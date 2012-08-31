@@ -24,7 +24,6 @@
         <version>0.1.0</version>
     </parent>
 
-    <groupId>ru.it.lecm.orgstructure</groupId>
     <artifactId>orgstructure-repo</artifactId>
     <packaging>amp</packaging>
     <name>OrgStructure Repo</name>
@@ -38,7 +37,6 @@
        below as the AMP module version. Instead we use the
        buildnumber-maven-plugin. This requires a scm connection.
    -->
-    <version>0.1.0</version>
     <description>OrgStructure Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>
