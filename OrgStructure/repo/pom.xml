@@ -19,13 +19,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.it.lecm.orgStructure</groupId>
-        <artifactId>orgStructure</artifactId>
+        <groupId>ru.it.lecm.orgstructure</groupId>
+        <artifactId>orgstructure</artifactId>
         <version>${platform.version}</version>
     </parent>
 
-    <groupId>ru.it.lecm.orgStructure</groupId>
-    <artifactId>orgStructure-repo</artifactId>
+    <groupId>ru.it.lecm.orgstructure</groupId>
+    <artifactId>orgstructure-repo</artifactId>
     <packaging>amp</packaging>
     <name>OrgStructure Repo</name>
     <!--
