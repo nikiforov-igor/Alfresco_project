@@ -21,7 +21,7 @@
     <parent>
         <groupId>ru.it.lecm.orgstructure</groupId>
         <artifactId>orgstructure</artifactId>
-        <version>1.0</version>
+        <version>0.1.0</version>
     </parent>
 
     <groupId>ru.it.lecm.orgstructure</groupId>
@@ -38,7 +38,7 @@
        below as the AMP module version. Instead we use the
        buildnumber-maven-plugin. This requires a scm connection.
    -->
-    <version>1.0</version>
+    <version>0.1.0</version>
     <description>OrgStructure Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>
@@ -86,6 +86,10 @@
             <plugin>
                 <artifactId>maven-nosnapshot-plugin</artifactId>
                 <groupId>org.alfresco.maven</groupId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
