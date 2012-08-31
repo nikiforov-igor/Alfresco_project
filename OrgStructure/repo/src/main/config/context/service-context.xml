@@ -56,6 +56,7 @@
                 <props>
                     <prop key="path">/${spaces.company_home.childname}</prop>
                     <prop key="location">alfresco/module/${artifactId}/organization.xml</prop>
+                    <prop key="uuidBinding">UPDATE_EXISTING</prop>
                 </props>
             </list>
         </property>
