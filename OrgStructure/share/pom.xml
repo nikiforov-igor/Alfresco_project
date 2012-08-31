@@ -20,7 +20,7 @@
     <parent>
         <groupId>ru.it.lecm.orgstructure</groupId>
         <artifactId>orgstructure</artifactId>
-        <version>${platform.version}</version>
+        <version>1.0</version>
     </parent>
 
     <groupId>ru.it.lecm.orgstructure</groupId>
@@ -37,7 +37,7 @@
 		below as the AMP module version. Instead we use the
 		buildnumber-maven-plugin. This requires a scm connection.
 	-->
-	<version>${platform.version}</version>
+	<version>1.0</version>
 	<description>OrgStructure Share project</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
