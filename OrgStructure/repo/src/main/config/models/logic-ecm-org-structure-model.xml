@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="leos:organizationStructure" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/orgstructure/1.0" prefix="leos"/>
+    </namespaces>
+
+
+    <types>
+
+        <!--
+            Описание модели организации
+        -->
+        <type  name="leos:organization">
+            <title>Organization</title>
+            <parent>cm:folder</parent>
+            <associations>
+                <!--
+                    Связь со структурными подразделениями
+                -->
+                <child-association name="leos:organization_unit_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>leos:organization_unit</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </type>
+
+        <!--
+            Структурное подразделение
+        -->
+        <type name="leos:organization_unit">
+            <title>Organization Unit</title>
+            <parent>cm:folder</parent>
+            <associations>
+                <!--
+                    Связь с офисами подразделения
+                -->
+                <association name="leos:office_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>leos:office</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!--
+                    Связь с подструктурными подразделениями
+                -->
+                <child-association name="leos:organization_unit_inner_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>leos:organization_unit</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+                <!--
+                    Связь с сотрудниками подразделения
+                -->
+                <child-association name="leos:employee_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>leos:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </type>
+
+        <!--
+            Сотрудник организации
+        -->
+        <type name="leos:employee">
+            <title>Еmployee</title>
+            <parent>cm:cmobject</parent>
+            <associations>
+                <!--
+                    Связь с учетной записью в системе
+                -->
+                <association name="leos:person_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:person</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!--
+                    Рабочее место сотрудника
+                -->
+                <association name="leos:employee_workplace_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>leos:workplace</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+
+        <!--
+            Офис организации
+        -->
+        <type name="leos:office">
+            <title>Office</title>
+            <parent>cm:folder</parent>
+            <associations>
+                <!--
+                    Связь с помещениями
+                -->
+                <child-association name="leos:room_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>leos:room</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </type>
+
+        <!--
+            Помещение в офисе
+        -->
+        <type name="leos:room">
+            <title>Room</title>
+            <parent>cm:folder</parent>
+        </type>
+
+        <!--
+            Рабочее помещение
+        -->
+        <type name="leos:workroom">
+            <title>Workroom</title>
+            <parent>leos:room</parent>
+            <associations>
+                <!--
+                    Связь с рабочими местами
+                -->
+                <child-association name="leos:workplace_assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>leos:workplace</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </type>
+
+        <!--
+            Рабочее место
+        -->
+        <type name="leos:workplace">
+            <title>Workplace</title>
+            <parent>cm:cmobject</parent>
+        </type>
+
+        <!--
+            Комната для совещаний
+        -->
+        <type name="leos:meetingroom">
+            <title>Meeting Room</title>
+            <parent>cm:cmobject</parent>
+        </type>
+
+    </types>
+
+</model>
