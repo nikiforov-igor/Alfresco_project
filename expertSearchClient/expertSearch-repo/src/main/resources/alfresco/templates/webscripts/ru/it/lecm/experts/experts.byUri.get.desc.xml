@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Experts</shortname>
+    <description>Get experts from web service</description>
+    <url>/lecm/experts/get/byUri</url>
+    <authentication>user</authentication>
+    <format default="json">extension</format>
+</webscript>
