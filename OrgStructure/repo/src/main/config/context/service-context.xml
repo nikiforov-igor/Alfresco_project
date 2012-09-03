@@ -46,8 +46,8 @@
         <property name="moduleId" value="${artifactId}"/>
         <property name="name" value="${groupId}.${artifactId}.bootstrapSpaces"/>
         <property name="description" value="Initial data requirements"/>
-        <property name="sinceVersion" value="1.0"/>
-        <property name="appliesFromVersion" value="1.0"/>
+        <property name="sinceVersion" value="0.1.0"/>
+        <property name="appliesFromVersion" value="0.1.0"/>
         <!--  Data properties
   -->
         <property name="importer" ref="spacesBootstrap"/>
