@@ -6,7 +6,7 @@
     <view:exporterVersion>4.0.0 (4003)</view:exporterVersion>
     <view:exportOf>/app:company_home/cm:Organization</view:exportOf>
   </view:metadata>
-  <leos:organization xmlns="" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:gd="http://www.alfresco.org/model/googledocs/1.0" xmlns:twitter="http://www.alfresco.org/model/publishing/twitter/1.0" xmlns:fm="http://www.alfresco.org/model/forum/1.0" xmlns:facebook="http://www.alfresco.org/model/publishing/facebook/1.0" xmlns:wcm="http://www.alfresco.org/model/wcmmodel/1.0" xmlns:youtube="http://www.alfresco.org/model/publishing/youtube/1.0" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:st="http://www.alfresco.org/model/site/1.0" xmlns:custom="custom.model" xmlns:blogicECM="http://www.it.ru/blogicECM/person/1.0" xmlns:exif="http://www.alfresco.org/model/exif/1.0" xmlns:alfcmis="http://www.alfresco.org/model/cmis/1.0/alfcmis" xmlns:pub="http://www.alfresco.org/model/publishing/1.0" xmlns:wca="http://www.alfresco.org/model/wcmappmodel/1.0" xmlns:inwf="http://www.alfresco.org/model/workflow/invite/nominated/1.0" xmlns:flickr="http://www.alfresco.org/model/publishing/flickr/1.0" xmlns:cm="http://www.alfresco.org/model/content/1.0" xmlns:imap="http://www.alfresco.org/model/imap/1.0" xmlns:stcp="http://www.alfresco.org/model/sitecustomproperty/1.0" xmlns:ver2="http://www.alfresco.org/model/versionstore/2.0" xmlns:view="http://www.alfresco.org/view/repository/1.0" xmlns:imwf="http://www.alfresco.org/model/workflow/invite/moderated/1.0" xmlns:cmisext="http://www.alfresco.org/model/cmis/1.0/cs01ext" xmlns:wf="http://www.alfresco.org/model/workflow/1.0" xmlns:trx="http://www.alfresco.org/model/transfer/1.0" xmlns:rn="http://www.alfresco.org/model/rendition/1.0" xmlns:slideshare="http://www.alfresco.org/model/publishing/slideshare/1.0" xmlns:sys="http://www.alfresco.org/model/system/1.0" xmlns:lnk="http://www.alfresco.org/model/linksmodel/1.0" xmlns:webdav="http://www.alfresco.org/model/webdav/1.0" xmlns:pubwf="http://www.alfresco.org/model/publishingworkflow/1.0" xmlns:ver="http://www.alfresco.org/model/versionstore/1.0" xmlns:cmiscustom="http://www.alfresco.org/model/cmis/custom" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:emailserver="http://www.alfresco.org/model/emailserver/1.0" xmlns:ia="http://www.alfresco.org/model/calendar" xmlns:leos="http://www.it.ru/logicECM/orgstructure/1.0" xmlns:rule="http://www.alfresco.org/model/rule/1.0" xmlns:dl="http://www.alfresco.org/model/datalist/1.0" xmlns:lecm_wf_assignment="http://lecm.it.ru/workflow/assignment" xmlns:usr="http://www.alfresco.org/model/user/1.0" xmlns:app="http://www.alfresco.org/model/application/1.0" xmlns:d="http://www.alfresco.org/model/dictionary/1.0" xmlns:module="http://www.alfresco.org/system/modules/1.0" xmlns:audio="http://www.alfresco.org/model/audio/1.0" xmlns:blg="http://www.alfresco.org/model/blogintegration/1.0" xmlns:linkedin="http://www.alfresco.org/model/publishing/linkedin/1.0" xmlns:alf="http://www.alfresco.org" xmlns:cmis="http://www.alfresco.org/model/cmis/1.0/cs01" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:bpm="http://www.alfresco.org/model/bpm/1.0" xmlns:reg="http://www.alfresco.org/system/registry/1.0" xmlns:wcmwf="http://www.alfresco.org/model/wcmworkflow/1.0" xmlns:act="http://www.alfresco.org/model/action/1.0" view:childName="cm:Organization">
+  <lecm-orgstructure:organization xmlns="" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:gd="http://www.alfresco.org/model/googledocs/1.0" xmlns:twitter="http://www.alfresco.org/model/publishing/twitter/1.0" xmlns:fm="http://www.alfresco.org/model/forum/1.0" xmlns:facebook="http://www.alfresco.org/model/publishing/facebook/1.0" xmlns:wcm="http://www.alfresco.org/model/wcmmodel/1.0" xmlns:youtube="http://www.alfresco.org/model/publishing/youtube/1.0" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:st="http://www.alfresco.org/model/site/1.0" xmlns:custom="custom.model" xmlns:blogicECM="http://www.it.ru/blogicECM/person/1.0" xmlns:exif="http://www.alfresco.org/model/exif/1.0" xmlns:alfcmis="http://www.alfresco.org/model/cmis/1.0/alfcmis" xmlns:pub="http://www.alfresco.org/model/publishing/1.0" xmlns:wca="http://www.alfresco.org/model/wcmappmodel/1.0" xmlns:inwf="http://www.alfresco.org/model/workflow/invite/nominated/1.0" xmlns:flickr="http://www.alfresco.org/model/publishing/flickr/1.0" xmlns:cm="http://www.alfresco.org/model/content/1.0" xmlns:imap="http://www.alfresco.org/model/imap/1.0" xmlns:stcp="http://www.alfresco.org/model/sitecustomproperty/1.0" xmlns:ver2="http://www.alfresco.org/model/versionstore/2.0" xmlns:view="http://www.alfresco.org/view/repository/1.0" xmlns:imwf="http://www.alfresco.org/model/workflow/invite/moderated/1.0" xmlns:cmisext="http://www.alfresco.org/model/cmis/1.0/cs01ext" xmlns:wf="http://www.alfresco.org/model/workflow/1.0" xmlns:trx="http://www.alfresco.org/model/transfer/1.0" xmlns:rn="http://www.alfresco.org/model/rendition/1.0" xmlns:slideshare="http://www.alfresco.org/model/publishing/slideshare/1.0" xmlns:sys="http://www.alfresco.org/model/system/1.0" xmlns:lnk="http://www.alfresco.org/model/linksmodel/1.0" xmlns:webdav="http://www.alfresco.org/model/webdav/1.0" xmlns:pubwf="http://www.alfresco.org/model/publishingworkflow/1.0" xmlns:ver="http://www.alfresco.org/model/versionstore/1.0" xmlns:cmiscustom="http://www.alfresco.org/model/cmis/custom" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:emailserver="http://www.alfresco.org/model/emailserver/1.0" xmlns:ia="http://www.alfresco.org/model/calendar" xmlns:lecm-orgstructure="http://www.it.ru/lecm/orgstructure/1.0" xmlns:rule="http://www.alfresco.org/model/rule/1.0" xmlns:dl="http://www.alfresco.org/model/datalist/1.0" xmlns:lecm_wf_assignment="http://lecm.it.ru/workflow/assignment" xmlns:usr="http://www.alfresco.org/model/user/1.0" xmlns:app="http://www.alfresco.org/model/application/1.0" xmlns:d="http://www.alfresco.org/model/dictionary/1.0" xmlns:module="http://www.alfresco.org/system/modules/1.0" xmlns:audio="http://www.alfresco.org/model/audio/1.0" xmlns:blg="http://www.alfresco.org/model/blogintegration/1.0" xmlns:linkedin="http://www.alfresco.org/model/publishing/linkedin/1.0" xmlns:alf="http://www.alfresco.org" xmlns:cmis="http://www.alfresco.org/model/cmis/1.0/cs01" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:bpm="http://www.alfresco.org/model/bpm/1.0" xmlns:reg="http://www.alfresco.org/system/registry/1.0" xmlns:wcmwf="http://www.alfresco.org/model/wcmworkflow/1.0" xmlns:act="http://www.alfresco.org/model/action/1.0" view:childName="cm:Organization">
     <view:aspects>
       <cm:auditable></cm:auditable>
       <sys:referenceable></sys:referenceable>
@@ -26,8 +26,8 @@
       <cm:modifier>admin</cm:modifier>
     </view:properties>
     <view:associations>
-      <leos:organization_unit_assoc>
-        <leos:organization_unit view:childName="cm:Unit 1">
+      <lecm-orgstructure:organization_unit_assoc>
+        <lecm-orgstructure:organization_unit view:childName="cm:Unit 1">
           <view:aspects>
             <cm:auditable></cm:auditable>
             <sys:referenceable></sys:referenceable>
@@ -47,8 +47,8 @@
             <cm:modifier>admin</cm:modifier>
           </view:properties>
           <view:associations>
-            <leos:organization_unit_inner_assoc>
-              <leos:organization_unit view:childName="cm:Subunit 2">
+            <lecm-orgstructure:organization_unit_inner_assoc>
+              <lecm-orgstructure:organization_unit view:childName="cm:Subunit 2">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -69,7 +69,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:organization_unit view:childName="cm:Новый Юнит">
+                    <lecm-orgstructure:organization_unit view:childName="cm:Новый Юнит">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -88,8 +88,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:asdfasdfasdfasdfasdf">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:asdfasdfasdfasdfasdf">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -108,8 +108,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:проба пера">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:проба пера">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -128,8 +128,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:ывапывап">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:ывапывап">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -148,8 +148,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:вапывпа">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:вапывпа">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -168,8 +168,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:12341234">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:12341234">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -188,8 +188,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:ваимпро">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:ваимпро">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -208,8 +208,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:111">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:111">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -228,8 +228,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:222">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:222">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -248,8 +248,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:333">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:333">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -268,8 +268,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:4231">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:4231">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -288,8 +288,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:ыв">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:ыв">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -308,8 +308,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:asdf">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:asdf">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -328,8 +328,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:555">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:555">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -348,8 +348,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:sdhsdfd">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:sdhsdfd">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -368,8 +368,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:asfd">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:asfd">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -388,8 +388,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:sdfgsdf">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:sdfgsdf">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -408,8 +408,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:jffghjfghj">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:jffghjfghj">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -428,8 +428,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:asdfasdf">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:asdfasdf">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -448,8 +448,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:dfghdfgh">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:dfghdfgh">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -468,8 +468,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:sdfgsdfgsdfg">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:sdfgsdfgsdfg">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -488,8 +488,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:8888">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:8888">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -508,8 +508,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:dddd">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:dddd">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -528,8 +528,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:employee view:childName="cm:sdfgsdfgsdfgsdfg">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:employee view:childName="cm:sdfgsdfgsdfgsdfg">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -548,8 +548,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:asdasdasd">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:asdasdasd">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -568,8 +568,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:66666">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:66666">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -588,8 +588,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:Подразделение">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:Подразделение">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -608,8 +608,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:123123123">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:123123123">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -628,11 +628,11 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
+                    </lecm-orgstructure:organization_unit>
                   </cm:contains>
                 </view:associations>
-              </leos:organization_unit>
-              <leos:organization_unit view:childName="cm:Подюнит 1">
+              </lecm-orgstructure:organization_unit>
+              <lecm-orgstructure:organization_unit view:childName="cm:Подюнит 1">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -653,7 +653,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:organization_unit view:childName="cm:Test">
+                    <lecm-orgstructure:organization_unit view:childName="cm:Test">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -672,8 +672,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:zxcz">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:zxcz">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -692,13 +692,13 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
+                    </lecm-orgstructure:employee>
                   </cm:contains>
                 </view:associations>
-              </leos:organization_unit>
-            </leos:organization_unit_inner_assoc>
+              </lecm-orgstructure:organization_unit>
+            </lecm-orgstructure:organization_unit_inner_assoc>
             <cm:contains>
-              <leos:organization_unit view:childName="cm:Департамент">
+              <lecm-orgstructure:organization_unit view:childName="cm:Департамент">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -719,7 +719,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:organization_unit view:childName="cm:Отдел">
+                    <lecm-orgstructure:organization_unit view:childName="cm:Отдел">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -738,8 +738,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:123123">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:123123">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -758,8 +758,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:employee view:childName="cm:123123123123123">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:employee view:childName="cm:123123123123123">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -778,8 +778,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:employee>
-                    <leos:organization_unit view:childName="cm:111">
+                    </lecm-orgstructure:employee>
+                    <lecm-orgstructure:organization_unit view:childName="cm:111">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -798,14 +798,14 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
+                    </lecm-orgstructure:organization_unit>
                   </cm:contains>
                 </view:associations>
-              </leos:organization_unit>
+              </lecm-orgstructure:organization_unit>
             </cm:contains>
           </view:associations>
-        </leos:organization_unit>
-        <leos:organization_unit view:childName="cm:Unit 2">
+        </lecm-orgstructure:organization_unit>
+        <lecm-orgstructure:organization_unit view:childName="cm:Unit 2">
           <view:aspects>
             <cm:auditable></cm:auditable>
             <sys:referenceable></sys:referenceable>
@@ -825,8 +825,8 @@
             <cm:modifier>admin</cm:modifier>
           </view:properties>
           <view:associations>
-            <leos:employee_assoc>
-              <leos:employee view:childName="cm:Employee 2">
+            <lecm-orgstructure:employee_assoc>
+              <lecm-orgstructure:employee view:childName="cm:Employee 2">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -845,8 +845,8 @@
                   <cm:creator>admin</cm:creator>
                   <cm:modifier>admin</cm:modifier>
                 </view:properties>
-              </leos:employee>
-              <leos:employee view:childName="cm:Employee 2">
+              </lecm-orgstructure:employee>
+              <lecm-orgstructure:employee view:childName="cm:Employee 2">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -865,10 +865,10 @@
                   <cm:creator>admin</cm:creator>
                   <cm:modifier>admin</cm:modifier>
                 </view:properties>
-              </leos:employee>
-            </leos:employee_assoc>
+              </lecm-orgstructure:employee>
+            </lecm-orgstructure:employee_assoc>
             <cm:contains>
-              <leos:office view:childName="cm:Office">
+              <lecm-orgstructure:office view:childName="cm:Office">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -889,7 +889,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:workroom view:childName="cm:Room 1">
+                    <lecm-orgstructure:workroom view:childName="cm:Room 1">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -910,7 +910,7 @@
                       </view:properties>
                       <view:associations>
                         <cm:contains>
-                          <leos:workplace view:childName="cm:Workplace">
+                          <lecm-orgstructure:workplace view:childName="cm:Workplace">
                             <view:aspects>
                               <cm:auditable></cm:auditable>
                               <sys:referenceable></sys:referenceable>
@@ -929,11 +929,11 @@
                               <cm:creator>admin</cm:creator>
                               <cm:modifier>admin</cm:modifier>
                             </view:properties>
-                          </leos:workplace>
+                          </lecm-orgstructure:workplace>
                         </cm:contains>
                       </view:associations>
-                    </leos:workroom>
-                    <leos:workroom view:childName="cm:Room 2">
+                    </lecm-orgstructure:workroom>
+                    <lecm-orgstructure:workroom view:childName="cm:Room 2">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -952,8 +952,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:workroom>
-                    <leos:meetingroom view:childName="cm:Room 3">
+                    </lecm-orgstructure:workroom>
+                    <lecm-orgstructure:meetingroom view:childName="cm:Room 3">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -972,11 +972,11 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:meetingroom>
+                    </lecm-orgstructure:meetingroom>
                   </cm:contains>
                 </view:associations>
-              </leos:office>
-              <leos:employee view:childName="cm:ssss">
+              </lecm-orgstructure:office>
+              <lecm-orgstructure:employee view:childName="cm:ssss">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -995,8 +995,8 @@
                   <cm:creator>admin</cm:creator>
                   <cm:modifier>admin</cm:modifier>
                 </view:properties>
-              </leos:employee>
-              <leos:organization_unit view:childName="cm:Департамент">
+              </lecm-orgstructure:employee>
+              <lecm-orgstructure:organization_unit view:childName="cm:Департамент">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -1017,7 +1017,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:organization_unit view:childName="cm:Отдел 1">
+                    <lecm-orgstructure:organization_unit view:childName="cm:Отдел 1">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -1036,8 +1036,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:111">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:111">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -1056,11 +1056,11 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
+                    </lecm-orgstructure:organization_unit>
                   </cm:contains>
                 </view:associations>
-              </leos:organization_unit>
-              <leos:organization_unit view:childName="cm:1">
+              </lecm-orgstructure:organization_unit>
+              <lecm-orgstructure:organization_unit view:childName="cm:1">
                 <view:aspects>
                   <cm:auditable></cm:auditable>
                   <sys:referenceable></sys:referenceable>
@@ -1081,7 +1081,7 @@
                 </view:properties>
                 <view:associations>
                   <cm:contains>
-                    <leos:organization_unit view:childName="cm:2">
+                    <lecm-orgstructure:organization_unit view:childName="cm:2">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -1100,8 +1100,8 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
-                    <leos:organization_unit view:childName="cm:Отдел">
+                    </lecm-orgstructure:organization_unit>
+                    <lecm-orgstructure:organization_unit view:childName="cm:Отдел">
                       <view:aspects>
                         <cm:auditable></cm:auditable>
                         <sys:referenceable></sys:referenceable>
@@ -1120,14 +1120,14 @@
                         <cm:creator>admin</cm:creator>
                         <cm:modifier>admin</cm:modifier>
                       </view:properties>
-                    </leos:organization_unit>
+                    </lecm-orgstructure:organization_unit>
                   </cm:contains>
                 </view:associations>
-              </leos:organization_unit>
+              </lecm-orgstructure:organization_unit>
             </cm:contains>
           </view:associations>
-        </leos:organization_unit>
-      </leos:organization_unit_assoc>
+        </lecm-orgstructure:organization_unit>
+      </lecm-orgstructure:organization_unit_assoc>
     </view:associations>
-  </leos:organization>
+  </lecm-orgstructure:organization>
 </view:view>

@@ -31,7 +31,7 @@
 
     <#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
-    <@script type="text/javascript" src="${page.url.context}/res/ru/it/blogic/logicecm/orgstructure/orgstructure.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/orgstructure.js"></@script>
 </@>
 
 <@templateBody>

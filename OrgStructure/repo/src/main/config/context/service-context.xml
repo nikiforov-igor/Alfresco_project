@@ -24,6 +24,7 @@
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/logic-ecm-org-structure-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/logic-ecm-org-structure-model-new.xml</value>
             </list>
         </property>
     </bean>
@@ -46,8 +47,8 @@
         <property name="moduleId" value="${artifactId}"/>
         <property name="name" value="${groupId}.${artifactId}.bootstrapSpaces"/>
         <property name="description" value="Initial data requirements"/>
-        <property name="sinceVersion" value="0.1.0"/>
-        <property name="appliesFromVersion" value="0.1.0"/>
+        <property name="sinceVersion" value="0.1.0.29"/>
+        <property name="appliesFromVersion" value="0.1.0.29"/>
         <!--  Data properties
   -->
         <property name="importer" ref="spacesBootstrap"/>

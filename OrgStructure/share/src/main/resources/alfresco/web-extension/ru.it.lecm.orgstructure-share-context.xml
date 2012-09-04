@@ -5,7 +5,7 @@
     <bean id="orgstructureResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
         <property name="resourceBundles">
             <list>
-                <value>ru.it.blogic.logicecm.orgstructure.form.form</value>
+                <value>ru.it.lecm.orgstructure.form.form</value>
             </list>
         </property>
     </bean>

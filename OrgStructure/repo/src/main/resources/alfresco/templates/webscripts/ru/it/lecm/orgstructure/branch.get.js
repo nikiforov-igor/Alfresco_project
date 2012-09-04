@@ -11,13 +11,13 @@ var sort = {
 }
 
 var def = {
-    query: query + " AND TYPE: \"leos:organization_unit\"",
+    query: query + " AND TYPE: \"lecm-orgstructure:organization_unit\"",
     sort: [sort]
 }
 var divisions = search.query(def);
 
 def = {
-    query: query + " AND TYPE: \"leos:employee\"",
+    query: query + " AND TYPE: \"lecm-orgstructure:employee\"",
     sort: [sort]
 }
 var members = search.query(def);
@@ -49,9 +49,9 @@ function addItems(branch, items) {
 
 function getNodeType(node) {
     var type = "employee"
-    if (node.getTypeShort() == "leos:organization") {
+    if (node.getTypeShort() == "lecm-orgstructure:organization") {
         type = "organization";
-    } else if (node.getTypeShort() == "leos:organization_unit") {
+    } else if (node.getTypeShort() == "lecm-orgstructure:organization_unit") {
         type = "organization_unit"
     }
     return type;

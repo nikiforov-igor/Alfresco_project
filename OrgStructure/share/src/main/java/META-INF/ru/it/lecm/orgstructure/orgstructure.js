@@ -186,9 +186,9 @@ LogicECM.module = LogicECM.module || {};
             var selectedMenu = p_aArgs[1];
             if (selectedMenu instanceof YAHOO.widget.MenuItem) {
                 if (selectedMenu.id == "appendEmployee") {
-                    this._createNode("leos:employee");
+                    this._createNode("lecm-orgstructure:employee");
                 } else if (selectedMenu.id == "appendDivision") {
-                    this._createNode("leos:organization_unit");
+                    this._createNode("lecm-orgstructure:organization_unit");
                 }
             }
 
