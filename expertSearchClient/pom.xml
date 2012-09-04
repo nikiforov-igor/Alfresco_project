@@ -16,7 +16,7 @@
     <name>GetExperts</name>
 
     <modules>
-        <module>expertSearch-repo</module>
-        <module>expertSearch-share</module>
+        <module>repo</module>
+        <module>share</module>
     </modules>
 </project>
