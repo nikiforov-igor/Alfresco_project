@@ -17,15 +17,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>ru.it.lecm.experts</groupId>
         <artifactId>experts</artifactId>
         <version>0.1.0</version>
     </parent>
 
-    <artifactId>share</artifactId>
+    <artifactId>experts-repo</artifactId>
     <packaging>amp</packaging>
-    <name>GetExperts Share</name>
+    <name>GetExperts Repo</name>
     <!--
        An Alfresco version number must be of the form 1.2.3.4. Using
        1.0-SNAPSHOT as the AMP version will create an exception. See
@@ -36,7 +37,7 @@
        below as the AMP module version. Instead we use the
        buildnumber-maven-plugin. This requires a scm connection.
    -->
-    <description>GetExperts Share project</description>
+    <description>GetExperts Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>
     </properties>
@@ -46,8 +47,28 @@
    -->
     <dependencies>
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-share</artifactId>
+            <artifactId>alfresco-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-data-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-repository</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -59,6 +80,15 @@
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
+    <!--
+       The scm is required for the buildnumber-maven-plugin which is required
+       for AMP version numbering
+   -->
+    <scm>
+        <connection>scm:svn:http://domain.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
+        <url>http://domain.com/svn/trunk/</url>
+    </scm>
 
     <build>
         <plugins>
@@ -83,10 +113,6 @@
                 <artifactId>maven-amp-plugin</artifactId>
             </plugin>
         </plugins>
-        <!--
-          Copies and filters resources in build folder so maven-amp-plugin can
-          pick them up
-      -->
         <resources>
             <resource>
                 <filtering>true</filtering>
@@ -95,11 +121,17 @@
                     <exclude>**README-*</exclude>
                 </excludes>
             </resource>
+            <!--
+             Copies and filters AMP config in the proper package
+             'alfresco/module/${project.artifactId}' so to enforce full module
+             naming single sourcing from POM properties
+         -->
             <resource>
                 <filtering>true</filtering>
-                <directory>src/main/java</directory>
+                <directory>src/main/config</directory>
+                <targetPath>alfresco/module/${project.artifactId}</targetPath>
                 <excludes>
-                    <exclude>**.java</exclude>
+                    <exclude>**README-*</exclude>
                 </excludes>
             </resource>
         </resources>

@@ -76,7 +76,7 @@
 
     <modules>
         <module>OrgStructure</module>
-        <module>expertSearchClient</module>
+        <module>lecm-experts</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

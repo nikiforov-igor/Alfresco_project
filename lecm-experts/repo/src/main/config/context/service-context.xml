@@ -48,6 +48,7 @@
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/expertsModel.xml</value>
+                <value>alfresco/module/${artifactId}/models/testModel.xml</value>
             </list>
         </property>
         <property name="labels">
