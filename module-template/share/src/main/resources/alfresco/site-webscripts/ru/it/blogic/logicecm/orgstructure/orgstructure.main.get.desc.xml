@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>main</shortname>
-    <description>Returns the main page content for the index page.</description>
-    <url>/logicecm/orgstructure/main</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>
