@@ -34,8 +34,6 @@ public class PentahoFormProducer extends AbstractWebScript {
 
 	@Override
 	public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-		System.out.println("!!!!!!!!!");
-//		String nodeRef = webScriptRequest.getParameter("nodeRef");
 		String nodeRef = webScriptRequest.getServiceMatch().getTemplateVars().get("nodeRef");
 
 		if (!NodeRef.isNodeRef(nodeRef)) {
