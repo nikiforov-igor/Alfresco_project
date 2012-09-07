@@ -12,12 +12,6 @@
     </namespaces>
     <aspects>
         <aspect name="lecm-exp:hasExperts">
-            <!--<properties>
-                <property name="lecm-exp:getter">
-                    <type>d:text</type>
-                    <protected>true</protected>
-                </property>
-            </properties>-->
             <associations>
                 <association name="lecm-exp:experts">
                     <title>Experts List</title>

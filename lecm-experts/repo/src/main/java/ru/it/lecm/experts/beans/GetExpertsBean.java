@@ -19,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ru.it.lecm.experts.client.RequestExpertsByURIResponse;
 import ru.it.lecm.experts.client.RequestExpertsExResponse;
 import ru.it.lecm.experts.client.SearchExpertsService;
 import ru.it.lecm.experts.client.SearchExpertsServiceSoap;
@@ -42,14 +41,14 @@ public class GetExpertsBean extends BaseProcessorExtension {
 	public String get(String ref) {
 		JSONArray expertsArray = new JSONArray();
 		if (byUri) {
-			//TODO need change this code block(check and change ref pass into service)
+			/*//TODO need change this code block(check and change ref pass into service)
 			SearchExpertsServiceSoap service = new SearchExpertsService().getSearchExpertsServiceSoap();
 			RequestExpertsByURIResponse.RequestExpertsByURIResult res = service.requestExpertsByURI(ref);
 
 			if (res.getContent().get(0) instanceof ElementNSImpl) {
 				ElementNSImpl result = (ElementNSImpl) res.getContent().get(0);
 				expertsArray = parseResult(result);
-			}
+			}*/
 		} else {
 			ContentService contentService = serviceRegistry.getContentService();
 			NodeRef nodeRef = new NodeRef(ref);

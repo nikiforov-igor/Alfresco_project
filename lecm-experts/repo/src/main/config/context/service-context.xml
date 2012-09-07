@@ -18,7 +18,7 @@
 	
 -->
 <beans>
-    <bean id="${groupId}.${artifactId}.getExpertsByUriBean" parent="baseJavaScriptExtension"
+    <!--<bean id="${groupId}.${artifactId}.getExpertsByUriBean" parent="baseJavaScriptExtension"
           class="ru.it.lecm.experts.beans.GetExpertsBean">
         <property name="serviceRegistry">
             <ref bean="ServiceRegistry" />
@@ -29,7 +29,7 @@
         <property name="byUri">
             <value>true</value>
         </property>
-    </bean>
+    </bean>-->
 
     <bean id="${groupId}.${artifactId}.getExpertsByContentBean" parent="baseJavaScriptExtension"
           class="ru.it.lecm.experts.beans.GetExpertsBean">
