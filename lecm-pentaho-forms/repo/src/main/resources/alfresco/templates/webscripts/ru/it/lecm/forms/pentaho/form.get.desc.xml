@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Produce form</shortname>
+    <description>Produce form for node</description>
+    <url>/lecm/pforms/form/{nodeRef}</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

@@ -1,0 +1,26 @@
+<alfresco-config>
+
+    <!-- Custom Aspects -->
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <aspects>
+            <visible>          
+                <aspect name="lecm-pforms:printable"/>       
+            </visible>  
+        </aspects>
+    </config>
+
+    <config evaluator="aspect" condition="lecm-pforms:printable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-pforms:formPrintBtn"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-pforms:formPrintBtn">
+                        <control template="/ru/it/lecm/forms/pentahoforms/formPrintBtn.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+</alfresco-config>

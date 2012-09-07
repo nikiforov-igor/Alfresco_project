@@ -46,6 +46,16 @@
             <id>alfresco-public</id>
             <url>http://maven.alfresco.com/nexus/content/groups/public</url>
         </repository>
+        <repository>
+            <id>repo.pentaho.org.3rd</id>
+            <name>repo.pentaho.org-releases</name>
+            <url>http://repository.pentaho.org/artifactory/pentaho</url>
+        </repository>
+        <repository>
+            <id>repo.pentaho.org</id>
+            <name>repo.pentaho.org-releases</name>
+            <url>http://repository.pentaho.org/artifactory/third-party</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -71,6 +81,7 @@
         <env>local</env>
         <alfresco.version>4.0.e</alfresco.version>
         <spring.version>3.0.5.RELEASE</spring.version>
+        <spring.surf.version>1.0.0</spring.surf.version>
         <platform.version>0.1.0</platform.version>
         <buildNumber>1</buildNumber>
     </properties>
@@ -78,6 +89,7 @@
     <modules>
         <module>OrgStructure</module>
         <module>lecm-experts</module>
+        <module>lecm-pentaho-forms</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
@@ -107,6 +119,18 @@
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-repository</artifactId>
                 <version>${alfresco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.extensions.surf</groupId>
+                <artifactId>spring-surf</artifactId>
+                <version>${spring.surf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.extensions.surf</groupId>
+                <artifactId>spring-webscripts</artifactId>
+                <version>${spring.surf.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -178,6 +202,7 @@
                         -->
                         <nonFilteredFileExtensions>
                             <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>prpt</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
@@ -221,6 +246,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
                     <configuration>
                         <source>1.6</source>
                         <target>1.6</target>

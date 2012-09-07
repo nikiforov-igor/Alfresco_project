@@ -126,6 +126,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.forms.pentahoforms</groupId>
+            <artifactId>pentahoforms-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 	</dependencies>
 
 	<build>
