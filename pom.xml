@@ -82,6 +82,7 @@
         <alfresco.version>4.0.e</alfresco.version>
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring.surf.version>1.0.0</spring.surf.version>
+        <jasperreports.version>4.7.0</jasperreports.version>
         <platform.version>0.1.0</platform.version>
         <buildNumber>1</buildNumber>
     </properties>
@@ -89,7 +90,7 @@
     <modules>
         <module>OrgStructure</module>
         <module>lecm-experts</module>
-        <module>lecm-pentaho-forms</module>
+        <module>lecm-jasperreports-forms</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
@@ -151,6 +152,11 @@
                 <version>${spring.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>${jasperreports.version}</version>
+            </dependency>
             <!--
                       Example Jar dependency: will be properly packed into the AMP /lib
                       directory <dependency> <groupId>rome</groupId>
@@ -203,6 +209,7 @@
                         <nonFilteredFileExtensions>
                             <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
                             <nonFilteredFileExtension>prpt</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>jasper</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
@@ -251,6 +258,31 @@
                         <source>1.6</source>
                         <target>1.6</target>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jasperreports-maven-plugin</artifactId>
+                    <configuration>
+                        <sourceDirectory>${basedir}/src/main/config/reportdefinitions</sourceDirectory>
+                        <outputDirectory>${project.build.outputDirectory}/config/reportdefinitions</outputDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile-reports</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <dependencies>
+                        <!--note this must be repeated here to pick up correct xml validation -->
+                        <dependency>
+                            <groupId>net.sf.jasperreports</groupId>
+                            <artifactId>jasperreports</artifactId>
+                            <version>${jasperreports.version}</version>
+                        </dependency>
+                    </dependencies>
+
                 </plugin>
                 <plugin>
                     <groupId>org.alfresco.maven.plugin</groupId>
