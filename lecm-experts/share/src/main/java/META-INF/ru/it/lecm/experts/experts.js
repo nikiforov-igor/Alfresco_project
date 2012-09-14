@@ -130,7 +130,7 @@ LogicECM.module = LogicECM.module || {};
                     oResponse.argument.context._draw();
                 },
                 failure:function (oResponse) {
-                    alert("Failed to load experts. " + "[" + o.statusText + "]");
+                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
                 },
                 argument:{
                     context:this

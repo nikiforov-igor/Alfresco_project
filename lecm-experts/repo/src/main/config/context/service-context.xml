@@ -56,4 +56,19 @@
             </list>
         </property>
     </bean>
+
+    <bean id="expertsComponent" class="ru.it.lecm.experts.polices.ExpertsComponent" init-method="init">
+        <property name="exp_policyComponent">
+            <ref bean="policyComponent" />
+        </property>
+        <property name="exp_nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="exp_personService">
+            <ref bean="personService"/>
+        </property>
+        <property name="exp_transService">
+            <ref bean="transactionService"/>
+        </property>
+    </bean>
 </beans>

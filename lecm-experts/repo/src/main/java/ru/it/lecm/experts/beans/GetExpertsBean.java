@@ -13,6 +13,8 @@ import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.dom.ElementNSImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +39,8 @@ public class GetExpertsBean extends BaseProcessorExtension {
 
 	public static final String ATTR_LNAME = "lname";
 	public static final String ATTR_FNAME = "fname";
+
+	private static Log logger = LogFactory.getLog(GetExpertsBean.class);
 
 	public String get(String ref) {
 		JSONArray expertsArray = new JSONArray();
@@ -80,7 +84,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 					}
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			} finally {
 				IOUtils.closeQuietly(originalInputStream);
 				IOUtils.closeQuietly(outputStream);
@@ -105,7 +109,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 						exp.put(ATTR_FNAME, attr.getTextContent());
 					}
 				} catch (JSONException e) {
-					e.printStackTrace();
+					logger.error(e);
 				}
 			}
 			expertsArray.put(exp);

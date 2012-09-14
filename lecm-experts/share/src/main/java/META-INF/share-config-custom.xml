@@ -21,7 +21,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-exp:experts"/>
+                    <show id="lecm-exp:experts" for-mode="edit"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-exp:experts">
