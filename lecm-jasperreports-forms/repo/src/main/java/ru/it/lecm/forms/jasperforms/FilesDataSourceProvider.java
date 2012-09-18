@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 
-	private List<JRField> fieldsList = new ArrayList<JRField>();
+	private List<JRField> fieldsList;
 
 	public FilesDataSourceProvider() {
 		super();
