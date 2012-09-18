@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	
+-->
+<beans>
+<!--
+    <bean id="activitiCustomizer" class="ru.it.lecm.base.workflow.listener.ActivitiConfigurationCustomizer" >
+        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
+    </bean>
+
+    <bean id="ssp.workflowBootstrap" parent="workflowDeployer">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/models/simpleSystemProcess.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">false</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/simpleSystemProcessModel.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="sup.workflowBootstrap" parent="workflowDeployer">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/models/simpleUserProcess.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">false</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/simpleUserProcessModel.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="workflowController" class="ru.it.lecm.base.workflow.WorkflowController">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
+
+    <bean id="endEventListener" class="ru.it.lecm.base.workflow.listener.EndEventListener">
+        <property name="workflowController" ref="workflowController" />
+    </bean>
+
+    <bean id="manualSctiptListener" class="ru.it.lecm.base.workflow.listener.ManualTaskListener">
+        <property name="workflowController" ref="workflowController" />
+    </bean>-->
+
+</beans>

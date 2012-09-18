@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="ssp:samplemodel">
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+    </imports>
+    <namespaces>
+        <namespace prefix="ssp" uri="http://www.it.ru/sample/workflow/system"/>
+    </namespaces>
+    <types>
+        <type name="ssp:startTask">
+            <parent>bpm:startTask</parent>
+            <mandatory-aspects>
+                <aspect>bpm:assignee</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
+</model>

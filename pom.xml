@@ -47,6 +47,10 @@
             <url>http://maven.alfresco.com/nexus/content/groups/public</url>
         </repository>
         <repository>
+            <id>alfresco-activiti</id>
+            <url>https://maven.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+        </repository>
+        <repository>
             <id>repo.pentaho.org.3rd</id>
             <name>repo.pentaho.org-releases</name>
             <url>http://repository.pentaho.org/artifactory/pentaho</url>
@@ -88,6 +92,7 @@
     </properties>
 
     <modules>
+        <module>lecm-base</module>
         <module>OrgStructure</module>
         <module>lecm-experts</module>
         <module>lecm-jasperreports-forms</module>
@@ -189,6 +194,24 @@
                 <version>20070829</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-engine</artifactId>
+                <version>5.7</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring</artifactId>
+                <version>5.7</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-data-model</artifactId>
+                <version>4.0.d</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -246,9 +269,6 @@
                         <!--</items>-->
                         <doCheck>false</doCheck>
                         <doUpdate>false</doUpdate>
-                        <providerImplementations>
-                            <svn>javasvn</svn>
-                        </providerImplementations>
                     </configuration>
                 </plugin>
                 <plugin>
