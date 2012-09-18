@@ -40,7 +40,7 @@ public abstract class AbstractDataSourceProvider implements JRDataSourceProvider
 		getFieldsList().add(field);
 	}
 
-	protected abstract List<JRField> getFieldsList();
+	public abstract List<JRField> getFieldsList();
 
 	@Override
 	public JRField[] getFields(JasperReport report) throws JRException, UnsupportedOperationException {

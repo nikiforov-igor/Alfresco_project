@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 
-	private final List<JRField> fieldsList = new ArrayList<JRField>();
+	private List<JRField> fieldsList = new ArrayList<JRField>();
 
 	public FilesDataSourceProvider() {
 		super();
@@ -42,7 +42,10 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		addField("node-uuid", String.class);
 	}
 
-	protected List<JRField> getFieldsList() {
+	public List<JRField> getFieldsList() {
+		if (fieldsList == null) {
+			fieldsList = new ArrayList<JRField>();
+		}
 		return fieldsList;
 	}
 
