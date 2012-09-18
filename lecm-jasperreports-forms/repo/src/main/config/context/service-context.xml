@@ -14,9 +14,7 @@
     <bean id="webscript.ru.it.lecm.forms.jasper.form.get"
           class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
           parent="webscript">
-        <property name="repository" ref="repositoryHelper"/>
-        <property name="nodeService" ref="NodeService" />
-        <property name="contentService" ref="ContentService" />
+        <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
 
 </beans>

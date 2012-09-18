@@ -10,7 +10,7 @@
 </#escape>
 	<script type="text/javascript">
 		function printNode(nodeRef) {
-			document.location.href = Alfresco.constants.PROXY_URI + "/lecm/jforms/form/" + nodeRef.replace("://", ":////");
+			document.location.href = Alfresco.constants.PROXY_URI + "/lecm/jforms/form/Simple/" + nodeRef.replace("://", ":////");
 		}
 	</script>
 </div>

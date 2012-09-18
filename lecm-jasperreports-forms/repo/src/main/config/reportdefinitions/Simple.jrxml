@@ -3,8 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="key" class="java.lang.String"/>
-	<field name="value" class="java.lang.String"/>
+	<property name="dataSource" value="ru.it.lecm.forms.jasperforms.FilesDataSourceProvider"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="node-uuid" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -22,12 +23,12 @@
 			<textField>
 				<reportElement uuid="0f4c2876-06f9-4454-bd45-6416ed9883bf" x="0" y="0" width="335" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{key}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="7bdb3317-73ac-4125-8e96-fd02ea1e85a4" x="335" y="0" width="220" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{node-uuid}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
