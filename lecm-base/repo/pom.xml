@@ -48,8 +48,6 @@
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-data-model</artifactId>
-            <version>4.0.d</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- Don't add here amp dependencies as it will break amp packaging -->
