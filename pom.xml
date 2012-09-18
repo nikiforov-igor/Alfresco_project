@@ -35,14 +35,6 @@
     <description>Logic ECM Platform</description>
     <repositories>
         <repository>
-            <id>alfresco-public-snapshots</id>
-            <url>http://maven.alfresco.com/nexus/content/groups/public-snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
             <id>alfresco-public</id>
             <url>http://maven.alfresco.com/nexus/content/groups/public</url>
         </repository>
@@ -50,29 +42,11 @@
             <id>alfresco-activiti</id>
             <url>https://maven.alfresco.com/nexus/content/repositories/activiti-releases/</url>
         </repository>
-        <repository>
-            <id>repo.pentaho.org.3rd</id>
-            <name>repo.pentaho.org-releases</name>
-            <url>http://repository.pentaho.org/artifactory/pentaho</url>
-        </repository>
-        <repository>
-            <id>repo.pentaho.org</id>
-            <name>repo.pentaho.org-releases</name>
-            <url>http://repository.pentaho.org/artifactory/third-party</url>
-        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>alfresco-public</id>
             <url>http://maven.alfresco.com/nexus/content/groups/public</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>alfresco-public-snapshots</id>
-            <url>http://maven.alfresco.com/nexus/content/groups/public-snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
         </pluginRepository>
     </pluginRepositories>
     <properties>
@@ -85,6 +59,7 @@
         <env>local</env>
         <alfresco.version>4.0.e</alfresco.version>
         <spring.version>3.0.5.RELEASE</spring.version>
+        <activiti.version>5.7</activiti.version>
         <spring.surf.version>1.0.0</spring.surf.version>
         <jasperreports.version>4.7.0</jasperreports.version>
         <platform.version>0.1.0</platform.version>
@@ -197,19 +172,13 @@
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-engine</artifactId>
-                <version>5.7</version>
+                <version>${activiti.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring</artifactId>
-                <version>5.7</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.alfresco</groupId>
-                <artifactId>alfresco-data-model</artifactId>
-                <version>4.0.d</version>
+                <version>${activiti.version}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
@@ -285,7 +254,7 @@
                     <version>1.0-beta-2</version>
                     <configuration>
                         <sourceDirectory>${basedir}/src/main/config/reportdefinitions</sourceDirectory>
-                        <outputDirectory>${project.build.outputDirectory}/config/reportdefinitions</outputDirectory>
+                        <outputDirectory>${project.build.outputDirectory}/reportdefinitions</outputDirectory>
                     </configuration>
                     <executions>
                         <execution>
