@@ -18,11 +18,16 @@ import java.util.*;
  * User: AZinovin
  * Date: 14.09.12
  * Time: 17:41
+ *
+ * Простой провайдер для стандартных файлов и папок
+ * На входе принимает всего один параметр - <code>nodeRef</code>, который может представлять список папок/файлов, либо единственный файл/папку.
+ * В случае единственной папки возвращает список содержимого папки, в остальных случаях - список по переданным идентификаторам
  */
 public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 
-	private List<JRField> fieldsList;
-
+	/**
+	не удалять - нужен для инициализации класса при вызове из iReport
+	 */
 	public FilesDataSourceProvider() {
 		super();
 	}
@@ -42,13 +47,6 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		addField("node-uuid", String.class);
 	}
 
-	public List<JRField> getFieldsList() {
-		if (fieldsList == null) {
-			fieldsList = new ArrayList<JRField>();
-		}
-		return fieldsList;
-	}
-
 	@Override
 	public JRDataSource create(JasperReport report) throws JRException {
 		JRField[] fields = getFields(report);
@@ -58,7 +56,7 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 			columnNames[i] = field.getName();
 		}
 		final List<Object[]> records = new ArrayList<Object[]>();
-		final List<FileInfo> fileInfos = FileInfos();
+		final List<FileInfo> fileInfos = getFileInfos();
 		for (FileInfo fileInfo : fileInfos) {
 			Object[] record = new Object[columnNames.length];
 			for (int i = 0; i < columnNames.length; i++) {
@@ -75,10 +73,15 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		return new ListOfArrayDataSource(records, columnNames);
 	}
 
-	private List<FileInfo> FileInfos() {
+	@Override
+	public void dispose(JRDataSource dataSource) throws JRException {
+		//не используется
+	}
+
+	private List<FileInfo> getFileInfos() {
 		String nodeRefStr = templateParams.get("nodeRef");
-		nodeRefStr = nodeRefStr.replace(":/", "://");   //TODO workaround to fix incorrect parameter value
-		nodeRefStr = nodeRefStr.replace(":///", "://");   //TODO workaround to fix incorrect parameter value
+		nodeRefStr = nodeRefStr.replace(":/", "://");   //TODO небольшой костыль - восстанавливает нормальный вид ссылки
+		nodeRefStr = nodeRefStr.replace(":///", "://");
 		final List<NodeRef> nodeRefs = NodeRef.getNodeRefs(nodeRefStr);
 		final FileFolderService fileFolderService = serviceRegistry.getFileFolderService();
 		List<FileInfo> fileInfos = new ArrayList<FileInfo>();
