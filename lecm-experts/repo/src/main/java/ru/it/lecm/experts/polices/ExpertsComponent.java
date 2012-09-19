@@ -97,7 +97,7 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 		}
 	}
 
-	private void getAndSaveExperts(final NodeRef nodeRef) {
+	private synchronized void getAndSaveExperts(final NodeRef nodeRef) {
 		AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 			public Object doWork() throws Exception {
 				//get experts

@@ -3,12 +3,8 @@ package ru.it.lecm.experts.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlMixed;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -51,11 +47,11 @@ public class RequestExpertsExResponse {
 
     /**
      * Gets the value of the requestExpertsExResult property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link RequestExpertsExResponse.RequestExpertsExResult }
-     *     
+     *     {@link ru.it.lecm.experts.client.RequestExpertsExResponse.RequestExpertsExResult }
+     *
      */
     public RequestExpertsExResponse.RequestExpertsExResult getRequestExpertsExResult() {
         return requestExpertsExResult;
@@ -63,11 +59,11 @@ public class RequestExpertsExResponse {
 
     /**
      * Sets the value of the requestExpertsExResult property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link RequestExpertsExResponse.RequestExpertsExResult }
-     *     
+     *     {@link ru.it.lecm.experts.client.RequestExpertsExResponse.RequestExpertsExResult }
+     *
      */
     public void setRequestExpertsExResult(RequestExpertsExResponse.RequestExpertsExResult value) {
         this.requestExpertsExResult = value;
@@ -121,8 +117,8 @@ public class RequestExpertsExResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link Object }
+         * {@link String }
          * 
          * 
          */

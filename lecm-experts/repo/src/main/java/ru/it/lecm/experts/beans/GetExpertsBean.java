@@ -76,7 +76,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 
 				if (binaryData.length > 0) {
 					SearchExpertsServiceSoap service = new SearchExpertsService().getSearchExpertsServiceSoap();
-					RequestExpertsExResponse.RequestExpertsExResult res = service.requestExpertsEx(binaryData, fileName);
+					RequestExpertsExResponse.RequestExpertsExResult res = service.requestExpertsEx(binaryData, fileName, true);
 
 					if (res.getContent().get(0) instanceof ElementNSImpl) {
 						ElementNSImpl result = (ElementNSImpl) res.getContent().get(0);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
       <s:element name="requestExpert">
@@ -47,6 +47,7 @@
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="binData" type="s:base64Binary" />
             <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="min" type="s:boolean" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -67,6 +68,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="uri" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="min" type="s:boolean" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -257,10 +259,10 @@
   </wsdl:binding>
   <wsdl:service name="SearchExpertsService">
     <wsdl:port name="SearchExpertsServiceSoap" binding="tns:SearchExpertsServiceSoap">
-      <soap:address location="http://172.30.0.73:8080/SearchExpertsService.asmx" />
+      <soap:address location="http://172.28.0.185/SearchExpertsService.asmx" />
     </wsdl:port>
     <wsdl:port name="SearchExpertsServiceSoap12" binding="tns:SearchExpertsServiceSoap12">
-      <soap12:address location="http://172.30.0.73:8080/SearchExpertsService.asmx" />
+      <soap12:address location="http://172.28.0.185/SearchExpertsService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

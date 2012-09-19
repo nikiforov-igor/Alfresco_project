@@ -4,6 +4,7 @@ package ru.it.lecm.experts.client;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -17,7 +18,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "SearchExpertsService", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://172.30.0.73:8080/SearchExpertsService.asmx?wsdl")
+@WebServiceClient(name = "SearchExpertsService", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://172.28.0.185/SearchExpertsService.asmx?wsdl")
 public class SearchExpertsService
     extends Service
 {
@@ -30,9 +31,9 @@ public class SearchExpertsService
         try {
             URL baseUrl;
             baseUrl = SearchExpertsService.class.getResource(".");
-            url = new URL(baseUrl, "http://172.30.0.73:8080/SearchExpertsService.asmx?wsdl");
+            url = new URL(baseUrl, "http://172.28.0.185/SearchExpertsService.asmx?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://172.30.0.73:8080/SearchExpertsService.asmx?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://172.28.0.185/SearchExpertsService.asmx?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         SEARCHEXPERTSSERVICE_WSDL_LOCATION = url;
@@ -57,7 +58,7 @@ public class SearchExpertsService
     }
 
     /**
-     * 
+     *
      * @param features
      *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
@@ -69,7 +70,7 @@ public class SearchExpertsService
     }
 
     /**
-     * 
+     *
      * @return
      *     returns SearchExpertsServiceSoap
      */
@@ -79,7 +80,7 @@ public class SearchExpertsService
     }
 
     /**
-     * 
+     *
      * @param features
      *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return

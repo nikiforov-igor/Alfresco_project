@@ -3,12 +3,8 @@ package ru.it.lecm.experts.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlMixed;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -51,11 +47,11 @@ public class RequestExpertsCoefTermResponse {
 
     /**
      * Gets the value of the requestExpertsCoefTermResult property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult }
-     *     
+     *     {@link ru.it.lecm.experts.client.RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult }
+     *
      */
     public RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult getRequestExpertsCoefTermResult() {
         return requestExpertsCoefTermResult;
@@ -63,11 +59,11 @@ public class RequestExpertsCoefTermResponse {
 
     /**
      * Sets the value of the requestExpertsCoefTermResult property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult }
-     *     
+     *     {@link ru.it.lecm.experts.client.RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult }
+     *
      */
     public void setRequestExpertsCoefTermResult(RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult value) {
         this.requestExpertsCoefTermResult = value;
@@ -121,8 +117,8 @@ public class RequestExpertsCoefTermResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link Object }
+         * {@link String }
          * 
          * 
          */

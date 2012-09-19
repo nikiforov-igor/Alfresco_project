@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="binData" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="fileName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="min" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,13 +31,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "binData",
-    "fileName"
+    "fileName",
+    "min"
 })
 @XmlRootElement(name = "requestExpertsEx")
 public class RequestExpertsEx {
 
     protected byte[] binData;
     protected String fileName;
+    protected boolean min;
 
     /**
      * Gets the value of the binData property.
@@ -82,6 +85,22 @@ public class RequestExpertsEx {
      */
     public void setFileName(String value) {
         this.fileName = value;
+    }
+
+    /**
+     * Gets the value of the min property.
+     * 
+     */
+    public boolean isMin() {
+        return min;
+    }
+
+    /**
+     * Sets the value of the min property.
+     * 
+     */
+    public void setMin(boolean value) {
+        this.min = value;
     }
 
 }

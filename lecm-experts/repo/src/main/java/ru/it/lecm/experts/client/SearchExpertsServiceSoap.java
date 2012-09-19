@@ -27,60 +27,66 @@ public interface SearchExpertsServiceSoap {
      * 
      * @param id
      * @return
-     *     returns expert.RequestExpertResponse.RequestExpertResult
+     *     returns ru.it.lecm.experts.cl.RequestExpertResponse.RequestExpertResult
      */
     @WebMethod(action = "http://tempuri.org/requestExpert")
     @WebResult(name = "requestExpertResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "requestExpert", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpert")
-    @ResponseWrapper(localName = "requestExpertResponse", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertResponse")
+    @RequestWrapper(localName = "requestExpert", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpert")
+    @ResponseWrapper(localName = "requestExpertResponse", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertResponse")
     public RequestExpertResponse.RequestExpertResult requestExpert(
-        @WebParam(name = "id", targetNamespace = "http://tempuri.org/")
-        int id);
+		    @WebParam(name = "id", targetNamespace = "http://tempuri.org/")
+		    int id);
 
     /**
      * 
      * @param query
      * @return
-     *     returns expert.RequestExpertsResponse.RequestExpertsResult
+     *     returns ru.it.lecm.experts.cl.RequestExpertsResponse.RequestExpertsResult
      */
     @WebMethod(action = "http://tempuri.org/requestExperts")
     @WebResult(name = "requestExpertsResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "requestExperts", targetNamespace = "http://tempuri.org/", className = "expert.RequestExperts")
-    @ResponseWrapper(localName = "requestExpertsResponse", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsResponse")
+    @RequestWrapper(localName = "requestExperts", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExperts")
+    @ResponseWrapper(localName = "requestExpertsResponse", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsResponse")
     public RequestExpertsResponse.RequestExpertsResult requestExperts(
-        @WebParam(name = "query", targetNamespace = "http://tempuri.org/")
-        String query);
+		    @WebParam(name = "query", targetNamespace = "http://tempuri.org/")
+		    String query);
 
     /**
      * 
+     * @param min
      * @param fileName
      * @param binData
      * @return
-     *     returns expert.RequestExpertsExResponse.RequestExpertsExResult
+     *     returns ru.it.lecm.experts.cl.RequestExpertsExResponse.RequestExpertsExResult
      */
     @WebMethod(action = "http://tempuri.org/requestExpertsEx")
     @WebResult(name = "requestExpertsExResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "requestExpertsEx", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsEx")
-    @ResponseWrapper(localName = "requestExpertsExResponse", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsExResponse")
+    @RequestWrapper(localName = "requestExpertsEx", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsEx")
+    @ResponseWrapper(localName = "requestExpertsExResponse", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsExResponse")
     public RequestExpertsExResponse.RequestExpertsExResult requestExpertsEx(
-        @WebParam(name = "binData", targetNamespace = "http://tempuri.org/")
-        byte[] binData,
-        @WebParam(name = "fileName", targetNamespace = "http://tempuri.org/")
-        String fileName);
+		    @WebParam(name = "binData", targetNamespace = "http://tempuri.org/")
+		    byte[] binData,
+		    @WebParam(name = "fileName", targetNamespace = "http://tempuri.org/")
+		    String fileName,
+		    @WebParam(name = "min", targetNamespace = "http://tempuri.org/")
+		    boolean min);
 
     /**
      * 
+     * @param min
      * @param uri
      * @return
-     *     returns expert.RequestExpertsByURIResponse.RequestExpertsByURIResult
+     *     returns ru.it.lecm.experts.cl.RequestExpertsByURIResponse.RequestExpertsByURIResult
      */
     @WebMethod(action = "http://tempuri.org/requestExpertsByURI")
     @WebResult(name = "requestExpertsByURIResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "requestExpertsByURI", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsByURI")
-    @ResponseWrapper(localName = "requestExpertsByURIResponse", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsByURIResponse")
+    @RequestWrapper(localName = "requestExpertsByURI", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsByURI")
+    @ResponseWrapper(localName = "requestExpertsByURIResponse", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsByURIResponse")
     public RequestExpertsByURIResponse.RequestExpertsByURIResult requestExpertsByURI(
-        @WebParam(name = "uri", targetNamespace = "http://tempuri.org/")
-        String uri);
+		    @WebParam(name = "uri", targetNamespace = "http://tempuri.org/")
+		    String uri,
+		    @WebParam(name = "min", targetNamespace = "http://tempuri.org/")
+		    boolean min);
 
     /**
      * 
@@ -88,18 +94,18 @@ public interface SearchExpertsServiceSoap {
      * @param term
      * @param query
      * @return
-     *     returns expert.RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult
+     *     returns ru.it.lecm.experts.cl.RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult
      */
     @WebMethod(action = "http://tempuri.org/requestExpertsCoefTerm")
     @WebResult(name = "requestExpertsCoefTermResult", targetNamespace = "http://tempuri.org/")
-    @RequestWrapper(localName = "requestExpertsCoefTerm", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsCoefTerm")
-    @ResponseWrapper(localName = "requestExpertsCoefTermResponse", targetNamespace = "http://tempuri.org/", className = "expert.RequestExpertsCoefTermResponse")
+    @RequestWrapper(localName = "requestExpertsCoefTerm", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsCoefTerm")
+    @ResponseWrapper(localName = "requestExpertsCoefTermResponse", targetNamespace = "http://tempuri.org/", className = "ru.it.lecm.experts.cl.RequestExpertsCoefTermResponse")
     public RequestExpertsCoefTermResponse.RequestExpertsCoefTermResult requestExpertsCoefTerm(
-        @WebParam(name = "query", targetNamespace = "http://tempuri.org/")
-        String query,
-        @WebParam(name = "term", targetNamespace = "http://tempuri.org/")
-        String term,
-        @WebParam(name = "coef", targetNamespace = "http://tempuri.org/")
-        float coef);
+		    @WebParam(name = "query", targetNamespace = "http://tempuri.org/")
+		    String query,
+		    @WebParam(name = "term", targetNamespace = "http://tempuri.org/")
+		    String term,
+		    @WebParam(name = "coef", targetNamespace = "http://tempuri.org/")
+		    float coef);
 
 }
