@@ -42,6 +42,11 @@ public class JasperFormProducer extends AbstractWebScript {
 	public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 		Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
 		String reportName = templateParams.get("report");
+		Map<String, String[]> requestParameters = new HashMap<String, String[]>();
+		for (String paramName : webScriptRequest.getParameterNames()) {
+			requestParameters.put(paramName, webScriptRequest.getParameterValues(paramName));
+		}
+		webScriptRequest.getParameterNames();
 		final URL reportDefinitionURL = JRLoader.getResource("/reportdefinitions/" + reportName + ".jasper");
 		OutputStream outputStream = null;
 		try {
@@ -51,7 +56,7 @@ public class JasperFormProducer extends AbstractWebScript {
 			AbstractDataSourceProvider dsProvider = null;
 			try {
 				dsProvider = (AbstractDataSourceProvider) Class.forName(dataSourceClass)
-						.getConstructor(Map.class, ServiceRegistry.class).newInstance(templateParams, serviceRegistry);
+						.getConstructor(Map.class, ServiceRegistry.class).newInstance(requestParameters, serviceRegistry);
 			} catch (ClassNotFoundException e) {
 				log.warn("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">. Class not found");
 			} catch (NoSuchMethodException e) {
@@ -66,7 +71,7 @@ public class JasperFormProducer extends AbstractWebScript {
 			if (dsProvider == null) {
 				log.warn("Default DataSourceProvider (ru.it.lecm.forms.jasperforms.FilesDataSourceProvider) will be used"); //TODO throw exception if DSProvider not defined
 				//use FilesDataSourceProvider as default datasource
-				dsProvider = new FilesDataSourceProvider(templateParams, serviceRegistry);
+				dsProvider = new FilesDataSourceProvider(requestParameters, serviceRegistry);
 			}
 			generateReport(outputStream, jasperReport, dsProvider);
 		} catch (JRException e) {
@@ -88,11 +93,12 @@ public class JasperFormProducer extends AbstractWebScript {
 
 		JRDataSource dataSource = dataSourceProvider.create(report);
 
-		final Map<String, String> templateParams = dataSourceProvider.getTemplateParams();
+		final Map<String, String[]> templateParams = dataSourceProvider.getRequestParameters();
 
 		JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
 
 		Map<String, Object> reportParameters = new HashMap<String, Object>();
+
 		reportParameters.putAll(templateParams);
 		JasperPrint jPrint = fillManager.fill(report, reportParameters, dataSource);
 		JasperExportManager.exportReportToPdfStream(jPrint, outputStream);

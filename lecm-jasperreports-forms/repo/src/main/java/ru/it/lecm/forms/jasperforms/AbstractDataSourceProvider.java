@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public abstract class AbstractDataSourceProvider implements JRDataSourceProvider {
 	ServiceRegistry serviceRegistry;
-	Map<String, String> templateParams;
+	Map<String, String[]> requestParameters;
 
 	private List<JRField> fieldsList;
 
@@ -31,11 +31,11 @@ public abstract class AbstractDataSourceProvider implements JRDataSourceProvider
 	/**
 	 * Основной конструктор класса
 	 *
-	 * @param templateParams  параметры, пришедшие из запроса (веб-скрипта), могут использоваться при создании источника данных для формирования запросов
+	 * @param requestParameters  параметры, пришедшие из запроса (веб-скрипта), могут использоваться при создании источника данных для формирования запросов
 	 * @param serviceRegistry точка доступа к сервисам - каждый провайдер может получить отсюда требующиеся для работы сервисы
 	 */
-	public AbstractDataSourceProvider(Map<String, String> templateParams, ServiceRegistry serviceRegistry) {
-		this.templateParams = templateParams;
+	public AbstractDataSourceProvider(Map<String, String[]> requestParameters, ServiceRegistry serviceRegistry) {
+		this.requestParameters = requestParameters;
 		this.serviceRegistry = serviceRegistry;
 		initFields();
 	}
@@ -77,7 +77,7 @@ public abstract class AbstractDataSourceProvider implements JRDataSourceProvider
 		return getFieldsList().toArray(new JRField[getFieldsList().size()]);
 	}
 
-	public Map<String, String> getTemplateParams() {
-		return templateParams;
+	public Map<String, String[]> getRequestParameters() {
+		return requestParameters;
 	}
 }

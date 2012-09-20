@@ -32,7 +32,7 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		super();
 	}
 
-	public FilesDataSourceProvider(Map<String, String> templateParams, ServiceRegistry serviceRegistry) {
+	public FilesDataSourceProvider(Map<String, String[]> templateParams, ServiceRegistry serviceRegistry) {
 		super(templateParams, serviceRegistry);
 	}
 
@@ -79,10 +79,11 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 	}
 
 	private List<FileInfo> getFileInfos() {
-		String nodeRefStr = templateParams.get("nodeRef");
-		nodeRefStr = nodeRefStr.replace(":/", "://");   //TODO небольшой костыль - восстанавливает нормальный вид ссылки
-		nodeRefStr = nodeRefStr.replace(":///", "://");
-		final List<NodeRef> nodeRefs = NodeRef.getNodeRefs(nodeRefStr);
+		String[] nodeRefsStr = requestParameters.get("nodeRef");
+		final List<NodeRef> nodeRefs = new ArrayList<NodeRef>();
+		for (String nodeRefStr : nodeRefsStr) {
+			nodeRefs.addAll(NodeRef.getNodeRefs(nodeRefStr));
+		}
 		final FileFolderService fileFolderService = serviceRegistry.getFileFolderService();
 		List<FileInfo> fileInfos = new ArrayList<FileInfo>();
 
