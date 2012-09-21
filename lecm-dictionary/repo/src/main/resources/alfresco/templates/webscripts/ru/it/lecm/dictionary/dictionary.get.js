@@ -1,3 +1,10 @@
+var dictionary = userhome.childByNamePath("Dictionary");
+if (dictionary == null || dictionary == "") {
+    dictionary = userhome.createNode("Dictionary", "cm:folder");
+    dictionary.createNode("TelephoneBook", "lecm-dic:dictionary");
+    dictionary.createNode("Organization", "lecm-dic:dictionary");
+    dictionary.createNode("AddressBook", "lecm-dic:dictionary");
+}
 var query = "";
 if (args["nodeRef"] == null || args["nodeRef"] == "") {
 	query = "PATH: \"/app:company_home/cm:Dictionary/*\"";
@@ -55,13 +62,4 @@ function getNodeType(node) {
 		type = "dictionary_values"
 	}
 	return type;
-}
-
-var folderD = userhome.childByNamePath("Dictionary");
-if (folderD == null ) {
-    userhome.createNode("Dictionary", "cm:folder");
-    folderD= userhome.childByNamePath("Dictionary");
-    folderD.createNode("TelephoneBook", "lecm-dic:dictionary");
-    folderD.createNode("Organization", "lecm-dic:dictionary");
-    folderD.createNode("AddressBook", "lecm-dic:dictionary");
 }
