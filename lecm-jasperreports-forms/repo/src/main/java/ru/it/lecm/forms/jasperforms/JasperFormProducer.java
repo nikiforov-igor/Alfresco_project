@@ -3,6 +3,7 @@ package ru.it.lecm.forms.jasperforms;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.alfresco.service.ServiceRegistry;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -56,11 +57,12 @@ public class JasperFormProducer extends AbstractWebScript {
 			AbstractDataSourceProvider dsProvider = null;
 			try {
 				dsProvider = (AbstractDataSourceProvider) Class.forName(dataSourceClass)
-						.getConstructor(Map.class, ServiceRegistry.class).newInstance(requestParameters, serviceRegistry);
+						.getConstructor(ServiceRegistry.class).newInstance(serviceRegistry);
+				BeanUtils.populate(dsProvider,requestParameters);
 			} catch (ClassNotFoundException e) {
-				log.warn("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">. Class not found");
+				throw new IOException("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">. Class not found");
 			} catch (NoSuchMethodException e) {
-				log.warn("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">. Constructor not defined or has incorrect parrameters");
+				throw new IOException("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">. Constructor not defined or has incorrect parrameters");
 			} catch (InvocationTargetException e) {
 				throw new IOException("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">", e);
 			} catch (InstantiationException e) {
@@ -68,12 +70,7 @@ public class JasperFormProducer extends AbstractWebScript {
 			} catch (IllegalAccessException e) {
 				throw new IOException("Can not istantiate DataSourceProvider of class <" + dataSourceClass + ">", e);
 			}
-			if (dsProvider == null) {
-				log.warn("Default DataSourceProvider (ru.it.lecm.forms.jasperforms.FilesDataSourceProvider) will be used"); //TODO throw exception if DSProvider not defined
-				//use FilesDataSourceProvider as default datasource
-				dsProvider = new FilesDataSourceProvider(requestParameters, serviceRegistry);
-			}
-			generateReport(outputStream, jasperReport, dsProvider);
+			generateReport(outputStream, jasperReport, dsProvider, requestParameters);
 		} catch (JRException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 			throw new IOException("Can not fill report", e);
@@ -85,7 +82,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		}
 	}
 
-	private void generateReport(OutputStream outputStream, JasperReport report, AbstractDataSourceProvider dataSourceProvider)
+	private void generateReport(OutputStream outputStream, JasperReport report, AbstractDataSourceProvider dataSourceProvider, Map<String, String[]> requestParameters)
 			throws IllegalArgumentException, JRException {
 		if (outputStream == null) {
 			throw new IllegalArgumentException("The output stream was not specified");
@@ -93,13 +90,12 @@ public class JasperFormProducer extends AbstractWebScript {
 
 		JRDataSource dataSource = dataSourceProvider.create(report);
 
-		final Map<String, String[]> templateParams = dataSourceProvider.getRequestParameters();
 
 		JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
 
 		Map<String, Object> reportParameters = new HashMap<String, Object>();
 
-		reportParameters.putAll(templateParams);
+		reportParameters.putAll(requestParameters);
 		JasperPrint jPrint = fillManager.fill(report, reportParameters, dataSource);
 		JasperExportManager.exportReportToPdfStream(jPrint, outputStream);
 	}

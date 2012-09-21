@@ -25,6 +25,16 @@ import java.util.*;
  */
 public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 
+	private String[] nodeRef;
+
+	public String[] getNodeRef() {
+		return nodeRef;
+	}
+
+	public void setNodeRef(String[] nodeRef) {
+		this.nodeRef = nodeRef;
+	}
+
 	/**
 	не удалять - нужен для инициализации класса при вызове из iReport
 	 */
@@ -32,8 +42,8 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		super();
 	}
 
-	public FilesDataSourceProvider(Map<String, String[]> templateParams, ServiceRegistry serviceRegistry) {
-		super(templateParams, serviceRegistry);
+	public FilesDataSourceProvider(ServiceRegistry serviceRegistry) {
+		super(serviceRegistry);
 	}
 
 	@Override
@@ -79,9 +89,8 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 	}
 
 	private List<FileInfo> getFileInfos() {
-		String[] nodeRefsStr = requestParameters.get("nodeRef");
 		final List<NodeRef> nodeRefs = new ArrayList<NodeRef>();
-		for (String nodeRefStr : nodeRefsStr) {
+		for (String nodeRefStr : nodeRef) {
 			nodeRefs.addAll(NodeRef.getNodeRefs(nodeRefStr));
 		}
 		final FileFolderService fileFolderService = serviceRegistry.getFileFolderService();
