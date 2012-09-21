@@ -71,6 +71,7 @@
         <module>OrgStructure</module>
         <module>lecm-experts</module>
         <module>lecm-jasperreports-forms</module>
+	    <module>lecm-dictionary</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
