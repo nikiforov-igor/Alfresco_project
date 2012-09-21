@@ -42,6 +42,12 @@
         <property name="byUri">
             <value>false</value>
         </property>
+        <property name="get_nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="get_contentService">
+            <ref bean="contentService"/>
+        </property>
     </bean>
 
     <bean id="${groupId}.${artifactId}.get.experts.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
@@ -64,11 +70,17 @@
         <property name="exp_nodeService">
             <ref bean="nodeService"/>
         </property>
+        <property name="exp_contentService">
+            <ref bean="contentService"/>
+        </property>
         <property name="exp_personService">
             <ref bean="personService"/>
         </property>
         <property name="exp_transService">
             <ref bean="transactionService"/>
+        </property>
+        <property name="exp_authService">
+            <ref bean="authenticationService"/>
         </property>
     </bean>
 </beans>

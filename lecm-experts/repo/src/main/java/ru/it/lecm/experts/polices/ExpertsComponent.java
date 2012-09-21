@@ -1,21 +1,25 @@
 package ru.it.lecm.experts.polices;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.ContentServicePolicies;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -36,13 +40,15 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 
 	private final static String AFFECTED_EXTENSIONS = "DOC,DOCX,PPTX,XLSX,TXT,PDF";
 
-	private final long DELAY = 10000;
+	private final long DELAY = 1000;
+	private final int ATTEMPTS = 30;
 
 	private PolicyComponent exp_policyComponent;
 	private NodeService exp_nodeService;
 	private PersonService exp_personService;
 	private TransactionService exp_transService;
-
+	private ContentService exp_contentService;
+	private AuthenticationService exp_authService;
 	private static ServiceRegistry serviceRegistry;
 	// Queue of node update events
 
@@ -71,66 +77,130 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 	@Override
 	public void onContentUpdate(NodeRef nodeRef, boolean newContent) {
 		if (exp_nodeService.hasAspect(nodeRef, EXPERTS_ASPECT) && newContent) {
-			final String fileName = (String) exp_nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
 			final NodeRef ref = nodeRef;
-			if (checkFilename(fileName)) {
-				Thread getExpertsThread = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(DELAY);
-							RetryingTransactionHelper.RetryingTransactionCallback<Object> processEventCallback =
-									new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-										public Object execute() throws Throwable {
-											getAndSaveExperts(ref);
-											return null;
-										}
-									};
-							exp_transService.getRetryingTransactionHelper().doInTransaction(processEventCallback, false, true);
-						} catch (Exception ex) {
-							logger.error(ex);
+			RetryingTransactionHelper.RetryingTransactionCallback<Object> processEventCallback =
+					new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+						public Object execute() throws Throwable {
+							searchExperts(ref, null);
+							return null;
 						}
-					}
-				});
-				getExpertsThread.start();
-			}
+					};
+			exp_transService.getRetryingTransactionHelper().doInTransaction(processEventCallback, false);
 		}
 	}
 
-	private void getAndSaveExperts(final NodeRef nodeRef) {
-		AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
-			public Object doWork() throws Exception {
-				//get experts
-				GetExpertsBean expertsBean = new GetExpertsBean();
-				expertsBean.setByUri(false);
-
-				String expertsString = expertsBean.get(nodeRef.toString());
-				try {
-					JSONArray expertsArray = new JSONArray(expertsString);
-					for (int i = 0; i < expertsArray.length(); i++) {
-						try {
-							JSONObject expert = (JSONObject) expertsArray.get(i);
-							String login = (String) expert.get(GetExpertsBean.ATTR_LNAME);
-
-							// find system user - throw exception if not exist
-							NodeRef personRef = exp_personService.getPerson(login, false);
-							exp_nodeService.createAssociation(nodeRef, personRef, EXPERTS_ASPECT_PROPERTY);
-						} catch (NoSuchPersonException ex) {
-							logger.info(ex);
-						} catch (AssociationExistsException ex) {
-							logger.info(ex);
-						} catch (InvalidNodeRefException ex) {
-							logger.info(ex);
-						} catch (Exception ex) {
-							logger.info(ex);
-						}
+	private void searchExperts(final NodeRef nodeRef, final NodeRef versionRef) {
+		final String fileName = (String) exp_nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+		if (checkFilename(fileName)) {
+			//final String username = exp_authService.getCurrentUserName();
+			for (int attempt = 0; attempt < ATTEMPTS; attempt++) {
+				String experts = getExperts(versionRef != null ? versionRef : nodeRef, fileName);
+				if (experts != null) {
+					createExpertsAssociations(experts, nodeRef);
+					break;
+				} else {
+					try {
+						Thread.sleep(DELAY);
+					} catch (InterruptedException e) {
+						logger.error(e);
 					}
-				} catch (JSONException e) {
-					logger.error(e);
 				}
-				return null;
 			}
-		}, AuthenticationUtil.SYSTEM_USER_NAME);
+			/*Thread getExpertsThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						*//*for (int attempt = 0; attempt < ATTEMPTS; attempt++) {
+							String experts = getExperts(versionRef != null ? versionRef : nodeRef, fileName);
+							if (experts != null) {
+								createExpertsAssociations(experts, nodeRef);
+								break;
+							} else {
+								Thread.sleep(DELAY);
+							}
+						}*//*
+
+						for (int attempt = 0; attempt < ATTEMPTS; attempt++) {
+							String experts = getExperts(versionRef != null ? versionRef : nodeRef, fileName);
+							if (experts != null) {
+								createExpertsAssociations(experts, nodeRef);
+								break;
+							} else {
+								Thread.sleep(DELAY);
+							}
+						}
+
+					} catch (Exception ex) {
+						logger.error(ex);
+					}
+				}
+			});
+			getExpertsThread.start();*/
+		}
+	}
+
+	private String getExperts(final NodeRef nodeRef, String fileName) {
+		GetExpertsBean expertsBean = new GetExpertsBean();
+		expertsBean.setByUri(false); // byContent search
+
+		String result = null;
+		InputStream originalInputStream = null;
+		ByteArrayOutputStream outputStream = null;
+		if (exp_nodeService.exists(nodeRef)) {
+			try {
+				result = expertsBean.get(nodeRef.toString());
+				/*ContentReader reader = exp_contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+				originalInputStream = reader.getContentInputStream();
+				outputStream = new ByteArrayOutputStream();
+
+				final int BUF_SIZE = 1 << 8; //1KiB buffer
+				byte[] buffer = new byte[BUF_SIZE];
+				int bytesRead = -1;
+
+
+				while ((bytesRead = originalInputStream.read(buffer)) > -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
+				byte[] binaryData = outputStream.toByteArray();
+				if (binaryData.length > 0) {
+					result = expertsBean.get(binaryData, fileName);
+				}*/
+			} /*catch (IOException e) {
+				logger.error(e);
+			}*/ catch (Exception ex) {
+				logger.error(ex);
+			} finally {
+				IOUtils.closeQuietly(originalInputStream);
+				IOUtils.closeQuietly(outputStream);
+			}
+		}
+		return result;
+	}
+
+	private void createExpertsAssociations(String expertsString, NodeRef ref) {
+		try {
+			JSONArray expertsArray = new JSONArray(expertsString);
+			for (int i = 0; i < expertsArray.length(); i++) {
+				try {
+					JSONObject expert = (JSONObject) expertsArray.get(i);
+					String login = (String) expert.get(GetExpertsBean.ATTR_LNAME);
+
+					// find system user - will be thrown exception if not exist
+					NodeRef personRef = exp_personService.getPerson(login, false);
+					exp_nodeService.createAssociation(ref, personRef, EXPERTS_ASPECT_PROPERTY);
+				} catch (NoSuchPersonException ex) {
+					logger.debug(ex);
+				} catch (AssociationExistsException ex) {
+					logger.debug(ex);
+				} catch (JSONException ex) {
+					logger.debug(ex);
+				} catch (Exception ex) {
+					logger.error(ex);
+				}
+			}
+		} catch (JSONException e) {
+			logger.error(e);
+		}
 	}
 
 	@Override
@@ -144,33 +214,20 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 		}
 	}
 
-	public TransactionService getExp_transService() {
-		return exp_transService;
-	}
-
 	public void setExp_transService(TransactionService exp_transService) {
 		this.exp_transService = exp_transService;
 	}
 
-	public PersonService getExp_personService() {
-		return exp_personService;
-	}
 
 	public void setExp_personService(PersonService exp_personService) {
 		this.exp_personService = exp_personService;
 	}
 
-	public PolicyComponent getExp_policyComponent() {
-		return exp_policyComponent;
-	}
 
 	public void setExp_policyComponent(PolicyComponent exp_policyComponent) {
 		this.exp_policyComponent = exp_policyComponent;
 	}
 
-	public NodeService getExp_nodeService() {
-		return exp_nodeService;
-	}
 
 	public void setExp_nodeService(NodeService exp_nodeService) {
 		this.exp_nodeService = exp_nodeService;
@@ -178,6 +235,16 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 
 	@Override
 	public void afterCreateVersion(NodeRef versionableNode, Version version) {
-		onContentUpdate(versionableNode, true);
+		if (exp_nodeService.hasAspect(versionableNode, EXPERTS_ASPECT)) {
+			searchExperts(versionableNode, version.getFrozenStateNodeRef());
+		}
+	}
+
+	public void setExp_contentService(ContentService exp_contentService) {
+		this.exp_contentService = exp_contentService;
+	}
+
+	public void setExp_authService(AuthenticationService exp_authService) {
+		this.exp_authService = exp_authService;
 	}
 }

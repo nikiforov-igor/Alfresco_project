@@ -87,7 +87,7 @@ LogicECM.module = LogicECM.module || {};
                     var newRow = {
                         login:experts[nodeIndex].lname,
                         fullName:experts[nodeIndex].fname,
-                        linkRef:"<a href='" + experts[nodeIndex].ulink + "'>" + this.msg("control.table.body.link.profile") + "</a>"
+                        linkRef:"<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "user/" + experts[nodeIndex].lname + "/profile" + "'>" + this.msg("control.table.body.link.profile") + "</a>"
                     };
                     this.table.addRow(newRow, this.globalDataCount);
                     this.globalDataCount++;

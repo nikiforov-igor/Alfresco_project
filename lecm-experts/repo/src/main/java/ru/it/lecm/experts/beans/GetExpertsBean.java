@@ -40,10 +40,13 @@ public class GetExpertsBean extends BaseProcessorExtension {
 	public static final String ATTR_LNAME = "lname";
 	public static final String ATTR_FNAME = "fname";
 
+	private NodeService get_nodeService;
+	private ContentService get_contentService;
+
 	private static Log logger = LogFactory.getLog(GetExpertsBean.class);
 
 	public String get(String ref) {
-		JSONArray expertsArray = new JSONArray();
+		String expertsArray = null;
 		if (byUri) {
 			/*//TODO need change this code block(check and change ref pass into service)
 			SearchExpertsServiceSoap service = new SearchExpertsService().getSearchExpertsServiceSoap();
@@ -75,13 +78,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 				byte[] binaryData = outputStream.toByteArray();
 
 				if (binaryData.length > 0) {
-					SearchExpertsServiceSoap service = new SearchExpertsService().getSearchExpertsServiceSoap();
-					RequestExpertsExResponse.RequestExpertsExResult res = service.requestExpertsEx(binaryData, fileName, true);
-
-					if (res.getContent().get(0) instanceof ElementNSImpl) {
-						ElementNSImpl result = (ElementNSImpl) res.getContent().get(0);
-						expertsArray = parseResult(result);
-					}
+					expertsArray = get(binaryData, fileName);
 				}
 			} catch (IOException e) {
 				logger.error(e);
@@ -89,6 +86,18 @@ public class GetExpertsBean extends BaseProcessorExtension {
 				IOUtils.closeQuietly(originalInputStream);
 				IOUtils.closeQuietly(outputStream);
 			}
+		}
+		return expertsArray;
+	}
+
+	public String get (byte[] content, String fileName) {
+		JSONArray expertsArray = new JSONArray();
+		SearchExpertsServiceSoap service = new SearchExpertsService().getSearchExpertsServiceSoap();
+		RequestExpertsExResponse.RequestExpertsExResult res = service.requestExpertsEx(content, fileName, true);
+
+		if (res.getContent().get(0) instanceof ElementNSImpl) {
+			ElementNSImpl result = (ElementNSImpl) res.getContent().get(0);
+			expertsArray = parseResult(result);
 		}
 		return expertsArray.toString();
 	}
@@ -117,9 +126,6 @@ public class GetExpertsBean extends BaseProcessorExtension {
 		return expertsArray;
 	}
 
-	public boolean isByUri() {
-		return byUri;
-	}
 
 	public void setByUri(boolean byUri) {
 		this.byUri = byUri;
@@ -131,5 +137,21 @@ public class GetExpertsBean extends BaseProcessorExtension {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
+	}
+
+	public NodeService getGet_nodeService() {
+		return get_nodeService;
+	}
+
+	public void setGet_nodeService(NodeService get_nodeService) {
+		this.get_nodeService = get_nodeService;
+	}
+
+	public ContentService getGet_contentService() {
+		return get_contentService;
+	}
+
+	public void setGet_contentService(ContentService get_contentService) {
+		this.get_contentService = get_contentService;
 	}
 }

@@ -4,8 +4,7 @@
     {
     lname: "${ex.lname}",
     fname: "${ex.fname}",
-    ref: "${ex.nodeRef}",
-    ulink: "${ex.ulink}"
+    ref: "${ex.nodeRef}"
     }
         <#if ex_has_next>,</#if>
     </#list>

@@ -25,13 +25,11 @@ function addExperts(experts, expertsList) {
         first = expertNode.properties["cm:firstName"];
         last = expertNode.properties["cm:lastName"];
         ref = expertNode.getNodeRef().toString();
-        link = url.server + "/share/page/user/" + login + "/profile";
 
         experts.push({
             lname:login,
             fname:first + " " + last,
-            nodeRef:ref,
-            ulink: encodeURI(link)
+            nodeRef:ref
         });
     }
 }
