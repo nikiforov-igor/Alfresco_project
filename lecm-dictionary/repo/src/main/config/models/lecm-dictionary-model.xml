@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-dic:dictionaryStructure" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>dictionary</description>
+	<author>MShafeev</author>
+	<published>2012-08-23</published>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/information_guide/1.0" prefix="lecm-dic"/>
+	</namespaces>
+
+
+	<types>
+
+		<!--Описание справочника-->
+		<type name="lecm-dic:dictionary">
+
+			<title>Information guide</title>
+			<parent>cm:folder</parent>
+
+			<properties>
+				<property name="lecm-dic:name">
+					<title>Name</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-dic:description">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-dic:active">
+					<title>Active</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<associations>
+
+				<!--Связь со значениями справочника-->
+				<child-association name="lecm-dic:dictionary_assoc">
+					<target>
+						<class>lecm-dic:dictionary_values</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+
+			</associations>
+		</type>
+
+		<!--Значения справочника-->
+		<type name="lecm-dic:dictionary_values">
+
+			<title>Dictionary values</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-dic:name_values">
+					<title>Name</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-dic:description_values">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-dic:active_values">
+					<title>Active</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<!--Связь с дочерними значениями справочника-->
+				<child-association name="lecm-dic:dictionary_values_assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-dic:dictionary_values</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+
+		</type>
+
+	</types>
+
+</model>
