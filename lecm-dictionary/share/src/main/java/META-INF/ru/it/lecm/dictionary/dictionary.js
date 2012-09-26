@@ -25,10 +25,10 @@ LogicECM.module = LogicECM.module || {};
  */
 (function () {
 
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-    var resultset = new Array();
-    var tableContainerId = null;
+    var Dom = YAHOO.util.Dom;
+    var resultset = new Array();  // TODO
+    var tableContainerId = null;  // TODO
+    var nodeDictionary = null;    //TODO
 
     LogicECM.module.Dictionary = function (htmlId) {
         return LogicECM.module.Dictionary.superclass.constructor.call(
@@ -46,6 +46,7 @@ LogicECM.module = LogicECM.module || {};
         messages:null,
         table:null,
         layout:null,
+        cDoc: null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -56,17 +57,22 @@ LogicECM.module = LogicECM.module || {};
                 scope:window
             }
         },
+        init: function(formId) {
+            this._loadNode();
+        },
 
         setMessages:function (messages) {
             this.messages = messages;
         },
 
         draw:function () {
-            var Dictionary = Dom.get(this.id);
-            //Добавляем меню
+            this.cDoc = this.id;
+            var dictionary = Dom.get(this.id);
+
+//			//Добавляем меню
             var menu = document.createElement("div");
             menu.id = this.id + "-menu";
-            Dictionary.appendChild(menu);
+            dictionary.appendChild(menu);
 
             var menuData = [
                 {
@@ -87,55 +93,35 @@ LogicECM.module = LogicECM.module || {};
                         ]
                     }
                 }
-//				{
-//					text:this.messages["dictionary.append"],
-//					submenu:{
-//						id:"appendmenu",
-//						itemdata:[
-//							{
-//								id:"appendEmployee",
-//								text:"fff",
-//								disabled:true
-//							},
-//							{
-//								id:"appendDivision",
-//								text:"ttt",
-//								disabled:true
-//							},
-//							{
-//								id: "appendFolder",
-//								text:"yyyy",
-//								disabled:true
-//							}
-//						]
-//					}
-//				}
             ];
 
             this.menu = new YAHOO.widget.MenuBar(menu.id + "-menubar", {
                 lazyload:false,
                 itemdata:menuData
             });
+
             this.menu.subscribe("click", this._menuSelected.bind(this));
             this.menu.render(menu);
+
 
             //Добавляем строку поиска
             this.search = document.createElement("div");
             this.search.id = this.id + "-search";
             this.search.innerHTML = "Search";
-            Dictionary.appendChild(this.search);
+            dictionary.appendChild(this.search);
 
             //Добавляем дерево структуры предприятия
             var treeContainer = document.createElement("div");
             treeContainer.id = this.id + "-tree";
-            Dictionary.appendChild(treeContainer);
+            dictionary.appendChild(treeContainer);
 
             //Добавляем таблицу с данными
             var tableContainer = document.createElement("div");
             tableContainer.id = this.id + "-table";
-            Dictionary.appendChild(tableContainer);
+            dictionary.appendChild(tableContainer);
             tableContainerId=tableContainer.id;
 
+            //this._loadNode();
             this.tree = new YAHOO.widget.TreeView(treeContainer.id);
             this.tree.setDynamicLoad(this._loadTree);
             var root = this.tree.getRoot();
@@ -167,11 +153,36 @@ LogicECM.module = LogicECM.module || {};
                 });
             }
         },
+        _loadNode: function () {
+            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
+            if (this.cDoc != null) {
+                sUrl += "?nodeRef=" + encodeURI(this.cDoc);
+            }
+            var callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    if (oResults != null) {
+                        for (var nodeIndex in oResults) {
+                            nodeDictionary = oResults[nodeIndex].toString();
+                        }
+                    }
+                },
+                failure:function (oResponse) {
+                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
+                },
+                argument:{
+                }
+            };
+
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+        },
         _loadTree:function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary";
+
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/dictionary";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }
+            resultset = [];
             var callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -184,40 +195,15 @@ LogicECM.module = LogicECM.module || {};
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:oResults[nodeIndex].type
                             };
-
                             new YAHOO.widget.TextNode(newNode, node);
                         }
                     }
-
-                    YAHOO.example.Data = {
-                        bookorders: [
-                            {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing"},
-                            {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
-                            {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
-                            {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice"}
-                        ]
-                    };
-                    var myColumnDefs = [
-                        {key:"name", sortable:true, resizeable:true},
-                        {key:"nodeRef", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
-                        {key:"isLeaf", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
-                        {key:"title", sortable:true, resizeable:true}
-                    ];
-//					var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
-
-                    var myDataSource = new YAHOO.util.DataSource(resultset);
-                    myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-                    myDataSource.responseSchema = {
-                        fields: ["id","date","quantity","amount","title"]
-                    };
-
-                    this.table = new YAHOO.widget.DataTable(tableContainerId,
-                        myColumnDefs, myDataSource, {caption:"DataTable Caption"});
 
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
                         oResponse.argument.tree.render();
+//                        oResponse.argument.context._showTable(resultset);
                     }
                 },
                 failure:function (oResponse) {
@@ -227,11 +213,34 @@ LogicECM.module = LogicECM.module || {};
                 argument:{
                     node:node,
                     fnLoadComplete:fnLoadComplete,
-                    tree:this.tree
+                    tree:this.tree,
+                    context: this
                 },
                 timeout:7000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+//			if (resultset.length != 0 || resultset.length != null) {
+//				this._showTable(resultset);
+//			}
+
+        },
+        _showTable:function(dataSource){
+            var myColumnDefs = [
+                {key:"id", sortable:true, resizeable:true},
+                {key:"date", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
+                {key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
+                {key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
+                {key:"title", sortable:true, resizeable:true}
+            ];
+
+            var myDataSource = new YAHOO.util.DataSource(dataSource);
+            myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+            myDataSource.responseSchema = {
+                fields: ["id","date","quantity","amount","title"]
+            };
+
+            this.table = new YAHOO.widget.DataTable(tableContainerId,
+                myColumnDefs, myDataSource, {caption:"DataTable Caption"});
         },
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
@@ -245,32 +254,7 @@ LogicECM.module = LogicECM.module || {};
 //								amount:node.typeName,
                 title:"My text"});
 
-
-            YAHOO.example.Data = {
-                bookorders: [
-                    {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing"},
-                    {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
-                    {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
-                    {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice"}
-                ]
-            };
-            var myColumnDefs = [
-                {key:"id", sortable:true, resizeable:true},
-                {key:"date", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
-                {key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
-                {key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
-                {key:"title", sortable:true, resizeable:true}
-            ];
-//					var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
-
-            var myDataSource = new YAHOO.util.DataSource(resultset);
-            myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-            myDataSource.responseSchema = {
-                fields: ["id","date","quantity","amount","title"]
-            };
-
-            this.table = new YAHOO.widget.DataTable(tableContainerId,
-                myColumnDefs, myDataSource, {caption:"DataTable Caption"});
+            this._showTable(resultset);
 
             if (this.selectedNode.data.type == "dictionary") {
                 this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", false);
@@ -294,7 +278,12 @@ LogicECM.module = LogicECM.module || {};
 
         },
         _createNode:function createNodeByType(type) {
-            var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
+            var templateUrl = null;
+            if (type == "lecm-dic:dictionary"){
+                templateUrl = this._createUrl("create", nodeDictionary, type);
+            } else {
+                templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
+            }
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
                 templateUrl:templateUrl,

@@ -1,10 +1,3 @@
-var dictionary = userhome.childByNamePath("Dictionary");
-if (dictionary == null || dictionary == "") {
-	dictionary = userhome.createNode("Dictionary", "cm:folder");
-	dictionary.createNode("TelephoneBook", "lecm-dic:dictionary");
-	dictionary.createNode("Organization", "lecm-dic:dictionary");
-	dictionary.createNode("AddressBook", "lecm-dic:dictionary");
-}
 var query = "";
 if (args["nodeRef"] == null || args["nodeRef"] == "") {
 	query = "PATH: \"/app:company_home/cm:Dictionary/*\"";

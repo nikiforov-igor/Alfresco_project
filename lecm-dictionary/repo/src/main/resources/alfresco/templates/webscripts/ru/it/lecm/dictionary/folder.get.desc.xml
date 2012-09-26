@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Folder</shortname>
+	<description>Folder</description>
+	<url>/lecm/dictionary/get/folder</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

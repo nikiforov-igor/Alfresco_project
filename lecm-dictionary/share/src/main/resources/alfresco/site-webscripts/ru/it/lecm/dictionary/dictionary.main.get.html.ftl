@@ -47,6 +47,7 @@
 	function init() {
 
 		var Dictionary = new LogicECM.module.Dictionary("dictionary");
+		Dictionary.init("dictionary");
 		Dictionary.setMessages(${messages});
 		Dictionary.draw();
 	}
