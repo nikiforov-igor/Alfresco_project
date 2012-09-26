@@ -4,6 +4,8 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-dic:description" force="true"/>
+                    <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -14,6 +16,8 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-dic:description" force="true"/>
+                    <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -24,6 +28,8 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-dic:description_values" force="true"/>
+                    <show id="lecm-dic:active_values" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -34,29 +40,10 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-dic:description_values" force="true"/>
+                    <show id="lecm-dic:active_values" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
 	</config>
-
-	<config evaluator="node-type" condition="cm:folder">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name" force="true"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="model-type" condition="cm:folder">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name" force="true"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-
 </alfresco-config>
