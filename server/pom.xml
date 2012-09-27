@@ -15,6 +15,7 @@
     <properties>
         <!--<alfresco.version>4.0.e</alfresco.version>-->
         <!--<platform.version>0.1.0</platform.version>-->
+        <share.script.cient.debug>false</share.script.cient.debug>
     </properties>
 
     <modules>
@@ -96,4 +97,12 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>debug</id>
+            <properties>
+                <share.script.cient.debug>true</share.script.cient.debug>
+            </properties>
+        </profile>
+    </profiles>
 </project>
