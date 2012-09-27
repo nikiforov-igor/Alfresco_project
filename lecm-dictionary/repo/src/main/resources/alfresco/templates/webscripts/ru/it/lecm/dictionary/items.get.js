@@ -21,9 +21,9 @@ var items = [];
 model.items = items;
 
 for each(var item in dictionary) {
-	name = item.properties["lecm-dic:name_values"];print(name)
-	description = item.properties["lecm-dic:description_values"]; print(description);
-	active = item.properties["lecm-dic:active_values"]; print(active);
+	name = item.properties["lecm-dic:name_values"];
+	description = item.properties["lecm-dic:description_values"];
+	active = item.properties["lecm-dic:active_values"];
 
 	items.push({
 		name:name,
