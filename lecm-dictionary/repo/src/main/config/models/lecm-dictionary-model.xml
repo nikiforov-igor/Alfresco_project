@@ -17,21 +17,13 @@
 		<namespace uri="http://www.it.ru/logicECM/information_guide/1.0" prefix="lecm-dic"/>
 	</namespaces>
 
-
 	<types>
 
 		<!--Описание справочника-->
 		<type name="lecm-dic:dictionary">
-
 			<title>Information guide</title>
 			<parent>cm:folder</parent>
-
 			<properties>
-				<property name="lecm-dic:name">
-					<title>Name</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-dic:description">
 					<title>Description</title>
 					<type>d:text</type>
@@ -43,31 +35,13 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-			<associations>
-
-				<!--Связь со значениями справочника-->
-				<child-association name="lecm-dic:dictionary_assoc">
-					<target>
-						<class>lecm-dic:dictionary_values</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-
-			</associations>
 		</type>
 
 		<!--Значения справочника-->
 		<type name="lecm-dic:dictionary_values">
-
 			<title>Dictionary values</title>
-			<parent>cm:folder</parent>
+			<parent>cm:content</parent>
 			<properties>
-				<property name="lecm-dic:name_values">
-					<title>Name</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-dic:description_values">
 					<title>Description</title>
 					<type>d:text</type>
@@ -93,9 +67,6 @@
 					</target>
 				</child-association>
 			</associations>
-
 		</type>
-
 	</types>
-
 </model>
