@@ -32,6 +32,7 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
 <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
+<script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary_datagrid.js"></script>
 </@>
 
 <@templateBody>
@@ -41,6 +42,20 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 </div>
 <div id="bd">
 	<@region id="column" scope="template"/>
+
+    <#--<@region id="actions-common" scope="template" />-->
+    <div class="yui-t1" id="alfresco-data-lists">
+        <div id="yui-main">
+            <div class="yui-b" id="alf-content">
+                <#--<@region id="toolbar" scope="template" />-->
+                <@region id="datagrid" scope="template" />
+            </div>
+        </div>
+        <div class="yui-b" id="alf-filters">
+            <#--<@region id="datalists" scope="template" />-->
+               <#--<@region id="filter" scope="template" />-->
+        </div>
+    </div>
 </div>
 </@>
 

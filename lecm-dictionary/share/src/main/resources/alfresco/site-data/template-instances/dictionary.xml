@@ -14,5 +14,13 @@
 				<title>Dictionary</title>
 			</properties>
 		</component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>datagrid</region-id>
+            <url>/lecm/dictionary/datagrid</url>
+            <properties>
+                <pagination>true</pagination>
+            </properties>
+        </component>
 	</components>
 </template-instance>
