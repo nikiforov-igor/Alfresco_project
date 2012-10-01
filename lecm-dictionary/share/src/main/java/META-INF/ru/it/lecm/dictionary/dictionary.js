@@ -26,6 +26,7 @@ LogicECM.module = LogicECM.module || {};
 (function () {
 
     var Dom = YAHOO.util.Dom;
+    var Bubbling = YAHOO.Bubbling;
     var resultset = new Array();  // TODO
     var tableContainerId = null;  // TODO
     var nodeDictionary = null;    //TODO
@@ -182,7 +183,6 @@ LogicECM.module = LogicECM.module || {};
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }
-            resultset = [];
             var callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -219,42 +219,73 @@ LogicECM.module = LogicECM.module || {};
                 timeout:7000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-//			if (resultset.length != 0 || resultset.length != null) {
-//				this._showTable(resultset);
-//			}
-
         },
         _showTable:function(dataSource){
             var myColumnDefs = [
-                {key:"id", sortable:true, resizeable:true},
-                {key:"date", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
-                {key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
-                {key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
-                {key:"title", sortable:true, resizeable:true}
+                {key:"name", sortable:true, resizeable:true},
+//				{key:"description", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
+//				{key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
+//				{key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
+                {key:"description", sortable:true, resizeable:true}
             ];
 
             var myDataSource = new YAHOO.util.DataSource(dataSource);
             myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
             myDataSource.responseSchema = {
-                fields: ["id","date","quantity","amount","title"]
+                fields: ["name","description"]
             };
 
             this.table = new YAHOO.widget.DataTable(tableContainerId,
                 myColumnDefs, myDataSource, {caption:"DataTable Caption"});
         },
+        _redrawTable: function(node){
+            resultset = [];
+            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/items";
+            if (node.data.nodeRef != null) {
+                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+            }
+            var callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    if (oResults != null) {
+                        node.children = [];
+                        for (var nodeIndex in oResults) {
+                            resultset.push({
+                                name:oResults[nodeIndex].name,
+                                description:oResults[nodeIndex].description
+                            });
+                        }
+                    }
+                    this._showTable(resultset);
+                }.bind(this),
+                failure:function (oResponse) {
+                    alert("Failed to load items. " + "[" + oResponse.statusText + "]");
+                },
+                argument:{
+                }
+            };
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+        },
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
 
-            resultset = [];
+            this._redrawTable(node);
 
-            resultset.push({
-                id:node.label,   //oResults[nodeIndex].title,
-                date:node.data.nodeRef, //oResults[nodeIndex].nodeRef,
-                quantity:node.index, //oResults[nodeIndex].isLeaf,
-//								amount:node.typeName,
-                title:"My text"});
-
-            this._showTable(resultset);
+            Bubbling.fire("activeDataListChanged",
+                {
+                    dataList: {
+                        description: "my_descr",
+                        itemType: "lecm-dic:dictionary_values",
+                        name: node.data.type,
+                        nodeRef: node.data.nodeRef,
+//                        prmissions: {
+//                            delete: true,
+//                            edit: true
+//                        },
+                        title: "Dictionaries"
+                    },
+                    scrollTo: true
+                });
 
             if (this.selectedNode.data.type == "dictionary") {
                 this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", false);
@@ -326,6 +357,7 @@ LogicECM.module = LogicECM.module || {};
                 }
             }).show();
         },
+
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
             var fileSpan = '<span class="light">Edit Metatdata</span>';
@@ -335,5 +367,4 @@ LogicECM.module = LogicECM.module || {};
         }
 
     });
-
 })();
