@@ -47,8 +47,16 @@
    -->
     <dependencies>
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-data-model</artifactId>
         </dependency>
         <dependency>
             <groupId>org.alfresco</groupId>

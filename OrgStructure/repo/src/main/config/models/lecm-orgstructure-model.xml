@@ -19,12 +19,6 @@
         <type name="lecm-orgstr:project-resource">
             <title>Project Resource</title>
             <parent>cm:content</parent>
-            <!--<properties>
-                <property name="lecm-orgstr:project_resource_title">
-                    <title>Title</title>
-                    <type>d:text</type>
-                </property>
-            </properties>-->
         </type>
 
         <!-- Описание организационной единицы -->
@@ -369,11 +363,11 @@
             <title>Position</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:position-name">
+                <!--<property name="lecm-orgstr:position-name">
                     <title>Title</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
-                </property>
+                </property>-->
                 <property name="lecm-orgstr:position-description">
                     <title>Description</title>
                     <type>d:any</type>

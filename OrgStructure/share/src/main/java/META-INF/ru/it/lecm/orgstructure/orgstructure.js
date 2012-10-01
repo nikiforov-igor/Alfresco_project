@@ -58,7 +58,7 @@ LogicECM.module = LogicECM.module || {};
 
         draw: function () {
             var orgStructure = Dom.get(this.id);
-            //Добавляем меню
+            /*//Добавляем меню
             var menu = document.createElement("div");
             menu.id = this.id + "-menu";
             orgStructure.appendChild(menu);
@@ -81,9 +81,9 @@ LogicECM.module = LogicECM.module || {};
                         ]
                     }
                 }
-            ];
+            ];*/
 
-           this.menu = new YAHOO.widget.MenuBar(menu.id + "-menubar", {
+           /*this.menu = new YAHOO.widget.MenuBar(menu.id + "-menubar", {
                 lazyload: false,
                 itemdata: menuData
             });
@@ -94,7 +94,7 @@ LogicECM.module = LogicECM.module || {};
             this.search = document.createElement("div");
             this.search.id = this.id + "-search";
             this.search.innerHTML = "Search";
-            orgStructure.appendChild(this.search);
+            orgStructure.appendChild(this.search);*/
 
             //Добавляем дерево структуры предприятия
             var treeContainer = document.createElement("div");
@@ -137,7 +137,11 @@ LogicECM.module = LogicECM.module || {};
             var sUrl = Alfresco.constants.PROXY_URI + "logicecm/orgstructure/branch";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+                if (node.data.type != null) {
+                    sUrl += "&type=" + encodeURI(node.data.type);
+                }
             }
+
             var callback = {
                 success: function(oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -174,13 +178,13 @@ LogicECM.module = LogicECM.module || {};
         },
         _treeNodeSelected: function(node) {
             this.selectedNode = node;
-            if (this.selectedNode.data.type == "organization_unit") {
+            /*if (this.selectedNode.data.type == "organization_unit") {
                 this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", false);
                 this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", false);
             } else {
                 this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", true);
                 this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", true);
-            };
+            };*/
         },
         _menuSelected: function onClickMenu(p_sType, p_aArgs) {
             var selectedMenu = p_aArgs[1];
