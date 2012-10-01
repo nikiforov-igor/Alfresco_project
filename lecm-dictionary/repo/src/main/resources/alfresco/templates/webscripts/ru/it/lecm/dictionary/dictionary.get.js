@@ -1,30 +1,15 @@
-var query = "";
-if (args["nodeRef"] == null || args["nodeRef"] == "") {
-	query = "PATH: \"/app:company_home/cm:Dictionary/*\"";
+var dictionary;
+var nodeRef = args["nodeRef"];
+if (nodeRef == null || nodeRef == "") {
+    dictionary = companyhome.childByNamePath("Dictionary");
 } else {
-	query = "PARENT: \"" + args["nodeRef"] + "\"";
+    dictionary = search.findNode(nodeRef);
 }
 
-var sort = {
-	column: "@{http://www.alfresco.org/model/content/1.0}name",
-	ascending: true
-}
-
-var def = {
-	query: query + " AND TYPE: \"lecm-dic:dictionary\"",
-	sort: [sort]
-}
-var dictionary = search.query(def);
-
-def = {
-	query: query + " AND TYPE: \"lecm-dic:dictionary_values\"",
-	sort: [sort]
-}
-var dictionary_values = search.query(def);
+var dictionary_values = dictionary.getChildren();
 
 var branch = [];
 
-addItems(branch, dictionary);
 addItems(branch, dictionary_values);
 
 model.branch = branch;
@@ -48,11 +33,7 @@ function addItems(branch, items) {
 }
 
 function getNodeType(node) {
-	var type = "dictionary_values"
-	if (node.getTypeShort() == "lecm-dic:dictionary") {
-		type = "dictionary";
-	} else if (node.getTypeShort() == "lecm-dic:dictionary_values") {
-		type = "dictionary_values"
-	}
+    var type = node.getTypeShort();
+    type = type.substr(type.lastIndexOf(":") + 1);
 	return type;
 }
