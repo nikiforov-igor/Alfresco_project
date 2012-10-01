@@ -1,6 +1,8 @@
 package ru.it.lecm.orgstructure;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.processor.BaseProcessorExtension;
@@ -8,10 +10,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.apache.commons.logging.Log;
@@ -39,7 +37,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String DIRECTORY_PROJECTS = "project-register";
 	public static final String DIRECTORY_STAFF_LIST = "staff-list";
 
-	private static final String ORGSTRUCTURE_NAMESPACE_URI = "lecm-orgstr";
+	private static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
 
 	public static final String NODE_REF = "nodeRef";
@@ -123,32 +121,23 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 				}
 			} else {
 					if (type.equalsIgnoreCase(TYPE_UNIT)) {
-						SearchParameters sp = new SearchParameters();
-						sp.addStore(currentRef.getStoreRef());
-						sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-						sp.setQuery("PARENT: \"" + ref + "\" AND TYPE:\"lecm-orgstr:organization-unit\"");
-						ResultSet results = null;
-						try {
-							results = serviceRegistry.getSearchService().query(sp);
-							for (ResultSetRow row : results) {
-								NodeRef unitRef = row.getNodeRef();
-								JSONObject unit = new JSONObject();
-								try {
-									unit.put(NODE_REF, unitRef.toString());
-									unit.put(TYPE, TYPE_UNIT);
-									unit.put(TITLE, getElementName(
-											nodeService, unitRef, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
-									unit.put(IS_LEAF, nodeService.getChildAssocs(
-											unitRef, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
+						Set<QName> units = new HashSet<QName>();
+						units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI,"organization-unit"));
+						List<ChildAssociationRef> childs =
+								nodeService.getChildAssocs(currentRef, units);
+						for (ChildAssociationRef child : childs) {
+							JSONObject position = new JSONObject();
+							try {
+								position.put(NODE_REF, child.getChildRef().toString());
+								position.put(TYPE, TYPE_UNIT);
+								position.put(TITLE, getElementName(
+										nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
+								position.put(IS_LEAF, nodeService.getChildAssocs(
+										child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 
-									nodes.put(unit);
-								} catch (JSONException e) {
-									logger.error(e);
-								}
-							}
-						} finally {
-							if (results != null) {
-								results.close();
+								nodes.put(position);
+							} catch (JSONException e) {
+								logger.error(e);
 							}
 						}
 					} else if (type.equals(TYPE_EMPLOYEES)) {
@@ -164,58 +153,34 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 							logger.error(e);
 						}
 					} else if (type.equals(TYPE_PROJECTS)) {
-						SearchParameters sp = new SearchParameters();
-						sp.addStore(currentRef.getStoreRef());
-						sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-						sp.setQuery("PARENT: \"" + ref + "\" AND TYPE:\"lecm-orgstr:project\"");
-						ResultSet results = null;
-						try {
-							results = serviceRegistry.getSearchService().query(sp);
-							for (ResultSetRow row : results) {
-								NodeRef projectRef = row.getNodeRef();
-								JSONObject project = new JSONObject();
-								try {
-									project.put(NODE_REF, projectRef.toString());
-									project.put(TYPE, TYPE_PROJECT);
-									project.put(TITLE, getElementName(
-											nodeService, projectRef, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
-									project.put(IS_LEAF, true);
+						List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
+						for (ChildAssociationRef child : childs) {
+							JSONObject position = new JSONObject();
+							try {
+								position.put(NODE_REF, child.getChildRef().toString());
+								position.put(TYPE, TYPE_PROJECT);
+								position.put(TITLE, getElementName(
+										nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
+								position.put(IS_LEAF, true);
 
-									nodes.put(project);
-								} catch (JSONException e) {
-									logger.error(e);
-								}
-							}
-						} finally {
-							if (results != null) {
-								results.close();
+								nodes.put(position);
+							} catch (JSONException e) {
+								logger.error(e);
 							}
 						}
 					} else if (type.equals(TYPE_STAFF_LIST)) {
-						SearchParameters sp = new SearchParameters();
-						sp.addStore(currentRef.getStoreRef());
-						sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-						sp.setQuery("PARENT: \"" + ref + "\" AND TYPE:\"lecm-orgstr:position\"");
-						ResultSet results = null;
-						try {
-							results = serviceRegistry.getSearchService().query(sp);
-							for (ResultSetRow row : results) {
-								NodeRef positionRef = row.getNodeRef();
-								JSONObject position = new JSONObject();
-								try {
-									position.put(NODE_REF, positionRef.toString());
-									position.put(TYPE, TYPE_POSITION);
-									position.put(TITLE, getElementName(nodeService,positionRef));
-									position.put(IS_LEAF, true);
+						List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
+						for (ChildAssociationRef child : childs) {
+							JSONObject position = new JSONObject();
+							try {
+								position.put(NODE_REF, child.getChildRef().toString());
+								position.put(TYPE, TYPE_POSITION);
+								position.put(TITLE, getElementName(nodeService,child.getChildRef()));
+								position.put(IS_LEAF, true);
 
-									nodes.put(position);
-								} catch (JSONException e) {
-									logger.error(e);
-								}
-							}
-						} finally {
-							if (results != null) {
-								results.close();
+								nodes.put(position);
+							} catch (JSONException e) {
+								logger.error(e);
 							}
 						}
 					}

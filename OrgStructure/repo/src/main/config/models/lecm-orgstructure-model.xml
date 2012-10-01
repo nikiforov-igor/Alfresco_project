@@ -374,11 +374,11 @@
                 </property>
                 <property name="lecm-orgstr:position-name-g">
                     <title>Name in genitive</title>
-                    <type>d:boolean</type>
+                    <type>d:text</type>
                 </property>
                 <property name="lecm-orgstr:position-name-d">
                     <title>Name in dative</title>
-                    <type>d:boolean</type>
+                    <type>d:text</type>
                 </property>
             </properties>
         </type>
