@@ -16,42 +16,43 @@
     <types>
         <!-- Абстрактные модели -->
         <!-- Описание ресурса проекта -->
-        <type name="lecm-orgstr:project_resource">
+        <type name="lecm-orgstr:project-resource">
             <title>Project Resource</title>
-            <parent>cm:object</parent>
-            <properties>
-                <property name="lecm-orgstr_project_resource_title">
+            <parent>cm:content</parent>
+            <!--<properties>
+                <property name="lecm-orgstr:project_resource_title">
                     <title>Title</title>
                     <type>d:text</type>
                 </property>
-            </properties>
+            </properties>-->
         </type>
 
         <!-- Описание организационной единицы -->
-        <type name="lecm-orgstr:organization_element">
+        <type name="lecm-orgstr:organization-element">
             <title>Organization Element</title>
             <parent>cm:folder</parent>
             <properties>
-                <property name="lecm-orgstr:element_full_name">
+                <property name="lecm-orgstr:element-full-name">
                     <title>Full Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:element_short_name">
+                <property name="lecm-orgstr:element-short-name">
                     <title>Short Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
             </properties>
             <associations>
-                <association name="lecm-orgstr:element_official_assoc">
+                <!-- Список должностных лиц-->
+                <association name="lecm-orgstr:element-official-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:official</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
                 </association>
@@ -60,240 +61,131 @@
 
         <!-- Описание моделей -->
         <!-- Описание организации -->
-        <type name="lecm-orgstructure:organization">
+        <type name="lecm-orgstr:organization">
             <title>Organization</title>
-            <parent>lecm-orgstr:organization_element</parent>
+            <parent>lecm-orgstr:organization-element</parent>
             <properties>
-                <property name="lecm-orgstr:org_leg_address">
+                <property name="lecm-orgstr:org-leg-address">
                     <title>Legal Address</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_act_address">
+                <property name="lecm-orgstr:org-act-address">
                     <title>Actual Address</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:org_off_site">
+                <property name="lecm-orgstr:org-off-site">
                     <title>Official Site</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_phone">
+                <property name="lecm-orgstr:org-phone">
                     <title>Phone numbers</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:org_fax">
+                <property name="lecm-orgstr:org-fax">
                     <title>Fax numbers</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_email">
+                <property name="lecm-orgstr:org-email">
                     <title>E-mails</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:org_logo">
+                <property name="lecm-orgstr:org-logo">
                     <title>Logo</title>
                     <type>d:any</type>
                 </property>
-                <property name="lecm-orgstr:org_tin">
+                <property name="lecm-orgstr:org-tin">
                     <title>TIN</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_ownership_type">
+                <property name="lecm-orgstr:org-ownership-type">
                     <title>Type of ownership</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_incorporation_form">
+                <property name="lecm-orgstr:org-incorporation-form">
                     <title>Form of incorporation</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:org_founding_docs">
+                <property name="lecm-orgstr:org-founding-docs">
                     <title>Information about the founding documents</title>
                     <type>d:text</type>
                 </property>
             </properties>
             <associations>
                 <!-- Связь со структурными подразделениями -->
-                <child-association name="lecm-orgstr:org_unit_assoc">
+                <child-association name="lecm-orgstr:org-unit-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:organization_unit</class>
-                        <mandatory>true</mandatory>
+                        <class>lecm-orgstr:organization-unit</class>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
                 </child-association>
-
-<!--                &lt;!&ndash; Связь с сотрудниками &ndash;&gt;
-                <child-association name="lecm-orgstr:org_employees_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash;  Связь с персональной датой &ndash;&gt;
-                <child-association name="lecm-orgstr:org_personal_data_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:personal_data_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь с офисами &ndash;&gt;
-                <child-association name="lecm-orgstr:org_office_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:office_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь с должностными лицами &ndash;&gt;
-                <child-association name="lecm-orgstr:org_official_container_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:official_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь с проектами &ndash;&gt;
-                <child-association name="lecm-orgstr:org_projects_container_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:projects_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь с трудовыми ресурсами &ndash;&gt;
-                <child-association name="lecm-orgstr:org_workforce_container_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:workforce_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь с реестром проектов &ndash;&gt;
-                <child-association name="lecm-orgstr:org_project_register_container_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:project_register_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>
-
-                &lt;!&ndash; Связь со штатным расписанием &ndash;&gt;
-                <child-association name="lecm-orgstr:org_staff_list_container_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:staff_list_container</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </child-association>-->
             </associations>
         </type>
 
         <!-- Папки объектов. DO NOT MODIFY -->
 
-        <type name="lecm-orgstr:employee_container">
+        <type name="lecm-orgstr:employee-container">
             <title>Employees Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:personal_data_container">
+        <type name="lecm-orgstr:personal-data-container">
             <title>Personal Data Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:office_container">
+        <type name="lecm-orgstr:office-container">
             <title>Offices Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:job_position_container">
-            <title>Job Position Directory</title>
-            <parent>cm:folder</parent>
-        </type>
-
-        <type name="lecm-orgstr:official_container">
+        <type name="lecm-orgstr:official-container">
             <title>Official Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:projects_container">
-            <title>Projects Directory</title>
-            <parent>cm:folder</parent>
-        </type>
-
-        <type name="lecm-orgstr:workforce_container">
+        <type name="lecm-orgstr:workforce-container">
             <title>Workforce Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:project_register_container">
-            <title>Project Register Directory</title>
+        <type name="lecm-orgstr:unit-composition-container">
+            <title>Unit Composition Directory</title>
             <parent>cm:folder</parent>
         </type>
 
-        <type name="lecm-orgstr:staff_list_container">
-            <title>Staff List Directory</title>
+        <type name="lecm-orgstr:project-register">
+            <title>Project Register</title>
+            <parent>cm:folder</parent>
+        </type>
+
+        <type name="lecm-orgstr:staff-list">
+            <title>Staff List</title>
             <parent>cm:folder</parent>
             <properties>
-                <property name="lecm-orgstr:staff_list_approval_date">
+                <property name="lecm-orgstr:staff-list-approval-date">
                     <type>d:date</type>
                 </property>
             </properties>
         </type>
 
         <!-- Структурное подразделение -->
-        <type name="lecm-orgstr:organization_unit">
+        <type name="lecm-orgstr:organization-unit">
             <title>Organization Unit</title>
-            <parent>lecm-orgstr:organization_element</parent>
+            <parent>lecm-orgstr:organization-element</parent>
             <properties>
-                <property name="lecm-orgstr:unit_code">
+                <property name="lecm-orgstr:unit-code">
                     <title>Code</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:unit_type">
+                <property name="lecm-orgstr:unit-type">
                     <title>Type</title>
                     <type>d:text</type>
                     <constraints>
@@ -307,15 +199,15 @@
                         </constraint>
                     </constraints>
                 </property>
-                <property name="lecm-orgstr:unit_exist">
-                    <title>Is exist</title>
+                <property name="lecm-orgstr:unii-is_exists">
+                    <title>Is exists</title>
                     <type>d:boolean</type>
                     <default>true</default>
                 </property>
             </properties>
             <associations>
-                <!-- Связь с офисами -->
-                <association name="lecm-orgstr:unit_offices_assoc">
+                <!-- Список офисов -->
+                <association name="lecm-orgstr:unit-offices-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -327,40 +219,27 @@
                     </target>
                 </association>
 
-                <!-- Связь с реестром проектов-->
-                <association name="lecm-orgstr:unit_register_assoc">
+                <!-- Список составов подразделения -->
+                <association name="lecm-orgstr:unit-composition-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:project_register</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-
-                <!-- Связь с составом -->
-                <association name="lecm-orgstr:unit_composition_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:unit_composition</class>
-                        <mandatory>true</mandatory>
+                        <class>lecm-orgstr:unit-composition</class>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
                 </association>
 
                 <!-- Связь с подструктурными подразделениями -->
-                <child-association name="lecm-orgstr:unit_inner_assoc">
+                <child-association name="lecm-orgstr:unit-inner-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:organization_unit</class>
+                        <class>lecm-orgstr:organization-unit</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
@@ -371,24 +250,24 @@
         <!-- Сотрудник организации -->
         <type name="lecm-orgstr:employee">
             <title>Еmployee</title>
-            <parent>cm:cmobject</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:employee_first_name">
+                <property name="lecm-orgstr:employee-first-name">
                     <title>First Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:employee_middle_name">
+                <property name="lecm-orgstr:employee-middle-name">
                     <title>Middle Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:employee_last_name">
+                <property name="lecm-orgstr:employee-last-name">
                     <title>Last Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:employee_sex">
+                <property name="lecm-orgstr:employee-sex">
                     <title>Sex</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
@@ -403,32 +282,28 @@
                         </constraint>
                     </constraints>
                 </property>
-                <property name="lecm-orgstr:employee_phone">
+                <property name="lecm-orgstr:employee-phone">
                     <title>Phone Number</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:employee_photo">
+                <property name="lecm-orgstr:employee-photo">
                     <title>Photo</title>
                     <type>d:any</type>
                 </property>
-                <property name="lecm-orgstr:employee_number">
+                <property name="lecm-orgstr:employee-number">
                     <title>Employee number</title>
                     <type>d:long</type>
                 </property>
-                <property name="lecm-orgstr:employee_fio_g">
+                <property name="lecm-orgstr:employee-fio-g">
                     <title>Full name in genitive</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:employee_fio_d">
+                <property name="lecm-orgstr:employee-fio-d">
                     <title>Full name in dative</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:employee_login">
-                    <title>Login</title>
-                    <type>d:text</type>
-                </property>
-                <property name="lecm-orgstr:employee_is_system_user">
+                <property name="lecm-orgstr:employee-is-system-user">
                     <title>Is System User</title>
                     <type>d:boolean</type>
                     <default>false</default>
@@ -436,10 +311,10 @@
             </properties>
             <associations>
                 <!-- Связь с учетной записью в системе -->
-                <association name="lecm-orgstr:employee_person_assoc">
+                <association name="lecm-orgstr:employee-person-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>true</many>
+                        <many>false</many>
                     </source>
                     <target>
                         <class>cm:person</class>
@@ -449,14 +324,14 @@
                 </association>
 
                 <!--  Связь с персональными данными -->
-                <child-association name="lecm-orgstr:employee_person_data_assoc">
+                <child-association name="lecm-orgstr:employee-person-data-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:personal_data</class>
-                        <mandatory>true</mandatory>
+                        <class>lecm-orgstr:personal-data</class>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </child-association>
@@ -466,23 +341,23 @@
         <!-- Должностное лицо -->
         <type name="lecm-orgstr:official">
             <title>Official</title>
-            <parent>cm:object</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:official_can_facsimile">
+                <property name="lecm-orgstr:official-can-facsimile">
                     <title>Can use a facsimile</title>
                     <type>d:boolean</type>
                 </property>
             </properties>
             <associations>
                 <!-- Связь с сотрудником -->
-                <association name="lecm-orgstr:official_employee_assoc">
+                <association name="lecm-orgstr:official-employee-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -492,22 +367,22 @@
         <!-- Должность -->
         <type name="lecm-orgstr:position">
             <title>Position</title>
-            <parent>cm:object</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:position_name">
+                <property name="lecm-orgstr:position-name">
                     <title>Title</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:position_description">
+                <property name="lecm-orgstr:position-description">
                     <title>Description</title>
                     <type>d:any</type>
                 </property>
-                <property name="lecm-orgstr:position_name_g">
+                <property name="lecm-orgstr:position-name-g">
                     <title>Name in genitive</title>
                     <type>d:boolean</type>
                 </property>
-                <property name="lecm-orgstr:position_name_d">
+                <property name="lecm-orgstr:position-name-d">
                     <title>Name in dative</title>
                     <type>d:boolean</type>
                 </property>
@@ -517,31 +392,31 @@
         <!-- Офис организации -->
         <type name="lecm-orgstr:office">
             <title>Office</title>
-            <parent>cm:object</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:office_full_name">
+                <property name="lecm-orgstr:office-full-name">
                     <title>Full Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:office_short_name">
+                <property name="lecm-orgstr:office-short-name">
                     <title>Short Name</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:office_phone">
+                <property name="lecm-orgstr:office-phone">
                     <title>Phone</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:office_fax">
+                <property name="lecm-orgstr:office-fax">
                     <title>Fax</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:office_address">
+                <property name="lecm-orgstr:office-address">
                     <title>Address</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
-                <property name="lecm-orgstr:office_transit_scheme">
+                <property name="lecm-orgstr:office-transit-scheme">
                     <title>Transit Scheme</title>
                     <type>d:any</type>
                 </property>
@@ -549,27 +424,27 @@
         </type>
 
        <!-- Персональные данные -->
-        <type name="lecm-orgstr:personal_data">
+        <type name="lecm-orgstr:personal-data">
             <title>Personal Data</title>
-            <parent>cm:object</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm_orgstr:person_data_address">
+                <property name="lecm-orgstr:person-data-address">
                     <title>Person Address</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm_orgstr:person_data_email">
+                <property name="lecm-orgstr:person-data-email">
                     <title>Person E-Mail</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm_orgstr:person_data_phone">
+                <property name="lecm-orgstr:person-data-phone">
                     <title>Person Phone</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm_orgstr:person_data_date">
+                <property name="lecm-orgstr:person-data-date">
                     <title>Person Birthday</title>
                     <type>d:date</type>
                 </property>
-                <property name="lecm_orgstr:person_data_service_id">
+                <property name="lecm-orgstr:person-data-service-id">
                     <title>Person Messaging service ID</title>
                     <type>d:text</type>
                 </property>
@@ -579,54 +454,27 @@
         <!-- Проект -->
         <type name="lecm-orgstr:project">
             <title>Project</title>
-            <parent>lecm-ogrstr:organization_element</parent>
+            <parent>lecm-orgstr:organization-element</parent>
             <properties>
-                <property name="lecm-orgstr:project_target">
+                <property name="lecm-orgstr:project-target">
                     <title>Project Targets</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-orgstr:project_schedule">
+                <property name="lecm-orgstr:project-schedule">
                     <title>Project schedule</title>
                     <type>d:text</type>
                 </property>
             </properties>
             <associations>
                 <!-- Список участников проекта -->
-                <association name="lecm-orgstr:project_workforce_assoc">
+                <association name="lecm-orgstr:project-workforce-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:workforce</class>
-                        <mandatory>true</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-            </associations>
-        </type>
-
-        <!-- Реестр проектов -->
-        <type name="lecm-orgstr:project_register">
-            <title>Project Register</title>
-            <parent>cm:object</parent>
-            <properties>
-                <property name="lecm-orgstr:project_register_name">
-                    <title>Name</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-            </properties>
-            <associations>
-                <!-- Связь с реестром проектов -->
-                <association name="lecm-orgstr:project_register_projects_assoc">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:project</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
                 </association>
@@ -636,29 +484,24 @@
         <!-- Участник (трудовой ресурс) -->
         <type name="lecm-orgstr:workforce">
             <title>Workforce</title>
-            <parent>lecm-orgstr:project_resource</parent>
+            <parent>lecm-orgstr:project-resource</parent>
             <properties>
-                <property name="lecm-orgstr:workforce_name">
-                    <title>Name</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-                <property name="lecm-orgstr:workforce_role">
+                <property name="lecm-orgstr:workforce-role">
                     <title>Role</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
             </properties>
             <associations>
-                <!-- Связь с сотрудником -->
-                <association name="lecm-orgstr:workforce_employee_assoc">
+                <!-- Ссылка на сотрудника -->
+                <association name="lecm-orgstr:workforce-employee-assoc">
                     <source>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -666,15 +509,10 @@
         </type>
 
         <!-- Состав подразделения -->
-        <type name="lecm-orgstr:unit_composition">
+        <type name="lecm-orgstr:unit-composition">
             <title>Unit Composition</title>
-            <parent>cm:object</parent>
+            <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:composition_code">
-                    <title>Code</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
                 <property name="lecm-orgstr:composition_is_boss">
                     <title>Employee Is Boss</title>
                     <type>d:boolean</type>
@@ -682,29 +520,29 @@
                 </property>
             </properties>
             <associations>
-                <!-- Связь с должностью -->
-                <association name="lecm-orgstr:composition_position_assoc">
+                <!-- Ссылка на должность -->
+                <association name="lecm-orgstr:composition-position-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:position</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
 
-                <!-- Связь с сотрудником -->
-                <association name="lecm-orgstr:composition_employee_assoc">
+                <!-- Ссылка на сотрудника -->
+                <association name="lecm-orgstr:composition-employee-assoc">
                     <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
                         <mandatory>false</mandatory>
-                        <many>true</many>
+                        <many>false</many>
                     </target>
                 </association>
             </associations>
