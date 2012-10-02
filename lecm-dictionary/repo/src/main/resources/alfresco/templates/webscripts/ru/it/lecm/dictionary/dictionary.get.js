@@ -1,16 +1,18 @@
-var dictionary;
+var rootNode;
 var nodeRef = args["nodeRef"];
 if (nodeRef == null || nodeRef == "") {
-    dictionary = companyhome.childByNamePath("Dictionary");
+    rootNode = companyhome.childByNamePath("Dictionary");
 } else {
-    dictionary = search.findNode(nodeRef);
+    rootNode = search.findNode(nodeRef);
 }
-
-var dictionary_values = dictionary.getChildren();
-
 var branch = [];
 
-addItems(branch, dictionary_values);
+
+if (rootNode != null) {
+    var dictionary_values = rootNode.getChildren();
+
+    addItems(branch, dictionary_values);
+}
 
 model.branch = branch;
 
