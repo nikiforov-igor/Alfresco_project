@@ -5,6 +5,7 @@ if (organization == null || organization == "") {
     organization = companyhome.createNode("Организация", "lecm-orgstr:organization");
 
     //структура директорий
+    var structure = organization.createNode("Структура", "lecm-orgstr:organization-structure");
     var offices = organization.createNode("Офисы", "lecm-orgstr:office-container");
     var emploeers = organization.createNode("Сотрудники", "lecm-orgstr:employee-container");
     var personal_data = organization.createNode("Персональные данные", "lecm-orgstr:personal-data-container");
@@ -28,6 +29,10 @@ if (organization == null || organization == "") {
     organization.properties["lecm-orgstr:org-founding-docs"] = "Документ-основание";
     organization.properties["lecm-orgstr:org-ownership-typ"] = "Частная компания";
     organization.save();
+    organization.createAssociation(structure,"lecm-orgstr:org-structure-assoc");
+    organization.createAssociation(pr_register, "lecm-orgstr:org-projects-assoc");
+    organization.createAssociation(staff_list, "lecm-orgstr:org-staff-assoc");
+
     // офисы
     var of1 = offices.createNode("Офис 1", "lecm-orgstr:office");
     of1.properties["lecm-orgstr:office-full-name"] = "Офис в Москве";
@@ -50,6 +55,7 @@ if (organization == null || organization == "") {
     of3.properties["lecm-orgstr:office-fax"] = "333-33-33";
     of3.properties["lecm-orgstr:office-address"] = "115280, г. Москва, ул. Ленинская Слобода, д.19, стр. 6";
     of3.save();
+
     //должности
     var d1 = staff_list.createNode("Директор", "lecm-orgstr:position");
     d1.properties["lecm-orgstr:position-description"] = "Генеральный директор";
@@ -109,6 +115,7 @@ if (organization == null || organization == "") {
     pd6.properties["lecm-orgstr:person-data-date"] = new Date("1987","07","26");
     pd6.properties["lecm-orgstr:person-data-service-id"] = "66666666";
     pd6.save();
+
     // Сотрудник и персональные данные
     var e1 = emploeers.createNode("Иванов И", "lecm-orgstr:employee");
     e1.properties["lecm-orgstr:employee-first-name"] = "Иван";
@@ -224,7 +231,7 @@ if (organization == null || organization == "") {
     c6.createAssociation(d2, "lecm-orgstr:composition-position-assoc");
 
     //подразделения
-    var direction = organization.createNode("Руководство", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var direction = structure.createNode("Руководство организации", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
     direction.properties["lecm-orgstr:element-full-name"] = "Руководство организации";
     direction.properties["lecm-orgstr:element-short-name"] = "Руководство";
     direction.properties["lecm-orgstr:unit-code"] = "PO";
@@ -232,7 +239,7 @@ if (organization == null || organization == "") {
     direction.properties["lecm-orgstr:unii-is_exists"] = true;
     direction.save();
 
-    var unit1 = organization.createNode("Отдел 1", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var unit1 = structure.createNode("Главное отделение", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
     unit1.properties["lecm-orgstr:element-full-name"] = "Главное отделение";
     unit1.properties["lecm-orgstr:element-short-name"] = "Отдел 1";
     unit1.properties["lecm-orgstr:unit-code"] = "O1";
@@ -244,7 +251,7 @@ if (organization == null || organization == "") {
     unit1.createAssociation(c1, "lecm-orgstr:unit-composition-assoc");
     unit1.createAssociation(c3, "lecm-orgstr:unit-composition-assoc");
 
-    var unit11 = unit1.createNode("Отдел 1.1", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
+    var unit11 = unit1.createNode("Отдел внедрения", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
     unit11.properties["lecm-orgstr:element-full-name"] = "Отдел внедрения";
     unit11.properties["lecm-orgstr:element-short-name"] = "Внедрение";
     unit11.properties["lecm-orgstr:unit-code"] = "O1.1";
@@ -254,7 +261,7 @@ if (organization == null || organization == "") {
     unit11.createAssociation(of3, "lecm-orgstr:unit-offices-assoc");
     unit11.createAssociation(c4, "lecm-orgstr:unit-composition-assoc");
 
-    var unit111 = unit11.createNode("Отдел 1.1.1", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
+    var unit111 = unit11.createNode("Обнинский Отдел внедрения", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
     unit111.properties["lecm-orgstr:element-full-name"] = "Обнинский Отдел внедрения";
     unit111.properties["lecm-orgstr:element-short-name"] = "Обнинское отделение";
     unit111.properties["lecm-orgstr:unit-code"] = "O1.1.1";
@@ -263,7 +270,7 @@ if (organization == null || organization == "") {
     unit111.save();
     unit111.createAssociation(c6, "lecm-orgstr:unit-composition-assoc");
 
-    var unit2 = organization.createNode("Отдел 2", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var unit2 = structure.createNode("BPM Отдел", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
     unit2.properties["lecm-orgstr:element-full-name"] = "BPM Отдел";
     unit2.properties["lecm-orgstr:element-short-name"] = "BPM";
     unit2.properties["lecm-orgstr:unit-code"] = "O2";

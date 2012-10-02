@@ -36,6 +36,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String DIRECTORY_EMPLOYEES = "employee-container";
 	public static final String DIRECTORY_PROJECTS = "project-register";
 	public static final String DIRECTORY_STAFF_LIST = "staff-list";
+	public static final String DIRECTORY_STRUCTURE = "organization-structure";
 
 	private static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
@@ -69,16 +70,6 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 				}
 			} else if (type.equals(TYPE_ORGANIZATION)) {
 				JSONObject element = new JSONObject();
-				try {
-					element.put(TITLE, "Структура");
-					element.put(NODE_REF, ref);
-					element.put(TYPE, TYPE_UNIT);
-					element.put(IS_LEAF, false);
-					
-					nodes.put(element);
-				} catch (JSONException e) {
-					logger.error(e);
-				}
 
 				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
 				for (ChildAssociationRef childAssociationRef : childs) {
@@ -111,6 +102,16 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 							element.put(TITLE, getElementName(nodeService, cRef));
 							element.put(NODE_REF, cRef.toString());
 							element.put(TYPE, TYPE_STAFF_LIST);
+							element.put(IS_LEAF, false);
+
+							nodes.put(element);
+						} else if (qType.getLocalName().equals(DIRECTORY_STRUCTURE)) {
+							NodeRef cRef = childAssociationRef.getChildRef();
+
+							element = new JSONObject();
+							element.put(TITLE, getElementName(nodeService, cRef));
+							element.put(NODE_REF, cRef.toString());
+							element.put(TYPE, TYPE_UNIT);
 							element.put(IS_LEAF, false);
 
 							nodes.put(element);
