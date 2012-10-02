@@ -5,7 +5,7 @@
 <script type="text/javascript">//<![CDATA[
 new Alfresco.widget.Resizer("DocumentLibrary");
 //]]></script>
-
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datalists.css" />
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 <!-- Required CSS -->
 	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
@@ -41,17 +41,17 @@ new Alfresco.widget.Resizer("DocumentLibrary");
     <@region id="title" scope="template"/>
 </div>
 <div id="bd">
-	<@region id="column" scope="template"/>
 
     <#--<@region id="actions-common" scope="template" />-->
     <div class="yui-t1" id="alfresco-data-lists">
         <div id="yui-main">
             <div class="yui-b" id="alf-content">
-                <#--<@region id="toolbar" scope="template" />-->
+                <@region id="toolbar" scope="template" />
                 <@region id="datagrid" scope="template" />
             </div>
         </div>
         <div class="yui-b" id="alf-filters">
+	        <@region id="column" scope="template"/>
             <#--<@region id="datalists" scope="template" />-->
                <#--<@region id="filter" scope="template" />-->
         </div>
