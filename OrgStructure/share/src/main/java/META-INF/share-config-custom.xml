@@ -35,4 +35,272 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:organization">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:org-leg-address"/>
+                    <show id="lecm-orgstr:org-act-address"/>
+                    <show id="lecm-orgstr:org-off-site"/>
+                    <show id="lecm-orgstr:org-phone"/>
+                    <show id="lecm-orgstr:org-fax"/>
+                    <show id="lecm-orgstr:org-email"/>
+                    <show id="lecm-orgstr:org-logo"/>
+                    <show id="lecm-orgstr:org-tin"/>
+                    <show id="lecm-orgstr:org-ownership-type"/>
+                    <show id="lecm-orgstr:org-incorporation-form"/>
+                    <show id="lecm-orgstr:org-founding-docs"/>
+                    <show id="lecm-orgstr:org-structure-assoc"/>
+                    <show id="lecm-orgstr:org-staff-assoc"/>
+                    <show id="lecm-orgstr:org-projects-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:organization">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:org-leg-address"/>
+                    <show id="lecm-orgstr:org-act-address"/>
+                    <show id="lecm-orgstr:org-off-site"/>
+                    <show id="lecm-orgstr:org-phone"/>
+                    <show id="lecm-orgstr:org-fax"/>
+                    <show id="lecm-orgstr:org-email"/>
+                    <show id="lecm-orgstr:org-logo"/>
+                    <show id="lecm-orgstr:org-tin"/>
+                    <show id="lecm-orgstr:org-ownership-type"/>
+                    <show id="lecm-orgstr:org-incorporation-form"/>
+                    <show id="lecm-orgstr:org-founding-docs"/>
+                    <show id="lecm-orgstr:org-structure-assoc"/>
+                    <show id="lecm-orgstr:org-staff-assoc"/>
+                    <show id="lecm-orgstr:org-projects-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:organization-unit">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:unit-code"/>
+                    <show id="lecm-orgstr:unit-type"/>
+                    <show id="lecm-orgstr:unii-is_exists"/>
+                    <show id="lecm-orgstr:unit-offices-assoc"/>
+                    <show id="lecm-orgstr:unit-composition-assoc"/>
+                    <show id="lecm-orgstr:unit-inner-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:organization-unit">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:unit-code"/>
+                    <show id="lecm-orgstr:unit-type"/>
+                    <show id="lecm-orgstr:unii-is_exists"/>
+                    <show id="lecm-orgstr:unit-offices-assoc"/>
+                    <show id="lecm-orgstr:unit-composition-assoc"/>
+                    <show id="lecm-orgstr:unit-inner-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:official">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:official-can-facsimile"/>
+                    <show id="lecm-orgstr:official-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:official">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:official-can-facsimile"/>
+                    <show id="lecm-orgstr:official-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:position">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:position-description"/>
+                    <show id="lecm-orgstr:position-name-g"/>
+                    <show id="lecm-orgstr:position-name-d"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:position">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:position-description"/>
+                    <show id="lecm-orgstr:position-name-g"/>
+                    <show id="lecm-orgstr:position-name-d"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:office">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:office-full-name"/>
+                    <show id="lecm-orgstr:office-short-name"/>
+                    <show id="lecm-orgstr:office-phone"/>
+                    <show id="lecm-orgstr:office-fax"/>
+                    <show id="lecm-orgstr:office-address"/>
+                    <show id="lecm-orgstr:office-transit-scheme"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:office">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:office-full-name"/>
+                    <show id="lecm-orgstr:office-short-name"/>
+                    <show id="lecm-orgstr:office-phone"/>
+                    <show id="lecm-orgstr:office-fax"/>
+                    <show id="lecm-orgstr:office-address"/>
+                    <show id="lecm-orgstr:office-transit-scheme"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:personal-data">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:person-data-address"/>
+                    <show id="lecm-orgstr:person-data-email"/>
+                    <show id="lecm-orgstr:person-data-phone"/>
+                    <show id="lecm-orgstr:person-data-date"/>
+                    <show id="lecm-orgstr:person-data-service-id"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:personal-data">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:person-data-address"/>
+                    <show id="lecm-orgstr:person-data-email"/>
+                    <show id="lecm-orgstr:person-data-phone"/>
+                    <show id="lecm-orgstr:person-data-date"/>
+                    <show id="lecm-orgstr:person-data-service-id"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:project">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:project-target"/>
+                    <show id="lecm-orgstr:project-schedule"/>
+                    <show id="lecm-orgstr:project-workforce-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:project">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:project-target"/>
+                    <show id="lecm-orgstr:project-schedule"/>
+                    <show id="lecm-orgstr:project-workforce-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:workforce">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:workforce-role"/>
+                    <show id="lecm-orgstr:workforce-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:workforce">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:unit-composition">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:composition_is_boss"/>
+                    <show id="lecm-orgstr:composition-position-assoc"/>
+                    <show id="lecm-orgstr:composition-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:unit-composition">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:composition_is_boss"/>
+                    <show id="lecm-orgstr:composition-position-assoc"/>
+                    <show id="lecm-orgstr:composition-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

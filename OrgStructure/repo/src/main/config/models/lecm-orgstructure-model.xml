@@ -42,7 +42,7 @@
                 <association name="lecm-orgstr:element-official-assoc">
                     <source>
                         <mandatory>true</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:official</class>
@@ -406,11 +406,6 @@
             <title>Position</title>
             <parent>cm:content</parent>
             <properties>
-                <!--<property name="lecm-orgstr:position-name">
-                    <title>Title</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>-->
                 <property name="lecm-orgstr:position-description">
                     <title>Description</title>
                     <type>d:any</type>

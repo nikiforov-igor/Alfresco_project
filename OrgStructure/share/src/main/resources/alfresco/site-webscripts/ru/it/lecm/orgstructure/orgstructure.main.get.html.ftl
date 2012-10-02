@@ -1,4 +1,5 @@
 <div class="yui-main">
+    <br/>
     <div id="orgstructure"></div>
 </div>
 
