@@ -15,7 +15,7 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/fonts/fonts-min.css"/>
 
 <!-- Dependency source file -->
-<script type="text/javascript" src="${url.context}/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+    <script type="text/javascript" src="${url.context}/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <!-- Optional dependency source file -->
 	<@script type="text/javascript" src="${url.context}/yui/animation/animation.js"></@script>
 <!-- Optional dependency source file for date editing with Calendar-->
@@ -31,8 +31,8 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
-<script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
-<script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary_datagrid.js"></script>
+    <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
+    <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-actions.js"></script>
 </@>
 
 <@templateBody>

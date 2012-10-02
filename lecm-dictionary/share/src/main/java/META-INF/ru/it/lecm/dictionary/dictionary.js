@@ -27,7 +27,6 @@ LogicECM.module = LogicECM.module || {};
 
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
-    var resultset = new Array();  // TODO
     var tableContainerId = null;  // TODO
     var nodeDictionary = null;    //TODO
 
@@ -60,7 +59,6 @@ LogicECM.module = LogicECM.module || {};
         },
         init: function(formId) {
             this._loadNode();
-//            this._loadJSON();
         },
 
         setMessages:function (messages) {
@@ -105,12 +103,6 @@ LogicECM.module = LogicECM.module || {};
             this.menu.subscribe("click", this._menuSelected.bind(this));
             this.menu.render(menu);
 
-
-            //Добавляем строку поиска
-            this.search = document.createElement("div");
-            this.search.id = this.id + "-search";
-            this.search.innerHTML = "Search";
-            dictionary.appendChild(this.search);
 
             //Добавляем дерево структуры предприятия
             var treeContainer = document.createElement("div");
@@ -204,7 +196,6 @@ LogicECM.module = LogicECM.module || {};
                         oResponse.argument.fnLoadComplete();
                     } else {
                         oResponse.argument.tree.render();
-//                        oResponse.argument.context._showTable(resultset);
                     }
                 },
                 failure:function (oResponse) {
@@ -221,56 +212,8 @@ LogicECM.module = LogicECM.module || {};
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
-        _showTable:function(dataSource){
-            var myColumnDefs = [
-                {key:"name", sortable:true, resizeable:true},
-//				{key:"description", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, sortOptions:{defaultDir:YAHOO.widget.DataTable.CLASS_DESC},resizeable:true},
-//				{key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
-//				{key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
-                {key:"description", sortable:true, resizeable:true}
-            ];
-
-            var myDataSource = new YAHOO.util.DataSource(dataSource);
-            myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-            myDataSource.responseSchema = {
-                fields: ["name","description"]
-            };
-
-            this.table = new YAHOO.widget.DataTable(tableContainerId,
-                myColumnDefs, myDataSource, {caption:"DataTable Caption"});
-        },
-        _redrawTable: function(node){
-            resultset = [];
-            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/items";
-            if (node.data.nodeRef != null) {
-                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-            }
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        node.children = [];
-                        for (var nodeIndex in oResults) {
-                            resultset.push({
-                                name:oResults[nodeIndex].name,
-                                description:oResults[nodeIndex].description
-                            });
-                        }
-                    }
-                    this._showTable(resultset);
-                }.bind(this),
-                failure:function (oResponse) {
-                    alert("Failed to load items. " + "[" + oResponse.statusText + "]");
-                },
-                argument:{
-                }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-        },
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
-
-            this._redrawTable(node);
 
             Bubbling.fire("activeDataListChanged",
                 {
@@ -366,55 +309,5 @@ LogicECM.module = LogicECM.module || {};
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
         }
-//
-//        _loadJSON: function () {
-//            var  sUrl = "/share/service/components/data-lists/config/columns?itemType="  + encodeURIComponent("lecm-dic:dictionary_values");
-//
-//            var callback = {
-//                success:function (oResponse) {
-////                    alert("yes");
-//                },
-//                failure:function (oResponse) {
-////                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-//                },
-//                argument:{
-//                }
-//            };
-//
-//            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-//        }
-
     });
-})();
-
-
-
-(function()
-{
-    /**
-     * YUI Library aliases
-     */
-    var Bubbling = YAHOO.Bubbling;
-
-    /**
-     * Alfresco.service.DataListActions implementation
-     */
-    Alfresco.service.DataListActions = {};
-    Alfresco.service.DataListActions.prototype =
-    {
-
-    };
-})();
-
-(function()
-{
-    Alfresco.module.DataListActions = function()
-    {
-        return null;
-    };
-
-    Alfresco.module.DataListActions.prototype =
-    {
-
-    };
 })();

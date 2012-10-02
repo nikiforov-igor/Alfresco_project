@@ -14,7 +14,7 @@
 	</imports>
 
 	<namespaces>
-		<namespace uri="http://www.it.ru/logicECM/information_guide/1.0" prefix="lecm-dic"/>
+		<namespace uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
 	</namespaces>
 
 	<types>
@@ -33,6 +33,7 @@
 					<title>Active</title>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
+                    <default>true</default>
 				</property>
 			</properties>
 		</type>
@@ -51,6 +52,7 @@
 					<title>Active</title>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
+                    <default>true</default>
 				</property>
 			</properties>
 			<associations>

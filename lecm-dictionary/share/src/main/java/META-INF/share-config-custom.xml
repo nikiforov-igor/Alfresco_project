@@ -29,7 +29,6 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description_values" force="true"/>
-                    <show id="lecm-dic:active_values" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -41,9 +40,16 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description_values" force="true"/>
-                    <show id="lecm-dic:active_values" force="true"/>
 				</field-visibility>
 			</form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" />
+                    <show id="lecm-dic:description_values" />
+                    <show id="lecm-dic:active_values" />
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 </alfresco-config>
