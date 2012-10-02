@@ -4,14 +4,18 @@
     <components>
         <component>
             <region-id>column</region-id>
-            <url>/logicecm/orgstructure/main</url>
+            <url>/lecm/orgstructure/main</url>
+        </component>
+        <component>
+            <region-id>datagrid</region-id>
+            <url>/lecm/orgstructure/datagrid</url>
         </component>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
             <url>/components/title/simple-title</url>
             <properties>
-                <title>Organization Structure</title>
+                <title>Справочник Организации</title>
             </properties>
         </component>
     </components>

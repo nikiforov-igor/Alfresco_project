@@ -1,55 +1,38 @@
 <alfresco-config>
 
-    <config evaluator="node-type" condition="lecm-orgstructure:employee">
+    <config evaluator="node-type" condition="lecm-orgstr:employee">
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="lecm-orgstructure:person_assoc" force="true"/>
-                    <show id="lecm-orgstructure:employee_workplace_assoc" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-orgstructure:person_assoc" label-id="logicecm.orgstructure.employee.person" />
-                    <field id="lecm-orgstructure:employee_workplace_assoc" label-id="logicecm.orgstructure.employee.workplace" />
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="model-type" condition="lecm-orgstructure:employee">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="lecm-orgstructure:person_assoc" force="true"/>
-                    <show id="lecm-orgstructure:employee_workplace_assoc" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-orgstructure:person_assoc" label-id="logicecm.orgstructure.employee.person" />
-                    <field id="lecm-orgstructure:employee_workplace_assoc" label-id="logicecm.orgstructure.employee.workplace" />
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-orgstructure:organization_unit">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-orgstr:employee-first-name"/>
+                    <show id="lecm-orgstr:employee-middle-name"/>
+                    <show id="lecm-orgstr:employee-last-name"/>
+                    <show id="lecm-orgstr:employee-sex"/>
+                    <show id="lecm-orgstr:employee-phone"/>
+                    <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-orgstr:employee-is-system-user"/>
+                    <show id="lecm-orgstr:employee-person-assoc"/>
+                    <show id="lecm-orgstr:employee-person-data-assoc"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstructure:organization_unit">
+    <config evaluator="model-type" condition="lecm-orgstr:employee">
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
+                    <show id="lecm-orgstr:employee-first-name"/>
+                    <show id="lecm-orgstr:employee-middle-name"/>
+                    <show id="lecm-orgstr:employee-last-name"/>
+                    <show id="lecm-orgstr:employee-sex"/>
+                    <show id="lecm-orgstr:employee-phone"/>
+                    <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-orgstr:employee-is-system-user"/>
+                    <show id="lecm-orgstr:employee-person-assoc"/>"/>
+                    <show id="lecm-orgstr:employee-person-data-assoc"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
-
 </alfresco-config>

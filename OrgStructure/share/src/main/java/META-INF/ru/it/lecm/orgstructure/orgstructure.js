@@ -26,7 +26,7 @@ LogicECM.module = LogicECM.module || {};
 (function () {
 
     var Dom = YAHOO.util.Dom
-
+    var Bubbling = YAHOO.Bubbling;
     LogicECM.module.OrgStructure = function (htmlId) {
         return LogicECM.module.OrgStructure.superclass.constructor.call(
             this,
@@ -39,6 +39,7 @@ LogicECM.module = LogicECM.module || {};
         menu: null,
         search: null,
         tree: null,
+        table:null,
         selectedNode: null,
         messages: null,
         options: {
@@ -58,43 +59,6 @@ LogicECM.module = LogicECM.module || {};
 
         draw: function () {
             var orgStructure = Dom.get(this.id);
-            /*//Добавляем меню
-            var menu = document.createElement("div");
-            menu.id = this.id + "-menu";
-            orgStructure.appendChild(menu);
-
-            var menuData = [{
-                    text: this.messages["orgstructure.append"],
-                    submenu:{
-                        id:"appendmenu",
-                        itemdata:[
-                            {
-                                id: "appendEmployee",
-                                text: this.messages["orgstructure.append.employee"],
-                                disabled: true
-                            },
-                            {
-                                id: "appendDivision",
-                                text: this.messages["orgstructure.append.division"],
-                                disabled: true
-                            }
-                        ]
-                    }
-                }
-            ];*/
-
-           /*this.menu = new YAHOO.widget.MenuBar(menu.id + "-menubar", {
-                lazyload: false,
-                itemdata: menuData
-            });
-            this.menu.subscribe("click", this._menuSelected.bind(this));
-            this.menu.render(menu);
-
-            //Добавляем строку поиска
-            this.search = document.createElement("div");
-            this.search.id = this.id + "-search";
-            this.search.innerHTML = "Search";
-            orgStructure.appendChild(this.search);*/
 
             //Добавляем дерево структуры предприятия
             var treeContainer = document.createElement("div");
@@ -109,7 +73,6 @@ LogicECM.module = LogicECM.module || {};
             this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.render();
-
         },
 
         _createUrl: function(type, nodeRef, childNodeType) {
@@ -178,24 +141,21 @@ LogicECM.module = LogicECM.module || {};
         },
         _treeNodeSelected: function(node) {
             this.selectedNode = node;
-            /*if (this.selectedNode.data.type == "organization_unit") {
-                this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", false);
-                this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", false);
-            } else {
-                this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", true);
-                this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", true);
-            };*/
-        },
-        _menuSelected: function onClickMenu(p_sType, p_aArgs) {
-            var selectedMenu = p_aArgs[1];
-            if (selectedMenu instanceof YAHOO.widget.MenuItem) {
-                if (selectedMenu.id == "appendEmployee") {
-                    this._createNode("lecm-orgstructure:employee");
-                } else if (selectedMenu.id == "appendDivision") {
-                    this._createNode("lecm-orgstructure:organization_unit");
-                }
-            }
-
+            Bubbling.fire("activeDataListChanged",
+                {
+                    dataList: {
+                        description: "",
+                        itemType: "lecm-orgstr:employee",
+                        name: node.data.type,
+                        nodeRef: node.data.nodeRef,
+                        permissions: {
+                            'delete': false,
+                            'edit': false
+                        },
+                        title: node.label
+                    },
+                    scrollTo: true
+                });
         },
         _createNode: function createNodeByType(type) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
@@ -247,8 +207,58 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
+        },
+        _loadTable:function () {
+            /*var sUrl = Alfresco.constants.PROXY_URI + "lecm/orstructure/get/employees";
+            if (this.selectedNode != null) {
+                sUrl += "?nodeRef=" + encodeURI(this.selectedNode.data.nodeRef);
+                sUrl += "&query=" + encodeURI(this.selectedNode.data.nodeRef);
+            }
+            var callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    oResponse.argument.context.addExperts(oResults);
+                    oResponse.argument.context._draw();
+                },
+                failure:function (oResponse) {
+                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
+                },
+                argument:{
+                    context:this
+                }
+            };
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);*/
         }
 
     });
 
+})();
+(function()
+{
+    /**
+     * YUI Library aliases
+     */
+    var Bubbling = YAHOO.Bubbling;
+
+    /**
+     * Alfresco.service.DataListActions implementation
+     */
+    Alfresco.service.DataListActions = {};
+    Alfresco.service.DataListActions.prototype =
+    {
+
+    };
+})();
+
+(function()
+{
+    Alfresco.module.DataListActions = function()
+    {
+        return null;
+    };
+
+    Alfresco.module.DataListActions.prototype =
+    {
+
+    };
 })();

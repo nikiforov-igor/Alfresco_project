@@ -120,8 +120,8 @@ if (organization == null || organization == "") {
     e1.properties["lecm-orgstr:employee-is-system-user"] = false;
     e1.properties["lecm-orgstr:employee-fio-g"] = "Иванова";
     e1.properties["lecm-orgstr:employee-fio-d"] = "Иванову";
-    e1.createAssociation(pd1, "lecm-orgstr:employee-person-data-assoc");
     e1.save();
+    e1.createAssociation(pd1, "lecm-orgstr:employee-person-data-assoc");
 
     var e2 = emploeers.createNode("Петров П", "lecm-orgstr:employee");
     e2.properties["lecm-orgstr:employee-first-name"] = "Петр";
@@ -133,8 +133,8 @@ if (organization == null || organization == "") {
     e2.properties["lecm-orgstr:employee-is-system-user"] = false;
     e2.properties["lecm-orgstr:employee-fio-g"] = "Петрова";
     e2.properties["lecm-orgstr:employee-fio-d"] = "Петрову";
-    e2.createAssociation(pd2, "lecm-orgstr:employee-person-data-assoc");
     e2.save();
+    e2.createAssociation(pd2, "lecm-orgstr:employee-person-data-assoc");
 
     var e3 = emploeers.createNode("Сидоров С.С", "lecm-orgstr:employee");
     e3.properties["lecm-orgstr:employee-first-name"] = "Сидор";
@@ -146,8 +146,8 @@ if (organization == null || organization == "") {
     e3.properties["lecm-orgstr:employee-is-system-user"] = false;
     e3.properties["lecm-orgstr:employee-fio-g"] = "Сидорова";
     e3.properties["lecm-orgstr:employee-fio-d"] = "Сидорову";
-    e3.createAssociation(pd3, "lecm-orgstr:employee-person-data-assoc");
     e3.save();
+    e3.createAssociation(pd3, "lecm-orgstr:employee-person-data-assoc");
 
     var e4 = emploeers.createNode("Башмаков Д.И", "lecm-orgstr:employee");
     e4.properties["lecm-orgstr:employee-first-name"] = "Денис";
@@ -163,9 +163,9 @@ if (organization == null || organization == "") {
     if (ppl == null) {
         ppl = people.getPerson("dbashmakov");
     }
+    e4.save();
     e4.createAssociation(pd4, "lecm-orgstr:employee-person-data-assoc");
     e4.createAssociation(ppl, "lecm-orgstr:employee-person-assoc");
-    e4.save();
 
     var e5 = emploeers.createNode("Никитина Л.А", "lecm-orgstr:employee");
     e5.properties["lecm-orgstr:employee-first-name"] = "Людмила";
@@ -181,9 +181,9 @@ if (organization == null || organization == "") {
     if (ppl == null) {
         ppl = people.getPerson("lnikitina");
     }
+    e5.save();
     e5.createAssociation(pd5, "lecm-orgstr:employee-person-data-assoc");
     e5.createAssociation(ppl, "lecm-orgstr:employee-person-assoc");
-    e5.save();
 
     var e6 = emploeers.createNode("Петрушевская Е.А", "lecm-orgstr:employee");
     e6.properties["lecm-orgstr:employee-first-name"] = "Екатерина";
@@ -195,8 +195,8 @@ if (organization == null || organization == "") {
     e6.properties["lecm-orgstr:employee-is-system-user"] = false;
     e6.properties["lecm-orgstr:employee-fio-g"] = "Петрушевской";
     e6.properties["lecm-orgstr:employee-fio-d"] = "Петрушевской";
-    e6.createAssociation(pd6, "lecm-orgstr:employee-person-data-assoc");
     e6.save();
+    e6.createAssociation(pd6, "lecm-orgstr:employee-person-data-assoc");
 
     // составы подразделений
     var c1 = composition.createNode("Башмаков - Директор", "lecm-orgstr:unit-composition");
