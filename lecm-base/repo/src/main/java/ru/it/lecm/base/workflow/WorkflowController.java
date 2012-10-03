@@ -12,7 +12,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
-import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
@@ -33,18 +32,12 @@ public class WorkflowController {
     private static String ACTIVITI_PREFIX = "activiti$";
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
-    private boolean isInitialized = false;
-
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         WorkflowController.serviceRegistry = serviceRegistry;
     }
 
     public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
         WorkflowController.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
-    }
-
-    public ServiceRegistry getServiceRegistry() {
-        return serviceRegistry;
     }
 
     public void executeTask(final String taskId, final String workflowId, final String assignee) {
@@ -85,7 +78,7 @@ public class WorkflowController {
                             throw new IllegalStateException("noworkflow: " + workflowId);
                         }
                         // start the workflow
-                        WorkflowPath wfPath = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+                        workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
                         //workflowService.endTask(task.getId(), null);
                         return null;
                     }
@@ -100,7 +93,7 @@ public class WorkflowController {
     public void endProcess(DelegateExecution delegateExecution) {
         Long taskId = null;
         try {
-            taskId = Long.valueOf((String)delegateExecution.getVariable("bpm_comment"));
+            taskId = Long.valueOf((String) delegateExecution.getVariable("bpm_comment"));
         } catch (NumberFormatException e) {
         }
         if (taskId != null) {
@@ -117,36 +110,5 @@ public class WorkflowController {
             workflowService.endTask(ACTIVITI_PREFIX + taskId.toString(), null);
         }
     }
-
-/*
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
-            @Override
-            public String doWork() throws Exception {
-                NodeService nodeService = serviceRegistry.getNodeService();
-                StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-                NodeRef root = nodeService.getRootNode(storeRef);
-                SearchService search = serviceRegistry.getSearchService();
-                ResultSet result = search.query(storeRef, SearchService.LANGUAGE_XPATH, "/app:company_home/cm:workflow");
-                if (result.length() == 0) {
-                    Map<QName, Serializable> props = null;
-                    props.put(ContentModel.PROP_NAME, "workflow");
-                    nodeService.createNode(
-                            new NodeRef(storeRef, "/app:company_home/"),
-                            QName.createQName("cm:contains"),
-                            null,
-                            QName.createQName("cm:folder"),
-                            props
-                    );
-                }
-                return "";
-            }
-        });
-
-    }
-*/
-
 
 }
