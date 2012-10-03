@@ -14,5 +14,25 @@
                 <aspect>bpm:assignees</aspect>
             </mandatory-aspects>
         </type>
+
+        <type name="sup:userTask">
+            <parent>bpm:activitiOutcomeTask</parent>
+            <properties>
+                <property name="sup:approveTaskOutcome">
+                    <type>d:text</type>
+                    <default>approve</default>
+                    <constraints>
+                        <constraint type="LIST" name="sup:approveTaskOutcomeConstraint">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>approve</value>
+                                    <value>reject</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+            </properties>
+        </type>
     </types>
 </model>

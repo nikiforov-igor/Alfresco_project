@@ -18,7 +18,16 @@
 	
 -->
 <beans>
-<!--
+
+    <bean id="${groupId}.${artifactId}.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/sample-field-set-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+
     <bean id="activitiCustomizer" class="ru.it.lecm.base.workflow.listener.ActivitiConfigurationCustomizer" >
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
@@ -30,7 +39,7 @@
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/models/simpleSystemProcess.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">false</prop>
+                    <prop key="redeploy">true</prop>
                 </props>
             </list>
         </property>
@@ -48,7 +57,7 @@
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/models/simpleUserProcess.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">false</prop>
+                    <prop key="redeploy">true</prop>
                 </props>
             </list>
         </property>
@@ -61,14 +70,15 @@
 
     <bean id="workflowController" class="ru.it.lecm.base.workflow.WorkflowController">
         <property name="serviceRegistry" ref="ServiceRegistry" />
+        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
     <bean id="endEventListener" class="ru.it.lecm.base.workflow.listener.EndEventListener">
         <property name="workflowController" ref="workflowController" />
     </bean>
 
-    <bean id="manualSctiptListener" class="ru.it.lecm.base.workflow.listener.ManualTaskListener">
+    <bean id="LogicECMWorkflowTask" class="ru.it.lecm.base.workflow.listener.LogicECMWorkflowTask">
         <property name="workflowController" ref="workflowController" />
-    </bean>-->
+    </bean>
 
 </beans>

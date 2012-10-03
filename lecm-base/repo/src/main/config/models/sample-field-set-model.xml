@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-sample-field-set:fieldsetmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/lecm/document/sample/1.0" prefix="lecm-sample-field-set"/>
+    </namespaces>
+
+
+    <types>
+
+        <!--
+            Описание модели организации
+        -->
+        <type name="lecm-sample-field-set:fieldset">
+            <title>FieldSet</title>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="lecm-sample-field-set:field1">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-sample-field-set:field2">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-sample-field-set:field3">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-sample-field-set:field4">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-sample-field-set:field5">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
+    </types>
+
+</model>

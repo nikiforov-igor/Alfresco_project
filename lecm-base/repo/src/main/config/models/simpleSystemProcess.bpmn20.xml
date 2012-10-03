@@ -4,40 +4,103 @@
     <process id="simpleSystemProcess" name="simpleSystemProcess">
         <startEvent id="startTask" name="startTask" activiti:formKey="ssp:startTask"></startEvent>
         <endEvent id="endevent1" name="End"></endEvent>
-        <userTask id="usertask1" name="User Task" activiti:assignee="${bpm_assignee.properties.userName}">
+        <userTask id="agreement" name="Agreement" activiti:assignee="${bpm_assignee.properties.userName}">
             <extensionElements>
-                <activiti:taskListener event="create" class="ru.it.lecm.base.workflow.listener.ManualTaskListener">
-                    <activiti:field name="descriptor">
-                        <activiti:string>{
-                            workflow: "123",
-                            async: false,
-                            group: "comercial"
-                            }</activiti:string>
+                <activiti:taskListener event="create" class="ru.it.lecm.base.workflow.listener.LogicECMWorkflowTask">
+                    <activiti:field name="workflowId">
+                        <activiti:string>simpleUserProcess</activiti:string>
+                    </activiti:field>
+                    <activiti:field name="assignee">
+                        <activiti:string>admin</activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
             </extensionElements>
         </userTask>
-        <sequenceFlow id="flow3" name="" sourceRef="usertask1" targetRef="endevent1"></sequenceFlow>
-        <sequenceFlow id="flow4" name="" sourceRef="startTask" targetRef="usertask1"></sequenceFlow>
+        <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+        <scriptTask id="approved" name="Approved" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>var node = execution.getVariable("bpm_package");
+                            var document = node.getChildren()[0];
+                            document.properties["{http://www.it.ru/lecm/document/sample/1.0}field5"] = "Approved";
+                            document.save();</activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <scriptTask id="reject" name="Reject">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>var node = execution.getVariable("bpm_package");
+                            var document = node.getChildren()[0];
+                            document.properties["{http://www.it.ru/lecm/document/sample/1.0}field5"] = "Rejected";
+                            document.save();</activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <sequenceFlow id="flow4" name="" sourceRef="startTask" targetRef="agreement"></sequenceFlow>
+        <sequenceFlow id="flow5" name="" sourceRef="exclusivegateway1" targetRef="approved">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow6" name="" sourceRef="exclusivegateway1" targetRef="reject">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!approved}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow7" name="" sourceRef="approved" targetRef="endevent1"></sequenceFlow>
+        <sequenceFlow id="flow8" name="" sourceRef="reject" targetRef="endevent1"></sequenceFlow>
+        <sequenceFlow id="flow9" name="" sourceRef="agreement" targetRef="exclusivegateway1"></sequenceFlow>
     </process>
     <bpmndi:BPMNDiagram id="BPMNDiagram_simpleSystemProcess">
         <bpmndi:BPMNPlane bpmnElement="simpleSystemProcess" id="BPMNPlane_simpleSystemProcess">
             <bpmndi:BPMNShape bpmnElement="startTask" id="BPMNShape_startTask">
-                <omgdc:Bounds height="35" width="35" x="210" y="220"></omgdc:Bounds>
+                <omgdc:Bounds height="35" width="35" x="120" y="220"></omgdc:Bounds>
             </bpmndi:BPMNShape>
             <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-                <omgdc:Bounds height="35" width="35" x="580" y="220"></omgdc:Bounds>
+                <omgdc:Bounds height="35" width="35" x="610" y="220"></omgdc:Bounds>
             </bpmndi:BPMNShape>
-            <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-                <omgdc:Bounds height="55" width="105" x="380" y="210"></omgdc:Bounds>
+            <bpmndi:BPMNShape bpmnElement="agreement" id="BPMNShape_agreement">
+                <omgdc:Bounds height="55" width="105" x="210" y="210"></omgdc:Bounds>
             </bpmndi:BPMNShape>
-            <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
-                <omgdi:waypoint x="485" y="237"></omgdi:waypoint>
-                <omgdi:waypoint x="580" y="237"></omgdi:waypoint>
-            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+                <omgdc:Bounds height="40" width="40" x="370" y="217"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="approved" id="BPMNShape_approved">
+                <omgdc:Bounds height="55" width="105" x="460" y="120"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="reject" id="BPMNShape_reject">
+                <omgdc:Bounds height="55" width="105" x="460" y="300"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
             <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-                <omgdi:waypoint x="245" y="237"></omgdi:waypoint>
-                <omgdi:waypoint x="380" y="237"></omgdi:waypoint>
+                <omgdi:waypoint x="155" y="237"></omgdi:waypoint>
+                <omgdi:waypoint x="210" y="237"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+                <omgdi:waypoint x="390" y="217"></omgdi:waypoint>
+                <omgdi:waypoint x="390" y="147"></omgdi:waypoint>
+                <omgdi:waypoint x="460" y="147"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+                <omgdi:waypoint x="390" y="257"></omgdi:waypoint>
+                <omgdi:waypoint x="390" y="327"></omgdi:waypoint>
+                <omgdi:waypoint x="460" y="327"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+                <omgdi:waypoint x="565" y="147"></omgdi:waypoint>
+                <omgdi:waypoint x="627" y="147"></omgdi:waypoint>
+                <omgdi:waypoint x="627" y="220"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+                <omgdi:waypoint x="565" y="327"></omgdi:waypoint>
+                <omgdi:waypoint x="627" y="327"></omgdi:waypoint>
+                <omgdi:waypoint x="627" y="255"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+                <omgdi:waypoint x="315" y="237"></omgdi:waypoint>
+                <omgdi:waypoint x="370" y="237"></omgdi:waypoint>
             </bpmndi:BPMNEdge>
         </bpmndi:BPMNPlane>
     </bpmndi:BPMNDiagram>

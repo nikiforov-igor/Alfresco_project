@@ -27,7 +27,6 @@ public class EndEventListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
-        System.out.println("");
-        controller.terminateSubprocess(delegateExecution);
+        controller.endProcess(delegateExecution);
     }
 }
