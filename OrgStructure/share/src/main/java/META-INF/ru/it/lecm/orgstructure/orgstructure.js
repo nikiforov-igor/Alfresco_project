@@ -71,6 +71,7 @@ LogicECM.module = LogicECM.module || {};
             this._loadTree(root);
             this.tree.subscribe("labelClick", this._treeNodeSelected.bind(this));
             this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
+            this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.render();
         },
@@ -97,7 +98,7 @@ LogicECM.module = LogicECM.module || {};
             }
         },
         _loadTree: function loadNodeData(node, fnLoadComplete)  {
-            var sUrl = Alfresco.constants.PROXY_URI + "logicecm/orgstructure/branch";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
                 if (node.data.type != null) {
@@ -115,7 +116,8 @@ LogicECM.module = LogicECM.module || {};
                                 label: oResults[nodeIndex].title,
                                 nodeRef: oResults[nodeIndex].nodeRef,
                                 isLeaf: oResults[nodeIndex].isLeaf,
-                                type: oResults[nodeIndex].type
+                                type: oResults[nodeIndex].type,
+                                dsUri:oResults[nodeIndex].dsUri
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }
@@ -141,13 +143,16 @@ LogicECM.module = LogicECM.module || {};
         },
         _treeNodeSelected: function(node) {
             this.selectedNode = node;
-            Bubbling.fire("activeDataListChanged",
+            if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
+            Bubbling.fire("orgElementSelected",
                 {
-                    dataList: {
+                    orgstructureElement: {
                         description: "",
+                        type:node.data.type,
                         itemType: "lecm-orgstr:employee",
                         name: node.data.type,
                         nodeRef: node.data.nodeRef,
+                        dataSourceUri:node.data.dsUri,
                         permissions: {
                             'delete': false,
                             'edit': false
@@ -156,8 +161,9 @@ LogicECM.module = LogicECM.module || {};
                     },
                     scrollTo: true
                 });
+            }
         },
-        _createNode: function createNodeByType(type) {
+        /*_createNode: function createNodeByType(type) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width: "40em",
@@ -179,7 +185,7 @@ LogicECM.module = LogicECM.module || {};
                     scope: this
                 }
             }).show();
-        },
+        },*/
         _editNode: function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
@@ -207,29 +213,7 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
-        },
-        _loadTable:function () {
-            /*var sUrl = Alfresco.constants.PROXY_URI + "lecm/orstructure/get/employees";
-            if (this.selectedNode != null) {
-                sUrl += "?nodeRef=" + encodeURI(this.selectedNode.data.nodeRef);
-                sUrl += "&query=" + encodeURI(this.selectedNode.data.nodeRef);
-            }
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    oResponse.argument.context.addExperts(oResults);
-                    oResponse.argument.context._draw();
-                },
-                failure:function (oResponse) {
-                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-                },
-                argument:{
-                    context:this
-                }
-            };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);*/
         }
-
     });
 
 })();

@@ -53,7 +53,7 @@
         Alfresco.component.DataGrid.superclass.constructor.call(this, "Alfresco.component.DataGrid", htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation", "history"]);
 
         // Initialise prototype properties
-        this.datalistMeta = {};
+        this.orgstructureMetadata = {};
         this.datalistColumns = {};
         this.dataRequestFields = [];
         this.dataResponseFields = [];
@@ -71,7 +71,7 @@
         /**
          * Decoupled event listeners
          */
-        Bubbling.on("activeDataListChanged", this.onActiveDataListChanged, this);
+        Bubbling.on("orgElementSelected", this.onOrgElementChanged, this);
         Bubbling.on("changeFilter", this.onChangeFilter, this);
         Bubbling.on("filterChanged", this.onFilterChanged, this);
         Bubbling.on("dataListDetailsUpdated", this.onDataListDetailsUpdated, this);
@@ -81,7 +81,7 @@
         Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
 
         /* Deferred list population until DOM ready */
-        this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onActiveDataListChanged"],
+        this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onOrgElementChanged"],
             {
                 fn: this.populateDataGrid,
                 scope: this
@@ -267,7 +267,7 @@
              * @param datalistMeta
              * @type Object
              */
-            datalistMeta: null,
+            orgstructureMetadata: null,
 
             /**
              * Data List columns from Form configuration
@@ -634,14 +634,14 @@
              */
             renderDataListMeta: function DataGrid_renderDataListMeta()
             {
-                if (!YAHOO.lang.isObject(this.datalistMeta))
+                if (!YAHOO.lang.isObject(this.orgstructureMetadata))
                 {
                     return;
                 }
 
                 Alfresco.util.populateHTML(
-                    [ this.id + "-title", $html(this.datalistMeta.title) ],
-                    [ this.id + "-description", $links($html(this.datalistMeta.description, true)) ]
+                    [ this.id + "-title", $html(this.orgstructureMetadata.title) ],
+                    [ this.id + "-description", $links($html(this.orgstructureMetadata.description, true)) ]
                 );
             },
 
@@ -652,7 +652,7 @@
              */
             populateDataGrid: function DataGrid_populateDataGrid()
             {
-                if (!YAHOO.lang.isObject(this.datalistMeta))
+                if (!YAHOO.lang.isObject(this.orgstructureMetadata))
                 {
                     return;
                 }
@@ -662,10 +662,10 @@
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
-                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.datalistMeta.itemType)),
+                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.orgstructureMetadata.itemType)),
                         successCallback:
                         {
-                            fn: this.onDatalistColumns,
+                            fn: this.onOrgElementColumns,
                             scope: this
                         },
                         failureCallback:
@@ -687,7 +687,7 @@
              * @method onDatalistColumns
              * @param response {Object} Ajax data structure
              */
-            onDatalistColumns: function DataGrid_onDatalistColumns(response)
+            onOrgElementColumns: function DataGrid_onOrgElementColumns(response)
             {
                 this.datalistColumns = response.json.columns;
                 // Set-up YUI History Managers and Paginator
@@ -826,7 +826,7 @@
              */
             _setupDataSource: function DataGrid__setupDataSource()
             {
-                var listNodeRef = new Alfresco.util.NodeRef(this.datalistMeta.nodeRef);
+                var listNodeRef = new Alfresco.util.NodeRef(this.orgstructureMetadata.nodeRef);
 
                 this.dataRequestFields = [];
                 this.dataResponseFields = [];
@@ -843,7 +843,7 @@
                 }
 
                 // DataSource definition
-                this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "slingshot/datalists/data/node/" + listNodeRef.uri,
+                    this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + this.orgstructureMetadata.dataSourceUri + listNodeRef.uri,
                     {
                         connMethodPost: true,
                         responseType: YAHOO.util.DataSource.TYPE_JSON,
@@ -1418,15 +1418,12 @@
              * @param layer {object} Event fired (unused)
              * @param args {array} Event parameters (unused)
              */
-            onActiveDataListChanged: function DataGrid_onActiveDataListChanged(layer, args)
-            {
+            onOrgElementChanged:function DataGrid_onActiveElementChanged(layer, args) {
                 var obj = args[1];
-                if ((obj !== null) && (obj.dataList !== null))
-                {
-                    this.datalistMeta = obj.dataList;
+                if ((obj !== null) && (obj.orgstructureElement !== null)) {
+                    this.orgstructureMetadata = obj.orgstructureElement;
                     // Could happen more than once, so check return value of fulfil()
-                    if (!this.deferredListPopulation.fulfil("onActiveDataListChanged"))
-                    {
+                    if (!this.deferredListPopulation.fulfil("onOrgElementChanged")) {
                         this.populateDataGrid();
                     }
                 }

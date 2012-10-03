@@ -376,11 +376,13 @@ function addItems(branch, items) {
         type = items[index].type;
         nodeRef = items[index].nodeRef;
         isLeaf = items[index].isLeaf;
+        dsUri = (items[index].dsUri != null ? items[index].dsUri : null);
         branch.push({
             title:title,
             type:type,
             nodeRef:nodeRef,
-            isLeaf: "" + isLeaf
+            isLeaf: "" + isLeaf,
+            dsUri: dsUri
         });
     }
 }
