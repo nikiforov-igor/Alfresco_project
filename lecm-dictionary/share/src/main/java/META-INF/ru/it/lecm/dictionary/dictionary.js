@@ -46,6 +46,7 @@ LogicECM.module = LogicECM.module || {};
         messages:null,
         table:null,
         layout:null,
+        button:null,
         cDoc: null,
         options:{
             templateUrl:null,
@@ -69,40 +70,12 @@ LogicECM.module = LogicECM.module || {};
             this.cDoc = this.id;
             var dictionary = Dom.get(this.id);
 
-//			//Добавляем меню
-            var menu = document.createElement("div");
-            menu.id = this.id + "-menu";
-            dictionary.appendChild(menu);
-
-            var menuData = [
-                {
-                    text:this.messages["dictionary.append"],
-                    submenu:{
-                        id:"appendmenu",
-                        itemdata:[
-                            {
-                                id:"appendEmployee",
-                                text:this.messages["dictionary.append.employee"],
-                                disabled:true
-                            },
-                            {
-                                id:"appendDivision",
-                                text:this.messages["dictionary.append.division"],
-                                disabled:true
-                            }
-                        ]
-                    }
-                }
-            ];
-
-            this.menu = new YAHOO.widget.MenuBar(menu.id + "-menubar", {
-                lazyload:false,
-                itemdata:menuData
-            });
-
-            this.menu.subscribe("click", this._menuSelected.bind(this));
-            this.menu.render(menu);
-
+            //Добавляем кнопку
+            this.button = new YAHOO.widget.Button("newListButton");
+            this.button.subscribe("click", function () {
+                this._createNode("lecm-dic:dictionary");
+                this.show();
+            }.bind(this));
 
             //Добавляем дерево структуры предприятия
             var treeContainer = document.createElement("div");
