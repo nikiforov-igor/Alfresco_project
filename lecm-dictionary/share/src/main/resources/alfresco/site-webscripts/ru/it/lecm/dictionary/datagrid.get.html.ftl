@@ -6,12 +6,9 @@
 <script type="text/javascript">//<![CDATA[
    new Alfresco.component.DataGrid('${id}').setOptions(
    {
-      <#--siteId: "${page.url.templateArgs.site!""}",-->
-      siteId: "site",
-      <#--containerId: "${template.properties.container!"dataLists"}",-->
-      containerId: "dataLists",
-      <#--usePagination: ${(args.pagination!false)?string}-->
-      usePagination: true
+      siteId: "${page.url.templateArgs.site!""}",
+      containerId: "${template.properties.container!"dataLists"}",
+      usePagination: ${(args.pagination!false)?string}
    }).setMessages(${messages});
 //]]></script>
 <div id="${id}-body" class="datagrid">

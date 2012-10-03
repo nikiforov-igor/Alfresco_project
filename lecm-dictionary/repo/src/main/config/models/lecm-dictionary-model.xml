@@ -41,7 +41,7 @@
 		<!--Значения справочника-->
 		<type name="lecm-dic:dictionary_values">
 			<title>Dictionary values</title>
-			<parent>cm:content</parent>
+			<parent>cm:folder</parent>
 			<properties>
 				<property name="lecm-dic:description_values">
 					<title>Description</title>

@@ -843,7 +843,7 @@
          }
          
          // DataSource definition
-         this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "slingshot/datalists/data/node/" + listNodeRef.uri,
+         this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "lecm/dictionary/data/node/" + listNodeRef.uri,
          {
             connMethodPost: true,
             responseType: YAHOO.util.DataSource.TYPE_JSON,
