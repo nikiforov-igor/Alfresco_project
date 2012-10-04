@@ -1,2 +1,2 @@
-<#import "../../../../../org/alfresco/slingshot/datalist/action.lib.ftl" as actionLib />
-<@actionLib.resultsJSON results=results />
+<#import "../../../../../org/alfresco/slingshot/datalists/action/action.lib.ftl" as actionLib />
+<@actionLib.resultsJSON results=results/>
