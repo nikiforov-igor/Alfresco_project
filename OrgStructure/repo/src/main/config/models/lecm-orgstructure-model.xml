@@ -324,6 +324,10 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-orgstr:employee-email">
+                    <title>E-Mail</title>
+                    <type>d:text</type>
+                </property>
                 <property name="lecm-orgstr:employee-photo">
                     <title>Photo</title>
                     <type>d:any</type>
@@ -406,10 +410,10 @@
             <title>Position</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:position-description">
+                <!--<property name="lecm-orgstr:position-description">
                     <title>Description</title>
                     <type>d:any</type>
-                </property>
+                </property>-->
                 <property name="lecm-orgstr:position-name-g">
                     <title>Name in genitive</title>
                     <type>d:text</type>
@@ -426,11 +430,6 @@
             <title>Office</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:office-full-name">
-                    <title>Full Name</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
                 <property name="lecm-orgstr:office-short-name">
                     <title>Short Name</title>
                     <type>d:text</type>

@@ -28,6 +28,11 @@
                 <value>alfresco/module/${artifactId}/models/lecm-orgstructure-model.xml</value>
             </list>
         </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/orgstructure</value>
+            </list>
+        </property>
     </bean>
     <!-- A simple class that is initialized by Spring -->
     <!--<bean id="${groupId}.${artifactId}.exampleBean" class="org.alfresco.demoamp.Demo" init-method="init" />-->

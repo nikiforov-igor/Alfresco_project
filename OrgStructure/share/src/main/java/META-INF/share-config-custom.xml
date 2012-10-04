@@ -8,8 +8,12 @@
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-sex"/>
+                    <show id="lecm-orgstr:employee-email"/>
+                    <show id="lecm-orgstr:employee-photo"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-orgstr:employee-fio-g"/>
+                    <show id="lecm-orgstr:employee-fio-d"/>
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
@@ -25,12 +29,13 @@
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
-                    <show id="lecm-orgstr:employee-sex"/>
+                    <!--<show id="lecm-orgstr:employee-sex"/>-->
                     <show id="lecm-orgstr:employee-phone"/>
+                    <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-number"/>
                     <show id="lecm-orgstr:employee-is-system-user"/>
-                    <show id="lecm-orgstr:employee-person-assoc"/>"/>
-                    <show id="lecm-orgstr:employee-person-data-assoc"/>
+                    <!--<show id="lecm-orgstr:employee-person-assoc"/>"/>
+                    <show id="lecm-orgstr:employee-person-data-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>
@@ -150,7 +155,8 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:position-description"/>
+                    <show id="cm:name"/>
+                    <show id="cm:description"/>
                     <show id="lecm-orgstr:position-name-g"/>
                     <show id="lecm-orgstr:position-name-d"/>
                 </field-visibility>
@@ -162,7 +168,8 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:position-description"/>
+                    <show id="cm:name"/>
+                    <show id="cm:description"/>
                     <show id="lecm-orgstr:position-name-g"/>
                     <show id="lecm-orgstr:position-name-d"/>
                 </field-visibility>
@@ -174,7 +181,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:office-full-name"/>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:office-short-name"/>
                     <show id="lecm-orgstr:office-phone"/>
                     <show id="lecm-orgstr:office-fax"/>
@@ -189,7 +196,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:office-full-name"/>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:office-short-name"/>
                     <show id="lecm-orgstr:office-phone"/>
                     <show id="lecm-orgstr:office-fax"/>
@@ -262,6 +269,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:workforce-role"/>
                     <show id="lecm-orgstr:workforce-employee-assoc"/>
                 </field-visibility>
@@ -273,8 +281,9 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:element-full-name"/>
-                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr:workforce-role"/>
+                    <show id="lecm-orgstr:workforce-employee-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -350,7 +359,7 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:employee-containe">
+    <config evaluator="node-type" condition="lecm-orgstr:employee-container">
         <forms>
             <form>
                 <field-visibility>
@@ -361,7 +370,29 @@
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:employee-containe">
+    <config evaluator="model-type" condition="lecm-orgstr:employee-container">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:contains"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:organization-structure">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:contains"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:organization-structure">
         <forms>
             <form>
                 <field-visibility>
