@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.it.ru/lecm/dictionary/descriptor/1.0"
+           version="0.1.0">
+    <xs:annotation>
+        <xs:documentation>
+            Описание справочника системы
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="dictionary" type="dictionaryType"/>
+    <xs:complexType name="dictionaryType">
+        <xs:annotation>
+            <xs:documentation>Справочник</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:annotation>
+                <xs:documentation>Справочник1</xs:documentation>
+            </xs:annotation>
+            <xs:element type="xs:string" name="name" minOccurs="1"/>
+            <xs:element type="xs:string" name="description" minOccurs="1"/>
+            <xs:element type="xs:string" name="modelType" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
