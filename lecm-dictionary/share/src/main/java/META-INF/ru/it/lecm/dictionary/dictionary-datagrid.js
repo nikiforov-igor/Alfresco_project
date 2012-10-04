@@ -1462,6 +1462,7 @@
          {
             page: this.currentPage
          });
+         Bubbling.fire("itemsListChanged");
       },
 
       /**
