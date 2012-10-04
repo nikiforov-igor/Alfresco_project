@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<beans>
+
+	<!-- Registration of dictionary models -->
+	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-dictionary-regions-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="${groupId}.${artifactId}.lecmDictionaryBootstrap"
+          parent="lecmDictionaryBootstrap">
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-dictionary-regions.xml</value>
+            </list>
+        </property>
+    </bean>
+</beans>
