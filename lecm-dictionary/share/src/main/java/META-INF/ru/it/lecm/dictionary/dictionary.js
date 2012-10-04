@@ -31,11 +31,13 @@ LogicECM.module = LogicECM.module || {};
     var nodeDictionary = null;    //TODO
 
     LogicECM.module.Dictionary = function (htmlId) {
-        return LogicECM.module.Dictionary.superclass.constructor.call(
+        LogicECM.module.Dictionary.superclass.constructor.call(
             this,
             "LogicECM.module.Dictionary",
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
+        Bubbling.on("itemsListChanged", this._renderTree, this);
+        return this;
     };
 
     YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
@@ -44,6 +46,7 @@ LogicECM.module = LogicECM.module || {};
         messages:null,
         button:null,
         cDoc: null,
+        treeContainer: null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -66,17 +69,10 @@ LogicECM.module = LogicECM.module || {};
             this.cDoc = this.id;
             var dictionary = Dom.get(this.id);
 
-            //Добавляем кнопку
-            this.button = new YAHOO.widget.Button("newListButton");
-            this.button.subscribe("click", function () {
-                this._createNode("lecm-dic:dictionary");
-                this.show();
-            }.bind(this));
-
             //Добавляем дерево структуры предприятия
-            var treeContainer = document.createElement("div");
-            treeContainer.id = this.id + "-tree";
-            dictionary.appendChild(treeContainer);
+            this.treeContainer = document.createElement("div");
+            this.treeContainer.id = this.id + "-tree";
+            dictionary.appendChild(this.treeContainer);
 
             //Добавляем таблицу с данными
             var tableContainer = document.createElement("div");
@@ -84,8 +80,17 @@ LogicECM.module = LogicECM.module || {};
             dictionary.appendChild(tableContainer);
             tableContainerId=tableContainer.id;
 
-            //this._loadNode();
-            this.tree = new YAHOO.widget.TreeView(treeContainer.id);
+            //Добавление дерева
+            this._createTree();
+
+            //Добавляем кнопку
+            this.button = new YAHOO.widget.Button("newListButton");
+            this.button.subscribe("click", function () {
+                this._createNode("lecm-dic:dictionary");
+            }.bind(this));
+        },
+        _createTree: function () {
+            this.tree = new YAHOO.widget.TreeView(this.treeContainer);
             this.tree.setDynamicLoad(this._loadTree);
             var root = this.tree.getRoot();
             this._loadTree(root);
@@ -94,7 +99,13 @@ LogicECM.module = LogicECM.module || {};
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.render();
         },
-
+        _renderTree: function () {
+            this._loadTree(this.selectedNode);
+            this.selectedNode.isLeaf = false;
+            this.selectedNode.expanded = true;
+            this.tree.render();
+            this.selectedNode.focus();
+        },
         _createUrl:function (type, nodeRef, childNodeType) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
             if (type == "create") {
@@ -201,12 +212,8 @@ LogicECM.module = LogicECM.module || {};
                 });
         },
         _createNode:function createNodeByType(type) {
-            var templateUrl = null;
-            if (type == "lecm-dic:dictionary"){
-                templateUrl = this._createUrl("create", nodeDictionary, type);
-            } else {
-                templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
-            }
+            var templateUrl = this._createUrl("create", nodeDictionary, type);
+
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
                 templateUrl:templateUrl,
@@ -217,17 +224,11 @@ LogicECM.module = LogicECM.module || {};
                 },
                 onSuccess:{
                     fn:function () {
-                        this._loadTree(this.selectedNode, function () {
-                            this.selectedNode.isLeaf = false;
-                            this.selectedNode.expanded = true;
-                            this.tree.render();
-                            this.selectedNode.focus();
-                        }.bind(this));
+                        this._createTree();
                     },
                     scope:this
                 }
             }).show();
-            this.tree.render();
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);

@@ -1854,6 +1854,7 @@
       _findRecordByParameter: function DataGrid__findRecordByParameter(p_value, p_parameter)
       {
         var recordSet = this.widgets.dataTable.getRecordSet();
+        Bubbling.fire("itemsListChanged");
         for (var i = 0, j = recordSet.getLength(); i < j; i++)
         {
            if (recordSet.getRecord(i).getData(p_parameter) == p_value)
