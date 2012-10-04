@@ -39,13 +39,9 @@ LogicECM.module = LogicECM.module || {};
     };
 
     YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
-        menu:null,
-        search:null,
         tree:null,
         selectedNode:null,
         messages:null,
-        table:null,
-        layout:null,
         button:null,
         cDoc: null,
         options:{
@@ -203,27 +199,6 @@ LogicECM.module = LogicECM.module || {};
                     },
                     scrollTo: true
                 });
-
-            if (this.selectedNode.data.type == "dictionary") {
-                this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", false);
-                this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", false);
-            } else {
-                this.menu.getSubmenus()[0].getItem(0).cfg.setProperty("disabled", true);
-                this.menu.getSubmenus()[0].getItem(1).cfg.setProperty("disabled", true);
-            }
-        },
-        _menuSelected:function onClickMenu(p_sType, p_aArgs) {
-            var selectedMenu = p_aArgs[1];
-            if (selectedMenu instanceof YAHOO.widget.MenuItem) {
-                if (selectedMenu.id == "appendEmployee") {
-                    this._createNode("lecm-dic:dictionary_values");
-                } else if (selectedMenu.id == "appendDivision") {
-                    this._createNode("lecm-dic:dictionary");
-                } else if (selectedMenu.id == "appendFolder") {
-                    this._createNode("cm:folder");
-                }
-            }
-
         },
         _createNode:function createNodeByType(type) {
             var templateUrl = null;
@@ -252,6 +227,7 @@ LogicECM.module = LogicECM.module || {};
                     scope:this
                 }
             }).show();
+            this.tree.render();
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
