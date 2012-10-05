@@ -27,12 +27,13 @@
 				<property name="lecm-dic:description">
 					<title>Description</title>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 				</property>
 				<property name="lecm-dic:type">
 					<title>Type</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+                    <default>lecm-dic:dictionary_values</default>
 				</property>
 				<property name="lecm-dic:active">
 					<title>Active</title>
@@ -48,11 +49,6 @@
 			<title>Dictionary values</title>
 			<parent>cm:folder</parent>
 			<properties>
-				<property name="lecm-dic:description_values">
-					<title>Description</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-dic:active_values">
 					<title>Active</title>
 					<type>d:boolean</type>
@@ -60,20 +56,6 @@
                     <default>true</default>
 				</property>
 			</properties>
-			<associations>
-				<!--Связь с дочерними значениями справочника-->
-				<child-association name="lecm-dic:dictionary_values_assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>lecm-dic:dictionary_values</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-			</associations>
 		</type>
 	</types>
 </model>
