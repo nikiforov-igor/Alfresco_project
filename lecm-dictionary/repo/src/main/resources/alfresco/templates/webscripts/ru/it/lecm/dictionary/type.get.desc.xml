@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Type</shortname>
+	<description>Type node properties </description>
+	<url>/lecm/dictionary/get/type</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>
