@@ -196,49 +196,46 @@ LogicECM.module = LogicECM.module || {};
         },
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
-            if (node.data.type=="dictionary") {
-                var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
-                if (node.data.nodeRef != null) {
-                    sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-                }
-                var callback = {
-                    success:function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null) {
-                            for (var nodeIndex in oResults) {
-                                nodeType = oResults[nodeIndex].toString();
-                                if (nodeType=="" || nodeType == null){
-                                    nodeType = "lecm-dic:dictionary_values";
-                                }
-                            }
-                        };
-                        Bubbling.fire("activeDataListChanged",
-                            {
-                                dataList: {
-                                    description: "",
-                                    itemType: nodeType,
-                                    name: node.data.type,
-                                    nodeRef: node.data.nodeRef,
-                                    permissions: {
-                                        'delete': true,
-                                        'edit': true
-                                    },
-                                    title: node.label
-                                },
-                                scrollTo: true
-                            });
-                    },
-                    failure:function (oResponse) {
-                        alert("Failed to load type. " + "[" + oResponse.statusText + "]");
-                    },
-                    argument:{
-                    }
-                };
+             var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
+             if (node.data.nodeRef != null) {
+                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+             }
 
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-            }
+             var callback = {
+                 success:function (oResponse) {
+                     var oResults = eval("(" + oResponse.responseText + ")");
+                     if (oResults != null) {
+                         for (var nodeIndex in oResults) {
+                             nodeType = oResults[nodeIndex].toString();
+                             if (nodeType=="" || nodeType == null){
+                                 nodeType = "lecm-dic:dictionary_values";
+                             }
+                         }
+                     };
+                     Bubbling.fire("activeDataListChanged",
+                         {
+                             dataList: {
+                                 description: "",
+                                 itemType: nodeType,
+                                 name: node.data.type,
+                                 nodeRef: node.data.nodeRef,
+                                 permissions: {
+                                     'delete': true,
+                                     'edit': true
+                                 },
+                                 title: node.label
+                             },
+                             scrollTo: true
+                         });
+                 },
+                 failure:function (oResponse) {
+                     alert("Failed to load type. " + "[" + oResponse.statusText + "]");
+                 },
+                 argument:{
+                 }
+             };
 
-
+             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
         _createNode:function createNodeByType(type) {
             var templateUrl = this._createUrl("create", nodeDictionary, type);
