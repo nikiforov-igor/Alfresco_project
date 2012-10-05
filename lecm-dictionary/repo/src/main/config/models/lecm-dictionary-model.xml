@@ -29,6 +29,11 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
+				<property name="lecm-dic:type">
+					<title>Type</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
 				<property name="lecm-dic:active">
 					<title>Active</title>
 					<type>d:boolean</type>

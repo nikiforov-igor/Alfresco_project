@@ -5,6 +5,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
+					<show id="lecm-dic:type" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>
@@ -17,6 +18,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
+					<show id="lecm-dic:type" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>

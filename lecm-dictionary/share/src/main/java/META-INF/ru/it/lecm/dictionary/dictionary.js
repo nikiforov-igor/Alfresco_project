@@ -29,6 +29,7 @@ LogicECM.module = LogicECM.module || {};
     var Bubbling = YAHOO.Bubbling;
     var tableContainerId = null;  // TODO
     var nodeDictionary = null;    //TODO
+    var nodeType = "lecm-dic:dictionary_values";  //TODO
 
     LogicECM.module.Dictionary = function (htmlId) {
         LogicECM.module.Dictionary.superclass.constructor.call(
@@ -47,6 +48,7 @@ LogicECM.module = LogicECM.module || {};
         button:null,
         cDoc: null,
         treeContainer: null,
+        rootNode: null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -199,7 +201,7 @@ LogicECM.module = LogicECM.module || {};
                 {
                     dataList: {
                         description: "",
-                        itemType: "lecm-dic:dictionary_values",
+                        itemType: nodeType,
                         name: node.data.type,
                         nodeRef: node.data.nodeRef,
                         permissions: {
@@ -210,6 +212,32 @@ LogicECM.module = LogicECM.module || {};
                     },
                     scrollTo: true
                 });
+            if (node.data.type=="dictionary") {
+                var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
+                if (node.data.nodeRef != null) {
+                    sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+                }
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null) {
+                            for (var nodeIndex in oResults) {
+                                nodeType = oResults[nodeIndex].toString();
+                                if (nodeType=="" || nodeType == null){
+                                    nodeType = "lecm-dic:dictionary_value";
+                                }
+                            }
+                        }
+                    },
+                    failure:function (oResponse) {
+                        alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
+                    },
+                    argument:{
+                    }
+                };
+
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            }
         },
         _createNode:function createNodeByType(type) {
             var templateUrl = this._createUrl("create", nodeDictionary, type);
