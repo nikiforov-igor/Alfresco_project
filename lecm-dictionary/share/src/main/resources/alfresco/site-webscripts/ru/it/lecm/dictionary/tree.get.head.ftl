@@ -1,5 +1,5 @@
-<#--<#include "component.head.inc">-->
-<!-- Data List Toolbar -->
-<#--<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css" />-->
-<#--<@script type="text/javascript" src="${page.url.context}/res/components/data-lists/toolbar.js"></@script>-->
-<script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
+<#include "../../../../org/alfresco/components/component.head.inc">
+<#include "../../../../org/alfresco/components/form/form.get.head.ftl">
+<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-tree.css" />
+<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-tree.js"></@script>

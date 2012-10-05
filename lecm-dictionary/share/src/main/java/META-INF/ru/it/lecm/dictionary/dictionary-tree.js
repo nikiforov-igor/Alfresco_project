@@ -27,7 +27,6 @@ LogicECM.module = LogicECM.module || {};
 
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
-    var tableContainerId = null;  // TODO
     var nodeDictionary = null;    //TODO
     var nodeType = "lecm-dic:dictionary_values";  //TODO
 
@@ -41,13 +40,19 @@ LogicECM.module = LogicECM.module || {};
         return this;
     };
 
+    var tree,
+        dragContainerId = 'dragContainer',
+        dragContainer,
+        dragTree;
+
+    var ddNodes = [];
+
     YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
-        tree:null,
         selectedNode:null,
         messages:null,
         button:null,
         cDoc: null,
-        treeContainer: null,
+        treeContainer: 'dictionary',
         rootNode: null,
         options:{
             templateUrl:null,
@@ -59,8 +64,12 @@ LogicECM.module = LogicECM.module || {};
                 scope:window
             }
         },
-        init: function(formId) {
+        init: function() {
             this._loadNode();
+
+            dragContainer = document.body.appendChild(document.createElement('div'));
+            dragTree = new YAHOO.widget.TreeView(dragContainer);
+            dragContainer.id = dragContainerId;
         },
 
         setMessages:function (messages) {
@@ -69,18 +78,6 @@ LogicECM.module = LogicECM.module || {};
 
         draw:function () {
             this.cDoc = this.id;
-            var dictionary = Dom.get(this.id);
-
-            //Добавляем дерево структуры предприятия
-            this.treeContainer = document.createElement("div");
-            this.treeContainer.id = this.id + "-tree";
-            dictionary.appendChild(this.treeContainer);
-
-            //Добавляем таблицу с данными
-            var tableContainer = document.createElement("div");
-            tableContainer.id = this.id + "-table";
-            dictionary.appendChild(tableContainer);
-            tableContainerId=tableContainer.id;
 
             //Добавление дерева
             this._createTree();
@@ -92,21 +89,22 @@ LogicECM.module = LogicECM.module || {};
             }.bind(this));
         },
         _createTree: function () {
-            this.tree = new YAHOO.widget.TreeView(this.treeContainer);
-            this.tree.setDynamicLoad(this._loadTree);
-            var root = this.tree.getRoot();
+            tree = new YAHOO.widget.TreeView(this.treeContainer);
+            tree.setDynamicLoad(this._loadTree);
+            var root = tree.getRoot();
             this._loadTree(root);
-            this.tree.subscribe("labelClick", this._treeNodeSelected.bind(this));
-            this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
-            this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
-            this.tree.render();
+            tree.subscribe("labelClick", this._treeNodeSelected.bind(this));
+            tree.subscribe("expand", this._treeNodeSelected.bind(this));
+            tree.subscribe('dblClickEvent', this._editNode.bind(this));
+            tree.render();
         },
         _renderTree: function () {
             this._loadTree(this.selectedNode);
             this.selectedNode.isLeaf = false;
             this.selectedNode.expanded = true;
-            this.tree.render();
+            tree.render();
             this.selectedNode.focus();
+            makeDraggable();
         },
         _createUrl:function (type, nodeRef, childNodeType) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
@@ -168,7 +166,8 @@ LogicECM.module = LogicECM.module || {};
                                 label:oResults[nodeIndex].title,
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
-                                type:oResults[nodeIndex].type
+                                type:oResults[nodeIndex].type,
+                                renderHidden:true
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }
@@ -179,6 +178,7 @@ LogicECM.module = LogicECM.module || {};
                     } else {
                         oResponse.argument.tree.render();
                     }
+                    makeDraggable();
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
@@ -187,7 +187,7 @@ LogicECM.module = LogicECM.module || {};
                 argument:{
                     node:node,
                     fnLoadComplete:fnLoadComplete,
-                    tree:this.tree,
+                    tree:tree,
                     context: this
                 },
                 timeout:7000
@@ -272,8 +272,9 @@ LogicECM.module = LogicECM.module || {};
                 onSuccess:{
                     fn:function () {
                         this._loadTree(this.selectedNode.parent, function () {
-                            this.tree.render();
+                            tree.render();
                             this.selectedNode.focus();
+                            makeDraggable();
                         }.bind(this));
                     },
                     scope:this
@@ -287,6 +288,96 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
+        }
+    });
+
+    var DDNode = function(id, sGroup, config) {
+        DDNode.superclass.constructor.call(this, id, sGroup, config);
+
+    };
+
+    var makeDraggable = function() {
+        for (var i = 0, l = ddNodes.length;i < l;i++) {
+//            ddNodes[i].unreg();
+        }
+        ddNodes = [];
+
+        var nodes = tree.getNodesBy(function(){return true;});
+        if (nodes) {
+            for (i = 0,l = nodes.length;i<l;i++) {
+                ddNodes.push(
+                    new DDNode(
+                        nodes[i].getContentEl(),
+                        'default',
+                        {
+                            dragElId: dragContainerId
+                        }
+                    )
+                );
+            }
+        }
+    }
+
+    YAHOO.extend(DDNode, YAHOO.util.DDProxy, {
+        srcNode: null,
+        destNode: null,
+
+        startDrag: function(x, y) {
+            this.srcNode = tree.getNodeByElement(this.getEl());
+            // The following section of code resizes the container of the proxy element.
+            (function () {
+                var proxyEl = this.getDragEl(),
+                    dragEl = this.srcNode.getEl(),
+                    dragRegion = Dom.getRegion(dragEl);
+
+                Dom.setStyle( proxyEl, "width",  dragRegion.width  + "px" );
+                Dom.setStyle( proxyEl, "height", dragRegion.height + "px" );
+            }).call(this);
+
+            Dom.setStyle(this.srcNode.getEl(), "visibility", "hidden");
+            dragTree.buildTreeFromObject(this.srcNode.getNodeDefinition());
+            dragTree.render();
+        },
+        onDragDrop: function (e, id) {
+            var parent = dest = this.destNode,
+                src = this.srcNode;
+            if (!dest) { return; }
+            while(parent) {
+                if (parent == src) {
+                    return;
+                }
+                parent = parent.parent;
+            }
+            tree.popNode(src);
+            src.appendTo(dest);
+            tree.render();
+            makeDraggable();
+        },
+
+        endDrag: function(x,y) {
+            Dom.setStyle(this.srcNode.getEl(), "visibility", "");
+            if (this.destNode) {
+                Dom.removeClass(this.destNode.getContentEl(),'dropTarget');
+            }
+
+//            var nodes = dragTree.getNodesBy(function(){return true;});
+//            if (nodes) {
+//                for (i = 0,l = nodes.length;i<l;i++) {
+//                    dragTree.removeNode(nodes[i]);
+//                }
+//            }
+        },
+
+        onDragOver: function(e, id) {
+            var tmpTarget = tree.getNodeByElement(Dom.get(id));
+
+            if (this.destNode != tmpTarget) {
+                if (this.destNode) {
+                    Dom.removeClass(this.destNode.getContentEl(),'dropTarget');
+                }
+                Dom.addClass(tmpTarget.getContentEl(),'dropTarget');
+                this.destNode = tmpTarget;
+            }
         }
     });
 })();

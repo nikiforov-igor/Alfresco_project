@@ -7,8 +7,6 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 //]]></script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datalists.css" />
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
-<!-- Required CSS -->
-	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
 <!-- Optional CSS for for date editing with Calendar-->
 	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/calendar/assets/skins/sam/calendar.css"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/menu/assets/skins/sam/menu.css"/>
@@ -31,7 +29,6 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
-    <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
     <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-actions.js"></script>
 </@>
 
@@ -41,7 +38,6 @@ new Alfresco.widget.Resizer("DocumentLibrary");
     <@region id="title" scope="template"/>
 </div>
 <div id="bd">
-
     <#--<@region id="actions-common" scope="template" />-->
     <div class="yui-t1" id="alfresco-data-lists">
         <div id="yui-main">
@@ -51,8 +47,7 @@ new Alfresco.widget.Resizer("DocumentLibrary");
             </div>
         </div>
         <div class="yui-b" id="alf-filters">
-	        <@region id="column" scope="template"/>
-            <#--<@region id="datalists" scope="template" />-->
+	        <@region id="tree" scope="template"/>
                <#--<@region id="filter" scope="template" />-->
         </div>
     </div>

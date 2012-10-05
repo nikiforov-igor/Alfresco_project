@@ -3,8 +3,8 @@
 	<template-type>ru/it/lecm/dictionary/dictionary</template-type>
 	<components>
 		<component>
-			<region-id>column</region-id>
-			<url>/lecm/dictionary/main</url>
+			<region-id>tree</region-id>
+			<url>/lecm/dictionary/tree</url>
 		</component>
 		<!-- Title -->
 		<component>
