@@ -1,5 +1,4 @@
 <#assign id = args.htmlid>
-<script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></script>
 <script type="text/javascript">//<![CDATA[
 
 (function() {
@@ -44,7 +43,7 @@
 
 	function init() {
 		var Dictionary = new LogicECM.module.Dictionary("dictionary");
-		Dictionary.init("dictionary");
+		Dictionary.init();
 		Dictionary.setMessages(${messages});
 		Dictionary.draw();
 	}

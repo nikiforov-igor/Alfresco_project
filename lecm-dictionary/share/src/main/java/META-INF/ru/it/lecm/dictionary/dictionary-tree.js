@@ -49,7 +49,6 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
         selectedNode:null,
-        messages:null,
         button:null,
         cDoc: null,
         treeContainer: 'dictionary',
@@ -67,13 +66,9 @@ LogicECM.module = LogicECM.module || {};
         init: function() {
             this._loadNode();
 
-            dragContainer = document.body.appendChild(document.createElement('div'));
+            dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
             dragTree = new YAHOO.widget.TreeView(dragContainer);
             dragContainer.id = dragContainerId;
-        },
-
-        setMessages:function (messages) {
-            this.messages = messages;
         },
 
         draw:function () {
@@ -315,6 +310,9 @@ LogicECM.module = LogicECM.module || {};
         }
     }
 
+    var isDragElement = false;
+    var dragElementIsLeaf;
+
     YAHOO.extend(DDNode, YAHOO.util.DDProxy, {
         srcNode: null,
         destNode: null,
@@ -331,24 +329,99 @@ LogicECM.module = LogicECM.module || {};
                 Dom.setStyle( proxyEl, "height", dragRegion.height + "px" );
             }).call(this);
 
-            Dom.setStyle(this.srcNode.getEl(), "visibility", "hidden");
-            dragTree.buildTreeFromObject(this.srcNode.getNodeDefinition());
-            dragTree.render();
+            if (!isDragElement && this.srcNode.data.type != "dictionary") {
+                isDragElement = true;
+                Dom.setStyle(this.srcNode.getEl(), "visibility", "hidden");
+
+                dragElementIsLeaf = this.srcNode.isLeaf;
+                this.srcNode.isLeaf = true;
+                dragTree.buildTreeFromObject(this.srcNode.getNodeDefinition());
+                this.srcNode.isLeaf = false;
+                dragTree.render();
+            }
         },
         onDragDrop: function (e, id) {
-            var parent = dest = this.destNode,
-                src = this.srcNode;
-            if (!dest) { return; }
-            while(parent) {
-                if (parent == src) {
-                    return;
-                }
-                parent = parent.parent;
-            }
-            tree.popNode(src);
-            src.appendTo(dest);
-            tree.render();
-            makeDraggable();
+
+            var me = this;
+
+            var fnActionMoveConfirm = function DictionaryActions__onActionMove_confirm()
+            {
+                var parent = dest = me.destNode,
+                    src = me.srcNode;
+                if (!dest) { return; }
+
+                var dataObj = {childNodeRef: encodeURI(src.data.nodeRef), parentNodeRef: encodeURI(dest.data.nodeRef)};
+
+                Alfresco.util.Ajax.jsonRequest(
+                    {
+                        method: Alfresco.util.Ajax.POST,
+                        url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/action/changeParent/node",
+                        dataObj: dataObj,
+                        successCallback:
+                        {
+                            fn: function(response, obj)
+                            {
+                                var oResults = eval("(" + response.responseText + ")");
+                                if (response.json.success) {
+                                    dest.isLeaf = false;
+                                    while(parent) {
+                                        if (parent == src) {
+                                            return;
+                                        }
+                                        parent = parent.parent;
+                                    }
+                                    tree.popNode(src);
+                                    src.isLeaf = dragElementIsLeaf;
+                                    src.appendTo(dest);
+                                    tree.render();
+                                    makeDraggable();
+
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: Alfresco.util.message("dictionary.message.moveSuccess", "LogicECM.module.Dictionary")
+                                        });
+                                } else {
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary")
+                                        });
+                                    }
+                            }
+                        },
+                        failureMessage: Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary"),
+                        failureCallback:
+                        {
+                            fn: function()
+                            {
+                                alert("!!!FALSE!!!");
+                            }
+                        }
+                    });
+            };
+
+            Alfresco.util.PopupManager.displayPrompt(
+                {
+                    title: Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary"),
+                    text: Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary"),
+                    buttons: [
+                        {
+                            text: Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary"),
+                            handler: function DataListActions__onActionMove_move()
+                            {
+                                this.destroy();
+                                fnActionMoveConfirm.call();
+                            }
+                        },
+                        {
+                            text: Alfresco.util.message("button.cancel"),
+                            handler: function DictionaryActions__onActionMove_cancel()
+                            {
+                                this.destroy();
+                            },
+                            isDefault: true
+                        }]
+                });
+
         },
 
         endDrag: function(x,y) {
@@ -357,12 +430,14 @@ LogicECM.module = LogicECM.module || {};
                 Dom.removeClass(this.destNode.getContentEl(),'dropTarget');
             }
 
-//            var nodes = dragTree.getNodesBy(function(){return true;});
-//            if (nodes) {
-//                for (i = 0,l = nodes.length;i<l;i++) {
-//                    dragTree.removeNode(nodes[i]);
-//                }
-//            }
+            isDragElement = false;
+            var nodes = dragTree.getNodesBy(function(){return true;});
+            if (nodes) {
+                for (i = 0,l = nodes.length;i<l;i++) {
+                    dragTree.removeNode(nodes[i]);
+                }
+            }
+            Dom.get(dragContainerId).innerHTML = "";
         },
 
         onDragOver: function(e, id) {
