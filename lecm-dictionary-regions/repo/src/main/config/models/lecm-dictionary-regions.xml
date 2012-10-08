@@ -2,5 +2,5 @@
 <dictionary xmlns="http://www.it.ru/lecm/dictionary/descriptor/1.0">
     <name>Регионы</name>
     <description>Регионы РФ</description>
-    <!--<modelType>lecm-dic-regions:dictionary_values</modelType>-->
+    <type>lecm-dic-regions:dictionary_values</type>
 </dictionary>
