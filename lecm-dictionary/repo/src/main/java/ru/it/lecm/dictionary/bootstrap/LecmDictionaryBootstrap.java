@@ -31,6 +31,7 @@ public class LecmDictionaryBootstrap {
 	private static final String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
 	private static final QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
 	private static final QName DESCRIPTION = QName.createQName(DICTIONARY_NAMESPACE_URI, "description");
+	private static final QName TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
 	private TransactionService transactionService;
 	private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
 
@@ -64,9 +65,10 @@ public class LecmDictionaryBootstrap {
 			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 				@Override
 				public Object execute() throws Throwable {
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 					properties.put(ContentModel.PROP_NAME, dictionaryDescriptor.getName());
 					properties.put(DESCRIPTION, dictionaryDescriptor.getDescription());
+					properties.put(TYPE, dictionaryDescriptor.getType());
 					nodeService.createNode(root, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, DICTIONARY, properties);
 					return "ok";
 				}

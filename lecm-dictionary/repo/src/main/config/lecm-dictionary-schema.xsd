@@ -18,7 +18,7 @@
             </xs:annotation>
             <xs:element type="xs:string" name="name" minOccurs="1"/>
             <xs:element type="xs:string" name="description" minOccurs="1"/>
-            <xs:element type="xs:string" name="modelType" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+            <xs:element type="xs:string" name="type" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

@@ -9,7 +9,7 @@ package ru.it.lecm.dictionary.bootstrap;
 public class DictionaryDescriptor {
 	private String name;
 	private String description;
-	private String modelType;
+	private String type;
 
 	public String getDescription() {
 		return description;
@@ -19,12 +19,12 @@ public class DictionaryDescriptor {
 		this.description = description;
 	}
 
-	public String getModelType() {
-		return modelType;
+	public String getType() {
+		return type;
 	}
 
-	public void setModelType(String modelType) {
-		this.modelType = modelType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getName() {
