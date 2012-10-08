@@ -1,7 +1,7 @@
 <webscript>
     <shortname>main</shortname>
     <description>Returns the main page content for the index page.</description>
-    <url>/lecm/orgstructure/main</url>
+    <url>/lecm/orgstructure/tree</url>
     <format default="html">extension</format>
     <authentication>user</authentication>
 </webscript>

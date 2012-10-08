@@ -29,7 +29,7 @@ if (organization == null || organization == "") {
     organization.properties["lecm-orgstr:org-founding-docs"] = "Документ-основание";
     organization.properties["lecm-orgstr:org-ownership-typ"] = "Частная компания";
     organization.save();
-    organization.createAssociation(structure,"lecm-orgstr:org-structure-assoc");
+    organization.createAssociation(structure, "lecm-orgstr:org-structure-assoc");
     organization.createAssociation(pr_register, "lecm-orgstr:org-projects-assoc");
     organization.createAssociation(staff_list, "lecm-orgstr:org-staff-assoc");
 
@@ -82,37 +82,37 @@ if (organization == null || organization == "") {
     var pd1 = personal_data.createNode("ПД-Иванов", "lecm-orgstr:personal-data");
     pd1.properties["lecm-orgstr:person-data-address"] = "адрес 1";
     pd1.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd1.properties["lecm-orgstr:person-data-date"] = new Date("1987","02","25");
+    pd1.properties["lecm-orgstr:person-data-date"] = new Date("1987", "02", "25");
     pd1.properties["lecm-orgstr:person-data-service-id"] = "11111111";
     pd1.save();
     var pd2 = personal_data.createNode("ПД-Петров", "lecm-orgstr:personal-data");
     pd2.properties["lecm-orgstr:person-data-address"] = "адрес 2";
     pd2.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd2.properties["lecm-orgstr:person-data-date"] = new Date("1986","02","25");
+    pd2.properties["lecm-orgstr:person-data-date"] = new Date("1986", "02", "25");
     pd2.properties["lecm-orgstr:person-data-service-id"] = "22222222";
     pd2.save();
     var pd3 = personal_data.createNode("ПД-Сидоров", "lecm-orgstr:personal-data");
     pd3.properties["lecm-orgstr:person-data-address"] = "адрес 3";
     pd3.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd3.properties["lecm-orgstr:person-data-date"] = new Date("1989","02","25");
+    pd3.properties["lecm-orgstr:person-data-date"] = new Date("1989", "02", "25");
     pd3.properties["lecm-orgstr:person-data-service-id"] = "33333333";
     pd3.save();
     var pd4 = personal_data.createNode("ПД-Башмаков", "lecm-orgstr:personal-data");
     pd4.properties["lecm-orgstr:person-data-address"] = "адрес 4";
     pd4.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd4.properties["lecm-orgstr:person-data-date"] = new Date("1977","02","25");
+    pd4.properties["lecm-orgstr:person-data-date"] = new Date("1977", "02", "25");
     pd4.properties["lecm-orgstr:person-data-service-id"] = "44444444";
     pd4.save();
     var pd5 = personal_data.createNode("ПД-Никитина", "lecm-orgstr:personal-data");
     pd5.properties["lecm-orgstr:person-data-address"] = "адрес 5";
     pd5.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd5.properties["lecm-orgstr:person-data-date"] = new Date("1987","07","25");
+    pd5.properties["lecm-orgstr:person-data-date"] = new Date("1987", "07", "25");
     pd5.properties["lecm-orgstr:person-data-service-id"] = "55555555";
     pd5.save();
     var pd6 = personal_data.createNode("ПД-Петрушевская", "lecm-orgstr:personal-data");
     pd6.properties["lecm-orgstr:person-data-address"] = "адрес 6";
     pd6.properties["lecm-orgstr:person-data-email"] = "ivanov@it.ru";
-    pd6.properties["lecm-orgstr:person-data-date"] = new Date("1987","07","26");
+    pd6.properties["lecm-orgstr:person-data-date"] = new Date("1987", "07", "26");
     pd6.properties["lecm-orgstr:person-data-service-id"] = "66666666";
     pd6.save();
 
@@ -166,7 +166,7 @@ if (organization == null || organization == "") {
     e4.properties["lecm-orgstr:employee-is-system-user"] = true;
     e4.properties["lecm-orgstr:employee-fio-g"] = "Башмакова";
     e4.properties["lecm-orgstr:employee-fio-d"] = "Башмакову";
-    var ppl = people.createPerson("dbashmakov", "Denis","Bashmakov","dbashmakov@it.ru","123456", true);
+    var ppl = people.createPerson("dbashmakov", "Denis", "Bashmakov", "dbashmakov@it.ru", "123456", true);
     if (ppl == null) {
         ppl = people.getPerson("dbashmakov");
     }
@@ -184,7 +184,7 @@ if (organization == null || organization == "") {
     e5.properties["lecm-orgstr:employee-is-system-user"] = true;
     e5.properties["lecm-orgstr:employee-fio-g"] = "Никитиной";
     e5.properties["lecm-orgstr:employee-fio-d"] = "Никитиной";
-    ppl = people.createPerson("lnikitina","Luda","Nikitina","lnikitina@it.ru","123456", true);
+    ppl = people.createPerson("lnikitina", "Luda", "Nikitina", "lnikitina@it.ru", "123456", true);
     if (ppl == null) {
         ppl = people.getPerson("lnikitina");
     }
@@ -339,17 +339,17 @@ if (organization == null || organization == "") {
     var o1 = officials.createNode("ДЛ-Башмаков", "lecm-orgstr:official");
     o1.properties["lecm-orgstr:official-can-facsimile"] = true;
     o1.save();
-    o1.createAssociation(e4,"lecm-orgstr:official-employee-assoc");
+    o1.createAssociation(e4, "lecm-orgstr:official-employee-assoc");
 
     var o2 = officials.createNode("ДЛ-Никитина", "lecm-orgstr:official");
     o2.properties["lecm-orgstr:official-can-facsimile"] = true;
     o2.save();
-    o2.createAssociation(e5,"lecm-orgstr:official-employee-assoc");
+    o2.createAssociation(e5, "lecm-orgstr:official-employee-assoc");
 
     var o3 = officials.createNode("ДЛ-Петров", "lecm-orgstr:official");
     o3.properties["lecm-orgstr:official-can-facsimile"] = false;
     o3.save();
-    o3.createAssociation(e2,"lecm-orgstr:official-employee-assoc");
+    o3.createAssociation(e2, "lecm-orgstr:official-employee-assoc");
 
     p1.createAssociation(o1, "lecm-orgstr:element-official-assoc");
     unit1.createAssociation(o2, "lecm-orgstr:element-official-assoc");
@@ -359,9 +359,14 @@ if (organization == null || organization == "") {
 var branch = [];
 var nodes;
 if (args["nodeRef"] == null || args["nodeRef"] == "") {
-    nodes = orgstructure.get("_ROOT_", organization.getNodeRef().toString());
-}else {
-    nodes = orgstructure.get(args["type"], args["nodeRef"]);
+    if (args["onlyStructure"] == null || args["onlyStructure"] == "") {
+        nodes = orgstructure.getRoots("_ROOT_", organization.getNodeRef().toString());
+    } else {
+        var structure = organization.childByNamePath("Структура");
+        nodes = orgstructure.getStructure("lecm-orgstr:organization-unit", structure.getNodeRef().toString());
+    }
+} else {
+    nodes = orgstructure.getStructure(args["type"], args["nodeRef"]);
 }
 //process response
 var oNodes = eval("(" + nodes + ")");
@@ -377,12 +382,14 @@ function addItems(branch, items) {
         nodeRef = items[index].nodeRef;
         isLeaf = items[index].isLeaf;
         dsUri = (items[index].dsUri != null ? items[index].dsUri : null);
+        childType = (items[index].childType != null ? items[index].childType : null);
         branch.push({
             title:title,
             type:type,
             nodeRef:nodeRef,
-            isLeaf: "" + isLeaf,
-            dsUri: dsUri
+            isLeaf:"" + isLeaf,
+            dsUri:dsUri,
+            childType:childType
         });
     }
 }

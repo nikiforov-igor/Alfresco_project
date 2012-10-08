@@ -11,6 +11,7 @@
         orgStructure.setMessages(${messages});
         orgStructure.draw();
     }
-    YAHOO.util.Event.onDOMReady(init);
+    //YAHOO.util.Event.onDOMReady(init);
+    init();
 })();
 //]]></script>

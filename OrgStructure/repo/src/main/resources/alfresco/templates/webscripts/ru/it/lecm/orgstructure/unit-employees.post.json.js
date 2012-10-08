@@ -1,7 +1,6 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/evaluator.lib.js">
-    <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/filters.lib.js">
-        <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/parse-args.lib.js">
-
+<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
+    <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/filters.lib.js">
+        <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
 function getData() {
     // Use helper function to get the arguments
     var parsedArgs = ParseArgs.getParsedArgs();
@@ -30,7 +29,7 @@ function getData() {
         // Use non-query method
         var unitNode = parsedArgs.listNode;
         if (unitNode != null) {
-            //TODO Call Bean OR JS for getting results
+            //getting results
             var uc_assocs = unitNode.assocs["lecm-orgstr:unit-composition-assoc"];
             for each (uc_assoc in uc_assocs){
                 var employees = uc_assoc.assocs["lecm-orgstr:composition-employee-assoc"];

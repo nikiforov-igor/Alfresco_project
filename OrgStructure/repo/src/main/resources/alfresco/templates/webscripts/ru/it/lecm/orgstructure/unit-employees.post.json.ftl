@@ -1,4 +1,4 @@
-<#import "org.employee.lib.ftl" as itemLib />
+<#import "orgstructure.output.lib.ftl" as itemLib />
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
 "totalRecords": ${data.paging.totalRecords?c},

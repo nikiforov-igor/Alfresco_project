@@ -33,6 +33,7 @@ new Alfresco.widget.Resizer("Orgstructure");
 
     <@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/orgstructure.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/orgstructure-datagrid.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/orgstructure-menu.js"></@script>
 </@>
 
 <@templateBody>
@@ -45,14 +46,13 @@ new Alfresco.widget.Resizer("Orgstructure");
     <div class="yui-t1" id="alfresco-orgstructure">
         <div id="yui-main">
             <div class="yui-b" id="alf-content">
-            <#--<@region id="toolbar" scope="template" />-->
-            <@region id="datagrid" scope="template" />
+                <@region id="content" scope="template"/>
+                <#--<@region id="tree" scope="global"/>
+                <@region id="datagrid" scope="global"/>-->
             </div>
         </div>
         <div class="yui-b" id="alf-filters">
-            <@region id="column" scope="template"/>
-        <#--<@region id="datalists" scope="template" />-->
-               <#--<@region id="filter" scope="template" />-->
+            <@region id="menu" scope="template"/>
         </div>
     </div>
 </div>

@@ -24,14 +24,16 @@ import org.json.JSONObject;
  */
 public class GetOrgstructureBean extends BaseProcessorExtension {
 
-	public static final String TYPE_ORGANIZATION = "_ORGANIZATION_";
-	public static final String TYPE_EMPLOYEES = "_EMPLOYEES_";
-	public static final String TYPE_PROJECTS = "_PROJECTS_";
-	public static final String TYPE_PROJECT = "_PROJECT_";
-	public static final String TYPE_STAFF_LIST = "_STAFF_LIST_";
-	public static final String TYPE_UNIT = "_UNIT_";
-	public static final String TYPE_EMP_ALL = "_EMPLOYEES_ALL_";
-	public static final String TYPE_POSITION = "_POSITION_";
+	public static final String TYPE_ORGANIZATION = "lecm-orgstr:organization";
+	public static final String TYPE_EMPLOYEES = "lecm-orgstr:employee-container";
+	public static final String TYPE_EMPLOYEE = "lecm-orgstr:employee";
+	public static final String TYPE_PROJECTS = "lecm-orgstr:project-register";
+	public static final String TYPE_PROJECT = "lecm-orgstr:project";
+	public static final String TYPE_STAFF_LIST = "lecm-orgstr:staff-list";
+	public static final String TYPE_UNIT = "lecm-orgstr:organization-unit";
+	public static final String TYPE_UNIT_LOCAL = "organization-unit";
+	public static final String TYPE_EMP_ALL = "_ALL_";
+	public static final String TYPE_POSITION = "lecm-orgstr:position";
 
 	public static final String DIRECTORY_EMPLOYEES = "employee-container";
 	public static final String DIRECTORY_PROJECTS = "project-register";
@@ -43,156 +45,93 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 
 	public static final String NODE_REF = "nodeRef";
 	public static final String TYPE = "type";
+	public static final String CHILD_TYPE = "childType";
 	public static final String TITLE = "title";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String DS_URI = "dsUri";
 
 	private static final String UNIT_EMPLOYEES_URI = "lecm/orgstructure/data/unit/";
-	private static final String POSITION_EMPLOYEES_URI = "lecm/orgstructure/data/position/";
-	private static final String PROJECT_EMPLOYEES_URI = "lecm/orgstructure/data/project/";
-	private static final String EMP_ALL_EMPLOYEES_URI = "slingshot/datalists/data/node/";
-	private static ServiceRegistry serviceRegistry;
+	private static final String PROJECTS_URI = "lecm/orgstructure/data/project/";
+	private static final String DEFAULT_URI = "slingshot/datalists/data/node/";
 
 	private static Log logger = LogFactory.getLog(GetOrgstructureBean.class);
+	public static final String ELEMENT_FULL_NAME = "element-full-name";
 
-	public String get(final String type, final String ref) {
+	private static ServiceRegistry serviceRegistry;
+
+	public String getRoots(final String type, final String ref) {
 		JSONArray nodes = new JSONArray();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		if (type != null && ref != null) {
-			final NodeRef currentRef = new NodeRef(ref);
-			if (type.equals("_ROOT_")) {
-				String orgName = getElementName(nodeService, currentRef, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name"));
-				JSONObject element = new JSONObject();
+		if (ref == null) {
+			return nodes.toString();
+		}
+		final NodeRef currentRef = new NodeRef(ref);
+		if (type == null || type.equals("_ROOT_")) {
+			JSONObject root;
+			List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
+			for (ChildAssociationRef childAssociationRef : childs) {
+				QName qType = nodeService.getType(childAssociationRef.getChildRef());
+				String qTypeLocalName = qType.getLocalName();
 				try {
-					element.put(TITLE, orgName);
-					element.put(NODE_REF, ref);
-					element.put(TYPE, TYPE_ORGANIZATION);
-					element.put(IS_LEAF, false);
+					NodeRef cRef = childAssociationRef.getChildRef();
 
-					nodes.put(element);
+					root = new JSONObject();
+					root.put(TITLE, getElementName(nodeService, cRef));
+					root.put(NODE_REF, cRef.toString());
+					root.put(TYPE, "lecm-orgstr:" + qTypeLocalName);
+					root.put(IS_LEAF, false);
+
+					// Список справочников по которым будет вестись работа
+					// TODO возможно, вынести в Enum
+					if (qTypeLocalName.equals(DIRECTORY_EMPLOYEES)) {
+						root.put(CHILD_TYPE, TYPE_EMPLOYEE);
+						root.put(DS_URI, DEFAULT_URI);
+					} else if (qTypeLocalName.equals(DIRECTORY_PROJECTS)) {
+						root.put(CHILD_TYPE, TYPE_PROJECT);
+						root.put(DS_URI, PROJECTS_URI);
+					} else if (qTypeLocalName.equals(DIRECTORY_STAFF_LIST)) {
+						root.put(CHILD_TYPE, TYPE_POSITION);
+						root.put(DS_URI, DEFAULT_URI);
+					} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
+						root.put(CHILD_TYPE, TYPE_UNIT);
+						root.put(DS_URI, UNIT_EMPLOYEES_URI);
+					}
+					nodes.put(root);
 				} catch (JSONException e) {
 					logger.error(e);
 				}
-			} else if (type.equals(TYPE_ORGANIZATION)) { // добавляем корневые объекты
-				JSONObject element;
+			}
+		}
+		return nodes.toString();
+	}
 
-				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
-				for (ChildAssociationRef childAssociationRef : childs) {
-					QName qType = nodeService.getType(childAssociationRef.getChildRef());
-					try {
-						if (qType.getLocalName().equals(DIRECTORY_EMPLOYEES)) {
-							NodeRef cRef = childAssociationRef.getChildRef();
+	public String getStructure(final String type, final String ref) {
+		JSONArray nodes = new JSONArray();
+		NodeService nodeService = serviceRegistry.getNodeService();
+		if (ref == null) {
+			return nodes.toString();
+		}
+		final NodeRef currentRef = new NodeRef(ref);
+		if (type.equalsIgnoreCase(TYPE_UNIT) || type.equalsIgnoreCase(TYPE_UNIT_LOCAL)) {
+			Set<QName> units = new HashSet<QName>();
+			units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT_LOCAL));
+			List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
+			for (ChildAssociationRef child : childs) {
+				JSONObject unit = new JSONObject();
+				try {
+					unit.put(NODE_REF, child.getChildRef().toString());
+					unit.put(TYPE, TYPE_UNIT);
+					unit.put(TITLE, getElementName(
+							nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
+					unit.put(IS_LEAF, nodeService.getChildAssocs(
+							child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 
-							element = new JSONObject();
-							element.put(TITLE, getElementName(nodeService, cRef));
-							element.put(NODE_REF, cRef.toString());
-							element.put(TYPE, TYPE_EMPLOYEES);
-							element.put(IS_LEAF, false);
+					unit.put(CHILD_TYPE, TYPE_UNIT);
+					unit.put(DS_URI, UNIT_EMPLOYEES_URI);
 
-							nodes.put(element);
-						} else if (qType.getLocalName().equals(DIRECTORY_PROJECTS)) {
-							NodeRef cRef = childAssociationRef.getChildRef();
-
-							element = new JSONObject();
-							element.put(TITLE, getElementName(nodeService, cRef));
-							element.put(NODE_REF, cRef.toString());
-							element.put(TYPE, TYPE_PROJECTS);
-							element.put(IS_LEAF, false);
-
-							nodes.put(element);
-						} else if (qType.getLocalName().equals(DIRECTORY_STAFF_LIST)) {
-							NodeRef cRef = childAssociationRef.getChildRef();
-
-							element = new JSONObject();
-							element.put(TITLE, getElementName(nodeService, cRef));
-							element.put(NODE_REF, cRef.toString());
-							element.put(TYPE, TYPE_STAFF_LIST);
-							element.put(IS_LEAF, false);
-
-							nodes.put(element);
-						} else if (qType.getLocalName().equals(DIRECTORY_STRUCTURE)) {
-							NodeRef cRef = childAssociationRef.getChildRef();
-
-							element = new JSONObject();
-							element.put(TITLE, getElementName(nodeService, cRef));
-							element.put(NODE_REF, cRef.toString());
-							element.put(TYPE, TYPE_UNIT);
-							element.put(IS_LEAF, false);
-
-							nodes.put(element);
-						}
-					} catch (JSONException e) {
-						logger.error(e);
-					}
-				}
-			} else {
-				if (type.equalsIgnoreCase(TYPE_UNIT)) {
-					Set<QName> units = new HashSet<QName>();
-					units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit"));
-					List<ChildAssociationRef> childs =
-							nodeService.getChildAssocs(currentRef, units);
-					for (ChildAssociationRef child : childs) {
-						JSONObject unit = new JSONObject();
-						try {
-							unit.put(NODE_REF, child.getChildRef().toString());
-							unit.put(TYPE, TYPE_UNIT);
-							unit.put(TITLE, getElementName(
-									nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
-							unit.put(IS_LEAF, nodeService.getChildAssocs(
-									child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
-							unit.put(DS_URI, UNIT_EMPLOYEES_URI);
-
-							nodes.put(unit);
-						} catch (JSONException e) {
-							logger.error(e);
-						}
-					}
-				} else if (type.equals(TYPE_EMPLOYEES)) {
-					JSONObject employees = new JSONObject();
-					try {
-						employees.put(TITLE, "Все");
-						employees.put(NODE_REF, ref);
-						employees.put(TYPE, TYPE_EMP_ALL);
-						employees.put(IS_LEAF, true);
-						employees.put(DS_URI, EMP_ALL_EMPLOYEES_URI);
-
-						nodes.put(employees);
-					} catch (JSONException e) {
-						logger.error(e);
-					}
-				} else if (type.equals(TYPE_PROJECTS)) {
-					List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
-					for (ChildAssociationRef child : childs) {
-						JSONObject project = new JSONObject();
-						try {
-							project.put(NODE_REF, child.getChildRef().toString());
-							project.put(TYPE, TYPE_PROJECT);
-							project.put(TITLE, getElementName(
-									nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name")));
-							project.put(IS_LEAF, true);
-							project.put(DS_URI, PROJECT_EMPLOYEES_URI);
-
-							nodes.put(project);
-						} catch (JSONException e) {
-							logger.error(e);
-						}
-					}
-				} else if (type.equals(TYPE_STAFF_LIST)) {
-					List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
-					for (ChildAssociationRef child : childs) {
-						JSONObject position = new JSONObject();
-						try {
-							position.put(NODE_REF, child.getChildRef().toString());
-							position.put(TYPE, TYPE_POSITION);
-							position.put(TITLE, getElementName(nodeService, child.getChildRef()));
-							position.put(IS_LEAF, true);
-							position.put(DS_URI, POSITION_EMPLOYEES_URI);
-
-							nodes.put(position);
-						} catch (JSONException e) {
-							logger.error(e);
-						}
-					}
+					nodes.put(unit);
+				} catch (JSONException e) {
+					logger.error(e);
 				}
 			}
 		}

@@ -117,13 +117,13 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
+                   <!-- <show id="lecm-orgstr:element-official-assoc"/>-->
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
                     <show id="lecm-orgstr:unii-is_exists"/>
-                    <show id="lecm-orgstr:unit-offices-assoc"/>
+                    <!--<show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <show id="lecm-orgstr:unit-inner-assoc"/>
+                    <show id="lecm-orgstr:unit-inner-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>
@@ -256,10 +256,10 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <!--<show id="lecm-orgstr:element-official-assoc"/>-->
                     <show id="lecm-orgstr:project-target"/>
                     <show id="lecm-orgstr:project-schedule"/>
-                    <show id="lecm-orgstr:project-workforce-assoc"/>
+                    <!--<show id="lecm-orgstr:project-workforce-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>

@@ -1,0 +1,6 @@
+<component>
+    <region-id>datagrid</region-id>
+    <source-id>global</source-id>
+    <scope>global</scope>
+    <uri>/lecm/orgstructure/datagrid</uri>
+</component>

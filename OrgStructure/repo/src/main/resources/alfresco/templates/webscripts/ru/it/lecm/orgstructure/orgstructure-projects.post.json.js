@@ -1,7 +1,8 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/evaluator.lib.js">
-    <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/filters.lib.js">
-        <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/orgstructure/parse-args.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
+    <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/filters.lib.js">
+        <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
 
+        const REQUEST_MAX = 1000;
 
 function getData() {
     // Use helper function to get the arguments
@@ -30,16 +31,16 @@ function getData() {
     // Use non-query method
     var unitNode = parsedArgs.listNode;
     if (unitNode != null) {
-        //TODO Call Bean OR JS for getting results
-        var w_assocs = unitNode.assocs["lecm-orgstr:project-workforce-assoc"];
-        for each(w_assoc in w_assocs) {
-            var employees = w_assoc.assocs["lecm-orgstr:workforce-employee-assoc"];
-            var employee = employees[0];
-            allNodes.push(employee);
+        //TODO Getting results here
+        var parentNode = parsedArgs.listNode;
+        if (parentNode != null) {
+        //Ищем все папки внутри Регистра Проектов
+        var pagedResult = parentNode.childFileFolders(false, true, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "cm:name", true, null);
+        allNodes = pagedResult.page;
         }
     }
 
-    if (allNodes.length > 0) {
+if (allNodes.length > 0) {
         for each(node in allNodes) {
             try {
                 items.push(Evaluator.run(node, fields));

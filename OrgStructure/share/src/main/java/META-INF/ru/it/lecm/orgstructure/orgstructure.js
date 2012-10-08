@@ -104,6 +104,8 @@ LogicECM.module = LogicECM.module || {};
                 if (node.data.type != null) {
                     sUrl += "&type=" + encodeURI(node.data.type);
                 }
+            } else {
+                sUrl += "?onlyStructure=true";
             }
 
             var callback = {
@@ -117,7 +119,8 @@ LogicECM.module = LogicECM.module || {};
                                 nodeRef: oResults[nodeIndex].nodeRef,
                                 isLeaf: oResults[nodeIndex].isLeaf,
                                 type: oResults[nodeIndex].type,
-                                dsUri:oResults[nodeIndex].dsUri
+                                dsUri:oResults[nodeIndex].dsUri,
+                                childType:oResults[nodeIndex].childType
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }

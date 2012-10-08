@@ -3,12 +3,20 @@
     <template-type>ru/it/lecm/orgstructure/orgstructure</template-type>
     <components>
         <component>
-            <region-id>column</region-id>
-            <url>/lecm/orgstructure/main</url>
+            <region-id>menu</region-id>
+            <url>/lecm/orgstructure/menu</url>
         </component>
         <component>
-            <region-id>datagrid</region-id>
-            <url>/lecm/orgstructure/datagrid</url>
+            <region-id>content</region-id>
+            <url>/lecm/orgstructure/content?empty=true</url>
+            <sub-components>
+                <sub-component id="tree">
+                    <url>/lecm/orgstructure/tree</url>
+                </sub-component>
+                <sub-component id="datagrid">
+                    <url>/lecm/orgstructure/datagrid</url>
+                </sub-component>
+            </sub-components>
         </component>
         <!-- Title -->
         <component>
