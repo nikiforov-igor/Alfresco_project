@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-bscalendar:businessCalendar" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>Business Calendar Event Model</description>
+	<author>RAA</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Import User Model Definitions -->
+		<import uri="http://www.alfresco.org/model/user/1.0" prefix="usr"/>
+	</imports>
+
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/model/business/calendar/structure/1.0" prefix="lecm-bscalendar"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-bscalendar:ignoreEvent">
+			<title>Separate Recurring Event</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-bscalendar:date">
+					<type>d:datetime</type>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-bscalendar:calendarEventType">
+			<title>Calendar Event Type</title>
+			<parent>cm:dictionaryModel</parent>
+			<properties>
+				<property name="lecm-bscalendar:color">
+					<type>d:text</type>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>color_default</value>
+									<value>color_marked</value>
+									<value>color_important</value>
+									<value>color_disabled</value>
+									<value>color_restricted</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-bscalendar:sound">
+					<type>d:text</type>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>snd_none</value>
+									<value>snd_default</value>
+									<value>snd_important</value>
+									<value>snd_disabled</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-bscalendar:calendarEvent">
+			<title>Business Calendar Event</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-bscalendar:dateUTC">
+					<title>Event date/time</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-bscalendar:durationMinutes">
+					<title>Duration in minutes</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-bscalendar:subject">
+					<title>Subject</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint type="LENGTH">
+							<parameter name="minLength"><value>1</value></parameter>
+							<parameter name="maxLength"><value>255</value></parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecm-bscalendar:descriptionEvent">
+					<title>Description and details</title>
+					<type>d:text</type>
+					<default></default>
+					<constraints>
+						<constraint type="LENGTH">
+							<parameter name="minLength"><value>0</value></parameter>
+							<parameter name="maxLength"><value>4096</value></parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-bscalendar:period">
+					<type>d:int</type>
+					<default></default>
+				</property>
+
+				<property name="lecm-bscalendar:periodUnits">
+					<type>d:text</type>
+					<default></default>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>hour</value>
+									<value>day</value>
+									<value>week</value>
+									<value>decade</value>
+									<value>month</value>
+									<value>quarter</value>
+									<value>half-year</value>
+									<value>year</value>
+									<value>scheduled</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<!-- 
+				<property name="lecm-bscalendar:whereEvent">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-bscalendar:recurrenceRule">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-bscalendar:recurrenceLastMeeting">
+					<type>d:datetime</type>
+				</property>
+				<property name="lecm-bscalendar:isOutlook">
+					<type>d:boolean</type>
+				</property>
+				<property name="lecm-bscalendar:outlookUID">
+					<title>Outlook UID</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				 -->
+
+			</properties>
+
+			<!--  доп свойства событий -->
+			<associations>
+				<child-association name="lecm-bscalendar:ignoreEventList">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-bscalendar:ignoreEvent</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+
+				<!-- Тип события (M-M) -->
+				<association name="lecm-bscalendar:type">
+					<title>Event type</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-bscalendar:calendarEventType</class>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+			</associations>
+
+			<mandatory-aspects>
+				<aspect>lecm-bscalendar:eventDetailsAspect</aspect>
+			</mandatory-aspects>
+
+		</type>
+
+		<type name="lecm-bscalendar:bcalendar">
+			<title>Business Calendar</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-bscalendar:nameCalendar">
+					<title>Calendar name</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint type="LENGTH">
+							<parameter name="minLength"><value>1</value></parameter>
+							<parameter name="maxLength"><value>255</value></parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-bscalendar:descriptionCalendar">
+					<title>Calendar description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint type="LENGTH">
+							<parameter name="minLength"><value>1</value></parameter>
+							<parameter name="maxLength"><value>1024</value></parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-bscalendar:ownerType">
+					<title>Calendar's owner type</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>personal</default>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>personal</value>
+									<value>org structure unit</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-bscalendar:moderatorTypeCalendar">
+					<title>Calendar's moderator type</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>user</default>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>by user</value>
+									<value>by org order</value>
+									<value>by project role</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<!-- 
+				<property name="lecm-bscalendar:whereEventDefault">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-bscalendar:colorEventDefault">
+					<type>d:text</type>
+				</property>
+				 -->
+
+			</properties>
+
+			<associations>
+				<!-- подписки на оповещения от себя или от других календарей (M-M) -->
+				<association name="lecm-bscalendar:subscribed_calendars_list">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-bscalendar:bcalendar</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Связь календаря со своими событиями (M-M) -->
+				<association name="lecm-bscalendar:calendar_events_assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-bscalendar:calendarEvent</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Владелец календаря (M-M) -->
+				<association name="lecm-bscalendar:ownerCalendar">
+					<title>Calendar's owner</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:person</class>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Модератор календаря (M-1) -->
+				<association name="lecm-bscalendar:moderatorCalendar">
+					<title>Calendar's moderator</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:person</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+
+			</associations>
+		</type>
+	</types>
+
+	<aspects>
+		<aspect name="lecm-bscalendar:eventDetailsAspect">
+			<title>Event more details</title>
+			<properties>
+				<property name="lecm-bscalendar:meetingPlaceOfEvent">
+					<title>Meeting place</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-bscalendar:resourcesOfEvent">
+					<title>Using resources</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-bscalendar:participantStyleOfEvent">
+					<title>Participant style</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<default></default>
+					<constraints>
+						<constraint type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>important</value>
+									<value>optional</value>
+									<value>keep in mind</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+
+			<associations>
+
+				<!-- Организатор/ответственный за событие (M-1) -->
+				<association name="lecm-bscalendar:callerOfEvent">
+					<title>Organizor or caller of event</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:person</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+
+				<!-- Приглашённые (M-M) -->
+				<association name="lecm-bscalendar:membersOfEvent">
+					<title>Organizor or caller of event</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:person</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Вложения (M-M) -->
+				<association name="lecm-bscalendar:attachmentsOfEvent">
+					<title>Attachments</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+			</associations>
+		</aspect>
+	</aspects>
+
+</model>
