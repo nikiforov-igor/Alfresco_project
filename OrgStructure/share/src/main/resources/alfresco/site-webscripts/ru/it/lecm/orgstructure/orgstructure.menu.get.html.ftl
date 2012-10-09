@@ -12,7 +12,7 @@
     function init() {
         var menu = new LogicECM.module.Menu("orgstructure-menu");
         menu.setMessages(${messages});
-        menu._loadRoots(menu.draw());
+        menu._loadRoots();
     }
     YAHOO.util.Event.onDOMReady(init);
 })();

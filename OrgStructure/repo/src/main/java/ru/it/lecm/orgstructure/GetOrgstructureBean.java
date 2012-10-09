@@ -24,16 +24,15 @@ import org.json.JSONObject;
  */
 public class GetOrgstructureBean extends BaseProcessorExtension {
 
-	public static final String TYPE_ORGANIZATION = "lecm-orgstr:organization";
-	public static final String TYPE_EMPLOYEES = "lecm-orgstr:employee-container";
-	public static final String TYPE_EMPLOYEE = "lecm-orgstr:employee";
-	public static final String TYPE_PROJECTS = "lecm-orgstr:project-register";
-	public static final String TYPE_PROJECT = "lecm-orgstr:project";
-	public static final String TYPE_STAFF_LIST = "lecm-orgstr:staff-list";
-	public static final String TYPE_UNIT = "lecm-orgstr:organization-unit";
-	public static final String TYPE_UNIT_LOCAL = "organization-unit";
+	public static final String TYPE_ORGANIZATION = "organization";
+	public static final String TYPE_EMPLOYEES = "employee-container";
+	public static final String TYPE_EMPLOYEE = "employee";
+	public static final String TYPE_PROJECTS = "project-register";
+	public static final String TYPE_PROJECT = "project";
+	public static final String TYPE_STAFF_LIST = "staff-list";
+	public static final String TYPE_UNIT = "organization-unit";
 	public static final String TYPE_EMP_ALL = "_ALL_";
-	public static final String TYPE_POSITION = "lecm-orgstr:position";
+	public static final String TYPE_POSITION = "position";
 
 	public static final String DIRECTORY_EMPLOYEES = "employee-container";
 	public static final String DIRECTORY_PROJECTS = "project-register";
@@ -78,7 +77,8 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					root = new JSONObject();
 					root.put(TITLE, getElementName(nodeService, cRef));
 					root.put(NODE_REF, cRef.toString());
-					root.put(TYPE, "lecm-orgstr:" + qTypeLocalName);
+					root.put(TYPE, qTypeLocalName);
+					root.put(TYPE, qTypeLocalName);
 					root.put(IS_LEAF, false);
 
 					// Список справочников по которым будет вестись работа
@@ -112,9 +112,9 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 			return nodes.toString();
 		}
 		final NodeRef currentRef = new NodeRef(ref);
-		if (type.equalsIgnoreCase(TYPE_UNIT) || type.equalsIgnoreCase(TYPE_UNIT_LOCAL)) {
+		if (type.equalsIgnoreCase(TYPE_UNIT)) {
 			Set<QName> units = new HashSet<QName>();
-			units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT_LOCAL));
+			units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT));
 			List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
 			for (ChildAssociationRef child : childs) {
 				JSONObject unit = new JSONObject();

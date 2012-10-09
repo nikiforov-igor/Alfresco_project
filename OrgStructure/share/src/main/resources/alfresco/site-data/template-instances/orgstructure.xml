@@ -12,11 +12,35 @@
             <sub-components>
                 <sub-component id="tree">
                     <url>/lecm/orgstructure/tree</url>
+                    <evaluations>
+                        <evaluation id= "OrgTreeEvaluator">
+                            <evaluators>
+                                <evaluator type="orgstructure.tree.evaluator"></evaluator>
+                            </evaluators>
+                            <render>false</render>
+                        </evaluation>
+                    </evaluations>
                 </sub-component>
                 <sub-component id="datagrid">
                     <url>/lecm/orgstructure/datagrid</url>
+                    <!--<evaluations>
+                        <evaluation id= "DataGridEvaluator" >
+                            <evaluators>
+                                <evaluator type= "blog.demo.evaluator" ></evaluator>
+                            </evaluators>
+                            <render> false </render>
+                        </evaluation>
+                    </evaluations>-->
                 </sub-component>
             </sub-components>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/orgstructure/toolbar</url>
+            <properties>
+                <pagination>true</pagination>
+            </properties>
         </component>
         <!-- Title -->
         <component>

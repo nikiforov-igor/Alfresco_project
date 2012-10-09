@@ -9,4 +9,5 @@
             </list>
         </property>
     </bean>
+    <bean id="orgstructure.tree.evaluator" class="ru.it.lecm.orgstructure.beans.OrgTreeEvaluator"/>
 </beans>
