@@ -20,8 +20,8 @@ public class LogicECMWorkflowTask implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        //new WorkflowHelper().startUserWorkflowProcessing(delegateTask.getId(), workflowId.getExpressionText(), assignee.getExpressionText());
-        new WorkflowHelper().startDocumentProcessing(delegateTask.getId());
+        new WorkflowHelper().startUserWorkflowProcessing(delegateTask.getId(), workflowId.getExpressionText(), assignee.getExpressionText());
+        //new WorkflowHelper().startDocumentProcessing(delegateTask.getId());
     }
 
 }
