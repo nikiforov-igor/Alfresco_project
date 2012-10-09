@@ -16,8 +16,20 @@ function main()
         parentNode = search.findNode(parentNodeRef);
     }
     if (parentNode != null && childNode != null) {
-        childNode.move(parentNode);
-        success = true;
+        var newDictionary = parentNode;
+        while (newDictionary != null && newDictionary.getTypeShort() != "lecm-dic:dictionary") {
+            newDictionary = newDictionary.parent;
+        }
+
+        var oldDictionary = childNode;
+        while (oldDictionary != null && oldDictionary.getTypeShort() != "lecm-dic:dictionary") {
+            oldDictionary = oldDictionary.parent;
+        }
+
+        if (newDictionary != null && oldDictionary != null && newDictionary.equals(oldDictionary)) {
+            childNode.move(parentNode);
+            success = true;
+        }
     }
     model.success = success;
 }

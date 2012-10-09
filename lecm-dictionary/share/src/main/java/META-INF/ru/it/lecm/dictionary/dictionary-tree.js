@@ -370,7 +370,11 @@ LogicECM.module = LogicECM.module || {};
                                         }
                                         parent = parent.parent;
                                     }
+                                    var oldParent = src.parent;
                                     tree.popNode(src);
+                                    if (oldParent.children.length == 0) {
+                                        oldParent.isLeaf = true;
+                                    }
                                     src.isLeaf = dragElementIsLeaf;
                                     src.appendTo(dest);
                                     tree.render();
