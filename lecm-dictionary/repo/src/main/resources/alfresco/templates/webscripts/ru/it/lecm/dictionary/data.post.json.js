@@ -1,6 +1,6 @@
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/filters.lib.js">
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/dictionary/filters.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/dictionary/parse-args.lib.js">
 
 const REQUEST_MAX = 1000;
 
@@ -57,7 +57,7 @@ function getData()
       allNodes = [], node,
       items = [];
 
-   if (filter == null || filter.filterId == "all")
+   if (filter == null || filter.filterData == null || filter.filterData == "")
    {
       // Use non-query method
       var parentNode = parsedArgs.listNode;
