@@ -297,7 +297,6 @@
        doActionFilter: function ()
        {
            var value = YAHOO.util.Dom.get('filter').value;
-           alert(value);
            this.currentFilter =
            {
                filterId: "all",
