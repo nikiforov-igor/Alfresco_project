@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Sample share</title>
+    <description>Sample share</description>
+    <template-instance>sample</template-instance>
+    <authentication>user</authentication>
+</page>
