@@ -1,32 +1,22 @@
 package ru.it.lecm.base.workflow.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.delegate.TaskListener;
-import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import ru.it.lecm.base.workflow.WorkflowController;
-
-import java.util.List;
+import ru.it.lecm.base.workflow.WorkflowHelper;
 
 /**
  * User: PMelnikov
  * Date: 05.09.12
  * Time: 14:57
+ * <p/>
+ * Класс-слушатель окончания процесса.
+ * По завершению передает сигнал об окончании пользовательского процесса
+ * для дальнейшего оповещения машины состояний.
  */
 public class EndEventListener implements ExecutionListener {
 
-    private static WorkflowController controller;
-
-    public void setWorkflowController(WorkflowController controller) {
-        EndEventListener.controller = controller;
-    }
-
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
-        controller.endProcess(delegateExecution);
+        new WorkflowHelper().stopUserWorkflowProcessing(delegateExecution);
     }
 }

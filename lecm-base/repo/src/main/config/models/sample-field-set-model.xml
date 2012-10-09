@@ -40,6 +40,16 @@
             </properties>
         </type>
 
+        <type name="lecm-sample-field-set:fieldsetExt">
+            <title>FieldSet</title>
+            <parent>lecm-sample-field-set:fieldset</parent>
+            <properties>
+                <property name="lecm-sample-field-set:field6">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
     </types>
 
 </model>

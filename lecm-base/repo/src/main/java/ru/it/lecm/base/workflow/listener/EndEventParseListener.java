@@ -19,6 +19,9 @@ import java.util.List;
  * User: PMelnikov
  * Date: 05.09.12
  * Time: 14:26
+ * <p/>
+ * Класс парсер, вызывается при инициализации рабочего
+ * процесса и добавляет слушателя на завершение процесса.
  */
 public class EndEventParseListener implements BpmnParseListener {
 

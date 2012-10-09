@@ -27,6 +27,13 @@
         </property>
     </bean>
 
+    <bean id="${groupId}.${artifactId}.workflowDictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
+            </list>
+        </property>
+    </bean>
 
     <bean id="activitiCustomizer" class="ru.it.lecm.base.workflow.listener.ActivitiConfigurationCustomizer" >
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
@@ -68,17 +75,19 @@
         </property>
     </bean>
 
-    <bean id="workflowController" class="ru.it.lecm.base.workflow.WorkflowController">
+    <bean id="workflowController" class="ru.it.lecm.base.workflow.WorkflowHelper">
         <property name="serviceRegistry" ref="ServiceRegistry" />
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
-    <bean id="endEventListener" class="ru.it.lecm.base.workflow.listener.EndEventListener">
-        <property name="workflowController" ref="workflowController" />
+    <bean id="workflowPolicy" class="ru.it.lecm.base.workflow.policy.WorkflowPolicy" init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent" />
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
     </bean>
 
-    <bean id="LogicECMWorkflowTask" class="ru.it.lecm.base.workflow.listener.LogicECMWorkflowTask">
-        <property name="workflowController" ref="workflowController" />
-    </bean>
 
 </beans>
