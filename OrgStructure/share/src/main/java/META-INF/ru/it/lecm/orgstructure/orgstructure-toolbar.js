@@ -97,24 +97,6 @@
                         value: "create"
                     });
 
-                // Selected Items menu button
-                this.widgets.selectedItems = Alfresco.util.createYUIButton(this, "selectedItems-button", this.onSelectedItems,
-                    {
-                        type: "menu",
-                        menu: "selectedItems-menu",
-                        lazyloadmenu: false,
-                        disabled: true
-                    });
-
-                this.widgets.printButton = Alfresco.util.createYUIButton(this, "printButton",
-                    {
-                        disabled: true
-                    });
-                this.widgets.rssFeedButton = Alfresco.util.createYUIButton(this, "rssFeedButton",
-                    {
-                        disabled: true
-                    });
-
                 // DataList Actions module
                 this.modules.actions = new Alfresco.module.DataListActions();
 
@@ -134,9 +116,9 @@
              */
             onNewRow: function DataListToolbar_onNewRow(e, p_obj)
             {
-                var datalistMeta = this.modules.dataGrid.datalistMeta,
-                    destination = datalistMeta.nodeRef,
-                    itemType = datalistMeta.itemType;
+                var orgMetadata = this.modules.dataGrid.orgstructureMetadata,
+                    destination = orgMetadata.nodeRef,
+                    itemType = orgMetadata.itemType;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)

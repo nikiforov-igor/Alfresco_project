@@ -105,7 +105,8 @@ LogicECM.module = LogicECM.module || {};
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
                 if (node.data.type != null) {
-                    sUrl += "&type=" + encodeURI(node.data.type);
+                    var type = node.data.type;
+                    sUrl += "&type=" + encodeURI(type.slice(type.indexOf(':') + 1));
                 }
             } else {
                 sUrl += "?onlyStructure=true";
@@ -169,29 +170,6 @@ LogicECM.module = LogicECM.module || {};
                     });
             }
         },
-        /*_createNode: function createNodeByType(type) {
-         var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, type);
-         new Alfresco.module.SimpleDialog("form-dialog").setOptions({
-         width: "40em",
-         templateUrl: templateUrl,
-         actionUrl: null,
-         destroyOnHide: true,
-         doBeforeDialogShow: {
-         fn: this._setFormDialogTitle
-         },
-         onSuccess:{
-         fn: function () {
-         this._loadTree(this.selectedNode, function() {
-         this.selectedNode.isLeaf = false;
-         this.selectedNode.expanded = true;
-         this.tree.render();
-         this.selectedNode.focus();
-         }.bind(this));
-         },
-         scope: this
-         }
-         }).show();
-         },*/
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
