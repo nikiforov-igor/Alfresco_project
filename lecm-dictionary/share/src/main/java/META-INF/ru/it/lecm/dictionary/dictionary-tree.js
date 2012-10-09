@@ -85,11 +85,12 @@ LogicECM.module = LogicECM.module || {};
         },
         _createTree: function () {
             tree = new YAHOO.widget.TreeView(this.treeContainer);
+            tree.singleNodeHighlight = true;
             tree.setDynamicLoad(this._loadTree);
             var root = tree.getRoot();
             this._loadTree(root);
-            tree.subscribe("labelClick", this._treeNodeSelected.bind(this));
             tree.subscribe("expand", this._treeNodeSelected.bind(this));
+            tree.subscribe('clickEvent',function(){return false;});
             tree.subscribe('dblClickEvent', this._editNode.bind(this));
             tree.render();
         },
