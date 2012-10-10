@@ -14,7 +14,7 @@
 <div id="${id}-body" class="datagrid">
    <div class="datagrid-meta">
 	   <div class="markup">
-		   <label for="filter">Filter by state:</label> <input type="text" id="filter" value="">
+		   <label for="filter">Filter:</label> <input type="text" id="filter" value="">
 	   </div>
       <h2 id="${id}-title"></h2>
       <div id="${id}-description" class="datagrid-description"></div>
