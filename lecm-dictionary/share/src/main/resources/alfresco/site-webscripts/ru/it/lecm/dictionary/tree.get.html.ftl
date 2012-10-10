@@ -65,5 +65,5 @@
 		</div>
 	</div>
 	<br/>
-	<div id="dictionary"></div>
+	<div id="dictionary" class="ygtv-highlight"></div>
 </div>

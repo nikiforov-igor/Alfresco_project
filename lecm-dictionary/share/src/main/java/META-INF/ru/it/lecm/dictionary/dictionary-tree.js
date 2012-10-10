@@ -90,7 +90,11 @@ LogicECM.module = LogicECM.module || {};
             var root = tree.getRoot();
             this._loadTree(root);
             tree.subscribe("expand", this._treeNodeSelected.bind(this));
-            tree.subscribe('clickEvent',function(){return false;});
+            tree.subscribe('clickEvent', function(event) {
+                this._treeNodeSelected(event.node);
+                tree.onEventToggleHighlight(event);
+                return false;
+            }.bind(this));
             tree.subscribe('dblClickEvent', this._editNode.bind(this));
             tree.render();
         },
@@ -253,7 +257,7 @@ LogicECM.module = LogicECM.module || {};
             }).show();
         },
         _editNode:function editNodeByEvent(event) {
-            var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
+            var templateUrl = this._createUrl("edit", event.node.data.nodeRef);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
                 templateUrl:templateUrl,
@@ -264,9 +268,9 @@ LogicECM.module = LogicECM.module || {};
                 },
                 onSuccess:{
                     fn:function () {
-                        this._loadTree(this.selectedNode.parent, function () {
+                        this._loadTree(event.node.parent, function () {
                             tree.render();
-                            this.selectedNode.focus();
+                            event.node.focus();
                             makeDraggable();
                         }.bind(this));
                     },
