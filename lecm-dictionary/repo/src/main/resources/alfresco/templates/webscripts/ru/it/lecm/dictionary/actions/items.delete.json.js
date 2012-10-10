@@ -59,7 +59,7 @@ function runAction(p_params)
          itemNode = search.findNode(nodeRef);
          if (itemNode != null)
          {
-             itemNode.properties["lecm-dic:active_values"] = false;
+             itemNode.properties["lecm-dic:active"] = false;
              result.success = itemNode.save();
          }
       }

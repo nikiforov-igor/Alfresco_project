@@ -45,11 +45,3 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 		</div>
 	</div>
 </div>
-
-<#--item: workspace://SpacesStore/55db65fe-49e7-4fdb-b2b8-4a7729e16fb9-->
-<#--"/share/service/components/form?itemKind=type&itemId=lecm-dic:dictionary_values&destination=workspace://SpacesStore/55db65fe-49e7-4fdb-b2b8-4a7729e16fb9&mode=create&submitType=json&formId=dictionary-node-form&showCancelButton=true"-->
-
-<#--dict: workspace://SpacesStore/5c2a8105-5d4b-4992-a110-6c3081484353-->
-<#--"/share/service/components/form?itemKind=type&itemId=lecm-dic:dictionary_values&destination=workspace://SpacesStore/5c2a8105-5d4b-4992-a110-6c3081484353&mode=create&submitType=json&formId=dictionary-node-form&showCancelButton=true"-->
-
-<#--"/share/service/components/form?itemKind=type&itemId=lecm-dic:dictionary_values&destination=workspace://SpacesStore/55db65fe-49e7-4fdb-b2b8-4a7729e16fb9&mode=create&submitType=json&showCancelButton=true"-->

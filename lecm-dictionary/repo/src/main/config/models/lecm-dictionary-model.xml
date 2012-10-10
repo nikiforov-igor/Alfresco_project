@@ -33,29 +33,50 @@
 					<title>Type</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-                    <default>lecm-dic:dictionary_values</default>
+                    <default>lecm-dic:hierarchical_dictionary_values</default>
 				</property>
-				<property name="lecm-dic:active">
-					<title>Active</title>
-					<type>d:boolean</type>
-					<mandatory>true</mandatory>
+                <property name="lecm-dic:show_control_in_separate_window">
+                    <title>Show control in separate window</title>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
                     <default>true</default>
-				</property>
+                </property>
 			</properties>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
 		</type>
 
-		<!--Значения справочника-->
-		<type name="lecm-dic:dictionary_values">
+		<!--Значения плоского справочника-->
+		<type name="lecm-dic:plane_dictionary_values">
 			<title>Dictionary values</title>
-			<parent>cm:folder</parent>
-			<properties>
-				<property name="lecm-dic:active_values">
-					<title>Active</title>
-					<type>d:boolean</type>
-					<mandatory>true</mandatory>
-                    <default>true</default>
-				</property>
-			</properties>
+			<parent>cm:content</parent>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
 		</type>
+
+        <!--Значения иерархического справочника-->
+        <type name="lecm-dic:hierarchical_dictionary_values">
+            <title>Dictionary values</title>
+            <parent>cm:folder</parent>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
+        </type>
+
 	</types>
+
+    <aspects>
+        <aspect name="lecm-dic:aspect_active">
+            <properties>
+                <property name="lecm-dic:active">
+                    <title>Active</title>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>true</default>
+                </property>
+            </properties>
+        </aspect>
+    </aspects>
 </model>

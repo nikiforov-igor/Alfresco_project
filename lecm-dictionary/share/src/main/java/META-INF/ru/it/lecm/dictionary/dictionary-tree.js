@@ -28,7 +28,6 @@ LogicECM.module = LogicECM.module || {};
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
     var nodeDictionary = null;    //TODO
-    var nodeType = "lecm-dic:dictionary_values";  //TODO
 
     LogicECM.module.Dictionary = function (htmlId) {
         LogicECM.module.Dictionary.superclass.constructor.call(
@@ -204,11 +203,12 @@ LogicECM.module = LogicECM.module || {};
              var callback = {
                  success:function (oResponse) {
                      var oResults = eval("(" + oResponse.responseText + ")");
+                     var nodeType = "lecm-dic:hierarchical_dictionary_values";
                      if (oResults != null) {
                          for (var nodeIndex in oResults) {
                              nodeType = oResults[nodeIndex].toString();
                              if (nodeType=="" || nodeType == null){
-                                 nodeType = "lecm-dic:dictionary_values";
+                                 nodeType = "lecm-dic:hierarchical_dictionary_values";
                              }
                          }
                      };
@@ -348,12 +348,12 @@ LogicECM.module = LogicECM.module || {};
         onDragDrop: function (e, id) {
 
             var me = this;
+            if (!this.destNode) { return; }
 
             var fnActionMoveConfirm = function DictionaryActions__onActionMove_confirm()
             {
                 var parent = dest = me.destNode,
                     src = me.srcNode;
-                if (!dest) { return; }
 
                 var dataObj = {childNodeRef: encodeURI(src.data.nodeRef), parentNodeRef: encodeURI(dest.data.nodeRef)};
 
@@ -411,7 +411,7 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.PopupManager.displayPrompt(
                 {
                     title: Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary"),
-                    text: Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary"),
+                    text: Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary", {"0":me.srcNode.label, "1":me.srcNode.parent.label, "2":me.destNode.label}),
                     buttons: [
                         {
                             text: Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary"),

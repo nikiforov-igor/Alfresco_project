@@ -9,7 +9,7 @@ function main()
             nodeRef = nodeRef.parent;
         }
         if (nodeRef.properties["lecm-dic:type"]==null){
-            type = "lecm-dic:dictionary_values";
+            type = "lecm-dic:hierarchical_dictionary_values"; //todo delete this default value
         } else {
             type = nodeRef.properties["lecm-dic:type"];
         }

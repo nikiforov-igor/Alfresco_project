@@ -6,6 +6,7 @@
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
 					<show id="lecm-dic:type" force="true"/>
+					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>
@@ -19,13 +20,14 @@
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
 					<show id="lecm-dic:type" force="true"/>
+					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-dic:dictionary_values">
+	<config evaluator="node-type" condition="lecm-dic:plane_dictionary_values">
 		<forms>
 			<form>
 				<field-visibility>
@@ -35,7 +37,7 @@
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-dic:dictionary_values">
+	<config evaluator="model-type" condition="lecm-dic:plane_dictionary_values">
 		<forms>
 			<form>
 				<field-visibility>
@@ -46,7 +48,34 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name" />
-                    <show id="lecm-dic:active_values" />
+                    <show id="lecm-dic:active" />
+                </field-visibility>
+            </form>
+		</forms>
+	</config>
+
+    <config evaluator="node-type" condition="lecm-dic:hierarchical_dictionary_values">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-dic:hierarchical_dictionary_values">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+				</field-visibility>
+			</form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" />
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
 		</forms>

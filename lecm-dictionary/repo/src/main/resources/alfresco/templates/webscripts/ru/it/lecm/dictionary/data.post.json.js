@@ -63,7 +63,11 @@ function getData()
       var parentNode = parsedArgs.listNode;
       if (parentNode != null)
       {
-         var pagedResult = parentNode.childFileFolders(true, true, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "cm:name", true, null);
+         if (parentNode.properties["lecm-dic:type"] == "lecm-dic:plane_dictionary_values") {
+            var pagedResult = parentNode.childFileFolders(true, false, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "cm:name", true, null);
+         } else {
+            var pagedResult = parentNode.childFileFolders(true, true, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "cm:name", true, null);
+         }
          allNodes = pagedResult.page;
       }
    }

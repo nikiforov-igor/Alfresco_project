@@ -21,10 +21,7 @@ function addItems(branch, items) {
 		title = item.getName();
 		type = getNodeType(item);
 		nodeRef = item.getNodeRef().toString();
-		isLeaf = true;
-		if (type == "dictionary" || type == "dictionary_values") {
-			isLeaf = !item.hasChildren;
-		}
+		isLeaf = !item.hasChildren;
 		branch.push({
 			title: title,
 			type: type,
