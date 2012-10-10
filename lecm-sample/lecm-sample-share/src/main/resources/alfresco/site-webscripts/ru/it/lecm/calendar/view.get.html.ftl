@@ -4,10 +4,7 @@
    {
       siteId: "${page.url.templateArgs.site!""}",
       //view type
-      /*
-      * view : '$ {viewArgs.viewType?html}',
-      **/
-      view : 'agenda',
+      view : '$ {viewArgs.viewType?html}',
       id : '${el}View',
       /*
       * The start date of the week/month if week or month
@@ -48,8 +45,7 @@
 //]]></script>
 
 
-<#--<#if (viewArgs.viewType=='agenda')>-->
-<#if ('agenda'=='agenda')>
+<#if (viewArgs.viewType=='agenda')>
 
    <!-- agenda -->
    <a href="" class="previousEvents hidden agendaNav">${msg("agenda.previous")}</a>
