@@ -13,14 +13,11 @@ import ru.it.lecm.base.workflow.WorkflowHelper;
  * Слушатель задачи для Activiti BPM Platform, который позволяет
  * запустить пользовательский процесс
  */
-public class LogicECMWorkflowTask implements TaskListener {
-
-    private FixedValue workflowId;
-    private FixedValue assignee;
+public class LogicECMFormTask implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        new WorkflowHelper().startUserWorkflowProcessing(delegateTask.getId(), workflowId.getExpressionText(), assignee.getExpressionText());
+        new WorkflowHelper().startDocumentProcessing(delegateTask.getId());
     }
 
 }
