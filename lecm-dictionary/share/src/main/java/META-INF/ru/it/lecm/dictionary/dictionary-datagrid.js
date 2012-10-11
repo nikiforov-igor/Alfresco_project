@@ -80,7 +80,7 @@
       Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
       Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
 
-      YAHOO.util.Event.on('filter','keyup',this.doActionFilter);
+      YAHOO.util.Event.on('filter','keyup',this.doActionFilter.bind(this));
       /* Deferred list population until DOM ready */
       this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onActiveDataListChanged"],
       {
@@ -297,10 +297,25 @@
        doActionFilter: function ()
        {
            var value = YAHOO.util.Dom.get('filter').value;
+           var columns = this.datalistColumns;
+           var text = "";
+
+           for (var i=0; i< columns.length; i++) {
+               if (columns[i].dataType == "text") {
+                   var separator = "#";
+                   text += columns[i].name+ ":" + value + separator;
+               }
+           }
+           if (value == undefined || value == null || value == ""){
+               text = "";
+           } else {
+               text = text.substring(0,(text.length)-1);
+           }
+
            this.currentFilter =
            {
                filterId: "all",
-               filterData: value
+               filterData: text
            };
            Bubbling.fire("changeFilter", this.currentFilter);
            Bubbling.fire("activeDataListChanged", this.onActiveDataListChanged, this);

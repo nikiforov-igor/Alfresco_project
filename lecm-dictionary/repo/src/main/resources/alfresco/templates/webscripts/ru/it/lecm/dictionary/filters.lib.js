@@ -53,6 +53,7 @@ var Filters =
             language: "lucene",
             templates: null
         };
+        var columns = filter.filterData.split('#');
 
         // Max returned results specified?
         var argMax = args.max;
@@ -60,8 +61,19 @@ var Filters =
         {
             filterParams.limitResults = argMax;
         }
+        var params = "";
+        for (var i=0; i < columns.length; i++) {
+            var or = " OR",
+                ampersand = " @";
+            var namespace = columns[i].split(":");
+            if (columns[i+1] == undefined ) {
+                or = "";
+                ampersand = " @";
+            }
 
-        filterParams.query += " +@cm\\:name:"+String(filter.filterData);
+            params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ namespace[2]  + or;
+        }
+        filterParams.query += " AND " + "(" + params + " )";
 
         return filterParams;
     }
