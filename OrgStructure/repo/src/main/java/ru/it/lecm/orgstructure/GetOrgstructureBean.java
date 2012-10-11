@@ -134,7 +134,27 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					logger.error(e);
 				}
 			}
-		}
+		} else if(type.equalsIgnoreCase(TYPE_ORGANIZATION)) {
+            NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, "Структура");
+            if (structure != null) {
+                JSONObject root = new JSONObject();
+                try {
+                    root.put(NODE_REF, structure.toString());
+                    root.put(TYPE, TYPE_UNIT);
+                    root.put(TITLE, getElementName(
+                            nodeService, structure, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
+                    root.put(IS_LEAF, nodeService.getChildAssocs(
+                            structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
+
+                    root.put(CHILD_TYPE, TYPE_UNIT);
+                    root.put(DS_URI, UNIT_EMPLOYEES_URI);
+
+                    nodes.put(root);
+                } catch (JSONException e) {
+                    logger.error(e);
+                }
+            }
+        }
 		return nodes.toString();
 	}
 

@@ -18,28 +18,34 @@ LogicECM.module = LogicECM.module || {};
 
 
 /**
+ * LogicECM Orgstructure module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.OrgStructure.OrgStructure
+ */
+LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
+
+/**
  * OrgStructure module.
  *
- * @namespace LogicECM.module
- * @class LogicECM.module.OrgStructure
+ * @namespace LogicECM.module.OrgStructure
+ * @class LogicECM.module.OrgStructure.Tree
  */
 (function () {
 
     var Dom = YAHOO.util.Dom
     var Bubbling = YAHOO.Bubbling;
-    LogicECM.module.OrgStructure = function (htmlId) {
-        return LogicECM.module.OrgStructure.superclass.constructor.call(
+
+    LogicECM.module.OrgStructure.Tree = function (htmlId) {
+        return LogicECM.module.OrgStructure.Tree.superclass.constructor.call(
             this,
-            "LogicECM.module.OrgStructure",
+            "LogicECM.module.OrgStructure.Tree",
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
     };
 
-    YAHOO.extend(LogicECM.module.OrgStructure, Alfresco.component.Base, {
-        menu:null,
-        search:null,
+    YAHOO.extend(LogicECM.module.OrgStructure.Tree, Alfresco.component.Base, {
         tree:null,
-        table:null,
         selectedNode:null,
         messages:null,
         options:{
@@ -64,19 +70,23 @@ LogicECM.module = LogicECM.module || {};
         },
 
         _createTree:function (parent) {
-            var treeContainer = document.createElement("div");
+            /*var treeContainer = document.createElement("div");
             treeContainer.id = this.id + "-tree";
-            parent.appendChild(treeContainer);
+            parent.appendChild(treeContainer);*/
 
-            this.tree = new YAHOO.widget.TreeView(treeContainer.id);
+            this.tree = new YAHOO.widget.TreeView(this.id);
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree);
             var root = this.tree.getRoot();
             this._loadTree(root);
-            this.tree.subscribe("labelClick", this._treeNodeSelected.bind(this));
             this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
             this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
+            this.tree.subscribe('clickEvent', function(event) {
+                this._treeNodeSelected(event.node);
+                //this.tree.onEventToggleHighlight(event);
+                return false;
+            }.bind(this));
             this.tree.render();
         },
         _createUrl:function (type, nodeRef, childNodeType) {
@@ -118,13 +128,14 @@ LogicECM.module = LogicECM.module || {};
                     if (oResults != null) {
                         node.children = [];
                         for (var nodeIndex in oResults) {
+                            var namespace = "lecm-orgstr";
                             var newNode = {
                                 label:oResults[nodeIndex].title,
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
-                                type:"lecm-orgstr:" + oResults[nodeIndex].type,
+                                type:namespace + ":" + oResults[nodeIndex].type,
                                 dsUri:oResults[nodeIndex].dsUri,
-                                childType:"lecm-orgstr:" + oResults[nodeIndex].childType
+                                childType:namespace + ":" + oResults[nodeIndex].childType
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }
@@ -137,7 +148,9 @@ LogicECM.module = LogicECM.module || {};
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    oResponse.argument.fnLoadComplete();
+                    if (oResponse.argument.fnLoadComplete != null) {
+                        oResponse.argument.fnLoadComplete();
+                    }
                 },
                 argument:{
                     node:node,
@@ -150,6 +163,8 @@ LogicECM.module = LogicECM.module || {};
         },
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
+            this.tree.onEventToggleHighlight(node);
+            this.tree.currentFocus._removeFocus();
             if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
                 Bubbling.fire("orgElementSelected",
                     {
@@ -200,30 +215,4 @@ LogicECM.module = LogicECM.module || {};
         }
     });
 
-})();
-(function () {
-    /**
-     * YUI Library aliases
-     */
-    var Bubbling = YAHOO.Bubbling;
-
-    /**
-     * Alfresco.service.DataListActions implementation
-     */
-    Alfresco.service.DataListActions = {};
-    Alfresco.service.DataListActions.prototype =
-    {
-
-    };
-})();
-
-(function () {
-    Alfresco.module.DataListActions = function () {
-        return null;
-    };
-
-    Alfresco.module.DataListActions.prototype =
-    {
-
-    };
 })();

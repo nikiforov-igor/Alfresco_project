@@ -1,29 +1,35 @@
 /**
- * Copyright (C) 2005-2010 Alfresco Software Limited.
+ * LogicECM root namespace.
  *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ * @namespace LogicECM
  */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
 
 /**
- * Data Lists: Toolbar component.
+ * LogicECM top-level module namespace.
  *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Orgstructure module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.OrgStructure.OrgStructure
+ */
+LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
+
+/**
  * Displays a list of Toolbar
  *
- * @namespace Alfresco
- * @class Alfresco.component.DataListToolbar
+ * @namespace LogicECM
+ * @class LogicECM.module.OrgStructure.Toolbar
  */
 (function()
 {
@@ -37,12 +43,12 @@
      * Toolbar constructor.
      *
      * @param htmlId {String} The HTML id of the parent element
-     * @return {Alfresco.component.DataListToolbar} The new Toolbar instance
+     * @return {LogicECM.module.OrgStructure.Toolbar} The new Toolbar instance
      * @constructor
      */
-    Alfresco.component.DataListToolbar = function(htmlId)
+    LogicECM.module.OrgStructure.Toolbar = function(htmlId)
     {
-        Alfresco.component.DataListToolbar.superclass.constructor.call(this, "Alfresco.component.DataListToolbar", htmlId, ["button", "container"]);
+        LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
 
         // Decoupled event listeners
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
@@ -54,17 +60,17 @@
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(Alfresco.component.DataListToolbar, Alfresco.component.Base)
+    YAHOO.extend(LogicECM.module.OrgStructure.Toolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with Common Actions module
      */
-    YAHOO.lang.augmentProto(Alfresco.component.DataListToolbar, Alfresco.service.DataListActions);
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Toolbar, LogicECM.module.OrgStructure.DataActions);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(Alfresco.component.DataListToolbar.prototype,
+    YAHOO.lang.augmentObject(LogicECM.module.OrgStructure.Toolbar.prototype,
         {
             /**
              * Object container for initialization options
@@ -98,10 +104,10 @@
                     });
 
                 // DataList Actions module
-                this.modules.actions = new Alfresco.module.DataListActions();
+                this.modules.actions = new LogicECM.module.OrgStructure.Actions();
 
                 // Reference to Data Grid component
-                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("Alfresco.component.DataGrid");
+                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.OrgStructure.DataGrid");
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");

@@ -1,6 +1,6 @@
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
-new Alfresco.component.DataListToolbar("${id}").setOptions(
+new LogicECM.module.OrgStructure.Toolbar("${id}").setOptions(
 		{
 			siteId: "site"
 		}).setMessages(${messages});

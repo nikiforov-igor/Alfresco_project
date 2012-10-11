@@ -1,3 +1,31 @@
+/**
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Orgstructure module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.OrgStructure.OrgStructure
+ */
+LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
+
+
 (function()
 {
     /**
@@ -6,10 +34,10 @@
     var Bubbling = YAHOO.Bubbling;
 
     /**
-     * Alfresco.service.DataListActions implementation
+     * LogicECM.module.OrgStructure.DataActions implementation
      */
-    Alfresco.service.DataListActions = {};
-    Alfresco.service.DataListActions.prototype =
+    LogicECM.module.OrgStructure.DataActions = {};
+    LogicECM.module.OrgStructure.DataActions.prototype =
     {
         /**
          * Delete item(s).
@@ -144,9 +172,9 @@
 
 (function()
 {
-    Alfresco.module.DataListActions = function()
+    LogicECM.module.OrgStructure.Actions = function()
     {
-        this.name = "Alfresco.module.DataListActions";
+        this.name = "LogicECM.module.OrgStructure.Actions";
 
         /* Load YUI Components */
         Alfresco.util.YUILoaderHelper.require(["json"], this.onComponentsLoaded, this);
@@ -154,7 +182,7 @@
         return this;
     };
 
-    Alfresco.module.DataListActions.prototype =
+    LogicECM.module.OrgStructure.Actions.prototype =
     {
         /**
          * Flag indicating whether module is ready to be used.
@@ -392,5 +420,5 @@
     };
 
     /* Dummy instance to load optional YUI components early */
-    var dummyInstance = new Alfresco.module.DataListActions();
+    var dummyInstance = new LogicECM.module.OrgStructure.Actions();
 })();

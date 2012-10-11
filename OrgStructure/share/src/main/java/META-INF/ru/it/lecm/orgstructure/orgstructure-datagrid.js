@@ -1,27 +1,35 @@
 /**
- * Copyright (C) 2005-2010 Alfresco Software Limited.
+ * LogicECM root namespace.
  *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ * @namespace LogicECM
  */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Orgstructure module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.OrgStructure.OrgStructure
+ */
+LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
 /**
  * Data Lists: DataGrid component.
  *
  * @namespace Alfresco
- * @class Alfresco.component.DataGrid
+ * @class LogicECM.module.OrgStructure.DataGrid
  */
 (function()
 {
@@ -45,12 +53,12 @@
      * DataGrid constructor.
      *
      * @param htmlId {String} The HTML id of the parent element
-     * @return {Alfresco.component.DataGrid} The new DataGrid instance
+     * @return {LogicECM.module.OrgStructure.DataGrid} The new DataGrid instance
      * @constructor
      */
-    Alfresco.component.DataGrid = function(htmlId)
+    LogicECM.module.OrgStructure.DataGrid = function(htmlId)
     {
-        Alfresco.component.DataGrid.superclass.constructor.call(this, "Alfresco.component.DataGrid", htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation", "history"]);
+        LogicECM.module.OrgStructure.DataGrid.superclass.constructor.call(this, "LogicECM.module.OrgStructure.DataGrid", htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation", "history"]);
 
         // Initialise prototype properties
         this.orgstructureMetadata = {};
@@ -93,17 +101,17 @@
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(Alfresco.component.DataGrid, Alfresco.component.Base);
+    YAHOO.extend(LogicECM.module.OrgStructure.DataGrid, Alfresco.component.Base);
 
     /**
      * Augment prototype with Common Actions module
      */
-    YAHOO.lang.augmentProto(Alfresco.component.DataGrid, Alfresco.service.DataListActions);
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.DataGrid, LogicECM.module.OrgStructure.DataActions);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(Alfresco.component.DataGrid.prototype,
+    YAHOO.lang.augmentObject(LogicECM.module.OrgStructure.DataGrid.prototype,
         {
             /**
              * Object container for initialization options
@@ -565,7 +573,7 @@
                 Bubbling.addDefaultAction("filter-change", fnChangeFilterHandler);
 
                 // DataList Actions module
-                this.modules.actions = new Alfresco.module.DataListActions();
+                this.modules.actions = new LogicECM.module.OrgStructure.Actions();
 
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
@@ -1664,8 +1672,8 @@
             _setDefaultDataTableErrors: function DataGrid__setDefaultDataTableErrors(dataTable)
             {
                 var msg = Alfresco.util.message;
-                dataTable.set("MSG_EMPTY", msg("message.empty", "Alfresco.component.DataGrid"));
-                dataTable.set("MSG_ERROR", msg("message.error", "Alfresco.component.DataGrid"));
+                dataTable.set("MSG_EMPTY", msg("message.empty", "LogicECM.module.OrgStructure.DataGrid"));
+                dataTable.set("MSG_ERROR", msg("message.error", "LogicECM.module.OrgStructure.DataGrid"));
             },
 
             /**

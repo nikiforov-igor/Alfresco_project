@@ -105,7 +105,7 @@
                     <show id="lecm-orgstr:unii-is_exists"/>
                     <show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <show id="lecm-orgstr:unit-inner-assoc"/>
+                    <!--<show id="lecm-orgstr:unit-inner-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>
@@ -386,7 +386,8 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
+                    <show id="lecm-orgstr:org-unit-assoc"/>
+                    <!--<show id="cm:contains"/>-->
                 </field-visibility>
             </form>
         </forms>

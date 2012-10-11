@@ -1,5 +1,5 @@
 <div id="orgstructure-content">
-    <div id="yui-main">
+    <#--<div id="yui-main">
     <#if !empty>
         <div>
             <#if fullLoad>
@@ -22,5 +22,5 @@
             </div>
         </div>
     </#if>
-    </div>
+    </div>-->
 </div>

@@ -10,7 +10,7 @@
 
 (function() {
     function init() {
-        var menu = new LogicECM.module.Menu("orgstructure-menu");
+        var menu = new LogicECM.module.OrgStructure.Menu("orgstructure-menu");
         menu.setMessages(${messages});
         menu._loadRoots();
     }

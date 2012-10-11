@@ -363,7 +363,7 @@ if (args["nodeRef"] == null || args["nodeRef"] == "") {
         nodes = orgstructure.getRoots("_ROOT_", organization.getNodeRef().toString());
     } else {
         var structure = organization.childByNamePath("Структура");
-        nodes = orgstructure.getStructure("organization-unit", structure.getNodeRef().toString());
+        nodes = orgstructure.getStructure("organization", organization.getNodeRef().toString());
     }
 } else {
     nodes = orgstructure.getStructure(args["type"], args["nodeRef"]);

@@ -4,13 +4,10 @@
 <![endif]-->
 <input id="yui-history-field" type="hidden" />
 <script type="text/javascript">//<![CDATA[
-new Alfresco.component.DataGrid('${id}').setOptions(
+new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
         {
-        <#--siteId: "${page.url.templateArgs.site!""}",-->
             siteId: "site",
-        <#--containerId: "${template.properties.container!"dataLists"}",-->
             containerId: "dataLists",
-        <#--usePagination: ${(args.pagination!false)?string}-->
             usePagination: true
         }).setMessages(${messages});
 //]]></script>

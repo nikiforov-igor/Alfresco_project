@@ -8,7 +8,7 @@
         </component>
         <component>
             <region-id>content</region-id>
-            <url>/lecm/orgstructure/content?empty=true</url>
+            <url>/lecm/orgstructure/content</url>
             <sub-components>
                 <sub-component id="tree">
                     <url>/lecm/orgstructure/tree</url>
@@ -23,14 +23,6 @@
                 </sub-component>
                 <sub-component id="datagrid">
                     <url>/lecm/orgstructure/datagrid</url>
-                    <!--<evaluations>
-                        <evaluation id= "DataGridEvaluator" >
-                            <evaluators>
-                                <evaluator type= "blog.demo.evaluator" ></evaluator>
-                            </evaluators>
-                            <render> false </render>
-                        </evaluation>
-                    </evaluations>-->
                 </sub-component>
             </sub-components>
         </component>
