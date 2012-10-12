@@ -544,8 +544,13 @@
             <title>Unit Composition</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="lecm-orgstr:composition_is_boss">
+                <property name="lecm-orgstr:composition-is-boss">
                     <title>Employee Is Boss</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-orgstr:composition-is-primary">
+                    <title>Composition Is Primary</title>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>

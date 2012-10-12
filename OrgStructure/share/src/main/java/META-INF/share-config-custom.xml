@@ -293,7 +293,8 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:composition_is_boss"/>
+                    <show id="lecm-orgstr:composition-is-boss"/>
+                    <show id="lecm-orgstr:composition-is-primary"/>
                     <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-employee-assoc"/>
                 </field-visibility>
@@ -305,7 +306,8 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:composition_is_boss"/>
+                    <show id="lecm-orgstr:composition-is-boss"/>
+                    <show id="lecm-orgstr:composition-is-primary"/>
                     <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-employee-assoc"/>
                 </field-visibility>
