@@ -63,10 +63,10 @@ var Filters =
         {
             filterParams.limitResults = argMax;
         }
-        var params = "";
+        var params = "",
+            or = " OR",
+            ampersand = " @";
         for (var i=0; i < columns.length; i++) {
-            var or = " OR",
-                ampersand = " @";
             var namespace = columns[i].split(":");
             if (columns[i+1] == undefined ) {
                 or = "";
