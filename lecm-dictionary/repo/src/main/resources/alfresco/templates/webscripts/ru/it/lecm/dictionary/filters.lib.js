@@ -41,9 +41,11 @@ var Filters =
      */
     getFilterParams: function Filter_getFilterParams(filter, parsedArgs)
     {
+        var parentNode = search.findNode(parsedArgs.nodeRef);
+        var xpath = parentNode.getQnamePath();
         var filterParams =
         {
-            query: "+PARENT:\"" + parsedArgs.nodeRef + "\" ",
+            query: " +PATH:\""+xpath + "//*\"",
             limitResults: null,
             sort: [
                 {
@@ -74,7 +76,6 @@ var Filters =
             params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ namespace[2]  + or;
         }
         filterParams.query += " AND " + "(" + params + " )";
-
         return filterParams;
     }
 };
