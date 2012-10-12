@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Sample java-backed session web script</shortname>
+	<description>Java-backed implementation of session script. It returns user info. Should live only in user session</description>
+	<url>/logicecm/SampleSessionJS</url>
+	<authentication>user</authentication>
+	<format default="html"/>
+</webscript>
