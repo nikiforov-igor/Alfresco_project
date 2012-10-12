@@ -11,7 +11,7 @@
                LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, Ctrl, Shift, Shift).
                This flag automatically activates logging on page load.
             -->
-            <client-debug-autologging>false</client-debug-autologging>
+            <client-debug-autologging>true</client-debug-autologging>
         </flags>
 
         <header>
