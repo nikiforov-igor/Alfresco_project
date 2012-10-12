@@ -317,7 +317,7 @@
                filterData: text
            };
            Bubbling.fire("changeFilter", this.currentFilter);
-           Bubbling.fire("activeDataListChanged", this.populateDataGrid, this);
+           this.onDataGridRefresh();
        },
       /**
        * DataTable Cell Renderers
