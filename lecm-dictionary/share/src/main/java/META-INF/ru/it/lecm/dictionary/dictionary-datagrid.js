@@ -302,8 +302,7 @@
 
            for (var i=0; i< columns.length; i++) {
                if (columns[i].dataType == "text") {
-                   var separator = "#";
-                   text += columns[i].name+ ":" + value + separator;
+                   text += columns[i].name+ ":" + value + "#";
                }
            }
            if (value == undefined || value == null || value == ""){
