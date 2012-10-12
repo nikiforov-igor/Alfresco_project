@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Sample java-backed web script</shortname>
-	<description>Java-backed implementation of sample web script</description>
-	<url>/logicecm/SampleWebScript/{folderpath}?verbose={verbose?}</url>
-	<authentication>user</authentication>
-	<format default="html"/>
-</webscript>
