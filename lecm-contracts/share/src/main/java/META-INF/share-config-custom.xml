@@ -1,0 +1,33 @@
+<alfresco-config>
+
+    <config evaluator="node-type" condition="lecm-contract:document">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-contract:regnum" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" />
+                    <field id="lecm-contract:regnum" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-contract:document">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-contract:regnum" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" />
+                    <field id="lecm-contract:regnum" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+</alfresco-config>

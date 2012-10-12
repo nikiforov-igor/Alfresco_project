@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Contracts Module Root Node</shortname>
+    <description>Contracts Module Root Node</description>
+    <url>/lecm/contracts/root</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

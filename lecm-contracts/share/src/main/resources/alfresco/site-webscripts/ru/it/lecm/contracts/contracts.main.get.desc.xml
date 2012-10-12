@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Contracts Module Main page</shortname>
+    <description>Contracts Module Main page</description>
+    <url>/lecm/contracts/main</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
