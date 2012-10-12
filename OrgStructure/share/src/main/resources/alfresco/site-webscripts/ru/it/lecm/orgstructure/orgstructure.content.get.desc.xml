@@ -3,5 +3,5 @@
     <description>Returns the orgstructure content page.</description>
     <url>/lecm/orgstructure/content</url>
     <format default="html">extension</format>
-    <authentication>none</authentication>
+    <authentication>user</authentication>
 </webscript>

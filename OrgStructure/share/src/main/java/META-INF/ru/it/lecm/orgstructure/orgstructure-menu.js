@@ -106,8 +106,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var button1 = new YAHOO.widget.Button({
                 id:"organization-structure",
                 type:"button",
-                label:"Structure",
-                container:"button1"
+                label:context.messages["lecm.orgstructure.structure.btn"],
+                container:"button1",
+                width:140
             });
             var onButtonClick1 = function (e) {
                 reloadPage("organization-structure");
@@ -118,7 +119,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var button2 = new YAHOO.widget.Button({
                 id:"project-register",
                 type:"button",
-                label:"Projects Register",
+                label:context.messages["lecm.orgstructure.project_register.btn"],
                 container:"button2"
             });
             var onButtonClick2 = function (e) {
@@ -130,7 +131,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var button3 = new YAHOO.widget.Button({
                 id:"employee-container",
                 type:"button",
-                label:"Employees",
+                label:context.messages["lecm.orgstructure.employees.btn"],
                 container:"button3"
             });
             var onButtonClick3 = function (e) {
@@ -142,7 +143,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var button4 = new YAHOO.widget.Button({
                 id:"staff-list",
                 type:"button",
-                label:"Staff List",
+                label:context.messages["lecm.orgstructure.staff_list.btn"],
                 container:"button4"
             });
 

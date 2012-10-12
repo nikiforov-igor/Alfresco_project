@@ -29,7 +29,7 @@
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
-                    <!--<show id="lecm-orgstr:employee-sex"/>-->
+                    <show id="lecm-orgstr:employee-sex"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-number"/>

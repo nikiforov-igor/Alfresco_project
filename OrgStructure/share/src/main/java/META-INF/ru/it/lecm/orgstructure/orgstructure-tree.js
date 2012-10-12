@@ -37,11 +37,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     var Bubbling = YAHOO.Bubbling;
 
     LogicECM.module.OrgStructure.Tree = function (htmlId) {
-        return LogicECM.module.OrgStructure.Tree.superclass.constructor.call(
+        LogicECM.module.OrgStructure.Tree.superclass.constructor.call(
             this,
             "LogicECM.module.OrgStructure.Tree",
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
+
+        Bubbling.on("unitCreated", this.onNewUnitCreated, this);
+
+        return this;
     };
 
     YAHOO.extend(LogicECM.module.OrgStructure.Tree, Alfresco.component.Base, {
@@ -71,8 +75,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         _createTree:function (parent) {
             /*var treeContainer = document.createElement("div");
-            treeContainer.id = this.id + "-tree";
-            parent.appendChild(treeContainer);*/
+             treeContainer.id = this.id + "-tree";
+             parent.appendChild(treeContainer);*/
 
             this.tree = new YAHOO.widget.TreeView(this.id);
             this.tree.singleNodeHighlight = true;
@@ -82,9 +86,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
             this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
-            this.tree.subscribe('clickEvent', function(event) {
+            this.tree.subscribe('clickEvent', function (event) {
                 this._treeNodeSelected(event.node);
-                //this.tree.onEventToggleHighlight(event);
                 return false;
             }.bind(this));
             this.tree.render();
@@ -135,7 +138,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:namespace + ":" + oResults[nodeIndex].type,
                                 dsUri:oResults[nodeIndex].dsUri,
-                                childType:namespace + ":" + oResults[nodeIndex].childType
+                                childType:namespace + ":" + oResults[nodeIndex].childType,
+                                childAssoc:namespace + ":" + oResults[nodeIndex].childAssoc
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }
@@ -212,6 +216,35 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
+        },
+        onNewUnitCreated:function Tree_onNewUnitCreated(layer, args) {
+            var obj = args[1];
+            if ((obj !== null) && (obj.nodeRef !== null)) {
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/assoc";
+                var current = this.selectedNode;
+
+                var postData = "{source:\""+ encodeURI(current.data.nodeRef) + "\", " +
+                    "target:\"" + encodeURI(obj.nodeRef) + "\"," +
+                    "assocType:\"" + encodeURI(current.data.childAssoc) + "\"}";
+
+                var callback = {
+                    success:function (oResponse) {
+                        var sNode = oResponse.argument.context.selectedNode;
+                        oResponse.argument.context._loadTree(sNode);
+                        sNode.isLeaf = false;
+                        sNode.expanded = true;
+                        oResponse.argument.context.tree.render();
+                    },
+                    failure:function (oResponse) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                    },
+                    argument:{
+                        context:this
+                    },
+                    timeout:7000
+                };
+                YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
+            }
         }
     });
 

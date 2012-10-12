@@ -383,13 +383,15 @@ function addItems(branch, items) {
         isLeaf = items[index].isLeaf;
         dsUri = (items[index].dsUri != null ? items[index].dsUri : null);
         childType = (items[index].childType != null ? items[index].childType : null);
+        childAssoc = (items[index].childAssoc != null ? items[index].childAssoc : null);
         branch.push({
             title:title,
             type:type,
             nodeRef:nodeRef,
             isLeaf:"" + isLeaf,
             dsUri:dsUri,
-            childType:childType
+            childType:childType,
+            childAssoc:childAssoc
         });
     }
 }

@@ -19,6 +19,20 @@ function main()
     }
 
     model.actionSet = actionSet;
+
+    var showNRB = false;
+    var showNUB = true;
+    // default - show structure and Add Unit Button
+    var type = args["type"];
+    if (type != null && type != '') {
+        if (type != 'organization-structure') {
+            // hide "New Unit Button", Show "New Row Button"
+            showNRB = true;
+            showNUB = false;
+        }
+    }
+    model.showNRB = showNRB;
+    model.showNUB = showNUB;
 }
 
 main();

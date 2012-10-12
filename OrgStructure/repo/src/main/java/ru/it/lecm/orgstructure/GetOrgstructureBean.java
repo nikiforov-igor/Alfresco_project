@@ -45,6 +45,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String NODE_REF = "nodeRef";
 	public static final String TYPE = "type";
 	public static final String CHILD_TYPE = "childType";
+	public static final String CHILD_ASSOC = "childAssoc";
 	public static final String TITLE = "title";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String DS_URI = "dsUri";
@@ -57,6 +58,8 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String ELEMENT_FULL_NAME = "element-full-name";
 
 	private static ServiceRegistry serviceRegistry;
+	public static final String ORG_UNIT_ASSOC = "org-unit-assoc";
+	public static final String UNIT_INNER_ASSOC = "unit-inner-assoc";
 
 	public String getRoots(final String type, final String ref) {
 		JSONArray nodes = new JSONArray();
@@ -93,7 +96,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 						root.put(CHILD_TYPE, TYPE_POSITION);
 						root.put(DS_URI, DEFAULT_URI);
 					} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
-						root.put(CHILD_TYPE, TYPE_UNIT);
+						root.put(CHILD_TYPE, TYPE_EMPLOYEE);
 						root.put(DS_URI, UNIT_EMPLOYEES_URI);
 					}
 					nodes.put(root);
@@ -127,6 +130,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 							child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 
 					unit.put(CHILD_TYPE, TYPE_UNIT);
+					unit.put(CHILD_ASSOC, UNIT_INNER_ASSOC);
 					unit.put(DS_URI, UNIT_EMPLOYEES_URI);
 
 					nodes.put(unit);
@@ -147,6 +151,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
                             structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 
                     root.put(CHILD_TYPE, TYPE_UNIT);
+	                root.put(CHILD_ASSOC, ORG_UNIT_ASSOC);
                     root.put(DS_URI, UNIT_EMPLOYEES_URI);
 
                     nodes.put(root);

@@ -7,7 +7,8 @@
             nodeRef: "${b.nodeRef}",
             isLeaf: ${b.isLeaf},
             dsUri: "${b.dsUri!""}",
-            childType: "${b.childType!""}"
+            childType: "${b.childType!""}",
+            childAssoc: "${b.childAssoc!""}",
         }
         <#if b_has_next>,</#if>
     </#list>
