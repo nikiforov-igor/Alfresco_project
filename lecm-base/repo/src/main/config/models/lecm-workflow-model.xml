@@ -9,12 +9,36 @@
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/workflow/1.0" prefix="lecm-workflow"/>
     </namespaces>
-    <aspects>
+    <constraints>
+        <constraint name="lecm-workflow:statuses" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>NEW</value>
+                    <value>ON_AGREEMENT</value>
+                    <value>ON_REFINING</value>
+                    <value>ON_SIGNING</value>
+                    <value>CANCELED</value>
+                    <value>SIGNED</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>    <aspects>
         <aspect name="lecm-workflow:documentTask">
             <properties>
                 <property name="lecm-workflow:stateProcess">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="lecm-workflow:documentStatus">
+            <properties>
+                <property name="lecm-workflow:status">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-workflow:statuses" />
+                    </constraints>
                 </property>
             </properties>
         </aspect>

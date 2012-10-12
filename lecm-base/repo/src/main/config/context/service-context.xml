@@ -19,18 +19,11 @@
 -->
 <beans>
 
-    <bean id="${groupId}.${artifactId}.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/sample-field-set-model.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="${groupId}.${artifactId}.workflowDictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+    <bean id="${groupId}.${artifactId}.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
             </list>
         </property>
     </bean>
@@ -39,43 +32,7 @@
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
-    <bean id="ssp.workflowBootstrap" parent="workflowDeployer">
-        <property name="workflowDefinitions">
-            <list>
-                <props>
-                    <prop key="engineId">activiti</prop>
-                    <prop key="location">alfresco/module/${artifactId}/models/simpleSystemProcess.bpmn20.xml</prop>
-                    <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
-                </props>
-            </list>
-        </property>
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/simpleSystemProcessModel.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="sup.workflowBootstrap" parent="workflowDeployer">
-        <property name="workflowDefinitions">
-            <list>
-                <props>
-                    <prop key="engineId">activiti</prop>
-                    <prop key="location">alfresco/module/${artifactId}/models/simpleUserProcess.bpmn20.xml</prop>
-                    <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
-                </props>
-            </list>
-        </property>
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/simpleUserProcessModel.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="workflowController" class="ru.it.lecm.base.workflow.WorkflowHelper">
+    <bean id="workflowHelper" class="ru.it.lecm.base.workflow.WorkflowHelper">
         <property name="serviceRegistry" ref="ServiceRegistry" />
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
@@ -88,6 +45,5 @@
             <ref bean="nodeService"/>
         </property>
     </bean>
-
 
 </beans>

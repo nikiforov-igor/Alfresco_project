@@ -21,7 +21,7 @@ public class WorkflowPolicy implements NodeServicePolicies.OnUpdatePropertiesPol
 
     public final static QName WORKFLOW_DOCUMENT_TASK_ASPECT = QName.createQName("http://www.it.ru/logicECM/workflow/1.0", "documentTask");
     public final static QName WORKFLOW_DOCUMENT_TASK_STATE_PROCESS_PROPERTY = QName.createQName("http://www.it.ru/logicECM/workflow/1.0", "stateProcess");
-    private final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/lecm/document/sample/1.0", "fieldset");
+    //private final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/lecm/document/sample/1.0", "fieldset");
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
@@ -30,17 +30,16 @@ public class WorkflowPolicy implements NodeServicePolicies.OnUpdatePropertiesPol
         PropertyCheck.mandatory(this, "nodeService", nodeService);
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
+/*
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
+*/
     }
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         if (nodeService.hasAspect(nodeRef, WORKFLOW_DOCUMENT_TASK_ASPECT)) {
-            String value = (String) nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/lecm/document/sample/1.0", "field1"));
-            if ("1".equals(value)) {
-                new WorkflowHelper().stopDocumentProcessing((String) nodeService.getProperty(nodeRef, WORKFLOW_DOCUMENT_TASK_STATE_PROCESS_PROPERTY));
-            }
+            new WorkflowHelper().stopDocumentProcessing((String) nodeService.getProperty(nodeRef, WORKFLOW_DOCUMENT_TASK_STATE_PROCESS_PROPERTY));
         }
     }
 
