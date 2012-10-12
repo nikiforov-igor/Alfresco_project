@@ -73,7 +73,7 @@ var Filters =
                 ampersand = " @";
             }
 
-            params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ namespace[2]  + or;
+            params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ "*" +namespace[2] + "*" + or;
         }
         filterParams.query += " AND " + "(" + params + " )";
         return filterParams;
