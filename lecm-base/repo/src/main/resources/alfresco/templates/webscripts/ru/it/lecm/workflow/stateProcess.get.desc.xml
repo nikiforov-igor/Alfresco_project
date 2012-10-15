@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Start State Process</shortname>
-    <description>Start State Process</description>
-    <url>/lecm/workflow/stateProcess</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>
