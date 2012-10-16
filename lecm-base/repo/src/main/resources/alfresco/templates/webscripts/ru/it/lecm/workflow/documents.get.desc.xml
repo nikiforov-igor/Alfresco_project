@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Documents By Status</shortname>
+    <description>Documents By Status</description>
+    <url>/lecm/workflow/documents</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

@@ -2,25 +2,25 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
     <process id="contractWorkflow" name="Contract Workflow">
         <startEvent id="start" name="Alfresco start" activiti:formKey="cwf:startTask"></startEvent>
-        <userTask id="new" name="Новый"></userTask>
+        <userTask id="new" name="Новый" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow1" name="" sourceRef="start" targetRef="new"></sequenceFlow>
-        <userTask id="onAgreement" name="На согласовании"></userTask>
+        <userTask id="onAgreement" name="На согласовании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow2" name="" sourceRef="new" targetRef="onAgreement"></sequenceFlow>
         <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
         <sequenceFlow id="flow3" name="" sourceRef="onAgreement" targetRef="parallelgateway1"></sequenceFlow>
-        <userTask id="onRefining" name="На доработке"></userTask>
+        <userTask id="onRefining" name="На доработке" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow4" name="${!agreed}" sourceRef="parallelgateway1" targetRef="onRefining">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!agreed}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow5" name="" sourceRef="onRefining" targetRef="onAgreement"></sequenceFlow>
-        <userTask id="onSigning" name="На подписании"></userTask>
+        <userTask id="onSigning" name="На подписании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow6" name="${agreed}" sourceRef="parallelgateway1" targetRef="onSigning">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${agreed}]]></conditionExpression>
         </sequenceFlow>
         <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="flow7" name="" sourceRef="onSigning" targetRef="exclusivegateway1"></sequenceFlow>
-        <userTask id="canceled" name="Отменен"></userTask>
-        <userTask id="signed" name="Подписан"></userTask>
+        <userTask id="canceled" name="Отменен" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
+        <userTask id="signed" name="Подписан" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow8" name="${signed}" sourceRef="exclusivegateway1" targetRef="signed">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${signed}]]></conditionExpression>
         </sequenceFlow>

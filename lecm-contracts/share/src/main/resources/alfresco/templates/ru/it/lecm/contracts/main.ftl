@@ -28,7 +28,7 @@ new Alfresco.widget.Resizer("Contracts");
 <!-- TreeView source file -->
     <@script type="text/javascript" src="${url.context}/yui/treeview/treeview.js"></@script>
     <@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
-
+    <@script type="text/javascript" src="${url.context}/yui/element/element.js"></@script>
     <#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
     <!-- Source file -->

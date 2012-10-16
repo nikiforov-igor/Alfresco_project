@@ -38,6 +38,8 @@ LogicECM.module = LogicECM.module || {};
     YAHOO.extend(LogicECM.module.Contracts, Alfresco.component.Base, {
         messages:null,
         catalog: null,
+        workflowId: "contractWorkflow",
+        list: null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -74,6 +76,10 @@ LogicECM.module = LogicECM.module || {};
                 container: "contracts"
             });
             oButton.on("click", this._createContract.bind(this));
+
+            this.list = document.createElement("div");
+            Dom.get(this.id).appendChild(this.list);
+            this._refreshList();
         },
 
         _createUrl:function (type, nodeRef, childNodeType) {
@@ -163,13 +169,13 @@ LogicECM.module = LogicECM.module || {};
                         var workflowUrl = Alfresco.constants.PROXY_URI + "lecm/workflow/stateProcess?workflowId={workflowId}&nodeRef={nodeRef}";
 
                         workflowUrl = YAHOO.lang.substitute(workflowUrl, {
-                            workflowId: "contractWorkflow",
+                            workflowId: this.workflowId,
                             nodeRef: response.json.persistedObject
                         });
 
                         var callback = {
                             success:function (oResponse) {
-                                alert("OK");
+                                oResponse.argument.contractsObject._refreshList();
                             },
                             argument:{
                                 contractsObject: this
@@ -181,6 +187,19 @@ LogicECM.module = LogicECM.module || {};
                     scope: this
                 }
             }).show();
+        },
+        _refreshList: function() {
+            sUrl =Alfresco.constants.URL_SERVICECONTEXT + "lecm/contracts/documents";
+            callback = {
+                success:function (oResponse) {
+                    oResponse.argument.contractsObject.list.innerHTML = oResponse.responseText;
+                },
+                argument:{
+                    contractsObject: this
+                },
+                timeout:7000
+            };
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         }
 
     });
