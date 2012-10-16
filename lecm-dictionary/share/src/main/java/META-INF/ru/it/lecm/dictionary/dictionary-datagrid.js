@@ -318,6 +318,7 @@
            };
            Bubbling.fire("changeFilter", this.currentFilter);
            this.onDataGridRefresh();
+           YAHOO.util.Dom.get('filter').focus();
        },
       /**
        * DataTable Cell Renderers
