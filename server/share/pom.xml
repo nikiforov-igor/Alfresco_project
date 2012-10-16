@@ -59,6 +59,13 @@
 		</dependency>
 
         <dependency>
+            <groupId>ru.it.lecm.base</groupId>
+            <artifactId>base-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>ru.it.lecm.orgstructure</groupId>
             <artifactId>orgstructure-share</artifactId>
             <version>${platform.version}</version>

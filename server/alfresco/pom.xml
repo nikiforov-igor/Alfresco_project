@@ -113,6 +113,13 @@
 			<scope>provided</scope>
 		</dependency>
         <dependency>
+            <groupId>ru.it.lecm.base</groupId>
+            <artifactId>base-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
             <groupId>ru.it.lecm.orgstructure</groupId>
             <artifactId>orgstructure-repo</artifactId>
             <version>${platform.version}</version>
