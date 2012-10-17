@@ -1,5 +1,3 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/repository/forms/pickerresults.lib.js">
-
 function main()
 {
    var argsFilterType = args['filterType'],
@@ -17,7 +15,9 @@ function main()
       results = [],
       categoryResults = null,
       resultObj = null,
-      lastPathElement = null;
+      lastPathElement = null,
+      argsXPathLocation = args['xPathLocation'],
+      argsXPathRoot = args['xPathRoot'];
 
    var nameParams = splitString(argsNameSubstituteString, argsOpenSubstituteSymbol, argsCloseSubstituteSymbol);
    
@@ -33,6 +33,8 @@ function main()
       logger.log("openSubstituteSymbol = " + argsOpenSubstituteSymbol);
       logger.log("closeSubstituteSymbol = " + argsCloseSubstituteSymbol);
       logger.log("nameParams = " + nameParams);
+      logger.log("argsXPathLocation = " + argsXPathLocation);
+      logger.log("argsXPathRoot = " + argsXPathRoot);
     }
          
    try
@@ -50,6 +52,22 @@ function main()
          {
             nodeRef = String(nodes[0].nodeRef);
          }
+      }
+      if (argsXPathLocation != null)
+      {
+          var root = companyhome;
+          // resolve the root for XPath
+          if (argsXPathRoot != null) {
+              var node = resolveNode(argsXPathRoot);
+              if (node != null) {
+                  root = node;
+              }
+          }
+          var nodes = root.childrenByXPath(argsXPathLocation);
+          if (nodes.length > 0)
+          {
+              nodeRef = String(nodes[0].nodeRef);
+          }
       }
 
       // default to max of 100 results
@@ -361,7 +379,7 @@ function resolveNode(reference)
    var node = null;
    try
    {
-      if (reference == "alfresco://company/home")
+      if (reference == "alfresco://company/home" || reference == "{companyhome}")
       {
          node = companyhome;
       }
@@ -380,6 +398,9 @@ function resolveNode(reference)
       else if (reference.substring(0, 1) == "/")
       {
          node = search.xpathSearch(reference)[0];
+      }
+       else if (reference == "{organization}") {
+        node = companyhome.childByNamePath("Организация");
       }
    }
    catch (e)
@@ -404,6 +425,77 @@ function splitString(string, openSymbol, closeSymbol) {
         }
     }
     return result;
+}
+
+/**
+ * Creates an Object representing the given person node.
+ *
+ * @method createPersonResult
+ * @param node
+ * @return Object representing the person
+ */
+function createPersonResult(node)
+{
+    var personObject =
+    {
+        typeShort: node.typeShort,
+        isContainer: false,
+        properties: {},
+        displayPath: node.displayPath,
+        nodeRef: "" + node.nodeRef
+    }
+
+    // define properties for person
+    personObject.properties.userName = node.properties.userName;
+    personObject.properties.name = (node.properties.firstName ? node.properties.firstName + " " : "") +
+        (node.properties.lastName ? node.properties.lastName : "") +
+        " (" + node.properties.userName + ")";
+    personObject.properties.jobtitle = (node.properties.jobtitle ? node.properties.jobtitle  : "");
+
+    return personObject;
+}
+
+/**
+ * Creates an Object representing the given group node.
+ *
+ * @method createGroupResult
+ * @param node
+ * @return Object representing the group
+ */
+function createGroupResult(node)
+{
+    var groupObject =
+    {
+        typeShort: node.typeShort,
+        isContainer: false,
+        properties: {},
+        displayPath: node.displayPath,
+        nodeRef: "" + node.nodeRef
+    }
+
+    // find most appropriate name for the group
+    var name = node.properties.name;
+    if (node.properties.authorityDisplayName != null && node.properties.authorityDisplayName.length > 0)
+    {
+        name = node.properties.authorityDisplayName;
+    }
+    else if (node.properties.authorityName != null && node.properties.authorityName.length > 0)
+    {
+        var authName = node.properties.authorityName;
+        if (authName.indexOf("GROUP_") == 0)
+        {
+            name = authName.substring(6);
+        }
+        else
+        {
+            name = authName;
+        }
+    }
+
+    // set the name
+    groupObject.properties.name = name;
+
+    return groupObject;
 }
 
 main();

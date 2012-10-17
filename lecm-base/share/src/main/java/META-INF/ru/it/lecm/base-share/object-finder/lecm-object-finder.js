@@ -87,7 +87,7 @@ LogicECM.module = LogicECM.module || {};
       this.columns = [];
       this.selectedItems = {};
       this.isReady = false;
-      
+
       this.options.objectRenderer = new LogicECM.module.ObjectRenderer(this);
 
       return this;
@@ -384,7 +384,7 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          startLocation: null,
-         
+
          /**
           * Specifies the parameters to pass to the node locator service
           * when determining the start location node.
@@ -410,7 +410,17 @@ LogicECM.module = LogicECM.module || {};
 
          openSubstituteSymbol: "{",
 
-         closeSubstituteSymbol: "}"
+         closeSubstituteSymbol: "}",
+
+          /**
+           * Для получения корневой ноды с помощью XPATH (с использованием расширенных методов, например, subtypeOf)
+           * XPathRoot Values supported are:
+           *
+           * - {companyhome}
+           * - {organization}
+           */
+         xPathLocation: null,
+         xPathLocationRoot:null
       },
 
       /**
@@ -624,7 +634,7 @@ LogicECM.module = LogicECM.module || {};
          this._populateSelectedItems();
          this.options.objectRenderer.onPickerShow();
          
-         if (!this.options.objectRenderer.startLocationResolved && (this.options.startLocation || this.options.rootNode))
+         if (!this.options.objectRenderer.startLocationResolved && (this.options.startLocation || this.options.rootNode || this.options.xPathLocation))
          {
             this._resolveStartLocation();
          }
@@ -1815,9 +1825,9 @@ LogicECM.module = LogicECM.module || {};
        */
       _resolveStartLocation: function ObjectFinder__resolveStartLocation()
       {
-         if (this.options.startLocation || this.options.rootNode)
+         if (this.options.startLocation || this.options.rootNode || this.options.xPathLocation)
          {
-            this.options.startLocation = (this.options.startLocation || this.options.rootNode);
+            this.options.startLocation = (this.options.startLocation || this.options.rootNode || this.options.xPathLocation);
             
             if (Alfresco.logger.isDebugEnabled())
             {
@@ -1825,7 +1835,7 @@ LogicECM.module = LogicECM.module || {};
             }
             
             var startingNodeRef = null;
-            
+            var startingNodeRoot = null;
             // check first for the start locations that don't require a remote call
             if (this.options.startLocation.charAt(0) == "{")
             {
@@ -1863,6 +1873,15 @@ LogicECM.module = LogicECM.module || {};
                // start location is an XPath, this will be dealt with later so set to empty string to ignore it
                startingNodeRef = "";
             }
+            else if (this.options.xPathLocation != null)
+            {
+                // start location is an XPath, this will be dealt with later so set to empty string to ignore it
+                startingNodeRef = "";
+                //check root node
+                if (this.options.xPathLocationRoot != null) {
+                    startingNodeRoot = this.options.xPathLocationRoot;
+                }
+            }
             else
             {
                // start location must be a hardcoded nodeRef
@@ -1873,6 +1892,7 @@ LogicECM.module = LogicECM.module || {};
             {
                // we already know the start location so just refresh
                this.options.objectRenderer.options.parentNodeRef = startingNodeRef;
+               this.options.objectRenderer.options.rootRef = startingNodeRoot;
                this._fireRefreshEvent();
             }
             else
@@ -2256,7 +2276,15 @@ LogicECM.module = LogicECM.module || {};
 
           openSubstituteSymbol: "{",
 
-          closeSubstituteSymbol: "}"
+          closeSubstituteSymbol: "}",
+
+          /**
+           * Root node for search parent
+           *
+           * @property parentRootRef
+           * @type string
+           */
+          rootRef: ""
       },
 
       /**
@@ -3006,8 +3034,13 @@ LogicECM.module = LogicECM.module || {};
               this.options.startLocation.charAt(0) == "/")
          {
             params += "&xpath=" + encodeURIComponent(this.options.startLocation);
+         } else if (this.options.xPathLocation)
+         {
+              params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+             if (this.options.xPathLocationRoot != null) {
+                 params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+             }
          }
-         
          // has a rootNode been specified?
          if (this.options.rootNode)
          {

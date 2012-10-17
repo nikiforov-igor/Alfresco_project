@@ -26,6 +26,12 @@
       <#if form.mode == "edit" && args.itemId??>currentItem: "${args.itemId?js_string}",</#if>
       <#if form.mode == "create" && form.destination?? && form.destination?length &gt; 0>currentItem: "${form.destination?js_string}",</#if>
    </#if>
+    <#if field.control.params.xPathLocation??>
+        xPathLocation: "${field.control.params.xPathLocation}",
+    </#if>
+    <#if field.control.params.xPathLocationRoot??>
+        xPathLocationRoot: "${field.control.params.xPathLocationRoot?js_string}",
+    </#if>
    <#if field.control.params.startLocationParams??>
       startLocationParams: "${field.control.params.startLocationParams?js_string}",
    </#if>
