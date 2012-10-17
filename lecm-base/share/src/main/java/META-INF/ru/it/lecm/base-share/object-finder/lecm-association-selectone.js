@@ -127,39 +127,34 @@ LogicECM.module = LogicECM.module || {};
             },
 
             populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {
-                this._createDataSource();
-
-                var successHandler = function (sRequest, oResponse, oPayload)
-                {
-                    var results = oResponse.results;
-                    for (var i = 0; i < results.length; i++) {
-                        var node = results[i];
-                        if (node.nodeRef == this.options.selectedValueNodeRef) {
-                            this.currentDisplayValueElement.innerHTML = node.name;
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
+                        successCallback:
+                        {
+                            fn: function (response) {
+                                var properties = response.json.properties;
+                                var name = this.options.nameSubstituteString;
+                                for (var i = 0; i < properties.length; i++) {
+                                    var prop = properties[i];
+                                    if (prop.name && prop.values[0]) {
+                                        var propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
+                                        if (name.indexOf(propSubstName) != -1) {
+                                            name = name.replace(propSubstName, prop.values[0].value);
+                                        }
+                                    }
+                                }
+                                this.currentDisplayValueElement.innerHTML = name;
+                            },
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: function (response) {
+                                //todo show error message
+                            },
+                            scope: this
                         }
-                    }
-                }.bind(this);
-
-                var failureHandler = function (sRequest, oResponse)
-                {
-                    if (oResponse.status == 401)
-                    {
-                        // Our session has likely timed-out, so refresh to offer the login page
-                        window.location.reload();
-                    }
-                    else
-                    {
-                        //todo show failure message
-                    }
-                }.bind(this);
-
-                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
-
-                this.dataSource.sendRequest(url,
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
                     });
             },
 
