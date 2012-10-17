@@ -20,7 +20,7 @@
 
 		<type name="lecm-dic-regions:dictionary_values">
 			<title>Region values</title>
-			<parent>lecm-dic:hierarchical_dictionary_values</parent>
+			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-dic-regions:code">
 					<title>Code</title>
