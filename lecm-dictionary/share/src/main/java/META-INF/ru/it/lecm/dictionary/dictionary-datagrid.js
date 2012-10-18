@@ -1452,8 +1452,8 @@
                    function (oRequest, oFullResponse) {
                        var oResults = eval("(" + oRequest.responseText + ")");
                        this.latestVersion = oResults.splice(0, 1)[0];
-                       this.onViewHistoricPropertiesClick(item.nodeRef);
                        this.versionCache = oResults;
+                       this.onViewHistoricPropertiesClick(item.nodeRef);
                    }.bind(this),
                failure:function (oResponse) {
                    alert("Failed to load version data. " + "[" + oResponse.statusText + "]");
