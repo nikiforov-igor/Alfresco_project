@@ -3,4 +3,5 @@
     <name>Регионы</name>
     <description>Регионы РФ</description>
     <type>lecm-dic-regions:dictionary_values</type>
+    <showControlInSeparateWindow>false</showControlInSeparateWindow>
 </dictionary>
