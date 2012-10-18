@@ -293,6 +293,12 @@
        * @type Object
        */
       dataResponseFields: null,
+      /** The latest version of the document
+       *
+       * @property latestVersion
+       * @type {Object}
+       */
+      latestVersion: null,
 
        doActionFilter: function ()
        {
@@ -1431,6 +1437,43 @@
          }).show();
       },
 
+      doBeforeParseData: function(item) {
+           var  sUrl = Alfresco.constants.PROXY_URI + "api/version?nodeRef=" + item.nodeRef;
+
+           var callback = {
+               success:
+                   function (oRequest, oFullResponse) {
+                       var oResults = eval("(" + oRequest.responseText + ")");
+                       this.latestVersion = oResults.splice(0, 1)[0];
+                       this.onViewHistoricPropertiesClick(item.nodeRef);
+                       this.versionCache = oResults;
+                   }.bind(this),
+               failure:function (oResponse) {
+                   alert("Failed to load version data. " + "[" + oResponse.statusText + "]");
+               },
+               argument:{
+               }
+           };
+
+           YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+       },
+
+       onActionShowMore: function(item) {
+           this.doBeforeParseData(item);
+       },
+
+       onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)
+       {
+
+           // Call the Hictoric Properties Viewer Module
+           Alfresco.module.getHistoricPropertiesViewerInstance().show(
+               {
+                   filename: this.latestVersion.name,
+                   currentNodeRef: nodeRef,
+                   latestVersion: this.latestVersion,
+                   nodeRef: this.versionCache[0].nodeRef
+               });
+       },
 
       /**
        * BUBBLING LIBRARY EVENT HANDLERS FOR PAGE EVENTS

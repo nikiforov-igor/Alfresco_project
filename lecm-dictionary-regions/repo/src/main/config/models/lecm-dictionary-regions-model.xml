@@ -10,6 +10,7 @@
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="contentmodel"/>
 	</imports>
 
 	<namespaces>
@@ -28,6 +29,9 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
 		</type>
 	</types>
 </model>
