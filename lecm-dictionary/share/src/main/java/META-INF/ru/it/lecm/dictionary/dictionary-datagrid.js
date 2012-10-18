@@ -299,6 +299,13 @@
        * @type {Object}
        */
       latestVersion: null,
+       /**
+        * A cached copy of the version history to limit duplicate calls.
+        *
+        * @property versionCache
+        * @type {Object} XHR response object
+        */
+       versionCache: null,
 
        doActionFilter: function ()
        {
@@ -1471,7 +1478,7 @@
                    filename: this.latestVersion.name,
                    currentNodeRef: nodeRef,
                    latestVersion: this.latestVersion,
-                   nodeRef: this.versionCache[0].nodeRef
+                   nodeRef: this.latestVersion.nodeRef
                });
        },
 
