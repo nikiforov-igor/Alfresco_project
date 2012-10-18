@@ -1498,12 +1498,15 @@ LogicECM.module = LogicECM.module || {};
          {
             Alfresco.util.Ajax.jsonRequest(
             {
-               url: Alfresco.constants.PROXY_URI + "api/forms/picker/items",
+               url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
                method: "POST",
                dataObj:
                {
                   items: arrItems.split(","),
-                  itemValueType: this.options.valueType
+                  itemValueType: this.options.valueType,
+                  itemNameSubstituteString: this.options.nameSubstituteString,
+                  itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
+                  itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
                },
                successCallback:
                {
