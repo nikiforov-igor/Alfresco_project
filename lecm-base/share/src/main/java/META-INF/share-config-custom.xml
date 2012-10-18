@@ -2,9 +2,9 @@
     <config>
         <forms>
             <dependencies>
-                <css src="/ru/it/lecm/base-share/object-finder/lecm-object-finder.css" />
-                <js src="/ru/it/lecm/base-share/object-finder/lecm-object-finder.js" />
-                <js src="/ru/it/lecm/base-share/object-finder/lecm-association-selectone.js" />
+                <css src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.css" />
+                <js src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.js" />
+                <js src="/ru/it/lecm/base-share/components/lecm-association-selectone.js" />
             </dependencies>
         </forms>
     </config>
