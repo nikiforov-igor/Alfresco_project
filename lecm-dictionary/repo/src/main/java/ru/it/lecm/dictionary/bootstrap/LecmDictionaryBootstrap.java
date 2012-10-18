@@ -32,6 +32,7 @@ public class LecmDictionaryBootstrap {
 	private static final QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
 	private static final QName DESCRIPTION = QName.createQName(DICTIONARY_NAMESPACE_URI, "description");
 	private static final QName TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
+	private static final QName SHOW_CONTROL_IN_SEPARATE_WINDOW = QName.createQName(DICTIONARY_NAMESPACE_URI, "show_control_in_separate_window");
 	private TransactionService transactionService;
 	private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
 
@@ -69,7 +70,8 @@ public class LecmDictionaryBootstrap {
 					properties.put(ContentModel.PROP_NAME, dictionaryDescriptor.getName());
 					properties.put(DESCRIPTION, dictionaryDescriptor.getDescription());
 					properties.put(TYPE, dictionaryDescriptor.getType());
-					nodeService.createNode(root, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, DICTIONARY, properties);
+					properties.put(SHOW_CONTROL_IN_SEPARATE_WINDOW, dictionaryDescriptor.isShowControlInSeparateWindow());
+					nodeService.createNode(root, ContentModel.ASSOC_CONTAINS, QName.createQName(DICTIONARY_NAMESPACE_URI, dictionaryDescriptor.getName()), DICTIONARY, properties);
 					return "ok";
 				}
 			});
@@ -87,7 +89,7 @@ public class LecmDictionaryBootstrap {
 			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 				@Override
 				public Object execute() throws Throwable {
-					ChildAssociationRef associationRef = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, DICTIONARY, properties);
+					ChildAssociationRef associationRef = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
 					dictionariesRoot[0] = associationRef.getChildRef();
 					return "ok";
 				}

@@ -10,6 +10,15 @@ public class DictionaryDescriptor {
 	private String name;
 	private String description;
 	private String type;
+	private boolean showControlInSeparateWindow = true;
+
+	public boolean isShowControlInSeparateWindow() {
+		return showControlInSeparateWindow;
+	}
+
+	public void setShowControlInSeparateWindow(boolean showControlInSeparateWindow) {
+		this.showControlInSeparateWindow = showControlInSeparateWindow;
+	}
 
 	public String getDescription() {
 		return description;
