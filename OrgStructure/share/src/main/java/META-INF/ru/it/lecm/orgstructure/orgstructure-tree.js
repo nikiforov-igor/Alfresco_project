@@ -93,6 +93,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }.bind(this));
 
             this.tree.render();
+            this.onExpandComplete(null);
         },
         onExpandComplete:function OT_onExpandComplete(oNode) {
             for (var i in this.options.insituEditors) {
@@ -240,7 +241,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     fn:function () {
                         this._loadTree(this.selectedNode.parent, function () {
                             this.tree.render();
-                            this.selectedNode.focus();
+                            this.onExpandComplete(null);
+                            this._treeNodeSelected(this.selectedNode);
                         }.bind(this));
                     },
                     scope:this
@@ -294,6 +296,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         sNode.isLeaf = false;
                         sNode.expanded = true;
                         otree.tree.render();
+                        onExpandComplete(null);
                     },
                     failure:function (oResponse) {
                         YAHOO.log("Failed to process XHR transaction.", "info", "example");
