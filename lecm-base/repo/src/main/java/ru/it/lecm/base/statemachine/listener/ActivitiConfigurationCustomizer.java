@@ -1,4 +1,4 @@
-package ru.it.lecm.base.workflow.listener;
+package ru.it.lecm.base.statemachine.listener;
 
 import org.activiti.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.activiti.engine.impl.bpmn.parser.BpmnParser;
@@ -28,7 +28,7 @@ public class ActivitiConfigurationCustomizer implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         BpmnParser parser = ((BpmnDeployer) activitiProcessEngineConfiguration.getDeploymentCache().getDeployers().get(0)).getBpmnParser();
-        parser.getParseListeners().add(new EndEventParseListener());
+        parser.getParseListeners().add(new LogicECMBPMNParser());
     }
 
 }

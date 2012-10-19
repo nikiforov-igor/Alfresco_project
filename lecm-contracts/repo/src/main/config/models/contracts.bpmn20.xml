@@ -1,21 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:lecm="http://www.it.ru/LogicECM/bpmn/1.0"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
     <process id="contractWorkflow" name="Contract Workflow">
         <startEvent id="start" name="Alfresco start" activiti:formKey="cwf:startTask"></startEvent>
-        <userTask id="new" name="Новый" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
+        <userTask id="new" name="Новый" activiti:assignee="${bpm_assignee.properties.userName}">
+            <extensionElements>
+                <lecm:extention>
+                    <lecm:event on="start">
+                        <lecm:action type="setStatus">
+                            <lecm:attribute name="status" value="DRAFT"/>
+                        </lecm:action>
+                    </lecm:event>
+                    <lecm:event on="take">
+                        <lecm:action type="chooseState">
+                            <lecm:attribute name="agreement">
+                                <lecm:parameter name="labelId" value="На согласование"/>
+                                <lecm:parameter name="workflowId" value="activitiReview"/>
+                                <lecm:parameter name="outputVariableName" value="review"/>
+                                <lecm:parameter name="outputVariableValue" value="true"/>
+                            </lecm:attribute>
+                            <lecm:attribute name="singing">
+                                <lecm:parameter name="labelId" value="На подписание"/>
+                                <lecm:parameter name="workflowId" value="activitiReview"/>
+                                <lecm:parameter name="outputVariableName" value="review"/>
+                                <lecm:parameter name="outputVariableValue" value="true"/>
+                            </lecm:attribute>
+                        </lecm:action>
+                    </lecm:event>
+                </lecm:extention>
+            </extensionElements>
+        </userTask>
         <sequenceFlow id="flow1" name="" sourceRef="start" targetRef="new"></sequenceFlow>
-        <userTask id="onAgreement" name="На согласовании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
+        <userTask id="onAgreement" name="На согласовании" activiti:assignee="${bpm_assignee.properties.userName}">
+            <extensionElements>
+                <lecm:extention>
+                    <lecm:event on="start">
+                        <lecm:action type="setStatus">
+                            <lecm:attribute name="status" value="ON_AGREEMENT"/>
+                        </lecm:action>
+                    </lecm:event>
+                    <lecm:event on="end">
+                        <lecm:action type="setStatus">
+                            <lecm:attribute name="status" value="AGREED"/>
+                        </lecm:action>
+                    </lecm:event>
+                </lecm:extention>
+            </extensionElements>
+        </userTask>
         <sequenceFlow id="flow2" name="" sourceRef="new" targetRef="onAgreement"></sequenceFlow>
         <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
         <sequenceFlow id="flow3" name="" sourceRef="onAgreement" targetRef="parallelgateway1"></sequenceFlow>
         <userTask id="onRefining" name="На доработке" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow4" name="${!agreed}" sourceRef="parallelgateway1" targetRef="onRefining">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!agreed}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome != 'Approve'}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow5" name="" sourceRef="onRefining" targetRef="onAgreement"></sequenceFlow>
         <userTask id="onSigning" name="На подписании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow6" name="${agreed}" sourceRef="parallelgateway1" targetRef="onSigning">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${agreed}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome == 'Approve'}]]></conditionExpression>
         </sequenceFlow>
         <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="flow7" name="" sourceRef="onSigning" targetRef="exclusivegateway1"></sequenceFlow>

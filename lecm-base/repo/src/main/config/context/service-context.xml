@@ -22,28 +22,53 @@
     <bean id="${groupId}.${artifactId}.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-statemachine-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
             </list>
         </property>
     </bean>
 
-    <bean id="activitiCustomizer" class="ru.it.lecm.base.workflow.listener.ActivitiConfigurationCustomizer" >
+    <bean id="activitiCustomizer" class="ru.it.lecm.base.statemachine.listener.ActivitiConfigurationCustomizer" >
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
-    <bean id="workflowHelper" class="ru.it.lecm.base.workflow.WorkflowHelper">
+    <bean id="stateMachineHelper" class="ru.it.lecm.base.statemachine.StateMachineHelper">
         <property name="serviceRegistry" ref="ServiceRegistry" />
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
-    <bean id="workflowPolicy" class="ru.it.lecm.base.workflow.policy.WorkflowPolicy" init-method="init">
+    <bean id="stateMachineHandler" class="ru.it.lecm.base.statemachine.listener.StateMachineHandler">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
+
+    <bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.policy.StateMachineDocumentListenerPolicy" init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent" />
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
         </property>
+    </bean>
+
+    <bean id="documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean"/>
+
+    <bean id="documentStateMachinePolicy" class="ru.it.lecm.base.statemachine.policy.DocumentStateMachinePolicy" init-method="init">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+        <property name="documentStateMachineBean" ref="documentStateMachineBean" />
+        <property name="policyComponent" ref="policyComponent" />
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.statemachine.choosestate.get"
+          class="ru.it.lecm.base.statemachine.script.ChooseStateScript"
+          parent="webscript">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.statemachine.documents.get"
+          class="ru.it.lecm.base.statemachine.script.DocumentListScript"
+          parent="webscript">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+        <property name="documentStateMachineBean" ref="documentStateMachineBean" />
     </bean>
 
 </beans>

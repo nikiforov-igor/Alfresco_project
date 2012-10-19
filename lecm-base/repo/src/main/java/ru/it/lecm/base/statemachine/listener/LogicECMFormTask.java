@@ -1,9 +1,8 @@
-package ru.it.lecm.base.workflow.listener;
+package ru.it.lecm.base.statemachine.listener;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
-import org.activiti.engine.impl.el.FixedValue;
-import ru.it.lecm.base.workflow.WorkflowHelper;
+import ru.it.lecm.base.statemachine.StateMachineHelper;
 
 /**
  * User: PMelnikov
@@ -17,7 +16,7 @@ public class LogicECMFormTask implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        new WorkflowHelper().startDocumentProcessing(delegateTask.getId());
+        new StateMachineHelper().startDocumentProcessing(delegateTask.getId());
     }
 
 }

@@ -1,8 +1,8 @@
-package ru.it.lecm.base.workflow.listener;
+package ru.it.lecm.base.statemachine.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
-import ru.it.lecm.base.workflow.WorkflowHelper;
+import ru.it.lecm.base.statemachine.StateMachineHelper;
 
 /**
  * User: PMelnikov
@@ -17,6 +17,6 @@ public class EndEventListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
-        new WorkflowHelper().stopUserWorkflowProcessing(delegateExecution);
+        new StateMachineHelper().stopUserWorkflowProcessing(delegateExecution);
     }
 }

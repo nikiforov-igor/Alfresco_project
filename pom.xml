@@ -73,6 +73,7 @@
         <module>lecm-jasperreports-forms</module>
 	    <module>lecm-dictionary</module>
 	    <module>lecm-dictionary-regions</module>
+	    <module>lecm-contracts</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

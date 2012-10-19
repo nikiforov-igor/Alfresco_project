@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="lecm-workflow:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Logic ECM workflow model</description>
+<model name="lecm-statemachine:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM statemachine model</description>
     <author>Logic ECM</author>
     <version>1.0</version>
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
     </imports>
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/workflow/1.0" prefix="lecm-workflow"/>
+        <namespace uri="http://www.it.ru/logicECM/statemachine/1.0" prefix="lecm-statemachine"/>
     </namespaces>
     <constraints>
-        <constraint name="lecm-workflow:statuses" type="LIST">
+        <constraint name="lecm-statemachine:statuses" type="LIST">
             <parameter name="allowedValues">
                 <list>
                     <value>NEW</value>
+                    <value>DRAFT</value>
                     <value>ON_AGREEMENT</value>
+                    <value>AGREED</value>
                     <value>ON_REFINING</value>
                     <value>ON_SIGNING</value>
                     <value>CANCELED</value>
@@ -23,21 +25,21 @@
             </parameter>
         </constraint>
     </constraints>    <aspects>
-        <aspect name="lecm-workflow:documentTask">
+        <aspect name="lecm-statemachine:documentTask">
             <properties>
-                <property name="lecm-workflow:stateProcess">
+                <property name="lecm-statemachine:stateProcess">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
             </properties>
         </aspect>
-        <aspect name="lecm-workflow:documentStatus">
+        <aspect name="lecm-statemachine:documentStatus">
             <properties>
-                <property name="lecm-workflow:status">
+                <property name="lecm-statemachine:status">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <constraints>
-                        <constraint ref="lecm-workflow:statuses" />
+                        <constraint ref="lecm-statemachine:statuses" />
                     </constraints>
                 </property>
             </properties>

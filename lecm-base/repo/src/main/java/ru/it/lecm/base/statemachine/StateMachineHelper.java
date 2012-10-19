@@ -1,7 +1,22 @@
-package ru.it.lecm.base.workflow;
+package ru.it.lecm.base.statemachine;
 
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmActivity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.Execution;
+import org.activiti.engine.runtime.ExecutionQuery;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
+import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
@@ -12,10 +27,12 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.workflow.policy.WorkflowPolicy;
+import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
 import java.util.*;
@@ -32,7 +49,7 @@ import java.util.*;
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  *
  */
-public class WorkflowHelper {
+public class StateMachineHelper {
 
     private static ServiceRegistry serviceRegistry;
     private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
@@ -50,11 +67,11 @@ public class WorkflowHelper {
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        WorkflowHelper.serviceRegistry = serviceRegistry;
+        StateMachineHelper.serviceRegistry = serviceRegistry;
     }
 
     public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
-        WorkflowHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
+        StateMachineHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
     }
 
     public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
@@ -146,10 +163,10 @@ public class WorkflowHelper {
                             document = item.getChildRef();
                         }
 
-                        if (!nodeService.hasAspect(document, WorkflowPolicy.WORKFLOW_DOCUMENT_TASK_ASPECT)) {
-                            nodeService.addAspect(document, WorkflowPolicy.WORKFLOW_DOCUMENT_TASK_ASPECT, null);
+                        if (!nodeService.hasAspect(document, StateMachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+                            nodeService.addAspect(document, StateMachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
                         }
-                        nodeService.setProperty(document, WorkflowPolicy.WORKFLOW_DOCUMENT_TASK_STATE_PROCESS_PROPERTY, taskId);
+                        nodeService.setProperty(document, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
                         return null;
                     }
                 }, AuthenticationUtil.SYSTEM_USER_NAME);
@@ -159,8 +176,79 @@ public class WorkflowHelper {
     }
 
     public void stopDocumentProcessing(String taskId) {
+        nextTransition(ACTIVITI_PREFIX + taskId);
+    }
+
+    public List<StateMachineAction> getTaskActions(String taskId, String onFire) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+            ProcessInstance process= runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+            ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService() )
+                    .getDeployedProcessDefinition(process.getProcessDefinitionId());
+            ActivityImpl activity = processDefinitionEntity.findActivity(((ExecutionEntity) execution).getActivityId());
+            List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+            for (ExecutionListener listener : listeners) {
+                if (listener instanceof StateMachineHandler) {
+                    result = ((StateMachineHandler) listener).getEvents().get(onFire);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<StateMachineAction> getTaskActionsByName(String taskId, String actionType, String onFire) {
+        List<StateMachineAction> actions = getTaskActions(taskId, onFire);
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        for (StateMachineAction action : actions) {
+            if (action.getType().equalsIgnoreCase(actionType)) {
+                result.add(action);
+            }
+        }
+        return  result;
+    }
+
+    public void addProcessDependency(String currentTask, String dependencyProcess) {
+        String taskId = currentTask.replace(ACTIVITI_PREFIX, "");
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        Execution execution = runtimeService.createExecutionQuery().processInstanceId(dependencyProcess.replace(ACTIVITI_PREFIX, "")).singleResult();
+        runtimeService.setVariable(execution.getId(), PROP_PARENT_PROCESS_ID, Long.valueOf(taskId));
+    }
+
+    public void setExecutionParamenters(String taskId, Map<String, String> parameters) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            for (String key : parameters.keySet()) {
+                runtimeService.setVariable(task.getExecutionId(), key, parameters.get(key));
+            }
+        }
+    }
+
+    public void nextTransition(String taskId) {
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        workflowService.endTask(ACTIVITI_PREFIX + taskId, null);
+        workflowService.endTask(taskId, null);
+    }
+
+    public String getCurrentTaskId(String executionId) {
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        return ACTIVITI_PREFIX + task.getId();
+    }
+
+    public String getCurrentExecutionId(String taskId) {
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        return task.getExecutionId();
     }
 
 }

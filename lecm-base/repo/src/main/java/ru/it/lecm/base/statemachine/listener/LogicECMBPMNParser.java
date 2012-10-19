@@ -1,17 +1,13 @@
-package ru.it.lecm.base.workflow.listener;
+package ru.it.lecm.base.statemachine.listener;
 
 import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.delegate.TaskListener;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.bpmn.parser.BpmnParseListener;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.ScopeImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.impl.util.xml.Element;
 import org.activiti.engine.impl.variable.VariableDeclaration;
-import org.activiti.engine.runtime.Execution;
 
 import java.util.List;
 
@@ -23,7 +19,7 @@ import java.util.List;
  * Класс парсер, вызывается при инициализации рабочего
  * процесса и добавляет слушателя на завершение процесса.
  */
-public class EndEventParseListener implements BpmnParseListener {
+public class LogicECMBPMNParser implements BpmnParseListener {
 
 
     @Override
@@ -64,6 +60,16 @@ public class EndEventParseListener implements BpmnParseListener {
 
     @Override
     public void parseUserTask(Element element, ScopeImpl scope, ActivityImpl activity) {
+        Element extentionElements = element.element("extensionElements");
+        if (extentionElements != null) {
+            Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extention");
+            if (lecmExtention != null) {
+                StateMachineHandler handler = new StateMachineHandler(lecmExtention);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, handler);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_END, handler);
+            }
+        }
     }
 
     @Override

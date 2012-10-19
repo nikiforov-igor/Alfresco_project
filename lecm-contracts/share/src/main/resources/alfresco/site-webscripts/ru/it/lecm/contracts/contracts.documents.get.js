@@ -1,6 +1,6 @@
-var json = remote.call("/lecm/workflow/documents?workflowId=contractWorkflow");
+var json = remote.call("/lecm/statemachine/documents?documentType=lecm-contract:document");
 
 if (json.status == 200) {
-    obj = eval("(" + json + ")");
+    var obj = eval("(" + json + ")");
     model.documents = obj;
 }

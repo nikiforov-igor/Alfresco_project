@@ -49,6 +49,10 @@
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-data-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.extensions.surf</groupId>
+            <artifactId>spring-webscripts</artifactId>
+        </dependency>
 
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>

@@ -166,23 +166,7 @@ LogicECM.module = LogicECM.module || {};
                 },*/
                 onSuccess:{
                     fn: function (response) {
-                        var workflowUrl = Alfresco.constants.PROXY_URI + "lecm/workflow/stateProcess?workflowId={workflowId}&nodeRef={nodeRef}";
-
-                        workflowUrl = YAHOO.lang.substitute(workflowUrl, {
-                            workflowId: this.workflowId,
-                            nodeRef: response.json.persistedObject
-                        });
-
-                        var callback = {
-                            success:function (oResponse) {
-                                oResponse.argument.contractsObject._refreshList();
-                            },
-                            argument:{
-                                contractsObject: this
-                            },
-                            timeout:7000
-                        };
-                        YAHOO.util.Connect.asyncRequest('GET', workflowUrl, callback);
+                        this._refreshList();
                     },
                     scope: this
                 }
