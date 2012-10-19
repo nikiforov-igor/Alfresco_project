@@ -19,7 +19,7 @@
 -->
 <beans>
 
-    <bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+    <bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap,ru.it.lecm.base.base-repo.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
