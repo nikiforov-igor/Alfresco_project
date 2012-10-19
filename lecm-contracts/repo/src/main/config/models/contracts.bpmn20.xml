@@ -54,16 +54,16 @@
             </extensionElements>
         </userTask>
         <sequenceFlow id="flow2" name="" sourceRef="new" targetRef="onAgreement"></sequenceFlow>
-        <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+        <exclusiveGateway id="parallelgateway1" name="Parallel Gateway"></exclusiveGateway>
         <sequenceFlow id="flow3" name="" sourceRef="onAgreement" targetRef="parallelgateway1"></sequenceFlow>
         <userTask id="onRefining" name="На доработке" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow4" name="${!agreed}" sourceRef="parallelgateway1" targetRef="onRefining">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome != 'Approve'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression">${wf_reviewOutcome != 'Approve'}</conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow5" name="" sourceRef="onRefining" targetRef="onAgreement"></sequenceFlow>
         <userTask id="onSigning" name="На подписании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
         <sequenceFlow id="flow6" name="${agreed}" sourceRef="parallelgateway1" targetRef="onSigning">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome == 'Approve'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression">${wf_reviewOutcome == 'Approve'}</conditionExpression>
         </sequenceFlow>
         <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="flow7" name="" sourceRef="onSigning" targetRef="exclusivegateway1"></sequenceFlow>
