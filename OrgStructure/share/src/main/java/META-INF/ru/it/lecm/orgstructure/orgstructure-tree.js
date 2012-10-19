@@ -205,7 +205,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
-            this.tree.currentFocus._removeFocus(); // for correct highlight
+            if (this.tree.currentFocus) {
+                this.tree.currentFocus._removeFocus(); // for correct highlight
+            }
             if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
                 Bubbling.fire("orgElementSelected",
                     {

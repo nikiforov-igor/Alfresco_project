@@ -149,7 +149,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
                         createRow.setOptions(
                             {
-                                width:"40em",
+                                width:"33em",
                                 templateUrl:templateUrl,
                                 actionUrl:null,
                                 destroyOnHide:false,

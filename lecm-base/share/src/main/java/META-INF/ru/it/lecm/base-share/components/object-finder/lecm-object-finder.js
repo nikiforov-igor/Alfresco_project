@@ -1118,24 +1118,24 @@ LogicECM.module = LogicECM.module || {};
        * @param args {array} Event parameters (depends on event type)
        */
       onParentDetails:function ObjectFinder_onParentDetails(layer, args) {
-          // cut the last x parent elements
-          if (this.options.numberOfHiddenLayers > 0) {
-              var number = this.options.numberOfHiddenLayers;
-              var counter = 0;
-              var cut = function (node) {
-                  if (node.parent) {
-                      cut(node.parent);
-                      if (counter < number) {
-                          delete node.parent;
-                          counter = counter + 1;
-                      }
-                  }
-                  return node;
-              };
-              args[1] = cut(args[1]);
-          }
           // Check the event is directed towards this instance
           if ($hasEventInterest(this, args)) {
+              // cut the last x parent elements
+              if (this.options.numberOfHiddenLayers > 0) {
+                  var number = this.options.numberOfHiddenLayers;
+                  var counter = 0;
+                  var cut = function (node) {
+                      if (node.parent) {
+                          cut(node.parent);
+                          if (counter < number) {
+                              delete node.parent;
+                              counter = counter + 1;
+                          }
+                      }
+                      return node;
+                  };
+                  args[1] = cut(args[1]);
+              }
               var obj = args[1];
               if (obj && obj.parent) {
                   var arrItems = [],
