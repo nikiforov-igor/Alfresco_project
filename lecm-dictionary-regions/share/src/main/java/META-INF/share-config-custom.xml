@@ -6,6 +6,10 @@
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic-regions:code"/>
                     <show id="lecm-dic-regions:description_values" force="true"/>
+                    <show id="cm:creator" for-mode="view" />
+                    <show id="cm:created" for-mode="view" />
+                    <show id="cm:modifier" for-mode="view" />
+                    <show id="cm:modified" for-mode="view" />
 				</field-visibility>
 			</form>
 		</forms>

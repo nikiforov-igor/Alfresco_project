@@ -165,20 +165,10 @@
             }
 
             // Check if the dialog has been showed before
-            if (this.widgets.panel)
-            {
-                // It'll need updating, probably.
-                this.update(this.showConfig.nodeRef);
-
-                // The displaying.
-                this._showPanel();
-            }
-            else
-            {
                 // If it hasn't load the gui (template) from the server
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "modules/document-details/historic-properties-viewer?nodeRef=" + this.showConfig.currentNodeRef + "&htmlid=" + this.id,
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/historic-properties-viewer?nodeRef=" + this.showConfig.currentNodeRef + "&htmlid=" + this.id,
                         successCallback:
                         {
                             fn: this.onTemplateLoaded,
@@ -198,8 +188,6 @@
                         scope: this,
                         correctScope: true
                     });
-
-            }
 
         },
 

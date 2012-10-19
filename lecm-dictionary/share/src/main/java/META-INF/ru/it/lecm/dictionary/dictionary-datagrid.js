@@ -306,6 +306,7 @@
         * @type {Object} XHR response object
         */
        versionCache: null,
+       versionable: false,
 
        doActionFilter: function ()
        {
@@ -1451,8 +1452,8 @@
                success:
                    function (oRequest, oFullResponse) {
                        var oResults = eval("(" + oRequest.responseText + ")");
-                       this.latestVersion = oResults.splice(0, 1)[0];
                        this.versionCache = oResults;
+                       this.latestVersion = oResults.splice(0, 1)[0];
                        this.onViewHistoricPropertiesClick(item.nodeRef);
                    }.bind(this),
                failure:function (oResponse) {
@@ -1465,10 +1466,9 @@
            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
        },
 
-       onActionShowMore: function(item) {
+       onActionVersion: function(item) {
            this.doBeforeParseData(item);
        },
-
        onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)
        {
 
