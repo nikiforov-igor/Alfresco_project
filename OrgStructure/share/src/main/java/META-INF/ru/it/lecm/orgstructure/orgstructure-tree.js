@@ -179,8 +179,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 });
                         }
                     }
+
+                    if (oResponse.argument.fnLoadComplete != null) {
+                        oResponse.argument.fnLoadComplete();
+                    } else {
                         otree.tree.render();
                         otree.onExpandComplete(null);
+                    }
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
