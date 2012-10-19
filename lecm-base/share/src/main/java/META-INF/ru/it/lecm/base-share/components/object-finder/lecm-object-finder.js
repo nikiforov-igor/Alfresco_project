@@ -420,7 +420,9 @@ LogicECM.module = LogicECM.module || {};
            * - {organization}
            */
          xPathLocation: null,
-         xPathLocationRoot:null
+         xPathLocationRoot:null,
+
+         numberOfHiddenLayers:0
       },
 
       /**
@@ -1115,67 +1117,75 @@ LogicECM.module = LogicECM.module || {};
        * @param layer {object} Event fired
        * @param args {array} Event parameters (depends on event type)
        */
-      onParentDetails: function ObjectFinder_onParentDetails(layer, args)
-      {
-         // Check the event is directed towards this instance
-         if ($hasEventInterest(this, args))
-         {
-            var obj = args[1];
-            if (obj && obj.parent)
-            {
-               var arrItems = [],
-                  item = obj.parent,
-                  navButton = this.widgets.navigationMenu,
-                  navMenu = navButton.getMenu(),
-                  navGroup = navMenu.getItemGroups()[0],
-                  indent = "";
-               
-               // Create array, deepest node first in final array
-               while (item)
-               {
-                  arrItems = [item].concat(arrItems);
-                  item = item.parent;
-               }
+      onParentDetails:function ObjectFinder_onParentDetails(layer, args) {
+          // cut the last x parent elements
+          if (this.options.numberOfHiddenLayers > 0) {
+              var number = this.options.numberOfHiddenLayers;
+              var counter = 0;
+              var cut = function (node) {
+                  if (node.parent) {
+                      cut(node.parent);
+                      if (counter < number) {
+                          delete node.parent;
+                          counter = counter + 1;
+                      }
+                  }
+                  return node;
+              };
+              args[1] = cut(args[1]);
+          }
+          // Check the event is directed towards this instance
+          if ($hasEventInterest(this, args)) {
+              var obj = args[1];
+              if (obj && obj.parent) {
+                  var arrItems = [],
+                      item = obj.parent,
+                      navButton = this.widgets.navigationMenu,
+                      navMenu = navButton.getMenu(),
+                      navGroup = navMenu.getItemGroups()[0],
+                      indent = "";
 
-               var i, ii;
-               for (i = 0, ii = navGroup.length; i < ii; i++)
-               {
-                  navMenu.removeItem(0, 0, true);
-               }
-               
-               item = arrItems[arrItems.length - 1];
-               navButton.set("label", this.options.objectRenderer.renderItem(item, 16, '<div><span class="item-icon">{icon}</span><span class="item-name">{name}</span></div>'));
-               
-               // Navigation Up button
-               if (arrItems.length > 1)
-               {
-                  this.widgets.folderUp.set("value", arrItems[arrItems.length - 2]);
-                  this.widgets.folderUp.set("disabled", false);
-               }
-               else
-               {
-                  this.widgets.folderUp.set("disabled", true);
-               }
-               
-               var menuItem;
-               for (i = 0, ii = arrItems.length; i < ii; i++)
-               {
-                  item = arrItems[i];
-                  menuItem = new YAHOO.widget.MenuItem(this.options.objectRenderer.renderItem(item, 16, indent + '<span class="item-icon">{icon}</span><span class="item-name">{name}</span>'),
-                  {
-                     value: item.nodeRef
-                  });
-                  menuItem.cfg.addProperty("label",
-                  {
-                     value: item.name
-                  });
-                  navMenu.addItem(menuItem, 0);
-                  indent += "&nbsp;&nbsp;&nbsp;";
-               }
-               
-               navMenu.render();
-            }
-         }
+                  // Create array, deepest node first in final array
+                  while (item) {
+                      arrItems = [item].concat(arrItems);
+                      item = item.parent;
+                  }
+
+                  var i, ii;
+                  for (i = 0, ii = navGroup.length; i < ii; i++) {
+                      navMenu.removeItem(0, 0, true);
+                  }
+
+                  item = arrItems[arrItems.length - 1];
+                  navButton.set("label", this.options.objectRenderer.renderItem(item, 16, '<div><span class="item-icon">{icon}</span><span class="item-name">{name}</span></div>'));
+
+                  // Navigation Up button
+                  if (arrItems.length > 1) {
+                      this.widgets.folderUp.set("value", arrItems[arrItems.length - 2]);
+                      this.widgets.folderUp.set("disabled", false);
+                  }
+                  else {
+                      this.widgets.folderUp.set("disabled", true);
+                  }
+
+                  var menuItem;
+                  for (i = 0, ii = arrItems.length; i < ii; i++) {
+                      item = arrItems[i];
+                      menuItem = new YAHOO.widget.MenuItem(this.options.objectRenderer.renderItem(item, 16, indent + '<span class="item-icon">{icon}</span><span class="item-name">{name}</span>'),
+                          {
+                              value:item.nodeRef
+                          });
+                      menuItem.cfg.addProperty("label",
+                          {
+                              value:item.name
+                          });
+                      navMenu.addItem(menuItem, 0);
+                      indent += "&nbsp;&nbsp;&nbsp;";
+                  }
+
+                  navMenu.render();
+              }
+          }
       },
       
       /**
@@ -1187,7 +1197,8 @@ LogicECM.module = LogicECM.module || {};
        */
       onFormContainerDestroyed: function ObjectFinder_onFormContainerDestroyed(layer, args)
       {
-         if (this.widgets.dialog)
+         //TODO for call multiDialogs
+         /*if (this.widgets.dialog)
          {
             this.widgets.dialog.destroy();
             delete this.widgets.dialog;
@@ -1196,7 +1207,7 @@ LogicECM.module = LogicECM.module || {};
          {
             this.widgets.resizer.destroy();
             delete this.widgets.resizer;
-         }
+         }*/
       },
 
 

@@ -35,6 +35,9 @@
    <#if field.control.params.startLocationParams??>
       startLocationParams: "${field.control.params.startLocationParams?js_string}",
    </#if>
+    <#if field.control.params.numberOfHiddenLayers??>
+      numberOfHiddenLayers: "${field.control.params.numberOfHiddenLayers?number}",
+    </#if>
       currentValue: "${field.value}",
       <#if field.control.params.valueType??>valueType: "${field.control.params.valueType}",</#if>
       <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>

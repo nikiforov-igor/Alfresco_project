@@ -4,7 +4,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-<#if field.control.params.numberOfHiddenLayers??>
+<#--<#if field.control.params.numberOfHiddenLayers??>
     // place a custom function before the execution of the onParentDetails-function
     LogicECM.module.ObjectFinder.prototype.onParentDetailsOriginal = LogicECM.module.ObjectFinder.prototype.onParentDetails;
     LogicECM.module.ObjectFinder.prototype.onParentDetails = function(layer, args)
@@ -27,7 +27,7 @@
         // call the original function with the modified args-parameter
         this.onParentDetailsOriginal(layer, args);
     };
-</#if>
+</#if>-->
 
 <@renderPickerJS field "picker" />
     picker.setOptions(
