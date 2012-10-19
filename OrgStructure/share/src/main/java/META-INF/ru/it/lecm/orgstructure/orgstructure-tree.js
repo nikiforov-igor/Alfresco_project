@@ -238,7 +238,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 },
                 onSuccess:{
                     fn:function () {
-                        context._loadTree(context.selectedNode.parent).bind(context);
+                        this._loadTree(this.selectedNode.parent, function () {
+                            this.tree.render();
+                            this.selectedNode.focus();
+                        }.bind(this));
                     },
                     scope:this
                 }
