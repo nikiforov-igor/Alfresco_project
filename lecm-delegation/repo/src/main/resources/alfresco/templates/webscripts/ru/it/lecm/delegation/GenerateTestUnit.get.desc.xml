@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>test unit generator</shortname>
+	<description>simple generator for test-unit objects</description>
+	<url>/logicecm/generateTestUnit</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+</webscript>

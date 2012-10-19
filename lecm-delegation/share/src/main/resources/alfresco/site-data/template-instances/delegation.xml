@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+   <template-type>ru/it/lecm/delegation/delegation</template-type>
+   <properties>
+      <pageFamily>delegation</pageFamily>
+      <container>delegation</container>
+   </properties>
+   <components>
+
+	   <component>
+         <region-id>view</region-id>
+         <url>/ru/it/lecm/delegation/view</url>
+      </component>
+
+   </components>
+</template-instance>

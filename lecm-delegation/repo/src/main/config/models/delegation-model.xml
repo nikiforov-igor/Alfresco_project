@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-dlg:delegationModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->
+	<description>Test delegation model</description>
+	<author>VMalygin</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Import User Model Definitions -->
+		<import uri="http://www.alfresco.org/model/user/1.0" prefix="usr"/>
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/delegation/1.0" prefix="lecm-dlg"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-dlg:test-unit">
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-dlg:testUnitId">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-dlg:testUnitName">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-dlg:testUnitTitle">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-dlg:testUnitDate">
+					<type>d:datetime</type>
+				</property>
+			</properties>
+		</type>
+	</types>
+
+</model>
