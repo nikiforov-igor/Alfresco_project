@@ -236,7 +236,7 @@
                         </constraint>
                     </constraints>
                 </property>
-                <property name="lecm-orgstr:unii-is_exists">
+                <property name="lecm-orgstr:unit-is-exists">
                     <title>Is exists</title>
                     <type>d:boolean</type>
                     <default>true</default>
@@ -505,7 +505,7 @@
                     </source>
                     <target>
                         <class>lecm-orgstr:workforce</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>true</many>
                     </target>
                 </association>
@@ -532,7 +532,7 @@
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -564,7 +564,7 @@
                     </source>
                     <target>
                         <class>lecm-orgstr:position</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>

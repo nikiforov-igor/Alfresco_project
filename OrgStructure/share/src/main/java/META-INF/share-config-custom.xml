@@ -1,4 +1,31 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <default-controls>
+                <type name="association:lecm-orgstr:unit-composition" template="/ru/it/lecm/orgstructure/controls/unitCompositions.ftl"/>
+                <type name="association:lecm-orgstr:workforce" template="/ru/it/lecm/orgstructure/controls/workForces.ftl"/>
+                <type name="association:lecm-orgstr:office" template="/ru/it/lecm/base-share/components/associationControl.ftl">
+                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:office-container')]</control-param>
+                    <control-param name="xPathLocationRoot">{organization}</control-param>
+                    <control-param name="numberOfHiddenLayers">2</control-param>
+                </type>
+                <type name="association:lecm-orgstr:employee" template="/ru/it/lecm/base-share/components/associationControl.ftl">
+                        <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:employee-container')]</control-param>
+                        <control-param name="xPathLocationRoot">{organization}</control-param>
+                        <control-param name="numberOfHiddenLayers">2</control-param>
+                </type>
+                <type name="association:lecm-orgstr:position" template="/ru/it/lecm/base-share/components/associationControl.ftl">
+                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:staff-list')]</control-param>
+                    <control-param name="xPathLocationRoot">{organization}</control-param>
+                    <control-param name="numberOfHiddenLayers">2</control-param>
+                </type>
+            </default-controls>
+            <dependencies>
+                <js src="/ru/it/lecm/orgstructure/controls/unit-composition.js" />
+                <js src="/ru/it/lecm/orgstructure/controls/workforce.js" />
+            </dependencies>
+        </forms>
+    </config>
 
     <config evaluator="node-type" condition="lecm-orgstr:employee">
         <forms>
@@ -102,10 +129,9 @@
                     <show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-orgstr:unii-is_exists"/>
+                    <show id="lecm-orgstr:unit-is-exists"/>
                     <show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <!--<show id="lecm-orgstr:unit-inner-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>
@@ -117,13 +143,12 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                   <!-- <show id="lecm-orgstr:element-official-assoc"/>-->
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-orgstr:unii-is_exists"/>
-                    <!--<show id="lecm-orgstr:unit-offices-assoc"/>
+                    <show id="lecm-orgstr:unit-is-exists"/>
+                    <show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <show id="lecm-orgstr:unit-inner-assoc"/>-->
+                    <show id="lecm-orgstr:element-official-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -256,10 +281,10 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <!--<show id="lecm-orgstr:element-official-assoc"/>-->
                     <show id="lecm-orgstr:project-target"/>
                     <show id="lecm-orgstr:project-schedule"/>
-                    <!--<show id="lecm-orgstr:project-workforce-assoc"/>-->
+                    <show id="lecm-orgstr:element-official-assoc"/>
+                    <show id="lecm-orgstr:project-workforce-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -293,10 +318,10 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-orgstr:composition-employee-assoc"/>
+                    <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-is-boss"/>
                     <show id="lecm-orgstr:composition-is-primary"/>
-                    <show id="lecm-orgstr:composition-position-assoc"/>
-                    <show id="lecm-orgstr:composition-employee-assoc"/>
                 </field-visibility>
             </form>
         </forms>

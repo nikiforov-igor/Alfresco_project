@@ -132,14 +132,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     });
 
                 // Using Forms Service, so always create new instance
-                var createRow = new Alfresco.module.SimpleDialog(this.id + "-createRow");
+                var createRow = new Alfresco.module.SimpleDialog("toolbar-createRow");
 
                 createRow.setOptions(
                     {
-                        width:"33em",
+                        width:"50em",
                         templateUrl:templateUrl,
                         actionUrl:null,
-                        destroyOnHide:true,
+                        destroyOnHide:false,
                         doBeforeDialogShow:{
                             fn:doBeforeDialogShow,
                             scope:this

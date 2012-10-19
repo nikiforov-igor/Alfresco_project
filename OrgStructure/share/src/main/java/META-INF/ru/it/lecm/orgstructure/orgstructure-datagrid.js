@@ -1352,7 +1352,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         width: "34em",
                         templateUrl: templateUrl,
                         actionUrl: null,
-                        destroyOnHide: true,
+                        destroyOnHide: false,
                         doBeforeDialogShow:
                         {
                             fn: doBeforeDialogShow,

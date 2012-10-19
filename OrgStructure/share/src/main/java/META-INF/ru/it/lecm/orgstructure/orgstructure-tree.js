@@ -35,6 +35,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
     var Dom = YAHOO.util.Dom
     var Bubbling = YAHOO.Bubbling;
+    var Event = YAHOO.util.Event;
 
     LogicECM.module.OrgStructure.Tree = function (htmlId) {
         LogicECM.module.OrgStructure.Tree.superclass.constructor.call(
@@ -44,7 +45,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             ["button", "container", "connection", "json", "selector"]);
 
         Bubbling.on("unitCreated", this.onNewUnitCreated, this);
-
         return this;
     };
 
@@ -56,6 +56,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             templateUrl:null,
             actionUrl:null,
             firstFocus:null,
+            insituEditors:null,
             onSuccess:{
                 fn:null,
                 obj:null,
@@ -74,23 +75,37 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _createTree:function (parent) {
-            /*var treeContainer = document.createElement("div");
-             treeContainer.id = this.id + "-tree";
-             parent.appendChild(treeContainer);*/
+            this.options.insituEditors = [];
 
             this.tree = new YAHOO.widget.TreeView(this.id);
             this.tree.singleNodeHighlight = true;
-            this.tree.setDynamicLoad(this._loadTree);
+            this.tree.setDynamicLoad(this._loadTree.bind(this));
             var root = this.tree.getRoot();
             this._loadTree(root);
+
             this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
+            this.tree.subscribe("expandComplete", this.onExpandComplete, this, true);
             this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.subscribe('clickEvent', function (event) {
                 this._treeNodeSelected(event.node);
                 return false;
             }.bind(this));
+
             this.tree.render();
+        },
+        onExpandComplete:function OT_onExpandComplete(oNode) {
+            for (var i in this.options.insituEditors) {
+                /*try {*/
+                    Alfresco.util.createInsituEditor(
+                        this.options.insituEditors[i].context,
+                        this.options.insituEditors[i].params,
+                        this.options.insituEditors[i].callback
+                    );
+                /*} catch (ex) {
+                    YAHOO.error("Failed to create Editor.", "info", "example");
+                }*/
+            }
         },
         _createUrl:function (type, nodeRef, childNodeType) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
@@ -124,7 +139,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             } else {
                 sUrl += "?onlyStructure=true";
             }
-
+            var otree = this;
             var callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -141,14 +156,31 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 childType:namespace + ":" + oResults[nodeIndex].childType,
                                 childAssoc:namespace + ":" + oResults[nodeIndex].childAssoc
                             };
-                            new YAHOO.widget.TextNode(newNode, node);
+
+                            var curElement = new YAHOO.widget.TextNode(newNode, node);
+
+                            var ref = curElement.data.nodeRef;
+                            curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
+                            curElement.id = curElement.labelElId;
+
+                            otree.options.insituEditors.push(
+                                {
+                                    context:curElement.labelElId,
+                                    params:{
+                                        showDelay:300,
+                                        hideDelay:300,
+                                        type:"organizationUnit",
+                                        unitID:curElement.labelElId,
+                                        unitName:curElement.label,
+                                        curElem:curElement,
+                                        unitAdmin:otree
+                                    },
+                                    callback:null
+                                });
                         }
                     }
-                    if (oResponse.argument.fnLoadComplete != null) {
-                        oResponse.argument.fnLoadComplete();
-                    } else {
-                        oResponse.argument.tree.render();
-                    }
+                        otree.tree.render();
+                        otree.onExpandComplete(null);
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
@@ -158,8 +190,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 },
                 argument:{
                     node:node,
-                    fnLoadComplete:fnLoadComplete,
-                    tree:this.tree
+                    fnLoadComplete:fnLoadComplete
                 },
                 timeout:7000
             };
@@ -168,7 +199,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
-            this.tree.currentFocus._removeFocus();
+            this.tree.currentFocus._removeFocus(); // for correct highlight
             if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
                 Bubbling.fire("orgElementSelected",
                     {
@@ -191,20 +222,41 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
-            new Alfresco.module.SimpleDialog("form-dialog").setOptions({
-                width:"40em",
+            var context = this;
+            new Alfresco.module.SimpleDialog("editUnit-dialog").setOptions({
+                width:"50em",
                 templateUrl:templateUrl,
                 actionUrl:null,
-                destroyOnHide:true,
+                destroyOnHide:false,
                 doBeforeDialogShow:{
                     fn:this._setFormDialogTitle
                 },
                 onSuccess:{
                     fn:function () {
-                        this._loadTree(this.selectedNode.parent, function () {
-                            this.tree.render();
-                            this.selectedNode.focus();
-                        }.bind(this));
+                        context._loadTree(context.selectedNode.parent).bind(context);
+                    },
+                    scope:this
+                }
+            }).show();
+            /*window.location.href = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
+                + "edit-metadata?nodeRef=" + this.selectedNode.data.nodeRef;*/
+        },
+        _addNode:function editNodeByEvent(event) {
+            var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, "lecm-orgstr:organization-unit");
+            new Alfresco.module.SimpleDialog("addUnit-dialog").setOptions({
+                width:"50em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:false,
+                doBeforeDialogShow:{
+                    fn:this._setFormDialogTitle
+                },
+                onSuccess:{
+                    fn:function Tree_onNewUnit_success(response) {
+                        YAHOO.Bubbling.fire("unitCreated",
+                            {
+                                nodeRef:response.json.persistedObject
+                            });
                     },
                     scope:this
                 }
@@ -223,23 +275,20 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/assoc";
                 var current = this.selectedNode;
 
-                var postData = "{source:\""+ encodeURI(current.data.nodeRef) + "\", " +
+                var postData = "{source:\"" + encodeURI(current.data.nodeRef) + "\", " +
                     "target:\"" + encodeURI(obj.nodeRef) + "\"," +
                     "assocType:\"" + encodeURI(current.data.childAssoc) + "\"}";
-
+                var otree = this;
                 var callback = {
                     success:function (oResponse) {
-                        var sNode = oResponse.argument.context.selectedNode;
-                        oResponse.argument.context._loadTree(sNode);
+                        var sNode = otree.selectedNode;
+                        otree._loadTree(sNode);
                         sNode.isLeaf = false;
                         sNode.expanded = true;
-                        oResponse.argument.context.tree.render();
+                        otree.tree.render();
                     },
                     failure:function (oResponse) {
                         YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    },
-                    argument:{
-                        context:this
                     },
                     timeout:7000
                 };
@@ -248,4 +297,83 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         }
     });
 
+    Alfresco.widget.InsituEditor.organizationUnit = function (p_params) {
+        this.params = YAHOO.lang.merge({}, p_params);
+
+        // Create icons instances
+        this.editIcon = new Alfresco.widget.InsituEditorUnitEdit(this, p_params);
+        this.addIcon = new Alfresco.widget.InsituEditorUnitAdd(this, p_params);
+        return this;
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditor.organizationUnit, Alfresco.widget.InsituEditor.textBox,
+        {
+            doShow:function InsituEditor_textBox_doShow() {
+                if (this.contextStyle === null)
+                    this.contextStyle = Dom.getStyle(this.params.context, "display");
+                Dom.setStyle(this.params.context, "display", "none");
+                Dom.setStyle(this.editForm, "display", "inline");
+            },
+
+            doHide:function InsituEditor_textBox_doHide(restoreUI) {
+                if (restoreUI) {
+                    Dom.setStyle(this.editForm, "display", "none");
+                    Dom.setStyle(this.params.context, "display", this.contextStyle);
+                }
+            },
+
+            _generateMarkup:function InsituEditor_textBox__generateMarkup() {
+                return;
+            }
+        });
+
+    Alfresco.widget.InsituEditorUnitAdd = function (p_editor, p_params) {
+        this.editor = p_editor;
+        this.params = YAHOO.lang.merge({}, p_params);
+        this.disabled = p_params.disabled;
+
+        this.editIcon = document.createElement("span");
+        this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+        Dom.addClass(this.editIcon, "insitu-add-unit");
+
+        this.params.context.appendChild(this.editIcon, this.params.context);
+        Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+        Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditorUnitAdd, Alfresco.widget.InsituEditorIcon,
+        {
+            onIconClick:function InsituEditorUnitAdd_onIconClick(e, obj) {
+                var context = obj.params.unitAdmin;
+                context.selectedNode = obj.params.curElem;
+                context._addNode(e);
+            }
+        });
+
+    Alfresco.widget.InsituEditorUnitEdit = function (p_editor, p_params) {
+        this.editor = p_editor;
+        this.params = YAHOO.lang.merge({}, p_params);
+        this.disabled = p_params.disabled;
+
+        this.editIcon = document.createElement("span");
+        this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+        Dom.addClass(this.editIcon, "insitu-edit-unit");
+
+        this.params.context.appendChild(this.editIcon, this.params.context);
+        Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+        Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditorUnitEdit, Alfresco.widget.InsituEditorIcon,
+        {
+            onIconClick:function InsituEditorUnitEdit_onIconClick(e, obj) {
+                var context = obj.params.unitAdmin;
+                context.selectedNode = obj.params.curElem;
+                context._editNode(e);
+            }
+        });
 })();

@@ -76,4 +76,16 @@
             <value>orgstructure</value>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.orgstructure.unit-composition-assocs.get"
+          class="ru.it.lecm.orgstructure.scripts.GetUnitCompositionAssocsBean"
+          parent="webscript">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.orgstructure.workforce-assocs.get"
+          class="ru.it.lecm.orgstructure.scripts.GetWorkforcesAssocsBean"
+          parent="webscript">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
 </beans>

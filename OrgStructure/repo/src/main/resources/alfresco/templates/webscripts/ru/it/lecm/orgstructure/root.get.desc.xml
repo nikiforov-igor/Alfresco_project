@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Root</shortname>
+    <description>Returns root of specialized folder in OrgStructure</description>
+    <url>/lecm/orgstructure/root</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
