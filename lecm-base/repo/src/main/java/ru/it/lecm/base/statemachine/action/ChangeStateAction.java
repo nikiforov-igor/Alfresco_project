@@ -11,22 +11,23 @@ import java.util.List;
  * Date: 18.10.12
  * Time: 11:44
  */
-public class ChooseStateAction extends StateMachineAction {
+public class ChangeStateAction extends StateMachineAction {
 
     private List<NextState> states = new ArrayList<NextState>();
     private static String PROP_LABEL = "labelId";
     private static String PROP_WORKFLOW = "workflowId";
-    private static String PROP_OUTPUT_VARIABLE_NAME = "outputVariableName";
-    private static String PROP_OUTPUT_VARIABLE_VALUE = "outputVariableValue";
+    private static String PROP_OUTPUT_VARIABLE_NAME = "variable";
+    private static String PROP_OUTPUT_VARIABLE_VALUE = "variableValue";
 
-    public ChooseStateAction(List<Element> attributes) {
+    public ChangeStateAction(Element action) {
+        String outputVariable = action.attribute(PROP_OUTPUT_VARIABLE_NAME);
+        List<Element> attributes  = action.elements("attribute");
         for (Element attribute : attributes) {
             List<Element> parameters = attribute.elements("parameter");
             String actionId = attribute.attribute("name");
             String label = "";
             String workflowId = "";
-            String outputVariableName = "";
-            String outputVariableValue = "";
+            String variableValue = "";
             for (Element parameter : parameters) {
                 String name = parameter.attribute("name");
                 String value = parameter.attribute("value");
@@ -34,13 +35,11 @@ public class ChooseStateAction extends StateMachineAction {
                     label = value;
                 } else if (PROP_WORKFLOW.equalsIgnoreCase(name)) {
                     workflowId = "activiti$" + value;
-                } else if (PROP_OUTPUT_VARIABLE_NAME.equalsIgnoreCase(name)) {
-                    outputVariableName = value;
                 } else if (PROP_OUTPUT_VARIABLE_VALUE.equalsIgnoreCase(name)) {
-                    outputVariableValue = value;
+                    variableValue = value;
                 }
             }
-            NextState nextState = new NextState(actionId, label, workflowId, outputVariableName, outputVariableValue);
+            NextState nextState = new NextState(actionId, label, workflowId, outputVariable, variableValue);
             states.add(nextState);
         }
     }
@@ -55,7 +54,7 @@ public class ChooseStateAction extends StateMachineAction {
 
     @Override
     public String getType() {
-        return "chooseState";
+        return "changeState";
     }
 
     public class NextState {

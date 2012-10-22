@@ -1,12 +1,10 @@
 package ru.it.lecm.base.statemachine.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.delegate.TaskListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.service.ServiceRegistry;
-import ru.it.lecm.base.statemachine.action.ChooseStateAction;
+import ru.it.lecm.base.statemachine.action.ChangeStateAction;
 import ru.it.lecm.base.statemachine.action.SetStatusAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 
@@ -70,8 +68,8 @@ public class StateMachineHandler implements ExecutionListener {
         StateMachineAction stateMachineAction = null;
         if ("setstatus".equalsIgnoreCase(actionName)) {
             stateMachineAction = new SetStatusAction(attributes);
-        } else if ("chooseState".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new ChooseStateAction(attributes);
+        } else if ("changeState".equalsIgnoreCase(actionName)) {
+            stateMachineAction = new ChangeStateAction(action);
         }
         if (stateMachineAction != null) {
             stateMachineAction.setServiceRegistry(serviceRegistry);

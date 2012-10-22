@@ -11,29 +11,27 @@
         <startEvent id="start" name="Alfresco start" activiti:formKey="cwf:startTask"></startEvent>
         <userTask id="new" name="Новый" activiti:assignee="${bpm_assignee.properties.userName}">
             <extensionElements>
-                <lecm:extention>
+                <lecm:extension>
                     <lecm:event on="start">
                         <lecm:action type="setStatus">
                             <lecm:attribute name="status" value="DRAFT"/>
                         </lecm:action>
                     </lecm:event>
                     <lecm:event on="take">
-                        <lecm:action type="chooseState">
+                        <lecm:action type="changeState" variable="Type">
                             <lecm:attribute name="agreement">
                                 <lecm:parameter name="labelId" value="На согласование"/>
                                 <lecm:parameter name="workflowId" value="activitiReview"/>
-                                <lecm:parameter name="outputVariableName" value="review"/>
-                                <lecm:parameter name="outputVariableValue" value="true"/>
+                                <lecm:parameter name="variableValue" value="true"/>
                             </lecm:attribute>
-                            <lecm:attribute name="singing">
+                            <lecm:attribute name="signing">
                                 <lecm:parameter name="labelId" value="На подписание"/>
                                 <lecm:parameter name="workflowId" value="activitiReview"/>
-                                <lecm:parameter name="outputVariableName" value="review"/>
-                                <lecm:parameter name="outputVariableValue" value="true"/>
+                                <lecm:parameter name="variableValue" value="false"/>
                             </lecm:attribute>
                         </lecm:action>
                     </lecm:event>
-                </lecm:extention>
+                </lecm:extension>
             </extensionElements>
         </userTask>
         <sequenceFlow id="flow1" name="" sourceRef="start" targetRef="new"></sequenceFlow>
@@ -56,12 +54,32 @@
         <sequenceFlow id="flow2" name="" sourceRef="new" targetRef="onAgreement"></sequenceFlow>
         <exclusiveGateway id="parallelgateway1" name="Parallel Gateway"></exclusiveGateway>
         <sequenceFlow id="flow3" name="" sourceRef="onAgreement" targetRef="parallelgateway1"></sequenceFlow>
-        <userTask id="onRefining" name="На доработке" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
+        <userTask id="onRefining" name="На доработке" activiti:assignee="${bpm_assignee.properties.userName}">
+            <extensionElements>
+                <lecm:extention>
+                    <lecm:event on="start">
+                        <lecm:action type="setStatus">
+                            <lecm:attribute name="status" value="ON_REFINING"/>
+                        </lecm:action>
+                    </lecm:event>
+                </lecm:extention>
+            </extensionElements>
+        </userTask>
         <sequenceFlow id="flow4" name="${!agreed}" sourceRef="parallelgateway1" targetRef="onRefining">
             <conditionExpression xsi:type="tFormalExpression">${wf_reviewOutcome != 'Approve'}</conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow5" name="" sourceRef="onRefining" targetRef="onAgreement"></sequenceFlow>
-        <userTask id="onSigning" name="На подписании" activiti:assignee="${bpm_assignee.properties.userName}"></userTask>
+        <userTask id="onSigning" name="На подписании" activiti:assignee="${bpm_assignee.properties.userName}">
+            <extensionElements>
+                <lecm:extention>
+                    <lecm:event on="start">
+                        <lecm:action type="setStatus">
+                            <lecm:attribute name="status" value="ON_SIGNING"/>
+                        </lecm:action>
+                    </lecm:event>
+                </lecm:extention>
+            </extensionElements>
+        </userTask>
         <sequenceFlow id="flow6" name="${agreed}" sourceRef="parallelgateway1" targetRef="onSigning">
             <conditionExpression xsi:type="tFormalExpression">${wf_reviewOutcome == 'Approve'}</conditionExpression>
         </sequenceFlow>

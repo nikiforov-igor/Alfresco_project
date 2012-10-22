@@ -6,7 +6,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
-import ru.it.lecm.base.statemachine.action.ChooseStateAction;
+import ru.it.lecm.base.statemachine.action.ChangeStateAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 
 import java.util.HashMap;
@@ -18,12 +18,12 @@ import java.util.Map;
  * Date: 17.10.12
  * Time: 16:18
  */
-public class ChooseStateScript extends DeclarativeWebScript {
+public class ChangeStateScript extends DeclarativeWebScript {
 
     private static ServiceRegistry serviceRegistry;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        ChooseStateScript.serviceRegistry = serviceRegistry;
+        ChangeStateScript.serviceRegistry = serviceRegistry;
     }
 
     @Override
@@ -34,11 +34,11 @@ public class ChooseStateScript extends DeclarativeWebScript {
 
         StateMachineHelper helper = new StateMachineHelper();
         List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "chooseState", "take");
-        ChooseStateAction.NextState nextState = null;
+        ChangeStateAction.NextState nextState = null;
         for (StateMachineAction action : actions) {
-            ChooseStateAction chooseStateAction = (ChooseStateAction) action;
-            List<ChooseStateAction.NextState> states = chooseStateAction.getStates();
-            for (ChooseStateAction.NextState state : states) {
+            ChangeStateAction changeStateAction = (ChangeStateAction) action;
+            List<ChangeStateAction.NextState> states = changeStateAction.getStates();
+            for (ChangeStateAction.NextState state : states) {
                 if (state.getActionId().equalsIgnoreCase(actionId)) {
                     nextState = state;
                 }

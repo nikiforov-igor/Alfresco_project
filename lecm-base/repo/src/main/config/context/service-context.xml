@@ -58,8 +58,8 @@
         <property name="policyComponent" ref="policyComponent" />
     </bean>
 
-    <bean id="webscript.ru.it.lecm.statemachine.choosestate.get"
-          class="ru.it.lecm.base.statemachine.script.ChooseStateScript"
+    <bean id="webscript.ru.it.lecm.statemachine.changestate.get"
+          class="ru.it.lecm.base.statemachine.script.ChangeStateScript"
           parent="webscript">
         <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>

@@ -14,7 +14,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.StateMachineModel;
-import ru.it.lecm.base.statemachine.action.ChooseStateAction;
+import ru.it.lecm.base.statemachine.action.ChangeStateAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 import ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean;
 
@@ -60,11 +60,11 @@ public class DocumentListScript extends DeclarativeWebScript {
                                     document.put("status", nodeService.getProperty(documentRef, StateMachineModel.PROP_STATUS).toString());
                                     document.put("taskId", task.getId());
                                     ArrayList<HashMap<String, String>> resultStates = new ArrayList<HashMap<String, String>>();
-                                    List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), "chooseState", "take");
+                                    List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), "changeState", "take");
                                     for (StateMachineAction action : actions) {
-                                        ChooseStateAction chooseAction = (ChooseStateAction) action;
-                                        List<ChooseStateAction.NextState> states =  chooseAction.getStates();
-                                        for (ChooseStateAction.NextState state : states) {
+                                        ChangeStateAction changeAction = (ChangeStateAction) action;
+                                        List<ChangeStateAction.NextState> states =  changeAction.getStates();
+                                        for (ChangeStateAction.NextState state : states) {
                                             HashMap<String, String> resultState = new HashMap<String, String>();
                                             resultState.put("actionId", state.getActionId());
                                             resultState.put("label", state.getLabel());

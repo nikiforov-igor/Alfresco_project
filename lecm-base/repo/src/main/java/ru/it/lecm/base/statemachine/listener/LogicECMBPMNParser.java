@@ -62,7 +62,7 @@ public class LogicECMBPMNParser implements BpmnParseListener {
     public void parseUserTask(Element element, ScopeImpl scope, ActivityImpl activity) {
         Element extentionElements = element.element("extensionElements");
         if (extentionElements != null) {
-            Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extention");
+            Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extension");
             if (lecmExtention != null) {
                 StateMachineHandler handler = new StateMachineHandler(lecmExtention);
                 activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
