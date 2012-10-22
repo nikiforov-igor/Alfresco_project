@@ -190,7 +190,7 @@
           * @type int
           * @default 3
           */
-         splitActionsAt: 4
+         splitActionsAt: 3
       },
 
       /**
@@ -1137,7 +1137,11 @@
             // Remove any actions the user doesn't have permission for
             var actions = YAHOO.util.Selector.query("div", clone),
                action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
-
+            if (actions.length > 3) {
+                this.options.splitActionsAt = 2;
+            } else {
+                this.options.splitActionsAt = 3;
+            }
             for (i = 0, ii = actions.length; i < ii; i++)
             {
                action = actions[i];
@@ -1170,7 +1174,7 @@
             // Need the "More >" container?
             var splitAt = this.options.splitActionsAt;
             actions = YAHOO.util.Selector.query("div", clone);
-            if (actions.length > splitAt)
+            if (actions.length > 3)
             {
                var moreContainer = Dom.get(this.id + "-moreActions").cloneNode(true);
                var containerDivs = YAHOO.util.Selector.query("div", moreContainer);
@@ -1484,6 +1488,88 @@
                    latestVersion: this.latestVersion,
                    nodeRef: this.latestVersion.nodeRef
                });
+       },
+
+       /**
+        * BUBBLING LIBRARY EVENT HANDLERS FOR ACTIONS
+        * Disconnected event handlers for action event notification
+        */
+
+       /**
+        * Show more actions pop-up.
+        *
+        * @method onActionShowMore
+        * @param record {object} Object literal representing file or folder to be actioned
+        * @param elMore {element} DOM Element of "More Actions" link
+        */
+       onActionShowMore: function DL_onActionShowMore(record, elMore)
+       {
+           var me = this;
+
+           // Fix "More Actions" hover style
+           Dom.addClass(elMore.firstChild, "highlighted");
+
+           // Get the pop-up div, sibling of the "More Actions" link
+           var elMoreActions = Dom.getNextSibling(elMore);
+           Dom.removeClass(elMoreActions, "hidden");
+           me.showingMoreActions = true;
+
+           // Hide pop-up timer function
+           var fnHidePopup = function DL_oASM_fnHidePopup()
+           {
+               // Need to rely on the "elMoreActions" enclosed variable, as MSIE doesn't support
+               // parameter passing for timer functions.
+               Event.removeListener(elMoreActions, "mouseover");
+               Event.removeListener(elMoreActions, "mouseout");
+               Dom.removeClass(elMore.firstChild, "highlighted");
+               Dom.addClass(elMoreActions, "hidden");
+               me.showingMoreActions = false;
+               if (me.deferredActionsMenu !== null)
+               {
+                   Dom.addClass(me.currentActionsMenu, "hidden");
+                   me.currentActionsMenu = me.deferredActionsMenu;
+                   me.deferredActionsMenu = null;
+                   Dom.removeClass(me.currentActionsMenu, "hidden");
+               }
+           };
+
+           // Initial after-click hide timer - 4x the mouseOut timer delay
+           if (elMoreActions.hideTimerId)
+           {
+               window.clearTimeout(elMoreActions.hideTimerId);
+           }
+           elMoreActions.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout * 4);
+
+           // Mouse over handler
+           var onMouseOver = function DLSM_onMouseOver(e, obj)
+           {
+               // Clear any existing hide timer
+               if (obj.hideTimerId)
+               {
+                   window.clearTimeout(obj.hideTimerId);
+                   obj.hideTimerId = null;
+               }
+           };
+
+           // Mouse out handler
+           var onMouseOut = function DLSM_onMouseOut(e, obj)
+           {
+               var elTarget = Event.getTarget(e);
+               var related = elTarget.relatedTarget;
+
+               // In some cases we should ignore this mouseout event
+               if ((related !== obj) && (!Dom.isAncestor(obj, related)))
+               {
+                   if (obj.hideTimerId)
+                   {
+                       window.clearTimeout(obj.hideTimerId);
+                   }
+                   obj.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout);
+               }
+           };
+
+           Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
+           Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
        },
 
       /**
