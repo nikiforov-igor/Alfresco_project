@@ -1637,12 +1637,13 @@
             // Reload the node's metadata
             Alfresco.util.Ajax.jsonPost(
             {
-               url: Alfresco.constants.PROXY_URI + "slingshot/datalists/item/node/" + nodeRef.uri,
+               url: Alfresco.constants.PROXY_URI + "lecm/dictionary/item/node/" + nodeRef.uri,
                dataObj: this._buildDataGridParams(),
                successCallback:
                {
                   fn: function DataGrid_onDataItemCreated_refreshSuccess(response)
                   {
+                     this.versionable = response.json.versionable;
                      var item = response.json.item;
                      var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate()
                      {
