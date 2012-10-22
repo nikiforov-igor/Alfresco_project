@@ -5,6 +5,8 @@
                 <css src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.css" />
                 <js src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.js" />
                 <js src="/ru/it/lecm/base-share/components/lecm-association-selectone.js" />
+                <css src="/ru/it/lecm/base-share/components/association-tree/association-tree-view.css" />
+                <js src="/ru/it/lecm/base-share/components/association-tree/association-tree-view.js" />
             </dependencies>
         </forms>
     </config>
