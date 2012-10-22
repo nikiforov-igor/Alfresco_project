@@ -57,8 +57,8 @@
    <div style="display:none">
       <!-- Action Set "More..." container -->
       <div id="${args.htmlid}-moreActions">
-         <#--<div class="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"></a></div>-->
-	     <div class="onActionVersion"><a href="#" class="show-more" title="${msg("actions.more")}"></a></div>
+         <div class="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"></a></div>
+	     <#--<div class="onActionVersion"><a href="#" class="show-more" title="${msg("actions.more")}"></a></div>-->
          <div class="more-actions hidden"></div>
       </div>
 
