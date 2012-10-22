@@ -1470,7 +1470,7 @@
            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
        },
 
-       previewVersion: function(item) {
+       onActionVersion: function(item) {
            this.doBeforeParseData(item);
        },
        onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)
