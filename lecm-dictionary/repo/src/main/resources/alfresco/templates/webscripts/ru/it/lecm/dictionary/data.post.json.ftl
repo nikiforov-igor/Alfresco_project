@@ -1,6 +1,7 @@
 <#import "../../../../org/alfresco/slingshot/datalists/item.lib.ftl" as itemLib />
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
+   "versionable": ${data.versionable?string},
    "totalRecords": ${data.paging.totalRecords?c},
    "startIndex": ${data.paging.startIndex?c},
    "metadata":

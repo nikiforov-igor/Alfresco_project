@@ -190,7 +190,7 @@
           * @type int
           * @default 3
           */
-         splitActionsAt: 3
+         splitActionsAt: 4
       },
 
       /**
@@ -903,6 +903,7 @@
          // Intercept data returned from data webscript to extract custom metadata
          this.widgets.dataSource.doBeforeCallback = function DataGrid_doBeforeCallback(oRequest, oFullResponse, oParsedResponse)
          {
+            this.versionable = oFullResponse.versionable;
             // Container userAccess event
             var permissions = oFullResponse.metadata.parent.permissions;
             if (permissions && permissions.userAccess)
@@ -914,7 +915,7 @@
             }
 
             return oParsedResponse;
-         };
+         }.bind(this);
       },
       
       /**
@@ -1158,6 +1159,9 @@
                      {
                         clone.removeChild(action);
                         break;
+                     }
+                     if (!this.versionable && (action.attributes[0].nodeValue == "onActionVersion")){
+                         clone.removeChild(action);
                      }
                   }
                }
@@ -1450,14 +1454,14 @@
 
            var callback = {
                success:
-                   function (oRequest, oFullResponse) {
+                   function (oRequest) {
                        var oResults = eval("(" + oRequest.responseText + ")");
                        this.versionCache = oResults;
                        this.latestVersion = oResults.splice(0, 1)[0];
                        this.onViewHistoricPropertiesClick(item.nodeRef);
                    }.bind(this),
-               failure:function (oResponse) {
-                   alert("Failed to load version data. " + "[" + oResponse.statusText + "]");
+               failure:function (oRequest) {
+                   alert("Failed to load version data. " + "[" + oRequest.statusText + "]");
                },
                argument:{
                }
@@ -1466,7 +1470,7 @@
            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
        },
 
-       onActionVersion: function(item) {
+       previewVersion: function(item) {
            this.doBeforeParseData(item);
        },
        onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)

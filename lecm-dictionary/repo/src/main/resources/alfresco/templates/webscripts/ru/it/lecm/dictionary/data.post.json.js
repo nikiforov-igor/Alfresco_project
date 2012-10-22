@@ -56,6 +56,7 @@ function getData()
    var filter = parsedArgs.filter,
       allNodes = [], node,
       items = [];
+      versionable = false;
 
    if (filter == null || filter.filterData == null || filter.filterData == "")
    {
@@ -96,6 +97,9 @@ function getData()
 
    if (allNodes.length > 0)
    {
+      if (allNodes[0].hasAspect("cm:versionable")) {
+         versionable = true;
+      }
       for each (node in allNodes)
       {
          try
@@ -108,6 +112,7 @@ function getData()
 
    return (
    {
+      versionable: versionable,
       fields: fields,
       paging:
       {
