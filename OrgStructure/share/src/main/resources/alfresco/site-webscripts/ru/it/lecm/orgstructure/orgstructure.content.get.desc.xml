@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>content</shortname>
-    <description>Returns the orgstructure content page.</description>
-    <url>/lecm/orgstructure/content</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>
