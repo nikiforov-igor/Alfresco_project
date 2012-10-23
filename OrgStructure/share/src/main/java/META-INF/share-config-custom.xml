@@ -53,6 +53,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
@@ -64,6 +65,11 @@
                     <!--<show id="lecm-orgstr:employee-person-assoc"/>"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>-->
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -141,6 +147,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
@@ -150,6 +157,11 @@
                     <show id="lecm-orgstr:unit-composition-assoc"/>
                     <show id="lecm-orgstr:element-official-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -279,6 +291,7 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:project-target"/>
@@ -286,6 +299,11 @@
                     <!--<show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:project-workforce-assoc"/>-->
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -331,11 +349,17 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-orgstr:composition-is-boss"/>
                     <show id="lecm-orgstr:composition-is-primary"/>
                     <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-employee-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

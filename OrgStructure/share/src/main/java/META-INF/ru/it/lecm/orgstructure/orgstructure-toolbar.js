@@ -114,7 +114,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
-            _createNode:function (itemType, destination, successEvent, successMsg, failureMsg) {
+            _createNode:function (itemType, destination, pattern, successEvent, successMsg, failureMsg) {
                 var toolbar = this;
                 var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
@@ -166,6 +166,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     });
                             },
                             scope:this
+                        },
+                        doBeforeFormSubmit:
+                        {
+                            fn: function GenerateElementName(form){
+                                generateNodeName(form, pattern, ",", false);
+                            },
+                            scope: this
                         }
                     }).show();
             }, /**
@@ -178,9 +185,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         onNewRow:function DataListToolbar_onNewRow(e, p_obj) {
             var orgMetadata = this.modules.dataGrid.orgstructureMetadata,
                 destination = orgMetadata.nodeRef,
-                itemType = orgMetadata.itemType;
+                itemType = orgMetadata.itemType,
+                namePattern = orgMetadata.namePattern;
 
-            this._createNode(itemType, destination, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
+            this._createNode(itemType, destination, namePattern, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
         },
 
             /**
@@ -196,8 +204,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     if (selectedNode != null) {
                         var destination = selectedNode.data.nodeRef;
                         var itemType = selectedNode.data.childType;
-
-                        this._createNode(itemType, destination, "unitCreated", "message.new-unit.success", "message.new-unit.failure");
+                        var namePattern = selectedNode.data.namePattern;
+                        this._createNode(itemType, destination, namePattern, "unitCreated", "message.new-unit.success", "message.new-unit.failure");
                     } else {
                         Alfresco.util.PopupManager.displayMessage(
                             {

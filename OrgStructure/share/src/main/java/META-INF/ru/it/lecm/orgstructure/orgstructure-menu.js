@@ -75,6 +75,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 name:root.type,
                                 nodeRef:root.nodeRef,
                                 dataSourceUri:root.dsUri,
+                                namePattern:root.namePattern,
                                 permissions:{
                                     'delete':false,
                                     'edit':false
@@ -175,7 +176,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:oResults[nodeIndex].type,
                                 dsUri:oResults[nodeIndex].dsUri,
-                                childType:oResults[nodeIndex].childType
+                                childType:oResults[nodeIndex].childType,
+                                namePattern:oResults[nodeIndex].namePattern
                             };
                             var namespace = "lecm-orgstr";
                             var rType = root.type;

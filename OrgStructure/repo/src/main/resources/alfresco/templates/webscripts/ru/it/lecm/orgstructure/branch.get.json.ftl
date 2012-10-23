@@ -9,6 +9,7 @@
             dsUri: "${b.dsUri!""}",
             childType: "${b.childType!""}",
             childAssoc: "${b.childAssoc!""}",
+            namePattern: "${b.pattern!""}"
         }
         <#if b_has_next>,</#if>
     </#list>

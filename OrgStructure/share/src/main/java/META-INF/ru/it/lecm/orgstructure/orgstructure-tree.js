@@ -155,7 +155,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 type:namespace + ":" + oResults[nodeIndex].type,
                                 dsUri:oResults[nodeIndex].dsUri,
                                 childType:namespace + ":" + oResults[nodeIndex].childType,
-                                childAssoc:namespace + ":" + oResults[nodeIndex].childAssoc
+                                childAssoc:namespace + ":" + oResults[nodeIndex].childAssoc,
+                                namePattern:oResults[nodeIndex].namePattern
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
@@ -218,6 +219,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             name:node.data.type,
                             nodeRef:node.data.nodeRef,
                             dataSourceUri:node.data.dsUri,
+                            namePattern:node.data.namePattern,
                             permissions:{
                                 'delete':false,
                                 'edit':false
@@ -255,6 +257,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
         _addNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, "lecm-orgstr:organization-unit");
+            var pattern = this.selectedNode.data.namePattern;
             new Alfresco.module.SimpleDialog("addUnit-dialog").setOptions({
                 width:"50em",
                 templateUrl:templateUrl,
@@ -271,6 +274,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             });
                     },
                     scope:this
+                },
+                doBeforeFormSubmit:
+                {
+                    fn: function GenerateElementName(form){
+                        generateNodeName(form, pattern, ",", false);
+                    },
+                    scope: this
                 }
             }).show();
         },
@@ -298,7 +308,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         sNode.isLeaf = false;
                         sNode.expanded = true;
                         otree.tree.render();
-                        onExpandComplete(null);
+                        otree.onExpandComplete(null);
                     },
                     failure:function (oResponse) {
                         YAHOO.log("Failed to process XHR transaction.", "info", "example");

@@ -13,6 +13,25 @@
         <namespace uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
     </namespaces>
 
+    <constraints>
+        <constraint name="lecm-orgstr:unit-type-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>SEPARATED</value>
+                    <value>SEGREGATED</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-orgstr:employee-sex-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>MALE</value>
+                    <value>FEMALE</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
     <types>
         <!-- Абстрактные модели -->
         <!-- Описание ресурса проекта -->
@@ -226,14 +245,7 @@
                     <title>Type</title>
                     <type>d:text</type>
                     <constraints>
-                        <constraint type="LIST">
-                            <parameter name="allowedValues">
-                                <list>
-                                    <value>Separated</value>
-                                    <value>Segregated</value>
-                                </list>
-                            </parameter>
-                        </constraint>
+                       <constraint ref="lecm-orgstr:unit-type-const" />
                     </constraints>
                 </property>
                 <property name="lecm-orgstr:unit-is-exists">
@@ -309,14 +321,7 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <constraints>
-                        <constraint type="LIST">
-                            <parameter name="allowedValues">
-                                <list>
-                                    <value>Male</value>
-                                    <value>Female</value>
-                                </list>
-                            </parameter>
-                        </constraint>
+                        <constraint ref="lecm-orgstr:employee-sex-const"/>
                     </constraints>
                 </property>
                 <property name="lecm-orgstr:employee-phone">

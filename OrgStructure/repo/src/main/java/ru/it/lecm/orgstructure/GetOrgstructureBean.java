@@ -49,6 +49,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String TITLE = "title";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String DS_URI = "dsUri";
+	public static final String NAME_PATTERN = "namePattern";
 
 	private static final String UNIT_EMPLOYEES_URI = "lecm/orgstructure/data/unit/";
 	private static final String PROJECTS_URI = "lecm/orgstructure/data/project/";
@@ -56,6 +57,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 
 	private static Log logger = LogFactory.getLog(GetOrgstructureBean.class);
 	public static final String ELEMENT_FULL_NAME = "element-full-name";
+	public static final String ELEMENT_FULL_NAME_PATTERN = "lecm-orgstr_element-full-name";
 
 	private static ServiceRegistry serviceRegistry;
 	public static final String ORG_UNIT_ASSOC = "org-unit-assoc";
@@ -85,19 +87,21 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					root.put(IS_LEAF, false);
 
 					// Список справочников по которым будет вестись работа
-					// TODO возможно, вынести в Enum
 					if (qTypeLocalName.equals(DIRECTORY_EMPLOYEES)) {
 						root.put(CHILD_TYPE, TYPE_EMPLOYEE);
 						root.put(DS_URI, DEFAULT_URI);
+						root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 					} else if (qTypeLocalName.equals(DIRECTORY_PROJECTS)) {
 						root.put(CHILD_TYPE, TYPE_PROJECT);
 						root.put(DS_URI, PROJECTS_URI);
+						root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					} else if (qTypeLocalName.equals(DIRECTORY_STAFF_LIST)) {
 						root.put(CHILD_TYPE, TYPE_POSITION);
 						root.put(DS_URI, DEFAULT_URI);
 					} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
 						root.put(CHILD_TYPE, TYPE_EMPLOYEE);
 						root.put(DS_URI, UNIT_EMPLOYEES_URI);
+						root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					}
 					nodes.put(root);
 				} catch (JSONException e) {
@@ -132,7 +136,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					unit.put(CHILD_TYPE, TYPE_UNIT);
 					unit.put(CHILD_ASSOC, UNIT_INNER_ASSOC);
 					unit.put(DS_URI, UNIT_EMPLOYEES_URI);
-
+					unit.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					nodes.put(unit);
 				} catch (JSONException e) {
 					logger.error(e);
@@ -153,7 +157,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
                     root.put(CHILD_TYPE, TYPE_UNIT);
 	                root.put(CHILD_ASSOC, ORG_UNIT_ASSOC);
                     root.put(DS_URI, UNIT_EMPLOYEES_URI);
-
+	                root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
                     nodes.put(root);
                 } catch (JSONException e) {
                     logger.error(e);
