@@ -38,14 +38,14 @@
         <webapp.name>alfresco</webapp.name>
         <!--
             | Empty log dir creates file alfresco.log in the current root folder.
-            | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' ) 
+            | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' )
             | Jetty embedded run logs by default in ${project.basedir}/alfresco.log
             -->
         <log.dir></log.dir>
-        <!-- 
-         | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where 
+        <!--
+         | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where
          | alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
-         | DEFAULT: alf_data_jetty relativel to run dir 
+         | DEFAULT: alf_data_jetty relativel to run dir
          -->
         <!-- For env=local DB is also configurable here. Of course keep in sync these two values otherwise you'll get integrity errors. Default Mysql-->
         <alfresco.data.location>./alf_data_jetty</alfresco.data.location>
@@ -109,10 +109,16 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>ru.it.lecm.delegation</groupId>
+			<artifactId>lecm-delegation-repo</artifactId>
+			<version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+		</dependency>
+<!--
+		<dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo</artifactId>
             <version>${platform.version}</version>
@@ -161,6 +167,7 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+-->
 	</dependencies>
 
 	<build>
@@ -186,7 +193,7 @@
 				</excludes>
 			</resource>
             <!--
-                | Include application properties file in classpath: this allows Spring contexts to have customization properties available at 
+                | Include application properties file in classpath: this allows Spring contexts to have customization properties available at
                 | classpath:alfresco-global.properties
                 -->
 			<!--<resource>-->
@@ -222,7 +229,7 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
-                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described 
+                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
                         | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
                         -->
                     <nonFilteredFileExtensions>
@@ -266,6 +273,26 @@
 							<includeTypes>amp</includeTypes>
 							<outputDirectory>${project.build.directory}/${webapp.name}</outputDirectory>
 							<excludes>META*</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>deploy-to-alfresco</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>C:/Alfresco/tomcat/webapps/</outputDirectory>
+									<destFileName>${webapp.name}.war</destFileName>
+								</artifactItem>
+							</artifactItems>
 						</configuration>
 					</execution>
 				</executions>

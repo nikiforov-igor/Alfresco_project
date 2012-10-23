@@ -1,3 +1,15 @@
 <alfresco-config>
 
+   <config>
+      <header>
+         <app-items>
+            <!-- defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"
+		 /share/res/components/images/header/my-dashboard.png
+		  -->
+            <item type="link" id="my-delegation" label="this is label" description="this is description" icon="">/delegation</item>
+         </app-items>
+      </header>
+   </config>
+
+
 </alfresco-config>

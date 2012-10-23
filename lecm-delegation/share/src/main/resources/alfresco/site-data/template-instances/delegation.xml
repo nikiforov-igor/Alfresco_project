@@ -15,10 +15,15 @@
 				<title>Delegation</title>
 			</properties>
 		</component>
-		<!-- Main View -->
+		<!-- West Region -->
 		<component>
-			<region-id>view</region-id>
-			<url>/ru/it/lecm/delegation/view</url>
+			<region-id>west</region-id>
+			<url>/ru/it/lecm/delegation/west</url>
+		</component>
+		<!-- Center region -->
+		<component>
+			<region-id>center</region-id>
+			<url>/ru/it/lecm/delegation/center</url>
 		</component>
 
 	</components>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>view</shortname>
-    <description>Returns the delegation content.</description>
-    <url>/ru/it/lecm/delegation/view</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

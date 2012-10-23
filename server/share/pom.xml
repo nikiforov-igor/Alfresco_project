@@ -57,7 +57,14 @@
             <version>${alfresco.version}</version>
             <type>war</type>
 		</dependency>
-
+		<dependency>
+			<groupId>ru.it.lecm.delegation</groupId>
+			<artifactId>lecm-delegation-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+		</dependency>
+		<!--
         <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-share</artifactId>
@@ -107,6 +114,7 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
+		-->
 	</dependencies>
 
 	<build>
@@ -161,6 +169,26 @@
                             <excludes>META*</excludes>
                         </configuration>
                     </execution>
+					<execution>
+						<id>deploy-to-alfresco</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>C:/Alfresco/tomcat/webapps/</outputDirectory>
+									<destFileName>${webapp.name}.war</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
                 </executions>
                 <dependencies>
                     <!--
@@ -195,7 +223,7 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
-                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described 
+                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
                         | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
                         -->
                     <nonFilteredFileExtensions>
@@ -205,7 +233,7 @@
             </plugin>
 		</plugins>
 	</build>
-	
+
 	<!-- Custom behaviors -->
 
 </project>
