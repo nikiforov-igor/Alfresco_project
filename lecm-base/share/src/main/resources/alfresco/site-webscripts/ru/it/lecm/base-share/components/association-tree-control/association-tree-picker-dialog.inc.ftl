@@ -43,8 +43,8 @@
         </div>
 
         <div id="${pickerId}-selection">
-            <div><strong>${msg("alvex.orgchart.selected_users")}</strong></div>
-            <div id="${pickerId}-selected-users"></div>
+            <div><strong>${msg("logicecm.base.selected-elements")}</strong></div>
+            <div id="${pickerId}-selected-elements"></div>
         </div>
 
         <div class="bdft">

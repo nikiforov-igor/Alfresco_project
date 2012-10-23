@@ -32,7 +32,6 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.AssociationTreeViewer = function(htmlId)
 	{
         LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer", htmlId);
-		YAHOO.Bubbling.on("formContentReady", this.onFormContentReady, this);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 
@@ -55,6 +54,9 @@ LogicECM.module = LogicECM.module || {};
 
 		options:
 		{
+            selectedValue: null,
+
+            currentValue: "",
 			// If control is disabled (has effect in 'picker' mode only)
 			disabled: false,
 			// If this form field is mandatory
@@ -83,14 +85,6 @@ LogicECM.module = LogicECM.module || {};
             closeSubstituteSymbol: "}"
 		},
 
-		onFormContentReady: function()
-		{
-			if(!this.options.initialized) {
-				this.options.initialized = true;
-				this.init();
-			}
-		},
-
 		onReady: function AssociationTreeViewer_onReady()
 		{
 			if(!this.options.initialized) {
@@ -104,36 +98,7 @@ LogicECM.module = LogicECM.module || {};
 			this.options.controlId = this.id + '-cntrl';
 			this.options.pickerId = this.id + '-cntrl-picker';
 
-//            var cur_assignees_refs = [];
-//            if( Dom.get(this.id).value && Dom.get(this.id).value != '')
-//                cur_assignees_refs = Dom.get(this.id).value.split(',');
-//
-//            // Prepare req to get names from nodeRefs
-//            var req = {};
-//            req['items'] = cur_assignees_refs;
-//            req['itemValueType'] = 'nodeRef';
-//
-//            Alfresco.util.Ajax.jsonRequest({
-//                url: Alfresco.constants.PROXY_URI + "api/forms/picker/items",
-//                method: Alfresco.util.Ajax.POST,
-//                dataObj: req,
-//                successCallback:
-//                {
-//                    fn: function (resp)
-//                    {
-//                        // Remember current assignees details
-//                        this.options.assignees = resp.json.data.items;
-//                        // And show them in HTML
-//                        for (m in this.options.assignees) {
-//                            Dom.get(this.id + "-cntrl-currentValueDisplay").innerHTML
-//                                    += '<div><img src="/share/res/components/images/filetypes/generic-user-16.png" '
-//                                    + 'width="16" alt="" title="' + this.options.assignees[m].name + '"> '
-//                                    + this.options.assignees[m].name + ' </div>';
-//                        }
-//                    },
-//                    scope:this
-//                }
-//            });
+            this._loadSelectedItems();
 
             // Create button if control is enabled
             if(!this.options.disabled)
@@ -144,11 +109,85 @@ LogicECM.module = LogicECM.module || {};
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
 
+                this.createPickerDialog();
+                this._createSelectedControls();
+            }
+		},
+
+        _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems()
+        {
+            var arrItems = "";
+            if (this.options.selectedValue)
+            {
+                arrItems = this.options.selectedValue;
+            }
+            else
+            {
+                arrItems = this.options.currentValue;
             }
 
-            this.createPickerDialog();
-            this._createSelectedControls();
-		},
+            var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)
+            {
+                var items = response.json.data.items,
+                    item;
+                this.selectedItems = {};
+                //this.singleSelectedItem = null;
+                if (!this.options.multipleSelectMode && items[0]) {
+                    this.singleSelectedItem = items[0];
+                }
+
+                for (var i = 0, il = items.length; i < il; i++)
+                {
+                    item = items[i];
+                    this.selectedItems[item.nodeRef] = item;
+                }
+                if(!this.options.disabled)
+                {
+                    this.updateSelectedItems();
+                }
+                this.updateFormFields();
+            };
+
+            var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
+            {
+                this.selectedItems = null;
+            };
+
+            if (arrItems !== "")
+            {
+                Alfresco.util.Ajax.jsonRequest(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+                        method: "POST",
+                        dataObj:
+                        {
+                            items: arrItems.split(","),
+                            itemValueType: "nodeRef",
+                            itemNameSubstituteString: this.options.nameSubstituteString,
+                            itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
+                            itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                        },
+                        successCallback:
+                        {
+                            fn: onSuccess,
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: onFailure,
+                            scope: this
+                        }
+                    });
+            }
+            else
+            {
+                // if disabled show the (None) message
+                if (this.options.disabled && this.options.displayMode == "items")
+                {
+                    Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+                }
+            }
+        },
 
         createPickerDialog: function()
         {
@@ -484,7 +523,7 @@ LogicECM.module = LogicECM.module || {};
                     { key: "add", label: "Add", sortable: false, formatter: this.fnRenderCellAdd(), width: 16 }
                 ];
 
-            var initialMessage = this.msg("form.control.object-picker.items-list.loading");
+            var initialMessage = this.msg("logicecm.base.select-tree-element");
 
             this.widgets.dataTable = new YAHOO.widget.DataTable(this.options.pickerId + "-group-members", columnDefinitions, this.widgets.dataSource,
                 {
@@ -780,7 +819,7 @@ LogicECM.module = LogicECM.module || {};
             }
             else
             {
-                this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.loading"));
+                this.widgets.dataTable.set("MSG_EMPTY", this.msg("logicecm.base.select-tree-element"));
                 this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
             }
 
@@ -880,7 +919,7 @@ LogicECM.module = LogicECM.module || {};
 
         updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
             var items = this.selectedItems;
-            var fieldId = this.options.pickerId + "-selected-users";
+            var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
             for (i in items) {
                 Dom.get(fieldId).innerHTML
@@ -919,23 +958,70 @@ LogicECM.module = LogicECM.module || {};
         {
             // Just element
             var el;
-            // Final assignees list with all adds and removes
-            var items = this.selectedItems;
 
-            // Update selected users in UI in main form
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
             el.innerHTML = '';
-            for (i in items) {
+            for (i in this.selectedItems) {
                 el.innerHTML += '<div><img src="/share/res/components/images/filetypes/generic-file-16.png" '
-                    + 'width="16" alt="" title="' + items[i].name + '"> ' + items[i].name + ' </div>';
+                    + 'width="16" alt="" title="' + this.selectedItems[i].name + '"> ' + this.selectedItems[i].name + ' </div>';
             }
 
-            // Update added fields in main form to be submitted
-            el = Dom.get(this.options.controlId + "-added");
-            el.value = '';
-            for (i in items) {
-                el.value += ( i < items.length-1 ? items[i].nodeRef + ',' : items[i].nodeRef );
+            if(!this.options.disabled)
+            {
+                var addItems = this.getAddedItems();
+
+                // Update added fields in main form to be submitted
+                el = Dom.get(this.options.controlId + "-added");
+                el.value = '';
+                for (i in addItems) {
+                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
+                }
+
+                var removedItems = this.getRemovedItems();
+
+                // Update removed fields in main form to be submitted
+                el = Dom.get(this.options.controlId + "-removed");
+                el.value = '';
+                for (i in removedItems) {
+                    el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
+                }
             }
+        },
+
+        getAddedItems: function AssociationTreeViewer_getAddedItems()
+        {
+            var addedItems = [],
+                currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
+
+            for (var item in this.selectedItems)
+            {
+                if (this.selectedItems.hasOwnProperty(item))
+                {
+                    if (!(item in currentItems))
+                    {
+                        addedItems.push(item);
+                    }
+                }
+            }
+            return addedItems;
+        },
+
+        getRemovedItems: function AssociationTreeViewer_getRemovedItems()
+        {
+            var removedItems = [],
+                currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
+
+            for (var item in currentItems)
+            {
+                if (currentItems.hasOwnProperty(item))
+                {
+                    if (!(item in this.selectedItems))
+                    {
+                        removedItems.push(item);
+                    }
+                }
+            }
+            return removedItems;
         }
   	});
 })();

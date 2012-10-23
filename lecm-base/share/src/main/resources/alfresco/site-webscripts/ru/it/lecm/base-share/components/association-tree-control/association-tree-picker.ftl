@@ -4,36 +4,46 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 
 <div class="form-field">
-<#if form.mode == "view">
-    <div id="${controlId}" class="viewmode-field">
-        <#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-        <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-        </#if>
-        <span class="viewmode-label">${field.label?html}:</span>
-        <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
-    </div>
-<#else>
-    <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-    <div id="${controlId}" class="object-finder">
+    <#if form.mode == "view">
+        <div id="${controlId}" class="viewmode-field">
+            <#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
+            <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
+            </#if>
+            <span class="viewmode-label">${field.label?html}:</span>
+            <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
+        </div>
+    <#else>
+        <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+        <div id="${controlId}" class="object-finder">
 
-        <div id="${controlId}-currentValueDisplay" class="current-values"></div>
+            <div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
-        <#if field.disabled == false>
-            <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
-            <input type="hidden" id="${controlId}-added" name="${field.name}_added" />
-            <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"  value="${field.value!""}"/>
-            <div id="${controlId}-itemGroupActions" class="show-picker">
-                <input type="button" id="${controlId}-orgchart-picker-button" name="-"
-                value="${field.control.params.selectActionLabel!msg("button.select")}" onclick="showTreePicker();"/>
-            </div>
+            <#if field.disabled == false>
+                <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+                <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+                <div id="${controlId}-itemGroupActions" class="show-picker">
+                    <input type="button" id="${controlId}-orgchart-picker-button" name="-"
+                    value="${field.control.params.selectActionLabel!msg("button.select")}" onclick="showTreePicker();"/>
+                </div>
 
-            <@renderOrgchartPickerDialogHTML controlId />
-        </#if>
-    </div>
-</#if>
+                <@renderOrgchartPickerDialogHTML controlId />
+            </#if>
+        </div>
+    </#if>
+    <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
 </div>
 
 <script type="text/javascript">
+    <#if field.control.params.selectedValueContextProperty??>
+        <#if context.properties[field.control.params.selectedValueContextProperty]??>
+            <#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+        <#elseif args[field.control.params.selectedValueContextProperty]??>
+            <#assign renderPickerJSSelectedValue = args[field.control.params.selectedValueContextProperty]>
+        <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
+            <#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+        </#if>
+    </#if>
+
     new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
             disabled: true,
@@ -51,6 +61,8 @@
         <#if field.control.params.roteNodeRef??>
             roteNodeRef: "${field.control.params.roteNodeRef}",
         </#if>
+        currentValue: "${field.value}",
+        <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
         itemType: "${field.endpointType}",
         mode: "picker"
     }).setMessages( ${messages} );
