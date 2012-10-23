@@ -4,9 +4,7 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.service.ServiceRegistry;
-import ru.it.lecm.base.statemachine.action.ChangeStateAction;
-import ru.it.lecm.base.statemachine.action.SetStatusAction;
-import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,11 +64,16 @@ public class StateMachineHandler implements ExecutionListener {
         String actionName = action.attribute("type");
         List<Element> attributes = action.elements("attribute");
         StateMachineAction stateMachineAction = null;
-        if ("setstatus".equalsIgnoreCase(actionName)) {
+        if ("setStatus".equalsIgnoreCase(actionName)) {
             stateMachineAction = new SetStatusAction(attributes);
         } else if ("changeState".equalsIgnoreCase(actionName)) {
             stateMachineAction = new ChangeStateAction(action);
+        } else if ("StartDocumentWorkflow".equalsIgnoreCase(actionName)) {
+            stateMachineAction = new StartDocumentWorkflowAction(attributes);
+        } else if ("StartDocumentProcessing".equalsIgnoreCase(actionName)) {
+            stateMachineAction = new StartDocumentProcessingAction(attributes);
         }
+
         if (stateMachineAction != null) {
             stateMachineAction.setServiceRegistry(serviceRegistry);
         }

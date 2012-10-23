@@ -39,7 +39,6 @@ public class SetStatusAction extends StateMachineAction {
         }
     }
 
-    @Override
     public String getType() {
         return "setStatus";
     }

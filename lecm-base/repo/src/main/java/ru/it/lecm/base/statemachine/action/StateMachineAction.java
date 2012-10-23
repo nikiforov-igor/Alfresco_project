@@ -22,6 +22,6 @@ abstract public class StateMachineAction {
 
     abstract public void execute(DelegateExecution execution);
 
-    abstract public String getType();
+    public abstract String getType();
 
 }

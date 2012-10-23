@@ -48,6 +48,7 @@
         <property name="nodeService">
             <ref bean="nodeService"/>
         </property>
+        <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
 
     <bean id="documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean"/>

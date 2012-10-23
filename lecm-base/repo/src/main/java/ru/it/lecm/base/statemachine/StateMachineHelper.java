@@ -7,14 +7,9 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
-import org.activiti.engine.runtime.ExecutionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.alfresco.model.ContentModel;
@@ -27,7 +22,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
-import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
@@ -51,10 +45,11 @@ import java.util.*;
  */
 public class StateMachineHelper {
 
+    public static String ACTIVITI_PREFIX = "activiti$";
+
     private static ServiceRegistry serviceRegistry;
     private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 
-    private static String ACTIVITI_PREFIX = "activiti$";
     private static String BPM_PACKAGE_PREFIX = "bpm_";
     private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
 
@@ -75,6 +70,10 @@ public class StateMachineHelper {
     }
 
     public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
+        startUserWorkflowProcessing(taskId, workflowId, assignee, false);
+    }
+
+    public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee, final boolean async) {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -104,7 +103,9 @@ public class StateMachineHelper {
                         //workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
                         workflowProps.put(WorkflowModel.ASSOC_ASSIGNEES, assigneeNodeRef);
                         workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
-                        workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
+                        if (!async) {
+                            workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
+                        }
                         // get the moderated workflow
                         WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(ACTIVITI_PREFIX + workflowId);
                         if (wfDefinition == null) {
@@ -220,7 +221,6 @@ public class StateMachineHelper {
     }
 
     public void setExecutionParamenters(String taskId, Map<String, String> parameters) {
-        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         TaskQuery taskQuery = taskService.createTaskQuery();

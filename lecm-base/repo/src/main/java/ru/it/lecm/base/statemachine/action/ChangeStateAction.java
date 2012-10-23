@@ -52,7 +52,6 @@ public class ChangeStateAction extends StateMachineAction {
     public void execute(DelegateExecution execution) {
     }
 
-    @Override
     public String getType() {
         return "changeState";
     }

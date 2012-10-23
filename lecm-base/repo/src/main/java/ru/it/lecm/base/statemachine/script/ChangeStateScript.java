@@ -33,7 +33,7 @@ public class ChangeStateScript extends DeclarativeWebScript {
         String actionId = req.getParameter("actionId");
 
         StateMachineHelper helper = new StateMachineHelper();
-        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "chooseState", "take");
+        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "changeState", "take");
         ChangeStateAction.NextState nextState = null;
         for (StateMachineAction action : actions) {
             ChangeStateAction changeStateAction = (ChangeStateAction) action;
@@ -60,7 +60,6 @@ public class ChangeStateScript extends DeclarativeWebScript {
             helper.addProcessDependency(taskId, dependencyExecution);
         }
 
-        req.getServiceMatch().getTemplateVars().get("taskId");
         return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }
