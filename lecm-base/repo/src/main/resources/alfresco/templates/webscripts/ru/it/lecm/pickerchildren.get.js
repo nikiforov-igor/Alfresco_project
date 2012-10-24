@@ -109,29 +109,51 @@ function main()
 
       if (url.templateArgs.type == "node")
       {
-         parent = resolveNode(nodeRef);
-         if (parent === null)
-         {
+        var childNodes = [];
+
+        parent = resolveNode(nodeRef);
+        if (parent === null) {
             status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
             return null;
-         }
-         
-         if (argsRootNode != null)
-         {
+        }
+        if (argsRootNode != null){
             rootNode = resolveNode(argsRootNode) || companyhome;
-         }
+        }
 
-         var ignoreTypes = null;
-         if (argsFilterType != null)
-         {
-            if (logger.isLoggingEnabled())
-               logger.log("ignoring types = " + argsFilterType);
-            
-            ignoreTypes = argsFilterType.split(',');
+        if (argsSearchTerm == null || argsSearchTerm == "")  {
+            var ignoreTypes = null;
+            if (argsFilterType != null)
+            {
+                 if (logger.isLoggingEnabled()) {
+                    logger.log("ignoring types = " + argsFilterType);
+                 }
+                 ignoreTypes = argsFilterType.split(',');
+            }
+
+            childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, "cm:name", true, null).getPage();
+        } else {
+            var filterParams = getFilterParams(argsSearchTerm, parent);
+            query = filterParams.query;
+
+            // Query the nodes - passing in default sort and result limit parameters
+            if (query !== "")
+            {
+                childNodes = search.query(
+                {
+                    query: query,
+                    language: filterParams.language,
+                    page:
+                        {
+                        maxItems: (filterParams.limitResults ? parseInt(filterParams.limitResults, 10) : 0)
+                        },
+                     sort: filterParams.sort,
+                     templates: filterParams.templates,
+                     namespace: (filterParams.namespace ? filterParams.namespace : null)
+                 });
+            }
          }
 
          // retrieve the children of this node
-         var childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, "cm:name", true, null).getPage();
 
          // Ensure folders and folderlinks appear at the top of the list
          var containerResults = new Array(),
@@ -496,6 +518,45 @@ function createGroupResult(node)
     groupObject.properties.name = name;
 
     return groupObject;
+}
+
+function getFilterParams(filterData, parentNode)
+{
+    var xpath = parentNode.getQnamePath();
+    var filterParams =
+    {
+        query: " +PATH:\""+xpath + "//*\"",
+        limitResults: null,
+        sort: [
+            {
+                column: "@cm:name",
+                ascending: true
+            }],
+        language: "lucene",
+        templates: null
+    };
+    var columns = filterData.split('#');
+
+    // Max returned results specified?
+    var argMax = args.max;
+    if ((argMax !== null) && !isNaN(argMax))
+    {
+        filterParams.limitResults = argMax;
+    }
+    var params = "",
+        or = " OR",
+        ampersand = " @";
+    for (var i=0; i < columns.length; i++) {
+        var namespace = columns[i].split(":");
+        if (columns[i+1] == undefined ) {
+            or = "";
+            ampersand = " @";
+        }
+
+        params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ "*" +namespace[2] + "*" + or;
+    }
+    filterParams.query += " AND " + "(" + params + " )";
+    return filterParams;
 }
 
 main();

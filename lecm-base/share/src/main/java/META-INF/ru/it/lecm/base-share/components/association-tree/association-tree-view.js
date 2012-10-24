@@ -37,7 +37,9 @@ LogicECM.module = LogicECM.module || {};
 
         this.selectedItems = {};
         this.addItemButtons = {};
+        this.searchProperties = {};
         this.createNewItemId = null;
+        this.currentNode = null;
 
 		return this;
 	};
@@ -51,6 +53,10 @@ LogicECM.module = LogicECM.module || {};
         selectedItems: null,
 
         addItemButtons: null,
+
+        currentNode: null,
+
+        searchProperties: null,
 
 		options:
 		{
@@ -68,7 +74,7 @@ LogicECM.module = LogicECM.module || {};
 
             createNewItemUri: "",
 
-            roteNodeRef: '',
+            rootNodeRef: '',
 
             itemType: "cm:content",
 
@@ -111,8 +117,41 @@ LogicECM.module = LogicECM.module || {};
 
                 this.createPickerDialog();
                 this._createSelectedControls();
+                this._loadSearchProperties();
             }
 		},
+
+        _loadSearchProperties: function AssociationTreeViewer__loadSearchProperties() {
+            Alfresco.util.Ajax.jsonGet(
+                {
+                    url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.options.itemType)),
+                    successCallback:
+                    {
+                        fn: function (response) {
+                            var columns = response.json.columns;
+                            for (var i = 0; i < columns.length; i++) {
+                                var column = columns[i];
+                                if (column.dataType == "text") {
+                                    this.searchProperties[column.name] = column.name;
+                                }
+                            }
+                        },
+                        scope: this
+                    },
+                    failureCallback:
+                    {
+                        fn: function (response) {
+                            //todo show error message
+                        },
+                        obj:
+                        {
+                            title: this.msg("message.error.columns.title"),
+                            text: this.msg("message.error.columns.description")
+                        },
+                        scope: this
+                    }
+                });
+        },
 
         _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems()
         {
@@ -254,53 +293,22 @@ LogicECM.module = LogicECM.module || {};
 
         onSearch: function()
         {
-            alert("search");
-//            this.options.selectedGroup = null;
-//            var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
-//            var url = Alfresco.constants.PROXY_URI
-//                + "api/forms/picker/authority/children?selectableType=cm:person&"
-//                + "searchTerm=" + encodeURIComponent(searchTerm) + "&size=100";
-//
-//            Alfresco.util.Ajax.jsonRequest({
-//                url: url,
-//                method: Alfresco.util.Ajax.GET,
-//                dataObj: null,
-//                successCallback:
-//                {
-//                    fn: function (resp)
-//                    {
-//                        var users = resp.json;
-//
-//                        for (x in users.data.items)
-//                            users.data.items[x].roleDisplayName = this.msg("alvex.orgchart.people_found");
-//
-//                        // clear data for display
-//                        this.options.usersDataStore.length = 0;
-//
-//                        // sort alphabetically
-//                        this.sortPeople(users.data.items);
-//
-//                        // push all users to datasource to display placing them into default role
-//                        for (x in users.data.items) {
-//                            users.data.items[x].userName = users.data.items[x].name.replace(/.*\(/, '').replace(/\).*/,'');
-//                            users.data.items[x].name = users.data.items[x].name.replace(/\(.*/,'');
-//                            this.options.usersDataStore.push(
-//                                {
-//                                    name: users.data.items[x].name,
-//                                    userName: users.data.items[x].userName,
-//                                    nodeRef: users.data.items[x].nodeRef,
-//                                    role: users.data.items[x].role
-//                                }
-//                            );
-//                        }
-//
-//                        this.options.usersDataTable.getDataSource().sendRequest('',
-//                            { success: this.options.usersDataTable.onDataReturnInitializeTable, scope: this.options.usersDataTable }
-//                        );
-//                    },
-//                    scope:this
-//                }
-//            });
+            var nodeRef = this.options.rootNodeRef;
+            if (this.currentNode != null) {
+                nodeRef = this.currentNode.data.nodeRef;
+            }
+            var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
+            var searchData = "";
+
+            if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
+                for(var column in this.searchProperties) {
+                    searchData += column + ":" + searchTerm + "#";
+                }
+                if (searchData != "") {
+                    searchData = searchData.substring(0,(searchData.length)-1);
+                }
+            }
+            this._updateItems(nodeRef, searchData);
         },
 
         // Render dialog with tree picker
@@ -358,13 +366,12 @@ LogicECM.module = LogicECM.module || {};
 
             Alfresco.util.Ajax.jsonGet(
                 {
-                    url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.roteNodeRef.replace("://", "/"),
+                    url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.rootNodeRef.replace("://", "/"),
                     successCallback:
                     {
                         fn: function (response) {
                             var data = response.json;
                             var properties = data.properties;
-                            var firstNode;
                             for (var i = 0; i < properties.length; i++) {
                                 var prop = properties[i];
                                 if (prop.name && (prop.name.prefixedName == this.options.treeRoteNodeTitleProperty)) {
@@ -445,6 +452,7 @@ LogicECM.module = LogicECM.module || {};
 
         treeViewClicked: function AssociationTreeViewer_treeViewClicked(node)
         {
+            this.currentNode = node;
             this._updateItems(node.data.nodeRef, "");
         },
 

@@ -58,8 +58,8 @@
         <#if field.control.params.nameSubstituteString??>
             nameSubstituteString: "${field.control.params.nameSubstituteString}",
         </#if>
-        <#if field.control.params.roteNodeRef??>
-            roteNodeRef: "${field.control.params.roteNodeRef}",
+        <#if field.control.params.rootNodeRef??>
+            rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
         currentValue: "${field.value}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
