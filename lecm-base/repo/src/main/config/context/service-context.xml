@@ -72,4 +72,9 @@
         <property name="documentStateMachineBean" ref="documentStateMachineBean" />
     </bean>
 
+    <bean id="webscript.ru.it.lecm.utils.node-properties.get"
+          class="ru.it.lecm.base.scripts.GetNodePropertiesScript"
+          parent="webscript">
+        <property name="serviceRegistry" ref="ServiceRegistry" />
+    </bean>
 </beans>
