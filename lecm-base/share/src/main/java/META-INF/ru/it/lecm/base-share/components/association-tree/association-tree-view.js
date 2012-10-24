@@ -588,7 +588,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 var templateUrl = me.generateCreateNewUrl(me.currentNode.data.nodeRef, me.options.itemType);
 
-                new Alfresco.module.SimpleDialog("form-dialog").setOptions({
+                new Alfresco.module.SimpleDialog("create-form-dialog-" + me.eventGroup).setOptions({
                     width:"40em",
                     templateUrl:templateUrl,
                     actionUrl:null,
@@ -597,7 +597,7 @@ LogicECM.module = LogicECM.module || {};
                         fn:me.setCreateNewFormDialogTitle
                     },
                     onSuccess:{
-                        fn:function () {
+                        fn:function (test) {
                             me._updateItems(me.currentNode.data.nodeRef, "");
                         },
                         scope:this
