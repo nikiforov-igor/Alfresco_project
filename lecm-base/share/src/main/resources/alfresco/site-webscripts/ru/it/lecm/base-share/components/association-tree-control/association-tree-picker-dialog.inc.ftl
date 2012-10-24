@@ -1,12 +1,21 @@
-<#macro renderOrgchartPickerDialogHTML controlId>
+<#macro renderTreePickerDialogHTML controlId plane>
 <#assign pickerId = controlId + "-picker">
 
 <div id="${pickerId}" class="picker yui-panel">
 
     <style type="text/css" media="screen">
-        #${pickerId}-searchContainer { padding-left: 6px; text-align: left; }
+        #${pickerId}-searchContainer {
+            padding-left: 6px;
+            text-align: left;
+            width: 100%;
+        }
         #${pickerId}-view-selector { margin-left: 1%; }
-        #${pickerId}-dataTable { margin-left: 1% }
+        #${pickerId}-dataTable {
+            <#if plane>
+                width: 98%;
+            </#if>
+            margin-left: 1%;
+        }
         #${pickerId}-userDetails { margin-left: 1% }
         #${pickerId}-group-members thead { display: none; }
         #${pickerId}-group-members table { border: none; width: 100% }
@@ -32,12 +41,14 @@
         </div>
 
         <div class="yui-g">
-            <div id="${pickerId}-treeSelector" class="yui-u first panel-left">
-                <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
-                    <#nested>
+            <#if !plane>
+                <div id="${pickerId}-treeSelector" class="yui-u first panel-left">
+                    <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
+                        <#nested>
+                    </div>
                 </div>
-            </div>
-            <div id="${pickerId}-dataTable" class="yui-u panel-right">
+            </#if>
+            <div id="${pickerId}-dataTable" <#if !plane>class="yui-u panel-right"</#if>>
                 <div id="${pickerId}-group-members" class="picker-items"></div>
             </div>
         </div>

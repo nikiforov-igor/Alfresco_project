@@ -68,6 +68,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             selectedValue: null,
 
+            plane: false,
+
             currentValue: "",
 			// If control is disabled (has effect in 'picker' mode only)
 			disabled: false,
@@ -121,8 +123,8 @@ LogicECM.module = LogicECM.module || {};
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
 
-                this.createPickerDialog();
                 this._createSelectedControls();
+                this.createPickerDialog();
                 this._loadSearchProperties();
             }
 		},
@@ -247,7 +249,7 @@ LogicECM.module = LogicECM.module || {};
 
             this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
                 {
-                    width: "974px"
+                    width: this.options.plane? "487px" : "974px"
                 });
             this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
 
@@ -357,17 +359,27 @@ LogicECM.module = LogicECM.module || {};
         // Fill tree view group selector with node data
         fillPickerDialog: function AssociationTreeViewer_fillPickerDialog()
         {
-            tree = new YAHOO.widget.TreeView(this.options.pickerId + "-groups");
-            tree.singleNodeHighlight = true;
-            tree.setDynamicLoad(this._loadNode.bind(this));
+            if (!this.options.plane) {
+                tree = new YAHOO.widget.TreeView(this.options.pickerId + "-groups");
+                tree.singleNodeHighlight = true;
+                tree.setDynamicLoad(this._loadNode.bind(this));
 
-            tree.subscribe('clickEvent', function(event) {
-                this.treeViewClicked(event.node);
-                tree.onEventToggleHighlight(event);
-                return false;
-            }.bind(this));
+                tree.subscribe('clickEvent', function(event) {
+                    this.treeViewClicked(event.node);
+                    tree.onEventToggleHighlight(event);
+                    return false;
+                }.bind(this));
 
-            this._loadRootNode();
+                this._loadRootNode();
+            } else {
+                this.treeViewClicked(
+                    {
+                        data: {
+                            isContainer: true,
+                            nodeRef: this.options.rootNodeRef
+                        }
+                    });
+            }
         },
 
         _loadRootNode: function AssociationTreeViewer__loadRootNode() {
@@ -509,7 +521,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.currentNode != null && me.currentNode.data.isContainer && !me.isSearch)
+                    if (me.currentNode != null && me.currentNode.data.isContainer && (!me.isSearch || me.options.plane))
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -606,31 +618,6 @@ LogicECM.module = LogicECM.module || {};
                 return true;
             };
             YAHOO.Bubbling.addDefaultAction("create-new-item-" + this.eventGroup, fnCreateNewItemHandler, true);
-
-            // Hook navigation action click events
-            var fnNavigationHandler = function AssociationTreeViewer__createControls_fnNavigationHandler(layer, args)
-            {
-                var owner = YAHOO.Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                if (owner !== null)
-                {
-                    var target, rowId, record;
-
-                    target = args[1].target;
-                    rowId = target.offsetParent;
-                    record = me.widgets.dataTable.getRecord(rowId);
-                    if (record)
-                    {
-                        YAHOO.Bubbling.fire("parentChanged",
-                            {
-                                eventGroup: me,
-                                label: record.getData("name"),
-                                nodeRef: record.getData("nodeRef")
-                            });
-                    }
-                }
-                return true;
-            };
-            YAHOO.Bubbling.addDefaultAction("parent-" + this.eventGroup, fnNavigationHandler, true);
         },
 
         generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
@@ -810,7 +797,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
                 this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.currentNode != null && this.currentNode.data.isContainer && !this.isSearch)
+                if (this.currentNode != null && this.currentNode.data.isContainer && (!this.isSearch || this.options.plane))
                 {
                     this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 }

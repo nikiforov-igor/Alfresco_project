@@ -2,6 +2,11 @@
 <#include "association-tree-picker-dialog.inc.ftl">
 
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#if field.control.params.plane?? && field.control.params.plane == "true">
+    <#assign plane = true>
+<#else>
+    <#assign plane = false>
+</#if>
 
 <div class="form-field">
     <#if form.mode == "view">
@@ -26,7 +31,7 @@
                     value="${field.control.params.selectActionLabel!msg("button.select")}" onclick="showTreePicker();"/>
                 </div>
 
-                <@renderOrgchartPickerDialogHTML controlId />
+                <@renderTreePickerDialogHTML controlId plane/>
             </#if>
         </div>
     </#if>
@@ -61,6 +66,7 @@
         <#if field.control.params.rootNodeRef??>
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
+        plane: ${plane?string},
         currentValue: "${field.value}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
         itemType: "${field.endpointType}",
