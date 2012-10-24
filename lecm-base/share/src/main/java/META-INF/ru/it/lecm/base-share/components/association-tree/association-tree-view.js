@@ -40,6 +40,8 @@ LogicECM.module = LogicECM.module || {};
         this.addItemButtons = {};
         this.searchProperties = {};
         this.currentNode = null;
+        this.rootNode = null;
+        this.isSearch = false;
 
 		return this;
 	};
@@ -56,7 +58,11 @@ LogicECM.module = LogicECM.module || {};
 
         currentNode: null,
 
+        rootNode: null,
+
         searchProperties: null,
+
+        isSearch: false,
 
 		options:
 		{
@@ -310,6 +316,7 @@ LogicECM.module = LogicECM.module || {};
                     searchData = searchData.substring(0,(searchData.length)-1);
                 }
             }
+            this.isSearch = true;
             this._updateItems(nodeRef, searchData);
         },
 
@@ -382,10 +389,13 @@ LogicECM.module = LogicECM.module || {};
                                         nodeRef: data.nodeRef,
                                         isLeaf: data.children.length == 0,
                                         isContainer: true,
-                                        renderHidden:true
+                                        renderHidden:true,
+                                        expanded: true
                                     };
-                                    new YAHOO.widget.TextNode(newNode, root);
+                                    this.rootNode = new YAHOO.widget.TextNode(newNode, root);
                                     tree.render();
+                                    this.treeViewClicked(this.rootNode);
+                                    tree.onEventToggleHighlight(this.rootNode);
                                     break;
                                 }
                             }
@@ -460,6 +470,7 @@ LogicECM.module = LogicECM.module || {};
         treeViewClicked: function AssociationTreeViewer_treeViewClicked(node)
         {
             this.currentNode = node;
+            this.isSearch = false;
             this._updateItems(node.data.nodeRef, "");
         },
 
@@ -498,7 +509,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.currentNode != null && me.currentNode.data.isContainer)
+                    if (me.currentNode != null && me.currentNode.data.isContainer && !me.isSearch)
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -792,21 +803,14 @@ LogicECM.module = LogicECM.module || {};
         _updateItems: function AssociationTreeViewer__updateItems(nodeRef, searchTerm)
         {
             // Empty results table - leave tag entry if it's been rendered
-            if (this.currentNode != null && this.currentNode.data.isContainer)
-            {
-                this.widgets.dataTable.deleteRows(1, this.widgets.dataTable.getRecordSet().getLength() - 1);
-            }
-            else
-            {
-                this.widgets.dataTable.set("MSG_EMPTY", this.msg("logicecm.base.select-tree-element"));
-                this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
-            }
+            this.widgets.dataTable.set("MSG_EMPTY", this.msg("logicecm.base.select-tree-element"));
+            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
 
             var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
             {
                 this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
                 this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.currentNode != null && this.currentNode.data.isContainer)
+                if (this.currentNode != null && this.currentNode.data.isContainer && !this.isSearch)
                 {
                     this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 }
