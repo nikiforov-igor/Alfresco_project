@@ -17,6 +17,7 @@ import ru.it.lecm.base.statemachine.action.StartDocumentProcessingAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,15 +54,27 @@ public class StateMachineDocumentListenerPolicy implements NodeServicePolicies.O
             String taskId = (String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
             List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "StartDocumentProcessing", "start");
-            Boolean result = Boolean.TRUE;
+
+            StartDocumentProcessingAction.Expression result = null;
             for (StateMachineAction action : actions) {
                 StartDocumentProcessingAction documentProcessingAction = (StartDocumentProcessingAction) action;
-                String expression = documentProcessingAction.getExpression();
-                result = result && parser.parseExpression(expression).getValue(context, Boolean.class);
+                List<StartDocumentProcessingAction.Expression> expressions = documentProcessingAction.getExpressions();
+                for (StartDocumentProcessingAction.Expression expression : expressions) {
+                    if (parser.parseExpression(expression.getExpression()).getValue(context, Boolean.class)) {
+                        result = expression;
+                        break;
+                    };
+                }
+                if (result != null) {
+                    break;
+                }
             }
 
-            if (result) {
-                new StateMachineHelper().stopDocumentProcessing((String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS));
+            if (result != null) {
+                HashMap<String, String> parameters = new HashMap<String, String>();
+                parameters.put(result.getOutputVariable(), result.getOutputValue());
+                helper.setExecutionParamentersByTaskId(taskId, parameters);
+                helper.stopDocumentProcessing(taskId);
             }
         }
     }

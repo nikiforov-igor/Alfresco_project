@@ -53,7 +53,7 @@
 
     <bean id="documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean"/>
 
-    <bean id="documentStateMachinePolicy" class="ru.it.lecm.base.statemachine.policy.DocumentStateMachinePolicy" init-method="init">
+    <bean id="stateMachineCreateDocumentPolicy" class="ru.it.lecm.base.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
         <property name="serviceRegistry" ref="ServiceRegistry" />
         <property name="documentStateMachineBean" ref="documentStateMachineBean" />
         <property name="policyComponent" ref="policyComponent" />

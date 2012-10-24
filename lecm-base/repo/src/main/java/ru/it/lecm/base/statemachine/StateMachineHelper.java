@@ -220,7 +220,7 @@ public class StateMachineHelper {
         runtimeService.setVariable(execution.getId(), PROP_PARENT_PROCESS_ID, Long.valueOf(taskId));
     }
 
-    public void setExecutionParamenters(String taskId, Map<String, String> parameters) {
+    public void setExecutionParamentersByTaskId(String taskId, Map<String, String> parameters) {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         TaskQuery taskQuery = taskService.createTaskQuery();

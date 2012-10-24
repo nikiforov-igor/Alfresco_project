@@ -71,7 +71,7 @@ public class StateMachineHandler implements ExecutionListener {
         } else if ("StartDocumentWorkflow".equalsIgnoreCase(actionName)) {
             stateMachineAction = new StartDocumentWorkflowAction(attributes);
         } else if ("StartDocumentProcessing".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new StartDocumentProcessingAction(attributes);
+            stateMachineAction = new StartDocumentProcessingAction(action);
         }
 
         if (stateMachineAction != null) {

@@ -49,43 +49,51 @@ LogicECM.module = LogicECM.module || {};
         },
 
         show: function showWorkflowForm(nodeRef, workflowId, taskId, actionId) {
-            this.selectedItem = nodeRef;
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formUI={formUI}&showCancelButton=true";
-            templateUrl = YAHOO.lang.substitute(templateUrl, {
-                itemKind:"workflow",
-                itemId: workflowId,
-                mode:"create",
-                submitType:"json",
-                formUI: "true"
+            if (workflowId != null && workflowId != 'null') {
+                this.selectedItem = nodeRef;
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formUI={formUI}&showCancelButton=true";
+                templateUrl = YAHOO.lang.substitute(templateUrl, {
+                    itemKind:"workflow",
+                    itemId: workflowId,
+                    mode:"create",
+                    submitType:"json",
+                    formUI: "true"
+                });
+                var htmlid = this.id + "-startWorkflowForm-" + Alfresco.util.generateDomId();
+                new Alfresco.module.SimpleDialog("htmlid").setOptions({
+                    width:"60em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    onSuccess:{
+                        fn:function (response) {
+                            this._chooseState(taskId, response.json.persistedObject, actionId);
+                        },
+                        scope:this
+                    }
+                }).show();
+            } else {
+                this._chooseState(taskId, null, actionId);
+            }
+        },
+
+        _chooseState: function (taskId, formResponse, actionId) {
+            var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
+            url = YAHOO.lang.substitute(url, {
+                taskId: taskId,
+                formResponse: encodeURI(formResponse),
+                actionId: actionId
             });
-            var htmlid = this.id + "-startWorkflowForm-" + Alfresco.util.generateDomId();
-            new Alfresco.module.SimpleDialog("htmlid").setOptions({
-                width:"60em",
-                templateUrl:templateUrl,
-                actionUrl:null,
-                destroyOnHide:true,
-                onSuccess:{
-                    fn:function (response) {
-                        var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
-                        url = YAHOO.lang.substitute(url, {
-                            taskId: taskId,
-                            formResponse: encodeURI(response.json.persistedObject),
-                            actionId: actionId
-                        });
-                        callback = {
-                            success:function (oResponse) {
-                                alert("OK");
-                            },
-                            argument:{
-                                contractsObject: this
-                            },
-                            timeout:7000
-                        };
-                        YAHOO.util.Connect.asyncRequest('GET', url, callback);;
-                    },
-                    scope:this
-                }
-            }).show();
+            callback = {
+                success:function (oResponse) {
+                    alert("OK");
+                },
+                argument:{
+                    contractsObject: this
+                },
+                timeout:7000
+            };
+            YAHOO.util.Connect.asyncRequest('GET', url, callback);
         },
 
         /**

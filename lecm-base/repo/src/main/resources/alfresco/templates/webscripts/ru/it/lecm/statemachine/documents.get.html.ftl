@@ -11,7 +11,7 @@
                     {
                         actionId: "${state.actionId}",
                         label: "${state.label}",
-                        workflowId: "${state.workflowId}"
+                        workflowId: "${state.workflowId!"null"}"
                     }
                     <#if state_has_next>,</#if>
                 </#list>

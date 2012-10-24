@@ -49,15 +49,18 @@ public class ChangeStateScript extends DeclarativeWebScript {
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
             String executionId = helper.getCurrentExecutionId(taskId);
-            helper.setExecutionParamenters(taskId, parameters);
+            helper.setExecutionParamentersByTaskId(taskId, parameters);
             helper.nextTransition(taskId);
 
-            int start = persistedResponse.indexOf("=") + 1;
-            int end = persistedResponse.indexOf(",");
-            String dependencyExecution = persistedResponse.substring(start, end);
+            if (!"null".equals(persistedResponse)) {
+                int start = persistedResponse.indexOf("=") + 1;
+                int end = persistedResponse.indexOf(",");
 
-            taskId = helper.getCurrentTaskId(executionId);
-            helper.addProcessDependency(taskId, dependencyExecution);
+                String dependencyExecution = persistedResponse.substring(start, end);
+
+                taskId = helper.getCurrentTaskId(executionId);
+                helper.addProcessDependency(taskId, dependencyExecution);
+            }
         }
 
         return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.

@@ -26,7 +26,7 @@ public class ChangeStateAction extends StateMachineAction {
             List<Element> parameters = attribute.elements("parameter");
             String actionId = attribute.attribute("name");
             String label = "";
-            String workflowId = "";
+            String workflowId = null;
             String variableValue = "";
             for (Element parameter : parameters) {
                 String name = parameter.attribute("name");

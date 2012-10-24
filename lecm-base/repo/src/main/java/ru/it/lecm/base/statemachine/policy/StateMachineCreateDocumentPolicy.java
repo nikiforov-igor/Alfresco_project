@@ -29,22 +29,22 @@ import java.util.Map;
  * Date: 17.10.12
  * Time: 11:08
  */
-public class DocumentStateMachinePolicy implements NodeServicePolicies.OnCreateNodePolicy {
+public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
     private static DocumentStateMachineBean documentStateMachineBean;
     private static ServiceRegistry serviceRegistry;
     private static PolicyComponent policyComponent;
 
     public void setDocumentStateMachineBean(DocumentStateMachineBean documentStateMachineBean) {
-        DocumentStateMachinePolicy.documentStateMachineBean = documentStateMachineBean;
+        StateMachineCreateDocumentPolicy.documentStateMachineBean = documentStateMachineBean;
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        DocumentStateMachinePolicy.serviceRegistry = serviceRegistry;
+        StateMachineCreateDocumentPolicy.serviceRegistry = serviceRegistry;
     }
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
-        DocumentStateMachinePolicy.policyComponent = policyComponent;
+        StateMachineCreateDocumentPolicy.policyComponent = policyComponent;
     }
 
     public final void init() {
