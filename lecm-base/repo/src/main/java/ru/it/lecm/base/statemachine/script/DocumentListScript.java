@@ -14,12 +14,15 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.StateMachineModel;
-import ru.it.lecm.base.statemachine.action.ChangeStateAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.changestate.ChangeStateAction;
 import ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov

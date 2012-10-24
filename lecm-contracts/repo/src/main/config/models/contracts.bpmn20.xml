@@ -11,6 +11,11 @@
         <startEvent id="start" name="Alfresco start" activiti:formKey="cwf:startTask"></startEvent>
         <userTask id="new" name="Черновик" activiti:assignee="${bpm_assignee.properties.userName}">
             <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>execution.setVariable('inputVariable', 'test');</activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
                 <lecm:extension>
                     <lecm:event on="start">
                         <lecm:action type="setStatus">
@@ -23,6 +28,12 @@
                                 <lecm:parameter name="labelId" value="На согласование"/>
                                 <lecm:parameter name="workflowId" value="activitiReview"/>
                                 <lecm:parameter name="variableValue" value="agreement"/>
+                                <lecm:workflowVariables>
+                                    <lecm:input from="inputVariable" to="workflowInputVariable"/>
+                                    <lecm:input to="workflowInputVariableValue" value="fromDescriptor" />
+                                    <lecm:output from="wf_reviewOutcome" to="agree"/>
+                                    <lecm:output to="stateProcessInputVariableValue" value="fromDescriptor" />
+                                </lecm:workflowVariables>
                             </lecm:attribute>
                             <lecm:attribute name="signing">
                                 <lecm:parameter name="labelId" value="На подписание"/>
@@ -63,7 +74,13 @@
                             <lecm:attribute name="agreement">
                                 <lecm:parameter name="labelId" value="На согласование"/>
                                 <lecm:parameter name="workflowId" value="activitiReview"/>
-                                <lecm:parameter name="variableValue" value="true"/>
+                                <lecm:parameter name="variableValue" value="agreement"/>
+                                <lecm:workflowVariables>
+                                    <lecm:input from="inputVariable" to="workflowInputVariable"/>
+                                    <lecm:input to="workflowInputVariableValue" value="fromDescriptor" />
+                                    <lecm:output from="wf_reviewOutcome" to="agree"/>
+                                    <lecm:output to="stateProcessInputVariableValue" value="fromDescriptor" />
+                                </lecm:workflowVariables>
                             </lecm:attribute>
                         </lecm:action>
                     </lecm:event>
@@ -118,10 +135,10 @@
         <sequenceFlow id="flow1" name="" sourceRef="start" targetRef="new"></sequenceFlow>
         <sequenceFlow id="flow3" name="" sourceRef="onAgreement" targetRef="parallelgateway1"></sequenceFlow>
         <sequenceFlow id="flow4" name="${!agreed}" sourceRef="parallelgateway1" targetRef="onRefining">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome != 'Approve'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${agree != 'Approve'}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow6" name="${agreed}" sourceRef="parallelgateway1" targetRef="onSigning">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wf_reviewOutcome == 'Approve'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${agree == 'Approve'}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow7" name="" sourceRef="onSigning" targetRef="exclusivegateway1"></sequenceFlow>
         <sequenceFlow id="flow8" name="${signed}" sourceRef="exclusivegateway1" targetRef="signed">

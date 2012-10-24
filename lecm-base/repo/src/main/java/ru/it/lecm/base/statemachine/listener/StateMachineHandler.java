@@ -4,7 +4,11 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.service.ServiceRegistry;
-import ru.it.lecm.base.statemachine.action.*;
+import ru.it.lecm.base.statemachine.action.SetStatusAction;
+import ru.it.lecm.base.statemachine.action.StartDocumentProcessingAction;
+import ru.it.lecm.base.statemachine.action.StartDocumentWorkflowAction;
+import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.changestate.ChangeStateAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

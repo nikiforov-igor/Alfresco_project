@@ -1,7 +1,9 @@
-package ru.it.lecm.base.statemachine.action;
+package ru.it.lecm.base.statemachine.action.changestate;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
+import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.WorkflowVariables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,10 @@ import java.util.List;
  * Time: 11:44
  */
 public class ChangeStateAction extends StateMachineAction {
+
+    public static String PROP_CHANGE_STATE_PREV_TASK_ID = "changeStatePrevTaskId";
+    public static String PROP_CHANGE_STATE_CUR_TASK_ID = "changeStateCurTaskId";
+    public static String PROP_CHANGE_STATE_ACTION_ID = "changeStateActionId";
 
     private List<NextState> states = new ArrayList<NextState>();
     private static String PROP_LABEL = "labelId";
@@ -39,7 +45,12 @@ public class ChangeStateAction extends StateMachineAction {
                     variableValue = value;
                 }
             }
-            NextState nextState = new NextState(actionId, label, workflowId, outputVariable, variableValue);
+            WorkflowVariables variables = null;
+            Element workflowVariablesElement = attribute.element("workflowVariables");
+            if (workflowVariablesElement != null) {
+                variables = new WorkflowVariables(workflowVariablesElement);
+            }
+            NextState nextState = new NextState(actionId, label, workflowId, outputVariable, variableValue, variables);
             states.add(nextState);
         }
     }
@@ -63,13 +74,15 @@ public class ChangeStateAction extends StateMachineAction {
         private String workflowId;
         private String outputVariableName;
         private String outputVariableValue;
+        private WorkflowVariables variables;
 
-        NextState(String actionId, String label, String workflowId, String outputVariableName, String outputVariableValue) {
+        NextState(String actionId, String label, String workflowId, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
             this.actionId = actionId;
             this.label = label;
             this.workflowId = workflowId;
             this.outputVariableName = outputVariableName;
             this.outputVariableValue = outputVariableValue;
+            this.variables = variables;
         }
 
         public String getActionId() {
@@ -90,6 +103,10 @@ public class ChangeStateAction extends StateMachineAction {
 
         public String getOutputVariableValue() {
             return outputVariableValue;
+        }
+
+        public WorkflowVariables getVariables() {
+            return variables;
         }
     }
 }

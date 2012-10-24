@@ -1,4 +1,4 @@
-package ru.it.lecm.base.statemachine.script;
+package ru.it.lecm.base.statemachine.action.changestate;
 
 import org.alfresco.service.ServiceRegistry;
 import org.springframework.extensions.webscripts.Cache;
@@ -6,7 +6,6 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
-import ru.it.lecm.base.statemachine.action.ChangeStateAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 
 import java.util.HashMap;
@@ -58,11 +57,21 @@ public class ChangeStateScript extends DeclarativeWebScript {
 
                 String dependencyExecution = persistedResponse.substring(start, end);
 
+                parameters = new HashMap<String, String>();
+                parameters.put(ChangeStateAction.PROP_CHANGE_STATE_ACTION_ID, actionId);
+                parameters.put(ChangeStateAction.PROP_CHANGE_STATE_PREV_TASK_ID, taskId);
+
                 taskId = helper.getCurrentTaskId(executionId);
-                helper.addProcessDependency(taskId, dependencyExecution);
+                parameters.put(ChangeStateAction.PROP_CHANGE_STATE_CUR_TASK_ID, taskId);
+
+                helper.setExecutionParameters(dependencyExecution, parameters);
+                if (nextState.getVariables() != null) {
+                    helper.setInputVariables(executionId, dependencyExecution, nextState.getVariables().getInput());
+                }
             }
         }
 
         return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.
     }
+
 }

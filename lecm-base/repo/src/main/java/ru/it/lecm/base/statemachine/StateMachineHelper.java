@@ -1,9 +1,11 @@
 package ru.it.lecm.base.statemachine;
 
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -26,6 +28,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.WorkflowVariables;
 import ru.it.lecm.base.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
@@ -51,6 +54,7 @@ public class StateMachineHelper {
     private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 
     private static String BPM_PACKAGE_PREFIX = "bpm_";
+
     private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
 
     private static HashSet<String> ignoredKeys = new HashSet<String>();
@@ -213,6 +217,37 @@ public class StateMachineHelper {
         return  result;
     }
 
+    public List<StateMachineAction> getHistoricalTaskActions(String taskId, String onFire) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            ProcessInstance process= runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+            ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService() )
+                    .getDeployedProcessDefinition(process.getProcessDefinitionId());
+            ActivityImpl activity = processDefinitionEntity.findActivity(task.getTaskDefinitionKey());
+            List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+            for (ExecutionListener listener : listeners) {
+                if (listener instanceof StateMachineHandler) {
+                    result = ((StateMachineHandler) listener).getEvents().get(onFire);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<StateMachineAction> getHistoricalTaskActionsByName(String taskId, String actionType, String onFire) {
+        List<StateMachineAction> actions = getHistoricalTaskActions(taskId, onFire);
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        for (StateMachineAction action : actions) {
+            if (action.getType().equalsIgnoreCase(actionType)) {
+                result.add(action);
+            }
+        }
+        return  result;
+    }
+
     public void addProcessDependency(String currentTask, String dependencyProcess) {
         String taskId = currentTask.replace(ACTIVITI_PREFIX, "");
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
@@ -222,13 +257,17 @@ public class StateMachineHelper {
 
     public void setExecutionParamentersByTaskId(String taskId, Map<String, String> parameters) {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
-        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         TaskQuery taskQuery = taskService.createTaskQuery();
         Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
         if (task != null) {
-            for (String key : parameters.keySet()) {
-                runtimeService.setVariable(task.getExecutionId(), key, parameters.get(key));
-            }
+            setExecutionParameters(task.getExecutionId(), parameters);
+        }
+    }
+
+    public void setExecutionParameters(String executionId, Map<String, String> parameters) {
+        for (String key : parameters.keySet()) {
+            RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+            runtimeService.setVariable(executionId.replace(ACTIVITI_PREFIX, ""), key, parameters.get(key));
         }
     }
 
@@ -249,6 +288,30 @@ public class StateMachineHelper {
         TaskQuery taskQuery = taskService.createTaskQuery();
         Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
         return task.getExecutionId();
+    }
+
+    public void setInputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        for (WorkflowVariables.WorkflowVariable variable : variables) {
+            if (variable.getFrom() == null) {
+                runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), variable.getValue());
+            } else {
+                Object value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFrom());
+                runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), value);
+            }
+        }
+    }
+
+    public void getOutputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        for (WorkflowVariables.WorkflowVariable variable : variables) {
+            if (variable.getFrom() == null) {
+                runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), variable.getValue());
+            } else {
+                Object value = runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFrom());
+                runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), value);
+            }
+        }
     }
 
 }
