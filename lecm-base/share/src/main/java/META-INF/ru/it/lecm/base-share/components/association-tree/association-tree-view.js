@@ -35,10 +35,10 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 
+        this.eventGroup = htmlId;
         this.selectedItems = {};
         this.addItemButtons = {};
         this.searchProperties = {};
-        this.createNewItemId = null;
         this.currentNode = null;
 
 		return this;
@@ -46,7 +46,7 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.AssociationTreeViewer, Alfresco.component.Base,
 	{
-        createNewItemId: null,
+        eventGroup: null,
 
         singleSelectedItem: null,
 
@@ -72,7 +72,7 @@ LogicECM.module = LogicECM.module || {};
 
 			initialized: false,
 
-            createNewItemUri: "",
+            createNewItemIcon: "",
 
             rootNodeRef: '',
 
@@ -140,8 +140,10 @@ LogicECM.module = LogicECM.module || {};
                     },
                     failureCallback:
                     {
-                        fn: function (response) {
-                            //todo show error message
+                        fn: function (oResponse) {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            this.widgets.dataTable.set("MSG_ERROR", response.message);
+                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
                         },
                         obj:
                         {
@@ -379,6 +381,7 @@ LogicECM.module = LogicECM.module || {};
                                         label: prop.values[0].value,
                                         nodeRef: data.nodeRef,
                                         isLeaf: data.children.length == 0,
+                                        isContainer: true,
                                         renderHidden:true
                                     };
                                     new YAHOO.widget.TextNode(newNode, root);
@@ -391,8 +394,10 @@ LogicECM.module = LogicECM.module || {};
                     },
                     failureCallback:
                     {
-                        fn: function (response) {
-                            //todo show error message
+                        fn: function (oResponse) {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            this.widgets.dataTable.set("MSG_ERROR", response.message);
+                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
                         },
                         scope: this
                     }
@@ -413,6 +418,7 @@ LogicECM.module = LogicECM.module || {};
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:oResults[nodeIndex].type,
+                                isContainer: oResults[nodeIndex].isContainer,
                                 renderHidden:true
                             };
                             new YAHOO.widget.TextNode(newNode, node);
@@ -426,8 +432,9 @@ LogicECM.module = LogicECM.module || {};
                     }
                 },
                 failure:function (oResponse) {
-//                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-//                    oResponse.argument.fnLoadComplete();
+                    var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                    this.widgets.dataTable.set("MSG_ERROR", response.message);
+                    this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
                 },
                 argument:{
                     node:node,
@@ -491,7 +498,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.options.createNewItemUri !== "" && me.createNewItemId === null)
+                    if (me.currentNode != null && me.currentNode.data.isContainer)
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -540,64 +547,6 @@ LogicECM.module = LogicECM.module || {};
                     MSG_EMPTY: initialMessage
                 });
 
-            // Rendering complete event handler
-            this.widgets.dataTable.subscribe("renderEvent", function()
-            {
-                if (this.options.createNewItemUri !== "")
-                {
-                    if (!this.widgets.enterListener)
-                    {
-                        this.widgets.enterListener = new KeyListener(this.createNewItemId,
-                            {
-                                keys: KeyListener.KEY.ENTER
-                            },
-                            {
-                                fn: function AssociationTreeViewer__createControls_fn(eventName, keyEvent, obj)
-                                {
-                                    // Clear any previous autocomplete timeout
-                                    if (this.autocompleteDelayId != -1)
-                                    {
-                                        window.clearTimeout(this.autocompleteDelayId);
-                                    }
-                                    this.onCreateNewItem();
-                                    Event.stopEvent(keyEvent[1]);
-                                    return false;
-                                },
-                                scope: this,
-                                correctScope: true
-                            }, YAHOO.env.ua.ie > 0 ? KeyListener.KEYDOWN : "keypress");
-                        this.widgets.enterListener.enable();
-                    }
-
-                    me.autocompleteDelayId = -1;
-                    Event.addListener(this.createNewItemId, "keyup", function(p_event)
-                    {
-                        var sQuery = this.value;
-
-                        // Filter out keys that don't trigger queries
-                        if (!Alfresco.util.isAutocompleteIgnoreKey(p_event.keyCode))
-                        {
-                            // Clear previous timeout
-                            if (me.autocompleteDelayId != -1)
-                            {
-                                window.clearTimeout(me.autocompleteDelayId);
-                            }
-                            // Set new timeout
-                            me.autocompleteDelayId = window.setTimeout(function()
-                            {
-                                YAHOO.Bubbling.fire("refreshItemList",
-                                    {
-                                        eventGroup: me,
-                                        searchTerm: sQuery
-                                    });
-                            }, 500);
-                        }
-                    });
-
-                    Dom.get(this.createNewItemId).focus();
-                }
-            }, this, true);
-
             // Hook add item action click events (for Compact mode)
             var fnAddItemHandler = function AssociationTreeViewer__createControls_fnAddItemHandler(layer, args)
             {
@@ -626,11 +575,23 @@ LogicECM.module = LogicECM.module || {};
             // Hook create new item action click events (for Compact mode)
             var fnCreateNewItemHandler = function AssociationTreeViewer__createControls_fnCreateNewItemHandler(layer, args)
             {
-                var owner = YAHOO.Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                if (owner !== null)
-                {
-                    me.onCreateNewItem();
-                }
+                var templateUrl = me.generateCreateNewUrl(me.currentNode.data.nodeRef, me.options.itemType);
+
+                new Alfresco.module.SimpleDialog("form-dialog").setOptions({
+                    width:"40em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn:me.setCreateNewFormDialogTitle
+                    },
+                    onSuccess:{
+                        fn:function () {
+                            me._updateItems(me.currentNode.data.nodeRef, "");
+                        },
+                        scope:this
+                    }
+                }).show();
                 return true;
             };
             YAHOO.Bubbling.addDefaultAction("create-new-item-" + this.eventGroup, fnCreateNewItemHandler, true);
@@ -659,6 +620,25 @@ LogicECM.module = LogicECM.module || {};
                 return true;
             };
             YAHOO.Bubbling.addDefaultAction("parent-" + this.eventGroup, fnNavigationHandler, true);
+        },
+
+        generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            return YAHOO.lang.substitute(templateUrl, {
+                itemKind: "type",
+                itemId: itemType,
+                destination: nodeRef,
+                mode: "create",
+                submitType: "json",
+                formId: "association-create-new-node-form"
+            });
+        },
+
+        setCreateNewFormDialogTitle: function (p_form, p_dialog) {
+            var fileSpan = '<span class="light">Create new</span>';
+            Alfresco.util.populateHTML(
+                [ p_dialog.id + "-form-container_h", fileSpan]
+            );
         },
 
         /**
@@ -710,8 +690,7 @@ LogicECM.module = LogicECM.module || {};
                 // Create New item cell type
                 if (oRecord.getData("type") == IDENT_CREATE_NEW)
                 {
-                    scope.createNewItemId = Alfresco.util.generateDomId();
-                    elCell.innerHTML = '<input id="' + scope.createNewItemId + '" type="text" class="create-new-input" tabindex="0" />';
+                    elCell.innerHTML = '<a href="#" title="' + scope.msg("form.control.object-picker.create-new") + '" class="create-new-item-' + scope.eventGroup + '" >' + scope.msg("form.control.object-picker.create-new") + '</a>';
                     return;
                 }
 
@@ -747,15 +726,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
-                var containerId = Alfresco.util.generateDomId(),
-                    button;
-
-                // Create New item cell type
-                if (oRecord.getData("type") == IDENT_CREATE_NEW)
-                {
-                    elCell.innerHTML = '<a href="#" class="create-new-item create-new-item-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.create-new") + '" tabindex="0"><span class="createNewIcon">&nbsp;</span></a>';
-                    return;
-                }
+                var containerId = Alfresco.util.generateDomId();
 
                 if (oRecord.getData("selectable"))
                 {
@@ -821,7 +792,7 @@ LogicECM.module = LogicECM.module || {};
         _updateItems: function AssociationTreeViewer__updateItems(nodeRef, searchTerm)
         {
             // Empty results table - leave tag entry if it's been rendered
-            if (this.createNewItemId !== null)
+            if (this.currentNode != null && this.currentNode.data.isContainer)
             {
                 this.widgets.dataTable.deleteRows(1, this.widgets.dataTable.getRecordSet().getLength() - 1);
             }
@@ -835,7 +806,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
                 this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.createNewItemId !== null)
+                if (this.currentNode != null && this.currentNode.data.isContainer)
                 {
                     this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 }

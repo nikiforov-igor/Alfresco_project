@@ -12,7 +12,8 @@ if (parentNode != null) {
             title: item.properties[nodeTitleProperty],
             type: item.getTypeShort(),
             nodeRef: item.getNodeRef().toString(),
-            isLeaf: "" + !item.hasChildren
+            isLeaf: "" + !item.hasChildren,
+            isContainer: "" + item.isContainer
         });
     }
 }

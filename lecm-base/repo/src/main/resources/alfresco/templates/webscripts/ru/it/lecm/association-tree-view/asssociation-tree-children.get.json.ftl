@@ -5,7 +5,8 @@
 		title: "${b.title}",
 		type: "${b.type}",
 		nodeRef: "${b.nodeRef}",
-		isLeaf: ${b.isLeaf}
+		isLeaf: ${b.isLeaf},
+        isContainer: ${b.isContainer}
 	}
 		<#if b_has_next>,</#if>
 	</#list>
