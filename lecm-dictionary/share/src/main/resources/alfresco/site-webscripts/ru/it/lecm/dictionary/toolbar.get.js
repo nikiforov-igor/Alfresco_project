@@ -27,7 +27,9 @@ function main()
     // Actions
     var myConfig = new XML(config.script),
         xmlActionSet = myConfig.actionSet,
+        xmlExportSet = myConfig.exportSet,
         actionSet = [];
+        exportSet = [];
 
     for each (var xmlAction in xmlActionSet.action)
     {
@@ -42,7 +44,21 @@ function main()
             });
     }
 
+    for each (var xmlAction in xmlExportSet.action)
+    {
+        exportSet.push(
+            {
+                id: xmlAction.@id.toString(),
+                type: xmlAction.@type.toString(),
+                permission: xmlAction.@permission.toString(),
+                asset: xmlAction.@asset.toString(),
+                href: xmlAction.@href.toString(),
+                label: xmlAction.@label.toString()
+            });
+    }
+
     model.actionSet = actionSet;
+    model.exportSet = exportSet;
 }
 
 main();

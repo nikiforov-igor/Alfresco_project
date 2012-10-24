@@ -29,6 +29,13 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 					</div>
 				</div>
 			</div>
+			<div class="new-row">
+            <span id="${id}-exportButton" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button">${msg('button.new-row')}</button>
+               </span>
+            </span>
+			</div>
 		</div>
 
 		<div class="right" style="display: none;">

@@ -44,4 +44,17 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="transactionService" ref="transactionService"/>
     </bean>
+
+    <bean id="${groupId}.${artifactId}.exportByXML" parent="baseJavaScriptExtension"
+          class="ru.it.lecm.dictionary.export.ExportXML">
+        <property name="extensionName">
+            <value>exportXML</value>
+        </property>
+        <property name="mimetypeService">
+            <ref bean="mimetypeService"/>
+        </property>
+        <property name="exporterService">
+            <ref bean="ExporterService"/>
+        </property>
+    </bean>
 </beans>

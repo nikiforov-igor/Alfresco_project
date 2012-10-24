@@ -97,6 +97,12 @@
                         value: "create"
                     });
 
+                this.widgets.exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExportXML,
+                    {
+                        disabled: true,
+                        value: "create"
+                    });
+
                 // Selected Items menu button
                 this.widgets.selectedItems = Alfresco.util.createYUIButton(this, "selectedItems-button", this.onSelectedItems,
                     {
@@ -366,6 +372,34 @@
                     }
                     this.widgets.selectedItems.set("disabled", (items.length === 0));
                 }
+            },
+            onExportXML: function(){
+                var datalistMeta = this.modules.dataGrid.datalistMeta;
+                var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export";
+                if (datalistMeta.nodeRef != null) {
+                    sUrl += "?nodeRef=" + encodeURI(datalistMeta.nodeRef);
+                }
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: sUrl,
+                        successCallback:
+                        {
+                            fn: function(response){
+                                var oResults = response.serverResponse.responseText;
+//                                var exportObject =  new ActiveXObject("Scripting.FileSystemObject");
+//                                var exportFile = exportObject.CreateTextFile(oResults, true);
+                                var mydoc = window.open();
+                                mydoc.document.write(oResults);
+                                mydoc.document.execCommand("saveAs",true,".xml");
+                            },
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: function() {alert("Failed to load webscript export.")},
+                            scope: this
+                        }
+                    });
             }
         }, true);
 })();
