@@ -7,6 +7,7 @@
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
     </imports>
 
     <namespaces>
@@ -70,6 +71,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Описание моделей -->
@@ -382,6 +386,9 @@
                     </target>
                 </child-association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Должностное лицо -->
@@ -428,6 +435,9 @@
                     <type>d:text</type>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Офис организации -->
@@ -457,6 +467,9 @@
                     <type>d:any</type>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
        <!-- Персональные данные -->
@@ -485,6 +498,9 @@
                     <type>d:text</type>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Проект -->
@@ -542,6 +558,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Состав подразделения -->
@@ -587,6 +606,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>

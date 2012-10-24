@@ -114,58 +114,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             isDefault: true
                         }]
                 });
-        },
-
-        /**
-         * Duplicate item(s).
-         *
-         * @method onActionDuplicate
-         * @param items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
-         */
-        onActionDuplicate: function DataListActions_onActionDuplicate(p_items)
-        {
-            var me = this,
-                items = YAHOO.lang.isArray(p_items) ? p_items : [p_items],
-                destinationNodeRef = new Alfresco.util.NodeRef(this.modules.dataGrid.datalistMeta.nodeRef),
-                nodeRefs = [];
-
-            for (var i = 0, ii = items.length; i < ii; i++)
-            {
-                nodeRefs.push(items[i].nodeRef);
-            }
-
-            this.modules.actions.genericAction(
-                {
-                    success:
-                    {
-                        event:
-                        {
-                            name: "dataItemsDuplicated",
-                            obj:
-                            {
-                                items: items
-                            }
-                        },
-                        message: this.msg("message.duplicate.success", items.length)
-                    },
-                    failure:
-                    {
-                        message: this.msg("message.duplicate.failure")
-                    },
-                    webscript:
-                    {
-                        method: Alfresco.util.Ajax.POST,
-                        name: "duplicate/node/" + destinationNodeRef.uri
-                    },
-                    config:
-                    {
-                        requestContentType: Alfresco.util.Ajax.JSON,
-                        dataObj:
-                        {
-                            nodeRefs: nodeRefs
-                        }
-                    }
-                });
         }
     };
 })();
@@ -202,7 +150,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         defaultConfig:
         {
             method: "POST",
-            urlStem: Alfresco.constants.PROXY_URI + "lecm/dictionary/action/",
+            urlStem: Alfresco.constants.PROXY_URI + "lecm/orgstructure/action/",
             dataObj: null,
             successCallback: null,
             successMessage: null,

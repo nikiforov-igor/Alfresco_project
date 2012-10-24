@@ -1,0 +1,9 @@
+<webscript>
+  <shortname>deleteItem</shortname>
+  <description>Orgstructure Action - Delete single or multiple items</description>
+  <url>/lecm/orgstructure/action/items</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+  <transaction>required</transaction>
+  <lifecycle>internal</lifecycle>
+</webscript>

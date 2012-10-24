@@ -44,6 +44,7 @@
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -61,15 +62,23 @@
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-number"/>
-                    <!--<show id="lecm-orgstr:employee-is-system-user"/>-->
-                    <!--<show id="lecm-orgstr:employee-person-assoc"/>"/>
-                    <show id="lecm-orgstr:employee-person-data-assoc"/>-->
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:employee-first-name"/>
+                    <show id="lecm-orgstr:employee-middle-name"/>
+                    <show id="lecm-orgstr:employee-last-name"/>
+                    <show id="lecm-orgstr:employee-phone"/>
+                    <show id="lecm-orgstr:employee-email"/>
+                    <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-dic:active" />
+                </field-visibility>
             </form>
         </forms>
     </config>
@@ -138,6 +147,7 @@
                     <show id="lecm-orgstr:unit-is-exists"/>
                     <show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -152,7 +162,6 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-orgstr:unit-is-exists"/>
                     <show id="lecm-orgstr:unit-offices-assoc"/>
                     <show id="lecm-orgstr:unit-composition-assoc"/>
                     <show id="lecm-orgstr:element-official-assoc"/>
@@ -162,6 +171,15 @@
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:unit-code"/>
+                    <show id="lecm-orgstr:unit-type"/>
+                    <show id="lecm-dic:active" />
+                </field-visibility>
             </form>
         </forms>
     </config>
@@ -196,6 +214,7 @@
                     <show id="cm:description"/>
                     <show id="lecm-orgstr:position-name-g"/>
                     <show id="lecm-orgstr:position-name-d"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -209,6 +228,7 @@
                     <show id="cm:description"/>
                     <show id="lecm-orgstr:position-name-g"/>
                     <show id="lecm-orgstr:position-name-d"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -224,6 +244,7 @@
                     <show id="lecm-orgstr:office-fax"/>
                     <show id="lecm-orgstr:office-address"/>
                     <show id="lecm-orgstr:office-transit-scheme"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -239,6 +260,7 @@
                     <show id="lecm-orgstr:office-fax"/>
                     <show id="lecm-orgstr:office-address"/>
                     <show id="lecm-orgstr:office-transit-scheme"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -253,6 +275,7 @@
                     <show id="lecm-orgstr:person-data-phone"/>
                     <show id="lecm-orgstr:person-data-date"/>
                     <show id="lecm-orgstr:person-data-service-id"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -267,6 +290,7 @@
                     <show id="lecm-orgstr:person-data-phone"/>
                     <show id="lecm-orgstr:person-data-date"/>
                     <show id="lecm-orgstr:person-data-service-id"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -282,6 +306,7 @@
                     <show id="lecm-orgstr:project-schedule"/>
                     <show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:project-workforce-assoc"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -296,14 +321,22 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:project-target"/>
                     <show id="lecm-orgstr:project-schedule"/>
-                    <!--<show id="lecm-orgstr:element-official-assoc"/>
-                    <show id="lecm-orgstr:project-workforce-assoc"/>-->
+                    <show id="lecm-dic:active" />
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:element-full-name"/>
+                    <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:project-target"/>
+                    <show id="lecm-orgstr:project-schedule"/>
+                    <show id="lecm-dic:active" />
+                </field-visibility>
             </form>
         </forms>
     </config>
@@ -315,6 +348,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workforce-role"/>
                     <show id="lecm-orgstr:workforce-employee-assoc"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -327,6 +361,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workforce-role"/>
                     <show id="lecm-orgstr:workforce-employee-assoc"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -340,6 +375,7 @@
                     <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-is-boss"/>
                     <show id="lecm-orgstr:composition-is-primary"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>
@@ -354,6 +390,7 @@
                     <show id="lecm-orgstr:composition-is-primary"/>
                     <show id="lecm-orgstr:composition-position-assoc"/>
                     <show id="lecm-orgstr:composition-employee-assoc"/>
+                    <show id="lecm-dic:active" />
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">

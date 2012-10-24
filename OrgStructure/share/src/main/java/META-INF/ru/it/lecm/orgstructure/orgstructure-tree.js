@@ -284,6 +284,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             }).show();
         },
+        _deleteNode:function editNodeByEvent(event) {
+
+        },
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
             var fileSpan = '<span class="light">Edit Metatdata</span>';
@@ -324,8 +327,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         this.params = YAHOO.lang.merge({}, p_params);
 
         // Create icons instances
-        this.editIcon = new Alfresco.widget.InsituEditorUnitEdit(this, p_params);
         this.addIcon = new Alfresco.widget.InsituEditorUnitAdd(this, p_params);
+        this.editIcon = new Alfresco.widget.InsituEditorUnitEdit(this, p_params);
+        this.deleteIcon = new Alfresco.widget.InsituEditorUnitDelete(this, p_params);
         return this;
     };
 
@@ -397,6 +401,31 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 var context = obj.params.unitAdmin;
                 context.selectedNode = obj.params.curElem;
                 context._editNode(e);
+            }
+        });
+
+    Alfresco.widget.InsituEditorUnitDelete = function (p_editor, p_params) {
+        this.editor = p_editor;
+        this.params = YAHOO.lang.merge({}, p_params);
+        this.disabled = p_params.disabled;
+
+        this.editIcon = document.createElement("span");
+        this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+        Dom.addClass(this.editIcon, "insitu-delete-unit");
+
+        this.params.context.appendChild(this.editIcon, this.params.context);
+        Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+        Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+        Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditorUnitDelete, Alfresco.widget.InsituEditorIcon,
+        {
+            onIconClick:function InsituEditorUnitDelete_onIconClick(e, obj) {
+                var context = obj.params.unitAdmin;
+                context.selectedNode = obj.params.curElem;
+                context._deleteNode(e);
             }
         });
 })();

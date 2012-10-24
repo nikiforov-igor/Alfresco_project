@@ -58,13 +58,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(LogicECM.module.OrgStructure.Toolbar, Alfresco.component.Base, {
-        messages:null,
-
-        setMessages:function (messages) {
-            this.messages = messages;
-        }
-    });
+    YAHOO.extend(LogicECM.module.OrgStructure.Toolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with Common Actions module
@@ -100,7 +94,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         disabled:true,
                         value:"create"
                     });
-
+                // Selected Items menu button
+                this.widgets.selectedItems = Alfresco.util.createYUIButton(this, "selectedItems-button", this.onSelectedItems,
+                    {
+                        type:"menu",
+                        menu:"selectedItems-menu",
+                        lazyloadmenu:false,
+                        disabled:true
+                    });
                 // DataList Actions module
                 this.modules.actions = new LogicECM.module.OrgStructure.Actions();
 
@@ -118,7 +119,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 var toolbar = this;
                 var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-dialogTitle", toolbar.messages["label.new-row.title"] ]
+                        [ p_dialog.id + "-dialogTitle", this.msg("label.new-row.title") ]
                     );
                 };
 
@@ -153,7 +154,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text:this.messages[successMsg]
+                                        text:this.msg(successMsg)
                                     });
                             },
                             scope:this
@@ -162,17 +163,16 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             fn:function DataListToolbar_onNewRow_failure(response) {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text:this.messages[failureMsg]
+                                        text:this.msg(failureMsg)
                                     });
                             },
                             scope:this
                         },
-                        doBeforeFormSubmit:
-                        {
-                            fn: function GenerateElementName(form){
+                        doBeforeFormSubmit:{
+                            fn:function GenerateElementName(form) {
                                 generateNodeName(form, pattern, ",", false);
                             },
-                            scope: this
+                            scope:this
                         }
                     }).show();
             }, /**
@@ -209,7 +209,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     } else {
                         Alfresco.util.PopupManager.displayMessage(
                             {
-                                text:this.messages["message.select-unit.info"]
+                                text:this.msg("message.select-unit.info")
                             });
                     }
                 }
