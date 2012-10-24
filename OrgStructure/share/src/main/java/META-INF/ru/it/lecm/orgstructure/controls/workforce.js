@@ -104,7 +104,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         loadData:function () {
             if (this.currentProject.indexOf("://") > 0) { // on new create - false
                 var unitNodeRef = new Alfresco.util.NodeRef(this.currentProject);
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/project/workforces/" + unitNodeRef;
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/project/workforces/" + unitNodeRef.uri;
                 var context = this;
                 var callback = {
                     success:function (oResponse) {
@@ -193,19 +193,35 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         _updateCtrl:function WFCtrl_onNewWorkfroceCreated(layer, args) {
             var obj = args[1];
             if ((obj !== null) && (obj.nodeRef !== null)) {
-                // add node to table
-                var newRow = {
-                    employee:"New",
-                    role:"New",
-                    workforceRef:obj.nodeRef
+                var workNodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/base/node/properties/" + workNodeRef.uri;
+                var postData = "{employee:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-employee-assoc->{http://www.alfresco.org/model/content/1.0}name\', " +
+                    "role:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-role\'}";
+                var control = this;
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null) {
+                            // add node in table
+                            var newRow = {
+                                employee:oResults.employee,
+                                role:oResults.role,
+                                workforceRef:obj.nodeRef
+                            };
+                            control.table.addRow(newRow, this.globalDataCount++);
+                            control.table.render();
+                            // add node to selected
+                            control.selectedItems[obj.nodeRef] = obj;
+                            // refresh currentValues
+                            control._adjustCurrentValues();
+                        }
+                    },
+                    failure:function (oResponse) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                    },
+                    timeout:10000
                 };
-                this.table.addRow(newRow, this.globalDataCount);
-                this.globalDataCount++;
-                this.table.render();
-                // add node to selected
-                this.selectedItems[obj.nodeRef] = obj;
-                // refresh currentValues
-                this._adjustCurrentValues();
+                YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
             }
         },
         onReady:function WFCtrl_onReady() {

@@ -53,31 +53,23 @@ public class GetNodePropertiesScript extends AbstractWebScript {
 			ref = storeType + "://" + storeId + "/" + id;
 		}
 
-
-		Map<String, String[]> requestParameters = new HashMap<String, String[]>();
-		for (String paramName : req.getParameterNames()) {
-			requestParameters.put(paramName, req.getParameterValues(paramName));
-		}
-
 		JSONObject result = new JSONObject();
-		if (ref != null && !ref.isEmpty()) {
-			NodeService nodeService = serviceRegistry.getNodeService();
-			NodeRef nodeRef = new NodeRef(ref);
+		NodeService nodeService = serviceRegistry.getNodeService();
+		NodeRef nodeRef = new NodeRef(ref);
 
-			String props = req.getContent().getContent();
-			if (props != null && !props.isEmpty() && props.startsWith("{")) {
-				try {
-					JSONObject propsObj = new JSONObject(props);
-					Iterator keys = propsObj.keys();
-					while (keys.hasNext()) {
-						String prop = (String) keys.next();
-						String getFrom = (String) propsObj.get(prop);
-						Object value = getValue(nodeRef, getFrom, nodeService);
-						result.put(prop, value);
-					}
-				} catch (JSONException e) {
-					log.error(e);
+		String props = req.getContent().getContent();
+		if (props != null && !props.isEmpty() && props.startsWith("{")) {
+			try {
+				JSONObject propsObj = new JSONObject(props);
+				Iterator keys = propsObj.keys();
+				while (keys.hasNext()) {
+					String prop = (String) keys.next();
+					String getFrom = (String) propsObj.get(prop);
+					Object value = getValue(nodeRef, getFrom, nodeService);
+					result.put(prop, value);
 				}
+			} catch (JSONException e) {
+				log.error(e);
 			}
 		}
 
@@ -99,9 +91,11 @@ public class GetNodePropertiesScript extends AbstractWebScript {
 
 			String lastPart = getFrom.substring(index + 2);
 			for (NodeRef checkedRef : checkedRefs) {
-				value = getValue(checkedRef, lastPart, nodeService);
-				if (value != null) {
-					break;
+				Object valuePart = getValue(checkedRef, lastPart, nodeService);
+				if (value == null) {
+					value = valuePart;
+				} else {
+					value = value + "," + valuePart;
 				}
 			}
 		} else {

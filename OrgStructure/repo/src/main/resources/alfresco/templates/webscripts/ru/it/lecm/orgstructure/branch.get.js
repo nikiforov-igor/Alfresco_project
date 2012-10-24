@@ -121,7 +121,7 @@ if (organization == null || organization == "") {
     e1.properties["lecm-orgstr:employee-first-name"] = "Иван";
     e1.properties["lecm-orgstr:employee-middle-name"] = "Иванович";
     e1.properties["lecm-orgstr:employee-last-name"] = "Иванов";
-    e1.properties["lecm-orgstr:employee-sex"] = "Male";
+    e1.properties["lecm-orgstr:employee-sex"] = "MALE";
     e1.properties["lecm-orgstr:employee-phone"] = "1-11-11";
     e1.properties["lecm-orgstr:employee-number"] = "1";
     e1.properties["lecm-orgstr:employee-is-system-user"] = false;
@@ -134,7 +134,7 @@ if (organization == null || organization == "") {
     e2.properties["lecm-orgstr:employee-first-name"] = "Петр";
     e2.properties["lecm-orgstr:employee-middle-name"] = "Петрович";
     e2.properties["lecm-orgstr:employee-last-name"] = "Петров";
-    e2.properties["lecm-orgstr:employee-sex"] = "Male";
+    e2.properties["lecm-orgstr:employee-sex"] = "MALE";
     e2.properties["lecm-orgstr:employee-phone"] = "2-11-11";
     e2.properties["lecm-orgstr:employee-number"] = "2";
     e2.properties["lecm-orgstr:employee-is-system-user"] = false;
@@ -147,7 +147,7 @@ if (organization == null || organization == "") {
     e3.properties["lecm-orgstr:employee-first-name"] = "Сидор";
     e3.properties["lecm-orgstr:employee-middle-name"] = "Сидорович";
     e3.properties["lecm-orgstr:employee-last-name"] = "Сидоров";
-    e3.properties["lecm-orgstr:employee-sex"] = "Male";
+    e3.properties["lecm-orgstr:employee-sex"] = "MALE";
     e3.properties["lecm-orgstr:employee-phone"] = "3-11-11";
     e3.properties["lecm-orgstr:employee-number"] = "3";
     e3.properties["lecm-orgstr:employee-is-system-user"] = false;
@@ -160,7 +160,7 @@ if (organization == null || organization == "") {
     e4.properties["lecm-orgstr:employee-first-name"] = "Денис";
     e4.properties["lecm-orgstr:employee-middle-name"] = "Игоревич";
     e4.properties["lecm-orgstr:employee-last-name"] = "Башмаков";
-    e4.properties["lecm-orgstr:employee-sex"] = "Male";
+    e4.properties["lecm-orgstr:employee-sex"] = "MALE";
     e4.properties["lecm-orgstr:employee-phone"] = "4-11-11";
     e4.properties["lecm-orgstr:employee-number"] = "4";
     e4.properties["lecm-orgstr:employee-is-system-user"] = true;
@@ -178,7 +178,7 @@ if (organization == null || organization == "") {
     e5.properties["lecm-orgstr:employee-first-name"] = "Людмила";
     e5.properties["lecm-orgstr:employee-middle-name"] = "Александровна";
     e5.properties["lecm-orgstr:employee-last-name"] = "Никитина";
-    e5.properties["lecm-orgstr:employee-sex"] = "Female";
+    e5.properties["lecm-orgstr:employee-sex"] = "FEMALE";
     e5.properties["lecm-orgstr:employee-phone"] = "5-11-11";
     e5.properties["lecm-orgstr:employee-number"] = "5";
     e5.properties["lecm-orgstr:employee-is-system-user"] = true;
@@ -196,7 +196,7 @@ if (organization == null || organization == "") {
     e6.properties["lecm-orgstr:employee-first-name"] = "Екатерина";
     e6.properties["lecm-orgstr:employee-middle-name"] = "Алексеевна";
     e6.properties["lecm-orgstr:employee-last-name"] = "Петрушевская";
-    e6.properties["lecm-orgstr:employee-sex"] = "Female";
+    e6.properties["lecm-orgstr:employee-sex"] = "FEMALE";
     e6.properties["lecm-orgstr:employee-phone"] = "6-11-11";
     e6.properties["lecm-orgstr:employee-number"] = "6";
     e6.properties["lecm-orgstr:employee-is-system-user"] = false;
@@ -210,7 +210,7 @@ if (organization == null || organization == "") {
     direction.properties["lecm-orgstr:element-full-name"] = "Руководство организации";
     direction.properties["lecm-orgstr:element-short-name"] = "Руководство";
     direction.properties["lecm-orgstr:unit-code"] = "PO";
-    direction.properties["lecm-orgstr:unit-type"] = "Segregated";
+    direction.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     direction.properties["lecm-orgstr:unii-is_exists"] = true;
     direction.save();
 
@@ -218,7 +218,7 @@ if (organization == null || organization == "") {
     unit1.properties["lecm-orgstr:element-full-name"] = "Главное отделение";
     unit1.properties["lecm-orgstr:element-short-name"] = "Отдел 1";
     unit1.properties["lecm-orgstr:unit-code"] = "O1";
-    unit1.properties["lecm-orgstr:unit-type"] = "Segregated";
+    unit1.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     unit1.properties["lecm-orgstr:unit-is-exists"] = true;
     unit1.save();
     unit1.createAssociation(of1, "lecm-orgstr:unit-offices-assoc");
@@ -228,7 +228,7 @@ if (organization == null || organization == "") {
     unit11.properties["lecm-orgstr:element-full-name"] = "Отдел внедрения";
     unit11.properties["lecm-orgstr:element-short-name"] = "Внедрение";
     unit11.properties["lecm-orgstr:unit-code"] = "O1.1";
-    unit11.properties["lecm-orgstr:unit-type"] = "Segregated";
+    unit11.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     unit11.properties["lecm-orgstr:unit-is-exists"] = true;
     unit11.save();
     unit11.createAssociation(of3, "lecm-orgstr:unit-offices-assoc");
@@ -237,7 +237,7 @@ if (organization == null || organization == "") {
     unit111.properties["lecm-orgstr:element-full-name"] = "Обнинский Отдел внедрения";
     unit111.properties["lecm-orgstr:element-short-name"] = "Обнинское отделение";
     unit111.properties["lecm-orgstr:unit-code"] = "O1.1.1";
-    unit111.properties["lecm-orgstr:unit-type"] = "Segregated";
+    unit111.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     unit111.properties["lecm-orgstr:unit-is-exists"] = true;
     unit111.save();
 
@@ -245,7 +245,7 @@ if (organization == null || organization == "") {
     unit2.properties["lecm-orgstr:element-full-name"] = "BPM Отдел";
     unit2.properties["lecm-orgstr:element-short-name"] = "BPM";
     unit2.properties["lecm-orgstr:unit-code"] = "O2";
-    unit2.properties["lecm-orgstr:unit-type"] = "Separated";
+    unit2.properties["lecm-orgstr:unit-type"] = "SEPARATED";
     unit2.properties["lecm-orgstr:unit-is-exists"] = true;
     unit2.save();
     unit2.createAssociation(of3, "lecm-orgstr:unit-offices-assoc");

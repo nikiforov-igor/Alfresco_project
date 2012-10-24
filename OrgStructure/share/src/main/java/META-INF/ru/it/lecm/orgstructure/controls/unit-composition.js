@@ -110,7 +110,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         loadData:function () {
             if (this.currentUnit.indexOf("://") > 0) {
                 var unitNodeRef = new Alfresco.util.NodeRef(this.currentUnit);
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/unit-compositions/" + unitNodeRef;
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/unit-compositions/" + unitNodeRef.uri;
                 var context = this;
                 var callback = {
                     success:function (oResponse) {
@@ -198,21 +198,39 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         updateTable:function UCCtrl_onNewCompositionCreated(layer, args) {
             var obj = args[1];
             if ((obj !== null) && (obj.nodeRef !== null)) {
-                // add node in table
-                var newRow = {
-                    employee:"New",
-                    position:"New",
-                    is_boss:"New",
-                    is_primary:"New",
-                    compositionRef:obj.nodeRef
+                var unitNodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/base/node/properties/" + unitNodeRef.uri;
+                var postData = "{employee:\'{http://www.it.ru/lecm/org/structure/1.0}composition-employee-assoc->{http://www.alfresco.org/model/content/1.0}name\', " +
+                    "position:\'{http://www.it.ru/lecm/org/structure/1.0}composition-position-assoc->{http://www.alfresco.org/model/content/1.0}name\'," +
+                    "is_boss:\'{http://www.it.ru/lecm/org/structure/1.0}composition-is-boss\'," +
+                    "is_primary:\'{http://www.it.ru/lecm/org/structure/1.0}composition-is-primary\'}";
+                var control = this;
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null) {
+                            // add node in table
+                            var newRow = {
+                                employee:oResults.employee,
+                                position:oResults.position,
+                                is_boss:oResults.is_boss,
+                                is_primary:oResults.is_primary,
+                                compositionRef:obj.nodeRef
+                            };
+                            control.table.addRow(newRow, this.globalDataCount++);
+                            control.table.render();
+                            // add node to selected
+                            control.selectedItems[obj.nodeRef] = obj;
+                            // refresh currentValues
+                            control._adjustCurrentValues();
+                        }
+                    },
+                    failure:function (oResponse) {
+                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
+                    },
+                    timeout:10000
                 };
-                this.table.addRow(newRow, this.globalDataCount);
-                this.globalDataCount++;
-                this.table.render();
-                // add node to selected
-                this.selectedItems[obj.nodeRef] = obj;
-                // refresh currentValues
-                this._adjustCurrentValues();
+                YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
             }
         },
         onReady:function UCCtrl_onReady() {

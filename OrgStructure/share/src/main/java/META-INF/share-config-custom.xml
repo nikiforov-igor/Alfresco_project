@@ -61,7 +61,7 @@
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-number"/>
-                    <show id="lecm-orgstr:employee-is-system-user"/>
+                    <!--<show id="lecm-orgstr:employee-is-system-user"/>-->
                     <!--<show id="lecm-orgstr:employee-person-assoc"/>"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>-->
                 </field-visibility>

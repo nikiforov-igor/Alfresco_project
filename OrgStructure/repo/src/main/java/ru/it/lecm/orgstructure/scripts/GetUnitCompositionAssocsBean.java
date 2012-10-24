@@ -58,7 +58,7 @@ public class GetUnitCompositionAssocsBean extends AbstractWebScript {
 			res.getWriter().write("[]");
 			return;
 		} else {
-			ref = storeType + "//" + storeId + "/" + id;
+			ref = storeType + "://" + storeId + "/" + id;
 		}
 
 		NodeService nodeService = serviceRegistry.getNodeService();
