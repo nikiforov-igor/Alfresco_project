@@ -67,7 +67,7 @@
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
         plane: ${plane?string},
-        currentValue: "${field.value}",
+        currentValue: "${field.value!''}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
         itemType: "${field.endpointType}",
         mode: "picker"
