@@ -3,5 +3,4 @@
     <description>Contracts: Document page</description>
     <url>/lecm/contracts/documents</url>
     <format default="html">extension</format>
-    <authentication>user</authentication>
 </webscript>

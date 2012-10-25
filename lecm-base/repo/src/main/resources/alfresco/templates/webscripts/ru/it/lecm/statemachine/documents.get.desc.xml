@@ -4,4 +4,6 @@
     <url>/lecm/statemachine/documents</url>
     <format default="html">extension</format>
     <authentication>user</authentication>
+    <lifecycle>internal</lifecycle>
+    <transaction allow="readonly">required</transaction>
 </webscript>
