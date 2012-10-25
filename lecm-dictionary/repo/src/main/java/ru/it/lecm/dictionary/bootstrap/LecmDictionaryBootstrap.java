@@ -4,7 +4,6 @@ import com.thoughtworks.xstream.XStream;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -82,20 +81,19 @@ public class LecmDictionaryBootstrap {
 	private NodeRef getDictionariesRoot() {
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		final NodeRef[] dictionariesRoot = {nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME)};
-		if (dictionariesRoot[0] == null) {
-			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-			properties.put(ContentModel.PROP_NAME, DICTIONARIES_ROOT_NAME);
+		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
+		if (dictionariesRoot == null) {
 			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 				@Override
 				public Object execute() throws Throwable {
-					ChildAssociationRef associationRef = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
-					dictionariesRoot[0] = associationRef.getChildRef();
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+					properties.put(ContentModel.PROP_NAME, DICTIONARIES_ROOT_NAME);
+					nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
 					return "ok";
 				}
 			});
 		}
-		return dictionariesRoot[0];
+		return nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
 	}
 
 	public void setTransactionService(TransactionService transactionService) {
