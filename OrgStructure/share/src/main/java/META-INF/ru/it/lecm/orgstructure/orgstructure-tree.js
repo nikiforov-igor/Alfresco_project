@@ -51,7 +51,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     YAHOO.extend(LogicECM.module.OrgStructure.Tree, Alfresco.component.Base, {
         tree:null,
         selectedNode:null,
-        messages:null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -64,11 +63,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
         },
 
-        setMessages:function (messages) {
-            this.messages = messages;
-        },
-
         draw:function () {
+            this.modules.actions = new LogicECM.module.OrgStructure.Actions();
             var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
             this._createTree(orgStructure);
@@ -97,15 +93,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
         onExpandComplete:function OT_onExpandComplete(oNode) {
             for (var i in this.options.insituEditors) {
-                /*try {*/
                     Alfresco.util.createInsituEditor(
                         this.options.insituEditors[i].context,
                         this.options.insituEditors[i].params,
                         this.options.insituEditors[i].callback
                     );
-                /*} catch (ex) {
-                    YAHOO.error("Failed to create Editor.", "info", "example");
-                }*/
             }
         },
         _createUrl:function (type, nodeRef, childNodeType) {
@@ -252,8 +244,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     scope:this
                 }
             }).show();
-            /*window.location.href = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
-                + "edit-metadata?nodeRef=" + this.selectedNode.data.nodeRef;*/
         },
         _addNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, "lecm-orgstr:organization-unit");
@@ -285,7 +275,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }).show();
         },
         _deleteNode:function editNodeByEvent(event) {
-
+            var selectedNode = this.selectedNode.data;
+            var forDeleted = [];
+            forDeleted.push(selectedNode);
+            var context = this;
+            this.onActionDelete(forDeleted, function () {
+                context._loadTree(context.selectedNode.parent, function () {
+                    if (this.selectedNode.parent.children.length == 0) {
+                        this.selectedNode.parent.isLeaf = true;
+                        this.selectedNode.parent.expanded = false;
+                    }
+                    this.tree.render();
+                    this.onExpandComplete(null);
+                    this._treeNodeSelected(this.selectedNode.parent);
+                }.bind(context));
+            });
         },
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
@@ -322,6 +326,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
         }
     });
+
+    /**
+     * Augment prototype with Common Actions module
+     */
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Tree, LogicECM.module.OrgStructure.DataActions);
 
     Alfresco.widget.InsituEditor.organizationUnit = function (p_params) {
         this.params = YAHOO.lang.merge({}, p_params);
@@ -425,7 +434,39 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             onIconClick:function InsituEditorUnitDelete_onIconClick(e, obj) {
                 var context = obj.params.unitAdmin;
                 context.selectedNode = obj.params.curElem;
-                context._deleteNode(e);
+                if (!context.selectedNode.isLeaf) {
+                    // has children
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text:context.msg("message.delete.unit.failure.has.children")
+                        });
+                } else {
+                    var unitNodeRef = new Alfresco.util.NodeRef(context.selectedNode.data.nodeRef);
+                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/unit-compositions/" + unitNodeRef.uri;
+                    var callback = {
+                        success:function (oResponse) {
+                            var oResults = eval("(" + oResponse.responseText + ")");
+                            if (oResults.length > 0) {
+                                // has compositions
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text:context.msg("message.delete.unit.failure.has.composition")
+                                    });
+                            } else {
+                                // may delete
+                                context._deleteNode(e).bind(context);
+                            }
+                        },
+                        failure:function (oResponse) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text:context.msg("message.delete.unit.error")
+                                });
+                        }
+                    };
+                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                }
+
             }
         });
 })();

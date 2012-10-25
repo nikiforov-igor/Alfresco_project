@@ -43,7 +43,7 @@ span.insitu-add-unit
 }
 span.insitu-delete-unit
 {
-    background-image: url(/share/res/components/images/minus-16.png);
+    background-image: url(/share/res/components/images/delete-16.png);
     background-repeat: no-repeat;
     cursor: pointer;
     height: 16px;

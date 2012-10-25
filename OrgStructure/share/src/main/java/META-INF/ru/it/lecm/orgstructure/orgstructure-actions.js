@@ -45,7 +45,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
          * @method onActionDelete
          * @param items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
          */
-        onActionDelete: function DataListActions_onActionDelete(p_items)
+        onActionDelete: function DataListActions_onActionDelete(p_items, fnDeleteComplete)
         {
             var me = this,
                 items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
@@ -70,7 +70,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     items: items
                                 }
                             },
-                            message: this.msg("message.delete.success", items.length)
+                            message: this.msg("message.delete.success", items.length),
+                            callback:{
+                                fn: fnDeleteComplete
+                            }
                         },
                         failure:
                         {

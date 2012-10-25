@@ -41,6 +41,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 
 	private static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
+	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
 	public static final String NODE_REF = "nodeRef";
 	public static final String TYPE = "type";
@@ -124,22 +125,25 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 			units.add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT));
 			List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
 			for (ChildAssociationRef child : childs) {
-				JSONObject unit = new JSONObject();
-				try {
-					unit.put(NODE_REF, child.getChildRef().toString());
-					unit.put(TYPE, TYPE_UNIT);
-					unit.put(TITLE, getElementName(
-							nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
-					unit.put(IS_LEAF, nodeService.getChildAssocs(
-							child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
+				Boolean isActive = (Boolean) nodeService.getProperty(child.getChildRef(), IS_ACTIVE);
+				isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
+				if (isActive) {
+					JSONObject unit = new JSONObject();
+					try {
+						unit.put(NODE_REF, child.getChildRef().toString());
+						unit.put(TYPE, TYPE_UNIT);
+						unit.put(TITLE, getElementName(
+								nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
+						unit.put(IS_LEAF, !hasChild(child, nodeService, true));
 
-					unit.put(CHILD_TYPE, TYPE_UNIT);
-					unit.put(CHILD_ASSOC, UNIT_INNER_ASSOC);
-					unit.put(DS_URI, UNIT_EMPLOYEES_URI);
-					unit.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
-					nodes.put(unit);
-				} catch (JSONException e) {
-					logger.error(e);
+						unit.put(CHILD_TYPE, TYPE_UNIT);
+						unit.put(CHILD_ASSOC, UNIT_INNER_ASSOC);
+						unit.put(DS_URI, UNIT_EMPLOYEES_URI);
+						unit.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+						nodes.put(unit);
+					} catch (JSONException e) {
+						logger.error(e);
+					}
 				}
 			}
 		} else if(type.equalsIgnoreCase(TYPE_ORGANIZATION)) {
@@ -165,6 +169,24 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
             }
         }
 		return nodes.toString();
+	}
+
+	private boolean hasChild(ChildAssociationRef child, NodeService nodeService, boolean onlyActive) {
+		List<ChildAssociationRef> childs = nodeService.getChildAssocs(
+				child.getChildRef(), RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false);
+		boolean hasChild = !childs.isEmpty();
+		if (onlyActive && !childs.isEmpty()) {
+			hasChild = false;
+			for (ChildAssociationRef ref : childs) {
+				Boolean isActive = (Boolean) nodeService.getProperty(ref.getChildRef(), IS_ACTIVE);
+				isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
+				if (isActive) {
+					hasChild = isActive; // if one active exist -> hasChild == true
+					break;
+				}
+			}
+		}
+		return hasChild;
 	}
 
 	private String getElementName(final NodeService service, final NodeRef ref, QName property, QName defaultProperty) {
