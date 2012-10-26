@@ -27,7 +27,7 @@
         </property>
     </bean>
 
-    <bean id="LogicECMContracts.workflowBootstrap" parent="workflowDeployer">
+    <bean id="LogicECMContracts.workflowBootstrap" parent="lecmWorkflowDeployer">
         <property name="workflowDefinitions">
             <list>
                 <props>

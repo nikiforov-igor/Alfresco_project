@@ -7,7 +7,7 @@
              xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              xmlns:lecm="http://www.it.ru/LogicECM/bpmn/1.0"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-    <process id="contractWorkflow" name="Contract Workflow">
+    <process id="contractWorkflow" name="Contract Workflow" >
         <startEvent id="start" name="Alfresco start" activiti:formKey="cwf:startTask"></startEvent>
         <userTask id="new" name="Черновик" activiti:assignee="${bpm_assignee.properties.userName}">
             <extensionElements>

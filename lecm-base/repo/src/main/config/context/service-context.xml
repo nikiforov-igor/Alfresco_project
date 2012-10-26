@@ -32,6 +32,12 @@
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
     </bean>
 
+    <bean id="lecmWorkflowDeployer" class="ru.it.lecm.base.statemachine.lecmWorkflowDeployer" parent="workflowDeployer" abstract="true">
+        <property name="workflowService" ref="WorkflowService" />
+        <property name="workflowAdminService" ref="workflowAdminService" />
+        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
+    </bean>
+
     <bean id="stateMachineHelper" class="ru.it.lecm.base.statemachine.StateMachineHelper">
         <property name="serviceRegistry" ref="ServiceRegistry" />
         <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
