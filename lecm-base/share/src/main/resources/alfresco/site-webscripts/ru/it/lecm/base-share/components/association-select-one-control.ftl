@@ -19,6 +19,9 @@
                 <#if field.control.params.parentNodeRef??>
                     parentNodeRef: "${field.control.params.parentNodeRef}",
                 </#if>
+                <#if field.control.params.startLocation??>
+                    startLocation: "${field.control.params.startLocation}",
+                </#if>
 
                 itemType: "${field.endpointType}",
                 itemFamily: "node",

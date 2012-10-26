@@ -8,6 +8,12 @@
     <#assign plane = false>
 </#if>
 
+<#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
+    <#assign showCreateNewLink = false>
+<#else>
+    <#assign showCreateNewLink = true>
+</#if>
+
 <div class="form-field">
     <#if form.mode == "view">
         <div id="${controlId}" class="viewmode-field">
@@ -53,6 +59,9 @@
         <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
             disabled: true,
         </#if>
+        <#if field.control.params.rootLocation??>
+            rootLocation: "${field.control.params.rootLocation}",
+        </#if>
         <#if field.mandatory??>
             mandatory: ${field.mandatory?string},
         <#elseif field.endpointMandatory??>
@@ -66,6 +75,7 @@
         <#if field.control.params.rootNodeRef??>
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
+        showCreateNewLink: ${showCreateNewLink?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>

@@ -66,6 +66,8 @@ LogicECM.module = LogicECM.module || {};
 
 		options:
 		{
+            showCreateNewLink: true,
+
             selectedValue: null,
 
             plane: false,
@@ -82,7 +84,9 @@ LogicECM.module = LogicECM.module || {};
 
             createNewItemIcon: "",
 
-            rootNodeRef: '',
+            rootLocation: null,
+
+            rootNodeRef: "",
 
             itemType: "cm:content",
 
@@ -370,45 +374,44 @@ LogicECM.module = LogicECM.module || {};
                     return false;
                 }.bind(this));
 
-                this._loadRootNode();
-            } else {
-                this.treeViewClicked(
-                    {
-                        data: {
-                            isContainer: true,
-                            nodeRef: this.options.rootNodeRef
-                        }
-                    });
             }
+            this._loadRootNode();
         },
 
         _loadRootNode: function AssociationTreeViewer__loadRootNode() {
-            var root = tree.getRoot();
+            var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
 
             Alfresco.util.Ajax.jsonGet(
                 {
-                    url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.rootNodeRef.replace("://", "/"),
+                    url: sUrl,
                     successCallback:
                     {
                         fn: function (response) {
-                            var data = response.json;
-                            var properties = data.properties;
-                            for (var i = 0; i < properties.length; i++) {
-                                var prop = properties[i];
-                                if (prop.name && (prop.name.prefixedName == this.options.treeRoteNodeTitleProperty)) {
+                            var oResults = response.json;
+                            if (oResults != null) {
+                                if (!this.options.plane) {
                                     var newNode = {
-                                        label: prop.values[0].value,
-                                        nodeRef: data.nodeRef,
-                                        isLeaf: data.children.length == 0,
-                                        isContainer: true,
-                                        renderHidden:true,
-                                        expanded: true
+                                        label:oResults.title,
+                                        nodeRef:oResults.nodeRef,
+                                        isLeaf:oResults.isLeaf,
+                                        type:oResults.type,
+                                        isContainer: oResults.isContainer,
+                                        renderHidden:true
                                     };
-                                    this.rootNode = new YAHOO.widget.TextNode(newNode, root);
+                                    this.rootNode = new YAHOO.widget.TextNode(newNode, tree.getRoot());
+
                                     tree.render();
                                     this.treeViewClicked(this.rootNode);
                                     tree.onEventToggleHighlight(this.rootNode);
-                                    break;
+                                } else {
+                                    this.options.rootNodeRef = oResults.nodeRef;
+                                    this.treeViewClicked(
+                                        {
+                                            data: {
+                                                isContainer: true,
+                                                nodeRef: this.options.rootNodeRef
+                                            }
+                                        });
                                 }
                             }
                         },
@@ -424,6 +427,28 @@ LogicECM.module = LogicECM.module || {};
                         scope: this
                     }
                 });
+        },
+
+        _generateRootUrlPath: function AssociationTreeViewer__generateItemsUrlPath(nodeRef)
+        {
+            return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
+        },
+
+        _generateRootUrlParams: function AssociationTreeViewer__generateItemsUrlParams()
+        {
+            var params = "?titleProperty=" + encodeURIComponent(this.options.treeRoteNodeTitleProperty);
+            if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
+            {
+                params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
+            } else if (this.options.xPathLocation)
+            {
+                params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+                if (this.options.xPathLocationRoot != null) {
+                    params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+                }
+            }
+
+            return params;
         },
 
         _loadNode:function AssociationTreeViewer__loadNode(node, fnLoadComplete) {
@@ -521,7 +546,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.currentNode != null && me.currentNode.data.isContainer && (!me.isSearch || me.options.plane))
+                    if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && (!me.isSearch || me.options.plane))
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -797,7 +822,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
                 this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.currentNode != null && this.currentNode.data.isContainer && (!this.isSearch || this.options.plane))
+                if (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && (!this.isSearch || this.options.plane))
                 {
                     this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 }
