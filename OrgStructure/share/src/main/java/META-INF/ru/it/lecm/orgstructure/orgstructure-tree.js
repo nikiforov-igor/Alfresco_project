@@ -216,7 +216,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 'delete':false,
                                 'edit':false
                             },
-                            title:node.label
+                            title:node.label,
+                            deletedAssocsType: "lecm-orgstr:composition-employee-assoc",
+                            fullDelete:true
                         },
                         scrollTo:true
                     });

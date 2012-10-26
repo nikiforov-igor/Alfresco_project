@@ -7,9 +7,8 @@ function main() {
         var s = search.findNode(source);
         var t = search.findNode(target);
         s.createAssociation(t, assocType);
-        status.code = 200;
     }  else {
-        status.code = 0;
+        status.setCode(status.STATUS_BAD_REQUEST, "Bad request. Must set all parameters");
     }
 }
 

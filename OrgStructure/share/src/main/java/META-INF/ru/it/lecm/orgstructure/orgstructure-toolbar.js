@@ -231,7 +231,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     // Get the function related to the clicked item
                     var fn = Alfresco.util.findEventClass(eventTarget);
                     if (fn && (typeof this[fn] == "function")) {
-                        this[fn].call(this, this.modules.dataGrid.getSelectedItems());
+                        this[fn].call(this, this.modules.dataGrid.getSelectedItems(), null, this.modules.dataGrid.orgstructureMetadata);
                     }
                 }
 

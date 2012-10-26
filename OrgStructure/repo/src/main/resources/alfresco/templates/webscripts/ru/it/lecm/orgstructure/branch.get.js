@@ -65,7 +65,7 @@ if (organization == null || organization == "") {
     var d2 = staff_list.createNode("Тестировщик", "lecm-orgstr:position");
     d2.properties["lecm-orgstr:position-description"] = "Тестировщик системы";
     d2.properties["lecm-orgstr:position-name-g"] = "Тестировщика";
-    d2.properties["lecm-orgstr:position-name-d"] = "Тестирвщику";
+    d2.properties["lecm-orgstr:position-name-d"] = "Тестировщику";
     d2.save();
     var d3 = staff_list.createNode("Аналитик", "lecm-orgstr:position");
     d3.properties["lecm-orgstr:position-description"] = "Аналитик";
@@ -206,15 +206,16 @@ if (organization == null || organization == "") {
     e6.createAssociation(pd6, "lecm-orgstr:employee-person-data-assoc");
 
     //подразделения
-    var direction = structure.createNode("Руководство организации", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var direction = structure.createNode("Руководство организации", "lecm-orgstr:organization-unit");
     direction.properties["lecm-orgstr:element-full-name"] = "Руководство организации";
     direction.properties["lecm-orgstr:element-short-name"] = "Руководство";
     direction.properties["lecm-orgstr:unit-code"] = "PO";
     direction.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     direction.properties["lecm-orgstr:unii-is_exists"] = true;
     direction.save();
+    structure.createAssociation(direction, "lecm-orgstr:org-unit-assoc");
 
-    var unit1 = structure.createNode("Главное отделение", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var unit1 = structure.createNode("Главное отделение", "lecm-orgstr:organization-unit");
     unit1.properties["lecm-orgstr:element-full-name"] = "Главное отделение";
     unit1.properties["lecm-orgstr:element-short-name"] = "Отдел 1";
     unit1.properties["lecm-orgstr:unit-code"] = "O1";
@@ -223,8 +224,9 @@ if (organization == null || organization == "") {
     unit1.save();
     unit1.createAssociation(of1, "lecm-orgstr:unit-offices-assoc");
     unit1.createAssociation(of2, "lecm-orgstr:unit-offices-assoc");
+    structure.createAssociation(unit1, "lecm-orgstr:org-unit-assoc");
 
-    var unit11 = unit1.createNode("Отдел внедрения", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
+    var unit11 = unit1.createNode("Отдел внедрения", "lecm-orgstr:organization-unit");
     unit11.properties["lecm-orgstr:element-full-name"] = "Отдел внедрения";
     unit11.properties["lecm-orgstr:element-short-name"] = "Внедрение";
     unit11.properties["lecm-orgstr:unit-code"] = "O1.1";
@@ -232,16 +234,18 @@ if (organization == null || organization == "") {
     unit11.properties["lecm-orgstr:unit-is-exists"] = true;
     unit11.save();
     unit11.createAssociation(of3, "lecm-orgstr:unit-offices-assoc");
+    unit1.createAssociation(unit11, "lecm-orgstr:unit-inner-assoc");
 
-    var unit111 = unit11.createNode("Обнинский Отдел внедрения", "lecm-orgstr:organization-unit", "lecm-orgstr:unit-inner-assoc");
+    var unit111 = unit11.createNode("Обнинский Отдел внедрения", "lecm-orgstr:organization-unit");
     unit111.properties["lecm-orgstr:element-full-name"] = "Обнинский Отдел внедрения";
     unit111.properties["lecm-orgstr:element-short-name"] = "Обнинское отделение";
     unit111.properties["lecm-orgstr:unit-code"] = "O1.1.1";
     unit111.properties["lecm-orgstr:unit-type"] = "SEGREGATED";
     unit111.properties["lecm-orgstr:unit-is-exists"] = true;
     unit111.save();
+    unit11.createAssociation(unit11, "lecm-orgstr:unit-inner-assoc");
 
-    var unit2 = structure.createNode("BPM Отдел", "lecm-orgstr:organization-unit", "lecm-orgstr:org-unit-assoc");
+    var unit2 = structure.createNode("BPM Отдел", "lecm-orgstr:organization-unit");
     unit2.properties["lecm-orgstr:element-full-name"] = "BPM Отдел";
     unit2.properties["lecm-orgstr:element-short-name"] = "BPM";
     unit2.properties["lecm-orgstr:unit-code"] = "O2";
@@ -250,6 +254,7 @@ if (organization == null || organization == "") {
     unit2.save();
     unit2.createAssociation(of3, "lecm-orgstr:unit-offices-assoc");
     unit2.createAssociation(of2, "lecm-orgstr:unit-offices-assoc");
+    structure.createAssociation(unit2, "lecm-orgstr:org-unit-assoc");
 
     var o1 = officials.createNode("ДЛ-Башмаков", "lecm-orgstr:official");
     o1.properties["lecm-orgstr:official-can-facsimile"] = true;

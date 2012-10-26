@@ -13,6 +13,22 @@ new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
 //]]></script>
 <div id="${id}-body" class="datagrid">
     <div class="datagrid-meta">
+        <div class="search-box">
+         <#--<span id="${id}-search_more" class="yui-button yui-menu-button">
+            <span class="first-child" style="background-image: url(${url.context}/res/components/images/header/search-menu.png)">
+               <button type="button" title="${msg("header.search.description")}" tabindex="0"></button>
+            </span>
+         </span>-->
+            <input id="${id}-searchText" type="text" maxlength="1024" />
+        </div>
+        <#--<div id="${id}-searchmenu_more" class="yuimenu yui-overlay yui-overlay-hidden">
+            <div class="bd">
+                <ul class="first-of-type">
+                    <li><a style="background-image: url(${url.context}/res/components/images/header/advanced-search.png)" title="${msg("header.advanced-search.description")}" href="${siteURL("advsearch")}">${msg("header.advanced-search.label")}</a></li>
+                </ul>
+            </div>
+        </div>-->
+        <br/>
         <h2 id="${id}-title"></h2>
         <div id="${id}-description" class="datagrid-description"></div>
     </div>

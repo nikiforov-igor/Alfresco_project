@@ -88,6 +88,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
 
+        Event.on(htmlId +'-searchText','keyup',this.doActionFilter.bind(this));
+
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onOrgElementChanged"],
             {
@@ -536,7 +538,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         {
                             args[1].stop = true;
                             var asset = me.widgets.dataTable.getRecord(args[1].target.offsetParent).getData();
-                            me[owner.className].call(me, asset, owner);
+                            me[owner.className].call(me, asset, null, me.orgstructureMetadata);
                         }
                     }
                     return true;
@@ -1867,6 +1869,31 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }
                 }
                 return null;
+            },
+            doActionFilter:function () {
+                var value = YAHOO.util.Dom.get(this.id + '-searchText').value;
+                var columns = this.datalistColumns;
+                var text = "";
+
+                if (value == undefined || value == null || value == "") {
+                    text = "";
+                } else {
+                    for (var i = 0; i < columns.length; i++) {
+                        if (columns[i].dataType == "text") {
+                            text += columns[i].name + ":" + value + "#";
+                        }
+                    }
+                    text = text.substring(0, (text.length) - 1);
+                }
+
+                this.currentFilter =
+                {
+                    filterId:"all",
+                    filterData:text
+                };
+                Bubbling.fire("changeFilter", this.currentFilter);
+                this.onDataGridRefresh();
+                YAHOO.util.Dom.get(this.id + '-searchText').focus();
             }
         }, true);
 })();

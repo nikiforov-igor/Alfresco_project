@@ -53,8 +53,8 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String NAME_PATTERN = "namePattern";
 
 	private static final String UNIT_EMPLOYEES_URI = "lecm/orgstructure/data/unit/";
-	private static final String PROJECTS_URI = "lecm/orgstructure/data/project/";
-	private static final String DEFAULT_URI = "slingshot/datalists/data/node/";
+	//private static final String PROJECTS_URI = "lecm/orgstructure/data/project/";
+	private static final String DEFAULT_URI = "lecm/orgstructure/data/node/";
 
 	private static Log logger = LogFactory.getLog(GetOrgstructureBean.class);
 	public static final String ELEMENT_FULL_NAME = "element-full-name";
@@ -94,7 +94,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 						root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 					} else if (qTypeLocalName.equals(DIRECTORY_PROJECTS)) {
 						root.put(CHILD_TYPE, TYPE_PROJECT);
-						root.put(DS_URI, PROJECTS_URI);
+						root.put(DS_URI, DEFAULT_URI);
 						root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					} else if (qTypeLocalName.equals(DIRECTORY_STAFF_LIST)) {
 						root.put(CHILD_TYPE, TYPE_POSITION);

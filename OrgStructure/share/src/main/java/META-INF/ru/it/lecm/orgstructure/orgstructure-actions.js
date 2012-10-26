@@ -45,7 +45,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
          * @method onActionDelete
          * @param items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
          */
-        onActionDelete: function DataListActions_onActionDelete(p_items, fnDeleteComplete)
+        onActionDelete: function DataListActions_onActionDelete(p_items, fnDeleteComplete, metadata)
         {
             var me = this,
                 items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
@@ -57,7 +57,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 {
                     nodeRefs.push(items[i].nodeRef);
                 }
-
+                var query = "";
+                if (metadata) {
+                    var fullDelete = metadata.fullDelete;
+                    var deletedAssocsType = metadata.deletedAssocsType;
+                    if (fullDelete != null) {
+                        query = query + "full=" + fullDelete;
+                    }
+                    if (deletedAssocsType != null) {
+                        query = query + "&deletedType=" + deletedAssocsType;
+                    }
+                }
                 this.modules.actions.genericAction(
                     {
                         success:
@@ -82,7 +92,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         webscript:
                         {
                             method: Alfresco.util.Ajax.DELETE,
-                            name: "items"
+                            name: "items",
+                            queryString:query
                         },
                         config:
                         {
@@ -339,7 +350,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 url = YAHOO.lang.substitute(url, params);
                 configObj = params;
             }
-            if (webscript.queryString)
+            if (webscript.queryString && webscript.queryString != "")
             {
                 url += "?" + webscript.queryString;
             }
