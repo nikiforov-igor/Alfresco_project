@@ -491,4 +491,13 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="string-compare" condition="AdvancedSearch">
+        <advanced-search>
+            <forms>
+                <form>lecm-orgstr:project</form>
+                <form>lecm-orgstr:organization-unit</form>
+            </forms>
+        </advanced-search>
+    </config>
 </alfresco-config>
