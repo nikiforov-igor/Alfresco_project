@@ -56,7 +56,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 			YAHOO.util.Event.onContentReady(buttonId, function () {
 
-				var buttonContainer = YUIDom.get (buttonId);
+				var buttonContainer = YAHOO.util.Dom.get (buttonId);
 				Alfresco.logger.info ("button container: " + buttonContainer);
 
 				Alfresco.util.createYUIButton (buttonContainer, "myButton", function (event) {
@@ -65,14 +65,16 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 						method: "GET", // GET, POST, PUT or DELETE, default is GET
 						url: Alfresco.constants.PROXY_URI + "logicecm/generateTestUnit", // the url to send the request to, mandatory
 						dataObj: {dummy: new Date().getTime()},
+//						successMessage: "success happend!", // Will be displayed using Alfresco.util.PopupManager.displayMessage if successCallback isn't provided
+//						failureMessage: "shit happend!", // Will be displayed by Alfresco.util.displayPrompt if no failureCallback isn't provided
 						successCallback: {fn: function (successResult){  // Callback for successful request, should have the following form: {fn: successHandler, scope: scopeForSuccessHandler}
 							Alfresco.logger.info ("get responce " + successResult.json.nodeRef);
+							YAHOO.Bubbling.fire (LogicECM.module.Delegation.Config.ON_AJAX_SUCCESS, "success happend!");
 						}, scope: self},
-						successMessage: "success happend!", // Will be displayed using Alfresco.util.PopupManager.displayMessage if successCallback isn't provided
 						failureCallback: {fn: function (failureResult) {
 							debugger;
-						}, scope: self}, // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
-						failureMessage: "shit happend!" // Will be displayed by Alfresco.util.displayPrompt if no failureCallback isn't provided
+							YAHOO.Bubbling.fire (LogicECM.module.Delegation.Config.ON_AJAX_FAILURE, "shit happend!");
+						}, scope: self} // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
 					});
 				}, {label: "кнопка label", name: "кнопка name", title: "кнопка title"});
 			});

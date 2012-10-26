@@ -47,8 +47,19 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 		onReady: function () {
 			self = this;
-			
+
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.Center has been created");
+
+			YAHOO.Bubbling.on ("onAjaxSuccessEvent", function (event, eventData) {
+				debugger;
+				var object = eventData[1];
+				Alfresco.util.PopupManager.displayMessage({text: object});
+			}, self);
+			YAHOO.Bubbling.on ("onAjaxFailureEvent", function (event, eventData) {
+				debugger;
+				var object = eventData[1];
+				Alfresco.util.PopupManager.displayMessage({text: object});
+			}, self);
 		}
 	});
 })();

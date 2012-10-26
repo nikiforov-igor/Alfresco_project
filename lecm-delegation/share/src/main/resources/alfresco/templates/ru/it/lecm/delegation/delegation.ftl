@@ -12,6 +12,7 @@
 	});
 //]]>
 </script>
+<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/delegation/delegation-const.js"></@script>
 </@>
 
 <@templateBody>
