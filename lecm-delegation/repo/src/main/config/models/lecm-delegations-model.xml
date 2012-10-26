@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lecm-ba == lecm Business Authority -->
+<model name="lecm-ba:delegations" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>Business Authority Delegation Model</description>
+	<author>RAA</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Import User Model Definitions -->
+		<import uri="http://www.alfresco.org/model/user/1.0" prefix="usr"/>
+		<!-- Import Org Structure Model Definitions -->
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+	</imports>
+
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0" prefix="lecm-ba"/>
+	</namespaces>
+
+	<constraints>
+		<constraint name="lecm-ba:statusList" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>New</value>
+					<value>Active</value>
+					<value>Revoked</value>
+					<value>Closed</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+
+		<!-- TODO: Бизнес-роль (пока тут) -->
+		<type name="lecm-ba:businessRoles">
+			<title>Бизнес Роль</title>
+			<parent>cm:content</parent>
+
+			<properties>
+				<property name="lecm-ba:role">
+					<title>Название</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+
+				<!-- Теневая security-группа -->
+				<property name="lecm-ba:secureGroupName">
+					<title>Shadow security group</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+
+			<associations>
+				<!-- TODO: Список пользователей и групп (1-M) -->
+				<association name="lecm-ba:roleGroup">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>cm:person</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+
+		</type>
+
+		<!-- Доверенность -->
+		<type name="lecm-ba:procuracy">
+			<title>Доверенность по делегированию прав</title>
+			<parent>cm:content</parent>
+
+			<properties>
+
+				<property name="lecm-ba:dateUTCBegin">
+					<title>Время начала действия</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+
+				<property name="lecm-ba:dateUTCEnd">
+					<title>Время окончания действия</title>
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-ba:dateUTCRevoke">
+					<title>Время прекращения</title>
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-ba:comment">
+					<title>Комментарий и детали</title>
+					<type>d:text</type>
+					<default></default>
+					<constraints>
+						<constraint type="LENGTH">
+							<parameter name="minLength"><value>0</value></parameter>
+							<parameter name="maxLength"><value>4096</value></parameter>
+						</constraint>
+					</constraints>
+				</property>
+
+				<property name="lecm-ba:canpropogate">
+					<title>Флаг возможности передачи доверенности</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+
+				<property name="lecm-ba:canpostprocess">
+					<title>Флаг для разрешения завершить доверенные задачи после отзыва Доверенности</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+
+				<property name="lecm-ba:status">
+					<title>Состоние Доверенности</title>
+					<type>d:text</type>
+					<default>new</default>
+					<constraints>
+						<constraint ref="lecm-ba:statusList"/>
+					</constraints>
+				</property>
+
+			</properties>
+
+			<associations>
+				<!-- Ссылка "От кого" (1-1) -->
+				<association name="lecm-ba:fromEmployee">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:official</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+
+				<!-- Ссылки "Кому" (1-1) -->
+				<association name="lecm-ba:toEmployee">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:official</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+
+				<!-- Список делегируемых бизнес-ролей -->
+				<association name="lecm-ba:delegateRoles">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-ba:businessRoles</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Ссылка на основную родительскую доверенность (для доверенностей второго уровня) -->
+				<association name="lecm-ba:parentProcuracy">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-ba:procuracy</class>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- TODO: Возможно, для упролщения реализации требования о передаче 
+					делегирований не более двух уровней, понадобится денормализующая
+					ссылка на доверенность второго уровня (из доверенности третьего уровня) 
+					... 
+				  -->
+
+			</associations>
+
+			<!-- Ссылка на Aвтора (создателя) доверенности (может отличаться от значения "От кого") -->
+			<mandatory-aspects>
+				<aspect>cm:author</aspect>
+			</mandatory-aspects>
+
+		</type>
+
+	</types>
+
+</model>
