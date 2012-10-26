@@ -37,6 +37,8 @@ LogicECM.module = LogicECM.module || {};
             options:{
                 disabled: false,
 
+                startLocation: null,
+
                 parentNodeRef:"",
 
                 currentValue: "",
@@ -278,10 +280,53 @@ LogicECM.module = LogicECM.module || {};
 
             _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
             {
-                return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
+                var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                     "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
                     "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol);
+
+                if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
+                {
+                    params += "&xpath=" + encodeURIComponent(this.options.startLocation);
+                } else if (this.options.xPathLocation)
+                {
+                    params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+                    if (this.options.xPathLocationRoot != null) {
+                        params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+                    }
+                }
+                // has a rootNode been specified?
+                if (this.options.rootNode)
+                {
+                    var rootNode = null;
+
+                    if (this.options.rootNode.charAt(0) == "{")
+                    {
+                        if (this.options.rootNode == "{companyhome}")
+                        {
+                            rootNode = "alfresco://company/home";
+                        }
+                        else if (this.options.rootNode == "{userhome}")
+                        {
+                            rootNode = "alfresco://user/home";
+                        }
+                        else if (this.options.rootNode == "{siteshome}")
+                        {
+                            rootNode = "alfresco://sites/home";
+                        }
+                    }
+                    else
+                    {
+                        // rootNode is either an xPath expression or a nodeRef
+                        rootNode = this.options.rootNode;
+                    }
+                    if (rootNode !== null)
+                    {
+                        params += "&rootNode=" + encodeURIComponent(rootNode);
+                    }
+                }
+
+                return params;
             },
 
             updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {

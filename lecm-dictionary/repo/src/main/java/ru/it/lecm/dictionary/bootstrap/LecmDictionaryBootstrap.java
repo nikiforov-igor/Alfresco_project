@@ -88,7 +88,7 @@ public class LecmDictionaryBootstrap {
 				public Object execute() throws Throwable {
 					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
 					properties.put(ContentModel.PROP_NAME, DICTIONARIES_ROOT_NAME);
-					nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
+                    nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, QName.createQName(DICTIONARY_NAMESPACE_URI, DICTIONARIES_ROOT_NAME), ContentModel.TYPE_FOLDER, properties);
 					return "ok";
 				}
 			});

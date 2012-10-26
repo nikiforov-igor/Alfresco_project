@@ -22,6 +22,9 @@
                 <#if field.control.params.parentNodeRef??>
                     parentNodeRef: "${field.control.params.parentNodeRef}",
                 </#if>
+                <#if field.control.params.startLocation??>
+                    startLocation: "${field.control.params.startLocation}",
+                </#if>
                 multipleSelectMode: ${field.endpointMany?string},
                 itemType: "${field.endpointType}",
                 currentValue: "${field.value!''}",
