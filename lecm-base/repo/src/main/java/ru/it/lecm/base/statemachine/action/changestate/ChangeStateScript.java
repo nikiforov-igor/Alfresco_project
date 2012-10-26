@@ -1,5 +1,6 @@
 package ru.it.lecm.base.statemachine.action.changestate;
 
+import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.service.ServiceRegistry;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
@@ -7,6 +8,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class ChangeStateScript extends DeclarativeWebScript {
         String actionId = req.getParameter("actionId");
 
         StateMachineHelper helper = new StateMachineHelper();
-        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "changeState", "take");
+        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(ChangeStateAction.class), ExecutionListener.EVENTNAME_TAKE);
         ChangeStateAction.NextState nextState = null;
         for (StateMachineAction action : actions) {
             ChangeStateAction changeStateAction = (ChangeStateAction) action;

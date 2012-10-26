@@ -1,7 +1,6 @@
 package ru.it.lecm.base.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.impl.persistence.entity.VariableInstanceEntity;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -20,7 +19,9 @@ public class SetStatusAction extends StateMachineAction {
 
     private String status = "UNKNOWN";
 
-    public SetStatusAction(List<Element> attributes) {
+    @Override
+    public void init(Element action) {
+        List<Element> attributes = action.elements("attribute");
         Element attribute = attributes.get(0);
         String name = attribute.attribute("name");
         String value = attribute.attribute("value");
@@ -37,10 +38,6 @@ public class SetStatusAction extends StateMachineAction {
         for (ChildAssociationRef child : children) {
             nodeService.setProperty(child.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
         }
-    }
-
-    public String getType() {
-        return "setStatus";
     }
 
 }

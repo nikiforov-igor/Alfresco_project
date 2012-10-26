@@ -5,7 +5,6 @@ import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 
-import java.security.PrivateKey;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,8 +21,9 @@ public class StartDocumentWorkflowAction extends StateMachineAction {
     private static final String PROP_WORKFLOW_ID = "workflowId";
     private static final String PROP_ASSIGNEE = "assignee";
 
-    public StartDocumentWorkflowAction(List<Element> attributes) {
-
+    @Override
+    public void init(Element action) {
+        List<Element> attributes = action.elements("attribute");
         for (Element attribute : attributes) {
             if (PROP_WORKFLOW_ID.equalsIgnoreCase(attribute.attribute("name"))) {
                 workflowId = attribute.attribute("value");
@@ -55,7 +55,4 @@ public class StartDocumentWorkflowAction extends StateMachineAction {
         timer.schedule(task, 1000);
     }
 
-    public String getType() {
-        return "StartDocumentWorkflow";
-    }
 }

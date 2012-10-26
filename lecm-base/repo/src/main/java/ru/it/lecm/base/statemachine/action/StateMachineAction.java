@@ -1,7 +1,9 @@
 package ru.it.lecm.base.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.service.ServiceRegistry;
+import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 /**
  * User: PMelnikov
@@ -22,6 +24,10 @@ abstract public class StateMachineAction {
 
     abstract public void execute(DelegateExecution execution);
 
-    public abstract String getType();
+    abstract public void init(Element actionElement);
+
+    public String getActionName() {
+        return StateMachineActions.getActionName(getClass());
+    }
 
 }

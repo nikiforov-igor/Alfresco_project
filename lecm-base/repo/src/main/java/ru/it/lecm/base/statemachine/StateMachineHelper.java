@@ -210,7 +210,7 @@ public class StateMachineHelper {
         List<StateMachineAction> actions = getTaskActions(taskId, onFire);
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         for (StateMachineAction action : actions) {
-            if (action.getType().equalsIgnoreCase(actionType)) {
+            if (action.getActionName().equalsIgnoreCase(actionType)) {
                 result.add(action);
             }
         }
@@ -241,7 +241,7 @@ public class StateMachineHelper {
         List<StateMachineAction> actions = getHistoricalTaskActions(taskId, onFire);
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         for (StateMachineAction action : actions) {
-            if (action.getType().equalsIgnoreCase(actionType)) {
+            if (action.getActionName().equalsIgnoreCase(actionType)) {
                 result.add(action);
             }
         }

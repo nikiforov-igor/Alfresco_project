@@ -24,7 +24,8 @@
                 </list>
             </parameter>
         </constraint>
-    </constraints>    <aspects>
+    </constraints>
+    <aspects>
         <aspect name="lecm-statemachine:documentTask">
             <properties>
                 <property name="lecm-statemachine:stateProcess">

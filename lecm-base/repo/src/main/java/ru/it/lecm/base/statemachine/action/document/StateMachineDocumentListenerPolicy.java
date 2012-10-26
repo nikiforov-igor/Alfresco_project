@@ -1,5 +1,6 @@
-package ru.it.lecm.base.statemachine.policy;
+package ru.it.lecm.base.statemachine.action.document;
 
+import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -13,8 +14,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.StateMachineModel;
-import ru.it.lecm.base.statemachine.action.StartDocumentProcessingAction;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class StateMachineDocumentListenerPolicy implements NodeServicePolicies.O
             }
             String taskId = (String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
-            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, "StartDocumentProcessing", "start");
+            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(StartDocumentProcessingAction.class), ExecutionListener.EVENTNAME_START);
 
             StartDocumentProcessingAction.Expression result = null;
             for (StateMachineAction action : actions) {
@@ -63,7 +64,7 @@ public class StateMachineDocumentListenerPolicy implements NodeServicePolicies.O
                     if (parser.parseExpression(expression.getExpression()).getValue(context, Boolean.class)) {
                         result = expression;
                         break;
-                    };
+                    }
                 }
                 if (result != null) {
                     break;

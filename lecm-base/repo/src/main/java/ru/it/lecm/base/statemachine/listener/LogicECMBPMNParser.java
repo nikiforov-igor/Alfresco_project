@@ -41,10 +41,12 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 
     @Override
     public void parseScriptTask(Element element, ScopeImpl scope, ActivityImpl activity) {
+        appendExtention(element, activity);
     }
 
     @Override
     public void parseServiceTask(Element element, ScopeImpl scope, ActivityImpl activity) {
+        appendExtention(element, activity);
     }
 
     @Override
@@ -61,16 +63,7 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 
     @Override
     public void parseUserTask(Element element, ScopeImpl scope, ActivityImpl activity) {
-        Element extentionElements = element.element("extensionElements");
-        if (extentionElements != null) {
-            Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extension");
-            if (lecmExtention != null) {
-                StateMachineHandler handler = new StateMachineHandler(lecmExtention);
-                activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
-                activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, handler);
-                activity.addExecutionListener(ExecutionListener.EVENTNAME_END, handler);
-            }
-        }
+        appendExtention(element, activity);
     }
 
     @Override
@@ -115,6 +108,19 @@ public class LogicECMBPMNParser implements BpmnParseListener {
     }
 
     public void parseRootElement(Element element, List<ProcessDefinitionEntity> processDefinitionEntities) {
+    }
+
+    private void appendExtention(Element element, ActivityImpl activity) {
+        Element extentionElements = element.element("extensionElements");
+        if (extentionElements != null) {
+            Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extension");
+            if (lecmExtention != null) {
+                StateMachineHandler handler = new StateMachineHandler(lecmExtention);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, handler);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_END, handler);
+            }
+        }
     }
 
 }

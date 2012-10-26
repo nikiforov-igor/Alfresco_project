@@ -25,7 +25,8 @@ public class ChangeStateAction extends StateMachineAction {
     private static String PROP_OUTPUT_VARIABLE_NAME = "variable";
     private static String PROP_OUTPUT_VARIABLE_VALUE = "variableValue";
 
-    public ChangeStateAction(Element action) {
+    @Override
+    public void init(Element action) {
         String outputVariable = action.attribute(PROP_OUTPUT_VARIABLE_NAME);
         List<Element> attributes  = action.elements("attribute");
         for (Element attribute : attributes) {
@@ -61,10 +62,6 @@ public class ChangeStateAction extends StateMachineAction {
 
     @Override
     public void execute(DelegateExecution execution) {
-    }
-
-    public String getType() {
-        return "changeState";
     }
 
     public class NextState {

@@ -4,11 +4,10 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.service.ServiceRegistry;
-import ru.it.lecm.base.statemachine.action.SetStatusAction;
-import ru.it.lecm.base.statemachine.action.StartDocumentProcessingAction;
-import ru.it.lecm.base.statemachine.action.StartDocumentWorkflowAction;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
-import ru.it.lecm.base.statemachine.action.changestate.ChangeStateAction;
+import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,19 +18,23 @@ import java.util.Map;
  * User: PMelnikov
  * Date: 17.10.12
  * Time: 14:30
+ *
+ * Слушатель машины состояний. Содержит в себе описание событий и действий для определенного статуса машины состояний
  */
+
 public class StateMachineHandler implements ExecutionListener {
 
     private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
     private static ServiceRegistry serviceRegistry;
+    private static Log logger = LogFactory.getLog(StateMachineHandler.class);
 
     public StateMachineHandler() {
     }
 
     public StateMachineHandler(Element lecmExtention) {
-        this.events.put("start", new ArrayList<StateMachineAction>());
-        this.events.put("take", new ArrayList<StateMachineAction>());
-        this.events.put("end", new ArrayList<StateMachineAction>());
+        this.events.put(ExecutionListener.EVENTNAME_START, new ArrayList<StateMachineAction>());
+        this.events.put(ExecutionListener.EVENTNAME_TAKE, new ArrayList<StateMachineAction>());
+        this.events.put(ExecutionListener.EVENTNAME_END, new ArrayList<StateMachineAction>());
         List<Element> events = lecmExtention.elements("event");
         for (Element event : events) {
             String eventName = event.attribute("on").toLowerCase();
@@ -64,24 +67,21 @@ public class StateMachineHandler implements ExecutionListener {
         StateMachineHandler.serviceRegistry = serviceRegistry;
     }
 
-    private StateMachineAction getStateMachineAction(Element action) {
-        String actionName = action.attribute("type");
-        List<Element> attributes = action.elements("attribute");
-        StateMachineAction stateMachineAction = null;
-        if ("setStatus".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new SetStatusAction(attributes);
-        } else if ("changeState".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new ChangeStateAction(action);
-        } else if ("StartDocumentWorkflow".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new StartDocumentWorkflowAction(attributes);
-        } else if ("StartDocumentProcessing".equalsIgnoreCase(actionName)) {
-            stateMachineAction = new StartDocumentProcessingAction(action);
+    private StateMachineAction getStateMachineAction(Element actionElement) {
+        String actionName = actionElement.attribute("type");
+        StateMachineAction action = null;
+        try {
+            Class actionClass = Class.forName(StateMachineActions.getClassName(actionName));
+            action = (StateMachineAction) actionClass.newInstance();
+        } catch (Exception e) {
+            logger.error("Cannot initialize action " + actionName, e);
         }
 
-        if (stateMachineAction != null) {
-            stateMachineAction.setServiceRegistry(serviceRegistry);
+        if (action != null) {
+            action.setServiceRegistry(serviceRegistry);
+            action.init(actionElement);
         }
-        return stateMachineAction;
+        return action;
     }
 
 }

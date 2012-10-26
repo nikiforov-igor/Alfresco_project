@@ -5,6 +5,7 @@ import org.activiti.engine.delegate.ExecutionListener;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
 import ru.it.lecm.base.statemachine.action.WorkflowVariables;
+import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ChangeStateEndWorkflowEvent implements ExecutionListener {
             String prevTaskId = (String) delegateExecution.getVariable(ChangeStateAction.PROP_CHANGE_STATE_PREV_TASK_ID);
             String curTaskId = (String) delegateExecution.getVariable(ChangeStateAction.PROP_CHANGE_STATE_CUR_TASK_ID);
             String actionId = (String) delegateExecution.getVariable(ChangeStateAction.PROP_CHANGE_STATE_ACTION_ID);
-            List<StateMachineAction> actions = new StateMachineHelper().getHistoricalTaskActionsByName(prevTaskId, "changeState", "take");
+            List<StateMachineAction> actions = new StateMachineHelper().getHistoricalTaskActionsByName(prevTaskId, StateMachineActions.getActionName(ChangeStateAction.class), EVENTNAME_TAKE);
             StateMachineHelper helper = new StateMachineHelper();
             for (StateMachineAction action : actions) {
                 ChangeStateAction changeStateAction = (ChangeStateAction) action;

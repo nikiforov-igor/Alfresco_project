@@ -1,9 +1,10 @@
-package ru.it.lecm.base.statemachine.action;
+package ru.it.lecm.base.statemachine.action.document;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
+import ru.it.lecm.base.statemachine.action.StateMachineAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,8 @@ public class StartDocumentProcessingAction extends StateMachineAction {
     private static final String PROP_OUTPUT_VARIABLE = "outputVariable";
     private static final String PROP_OUTPUT_VALUE = "outputValue";
 
-    public StartDocumentProcessingAction(Element element) {
+    @Override
+    public void init(Element element) {
         Element expressions = element.element(TAG_EXPRESSIONS);
 
         String outputVariable = expressions.attribute(PROP_OUTPUT_VARIABLE);
@@ -64,9 +66,6 @@ public class StartDocumentProcessingAction extends StateMachineAction {
         timer.schedule(task, 1000);
     }
 
-    public String getType() {
-        return "StartDocumentProcessing";
-    }
 
     public class Expression {
 

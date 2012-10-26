@@ -41,7 +41,7 @@
         <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
 
-    <bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.policy.StateMachineDocumentListenerPolicy" init-method="init">
+    <bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.action.document.StateMachineDocumentListenerPolicy" init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent" />
         </property>
@@ -77,4 +77,16 @@
           parent="webscript">
         <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
+
+    <bean id="stateMachineActions" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+        <property name="actions">
+            <map>
+                <entry key="SetStatus" value="ru.it.lecm.base.statemachine.action.SetStatusAction" />
+                <entry key="ChangeState" value="ru.it.lecm.base.statemachine.action.changestate.ChangeStateAction" />
+                <entry key="StartDocumentWorkflow" value="ru.it.lecm.base.statemachine.action.StartDocumentWorkflowAction" />
+                <entry key="StartDocumentProcessing" value="ru.it.lecm.base.statemachine.action.document.StartDocumentProcessingAction" />
+            </map>
+        </property>
+    </bean>
+
 </beans>
