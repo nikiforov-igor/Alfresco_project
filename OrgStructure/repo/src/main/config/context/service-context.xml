@@ -20,7 +20,7 @@
 <beans>
     <!-- Registration of orgStructure models -->
     <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-orgstructure-model.xml</value>
