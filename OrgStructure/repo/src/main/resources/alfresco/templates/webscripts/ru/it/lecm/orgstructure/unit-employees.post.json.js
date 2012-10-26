@@ -30,7 +30,6 @@ function getData() {
         var unitNode = parsedArgs.listNode;
         if (unitNode != null) {
             //getting results
-            unitNode = search,findNode(unitNode.nodeRef);
             var uc_assocs = unitNode.assocs["lecm-orgstr:unit-composition-assoc"];
             for each (uc_assoc in uc_assocs){
                 var employees = uc_assoc.assocs["lecm-orgstr:composition-employee-assoc"];
