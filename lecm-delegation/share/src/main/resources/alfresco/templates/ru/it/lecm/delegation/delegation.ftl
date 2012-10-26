@@ -2,21 +2,13 @@
 
 <@templateHeader>
 <script type="text/javascript"> //<![CDATA[
-	new Alfresco.widget.Resizer("Calendar").setOptions({
+	new Alfresco.widget.Resizer("DelegationResizer").setOptions({
 		divLeft: "divWest",
 		divRight: "divCenter",
-		initialWidth: 215
+		initialWidth: 300
 	});
 	YAHOO.util.Event.onDOMReady(function () {
-		var loggerConfig = {
-			width: "50%",
-			height: "300px",
-			footerEnabled: true,
-			newestOnTop: false,
-			verboseOutput: false
-		};
-		new YAHOO.widget.LogReader("delegationLogger", loggerConfig);
-		YAHOO.log ("delegationLogger successfully initiated!", "info");
+		Alfresco.logger.info("Delegation module ready.");
 	});
 //]]>
 </script>

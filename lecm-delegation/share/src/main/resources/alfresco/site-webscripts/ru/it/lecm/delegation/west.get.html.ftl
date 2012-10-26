@@ -2,13 +2,18 @@
 	(function () {
 		var delegationWest = new LogicECM.module.Delegation.West ("west");
 		delegationWest.setMessages(${messages});
-		delegationWest.init();
-		delegationWest.initListeners("buttons", ["testButtonId", "mybutton"]);
+//		delegationWest.initListeners("buttons", ["testButtonId", "mybutton"]);
 	})();
 //]]>
 </script>
 
-<div id="west">${myItem}</div>
+<div id="west">
+	<div>${myItem}</div>
+	<div id="buttons">
+		<div id="buttons-myButton"></div>
+	</div>
+</div>
+<!--
 <div id="buttons">
 	<input type="button" id="testButtonId" name="testButton" label="йа кнопко" title="йа кнопочко">
 
@@ -18,3 +23,4 @@
 		</span>
 	</span>
 </div>
+-->

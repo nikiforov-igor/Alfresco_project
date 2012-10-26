@@ -43,49 +43,61 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.West, Alfresco.component.Base, {
 
-		logger:null,
+		self: null,
 
-		init: function () {
-			alert("invoke init");
+		onReady: function () {
+			self = this;
 
-			this.logger = new YAHOO.widget.LogWriter(this.toString());
-
-			// Now you can write log messages from your LogWriter
-			this.logger.log("A new MyClass has been created","info");
-
+			this.initListeners("buttons");
+			Alfresco.logger.info ("A new LogicECM.module.Delegation.West has been created");
 		},
 
-		initListeners: function (htmlId, buttons) {
+		initListeners: function (buttonId) {
 
-			buttons = buttons || [];
+			YAHOO.util.Event.onContentReady(buttonId, function () {
 
-			var context = this;
+				var buttonContainer = YUIDom.get (buttonId);
+				Alfresco.logger.info ("button container: " + buttonContainer);
 
-			function onButtonsReady() {
+				Alfresco.util.createYUIButton (buttonContainer, "myButton", function (event) {
+					Alfresco.logger.info (event.toString());
+					Alfresco.util.Ajax.jsonGet ({
+						method: "GET", // GET, POST, PUT or DELETE, default is GET
+						url: Alfresco.constants.PROXY_URI + "logicecm/generateTestUnit", // the url to send the request to, mandatory
+						dataObj: {dummy: new Date().getTime()},
+						successCallback: {fn: function (successResult){  // Callback for successful request, should have the following form: {fn: successHandler, scope: scopeForSuccessHandler}
+							Alfresco.logger.info ("get responce " + successResult.json.nodeRef);
+						}, scope: self},
+						successMessage: "success happend!", // Will be displayed using Alfresco.util.PopupManager.displayMessage if successCallback isn't provided
+						failureCallback: {fn: function (failureResult) {
+							debugger;
+						}, scope: self}, // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
+						failureMessage: "shit happend!" // Will be displayed by Alfresco.util.displayPrompt if no failureCallback isn't provided
+					});
+				}, {label: "кнопка label", name: "кнопка name", title: "кнопка title"});
+			});
 
-				var onButtonClick = function (e) {
-					var sUrl = Alfresco.constants.PROXY_URI + "logicecm/generateTestUnit";
-					var callback = {
-						success:function (oResponse) {
-							var oResults = eval("(" + oResponse.responseText + ")");
-//							alert ("get responce " + oResults.nodeRef);
-							context.logger.log ("get responce " + oResults.nodeRef, "info", "west.js");
-						},
-						failure:function (oResponse) {
-//							alert ("Failed to get responce. " + "[" + oResponse.statusText + "]");
-							context.logger.log ("Failed to get responce. " + "[" + oResponse.statusText + "]", "error", "west.js");
-						}
-					};
-					YAHOO.util.Connect.asyncRequest("GET", sUrl, callback);
-				};
-
-				for (var i = 0; i < buttons.length; i++) {
-					var button = new YAHOO.widget.Button(buttons[i]);
-					button.on("click", onButtonClick);
-				}
-			}
-
-			YAHOO.util.Event.onContentReady(htmlId, onButtonsReady);
+//			function onButtonsReady() {
+//
+//				var onButtonClick = function (e) {
+//					var sUrl = Alfresco.constants.PROXY_URI + "logicecm/generateTestUnit";
+//					var callback = {
+//						success:function (oResponse) {
+//							var oResults = Alfresco.util.parseJSON (oResponse.responseText, true);
+//							Alfresco.logger.info ("get responce " + oResults.nodeRef);
+//						},
+//						failure:function (oResponse) {
+//							Alfresco.logger.info ("Failed to get responce. " + "[" + oResponse.statusText + "]");
+//						}
+//					};
+//					YAHOO.util.Connect.asyncRequest("GET", sUrl, callback);
+//				};
+//
+//				for (var i = 0; i < buttons.length; i++) {
+//					var button = new YAHOO.widget.Button(buttons[i]);
+//					button.on("click", onButtonClick);
+//				}
+//			}
 		}
 	});
 })();

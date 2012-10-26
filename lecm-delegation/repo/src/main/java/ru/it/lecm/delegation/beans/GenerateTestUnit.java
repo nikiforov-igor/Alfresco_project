@@ -57,7 +57,7 @@ public class GenerateTestUnit extends DeclarativeWebScript {
 
 				properties.put (testUnitId, UUID.randomUUID ().toString ());
 				properties.put (testUnitName, "someData");
-				properties.put (testUnitTitle, "this is some data. It is unique by it's id and can be serialized to json");
+				properties.put (testUnitTitle, "this is some data. It is unique by its id and can be serialized to json");
 				properties.put (testUnitDate, new Date ());
 
 				ChildAssociationRef ref = nodeService.createNode (userHome, ContentModel.ASSOC_CONTAINS, QName.createQName ("http://www.it.ru/lecm/delegation/1.0", "testUnitAssoc"), testUnit, properties);
