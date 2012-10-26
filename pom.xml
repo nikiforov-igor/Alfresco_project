@@ -73,6 +73,7 @@
         <module>lecm-jasperreports-forms</module>
 	    <module>lecm-dictionary</module>
 	    <module>lecm-dictionary-regions</module>
+	    <module>lecm-dictionary-test</module>
 	    <module>lecm-contracts</module>
     </modules>
     <scm>

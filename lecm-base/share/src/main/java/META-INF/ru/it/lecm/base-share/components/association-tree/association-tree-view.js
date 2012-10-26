@@ -20,8 +20,7 @@ LogicECM.module = LogicECM.module || {};
 {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
-		KeyListener = YAHOO.util.KeyListener,
-        tree;
+		KeyListener = YAHOO.util.KeyListener;
 
     var $html = Alfresco.util.encodeHTML,
         $combine = Alfresco.util.combinePaths,
@@ -41,6 +40,7 @@ LogicECM.module = LogicECM.module || {};
         this.searchProperties = {};
         this.currentNode = null;
         this.rootNode = null;
+        this.tree = null;
         this.isSearch = false;
 
 		return this;
@@ -48,6 +48,8 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.AssociationTreeViewer, Alfresco.component.Base,
 	{
+        tree: null,
+
         eventGroup: null,
 
         singleSelectedItem: null,
@@ -364,13 +366,13 @@ LogicECM.module = LogicECM.module || {};
         fillPickerDialog: function AssociationTreeViewer_fillPickerDialog()
         {
             if (!this.options.plane) {
-                tree = new YAHOO.widget.TreeView(this.options.pickerId + "-groups");
-                tree.singleNodeHighlight = true;
-                tree.setDynamicLoad(this._loadNode.bind(this));
+                this.tree = new YAHOO.widget.TreeView(this.options.pickerId + "-groups");
+                this.tree.singleNodeHighlight = true;
+                this.tree.setDynamicLoad(this._loadNode.bind(this));
 
-                tree.subscribe('clickEvent', function(event) {
+                this.tree.subscribe('clickEvent', function(event) {
                     this.treeViewClicked(event.node);
-                    tree.onEventToggleHighlight(event);
+                    this.tree.onEventToggleHighlight(event);
                     return false;
                 }.bind(this));
 
@@ -398,11 +400,11 @@ LogicECM.module = LogicECM.module || {};
                                         isContainer: oResults.isContainer,
                                         renderHidden:true
                                     };
-                                    this.rootNode = new YAHOO.widget.TextNode(newNode, tree.getRoot());
+                                    this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
 
-                                    tree.render();
+                                    this.tree.render();
                                     this.treeViewClicked(this.rootNode);
-                                    tree.onEventToggleHighlight(this.rootNode);
+                                    this.tree.onEventToggleHighlight(this.rootNode);
                                 } else {
                                     this.options.rootNodeRef = oResults.nodeRef;
                                     this.treeViewClicked(
@@ -486,7 +488,7 @@ LogicECM.module = LogicECM.module || {};
                 argument:{
                     node:node,
                     fnLoadComplete:fnLoadComplete,
-                    tree:tree,
+                    tree:this.tree,
                     context: this
                 },
                 timeout:7000
