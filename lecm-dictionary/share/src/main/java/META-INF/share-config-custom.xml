@@ -78,6 +78,11 @@
                     <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
+            <form id="export-fields">
+                <field-visibility>
+                    <show id="lecm-dic:active" />
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 </alfresco-config>

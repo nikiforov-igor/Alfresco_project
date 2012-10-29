@@ -32,7 +32,7 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 			<div class="new-row">
             <span id="${id}-exportButton" class="yui-button yui-push-button">
                <span class="first-child">
-                  <button type="button">${msg('button.new-row')}</button>
+                  <button type="button">${msg('button.export')}</button>
                </span>
             </span>
 			</div>
