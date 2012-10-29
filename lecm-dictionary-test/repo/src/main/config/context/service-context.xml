@@ -20,7 +20,7 @@
 <beans>
 
 	<!-- Registration of dictionary models -->
-	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary">
+	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-regions-repo.dictionary">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-dictionary-address-model.xml</value>
