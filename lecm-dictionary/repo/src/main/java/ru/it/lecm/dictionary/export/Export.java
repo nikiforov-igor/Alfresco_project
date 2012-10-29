@@ -42,7 +42,8 @@ public class Export extends AbstractWebScript {
         for (ChildAssociationRef subNodeAss : childAssocs) {
             xmlw.writeStartElement("items");
             list.add(subNodeAss);
-//            for (ChildAssociationRef properties : subNodeAss) {
+                xmlw.writeStartElement("item");
+                xmlw.writeAttribute("name", subNodeAss.getChildRef().toString());
                 Set set = nodeService.getProperties(subNodeAss.getChildRef()).entrySet();
                 Iterator iterator = set.iterator();
                 while(iterator.hasNext()) {
@@ -51,24 +52,17 @@ public class Export extends AbstractWebScript {
                     String value = (String)m.getValue().toString();
                     for (int i=0; i<namespace.size(); i++){
                         if (namespace.get(i).equals(key.getLocalName())){
-                            xmlw.writeStartElement("item");
-                            xmlw.writeAttribute("name", subNodeAss.getChildRef().toString());
                             xmlw.writeStartElement("property");
                             xmlw.writeAttribute("name", fields[i]);
-//                            xmlw.writeStartElement(key.getLocalName());
                             xmlw.writeCharacters(value);
-//                            xmlw.writeAttribute(key.getLocalName(),value);
-//                            xmlw.writeEndElement();
-                            xmlw.writeEndElement();
                             xmlw.writeEndElement();
                         }
                     }
                 }
-//            }
+            xmlw.writeEndElement();
             collectNodes(subNodeAss.getChildRef(), list, xmlw, namespace, fields);
             xmlw.writeEndElement();
         }
-//        xmlw.writeEndElement();
     }
 
     @Override
