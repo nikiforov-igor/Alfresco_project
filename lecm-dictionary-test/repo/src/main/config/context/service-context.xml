@@ -27,6 +27,11 @@
                 <value>alfresco/module/${artifactId}/models/lecm-dictionary-test-model.xml</value>
             </list>
 		</property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/dictionary-test</value>
+            </list>
+        </property>
 	</bean>
 
     <bean id="${groupId}.${artifactId}.lecmDictionaryBootstrap"

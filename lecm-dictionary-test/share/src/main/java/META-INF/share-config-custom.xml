@@ -88,7 +88,7 @@
 
                     <field id="lecm-dic-test:addressOneTree">
                         <control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адресс</control-param>
+                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -96,7 +96,7 @@
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
                         <control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адресс</control-param>
+                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -166,7 +166,7 @@
 
                     <field id="lecm-dic-test:addressOneTree">
                         <control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адресс</control-param>
+                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -174,7 +174,7 @@
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
                         <control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адресс</control-param>
+                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
