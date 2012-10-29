@@ -1,4 +1,11 @@
 var rootNode;
+
+var assocType = "cm:contains";
+var argsAssocType = args["assocType"];
+if (argsAssocType != null && argsAssocType != "") {
+    assocType = argsAssocType;
+}
+
 var nodeRef = args["nodeRef"];
 if (nodeRef == null || nodeRef == "") {
     rootNode = companyhome.childByNamePath("Dictionary");
@@ -9,7 +16,7 @@ var branch = [];
 
 
 if (rootNode != null) {
-    var dictionary_values = rootNode.getChildren();
+    var dictionary_values = rootNode.childAssocs[assocType];
 
     addItems(branch, dictionary_values);
 }
@@ -21,7 +28,7 @@ function addItems(branch, items) {
 		title = item.getName();
 		type = getNodeType(item);
 		nodeRef = item.getNodeRef().toString();
-		isLeaf = !item.hasChildren;
+		isLeaf = item.childAssocs[assocType] == null;
 		branch.push({
 			title: title,
 			type: type,
