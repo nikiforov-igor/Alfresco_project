@@ -1,9 +1,15 @@
 package ru.it.lecm.delegation.utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.InvalidQNameException;
@@ -53,6 +59,81 @@ public class Utils {
 			dstProps.put( QName.createQName(nsURI, key), (Serializable) srcArgs.get(key));
 		}
 		return dstProps;
+	}
+
+
+	/**
+	 * Сформировать список из id-шников 
+	 * @param listChild список дочерних ссылок
+	 * @return всегда не null список из Id-шников ссылок (при listChild == null или 
+	 * пустом ListChild воз-ся пустой результат)
+	 */
+	public static List<String> makeIdList(Collection<ChildAssociationRef> listChild) {
+		return (List<String>) makeIdList( new ArrayList<String>(), listChild);
+	}
+
+	/**
+	 * Сформировать список из id-шников ссылок
+	 * @param dest целевой проинициализированный список
+	 * @param refs
+	 * @return dest с включенными id из refs
+	 */
+	public static Collection<String> makeIdList(final Collection<String> dest, Collection<ChildAssociationRef> refs) {
+		if (refs != null)
+			for(ChildAssociationRef item: refs)
+				dest.add( item.getChildRef().getId() );
+		return dest;
+	}
+
+
+	/**
+	 * Получить список значений, которые есть в списке listA, но отсутствуют в listB.
+	 * @param oldIds
+	 * @param newIds
+	 * @return не null список значений условно соот-щий выражению "listA-listB" 
+	 * (только из значений списка listA).
+	 */
+	public static List<String> getDiffer(Collection<String> listA, Collection<String> listB) {
+		final List<String> result = new ArrayList<String>();
+		if (listA != null && !listA.isEmpty()) {
+			if (listB == null || listB.isEmpty()) {
+				// если нет списка B -> оставить целиком список A
+				result.addAll(listA);
+			} else {
+				final Set<String> setB = new HashSet<String>(listB); // для быстрого поиска ...
+				// включаем всё из A, чего нет в B ...
+				for(String item: listA) 
+					if (!setB.contains(item))
+						result.add(item);
+			}
+		}
+		return result;
+	}
+
+
+	/**
+	 * Получить список значений, которые есть в списке listA, но отсутствуют в listB.
+	 * @param oldIds
+	 * @param newIds
+	 * @return не null список значений условно соот-щий выражению "listA-listB" 
+	 * (только из значений списка listA).
+	 */
+	public static List<ChildAssociationRef> getDifferRefs(Collection<ChildAssociationRef> listA, Collection<ChildAssociationRef> listB) {
+		final List<ChildAssociationRef> result = new ArrayList<ChildAssociationRef>();
+		if (listA != null && !listA.isEmpty()) {
+			if (listB == null || listB.isEmpty()) {
+				// если нет списка B -> оставить целиком список A
+				result.addAll(listA);
+			} else {
+				final Set<String> setB = new HashSet<String>(); // для быстрого поиска ...
+				makeIdList(setB, listB);
+				// включаем всё из A, чего нет в B ...
+				for(ChildAssociationRef item: listA) 
+					if (!setB.contains(item.getChildRef().getId()))
+						result.add(item);
+			}
+		}
+		return result;
 	}
 }
 

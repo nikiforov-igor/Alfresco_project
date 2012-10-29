@@ -1,8 +1,11 @@
 package ru.it.lecm.delegation.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.alfresco.model.ContentModel;
@@ -21,6 +24,7 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,9 +63,12 @@ public class DelegationBean
 	 */
 	final static public String NODE_DEFAULT_DELEGATIONS_ROOT = "DELEGATIONS_ROOT";
 
+
 	/**
 	 * Свойства Доверенности
 	 */
+	final public static QName NTYPE_PROCURACY = QName.createQName(NSURI_DELEGATIONS, TYPE_PROCURACY);
+
 	/** datetime, Время начала действия */
 	final static public QName PROP_DATEBEGIN = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:dateUTCBegin");
 
@@ -87,6 +94,13 @@ public class DelegationBean
 	final static public QName PROP_ = QName.createQName(NSURI_DELEGATIONS, "");
 	 */
 
+	/**
+	 * Ссылки Доверенности
+	 */
+	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:fromEmployee"); // (1-1) Ссылки "От кого"
+	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:toEmployee"); // (1-1) Ссылки "Кому"
+	final static public QName ASSOC_GIVE_ROLES = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:delegateRoles"); //  (1-M) Список делегируемых бизнес-ролей
+	final static public QName ASSOC_PARENT_PROCURACY = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:parentProcuracy"); // (1-M) Ссылка на основную родительскую доверенность (для доверенностей второго уровня)
 
 	/*
 	 * props
@@ -193,12 +207,12 @@ public class DelegationBean
 
 
 	/**
-	 * Получить ссылку на узел Доверенности по id узла
-	 * @param procuracyId
+	 * Получить ссылку на узел по id узла
+	 * @param procuracyid
 	 * @return
 	 */
-	static NodeRef makeFullRef(String procuracyId) {
-		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, procuracyId);
+	static NodeRef makeFullRef(String procuracyid) {
+		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, procuracyid);
 	}
 
 
@@ -400,6 +414,12 @@ public class DelegationBean
 			// nodeService.getSourceAssocs(arg0, arg1);
 			logger.debug( "update: properties updated for node id=" + currentRef.getId());
 
+			/* ообновление ассоциаций ... */
+			updateAcccossiations( ASSOC_FROM_EMPLOYEE, currentRef, args);
+			updateAcccossiations( ASSOC_TO_EMPLOYEE, currentRef, args);
+			updateAcccossiations( ASSOC_GIVE_ROLES, currentRef, args);
+			updateAcccossiations( ASSOC_PARENT_PROCURACY, currentRef, args);
+
 			/* (!) выдаём новые права если статус активный ... */
 			final Serializable status = (props.containsKey(PROP_STATUS)) ? props.get(PROP_STATUS) : null;
 			if (STATUS_ACTIVE.equals(status)) {
@@ -426,6 +446,26 @@ public class DelegationBean
 		final NodeService nodeService = serviceRegistry.getNodeService();
 	}
  */
+
+	/**
+	 * Обновить список ассоциаций
+	 * @param assocTypeName
+	 * @param currentRef
+	 * @param args
+	 * @throws JSONException 
+	 */
+	private void updateAcccossiations(QName assocTypeName,
+			NodeRef nodeRef, JSONObject args) throws JSONException {
+		final Object jlist = args.get(assocTypeName.getLocalName());
+		if (jlist == null)
+			return;
+		final List<String> ids = new ArrayList<String>();
+		if (jlist instanceof Collection) {
+			ids.addAll( (Collection<String>)jlist );
+		} else
+			ids.add(jlist.toString());
+		updateAcccossiations(assocTypeName, nodeRef, ids);
+	}
 
 	static final Serializable getArgsDate(JSONObject args, String propName)
 			throws JSONException {
@@ -477,4 +517,53 @@ public class DelegationBean
 		logger.warn( String.format( "NOT YET IMPLEMENTED: revoking access rights by procuracy %s", procuracyRef));
 	}
 
+
+	// assocId => assocIdName
+	protected void updateAcccossiations(QName assocTypeName, final NodeRef srcParentRef,
+			List<String> newDstIds) 
+	{
+		// TODOL: locks
+
+		// session.nodeService
+		final NodeService nodeService = serviceRegistry.getNodeService();
+
+		// получить текущий список связей ...
+		final List<ChildAssociationRef> listOld = nodeService.getChildAssocs( srcParentRef, assocTypeName, RegexQNamePattern.MATCH_ALL);
+		final List<String> oldIds = Utils.makeIdList(listOld);
+
+		// список на удаление: то что было, а теперь нет ...
+		final List<String> toDel = Utils.getDiffer(oldIds, newDstIds);
+
+		// список на вставку: чего не было, но стало ...
+		final List<String> toAdd = Utils.getDiffer(newDstIds, oldIds);
+		// остальное не трогать )
+
+		// удаление прежних ...
+		for (String childId: toDel) {
+			final ChildAssociationRef ref = findRefByChildId( listOld, childId);
+			nodeService.removeChildAssociation( ref);
+			logger.debug( String.format( "node id=%s: reference removed %s", srcParentRef.getId(), ref.getQName(), ref.getChildRef().getId()));
+		}
+
+		// создание новых ссылок ...
+		for (String childId: toAdd) {
+			final NodeRef childRef = makeFullRef( childId);
+			final ChildAssociationRef ref = nodeService.addChild( srcParentRef
+						, childRef
+						, assocTypeName
+						, QName.createQName(NSURI_DELEGATIONS, "child"));
+			logger.debug( String.format( "node id=%s: reference added %s", srcParentRef.getId(), ref.getQName(), ref.getChildRef().getId()));
+			// ChildAssociationRef association = nodeService.createNode( srcParentRef, ContentModel.ASSOC_CONTAINS, assocTypeName, QName.createQName( URI_DATA_PROCURACY, "child"));
+		}
+
+		// TODO: check unlock
+	}
+
+	static ChildAssociationRef findRefByChildId( Collection<ChildAssociationRef> list, String childId) {
+		if (list != null && childId != null)
+			for (ChildAssociationRef item: list)
+				if (childId.equals(item.getChildRef().getId()))
+					return item; // FOUND
+		return null; // NOT FOUND
+	}
 }
