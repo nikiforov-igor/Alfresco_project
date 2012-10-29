@@ -56,6 +56,7 @@ function main()
 
         resultObj =
         {
+            displayPath: resultNode.displayPath != null ? resultNode.displayPath : "",
             title: resultNode.properties[titleProperty],
             type: resultNode.getTypeShort(),
             nodeRef: resultNode.getNodeRef().toString(),

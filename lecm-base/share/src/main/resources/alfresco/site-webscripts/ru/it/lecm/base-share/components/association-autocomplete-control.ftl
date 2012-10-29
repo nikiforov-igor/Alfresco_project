@@ -25,6 +25,9 @@
                 <#if field.control.params.startLocation??>
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
+                <#if field.control.params.itemIcon??>
+                    itemIcon: "${field.control.params.itemIcon}",
+                </#if>
                 multipleSelectMode: ${field.endpointMany?string},
                 itemType: "${field.endpointType}",
                 currentValue: "${field.value!''}",

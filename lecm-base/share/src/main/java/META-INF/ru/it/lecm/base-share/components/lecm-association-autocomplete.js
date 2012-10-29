@@ -43,6 +43,8 @@ LogicECM.module = LogicECM.module || {};
 
                 currentValue: "",
 
+                itemIcon: "components/images/filetypes/generic-file-16.png",
+
                 multipleSelectMode: false,
 
                 itemType:"cm:content",
@@ -335,7 +337,7 @@ LogicECM.module = LogicECM.module || {};
                 Dom.get(fieldId).innerHTML = '';
                 for (var i in items) {
                     Dom.get(fieldId).innerHTML
-                        += '<div><img src="/share/res/components/images/filetypes/generic-file-16.png" '
+                        += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.itemIcon + '" '
                         + 'width="16" alt="" title="' + items[i].name + '"> ' + items[i].name + ' '
                         + this.getRemoveButtonHTML(items[i]) + '</div>';
                     YAHOO.util.Event.onAvailable(items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
@@ -377,7 +379,7 @@ LogicECM.module = LogicECM.module || {};
                 el = Dom.get(this.controlId + "-currentValueDisplay");
                 el.innerHTML = '';
                 for (var i in this.selectedItems) {
-                    el.innerHTML += '<div><img src="/share/res/components/images/filetypes/generic-file-16.png" '
+                    el.innerHTML += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.itemIcon + '" '
                         + 'width="16" alt="" title="' + this.selectedItems[i].name + '"> ' + this.selectedItems[i].name + ' </div>';
                 }
             },

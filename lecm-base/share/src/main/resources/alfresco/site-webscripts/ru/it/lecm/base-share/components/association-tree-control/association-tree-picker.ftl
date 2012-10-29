@@ -62,6 +62,12 @@
         <#if field.control.params.rootLocation??>
             rootLocation: "${field.control.params.rootLocation}",
         </#if>
+        <#if field.control.params.bigItemIcon??>
+            bigItemIcon: "${field.control.params.bigItemIcon}",
+        </#if>
+        <#if field.control.params.smallItemIcon??>
+            smallItemIcon: "${field.control.params.smallItemIcon}",
+        </#if>
         <#if field.mandatory??>
             mandatory: ${field.mandatory?string},
         <#elseif field.endpointMandatory??>

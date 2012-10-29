@@ -23,6 +23,13 @@
                 <field-visibility>
                     <show id="cm:name" />
                     <show id="lecm-dic-address:prefix"/>
+                    <show id="lecm-dic-test:regOneSelect" />
+                    <show id="lecm-dic-test:regOneAutocomplete" />
+                    <show id="lecm-dic-test:regManyAutocomplete" />
+                    <show id="lecm-dic-test:regOneTree" />
+                    <show id="lecm-dic-test:regManyTree" />
+                    <show id="lecm-dic-test:addressOneTree" />
+                    <show id="lecm-dic-test:addressManyTree" />
                     <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
@@ -60,12 +67,14 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
+                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
+                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
 
@@ -75,6 +84,8 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -83,6 +94,8 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
 
@@ -92,6 +105,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -100,6 +115,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -138,12 +155,14 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
+                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
+                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
 
@@ -153,6 +172,8 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -161,6 +182,8 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
 
@@ -170,6 +193,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -178,6 +203,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -186,6 +213,14 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name" />
+                    <show id="lecm-dic-address:prefix"/>
+                    <show id="lecm-dic-test:regOneSelect" />
+                    <show id="lecm-dic-test:regOneAutocomplete" />
+                    <show id="lecm-dic-test:regManyAutocomplete" />
+                    <show id="lecm-dic-test:regOneTree" />
+                    <show id="lecm-dic-test:regManyTree" />
+                    <show id="lecm-dic-test:addressOneTree" />
+                    <show id="lecm-dic-test:addressManyTree" />
                     <show id="lecm-dic:active" />
                 </field-visibility>
             </form>

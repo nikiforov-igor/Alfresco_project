@@ -86,6 +86,10 @@ LogicECM.module = LogicECM.module || {};
 
             createNewItemIcon: "",
 
+            bigItemIcon: "components/images/filetypes/generic-file-32.png",
+
+            smallItemIcon: "components/images/filetypes/generic-file-16.png",
+
             rootLocation: null,
 
             rootNodeRef: "",
@@ -398,6 +402,7 @@ LogicECM.module = LogicECM.module || {};
                                         isLeaf:oResults.isLeaf,
                                         type:oResults.type,
                                         isContainer: oResults.isContainer,
+                                        displayPath: oResults.displayPath,
                                         renderHidden:true
                                     };
                                     this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
@@ -787,7 +792,7 @@ LogicECM.module = LogicECM.module || {};
 
         getIconURL: function AssociationTreeViewer_getIconURL(item, size)
         {
-            return Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/' + Alfresco.util.getFileIcon(item.name, item.type, size);
+            return Alfresco.constants.URL_RESCONTEXT + this.options.bigItemIcon;
         },
 
         canItemBeSelected: function AssociationTreeViewer_canItemBeSelected(id)
@@ -919,9 +924,22 @@ LogicECM.module = LogicECM.module || {};
             var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
             for (i in items) {
+
+                if (this.options.plane) {
+                    var displayName = items[i].name;
+                } else {
+                    displayName = items[i].displayPath + "/" + items[i].name;
+                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+                        if (rootNodeDisplayName !== "") {
+                            displayName = displayName.replace(rootNodeDisplayName, "");
+                        }
+                    }
+                }
+
                 Dom.get(fieldId).innerHTML
-                    += '<div><img src="/share/res/components/images/filetypes/generic-file-16.png" '
-                    + 'width="16" alt="" title="' + items[i].name + '"> ' + items[i].name + ' '
+                    += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
+                    + 'width="16" alt="" title="' + displayName + '"> ' + displayName + ' '
                     + this.getRemoveButtonHTML(items[i]) + '</div>';
                 YAHOO.util.Event.onAvailable(items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
             }
@@ -959,7 +977,7 @@ LogicECM.module = LogicECM.module || {};
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
             el.innerHTML = '';
             for (i in this.selectedItems) {
-                el.innerHTML += '<div><img src="/share/res/components/images/filetypes/generic-file-16.png" '
+                el.innerHTML += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
                     + 'width="16" alt="" title="' + this.selectedItems[i].name + '"> ' + this.selectedItems[i].name + ' </div>';
             }
 
