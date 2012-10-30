@@ -26,7 +26,7 @@
             <parent>lecm-dic:plane_dictionary_values</parent>
 
             <associations>
-                <child-association name="lecm-dic-test:regOneSelect">
+                <association name="lecm-dic-test:regOneSelect">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -36,10 +36,9 @@
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
+                </association>
 
-                <child-association name="lecm-dic-test:regOneAutocomplete">
+                <association name="lecm-dic-test:regOneAutocomplete">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -49,9 +48,8 @@
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
-                <child-association name="lecm-dic-test:regManyAutocomplete">
+                </association>
+                <association name="lecm-dic-test:regManyAutocomplete">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -61,10 +59,9 @@
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
+                </association>
 
-                <child-association name="lecm-dic-test:regOneTree">
+                <association name="lecm-dic-test:regOneTree">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -74,9 +71,8 @@
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
-                <child-association name="lecm-dic-test:regManyTree">
+                </association>
+                <association name="lecm-dic-test:regManyTree">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -86,10 +82,9 @@
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
+                </association>
 
-                <child-association name="lecm-dic-test:addressOneTree">
+                <association name="lecm-dic-test:addressOneTree">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -99,9 +94,8 @@
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
-                <child-association name="lecm-dic-test:addressManyTree">
+                </association>
+                <association name="lecm-dic-test:addressManyTree">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
@@ -111,8 +105,7 @@
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
-                    <duplicate>true</duplicate>
-                </child-association>
+                </association>
             </associations>
         </type>
     </types>
