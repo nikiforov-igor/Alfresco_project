@@ -3,7 +3,7 @@
 <!-- lecm-ba == lecm Business Authority -->
 <model name="lecm-ba:delegations" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
-	<!-- Optional meta-data about the model -->   
+	<!-- Optional meta-data about the model -->
 	<description>Business Authority Delegation Model</description>
 	<author>RAA</author>
 	<version>1.0</version>
@@ -141,7 +141,7 @@
 				<!-- Ссылка "От кого" (1-1) -->
 				<association name="lecm-ba:fromEmployee">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<target>
@@ -154,7 +154,7 @@
 				<!-- Ссылки "Кому" (1-1) -->
 				<association name="lecm-ba:toEmployee">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<target>
@@ -167,7 +167,7 @@
 				<!-- Список делегируемых бизнес-ролей -->
 				<association name="lecm-ba:delegateRoles">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<target>
@@ -180,20 +180,20 @@
 				<!-- Ссылка на основную родительскую доверенность (для доверенностей второго уровня) -->
 				<association name="lecm-ba:parentProcuracy">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<target>
 						<class>lecm-ba:procuracy</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
 				</association>
 
-				<!-- TODO: Возможно, для упрощения реализации требования о передаче 
+				<!-- TODO: Возможно, для упрощения реализации требования о передаче
 					делегирований не более двух уровней, понадобится денормализующая
-					ссылка на доверенность второго уровня (из доверенности третьего уровня) 
-					... 
+					ссылка на доверенность второго уровня (из доверенности третьего уровня)
+					...
 				  -->
 
 			</associations>

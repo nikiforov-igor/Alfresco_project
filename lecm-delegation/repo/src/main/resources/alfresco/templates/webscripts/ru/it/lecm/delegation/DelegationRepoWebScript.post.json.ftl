@@ -1,5 +1,5 @@
 <#if model??>
-	${model.toString()}
+	${model}
 <#else>
 	{}
 </#if>

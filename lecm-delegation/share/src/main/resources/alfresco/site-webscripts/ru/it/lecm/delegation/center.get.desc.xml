@@ -3,6 +3,6 @@
 	<shortname>center</shortname>
 	<description>Returns center region content.</description>
 	<url>/ru/it/lecm/delegation/center</url>
-	<format default="html">extension</format>
+	<format default="html"/>
 	<authentication>user</authentication>
 </webscript>

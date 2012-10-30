@@ -5,4 +5,5 @@
 	<url>/logicecm/delegation/{action}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
+	<transaction>required</transaction>
 </webscript>

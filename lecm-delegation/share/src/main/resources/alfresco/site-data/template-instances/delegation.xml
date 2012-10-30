@@ -25,6 +25,10 @@
 			<region-id>center</region-id>
 			<url>/ru/it/lecm/delegation/center</url>
 		</component>
-
+		<!-- Toolbar region -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/ru/it/lecm/delegation/toolbar</url>
+		</component>
 	</components>
 </template-instance>

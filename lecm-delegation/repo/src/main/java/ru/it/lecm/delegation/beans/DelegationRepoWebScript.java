@@ -1,21 +1,22 @@
 package ru.it.lecm.delegation.beans;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.ServletUtil;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.IWebScriptDelegation;
 
 /**
  *
@@ -23,7 +24,7 @@ import ru.it.lecm.delegation.IDelegation;
  * @since 18.10.2012 14:41:08
  * @see <p>mailto: <a href="mailto:vladimir.malygin@aplana.com">vladimir.malygin@aplana.com</a></p>
  */
-public class DelegationRepoWebScript extends DeclarativeWebScript implements IDelegation {
+public class DelegationRepoWebScript extends DeclarativeWebScript implements IWebScriptDelegation {
 
 	private final static Logger logger = LoggerFactory.getLogger (DelegationRepoWebScript.class);
 
@@ -46,45 +47,45 @@ public class DelegationRepoWebScript extends DeclarativeWebScript implements IDe
 		}
 	};
 
-	private IDelegation delegationService;
+	private IWebScriptDelegation webScriptDelegation;
 
-	private JSONObject createDummy () {
+	private String createDummy () {
 		try {
 			JSONObject dummy = new JSONObject ();
 			dummy.put ("id", UUID.randomUUID ());
 			dummy.put ("name", "someData");
 			dummy.put ("title", "this is some data. It is unique by it's id and can be serialized to json");
 			dummy.put ("date", new Date ());
-			return dummy;
+			return dummy.toString ();
 		} catch (JSONException ex) {
 			logger.error (ex.getMessage (), ex);
-			return  null;
+			return  "{}";
 		}
 	}
 
 	@Override
-	public String createProcuracy (JSONObject args) {
-		return delegationService.createProcuracy (args);
+	public String createProcuracy (String args) {
+		return webScriptDelegation.createProcuracy (args);
 	}
 
 	@Override
-	public JSONObject getProcuracy (String procuracyId) {
-		return delegationService.getProcuracy (procuracyId);
+	public String getProcuracy (String procuracyId) {
+		return webScriptDelegation.getProcuracy (procuracyId);
 	}
 
 	@Override
-	public JSONArray findProcuracyList (JSONObject searchArgs) {
-		return delegationService.findProcuracyList (searchArgs);
+	public String findProcuracyList (String searchArgs) {
+		return webScriptDelegation.findProcuracyList (searchArgs);
 	}
 
 	@Override
-	public void updateProcuracy (String procuracyId, JSONObject args) {
-		delegationService.updateProcuracy (procuracyId, args);
+	public String updateProcuracy (String args) {
+		return webScriptDelegation.updateProcuracy (args);
 	}
 
 	@Override
-	public void deleteProcuracy (String procuracyId) {
-		delegationService.deleteProcuracy (procuracyId);
+	public String deleteProcuracy (String procuracyId) {
+		return webScriptDelegation.deleteProcuracy (procuracyId);
 	}
 
 	@Override
@@ -96,23 +97,32 @@ public class DelegationRepoWebScript extends DeclarativeWebScript implements IDe
 		Map<String, String> templateArgs = req.getServiceMatch ().getTemplateVars ();
 		String action = templateArgs.get (ACTION_DEF);
 
-//		String content = req.getContent ().getContent ();
+		Content content = req.getContent ();
+		if (content == null) {
+			throw new WebScriptException (String.format ("DelegationRepoWebScript was invoked with unknown template arg: %s.", action));
+		}
+
+		String jsonContent;
+		try {
+			jsonContent = content.getContent ();
+		} catch (IOException ex) {
+			jsonContent = "{}";
+			logger.warn ("can't get content as json string", ex);
+		}
 
 		HashMap<String, Object> model = new HashMap<String, Object> ();
 		if (Action.createDummy.equals (action)) {
 			model.put ("model", createDummy ());
 		} else if (Action.create.equals (action)) {
-			model.put ("model", createProcuracy (null));
+			model.put ("model", createProcuracy (jsonContent));
 		} else if (Action.get.equals (action)) {
-			model.put ("model", getProcuracy (null));
+			model.put ("model", getProcuracy (jsonContent));
 		} else if (Action.find.equals (action)) {
-			model.put ("model", findProcuracyList (null));
+			model.put ("model", findProcuracyList (jsonContent));
 		} else if (Action.update.equals (action)) {
-			updateProcuracy (null, null);
-			model.put ("model", "ok");
+			model.put ("model", updateProcuracy (jsonContent));
 		} else if (Action.delete.equals (action)) {
-			deleteProcuracy (null);
-			model.put ("model", "ok");
+			model.put ("model", deleteProcuracy (jsonContent));
 		} else {
 			throw new WebScriptException (String.format ("DelegationRepoWebScript was invoked with unknown template arg: %s.", action));
 		}
@@ -120,7 +130,7 @@ public class DelegationRepoWebScript extends DeclarativeWebScript implements IDe
 		return model;
 	}
 
-	public void setDelegationService (IDelegation delegationService) {
-		this.delegationService = delegationService;
+	public void setServiceDelegationWebScript (IWebScriptDelegation webScriptDelegation) {
+		this.webScriptDelegation = webScriptDelegation;
 	}
 }
