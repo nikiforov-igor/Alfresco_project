@@ -33,8 +33,7 @@
                 <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
                 <div id="${controlId}-itemGroupActions" class="show-picker">
-                    <input type="button" id="${controlId}-orgchart-picker-button" name="-"
-                    value="${field.control.params.selectActionLabel!msg("button.select")}" onclick="showTreePicker();"/>
+                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
                 </div>
 
                 <@renderTreePickerDialogHTML controlId plane/>
@@ -85,7 +84,6 @@
         plane: ${plane?string},
         currentValue: "${field.value!''}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
-        itemType: "${field.endpointType}",
-        mode: "picker"
+        itemType: "${field.endpointType}"
     }).setMessages( ${messages} );
 </script>

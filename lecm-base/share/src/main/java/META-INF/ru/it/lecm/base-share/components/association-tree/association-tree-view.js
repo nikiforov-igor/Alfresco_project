@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
+            changeItemsFireAction: null,
+
             selectedValue: null,
 
             plane: false,
@@ -129,7 +131,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 // Create picker button
                 this.widgets.pickerButton =  new YAHOO.widget.Button(
-                            this.id + "-cntrl-orgchart-picker-button",
+                            this.id + "-cntrl-tree-picker-button",
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
 
@@ -203,6 +205,7 @@ LogicECM.module = LogicECM.module || {};
                 if(!this.options.disabled)
                 {
                     this.updateSelectedItems();
+                    this.updateAddButtons();
                 }
                 this.updateFormFields();
             };
@@ -241,6 +244,10 @@ LogicECM.module = LogicECM.module || {};
             else
             {
                 // if disabled show the (None) message
+                this.selectedItems = {};
+                this.singleSelectedItem = null;
+                this.updateSelectedItems();
+                this.updateAddButtons();
                 if (this.options.disabled && this.options.displayMode == "items")
                 {
                     Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
@@ -362,6 +369,9 @@ LogicECM.module = LogicECM.module || {};
 
             // Show the dialog
             this.widgets.dialog.show();
+
+            this.options.selectedValue = Dom.get(this.options.controlId + "-added").value;
+            this._loadSelectedItems();
 
             Event.preventDefault(e);
         },
@@ -941,7 +951,7 @@ LogicECM.module = LogicECM.module || {};
                     += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
                     + 'width="16" alt="" title="' + displayName + '"> ' + displayName + ' '
                     + this.getRemoveButtonHTML(items[i]) + '</div>';
-                YAHOO.util.Event.onAvailable(items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
+                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
             }
         },
 
@@ -959,13 +969,13 @@ LogicECM.module = LogicECM.module || {};
 
         getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node)
         {
-            return '<a href="#" class="remove-item" id="' + node.nodeRef
+            return '<a href="#" class="remove-item" id="t-' + this.options.controlId + node.nodeRef
                 + '"><img src="/share/res/components/images/remove-icon-16.png" width="16"/></a>';
         },
 
         attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(node)
         {
-            YAHOO.util.Event.on(node.nodeRef, 'click', this.removeNode, node, this);
+            YAHOO.util.Event.on("t-" + this.options.controlId + node.nodeRef, 'click', this.removeNode, node, this);
         },
 
         // Updates all form fields
@@ -976,9 +986,21 @@ LogicECM.module = LogicECM.module || {};
 
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
             el.innerHTML = '';
-            for (i in this.selectedItems) {
+            for (var i in this.selectedItems) {
+                if (this.options.plane) {
+                    var displayName = this.selectedItems[i].name;
+                } else {
+                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].name;
+                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+                        if (rootNodeDisplayName !== "") {
+                            displayName = displayName.replace(rootNodeDisplayName, "");
+                        }
+                    }
+                }
+
                 el.innerHTML += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
-                    + 'width="16" alt="" title="' + this.selectedItems[i].name + '"> ' + this.selectedItems[i].name + ' </div>';
+                    + 'width="16" alt="" title="' + displayName + '"> ' + displayName + ' </div>';
             }
 
             if(!this.options.disabled)
@@ -999,6 +1021,10 @@ LogicECM.module = LogicECM.module || {};
                 el.value = '';
                 for (i in removedItems) {
                     el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
+                }
+
+                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction);
                 }
             }
         },

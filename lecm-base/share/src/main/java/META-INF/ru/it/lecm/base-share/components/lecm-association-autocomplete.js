@@ -23,11 +23,11 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.AssociationAutoComplete = function LogicECM_module_AssociationAutoComplete(fieldHtmlId) {
         LogicECM.module.AssociationAutoComplete.superclass.constructor.call(this, "LogicECM.module.AssociationAutoComplete", fieldHtmlId, [ "container", "resize", "datasource"]);
+        YAHOO.Bubbling.on("refreshAutocompleteItemList", this.onRefreshAutocompleteItemList, this);
 
-        this.controlId = fieldHtmlId;
+        this.controlId = fieldHtmlId + "-cntrl";
         this.dataArray = [];
         this.selectedItems = {};
-        this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
         return this;
     };
@@ -70,8 +70,6 @@ LogicECM.module = LogicECM.module || {};
 
             controlId:"",
 
-            currentDisplayValueId:null,
-
             selectItem:null,
 
             currentDisplayValueElement:null,
@@ -90,6 +88,12 @@ LogicECM.module = LogicECM.module || {};
                 this.loadSelectedItems();
             },
 
+            onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)
+            {
+                this.options.selectedValueNodeRef = Dom.get(this.controlId + "-added").value;
+                this.loadSelectedItems();
+            },
+
             loadSelectedItems: function AssociationAutoComplete__loadSelectedItems()
             {
                 var arrItems = "";
@@ -102,7 +106,7 @@ LogicECM.module = LogicECM.module || {};
                     arrItems = this.options.currentValue;
                 }
 
-                var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)
+                var onSuccess = function AssociationAutoComplete__loadSelectedItems_onSuccess(response)
                 {
                     var items = response.json.data.items,
                         item;
@@ -123,7 +127,7 @@ LogicECM.module = LogicECM.module || {};
                     }
                 };
 
-                var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
+                var onFailure = function AssociationAutoComplete__loadSelectedItems_onFailure(response)
                 {
                     this.selectedItems = null;
                 };
@@ -331,31 +335,31 @@ LogicECM.module = LogicECM.module || {};
                 return params;
             },
 
-            updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
+            updateSelectedItems: function AssociationAutoComplete_updateSelectedItems() {
                 var items = this.selectedItems;
-                var fieldId = this.controlId + "-selected-elements";
+                var fieldId = this.controlId + "-currentValueDisplay";
                 Dom.get(fieldId).innerHTML = '';
                 for (var i in items) {
                     Dom.get(fieldId).innerHTML
                         += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.itemIcon + '" '
                         + 'width="16" alt="" title="' + items[i].name + '"> ' + items[i].name + ' '
                         + this.getRemoveButtonHTML(items[i]) + '</div>';
-                    YAHOO.util.Event.onAvailable(items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
+                    YAHOO.util.Event.onAvailable("ac-" + this.controlId + items[i].nodeRef, this.attachRemoveItemClickListener, items[i], this);
                 }
             },
 
-            getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node)
+            getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)
             {
-                return '<a href="#" class="remove-item" id="' + node.nodeRef
+                return '<a href="#" class="remove-item" id="ac-' + this.controlId + node.nodeRef
                     + '"><img src="/share/res/components/images/remove-icon-16.png" width="16"/></a>';
             },
 
-            attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(node)
+            attachRemoveItemClickListener: function AssociationAutoComplete_attachRemoveItemClickListener(node)
             {
-                YAHOO.util.Event.on(node.nodeRef, 'click', this.removeSelectedElement, node, this);
+                YAHOO.util.Event.on("ac-" + this.controlId + node.nodeRef, 'click', this.removeSelectedElement, node, this);
             },
 
-            removeSelectedElement: function AssociationTreeViewer_removeSelectedElement(event, node)
+            removeSelectedElement: function AssociationAutoComplete_removeSelectedElement(event, node)
             {
                 delete this.selectedItems[node.nodeRef];
                 this.singleSelectedItem = null;
@@ -385,7 +389,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             // Updates all form fields
-            updateFormFields: function AssociationTreeViewer_updateFormFields()
+            updateFormFields: function AssociationAutoComplete_updateFormFields()
             {
                 // Just element
                 var el;
@@ -409,7 +413,7 @@ LogicECM.module = LogicECM.module || {};
                 }
             },
 
-            getAddedItems: function AssociationTreeViewer_getAddedItems()
+            getAddedItems: function AssociationAutoComplete_getAddedItems()
             {
                 var addedItems = [],
                     currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
@@ -427,7 +431,7 @@ LogicECM.module = LogicECM.module || {};
                 return addedItems;
             },
 
-            getRemovedItems: function AssociationTreeViewer_getRemovedItems()
+            getRemovedItems: function AssociationAutoComplete_getRemovedItems()
             {
                 var removedItems = [],
                     currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
