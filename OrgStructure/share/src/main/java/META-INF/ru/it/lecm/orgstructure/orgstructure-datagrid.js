@@ -80,15 +80,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
          * Decoupled event listeners
          */
         Bubbling.on("orgElementSelected", this.onOrgElementChanged, this);
-        Bubbling.on("changeFilter", this.onChangeFilter, this);
-        Bubbling.on("filterChanged", this.onFilterChanged, this);
+        //Bubbling.on("changeFilter", this.onChangeFilter, this);
+        //Bubbling.on("filterChanged", this.onFilterChanged, this);
         Bubbling.on("dataListDetailsUpdated", this.onDataListDetailsUpdated, this);
         Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
         Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
 
-        Event.on(htmlId +'-searchText','keyup',this.doActionFilter.bind(this));
+        //Event.on(htmlId +'-search-text','keyup',this.doActionFilter.bind(this));
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onOrgElementChanged"],
@@ -124,24 +124,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             options:
             {
                 /**
-                 * Current siteId.
-                 *
-                 * @property siteId
-                 * @type string
-                 * @default ""
-                 */
-                siteId: "",
-
-                /**
-                 * ContainerId representing root container.
-                 *
-                 * @property containerId
-                 * @type string
-                 * @default "dataLists"
-                 */
-                containerId: "dataLists",
-
-                /**
                  * Flag indicating whether pagination is available or not.
                  *
                  * @property usePagination
@@ -166,13 +148,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                  */
                 pageSize: 50,
 
-                /**
-                 * Initial filter to show on load.
-                 *
-                 * @property initialFilter
-                 * @type object
-                 */
-                initialFilter: {},
 
                 /**
                  * Delay time value for "More Actions" popup, in milliseconds
@@ -547,7 +522,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 Bubbling.addDefaultAction("show-more", fnActionHandler);
 
                 // Hook filter change events
-                var fnChangeFilterHandler = function DataGrid_fnChangeFilterHandler(layer, args)
+                /*var fnChangeFilterHandler = function DataGrid_fnChangeFilterHandler(layer, args)
                 {
                     var owner = args[1].anchor;
                     if (owner !== null)
@@ -572,10 +547,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }
                     return true;
                 };
-                Bubbling.addDefaultAction("filter-change", fnChangeFilterHandler);
+                Bubbling.addDefaultAction("filter-change", fnChangeFilterHandler);*/
 
                 // DataList Actions module
                 this.modules.actions = new LogicECM.module.OrgStructure.Actions();
+
+                // initialize Search
+                // draw it after get metaData!
+                this.modules.search = new LogicECM.AdvancedSearch(this.id);
 
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
@@ -587,22 +566,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
-            },
-
-            /**
-             * Fired by YUI when History Manager is initialised and available for scripting.
-             * Component initialisation, including instantiation of YUI widgets and event listener binding.
-             *
-             * @method onHistoryManagerReady
-             */
-            onHistoryManagerReady: function DataGrid_onHistoryManagerReady()
-            {
-                // Fire changeFilter event for first-time population
-                Alfresco.logger.debug("DataGrid_onHistoryManagerReady", "changeFilter =>", this.options.initialFilter);
-                Bubbling.fire("changeFilter", YAHOO.lang.merge(
-                    {
-                        datagridFirstTimeNav: true
-                    }, this.options.initialFilter));
             },
 
             /**
@@ -655,11 +618,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 );
             },
 
-            /**
-             * Retrieves the Data List from the Repository
-             *
-             * @method populateDataGrid
-             */
+            renderSearchForm: function DataGrid_renderSearchForm()
+            {
+                if (!YAHOO.lang.isObject(this.orgstructureMetadata))
+                {
+                    return;
+                }
+                // draw searchForm
+                if (this.modules.search) {
+                    this.modules.search.initSearch(this.orgstructureMetadata);
+                } else {
+                    this.modules.search = new LogicECM.AdvancedSearch(this.id);
+                    this.modules.search.initSearch(this.orgstructureMetadata);
+                }
+            },
+
             populateDataGrid: function DataGrid_populateDataGrid()
             {
                 if (!YAHOO.lang.isObject(this.orgstructureMetadata))
@@ -668,6 +641,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
 
                 this.renderDataListMeta();
+                //this.renderSearchForm();
 
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
@@ -697,8 +671,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @method onDatalistColumns
              * @param response {Object} Ajax data structure
              */
-            onOrgElementColumns: function DataGrid_onOrgElementColumns(response)
-            {
+            onOrgElementColumns:function DataGrid_onOrgElementColumns(response) {
                 this.datalistColumns = response.json.columns;
                 // Set-up YUI History Managers and Paginator
                 this._setupHistoryManagers();
@@ -711,8 +684,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 // Enable item select menu
                 this.widgets.itemSelect.set("disabled", false);
 
-                // Continue only when History Manager fires its onReady event
-                YAHOO.util.History.onReady(this.onHistoryManagerReady, this, true);
+                this.renderSearchForm();
             },
 
             /**
@@ -749,8 +721,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     filterObj.filterOwner = Alfresco.util.FilterManager.getOwner(filterObj.filterId);
                     return filterObj;
                 };
-
-                this.options.initialFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
 
                 // Register History Manager filter update callback
                 YAHOO.util.History.register("filter", bookmarkedFilter, function DataGrid_onHistoryManagerFilterChanged(newFilter)
@@ -824,7 +794,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                      * not supported (Opera, or not A-grade)
                      */
                     Alfresco.logger.error(this.name + ": Couldn't initialize HistoryManager.", e2);
-                    this.onHistoryManagerReady();
                 }
             },
 
@@ -834,15 +803,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @method _setupDataSource
              * @protected
              */
-            _setupDataSource: function DataGrid__setupDataSource()
-            {
+            _setupDataSource:function DataGrid__setupDataSource() {
                 var listNodeRef = new Alfresco.util.NodeRef(this.orgstructureMetadata.nodeRef);
 
                 this.dataRequestFields = [];
                 this.dataResponseFields = [];
 
-                for (var i = 0, ii = this.datalistColumns.length; i < ii; i++)
-                {
+                for (var i = 0, ii = this.datalistColumns.length; i < ii; i++) {
                     var column = this.datalistColumns[i],
                         columnName = column.name.replace(":", "_"),
                         fieldLookup = (column.type == "property" ? "prop" : "assoc") + "_" + columnName;
@@ -853,38 +820,37 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
 
                 // DataSource definition
-                    this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + this.orgstructureMetadata.dataSourceUri + listNodeRef.uri,
+                var uriSearchResults = Alfresco.constants.PROXY_URI + "lecm/search?";
+                this.widgets.dataSource = new YAHOO.util.DataSource(uriSearchResults,
                     {
-                        connMethodPost: true,
-                        responseType: YAHOO.util.DataSource.TYPE_JSON,
-                        responseSchema:
-                        {
-                            resultsList: "items",
-                            metaFields:
-                            {
-                                paginationRecordOffset: "startIndex",
-                                totalRecords: "totalRecords"
+                        responseType:YAHOO.util.DataSource.TYPE_JSON,
+                        connXhrMode:"queueRequests",
+                        responseSchema:{
+                            resultsList:"items",
+                            metaFields:{
+                                paginationRecordOffset:"startIndex",
+                                totalRecords:"totalRecords"
                             }
                         }
                     });
 
-                this.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
-
                 // Intercept data returned from data webscript to extract custom metadata
-                this.widgets.dataSource.doBeforeCallback = function DataGrid_doBeforeCallback(oRequest, oFullResponse, oParsedResponse)
-                {
+                /*this.widgets.dataSource.doBeforeCallback = function DataGrid_doBeforeCallback(oRequest, oFullResponse, oParsedResponse) {
                     // Container userAccess event
                     var permissions = oFullResponse.metadata.parent.permissions;
-                    if (permissions && permissions.userAccess)
-                    {
+                    if (permissions && permissions.userAccess) {
                         Bubbling.fire("userAccess",
                             {
-                                userAccess: permissions.userAccess
+                                userAccess:permissions.userAccess
                             });
                     }
 
                     return oParsedResponse;
                 };
+*/
+                // link dataSource with search
+                this.modules.search.dataSource = this.widgets.dataSource;
+                this.modules.search.dataFields = this.dataRequestFields;
             },
 
             /**
@@ -893,83 +859,74 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @method _setupDataTable
              * @protected
              */
-            _setupDataTable: function DataGrid__setupDataTable(columns)
-            {
+            _setupDataTable:function DataGrid__setupDataTable() {
                 // YUI DataTable column definitions
                 var columnDefinitions =
                     [
-                        { key: "nodeRef", label: "", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
+                        { key:"nodeRef", label:"", sortable:false, formatter:this.fnRenderCellSelected(), width:16 }
                     ];
 
                 var column;
-                for (var i = 0, ii = this.datalistColumns.length; i < ii; i++)
-                {
+                for (var i = 0, ii = this.datalistColumns.length; i < ii; i++) {
                     column = this.datalistColumns[i];
                     columnDefinitions.push(
                         {
-                            key: this.dataResponseFields[i],
-                            label: column.label,
-                            sortable: true,
-                            sortOptions:
-                            {
-                                field: column.formsName,
-                                sortFunction: this.getSortFunction()
+                            key:this.dataResponseFields[i],
+                            label:column.label,
+                            sortable:true,
+                            sortOptions:{
+                                field:column.formsName,
+                                sortFunction:this.getSortFunction()
                             },
-                            formatter: this.getCellFormatter(column.dataType)
+                            formatter:this.getCellFormatter(column.dataType)
                         });
                 }
 
                 // Add actions as last column
                 columnDefinitions.push(
-                    { key: "actions", label: this.msg("label.column.actions"), sortable: false, formatter: this.fnRenderCellActions(), width: 80 }
+                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
                 );
 
                 // DataTable definition
                 var me = this;
                 this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
-                        renderLoopSize: this.options.usePagination ? 16 : 32,
-                        initialLoad: false,
-                        dynamicData: false,
-                        "MSG_EMPTY": this.msg("message.empty"),
-                        "MSG_ERROR": this.msg("message.error"),
-                        paginator: this.widgets.paginator
+                        renderLoopSize:this.options.usePagination ? 16 : 32,
+                        initialLoad:false,
+                        dynamicData:false,
+                        "MSG_EMPTY":this.msg("message.empty"),
+                        "MSG_ERROR":this.msg("message.error"),
+                        paginator:this.widgets.paginator
                     });
 
                 // Update totalRecords with value from server
-                this.widgets.dataTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload)
-                {
+                this.widgets.dataTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
                     me.totalRecords = oResponse.meta.totalRecords;
                     oResponse.meta.pagination =
                     {
-                        rowsPerPage: me.options.pageSize,
-                        recordOffset: (me.currentPage - 1) * me.options.pageSize
+                        rowsPerPage:me.options.pageSize,
+                        recordOffset:(me.currentPage - 1) * me.options.pageSize
                     };
                     return oResponse.meta;
                 };
 
                 // Override abstract function within DataTable to set custom error message
-                this.widgets.dataTable.doBeforeLoadData = function DataGrid_doBeforeLoadData(sRequest, oResponse, oPayload)
-                {
-                    if (oResponse.error)
-                    {
-                        try
-                        {
+                this.widgets.dataTable.doBeforeLoadData = function DataGrid_doBeforeLoadData(sRequest, oResponse, oPayload) {
+                    if (oResponse.error) {
+                        try {
                             var response = YAHOO.lang.JSON.parse(oResponse.responseText);
                             me.widgets.dataTable.set("MSG_ERROR", response.message);
                         }
-                        catch(e)
-                        {
+                        catch (e) {
                             me._setDefaultDataTableErrors(me.widgets.dataTable);
                         }
                     }
 
                     // We don't get an renderEvent for an empty recordSet, but we'd like one anyway
-                    if (oResponse.results.length === 0)
-                    {
+                    if (oResponse.results.length === 0) {
                         this.fireEvent("renderEvent",
                             {
-                                type: "renderEvent"
+                                type:"renderEvent"
                             });
                     }
 
@@ -978,29 +935,25 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 };
 
                 // Override default function so the "Loading..." message is suppressed
-                this.widgets.dataTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir)
-                {
+                this.widgets.dataTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir) {
                     me.currentSort =
                     {
-                        oColumn: oColumn,
-                        sSortDir: sSortDir
+                        oColumn:oColumn,
+                        sSortDir:sSortDir
                     };
                     return true;
-                }
+                };
 
                 // File checked handler
-                this.widgets.dataTable.subscribe("checkboxClickEvent", function(e)
-                {
+                this.widgets.dataTable.subscribe("checkboxClickEvent", function (e) {
                     var id = e.target.value;
                     this.selectedItems[id] = e.target.checked;
                     Bubbling.fire("selectedItemsChanged");
                 }, this, true);
 
                 // Before render event handler
-                this.widgets.dataTable.subscribe("beforeRenderEvent", function()
-                {
-                    if (me.currentSort)
-                    {
+                this.widgets.dataTable.subscribe("beforeRenderEvent", function () {
+                    if (me.currentSort) {
                         // Is there a custom sort handler function defined?
                         var oColumn = me.currentSort.oColumn,
                             sSortDir = me.currentSort.sSortDir,
@@ -1009,8 +962,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 oColumn.sortOptions.sortFunction : null;
 
                         // Sort the Records
-                        if (sSortDir || sortFnc)
-                        {
+                        if (sSortDir || sortFnc) {
                             // Default sort function if necessary
                             sortFnc = sortFnc || this.get("sortFunction");
                             // Get the field to sort
@@ -1023,20 +975,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }, this.widgets.dataTable, true);
 
                 // Rendering complete event handler
-                this.widgets.dataTable.subscribe("renderEvent", function()
-                {
+                this.widgets.dataTable.subscribe("renderEvent", function () {
                     Alfresco.logger.debug("DataTable renderEvent");
 
                     // IE6 fix for long filename rendering issue
-                    if (YAHOO.env.ua.ie < 7)
-                    {
+                    if (YAHOO.env.ua.ie < 7) {
                         var ie6fix = this.widgets.dataTable.getTableEl().parentNode;
                         ie6fix.className = ie6fix.className;
                     }
 
                     // Deferred functions specified?
-                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++)
-                    {
+                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
                         this.afterDataGridUpdate[i].call(this);
                     }
                     this.afterDataGridUpdate = [];
@@ -1045,6 +994,26 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 // Enable row highlighting
                 this.widgets.dataTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
                 this.widgets.dataTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
+
+                // link current table with search and do search
+                this.modules.search.dataTable = this.widgets.dataTable;
+
+                var initialData = {
+                    datatype:this.orgstructureMetadata.itemType
+                };
+
+                var initialSearch = this.orgstructureMetadata.initialSearch != null ? this.orgstructureMetadata.initialSearch: "";
+                // trigger the initial search
+                YAHOO.Bubbling.fire("doSearch",
+                    {
+                        searchTerm: "",
+                        searchTag:"",
+                        searchAllSites:true,
+                        searchRepository:true,
+                        searchSort:"",
+                        searchQuery:YAHOO.lang.JSON.stringify(initialData),
+                        searchFilter:initialSearch
+                    });
             },
 
             /**
@@ -1478,7 +1447,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @param layer {object} Event fired (unused)
              * @param args {array} Event parameters (new filterId)
              */
-            onChangeFilter: function DataGrid_onChangeFilter(layer, args)
+           /* onChangeFilter: function DataGrid_onChangeFilter(layer, args)
             {
                 var obj = args[1];
                 if ((obj !== null) && (obj.filterId !== null))
@@ -1525,7 +1494,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         YAHOO.util.History.multiNavigate(objNav);
                     }
                 }
-            },
+            },*/
 
             /**
              * DataGrid View Filter changed event handler
@@ -1534,7 +1503,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @param layer {object} Event fired (unused)
              * @param args {array} Event parameters (new filterId)
              */
-            onFilterChanged: function DataGrid_onFilterChanged(layer, args)
+            /*onFilterChanged: function DataGrid_onFilterChanged(layer, args)
             {
                 var obj = args[1];
                 if ((obj !== null) && (obj.filterId !== null))
@@ -1545,7 +1514,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     this.currentFilter = Alfresco.util.cleanBubblingObject(obj);
                     Alfresco.logger.debug("DL_onFilterChanged: ", this.currentFilter);
                 }
-            },
+            },*/
 
             /**
              * Data Item created event handler

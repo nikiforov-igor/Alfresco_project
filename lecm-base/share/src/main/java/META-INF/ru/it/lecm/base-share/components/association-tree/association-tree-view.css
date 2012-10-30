@@ -65,9 +65,6 @@ div.roles-list {
 .orgchart-picker-menu { border-bottom: 1px solid #CBCBCB; }
 .search-input { float: left; }
 
-/* Admin page */
-.form-fields { padding: 1em; }
-
 .orgchart-admin
 {
 	margin: 16px 10px 10px;

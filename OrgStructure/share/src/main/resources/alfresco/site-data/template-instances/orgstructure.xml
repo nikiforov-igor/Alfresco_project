@@ -39,7 +39,7 @@
             <region-id>title</region-id>
             <url>/components/title/simple-title</url>
             <properties>
-                <title>Справочник Организации</title>
+                <title>page.orgstructure</title>
             </properties>
         </component>
     </components>
