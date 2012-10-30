@@ -43,7 +43,7 @@ public class DelegationBean
 	// Namespace URI of delegations model structure
 	public static final String NSURI_DELEGATIONS = "http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0"; // prefix="lecm-ba"
 	public static final String URI_DATA_PROCURACY = "lecm/delegation/"; // "lecm/business/authority/delegation/"
-	public static final String TYPE_PROCURACY = "lecm-ba:procuracy";
+	public static final String TYPE_PROCURACY = "procuracy";
 	public static final String ASSOCNAME_PROCURACY = "PROCURACY";
 	public static final String STATUS_ACTIVE = "Active";
 
@@ -70,25 +70,25 @@ public class DelegationBean
 	final public static QName NTYPE_PROCURACY = QName.createQName(NSURI_DELEGATIONS, TYPE_PROCURACY);
 
 	/** datetime, Время начала действия */
-	final static public QName PROP_DATEBEGIN = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:dateUTCBegin");
+	final static public QName PROP_DATEBEGIN = QName.createQName(NSURI_DELEGATIONS, "dateUTCBegin");
 
 	/** datetime, Время окончания действия */
-	final static public QName PROP_DATEEND = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:dateUTCEnd");
+	final static public QName PROP_DATEEND = QName.createQName(NSURI_DELEGATIONS, "dateUTCEnd");
 
 	/** datetime, Время прекращения */
-	final static public QName PROP_DATEREVOKE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:dateUTCRevoke");
+	final static public QName PROP_DATEREVOKE = QName.createQName(NSURI_DELEGATIONS, "dateUTCRevoke");
 
 	/** datetime, Комментарий и детали */
-	final static public QName PROP_COMMENT = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:comment");
+	final static public QName PROP_COMMENT = QName.createQName(NSURI_DELEGATIONS, "comment");
 
 	/** boolean, Флаг возможности передачи доверенности */
-	final static public QName PROP_CANPROPOGATE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:canpropogate");
+	final static public QName PROP_CANPROPOGATE = QName.createQName(NSURI_DELEGATIONS, "canpropogate");
 
 	/** boolean, Флаг для разрешения завершить доверенные задачи после отзыва Доверенности */
-	final static public QName PROP_CANPOSTPROCESS = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:canpostprocess");
+	final static public QName PROP_CANPOSTPROCESS = QName.createQName(NSURI_DELEGATIONS, "canpostprocess");
 
 	/** text, Состояние Доверенности */
-	final static public QName PROP_STATUS = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:status");
+	final static public QName PROP_STATUS = QName.createQName(NSURI_DELEGATIONS, "status");
 
 	/*
 	final static public QName PROP_ = QName.createQName(NSURI_DELEGATIONS, "");
@@ -97,15 +97,16 @@ public class DelegationBean
 	/**
 	 * Ссылки Доверенности
 	 */
-	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:fromEmployee"); // (1-1) Ссылки "От кого"
-	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:toEmployee"); // (1-1) Ссылки "Кому"
-	final static public QName ASSOC_GIVE_ROLES = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:delegateRoles"); //  (1-M) Список делегируемых бизнес-ролей
-	final static public QName ASSOC_PARENT_PROCURACY = QName.createQName(NSURI_DELEGATIONS, "lecm-ba:parentProcuracy"); // (1-M) Ссылка на основную родительскую доверенность (для доверенностей второго уровня)
+	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "fromEmployee"); // (1-1) Ссылки "От кого"
+	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "toEmployee"); // (1-1) Ссылки "Кому"
+	final static public QName ASSOC_GIVE_ROLES = QName.createQName(NSURI_DELEGATIONS, "delegateRoles"); //  (1-M) Список делегируемых бизнес-ролей
+	final static public QName ASSOC_PARENT_PROCURACY = QName.createQName(NSURI_DELEGATIONS, "parentProcuracy"); // (1-M) Ссылка на основную родительскую доверенность (для доверенностей второго уровня)
 
 	/*
 	 * props
 	 */
 	private static Log logger = LogFactory.getLog(DelegationBean.class);
+
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;

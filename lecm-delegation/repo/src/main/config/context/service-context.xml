@@ -43,6 +43,11 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
+	<bean id="serviceDelegationWebScript" class="ru.it.lecm.delegation.beans.DelegationBeanWebScript"
+		depends-on="serviceDelegation">
+		<property name="proxy" ref="serviceDelegation" />
+	</bean>
+
 	<!--
 	<bean id="webscript.ru.it.lecm.delegation.serviceDelegate.get"
 			class="ru.it.lecm.delegation.beans.ServiceDelegateWebScript" parent="webscript"

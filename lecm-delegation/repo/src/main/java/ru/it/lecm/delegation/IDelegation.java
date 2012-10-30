@@ -6,7 +6,6 @@ import org.json.JSONObject;
 /**
  * Интерфейс для поддержки делегирований.
  * @author rabdullin
- *
  */
 public interface IDelegation {
 
