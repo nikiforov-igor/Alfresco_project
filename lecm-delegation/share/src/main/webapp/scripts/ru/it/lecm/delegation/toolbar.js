@@ -65,6 +65,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.Toolbar has been created");
 			self._onToolbarReady ();
 //			YAHOO.util.Event.onContentReady(self.id, self._onToolbarReady);
+			YAHOO.util.Dom.setStyle (self.id + "-body", "visibility", "visible");
 		}
 	});
 })();
