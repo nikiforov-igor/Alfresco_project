@@ -12,11 +12,11 @@
     </#if>
 </#if>
 
-<#--<#if field.control.params.refillable?? && field.control.params.refillable == "false">-->
-    <#--<#assign showCreateNewLink = false>-->
-<#--<#else>-->
+<#if field.control.params.refillable?? && field.control.params.refillable == "false">
+    <#assign showCreateNewLink = false>
+<#else>
     <#assign showCreateNewLink = true>
-<#--</#if>-->
+</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function()
