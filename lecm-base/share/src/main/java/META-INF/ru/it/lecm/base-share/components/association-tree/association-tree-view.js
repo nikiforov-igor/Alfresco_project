@@ -160,7 +160,6 @@ LogicECM.module = LogicECM.module || {};
                 },
                 onSuccess:{
                     fn:function (response) {
-//                        alert(response.json.persistedObject);
                         this.addSelectedItem(response.json.persistedObject);
                         this._updateItems(this.options.rootNodeRef, "");
                     },

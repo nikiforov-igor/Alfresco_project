@@ -10,6 +10,12 @@
     </#if>
 </#if>
 
+<#if field.control.params.refillable?? && field.control.params.refillable == "false">
+    <#assign showCreateNewLink = false>
+<#else>
+    <#assign showCreateNewLink = true>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -29,10 +35,16 @@
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
                 openSubstituteSymbol: "{",
-                closeSubstituteSymbol: "}"
+                closeSubstituteSymbol: "}",
+                showCreateNewButton: ${showCreateNewLink?string}
             });
 })();
 //]]></script>
+
+<style type="text/css">
+    #${fieldHtmlId}-added {width:20em; position: absolute;}
+    #${fieldHtmlId}-selectone-create-new-button {margin-left:21em;}
+</style>
 
 <div class="form-field">
     <#if form.mode == "view">
@@ -46,22 +58,28 @@
     <#else>
         <label for="${fieldHtmlId}-added">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
         <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
-        <select id="${fieldHtmlId}-added" name="${field.name}_added" tabindex="0"
-                <#if field.description??>title="${field.description}"</#if>
-                <#if field.control.params.size??>size="${field.control.params.size}"</#if>
-                <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-                <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-                <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
-            <#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "true">
-                <option value="">
-                    <#if field.control.params.notSelectedOptionLabel??>
-                        ${field.control.params.notSelectedOptionLabel}
-                    <#elseif field.control.params.notSelectedOptionLabelCode??>
-                        ${msg(field.control.params.notSelectedOptionLabelCode)}
-                    </#if>
-                </option>
+        <div id="${fieldHtmlId}-controls">
+            <select id="${fieldHtmlId}-added" name="${field.name}_added" tabindex="0"
+                    <#if field.description??>title="${field.description}"</#if>
+                    <#if field.control.params.size??>size="${field.control.params.size}"</#if>
+                    <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
+                    <#if field.control.params.style??>style="${field.control.params.style}"</#if>
+                    <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
+                <#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "true">
+                    <option value="">
+                        <#if field.control.params.notSelectedOptionLabel??>
+                            ${field.control.params.notSelectedOptionLabel}
+                        <#elseif field.control.params.notSelectedOptionLabelCode??>
+                            ${msg(field.control.params.notSelectedOptionLabelCode)}
+                        </#if>
+                    </option>
+                </#if>
+            </select>
+            <#if showCreateNewLink>
+                <input type="button" id="${fieldHtmlId}-selectone-create-new-button" name="-" value="${msg("logicecm.base.create-new-button.label")}"/>
             </#if>
-        </select>
+        </div>
+
     </#if>
     <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
 </div>

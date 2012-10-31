@@ -26,6 +26,7 @@ LogicECM.module = LogicECM.module || {};
     {
         LogicECM.module.AssociationSelectOne.superclass.constructor.call(this, "LogicECM.module.AssociationSelectOne", fieldHtmlId, [ "container", "resize", "datasource"]);
         this.selectItemId = fieldHtmlId + "-added";
+        this.controlId = fieldHtmlId;
         this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
         return this;
@@ -35,6 +36,8 @@ LogicECM.module = LogicECM.module || {};
         {
             options:
             {
+                showCreateNewButton: true,
+
                 parentNodeRef: "",
 
                 startLocation: null,
@@ -54,6 +57,12 @@ LogicECM.module = LogicECM.module || {};
                 closeSubstituteSymbol: "}"
             },
 
+            rootNode: null,
+
+            controlId: null,
+
+            createNewButton: null,
+
             selectItemId: null,
 
             currentDisplayValueId: null,
@@ -72,6 +81,7 @@ LogicECM.module = LogicECM.module || {};
 
             onReady: function AssociationSelectOne_onReady()
             {
+                this._loadParentNode();
                 this.selectItem = Dom.get(this.selectItemId);
                 if (this.selectItem) {
                     this.populateSelect();
@@ -80,6 +90,113 @@ LogicECM.module = LogicECM.module || {};
                 if (this.currentDisplayValueElement) {
                     this.populateCurrentValue();
                 }
+                if (this.options.showCreateNewButton) {
+                    this.createNewButton =  new YAHOO.widget.Button(
+                        this.controlId + "-selectone-create-new-button",
+                        { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
+                    );
+                }
+            },
+
+            showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
+                var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
+
+                new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
+                    width:"40em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn:this.setCreateNewFormDialogTitle
+                    },
+                    onSuccess:{
+                        fn:function (response) {
+                            this.options.selectedValueNodeRef = response.json.persistedObject;
+                            this.populateSelect();
+//                            this.addSelectedItem(response.json.persistedObject);
+//                            this._updateItems(this.options.parentNodeRef, "");
+                        },
+                        scope:this
+                    }
+                }).show();
+            },
+
+            setCreateNewFormDialogTitle: function (p_form, p_dialog) {
+                var fileSpan = '<span class="light">Create new</span>';
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-form-container_h", fileSpan]
+                );
+            },
+
+            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+                return YAHOO.lang.substitute(templateUrl, {
+                    itemKind: "type",
+                    itemId: itemType,
+                    destination: nodeRef,
+                    mode: "create",
+                    submitType: "json",
+                    formId: "association-create-new-node-form"
+                });
+            },
+
+            _loadParentNode: function AssociationTreeViewer__loadRootNode() {
+                var sUrl = this._generateParentUrlPath(this.options.parentNodeRef) + this._generateParentUrlParams();
+
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: sUrl,
+                        successCallback:
+                        {
+                            fn: function (response) {
+                                var oResults = response.json;
+                                if (oResults != null) {
+                                    this.rootNode = {
+                                            label:oResults.title,
+                                            nodeRef:oResults.nodeRef,
+                                            type:oResults.type,
+                                            isContainer: oResults.isContainer,
+                                            displayPath: oResults.displayPath
+                                    };
+                                    if (this.options.parentNodeRef === "") {
+                                        this.options.parentNodeRef = oResults.nodeRef;
+                                    }
+                                }
+                            },
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: function (oResponse) {
+                                var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                                this.widgets.dataTable.set("MSG_ERROR", response.message);
+                                this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                            },
+                            scope: this
+                        }
+                    });
+            },
+
+            _generateParentUrlPath: function AssociationTreeViewer__generateItemsUrlPath(nodeRef)
+            {
+                return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
+            },
+
+            _generateParentUrlParams: function AssociationTreeViewer__generateItemsUrlParams()
+            {
+                var params = "?titleProperty=" + encodeURIComponent("cm:name");
+                if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
+                {
+                    params += "&xpath=" + encodeURIComponent(this.options.startLocation);
+                } else if (this.options.xPathLocation)
+                {
+                    params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+                    if (this.options.xPathLocationRoot != null) {
+                        params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+                    }
+                }
+
+                return params;
             },
 
             destroy: function AssociationSelectOne_destroy()
@@ -92,6 +209,10 @@ LogicECM.module = LogicECM.module || {};
 
                 var successHandler = function (sRequest, oResponse, oPayload)
                 {
+                    var emptyOptions = this.selectItem.options[0];
+                    this.selectItem.innerHTML = "";
+                    this.selectItem.appendChild(emptyOptions);
+
                     var results = oResponse.results;
                     for (var i = 0; i < results.length; i++) {
                         var node = results[i];
