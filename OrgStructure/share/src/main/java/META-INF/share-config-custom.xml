@@ -85,10 +85,16 @@
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
-                    <show id="lecm-orgstr:employee-phone"/>
+                    <show id="lecm-orgstr:employee-sex"/>
                     <show id="lecm-orgstr:employee-email"/>
+                    <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:employee-sex">
+                        <control template="/ru/it/lecm/base-share/components/select-one-with-empty.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -198,6 +204,11 @@
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:unit-type">
+                        <control template="/ru/it/lecm/base-share/components/select-one-with-empty.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -362,7 +373,7 @@
                     <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
-            <form id="datagrid">
+            <form id="search">
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
@@ -429,6 +440,22 @@
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:composition-position-assoc"/>
+                    <show id="lecm-orgstr:composition-employee-assoc"/>
+                    <show id="lecm-orgstr:composition-is-boss"/>
+                    <show id="lecm-orgstr:composition-is-primary"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-orgstr:composition-position-assoc"/>
+                    <show id="lecm-orgstr:composition-employee-assoc"/>
+                    <show id="lecm-orgstr:composition-is-boss"/>
+                    <show id="lecm-orgstr:composition-is-primary"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
