@@ -103,7 +103,7 @@ public class Export extends AbstractWebScript {
 
 			res.setContentEncoding("UTF-8");
 			res.setContentType("text/xml");
-			res.setHeader("fileName", "test.xml");
+			res.addHeader("Content-Disposition", "attachment; filename=dictionary.xml");
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 			XMLStreamWriter xmlw = xmlof.createXMLStreamWriter(resOutputStream);
