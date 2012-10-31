@@ -12,6 +12,12 @@
     </#if>
 </#if>
 
+<#--<#if field.control.params.refillable?? && field.control.params.refillable == "false">-->
+    <#--<#assign showCreateNewLink = false>-->
+<#--<#else>-->
+    <#assign showCreateNewLink = true>
+<#--</#if>-->
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -43,33 +49,33 @@
 
 
     new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
-        <#if form.mode == "view" || field.disabled>
-            disabled: true,
-        </#if>
-        <#if field.control.params.startLocation??>
-            rootLocation: "${field.control.params.startLocation}",
-        </#if>
-        <#if field.control.params.bigItemIcon??>
-            bigItemIcon: "${field.control.params.bigItemIcon}",
-        </#if>
-        <#if field.control.params.smallItemIcon??>
-            smallItemIcon: "${field.control.params.smallItemIcon}",
-        </#if>
-        <#if field.mandatory??>
-            mandatory: ${field.mandatory?string},
-        <#elseif field.endpointMandatory??>
-            mandatory: ${field.endpointMandatory?string},
-        </#if>
-            multipleSelectMode: ${field.endpointMany?string},
+            <#if form.mode == "view" || field.disabled>
+                disabled: true,
+            </#if>
+            <#if field.control.params.startLocation??>
+                rootLocation: "${field.control.params.startLocation}",
+            </#if>
+            <#if field.control.params.bigItemIcon??>
+                bigItemIcon: "${field.control.params.bigItemIcon}",
+            </#if>
+            <#if field.control.params.smallItemIcon??>
+                smallItemIcon: "${field.control.params.smallItemIcon}",
+            </#if>
+            <#if field.mandatory??>
+                mandatory: ${field.mandatory?string},
+            <#elseif field.endpointMandatory??>
+                mandatory: ${field.endpointMandatory?string},
+            </#if>
+                multipleSelectMode: ${field.endpointMany?string},
 
-        <#if field.control.params.nameSubstituteString??>
-            nameSubstituteString: "${field.control.params.nameSubstituteString}",
-        </#if>
-        <#if field.control.params.parentNodeRef??>
-            rootNodeRef: "${field.control.params.parentNodeRef}",
-        </#if>
+            <#if field.control.params.nameSubstituteString??>
+                nameSubstituteString: "${field.control.params.nameSubstituteString}",
+            </#if>
+            <#if field.control.params.parentNodeRef??>
+                rootNodeRef: "${field.control.params.parentNodeRef}",
+            </#if>
+            showCreateNewLink: ${showCreateNewLink?string},
             changeItemsFireAction: "refreshAutocompleteItemList",
-            showCreateNewLink: true,
             plane: true,
             currentValue: "${field.value!''}",
             itemType: "${field.endpointType}"
@@ -100,6 +106,9 @@
         <div id="${controlId}-autocomplete">
             <input id="${controlId}-autocomplete-input" type="text"/>
             <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+            <#if showCreateNewLink>
+                <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value="${msg("logicecm.base.create-new-button.label")}"/>
+            </#if>
             <div id="${controlId}-autocomplete-container"></div>
 
             <@renderTreePickerDialogHTML controlId true/>
