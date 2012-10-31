@@ -60,6 +60,7 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
 
@@ -67,14 +68,18 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
-                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
-                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
 
@@ -83,7 +88,7 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="refillable">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
@@ -93,7 +98,7 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="plane">true</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="refillable">false</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
@@ -104,7 +109,7 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="refillable">false</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
@@ -114,7 +119,7 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="refillable">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
@@ -148,6 +153,7 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
 
@@ -155,14 +161,18 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
-                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
-                            <control-param name="itemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
 
@@ -174,6 +184,7 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -184,6 +195,7 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
                         </control>
                     </field>
 
@@ -195,6 +207,7 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -205,6 +218,7 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
+                            <control-param name="refillable">true</control-param>
                         </control>
                     </field>
                 </appearance>

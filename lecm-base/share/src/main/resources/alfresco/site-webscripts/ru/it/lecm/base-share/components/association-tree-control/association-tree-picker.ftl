@@ -8,7 +8,7 @@
     <#assign plane = false>
 </#if>
 
-<#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
+<#if field.control.params.refillable?? && field.control.params.refillable == "false">
     <#assign showCreateNewLink = false>
 <#else>
     <#assign showCreateNewLink = true>
@@ -34,6 +34,9 @@
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
                 <div id="${controlId}-itemGroupActions" class="show-picker">
                     <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+                    <#if showCreateNewLink>
+                        <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value="${msg("logicecm.base.create-new-button.label")}"/>
+                    </#if>
                 </div>
 
                 <@renderTreePickerDialogHTML controlId plane/>

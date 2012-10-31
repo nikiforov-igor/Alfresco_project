@@ -27,8 +27,8 @@
                 <#if field.control.params.startLocation??>
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
-                <#if field.control.params.itemIcon??>
-                    itemIcon: "${field.control.params.itemIcon}",
+                <#if field.control.params.smallItemIcon??>
+                    itemIcon: "${field.control.params.smallItemIcon}",
                 </#if>
                 multipleSelectMode: ${field.endpointMany?string},
                 itemType: "${field.endpointType}",
@@ -52,8 +52,8 @@
         <#if field.control.params.bigItemIcon??>
             bigItemIcon: "${field.control.params.bigItemIcon}",
         </#if>
-        <#if field.control.params.itemIcon??>
-            smallItemIcon: "${field.control.params.itemIcon}",
+        <#if field.control.params.smallItemIcon??>
+            smallItemIcon: "${field.control.params.smallItemIcon}",
         </#if>
         <#if field.mandatory??>
             mandatory: ${field.mandatory?string},

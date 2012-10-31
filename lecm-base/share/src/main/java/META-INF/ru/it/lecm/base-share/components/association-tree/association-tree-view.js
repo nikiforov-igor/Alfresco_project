@@ -134,12 +134,40 @@ LogicECM.module = LogicECM.module || {};
                             this.id + "-cntrl-tree-picker-button",
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
+                if (this.options.showCreateNewLink) {
+                    this.widgets.createNewButton =  new YAHOO.widget.Button(
+                        this.id + "-cntrl-tree-picker-create-new-button",
+                        { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
+                        );
+                }
 
                 this._createSelectedControls();
                 this.createPickerDialog();
                 this._loadSearchProperties();
             }
 		},
+
+        showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
+            var templateUrl = this.generateCreateNewUrl(this.options.rootNodeRef, this.options.itemType);
+
+            new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
+                width:"40em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:true,
+                doBeforeDialogShow:{
+                    fn:this.setCreateNewFormDialogTitle
+                },
+                onSuccess:{
+                    fn:function (response) {
+//                        alert(response.json.persistedObject);
+                        this.addSelectedItem(response.json.persistedObject);
+                        this._updateItems(this.options.rootNodeRef, "");
+                    },
+                    scope:this
+                }
+            }).show();
+        },
 
         _loadSearchProperties: function AssociationTreeViewer__loadSearchProperties() {
             Alfresco.util.Ajax.jsonGet(
@@ -252,6 +280,66 @@ LogicECM.module = LogicECM.module || {};
                 {
                     Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
                 }
+            }
+        },
+
+        addSelectedItem: function AssociationTreeViewer_addSelectedItems(nodeRef) {
+            var onSuccess = function AssociationTreeViewer_addSelectedItems_onSuccess(response)
+            {
+                var items = response.json.data.items,
+                    item;
+
+                //this.singleSelectedItem = null;
+                if (!this.options.multipleSelectMode && items[0]) {
+                    this.selectedItems = {};
+                    item = items[0];
+                    this.selectedItems[item.nodeRef] = item;
+                    this.singleSelectedItem = items[0];
+                } else {
+                    for (var i = 0, il = items.length; i < il; i++)
+                    {
+                        item = items[i];
+                        this.selectedItems[item.nodeRef] = item;
+                    }
+                }
+
+                if(!this.options.disabled)
+                {
+                    this.updateSelectedItems();
+                    this.updateAddButtons();
+                }
+                this.updateFormFields();
+            };
+
+            var onFailure = function AssociationTreeViewer_addSelectedItems_onFailure(response) {
+
+            };
+
+            if (nodeRef !== "")
+            {
+                Alfresco.util.Ajax.jsonRequest(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+                        method: "POST",
+                        dataObj:
+                        {
+                            items: nodeRef.split(","),
+                            itemValueType: "nodeRef",
+                            itemNameSubstituteString: this.options.nameSubstituteString,
+                            itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
+                            itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                        },
+                        successCallback:
+                        {
+                            fn: onSuccess,
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: onFailure,
+                            scope: this
+                        }
+                    });
             }
         },
 
@@ -416,6 +504,7 @@ LogicECM.module = LogicECM.module || {};
                                         renderHidden:true
                                     };
                                     this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
+                                    this.options.rootNodeRef = oResults.nodeRef;
 
                                     this.tree.render();
                                     this.treeViewClicked(this.rootNode);
@@ -651,7 +740,8 @@ LogicECM.module = LogicECM.module || {};
                         fn:me.setCreateNewFormDialogTitle
                     },
                     onSuccess:{
-                        fn:function (test) {
+                        fn:function (response) {
+                            me.addSelectedItem(response.json.persistedObject);
                             me._updateItems(me.currentNode.data.nodeRef, "");
                         },
                         scope:this
