@@ -1,5 +1,6 @@
 package ru.it.lecm.dictionary.export;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -15,8 +16,10 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
-//import javax.xml.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: mShafeev
@@ -25,108 +28,114 @@ import java.util.*;
  */
 public class Export extends AbstractWebScript {
 
-    private static final Log log = LogFactory.getLog(Export.class);
+	private static final Log log = LogFactory.getLog(Export.class);
 
-    protected NodeService nodeService;
+	protected NodeService nodeService;
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
-    public void collectNodes(NodeRef node, List list, XMLStreamWriter xmlw, ArrayList<String> namespace,
-                             String[] fields
-                             ) throws XMLStreamException {
+	public void collectNodes(NodeRef node, XMLStreamWriter xmlw, ArrayList<String> namespace,
+	                         String[] fields
+	) throws XMLStreamException {
 //        list.add(node);
-        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node);
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node);
 //        xmlw.writeStartElement("items");
-        for (ChildAssociationRef subNodeAss : childAssocs) {
-            xmlw.writeStartElement("items");
-            list.add(subNodeAss);
-                xmlw.writeStartElement("item");
-                xmlw.writeAttribute("name", subNodeAss.getChildRef().toString());
-                Set set = nodeService.getProperties(subNodeAss.getChildRef()).entrySet();
-                Iterator iterator = set.iterator();
-                while(iterator.hasNext()) {
-                    Map.Entry m = (Map.Entry)iterator.next();
-                    QName key = (QName)m.getKey();
-                    String value = (String)m.getValue().toString();
-                    for (int i=0; i<namespace.size(); i++){
-                        if (namespace.get(i).equals(key.getLocalName())){
-                            xmlw.writeStartElement("property");
-                            xmlw.writeAttribute("name", fields[i]);
-                            xmlw.writeCharacters(value);
-                            xmlw.writeEndElement();
-                        }
-                    }
-                }
-            xmlw.writeEndElement();
-            collectNodes(subNodeAss.getChildRef(), list, xmlw, namespace, fields);
-            xmlw.writeEndElement();
-        }
-    }
+		if (!childAssocs.isEmpty()) {
+			xmlw.writeStartElement("items");
+			{
+				for (ChildAssociationRef subNodeAss : childAssocs) {
+					xmlw.writeStartElement("item");
+					{
+						xmlw.writeAttribute("name", subNodeAss.getChildRef().toString());
+						Set set = nodeService.getProperties(subNodeAss.getChildRef()).entrySet();
+						for (Object aSet : set) {
+							Map.Entry m = (Map.Entry) aSet;
+							QName key = (QName) m.getKey();
+							String value = m.getValue().toString();
+							for (int i = 0; i < namespace.size(); i++) {
+								if (namespace.get(i).equals(key.getLocalName())) {
+									xmlw.writeStartElement("property");
+									xmlw.writeAttribute("name", fields[i]);
+									xmlw.writeCharacters(value);
+									xmlw.writeEndElement();
+								}
+							}
+						}
+					}
+					collectNodes(subNodeAss.getChildRef(), xmlw, namespace, fields);
+					xmlw.writeEndElement();
+				}
+			}
+			xmlw.writeEndElement();
+		}
+	}
 
-    @Override
-    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+	@Override
+	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
-        OutputStream resOutputStream = null;
-        try {
-            ArrayList<String> namespace = new ArrayList<String>();
-            String[] fields = req.getParameterValues("field");
-            String nodeRefStr = req.getParameter("nodeRef");
-            for (int i=0; i<fields.length; i++){
-                namespace.add(fields[i].split(":")[1]);
-            }
-            NodeRef nodeRef = new NodeRef(nodeRefStr);
+		OutputStream resOutputStream = null;
+		try {
+			ArrayList<String> namespace = new ArrayList<String>();
+			String[] fields = req.getParameterValues("field");
+			String nodeRefStr = req.getParameter("nodeRef");
+			for (String field : fields) {
+				namespace.add(field.split(":")[1]);
+			}
+			NodeRef nodeRef = new NodeRef(nodeRefStr);
 
-            List<ChildAssociationRef>  allListNode = new ArrayList<ChildAssociationRef>();
-            String name = "";
-            Set set = nodeService.getProperties(nodeRef).entrySet();
-            Iterator iterator = set.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry m = (Map.Entry)iterator.next();
-                QName key = (QName)m.getKey();
-                String value = (String)m.getValue().toString();
-                if (key.getLocalName().equals("name")){
-                    name = value;
-                }
-            }
-
-
-            // Create an output factory
-            XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
-
-            // Create an XML stream writer
-            resOutputStream = res.getOutputStream();
-            XMLStreamWriter xmlw =
-                    xmlof.createXMLStreamWriter(resOutputStream);
-
-            xmlw.writeStartDocument("1.0");
-            xmlw.writeStartElement("dictionary");
-            xmlw.writeStartElement("properties");
-            xmlw.writeAttribute("name", name);
-            xmlw.writeEndElement();
+			String name = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME).toString();
+//			Set set = nodeService.getProperties(nodeRef).entrySet();
+//			Iterator iterator = set.iterator();
+//			while (iterator.hasNext()) {
+//				Map.Entry m = (Map.Entry) iterator.next();
+//				QName key = (QName) m.getKey();
+//				String value = (String) m.getValue().toString();
+//				if (key.getLocalName().equals("name")) {
+//					name = value;
+//				}
+//			}
 
 
-            //Обход по дереву
-            collectNodes(nodeRef, allListNode, xmlw, namespace, fields);
+			// Create an output factory
+			XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
 
-
-
-            xmlw.writeEndElement();
-            xmlw.writeEndDocument();
-
-            // Close the writer to flush the output
-            xmlw.close();
-            resOutputStream.flush();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (resOutputStream != null) {
-                resOutputStream.close();
-            }
-        }
-    }
+			res.setContentEncoding("UTF-8");
+			res.setContentType("text/xml");
+			res.setHeader("fileName", "test.xml");
+			// Create an XML stream writer
+			resOutputStream = res.getOutputStream();
+			XMLStreamWriter xmlw = xmlof.createXMLStreamWriter(resOutputStream);
+			xmlw.writeStartDocument("1.0");
+			{
+				xmlw.writeStartElement("dictionary");
+				{
+					xmlw.writeAttribute("nodeRef", nodeRef.toString());
+					xmlw.writeStartElement("properties");
+					{
+						xmlw.writeAttribute("name", name);
+					}
+					xmlw.writeEndElement();
+					//Обход по дереву
+					collectNodes(nodeRef, xmlw, namespace, fields);
+				}
+				xmlw.writeEndElement();
+			}
+			xmlw.writeEndDocument();
+			// Close the writer to flush the output
+			xmlw.close();
+			resOutputStream.flush();
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (resOutputStream != null) {
+				resOutputStream.close();
+			}
+		}
+		log.info("Export complete");
+	}
 
 }
