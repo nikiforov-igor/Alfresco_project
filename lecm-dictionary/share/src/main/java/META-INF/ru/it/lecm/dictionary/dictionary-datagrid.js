@@ -929,7 +929,7 @@
          // YUI DataTable column definitions
          var columnDefinitions =
          [
-            { key: "nodeRef", label: "", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
+            { key: "nodeRef", label: "<input type='checkbox' id='select-all-records'>", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
          ];
          
          var column;
@@ -966,7 +966,7 @@
             "MSG_ERROR": this.msg("message.error"),
             paginator: this.widgets.paginator
          });
-         
+
          // Update totalRecords with value from server
          this.widgets.dataTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload)
          {
@@ -1017,14 +1017,32 @@
                sSortDir: sSortDir
             };
             return true;
-         }
+         };
+
+          YAHOO.util.Event.onAvailable("select-all-records", function() {
+              YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
+          }, this, true);
 
          // File checked handler
          this.widgets.dataTable.subscribe("checkboxClickEvent", function(e)
          { 
             var id = e.target.value; 
             this.selectedItems[id] = e.target.checked;
-            Bubbling.fire("selectedItemsChanged");
+
+             var checks = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl()),
+                 len = checks.length, i;
+
+             var allChecked = true;
+             for (i = 0; i < len; i++)
+             {
+                 if (!checks[i].checked) {
+                     allChecked = false;
+                     break;
+                 }
+             }
+             Dom.get('select-all-records').checked = allChecked;
+
+             Bubbling.fire("selectedItemsChanged");
          }, this, true);
 
          // Before render event handler
@@ -1077,6 +1095,15 @@
          this.widgets.dataTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
          this.widgets.dataTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
       },
+
+       selectAllClick: function DataGrid_selectAllClick() {
+           var selectAllElement = Dom.get("select-all-records");
+           if (selectAllElement.checked) {
+               this.selectItems("selectAll");
+           } else {
+               this.selectItems("selectNone");
+           }
+       },
 
       /**
        * Multi-item select button click handler
