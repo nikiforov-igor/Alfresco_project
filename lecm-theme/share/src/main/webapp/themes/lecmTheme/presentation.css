@@ -1,22 +1,22 @@
 /* My Styles */
 
-.header{
+#alf-hd .header{
   height : 70px;
   background-position: right top;
   background-image: url(/share/res/themes/lecmTheme/images/lecmUI/header-right.png) !important;
 }
 
-.app-items{
+#alf-hd .header .app-items{
 position : relative;
 top : -25px;
 }
 
-.app-items > span > span > a {
+#alf-hd .header .app-items > span > span > a {
  position: relative;
  top: 17px;
 }
 
-.app-items > span > span > button {
+#alf-hd .header .app-items > span > span > button {
  position: relative;
  top: 17px;
 }
