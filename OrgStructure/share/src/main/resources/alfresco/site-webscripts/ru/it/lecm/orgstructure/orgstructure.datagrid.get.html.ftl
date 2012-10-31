@@ -62,6 +62,8 @@ new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
                 </div>
             </div>
             <script type="text/javascript">//<![CDATA[
+                Alfresco.util.createTwister.collapsed =
+                    "OrgstructureSearch" + (Alfresco.util.createTwister.collapsed.length > 0 ? ",":"") + Alfresco.util.createTwister.collapsed ;
                 Alfresco.util.createTwister("${id}-heading", "OrgstructureSearch");
             //]]></script>
         </div>
