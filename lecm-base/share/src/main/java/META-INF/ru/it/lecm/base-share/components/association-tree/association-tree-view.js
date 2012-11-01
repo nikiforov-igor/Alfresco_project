@@ -124,8 +124,6 @@ LogicECM.module = LogicECM.module || {};
 			this.options.controlId = this.id + '-cntrl';
 			this.options.pickerId = this.id + '-cntrl-picker';
 
-            this._loadSelectedItems();
-
             // Create button if control is enabled
             if(!this.options.disabled)
             {
@@ -145,6 +143,7 @@ LogicECM.module = LogicECM.module || {};
                 this.createPickerDialog();
                 this._loadSearchProperties();
             }
+            this._loadSelectedItems();
 		},
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
