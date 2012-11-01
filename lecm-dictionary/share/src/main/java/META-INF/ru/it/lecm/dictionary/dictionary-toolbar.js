@@ -302,12 +302,8 @@
             onExportXML: function(){
                 var datalistMeta = this.modules.dataGrid.datalistMeta;
                 var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datalistMeta.itemType);
-//                if (datalistMeta.nodeRef != null) {
-//                    sUrl += "?nodeRef=" + encodeURI(datalistMeta.nodeRef);
-//                }
                 var fields = "";
-                var selectedItems = "";
-                var dataObj = {};
+                var items = "";
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: sUrl,
@@ -315,17 +311,16 @@
                         {
                             fn: function(response){
                                 var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                dataObj = oResults;
                                 for (var nodeIndex in oResults) {
                                     fields += "field=" + oResults[nodeIndex].fild + "&";
                                 }
-//                            var sel = datalistMeta.selectedItems.length;
-//                            var sel2 = datalistMeta.selectedItems[0];
-//                            selectedItems += "selectedItems=" + datalistMeta.selectedItems[nodeIndex] + "&";
+                                for (var item in this.modules.dataGrid.selectedItems) {
+                                    items += "selectedItems=" + item + "&";
+                                }
                             document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
                                                      + "?" + fields
-                                                     + "nodeRef=" + datalistMeta.nodeRef;
-//                                                     + "&selectedItems=" + datalistMeta.selectedItems;
+                                                     + "nodeRef=" + datalistMeta.nodeRef + "&"
+                                                     + items;
                             },
                             scope: this
                         },
@@ -335,47 +330,6 @@
                             scope: this
                         }
                     });
-
-
-            },
-            onImportXML: function DLTB_onFileUpload(e, p_obj)
-            {
-                if (this.fileUpload === null)
-                {
-                    this.fileUpload = Alfresco.getFileUploadInstance();
-                }
-
-                // Show uploader for multiple files
-                var multiUploadConfig =
-                {
-                    siteId: this.options.siteId,
-                    containerId: this.options.containerId,
-                    uploadDirectory: this.currentPath,
-                    filter: [],
-                    mode: this.fileUpload.MODE_MULTI_UPLOAD,
-                    thumbnails: "doclib",
-                    onFileUploadComplete:
-                    {
-                        fn: this.onFileUploadComplete,
-                        scope: this
-                    }
-                };
-                this.fileUpload.show(multiUploadConfig);
-
-                if (YAHOO.lang.isArray(p_obj) && p_obj[1].tooltip)
-                {
-                    var balloon = Alfresco.util.createBalloon(this.fileUpload.uploader.id + "-dialog",
-                        {
-                            html: p_obj[1].tooltip,
-                            width: "30em"
-                        });
-                    balloon.show();
-
-                    this.fileUpload.uploader.widgets.panel.hideEvent.subscribe(function()
-                    {
-                        balloon.hide()
-                    });
-                }
             }
         }, true);
 })();

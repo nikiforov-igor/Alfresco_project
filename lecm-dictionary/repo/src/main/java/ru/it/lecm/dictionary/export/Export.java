@@ -87,6 +87,7 @@ public class Export extends AbstractWebScript {
 		try {
 			ArrayList<String> namespace = new ArrayList<String>();
 			String[] fields = req.getParameterValues("field");
+            String[] selectItems = req.getParameterValues("selectedItems");
 			String nodeRefStr = req.getParameter("nodeRef");
 			for (String field : fields) {
 				namespace.add(field.split(":")[1]);
