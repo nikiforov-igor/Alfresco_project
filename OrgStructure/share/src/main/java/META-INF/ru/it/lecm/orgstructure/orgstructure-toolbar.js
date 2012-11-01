@@ -63,7 +63,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     /**
      * Augment prototype with Common Actions module
      */
-    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Toolbar, LogicECM.module.OrgStructure.DataActions);
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Toolbar, LogicECM.module.Base.DataActions);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
