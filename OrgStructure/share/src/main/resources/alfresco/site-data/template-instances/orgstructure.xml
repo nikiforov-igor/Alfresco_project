@@ -21,7 +21,7 @@
                     </evaluations>
                 </sub-component>
                 <sub-component id="datagrid">
-                    <url>/lecm/orgstructure/datagrid</url>
+                    <url>/lecm/base/datagrid</url>
                 </sub-component>
             </sub-components>
         </component>

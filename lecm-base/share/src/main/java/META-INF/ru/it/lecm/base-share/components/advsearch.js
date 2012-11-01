@@ -25,18 +25,11 @@
 if (typeof LogicECM == "undefined" || !LogicECM) {
     var LogicECM = {};
 }
-(function()
-{
+(function () {
     /**
      * YUI Library aliases
      */
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-
-    /**
-     * Alfresco Slingshot aliases
-     */
-    var $html = Alfresco.util.encodeHTML;
+    var Dom = YAHOO.util.Dom;
 
     /**
      * Advanced Search constructor.
@@ -45,35 +38,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @return {LogicECM.AdvancedSearch} The new AdvancedSearch instance
      * @constructor
      */
-    LogicECM.AdvancedSearch = function(htmlId)
-    {
+    LogicECM.AdvancedSearch = function (htmlId) {
         LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container"]);
 
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
-        //YAHOO.Bubbling.on("initSearch", this.initSearch, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
     };
 
     YAHOO.extend(LogicECM.AdvancedSearch, Alfresco.component.Base,
         {
-            dataTable: null,
-            dataFields: [],
-            dataSource: null,
+            dataTable:null,
+            dataSource:null,
+            dataColumns:{},
             /**
              * Object container for initialization options
              *
              * @property options
              * @type object
              */
-            options:
-            {
+            options:{
                 /**
                  * Previously saved query, if any
                  *
                  * @property savedQuery
                  * @type string
                  */
-                savedQuery: "",
+                savedQuery:"",
 
                 /**
                  * It is possible to disable searching entire repo via config
@@ -81,17 +71,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @property searchRepo
                  * @type boolean
                  */
-                searchRepo: true,
+                searchRepo:true,
 
-                minSearchTermLength: 3,
+                minSearchTermLength:3,
 
-                maxSearchResults: 3000
+                maxSearchResults:3000
             },
 
             /**
              * Currently visible Search Form object
              */
-            currentForm: null,
+            currentForm:null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -103,17 +93,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var me = this;
 
                 // DataSource default definition
-                var uriSearchResults = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/search?";
                 if (!this.dataSource) {
+                    var uriSearchResults = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/search";
                     this.dataSource = new YAHOO.util.DataSource(uriSearchResults,
                         {
+                            connMethodPost: true,
                             responseType:YAHOO.util.DataSource.TYPE_JSON,
-                            connXhrMode:"queueRequests",
                             responseSchema:{
                                 resultsList:"items",
                                 metaFields:{
                                     paginationRecordOffset:"startIndex",
-                                    totalRecords:"totalRecords"
+                                    totalRecords:"totalRecords",
+                                    isVersionable:"versionable",
+                                    meta:"metadata"
                                 }
                             }
                         });
@@ -242,28 +234,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              *
              * @method repopulateCurrentForm
              */
-            repopulateCurrentForm: function ADVSearch_repopulateCurrentForm()
-            {
-                if (this.options.savedQuery.length !== 0)
-                {
+            repopulateCurrentForm:function ADVSearch_repopulateCurrentForm() {
+                if (this.options.savedQuery.length !== 0) {
                     var savedQuery = YAHOO.lang.JSON.parse(this.options.savedQuery);
                     var elForm = Dom.get(this.currentForm.runtime.formId);
 
-                    for (var i = 0, j = elForm.elements.length; i < j; i++)
-                    {
+                    for (var i = 0, j = elForm.elements.length; i < j; i++) {
                         var element = elForm.elements[i];
                         var name = element.name;
-                        if (name != undefined && name !== "-")
-                        {
+                        if (name != undefined && name !== "-") {
                             var savedValue = savedQuery[name];
-                            if (savedValue !== undefined)
-                            {
-                                if (element.type === "checkbox" || element.type === "radio")
-                                {
+                            if (savedValue !== undefined) {
+                                if (element.type === "checkbox" || element.type === "radio") {
                                     element.checked = (savedValue === "true");
                                 }
-                                else
-                                {
+                                else {
                                     element.value = savedValue;
                                 }
                             }
@@ -284,18 +269,36 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // retrieve form data structure directly from the runtime
                 var formData = me.currentForm.runtime.getFormData();
-
                 // add DD type to form data structure
                 formData.datatype = me.currentForm.type;
 
-                var terms = Dom.get(this.id + "-search-text").value;
+                var termsValues = Dom.get(this.id + "-search-text").value;
+
+                var terms = termsValues.split(",");
+
+                var termsString = "";
+                var columns = this.dataColumns;
+
+                for (var i = 0; i < columns.length; i++) {
+                    if (columns[i].dataType == "text") {
+                        for (var j = 0; j < terms.length; j++) {
+                            var t = terms[j];
+                            if (t.length > 0) {
+                                termsString += columns[i].name + ":" + YAHOO.lang.trim(t) + "#";
+                            }
+                        }
+                    }
+                }
+
+                if (termsString.length > 0) {
+                    termsString = termsString.substring(0, (termsString.length) - 1); // delete last #
+                }
+
                 var query = YAHOO.lang.JSON.stringify(formData);
 
                 this._performSearch(
                     {
-                        searchTerm:terms,
-                        searchTag:"",
-                        searchAllSites:true,
+                        searchTerm:termsString,
                         searchRepository:me.options.searchRepo.toString(),
                         searchSort:"",
                         searchQuery:query,
@@ -305,14 +308,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             _performSearch:function Search__performSearch(args) {
                 var searchTerm = YAHOO.lang.trim(args.searchTerm),
-                    searchTag = YAHOO.lang.trim(args.searchTag),
-                    searchAllSites = args.searchAllSites,
                     searchRepository = args.searchRepository,
                     searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter;
-                var fields = this.dataFields.join(",");
 
+                var reqFields = [];
+                for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
+                    var column = this.dataColumns[i],
+                        columnName = column.name.replace(":", "_");
+                    reqFields.push(columnName);
+                }
+                var fields = reqFields.join(",");
                 if (searchQuery.length === 0 &&
                     searchTag.length === 0 &&
                     searchTerm.replace(/\*/g, "").length < this.options.minSearchTermLength && searchFilter.length === 0) {
@@ -335,8 +342,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 function successHandler(sRequest, oResponse, oPayload) {
                     // update current state on success
                     this.searchTerm = searchTerm;
-                    this.searchTag = searchTag;
-                    this.searchAllSites = searchAllSites;
                     this.searchRepository = searchRepository;
                     this.searchSort = searchSort;
 
@@ -356,13 +361,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             me.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
                         }
                         catch (e) {
-                            this._setDefaultDataTableErrors(me.dataTable);
                             me.dataTable.render();
                         }
                     }
                 }
 
-                this.dataSource.sendRequest(this._buildSearchParams(searchRepository, searchAllSites, searchTerm, searchQuery, searchFilter, searchTag, searchSort, fields),
+                var searchParams = this._buildSearchParams(searchRepository, searchTerm, searchQuery, searchFilter, searchSort, fields);
+                this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
                         failure:failureHandler,
@@ -375,27 +380,23 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._performSearch(obj);
             },
 
-            _buildSearchParams: function Search__buildSearchParams(searchRepository, searchAllSites, searchTerm, searchQuery, searchFilter, searchTag, searchSort, searchFields)
-            {
-                var site = "";
-                var params = YAHOO.lang.substitute("site={site}&term={term}&tag={tag}&maxResults={maxResults}&sort={sort}&query={query}&repo={repo}&fields={fields}",
-                    {
-                        site: encodeURIComponent(site),
-                        repo: searchRepository.toString(),
-                        term: searchTerm,
-                        tag: encodeURIComponent(searchTag),
-                        sort: encodeURIComponent(searchSort),
-                        query: encodeURIComponent(searchQuery),
-                        filter: encodeURIComponent(searchFilter),
-                        maxResults: this.options.maxSearchResults + 1, // to calculate whether more results were available,
-                        fields:encodeURIComponent(searchFields)
-                    });
-
-                return params;
+            _buildSearchParams:function Search__buildSearchParams(searchRepository, searchTerm, searchQuery, searchFilter, searchSort, searchFields) {
+                var request =
+                {
+                    params:{
+                        repo:searchRepository.toString(),
+                        term:searchTerm,
+                        sort:searchSort,
+                        query:searchQuery,
+                        filter:searchFilter,
+                        maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
+                        fields:searchFields
+                    }
+                };
+                return request;
             },
 
-            onClearClick: function ADVSearch_onSearchClick(e, obj)
-            {
+            onClearClick:function ADVSearch_onSearchClick(e, obj) {
                 var queryInput = Dom.get(this.id + "-search-text");
                 queryInput.value = "";
                 queryInput.focus();
@@ -404,14 +405,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             /**
              * Event handler called when the "beforeFormRuntimeInit" event is received
              */
-            onBeforeFormRuntimeInit: function ADVSearch_onBeforeFormRuntimeInit(layer, args)
-            {
+            onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
                 this.currentForm.runtime = args[1].runtime;
 
                 // Repopulate current form from url query data?
-                if (this.currentForm.repopulate)
-                {
+                if (this.currentForm.repopulate) {
                     this.currentForm.repopulate = false;
                     this.repopulateCurrentForm();
                 }
@@ -422,8 +421,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              *
              * @method _searchEnterHandler
              */
-            _searchEnterHandler: function ADVSearch__searchEnterHandler(e, args)
-            {
+            _searchEnterHandler:function ADVSearch__searchEnterHandler(e, args) {
                 this.onSearchClick(e, args);
             }
         });

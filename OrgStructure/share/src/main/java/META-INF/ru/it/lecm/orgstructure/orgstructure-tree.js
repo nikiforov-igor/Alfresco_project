@@ -202,9 +202,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 this.tree.currentFocus._removeFocus(); // for correct highlight
             }
             if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
-                Bubbling.fire("orgElementSelected",
+                Bubbling.fire("activeGridChanged",
                     {
-                        orgstructureElement:{
+                        datagridMeta:{
                             description:"",
                             type:node.data.type,
                             itemType:"lecm-orgstr:employee",

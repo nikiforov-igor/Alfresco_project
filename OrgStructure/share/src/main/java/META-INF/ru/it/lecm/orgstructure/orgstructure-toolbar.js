@@ -106,7 +106,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 this.modules.actions = new LogicECM.module.OrgStructure.Actions();
 
                 // Reference to Data Grid component
-                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.OrgStructure.DataGrid");
+                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
 
                 // Reference to Tree component
                 this.modules.tree = Alfresco.util.ComponentManager.findFirst("LogicECM.module.OrgStructure.Tree");
@@ -183,7 +183,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
          * @param p_obj {object} Object passed back from addListener method
          */
         onNewRow:function DataListToolbar_onNewRow(e, p_obj) {
-            var orgMetadata = this.modules.dataGrid.orgstructureMetadata,
+            var orgMetadata = this.modules.dataGrid.datagridMeta,
                 destination = orgMetadata.nodeRef,
                 itemType = orgMetadata.itemType,
                 namePattern = orgMetadata.namePattern;

@@ -66,9 +66,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         draw:function () {
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
-                    Bubbling.fire("orgElementSelected",
+                    Bubbling.fire("activeGridChanged",
                         {
-                            orgstructureElement:{
+                            datagridMeta:{
                                 description:"",
                                 type:root.type,
                                 itemType:root.childType,

@@ -4,7 +4,7 @@
 <![endif]-->
 <input id="yui-history-field" type="hidden" />
 <script type="text/javascript">//<![CDATA[
-new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
+new LogicECM.module.Base.DataGrid('${id}').setOptions(
         {
             usePagination: true
         }).setMessages(${messages});
@@ -62,8 +62,8 @@ new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
                 </div>
             </div>
             <script type="text/javascript">//<![CDATA[
-                Alfresco.util.createTwister.collapsed =
-                    "OrgstructureSearch" + (Alfresco.util.createTwister.collapsed.length > 0 ? ",":"") + Alfresco.util.createTwister.collapsed ;
+                /*Alfresco.util.createTwister.collapsed =
+                    "OrgstructureSearch" + (Alfresco.util.createTwister.collapsed.length > 0 ? ",":"") + Alfresco.util.createTwister.collapsed ;*/
                 Alfresco.util.createTwister("${id}-heading", "OrgstructureSearch");
             //]]></script>
         </div>
@@ -73,7 +73,7 @@ new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
     </div>
     <div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button">
         <div class="yui-u first align-center">
-            <div class="item-select">
+            <#--<div class="item-select">
                 <button id="${args.htmlid}-itemSelect-button" name="datagrid-itemSelect-button">${msg("menu.select")}</button>
                 <div id="${args.htmlid}-itemSelect-menu" class="yuimenu">
                     <div class="bd">
@@ -84,7 +84,7 @@ new LogicECM.module.OrgStructure.DataGrid('${id}').setOptions(
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div id="${id}-paginator" class="paginator"></div>
         </div>
         <div class="yui-u align-right">
