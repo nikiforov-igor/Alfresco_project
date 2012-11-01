@@ -78,7 +78,7 @@ public class Import extends AbstractWebScript {
                     parentNodeRef = createDictionary(getAttributeValue(xmlr));
                 }
                 if (str.equals("type")) {
-
+                    dictionaryType = getAttributeValue(xmlr);
                 }
                 if (str.equals("items")) {
                     xmlr.next();
