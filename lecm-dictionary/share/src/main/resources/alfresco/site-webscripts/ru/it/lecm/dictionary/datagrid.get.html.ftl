@@ -21,18 +21,6 @@
    </div>
    <div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button">
       <div class="yui-u first align-center">
-         <div class="item-select">
-            <button id="${args.htmlid}-itemSelect-button" name="datagrid-itemSelect-button">${msg("menu.select")}</button>
-            <div id="${args.htmlid}-itemSelect-menu" class="yuimenu">
-               <div class="bd">
-                  <ul>
-                     <li><a href="#"><span class="selectAll">${msg("menu.select.all")}</span></a></li>
-                     <li><a href="#"><span class="selectInvert">${msg("menu.select.invert")}</span></a></li>
-                     <li><a href="#"><span class="selectNone">${msg("menu.select.none")}</span></a></li>
-                  </ul>
-               </div>
-            </div>
-         </div>
          <div id="${id}-paginator" class="paginator"></div>
       </div>
       <div class="yui-u align-right">

@@ -550,14 +550,6 @@
       {
          var me = this;
          
-         // Item Select menu button
-         this.widgets.itemSelect = Alfresco.util.createYUIButton(this, "itemSelect-button", this.onItemSelect,
-         {
-            type: "menu", 
-            menu: "itemSelect-menu",
-            disabled: true
-         });
-
          // Hook action events
          var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
          {
@@ -738,8 +730,6 @@
          this._setupDataTable();
          // Hide "no list" message
          Dom.addClass(this.id + "-selectListMessage", "hidden");
-         // Enable item select menu
-         this.widgets.itemSelect.set("disabled", false);
 
          // Continue only when History Manager fires its onReady event
          YAHOO.util.History.onReady(this.onHistoryManagerReady, this, true);
@@ -1104,24 +1094,6 @@
                this.selectItems("selectNone");
            }
        },
-
-      /**
-       * Multi-item select button click handler
-       *
-       * @method onItemSelect
-       * @param sType {string} Event type, e.g. "click"
-       * @param aArgs {array} Arguments array, [0] = DomEvent, [1] = EventTarget
-       * @param p_obj {object} Object passed back from subscribe method
-       */
-      onItemSelect: function DataGrid_onItemSelect(sType, aArgs, p_obj)
-      {
-         var domEvent = aArgs[0],
-            eventTarget = aArgs[1];
-
-         // Select based upon the className of the clicked item
-         this.selectItems(Alfresco.util.findEventClass(eventTarget));
-         Event.preventDefault(domEvent);
-      },
 
       /**
        * Custom event handler to highlight row.

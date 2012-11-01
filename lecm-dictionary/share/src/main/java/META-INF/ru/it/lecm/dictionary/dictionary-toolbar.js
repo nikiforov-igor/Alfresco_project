@@ -84,6 +84,8 @@
                 siteId: ""
             },
 
+            groupActions: {},
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
@@ -99,24 +101,10 @@
 
                 this.widgets.exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExportXML,
                     {
-                        disabled: true,
-                        value: "create"
-                    });
-
-                // Selected Items menu button
-                this.widgets.selectedItems = Alfresco.util.createYUIButton(this, "selectedItems-button", this.onSelectedItems,
-                    {
-                        type: "menu",
-                        menu: "selectedItems-menu",
-                        lazyloadmenu: false,
                         disabled: true
                     });
 
-                this.widgets.printButton = Alfresco.util.createYUIButton(this, "printButton",
-                    {
-                        disabled: true
-                    });
-                this.widgets.rssFeedButton = Alfresco.util.createYUIButton(this, "rssFeedButton",
+                this.groupActions.deleteButton = Alfresco.util.createYUIButton(this, "deleteButton", this.onDeleteRow,
                     {
                         disabled: true
                     });
@@ -129,6 +117,19 @@
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
+            },
+
+            onDeleteRow: function DataListToolbar_onDeleteRow() {
+                if (this.modules.dataGrid)
+                {
+                    // Get the function related to the clicked item
+                    var fn = "onActionDelete";
+                    if (fn && (typeof this[fn] == "function"))
+                    {
+                        this[fn].call(this, this.modules.dataGrid.getSelectedItems());
+                    }
+                }
+
             },
 
             /**
@@ -207,43 +208,6 @@
             },
 
             /**
-             * Selected Items button click handler
-             *
-             * @method onSelectedItems
-             * @param sType {string} Event type, e.g. "click"
-             * @param aArgs {array} Arguments array, [0] = DomEvent, [1] = EventTarget
-             * @param p_obj {object} Object passed back from subscribe method
-             */
-            onSelectedItems: function DataListToolbar_onSelectedItems(sType, aArgs, p_obj)
-            {
-                var domEvent = aArgs[0],
-                    eventTarget = aArgs[1];
-
-                // Check mandatory docList module is present
-                if (this.modules.dataGrid)
-                {
-                    // Get the function related to the clicked item
-                    var fn = Alfresco.util.findEventClass(eventTarget);
-                    if (fn && (typeof this[fn] == "function"))
-                    {
-                        this[fn].call(this, this.modules.dataGrid.getSelectedItems());
-                    }
-                }
-
-                Event.preventDefault(domEvent);
-            },
-
-            /**
-             * Deselect currectly selected assets.
-             *
-             * @method onActionDeselectAll
-             */
-            onActionDeselectAll: function DataListToolbar_onActionDeselectAll()
-            {
-                this.modules.dataGrid.selectItems("selectNone");
-            },
-
-            /**
              * User Access event handler
              *
              * @method onUserAccess
@@ -317,60 +281,15 @@
             {
                 if (this.modules.dataGrid)
                 {
-                    var items = this.modules.dataGrid.getSelectedItems(), item,
-                        userAccess = {}, itemAccess, index,
-                        menuItems = this.widgets.selectedItems.getMenu().getItems(), menuItem,
-                        actionPermissions, disabled,
-                        i, ii;
-
-                    // Check each item for user permissions
-                    for (i = 0, ii = items.length; i < ii; i++)
+                    var items = this.modules.dataGrid.getSelectedItems();
+                    for (var index in this.groupActions)
                     {
-                        item = items[i];
-
-                        // Required user access level - logical AND of each item's permissions
-                        itemAccess = item.permissions.userAccess;
-                        for (index in itemAccess)
+                        if (this.groupActions.hasOwnProperty(index))
                         {
-                            if (itemAccess.hasOwnProperty(index))
-                            {
-                                userAccess[index] = (userAccess[index] === undefined ? itemAccess[index] : userAccess[index] && itemAccess[index]);
-                            }
+                            var action = this.groupActions[index];
+                            action.set("disabled", (items.length === 0));
                         }
                     }
-
-                    // Now go through the menu items, setting the disabled flag appropriately
-                    for (index in menuItems)
-                    {
-                        if (menuItems.hasOwnProperty(index))
-                        {
-                            // Defaulting to enabled
-                            menuItem = menuItems[index];
-                            disabled = false;
-
-                            if (menuItem.element.firstChild)
-                            {
-                                // Check permissions required - stored in "rel" attribute in the DOM
-                                if (menuItem.element.firstChild.rel && menuItem.element.firstChild.rel !== "")
-                                {
-                                    // Comma-separated indicates and "AND" match
-                                    actionPermissions = menuItem.element.firstChild.rel.split(",");
-                                    for (i = 0, ii = actionPermissions.length; i < ii; i++)
-                                    {
-                                        // Disable if the user doesn't have ALL the permissions
-                                        if (!userAccess[actionPermissions[i]])
-                                        {
-                                            disabled = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                menuItem.cfg.setProperty("disabled", disabled);
-                            }
-                        }
-                    }
-                    this.widgets.selectedItems.set("disabled", (items.length === 0));
                 }
             },
             onExportXML: function(){
