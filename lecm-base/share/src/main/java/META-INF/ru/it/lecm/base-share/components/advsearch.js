@@ -339,7 +339,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 function successHandler(sRequest, oResponse, oPayload) {
                     // update current state on success
                     this.searchTerm = searchTerm;
-                    this.searchRepository = searchRepository;
                     this.searchSort = searchSort;
 
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
