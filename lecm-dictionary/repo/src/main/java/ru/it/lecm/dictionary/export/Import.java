@@ -154,7 +154,8 @@ public class Import extends AbstractWebScript {
     }
 
     private NodeRef createItem(NodeRef parentNodeRef, String name, Map<QName, Serializable> properties) {
-        return  nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
+	    properties.put(ContentModel.PROP_NAME, name);
+	    return  nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
                 QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
                 QName.createQName(namespaceURI, dictionaryType),
                 properties).getChildRef();
