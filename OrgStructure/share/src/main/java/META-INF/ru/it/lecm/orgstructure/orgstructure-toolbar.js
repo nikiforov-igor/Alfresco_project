@@ -103,7 +103,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         disabled:true
                     });
                 // DataList Actions module
-                this.modules.actions = new LogicECM.module.OrgStructure.Actions();
+                this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");

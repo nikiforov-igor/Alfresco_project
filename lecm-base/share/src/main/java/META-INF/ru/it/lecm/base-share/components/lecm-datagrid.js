@@ -1028,7 +1028,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 YAHOO.Bubbling.fire("doSearch",
                     {
                         searchTerm: "",
-                        searchRepository:true,
                         searchSort:"",
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:initialSearch
@@ -1809,7 +1808,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var initialSearch = this.datagridMeta.initialSearch != null ? this.datagridMeta.initialSearch: "";
 
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams(true, true, "", YAHOO.lang.JSON.stringify(initialData), initialSearch, "", "", this.dataRequestFields.join(","));
+                var requestParams = this.modules.search._buildSearchParams("", YAHOO.lang.JSON.stringify(initialData), initialSearch, "", this.dataRequestFields.join(","));
                 this.widgets.dataSource.sendRequest(requestParams,
                     {
                         success:successHandler,

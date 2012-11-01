@@ -64,7 +64,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         draw:function () {
-            this.modules.actions = new LogicECM.module.OrgStructure.Actions();
+            this.modules.actions = new LogicECM.module.Base.Actions();
             var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
             this._createTree(orgStructure);

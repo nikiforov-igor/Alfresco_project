@@ -299,7 +299,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._performSearch(
                     {
                         searchTerm:termsString,
-                        searchRepository:me.options.searchRepo.toString(),
                         searchSort:"",
                         searchQuery:query,
                         searchFilter:""
@@ -308,7 +307,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             _performSearch:function Search__performSearch(args) {
                 var searchTerm = YAHOO.lang.trim(args.searchTerm),
-                    searchRepository = args.searchRepository,
                     searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter;
@@ -321,7 +319,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
                 var fields = reqFields.join(",");
                 if (searchQuery.length === 0 &&
-                    searchTag.length === 0 &&
                     searchTerm.replace(/\*/g, "").length < this.options.minSearchTermLength && searchFilter.length === 0) {
                     Alfresco.util.PopupManager.displayMessage(
                         {
@@ -366,7 +363,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                 }
 
-                var searchParams = this._buildSearchParams(searchRepository, searchTerm, searchQuery, searchFilter, searchSort, fields);
+                var searchParams = this._buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, fields);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -380,11 +377,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._performSearch(obj);
             },
 
-            _buildSearchParams:function Search__buildSearchParams(searchRepository, searchTerm, searchQuery, searchFilter, searchSort, searchFields) {
+            _buildSearchParams:function Search__buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, searchFields) {
                 var request =
                 {
                     params:{
-                        repo:searchRepository.toString(),
                         term:searchTerm,
                         sort:searchSort,
                         query:searchQuery,
