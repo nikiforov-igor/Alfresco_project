@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+//import javax.xml.stream.*;
 
 /**
  * User: mShafeev
@@ -48,7 +49,13 @@ public class Export extends AbstractWebScript {
 				for (ChildAssociationRef subNodeAss : childAssocs) {
 					xmlw.writeStartElement("item");
 					{
-						xmlw.writeAttribute("name", subNodeAss.getChildRef().toString());
+
+
+						String name = nodeService.getProperty(subNodeAss.getChildRef(), ContentModel.PROP_NAME).toString();
+						xmlw.writeAttribute("name", name);
+						xmlw.writeStartElement("namespaceURI");
+						xmlw.writeAttribute("name", nodeService.getType(subNodeAss.getChildRef()).getNamespaceURI());
+						xmlw.writeEndElement();
 						Set set = nodeService.getProperties(subNodeAss.getChildRef()).entrySet();
 						for (Object aSet : set) {
 							Map.Entry m = (Map.Entry) aSet;
@@ -58,6 +65,7 @@ public class Export extends AbstractWebScript {
 								if (namespace.get(i).equals(key.getLocalName())) {
 									xmlw.writeStartElement("property");
 									xmlw.writeAttribute("name", fields[i]);
+									xmlw.writeAttribute("namespaceURI", nodeService.getType(subNodeAss.getChildRef()).getNamespaceURI());
 									xmlw.writeCharacters(value);
 									xmlw.writeEndElement();
 								}
@@ -111,10 +119,16 @@ public class Export extends AbstractWebScript {
 			{
 				xmlw.writeStartElement("dictionary");
 				{
-					xmlw.writeAttribute("nodeRef", nodeRef.toString());
-					xmlw.writeStartElement("properties");
+					xmlw.writeAttribute("name", name);
+//					xmlw.writeAttribute("nodeRef", nodeRef.toString());
+					xmlw.writeStartElement("namespaceURI");
 					{
-						xmlw.writeAttribute("name", name);
+						xmlw.writeAttribute("name", nodeService.getType(nodeRef).getNamespaceURI());
+					}
+					xmlw.writeEndElement();
+					xmlw.writeStartElement("type");
+					{
+						xmlw.writeAttribute("name", nodeService.getProperty(nodeRef, QName.createQName(nodeService.getType(nodeRef).getNamespaceURI(),"type")).toString().split(":")[1]);
 					}
 					xmlw.writeEndElement();
 					//Обход по дереву

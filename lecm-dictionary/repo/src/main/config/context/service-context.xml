@@ -46,26 +46,20 @@
     </bean>
 
 
-    <bean id="${groupId}.${artifactId}.exportByXML" parent="baseJavaScriptExtension"
-          class="ru.it.lecm.dictionary.export.ExportXML">
-        <property name="extensionName">
-            <value>exportXML</value>
-        </property>
-        <property name="mimetypeService">
-            <ref bean="mimetypeService"/>
-        </property>
-        <property name="exporterService">
-            <ref bean="ExporterService"/>
-        </property>
-    </bean>
-
-
     <bean id="webscript.ru.it.lecm.dictionary.export.get"
           class="ru.it.lecm.dictionary.export.Export"
           parent="webscript">
         <property name="nodeService">
             <ref bean="nodeService" />
         </property>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.dictionary.import.post"
+          class="ru.it.lecm.dictionary.export.Import"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+	    <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 </beans>

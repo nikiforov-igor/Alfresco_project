@@ -83,6 +83,13 @@
                  */
                 siteId: ""
             },
+            /**
+             * FileUpload module instance.
+             *
+             * @property fileUpload
+             * @type Alfresco.FileUpload
+             */
+            fileUpload: null,
 
             groupActions: {},
 
@@ -330,31 +337,45 @@
                     });
 
 
+            },
+            onImportXML: function DLTB_onFileUpload(e, p_obj)
+            {
+                if (this.fileUpload === null)
+                {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
+                }
+
+                // Show uploader for multiple files
+                var multiUploadConfig =
+                {
+                    siteId: this.options.siteId,
+                    containerId: this.options.containerId,
+                    uploadDirectory: this.currentPath,
+                    filter: [],
+                    mode: this.fileUpload.MODE_MULTI_UPLOAD,
+                    thumbnails: "doclib",
+                    onFileUploadComplete:
+                    {
+                        fn: this.onFileUploadComplete,
+                        scope: this
+                    }
+                };
+                this.fileUpload.show(multiUploadConfig);
+
+                if (YAHOO.lang.isArray(p_obj) && p_obj[1].tooltip)
+                {
+                    var balloon = Alfresco.util.createBalloon(this.fileUpload.uploader.id + "-dialog",
+                        {
+                            html: p_obj[1].tooltip,
+                            width: "30em"
+                        });
+                    balloon.show();
+
+                    this.fileUpload.uploader.widgets.panel.hideEvent.subscribe(function()
+                    {
+                        balloon.hide()
+                    });
+                }
             }
-//            onPostXML: function(object){
-//
-//                Alfresco.util.Ajax.jsonRequest(
-//                    {
-//                        method: Alfresco.util.Ajax.POST,
-//                        url: Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export",
-//                        dataObj: object,
-//                        successCallback:
-//                        {
-//                            fn: function(response)
-//                            {
-//                                var oResults = eval("(" + response.responseText + ")");
-//                            }
-//                        },
-//                        failureMessage: "failure",
-////                            Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary"),
-//                        failureCallback:
-//                        {
-//                            fn: function()
-//                            {
-//                                alert("!!!FALSE!!!");
-//                            }
-//                        }
-//                    });
-//            }
         }, true);
 })();
