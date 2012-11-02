@@ -62,6 +62,10 @@
             <artifactId>alfresco-remote-api</artifactId>
             <version>4.0.e</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javacsv</groupId>
+            <artifactId>javacsv</artifactId>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

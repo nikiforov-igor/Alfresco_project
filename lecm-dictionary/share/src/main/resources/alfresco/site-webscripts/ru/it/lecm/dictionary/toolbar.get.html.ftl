@@ -12,6 +12,11 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
         background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
         padding-left: 24px;
     }
+    .datalist-toolbar .exportcsv span.first-child
+    {
+	    background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
+	    padding-left: 24px;
+    }
     .datalist-toolbar .delete-row span.first-child
     {
         background: url(/share/res/components/images/delete-row-16.png) no-repeat 12px 4px;
@@ -43,12 +48,12 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
                    </span>
                 </span>
 			</div>
-			<div class="new-row">
-            <span id="${id}-importButton" class="yui-button yui-push-button">
-               <span class="first-child">
-                  <button type="button">${msg('button.import')}</button>
-               </span>
-            </span>
+			<div class="exportcsv">
+                <span id="${id}-exportCsvButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button" title="${msg('button.export')}"/>
+                   </span>
+                </span>
 			</div>
 		</div>
 
