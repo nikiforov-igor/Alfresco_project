@@ -19,80 +19,86 @@
 -->
 <beans>
 
-    <bean id="${groupId}.${artifactId}.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-statemachine-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="${groupId}.${artifactId}.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-statemachine-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="activitiCustomizer" class="ru.it.lecm.base.statemachine.listener.ActivitiConfigurationCustomizer" >
-        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
-    </bean>
+	<bean id="activitiCustomizer" class="ru.it.lecm.base.statemachine.listener.ActivitiConfigurationCustomizer">
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+	</bean>
 
-    <bean id="lecmWorkflowDeployer" class="ru.it.lecm.base.statemachine.lecmWorkflowDeployer" parent="workflowDeployer" abstract="true">
-        <property name="workflowService" ref="WorkflowService" />
-        <property name="workflowAdminService" ref="workflowAdminService" />
-        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
-    </bean>
+	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.base.statemachine.LecmWorkflowDeployer" parent="workflowDeployer"
+		  abstract="true">
+		<property name="workflowService" ref="WorkflowService"/>
+		<property name="workflowAdminService" ref="workflowAdminService"/>
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+	</bean>
 
-    <bean id="stateMachineHelper" class="ru.it.lecm.base.statemachine.StateMachineHelper">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-        <property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration" />
-    </bean>
+	<bean id="stateMachineHelper" class="ru.it.lecm.base.statemachine.StateMachineHelper">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+	</bean>
 
-    <bean id="stateMachineHandler" class="ru.it.lecm.base.statemachine.listener.StateMachineHandler">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
+	<bean id="stateMachineHandler" class="ru.it.lecm.base.statemachine.listener.StateMachineHandler">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 
-    <bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.action.document.StateMachineDocumentListenerPolicy" init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent" />
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
+	<bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.action.document.ExpressionForDocumentFieldsListenerPolicy"
+		  init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 
-    <bean id="documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean"/>
+	<bean id="documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean"/>
 
-    <bean id="stateMachineCreateDocumentPolicy" class="ru.it.lecm.base.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-        <property name="documentStateMachineBean" ref="documentStateMachineBean" />
-        <property name="policyComponent" ref="policyComponent" />
-    </bean>
+	<bean id="stateMachineCreateDocumentPolicy"
+		  class="ru.it.lecm.base.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
+		<property name="policyComponent" ref="policyComponent"/>
+	</bean>
 
-    <bean id="webscript.ru.it.lecm.statemachine.changestate.get"
-          class="ru.it.lecm.base.statemachine.action.changestate.ChangeStateScript"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
+	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
+		  class="ru.it.lecm.base.statemachine.action.finishstate.ToFinishStateWithTransitionScript"
+		  parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 
-    <bean id="webscript.ru.it.lecm.statemachine.documents.get"
-          class="ru.it.lecm.base.statemachine.script.DocumentListScript"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-        <property name="documentStateMachineBean" ref="documentStateMachineBean" />
-    </bean>
+	<bean id="webscript.ru.it.lecm.statemachine.documents.get"
+		  class="ru.it.lecm.base.statemachine.script.DocumentListScript"
+		  parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
+	</bean>
 
-    <bean id="webscript.ru.it.lecm.utils.node-properties.post"
-          class="ru.it.lecm.base.scripts.GetNodePropertiesScript"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
+	<bean id="webscript.ru.it.lecm.utils.node-properties.post"
+		  class="ru.it.lecm.base.scripts.GetNodePropertiesScript"
+		  parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 
-    <bean id="stateMachineActions" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
-        <property name="actions">
-            <map>
-                <entry key="SetStatus" value="ru.it.lecm.base.statemachine.action.SetStatusAction" />
-                <entry key="ChangeState" value="ru.it.lecm.base.statemachine.action.changestate.ChangeStateAction" />
-                <entry key="StartDocumentWorkflow" value="ru.it.lecm.base.statemachine.action.StartDocumentWorkflowAction" />
-                <entry key="StartDocumentProcessing" value="ru.it.lecm.base.statemachine.action.document.StartDocumentProcessingAction" />
-            </map>
-        </property>
-    </bean>
+	<bean id="stateMachineActions" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="actions">
+			<map>
+				<entry key="StatusChange" value="ru.it.lecm.base.statemachine.action.StatusChangeAction"/>
+				<entry key="ToFinishStateWithTransition" value="ru.it.lecm.base.statemachine.action.finishstate.ToFinishStateWithTransitionAction"/>
+				<entry key="StartUserWorkflow"
+					   value="ru.it.lecm.base.statemachine.action.StartUserWorkflowAction"/>
+				<entry key="ExpressionForDocumentFields"
+					   value="ru.it.lecm.base.statemachine.action.document.ExpressionForDocumentFieldsAction"/>
+			</map>
+		</property>
+	</bean>
 
 </beans>

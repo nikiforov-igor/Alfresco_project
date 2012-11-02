@@ -12,22 +12,22 @@ import ru.it.lecm.base.statemachine.bean.StateMachineActions;
  */
 abstract public class StateMachineAction {
 
-    private ServiceRegistry serviceRegistry;
+	private ServiceRegistry serviceRegistry;
 
-    public ServiceRegistry getServiceRegistry() {
-        return serviceRegistry;
-    }
+	public ServiceRegistry getServiceRegistry() {
+		return serviceRegistry;
+	}
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
+	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+		this.serviceRegistry = serviceRegistry;
+	}
 
-    abstract public void execute(DelegateExecution execution);
+	abstract public void execute(DelegateExecution execution);
 
-    abstract public void init(Element actionElement);
+	abstract public void init(Element actionElement);
 
-    public String getActionName() {
-        return StateMachineActions.getActionName(getClass());
-    }
+	public String getActionName() {
+		return StateMachineActions.getActionName(getClass());
+	}
 
 }

@@ -1,9 +1,9 @@
 <webscript>
-    <shortname>Documents By Status</shortname>
-    <description>Documents By Status</description>
-    <url>/lecm/statemachine/documents</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-    <lifecycle>internal</lifecycle>
-    <transaction allow="readonly">required</transaction>
+	<shortname>Documents By Status</shortname>
+	<description>Documents By Status</description>
+	<url>/lecm/statemachine/documents</url>
+	<format default="html">extension</format>
+	<authentication>user</authentication>
+	<lifecycle>internal</lifecycle>
+	<transaction allow="readonly">required</transaction>
 </webscript>

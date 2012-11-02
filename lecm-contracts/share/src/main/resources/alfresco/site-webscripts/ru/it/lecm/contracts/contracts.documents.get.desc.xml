@@ -1,6 +1,6 @@
 <webscript>
-    <shortname>Contracts: Document page</shortname>
-    <description>Contracts: Document page</description>
-    <url>/lecm/contracts/documents</url>
-    <format default="html">extension</format>
+	<shortname>Contracts: Document page</shortname>
+	<description>Contracts: Document page</description>
+	<url>/lecm/contracts/documents</url>
+	<format default="html">extension</format>
 </webscript>

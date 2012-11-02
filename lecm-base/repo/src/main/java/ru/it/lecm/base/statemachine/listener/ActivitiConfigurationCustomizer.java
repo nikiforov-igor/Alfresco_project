@@ -15,20 +15,20 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class ActivitiConfigurationCustomizer implements InitializingBean {
 
-    private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 
-    public AlfrescoProcessEngineConfiguration getActivitiProcessEngineConfiguration() {
-        return activitiProcessEngineConfiguration;
-    }
+	public AlfrescoProcessEngineConfiguration getActivitiProcessEngineConfiguration() {
+		return activitiProcessEngineConfiguration;
+	}
 
-    public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
-        this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
-    }
+	public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
+		this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        BpmnParser parser = ((BpmnDeployer) activitiProcessEngineConfiguration.getDeploymentCache().getDeployers().get(0)).getBpmnParser();
-        parser.getParseListeners().add(new LogicECMBPMNParser());
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		BpmnParser parser = ((BpmnDeployer) activitiProcessEngineConfiguration.getDeploymentCache().getDeployers().get(0)).getBpmnParser();
+		parser.getParseListeners().add(new LogicECMBPMNParser());
+	}
 
 }

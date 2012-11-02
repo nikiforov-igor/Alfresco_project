@@ -27,7 +27,7 @@ import java.util.Map;
  * Date: 05.10.12
  * Time: 11:30
  */
-public class StateMachineDocumentListenerPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class ExpressionForDocumentFieldsListenerPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
@@ -54,13 +54,13 @@ public class StateMachineDocumentListenerPolicy implements NodeServicePolicies.O
             }
             String taskId = (String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
-            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(StartDocumentProcessingAction.class), ExecutionListener.EVENTNAME_START);
+            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(ExpressionForDocumentFieldsAction.class), ExecutionListener.EVENTNAME_START);
 
-            StartDocumentProcessingAction.Expression result = null;
+            ExpressionForDocumentFieldsAction.Expression result = null;
             for (StateMachineAction action : actions) {
-                StartDocumentProcessingAction documentProcessingAction = (StartDocumentProcessingAction) action;
-                List<StartDocumentProcessingAction.Expression> expressions = documentProcessingAction.getExpressions();
-                for (StartDocumentProcessingAction.Expression expression : expressions) {
+                ExpressionForDocumentFieldsAction documentFieldsAction = (ExpressionForDocumentFieldsAction) action;
+                List<ExpressionForDocumentFieldsAction.Expression> expressions = documentFieldsAction.getExpressions();
+                for (ExpressionForDocumentFieldsAction.Expression expression : expressions) {
                     if (parser.parseExpression(expression.getExpression()).getValue(context, Boolean.class)) {
                         result = expression;
                         break;

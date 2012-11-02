@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-contract:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Logic ECM document model</description>
-    <author>Logic ECM</author>
-    <version>1.0</version>
-    <imports>
-        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
-    </imports>
-    <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
-    </namespaces>
+	<description>Logic ECM document model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
+	</namespaces>
 
-    <types>
-        <type name="lecm-contract:document">
-            <title>Logic Ecm Contract Document</title>
-            <parent>lecm-document:base</parent>
-            <properties>
-                <property name="lecm-contract:regnum">
-                    <type>d:text</type>
-                </property>
-            </properties>
-        </type>
-    </types>
+	<types>
+		<type name="lecm-contract:document">
+			<title>Logic Ecm Contract Document</title>
+			<parent>lecm-document:base</parent>
+			<properties>
+				<property name="lecm-contract:regnum">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</type>
+	</types>
 
 </model>

@@ -19,36 +19,38 @@
 -->
 <beans>
 
-    <bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap,ru.it.lecm.base.base-repo.LogicEcmModelsBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap,ru.it.lecm.base.base-repo.LogicEcmModelsBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="LogicECMContracts.workflowBootstrap" parent="lecmWorkflowDeployer">
-        <property name="workflowDefinitions">
-            <list>
-                <props>
-                    <prop key="engineId">activiti</prop>
-                    <prop key="location">alfresco/module/${artifactId}/models/contracts.bpmn20.xml</prop>
-                    <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
-                </props>
-            </list>
-        </property>
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-contracts-workflow-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="LogicECMContracts.workflowBootstrap" parent="lecmWorkflowDeployer">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/models/contracts.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">true</prop>
+				</props>
+			</list>
+		</property>
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-workflow-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="${groupId}.${artifactId}.documentStateMachineBean" class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean">
-        <property name="documentType" value="lecm-contract:document" />
-        <property name="stateMachineId" value="contractWorkflow" />
-    </bean>
+	<bean id="${groupId}.${artifactId}.documentStateMachineBean"
+		  class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean">
+		<property name="documentType" value="lecm-contract:document"/>
+		<property name="stateMachineId" value="contractWorkflow"/>
+	</bean>
 
 
 </beans>

@@ -31,70 +31,70 @@ import java.util.Map;
  */
 public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-    private static DocumentStateMachineBean documentStateMachineBean;
-    private static ServiceRegistry serviceRegistry;
-    private static PolicyComponent policyComponent;
+	private static DocumentStateMachineBean documentStateMachineBean;
+	private static ServiceRegistry serviceRegistry;
+	private static PolicyComponent policyComponent;
 
-    public void setDocumentStateMachineBean(DocumentStateMachineBean documentStateMachineBean) {
-        StateMachineCreateDocumentPolicy.documentStateMachineBean = documentStateMachineBean;
-    }
+	public void setDocumentStateMachineBean(DocumentStateMachineBean documentStateMachineBean) {
+		StateMachineCreateDocumentPolicy.documentStateMachineBean = documentStateMachineBean;
+	}
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        StateMachineCreateDocumentPolicy.serviceRegistry = serviceRegistry;
-    }
+	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+		StateMachineCreateDocumentPolicy.serviceRegistry = serviceRegistry;
+	}
 
-    public void setPolicyComponent(PolicyComponent policyComponent) {
-        StateMachineCreateDocumentPolicy.policyComponent = policyComponent;
-    }
+	public void setPolicyComponent(PolicyComponent policyComponent) {
+		StateMachineCreateDocumentPolicy.policyComponent = policyComponent;
+	}
 
-    public final void init() {
-        PropertyCheck.mandatory(this, "documentStateMachineBean", documentStateMachineBean);
-        PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
-        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+	public final void init() {
+		PropertyCheck.mandatory(this, "documentStateMachineBean", documentStateMachineBean);
+		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
+		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                StateMachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				StateMachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
 
-    }
+	}
 
-    @Override
-    public void onCreateNode(ChildAssociationRef childAssocRef) {
-        NodeService nodeService = serviceRegistry.getNodeService();
+	@Override
+	public void onCreateNode(ChildAssociationRef childAssocRef) {
+		NodeService nodeService = serviceRegistry.getNodeService();
 
-        QName type = nodeService.getType(childAssocRef.getChildRef());
-        List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
-        String stateMashineId = documentStateMachineBean.getStateMachines().get(prefixes.get(0) + ":" + type.getLocalName());
-        if (stateMashineId != null) {
-            //append status aspect to new document
-            HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-            aspectProps.put(StateMachineModel.PROP_STATUS, "NEW");
-            nodeService.addAspect(childAssocRef.getChildRef(), StateMachineModel.ASPECT_STATUS, aspectProps);
+		QName type = nodeService.getType(childAssocRef.getChildRef());
+		List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
+		String stateMashineId = documentStateMachineBean.getStateMachines().get(prefixes.get(0) + ":" + type.getLocalName());
+		if (stateMashineId != null) {
+			//append status aspect to new document
+			HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+			aspectProps.put(StateMachineModel.PROP_STATUS, "NEW");
+			nodeService.addAspect(childAssocRef.getChildRef(), StateMachineModel.ASPECT_STATUS, aspectProps);
 
-            PersonService personService = serviceRegistry.getPersonService();
-            NodeRef assigneeNodeRef = personService.getPerson("workflow");
+			PersonService personService = serviceRegistry.getPersonService();
+			NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
-            Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+			Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
-            WorkflowService workflowService = serviceRegistry.getWorkflowService();
+			WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-            NodeRef stateProcessPackage = workflowService.createPackage(null);
-            nodeService.addChild(stateProcessPackage, childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, type);
+			NodeRef stateProcessPackage = workflowService.createPackage(null);
+			nodeService.addChild(stateProcessPackage, childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, type);
 
-            workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
-            workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+			workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
+			workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
 
-            // get the moderated workflow
-            WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
-            if (wfDefinition == null) {
-                throw new IllegalStateException("noworkflow: " + stateMashineId);
-            }
-            // start the workflow
-            WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
-            for (WorkflowTask task : tasks) {
-                workflowService.endTask(task.getId(), null);
-            }
-        }
-    }
+			// get the moderated workflow
+			WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
+			if (wfDefinition == null) {
+				throw new IllegalStateException("noworkflow: " + stateMashineId);
+			}
+			// start the workflow
+			WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+			for (WorkflowTask task : tasks) {
+				workflowService.endTask(task.getId(), null);
+			}
+		}
+	}
 
 }

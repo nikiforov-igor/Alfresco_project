@@ -1,3 +1,3 @@
 {
-    nodeRef: "${catalog}"
+	nodeRef: "${catalog}"
 }
