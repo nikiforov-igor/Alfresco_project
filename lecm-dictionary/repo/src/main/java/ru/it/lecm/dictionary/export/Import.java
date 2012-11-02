@@ -105,6 +105,7 @@ public class Import extends AbstractWebScript {
     private void items(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
         boolean createItem = true;
         String itemName = "";
+	    NodeRef parentName = parent;
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         try {
             while (xmlr.hasNext()) {
@@ -117,10 +118,10 @@ public class Import extends AbstractWebScript {
                     //Если нашли вложенный элемент
                     if (xmlr.getLocalName().equals("items")) {
                         if (!itemName.equals("")) {
-                            parent = createItem(parent, itemName, properties);
+                            parentName = createItem(parent, itemName, properties);
                             xmlr.next();
                             createItem = false;
-                            items(xmlr, parent);
+                            items(xmlr, parentName);
                         }
                     }
 
