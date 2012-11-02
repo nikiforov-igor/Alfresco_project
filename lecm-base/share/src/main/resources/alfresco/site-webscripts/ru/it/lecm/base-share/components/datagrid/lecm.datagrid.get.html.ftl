@@ -85,6 +85,7 @@ new LogicECM.module.Base.DataGrid('${id}').setOptions(
                     </div>
                 </div>
             </div>-->
+	        <div class="item-select">&nbsp;</div>
             <div id="${id}-paginator" class="paginator"></div>
         </div>
         <div class="yui-u align-right">
