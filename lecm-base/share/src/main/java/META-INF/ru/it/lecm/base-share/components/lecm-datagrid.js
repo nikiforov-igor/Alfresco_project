@@ -515,7 +515,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         {
                             args[1].stop = true;
                             var asset = me.widgets.dataTable.getRecord(args[1].target.offsetParent).getData();
-                            me[owner.className].call(me, asset, owner);
+                            me[owner.className].call(me, asset, null, me.datagridMeta);
                         }
                     }
                     return true;
@@ -781,8 +781,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _setupDataSource: function DataGrid__setupDataSource()
             {
-                var listNodeRef = new Alfresco.util.NodeRef(this.datagridMeta.nodeRef);
-
                 this.dataRequestFields = [];
                 this.dataResponseFields = [];
 
