@@ -3,5 +3,7 @@
     <name>Регионы</name>
     <description>Регионы РФ</description>
     <type>lecm-dic-regions:dictionary_values</type>
+    <attributeForShow>lecm-dic-regions:code</attributeForShow>
+	<plane>true</plane>
     <showControlInSeparateWindow>false</showControlInSeparateWindow>
 </dictionary>

@@ -835,6 +835,38 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 this.modules.search.dataColumns = this.datagridColumns;
             },
 
+	        getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
+		        // YUI DataTable column definitions
+		        var columnDefinitions =
+			        [
+				        { key: "nodeRef", label: "<input type='checkbox' id='select-all-records'>", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
+			        ];
+
+		        var column;
+		        for (var i = 0, ii = this.datagridColumns.length; i < ii; i++)
+		        {
+			        column = this.datagridColumns[i];
+			        columnDefinitions.push(
+				        {
+					        key: this.dataResponseFields[i],
+					        label: column.label,
+					        sortable: true,
+					        sortOptions:
+					        {
+						        field: column.formsName,
+						        sortFunction: this.getSortFunction()
+					        },
+					        formatter: this.getCellFormatter(column.dataType)
+				        });
+		        }
+
+		        // Add actions as last column
+		        columnDefinitions.push(
+			        { key: "actions", label: this.msg("label.column.actions"), sortable: false, formatter: this.fnRenderCellActions(), width: 80 }
+		        );
+		        return columnDefinitions;
+	        },
+
             /**
              * DataTable set-up and event registration
              *
@@ -843,35 +875,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _setupDataTable: function DataGrid__setupDataTable(columns)
             {
-                // YUI DataTable column definitions
-                var columnDefinitions =
-                    [
-                        { key: "nodeRef", label: "<input type='checkbox' id='select-all-records'>", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
-                    ];
-
-                var column;
-                for (var i = 0, ii = this.datagridColumns.length; i < ii; i++)
-                {
-                    column = this.datagridColumns[i];
-                    columnDefinitions.push(
-                        {
-                            key: this.dataResponseFields[i],
-                            label: column.label,
-                            sortable: true,
-                            sortOptions:
-                            {
-                                field: column.formsName,
-                                sortFunction: this.getSortFunction()
-                            },
-                            formatter: this.getCellFormatter(column.dataType)
-                        });
-                }
-
-                // Add actions as last column
-                columnDefinitions.push(
-                    { key: "actions", label: this.msg("label.column.actions"), sortable: false, formatter: this.fnRenderCellActions(), width: 80 }
-                );
-
+                // YUI DataTable colum
+                var columnDefinitions = this.getDataTableColumnDefinitions();
                 // DataTable definition
                 var me = this;
                 this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
@@ -1279,7 +1284,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 Bubbling.fire("selectedItemsChanged");
             },
-            
+
             /**
              * Edit Data Item pop-up
              *

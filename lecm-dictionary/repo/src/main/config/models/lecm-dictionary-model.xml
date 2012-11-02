@@ -35,12 +35,24 @@
 					<mandatory>true</mandatory>
                     <default>lecm-dic:hierarchical_dictionary_values</default>
 				</property>
+                <property name="lecm-dic:attributeForShow">
+                    <title>Attribute for show</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>cm:name</default>
+                </property>
                 <property name="lecm-dic:show_control_in_separate_window">
                     <title>Show control in separate window</title>
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
                     <default>true</default>
                 </property>
+				<property name="lecm-dic:plane">
+					<title>Plane</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>true</default>
+				</property>
 			</properties>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>

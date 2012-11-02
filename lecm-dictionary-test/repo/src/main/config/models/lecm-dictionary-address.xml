@@ -3,5 +3,7 @@
     <name>Адрес</name>
     <description>Адрес</description>
     <type>lecm-dic-address:dictionary_values</type>
+    <attributeForShow>cm:name</attributeForShow>
+    <plane>false</plane>
     <showControlInSeparateWindow>false</showControlInSeparateWindow>
 </dictionary>

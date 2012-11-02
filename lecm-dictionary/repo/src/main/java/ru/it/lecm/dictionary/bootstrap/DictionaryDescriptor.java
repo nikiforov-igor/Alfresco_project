@@ -10,6 +10,8 @@ public class DictionaryDescriptor {
 	private String name;
 	private String description;
 	private String type;
+	private String attributeForShow;
+	private boolean plane = true;
 	private boolean showControlInSeparateWindow = true;
 
 	public boolean isShowControlInSeparateWindow() {
@@ -42,5 +44,21 @@ public class DictionaryDescriptor {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+    public String getAttributeForShow() {
+        return attributeForShow;
+    }
+
+    public void setAttributeForShow(String attributeForShow) {
+        this.attributeForShow = attributeForShow;
+    }
+
+	public boolean isPlane() {
+		return plane;
+	}
+
+	public void setPlane(boolean plane) {
+		this.plane = plane;
 	}
 }

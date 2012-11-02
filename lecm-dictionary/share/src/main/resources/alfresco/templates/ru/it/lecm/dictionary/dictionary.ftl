@@ -38,7 +38,6 @@ new Alfresco.widget.Resizer("DocumentLibrary");
     <@region id="title" scope="template"/>
 </div>
 <div id="bd">
-    <#--<@region id="actions-common" scope="template" />-->
     <div class="yui-t1" id="alfresco-data-lists">
         <div id="yui-main">
             <div class="yui-b" id="alf-content">
@@ -48,7 +47,6 @@ new Alfresco.widget.Resizer("DocumentLibrary");
         </div>
         <div class="yui-b" id="alf-filters">
 	        <@region id="tree" scope="template"/>
-               <#--<@region id="filter" scope="template" />-->
         </div>
     </div>
 </div>

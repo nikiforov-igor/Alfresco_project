@@ -19,7 +19,9 @@
             <xs:element type="xs:string" name="name" minOccurs="1"/>
             <xs:element type="xs:string" name="description" minOccurs="1"/>
             <xs:element type="xs:string" name="type" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+            <xs:element type="xs:string" name="attributeForShow" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
             <xs:element type="xs:boolean" name="showControlInSeparateWindow" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+            <xs:element type="xs:boolean" name="plane" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

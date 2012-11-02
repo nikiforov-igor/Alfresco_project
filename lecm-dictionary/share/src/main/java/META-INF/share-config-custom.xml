@@ -8,6 +8,8 @@
 					<show id="lecm-dic:type" force="true"/>
 					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
+                    <show id="lecm-dic:attributeForShow" force="true"/>
+                    <show id="lecm-dic:plane" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -22,6 +24,15 @@
 					<show id="lecm-dic:type" force="true"/>
 					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
                     <show id="lecm-dic:active" force="true"/>
+					<show id="lecm-dic:attributeForShow" force="true"/>
+					<show id="lecm-dic:plane" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="lecm-dic:description" />
+					<show id="lecm-dic:plane"/>
 				</field-visibility>
 			</form>
 		</forms>

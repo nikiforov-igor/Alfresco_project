@@ -1,0 +1,21 @@
+.dictionary-toolbar
+{
+    margin: 0 -10px;
+}
+
+.dictionary-toolbar .header-bar
+{
+    min-height: 2em;
+    padding: 4px 1em;
+}
+
+.dictionary-toolbar .left,
+.dictionary-toolbar .left div
+{
+    float: left;
+}
+
+.dictionary-toolbar .right
+{
+    float: right;
+}

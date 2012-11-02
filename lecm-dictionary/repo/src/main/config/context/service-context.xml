@@ -36,6 +36,11 @@
 				<value>alfresco/module/${artifactId}/models/lecm-dictionary-model.xml</value>
 			</list>
 		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/dictionary</value>
+			</list>
+		</property>
 	</bean>
 
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true"

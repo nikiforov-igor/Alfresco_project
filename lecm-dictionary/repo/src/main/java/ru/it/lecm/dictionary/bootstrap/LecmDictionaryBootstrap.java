@@ -31,6 +31,8 @@ public class LecmDictionaryBootstrap {
 	private static final QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
 	private static final QName DESCRIPTION = QName.createQName(DICTIONARY_NAMESPACE_URI, "description");
 	private static final QName TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
+	private static final QName ATTRIBUTE_FOR_SHOW = QName.createQName(DICTIONARY_NAMESPACE_URI, "attributeForShow");
+	private static final QName PLANE = QName.createQName(DICTIONARY_NAMESPACE_URI, "plane");
 	private static final QName SHOW_CONTROL_IN_SEPARATE_WINDOW = QName.createQName(DICTIONARY_NAMESPACE_URI, "show_control_in_separate_window");
 	private TransactionService transactionService;
 	private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
@@ -70,6 +72,8 @@ public class LecmDictionaryBootstrap {
 					properties.put(DESCRIPTION, dictionaryDescriptor.getDescription());
 					properties.put(TYPE, dictionaryDescriptor.getType());
 					properties.put(SHOW_CONTROL_IN_SEPARATE_WINDOW, dictionaryDescriptor.isShowControlInSeparateWindow());
+					properties.put(ATTRIBUTE_FOR_SHOW, dictionaryDescriptor.getAttributeForShow());
+					properties.put(PLANE, dictionaryDescriptor.isPlane());
 					nodeService.createNode(root, ContentModel.ASSOC_CONTAINS, QName.createQName(DICTIONARY_NAMESPACE_URI, dictionaryDescriptor.getName()), DICTIONARY, properties);
 					return "ok";
 				}
