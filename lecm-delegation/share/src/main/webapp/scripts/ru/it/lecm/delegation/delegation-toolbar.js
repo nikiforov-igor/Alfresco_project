@@ -43,7 +43,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Toolbar, Alfresco.component.Base, {
 
-		self:null,
+		scope:null,
 
 		_createProcuracyBtnClick: function (event) {
 			Alfresco.util.PopupManager.displayMessage({text: "createProcuracyBtnClick"});
@@ -54,18 +54,18 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		},
 
 		_onToolbarReady: function () {
-			var container = YAHOO.util.Dom.get(self.id);
-			Alfresco.util.createYUIButton(container, "btnCreateProcuracy", self._createProcuracyBtnClick, {label: "создать доверенность"});
-			Alfresco.util.createYUIButton(container, "btnListProcuracies", self._listProcuraciesBtnClick, {label: "список доверенностей"});
+			var container = YAHOO.util.Dom.get(scope.id);
+			Alfresco.util.createYUIButton(container, "btnCreateProcuracy", scope._createProcuracyBtnClick, {label: "создать доверенность"});
+			Alfresco.util.createYUIButton(container, "btnListProcuracies", scope._listProcuraciesBtnClick, {label: "список доверенностей"});
 		},
 
 		onReady: function () {
-			self = this;
+			scope = this;
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.Toolbar has been created");
-			self._onToolbarReady ();
-//			YAHOO.util.Event.onContentReady(self.id, self._onToolbarReady);
-			YAHOO.util.Dom.setStyle (self.id + "-body", "visibility", "visible");
+			scope._onToolbarReady ();
+//			YAHOO.util.Event.onContentReady(scope.id, scope._onToolbarReady);
+			YAHOO.util.Dom.setStyle (scope.id + "-body", "visibility", "visible");
 		}
 	});
 })();

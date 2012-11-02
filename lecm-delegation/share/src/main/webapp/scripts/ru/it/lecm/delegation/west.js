@@ -39,19 +39,19 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.West, Alfresco.component.Base, {
 
-		self: null,
+		scope: null,
 
 		onReady: function() {
-			self = this;
+			scope = this;
 
 			Alfresco.logger.info("A new LogicECM.module.Delegation.West has been created");
-			self.initListeners();
-			YAHOO.util.Dom.setStyle (self.id + "-body", "visibility", "visible");
+			scope.initListeners();
+			YAHOO.util.Dom.setStyle (scope.id + "-body", "visibility", "visible");
 		},
 
 		initListeners: function() {
 
-			var container = YAHOO.util.Dom.get(self.id);
+			var container = YAHOO.util.Dom.get(scope.id);
 			Alfresco.util.createYUIButton(container, "myButton", function(event) {
 				Alfresco.logger.info(event.toString());
 				Alfresco.util.Ajax.jsonGet({
@@ -63,11 +63,11 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					successCallback: {fn: function(successResult) { // Callback for successful request, should have the following form: {fn: successHandler, scope: scopeForSuccessHandler}
 							Alfresco.logger.info("get responce " + successResult.json.nodeRef);
 							YAHOO.Bubbling.fire(LogicECM.module.Delegation.Const.ON_AJAX_SUCCESS, "success happend!");
-						},scope: self},
+						},scope: scope},
 					failureCallback: {fn: function(failureResult) { // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
 							debugger;
 							YAHOO.Bubbling.fire(LogicECM.module.Delegation.Const.ON_AJAX_FAILURE, "shit happend!");
-						},scope: self}
+						},scope: scope}
 				});
 			}, {label: "кнопка label", name: "кнопка name", title: "кнопка title"});
 		}
