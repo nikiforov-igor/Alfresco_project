@@ -53,9 +53,6 @@ public class Export extends AbstractWebScript {
 
 						String name = nodeService.getProperty(subNodeAss.getChildRef(), ContentModel.PROP_NAME).toString();
 						xmlw.writeAttribute("name", name);
-						xmlw.writeStartElement("namespaceURI");
-						xmlw.writeAttribute("name", nodeService.getType(subNodeAss.getChildRef()).getNamespaceURI());
-						xmlw.writeEndElement();
 						Set set = nodeService.getProperties(subNodeAss.getChildRef()).entrySet();
 						for (Object aSet : set) {
 							Map.Entry m = (Map.Entry) aSet;
@@ -65,7 +62,6 @@ public class Export extends AbstractWebScript {
 								if (namespace.get(i).equals(key.getLocalName())) {
 									xmlw.writeStartElement("property");
 									xmlw.writeAttribute("name", fields[i]);
-									xmlw.writeAttribute("namespaceURI", nodeService.getType(subNodeAss.getChildRef()).getNamespaceURI());
 									xmlw.writeCharacters(value);
 									xmlw.writeEndElement();
 								}
@@ -95,16 +91,6 @@ public class Export extends AbstractWebScript {
 			NodeRef nodeRef = new NodeRef(nodeRefStr);
 
 			String name = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME).toString();
-//			Set set = nodeService.getProperties(nodeRef).entrySet();
-//			Iterator iterator = set.iterator();
-//			while (iterator.hasNext()) {
-//				Map.Entry m = (Map.Entry) iterator.next();
-//				QName key = (QName) m.getKey();
-//				String value = (String) m.getValue().toString();
-//				if (key.getLocalName().equals("name")) {
-//					name = value;
-//				}
-//			}
 
 
 			// Create an output factory
@@ -121,10 +107,9 @@ public class Export extends AbstractWebScript {
 				xmlw.writeStartElement("dictionary");
 				{
 					xmlw.writeAttribute("name", name);
-//					xmlw.writeAttribute("nodeRef", nodeRef.toString());
 					xmlw.writeStartElement("namespaceURI");
 					{
-						xmlw.writeAttribute("name", nodeService.getType(nodeRef).getNamespaceURI());
+						xmlw.writeAttribute("name", nodeService.getType(nodeService.getChildAssocs(nodeRef).get(0).getChildRef()).getNamespaceURI());
 					}
 					xmlw.writeEndElement();
 					xmlw.writeStartElement("type");

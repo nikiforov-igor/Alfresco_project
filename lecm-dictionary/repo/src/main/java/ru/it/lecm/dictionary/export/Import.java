@@ -77,6 +77,9 @@ public class Import extends AbstractWebScript {
                     //создание справочника
                     parentNodeRef = createDictionary(getAttributeValue(xmlr));
                 }
+	            if (str.equals("namespaceURI")){
+		            namespaceURI = getAttributeValue(xmlr);
+	            }
                 if (str.equals("type")) {
                     dictionaryType = getAttributeValue(xmlr);
                 }
@@ -196,10 +199,6 @@ public class Import extends AbstractWebScript {
         String uri = "";
         while (xmlr.hasNext()) {
             if (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()) {
-                if (xmlr.getLocalName().equals("namespaceURI")) {
-                    uri = getAttributeValue(xmlr);
-                    namespaceURI = uri;
-                }
                 if (xmlr.getLocalName().equals("property")) {
                     prefix = xmlr.getAttributeValue(0).split(":")[0];
                     name = xmlr.getAttributeValue(0).split(":")[1];
