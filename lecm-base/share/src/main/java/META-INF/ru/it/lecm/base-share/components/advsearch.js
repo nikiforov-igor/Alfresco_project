@@ -110,6 +110,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             }
                         });
 
+                } else {
+                    this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
                 }
 
                 // YUI Paginator definition
@@ -338,8 +340,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // Success handler
                 function successHandler(sRequest, oResponse, oPayload) {
                     // update current state on success
-                    this.searchTerm = searchTerm;
-                    this.searchSort = searchSort;
+                    //this.searchTerm = searchTerm;
+                    //this.searchSort = searchSort;
 
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
                 }

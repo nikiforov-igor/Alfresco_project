@@ -619,7 +619,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 this.renderDataGridMeta();
-
+                this.renderSearchForm();
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
@@ -659,8 +659,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 this._setupDataTable();
                 // Hide "no list" message
                 Dom.addClass(this.id + "-selectListMessage", "hidden");
-
-                this.renderSearchForm();
             },
 
             /**
@@ -804,6 +802,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         connMethodPost: true,
                         responseType:YAHOO.util.DataSource.TYPE_JSON,
+                        connXhrMode:"queueRequests",
                         responseSchema:{
                             resultsList:"items",
                             metaFields:{
