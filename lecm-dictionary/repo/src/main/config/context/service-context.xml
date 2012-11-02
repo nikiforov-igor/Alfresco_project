@@ -49,9 +49,8 @@
     <bean id="webscript.ru.it.lecm.dictionary.export.get"
           class="ru.it.lecm.dictionary.export.Export"
           parent="webscript">
-        <property name="nodeService">
-            <ref bean="nodeService" />
-        </property>
+        <property name="nodeService" ref="nodeService"/>
+	    <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.dictionary.export-csv.get"
