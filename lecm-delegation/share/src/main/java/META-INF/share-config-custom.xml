@@ -1,4 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
-
+	<config evaluator="node-type" condition="lecm-dlg:test-unit">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-dlg:testUnitId"/>
+					<show id="lecm-dlg:testUnitName"/>
+					<show id="lecm-dlg:testUnitTitle"/>
+					<show id="lecm-dlg:testUnitDate"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-dlg:test-unit">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-dlg:testUnitId"/>
+					<show id="lecm-dlg:testUnitName"/>
+					<show id="lecm-dlg:testUnitTitle"/>
+					<show id="lecm-dlg:testUnitDate"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-dlg:testUnitId"/>
+					<show id="lecm-dlg:testUnitName"/>
+					<show id="lecm-dlg:testUnitTitle"/>
+					<show id="lecm-dlg:testUnitDate"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

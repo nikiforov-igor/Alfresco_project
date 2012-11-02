@@ -1,11 +1,16 @@
 <#assign centerId = args.htmlid>
+<!--[if IE]>
+	<iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>
+<![endif]-->
+<input id="yui-history-field" type="hidden" />
 <script type="text/javascript"> //<![CDATA[
 	(function () {
 		// var delegationCenter = new LogicECM.module.Delegation.Center ("${centerId}");
 		// delegationCenter.setMessages(${messages});
 		var datagrid = new LogicECM.module.Delegation.DataGrid ("${centerId}");
 		datagrid.setOptions ({
-			usePagination: ${(args.pagination!false)?string}
+			usePagination: ${(args.pagination!false)?string},
+			initialFilter: null
 		});
 		datagrid.setMessages (${messages});
 	})();

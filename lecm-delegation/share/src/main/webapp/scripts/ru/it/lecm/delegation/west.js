@@ -63,6 +63,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					successCallback: {fn: function(successResult) { // Callback for successful request, should have the following form: {fn: successHandler, scope: scopeForSuccessHandler}
 							Alfresco.logger.info("get responce " + successResult.json.nodeRef);
 							YAHOO.Bubbling.fire(LogicECM.module.Delegation.Const.ON_AJAX_SUCCESS, "success happend!");
+							YAHOO.Bubbling.fire("activeDataListChanged", {
+								dataList: {itemType: "lecm-dlg:test-unit"},
+								scrollTo: true
+							});
 						},scope: scope},
 					failureCallback: {fn: function(failureResult) { // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
 							debugger;

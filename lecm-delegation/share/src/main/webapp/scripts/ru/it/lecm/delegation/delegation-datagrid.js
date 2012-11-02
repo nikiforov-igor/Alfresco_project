@@ -73,8 +73,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
        */
       YAHOO.Bubbling.on("activeDataListChanged", this.onActiveDataListChanged, this);
       YAHOO.Bubbling.on("changeFilter", this.onChangeFilter, this);
-      YAHOO.Bubbling.on("filterChanged", this.onFilterChanged, this);
-      YAHOO.Bubbling.on("dataListDetailsUpdated", this.onDataListDetailsUpdated, this);
+      //YAHOO.Bubbling.on("filterChanged", this.onFilterChanged, this);
+      //YAHOO.Bubbling.on("dataListDetailsUpdated", this.onDataListDetailsUpdated, this);
       YAHOO.Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
       YAHOO.Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
       YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
@@ -828,7 +828,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
        */
       _setupDataSource: function DataGrid__setupDataSource()
       {
-         var listNodeRef = new Alfresco.util.NodeRef(this.datalistMeta.nodeRef);
+//         var listNodeRef = new Alfresco.util.NodeRef(this.datalistMeta.nodeRef);
 
          for (var i = 0, ii = this.datalistColumns.length; i < ii; i++)
          {
@@ -842,9 +842,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
          }
 
          // DataSource definition
-         this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "slingshot/datalists/data/node/" + listNodeRef.uri,
+//         this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "slingshot/datalists/data/node/" + listNodeRef.uri,
+         this.widgets.dataSource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI + "logicecm/generateTestUnit",
          {
-            connMethodPost: true,
+//            connMethodPost: true,
             responseType: YAHOO.util.DataSource.TYPE_JSON,
             responseSchema:
             {
@@ -1807,7 +1808,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
          // TODO: No-cache? - add to URL retrieved from DataSource
          // "&noCache=" + new Date().getTime();
 
-         this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
+//         this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
+         this.widgets.dataSource.sendRequest(null,
          {
             success: successHandler,
             failure: failureHandler,
