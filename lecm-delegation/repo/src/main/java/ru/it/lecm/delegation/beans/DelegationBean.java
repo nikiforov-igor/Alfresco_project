@@ -26,13 +26,13 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.utils.DurationLogger;
 import ru.it.lecm.delegation.utils.Utils;
 
 public class DelegationBean
@@ -105,7 +105,8 @@ public class DelegationBean
 	/*
 	 * props
 	 */
-	private static Log logger = LogFactory.getLog(DelegationBean.class);
+	// private static Log logger = LogFactory.getLog(DelegationBean.class);
+	private static Logger logger = Logger.getLogger( DelegationBean.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -155,6 +156,7 @@ public class DelegationBean
 		if (dictionariesRoot[0] == null) {
 			// создание корневого узла для делегирований в Компании ...
 			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+			final String rootname = rootName;
 			properties.put(ContentModel.PROP_NAME, rootName);
 			transactionService.getRetryingTransactionHelper().doInTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Object>() 
 			{
@@ -162,6 +164,7 @@ public class DelegationBean
 				public Object execute() throws Throwable {
 					final ChildAssociationRef associationRef = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
 					dictionariesRoot[0] = associationRef.getChildRef();
+					logger.warn("container node '"+ rootname+ "' created: "+ dictionariesRoot[0].toString() );
 					return "ok";
 				}
 			});
@@ -281,7 +284,8 @@ public class DelegationBean
 	}
 
 
-	final static String escape(String value) {
+	/*
+	final static String escape(final String value) {
 		return (value == null) 
 					? null
 					: value
@@ -289,7 +293,12 @@ public class DelegationBean
 						.replaceAll("\\", "\\\\") // замена '\' на '\\'
 					;
 	}
+	 */
 
+	final static String quots(final String value) {
+		// return StringUtils.quote(value);
+		return (value == null) ? null : '"'+ value + '"';
+	}
 
 	@Override
 	public JSONArray findProcuracyList(JSONObject searchArgs) {
@@ -298,7 +307,7 @@ public class DelegationBean
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
 
-		final StringBuilder sbQuery = new StringBuilder("+TYPE:\"{"+ NSURI_DELEGATIONS+ "}content\"");
+		final StringBuilder sbQuery = new StringBuilder( String.format( "TYPE:\"{%s}%s\"", NSURI_DELEGATIONS, TYPE_PROCURACY));
 
 		/* добавление условий поиска */
 		if (searchArgs != null) {
@@ -310,7 +319,7 @@ public class DelegationBean
 					// example: +TYPE:"sys:base" -@test\:two:"mustnotmatch"
 					// example: @test\:one:"maymatch" OR @test\:two:"maymatch"
 					// example: @test\:one:"mustmatch" AND NOT @test\:two:"mustnotmatch"
-					sbQuery.append(" AND @").append(escape(key)).append(":\"").append(escape(value.toString())).append("\"");
+					sbQuery.append(String.format(" AND @%s:%s", key,  quots(value.toString()) ));
 				} catch (JSONException ex) {
 					logger.error(ex);
 				}
@@ -320,25 +329,21 @@ public class DelegationBean
 
 		/* поиск */
 		final JSONArray result = new JSONArray();
-		ResultSet found = null;
+		ResultSet foundSet = null;
 		try {
-			found = serviceRegistry.getSearchService().query(sp);
-			for(ResultSetRow row : found) {
-				final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
-				final JSONObject obj = makeJson(props);
-				result.put(obj);
+			foundSet = serviceRegistry.getSearchService().query(sp);
+			if (foundSet != null) {
+				for(ResultSetRow row : foundSet) {
+					final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
+					final JSONObject obj = makeJson(props);
+					result.put(obj);
+				}
 			}
 		} finally {
-			if(found != null)
-				found.close();
+			if(foundSet != null)
+				foundSet.close();
 		}
 
-/*
-		try {
-		} catch (JSONException ex) {
-			logger.error(ex);
-		}
- */
 		return result;
 	}
 
@@ -353,6 +358,169 @@ public class DelegationBean
 						return "ok";
 					}
 				});
+	}
+
+
+	final private static String ARG_TESTNAME = "testName";
+
+	private enum TestAction {
+		test1
+		, test2
+		, test3
+		, test4
+		;
+
+		public boolean eq(Object s) {
+			return (s != null) && this.name().equalsIgnoreCase(s.toString());
+		}
+	}
+
+	@Override
+	public JSONObject test(JSONObject args) {
+		JSONObject result = new JSONObject();
+
+		final DurationLogger d = new DurationLogger();
+		try {
+			if (args == null) {
+				result.put("message", "No arguments");
+				return result;
+			} 
+
+			final Object testName = (args.has(ARG_TESTNAME)) ? args.get(ARG_TESTNAME) : null;
+			if (testName == null) {
+				result.put("message", "Argument '"+ ARG_TESTNAME+ "' not specified");
+				return result;
+			}
+
+			logger.info( "performing test '"+ testName+ "'");
+			if (TestAction.test1.eq(testName)) {
+				copyJson( result, runTest1());
+			} else if (TestAction.test2.eq(testName)) {
+				copyJson( result, runTest2());
+			} else if (TestAction.test3.eq(testName)) {
+				copyJson( result, runTest3());
+			} else if (TestAction.test4.eq(testName)) {
+				copyJson( result, runTest4());
+			} else
+				result.put("message", "Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
+
+		} catch(Throwable ex) {
+			logger.error( String.format("Exception in args ", args), ex);
+			// result.put( "error", ex.toString());
+			throw new RuntimeException("Fail test", ex);
+		} finally {
+			final String msg = d.fmtDuration( "{t} msec");
+			logger.info( "testTime " + msg);
+			try {
+				result.put( "testTime", msg);	
+			} catch(JSONException ex) {
+				logger.error(ex);
+			}
+		}
+
+		return result;
+	}
+
+	static void copyJson(JSONObject dest, JSONObject source) throws JSONException {
+		if (dest != null && source != null && source.keys() != null)
+			for(String key: JSONObject.getNames(source))
+				dest.put(key, source.get(key));
+	}
+
+	private JSONObject doSearchTest(final String status, final boolean flag) 
+			throws JSONException 
+	{
+		final JSONObject result = new JSONObject();
+
+		final NodeService nodeService = serviceRegistry.getNodeService();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+
+		final NodeRef blanksRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "Бланки-тест");
+		final NodeRef commonFolder = nodeService.getChildByName(blanksRoot, ContentModel.ASSOC_CONTAINS, "Общая папка");
+
+
+		/* параметры Lucene поиска */
+		final SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+
+		final StringBuilder sbQuery = new StringBuilder( "TYPE:\"{http://www.it.ru/lecm/model/blanks/1.0}blank\"");
+
+		/* добавление условий поиска */
+		sbQuery.append(String.format(" AND @%s:%s", "status", status));
+		sbQuery.append(String.format(" AND @%s:%s", "flag", flag));
+
+		/* запрос */
+		final DurationLogger d = new DurationLogger();
+		sp.setQuery(sbQuery.toString());
+
+		final String msg = d.fmtDuration("{t} msec");
+		d.markStart();
+		logger.info( "searchTime "+ msg);
+		result.put("searchTime", msg);
+
+		/* поиск */
+		ResultSet foundSet = null;
+		try {
+			// проходим по набору, эмулируя обращение к данным ...
+			foundSet = serviceRegistry.getSearchService().query(sp);
+			int i = 0;
+			if (foundSet != null) {
+				for(ResultSetRow row : foundSet) {
+					i++;
+					final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
+					// final JSONObject obj = makeJson(props);
+					// result.put(obj);
+				}
+			}
+			final String info = String.format("found %s record(s)", i);
+			logger.info( info);
+			result.put("rows", info);
+		} finally {
+			final String info = d.fmtDuration("{t} msec");
+			logger.info( "processTime "+ info);
+			result.put("processTime", info);
+
+			if(foundSet != null)
+				foundSet.close();
+		}
+
+		final Map<QName, Serializable> props = nodeService.getProperties(commonFolder);
+		final StringBuilder sb = makePropDump(props, "node "+ commonFolder.toString());
+		logger.info(sb.toString());
+
+		return result;
+	}
+
+	private JSONObject runTest1() throws JSONException {
+		return doSearchTest( "New", false);
+	}
+
+	private JSONObject runTest2() throws JSONException {
+		return doSearchTest( "New", true);
+	}
+
+	private JSONObject runTest3() throws JSONException {
+		return doSearchTest( "Active", false);
+	}
+
+	private JSONObject runTest4() throws JSONException {
+		return doSearchTest( "Active", true);
+	}
+
+	private StringBuilder makePropDump(final Map<QName, Serializable> props,
+			final String info) {
+		final StringBuilder sb = new StringBuilder("Properties of "+ info+ "\n"); 
+		if (props == null)
+			sb.append("\t no data");
+		else {
+			int i = 0;
+			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
+				i++;
+				sb.append( String.format( "\t[%s]\t%s    '%s'\n", i, entry.getKey().getLocalName(), entry.getValue()));
+			}
+		}
+		return sb;
 	}
 
 	private void internalUpdateProcuracy(final String procuracyId, final JSONObject args) {
@@ -567,4 +735,5 @@ public class DelegationBean
 					return item; // FOUND
 		return null; // NOT FOUND
 	}
+
 }

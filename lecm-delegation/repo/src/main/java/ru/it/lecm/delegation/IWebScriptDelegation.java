@@ -51,4 +51,6 @@ public interface IWebScriptDelegation {
 	 */
 	String deleteProcuracy(String /*JSONObject*/ argId);
 
+	String test(String /*JSONObject*/ args);
 }
+

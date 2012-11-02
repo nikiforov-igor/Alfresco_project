@@ -94,4 +94,16 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 			throw createAndRegException( ex, "error processing deleteProcuracy with id="+ argId);
 		}
 	}
+
+	@Override
+	public String test(String /*JSONObject*/ args) {
+		try {
+			final JSONObject jargs = new JSONObject(args);
+			final JSONObject result = proxy.test( jargs);
+			return result.toString();
+		} catch (JSONException ex) {
+			throw createAndRegException( ex, "error processing test with args:\n"+ args);
+		}
+	}
+
 }

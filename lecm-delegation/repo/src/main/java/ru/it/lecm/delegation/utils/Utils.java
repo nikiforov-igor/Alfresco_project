@@ -55,8 +55,10 @@ public class Utils {
 			, JSONObject srcArgs
 		) throws InvalidQNameException, JSONException
 	{
-		for(String key: JSONObject.getNames(srcArgs)) {
-			dstProps.put( QName.createQName(nsURI, key), (Serializable) srcArgs.get(key));
+		if (srcArgs != null && srcArgs.length() > 0) {
+			for(String key: JSONObject.getNames(srcArgs)) {
+				dstProps.put( QName.createQName(nsURI, key), (Serializable) srcArgs.get(key));
+			}
 		}
 		return dstProps;
 	}

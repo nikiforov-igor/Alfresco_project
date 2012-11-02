@@ -74,4 +74,6 @@ public interface IDelegation {
 	 */
 	void deleteProcuracy(String procuracyId);
 
+	JSONObject test(JSONObject args);
+
 }

@@ -43,7 +43,8 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean id="serviceDelegationWebScript" class="ru.it.lecm.delegation.beans.DelegationBeanWebScript" depends-on="serviceDelegation">
+	<bean id="serviceDelegationWebScript" class="ru.it.lecm.delegation.beans.DelegationBeanWebScript"
+		depends-on="serviceDelegation">
 		<property name="proxy" ref="serviceDelegation" />
 	</bean>
 
@@ -56,11 +57,11 @@
 	 -->
 
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.get" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
-		<property name="serviceDelegationWebScript" ref="serviceDelegationWebScript"/>
+		<property name="delegationService" ref="serviceDelegationWebScript"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
-		<property name="serviceDelegationWebScript" ref="serviceDelegationWebScript"/>
+		<property name="delegationService" ref="serviceDelegationWebScript"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.delegation.GenerateTestUnit.get" class="ru.it.lecm.delegation.beans.GenerateTestUnit" parent="webscript">
