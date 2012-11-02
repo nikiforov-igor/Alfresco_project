@@ -24,7 +24,7 @@
 	<div class="yui-t1" id="alfresco-delegation">
 		<div id="yui-main">
 			<div class="yui-b" id="divCenter">
-				<@region id="toolbar" scope="template"/>
+				<@region id="delegation-toolbar" scope="template"/>
 				<@region id="center" scope="template"/>
 			</div>
 		</div>

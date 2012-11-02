@@ -8,7 +8,6 @@
 </script>
 
 <div id="${toolbarId}-body" class="datalist-toolbar toolbar">
-
 	<div id="${toolbarId}-headerBar" class="header-bar flat-button theme-bg-2">
 		<div class="left">
 			<div id="${toolbarId}-btnCreateProcuracy"></div>
@@ -16,4 +15,3 @@
 		</div>
 	</div>
 </div>
-

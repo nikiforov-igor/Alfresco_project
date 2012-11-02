@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
-	<shortname>toolbar</shortname>
+	<shortname>delegation-toolbar</shortname>
 	<description>Returns toolbar region content.</description>
 	<url>/ru/it/lecm/delegation/toolbar</url>
 	<format default="html"/>

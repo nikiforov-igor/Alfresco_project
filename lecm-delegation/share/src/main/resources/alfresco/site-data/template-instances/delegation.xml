@@ -27,7 +27,7 @@
 		</component>
 		<!-- Toolbar region -->
 		<component>
-			<region-id>toolbar</region-id>
+			<region-id>delegation-toolbar</region-id>
 			<url>/ru/it/lecm/delegation/toolbar</url>
 		</component>
 	</components>
