@@ -27,6 +27,11 @@
 				<value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
 			</list>
 		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-statemachine</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="activitiCustomizer" class="ru.it.lecm.base.statemachine.listener.ActivitiConfigurationCustomizer">
