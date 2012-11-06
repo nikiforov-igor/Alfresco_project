@@ -16,7 +16,7 @@ import java.util.TimerTask;
  * Date: 23.10.12
  * Time: 8:47
  */
-public class ExpressionForDocumentFieldsAction extends StateMachineAction {
+public class WaitForDocumentChangeAction extends StateMachineAction {
 
 	private List<Expression> expressions = new ArrayList<Expression>();
 

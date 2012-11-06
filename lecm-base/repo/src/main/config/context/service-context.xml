@@ -54,7 +54,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-	<bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.action.document.ExpressionForDocumentFieldsListenerPolicy"
+	<bean id="workflowPolicy" class="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
 		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
@@ -75,7 +75,7 @@
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
-		  class="ru.it.lecm.base.statemachine.action.finishstate.ToFinishStateWithTransitionScript"
+		  class="ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
@@ -97,11 +97,11 @@
 		<property name="actions">
 			<map>
 				<entry key="StatusChange" value="ru.it.lecm.base.statemachine.action.StatusChangeAction"/>
-				<entry key="ToFinishStateWithTransition" value="ru.it.lecm.base.statemachine.action.finishstate.ToFinishStateWithTransitionAction"/>
-				<entry key="StartUserWorkflow"
-					   value="ru.it.lecm.base.statemachine.action.StartUserWorkflowAction"/>
-				<entry key="ExpressionForDocumentFields"
-					   value="ru.it.lecm.base.statemachine.action.document.ExpressionForDocumentFieldsAction"/>
+				<entry key="FinishStateWithTransition" value="ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction"/>
+				<entry key="StartWorkflow"
+					   value="ru.it.lecm.base.statemachine.action.StartWorkflowAction"/>
+				<entry key="WaitForDocumentChange"
+					   value="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeAction"/>
 			</map>
 		</property>
 	</bean>

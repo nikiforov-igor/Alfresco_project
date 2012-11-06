@@ -16,7 +16,7 @@ import java.util.List;
  * Действие машины состояний, при котором машина состояний переходит в режим ожидания
  * и предлагает пользователю выбор дальнейшиго действия над документом.
  */
-public class ToFinishStateWithTransitionAction extends StateMachineAction {
+public class FinishStateWithTransitionAction extends StateMachineAction {
 
 	public static String PROP_CHANGE_STATE_PREV_TASK_ID = "changeStatePrevTaskId";
 	public static String PROP_CHANGE_STATE_CUR_TASK_ID = "changeStateCurTaskId";

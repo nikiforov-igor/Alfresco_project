@@ -19,12 +19,12 @@ import java.util.Map;
  * Date: 17.10.12
  * Time: 16:18
  */
-public class ToFinishStateWithTransitionScript extends DeclarativeWebScript {
+public class FinishStateWithTransitionScript extends DeclarativeWebScript {
 
 	private static ServiceRegistry serviceRegistry;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		ToFinishStateWithTransitionScript.serviceRegistry = serviceRegistry;
+		FinishStateWithTransitionScript.serviceRegistry = serviceRegistry;
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class ToFinishStateWithTransitionScript extends DeclarativeWebScript {
 		String actionId = req.getParameter("actionId");
 
 		StateMachineHelper helper = new StateMachineHelper();
-		List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(ToFinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
-		ToFinishStateWithTransitionAction.NextState nextState = null;
+		List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+		FinishStateWithTransitionAction.NextState nextState = null;
 		for (StateMachineAction action : actions) {
-			ToFinishStateWithTransitionAction toFinishStateWithTransitionAction = (ToFinishStateWithTransitionAction) action;
-			List<ToFinishStateWithTransitionAction.NextState> states = toFinishStateWithTransitionAction.getStates();
-			for (ToFinishStateWithTransitionAction.NextState state : states) {
+			FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
+			List<FinishStateWithTransitionAction.NextState> states = finishStateWithTransitionAction.getStates();
+			for (FinishStateWithTransitionAction.NextState state : states) {
 				if (state.getActionId().equalsIgnoreCase(actionId)) {
 					nextState = state;
 				}
@@ -60,11 +60,11 @@ public class ToFinishStateWithTransitionScript extends DeclarativeWebScript {
 				String dependencyExecution = persistedResponse.substring(start, end);
 
 				parameters = new HashMap<String, String>();
-				parameters.put(ToFinishStateWithTransitionAction.PROP_CHANGE_STATE_ACTION_ID, actionId);
-				parameters.put(ToFinishStateWithTransitionAction.PROP_CHANGE_STATE_PREV_TASK_ID, taskId);
+				parameters.put(FinishStateWithTransitionAction.PROP_CHANGE_STATE_ACTION_ID, actionId);
+				parameters.put(FinishStateWithTransitionAction.PROP_CHANGE_STATE_PREV_TASK_ID, taskId);
 
 				taskId = helper.getCurrentTaskId(executionId);
-				parameters.put(ToFinishStateWithTransitionAction.PROP_CHANGE_STATE_CUR_TASK_ID, taskId);
+				parameters.put(FinishStateWithTransitionAction.PROP_CHANGE_STATE_CUR_TASK_ID, taskId);
 
 				helper.setExecutionParameters(dependencyExecution, parameters);
 				if (nextState.getVariables() != null) {

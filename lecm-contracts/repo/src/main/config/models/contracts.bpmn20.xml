@@ -25,7 +25,7 @@
 						</lecm:action>
 					</lecm:event>
 					<lecm:event on="take">
-						<lecm:action type="ToFinishStateWithTransition" variable="trans">
+						<lecm:action type="FinishStateWithTransition" variable="trans">
 							<lecm:attribute name="agreement">
 								<lecm:parameter name="labelId" value="На согласование"/>
 								<lecm:parameter name="workflowId" value="activitiReview"/>
@@ -72,7 +72,7 @@
 						</lecm:action>
 					</lecm:event>
 					<lecm:event on="take">
-						<lecm:action type="ToFinishStateWithTransition" variable="Type">
+						<lecm:action type="FinishStateWithTransition" variable="Type">
 							<lecm:attribute name="agreement">
 								<lecm:parameter name="labelId" value="На согласование"/>
 								<lecm:parameter name="workflowId" value="activitiReview"/>
@@ -96,11 +96,11 @@
 						<lecm:action type="StatusChange">
 							<lecm:attribute name="status" value="ON_SIGNING"/>
 						</lecm:action>
-						<lecm:action type="StartUserWorkflow">
+						<lecm:action type="StartWorkflow">
 							<lecm:attribute name="workflowId" value="activitiReview"/>
 							<lecm:attribute name="assignee" value="admin"/>
 						</lecm:action>
-						<lecm:action type="ExpressionForDocumentFields">
+						<lecm:action type="WaitForDocumentChange">
 							<lecm:expressions outputVariable="signed">
 								<lecm:expression expression="#lecm_contract_regnum.equals('3')" outputValue="true"/>
 								<lecm:expression expression="#lecm_contract_regnum.equals('5')" outputValue="false"/>

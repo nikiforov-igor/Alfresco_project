@@ -27,7 +27,7 @@ import java.util.Map;
  * Date: 05.10.12
  * Time: 11:30
  */
-public class ExpressionForDocumentFieldsListenerPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
@@ -54,13 +54,13 @@ public class ExpressionForDocumentFieldsListenerPolicy implements NodeServicePol
             }
             String taskId = (String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
-            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(ExpressionForDocumentFieldsAction.class), ExecutionListener.EVENTNAME_START);
+            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
 
-            ExpressionForDocumentFieldsAction.Expression result = null;
+            WaitForDocumentChangeAction.Expression result = null;
             for (StateMachineAction action : actions) {
-                ExpressionForDocumentFieldsAction documentFieldsAction = (ExpressionForDocumentFieldsAction) action;
-                List<ExpressionForDocumentFieldsAction.Expression> expressions = documentFieldsAction.getExpressions();
-                for (ExpressionForDocumentFieldsAction.Expression expression : expressions) {
+                WaitForDocumentChangeAction documentChangeAction = (WaitForDocumentChangeAction) action;
+                List<WaitForDocumentChangeAction.Expression> expressions = documentChangeAction.getExpressions();
+                for (WaitForDocumentChangeAction.Expression expression : expressions) {
                     if (parser.parseExpression(expression.getExpression()).getValue(context, Boolean.class)) {
                         result = expression;
                         break;

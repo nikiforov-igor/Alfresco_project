@@ -14,7 +14,7 @@ import java.util.TimerTask;
  * Date: 23.10.12
  * Time: 8:47
  */
-public class StartUserWorkflowAction extends StateMachineAction {
+public class StartWorkflowAction extends StateMachineAction {
 
 	private String workflowId = "";
 	private String assignee = "";
