@@ -35,32 +35,32 @@ public interface IWebScriptDelegation {
 	 * @return json-строка со списком доверенностей удовлетворяющих критериям searchArgs
 	 * (при procuracyId != null список будет содержать одну указанную доверенность)
 	 * Формат:
-{
- "totalRecords": , //общее кол-во строк
- "startIndex": 0, //всегда ноль, 
- "metadata": { //непонятная секция, пока захардкодим, позжу доразберусь зачем она нужна
- }
+	{
+		"totalRecords": , // общее кол-во строк
+		"startIndex": 0, // всегда ноль, 
+		"metadata": { // непонятная секция, пока захардкодим, позжу доразберусь зачем она нужна
+		},
 
+		"parent": {
+			"nodeRef": ,// ссылка на родительский контейнер в котором лежат элементы (workspace://SpacesStore/%parentId%)
+			"permissions": { // права родительского контейнера
+				"userAccess": {
+					"create": true // нас интересует есть ли право создавать детишек в родительском контейнернере
+				}
+			}
+		},
 
-  "parent": {
-   "nodeRef": ,//ссылка на родительский контейнер в котором лежат элементы (workspace://SpacesStore/%parentId%)
-   "permissions": { //права родительского контейнера
-    "userAccess": {
-     "create": true //нас интересует есть ли право создавать детишек в родительском контейнернере
-    }
-   }
-  }
- },
- "items":[ //массив с данными (JSONArray) которые мы отображаем в таблице
-  {
-   "nodeRef": ,//ссылка на элемент (workspace://SpacesStore/%elementId%
-   "itemData": { //свойства объета которые мы возвращаем, свойства описываются по принципу prop_префиксМодели_имяСвойства (например prop_lecm-ba_dateUTCBegin)
-    "prop_lecm-ba_dateUTCBegin": { //чем value отличается от displayValue я не знаю, в тех примерах что я видел value=displayValueб как-то так
-     "value": , //значение свойства
-     "displayValue": //отображаемое значение свойства
-    }
-   }
-  }
+		"items":[ //массив с данными (JSONArray) которые мы отображаем в таблице
+		{
+			"nodeRef": ,//ссылка на элемент (workspace://SpacesStore/%elementId%
+			"itemData": { //свойства объета которые мы возвращаем, свойства описываются по принципу prop_префиксМодели_имяСвойства (например prop_lecm-ba_dateUTCBegin)
+				"prop_lecm-ba_dateUTCBegin": { //чем value отличается от displayValue я не знаю, в тех примерах что я видел value=displayValueб как-то так
+					"value": , // значение свойства
+					"displayValue": // отображаемое значение свойства
+				}
+			}
+		}
+	}
 	 */
 	String /*JSONObject*/ findProcuracyList(String /*JSONObject*/ searchArgs);
 

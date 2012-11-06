@@ -23,6 +23,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
@@ -316,7 +317,7 @@ public class DelegationBean
 				}
 				, ... other properties ...
 	 */
-	final static JSONObject makeJsonPropeties(Map<QName, Serializable> props) {
+	final static JSONObject makeJsonPropeties(Map<QName, Serializable> props, NamespaceService nss) {
 		final JSONObject result = new JSONObject();
 		if (props != null) {
 			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
@@ -326,7 +327,7 @@ public class DelegationBean
 					propObj.put( "value", value);
 					propObj.put( "displayValue", value);
 
-					final String propName = normalizePropName( PREFIX_PROCURACY, entry.getKey());
+					final String propName = normalizePropName( entry.getKey(), nss);
 					result.put( propName, propObj);
 				} catch (JSONException ex) {
 					logger.error("Problem loading procuracy node ", ex);
@@ -337,8 +338,10 @@ public class DelegationBean
 	}
 
 
-	static String normalizePropName(String prefix, QName key) {
-		return String.format( "prop_%s_%s", prefix, key.getLocalName() ) ;
+	static String normalizePropName(QName key, NamespaceService nss) {
+		// final Collection<String> prefixes = nss.getPrefixes(key.getNamespaceURI());
+		final QName prefixed = key.getPrefixedQName(nss);
+		return String.format( "prop_%s_%s", QName.splitPrefixedQName(prefixed.toPrefixString())[0], key.getLocalName() ) ;
 	}
 
 
@@ -409,6 +412,9 @@ public class DelegationBean
 	}
 
 	static private class JsonMetaDataSection extends JSONObject {
+		public JsonMetaDataSection(final NodeRef parent)  throws JSONException {
+			put( "parent", new JsonParent(parent));
+		}
 	}
 
 	static private class JsonParent extends JSONObject {
@@ -452,8 +458,7 @@ public class DelegationBean
 	{
 		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
 		result.put( "startIndex", 0); //всегда ноль,
-		result.put( "metadata", new JsonMetaDataSection()); // пока непонятная секция
-		result.put( "parent", new JsonParent(parent));
+		result.put( "metadata", new JsonMetaDataSection(parent)); // пока непонятная секция
 
 		result.put( "items", makeItems(foundSet)); // массив с данными (JSONArray) которые мы отображаем в таблице
 		return result;
@@ -482,7 +487,7 @@ public class DelegationBean
 				// final JSONObject obj = makeJson(props);
 				final JSONObject obj = new JSONObject();
 				obj.put("nodeRef", row.getNodeRef());
-				obj.put("itemData", makeJsonPropeties(props));
+				obj.put("itemData", makeJsonPropeties(props, serviceRegistry.getNamespaceService()));
 				result.put(obj);
 			}
 		}
