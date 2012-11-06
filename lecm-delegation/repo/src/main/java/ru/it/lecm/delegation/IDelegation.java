@@ -44,7 +44,7 @@ public interface IDelegation {
 	 * @return список доверенностей удовлетворяющих критериям searchArgs
 	 * (при procuracyId != null список из одной указанной)
 	 */
-	JSONArray findProcuracyList(JSONObject searchArgs);
+	JSONObject findProcuracyList(JSONObject searchArgs);
 
 	/**
 	 * Отозвать/активировать Доверенность

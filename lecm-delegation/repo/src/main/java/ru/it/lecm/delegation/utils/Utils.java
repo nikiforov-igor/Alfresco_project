@@ -137,5 +137,36 @@ public class Utils {
 		}
 		return result;
 	}
+
+
+	public static StringBuilder makePropDump(final Map<QName, Serializable> props,
+			final String propsTag) {
+		return makePropDump( new StringBuilder(), props, propsTag);
+	}
+
+	/**
+	 * "дамп" свойств
+	 * @param dest целевой буфер вывода
+	 * @param srcprops свойства для дампа
+	 * @param propsTag название списка свойст для заголовка
+	 * @return =dest
+	 */
+	public static StringBuilder makePropDump(
+			final StringBuilder dest, 
+			final Map<QName, Serializable> srcprops,
+			final String propsTag) {
+		final StringBuilder sb = new StringBuilder("Properties of "+ propsTag+ "\n");
+		if (srcprops == null)
+			sb.append("\t no data");
+		else {
+			int i = 0;
+			for (Map.Entry<QName, Serializable> entry: srcprops.entrySet()) {
+				i++;
+				sb.append( String.format( "\t[%s]\t%s    '%s'\n", i, entry.getKey().getLocalName(), entry.getValue()));
+			}
+		}
+		return sb;
+	}
+
 }
 

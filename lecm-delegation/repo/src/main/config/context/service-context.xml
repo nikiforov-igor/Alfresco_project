@@ -36,11 +36,18 @@
 		</property>
 	</bean>
 
+	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean">
+		<property name="serviceRegistry" ref="ServiceRegistry" />
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+	</bean>
+
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
-	<bean id="serviceDelegation" class="ru.it.lecm.delegation.beans.DelegationBean">
+	<bean id="serviceDelegation" class="ru.it.lecm.delegation.beans.DelegationBean"
+		depends-on="testSearch">
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="tester" ref="testSearch"/>
 	</bean>
 
 	<bean id="serviceDelegationWebScript" class="ru.it.lecm.delegation.beans.DelegationBeanWebScript"
