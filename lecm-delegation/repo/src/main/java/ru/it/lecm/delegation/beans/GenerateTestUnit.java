@@ -65,6 +65,8 @@ public class GenerateTestUnit extends DeclarativeWebScript {
 			}
 		});
 		HashMap<String, Object> map = new HashMap<String, Object> ();
+		NodeRef userHome = repository.getUserHome (repository.getPerson ());
+		map.put ("parent", userHome.toString ());
 		map.put ("result", testUnit.toString ());
 		map.put ("result2", testUnit);
 		return map;
