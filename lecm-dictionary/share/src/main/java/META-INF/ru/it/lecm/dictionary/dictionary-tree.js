@@ -62,12 +62,13 @@ LogicECM.module = LogicECM.module || {};
                 scope:window
             }
         },
-        init: function() {
-            this._loadNode();
+        init: function(dictionaryName) {
 
-            dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
-            dragTree = new YAHOO.widget.TreeView(dragContainer);
-            dragContainer.id = dragContainerId;
+	        this._loadRootNode(dictionaryName);
+
+	        dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
+	        dragTree = new YAHOO.widget.TreeView(dragContainer);
+	        dragContainer.id = dragContainerId;
         },
 
         draw:function () {
@@ -86,9 +87,23 @@ LogicECM.module = LogicECM.module || {};
             tree = new YAHOO.widget.TreeView(this.treeContainer);
             tree.singleNodeHighlight = true;
             tree.setDynamicLoad(this._loadTree);
-            var root = tree.getRoot();
-            this._loadTree(root);
-            tree.subscribe("expand", this._treeNodeSelected.bind(this));
+
+	        var root = tree.getRoot();
+	        var newRootNode = null;
+	        if (this.rootNode != null) {
+		        var newNode = {
+			        label:this.rootNode.title,
+			        nodeRef:this.rootNode.nodeRef,
+			        isLeaf:false,
+			        expanded: true,
+			        type:this.rootNode.type,
+			        renderHidden:true
+		        };
+		        newRootNode = new YAHOO.widget.TextNode(newNode, root);
+	        } else {
+		        this._loadTree(root);
+	        }
+
             tree.subscribe('clickEvent', function(event) {
                 this._treeNodeSelected(event.node);
                 tree.onEventToggleHighlight(event);
@@ -96,6 +111,11 @@ LogicECM.module = LogicECM.module || {};
             }.bind(this));
             tree.subscribe('dblClickEvent', this._editNode.bind(this));
             tree.render();
+
+	        if (newRootNode != null) {
+	            this._treeNodeSelected(newRootNode);
+	            tree.onEventToggleHighlight(newRootNode);
+	        }
         },
         _renderTree: function () {
             this._loadTree(this.selectedNode);
@@ -126,28 +146,53 @@ LogicECM.module = LogicECM.module || {};
                 });
             }
         },
-        _loadNode: function () {
-            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
-            if (this.cDoc != null) {
-                sUrl += "?nodeRef=" + encodeURI(this.cDoc);
-            }
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        for (var nodeIndex in oResults) {
-                            nodeDictionary = oResults[nodeIndex].toString();
-                        }
-                    }
-                },
-                failure:function (oResponse) {
-                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-                },
-                argument:{
-                }
-            };
+	    _loadRootNode: function (dictionaryName) {
+		    var me = this;
 
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+		    if (dictionaryName !== null && dictionaryName !== "") {
+			    var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + dictionaryName;
+//
+		        var callback = {
+			        success:function (oResponse) {
+				        var oResults = eval("(" + oResponse.responseText + ")");
+				        if (oResults != null && oResults.nodeRef != null) {
+				            nodeDictionary = oResults.nodeRef;
+					        me.rootNode = oResults;
+				        }
+
+				        me.draw();
+			        },
+			        failure:function (oResponse) {
+				        alert("Failed to load dictionary " + dictionaryName);
+			        },
+			        argument:{
+			        }
+		        };
+			    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+		    } else {
+	            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
+	            if (this.cDoc != null) {
+	                sUrl += "?nodeRef=" + encodeURI(this.cDoc);
+	            }
+	            var callback = {
+	                success:function (oResponse) {
+	                    var oResults = eval("(" + oResponse.responseText + ")");
+	                    if (oResults != null) {
+	                        for (var nodeIndex in oResults) {
+	                            nodeDictionary = oResults[nodeIndex].toString();
+	                        }
+	                    }
+		                me.draw();
+	                },
+	                failure:function (oResponse) {
+	                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
+	                },
+	                argument:{
+	                }
+	            };
+
+	            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+		    }
         },
         _loadTree:function loadNodeData(node, fnLoadComplete) {
 

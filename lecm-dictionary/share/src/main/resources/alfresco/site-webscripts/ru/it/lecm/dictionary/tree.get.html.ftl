@@ -43,14 +43,12 @@
 
 	function init() {
 		var Dictionary = new LogicECM.module.Dictionary("dictionary");
-		Dictionary.init();
+		Dictionary.init("${(args.dic!'')?string}");
 		Dictionary.setMessages(${messages});
-		Dictionary.draw();
 	}
 
 	//once the DOM has loaded, we can go ahead and set up our tree:
 	YAHOO.util.Event.onDOMReady(init);
-
 })();
 //]]></script>
 

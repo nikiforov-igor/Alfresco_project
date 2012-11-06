@@ -54,7 +54,7 @@
 							if (datalistColumn.name == "lecm-dic:plane")  {
 								html += data.displayValue ? "${msg('logicecm.dictionary.plane')}" : "${msg('logicecm.dictionary.hierarchical')}";
 							} else if (datalistColumn.name == "cm:name") {
-								html += "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "dictionary?type=" + encodeURIComponent(data.displayValue) + "'>" + data.displayValue + "</a>";
+								html += "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "dictionary?dic=" + encodeURIComponent(data.displayValue) + "'>" + data.displayValue + "</a>";
 							} else {
 								switch (datalistColumn.dataType.toLowerCase())
 								{
