@@ -76,10 +76,6 @@ public class Import extends AbstractWebScript {
 	            if (str.equals("dictionary")) {
 		            String dictionaryName = getAttributeValue(xmlr);
 		            xmlr.nextTag();
-		            xmlr.nextTag();
-		            xmlr.nextTag();
-		            xmlr.nextTag();
-		            xmlr.nextTag();
 		            Map<QName, Serializable> dicProps = getProperties(xmlr);
 		            dictionaryType = dicProps.get(QName.createQName("lecm-dic:type", namespaceService)).toString();
 		            //создание справочника
