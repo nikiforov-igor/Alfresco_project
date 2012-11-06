@@ -2,7 +2,6 @@ package ru.it.lecm.delegation.beans;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,8 +61,8 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 	@Override
 	public String /*JSONArray*/ findProcuracyList(String /*JSONObject*/ searchArgs) {
 		try {
-			final JSONObject jargs = new JSONObject(searchArgs);
-			final JSONArray result = proxy.findProcuracyList( jargs);
+			final JSONObject jargs = (searchArgs != null && !searchArgs.isEmpty()) ? new JSONObject(searchArgs) : null;
+			final JSONObject result = proxy.findProcuracyList( jargs);
 			return result.toString();
 		} catch (JSONException ex) {
 			throw createAndRegException( ex, "error processing findProcuracyList with args:\n"+ searchArgs);

@@ -114,7 +114,7 @@ public class DelegationRepoWebScript
 	protected Map<String, Object> executeImpl (WebScriptRequest req, Status status, Cache cache) {
 
 		logger.debug ("executing delegation webscript");
-		logger.debug ("http session is {0}", ServletUtil.getSession ());
+		logger.debug ( String.format( "http session is %s", ServletUtil.getSession ()));
 
 		final Map<String, String> templateArgs = req.getServiceMatch ().getTemplateVars ();
 		final String action = templateArgs.get (ACTION_DEF);

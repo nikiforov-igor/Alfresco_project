@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.delegation.utils.DurationLogger;
 import ru.it.lecm.delegation.utils.Utils;
 
@@ -43,7 +44,9 @@ public class DelegationBean
 
 	// Namespace URI of delegations model structure
 	public static final String NSURI_DELEGATIONS = "http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0"; // prefix="lecm-ba"
+	public static final String PREFIX_PROCURACY ="lecm-ba";
 	public static final String URI_DATA_PROCURACY = "lecm/delegation/"; // "lecm/business/authority/delegation/"
+
 	public static final String TYPE_PROCURACY = "procuracy";
 	public static final String ASSOCNAME_PROCURACY = "PROCURACY";
 	public static final String STATUS_ACTIVE = "Active";
@@ -106,11 +109,12 @@ public class DelegationBean
 	/*
 	 * props
 	 */
-	 private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
+	final private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
+	private ITestSearch tester;
 
 
 	public ServiceRegistry getServiceRegistry() {
@@ -129,12 +133,28 @@ public class DelegationBean
 		this.repositoryHelper = repositoryHelper;
 	}
 
+	public TransactionService getTransactionService() {
+		return this.transactionService;
+	}
+
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
 
-	public TransactionService getTransactionService() {
-		return this.transactionService;
+	public ITestSearch getTester() {
+		return tester;
+	}
+
+	public void setTester(ITestSearch tester) {
+		this.tester = tester;
+	}
+
+	private NodeRef getDelegationRootRef() {
+		final NodeService nodeService = serviceRegistry.getNodeService();
+		repositoryHelper.init();
+
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		return nodeService.getChildByName( companyHome, ContentModel.ASSOC_CONTAINS, NODE_DEFAULT_DELEGATIONS_ROOT);
 	}
 
 	/**
@@ -152,7 +172,8 @@ public class DelegationBean
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
 
 		// массив, чтобы проще было использовать изнутри doInTransaction ...
-		final NodeRef[] dictionariesRoot = { nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, rootName) };
+		final NodeRef[] dictionariesRoot = { nodeService.getChildByName(
+				companyHome, ContentModel.ASSOC_CONTAINS, rootName) };
 		if (dictionariesRoot[0] == null) {
 			// создание корневого узла для делегирований в Компании ...
 			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
@@ -184,25 +205,6 @@ public class DelegationBean
 	}
 	 */
 
-	/*
-	static JSONObject makeJsonObj(
-			final NodeService nodeService
-			, final String qTypeLocalName
-			, final NodeRef node
-	) throws JSONException {
-		final JSONObject result = new JSONObject();
-
-		result.put(JSON_TITLE, Utils.getElementName(nodeService, node));
-		result.put(JSON_NODEREF, node.toString());
-		result.put(JSON_TYPE, qTypeLocalName);
-
-		result.put(JSON_ISLEAF, false);
-		result.put(JSON_DSURI, URI_DATA_PROCURACY);
-		// root.put(JSON_CHILDTYPE, xxx);
-
-		return result;
-	}
-	 */
 
 	@Override
 	public JSONObject getProcuracy(String procuracyId) {
@@ -269,6 +271,26 @@ public class DelegationBean
 	}
 
 
+	/*
+	static JSONObject makeJsonObj(
+			final NodeService nodeService
+			, final String qTypeLocalName
+			, final NodeRef node
+	) throws JSONException {
+		final JSONObject result = new JSONObject();
+
+		result.put(JSON_TITLE, Utils.getElementName(nodeService, node));
+		result.put(JSON_NODEREF, node.toString());
+		result.put(JSON_TYPE, qTypeLocalName);
+
+		result.put(JSON_ISLEAF, false);
+		result.put(JSON_DSURI, URI_DATA_PROCURACY);
+		// root.put(JSON_CHILDTYPE, xxx);
+
+		return result;
+	}
+	 */
+
 	final static JSONObject makeJson(final Map<QName, Serializable> props) {
 		final JSONObject result = new JSONObject();
 		if (props != null) {
@@ -284,6 +306,42 @@ public class DelegationBean
 	}
 
 
+	/**
+	 * 
+	 * @param props
+	 * @return массив вида 
+				"prop_lecm-ba_dateUTCBegin": {
+					"value": sss, //значение свойства
+					"displayValue": sss //отображаемое значение свойства
+				}
+				, ... other properties ...
+	 */
+	final static JSONObject makeJsonPropeties(Map<QName, Serializable> props) {
+		final JSONObject result = new JSONObject();
+		if (props != null) {
+			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
+				try {
+					final JSONObject propObj = new JSONObject();
+					final Object value = entry.getValue();
+					propObj.put( "value", value);
+					propObj.put( "displayValue", value);
+
+					final String propName = normalizePropName( PREFIX_PROCURACY, entry.getKey());
+					result.put( propName, propObj);
+				} catch (JSONException ex) {
+					logger.error("Problem loading procuracy node ", ex);
+				}
+			}
+		}
+		return result;
+	}
+
+
+	static String normalizePropName(String prefix, QName key) {
+		return String.format( "prop_%s_%s", prefix, key.getLocalName() ) ;
+	}
+
+
 	/*
 	final static String escape(final String value) {
 		return (value == null)
@@ -295,22 +353,16 @@ public class DelegationBean
 	}
 	 */
 
+
 	final static String quots(final String value) {
 		// return StringUtils.quote(value);
 		return (value == null) ? null : '"'+ value + '"';
 	}
 
-	@Override
-	public JSONArray findProcuracyList(JSONObject searchArgs) {
-		/* параметры Lucene поиска */
-		final SearchParameters sp = new SearchParameters();
-		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-
-		final StringBuilder sbQuery = new StringBuilder( String.format( "TYPE:\"{%s}%s\"", NSURI_DELEGATIONS, TYPE_PROCURACY));
-
-		/* добавление условий поиска */
-		if (searchArgs != null) {
+	final static StringBuilder makeSearch(final StringBuilder dest, JSONObject searchArgs) {
+		dest.append( String.format( "TYPE:\"{%s}%s\"", NSURI_DELEGATIONS, TYPE_PROCURACY));
+		/* добавление условий поиска, если есть */
+		if (searchArgs != null && JSONObject.getNames(searchArgs) != null) {
 			for (String key: JSONObject.getNames(searchArgs)) {
 				try {
 					final Object value = searchArgs.get( key);
@@ -319,31 +371,121 @@ public class DelegationBean
 					// example: +TYPE:"sys:base" -@test\:two:"mustnotmatch"
 					// example: @test\:one:"maymatch" OR @test\:two:"maymatch"
 					// example: @test\:one:"mustmatch" AND NOT @test\:two:"mustnotmatch"
-					sbQuery.append(String.format(" AND @%s:%s", key,  quots(value.toString()) ));
+					dest.append(String.format(" AND @%s:%s", key,  quots(value.toString()) ));
 				} catch (JSONException ex) {
 					logger.error("", ex);
 				}
 			}
 		}
+		return dest;
+	}
+
+	@Override
+	public JSONObject findProcuracyList(JSONObject searchArgs) {
+		/* параметры Lucene поиска */
+		final SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+
+		final StringBuilder sbQuery = makeSearch( new StringBuilder(), searchArgs);
 		sp.setQuery(sbQuery.toString());
 
 		/* поиск */
-		final JSONArray result = new JSONArray();
+		final JSONObject result = new JSONObject();
 		ResultSet foundSet = null;
 		try {
 			foundSet = serviceRegistry.getSearchService().query(sp);
-			if (foundSet != null) {
-				for(ResultSetRow row : foundSet) {
-					final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
-					final JSONObject obj = makeJson(props);
-					result.put(obj);
-				}
+			try {
+				makeResult(result,  foundSet, getDelegationRootRef());
+			} catch (JSONException ex) {
+				logger.error("Problem building JSON answer", ex);
 			}
 		} finally {
 			if(foundSet != null)
 				foundSet.close();
 		}
 
+		return result;
+	}
+
+	static private class JsonMetaDataSection extends JSONObject {
+	}
+
+	static private class JsonParent extends JSONObject {
+		private NodeRef parent;
+
+		public NodeRef getParent() {
+			return this.parent;
+		}
+
+		public JsonParent(final NodeRef parent) throws JSONException {
+			this.parent = parent;
+			//ссылка на родительский контейнер в котором лежат элементы ("workspace://SpacesStore/%parentId%")
+			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId()); 
+			put( "nodeRef", parent); 
+			put( "permissions", getPermissions(parent) ); // права родительского контейнера
+		}
+
+		/**
+		 * Получить права на узел
+		 * @param node
+		 * @return
+		 * @throws JSONException 
+		 */
+		static JSONObject getPermissions(final NodeRef node) throws JSONException {
+			final JSONObject result = new JSONObject();
+			//нас интересует есть ли право создавать детишек в родительском контейнернере
+			result.put( "userAccess", makePermission("create", true));
+			return result;
+		}
+
+		static JSONObject makePermission(String permName, boolean enabled) throws JSONException {
+			final JSONObject result = new JSONObject();
+			result.put( permName, enabled);
+			return result;
+		}
+
+	}
+
+	JSONObject makeResult(final JSONObject result, ResultSet foundSet
+			, NodeRef parent) throws JSONException 
+	{
+		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
+		result.put( "startIndex", 0); //всегда ноль,
+		result.put( "metadata", new JsonMetaDataSection()); // пока непонятная секция
+		result.put( "parent", new JsonParent(parent));
+
+		result.put( "items", makeItems(foundSet)); // массив с данными (JSONArray) которые мы отображаем в таблице
+		return result;
+	}
+
+	/**
+	 * @param foundSet
+	 * @return массив объектов вида:
+	 * 	{
+			"nodeRef": xxx,//ссылка на элемент (workspace://SpacesStore/%elementId%
+			"itemData": { //свойства объета которые мы возвращаем, свойства описываются по принципу prop_префиксМодели_имяСвойства (например prop_lecm-ba_dateUTCBegin)
+				"prop_lecm-ba_dateUTCBegin": { //чем value отличается от displayValue я не знаю, в тех примерах что я видел value=displayValueб как-то так
+					"value": sss, //значение свойства
+					"displayValue": xxx //отображаемое значение свойства
+				}
+				, ... other properties ...
+			}
+		}
+	 * @throws JSONException
+	 */
+	JSONArray makeItems(ResultSet foundSet) throws JSONException {
+		final JSONArray result = new JSONArray();
+		if (foundSet != null) {
+			for(ResultSetRow row : foundSet) {
+				final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
+				// final JSONObject obj = makeJson(props);
+				final JSONObject obj = new JSONObject();
+				obj.put("nodeRef", row.getNodeRef());
+				obj.put("itemData", makeJsonPropeties(props));
+				result.put(obj);
+			}
+		}
 		return result;
 	}
 
@@ -394,13 +536,13 @@ public class DelegationBean
 
 			logger.info( "performing test '"+ testName+ "'");
 			if (TestAction.test1.eq(testName)) {
-				copyJson( result, runTest1());
+				copyJson( result, tester.runTest(1));
 			} else if (TestAction.test2.eq(testName)) {
-				copyJson( result, runTest2());
+				copyJson( result, tester.runTest(2));
 			} else if (TestAction.test3.eq(testName)) {
-				copyJson( result, runTest3());
+				copyJson( result, tester.runTest(3));
 			} else if (TestAction.test4.eq(testName)) {
-				copyJson( result, runTest4());
+				copyJson( result, tester.runTest(4));
 			} else
 				result.put("message", "Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
 
@@ -425,102 +567,6 @@ public class DelegationBean
 		if (dest != null && source != null && source.keys() != null)
 			for(String key: JSONObject.getNames(source))
 				dest.put(key, source.get(key));
-	}
-
-	private JSONObject doSearchTest(final String status, final boolean flag)
-			throws JSONException
-	{
-		final JSONObject result = new JSONObject();
-
-		final NodeService nodeService = serviceRegistry.getNodeService();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-
-		final NodeRef blanksRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "Бланки-тест");
-		final NodeRef commonFolder = nodeService.getChildByName(blanksRoot, ContentModel.ASSOC_CONTAINS, "Общая папка");
-
-
-		/* параметры Lucene поиска */
-		final SearchParameters sp = new SearchParameters();
-		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-
-		final StringBuilder sbQuery = new StringBuilder( "TYPE:\"{http://www.it.ru/lecm/model/blanks/1.0}blank\"");
-
-		/* добавление условий поиска */
-		sbQuery.append(String.format(" AND @%s:%s", "status", status));
-		sbQuery.append(String.format(" AND @%s:%s", "flag", flag));
-
-		/* запрос */
-		final DurationLogger d = new DurationLogger();
-		sp.setQuery(sbQuery.toString());
-
-		final String msg = d.fmtDuration("{t} msec");
-		d.markStart();
-		logger.info( "searchTime "+ msg);
-		result.put("searchTime", msg);
-
-		/* поиск */
-		ResultSet foundSet = null;
-		try {
-			// проходим по набору, эмулируя обращение к данным ...
-			foundSet = serviceRegistry.getSearchService().query(sp);
-			int i = 0;
-			if (foundSet != null) {
-				for(ResultSetRow row : foundSet) {
-					i++;
-					final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
-					// final JSONObject obj = makeJson(props);
-					// result.put(obj);
-				}
-			}
-			final String info = String.format("found %s record(s)", i);
-			logger.info( info);
-			result.put("rows", info);
-		} finally {
-			final String info = d.fmtDuration("{t} msec");
-			logger.info( "processTime "+ info);
-			result.put("processTime", info);
-
-			if(foundSet != null)
-				foundSet.close();
-		}
-
-		final Map<QName, Serializable> props = nodeService.getProperties(commonFolder);
-		final StringBuilder sb = makePropDump(props, "node "+ commonFolder.toString());
-		logger.info(sb.toString());
-
-		return result;
-	}
-
-	private JSONObject runTest1() throws JSONException {
-		return doSearchTest( "New", false);
-	}
-
-	private JSONObject runTest2() throws JSONException {
-		return doSearchTest( "New", true);
-	}
-
-	private JSONObject runTest3() throws JSONException {
-		return doSearchTest( "Active", false);
-	}
-
-	private JSONObject runTest4() throws JSONException {
-		return doSearchTest( "Active", true);
-	}
-
-	private StringBuilder makePropDump(final Map<QName, Serializable> props,
-			final String info) {
-		final StringBuilder sb = new StringBuilder("Properties of "+ info+ "\n");
-		if (props == null)
-			sb.append("\t no data");
-		else {
-			int i = 0;
-			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
-				i++;
-				sb.append( String.format( "\t[%s]\t%s    '%s'\n", i, entry.getKey().getLocalName(), entry.getValue()));
-			}
-		}
-		return sb;
 	}
 
 	private void internalUpdateProcuracy(final String procuracyId, final JSONObject args) {

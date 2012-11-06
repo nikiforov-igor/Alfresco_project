@@ -1,6 +1,7 @@
 package ru.it.lecm.delegation.beans;
 
 import java.util.Map;
+
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.slf4j.Logger;
