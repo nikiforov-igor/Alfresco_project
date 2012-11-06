@@ -51,6 +51,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 		_listProcuraciesBtnClick: function (event) {
 			Alfresco.util.PopupManager.displayMessage({text: "listProcuraciesBtnClick"});
+			YAHOO.Bubbling.fire("activeDataListChanged", {
+				dataList: {itemType: "lecm-ba:procuracy"},
+				scrollTo: true
+			});
 		},
 
 		_onToolbarReady: function () {

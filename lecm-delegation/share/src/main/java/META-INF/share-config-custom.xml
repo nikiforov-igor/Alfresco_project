@@ -32,4 +32,15 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="model-type" condition="lecm-ba:procuracy">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-ba:comment"/>
+					<show id="lecm-ba:status"/>
+					<show id="lecm-ba:canpropogate"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
