@@ -26,10 +26,11 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.utils.DurationLogger;
@@ -50,7 +51,7 @@ public class DelegationBean
 	/*
 	public static final String JSON_TITLE = "title";
 	public static final String JSON_ISLEAF = "isLeaf";
-	public static final String JSON_TYPE = "type"; 
+	public static final String JSON_TYPE = "type";
 
 	public static final String JSON_NODEREF = "nodeRef";
 	public static final String JSON_DSURI = "dsUri";
@@ -105,8 +106,7 @@ public class DelegationBean
 	/*
 	 * props
 	 */
-	// private static Log logger = LogFactory.getLog(DelegationBean.class);
-	private static Logger logger = Logger.getLogger( DelegationBean.class);
+	 private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -139,8 +139,8 @@ public class DelegationBean
 
 	/**
 	 * Получение корневого узла (в Компании), в котором хрянятся все доверенности.
-	 * Если такой узел отсутствует - он создаётся. 
-	 * @param rootName название узла, если null, то используется по-умолчанию NODE_DEFAULT_DELEGATIONS_ROOT. 
+	 * Если такой узел отсутствует - он создаётся.
+	 * @param rootName название узла, если null, то используется по-умолчанию NODE_DEFAULT_DELEGATIONS_ROOT.
 	 * @return
 	 */
 	private NodeRef ensureDelegationsRootRef(String rootName) {
@@ -158,7 +158,7 @@ public class DelegationBean
 			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
 			final String rootname = rootName;
 			properties.put(ContentModel.PROP_NAME, rootName);
-			transactionService.getRetryingTransactionHelper().doInTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Object>() 
+			transactionService.getRetryingTransactionHelper().doInTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Object>()
 			{
 				@Override
 				public Object execute() throws Throwable {
@@ -236,7 +236,7 @@ public class DelegationBean
 		/* (!) Обновление данных */
 		final NodeRef rootDelegates = ensureDelegationsRootRef(NODE_DEFAULT_DELEGATIONS_ROOT);
 		final ChildAssociationRef ref = nodeService.createNode (
-					rootDelegates 
+					rootDelegates
 					, ContentModel.ASSOC_CONTAINS
 					, QName.createQName (NSURI_DELEGATIONS, ASSOCNAME_PROCURACY)
 					, QName.createQName (NSURI_DELEGATIONS, TYPE_PROCURACY)
@@ -252,10 +252,10 @@ public class DelegationBean
 	/**
 	 * Получить указанную доверенность
 	 * @param rootName название корневого узла доверенностей
-	 * @param procuracyId id Доверенности (id для строки storeType + "//" + storeId + "/" + id); 
+	 * @param procuracyId id Доверенности (id для строки storeType + "//" + storeId + "/" + id);
 	 * @return
 	 */
-	private JSONObject getProcuracy(String rootName, final String procuracyId) 
+	private JSONObject getProcuracy(String rootName, final String procuracyId)
 	{
 		JSONObject result = new JSONObject();
 
@@ -286,7 +286,7 @@ public class DelegationBean
 
 	/*
 	final static String escape(final String value) {
-		return (value == null) 
+		return (value == null)
 					? null
 					: value
 						.replaceAll("\"", "\\\"") // замена '"' на '\"'
@@ -321,7 +321,7 @@ public class DelegationBean
 					// example: @test\:one:"mustmatch" AND NOT @test\:two:"mustnotmatch"
 					sbQuery.append(String.format(" AND @%s:%s", key,  quots(value.toString()) ));
 				} catch (JSONException ex) {
-					logger.error(ex);
+					logger.error("", ex);
 				}
 			}
 		}
@@ -384,7 +384,7 @@ public class DelegationBean
 			if (args == null) {
 				result.put("message", "No arguments");
 				return result;
-			} 
+			}
 
 			final Object testName = (args.has(ARG_TESTNAME)) ? args.get(ARG_TESTNAME) : null;
 			if (testName == null) {
@@ -412,9 +412,9 @@ public class DelegationBean
 			final String msg = d.fmtDuration( "{t} msec");
 			logger.info( "testTime " + msg);
 			try {
-				result.put( "testTime", msg);	
+				result.put( "testTime", msg);
 			} catch(JSONException ex) {
-				logger.error(ex);
+				logger.error("", ex);
 			}
 		}
 
@@ -427,8 +427,8 @@ public class DelegationBean
 				dest.put(key, source.get(key));
 	}
 
-	private JSONObject doSearchTest(final String status, final boolean flag) 
-			throws JSONException 
+	private JSONObject doSearchTest(final String status, final boolean flag)
+			throws JSONException
 	{
 		final JSONObject result = new JSONObject();
 
@@ -510,7 +510,7 @@ public class DelegationBean
 
 	private StringBuilder makePropDump(final Map<QName, Serializable> props,
 			final String info) {
-		final StringBuilder sb = new StringBuilder("Properties of "+ info+ "\n"); 
+		final StringBuilder sb = new StringBuilder("Properties of "+ info+ "\n");
 		if (props == null)
 			sb.append("\t no data");
 		else {
@@ -557,7 +557,7 @@ public class DelegationBean
 			revokeAccessRights(currentRef);
 			logger.debug( "pre-update: grants revoked from the node id=" + currentRef.getId());
 
-			// обновление данных - замена свойств по именам ... 
+			// обновление данных - замена свойств по именам ...
 			/*
 			final Map<QName, Serializable> props = new HashMap<QName, Serializable>();
 			// для свойств объекта явно задаём новые ...
@@ -601,7 +601,7 @@ public class DelegationBean
 
 			logger.info( "node updated successfully id=" + currentRef.getId());
 		} catch (JSONException ex) {
-			logger.error(ex);
+			logger.error("", ex);
 		} finally  {
 			lockService.unlock(currentRef);
 		}
@@ -621,7 +621,7 @@ public class DelegationBean
 	 * @param assocTypeName
 	 * @param currentRef
 	 * @param args
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	private void updateAcccossiations(QName assocTypeName,
 			NodeRef nodeRef, JSONObject args) throws JSONException {
@@ -658,7 +658,7 @@ public class DelegationBean
 
 
 	/**
-	 * 
+	 *
 	 * @param date проверяемая дата
 	 * @return true, если date это рабочий день, false иначе.
 	 */
@@ -689,7 +689,7 @@ public class DelegationBean
 
 	// assocId => assocIdName
 	protected void updateAcccossiations(QName assocTypeName, final NodeRef srcParentRef,
-			List<String> newDstIds) 
+			List<String> newDstIds)
 	{
 		// TODOL: locks
 

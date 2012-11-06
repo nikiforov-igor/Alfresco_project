@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * Для упрощения журналирования длительности операций.
  * Примерная схема использования:
- * ... org.apache.log4j.Logger logger;
+ * ... org.slf4j.Logger logger;
  * ...
  * 		DurationLogger dl = new dr(logger);
  * ...
@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  *		// [2] вывод длительность от т [1] до этой точки [2]
  * 		dl.markDuration("время выполнения Операции A: начало {s,date}, конец: {e,date}, длительность мс: {t}, в сек: {t,s}, в мин: {t,min}, дата: {t,date}");
  * 		... выполнение продолжается ...
- *		// [3] отметка суммарного времени обоих операций от [1] до [3] 
+ *		// [3] отметка суммарного времени обоих операций от [1] до [3]
  *		// и перезапуск
  * 		dl.markDurationAndStart("время выполнения операций А и Б: начало {s,date}, конец: {e,date}, длительность мс: {t}, в сек: {t,s}, в мин: {t,min}, дата: {t,date}");
  *
@@ -33,11 +33,11 @@ import org.apache.log4j.Logger;
  * При вызове отметок можно указать форматную строку, с необязательными
  * аргументами вида "{name,units}", где name обозначение сути переменной,
  * а units единица её измерения.
- * Для name можно использовать букву или слово: 
- * 		буква   Слово 
+ * Для name можно использовать букву или слово:
+ * 		буква   Слово
  * 		's' 	"start" начало замера
  * 		'e' 	"end" конец замера
- * 		't' 	"time" конец замера 
+ * 		't' 	"time" конец замера
  * для units указываются единицы измерения времени:
  * 		нет		по-умолчанию, в зависимости от name
  * 			если t то миллисекунды,
@@ -49,7 +49,7 @@ import org.apache.log4j.Logger;
  * 		h или hhmm		часы:минуты (для начала и конца - внутри дня, для длительности - она сама)
  * 		date			дата "dd/mm/yy" (без времени суток)
  * 		date_hhmmss		дата до секунд ("dd/mm/yyyy hh:mm:ss")
- * 
+ *
  * см также метод {@link markDuration}
  */
 public class DurationLogger {
@@ -125,7 +125,7 @@ public class DurationLogger {
 
 	/**
 	 * @return текущее время в мс, которое считается "большим" для длительности,
-	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration} 
+	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration}
 	 */
 	public long getWarn_duration_ms() {
 		return warn_duration_ms;
@@ -133,7 +133,7 @@ public class DurationLogger {
 
 	/**
 	 * @param warn_duration_ms время в мс, которое считается "большим" для длительности,
-	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration} 
+	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration}
 	 */
 	public void setWarn_duration_ms(long warn_duration_ms) {
 		this.warn_duration_ms = warn_duration_ms;
@@ -169,8 +169,8 @@ public class DurationLogger {
 	 * @return длительность в нс, замер продолжается
 	 */
 	public long calcDurationNanos() {
-		this.nano_end = System.nanoTime(); 
-		this.ms_end = System.currentTimeMillis(); 
+		this.nano_end = System.nanoTime();
+		this.ms_end = System.currentTimeMillis();
 		return nano_end - nano_start;
 	}
 
@@ -188,7 +188,7 @@ public class DurationLogger {
 	 * Работает аналогично logDuration, но автоматом начинает НОВЫЙ ЗАМЕР времени.
 	 * @param fmt форматная строка для вывода замера (см параметры для fmtDuration::fmt)
 	 * @return отформатированная строка с замером, текущий замер времени продолжается.
-//	 * @return длительность последней операции в мс 
+//	 * @return длительность последней операции в мс
 	 */
 	public String logDurationAndStart(String fmt) {
 		final String msg = fmtDuration(fmt);
@@ -203,11 +203,11 @@ public class DurationLogger {
 		{ "s", "start"}, { "e", "end"}, { "t", "time"}
 	};
 
-	
+
 	/**
-	 * Названия для единиц измерения 
+	 * Названия для единиц измерения
 	 * строки - см индексы и названия для "точности",
-	 * в строках синонимы для оот-щей ед измерения 
+	 * в строках синонимы для оот-щей ед измерения
 	 */
 	public final static String[][] UNITS = {
 		/*0*/ {""}
@@ -222,11 +222,11 @@ public class DurationLogger {
 
 	/**
 	 * Выполнить вывод длительности с миллисекундах от последнего маркера начала.
-	 * @param fmt форматная строка для вывода отметки времени. 
+	 * @param fmt форматная строка для вывода отметки времени.
 	 * @return отформатированная строка, новый замер времени НЕ начинается.
 	 *
 	 * Могут использоваться следйющие макросы в форматной строке:
-	 * необ аргументы в виде "{название:ед_врем}" для подстановки времени начала, 
+	 * необ аргументы в виде "{название:ед_врем}" для подстановки времени начала,
 	 * конца и длительности. Значение (fmt=null) соот-ет "по-умолачнию" DURATION_MS
 	 * "название" это обозначение сути переменной,
 	 *  "точность" единица её измерения.
@@ -235,7 +235,7 @@ public class DurationLogger {
 	 * 		's' 	"start" 		начало замера
 	 * 		'e' 	"end"			конец замера
 	 * 		't' 	"time"			конец замера
-	 *  
+	 *
 	 * Для "ед_врем" указываются единицы измерения Выводимого времени:
 	 * 		Значение		Действие
 	 * 	0	нет				по-умолчанию, в зависимости от названия
@@ -248,7 +248,7 @@ public class DurationLogger {
 	 * 	5	h или hhmm		часы:минуты (для начала и конца - внутри дня, для длительности - она сама)
 	 * 	6	date			дата "dd/mm/yy" (без времени суток)
 	 * 	7	date_hhmmss		дата до секунд ("dd/mm/yyyy hh:mm:ss")
-	 * 
+	 *
 	 */
 	public String fmtDuration(String fmt) {
 		if (fmt == null)
@@ -260,9 +260,9 @@ public class DurationLogger {
 		String message = fmt;
 		if (fmt.length() > 0) {
 			// формирование значений для макро-подстановок ...
-			// (!) здесь не используется nano_start и nano_end, т.к. они не 
+			// (!) здесь не используется nano_start и nano_end, т.к. они не
 			// являются временем суток, а ms_start и ms_end являются.
-			final Map<String, String> substData = getSubstitutionMap( new long[] 
+			final Map<String, String> substData = getSubstitutionMap( new long[]
 					{ toNanos( ms_start), toNanos(ms_end), nano_duration });
 
 			// макро-подстановка ...
@@ -280,11 +280,11 @@ public class DurationLogger {
 	 * Если длительность превышает значение warn_duration_ms сообщение
 	 * выводится на уроне WARN иначе на уровне DEBUG.
 	 * @param log целевой журнал
-	 * @param fmt форматная строка (см. форматы для {@link fmtDuration}) 
+	 * @param fmt форматная строка (см. форматы для {@link fmtDuration})
 	 * @param startNew true, если надо начать новый замер после этого
 	 * @return длительность последней операции в мс
 	 */
-	public long logCtrlDuration(org.apache.log4j.Logger log, String fmt, boolean startNew) {
+	public long logCtrlDuration(Logger log, String fmt, boolean startNew) {
 		final long duration_ms = toMillis( calcDurationNanos());
 
 		final boolean isWarn = (duration_ms > this.warn_duration_ms);
@@ -307,7 +307,7 @@ public class DurationLogger {
 	 * Если длительность превышает значение warn_duration_ms, то сообщение
 	 * выводится на уроне WARN иначе на уровне DEBUG.
 	 * @param log целевой журнал
-	 * @param fmt форматная строка (см. форматы для {@link fmtDuration}) 
+	 * @param fmt форматная строка (см. форматы для {@link fmtDuration})
 	 * @return длительность последней операции в мс
 	 */
 	public long logCtrlDuration(Logger log, String fmt) {
@@ -326,7 +326,7 @@ public class DurationLogger {
 	protected Map<String, String> getSubstitutionMap(final long[] nanos) {
 		final Map<String, String> substData = new HashMap<String, String>();
 
-		/* subst: 
+		/* subst:
 		 * Первый индекс [i]: 0: начало	1: конец	3: длительность
 		 * Второй индекс [j]:
 		 * 	i,0: default
@@ -337,7 +337,7 @@ public class DurationLogger {
 		 *  i,5: чч:мм
 		 *  i,6: date 			"dd/mm/yyyy"
 		 *  i,7: date_hhmmss	"dd/mm/yyyy hh:mm:ss"
-		 *  Например 
+		 *  Например
 		 *  	subs[0,3] это представление для формата "{start,sec}"
 		 *  	subs[1,6] для "{end,date}"
 		 *  	subs[2,1] для "{time,nano}"
@@ -370,7 +370,7 @@ public class DurationLogger {
 			subst[i][6] =  String.format( "%1$tm/%1$td/%1$ty", dt); // "dd/mm/yyyy"
 			subst[i][7] =  String.format( "%1$tm/%1$td/%1$tY %1$tH:%1$tM:%1$tS", dt); // "dd/mm/yyyy hh:mm:ss"
 
-			// default: берём в зависимости от значения Начало, Конец, 
+			// default: берём в зависимости от значения Начало, Конец,
 			// Длительность одно из уже вычисленных значений
 			subst[i][0] = subst[i][ (i == 2) ? /*msec*/ 2 : /*date*/ 7];
 
@@ -382,9 +382,9 @@ public class DurationLogger {
 					final String value = subst[i][ii];
 					// для разных синонимов замена будет одна и та же ...
 					for (int jj = 0; jj < UNITS[ii].length; jj++) {
-						final String macro = 
+						final String macro =
 								"[{]"
-								+ tag 
+								+ tag
 								+ (DurationLogger.UNITS[ii][jj].length() > 0 ? ","+DurationLogger.UNITS[ii][jj] : "")
 								+ "[}]";
 						substData.put( macro, value);
@@ -407,7 +407,7 @@ public class DurationLogger {
 	 * @return время выполнения в мс
 	 */
 	final static public long exec(Logger log, String infoFmt, long normal_time_ms
-			, Runnable todo) 
+			, Runnable todo)
 	{
 		final DurationLogger d = new DurationLogger(normal_time_ms);
 		todo.run();
