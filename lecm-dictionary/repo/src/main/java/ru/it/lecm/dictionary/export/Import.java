@@ -36,8 +36,8 @@ public class Import extends AbstractWebScript {
     private static final String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
     private static final QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
     private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
-    private String namespaceURI = "";
-    private String dictionaryType = "";
+	public static final String TAG_PROPERTY = "property";
+	private String dictionaryType = "";
 
     NodeService nodeService;
     NamespaceService namespaceService;
@@ -71,23 +71,28 @@ public class Import extends AbstractWebScript {
             XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
             NodeRef parentNodeRef = null;
 
-            while (xmlr.hasNext()) {
-                str = getStartTag(xmlr);
-                if (str.equals("dictionary")) {
-                    //создание справочника
-                    parentNodeRef = createDictionary(getAttributeValue(xmlr));
-                }
-	            if (str.equals("namespaceURI")){
-		            namespaceURI = getAttributeValue(xmlr);
+            while (true) {
+	            str = getStartTag(xmlr);
+	            if (str.equals("dictionary")) {
+		            String dictionaryName = getAttributeValue(xmlr);
+		            xmlr.nextTag();
+		            xmlr.nextTag();
+		            xmlr.nextTag();
+		            xmlr.nextTag();
+		            xmlr.nextTag();
+		            Map<QName, Serializable> dicProps = getProperties(xmlr);
+		            dictionaryType = dicProps.get(QName.createQName("lecm-dic:type", namespaceService)).toString();
+		            //создание справочника
+		            parentNodeRef = createDictionary(dictionaryName, dicProps);
+		            str = getStartTag(xmlr);
+	                if (str.equals("items")) {
+		                xmlr.nextTag();
+		                items(xmlr, parentNodeRef);
+	                }
+		            break;
+	            } else {
+	                xmlr.nextTag();
 	            }
-                if (str.equals("type")) {
-                    dictionaryType = getAttributeValue(xmlr);
-                }
-                if (str.equals("items")) {
-                    xmlr.next();
-                    items(xmlr, parentNodeRef);
-                }
-                xmlr.next();
             }
             //Возможно необходимо выводить статистику по добавленым значениям
             wf.put("text", "Справочник успешно создан");
@@ -103,54 +108,41 @@ public class Import extends AbstractWebScript {
     }
 
     private void items(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
-        boolean createItem = true;
-        String itemName = "";
-	    NodeRef parentName = parent;
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+        String itemName;
+	    Map<QName, Serializable> properties;
         try {
-            while (xmlr.hasNext()) {
-                if (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()) {
-                    if (xmlr.getLocalName().equals("item")) {
-                        itemName = getAttributeValue(xmlr);
-                        createItem = true;
-                        properties = getProperties(xmlr);
-                    }
-                    //Если нашли вложенный элемент
-                    if (xmlr.getLocalName().equals("items")) {
-                        if (!itemName.equals("")) {
-                            parentName = createItem(parent, itemName, properties);
-                            xmlr.next();
-                            createItem = false;
-                            items(xmlr, parentName);
-                        }
-                    }
-
-                }
-                //закрывающи тег
-                if (XMLStreamConstants.END_ELEMENT == xmlr.getEventType()) {
-                    if (xmlr.getLocalName().equals("item") && createItem) {
-                        createItem(parent, itemName, properties);
-                    }
-                    if (xmlr.getLocalName().equals("items")) {
-                        xmlr.next();
-                        break;
-                    }
-                }
-                xmlr.next();
-            }
+	        while (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
+			        && xmlr.getLocalName().equals("item")) {
+		        itemName = getAttributeValue(xmlr);
+		        xmlr.nextTag();
+		        properties = getProperties(xmlr);
+		        NodeRef current = createItem(parent, itemName, properties);
+		        //Если нашли вложенный элемент
+		        if (xmlr.getLocalName().equals("items")) {
+			        if (!itemName.equals("")) {
+				        xmlr.nextTag();
+				        items(xmlr, current);
+				        xmlr.nextTag();
+				        xmlr.nextTag();
+			        }
+			        xmlr.nextTag();
+		        }
+		        xmlr.nextTag();
+	        }
         } catch (XMLStreamException e) {
-            e.printStackTrace();
+	        e.printStackTrace();
         }
     }
 
-    private NodeRef createDictionary(String dictionaryName) {
+    private NodeRef createDictionary(String dictionaryName, Map<QName, Serializable> dicProps) {
         final NodeRef root = getDictionariesRoot();
         NodeRef dictionary = nodeService.getChildByName(root, ContentModel.ASSOC_CONTAINS, dictionaryName);
         if (dictionary == null) {
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
             properties.put(ContentModel.PROP_NAME, dictionaryName);
+	        properties.putAll(dicProps);
             dictionary = nodeService.createNode(root, ContentModel.ASSOC_CONTAINS,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, dictionaryName),
+                    QName.createQName(DICTIONARY_NAMESPACE_URI, dictionaryName),
                     DICTIONARY,
                     properties).getChildRef();
         }
@@ -161,7 +153,7 @@ public class Import extends AbstractWebScript {
 	    properties.put(ContentModel.PROP_NAME, name);
 	    return  nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
                 QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
-                QName.createQName(namespaceURI, dictionaryType),
+                QName.createQName(dictionaryType, namespaceService),
                 properties).getChildRef();
     }
 
@@ -195,33 +187,19 @@ public class Import extends AbstractWebScript {
     private Map<QName, Serializable> getProperties(XMLStreamReader xmlr) throws XMLStreamException {
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         String value;
-        String prefix = "";
-        String name = "";
-        String uri = "";
-        while (xmlr.hasNext()) {
-            if (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()) {
-                if (xmlr.getLocalName().equals("property")) {
-                    prefix = xmlr.getAttributeValue(0).split(":")[0];
-                    name = xmlr.getAttributeValue(0).split(":")[1];
-                }
-            }
-            if (XMLStreamConstants.CHARACTERS == xmlr.getEventType()) {
-                value = new String(xmlr.getTextCharacters(), xmlr.getTextStart(), xmlr.getTextLength());
-
-                if (namespaceService.getNamespaceURI(prefix) == null) {
-                    namespaceService.registerNamespace(prefix,uri);
-                }
-                properties.put(QName.createQName(namespaceService.getNamespaceURI(prefix), name), value);
-            }
-            if (XMLStreamConstants.END_ELEMENT == xmlr.getEventType()) {
-                if (xmlr.getLocalName().equals("property") || xmlr.getLocalName().equals("properties")) {
-                    break;
-                }
-            }
-            xmlr.next();
-        }
-
-        return properties;
+	    String propName;
+	    while (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
+			    && xmlr.getLocalName().equals(TAG_PROPERTY)) {
+		    propName = xmlr.getAttributeValue("", "name");
+		    xmlr.next();
+		    if (XMLStreamConstants.CHARACTERS == xmlr.getEventType()) {
+			    value = xmlr.getText();
+			    properties.put(QName.createQName(propName, namespaceService), value);
+			    xmlr.nextTag();
+			    xmlr.nextTag();//пропускаем закрывающий тэг
+		    }
+	    }
+	    return properties;
     }
 
 }

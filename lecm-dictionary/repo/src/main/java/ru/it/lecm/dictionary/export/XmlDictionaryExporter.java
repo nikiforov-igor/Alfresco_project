@@ -46,16 +46,6 @@ public class XmlDictionaryExporter {
 		{
 			String name = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME).toString();
 			xmlw.writeAttribute("name", name);
-			xmlw.writeStartElement("namespaceURI");
-			{
-				xmlw.writeAttribute("name", nodeService.getType(nodeService.getChildAssocs(nodeRef).get(0).getChildRef()).getNamespaceURI());
-			}
-			xmlw.writeEndElement();
-			xmlw.writeStartElement("type");
-			{
-				xmlw.writeAttribute("name", nodeService.getProperty(nodeRef, QName.createQName(nodeService.getType(nodeRef).getNamespaceURI(), "type")).toString().split(":")[1]);
-			}
-			xmlw.writeEndElement();
 			writeProperties(nodeRef, true);
 			//Обход по дереву
 			writeItems(nodeRef);
