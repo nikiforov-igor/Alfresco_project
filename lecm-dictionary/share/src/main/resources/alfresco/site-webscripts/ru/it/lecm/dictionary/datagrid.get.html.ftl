@@ -17,7 +17,7 @@
 		   <label for="filter">Filter:</label> <input type="text" id="filter" value="">
 	   </div>
 	   <form id="uploadForm" enctype="multipart/form-data" method="post" target=uploadFrame
-	         action="http://localhost:8080/share/proxy/alfresco/lecm/dictionary/post/import">
+	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
 			<p><input type="file" name="f">
 			<input type="submit" value="Import"></p>
 	   </form>
