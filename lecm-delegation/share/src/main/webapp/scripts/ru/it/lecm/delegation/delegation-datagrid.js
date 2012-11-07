@@ -1094,7 +1094,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
             userAccess["filter-" + this.currentFilter.filterId] = true;
 
             // Remove any actions the user doesn't have permission for
-            var actions = YAHOO.util.YAHOO.util.Selector.query("div", clone),
+            var actions = YAHOO.util.Selector.query("div", clone),
                action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
 
             for (i = 0, ii = actions.length; i < ii; i++)
@@ -1125,11 +1125,11 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
             // Need the "More >" container?
             var splitAt = this.options.splitActionsAt;
-            actions = YAHOO.util.YAHOO.util.Selector.query("div", clone);
+            actions = YAHOO.util.Selector.query("div", clone);
             if (actions.length > splitAt)
             {
                var moreContainer = YAHOO.util.Dom.get(this.id + "-moreActions").cloneNode(true);
-               var containerDivs = YAHOO.util.YAHOO.util.Selector.query("div", moreContainer);
+               var containerDivs = YAHOO.util.Selector.query("div", moreContainer);
                // Insert the two necessary DIVs before the splitAt action item
                YAHOO.util.Dom.insertBefore(containerDivs[0], actions[splitAt]);
                YAHOO.util.Dom.insertBefore(containerDivs[1], actions[splitAt]);
@@ -1711,7 +1711,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
                }
                else
                {
-                  loadingMessage.showYAHOO.util.Event.subscribe(function()
+                  loadingMessage.showEvent.subscribe(function()
                   {
                      this.loadingMessageShowing = true;
                   }, this, true);

@@ -308,9 +308,9 @@ public class DelegationBean
 
 
 	/**
-	 * 
+	 *
 	 * @param props
-	 * @return массив вида 
+	 * @return массив вида
 				"prop_lecm-ba_dateUTCBegin": {
 					"value": sss, //значение свойства
 					"displayValue": sss //отображаемое значение свойства
@@ -427,8 +427,8 @@ public class DelegationBean
 		public JsonParent(final NodeRef parent) throws JSONException {
 			this.parent = parent;
 			//ссылка на родительский контейнер в котором лежат элементы ("workspace://SpacesStore/%parentId%")
-			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId()); 
-			put( "nodeRef", parent); 
+			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId());
+			put( "nodeRef", parent);
 			put( "permissions", getPermissions(parent) ); // права родительского контейнера
 		}
 
@@ -436,7 +436,7 @@ public class DelegationBean
 		 * Получить права на узел
 		 * @param node
 		 * @return
-		 * @throws JSONException 
+		 * @throws JSONException
 		 */
 		static JSONObject getPermissions(final NodeRef node) throws JSONException {
 			final JSONObject result = new JSONObject();
@@ -454,7 +454,7 @@ public class DelegationBean
 	}
 
 	JSONObject makeResult(final JSONObject result, ResultSet foundSet
-			, NodeRef parent) throws JSONException 
+			, NodeRef parent) throws JSONException
 	{
 		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
 		result.put( "startIndex", 0); //всегда ноль,
@@ -488,6 +488,8 @@ public class DelegationBean
 				final JSONObject obj = new JSONObject();
 				obj.put("nodeRef", row.getNodeRef());
 				obj.put("itemData", makeJsonPropeties(props, serviceRegistry.getNamespaceService()));
+				//временный хардкод для того чтобы actionset-ы в таблице заработали
+				obj.put ("permissions", new JSONObject ("{\"userAccess\":{\"create\": true, \"edit\":true, \"delete\":true}}"));
 				result.put(obj);
 			}
 		}
