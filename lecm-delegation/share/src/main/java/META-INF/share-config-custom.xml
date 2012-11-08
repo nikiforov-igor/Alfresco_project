@@ -34,6 +34,13 @@
 	</config>
 	<config evaluator="model-type" condition="lecm-ba:procuracy">
 		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-ba:comment"/>
+					<show id="lecm-ba:status"/>
+					<show id="lecm-ba:canpropogate"/>
+				</field-visibility>
+			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-ba:comment"/>

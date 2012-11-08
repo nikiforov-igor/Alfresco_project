@@ -75,10 +75,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
       YAHOO.Bubbling.on("changeFilter", this.onChangeFilter, this);
       //YAHOO.Bubbling.on("filterChanged", this.onFilterChanged, this);
       //YAHOO.Bubbling.on("dataListDetailsUpdated", this.onDataListDetailsUpdated, this);
-      YAHOO.Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
-      YAHOO.Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
-      YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
-      YAHOO.Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
+//      YAHOO.Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
+//      YAHOO.Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
+//      YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
+//      YAHOO.Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
 
       /* Deferred list population until DOM ready */
       this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onActiveDataListChanged"],
@@ -1423,7 +1423,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
          var obj = args[1];
          if ((obj !== null) && (obj.dataList !== null))
          {
-            this.datalistMeta = obj.dataList;
+//            this.datalistMeta = obj.dataList;
+            this.datalistMeta = YAHOO.lang.merge (this.datalistMeta, obj.dataList);
             // Could happen more than once, so check return value of fulfil()
             if (!this.deferredListPopulation.fulfil("onActiveDataListChanged"))
             {
