@@ -45,7 +45,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
          * @method onActionDelete
          * @param items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
          */
-        onActionDelete: function DataGridActions_onActionDelete(p_items, fnDeleteComplete, metadata)
+        onActionDelete: function DataGridActions_onActionDelete(p_items, owner, fnDeleteComplete, metadata)
         {
             var me = this,
                 items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
