@@ -95,16 +95,24 @@ public class XmlDictionaryImporter {
 					QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, dictionaryName),
 					ExportNamespace.DICTIONARY,
 					properties).getChildRef();
+		} else {
+			nodeService.addProperties(dictionary, dicProps);
 		}
 		return dictionary;
 	}
 
 	private NodeRef createItem(NodeRef parentNodeRef, Map<QName, Serializable> properties) {
 		String name = properties.get(ContentModel.PROP_NAME).toString();
-		return nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
+		NodeRef node = nodeService.getChildByName(parentNodeRef, ContentModel.ASSOC_CONTAINS, name);
+		if (node == null) {
+			node = nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
 				itemsType,
 				properties).getChildRef();
+		} else {
+			nodeService.addProperties(node, properties);
+		}
+		return node;
 	}
 
 	private NodeRef getDictionariesRoot() {
