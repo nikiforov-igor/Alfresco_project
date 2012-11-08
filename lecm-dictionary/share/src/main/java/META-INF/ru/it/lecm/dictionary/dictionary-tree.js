@@ -257,6 +257,7 @@ LogicECM.module = LogicECM.module || {};
 	                         datagridMeta: {
                                  description: "",
                                  itemType: nodeType,
+		                         nodeRef: node.data.nodeRef,
 		                         initialSearch: 'PARENT:"' + node.data.nodeRef + '"',
                                  title: node.label
                              },
