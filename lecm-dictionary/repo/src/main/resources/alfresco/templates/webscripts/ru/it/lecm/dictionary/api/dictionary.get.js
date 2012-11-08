@@ -10,6 +10,6 @@ model.dictionary = dictionary;
 
 function xpathEncode(xpath) {
 	var result = xpath;
-	result = result.replace(" ", "_x0020_");
+	result = result.split(" ").join("_x0020_");
 	return result;
 }
