@@ -125,7 +125,7 @@
                 this.modules.actions = new Alfresco.module.DataListActions();
 
                 // Reference to Data Grid component
-                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("Alfresco.component.DataGrid");
+                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -153,9 +153,9 @@
              */
             onNewRow: function DataListToolbar_onNewRow(e, p_obj)
             {
-                var datalistMeta = this.modules.dataGrid.datalistMeta,
-                    destination = datalistMeta.nodeRef,
-                    itemType = datalistMeta.itemType;
+                var datagridMeta = this.modules.dataGrid.datagridMeta,
+                    destination = datagridMeta.nodeRef,
+                    itemType = datagridMeta.itemType;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
@@ -305,8 +305,8 @@
                 }
             },
             onExportXML: function(){
-                var datalistMeta = this.modules.dataGrid.datalistMeta;
-                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datalistMeta.itemType);
+                var datagridMeta = this.modules.dataGrid.datagridMeta;
+                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
                 var fields = "";
                 var items = "";
                 Alfresco.util.Ajax.jsonGet(
@@ -324,7 +324,7 @@
                                 }
                             document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
                                                      + "?" + fields
-                                                     + "nodeRef=" + datalistMeta.nodeRef + "&"
+                                                     + "nodeRef=" + datagridMeta.nodeRef + "&"
                                                      + items;
                             },
                             scope: this
@@ -337,8 +337,8 @@
                     });
             },
             onExportSCV: function(){
-                var datalistMeta = this.modules.dataGrid.datalistMeta;
-                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datalistMeta.itemType);
+                var datagridMeta = this.modules.dataGrid.datagridMeta;
+                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
                 var fields = "";
                 var items = "";
                 Alfresco.util.Ajax.jsonGet(

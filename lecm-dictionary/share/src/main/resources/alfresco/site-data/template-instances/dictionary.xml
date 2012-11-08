@@ -5,16 +5,13 @@
 		<component>
 			<region-id>tree</region-id>
 			<url>/lecm/dictionary/tree</url>
-			<properties>
-				<dic>{dic}</dic>
-			</properties>
 		</component>
 		<!-- Title -->
 		<component>
 			<region-id>title</region-id>
 			<url>/components/title/simple-title</url>
 			<properties>
-				<title>Dictionary</title>
+				<title>Справочники > Справочник "{dic}"</title>
 			</properties>
 		</component>
 		<!-- Toolbar -->
@@ -29,10 +26,6 @@
         <component>
             <region-id>datagrid</region-id>
             <url>/lecm/dictionary/datagrid</url>
-            <properties>
-                <pagination>true</pagination>
-	            <dic>{dic}</dic>
-            </properties>
         </component>
 	</components>
 </template-instance>

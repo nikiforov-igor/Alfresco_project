@@ -43,7 +43,7 @@
 
 	function init() {
 		var Dictionary = new LogicECM.module.Dictionary("dictionary");
-		Dictionary.init("${(args.dic!'')?string}");
+		Dictionary.init("${(page.url.args.dic!'')?string}");
 		Dictionary.setMessages(${messages});
 	}
 

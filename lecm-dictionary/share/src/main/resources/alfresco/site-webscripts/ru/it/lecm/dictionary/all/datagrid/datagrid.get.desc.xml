@@ -1,7 +1,7 @@
 <webscript>
     <shortname>datagrid</shortname>
     <description>Return base datagrid</description>
-    <url>/lecm/dictionary/main/datagrid</url>
+    <url>/lecm/dictionary/all/datagrid</url>
     <format default="html">extension</format>
     <authentication>user</authentication>
 </webscript>

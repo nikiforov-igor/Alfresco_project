@@ -19,13 +19,13 @@
 		<!--Toolbar -->
 		<component>
 			<region-id>toolbar</region-id>
-			<url>/lecm/dictionary/main/toolbar</url>
+			<url>/lecm/dictionary/all/toolbar</url>
 		</component>
 
 		<!--Datagrid -->
 		<component>
 			<region-id>datagrid</region-id>
-			<url>/lecm/dictionary/main/datagrid</url>
+			<url>/lecm/dictionary/all/datagrid</url>
 		</component>
 	</components>
 </template-instance>

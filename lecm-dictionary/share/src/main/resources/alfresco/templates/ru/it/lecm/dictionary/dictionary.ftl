@@ -1,35 +1,45 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
+
 <@templateHeader "transitional">
 	<@documentLibraryJS />
-<script type="text/javascript">//<![CDATA[
-new Alfresco.widget.Resizer("DocumentLibrary");
-//]]></script>
+
+	<#assign plane = false/>
+	<#if page.url.args.plane?? && page.url.args.plane == "true">
+		<#assign plane = true/>
+	</#if>
+
+	<script type="text/javascript">//<![CDATA[
+		(function () {
+			<#if !plane>
+				new Alfresco.widget.Resizer("DocumentLibrary");
+			</#if>
+
+			function init() {
+				new LogicECM.module.DictionaryMain().setOptions(
+						{
+							dictionaryName: "${page.url.args.dic!""}",
+							plane: ${plane?string}
+						});
+			}
+
+			YAHOO.util.Event.onDOMReady(init);
+		})();
+	//]]></script>
+
+
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datalists.css" />
+
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
-<!-- Optional CSS for for date editing with Calendar-->
-	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/calendar/assets/skins/sam/calendar.css"/>
-	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/menu/assets/skins/sam/menu.css"/>
-	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/fonts/fonts-min.css"/>
-
-<!-- Dependency source file -->
-    <script type="text/javascript" src="${url.context}/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<!-- Optional dependency source file -->
-	<@script type="text/javascript" src="${url.context}/yui/animation/animation.js"></@script>
-<!-- Optional dependency source file for date editing with Calendar-->
-	<@script type="text/javascript" src="${url.context}/yui/calendar/calendar.js"></@script>
-<!-- Optional dependency source file to decode contents of yuiConfig markup attribute-->
-	<@script type="text/javascript" src="${url.context}/yui/json/json.js"></@script>
-	<@script type="text/javascript" src="${url.context}/yui/menu/menu.js"></@script>
-	<@script type="text/javascript" src="${url.context}/yui/container/container_core.js"></@script>
-
-<!-- TreeView source file -->
-	<@script type="text/javascript" src="${url.context}/yui/treeview/treeview.js"></@script>
 	<@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
-
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/base-share/components/lecm-datagrid-actions.js"></@script>
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
+	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/utils/generate-custom-name.js"></@script>
 
-    <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-actions.js"></script>
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary.js"></@script>
+
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/dictionary/dictionary-actions.js"></@script>
 </@>
 
 <@templateBody>
@@ -40,14 +50,16 @@ new Alfresco.widget.Resizer("DocumentLibrary");
 <div id="bd">
     <div class="yui-t1" id="alfresco-data-lists">
         <div id="yui-main">
-            <div class="yui-b" id="alf-content">
+            <div class="yui-b" id="alf-content" <#if plane>style="margin-left: 0;"</#if>>
                 <@region id="toolbar" scope="template" />
                 <@region id="datagrid" scope="template" />
             </div>
         </div>
-        <div class="yui-b" id="alf-filters">
-	        <@region id="tree" scope="template"/>
-        </div>
+		<#if !plane>
+	        <div class="yui-b" id="alf-filters">
+		        <@region id="tree" scope="template"/>
+	        </div>
+		</#if>
     </div>
 </div>
 </@>

@@ -257,17 +257,13 @@ LogicECM.module = LogicECM.module || {};
                              }
                          }
                      };
-                     Bubbling.fire("activeDataListChanged",
+                     Bubbling.fire("activeGridChanged",
                          {
-                             dataList: {
+	                         datagridMeta: {
                                  description: "",
                                  itemType: nodeType,
                                  name: node.data.type,
                                  nodeRef: node.data.nodeRef,
-                                 permissions: {
-                                     'delete': true,
-                                     'edit': true
-                                 },
                                  title: node.label
                              },
                              scrollTo: true
