@@ -259,7 +259,7 @@ LogicECM.module = LogicECM.module || {};
                                  itemType: nodeType,
 		                         nodeRef: node.data.nodeRef,
 		                         initialSearch: 'PARENT:"' + node.data.nodeRef + '"',
-                                 title: node.label
+                                 title: ""
                              },
                              scrollTo: true
                          });

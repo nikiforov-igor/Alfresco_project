@@ -67,11 +67,11 @@ LogicECM.module = LogicECM.module || {};
 				YAHOO.Bubbling.fire("activeGridChanged",
 					{
 						datagridMeta:{
-							description: this.rootNode.description,
+							description: "",
 							itemType: this.rootNode.itemType,
 							nodeRef: this.rootNode.nodeRef,
 							initialSearch: 'PARENT:"' + this.rootNode.nodeRef + '"',
-							title: this.rootNode.title
+							title: ""
 						},
 						scrollTo:true
 					});
