@@ -47,10 +47,11 @@ public class DelegationRepoWebScript
 		update,
 		delete,
 
+		getrootnode,
 		test;
 
 		public boolean equals (String obj) {
-			return this.toString().equals (obj);
+			return this.toString().equalsIgnoreCase(obj);
 		}
 	};
 
@@ -78,6 +79,11 @@ public class DelegationRepoWebScript
 			return  "{}";
 		}
 		return dummy.toString();
+	}
+
+	@Override
+	public String getProcuracyRootNodeRef() {
+		return delegationService.getProcuracyRootNodeRef();
 	}
 
 	@Override
@@ -134,20 +140,30 @@ public class DelegationRepoWebScript
 
 
 		HashMap<String, Object> model = new HashMap<String, Object> ();
-		if (Action.createDummy.equals (action)) {
+		if (Action.getrootnode.equals (action)) {
+			model.put ("model", getProcuracyRootNodeRef());
+
+		} else if (Action.createDummy.equals (action)) {
 			model.put ("model", createDummy());
+
 		} else if (Action.create.equals (action)) {
 			model.put ("model", createProcuracy (jsonContent));
+
 		} else if (Action.get.equals (action)) {
 			model.put ("model", getProcuracy (jsonContent));
+
 		} else if (Action.find.equals (action)) {
 			model.put ("model", findProcuracyList (jsonContent));
+
 		} else if (Action.update.equals (action)) {
 			model.put ("model", updateProcuracy (jsonContent));
+
 		} else if (Action.delete.equals (action)) {
 			model.put ("model", deleteProcuracy (jsonContent));
+
 		} else if (Action.test.equals (action)) {
 			model.put ("model", test(jsonContent));
+
 		} else {
 			throw new WebScriptException (String.format ("DelegationRepoWebScript was invoked with unknown template arg: %s", action));
 		}

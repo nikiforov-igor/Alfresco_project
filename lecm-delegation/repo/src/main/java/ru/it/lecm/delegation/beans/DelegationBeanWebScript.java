@@ -1,5 +1,6 @@
 package ru.it.lecm.delegation.beans;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -28,6 +29,15 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 		this.proxy = proxy;
 	}
 
+	@Override
+	public String getProcuracyRootNodeRef() {
+		try {
+			final NodeRef nr = proxy.getProcuracyRootNodeRef();
+			return makeSimpleJson("nodeRef", (nr != null) ? nr.toString() : "");
+		} catch (JSONException ex) {
+			throw createAndRegException( ex, "error processing getProcuracyRootNodeRef");
+		}
+	}
 
 	@Override
 	public String createProcuracy(String args) {
@@ -95,6 +105,7 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 	}
 
 	@Override
+	// TODO: possibly NOT temporary method
 	public String test(String /*JSONObject*/ args) {
 		try {
 			final JSONObject jargs = new JSONObject(args);
@@ -104,5 +115,6 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 			throw createAndRegException( ex, "error processing test with args:\n"+ args);
 		}
 	}
+
 
 }

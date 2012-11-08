@@ -8,6 +8,12 @@ package ru.it.lecm.delegation;
 public interface IWebScriptDelegation {
 
 	/**
+	 * Получить NodeRef корневого узла Доверенностей 
+	 * @return json-строку с результатом "nodeRef"="xxx"
+	 */
+	String getProcuracyRootNodeRef();
+
+	/**
 	 * Создание новой доверенности
 	 * @param args json-строка с аргументами (названия соот-ют модели "lecm-ba:delegations")
 	 * @return json-строка с id созданного узла

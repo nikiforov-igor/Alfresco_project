@@ -1,6 +1,6 @@
 package ru.it.lecm.delegation;
 
-import org.json.JSONArray;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONObject;
 
 /**
@@ -16,6 +16,13 @@ public interface IDelegation {
 		, _closed
 		;
 	}
+
+
+	/**
+	 * Получить NodeRef корневого узла Доверенностей 
+	 * @return
+	 */
+	NodeRef getProcuracyRootNodeRef();
 
 	/**
 	 * Создание новой доверенности

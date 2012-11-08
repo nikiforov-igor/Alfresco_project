@@ -150,6 +150,13 @@ public class DelegationBean
 		this.tester = tester;
 	}
 
+	/**
+	 * Получение корневого узла (в Компании), в котором хрянятся все доверенности.
+	 * Если такой узел отсутствует - он здесь НЕ создаётся.
+	 * см. также {@link:ensureDelegationsRootRef}
+	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
+	 * @return
+	 */
 	private NodeRef getDelegationRootRef() {
 		final NodeService nodeService = serviceRegistry.getNodeService();
 		repositoryHelper.init();
@@ -159,9 +166,19 @@ public class DelegationBean
 	}
 
 	/**
-	 * Получение корневого узла (в Компании), в котором хрянятся все доверенности.
-	 * Если такой узел отсутствует - он создаётся.
-	 * @param rootName название узла, если null, то используется по-умолчанию NODE_DEFAULT_DELEGATIONS_ROOT.
+	 * Получение корневого узла, в котором хрянятся все доверенности.
+	 * Если такой узел отсутствует - он создаётся автоматом (внутри CompanyHome).
+	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
+	 * @return
+	 */
+	private NodeRef ensureDelegationsRootRef() {
+		return ensureDelegationsRootRef(NODE_DEFAULT_DELEGATIONS_ROOT);
+	}
+
+	/**
+	 * Получение указанного узла в CompanyHome.
+	 * Если такой узел отсутствует - он создаётся автоматом (внутри CompanyHome).
+	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
 	 * @return
 	 */
 	private NodeRef ensureDelegationsRootRef(String rootName) {
@@ -191,6 +208,7 @@ public class DelegationBean
 				}
 			});
 		}
+		// logger.info( "\n\t(!) all authorities "+ serviceRegistry.getPermissionService().getAllAuthorities());
 		return dictionariesRoot[0];
 	}
 
@@ -224,6 +242,12 @@ public class DelegationBean
 
 
 	@Override
+	public NodeRef getProcuracyRootNodeRef() {
+		return ensureDelegationsRootRef();
+	}
+
+
+	@Override
 	public String createProcuracy(JSONObject args) {
 
 		final NodeService nodeService = serviceRegistry.getNodeService();
@@ -237,7 +261,7 @@ public class DelegationBean
 		}
 
 		/* (!) Обновление данных */
-		final NodeRef rootDelegates = ensureDelegationsRootRef(NODE_DEFAULT_DELEGATIONS_ROOT);
+		final NodeRef rootDelegates = ensureDelegationsRootRef();
 		final ChildAssociationRef ref = nodeService.createNode (
 					rootDelegates
 					, ContentModel.ASSOC_CONTAINS
@@ -308,9 +332,9 @@ public class DelegationBean
 
 
 	/**
-	 *
+	 * 
 	 * @param props
-	 * @return массив вида
+	 * @return массив вида 
 				"prop_lecm-ba_dateUTCBegin": {
 					"value": sss, //значение свойства
 					"displayValue": sss //отображаемое значение свойства
@@ -362,8 +386,23 @@ public class DelegationBean
 		return (value == null) ? null : '"'+ value + '"';
 	}
 
-	final static StringBuilder makeSearch(final StringBuilder dest, JSONObject searchArgs) {
-		dest.append( String.format( "TYPE:\"{%s}%s\"", NSURI_DELEGATIONS, TYPE_PROCURACY));
+	/**
+	 * Сформировать запрос к Доверенностям.
+	 * @param dest целевой буфер
+	 * @param namespace namespace для поиска
+	 * @param typename искомый тип внутри namespace
+	 * @param searchArgs список атрибутов и значений для поиска
+	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
+	 * пример:
+	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
+	 */
+	final static StringBuilder makeSearchQuery(
+				final StringBuilder dest
+				, final String namespace
+				, final String typename
+				, JSONObject searchArgs
+	) {
+		dest.append( String.format( "TYPE:\"{%s}%s\"", namespace, typename));
 		/* добавление условий поиска, если есть */
 		if (searchArgs != null && JSONObject.getNames(searchArgs) != null) {
 			for (String key: JSONObject.getNames(searchArgs)) {
@@ -371,9 +410,9 @@ public class DelegationBean
 					final Object value = searchArgs.get( key);
 					if (value == null) continue;
 
-					// example: +TYPE:"sys:base" -@test\:two:"mustnotmatch"
-					// example: @test\:one:"maymatch" OR @test\:two:"maymatch"
-					// example: @test\:one:"mustmatch" AND NOT @test\:two:"mustnotmatch"
+					// example: +TYPE:"sys:base" -@test\:two:"value_must_not_match"
+					// example: @test\:one:"maymatch" OR @test\:two:"may_match"
+					// example: @test\:one:"mustmatch" AND NOT @test\:two:"value_must_not_match"
 					dest.append(String.format(" AND @%s:%s", key,  quots(value.toString()) ));
 				} catch (JSONException ex) {
 					logger.error("", ex);
@@ -383,14 +422,38 @@ public class DelegationBean
 		return dest;
 	}
 
+	/**
+	 * Сформировать запрос к Доверенностям.
+	 * @param dest целевой буфер
+	 * @param searchArgs список атрибутов и значений для поиска
+	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
+	 * пример:
+	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
+	 */
+	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest, JSONObject searchArgs) {
+		return makeSearchQuery( dest, NSURI_DELEGATIONS, TYPE_PROCURACY, searchArgs);
+	}
+
+	/**
+	 * Выполнить поиск.
+	 * Пример правильного JSON (верно поименованные данные):
+	 * {
+	 * 		"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess":"false"
+	 * 		, "{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate":"false"
+	 */
 	@Override
 	public JSONObject findProcuracyList(JSONObject searchArgs) {
+		// TODO: сейчас тип в ссылках на атрибуты надо указывать полностью, обдумать как перейти на префиксную систему ...
 		/* параметры Lucene поиска */
 		final SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO); // FTS (!)
 
-		final StringBuilder sbQuery = makeSearch( new StringBuilder(), searchArgs);
+		final StringBuilder sbQuery = makeSearchQuery4Procuracy( new StringBuilder(), searchArgs);
+		/*
+		 * Пример сформированногозапроса:
+		 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
+		 */ 
 		sp.setQuery(sbQuery.toString());
 
 		/* поиск */
@@ -417,7 +480,7 @@ public class DelegationBean
 		}
 	}
 
-	static private class JsonParent extends JSONObject {
+	static class JsonParent extends JSONObject {
 		private NodeRef parent;
 
 		public NodeRef getParent() {
@@ -427,8 +490,8 @@ public class DelegationBean
 		public JsonParent(final NodeRef parent) throws JSONException {
 			this.parent = parent;
 			//ссылка на родительский контейнер в котором лежат элементы ("workspace://SpacesStore/%parentId%")
-			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId());
-			put( "nodeRef", parent);
+			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId()); 
+			put( "nodeRef", parent); 
 			put( "permissions", getPermissions(parent) ); // права родительского контейнера
 		}
 
@@ -436,7 +499,7 @@ public class DelegationBean
 		 * Получить права на узел
 		 * @param node
 		 * @return
-		 * @throws JSONException
+		 * @throws JSONException 
 		 */
 		static JSONObject getPermissions(final NodeRef node) throws JSONException {
 			final JSONObject result = new JSONObject();
@@ -454,7 +517,7 @@ public class DelegationBean
 	}
 
 	JSONObject makeResult(final JSONObject result, ResultSet foundSet
-			, NodeRef parent) throws JSONException
+			, NodeRef parent) throws JSONException 
 	{
 		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
 		result.put( "startIndex", 0); //всегда ноль,
@@ -488,7 +551,7 @@ public class DelegationBean
 				final JSONObject obj = new JSONObject();
 				obj.put("nodeRef", row.getNodeRef());
 				obj.put("itemData", makeJsonPropeties(props, serviceRegistry.getNamespaceService()));
-				//временный хардкод для того чтобы actionset-ы в таблице заработали
+				//TODO: временный хардкод для того чтобы actionset-ы в таблице заработали
 				obj.put ("permissions", new JSONObject ("{\"userAccess\":{\"create\": true, \"edit\":true, \"delete\":true}}"));
 				result.put(obj);
 			}
