@@ -43,8 +43,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Center, Alfresco.component.Base, {
 
-		scope:null,
-
 		_onAjaxSuccess: function (event, eventData) {
 			var object = eventData[1];
 			Alfresco.util.PopupManager.displayMessage({text: object});
@@ -56,12 +54,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		},
 
 		onReady: function () {
-			scope = this;
-
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.Center has been created");
 
-			YAHOO.Bubbling.on (LogicECM.module.Delegation.Const.ON_AJAX_SUCCESS, scope._onAjaxSuccess, scope);
-			YAHOO.Bubbling.on (LogicECM.module.Delegation.Const.ON_AJAX_FAILURE, scope._onAjaxFailure, scope);
+			YAHOO.Bubbling.on (LogicECM.module.Delegation.Const.ON_AJAX_SUCCESS, this._onAjaxSuccess, this);
+			YAHOO.Bubbling.on (LogicECM.module.Delegation.Const.ON_AJAX_FAILURE, this._onAjaxFailure, this);
 
 			var dsLocalJSON = new YAHOO.util.LocalDataSource({
 				found: 3,
@@ -103,7 +99,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 			new Alfresco.util.DataTable (dataTableConfig);
 
-			YAHOO.util.Dom.setStyle (scope.id + "-body", "visibility", "visible");
+			YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
 		}
 	});
 })();

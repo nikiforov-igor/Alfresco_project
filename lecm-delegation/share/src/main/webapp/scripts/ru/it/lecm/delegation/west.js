@@ -39,19 +39,16 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.West, Alfresco.component.Base, {
 
-		scope: null,
-
 		onReady: function() {
-			scope = this;
 
 			Alfresco.logger.info("A new LogicECM.module.Delegation.West has been created");
-			scope.initListeners();
-			YAHOO.util.Dom.setStyle (scope.id + "-body", "visibility", "visible");
+			this.initListeners();
+			YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
 		},
 
 		initListeners: function() {
 
-			var container = YAHOO.util.Dom.get(scope.id);
+			var container = YAHOO.util.Dom.get(this.id);
 			Alfresco.util.createYUIButton(container, "myButton", function(event) {
 				Alfresco.logger.info(event.toString());
 				Alfresco.util.Ajax.jsonGet({
@@ -67,11 +64,11 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 //								dataList: {itemType: "lecm-dlg:test-unit"},
 //								scrollTo: true
 //							});
-						},scope: scope},
+						},scope: this},
 					failureCallback: {fn: function(failureResult) { // Callback for failed request, should have the following form: {fn: failureHandler, scope: scopeForFailureHandler}
 							debugger;
 							YAHOO.Bubbling.fire(LogicECM.module.Delegation.Const.ON_AJAX_FAILURE, "shit happend!");
-						},scope: scope}
+						},scope: this}
 				});
 			}, {label: "кнопка label", name: "кнопка name", title: "кнопка title"});
 		}

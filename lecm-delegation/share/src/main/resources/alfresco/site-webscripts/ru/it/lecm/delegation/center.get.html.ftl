@@ -12,6 +12,8 @@
 			usePagination: ${(args.pagination!false)?string},
 			initialFilter: null
 		});
+		datagrid.datalistMeta.nodeRef = ${rootNode}.nodeRef;
+		datagrid.datalistMeta.itemType = "lecm-ba:procuracy";
 		datagrid.setMessages (${messages});
 	})();
 //]]>

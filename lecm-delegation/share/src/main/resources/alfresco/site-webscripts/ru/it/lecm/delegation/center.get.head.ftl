@@ -1,4 +1,5 @@
 <#include "/org/alfresco/components/component.head.inc">
+<#include "/org/alfresco/components/form/form.get.head.ftl">
 
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/ru/it/lecm/delegation/delegation-datagrid.css"/>
 

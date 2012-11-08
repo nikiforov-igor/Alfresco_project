@@ -828,7 +828,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
        */
       _setupDataSource: function DataGrid__setupDataSource()
       {
-//         var listNodeRef = new Alfresco.util.NodeRef(this.datalistMeta.nodeRef);
+         var listNodeRef = new Alfresco.util.NodeRef(this.datalistMeta.nodeRef);
 
          for (var i = 0, ii = this.datalistColumns.length; i < ii; i++)
          {
