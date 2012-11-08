@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LogicECM root namespace.
  *
  * @namespace LogicECM
@@ -127,3 +127,5 @@ LogicECM.module.Header = LogicECM.module.Header || {};
         }
     });
 })();
+
+
