@@ -28,7 +28,7 @@
                  <!--defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"-->
                 <item type="link" id="orgstructure" label="Orgstructure" >/orgstructure</item>
                 <item type="link" id="delegation" label="Delegation" >/delegation</item>
-                <item type="link" id="dictionary" label="Dictionary" >/dictionary</item>
+                <item type="link" id="dictionary" label="Dictionary" >/allDictionary</item>
                 <item type="js" id="jsButton">LogicECM.module.Header.JsButton</item>
                 <item type="js" id="sites">Alfresco.module.Sites</item>
 
