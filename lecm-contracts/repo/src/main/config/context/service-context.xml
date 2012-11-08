@@ -26,6 +26,11 @@
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
 			</list>
 		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-workflow-model</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="LogicECMContracts.workflowBootstrap" parent="lecmWorkflowDeployer">

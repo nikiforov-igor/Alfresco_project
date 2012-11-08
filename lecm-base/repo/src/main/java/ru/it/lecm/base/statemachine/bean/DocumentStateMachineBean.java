@@ -1,7 +1,9 @@
 package ru.it.lecm.base.statemachine.bean;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.extensions.surf.util.I18NUtil;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -27,11 +29,33 @@ public class DocumentStateMachineBean implements InitializingBean {
 		return stateMachines;
 	}
 
+	public Collection<String> getProcesses() {
+		return stateMachines.values();
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (documentType != null && stateMachineId != null) {
 			stateMachines.put(documentType, stateMachineId);
 		}
+	}
+
+	public String getTitle(String processId) {
+		String key = "statemachine";
+		key += "." + processId;
+		key += ".title";
+
+		String message = I18NUtil.getMessage(key, I18NUtil.getLocale());
+		return message == null ? processId : message;
+	}
+
+	public String getDescription(String processId) {
+		String key = "statemachine";
+		key += "." + processId;
+		key += ".description";
+
+		String message = I18NUtil.getMessage(key, I18NUtil.getLocale());
+		return message == null ? processId : message;
 	}
 
 }

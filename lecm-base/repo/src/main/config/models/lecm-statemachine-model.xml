@@ -39,9 +39,6 @@
 				<property name="lecm-statemachine:status">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-					<constraints>
-						<constraint ref="lecm-statemachine:statuses"/>
-					</constraints>
 				</property>
 			</properties>
 		</aspect>

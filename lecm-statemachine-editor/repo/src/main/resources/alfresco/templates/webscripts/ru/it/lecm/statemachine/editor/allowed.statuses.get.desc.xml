@@ -1,7 +1,7 @@
 <webscript>
 	<shortname>Allowed Statuse for Statemachine</shortname>
 	<description>Allowed Statuse for Statemachine</description>
-	<url>/lecm/statemachine/allowedstatuses</url>
+	<url>/lecm/statemachine/editor/allowedstatuses</url>
 	<format default="html">extension</format>
 	<authentication>user</authentication>
 </webscript>
