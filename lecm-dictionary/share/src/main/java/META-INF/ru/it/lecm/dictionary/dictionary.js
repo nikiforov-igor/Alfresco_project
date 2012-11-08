@@ -19,7 +19,7 @@ LogicECM.module = LogicECM.module || {};
 		return LogicECM.module.DictionaryMain.superclass.constructor.call(
 			this,
 			"LogicECM.module.DictionaryMain",
-			"alfresco-data-lists",
+			"lecm-dictionary",
 			["button", "container", "connection", "json"]);
 	};
 
@@ -69,7 +69,7 @@ LogicECM.module = LogicECM.module || {};
 						datagridMeta:{
 							description: this.rootNode.description,
 							itemType: this.rootNode.itemType,
-							nodeRef: this.rootNode.nodeRef,
+							initialSearch: 'PARENT:"' + this.rootNode.nodeRef + '"',
 							title: this.rootNode.title
 						},
 						scrollTo:true

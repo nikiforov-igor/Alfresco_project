@@ -1,4 +1,13 @@
 <#assign id = args.htmlid>
+<style type="text/css">
+	.header-bar
+	{
+		margin-left: -10px;
+		min-height: 2em;
+		padding: 4px 1em;
+	}
+</style>
+
 <script type="text/javascript">//<![CDATA[
 
 (function() {
@@ -54,13 +63,7 @@
 
 <div id="${id}-body" class="datalists">
 	<div id="${id}-headerBar" class="header-bar toolbar flat-button theme-bg-2">
-		<div class="left">
-         <span id="newListButton" class="yui-button yui-push-button new-list">
-             <span class="first-child">
-                 <button type="button">${msg('button.new-list')}</button>
-             </span>
-         </span>
-		</div>
+		<div class="left"></div>
 	</div>
 	<br/>
 	<div id="dictionary" class="ygtv-highlight"></div>

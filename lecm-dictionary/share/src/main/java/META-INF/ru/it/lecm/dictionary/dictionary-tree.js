@@ -76,12 +76,6 @@ LogicECM.module = LogicECM.module || {};
 
             //Добавление дерева
             this._createTree();
-
-            //Добавляем кнопку
-            this.button = new YAHOO.widget.Button("newListButton");
-            this.button.subscribe("click", function () {
-                this._createNode("lecm-dic:dictionary");
-            }.bind(this));
         },
         _createTree: function () {
             tree = new YAHOO.widget.TreeView(this.treeContainer);
@@ -93,6 +87,7 @@ LogicECM.module = LogicECM.module || {};
 	        if (this.rootNode != null) {
 		        var newNode = {
 			        label:this.rootNode.title,
+			        description: this.rootNode.description,
 			        nodeRef:this.rootNode.nodeRef,
 			        isLeaf:false,
 			        expanded: true,
@@ -262,8 +257,7 @@ LogicECM.module = LogicECM.module || {};
 	                         datagridMeta: {
                                  description: "",
                                  itemType: nodeType,
-                                 name: node.data.type,
-                                 nodeRef: node.data.nodeRef,
+		                         initialSearch: 'PARENT:"' + node.data.nodeRef + '"',
                                  title: node.label
                              },
                              scrollTo: true
@@ -277,25 +271,6 @@ LogicECM.module = LogicECM.module || {};
              };
 
              YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-        },
-        _createNode:function createNodeByType(type) {
-            var templateUrl = this._createUrl("create", nodeDictionary, type);
-
-            new Alfresco.module.SimpleDialog("form-dialog").setOptions({
-                width:"40em",
-                templateUrl:templateUrl,
-                actionUrl:null,
-                destroyOnHide:true,
-                doBeforeDialogShow:{
-                    fn:this._setFormDialogTitle
-                },
-                onSuccess:{
-                    fn:function () {
-                        this._createTree();
-                    },
-                    scope:this
-                }
-            }).show();
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", event.node.data.nodeRef);

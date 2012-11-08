@@ -27,9 +27,6 @@
 		})();
 	//]]></script>
 
-
-	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datalists.css" />
-
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/base-share/components/lecm-datagrid-actions.js"></@script>
@@ -48,7 +45,7 @@
     <@region id="title" scope="template"/>
 </div>
 <div id="bd">
-    <div class="yui-t1" id="alfresco-data-lists">
+    <div class="yui-t1" id="lecm-dictionary">
         <div id="yui-main">
             <div class="yui-b" id="alf-content" <#if plane>style="margin-left: 0;"</#if>>
                 <@region id="toolbar" scope="template" />
