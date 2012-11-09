@@ -75,7 +75,8 @@
 	    <module>lecm-dictionary-regions</module>
 	    <module>lecm-dictionary-test</module>
 	    <module>lecm-contracts</module>
-	    <module>lecm-theme</module>
+		<module>lecm-statemachine-editor</module>
+		<module>lecm-theme</module>
 	    <module>lecm-delegation</module>
     </modules>
     <scm>
