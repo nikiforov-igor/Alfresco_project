@@ -540,6 +540,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
+
+	            Bubbling.fire("initDatagrid",
+		            {
+			            datagrid: this
+		            });
             },
 
             /**
