@@ -127,6 +127,18 @@
 			            disabled: true
 		            });
 
+	            var me = this;
+	            var searchInput = Dom.get("dictionaryFullSearchInput");
+	            new YAHOO.util.KeyListener(searchInput,
+		            {
+			            keys: 13
+		            },
+		            {
+			            fn: me.onSearch,
+			            scope: this,
+			            correctScope: true
+		            }, "keydown").enable();
+
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
 
