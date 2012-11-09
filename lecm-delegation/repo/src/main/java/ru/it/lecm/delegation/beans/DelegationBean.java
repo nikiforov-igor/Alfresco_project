@@ -392,6 +392,7 @@ public class DelegationBean
 	 * @param namespace namespace для поиска
 	 * @param typename искомый тип внутри namespace
 	 * @param searchArgs список атрибутов и значений для поиска
+	 * @param parentNode 
 	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
 	 * пример:
 	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
@@ -401,8 +402,15 @@ public class DelegationBean
 				, final String namespace
 				, final String typename
 				, JSONObject searchArgs
+				, NodeRef parentNode
 	) {
+		/* фиксируем тип Доверенностей... */
 		dest.append( String.format( "TYPE:\"{%s}%s\"", namespace, typename));
+
+		/* если задан родитель - добавляем ... */
+		if (parentNode != null)
+			dest.append( String.format( " AND PARENT:\"%s\"", parentNode));
+
 		/* добавление условий поиска, если есть */
 		if (searchArgs != null && JSONObject.getNames(searchArgs) != null) {
 			for (String key: JSONObject.getNames(searchArgs)) {
@@ -426,12 +434,14 @@ public class DelegationBean
 	 * Сформировать запрос к Доверенностям.
 	 * @param dest целевой буфер
 	 * @param searchArgs список атрибутов и значений для поиска
+	 * @param parentNode родительский узел для поиска внутри него, если null, то не используется 
 	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
 	 * пример:
 	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
 	 */
-	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest, JSONObject searchArgs) {
-		return makeSearchQuery( dest, NSURI_DELEGATIONS, TYPE_PROCURACY, searchArgs);
+	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest 
+			, JSONObject searchArgs, NodeRef parentNode) {
+		return makeSearchQuery( dest, NSURI_DELEGATIONS, TYPE_PROCURACY, searchArgs, parentNode);
 	}
 
 	/**
@@ -449,10 +459,11 @@ public class DelegationBean
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO); // FTS (!)
 
-		final StringBuilder sbQuery = makeSearchQuery4Procuracy( new StringBuilder(), searchArgs);
+		final StringBuilder sbQuery = makeSearchQuery4Procuracy( new StringBuilder(), searchArgs, getDelegationRootRef());
+
 		/*
 		 * Пример сформированногозапроса:
-		 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
+		 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND PARENT:"workspace://SpacesStore/6081c936-e68c-4ecf-a273-04a2a4c53f74" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
 		 */ 
 		sp.setQuery(sbQuery.toString());
 
@@ -474,6 +485,7 @@ public class DelegationBean
 		return result;
 	}
 
+	// пока непонятная секция
 	static private class JsonMetaDataSection extends JSONObject {
 		public JsonMetaDataSection(final NodeRef parent)  throws JSONException {
 			put( "parent", new JsonParent(parent));
@@ -521,7 +533,7 @@ public class DelegationBean
 	{
 		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
 		result.put( "startIndex", 0); //всегда ноль,
-		result.put( "metadata", new JsonMetaDataSection(parent)); // пока непонятная секция
+		result.put( "metadata", new JsonMetaDataSection(parent)); 
 
 		result.put( "items", makeItems(foundSet)); // массив с данными (JSONArray) которые мы отображаем в таблице
 		return result;
@@ -605,6 +617,7 @@ public class DelegationBean
 			}
 
 			logger.info( "performing test '"+ testName+ "'");
+			tester.setConfig(args);
 			if (TestAction.test1.eq(testName)) {
 				copyJson( result, tester.runTest(1));
 			} else if (TestAction.test2.eq(testName)) {
@@ -852,4 +865,41 @@ public class DelegationBean
 		return null; // NOT FOUND
 	}
 
+	/*
+	public class SecureAccessor 
+		implements net.sf.acegisecurity.afterinvocation.AfterInvocationProvider
+	{
+		// net.sf.acegisecurity.afterinvocation.AfterInvocationProvider
+		// org.alfresco.repo.security.permissions.dynamic.OwnerDynamicAuthority;
+
+		private static final String AFTER_ACL_NODE = "AFTER_ACL_NODE";
+		private static final String AFTER_ACL_PARENT = "AFTER_ACL_PARENT";
+
+		@Override
+		public boolean supports(ConfigAttribute attribute)
+		{
+			return (attribute.getAttribute() != null) 
+					&& (
+						attribute.getAttribute().startsWith(AFTER_ACL_NODE) 
+						|| attribute.getAttribute().startsWith(AFTER_ACL_PARENT)
+					);
+		}
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		public boolean supports(Class clazz)
+		{
+			return (MethodInvocation.class.isAssignableFrom(clazz));
+		}
+
+		@Override
+		public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) 
+				throws AccessDeniedException 
+		{
+			logger.info("checking object "+ (returnedObject == null ? "NULL" : returnedObject.getClass() + " \n"+ returnedObject.toString()));
+			return returnedObject;
+		}
+
+	}
+	*/
 }
