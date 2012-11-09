@@ -263,6 +263,7 @@ LogicECM.module = LogicECM.module || {};
                              },
                              scrollTo: true
                          });
+	                 YAHOO.Bubbling.fire("hideFilteredLabel");
                  },
                  failure:function (oResponse) {
                      alert("Failed to load type. " + "[" + oResponse.statusText + "]");

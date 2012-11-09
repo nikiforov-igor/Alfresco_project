@@ -419,6 +419,8 @@
 								datagridMeta:datagridMeta,
 								scrollTo:true
 							});
+
+						YAHOO.Bubbling.fire("showFilteredLabel");
 					}
 				}
 			},
