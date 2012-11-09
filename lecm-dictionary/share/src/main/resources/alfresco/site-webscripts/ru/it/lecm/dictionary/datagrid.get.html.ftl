@@ -171,7 +171,10 @@
 	function init() {
 		loadDictionary();
 
-		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}");
+		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
+				{
+					width: "487px"
+				});
 	}
 
 	YAHOO.util.Event.onDOMReady(init);
