@@ -145,7 +145,7 @@
 						<many>false</many>
 					</source>
 					<target>
-						<class>lecm-orgstr:official</class>
+						<class>lecm-orgstr:employee</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
@@ -158,7 +158,7 @@
 						<many>false</many>
 					</source>
 					<target>
-						<class>lecm-orgstr:official</class>
+						<class>lecm-orgstr:employee</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
