@@ -29,6 +29,7 @@ if (statemachineId != null && statemachineId != '') {
 	for each (var status in machineStatuses) {
 		statuses.push({
 			name: status.properties["cm:name"],
+			nodeRef: status.nodeRef.toString(),
 			actions: []
 		});
 	}

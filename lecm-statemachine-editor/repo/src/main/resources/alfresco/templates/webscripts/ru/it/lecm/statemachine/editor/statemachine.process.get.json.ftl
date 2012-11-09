@@ -5,6 +5,7 @@
     <#list statuses as status>
         {
             name: "${status.name}",
+            nodeRef: "${status.nodeRef}",
             actions: [
                 {
                     action: "Action 1",

@@ -40,6 +40,8 @@ LogicECM.module = LogicECM.module || {};
 		statemachineId: null,
 		packageNodeRef: null,
 		layout: null,
+		menu: null,
+		currentStatus: null,
 		options:{},
 
 		setMessages:function (messages) {
@@ -67,6 +69,16 @@ LogicECM.module = LogicECM.module || {};
 				this._redraw();
 			}.bind(this));
 			this.layout.render();
+
+			this.menu = new YAHOO.widget.Menu("actionsmenu");
+			this.menu.addItems([
+				{ text: "Yahoo! Mail", value: "1" },
+				{ text: "Yahoo! Address Book", value: "2" },
+				{ text: "Yahoo! Calendar", value: "http://calendar.yahoo.com" },
+				{ text: "Yahoo! Notepad",  value: "http://notepad.yahoo.com" }
+			]);
+			this.menu.render(document.body);
+			this.menu.subscribe("click", this._addAction.bind(this));
 		},
 
 		onResize: function() {
@@ -155,9 +167,17 @@ LogicECM.module = LogicECM.module || {};
 			//action_name header
 			var actionName = document.createElement("div");
 			actionName.id = id + "-action-name-header";
-			actionName.innerHTML = "<b>Действия</b> <a class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+			actionName.innerHTML = "<b>Действия</b> <a id='" + actionName.id + "-add' class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
 			action.appendChild(actionName);
 			Dom.addClass(actionName.id, "action_name");
+
+			var addAction = new YAHOO.util.Element(actionName.id + "-add");
+			addAction.on("click", function (event) {
+				this.currentStatus = model.nodeRef;
+				this.menu.moveTo(event.x, event.y);
+				this.menu.show();
+			}.bind(this));
+
 			//action_results header
 			var actionResults = document.createElement("div");
 			actionResults.id = id + "-action-resilts-header";
@@ -214,6 +234,11 @@ LogicECM.module = LogicECM.module || {};
 					scope:this
 				}
 			}).show();
+		},
+		_addAction: function(p_sType, p_aArgs) {
+			var oEvent = p_aArgs[0],    // DOM Event
+			oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
+			alert("123");
 		}
 	});
 
