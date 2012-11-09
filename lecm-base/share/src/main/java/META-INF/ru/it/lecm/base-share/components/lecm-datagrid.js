@@ -1817,7 +1817,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Update the DataSource
                 var requestParams = this.modules.search._buildSearchParams("", YAHOO.lang.JSON.stringify(initialData), initialSearch, "", this.dataRequestFields.join(","));
-                this.widgets.dataSource.sendRequest(requestParams,
+                this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,
                         failure:failureHandler,
