@@ -311,7 +311,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var searchTerm = YAHOO.lang.trim(args.searchTerm),
                     searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
-                    searchFilter = args.searchFilter;
+                    searchFilter = args.searchFilter,
+	                fullTextSearch = args.fullTextSearch;
 
                 var reqFields = [];
                 for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
@@ -364,7 +365,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                 }
 
-                var searchParams = this._buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, fields);
+                var searchParams = this._buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, fields, fullTextSearch);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -378,7 +379,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._performSearch(obj);
             },
 
-            _buildSearchParams:function Search__buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, searchFields) {
+            _buildSearchParams:function Search__buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
                 var request =
                 {
                     params:{
@@ -387,7 +388,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         query:searchQuery,
                         filter:searchFilter,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
-                        fields:searchFields
+                        fields:searchFields,
+	                    fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
                     }
                 };
                 return request;

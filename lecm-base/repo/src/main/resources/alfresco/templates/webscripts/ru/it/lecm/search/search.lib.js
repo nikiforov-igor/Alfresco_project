@@ -135,7 +135,8 @@ function getSearchResults(params) {
         formData = params.query,
         fields = params.fields,
         filter = params.filter,
-        sort = params.sort;
+        sort = params.sort,
+        fullTextSearch = params.fullTextSearch;
 
     // Simple keyword search and tag specific search
     if (term !== null && term.length() > 0) {
@@ -164,7 +165,7 @@ function getSearchResults(params) {
     // - always string values - interogate DD for type data
     if (formData !== null && formData.length() > 0) {
         var formQuery = "",
-            formJson = jsonUtils.toObject(formData);
+	        formJson = jsonUtils.toObject(formData);
 
         // extract form data and generate search query
         var first = true;
@@ -251,14 +252,49 @@ function getSearchResults(params) {
             }
         }
 
-        if (formQuery.length > 0 || ftsQuery.length !== 0 || formData.length() > 0) {
-            // extract data type for this search - advanced search query is type specific
-            ftsQuery = (formJson.datatype != null && formJson.datatype.length > 0 ? 'TYPE:"' + formJson.datatype + '"' : '') +
-                (formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
-                (filter.length() !== 0 ? ' AND (' + filter + ')' : '') +
-                (ftsQuery.length !== 0 ? ' AND (' + ftsQuery + ')' : '');
-        }
-    }
+		var fullTextSearchQuery = "";
+		if (fullTextSearch != "") {
+			var fullTextSearchJson = jsonUtils.toObject(fullTextSearch);
+
+			var parentNodeRef = fullTextSearchJson["parentNodeRef"];
+			logger.log("parentNodeRef = " + parentNodeRef);
+			if (parentNodeRef !== null && parentNodeRef.length > 0) {
+				var parentNode = search.findNode(parentNodeRef);
+				if (parentNode != null) {
+					var xpath = parentNode.getQnamePath();
+					fullTextSearchQuery += " +PATH:\""+xpath + "//*\"";
+				}
+			}
+
+			var fields = fullTextSearchJson["fields"];
+			logger.log("fields = " + fields);
+			var searchTerm = fullTextSearchJson["searchTerm"];
+			logger.log("searchTerm = " + searchTerm);
+			if (fields !== null && fields.length > 0 && searchTerm !== null && searchTerm.length > 0) {
+				var columns = fields.split(",");
+				var fieldsQuery = "";
+
+				for (var i = 0; i < columns.length; i++) {
+					fieldsQuery += this.escapeQName(columns[i]) + ":" + searchTerm + "* OR ";
+				}
+				if (fieldsQuery.length > 5) {
+					fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
+					fullTextSearchQuery += " AND (" + fieldsQuery + ")";
+				}
+			}
+		}
+
+		logger.log("fullTextSearchQuery = " + fullTextSearchQuery);
+
+		if (formQuery.length > 0 || ftsQuery.length !== 0 || formData.length() > 0 || fullTextSearchQuery.length() > 0) {
+			// extract data type for this search - advanced search query is type specific
+			ftsQuery = (formJson.datatype != null && formJson.datatype.length > 0 ? 'TYPE:"' + formJson.datatype + '"' : '') +
+				(formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
+				(filter.length() !== 0 ? ' AND (' + filter + ')' : '') +
+				(ftsQuery.length !== 0 ? ' AND (' + ftsQuery + ')' : '') +
+				(fullTextSearchQuery.length !== 0 ? ' AND (' + fullTextSearchQuery + ')' : '');
+		}
+	}
 
     if (ftsQuery.length !== 0) {
         // ensure a TYPE is specified - if no add one to remove system objects from result sets

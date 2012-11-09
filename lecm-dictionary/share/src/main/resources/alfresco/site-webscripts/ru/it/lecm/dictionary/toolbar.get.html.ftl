@@ -22,6 +22,16 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
         background: url(/share/res/components/images/delete-row-16.png) no-repeat 12px 4px;
         padding-left: 24px;
     }
+    .datalist-toolbar .search span.first-child
+    {
+	    background: url(/share/res/components/images/search-16-gray.png) no-repeat 12px 4px;
+	    padding-left: 24px;
+    }
+	#${id}-searchInput
+	{
+		display: inline-block;
+		vertical-align: text-bottom;
+	}
 </style>
 
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
@@ -57,8 +67,15 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 			</div>
 		</div>
 
-		<div class="right" style="display: none;">
-
+		<div class="right">
+			<span id="${id}-searchInput">
+				<input type="text" id="dictionaryFullSearchInput" value="">
+			</span>
+			<span id="${id}-searchButton" class="yui-button yui-push-button search">
+				<span class="first-child">
+					<button type="button" title="${msg('button.search')}"/>
+				</span>
+			</span>
 		</div>
 	</div>
 </div>

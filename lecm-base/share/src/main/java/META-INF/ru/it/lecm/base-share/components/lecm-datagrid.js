@@ -1032,7 +1032,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         searchTerm: "",
                         searchSort:"",
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
-                        searchFilter:initialSearch
+                        searchFilter:initialSearch,
+	                    fullTextSearch: this.datagridMeta.fullTextSearch
                     });
             },
 
