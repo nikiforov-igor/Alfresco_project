@@ -256,7 +256,7 @@
 	   </div>
 
 	   <form id="uploadForm" enctype="multipart/form-data" method="post" target=uploadFrame
-	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
+	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
 			<p><input type="file" name="f">
 			<input type="submit" value="Import"></p>
 	   </form>

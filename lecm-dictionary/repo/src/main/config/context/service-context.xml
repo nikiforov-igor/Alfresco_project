@@ -74,4 +74,12 @@
 	    <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
+    <bean id="webscript.ru.it.lecm.dictionary.import-csv.post"
+          class="ru.it.lecm.dictionary.imports.ImportCSV"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="namespaceService" ref="namespaceService"/>
+    </bean>
+
 </beans>

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Import CSV</shortname>
+    <description>Import CSV</description>
+    <url>/lecm/dictionary/post/import-csv</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

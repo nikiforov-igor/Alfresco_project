@@ -37,6 +37,14 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
                    </span>
                 </span>
 			</div>
+			<div class="file-upload">
+               <span id="${id}-fileUpload-button" class="yui-button yui-push-button">
+                  <span class="first-child">
+                     <button name="fileUpload">${msg("button.upload")}</button>
+                  </span>
+               </span>
+			</div>
+			<div id="uploaderUI" style="width:100px;height:40px;margin-left:5px;float:left"></div>
 		</div>
 
 		<div class="right">
