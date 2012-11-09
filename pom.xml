@@ -76,6 +76,7 @@
 	    <module>lecm-dictionary-test</module>
 	    <module>lecm-contracts</module>
 	    <module>lecm-theme</module>
+	    <module>lecm-delegation</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

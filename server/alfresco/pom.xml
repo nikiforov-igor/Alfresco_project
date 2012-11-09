@@ -17,69 +17,69 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>ru.it.lecm</groupId>
-        <artifactId>server</artifactId>
-        <version>0.1.0</version>
-    </parent>
+	<parent>
+		<groupId>ru.it.lecm</groupId>
+		<artifactId>server</artifactId>
+		<version>0.1.0</version>
+	</parent>
 
-    <groupId>ru.it.lecm.server</groupId>
+	<groupId>ru.it.lecm.server</groupId>
 	<artifactId>server-alfresco</artifactId>
 	<name>Alfresco extension</name>
 	<packaging>war</packaging>
 	<url></url>
 
 	<description>Alfresco extension</description>
-    <!-- oOo SINGLE POINT OF CONFIGURATION FOR COMMON ALFRESCO PROPERTIES oOo -->
+	<!-- oOo SINGLE POINT OF CONFIGURATION FOR COMMON ALFRESCO PROPERTIES oOo -->
 	<properties>
-        <!-- Build environment ==> src/main/properties/<env>/alfresco-global.properties is loaded -->
-        <!--<env>local</env>-->
-        <!-- Webapp packaged name -->
-        <webapp.name>alfresco</webapp.name>
-        <!--
-            | Empty log dir creates file alfresco.log in the current root folder.
-            | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' ) 
-            | Jetty embedded run logs by default in ${project.basedir}/alfresco.log
-            -->
-        <log.dir></log.dir>
-        <!-- 
-         | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where 
-         | alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
-         | DEFAULT: alf_data_jetty relativel to run dir 
-         -->
-        <!-- For env=local DB is also configurable here. Of course keep in sync these two values otherwise you'll get integrity errors. Default Mysql-->
-        <alfresco.data.location>./alf_data_jetty</alfresco.data.location>
-        <alfresco.db.name>alfresco_dev</alfresco.db.name>
-        <alfresco.db.driver>com.mysql.jdbc.Driver</alfresco.db.driver>
-        <alfresco.db.username>alfresco</alfresco.db.username>
-        <alfresco.db.password>alfresco</alfresco.db.password>
-        <alfresco.db.params>MODE=PostgreSQL;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;MVCC=TRUE</alfresco.db.params>
-        <alfresco.db.url>jdbc:mysql://localhost/${alfresco.db.name}?useUnicode=yes&amp;characterEncoding=UTF-8</alfresco.db.url>
-        <alfresco.db.datasource.class>org.h2.jdbcx.JdbcDataSource</alfresco.db.datasource.class>
+		<!-- Build environment ==> src/main/properties/<env>/alfresco-global.properties is loaded -->
+		<!--<env>local</env>-->
+		<!-- Webapp packaged name -->
+		<webapp.name>alfresco</webapp.name>
+		<!--
+		 | Empty log dir creates file alfresco.log in the current root folder.
+		 | You can also specify a meaningful log directory for the server (add a trailing slash, e.g. '/var/log/alfresco/' )
+		 | Jetty embedded run logs by default in ${project.basedir}/alfresco.log
+		-->
+		<log.dir></log.dir>
+		<!--
+		 | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where
+		 | alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
+		 | DEFAULT: alf_data_jetty relativel to run dir
+		 -->
+		<!-- For env=local DB is also configurable here. Of course keep in sync these two values otherwise you'll get integrity errors. Default Mysql-->
+		<alfresco.data.location>./alf_data_jetty</alfresco.data.location>
+		<alfresco.db.name>alfresco_dev</alfresco.db.name>
+		<alfresco.db.driver>com.mysql.jdbc.Driver</alfresco.db.driver>
+		<alfresco.db.username>alfresco</alfresco.db.username>
+		<alfresco.db.password>alfresco</alfresco.db.password>
+		<alfresco.db.params>MODE=PostgreSQL;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;MVCC=TRUE</alfresco.db.params>
+		<alfresco.db.url>jdbc:mysql://localhost/${alfresco.db.name}?useUnicode=yes&amp;characterEncoding=UTF-8</alfresco.db.url>
+		<alfresco.db.datasource.class>org.h2.jdbcx.JdbcDataSource</alfresco.db.datasource.class>
 
-        <!-- DEPRECATED -->
-        <desktop.action.package>org.alfresco.filesys.repo.desk</desktop.action.package>
-        <!--
-            | Uncomment this property together with the <scm> section downwards
-            |
-            | <svn.url> https://mycompany.com/repos/my-test-project </svn.url>
-            -->
-        <!--
-            | Uncomment this property together with the maven-release-plugin <plugin><configuration><tagBase/></configuration></plugin> section downwards
-            |  <svn.tags.url>${svn.url}/tags</svn.tags.url>
-            -->
-        <!--
-            These redundancies are due to filtering issues of Maven. See here
-            http://maven.apache.org/plugins/maven-site-plugin/usage.html
-        -->
-        <site_pom_description>${project.description}</site_pom_description>
-        <site_pom_url>${project.organization.url}</site_pom_url>
-        <site_pom_groupId>${project.groupId}</site_pom_groupId>
-        <site_pom_artifactId>${project.artifactId}</site_pom_artifactId>
-        <site_pom_version>${project.version}</site_pom_version>
-        <!--<site_tags_url>${svn.tags.url}</site_tags_url>-->
-        <!--<site_site_url>${site.url}</site_site_url>-->
-    </properties>
+		<!-- DEPRECATED -->
+		<desktop.action.package>org.alfresco.filesys.repo.desk</desktop.action.package>
+		<!--
+		 | Uncomment this property together with the <scm> section downwards
+		 |
+		 | <svn.url> https://mycompany.com/repos/my-test-project </svn.url>
+		 -->
+		<!--
+		 | Uncomment this property together with the maven-release-plugin <plugin><configuration><tagBase/></configuration></plugin> section downwards
+		 |  <svn.tags.url>${svn.url}/tags</svn.tags.url>
+		 -->
+		<!--
+		 These redundancies are due to filtering issues of Maven. See here
+		 http://maven.apache.org/plugins/maven-site-plugin/usage.html
+		-->
+		<site_pom_description>${project.description}</site_pom_description>
+		<site_pom_url>${project.organization.url}</site_pom_url>
+		<site_pom_groupId>${project.groupId}</site_pom_groupId>
+		<site_pom_artifactId>${project.artifactId}</site_pom_artifactId>
+		<site_pom_version>${project.version}</site_pom_version>
+		<!--<site_tags_url>${svn.tags.url}</site_tags_url>-->
+		<!--<site_site_url>${site.url}</site_site_url>-->
+	</properties>
 
 
 	<!-- Alfresco dependencies -->
@@ -87,8 +87,8 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco</artifactId>
-            <version>${alfresco.version}</version>
-            <type>war</type>
+			<version>${alfresco.version}</version>
+			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
@@ -109,37 +109,35 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.base</groupId>
-            <artifactId>base-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.orgstructure</groupId>
-            <artifactId>orgstructure-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.experts</groupId>
-            <artifactId>experts-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.forms.jasperforms</groupId>
-            <artifactId>jasperforms-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.experts</groupId>
+			<artifactId>experts-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.forms.jasperforms</groupId>
+			<artifactId>jasperforms-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.dictionary</groupId>
 			<artifactId>dictionary-repo</artifactId>
@@ -154,16 +152,23 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.dictionary</groupId>
-            <artifactId>dictionary-test-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.dictionary</groupId>
+			<artifactId>dictionary-test-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.contracts</groupId>
 			<artifactId>contracts-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.delegation</groupId>
+			<artifactId>lecm-delegation-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -173,15 +178,15 @@
 	<build>
 		<finalName>${webapp.name}</finalName>
 		<!--
-			In certain cases we do build time filtering with the single sourcing
-			alfresco-global.properties
+		 | In certain cases we do build time filtering with the single sourcing
+		 | alfresco-global.properties
 		-->
 		<!--<filters>-->
-			<!--<filter>${project.basedir}/src/main/properties/${env}/alfresco-global.properties</filter>-->
+		<!--<filter>${project.basedir}/src/main/properties/${env}/alfresco-global.properties</filter>-->
 		<!--</filters>-->
 		<!--
-			Default profile to build as an Alfresco extension - resources are
-			copied into classpath
+		 | Default profile to build as an Alfresco extension - resources are
+		 | copied into classpath
 		-->
 		<resources>
 			<!-- By default also no content is restored -->
@@ -192,10 +197,10 @@
 					<exclude>**/ldap-*.xml</exclude>
 				</excludes>
 			</resource>
-            <!--
-                | Include application properties file in classpath: this allows Spring contexts to have customization properties available at 
-                | classpath:alfresco-global.properties
-                -->
+			<!--
+			 | Include application properties file in classpath: this allows Spring contexts to have customization properties available at
+			 | classpath:alfresco-global.properties
+			-->
 			<!--<resource>-->
 				<!--<directory>src/main/properties/${env}</directory>-->
 				<!--<includes>-->
@@ -220,40 +225,40 @@
 			</resource>
 		</resources>
 
-        <plugins>
-            <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
-                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described 
-                        | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
-                        -->
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
-            </plugin>
-            <!--
-                useful for eclipse project configuration. Run "mvn eclipse:eclipse"
-                and hit "F5" on the project
-            -->
+		<plugins>
+			<!-- Needed for cross OS compatibility in acp/zip encoding -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
+					 | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
+					 | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
+					-->
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<!--
+			 | useful for eclipse project configuration. Run "mvn eclipse:eclipse"
+			 | and hit "F5" on the project
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.8</version>
 				<!--
-					<configuration> <downloadSources>true</downloadSources>
-					</configuration>
+				 | <configuration> <downloadSources>true</downloadSources>
+				 | </configuration>
 				-->
 			</plugin>
 			<!-- Add documentation locales here -->
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
-                <version>3.0</version>
+				<version>3.0</version>
 				<configuration>
 					<locales>en</locales>
 				</configuration>
@@ -261,7 +266,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
+				<version>2.3</version>
 				<executions>
 					<execution>
 						<id>unpack-amps</id>
@@ -278,9 +283,9 @@
 				</executions>
 				<dependencies>
 					<!--
-						This is required to be re-defined explicitly at plugin level as
-						otherwise the 'amp' extension unArchiver won't be available to the
-						maven-dependency-plugin
+					 | This is required to be re-defined explicitly at plugin level as
+					 | otherwise the 'amp' extension unArchiver won't be available to the
+					 | maven-dependency-plugin
 					-->
 					<dependency>
 						<groupId>org.alfresco.maven.plugin</groupId>
@@ -292,7 +297,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+				<version>2.1.1</version>
 				<configuration>
 					<archiveClasses>false</archiveClasses>
 					<webappDirectory>target/${webapp.name}</webappDirectory>
@@ -314,14 +319,13 @@
 					<!-- useEditMode>true</useEditMode> -->
 					<dryRun>true</dryRun>
 					<preparationGoals>clean package</preparationGoals>
-					<goals>install deploy cargo:undeploy cargo:deploy
-						site:deploy</goals>
+					<goals>install deploy cargo:undeploy cargo:deploy site:deploy</goals>
 					<!-- <tagBase>${svn.tags.url}</tagBase> -->
 				</configuration>
 			</plugin>
 			<!--
-				Adds support for books PDF and RTF generation for single sourced
-				documentation
+			 | Adds support for books PDF and RTF generation for single sourced
+			 | documentation
 			-->
 			<plugin>
 				<groupId>org.apache.maven.doxia</groupId>
@@ -337,9 +341,9 @@
 				</executions>
 				<configuration>
 					<!--
-						| Target books dir: within the site so it can be linked and
-						deployed | TODO: Use ${project.target.dir} or so similar property
-						instead of | hard wiring 'target'
+					 | Target books dir: within the site so it can be linked and deployed
+					 | TODO: Use ${project.target.dir} or so similar property instead of
+					 | hard wiring 'target'
 					-->
 					<generatedDocs>target/site/books</generatedDocs>
 					<books>
@@ -368,39 +372,39 @@
 			<!-- Targeting 1.6 -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-                    <encoding>UTF-8</encoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
+				<version>2.12</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
+				<version>2.8.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jxr-maven-plugin</artifactId>
-                <version>2.0-beta-1</version>
+				<version>2.0-beta-1</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-clover-plugin</artifactId>
-                <version>2.4</version>
+				<version>2.4</version>
 			</plugin>
 			<!--
-				Enable this plugin only after setting SCM connection, otherwise mvn
-				site will fail <plugin> <groupId>org.codehaus.mojo</groupId>
-				<artifactId>changelog-maven-plugin</artifactId> </plugin>
+			 | Enable this plugin only after setting SCM connection, otherwise mvn
+			 | site will fail <plugin> <groupId>org.codehaus.mojo</groupId>
+			 | <artifactId>changelog-maven-plugin</artifactId> </plugin>
 			-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
-                <version>2.4</version>
+				<version>2.4</version>
 			</plugin>
 		</plugins>
 	</reporting>
