@@ -391,32 +391,35 @@
 				if (this.modules.dataGrid)
 				{
 					var searchTerm = Dom.get("dictionaryFullSearchInput").value;
-					var dataGrid = this.modules.dataGrid;
-					var datagridMeta = dataGrid.datagridMeta;
-					var columns = dataGrid.datagridColumns;
 
-					var fields = "";
-					for (var i = 0; i < columns.length; i++) {
-						if (columns[i].dataType == "text") {
-							fields += columns[i].name + ",";
+					if (searchTerm.length > 0) {
+						var dataGrid = this.modules.dataGrid;
+						var datagridMeta = dataGrid.datagridMeta;
+						var columns = dataGrid.datagridColumns;
+
+						var fields = "";
+						for (var i = 0; i < columns.length; i++) {
+							if (columns[i].dataType == "text") {
+								fields += columns[i].name + ",";
+							}
 						}
-					}
-					if (fields.length > 1) {
-						fields = fields.substring(0, fields.length - 1);
-					}
-					var fullTextSearch = {
-						parentNodeRef: datagridMeta.nodeRef,
-						fields: fields,
-						searchTerm: searchTerm
-					}
-					datagridMeta.initialSearch = "";
-					datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+						if (fields.length > 1) {
+							fields = fields.substring(0, fields.length - 1);
+						}
+						var fullTextSearch = {
+							parentNodeRef: datagridMeta.nodeRef,
+							fields: fields,
+							searchTerm: searchTerm
+						}
+						datagridMeta.initialSearch = "";
+						datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
-					YAHOO.Bubbling.fire("activeGridChanged",
-						{
-							datagridMeta:datagridMeta,
-							scrollTo:true
-						});
+						YAHOO.Bubbling.fire("activeGridChanged",
+							{
+								datagridMeta:datagridMeta,
+								scrollTo:true
+							});
+					}
 				}
 			},
 
