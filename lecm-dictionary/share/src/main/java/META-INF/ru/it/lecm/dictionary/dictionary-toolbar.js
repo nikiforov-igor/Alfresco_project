@@ -60,7 +60,7 @@
     /**
      * Augment prototype with Common Actions module
      */
-    YAHOO.lang.augmentProto(Alfresco.component.DataListToolbar, Alfresco.service.DataListActions);
+    YAHOO.lang.augmentProto(Alfresco.component.DataListToolbar, LogicECM.module.Base.DataActions);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
@@ -126,9 +126,6 @@
 		            {
 			            disabled: true
 		            });
-
-                // DataList Actions module
-                this.modules.actions = new Alfresco.module.DataListActions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");

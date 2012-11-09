@@ -6,34 +6,6 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 		}).setMessages(${messages});
 //]]></script>
 
-<style type="text/css">
-    .datalist-toolbar .export span.first-child
-    {
-        background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
-        padding-left: 24px;
-    }
-    .datalist-toolbar .exportcsv span.first-child
-    {
-	    background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
-	    padding-left: 24px;
-    }
-    .datalist-toolbar .delete-row span.first-child
-    {
-        background: url(/share/res/components/images/delete-row-16.png) no-repeat 12px 4px;
-        padding-left: 24px;
-    }
-    .datalist-toolbar .search span.first-child
-    {
-	    background: url(/share/res/components/images/search-16-gray.png) no-repeat 12px 4px;
-	    padding-left: 24px;
-    }
-	#${id}-searchInput
-	{
-		display: inline-block;
-		vertical-align: text-bottom;
-	}
-</style>
-
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
 	<div id="${args.htmlid}-headerBar" class="header-bar flat-button theme-bg-2">
 		<div class="left">
@@ -68,7 +40,7 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 		</div>
 
 		<div class="right">
-			<span id="${id}-searchInput">
+			<span id="${id}-searchInput" class="search-input">
 				<input type="text" id="dictionaryFullSearchInput" value="">
 			</span>
 			<span id="${id}-searchButton" class="yui-button yui-push-button search">

@@ -1,21 +1,25 @@
-.dictionary-toolbar
+.datalist-toolbar .export span.first-child
 {
-    margin: 0 -10px;
+	background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
 }
-
-.dictionary-toolbar .header-bar
+.datalist-toolbar .exportcsv span.first-child
 {
-    min-height: 2em;
-    padding: 4px 1em;
+	background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
 }
-
-.dictionary-toolbar .left,
-.dictionary-toolbar .left div
+.datalist-toolbar .delete-row span.first-child
 {
-    float: left;
+	background: url(/share/res/components/images/delete-row-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
 }
-
-.dictionary-toolbar .right
+.datalist-toolbar .search span.first-child
 {
-    float: right;
+	background: url(/share/res/components/images/search-16-gray.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+.datalist-toolbar .search-input
+{
+	display: inline-block;
+	vertical-align: text-bottom;
 }
