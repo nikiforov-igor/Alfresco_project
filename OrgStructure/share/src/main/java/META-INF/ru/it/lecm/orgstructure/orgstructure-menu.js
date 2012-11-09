@@ -69,20 +69,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:{
-                                description:"",
-                                type:root.type,
-                                itemType:root.childType,
+                                itemType:root.itemType,
                                 name:root.type,
-                                nodeRef:root.nodeRef,
-                                dataSourceUri:root.dsUri,
-                                namePattern:root.namePattern,
-                                permissions:{
-                                    'delete':false,
-                                    'edit':false
-                                },
+                                nodeRef:root.nodeRef, // used in toolbar
+                                namePattern:root.namePattern, // used on save in toolbar and tree
                                 title:root.label
-                            },
-                            scrollTo:true
+                            }
                         });
                 }
             }
@@ -105,61 +97,36 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             var context = this;
             var button1 = new YAHOO.widget.Button({
-                id:"organization-structure",
+                id:"structure",
                 type:"button",
                 label:context.messages["lecm.orgstructure.structure.btn"],
                 container:"button1",
                 width:140
             });
             var onButtonClick1 = function (e) {
-                reloadPage("organization-structure");
+                reloadPage("structure");
             };
             button1.on("click", onButtonClick1);
             this.elements.push(button1);
 
             var button2 = new YAHOO.widget.Button({
-                id:"project-register",
+                id:"employees",
                 type:"button",
-                label:context.messages["lecm.orgstructure.project_register.btn"],
+                label:context.messages["lecm.orgstructure.employees.btn"],
                 container:"button2"
             });
             var onButtonClick2 = function (e) {
-                reloadPage("project-register");
+                reloadPage("employees");
             };
             button2.on("click", onButtonClick2);
             this.elements.push(button2);
-
-            var button3 = new YAHOO.widget.Button({
-                id:"employee-container",
-                type:"button",
-                label:context.messages["lecm.orgstructure.employees.btn"],
-                container:"button3"
-            });
-            var onButtonClick3 = function (e) {
-                reloadPage("employee-container");
-            };
-            button3.on("click", onButtonClick3);
-            this.elements.push(button3);
-
-            var button4 = new YAHOO.widget.Button({
-                id:"staff-list",
-                type:"button",
-                label:context.messages["lecm.orgstructure.staff_list.btn"],
-                container:"button4"
-            });
-
-            var onButtonClick4 = function (e) {
-                reloadPage("staff-list");
-            };
-            button4.on("click", onButtonClick4);
-            this.elements.push(button4);
 
             var type = getUrlVars()["type"];
             var root;
             if (type != null) {
                 root = context.roots[type];
             } else {
-                root = context.roots["organization-structure"];
+                root = context.roots["structure"];
             }
             bubbleTable(root);
         },
@@ -175,15 +142,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:oResults[nodeIndex].type,
-                                dsUri:oResults[nodeIndex].dsUri,
-                                childType:oResults[nodeIndex].childType,
+                                itemType:oResults[nodeIndex].itemType,
                                 namePattern:oResults[nodeIndex].namePattern
                             };
                             var namespace = "lecm-orgstr";
                             var rType = root.type;
-                            var cType = root.childType;
+                            var cType = root.itemType;
                             root.type = namespace + ":" + rType;
-                            root.childType = namespace + ":"+ cType;
+                            root.itemType = namespace + ":"+ cType;
 
                             oResponse.argument.context.roots[rType] = root;
                         }

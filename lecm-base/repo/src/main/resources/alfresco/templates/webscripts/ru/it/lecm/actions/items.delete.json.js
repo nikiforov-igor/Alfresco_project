@@ -80,19 +80,20 @@ function runAction(p_params) {
                         result.success = true;
                     }
                 } else {
-                    if (full) { // delete all assocs, mark object as inactive
-                        sAssocs = itemNode.getSourceAssocs();
-                        for (key in sAssocs) {
-                            var assocsList = sAssocs[key];
-                            for (index in assocsList) {
-                                var target = assocsList[index];
-                                //target.removeAssociation(itemNode, key);
-                                target.remove();
+                    if (!full) { // mark object as inactive
+                        itemNode.properties["lecm-dic:active"] = false;
+                        result.success = itemNode.save();
+                    } else {//delete node and all assocs
+                            sAssocs = itemNode.getSourceAssocs();
+                            for (key in sAssocs) {
+                                var assocsList = sAssocs[key];
+                                for (index in assocsList) {
+                                    var target = assocsList[index];
+                                    target.removeAssociation(itemNode, key)
+                                }
                             }
-                        }
+                            result.success = itemNode.remove();
                     }
-                    itemNode.properties["lecm-dic:active"] = false;
-                    result.success = itemNode.save();
                 }
             }
         }

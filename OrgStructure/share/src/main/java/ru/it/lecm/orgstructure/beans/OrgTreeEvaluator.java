@@ -15,7 +15,7 @@ public class OrgTreeEvaluator extends DefaultSubComponentEvaluator {
 	public boolean evaluate(RequestContext context, Map<String, String> params) {
 		boolean result;
 		String type = context.getParameter("type");
-		result = (type != null && !type.equals("organization-structure"));
+		result = (type != null && !type.equals("structure"));
 		return result;
 	}
 }

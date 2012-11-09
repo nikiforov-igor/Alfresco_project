@@ -1,5 +1,7 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></script>
+<link rel="stylesheet" type="text/css" href="${url.context}/res/ru/it/lecm/orgstructure/controls/controls.css" />
+
 <script type="text/javascript">//<![CDATA[
 (function () {
     function init() {
@@ -14,7 +16,7 @@
             </#if>
         });
         unitCompositionTable.setMessages(${messages});
-        unitCompositionTable.init("${form.arguments.itemId}");
+        unitCompositionTable.setProjectRef("${form.arguments.itemId}");
     }
 
     //YAHOO.util.Event.onDOMReady(init);
@@ -58,4 +60,12 @@
         </div>
     </div>
 </#escape>
+</div>
+
+<!-- Action Sets -->
+<div style="display:none">
+	<div id="${controlId}-actionSet" class="action-set simple">
+		<div class="onActionEdit"><a rel="" href="" class="wf-crtl-link" title="${msg("actions.edit")}"><span>${msg("actions.edit")}</span></a></div>
+		<div class="onActionDeleteWf"><a rel="" href="" class="wf-crtl-link" title="${msg("actions.delete-row")}"><span>${msg("actions.delete-row")}</span></a></div>
+	</div>
 </div>

@@ -1321,7 +1321,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
                 editDetails.setOptions(
                     {
-                        width: "34em",
+                        width: "50em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,

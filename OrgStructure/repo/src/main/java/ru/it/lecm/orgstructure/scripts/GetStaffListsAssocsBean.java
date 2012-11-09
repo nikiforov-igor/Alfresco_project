@@ -24,9 +24,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
  *         Date: 12.10.12
  *         Time: 15:16
  */
-public class GetUnitCompositionAssocsBean extends AbstractWebScript {
+public class GetStaffListsAssocsBean extends AbstractWebScript {
 
-	private static final Log log = LogFactory.getLog(GetUnitCompositionAssocsBean.class);
+	private static final Log log = LogFactory.getLog(GetStaffListsAssocsBean.class);
 
 	private static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	public static final String DEFAULT_STORE_TYPE = "workspace";

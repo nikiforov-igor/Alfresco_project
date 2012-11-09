@@ -50,6 +50,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             dataTable:null,
             dataSource:null,
             dataColumns:{},
+
+            currentSearchTerm: "",
+            currentSearchSort:"",
+            currentSearchFilter:"",
+            currentSearchQuery:"",
+
             /**
              * Object container for initialization options
              *
@@ -341,9 +347,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // Success handler
                 function successHandler(sRequest, oResponse, oPayload) {
                     // update current state on success
-                    //this.searchTerm = searchTerm;
-                    //this.searchSort = searchSort;
-
+                    this.currentSearchTerm = searchTerm;
+                    this.currentSearchSort = searchSort;
+                    this.currentSearchFilter = searchFilter;
+                    this.currentSearchQuery = searchQuery;
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
                 }
 

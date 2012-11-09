@@ -33,7 +33,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
  */
 (function () {
 
-    var Dom = YAHOO.util.Dom
+    var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
     var Event = YAHOO.util.Event;
 
@@ -130,7 +130,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     sUrl += "&type=" + encodeURI(type.slice(type.indexOf(':') + 1));
                 }
             } else {
-                sUrl += "?onlyStructure=true";
+                sUrl += "?onlyRoot=true";
             }
             var otree = this;
             var callback = {
@@ -145,9 +145,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:namespace + ":" + oResults[nodeIndex].type,
-                                dsUri:oResults[nodeIndex].dsUri,
-                                childType:namespace + ":" + oResults[nodeIndex].childType,
-                                childAssoc:namespace + ":" + oResults[nodeIndex].childAssoc,
                                 namePattern:oResults[nodeIndex].namePattern
                             };
 
@@ -201,28 +198,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.tree.currentFocus) {
                 this.tree.currentFocus._removeFocus(); // for correct highlight
             }
-            if (this.selectedNode.data.dsUri != null && this.selectedNode.data.dsUri != '') {
-                Bubbling.fire("activeGridChanged",
-                    {
-                        datagridMeta:{
-                            description:"",
-                            type:node.data.type,
-                            itemType:"lecm-orgstr:employee",
-                            name:node.data.type,
-                            nodeRef:node.data.nodeRef,
-                            dataSourceUri:node.data.dsUri,
-                            namePattern:node.data.namePattern,
-                            permissions:{
-                                'delete':false,
-                                'edit':false
-                            },
-                            title:node.label,
-                            deletedAssocsType: "lecm-orgstr:composition-employee-assoc",
-                            fullDelete:true
-                        },
-                        scrollTo:true
-                    });
-            }
+            Bubbling.fire("activeGridChanged",
+                {
+                    datagridMeta:{
+                        itemType:"lecm-orgstr:staff-list",
+                        name:node.data.type,
+                        namePattern:node.data.namePattern,
+                        title:node.label,
+                        fullDelete:true,
+                        initialSearch:"PARENT:" + node.data.nodeRef
+                    }
+                });
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
@@ -295,36 +281,22 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
-            var fileSpan = '<span class="light">Edit Metatdata</span>';
+            var message = this.msg("actions.edit");
+            var fileSpan = '<span class="light">' + message + '</span>';
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
         },
         onNewUnitCreated:function Tree_onNewUnitCreated(layer, args) {
             var obj = args[1];
+            var otree = this;
             if ((obj !== null) && (obj.nodeRef !== null)) {
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/assoc";
-                var current = this.selectedNode;
-
-                var postData = "{source:\"" + encodeURI(current.data.nodeRef) + "\", " +
-                    "target:\"" + encodeURI(obj.nodeRef) + "\"," +
-                    "assocType:\"" + encodeURI(current.data.childAssoc) + "\"}";
-                var otree = this;
-                var callback = {
-                    success:function (oResponse) {
-                        var sNode = otree.selectedNode;
-                        otree._loadTree(sNode);
-                        sNode.isLeaf = false;
-                        sNode.expanded = true;
-                        otree.tree.render();
-                        otree.onExpandComplete(null);
-                    },
-                    failure:function (oResponse) {
-                        YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                    },
-                    timeout:7000
-                };
-                YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
+                var sNode = otree.selectedNode;
+                otree._loadTree(sNode);
+                sNode.isLeaf = false;
+                sNode.expanded = true;
+                otree.tree.render();
+                otree.onExpandComplete(null);
             }
         }
     });
@@ -332,7 +304,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     /**
      * Augment prototype with Common Actions module
      */
-    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Tree, LogicECM.module.OrgStructure.DataActions);
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Tree, LogicECM.module.Base.DataActions);
 
     Alfresco.widget.InsituEditor.organizationUnit = function (p_params) {
         this.params = YAHOO.lang.merge({}, p_params);
@@ -444,7 +416,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         });
                 } else {
                     var unitNodeRef = new Alfresco.util.NodeRef(context.selectedNode.data.nodeRef);
-                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/unit-compositions/" + unitNodeRef.uri;
+                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/staff-lists/" + unitNodeRef.uri;
                     var callback = {
                         success:function (oResponse) {
                             var oResults = eval("(" + oResponse.responseText + ")");

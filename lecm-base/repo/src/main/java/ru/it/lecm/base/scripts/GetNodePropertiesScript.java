@@ -29,8 +29,6 @@ public class GetNodePropertiesScript extends AbstractWebScript {
 	public static final String DEFAULT_STORE_ID = "SpacesStore";
 
 	private static ServiceRegistry serviceRegistry;
-	public static final String NODE_REF = "nodeRef";
-	public static final String PROPS = "props";
 
 	private static final Log log = LogFactory.getLog(GetNodePropertiesScript.class);
 

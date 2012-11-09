@@ -10,6 +10,10 @@ new Alfresco.widget.Resizer("Orgstructure");
     <@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/base-share/components/lecm-datagrid-actions.js"></@script>
     <#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/controls/lecm-controls-actions.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/controls/workforce.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/orgstructure/controls/staff-list.js"></@script>
+
     <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/utils/generate-custom-name.js"></@script>
 </@>

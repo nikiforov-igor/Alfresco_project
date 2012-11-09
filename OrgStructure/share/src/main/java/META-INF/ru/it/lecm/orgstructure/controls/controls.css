@@ -1,0 +1,78 @@
+.form-field .action-set a
+{
+    background-image: url(/share/res/components/images/generic-file-16.png);
+}
+
+.form-field .action-set div
+{
+    display: block;
+    margin: 0;
+}
+
+.form-field a.wf-crtl-link
+{
+    background-position: 4px 1px;
+    background-repeat: no-repeat;
+    border: 1px solid transparent;
+    display: block;
+    min-height: 16px;
+    padding: 2px 0 2px 24px;
+}
+
+.form-field .onActionEdit a
+{
+    background-image: url(/share/res/components/images/edit-16.png);
+}
+
+.form-field .onActionDeleteWf a
+{
+    background-image: url(/share/res/components/images/delete-16.png);
+}
+
+.form-field a.wf-crtl-link
+{
+    background-position: 4px 0;
+    background-repeat: no-repeat;
+    border: 1px solid transparent;
+    display: block;
+    min-height: 16px;
+    padding: 0 0 0 24px;
+}
+
+.form-field div.simple div {
+    float: left;
+    line-height: 1em;
+}
+
+.form-field .action-set a:active,
+.form-field .action-set a:hover,
+.form-field .action-set .highlighted
+{
+    background-color: #fff;
+    border: 1px solid #2b6eb5;
+    text-decoration: none;
+}
+
+.form-field div.simple a.wf-crtl-link
+{
+    background-position: 4px 0;
+    min-height: 16px;
+    padding: 0 0 0 24px;
+}
+
+.form-field div.simple a.wf-crtl-link span
+{
+    display: none;
+}
+
+.yui-dt-col-actions .yui-dt-liner {
+    padding: 3px;
+}
+.yui-dt25-col-actions .yui-dt-liner {
+    overflow: hidden;
+    width: 80px;
+}
+.yui-dt-liner {
+    padding: 4px;
+}
+

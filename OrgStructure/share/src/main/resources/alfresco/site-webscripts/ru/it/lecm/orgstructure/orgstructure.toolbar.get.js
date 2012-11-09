@@ -25,7 +25,7 @@ function main()
     // default - show structure and Add Unit Button
     var type = args["type"];
     if (type != null && type != '') {
-        if (type != 'organization-structure') {
+        if (type != 'structure') {
             // hide "New Unit Button", Show "New Row Button"
             showNRB = true;
             showNUB = false;

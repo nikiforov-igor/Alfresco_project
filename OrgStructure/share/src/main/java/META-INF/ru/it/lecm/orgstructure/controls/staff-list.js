@@ -44,7 +44,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         this.currentValueHtmlId = currentValueHtmlId;
         this.selectedItems = {};
-        Bubbling.on("newCompositionCreated", this.updateTable, this);
+        Bubbling.on("neStaffListCreated", this.updateTable, this);
     };
 
     YAHOO.lang.extend(LogicECM.module.OrgStructure.UnitCompositionCtrl, Alfresco.component.Base, {
@@ -110,7 +110,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         loadData:function () {
             if (this.currentUnit.indexOf("://") > 0) {
                 var unitNodeRef = new Alfresco.util.NodeRef(this.currentUnit);
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/unit-compositions/" + unitNodeRef.uri;
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/staff-lists/" + unitNodeRef.uri;
                 var context = this;
                 var callback = {
                     success:function (oResponse) {
@@ -125,75 +125,63 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
         },
         onNewComposition:function UCCtrl_onNewComposition(e, p_obj) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/root?type=unit-compositions";
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        var destination = oResults[0].nodeRef;
-                        var itemType = "lecm-orgstr:unit-composition";
+            var destination = this.currentUnit;
+            var itemType = "lecm-orgstr:staff-list";
 
-                        var doBeforeDialogShow = function UCCtrl_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
-                            Alfresco.util.populateHTML(
-                                [ p_dialog.id + "-dialogTitle", "Title" ],
-                                [ p_dialog.id + "-dialogHeader", "Header" ]
-                            );
-                        };
-
-                        var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
-                            {
-                                itemKind:"type",
-                                itemId:itemType,
-                                destination:destination,
-                                mode:"create",
-                                submitType:"json"
-                            });
-
-                        // Using Forms Service, so always create new instance
-                        var createRow = new Alfresco.module.SimpleDialog("newComposition-dialog");
-
-                        createRow.setOptions(
-                            {
-                                width:"33em",
-                                templateUrl:templateUrl,
-                                actionUrl:null,
-                                destroyOnHide:false,
-                                doBeforeDialogShow:{
-                                    fn:doBeforeDialogShow,
-                                    scope:this
-                                },
-                                onSuccess:{
-                                    fn:function UCCtrl_onNewRow_success(response) {
-                                        YAHOO.Bubbling.fire("newCompositionCreated",
-                                            {
-                                                nodeRef:response.json.persistedObject
-                                            });
-
-                                        /*Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:("message.new-row.success")
-                                            });*/
-                                    },
-                                    scope:this
-                                },
-                                onFailure:{
-                                    fn:function DataListToolbar_onNewRow_failure(response) {
-                                        /*Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:this.msg("message.new-row.failure")
-                                            });*/
-                                    },
-                                    scope:this
-                                }
-                            }).show();
-                    }
-                },
-                failure:function (oResponse) {
-                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                },
-                timeout:7000
+            var doBeforeDialogShow = function UCCtrl_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-dialogTitle", "Title" ],
+                    [ p_dialog.id + "-dialogHeader", "Header" ]
+                );
             };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
+                {
+                    itemKind:"type",
+                    itemId:itemType,
+                    destination:destination,
+                    mode:"create",
+                    submitType:"json"
+                });
+
+            // Using Forms Service, so always create new instance
+            var createRow = new Alfresco.module.SimpleDialog("newStaffList-dialog");
+
+            createRow.setOptions(
+                {
+                    width:"33em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:false,
+                    doBeforeDialogShow:{
+                        fn:doBeforeDialogShow,
+                        scope:this
+                    },
+                    onSuccess:{
+                        fn:function UCCtrl_onNewRow_success(response) {
+                            YAHOO.Bubbling.fire("neStaffListCreated",
+                                {
+                                    nodeRef:response.json.persistedObject
+                                });
+
+                            /*Alfresco.util.PopupManager.displayMessage(
+                             {
+                             text:("message.new-row.success")
+                             });*/
+                        },
+                        scope:this
+                    },
+                    onFailure:{
+                        fn:function DataListToolbar_onNewRow_failure(response) {
+                            /*Alfresco.util.PopupManager.displayMessage(
+                             {
+                             text:this.msg("message.new-row.failure")
+                             });*/
+                        },
+                        scope:this
+                    }
+                }).show();
+
         },
         updateTable:function UCCtrl_onNewCompositionCreated(layer, args) {
             var obj = args[1];

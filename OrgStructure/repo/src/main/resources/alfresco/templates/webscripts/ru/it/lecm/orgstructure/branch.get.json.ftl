@@ -6,10 +6,8 @@
             type: "${b.type}",
             nodeRef: "${b.nodeRef}",
             isLeaf: ${b.isLeaf},
-            dsUri: "${b.dsUri!""}",
-            childType: "${b.childType!""}",
-            childAssoc: "${b.childAssoc!""}",
-            namePattern: "${b.pattern!""}"
+            itemType: "${b.itemType}",
+            namePattern: "${b.pattern}"
         }
         <#if b_has_next>,</#if>
     </#list>

@@ -203,7 +203,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var selectedNode = this.modules.tree.selectedNode;
                     if (selectedNode != null) {
                         var destination = selectedNode.data.nodeRef;
-                        var itemType = selectedNode.data.childType;
+                        var itemType = selectedNode.data.type;
                         var namePattern = selectedNode.data.namePattern;
                         this._createNode(itemType, destination, namePattern, "unitCreated", "message.new-unit.success", "message.new-unit.failure");
                     } else {

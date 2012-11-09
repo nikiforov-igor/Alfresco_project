@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -31,12 +32,15 @@ public class GetWorkforcesAssocsBean extends AbstractWebScript {
 	public static final String DEFAULT_STORE_TYPE = "workspace";
 	public static final String DEFAULT_STORE_ID = "SpacesStore";
 
-	private static final QName ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce-role");
-	private static final QName EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce-employee-assoc");
+	private static final QName EMPLOYEES = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce-employee-assoc");
+	private static final QName ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce-role-assoc");
+
 	private static final QName EMPLOYEE_FIRST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
 	private static final QName EMPLOYEE_MIDDLE_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
 	private static final QName EMPLOYEE_LAST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
-	public static final QName WORKFORCE_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "project-workforce-assoc");
+	private static final QName NAME = ContentModel.PROP_NAME;
+
+	public static final QName WORKFORCE_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workGroup-workforce-assoc");
 
 	private ServiceRegistry serviceRegistry;
 
@@ -70,21 +74,24 @@ public class GetWorkforcesAssocsBean extends AbstractWebScript {
 
 			JSONObject wf = new JSONObject();
 
-			String propertyRole = (String) nodeService.getProperty(workForce, ROLE);
-			AssociationRef employee = nodeService.getTargetAssocs(workForce, EMPLOYEE).get(0);
+			List<AssociationRef> employees = nodeService.getTargetAssocs(workForce, EMPLOYEES);
+			AssociationRef role = nodeService.getTargetAssocs(workForce, ROLE).get(0); // роль в объекте может быть только одна
 			try {
+				String propertyRole = (String) nodeService.getProperty(role.getTargetRef(), NAME);
 				wf.put("workforce_role", propertyRole != null ? propertyRole : "ERROR");
 
-				JSONObject employeeObject = new JSONObject();
-				if (employee != null) {
-					NodeRef pRef = employee.getTargetRef();
-					String labelValue = nodeService.getProperty(pRef, EMPLOYEE_LAST_NAME) + " " +
-							nodeService.getProperty(pRef, EMPLOYEE_MIDDLE_NAME) + " " +
-							nodeService.getProperty(pRef, EMPLOYEE_FIRST_NAME);
-					employeeObject.put("nodeRef", pRef);
-					employeeObject.put("name", labelValue);
+				String employeesString = "";
+				if (employees != null) { //если есть сотрудники
+					for (AssociationRef employee : employees) {
+						NodeRef pRef = employee.getTargetRef();
+						String labelValue = nodeService.getProperty(pRef, EMPLOYEE_LAST_NAME) + " " +
+								nodeService.getProperty(pRef, EMPLOYEE_MIDDLE_NAME) + " " +
+								nodeService.getProperty(pRef, EMPLOYEE_FIRST_NAME);
+						employeesString += labelValue + ",";
+					}
+					employeesString = employeesString.substring(0, employeesString.length() -1);
 				}
-				wf.put("workforce_employee", employeeObject);
+				wf.put("workforce_employees", employeesString);
 
 				wf.put("nodeRef", workForce.toString());
 				wf.put("parentRef", projectRef.toString());

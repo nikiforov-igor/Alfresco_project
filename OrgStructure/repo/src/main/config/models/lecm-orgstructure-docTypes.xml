@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary xmlns="http://www.it.ru/lecm/dictionary/descriptor/1.0">
+    <name>Виды документов</name>
+    <description>Виды документов</description>
+    <type>lecm-orgstr-docType:documentType</type>
+    <plane>true</plane>
+    <showControlInSeparateWindow>false</showControlInSeparateWindow>
+</dictionary>

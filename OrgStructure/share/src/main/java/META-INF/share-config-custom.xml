@@ -2,28 +2,14 @@
     <config>
         <forms>
             <default-controls>
-                <type name="association:lecm-orgstr:unit-composition" template="/ru/it/lecm/orgstructure/controls/unitCompositions.ftl"/>
+                <type name="association:lecm-orgstr:staff-list" template="/ru/it/lecm/orgstructure/controls/staffLists.ftl"/>
                 <type name="association:lecm-orgstr:workforce" template="/ru/it/lecm/orgstructure/controls/workForces.ftl"/>
-                <type name="association:lecm-orgstr:office" template="/ru/it/lecm/base-share/components/associationControl.ftl">
-                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:office-container')]</control-param>
-                    <control-param name="xPathLocationRoot">{organization}</control-param>
-                    <control-param name="numberOfHiddenLayers">2</control-param>
-                </type>
                 <type name="association:lecm-orgstr:employee" template="/ru/it/lecm/base-share/components/associationControl.ftl">
-                        <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:employee-container')]</control-param>
-                        <control-param name="xPathLocationRoot">{organization}</control-param>
-                        <control-param name="numberOfHiddenLayers">2</control-param>
-                </type>
-                <type name="association:lecm-orgstr:position" template="/ru/it/lecm/base-share/components/associationControl.ftl">
-                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:staff-list')]</control-param>
+                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:employees')]</control-param>
                     <control-param name="xPathLocationRoot">{organization}</control-param>
                     <control-param name="numberOfHiddenLayers">2</control-param>
                 </type>
             </default-controls>
-            <dependencies>
-                <js src="/ru/it/lecm/orgstructure/controls/unit-composition.js" />
-                <js src="/ru/it/lecm/orgstructure/controls/workforce.js" />
-            </dependencies>
         </forms>
     </config>
 
@@ -36,7 +22,7 @@
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-sex"/>
                     <show id="lecm-orgstr:employee-email"/>
-                    <show id="lecm-orgstr:employee-photo"/>
+                    <show id="lecm-orgstr:employee-photo-assoc"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
                     <show id="lecm-orgstr:employee-fio-g"/>
@@ -55,13 +41,20 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <!-- чтобы иметь возможность сохранить с требуемым именем-->
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-sex"/>
-                    <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-email"/>
+                    <show id="lecm-orgstr:employee-photo-assoc"/>
+                    <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-orgstr:employee-fio-g"/>
+                    <show id="lecm-orgstr:employee-fio-d"/>
+                    <show id="lecm-orgstr:employee-is-system-user"/>
+                    <show id="lecm-orgstr:employee-person-assoc"/>
+                    <show id="lecm-orgstr:employee-person-data-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
@@ -76,8 +69,6 @@
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-email"/>
-                    <show id="lecm-orgstr:employee-number"/>
-                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
             <form id="search">
@@ -105,21 +96,18 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:org-leg-address"/>
                     <show id="lecm-orgstr:org-act-address"/>
                     <show id="lecm-orgstr:org-off-site"/>
                     <show id="lecm-orgstr:org-phone"/>
                     <show id="lecm-orgstr:org-fax"/>
                     <show id="lecm-orgstr:org-email"/>
-                    <show id="lecm-orgstr:org-logo"/>
+                    <show id="lecm-orgstr:org-logo-assoc"/>
                     <show id="lecm-orgstr:org-tin"/>
                     <show id="lecm-orgstr:org-ownership-type"/>
                     <show id="lecm-orgstr:org-incorporation-form"/>
                     <show id="lecm-orgstr:org-founding-docs"/>
-                    <show id="lecm-orgstr:org-structure-assoc"/>
-                    <show id="lecm-orgstr:org-staff-assoc"/>
-                    <show id="lecm-orgstr:org-projects-assoc"/>
+                    <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -131,21 +119,18 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:org-leg-address"/>
                     <show id="lecm-orgstr:org-act-address"/>
                     <show id="lecm-orgstr:org-off-site"/>
                     <show id="lecm-orgstr:org-phone"/>
                     <show id="lecm-orgstr:org-fax"/>
                     <show id="lecm-orgstr:org-email"/>
-                    <show id="lecm-orgstr:org-logo"/>
+                    <show id="lecm-orgstr:org-logo-assoc"/>
                     <show id="lecm-orgstr:org-tin"/>
                     <show id="lecm-orgstr:org-ownership-type"/>
                     <show id="lecm-orgstr:org-incorporation-form"/>
                     <show id="lecm-orgstr:org-founding-docs"/>
-                    <show id="lecm-orgstr:org-structure-assoc"/>
-                    <show id="lecm-orgstr:org-staff-assoc"/>
-                    <show id="lecm-orgstr:org-projects-assoc"/>
+                    <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
             </form>
         </forms>
@@ -157,13 +142,10 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-orgstr:unit-is-exists"/>
-                    <show id="lecm-orgstr:unit-offices-assoc"/>
-                    <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <show id="lecm-dic:active" />
+                    <show id="cm:contains"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -174,13 +156,11 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <!-- для того, чтобы сохранить под требуемым именем-->
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-orgstr:unit-offices-assoc"/>
-                    <show id="lecm-orgstr:unit-composition-assoc"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
@@ -193,8 +173,7 @@
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
-                    <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
             <form id="search">
@@ -213,57 +192,35 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:official">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-orgstr:official-can-facsimile"/>
-                    <show id="lecm-orgstr:official-employee-assoc"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="model-type" condition="lecm-orgstr:official">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-orgstr:official-can-facsimile"/>
-                    <show id="lecm-orgstr:official-employee-assoc"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-orgstr:position">
+    <config evaluator="node-type" condition="lecm-orgstr-pos:position">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:description"/>
-                    <show id="lecm-orgstr:position-name-g"/>
-                    <show id="lecm-orgstr:position-name-d"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr-pos:position-code"/>
+                    <show id="lecm-orgstr-pos:position-name-g"/>
+                    <show id="lecm-orgstr-pos:position-name-d"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:position">
+    <config evaluator="model-type" condition="lecm-orgstr-pos:position">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:description"/>
-                    <show id="lecm-orgstr:position-name-g"/>
-                    <show id="lecm-orgstr:position-name-d"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr-pos:position-code"/>
+                    <show id="lecm-orgstr-pos:position-name-g"/>
+                    <show id="lecm-orgstr-pos:position-name-d"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:description"/>
+                    <show id="lecm-orgstr-pos:position-code"/>
                 </field-visibility>
             </form>
         </forms>
@@ -279,7 +236,7 @@
                     <show id="lecm-orgstr:office-fax"/>
                     <show id="lecm-orgstr:office-address"/>
                     <show id="lecm-orgstr:office-transit-scheme"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -295,7 +252,7 @@
                     <show id="lecm-orgstr:office-fax"/>
                     <show id="lecm-orgstr:office-address"/>
                     <show id="lecm-orgstr:office-transit-scheme"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -310,7 +267,9 @@
                     <show id="lecm-orgstr:person-data-phone"/>
                     <show id="lecm-orgstr:person-data-date"/>
                     <show id="lecm-orgstr:person-data-service-id"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:person-data-docType-assoc"/>
+                    <show id="lecm-orgstr:person-data-doc-series"/>
+                    <show id="lecm-orgstr:person-data-doc-number"/>
                 </field-visibility>
             </form>
         </forms>
@@ -325,38 +284,41 @@
                     <show id="lecm-orgstr:person-data-phone"/>
                     <show id="lecm-orgstr:person-data-date"/>
                     <show id="lecm-orgstr:person-data-service-id"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:person-data-docType-assoc"/>
+                    <show id="lecm-orgstr:person-data-doc-series"/>
+                    <show id="lecm-orgstr:person-data-doc-number"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:project">
+    <config evaluator="node-type" condition="lecm-orgstr:workGroup">
         <forms>
             <form>
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:project-target"/>
-                    <show id="lecm-orgstr:project-schedule"/>
-                    <show id="lecm-orgstr:element-official-assoc"/>
-                    <show id="lecm-orgstr:project-workforce-assoc"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:workGroup-description"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="cm:contains"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:project">
+    <config evaluator="model-type" condition="lecm-orgstr:workGroup">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <!-- Для сохранения с иным именем-->
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:project-target"/>
-                    <show id="lecm-orgstr:project-schedule"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:workGroup-description"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
@@ -368,17 +330,12 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:project-target"/>
-                    <show id="lecm-orgstr:project-schedule"/>
-                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
-                    <show id="lecm-orgstr:project-target"/>
-                    <show id="lecm-orgstr:project-schedule"/>
                 </field-visibility>
             </form>
         </forms>
@@ -388,11 +345,23 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:workforce-role"/>
-                    <show id="lecm-orgstr:workforce-employee-assoc"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:workforce-role-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:workforce-comment">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecm-orgstr:element-member-position-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -401,61 +370,23 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:workforce-role"/>
-                    <show id="lecm-orgstr:workforce-employee-assoc"/>
-                    <show id="lecm-dic:active" />
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-orgstr:unit-composition">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-orgstr:composition-employee-assoc"/>
-                    <show id="lecm-orgstr:composition-position-assoc"/>
-                    <show id="lecm-orgstr:composition-is-boss"/>
-                    <show id="lecm-orgstr:composition-is-primary"/>
-                    <show id="lecm-dic:active" />
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="model-type" condition="lecm-orgstr:unit-composition">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:composition-is-boss"/>
-                    <show id="lecm-orgstr:composition-is-primary"/>
-                    <show id="lecm-orgstr:composition-position-assoc"/>
-                    <show id="lecm-orgstr:composition-employee-assoc"/>
-                    <show id="lecm-dic:active" />
+                    <show id="lecm-orgstr:workforce-comment"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    <field id="lecm-orgstr:workforce-comment">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecm-orgstr:element-member-position-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
                     </field>
                 </appearance>
-            </form>
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="lecm-orgstr:composition-position-assoc"/>
-                    <show id="lecm-orgstr:composition-employee-assoc"/>
-                    <show id="lecm-orgstr:composition-is-boss"/>
-                    <show id="lecm-orgstr:composition-is-primary"/>
-                </field-visibility>
-            </form>
-            <form id="search">
-                <field-visibility>
-                    <show id="lecm-orgstr:composition-position-assoc"/>
-                    <show id="lecm-orgstr:composition-employee-assoc"/>
-                    <show id="lecm-orgstr:composition-is-boss"/>
-                    <show id="lecm-orgstr:composition-is-primary"/>
-                </field-visibility>
             </form>
         </forms>
     </config>
@@ -464,10 +395,20 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:staff-list-approval-date"/>
-                    <show id="cm:contains"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:element-member-position-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -477,75 +418,228 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr:staff-list-approval-date"/>
-                    <show id="cm:contains"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:staff-list-is-boss"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-orgstr:element-member-position-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:staff-list-is-boss"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:project-register">
+    <config evaluator="node-type" condition="lecm-orgstr:employees">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:project-register">
+    <config evaluator="model-type" condition="lecm-orgstr:employees">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:employee-container">
+    <config evaluator="node-type" condition="lecm-orgstr:structure">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:employee-container">
+    <config evaluator="model-type" condition="lecm-orgstr:structure">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:organization-structure">
+    <!--    <config evaluator="node-type" condition="lecm-orgstr:project-roles">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr:org-unit-assoc"/>
-                    <!--<show id="cm:contains"/>-->
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr:organization-structure">
+    <config evaluator="model-type" condition="lecm-orgstr:project-roles">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="cm:contains"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>-->
+
+    <config evaluator="node-type" condition="lecm-orgstr-roles:role">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-roles:role-description"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr-roles:role-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr-roles:role">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-roles:role-description"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr-roles:role-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:staffPosition">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-pos:staffPosition-name-g"/>
+                    <show id="lecm-orgstr-pos:staffPosition-name-d"/>
+                    <show id="lecm-orgstr-pos:staffPosition-code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:staffPosition">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-pos:staffPosition-name-g"/>
+                    <show id="lecm-orgstr-pos:staffPosition-name-d"/>
+                    <show id="lecm-orgstr-pos:staffPosition-code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:workRole">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-pos:workRole-description"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:workRole">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr-pos:workRole-description"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr-docType:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr-docType:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-orgstr:employee-link">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:employee-link-is-primary"/>
+                    <show id="lecm-orgstr:employee-link-employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-orgstr:employee-link">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-orgstr:employee-link-is-primary"/>
+                    <show id="lecm-orgstr:employee-link-employee-assoc"/>
                 </field-visibility>
             </form>
         </forms>

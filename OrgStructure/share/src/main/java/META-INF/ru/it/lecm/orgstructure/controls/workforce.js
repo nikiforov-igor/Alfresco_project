@@ -34,6 +34,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
+    var $html = Alfresco.util.encodeHTML;
 
     LogicECM.module.OrgStructure.WorkForceCtrl = function (htmlId, currentValueHtmlId) {
         LogicECM.module.OrgStructure.WorkForceCtrl.superclass.constructor.call(
@@ -44,7 +45,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         this.currentValueHtmlId = currentValueHtmlId;
         this.selectedItems = {};
+
         Bubbling.on("newWorkForceCreated", this._updateCtrl, this);
+
+        return this;
     };
 
     YAHOO.lang.extend(LogicECM.module.OrgStructure.WorkForceCtrl, Alfresco.component.Base, {
@@ -52,8 +56,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         currentProject:null,
         globalDataCount:0,
         buttons:null,
-        //wfMetaData:null,
-        messages:null,
 
         options:{
             mandatory:false,
@@ -61,21 +63,49 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             selectedValue:"",
             selectedItems:null
         },
-        setMessages:function (messages) {
-            this.messages = messages;
-        },
-        init:function (formId) {
-            this.currentProject = formId;
+
+        onReady: function WFCtrl_onReady(){
+
             this.buttons = {};
-            //this.wfMetaData = {};
+
+            this.buttons.newRowButton = Alfresco.util.createYUIButton(this, "newWorkForceBtn", this.onNewWorkforce,
+                {
+                    disabled:false,
+                    value:"create"
+                });
 
             var parent = Dom.get(this.id);
+
+            var me = this;
+
+            // Actions Actions module
+            this.modules.actions = new LogicECM.module.Base.Actions();
+
+            // Hook action events
+            var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
+            {
+                var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                if (owner !== null)
+                {
+                    if (typeof me[owner.className] == "function")
+                    {
+                        args[1].stop = true;
+                        var pos = args[1].target.offsetParent;
+                        if (pos != null) {
+                            var asset = me.table.getRecord(pos).getData();
+                            me[owner.className].call(me, asset, me.updateRows.bind(me), {fullDelete:true});
+                        }
+                    }
+                }
+                return true;
+            };
+            Bubbling.addDefaultAction("wf-crtl-link", fnActionHandler);
 
             // from model - field to view
             var columnDefs = [
                 { key:"role", label:this.msg("control.table.column.role.title"), resizeable:true, sortable:true},
-                { key:"employee", label:this.msg("control.table.column.employee.title"), resizeable:true, sortable:true},
-                { key:"actions", label:this.msg("control.table.column.actions.title"), resizeable:false}
+                { key:"employees", label:this.msg("control.table.column.employee.title"), resizeable:true, sortable:true},
+                { key:"actions", label:this.msg("control.table.column.actions.title"), resizeable:false, sortable:false, formatter: me.fnRenderCellActions(), width: 60}
             ];
 
             var initialSource = new YAHOO.util.DataSource([]);
@@ -84,23 +114,32 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             this.table = new YAHOO.widget.DataTable(parent, columnDefs, initialSource, {initialLoad:false});
             this.loadData();
+
+            this.table.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
+            this.table.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
         },
+
+        setProjectRef:function (formId) {
+            this.currentProject = formId;
+        },
+
         _drawTable:function (workforces) {
             if (workforces != null) {
                 for (var nodeIndex in workforces) {
                     var newRow = {
-                        employee:workforces[nodeIndex].workforce_employee.name,
+                        employees:workforces[nodeIndex].workforce_employees,
                         role:workforces[nodeIndex].workforce_role,
-                        workforceRef:workforces[nodeIndex].nodeRef
+                        nodeRef:workforces[nodeIndex].nodeRef
                     };
 
                     this.table.addRow(newRow, this.globalDataCount);
-                    this.selectedItems[newRow.workforceRef] = newRow;
+                    this.selectedItems[newRow.nodeRef] = newRow;
                     this.globalDataCount++;
                 }
                 this.table.render();
             }
         },
+
         loadData:function () {
             if (this.currentProject.indexOf("://") > 0) { // on new create - false
                 var unitNodeRef = new Alfresco.util.NodeRef(this.currentProject);
@@ -118,85 +157,112 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
             }
         },
-        onNewWorkforce:function WFCtrl_onNewComposition(e, p_obj) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/root?type=workforces";
-            var context = this;
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults != null) {
-                        var destination = oResults[0].nodeRef;
-                        var itemType = "lecm-orgstr:workforce";
 
-                        var doBeforeDialogShow = function WorkforceCtrl_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
-                            Alfresco.util.populateHTML(
-                                [ p_dialog.id + "-dialogTitle", "Title" ],
-                                [ p_dialog.id + "-dialogHeader", "Header" ]
-                            );
-                        };
-
-                        var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
-                            {
-                                itemKind:"type",
-                                itemId:itemType,
-                                destination:destination,
-                                mode:"create",
-                                submitType:"json"
-                            });
-
-                        // Using Forms Service, so always create new instance
-                        var createRow = new Alfresco.module.SimpleDialog("newWorkforce-dialog");
-
-                        createRow.setOptions(
-                            {
-                                width:"33em",
-                                templateUrl:templateUrl,
-                                actionUrl:null,
-                                destroyOnHide:false,
-                                doBeforeDialogShow:{
-                                    fn:doBeforeDialogShow,
-                                    scope:this
-                                },
-                                onSuccess:{
-                                    fn:function WF_onNewRow_success(response) {
-                                        YAHOO.Bubbling.fire("newWorkForceCreated",
-                                            {
-                                                nodeRef:response.json.persistedObject
-                                            });
-
-                                        /*Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:this.msg("message.new-row.success")
-                                            });*/
-                                    },
-                                    scope:this
-                                },
-                                onFailure:{
-                                    fn:function WF_onNewRow_failure(response) {
-                                        /*Alfresco.util.PopupManager.displayMessage(
-                                            {
-                                                text:this.msg("message.new-row.failure")
-                                            });*/
-                                    },
-                                    scope:this
-                                }
-                            }).show();
+        updateRows:function () {
+            if (this.currentProject.indexOf("://") > 0) { // on new create - false
+                var unitNodeRef = new Alfresco.util.NodeRef(this.currentProject);
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/project/workforces/" + unitNodeRef.uri;
+                var context = this;
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        var rows = [];
+                        for (var nodeIndex in oResults) {
+                            var newRow = {
+                                employees:oResults[nodeIndex].workforce_employees,
+                                role:oResults[nodeIndex].workforce_role,
+                                nodeRef:oResults[nodeIndex].nodeRef
+                            };
+                            rows.push(newRow);
+                        }
+                        context.table.updateRows(0, rows);
+                    },
+                    failure:function (oResponse) {
+                        YAHOO.log("Failed to load workforces. " + "[" + oResponse.statusText + "]");
                     }
-                },
-                failure:function (oResponse) {
-                    YAHOO.log("Failed to process XHR transaction.", "info", "example");
-                },
-                timeout:7000
+                };
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            }
+        },
+        deleteRows:function () {
+            if (this.currentProject.indexOf("://") > 0) { // on new create - false
+                var unitNodeRef = new Alfresco.util.NodeRef(this.currentProject);
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/project/workforces/" + unitNodeRef.uri;
+                var context = this;
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        var rows = [];
+                        for (var nodeIndex in oResults) {
+                            var newRow = {
+                                employees:oResults[nodeIndex].workforce_employees,
+                                role:oResults[nodeIndex].workforce_role,
+                                nodeRef:oResults[nodeIndex].nodeRef
+                            };
+                            rows.push(newRow);
+                        }
+                        context.table.deleteRows(0, context.globalDataCount);
+                        context.globalDataCount = 0;
+                        context.table.addRows(rows, context.globalDataCount);
+                    },
+                    failure:function (oResponse) {
+                        YAHOO.log("Failed to load workforces. " + "[" + oResponse.statusText + "]");
+                    }
+                };
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            }
+        },
+        onNewWorkforce:function WFCtrl_onNewComposition(e, p_obj) {
+            var destination = this.currentProject; // save inside project directory
+            var itemType = "lecm-orgstr:workforce"; // save with fix type
+
+            var doBeforeDialogShow = function WorkforceCtrl_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-dialogTitle", "Title" ],
+                    [ p_dialog.id + "-dialogHeader", "Header" ]
+                );
             };
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
+                {
+                    itemKind:"type",
+                    itemId:itemType,
+                    destination:destination,
+                    mode:"create",
+                    submitType:"json"
+                });
+
+            // Using Forms Service, so always create new instance
+            var createRow = new Alfresco.module.SimpleDialog("newWorkforce-dialog");
+            createRow.setOptions(
+                {
+                    width:"33em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:false,
+                    doBeforeDialogShow:{
+                        fn:doBeforeDialogShow,
+                        scope:this
+                    },
+                    onSuccess:{
+                        fn:function WF_onNewRow_success(response) {
+                            // update ctrl table
+                            YAHOO.Bubbling.fire("newWorkForceCreated",
+                                {
+                                    nodeRef:response.json.persistedObject
+                                });
+                        },
+                        scope:this
+                    }
+                }).show();
         },
         _updateCtrl:function WFCtrl_onNewWorkfroceCreated(layer, args) {
             var obj = args[1];
             if ((obj !== null) && (obj.nodeRef !== null)) {
                 var workNodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
                 var sUrl = Alfresco.constants.PROXY_URI + "lecm/base/node/properties/" + workNodeRef.uri;
-                var postData = "{employee:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-employee-assoc->{http://www.alfresco.org/model/content/1.0}name\', " +
-                    "role:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-role\'}";
+                var postData = "{employees:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-employee-assoc->{http://www.alfresco.org/model/content/1.0}name\', " +
+                    "role:\'{http://www.it.ru/lecm/org/structure/1.0}workforce-role-assoc->{http://www.alfresco.org/model/content/1.0}name\'}";
                 var control = this;
                 var callback = {
                     success:function (oResponse) {
@@ -204,9 +270,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         if (oResults != null) {
                             // add node in table
                             var newRow = {
-                                employee:oResults.employee,
+                                employees:oResults.employees,
                                 role:oResults.role,
-                                workforceRef:obj.nodeRef
+                                nodeRef:obj.nodeRef
                             };
                             control.table.addRow(newRow, this.globalDataCount++);
                             control.table.render();
@@ -224,13 +290,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
             }
         },
-        onReady:function WFCtrl_onReady() {
-            this.buttons.newRowButton = Alfresco.util.createYUIButton(this, "newWorkForceBtn", this.onNewWorkforce,
-                {
-                    disabled:false,
-                    value:"create"
-                });
-        },
+
         _adjustCurrentValues:function WFCtrl__adjustCurrentValues() {
             var addedItems = this.getAddedItems(),
                 removedItems = this.getRemovedItems(),
@@ -289,6 +349,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             }
             return selectedItems;
+        },
+
+        onActionDeleteWf:function WFCtrl_deleteWf(p_items, fnDeleteComplete, metadata) {
+            var context = this;
+            this.onActionDelete(p_items, function () {
+                context.deleteRows();
+            }, metadata);
         }
     });
+
+    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.WorkForceCtrl, LogicECM.module.Orgstructure.CtrlActions);
 })();
