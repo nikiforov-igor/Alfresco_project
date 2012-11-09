@@ -13,8 +13,6 @@
 <div id="statemachine" style="margin: 0 0 20px 0">
     <div id="bottom1" style="padding: 3px">
     </div>
-    <div id="left1" style="padding: 3px">
-    </div>
     <div id="center1" style="padding: 3px">
     </div>
 </div>

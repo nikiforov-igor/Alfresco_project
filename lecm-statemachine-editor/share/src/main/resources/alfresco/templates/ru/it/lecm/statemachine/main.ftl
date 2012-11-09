@@ -30,7 +30,7 @@
     <!-- Source file -->
     <script src=""${url.context}/yui/button/button-min.js"></script>
 
-    <link rel="stylesheet" type="text/css"href="${url.context}/yui/reset-fonts-grids/reset-fonts-grids.css">
+    <link rel="stylesheet" type="text/css" href="${url.context}/yui/reset-fonts-grids/reset-fonts-grids.css">
     <!-- Skin CSS files resize.css must load before layout.css -->
     <link rel="stylesheet" type="text/css" href="${url.context}/yui/assets/skins/sam/resize.css">
     <link rel="stylesheet" type="text/css" href="${url.context}/yui/assets/skins/sam/layout.css">
@@ -42,6 +42,7 @@
     <@script type="text/javascript" src="${url.context}/yui/layout/layout.js"></@script>
 
     <script type="text/javascript" src="${page.url.context}/scripts/statemachine/editor/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/statemachine/editor.css">
 </@>
 
 <@templateBody>

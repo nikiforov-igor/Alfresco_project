@@ -22,4 +22,15 @@ if (statemachineId != null && statemachineId != '') {
 		machine.save();
 	}
 
+	model.packageNodeRef = machine.nodeRef.toString();
+
+	var machineStatuses = machine.getChildren();
+	var statuses = [];
+	for each (var status in machineStatuses) {
+		statuses.push({
+			name: status.properties["cm:name"],
+			actions: []
+		});
+	}
+	model.statuses = statuses;
 }

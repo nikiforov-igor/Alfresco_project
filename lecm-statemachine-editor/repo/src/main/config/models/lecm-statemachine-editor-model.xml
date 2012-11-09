@@ -14,47 +14,14 @@
 	<types>
 		<type name="lecm-stmeditor:statemachine">
 			<title>Logic ECM Base Document</title>
-			<parent>cm:cmobject</parent>
-			<properties>
-				<property name="lecm-stmeditor:statemachineId">
-					<title>Statemachine ID</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-			</properties>
-			<associations>
-				<!-- Связь со структурой-->
-				<child-association name="lecm-stmeditor:status-assoc">
-					<source>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>lecm-stmeditor:status</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-			</associations>
+			<parent>cm:folder</parent>
 		</type>
+
 		<type name="lecm-stmeditor:status">
 			<title>Logic ECM Base Document</title>
-			<parent>cm:cmobject</parent>
-			<associations>
-				<!-- Связь со структурой-->
-				<child-association name="lecm-stmeditor:action-assoc">
-					<source>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>lecm-stmeditor:action</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-			</associations>
+			<parent>cm:folder</parent>
 		</type>
+
 		<type name="lecm-stmeditor:action">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:cmobject</parent>
