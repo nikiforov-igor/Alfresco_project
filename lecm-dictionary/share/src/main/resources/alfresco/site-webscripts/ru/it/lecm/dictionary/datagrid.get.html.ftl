@@ -56,7 +56,7 @@
 									case "datetime":
 										var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
 										if (datalistColumn.name == attributeForShow) {
-											content = "<a href='#' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+											content = "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 										}
 										html += content;
 										break;
@@ -64,7 +64,7 @@
 									case "date":
 										var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
 										if (datalistColumn.name == attributeForShow) {
-											content = "<a href='#' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+											content = "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 										}
 										html += content;
 										break;
@@ -72,7 +72,7 @@
 									case "text":
 										var content = $html(data.displayValue);
 										if (datalistColumn.name == attributeForShow) {
-											html += "<a href='#' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+											html += "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 										} else {
 											html += $links(content);
 										}
@@ -132,6 +132,7 @@
 			failureMessage: "message.failure",
 			execScripts: true
 		});
+		return false;
 	}
 
 	function showViewDialog(response) {
