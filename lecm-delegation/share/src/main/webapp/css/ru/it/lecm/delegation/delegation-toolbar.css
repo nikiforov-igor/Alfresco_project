@@ -49,6 +49,7 @@
    padding: 0px;
 }
 
+/*
 .toolbar .onActionDuplicate
 {
    background-image: url('./images/duplicate-row-16.png');
@@ -63,6 +64,7 @@
 {
    background-image: url('./images/select-rows-none-16.png');
 }
+*/
 
 .datalist-toolbar .new-row span.first-child
 {

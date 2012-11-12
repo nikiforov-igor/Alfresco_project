@@ -17,7 +17,6 @@
 </script>
 
 <!-- Alfresco default scripts -->
-<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
 <!-- Logic ECM scripts -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/ru/it/lecm/delegation/delegation-const.js"/>
@@ -29,6 +28,7 @@
 	<@region id="title" scope="template"/>
 </div>
 <div id="bd">
+	<@region id="delegation-actions" scope="template"/>
 	<div class="yui-t1" id="alfresco-delegation">
 		<div id="yui-main">
 			<div class="yui-b" id="divCenter">

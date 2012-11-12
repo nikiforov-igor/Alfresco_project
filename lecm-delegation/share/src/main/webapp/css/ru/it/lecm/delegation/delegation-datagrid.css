@@ -278,25 +278,22 @@
    background-image: url('./images/plus-16.png');
 }
 
-.datagrid .onActionView a
-{
-   background-image: url('./images/list-16.png');
-}
-
-.datagrid .onActionEdit a
-{
+.datagrid .onActionEdit a {
    background-image: url('./images/edit-16.png');
 }
 
-.datagrid .onActionDuplicate a
-{
+.datagrid .onActionDelete a {
+   background-image: url('./images/delete-row-16.png');
+}
+
+.datagrid .onActionRevoke a {
    background-image: url('./images/duplicate-row-16.png');
 }
 
-.datagrid .onActionDelete a
-{
-   background-image: url('./images/delete-row-16.png');
+.datagrid .onActionPropogate a {
+   background-image: url('./images/duplicate-row-16.png');
 }
+
 
 /* Forms */
 

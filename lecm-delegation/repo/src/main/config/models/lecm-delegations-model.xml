@@ -84,24 +84,29 @@
 
 			<properties>
 
+				<!-- Дата начала действия -->
 				<property name="lecm-ba:dateUTCBegin">
-					<title>Время начала действия</title>
+					<title>Дата начала действия</title>
 					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 				</property>
 
+				<!-- Дата окончания действия -->
 				<property name="lecm-ba:dateUTCEnd">
-					<title>Время окончания действия</title>
+					<title>Дата окончания действия</title>
 					<type>d:datetime</type>
 					<mandatory>false</mandatory>
 				</property>
 
-				<property name="lecm-ba:dateUTCRevoke">
-					<title>Время прекращения</title>
-					<type>d:datetime</type>
-					<mandatory>false</mandatory>
+				<!-- Все функции -->
+				<!-- Признак того, что делегируются все функции Доверителя. -->
+				<property name="lecm-ba:allFunctions">
+					<title>Все функции</title>
+					<type>d:boolean</type>
+					<default>false</default>
 				</property>
 
+				<!-- Комментарий -->
 				<property name="lecm-ba:comment">
 					<title>Комментарий и детали</title>
 					<type>d:text</type>
@@ -114,20 +119,26 @@
 					</constraints>
 				</property>
 
+				<!-- Признак того что доверенность может быть передоверена -->
+				<!-- Значение «по-умолчанию» = False -->
 				<property name="lecm-ba:canpropogate">
 					<title>Флаг возможности передачи доверенности</title>
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
 
-				<property name="lecm-ba:canpostprocess">
-					<title>Флаг для разрешения завершить доверенные задачи после отзыва Доверенности</title>
-					<type>d:boolean</type>
-					<default>false</default>
+				<!-- Дата и время аннулирования -->
+				<!-- Заполняется системой автоматически при аннулировании доверенности -->
+				<property name="lecm-ba:dateUTCRevoke">
+					<title>Время прекращения</title>
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
 				</property>
 
+				<!-- Статус -->
+				<!-- Заполняется системой автоматически. -->
 				<property name="lecm-ba:status">
-					<title>Состоние Доверенности</title>
+					<title>Состояние Доверенности</title>
 					<type>d:text</type>
 					<default>new</default>
 					<constraints>
@@ -138,6 +149,8 @@
 			</properties>
 
 			<associations>
+				<!-- Кто делегирует полномочия (делегирующий) -->
+				<!-- Ссылочная запись на сотрудника, являющимся доверителем -->
 				<!-- Ссылка "От кого" (1-1) -->
 				<association name="lecm-ba:fromEmployee">
 					<source>
@@ -146,11 +159,13 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
+						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
 				</association>
 
+				<!-- Кому делегируются полномочия (доверенное лицо) -->
+				<!-- Ссылочная запись на сотрудника, являющимся доверенным лицом -->
 				<!-- Ссылки "Кому" (1-1) -->
 				<association name="lecm-ba:toEmployee">
 					<source>
@@ -159,11 +174,13 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
+						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
 				</association>
 
+				<!-- Состав делегируемых функций -->
+				<!-- Содержит список делегируемых функций -->
 				<!-- Список делегируемых бизнес-ролей -->
 				<association name="lecm-ba:delegateRoles">
 					<source>
@@ -172,11 +189,19 @@
 					</source>
 					<target>
 						<class>lecm-ba:businessRoles</class>
-						<mandatory>false</mandatory>
+						<mandatory>true</mandatory>
 						<many>true</many>
 					</target>
 				</association>
 
+				<!--
+				 | TODO: Возможно, для упрощения реализации требования о передаче
+				 | делегирований не более двух уровней, понадобится денормализующая
+				 | ссылка на доверенность второго уровня (из доверенности третьего уровня)
+				 | ...
+				-->
+				<!-- Документ-основание  -->
+				<!-- Не редактируемый атрибут. Используется при вторичном делегировании -->
 				<!-- Ссылка на основную родительскую доверенность (для доверенностей второго уровня) -->
 				<association name="lecm-ba:parentProcuracy">
 					<source>
@@ -190,15 +215,14 @@
 					</target>
 				</association>
 
-				<!-- TODO: Возможно, для упрощения реализации требования о передаче
-					делегирований не более двух уровней, понадобится денормализующая
-					ссылка на доверенность второго уровня (из доверенности третьего уровня)
-					...
-				  -->
 
 			</associations>
 
-			<!-- Ссылка на Aвтора (создателя) доверенности (может отличаться от значения "От кого") -->
+			<!-- Информация о создателе (авторе) -->
+			<!--
+			 | Ссылочная запись на сотрудника,  оформившего доверенность на делегирование.
+			 | Составителем может является Доверитель или Технолог.
+			-->
 			<mandatory-aspects>
 				<aspect>cm:author</aspect>
 			</mandatory-aspects>

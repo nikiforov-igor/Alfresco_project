@@ -32,20 +32,72 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="node-type" condition="lecm-ba:procuracy">
+		<forms>
+			<form>
+				<appearance>
+					<field id="lecm-ba:comment">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">5</control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->
+					<show id="lecm-ba:toEmployee"/> <!-- доверенное лицо -->
+					<show id="lecm-ba:dateUTCBegin"/> <!-- дата начала -->
+					<show id="lecm-ba:dateUTCEnd"/>  <!-- дата окончания -->
+					<!-- бессрочная ???? -->
+					<show id="lecm-ba:allFunctions"/> <!-- все функции -->
+					<show id="lecm-ba:delegateRoles"/> <!-- делегируемые ф-ции/выбранные ф-ции -->
+					<show id="lecm-ba:canpropogate"/>  <!-- возможно вторичное делегирование -->
+					<show id="lecm-ba:comment"/>  <!-- комментарий -->
+					<show id="lecm-ba:parentProcuracy"/>  <!-- документ основание -->
+					<show id="lecm-ba:dateUTCRevoke"/>  <!-- дата прекращения (отзыва) -->
+					<show id="lecm-ba:status"/> <!-- статус -->
+					<!--<show id="cm:author"/>--> <!-- инициатор -->
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="model-type" condition="lecm-ba:procuracy">
 		<forms>
 			<form>
+				<appearance>
+					<field id="lecm-ba:comment">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">5</control-param>
+						</control>
+					</field>
+				</appearance>
 				<field-visibility>
-					<show id="lecm-ba:comment"/>
-					<show id="lecm-ba:status"/>
-					<show id="lecm-ba:canpropogate"/>
+					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->
+					<show id="lecm-ba:toEmployee"/> <!-- доверенное лицо -->
+					<show id="lecm-ba:dateUTCBegin"/> <!-- дата начала -->
+					<show id="lecm-ba:dateUTCEnd"/>  <!-- дата окончания -->
+					<!-- бессрочная ???? -->
+					<show id="lecm-ba:allFunctions"/> <!-- все функции -->
+					<show id="lecm-ba:delegateRoles"/> <!-- делегируемые ф-ции/выбранные ф-ции -->
+					<show id="lecm-ba:canpropogate"/>  <!-- возможно вторичное делегирование -->
+					<show id="lecm-ba:comment"/>  <!-- комментарий -->
+					<show id="lecm-ba:parentProcuracy"/>  <!-- документ основание -->
+					<show id="lecm-ba:dateUTCRevoke"/>  <!-- дата прекращения (отзыва) -->
+					<show id="lecm-ba:status"/> <!-- статус -->
+					<!--<show id="cm:author"/>--> <!-- инициатор -->
 				</field-visibility>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-ba:comment"/>
-					<show id="lecm-ba:status"/>
-					<show id="lecm-ba:canpropogate"/>
+					<show id="lecm-ba:fromEmployee"/> <!-- Делегирующий -->
+					<show id="lecm-ba:toEmployee"/> <!-- Доверенное лицо -->
+					<show id="lecm-ba:dateUTCBegin"/> <!-- Дата начала -->
+					<show id="lecm-ba:dateUTCEnd"/> <!-- Дата окончания -->
+					<!--
+					показать столбец со значением true/false показывающим вторичное это делегирование или нет
+					рендерер видимо навесить надо...на столбец
+					-->
+					<show id="lecm-ba:parentProcuracy"/> <!-- вторично -->
+					<show id="lecm-ba:status"/> <!-- статус -->
 				</field-visibility>
 			</form>
 		</forms>

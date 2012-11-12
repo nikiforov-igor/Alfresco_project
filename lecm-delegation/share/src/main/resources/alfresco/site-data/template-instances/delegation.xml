@@ -30,5 +30,10 @@
 			<region-id>delegation-toolbar</region-id>
 			<url>/ru/it/lecm/delegation/toolbar</url>
 		</component>
+		<!-- Delegation actions region -->
+		<component>
+			<region-id>delegation-actions</region-id>
+			<url>/ru/it/lecm/delegation/actions</url>
+		</component>
 	</components>
 </template-instance>
