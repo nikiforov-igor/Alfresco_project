@@ -256,13 +256,21 @@
 	   </div>
 
 	   <form id="uploadForm" enctype="multipart/form-data" method="post" target=uploadFrame
-	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
+	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
 			<p><input type="file" name="f">
 			<input type="submit" value="Import"></p>
 	   </form>
 	   <div id="progressBar" style="display:none;">
 	   </div>
 	   <iframe id="uploadFrame" name="uploadFrame" src="" style="display:none;"></iframe>
+	   <form id="uploadForm2" enctype="multipart/form-data" method="post" target=uploadFrame
+	         action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
+		   <p><input type="file" name="f">
+			   <input type="submit" value="Import"></p>
+	   </form>
+	   <div id="progressBar2" style="display:none;">
+	   </div>
+	   <iframe id="uploadFrame2" name="uploadFrame" src="" style="display:none;"></iframe>
 		<h2 id="${id}-title"></h2>
       <div id="${id}-description" class="datagrid-description"></div>
    </div>
