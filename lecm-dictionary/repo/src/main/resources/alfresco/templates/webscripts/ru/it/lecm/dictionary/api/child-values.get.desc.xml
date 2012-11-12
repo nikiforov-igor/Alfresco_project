@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Dictionary child values</shortname>
+	<description>Get children of dictionary value</description>
+	<url>/lecm/dictionary/api/getChildrenItems</url>
+	<format default="xml">extension</format>
+	<authentication>user</authentication>
+</webscript>
