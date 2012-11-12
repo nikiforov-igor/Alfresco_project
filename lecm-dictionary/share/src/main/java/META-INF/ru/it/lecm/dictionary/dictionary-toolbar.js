@@ -107,11 +107,6 @@
                         value: "create"
                     });
 
-                this.widgets.exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExportXML,
-                    {
-                        disabled: true
-                    });
-
                 this.widgets.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportSCV,
                     {
                         disabled: true
@@ -322,38 +317,6 @@
                     }
                 }
             },
-            onExportXML: function(){
-                var datagridMeta = this.modules.dataGrid.datagridMeta;
-                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
-                var fields = "";
-                var items = "";
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: sUrl,
-                        successCallback:
-                        {
-                            fn: function(response){
-                                var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                for (var nodeIndex in oResults) {
-                                    fields += "field=" + oResults[nodeIndex].fild + "&";
-                                }
-                                for (var item in this.modules.dataGrid.selectedItems) {
-                                    items += "selectedItems=" + item + "&";
-                                }
-                            document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
-                                                     + "?" + fields
-                                                     + "nodeRef=" + datagridMeta.nodeRef + "&"
-                                                     + items;
-                            },
-                            scope: this
-                        },
-                        failureCallback:
-                        {
-                            fn: function() {alert("Failed to load webscript export.")},
-                            scope: this
-                        }
-                    });
-            },
             onExportSCV: function(){
                 var datagridMeta = this.modules.dataGrid.datagridMeta;
                 var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
@@ -372,7 +335,6 @@
                                 for (var item in this.modules.dataGrid.selectedItems) {
                                     items += "selectedItems=" + item + "&";
                                 }
-//                            document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
                                                      + "?" + fields
                                                      + items;

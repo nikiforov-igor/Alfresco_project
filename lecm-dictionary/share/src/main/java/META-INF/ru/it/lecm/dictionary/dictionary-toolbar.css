@@ -1,8 +1,3 @@
-.datalist-toolbar .export span.first-child
-{
-	background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
-	padding-left: 24px;
-}
 .datalist-toolbar .exportcsv span.first-child
 {
 	background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
