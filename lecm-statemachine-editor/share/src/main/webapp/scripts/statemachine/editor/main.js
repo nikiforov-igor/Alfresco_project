@@ -70,15 +70,29 @@ LogicECM.module = LogicECM.module || {};
 			}.bind(this));
 			this.layout.render();
 
-			this.menu = new YAHOO.widget.Menu("actionsmenu");
-			this.menu.addItems([
-				{ text: "Yahoo! Mail", value: "1" },
-				{ text: "Yahoo! Address Book", value: "2" },
-				{ text: "Yahoo! Calendar", value: "http://calendar.yahoo.com" },
-				{ text: "Yahoo! Notepad",  value: "http://notepad.yahoo.com" }
-			]);
-			this.menu.render(document.body);
-			this.menu.subscribe("click", this._addAction.bind(this));
+			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
+			var callback = {
+				success:function (oResponse) {
+					var oResults = eval("(" + oResponse.responseText + ")");
+					var items = [];
+					for (var i = 0; i < oResults.length; i++) {
+						items.push({
+							text: oResults[i].title,
+							value: oResults[i].id
+						});
+					}
+					oResponse.argument.parent.menu = new YAHOO.widget.Menu("actionsmenu");
+					oResponse.argument.parent.menu.addItems(items);
+					oResponse.argument.parent.menu.render(document.body);
+					oResponse.argument.parent.menu.subscribe("click", oResponse.argument.parent._addAction.bind(oResponse.argument.parent));
+				},
+				argument:{
+					parent: this
+				},
+				timeout: 20000
+			};
+			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+
 		},
 
 		onResize: function() {
@@ -227,6 +241,9 @@ LogicECM.module = LogicECM.module || {};
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn:this._setFormDialogTitle
+				},
 				onSuccess:{
 					fn:function (response) {
 						this._redraw();
@@ -235,11 +252,22 @@ LogicECM.module = LogicECM.module || {};
 				}
 			}).show();
 		},
+
 		_addAction: function(p_sType, p_aArgs) {
 			var oEvent = p_aArgs[0],    // DOM Event
 			oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
 			alert("123");
+		},
+
+		_setFormDialogTitle:function (p_form, p_dialog) {
+			// Dialog title
+			var message = this.msg("actions.edit");
+			var fileSpan = '<span class="light">Новый статус</span>';
+			Alfresco.util.populateHTML(
+				[ p_dialog.id + "-form-container_h", fileSpan]
+			);
 		}
+
 	});
 
 })();

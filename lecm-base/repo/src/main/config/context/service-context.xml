@@ -93,17 +93,30 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-	<bean id="stateMachineActions" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
-		<property name="actions">
-			<map>
-				<entry key="StatusChange" value="ru.it.lecm.base.statemachine.action.StatusChangeAction"/>
-				<entry key="FinishStateWithTransition" value="ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction"/>
-				<entry key="StartWorkflow"
-					   value="ru.it.lecm.base.statemachine.action.StartWorkflowAction"/>
-				<entry key="WaitForDocumentChange"
-					   value="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeAction"/>
-			</map>
-		</property>
+	<bean id="stateMachineActions" class="ru.it.lecm.base.statemachine.bean.StateMachineActions" />
+
+	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="StatusChange"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.StatusChangeAction" />
+		<property name="type" value="system" />
+	</bean>
+
+	<bean id="finishStateWithTransition.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="FinishStateWithTransition"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction" />
+		<property name="type" value="user" />
+	</bean>
+
+	<bean id="startWorkflow.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="StartWorkflow"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.StartWorkflowAction" />
+		<property name="type" value="user" />
+	</bean>
+
+	<bean id="WaitForDocumentChange.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="WaitForDocumentChange"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeAction" />
+		<property name="type" value="user" />
 	</bean>
 
 </beans>
