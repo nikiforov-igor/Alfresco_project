@@ -1,6 +1,7 @@
 package ru.it.lecm.dictionary.imports;
 
 import org.alfresco.repo.model.Repository;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.json.JSONArray;
@@ -44,6 +45,8 @@ public class ImportCSV extends AbstractWebScript {
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 		JSONObject wf = new JSONObject();
 		JSONArray compositions = new JSONArray();
+		String nodeRefStr = req.getParameter("nodeRef");
+		NodeRef nodeRef = new NodeRef(nodeRefStr);
 		try {
 			FormData formData = (FormData) req.parseContent();
 			FormData.FormField[] fields = formData.getFields();
@@ -51,7 +54,7 @@ public class ImportCSV extends AbstractWebScript {
 			InputStream inputStream = fields[0].getInputStream();
 
 			CsvDictionaryImporter csvDictionaryImporter = new CsvDictionaryImporter(inputStream, repositoryHelper,
-					nodeService, namespaceService);
+					nodeService, namespaceService, nodeRef);
 			csvDictionaryImporter.readDictionary();
 
 			wf.put("text", "Справочник успешно создан");

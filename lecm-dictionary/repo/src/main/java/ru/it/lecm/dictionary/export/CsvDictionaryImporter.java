@@ -29,13 +29,15 @@ public class CsvDictionaryImporter {
 	private Repository repositoryHelper;
 	private QName itemsType = null;
 	private InputStream inputStream;
+	private NodeRef parentNodeRef;
 
 	public CsvDictionaryImporter(InputStream inputStream, Repository repositoryHelper, NodeService nodeService,
-	                            NamespaceService namespaceService) {
+	                            NamespaceService namespaceService, NodeRef parentNodeRef) {
 		this.inputStream = inputStream;
 		this.repositoryHelper = repositoryHelper;
 		this.nodeService = nodeService;
 		this.namespaceService = namespaceService;
+		this.parentNodeRef = parentNodeRef;
 	}
 
 	private NodeRef createItem(NodeRef parentNodeRef, Map<QName, Serializable> properties) {
@@ -54,11 +56,10 @@ public class CsvDictionaryImporter {
 
 	public void readDictionary() throws IOException {
 		CsvReader csvr = new CsvReader(inputStream, ',', Charset.defaultCharset());
-		NodeRef parentNodeRef;
 		String str = "";
 		ArrayList<String> header = new ArrayList<String>();
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		NodeRef nodeRef = new NodeRef("workspace://SpacesStore/c6f662d7-1143-497a-b22e-edf086e0ef5b");
+//		NodeRef nodeRef = new NodeRef("workspace://SpacesStore/c6f662d7-1143-497a-b22e-edf086e0ef5b");
 
 		csvr.readHeaders();
 		for (int i = 0; i < csvr.getHeaderCount(); i++){
@@ -66,13 +67,14 @@ public class CsvDictionaryImporter {
 //			value = xmlr.getText();
 //			properties.put(QName.createQName(propName, namespaceService), value);
 		}
-		itemsType = QName.createQName(nodeService.getProperty(nodeRef, ExportNamespace.PROP_TYPE).toString(),namespaceService);
+		itemsType = QName.createQName(nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString(),
+				namespaceService);
 		while(csvr.readRecord()){
 			for (int i = 0; i < csvr.getColumnCount()-1; i++) {
 				csvr.get(i);
 				properties.put(QName.createQName(header.get(i), namespaceService), csvr.get(i));
 			}
-			createItem(nodeRef, properties);
+			createItem(parentNodeRef, properties);
 		}
 
 //		if (str.equals(ExportNamespace.TAG_DICTIONARY)) {
