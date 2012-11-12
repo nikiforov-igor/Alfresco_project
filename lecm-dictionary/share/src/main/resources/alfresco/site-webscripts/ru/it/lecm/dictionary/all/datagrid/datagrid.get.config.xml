@@ -1,6 +1,6 @@
 <dataGrid>
     <actionSet>
         <action type="action-link" id="onActionEdit" permission="edit" label="actions.edit"/>
-        <action type="action-link" id="onActionExportXML" permission="edit" label="actions.export-dictionary"/>
+        <action type="action-link" id="onActionExportXML" permission="edit" label="actions.export-xml"/>
     </actionSet>
 </dataGrid>

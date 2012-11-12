@@ -183,7 +183,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 
 	    /**
-         * Duplicate item(s).
+         * Export to XML.
          *
          * @method onActionExportXML
          * @param items {Object } Object literal representing the Data Item to be actioned
