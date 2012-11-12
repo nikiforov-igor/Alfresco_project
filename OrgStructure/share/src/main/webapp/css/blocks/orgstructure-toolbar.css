@@ -1,0 +1,10 @@
+.search span.first-child
+{
+    background: url(/share/res/components/images/search-16-gray.png) no-repeat 12px 4px;
+    padding-left: 24px;
+}
+.search-input
+{
+    display: inline-block;
+    vertical-align: text-bottom;
+}

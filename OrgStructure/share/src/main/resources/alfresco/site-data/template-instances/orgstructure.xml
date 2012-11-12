@@ -3,10 +3,6 @@
     <template-type>ru/it/lecm/orgstructure/orgstructure</template-type>
     <components>
         <component>
-            <region-id>menu</region-id>
-            <url>/lecm/orgstructure/menu</url>
-        </component>
-        <component>
             <region-id>content</region-id>
             <sub-components>
                 <sub-component id="tree">

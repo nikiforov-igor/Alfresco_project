@@ -78,10 +78,32 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 							root.put(ITEM_TYPE, TYPE_EMPLOYEE);
 							root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 						} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
-							root.put(ITEM_TYPE, TYPE_STAFF_LIST);
+							root.put(ITEM_TYPE, TYPE_UNIT);
 							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 						}
 						nodes.put(root);
+						//Добавить Штатное расписание и Рабочие группы
+						if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
+							root = new JSONObject();
+							root.put(TITLE, "Штатное расписание");
+							root.put(NODE_REF, cRef.toString());
+							root.put(TYPE, "staffLists");
+							root.put(IS_LEAF, false);
+							root.put(ITEM_TYPE, TYPE_STAFF_LIST);
+							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+
+							nodes.put(root);
+
+							root = new JSONObject();
+							root.put(TITLE, "Рабочие группы");
+							root.put(NODE_REF, cRef.toString());
+							root.put(TYPE, "workGroups");
+							root.put(IS_LEAF, false);
+							root.put(ITEM_TYPE, TYPE_WRK_GROUP);
+							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+
+							nodes.put(root);
+						}
 					} catch (JSONException e) {
 						logger.error(e);
 					}

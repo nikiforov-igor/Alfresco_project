@@ -44,10 +44,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     };
 
     YAHOO.extend(LogicECM.module.OrgStructure.Menu, Alfresco.component.Base, {
-        menu:null,
-        elements:[],
-        roots:new Object(),
-        messages:null,
+        roots:{},
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -59,11 +56,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
         },
 
-        setMessages:function (messages) {
-            this.messages = messages;
-        },
-
-        draw:function () {
+        _draw:function () {
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
                     Bubbling.fire("activeGridChanged",
@@ -96,41 +89,41 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
 
             var context = this;
-            var button1 = new YAHOO.widget.Button({
-                id:"structure",
-                type:"button",
-                label:context.messages["lecm.orgstructure.structure.btn"],
-                container:"button1",
-                width:140
-            });
-            var onButtonClick1 = function (e) {
-                reloadPage("structure");
-            };
-            button1.on("click", onButtonClick1);
-            this.elements.push(button1);
-
-            var button2 = new YAHOO.widget.Button({
-                id:"employees",
-                type:"button",
-                label:context.messages["lecm.orgstructure.employees.btn"],
-                container:"button2"
-            });
-            var onButtonClick2 = function (e) {
-                reloadPage("employees");
-            };
-            button2.on("click", onButtonClick2);
-            this.elements.push(button2);
 
             var type = getUrlVars()["type"];
-            var root;
-            if (type != null) {
-                root = context.roots[type];
-            } else {
-                root = context.roots["structure"];
+            if (type == null) {
+                type = "structure";
             }
+            var root = context.roots[type];
+
+            var radio1 = Dom.get("structure");
+            radio1.onclick = function (e) {
+                reloadPage("structure");
+            };
+            radio1.checked = (type == "structure");
+
+            var radio2 = Dom.get("employees");
+            radio2.onclick = function (e) {
+                reloadPage("employees");
+            };
+            radio2.checked = (type == "employees");
+
+            var radio3 = Dom.get("workGroups");
+            radio3.onclick = function (e) {
+                reloadPage("workGroups");
+            };
+            radio3.checked = (type == "workGroups");
+
+            var radio4 = Dom.get("staffLists");
+            radio4.onclick = function (e) {
+                reloadPage("staffLists");
+            };
+            radio4.checked = (type == "staffLists");
+
             bubbleTable(root);
         },
-        _loadRoots:function loadRoots() {
+
+        draw:function draw() {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
             var callback = {
                 success:function (oResponse) {
@@ -149,12 +142,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             var rType = root.type;
                             var cType = root.itemType;
                             root.type = namespace + ":" + rType;
-                            root.itemType = namespace + ":"+ cType;
+                            root.itemType = namespace + ":" + cType;
 
                             oResponse.argument.context.roots[rType] = root;
                         }
                     }
-                    oResponse.argument.context.draw();
+                    oResponse.argument.context._draw();
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");

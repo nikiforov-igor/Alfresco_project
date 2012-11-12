@@ -11,7 +11,7 @@ new LogicECM.module.Base.DataGrid('${id}').setOptions(
 //]]></script>
 <div id="${id}-body" class="datagrid">
     <div class="datagrid-meta">
-        <div id="searchBlock">
+        <div id="searchBlock" style="display: none;">
             <h2 id="${id}-heading" class="thin dark">
                 ${msg("search-block")}
             </h2>
@@ -67,9 +67,9 @@ new LogicECM.module.Base.DataGrid('${id}').setOptions(
                 Alfresco.util.createTwister("${id}-heading", "OrgstructureSearch");
             //]]></script>
         </div>
-        <hr/>
-        <h2 id="${id}-title"></h2>
-        <div id="${id}-description" class="datagrid-description"></div>
+        <#--<hr/>-->
+        <#--<h2 id="${id}-title"></h2>
+        <div id="${id}-description" class="datagrid-description"></div>-->
     </div>
     <div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button">
         <div class="yui-u first align-center">

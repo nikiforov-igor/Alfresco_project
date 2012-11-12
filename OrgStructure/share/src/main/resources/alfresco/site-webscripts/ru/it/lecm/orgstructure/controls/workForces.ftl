@@ -1,6 +1,6 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></script>
-<link rel="stylesheet" type="text/css" href="${url.context}/res/ru/it/lecm/orgstructure/controls/controls.css" />
+<link rel="stylesheet" type="text/css" href="${page.url.context}/css/controls/controls.css" />
 
 <script type="text/javascript">//<![CDATA[
 (function () {

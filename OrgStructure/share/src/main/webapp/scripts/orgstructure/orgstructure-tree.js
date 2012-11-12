@@ -201,12 +201,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             Bubbling.fire("activeGridChanged",
                 {
                     datagridMeta:{
-                        itemType:"lecm-orgstr:staff-list",
+                        itemType:"lecm-orgstr:organization-unit",
                         name:node.data.type,
                         namePattern:node.data.namePattern,
                         title:node.label,
                         fullDelete:true,
-                        initialSearch:"PARENT:" + node.data.nodeRef
+                        initialSearch:"PARENT:\"" + node.data.nodeRef + "\""
                     }
                 });
         },
@@ -281,7 +281,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
-            var message = this.msg("actions.edit");
+            var message = this.msg("dialog.edit.title");
             var fileSpan = '<span class="light">' + message + '</span>';
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
