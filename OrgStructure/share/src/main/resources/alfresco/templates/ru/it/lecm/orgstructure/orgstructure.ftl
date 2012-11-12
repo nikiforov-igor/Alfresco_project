@@ -27,7 +27,7 @@ new Alfresco.widget.Resizer("Orgstructure");
 <div id="bd">
 	<div class="yui-t1">
 		<div id="yui-main">
-			<div class="yui-b" style="margin-left: 0;" id="alf-content">
+			<div class="yui-b" style="margin-left: 0;" id="content">
 				<@region id="toolbar" scope="template" />
 				<@region id="content" scope="template" />
 			</div>

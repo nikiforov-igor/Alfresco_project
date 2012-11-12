@@ -19,23 +19,22 @@ new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
     <div id="${args.htmlid}-headerBar" class="header-bar flat-button theme-bg-2">
         <div class="left">
-        <#if showNRB>
-            <div class="new-row">
-            <span id="${id}-newRowButton" class="yui-button yui-push-button">
-               <span class="first-child">
-                  <button type="button">${msg('button.new-row')}</button>
-               </span>
-            </span>
-            </div>
-        </#if>
-        <#if showNUB>
-            <div class="new-row">
+        <#if showNewUnitBtn>
+	        <div class="new-row">
             <span id="${id}-newUnitButton" class="yui-button yui-push-button">
                <span class="first-child">
                   <button type="button">${msg('button.new-unit')}</button>
                </span>
             </span>
-            </div>
+	        </div>
+        <#else>
+	        <div class="new-row">
+            <span id="${id}-newRowButton" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button">${msg('button.new-row')}</button>
+               </span>
+            </span>
+	        </div>
         </#if>
             <div class="selected-items">
                 <button class="no-access-check" id="${args.htmlid}-selectedItems-button" name="doclist-selectedItems-button">${msg("menu.selected-items")}</button>
@@ -53,7 +52,7 @@ new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
             </div>
         </div>
 	    <div id="${id}-menu" class="right">
-	        <#include "/ru/it/lecm/orgstructure/menu.ftl"/>
+	        <#include "/ru/it/lecm/orgstructure/orgstructure-menu.ftl"/>
 	    </div>
     </div>
 </div>

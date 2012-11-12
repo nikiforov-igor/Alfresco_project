@@ -45,20 +45,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
     YAHOO.extend(LogicECM.module.OrgStructure.Menu, Alfresco.component.Base, {
         roots:{},
-        options:{
-            templateUrl:null,
-            actionUrl:null,
-            firstFocus:null,
-            onSuccess:{
-                fn:null,
-                obj:null,
-                scope:window
-            }
-        },
 
         _draw:function () {
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
+                    // draw datagrid
                     Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:{
@@ -96,30 +87,36 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
             var root = context.roots[type];
 
-            var radio1 = Dom.get("structure");
+            const structure = "structure";
+            const employees = "employees";
+            const workGroups = "workGroups";
+            const staffLists = "staffLists";
+
+            var radio1 = Dom.get(structure);
             radio1.onclick = function (e) {
-                reloadPage("structure");
+                reloadPage(structure);
             };
-            radio1.checked = (type == "structure");
+            radio1.checked = (type == structure);
 
-            var radio2 = Dom.get("employees");
+            var radio2 = Dom.get(employees);
             radio2.onclick = function (e) {
-                reloadPage("employees");
+                reloadPage(employees);
             };
-            radio2.checked = (type == "employees");
+            radio2.checked = (type == employees);
 
-            var radio3 = Dom.get("workGroups");
+            var radio3 = Dom.get(workGroups);
             radio3.onclick = function (e) {
-                reloadPage("workGroups");
+                reloadPage(workGroups);
             };
-            radio3.checked = (type == "workGroups");
+            radio3.checked = (type == workGroups);
 
-            var radio4 = Dom.get("staffLists");
+            var radio4 = Dom.get(staffLists);
             radio4.onclick = function (e) {
-                reloadPage("staffLists");
+                reloadPage(staffLists);
             };
-            radio4.checked = (type == "staffLists");
+            radio4.checked = (type == staffLists);
 
+            // initial datagrid Load
             bubbleTable(root);
         },
 

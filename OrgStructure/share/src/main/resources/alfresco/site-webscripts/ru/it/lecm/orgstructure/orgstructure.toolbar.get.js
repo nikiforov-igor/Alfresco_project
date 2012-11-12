@@ -20,19 +20,15 @@ function main()
 
     model.actionSet = actionSet;
 
-    var showNRB = false;
-    var showNUB = true;
+    var showNewUnitBtn = true;
     // default - show structure and Add Unit Button
     var type = args["type"];
     if (type != null && type != '') {
         if (type != 'structure') {
-            // hide "New Unit Button", Show "New Row Button"
-            showNRB = true;
-            showNUB = false;
+            showNewUnitBtn = false;
         }
     }
-    model.showNRB = showNRB;
-    model.showNUB = showNUB;
+    model.showNewUnitBtn = showNewUnitBtn;
 }
 
 main();
