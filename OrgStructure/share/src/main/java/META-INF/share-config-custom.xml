@@ -192,35 +192,35 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr-pos:position">
+    <config evaluator="node-type" condition="lecm-orgstr:position">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:position-code"/>
-                    <show id="lecm-orgstr-pos:position-name-g"/>
-                    <show id="lecm-orgstr-pos:position-name-d"/>
+                    <show id="lecm-orgstr:position-code"/>
+                    <show id="lecm-orgstr:position-name-g"/>
+                    <show id="lecm-orgstr:position-name-d"/>
                     <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-orgstr-pos:position">
+    <config evaluator="model-type" condition="lecm-orgstr:position">
         <forms>
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:position-code"/>
-                    <show id="lecm-orgstr-pos:position-name-g"/>
-                    <show id="lecm-orgstr-pos:position-name-d"/>
+                    <show id="lecm-orgstr:position-code"/>
+                    <show id="lecm-orgstr:position-name-g"/>
+                    <show id="lecm-orgstr:position-name-d"/>
                     <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:position-code"/>
+                    <show id="lecm-orgstr:position-code"/>
                 </field-visibility>
             </form>
         </forms>
@@ -560,9 +560,9 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:staffPosition-name-g"/>
-                    <show id="lecm-orgstr-pos:staffPosition-name-d"/>
-                    <show id="lecm-orgstr-pos:staffPosition-code"/>
+                    <show id="lecm-orgstr:staffPosition-name-g"/>
+                    <show id="lecm-orgstr:staffPosition-name-d"/>
+                    <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
             </form>
         </forms>
@@ -573,9 +573,9 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:staffPosition-name-g"/>
-                    <show id="lecm-orgstr-pos:staffPosition-name-d"/>
-                    <show id="lecm-orgstr-pos:staffPosition-code"/>
+                    <show id="lecm-orgstr:staffPosition-name-g"/>
+                    <show id="lecm-orgstr:staffPosition-name-d"/>
+                    <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
             </form>
         </forms>
@@ -586,7 +586,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:workRole-description"/>
+                    <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
             </form>
         </forms>
@@ -597,7 +597,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-orgstr-pos:workRole-description"/>
+                    <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
             </form>
         </forms>

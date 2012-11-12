@@ -15,9 +15,6 @@ if (args["type"] == null || args["type"] == "") {
     } else if (t == "personal_data") {
         var personal_data = organization.childByNamePath("Персональные данные");
         root = personal_data.nodeRef.toString();
-    } else if (t == "wkGroups") {
-        var projects = organization.childByNamePath("Рабочие группы");
-        root = projects.nodeRef.toString();
     }
 }
 
