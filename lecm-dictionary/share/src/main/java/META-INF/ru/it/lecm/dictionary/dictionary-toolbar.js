@@ -93,6 +93,7 @@
             fileUpload: null,
 
             groupActions: {},
+	        panel: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -121,6 +122,50 @@
 		            {
 			            disabled: true
 		            });
+
+	            var oPanel1 = new YAHOO.widget.Panel("panel-1", {
+
+		            visible: false,
+		            fixedcenter: true,
+		            constraintoviewport: true,
+		            width: "300px"
+
+	            });
+
+	            oPanel1.render();
+
+	            Event.on("show-dialog-1", "click", oPanel1.show, null, oPanel1);
+
+	            this.panel = new YAHOO.widget.Panel("panel-2", {
+
+		            visible: false,
+		            fixedcenter: true,
+		            constraintoviewport: true,
+		            width: "300px"
+
+	            });
+
+	            this.panel.render();
+	            this.widgets.submitButton = Alfresco.util.createYUIButton(this, "submitButton", this.onInitParameter,
+		            {
+			            disabled: true
+		            });
+//	            Event.on("show-dialog-2", "click", oPanel2.show, null, oPanel2);
+
+//                Alfresco.util.createYUIPanel("panel-2", { visible: false,
+//                    fixedcenter: true,
+//                    constraintoviewport: true,
+//                    width: "300px" });
+//
+//                Alfresco.util.createYUIButton(this, "show-dialog-2", this.onInitParameter,
+//                    {
+//                        type: "submit"
+//                    });
+//                var oTooltip1 = new YAHOO.widget.Tooltip("tooltip-1", {
+//                    context:"show-dialog-1",
+//                    text:"Shows a Dialog built using Panel from existing markup.",
+//                    iframe: true,
+//                    showDelay:500 } );
 
 	            var me = this;
 	            var searchInput = Dom.get("dictionaryFullSearchInput");
@@ -390,6 +435,47 @@
 			onInitDataGrid: function DataListToolbar_onInitDataGrid(layer, args) {
 				var datagrid = args[1].datagrid;
 				this.modules.dataGrid = datagrid;
-			}
+			},
+	        onFileUpload: function RDLTB_onFileUpload(e, p_obj)
+	        {
+		        if (this.fileUpload === null)
+		        {
+			        this.fileUpload = Alfresco.getFileUploadInstance();
+		        }
+
+		        // Show uploader for multiple files
+		        var singleUploadConfig =
+		        {
+//                    destination: this.modules.docList.doclistMetadata.parent.nodeRef,
+			        filter: [],
+			        mode: this.fileUpload.MODE_SINGLE_UPDATE,
+			        thumbnails: "doclib",
+			        onFileUploadComplete:
+			        {
+				        fn: this.onFileUploadComplete,
+				        scope: this
+			        }
+		        };
+		        this.fileUpload.show(singleUploadConfig);
+	        },
+	        onFileUploadXML: function()
+	        {
+//                var oPanel1 = new YAHOO.widget.Panel("panel-1", {
+//
+//                    visible: false,
+//                    fixedcenter: true,
+//                    constraintoviewport: true,
+//                    width: "300px"
+//
+//                });
+//                oPanel1.render();
+//
+//                Event.on("show-dialog-1", "click", oPanel1.show, null, oPanel1);
+	        },
+	        onInitParameter: function() {
+		        document.getElementById('nodeRef').value=this.modules.dataGrid.datagridMeta.nodeRef;
+		        this.panel.show();
+//		        document.getElementById('panel-2-form').submit();
+	        }
 		}, true);
 })();

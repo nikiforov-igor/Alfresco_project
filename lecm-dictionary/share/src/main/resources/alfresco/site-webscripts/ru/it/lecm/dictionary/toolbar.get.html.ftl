@@ -50,5 +50,39 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 				</span>
 			</span>
 		</div>
+
+		<div class="import-xml">
+			<button class="left" id="show-dialog-1" title="${msg('button.import-xml')}">${msg('button.import-xml')}</button>
+			<form name="panel-1-form" id="panel-1-form" method="post" enctype="multipart/form-data"
+			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
+				<div id="panel-1">
+					<p><input type="file" name="f">
+						<input type="submit" id="panel-1-button-1" name="button-1" value="Submit"></p>
+				</div>
+			</form>
+		</div>
+		<div class="file-upload">
+			<span id="${id}-submitButton" class="yui-button yui-push-button">
+				<span class="first-child">
+					<button type="button" title="${msg('button.import-csv')}">${msg('button.import-csv')}</button>
+				</span>
+			</span>
+		</div>
+		<div class="import-csv">
+		<#--<button class="left" id="show-dialog-2" title="${msg('button.import-csv')}">${msg('button.import-csv')}</button>-->
+		<form name="panel-2-form" id="panel-2-form" method="post" enctype="multipart/form-data" action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
+			<div id="panel-2">
+
+				<input type="file" name="f">
+				<input type="hidden" value="" name="nodeRef" id="nodeRef" />
+					<input type="submit" id="panel-2-button-2" name="button-2" value="Submit"></p>
+			<#--<span id="${id}-submitButton" class="yui-button yui-push-button">-->
+			<#--<span class="first-child">-->
+			<#--<button type="button" title="${msg('button.search')}"></button>-->
+			<#--</span>-->
+			<#--</span>-->
+			</div>
+		</form>
+		</div>
 	</div>
 </div>
