@@ -43,26 +43,21 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
     YAHOO.lang.extend(LogicECM.module.Header.JsButton, Alfresco.component.Base, {
 
-        context:null,
-
+        // обманка для history.js
         location: {href:"#"},
 
+        // функция вызываемая при окончании инициализации базового модуля
         onReady: function () {
-            context = this;
 
             Alfresco.logger.info ("A new LogicECM.module.Header.JsButton has been created");
 
+            this.createNotifyer();
+            this.startFakeTimer();
 
-
-            context.createNotifyer();
-            context.startFakeTimer();
-
-            context.initMenu();
-
-
-
+            this.initMenu();
         },
 
+        /// Добавление счетчика обманки
         createNotifyer: function(){
             var btn = YAHOO.util.Dom.get(this.id);
             var div=document.createElement("div");
@@ -70,6 +65,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
             btn.appendChild(div);
         },
 
+        /// Инициализатор счетчика-обманки
         startFakeTimer : function(){
             var counter = 0;
 
@@ -88,16 +84,16 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
         },
 
+        /// Показывает во всплывающем окне значение из поля ввода
         go : function(){
-
             var container = YAHOO.util.Dom.get('myPassword');
             alert(container.value);
-
         },
 
+        // Создание выпадающего меню
         initMenu : function(){
 
-            // Inject the template from the XHR request into a new DIV element
+            // Содержимое меню можно запрашивать с сервера
             var containerDiv = document.createElement("div");
             containerDiv.innerHTML =
                 '<div id="jsButton-menu" class="yuimenu menu-with-icons yui-overlay yui-overlay-hidden">' +
@@ -108,7 +104,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
                     '           </li>' +
                     '       </ul>' +
                     '       <div> <input id="myPassword" type="password"/></div>' +
-                    '       <div> <div  id="' + context.id +'-goBtn"></div></div>' +
+                    '       <div> <div  id="' + this.id +'-goBtn"></div></div>' +
                     '   </div>'+
                     '</div>';
             document.body.insertBefore(containerDiv, document.body.firstChild);
@@ -122,7 +118,9 @@ LogicECM.module.Header = LogicECM.module.Header || {};
                 });
 
             var container = YAHOO.util.Dom.get(context.id);
-            Alfresco.util.createYUIButton(container, "goBtn", context.go, {label: "создать доверенность"});
+
+            // Обработчик кнопки в меню
+            Alfresco.util.createYUIButton(container, "goBtn", this.go, {label: "Показать введённое значение"});
 
         }
     });
