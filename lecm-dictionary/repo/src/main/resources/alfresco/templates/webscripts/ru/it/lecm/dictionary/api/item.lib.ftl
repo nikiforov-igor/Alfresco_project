@@ -1,5 +1,5 @@
 <#macro renderItem item>
-	<item name="${item.node.getName()}" nodeRef="${item.node.nodeRef}">
+	<item name="${item.node.getName()}" nodeRef="${item.node.nodeRef}" type="${item.node.typeShort}">
 		<@renderProperties item=item/>
 	</item>
 </#macro>
