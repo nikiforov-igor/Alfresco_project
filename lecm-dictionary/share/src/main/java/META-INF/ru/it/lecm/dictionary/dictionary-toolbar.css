@@ -18,3 +18,13 @@
 	display: inline-block;
 	vertical-align: text-bottom;
 }
+.datalist-toolbar .file-import-csv span.first-child
+{
+	background: url(/share/res/components/images/details-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+.datalist-toolbar .file-import-xml span.first-child
+{
+	background: url(/share/res/components/images/task-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}

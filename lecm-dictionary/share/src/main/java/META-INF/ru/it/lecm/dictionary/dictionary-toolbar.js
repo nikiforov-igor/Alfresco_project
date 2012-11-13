@@ -94,6 +94,7 @@
 
             groupActions: {},
 	        panel: null,
+            panel1: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -108,7 +109,7 @@
                         value: "create"
                     });
 
-                this.widgets.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportSCV,
+                this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportSCV,
                     {
                         disabled: true
                     });
@@ -123,7 +124,7 @@
 			            disabled: true
 		            });
 
-	            var oPanel1 = new YAHOO.widget.Panel("panel-1", {
+                    this.panel1 = new YAHOO.widget.Panel("panel-1", {
 
 		            visible: false,
 		            fixedcenter: true,
@@ -132,9 +133,12 @@
 
 	            });
 
-	            oPanel1.render();
+                this.panel1.render();
 
-	            Event.on("show-dialog-1", "click", oPanel1.show, null, oPanel1);
+                this.widgets.importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){this.panel1.show()},
+                    {
+                        disabled: true
+                    });
 
 	            this.panel = new YAHOO.widget.Panel("panel-2", {
 
@@ -146,26 +150,10 @@
 	            });
 
 	            this.panel.render();
-	            this.widgets.submitButton = Alfresco.util.createYUIButton(this, "submitButton", this.onInitParameter,
+	            this.groupActions.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onInitParameter,
 		            {
 			            disabled: true
 		            });
-//	            Event.on("show-dialog-2", "click", oPanel2.show, null, oPanel2);
-
-//                Alfresco.util.createYUIPanel("panel-2", { visible: false,
-//                    fixedcenter: true,
-//                    constraintoviewport: true,
-//                    width: "300px" });
-//
-//                Alfresco.util.createYUIButton(this, "show-dialog-2", this.onInitParameter,
-//                    {
-//                        type: "submit"
-//                    });
-//                var oTooltip1 = new YAHOO.widget.Tooltip("tooltip-1", {
-//                    context:"show-dialog-1",
-//                    text:"Shows a Dialog built using Panel from existing markup.",
-//                    iframe: true,
-//                    showDelay:500 } );
 
 	            var me = this;
 	            var searchInput = Dom.get("dictionaryFullSearchInput");
