@@ -41,6 +41,7 @@
 							<control-param name="rows">5</control-param>
 						</control>
 					</field>
+					<field id="lecm-ba:status" read-only="true"/>
 				</appearance>
 				<field-visibility>
 					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->
@@ -69,6 +70,7 @@
 							<control-param name="rows">5</control-param>
 						</control>
 					</field>
+					<field id="lecm-ba:status" read-only="true"/>
 				</appearance>
 				<field-visibility>
 					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->

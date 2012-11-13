@@ -10,7 +10,8 @@
 		var datagrid = new LogicECM.module.Delegation.DataGrid ("${centerId}");
 		datagrid.setOptions ({
 			usePagination: ${(args.pagination!false)?string},
-			initialFilter: null
+			initialFilter: null,
+			splitActionsAt: 4
 		});
 		var rootNode = ${rootNode};
 		datagrid.datalistMeta.nodeRef = rootNode.nodeRef;
@@ -38,7 +39,7 @@
 			<div id="${centerId}-paginator" class="paginator"></div>
 		</div>
 		<div class="yui-u align-right">
-			<div class="items-per-page">
+			<div class="items-per-page" style="visibility: hidden;">
 				<button id="${centerId}-itemsPerPage-button">Записей на странице</button>
 			</div>
 		</div>
@@ -51,7 +52,7 @@
 		</div>
 	</div>
 	<!-- Action Sets -->
-	<div > <!-- style="display:none" -->
+	<div style="display:none;">
 		<!-- Action Set "More..." container -->
 		<div id="${centerId}-moreActions">
 			<div class="onActionShowMore">

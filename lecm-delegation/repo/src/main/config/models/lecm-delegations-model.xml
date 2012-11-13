@@ -140,7 +140,7 @@
 				<property name="lecm-ba:status">
 					<title>Состояние Доверенности</title>
 					<type>d:text</type>
-					<default>new</default>
+					<default>New</default>
 					<constraints>
 						<constraint ref="lecm-ba:statusList"/>
 					</constraints>
@@ -189,7 +189,7 @@
 					</source>
 					<target>
 						<class>lecm-ba:businessRoles</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
 				</association>

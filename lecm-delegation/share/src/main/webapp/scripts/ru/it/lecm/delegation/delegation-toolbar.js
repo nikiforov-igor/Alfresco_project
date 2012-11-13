@@ -43,90 +43,98 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Toolbar, Alfresco.component.Base, {
 
-		_createProcuracyBtnClick: function (e, p_obj) {
-//		_createProcuracyBtnClick: function (event) {
-			Alfresco.util.PopupManager.displayMessage({text: "createProcuracyBtnClick"});
+		_createProcuracyBtnClick: function () {
+			var scope = this;
+			return function (e, p_obj) {
+				//		_createProcuracyBtnClick: function (event) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: "createProcuracyBtnClick"
+				});
 
-         var datalistMeta = this.modules.dataGrid.datalistMeta,
-            destination = datalistMeta.nodeRef,
-            itemType = datalistMeta.itemType;
+				var datalistMeta = scope.modules.dataGrid.datalistMeta,
+				destination = datalistMeta.nodeRef,
+				itemType = datalistMeta.itemType;
 
-         // Intercept before dialog show
-         var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
-         {
-            Alfresco.util.populateHTML(
-               [ p_dialog.id + "-dialogTitle", this.msg("label.new-row.title") ],
-               [ p_dialog.id + "-dialogHeader", this.msg("label.new-row.header") ]
-            );
-         };
+				// Intercept before dialog show
+				var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
+				{
+					Alfresco.util.populateHTML(
+						[ p_dialog.id + "-dialogTitle", scope.msg("label.new-row.title") ],
+						[ p_dialog.id + "-dialogHeader", scope.msg("label.new-row.header") ]
+						);
+				};
 
-         var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
-         {
-            itemKind: "type",
-            itemId: itemType,
-            destination: destination,
-            mode: "create",
-            submitType: "json"
-         });
+				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
+				{
+					itemKind: "type",
+					itemId: itemType,
+					destination: destination,
+					mode: "create",
+					submitType: "json"
+				});
 
-         // Using Forms Service, so always create new instance
-         var createRow = new Alfresco.module.SimpleDialog(this.id + "-createRow");
+				// Using Forms Service, so always create new instance
+				var createRow = new Alfresco.module.SimpleDialog(scope.id + "-createRow");
 
-         createRow.setOptions(
-         {
-            width: "33em",
-            templateUrl: templateUrl,
-            actionUrl: null,
-            destroyOnHide: true,
-            doBeforeDialogShow:
-            {
-               fn: doBeforeDialogShow,
-               scope: this
-            },
-            onSuccess:
-            {
-               fn: function DataListToolbar_onNewRow_success(response)
-               {
-                  YAHOO.Bubbling.fire("dataItemCreated",
-                  {
-                     nodeRef: response.json.persistedObject
-                  });
+				createRow.setOptions(
+				{
+					width: "33em",
+					templateUrl: templateUrl,
+					actionUrl: null,
+					destroyOnHide: true,
+					doBeforeDialogShow:
+					{
+						fn: doBeforeDialogShow,
+						scope: scope
+					},
+					onSuccess:
+					{
+						fn: function DataListToolbar_onNewRow_success(response)
+						{
+							YAHOO.Bubbling.fire("dataItemCreated",
+							{
+								nodeRef: response.json.persistedObject
+							});
 
-                  Alfresco.util.PopupManager.displayMessage(
-                  {
-                     text: this.msg("message.new-row.success")
-                  });
-               },
-               scope: this
-            },
-            onFailure:
-            {
-               fn: function DataListToolbar_onNewRow_failure(response)
-               {
-                  Alfresco.util.PopupManager.displayMessage(
-                  {
-                     text: this.msg("message.new-row.failure")
-                  });
-               },
-               scope: this
-            }
-         }).show();
+							Alfresco.util.PopupManager.displayMessage(
+							{
+								text: scope.msg("message.new-row.success")
+							});
+						},
+						scope: scope
+					},
+					onFailure:
+					{
+						fn: function DataListToolbar_onNewRow_failure(response)
+						{
+							Alfresco.util.PopupManager.displayMessage(
+							{
+								text: scope.msg("message.new-row.failure")
+							});
+						},
+						scope: scope
+					}
+				}).show();
+
+			}
 		},
 
-		_listProcuraciesBtnClick: function (event) {
-			Alfresco.util.PopupManager.displayMessage({text: "listProcuraciesBtnClick"});
-			YAHOO.Bubbling.fire("activeDataListChanged", {
-				dataList: {},
-				scrollTo: true
-			});
+		_listProcuraciesBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				Alfresco.util.PopupManager.displayMessage({text: "listProcuraciesBtnClick"});
+				YAHOO.Bubbling.fire("activeDataListChanged", {
+					dataList: {},
+					scrollTo: true
+				});
+			}
 		},
 
 		_onToolbarReady: function () {
-			var scope = this;
 			var container = YAHOO.util.Dom.get(this.id);
-			Alfresco.util.createYUIButton(container, "btnCreateProcuracy", function (e, p_obj) {scope._createProcuracyBtnClick (e, p_obj);}, {label: "создать доверенность"});
+			Alfresco.util.createYUIButton(container, "btnCreateProcuracy", this._createProcuracyBtnClick (), {label: "создать доверенность"});
 
-			Alfresco.util.createYUIButton(container, "btnListProcuracies", this._listProcuraciesBtnClick, {label: "список доверенностей"});
+			Alfresco.util.createYUIButton(container, "btnListProcuracies", this._listProcuraciesBtnClick (), {label: "список доверенностей"});
 		},
 
 		onReady: function () {
