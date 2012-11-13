@@ -22,15 +22,28 @@ if (statemachineId != null && statemachineId != '') {
 		machine.save();
 	}
 
+	var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+	var actionsBean = ctx.getBean("stateMachineActions");
+
 	model.packageNodeRef = machine.nodeRef.toString();
 
 	var machineStatuses = machine.getChildren();
 	var statuses = [];
 	for each (var status in machineStatuses) {
+		var actionsNodes = status.getChildren();
+		var actions = [];
+		for each (var action in actionsNodes) {
+			var actionId = action.properties["lecm-stmeditor:actionId"];
+			actions.push({
+				actionName: actionsBean.getActionTitle(actionId),
+				actionId: actionId,
+				transitions: []
+			});
+		}
 		statuses.push({
 			name: status.properties["cm:name"],
 			nodeRef: status.nodeRef.toString(),
-			actions: []
+			actions: actions
 		});
 	}
 	model.statuses = statuses;

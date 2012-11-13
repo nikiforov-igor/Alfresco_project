@@ -113,7 +113,7 @@
 		<property name="type" value="user" />
 	</bean>
 
-	<bean id="WaitForDocumentChange.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+	<bean id="waitForDocumentChange.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
 		<property name="name" value="WaitForDocumentChange"/>
 		<property name="action" value="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeAction" />
 		<property name="type" value="user" />

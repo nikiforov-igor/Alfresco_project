@@ -7,22 +7,18 @@
             name: "${status.name}",
             nodeRef: "${status.nodeRef}",
             actions: [
+                <#list status.actions as action>
                 {
-                    action: "Action 1",
+                    actionName: "${action.actionName!"null"}",
+                    actionId: "${action.actionId!"null"}",
                     transitions: [
                         "Trans1",
                         "Trans2",
                         "Trans3"
                     ]
-                },
-                {
-                    action: "Action 2",
-                    transitions: [
-                        "Trans11",
-                        "Trans12",
-                        "Trans13"
-                    ]
                 }
+                    <#if action_has_next>,</#if>
+                </#list>
             ]
         }
         <#if status_has_next>,</#if>

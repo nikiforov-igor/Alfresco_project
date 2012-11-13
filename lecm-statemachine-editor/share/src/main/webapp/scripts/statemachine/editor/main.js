@@ -70,9 +70,16 @@ LogicECM.module = LogicECM.module || {};
 			}.bind(this));
 			this.layout.render();
 
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
 			var callback = {
 				success:function (oResponse) {
+					feedbackMessage.destroy();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					var items = [];
 					for (var i = 0; i < oResults.length; i++) {
@@ -118,9 +125,16 @@ LogicECM.module = LogicECM.module || {};
 			var el = this.layout.getUnitByPosition('center').body.firstChild;
 			el.innerHTML = "";
 
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/process?statemachineId=" + this.statemachineId;
 			var callback = {
 				success:function (oResponse) {
+					feedbackMessage.destroy();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
@@ -209,7 +223,7 @@ LogicECM.module = LogicECM.module || {};
 				//action_name
 				var actionName = document.createElement("div");
 				actionName.id = id + "-action-name-" + i;
-				actionName.innerHTML = actionModel.action;
+				actionName.innerHTML = actionModel.actionName;
 				action.appendChild(actionName);
 				Dom.addClass(actionName.id, "action_name");
 				//action_results
@@ -254,9 +268,33 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_addAction: function(p_sType, p_aArgs) {
-			var oEvent = p_aArgs[0],    // DOM Event
-			oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
-			alert("123");
+			var oEvent = p_aArgs[0];    // DOM Event
+			var oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
+			//statusNodeRef
+			//actionId
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/actions?statusNodeRef={statusNodeRef}&actionId={actionId}";
+			sUrl = YAHOO.lang.substitute(sUrl, {
+				statusNodeRef: this.currentStatus,
+				actionId: oMenuItem.value
+			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
+			var callback = {
+				success:function (oResponse) {
+					feedbackMessage.destroy();
+					var oResults = eval("(" + oResponse.responseText + ")");
+					oResponse.argument.parent._redraw();
+				},
+				argument:{
+					parent: this
+				},
+				timeout: 20000
+			};
+			YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
 		},
 
 		_setFormDialogTitle:function (p_form, p_dialog) {

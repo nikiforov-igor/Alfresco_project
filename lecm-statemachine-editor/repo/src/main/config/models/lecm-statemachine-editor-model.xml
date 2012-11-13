@@ -23,8 +23,29 @@
 		</type>
 
 		<type name="lecm-stmeditor:action">
-			<title>Logic ECM Base Document</title>
+			<title>Logic ECM Statemachine Action Object</title>
 			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-stmeditor:actionId">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-stmeditor:StartWorkflow">
+			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+			<properties>
+				<property name="lecm-stmeditor:workflowId">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:assignee">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 		</type>
 	</types>
 
