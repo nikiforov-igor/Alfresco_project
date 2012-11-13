@@ -6,14 +6,14 @@
 
 <#macro renderProperties item>
 	<#list item.propertiesName as prop>
-		<#if !prop?starts_with("sys:")>
-			<property name="${prop}">
+		<property name="${prop}">
+			<#if item.node.properties[prop]??>
 				<#if item.node.properties[prop]?is_date>
 						${item.node.properties[prop]?datetime}
 					<#else>
 				${item.node.properties[prop]?string}
 				</#if>
-			</property>
-		</#if>
+			</#if>
+		</property>
 	</#list>
 </#macro>
