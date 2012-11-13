@@ -117,7 +117,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
                     lazyloadmenu: false
                 });
 
-            var container = YAHOO.util.Dom.get(context.id);
+            var container = YAHOO.util.Dom.get(this.id);
 
             // Обработчик кнопки в меню
             Alfresco.util.createYUIButton(container, "goBtn", this.go, {label: "Показать введённое значение"});
