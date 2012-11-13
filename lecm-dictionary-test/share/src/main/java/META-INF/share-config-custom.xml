@@ -30,7 +30,6 @@
                     <show id="lecm-dic-test:regManyTree" />
                     <show id="lecm-dic-test:addressOneTree" />
                     <show id="lecm-dic-test:addressManyTree" />
-                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
 		</forms>
@@ -235,7 +234,6 @@
                     <show id="lecm-dic-test:regManyTree" />
                     <show id="lecm-dic-test:addressOneTree" />
                     <show id="lecm-dic-test:addressManyTree" />
-                    <show id="lecm-dic:active" />
                 </field-visibility>
             </form>
         </forms>

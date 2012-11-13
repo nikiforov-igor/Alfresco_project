@@ -191,7 +191,7 @@ LogicECM.module = LogicECM.module || {};
         },
         _loadTree:function loadNodeData(node, fnLoadComplete) {
 
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/dictionary";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/dictionary-tree";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }

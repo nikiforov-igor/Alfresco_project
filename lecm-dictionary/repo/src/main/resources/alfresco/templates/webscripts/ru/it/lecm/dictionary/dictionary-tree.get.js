@@ -25,16 +25,18 @@ model.branch = branch;
 
 function addItems(branch, items) {
 	for each(var item in items) {
-		title = item.getName();
-		type = getNodeType(item);
-		nodeRef = item.getNodeRef().toString();
-		isLeaf = item.childAssocs[assocType] == null;
-		branch.push({
-			title: title,
-			type: type,
-			nodeRef: nodeRef,
-			isLeaf: "" + isLeaf
-		});
+		if (item.properties["lecm-dic:active"]) {
+			title = item.getName();
+			type = getNodeType(item);
+			nodeRef = item.getNodeRef().toString();
+			isLeaf = item.childAssocs[assocType] == null;
+			branch.push({
+				title: title,
+				type: type,
+				nodeRef: nodeRef,
+				isLeaf: "" + isLeaf
+			});
+		}
 	}
 }
 

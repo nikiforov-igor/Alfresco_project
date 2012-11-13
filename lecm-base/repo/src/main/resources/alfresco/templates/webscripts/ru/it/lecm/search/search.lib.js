@@ -302,6 +302,9 @@ function getSearchResults(params) {
             ftsQuery += ' AND (+TYPE:"cm:content" +TYPE:"cm:folder")';
         }
 
+	    //not show removed dictionaries
+	    ftsQuery += ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
+
         // sort field - expecting field to in one of the following formats:
         //  - short QName form such as: cm:name
         //  - pseudo cm:content field starting with "." such as: .size
