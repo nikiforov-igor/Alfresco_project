@@ -55,7 +55,7 @@ public class CsvDictionaryImporter {
 	}
 
 	public void readDictionary() throws IOException {
-		CsvReader csvr = new CsvReader(inputStream, ',', Charset.defaultCharset());
+		CsvReader csvr = new CsvReader(inputStream, ';', Charset.defaultCharset());
 		String str = "";
 		ArrayList<String> header = new ArrayList<String>();
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();

@@ -53,7 +53,7 @@ public class ExportCSV extends AbstractWebScript {
 			resOutputStream = res.getOutputStream();
 
 			Charset charset = Charset.defaultCharset();
-			CsvWriter wr = new CsvWriter(resOutputStream, ',', charset);
+			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
 
 			for (String field : fields) {
 				namespace.add(field.split(":")[1]);
