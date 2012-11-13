@@ -161,34 +161,36 @@ function main()
 
          for each (var result in childNodes)
          {
-            if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
-            {
-               // wrap result and determine if it is selectable in the UI
-               resultObj = 
-               { 
-                  item: result
-               };
-               resultObj.selectable = isItemSelectable(result, argsSelectableType);
-               
-               containerResults.push(resultObj);
-            }
-            else
-            {
-               // wrap result and determine if it is selectable in the UI
-               resultObj = 
-               { 
-                  item: result
-               };
-               resultObj.selectable = isItemSelectable(result, argsSelectableType);
-               
-               contentResults.push(resultObj);
-            }
+	        if (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"]) {
+	            if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
+	            {
+	               // wrap result and determine if it is selectable in the UI
+	               resultObj =
+	               {
+	                  item: result
+	               };
+	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-            var visibleName = argsNameSubstituteString;
-            for each(var field in nameParams) {
-                visibleName = visibleName.replace(argsOpenSubstituteSymbol + field + argsCloseSubstituteSymbol, result.properties[field]);
+	               containerResults.push(resultObj);
+	            }
+	            else
+	            {
+	               // wrap result and determine if it is selectable in the UI
+	               resultObj =
+	               {
+	                  item: result
+	               };
+	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
+
+	               contentResults.push(resultObj);
+	            }
+
+	            var visibleName = argsNameSubstituteString;
+	            for each(var field in nameParams) {
+	                visibleName = visibleName.replace(argsOpenSubstituteSymbol + field + argsCloseSubstituteSymbol, result.properties[field]);
+	            }
+	            resultObj.visibleName = visibleName;
             }
-            resultObj.visibleName = visibleName;
          }
 
          results = containerResults.concat(contentResults);

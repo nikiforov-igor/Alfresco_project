@@ -8,13 +8,15 @@ if (parentNode != null) {
     var values = parentNode.getChildren();
 
     for each(var item in values) {
-        branch.push({
-            title: item.properties[nodeTitleProperty],
-            type: item.getTypeShort(),
-            nodeRef: item.getNodeRef().toString(),
-            isLeaf: "" + !item.hasChildren,
-            isContainer: "" + item.isContainer
-        });
+		if (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"]) {
+	        branch.push({
+	            title: item.properties[nodeTitleProperty],
+	            type: item.getTypeShort(),
+	            nodeRef: item.getNodeRef().toString(),
+	            isLeaf: "" + !item.hasChildren,
+	            isContainer: "" + item.isContainer
+	        });
+		}
     }
 }
 
