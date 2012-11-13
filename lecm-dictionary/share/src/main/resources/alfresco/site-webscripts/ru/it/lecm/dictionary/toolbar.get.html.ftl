@@ -46,13 +46,15 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 			</div>
 		</div>
 		<div class="import-csv">
-			<form name="panel-2-form" id="panel-2-form" method="post" enctype="multipart/form-data" action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
+			<form name="panel-2-form" id="panel-2-form" method="post" enctype="multipart/form-data"
+			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv" target="importFrameCsv">
 				<div id="panel-2">
 					<input type="file" name="f">
 					<input type="hidden" value="" name="nodeRef" id="nodeRef" />
 					<input type="submit" id="panel-2-button-2" name="button-2" value="Submit"></p>
 				</div>
 			</form>
+			<iframe id="importFrameCsv" name="importFrameCsv" src="" style="display:none;"></iframe>
 		</div>
 		<div class="right">
 			<span id="${id}-searchInput" class="search-input">
@@ -67,12 +69,13 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 
 		<div class="import-xml">
 			<form name="panel-1-form" id="panel-1-form" method="post" enctype="multipart/form-data"
-			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
+			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import" target="importFrameXml">
 				<div id="panel-1">
 					<p><input type="file" name="f">
 						<input type="submit" id="panel-1-button-1" name="button-1" value="Submit"></p>
 				</div>
 			</form>
+			<iframe id="importFrameXml" name="importFrameXml" src="" style="display:none;"></iframe>
 		</div>
 
 	</div>

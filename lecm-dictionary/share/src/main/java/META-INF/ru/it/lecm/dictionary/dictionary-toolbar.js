@@ -150,7 +150,7 @@
 	            });
 
 	            this.panel.render();
-	            this.groupActions.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onInitParameter,
+	            this.widgets.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onInitParameter,
 		            {
 			            disabled: true
 		            });
