@@ -1,12 +1,16 @@
 package ru.it.lecm.delegation.beans;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
@@ -15,6 +19,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.lock.LockService;
 import org.alfresco.service.cmr.lock.LockType;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -295,7 +300,6 @@ public class DelegationBean
 		return result;
 	}
 
-
 	/*
 	static JSONObject makeJsonObj(
 			final NodeService nodeService
@@ -316,6 +320,21 @@ public class DelegationBean
 	}
 	 */
 
+	// org.alfresco.util.ISO8601DateFormat;
+	final static DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+
+	/**
+	 * Преобразование в значение, пригодное для json-передачи
+	 * Сейчас преобразуются только типы Date в формат ISO8601
+	 * @param value
+	 * @return
+	 */
+	final static Object convertModelValueIntoJson(Object value) {
+		return (value instanceof Date)
+				? DateFormatISO8601.format((Date) value)
+				: value;
+	}
+
 	final static JSONObject makeJson(final Map<QName, Serializable> props) {
 		final JSONObject result = new JSONObject();
 		if (props != null) {
@@ -332,8 +351,9 @@ public class DelegationBean
 
 
 	/**
-	 * 
+	 * Получить свойства в json-виде пригодном для отправки в форму ввода 
 	 * @param props
+	 * @param assoclist набор полей-ассоциаций
 	 * @return массив вида 
 				"prop_lecm-ba_dateUTCBegin": {
 					"value": sss, //значение свойства
@@ -341,17 +361,24 @@ public class DelegationBean
 				}
 				, ... other properties ...
 	 */
-	final static JSONObject makeJsonPropeties(Map<QName, Serializable> props, NamespaceService nss) {
+	final static JSONObject makeJsonPropeties(
+			Map<QName, Serializable> props
+			, Collection<QName> assoclist
+			, NamespaceService nss
+			) 
+	{
 		final JSONObject result = new JSONObject();
 		if (props != null) {
 			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
 				try {
 					final JSONObject propObj = new JSONObject();
-					final Object value = entry.getValue();
+					final Object value = convertModelValueIntoJson( entry.getValue());
 					propObj.put( "value", value);
 					propObj.put( "displayValue", value);
 
-					final String propName = normalizePropName( entry.getKey(), nss);
+					final String prefix = (assoclist != null && assoclist.contains(entry.getKey())) 
+								? PREFIX_ASSOC : PREFIX_PROP;
+					final String propName = normalizePropName( entry.getKey(), prefix, nss);
 					result.put( propName, propObj);
 				} catch (JSONException ex) {
 					logger.error("Problem loading procuracy node ", ex);
@@ -362,10 +389,14 @@ public class DelegationBean
 	}
 
 
-	static String normalizePropName(QName key, NamespaceService nss) {
+	private final static String PREFIX_PROP = "prop";
+	private final static String PREFIX_ASSOC = "assoc";
+
+	// return example: "prop_lecm-ba_dateUTCBegin", "assoc_lecm-ba_fromEmployee"
+	static String normalizePropName(QName key, String prefix, NamespaceService nss) {
 		// final Collection<String> prefixes = nss.getPrefixes(key.getNamespaceURI());
 		final QName prefixed = key.getPrefixedQName(nss);
-		return String.format( "prop_%s_%s", QName.splitPrefixedQName(prefixed.toPrefixString())[0], key.getLocalName() ) ;
+		return String.format( "%s_%s_%s", prefix, QName.splitPrefixedQName(prefixed.toPrefixString())[0], key.getLocalName() ) ;
 	}
 
 
@@ -559,13 +590,25 @@ public class DelegationBean
 		if (foundSet != null) {
 			for(ResultSetRow row : foundSet) {
 				final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
-				// final JSONObject obj = makeJson(props);
-				final JSONObject obj = new JSONObject();
-				obj.put("nodeRef", row.getNodeRef());
-				obj.put("itemData", makeJsonPropeties(props, serviceRegistry.getNamespaceService()));
-				//TODO: временный хардкод для того чтобы actionset-ы в таблице заработали
-				obj.put ("permissions", new JSONObject ("{\"userAccess\":{\"create\": true, \"edit\":true, \"delete\":true}}"));
-				result.put(obj);
+
+				final Set<QName> assocs = new HashSet <QName>(); 
+				{	// добавление ассоциаций ...
+					final List<AssociationRef> ca = serviceRegistry.getNodeService().getTargetAssocs(row.getNodeRef(), RegexQNamePattern.MATCH_ALL);
+					if (ca != null)
+						for (AssociationRef ref: ca)
+							assocs.add(ref.getTypeQName());
+				}
+
+				{
+					final JSONObject obj = new JSONObject();
+					obj.put("nodeRef", row.getNodeRef());
+					obj.put("itemData", makeJsonPropeties(props, assocs, serviceRegistry.getNamespaceService()));
+
+					// TODO: временный хардкод для того чтобы actionset-ы в таблице заработали
+					obj.put ("permissions", new JSONObject ("{\"userAccess\":{\"create\": true, \"edit\":true, \"delete\":true}}"));
+					result.put(obj);
+				}
+
 			}
 		}
 		return result;
