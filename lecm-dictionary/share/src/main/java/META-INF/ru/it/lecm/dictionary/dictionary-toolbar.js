@@ -402,9 +402,10 @@
 				{
 					var searchTerm = Dom.get("dictionaryFullSearchInput").value;
 
+					var dataGrid = this.modules.dataGrid;
+					var datagridMeta = dataGrid.datagridMeta;
+
 					if (searchTerm.length > 0) {
-						var dataGrid = this.modules.dataGrid;
-						var datagridMeta = dataGrid.datagridMeta;
 						var columns = dataGrid.datagridColumns;
 
 						var fields = "";
@@ -431,6 +432,16 @@
 							});
 
 						YAHOO.Bubbling.fire("showFilteredLabel");
+					} else {
+						var nodeRef = datagridMeta.nodeRef;
+						datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
+						datagridMeta.fullTextSearch = "";
+							YAHOO.Bubbling.fire("activeGridChanged",
+							{
+								datagridMeta: datagridMeta,
+								scrollTo: true
+							});
+						YAHOO.Bubbling.fire("hideFilteredLabel");
 					}
 				}
 			},
