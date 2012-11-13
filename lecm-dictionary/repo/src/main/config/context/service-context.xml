@@ -82,4 +82,10 @@
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
+	<bean id="webscript.ru.it.lecm.dictionary.api.export.get"
+	      class="ru.it.lecm.dictionary.export.ExportAPI"
+	      parent="webscript">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+	</bean>
 </beans>
