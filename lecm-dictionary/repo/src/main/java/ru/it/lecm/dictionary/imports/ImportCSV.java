@@ -17,11 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created with IntelliJ IDEA.
  * User: mShafeev
  * Date: 02.11.12
  * Time: 16:33
- * To change this template use File | Settings | File Templates.
  */
 public class ImportCSV extends AbstractWebScript {
 
@@ -53,11 +51,11 @@ public class ImportCSV extends AbstractWebScript {
 
 			InputStream inputStream = fields[0].getInputStream();
 
-			CsvDictionaryImporter csvDictionaryImporter = new CsvDictionaryImporter(inputStream, repositoryHelper,
+			CsvDictionaryImporter csvDictionaryImporter = new CsvDictionaryImporter(inputStream,
 					nodeService, namespaceService, nodeRef);
 			csvDictionaryImporter.readDictionary();
 
-			wf.put("text", "Справочник успешно создан");
+			wf.put("text", "Элементы успешно загружены");
 			compositions.put(wf);
 			res.setContentEncoding("utf-8");
 			res.getWriter().write(compositions.toString());

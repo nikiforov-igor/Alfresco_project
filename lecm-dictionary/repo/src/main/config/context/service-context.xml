@@ -78,7 +78,6 @@
           class="ru.it.lecm.dictionary.imports.ImportCSV"
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
