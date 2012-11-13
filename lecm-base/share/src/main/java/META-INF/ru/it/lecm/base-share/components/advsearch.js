@@ -417,12 +417,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
-                this.currentForm.runtime = args[1].runtime;
+                if (this.currentForm) {
+                    this.currentForm.runtime = args[1].runtime;
 
-                // Repopulate current form from url query data?
-                if (this.currentForm.repopulate) {
-                    this.currentForm.repopulate = false;
-                    this.repopulateCurrentForm();
+                    // Repopulate current form from url query data?
+                    if (this.currentForm.repopulate) {
+                        this.currentForm.repopulate = false;
+                        this.repopulateCurrentForm();
+                    }
                 }
             },
 
