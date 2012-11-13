@@ -81,7 +81,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 minSearchTermLength:3,
 
-                maxSearchResults:3000
+                maxSearchResults:3000,
+                // default hide search block
+                hideExtendSearchBlock: true
             },
 
             /**
@@ -141,29 +143,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 defaultForm.id = "search";
                 defaultForm.type = metaData.itemType;
 
-                // search YUI button and menus
-                this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
-                this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
-                this.widgets.clearButton = Alfresco.util.createYUIButton(this, "clear-button", this.onClearClick);
+                if (!this.options.hideExtendSearchBlock) {
+                    // search YUI button and menus
+                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
+                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
+                    this.widgets.clearButton = Alfresco.util.createYUIButton(this, "clear-button", this.onClearClick);
 
-                // render initial form template
-                this.renderFormTemplate(defaultForm, true);
+                    // render initial form template
+                    this.renderFormTemplate(defaultForm, true);
 
-                // register the "enter" event on the search text field
-                var queryInput = Dom.get(this.id + "-search-text");
+                    // register the "enter" event on the search text field
+                    var queryInput = Dom.get(this.id + "-search-text");
 
-                this.widgets.enterListener = new YAHOO.util.KeyListener(queryInput,
-                    {
-                        keys:YAHOO.util.KeyListener.KEY.ENTER
-                    },
-                    {
-                        fn:me._searchEnterHandler,
-                        scope:this,
-                        correctScope:true
-                    }, "keydown").enable();
+                    this.widgets.enterListener = new YAHOO.util.KeyListener(queryInput,
+                        {
+                            keys:YAHOO.util.KeyListener.KEY.ENTER
+                        },
+                        {
+                            fn:me._searchEnterHandler,
+                            scope:this,
+                            correctScope:true
+                        }, "keydown").enable();
 
-                // Finally show the component body here to prevent UI artifacts on YUI button decoration
-                Dom.setStyle(this.id + "-body", "visibility", "visible");
+                    // Finally show the component body here to prevent UI artifacts on YUI button decoration
+                    Dom.setStyle("searchBlock", "display", "block");
+                }
             },
 
             /**

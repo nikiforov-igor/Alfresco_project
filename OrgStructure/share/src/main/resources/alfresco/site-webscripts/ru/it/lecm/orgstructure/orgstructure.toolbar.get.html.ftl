@@ -51,7 +51,7 @@ new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
                 </div>
             </div>
         </div>
-	    <div id="${id}-menu" class="right">
+	    <div id="${id}-menu" class="right" style="padding-top: 4px; padding-bottom: 4px;">
 	        <#include "/ru/it/lecm/orgstructure/orgstructure-menu.ftl"/>
 	    </div>
     </div>
