@@ -137,7 +137,7 @@
 
                 this.widgets.importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){this.panel1.show()},
                     {
-                        disabled: true
+                        disabled: false
                     });
 
 	            this.panel = new YAHOO.widget.Panel("panel-2", {
