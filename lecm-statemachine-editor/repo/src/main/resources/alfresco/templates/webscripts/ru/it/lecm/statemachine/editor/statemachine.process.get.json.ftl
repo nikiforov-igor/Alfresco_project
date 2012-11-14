@@ -11,6 +11,7 @@
                 {
                     actionName: "${action.actionName!"null"}",
                     actionId: "${action.actionId!"null"}",
+                    nodeRef: "${action.nodeRef!"null"}",
                     transitions: [
                         "Trans1",
                         "Trans2",

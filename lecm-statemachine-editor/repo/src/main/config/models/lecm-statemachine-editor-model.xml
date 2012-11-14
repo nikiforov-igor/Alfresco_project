@@ -47,6 +47,18 @@
 				</property>
 			</properties>
 		</type>
+
+		<type name="lecm-stmeditor:FinishStateWithTransition">
+			<title>Logic ECM Statemachine FinishStateWithTransition Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
+		<type name="lecm-stmeditor:WaitForDocumentChange">
+			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
 	</types>
+
 
 </model>

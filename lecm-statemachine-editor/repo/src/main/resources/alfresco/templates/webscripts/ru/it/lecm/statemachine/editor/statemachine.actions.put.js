@@ -1,6 +1,3 @@
-//statusNodeRef
-//actionId
-
 var statusNodeRef = args["statusNodeRef"];
 var actionId = args["actionId"];
 

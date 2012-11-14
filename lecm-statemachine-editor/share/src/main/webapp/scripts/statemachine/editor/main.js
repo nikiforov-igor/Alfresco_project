@@ -27,6 +27,8 @@ LogicECM.module = LogicECM.module || {};
 
 	var Dom = YAHOO.util.Dom
 	var Bubbling = YAHOO.Bubbling;
+	var Event = YAHOO.util.Event;
+
 	LogicECM.module.StatemachineEditor = function (htmlId) {
 		return LogicECM.module.StatemachineEditor.superclass.constructor.call(
 			this,
@@ -79,7 +81,7 @@ LogicECM.module = LogicECM.module || {};
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
 			var callback = {
 				success:function (oResponse) {
-					feedbackMessage.destroy();
+					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
 					var oResults = eval("(" + oResponse.responseText + ")");
 					var items = [];
 					for (var i = 0; i < oResults.length; i++) {
@@ -134,7 +136,7 @@ LogicECM.module = LogicECM.module || {};
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/process?statemachineId=" + this.statemachineId;
 			var callback = {
 				success:function (oResponse) {
-					feedbackMessage.destroy();
+					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
@@ -178,9 +180,31 @@ LogicECM.module = LogicECM.module || {};
 			//status
 			var status = document.createElement("div");
 			status.id = id + "-status";
-			status.innerHTML = "<b>Статус</b><br/>" + model.name;
 			container.appendChild(status);
 			Dom.addClass(id + "-status", "status_dis");
+			var statusHeader = document.createElement("div");
+			statusHeader.innerHTML = "<b>Статус</b>";
+			status.appendChild(statusHeader);
+			var statusName = document.createElement("div");
+			statusName.id = id + "-status-name";
+			statusName.innerHTML = model.name;
+			status.appendChild(statusName);
+			Dom.addClass(statusName.id, "status_name");
+
+			Alfresco.util.createInsituEditor(
+				statusName.id,
+				{
+					showDelay: 300,
+					hideDelay: 300,
+					type: "statemachineEditActions",
+					nodeRef: model.nodeRef,
+					elementType: "status",
+					elementName: model.name,
+					parent: this
+				},
+				null
+			);
+
 			//actions container
 			var actions = document.createElement("div");
 			actions.id = id + "-actions";
@@ -197,7 +221,7 @@ LogicECM.module = LogicECM.module || {};
 			actionName.id = id + "-action-name-header";
 			actionName.innerHTML = "<b>Действия</b> <a id='" + actionName.id + "-add' class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
 			action.appendChild(actionName);
-			Dom.addClass(actionName.id, "action_name");
+			Dom.addClass(actionName.id, "action_name_header");
 
 			var addAction = new YAHOO.util.Element(actionName.id + "-add");
 			addAction.on("click", function (event) {
@@ -226,6 +250,21 @@ LogicECM.module = LogicECM.module || {};
 				actionName.innerHTML = actionModel.actionName;
 				action.appendChild(actionName);
 				Dom.addClass(actionName.id, "action_name");
+
+				Alfresco.util.createInsituEditor(
+					actionName.id,
+					{
+						showDelay: 300,
+						hideDelay: 300,
+						type: "statemachineEditActions",
+						nodeRef: actionModel.nodeRef,
+						elementType: "action",
+						elementName: actionModel.actionName,
+						parent: this
+					},
+					null
+				);
+
 				//action_results
 				var actionResults = document.createElement("div");
 				actionResults.id = id + "-action-resilts-" + i;
@@ -285,7 +324,7 @@ LogicECM.module = LogicECM.module || {};
 				});
 			var callback = {
 				success:function (oResponse) {
-					feedbackMessage.destroy();
+					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent._redraw();
 				},
@@ -300,12 +339,260 @@ LogicECM.module = LogicECM.module || {};
 		_setFormDialogTitle:function (p_form, p_dialog) {
 			// Dialog title
 			var message = this.msg("actions.edit");
-			var fileSpan = '<span class="light">Новый статус</span>';
+			var fileSpan = '<span class="light">Статус</span>';
 			Alfresco.util.populateHTML(
 				[ p_dialog.id + "-form-container_h", fileSpan]
 			);
-		}
+		},
+		_deleteStatus: function(nodeRef) {
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";
+			sUrl = YAHOO.lang.substitute(sUrl, {
+				nodeRef: nodeRef
+			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
+			var callback = {
+				success:function (oResponse) {
+					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._redraw();
+				},
+				argument:{
+					parent: this
+				},
+				timeout: 20000
+			};
+			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
+		},
 
+		_editStatus: function(nodeRef) {
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			templateUrl = YAHOO.lang.substitute(templateUrl, {
+				itemKind:"node",
+				itemId: nodeRef,
+				mode:"edit",
+				submitType:"json",
+				formId:"statemachine-editor-edit-status"
+			});
+			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
+				width:"40em",
+				templateUrl:templateUrl,
+				actionUrl:null,
+				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn:this._setFormDialogTitle
+				},
+				onSuccess:{
+					fn:function (response) {
+						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";
+						sUrl = YAHOO.lang.substitute(sUrl, {
+							nodeRef: nodeRef
+						});
+						var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+							{
+								text: Alfresco.util.message("label.loading"),
+								spanClass: "wait",
+								displayTime: 0
+							});
+						var callback = {
+							success:function (oResponse) {
+								YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+								oResponse.argument.parent._redraw();
+							},
+							argument:{
+								parent: this
+							},
+							timeout: 20000
+						};
+						YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
+					},
+					scope:this
+				}
+			}).show();
+
+		},
+
+		_deleteAction: function(nodeRef) {
+			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions?nodeRef={nodeRef}";
+			sUrl = YAHOO.lang.substitute(sUrl, {
+				nodeRef: nodeRef
+			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
+			var callback = {
+				success:function (oResponse) {
+					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._redraw();
+				},
+				argument:{
+					parent: this
+				},
+				timeout: 20000
+			};
+			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
+		},
+
+		_editAction: function(nodeRef) {
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			templateUrl = YAHOO.lang.substitute(templateUrl, {
+				itemKind:"node",
+				itemId: nodeRef,
+				mode:"edit",
+				submitType:"json",
+				formId:"statemachine-editor-edit-status"
+			});
+			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
+				width:"40em",
+				templateUrl:templateUrl,
+				actionUrl:null,
+				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn:this._setFormDialogTitle
+				},
+				onSuccess:{
+					fn:function (response) {
+						this._redraw();
+					},
+					scope:this
+				}
+			}).show();
+
+		}
 	});
+
+	Alfresco.widget.InsituEditor.statemachineEditActions = function (p_params) {
+		this.params = YAHOO.lang.merge({}, p_params);
+
+		// Create icons instances
+		this.editIcon = new Alfresco.widget.InsituEditorUnitEdit(this, p_params);
+		this.deleteIcon = new Alfresco.widget.InsituEditorUnitDelete(this, p_params);
+		return this;
+	};
+
+	YAHOO.extend(Alfresco.widget.InsituEditor.statemachineEditActions, Alfresco.widget.InsituEditor.textBox,
+		{
+			doShow:function InsituEditor_textBox_doShow() {
+				if (this.contextStyle === null)
+					this.contextStyle = Dom.getStyle(this.params.context, "display");
+				Dom.setStyle(this.params.context, "display", "none");
+				Dom.setStyle(this.editForm, "display", "inline");
+			},
+
+			doHide:function InsituEditor_textBox_doHide(restoreUI) {
+				if (restoreUI) {
+					Dom.setStyle(this.editForm, "display", "none");
+					Dom.setStyle(this.params.context, "display", this.contextStyle);
+				}
+			},
+
+			_generateMarkup:function InsituEditor_textBox__generateMarkup() {
+				return;
+			}
+		});
+
+	Alfresco.widget.InsituEditorUnitEdit = function (p_editor, p_params) {
+		this.editor = p_editor;
+		this.params = YAHOO.lang.merge({}, p_params);
+		this.disabled = p_params.disabled;
+
+		this.editIcon = document.createElement("span");
+		this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+		Dom.addClass(this.editIcon, "insitu-edit-unit");
+
+		this.params.context.appendChild(this.editIcon, this.params.context);
+		Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+		Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+		Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+		Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+	};
+
+	YAHOO.extend(Alfresco.widget.InsituEditorUnitEdit, Alfresco.widget.InsituEditorIcon,
+		{
+			onIconClick:function InsituEditorUnitEdit_onIconClick(e, obj) {
+				var context = obj.params;
+				if (context.elementType == "status") {
+					context.parent._editStatus(context.nodeRef);
+				} else if (context.elementType == "action") {
+					context.parent._editAction(context.nodeRef);
+				}
+			}
+		});
+
+	Alfresco.widget.InsituEditorUnitDelete = function (p_editor, p_params) {
+		this.editor = p_editor;
+		this.params = YAHOO.lang.merge({}, p_params);
+		this.disabled = p_params.disabled;
+
+		this.editIcon = document.createElement("span");
+		this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+		Dom.addClass(this.editIcon, "insitu-delete-unit");
+
+		this.params.context.appendChild(this.editIcon, this.params.context);
+		Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+		Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+		Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+		Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+	};
+
+	YAHOO.extend(Alfresco.widget.InsituEditorUnitDelete, Alfresco.widget.InsituEditorIcon,
+		{
+			onIconClick: function InsituEditorUnitDelete_onIconClick(e, obj) {
+				var context = obj.params;
+				if (context.elementType == "status") {
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							title: "Удаление статуса",
+							text: "Вы действительно хотите удалить статус \"" + context.elementName + "\"",
+							buttons: [
+								{
+									text: "Удалить",
+									handler: function dlA_onActionDelete_delete()
+									{
+										this.destroy();
+										context.parent._deleteStatus(context.nodeRef);
+									}
+								},
+								{
+									text: "Отмена",
+									handler: function dlA_onActionDelete_cancel()
+									{
+										this.destroy();
+									},
+									isDefault: true
+								}]
+						});
+				} else if (context.elementType == "action") {
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							title: "Удаление действия",
+							text: "Вы действительно хотите удалить действие \"" + context.elementName + "\"",
+							buttons: [
+								{
+									text: "Удалить",
+									handler: function dlA_onActionDelete_delete()
+									{
+										this.destroy();
+										context.parent._deleteAction(context.nodeRef);
+									}
+								},
+								{
+									text: "Отмена",
+									handler: function dlA_onActionDelete_cancel()
+									{
+										this.destroy();
+									},
+									isDefault: true
+								}]
+						});
+				}
+			}
+		});
 
 })();

@@ -5,11 +5,9 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-					<show id="lecm-contract:regnum" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
-					<field id="lecm-contract:regnum"/>
 				</appearance>
 			</form>
 		</forms>
@@ -23,6 +21,21 @@
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:StartWorkflow">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:assignee" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:workflowId"/>
+					<field id="lecm-stmeditor:assignee"/>
 				</appearance>
 			</form>
 		</forms>

@@ -37,6 +37,7 @@ if (statemachineId != null && statemachineId != '') {
 			actions.push({
 				actionName: actionsBean.getActionTitle(actionId),
 				actionId: actionId,
+				nodeRef: action.nodeRef.toString(),
 				transitions: []
 			});
 		}
