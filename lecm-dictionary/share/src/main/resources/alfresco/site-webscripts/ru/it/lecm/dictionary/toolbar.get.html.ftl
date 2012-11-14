@@ -49,6 +49,7 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 			<form name="panel-2-form" id="panel-2-form" method="post" enctype="multipart/form-data"
 			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv" target="importFrameCsv">
 				<div id="panel-2">
+					<div class="hd">${msg('button.import-csv')}</div>
 					<input type="file" name="f">
 					<input type="hidden" value="" name="nodeRef" id="nodeRef" />
 					<input type="submit" id="panel-2-button-2" name="button-2" value="Submit"></p>
@@ -71,6 +72,7 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 			<form name="panel-1-form" id="panel-1-form" method="post" enctype="multipart/form-data"
 			      action="${url.context}/proxy/alfresco/lecm/dictionary/post/import" target="importFrameXml">
 				<div id="panel-1">
+					<div class="hd">${msg('button.import-xml')}</div>
 					<p><input type="file" name="f">
 						<input type="submit" id="panel-1-button-1" name="button-1" value="Submit"></p>
 				</div>
