@@ -22,9 +22,10 @@
         <!-- Title -->
         <component>
             <region-id>title</region-id>
-            <url>/components/title/simple-title</url>
+            <url>/lecm/base/title-with-filter-label</url>
             <properties>
                 <title>page.orgstructure</title>
+                <filteredLabel>page.orgstructure.filter.label</filteredLabel>
             </properties>
         </component>
     </components>

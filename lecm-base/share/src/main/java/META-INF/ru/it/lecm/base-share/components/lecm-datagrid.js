@@ -664,9 +664,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Set-up YUI History Managers and Paginator
                 this._setupHistoryManagers();
                 // DataSource set-up and event registration
-                this._setupDataSource();
+                this.setupDataSource();
                 // DataTable set-up and event registration
-                this._setupDataTable();
+                this.setupDataTable();
                 // Hide "no list" message
                 Dom.addClass(this.id + "-selectListMessage", "hidden");
             },
@@ -783,13 +783,47 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-            /**
+            _setupDataSource:function () {
+                var uriSearchResults = Alfresco.constants.PROXY_URI + "lecm/search";
+                var dSource = new YAHOO.util.DataSource(uriSearchResults,
+                    {
+                        connMethodPost:true,
+                        responseType:YAHOO.util.DataSource.TYPE_JSON,
+                        connXhrMode:"queueRequests",
+                        responseSchema:{
+                            resultsList:"items",
+                            metaFields:{
+                                paginationRecordOffset:"startIndex",
+                                totalRecords:"totalRecords",
+                                isVersionable:"versionable",
+                                meta:"metadata"
+                            }
+                        }
+                    });
+
+                dSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
+
+                // Intercept data returned from data webscript to extract custom metadata
+                dSource.doBeforeCallback = function DataGrid_doBeforeCallback(oRequest, oFullResponse, oParsedResponse) {
+                    this.versionable = oFullResponse.versionable;
+                    // Container userAccess event
+                    var permissions = oFullResponse.metadata.permissions;
+                    if (permissions && permissions.userAccess) {
+                        Bubbling.fire("userAccess",
+                            {
+                                userAccess:permissions.userAccess
+                            });
+                    }
+                    return oParsedResponse;
+                }.bind(this);
+                return dSource;
+            }, /**
              * DataSource set-up and event registration
              *
              * @method _setupDataSource
              * @protected
              */
-            _setupDataSource: function DataGrid__setupDataSource()
+            setupDataSource: function DataGrid__setupDataSource()
             {
                 this.dataRequestFields = [];
                 this.dataResponseFields = [];
@@ -804,44 +838,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.datagridColumns[fieldLookup] = column;
                 }
 
-                // DataSource definition
-                var uriSearchResults = Alfresco.constants.PROXY_URI + "lecm/search";
-                this.widgets.dataSource = new YAHOO.util.DataSource(uriSearchResults,
-                    {
-                        connMethodPost: true,
-                        responseType:YAHOO.util.DataSource.TYPE_JSON,
-                        connXhrMode:"queueRequests",
-                        responseSchema:{
-                            resultsList:"items",
-                            metaFields:{
-                                paginationRecordOffset:"startIndex",
-                                totalRecords:"totalRecords",
-                                isVersionable:"versionable",
-                                meta:"metadata"
-                            }
-                        }
-                    });
-
-                this.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
-
-                // Intercept data returned from data webscript to extract custom metadata
-                this.widgets.dataSource.doBeforeCallback = function DataGrid_doBeforeCallback(oRequest, oFullResponse, oParsedResponse)
-                {
-                    this.versionable = oFullResponse.versionable;
-                    // Container userAccess event
-                    var permissions = oFullResponse.metadata.permissions;
-                    if (permissions && permissions.userAccess)
-                    {
-                        Bubbling.fire("userAccess",
-                            {
-                                userAccess: permissions.userAccess
-                            });
-                    }
-                    return oParsedResponse;
-                }.bind(this);
-
-                // link dataSource with search
-                this.modules.search.dataSource = this.widgets.dataSource;
+                // DataSource definition if not alfready defined
+                if (!this.widgets.dataSource) {
+                    this.widgets.dataSource = this._setupDataSource();
+                    // link dataSource with search
+                    this.modules.search.dataSource = this.widgets.dataSource;
+                }
                 this.modules.search.dataColumns = this.datagridColumns;
             },
 
@@ -877,62 +879,45 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        return columnDefinitions;
 	        },
 
-            /**
-             * DataTable set-up and event registration
-             *
-             * @method _setupDataTable
-             * @protected
-             */
-            _setupDataTable: function DataGrid__setupDataTable(columns)
-            {
-                // YUI DataTable colum
-                var columnDefinitions = this.getDataTableColumnDefinitions();
-                // DataTable definition
-                var me = this;
-                this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
+            _setupDataTable:function (columnDefinitions, me) {
+                var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
-                        renderLoopSize: this.options.usePagination ? 16 : 32,
-                        initialLoad: false,
-                        dynamicData: false,
-                        "MSG_EMPTY": this.msg("message.empty"),
-                        "MSG_ERROR": this.msg("message.error"),
-                        paginator: this.widgets.paginator
+                        renderLoopSize:this.options.usePagination ? 16 : 32,
+                        initialLoad:false,
+                        dynamicData:false,
+                        "MSG_EMPTY":this.msg("message.empty"),
+                        "MSG_ERROR":this.msg("message.error"),
+                        paginator:this.widgets.paginator
                     });
 
                 // Update totalRecords with value from server
-                this.widgets.dataTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload)
-                {
+                dTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
                     me.totalRecords = oResponse.meta.totalRecords;
                     oResponse.meta.pagination =
                     {
-                        rowsPerPage: me.options.pageSize,
-                        recordOffset: (me.currentPage - 1) * me.options.pageSize
+                        rowsPerPage:me.options.pageSize,
+                        recordOffset:(me.currentPage - 1) * me.options.pageSize
                     };
                     return oResponse.meta;
                 };
 
                 // Override abstract function within DataTable to set custom error message
-                this.widgets.dataTable.doBeforeLoadData = function DataGrid_doBeforeLoadData(sRequest, oResponse, oPayload)
-                {
-                    if (oResponse.error)
-                    {
-                        try
-                        {
+                dTable.doBeforeLoadData = function DataGrid_doBeforeLoadData(sRequest, oResponse, oPayload) {
+                    if (oResponse.error) {
+                        try {
                             var response = YAHOO.lang.JSON.parse(oResponse.responseText);
                             me.widgets.dataTable.set("MSG_ERROR", response.message);
                         }
-                        catch(e)
-                        {
+                        catch (e) {
                             me._setDefaultDataTableErrors(me.widgets.dataTable);
                         }
                     }
 
                     // We don't get an renderEvent for an empty recordSet, but we'd like one anyway
-                    if (oResponse.results.length === 0)
-                    {
+                    if (oResponse.results.length === 0) {
                         this.fireEvent("renderEvent",
                             {
-                                type: "renderEvent"
+                                type:"renderEvent"
                             });
                     }
 
@@ -941,32 +926,29 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
 
                 // Override default function so the "Loading..." message is suppressed
-                this.widgets.dataTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir)
-                {
+                dTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir) {
                     me.currentSort =
                     {
-                        oColumn: oColumn,
-                        sSortDir: sSortDir
+                        oColumn:oColumn,
+                        sSortDir:sSortDir
                     };
                     return true;
                 };
 
-                YAHOO.util.Event.onAvailable("select-all-records", function() {
+                YAHOO.util.Event.onAvailable("select-all-records", function () {
                     YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
                 }, this, true);
 
                 // File checked handler
-                this.widgets.dataTable.subscribe("checkboxClickEvent", function(e)
-                {
+                dTable.subscribe("checkboxClickEvent", function (e) {
                     var id = e.target.value;
                     this.selectedItems[id] = e.target.checked;
 
-                    var checks = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl()),
+                    var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
                         len = checks.length, i;
 
                     var allChecked = true;
-                    for (i = 0; i < len; i++)
-                    {
+                    for (i = 0; i < len; i++) {
                         if (!checks[i].checked) {
                             allChecked = false;
                             break;
@@ -978,10 +960,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }, this, true);
 
                 // Before render event handler
-                this.widgets.dataTable.subscribe("beforeRenderEvent", function()
-                {
-                    if (me.currentSort)
-                    {
+                dTable.subscribe("beforeRenderEvent", function () {
+                    if (me.currentSort) {
                         // Is there a custom sort handler function defined?
                         var oColumn = me.currentSort.oColumn,
                             sSortDir = me.currentSort.sSortDir,
@@ -990,8 +970,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 oColumn.sortOptions.sortFunction : null;
 
                         // Sort the Records
-                        if (sSortDir || sortFnc)
-                        {
+                        if (sSortDir || sortFnc) {
                             // Default sort function if necessary
                             sortFnc = sortFnc || this.get("sortFunction");
                             // Get the field to sort
@@ -1001,35 +980,47 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             this._oRecordSet.sortRecords(sortFnc, ((sSortDir == YAHOO.widget.DataTable.CLASS_DESC) ? true : false), sField);
                         }
                     }
-                }, this.widgets.dataTable, true);
+                }, dTable, true);
 
                 // Rendering complete event handler
-                this.widgets.dataTable.subscribe("renderEvent", function()
-                {
+                dTable.subscribe("renderEvent", function () {
                     Alfresco.logger.debug("DataTable renderEvent");
 
                     // IE6 fix for long filename rendering issue
-                    if (YAHOO.env.ua.ie < 7)
-                    {
-                        var ie6fix = this.widgets.dataTable.getTableEl().parentNode;
+                    if (YAHOO.env.ua.ie < 7) {
+                        var ie6fix = dTable.getTableEl().parentNode;
                         ie6fix.className = ie6fix.className;
                     }
 
                     // Deferred functions specified?
-                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++)
-                    {
+                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
                         this.afterDataGridUpdate[i].call(this);
                     }
                     this.afterDataGridUpdate = [];
                 }, this, true);
 
                 // Enable row highlighting
-                this.widgets.dataTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
-                this.widgets.dataTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
+                dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
+                dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
 
-                // link current table with search and do search
-                this.modules.search.dataTable = this.widgets.dataTable;
-
+                return dTable;
+            }, /**
+             * DataTable set-up and event registration
+             *
+             * @method setupDataTable
+             * @protected
+             */
+            setupDataTable: function DataGrid__setupDataTable(columns)
+            {
+                // YUI DataTable colum
+                var columnDefinitions = this.getDataTableColumnDefinitions();
+                // DataTable definition
+                var me = this;
+                if (!this.widgets.dataTable) {
+                    this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                    // link current table with search and do search
+                    this.modules.search.dataTable = this.widgets.dataTable;
+                }
                 //complete initial search
                 var initialData = {
                     datatype:this.datagridMeta.itemType

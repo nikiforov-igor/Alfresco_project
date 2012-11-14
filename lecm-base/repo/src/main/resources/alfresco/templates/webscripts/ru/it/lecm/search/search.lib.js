@@ -258,7 +258,7 @@ function getSearchResults(params) {
 
 			var parentNodeRef = fullTextSearchJson["parentNodeRef"];
 			logger.log("parentNodeRef = " + parentNodeRef);
-			if (parentNodeRef !== null && parentNodeRef.length > 0) {
+			if (parentNodeRef != null && parentNodeRef.length > 0) {
 				var parentNode = search.findNode(parentNodeRef);
 				if (parentNode != null) {
 					var xpath = parentNode.getQnamePath();

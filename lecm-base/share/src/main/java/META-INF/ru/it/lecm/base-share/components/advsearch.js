@@ -30,7 +30,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * YUI Library aliases
      */
     var Dom = YAHOO.util.Dom;
-
+    var $html = Alfresco.util.encodeHTML;
     /**
      * Advanced Search constructor.
      *
@@ -344,12 +344,71 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.dataTable.deleteRows(0, this.dataTable.getRecordSet().getLength());
 
                 // update the ui to show that a search is on-going
-                this.dataTable.set("MSG_EMPTY", "");
                 this.dataTable.render();
 
                 var me = this;
+                var loadingMessage = null,
+                    timerShowLoadingMessage = null;
+
+                // Clear the current document list if the data webscript is taking too long
+                var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
+                {
+                    // Check the timer still exists. This is to prevent IE firing the event after we cancelled it. Which is "useful".
+                    if (timerShowLoadingMessage)
+                    {
+                        loadingMessage = Alfresco.util.PopupManager.displayMessage(
+                            {
+                                displayTime: 0,
+                                text: '<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
+                                noEscape: true
+                            });
+
+                        if (YAHOO.env.ua.ie > 0)
+                        {
+                            this.loadingMessageShowing = true;
+                        }
+                        else
+                        {
+                            loadingMessage.showEvent.subscribe(function()
+                            {
+                                this.loadingMessageShowing = true;
+                            }, this, true);
+                        }
+                    }
+                };
+
+                // Slow data webscript message
+                this.loadingMessageShowing = false;
+                timerShowLoadingMessage = YAHOO.lang.later(500, this, fnShowLoadingMessage);
+
+                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage()
+                {
+                    if (timerShowLoadingMessage)
+                    {
+                        // Stop the "slow loading" timed function
+                        timerShowLoadingMessage.cancel();
+                        timerShowLoadingMessage = null;
+                    }
+
+                    if (loadingMessage)
+                    {
+                        if (this.loadingMessageShowing)
+                        {
+                            // Safe to destroy
+                            loadingMessage.destroy();
+                            loadingMessage = null;
+                        }
+                        else
+                        {
+                            // Wait and try again later. Scope doesn't get set correctly with "this"
+                            YAHOO.lang.later(100, me, destroyLoaderMessage);
+                        }
+                    }
+                };
+
                 // Success handler
                 function successHandler(sRequest, oResponse, oPayload) {
+                    destroyLoaderMessage();
                     // update current state on success
                     this.currentSearchTerm = searchTerm;
                     this.currentSearchSort = searchSort;
@@ -360,6 +419,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Failure handler
                 function failureHandler(sRequest, oResponse) {
+                    destroyLoaderMessage();
                     if (oResponse.status == 401) {
                         // Our session has likely timed-out, so refresh to offer the login page
                         window.location.reload();
@@ -369,6 +429,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             var response = YAHOO.lang.JSON.parse(oResponse.responseText);
                             me.dataTable.set("MSG_ERROR", response.message);
                             me.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                            if (oResponse.status == 404)
+                            {
+                                // Site or container not found - deactivate controls
+                                YAHOO.Bubbling.fire("deactivateAllControls");
+                            }
                         }
                         catch (e) {
                             me.dataTable.render();
@@ -376,6 +441,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                 }
 
+                this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // update post header for prevent errors
                 var searchParams = this._buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, fields, fullTextSearch);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {

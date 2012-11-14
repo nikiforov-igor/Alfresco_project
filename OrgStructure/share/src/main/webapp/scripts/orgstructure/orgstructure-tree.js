@@ -204,6 +204,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         itemType:"lecm-orgstr:organization-unit",
                         name:node.data.type,
                         namePattern:node.data.namePattern,
+                        nodeRef:node.data.nodeRef,
                         title:node.label,
                         fullDelete:true,
                         initialSearch:"PARENT:\"" + node.data.nodeRef + "\""
@@ -297,6 +298,19 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 sNode.expanded = true;
                 otree.tree.render();
                 otree.onExpandComplete(null);
+
+                Bubbling.fire("activeGridChanged",
+                    {
+                        datagridMeta:{
+                            itemType:"lecm-orgstr:organization-unit",
+                            name:sNode.data.type,
+                            namePattern:sNode.data.namePattern,
+                            nodeRef:sNode.data.nodeRef,
+                            title:sNode.label,
+                            fullDelete:true,
+                            initialSearch:"PARENT:\"" + sNode.data.nodeRef + "\""
+                        }
+                    });
             }
         }
     });
@@ -338,7 +352,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         });
 
     Alfresco.widget.InsituEditorUnitAdd = function (p_editor, p_params) {
-        this.editor = p_editor;
         this.params = YAHOO.lang.merge({}, p_params);
         this.disabled = p_params.disabled;
 

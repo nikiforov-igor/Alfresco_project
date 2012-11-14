@@ -6,7 +6,7 @@ new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
 	<div id="${id}-searchHeaderBar" class="header-bar flat-button theme-bg-2">
 		<div class="right">
 			<span id="${id}-searchInput" class="search-input">
-				<input type="text" id="dictionaryFullSearchInput" value="">
+				<input type="text" id="full-text-search" value="">
 			</span>
 			<span id="${id}-searchButton" class="yui-button yui-push-button search">
 				<span class="first-child">

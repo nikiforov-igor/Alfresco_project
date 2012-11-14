@@ -51,7 +51,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
-
+        YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         return this;
     };
 
@@ -102,6 +102,23 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         lazyloadmenu:false,
                         disabled:true
                     });
+
+                this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
+                    {
+                        disabled: true
+                    });
+                var me = this;
+                var searchInput = Dom.get("full-text-search");
+                new YAHOO.util.KeyListener(searchInput,
+                    {
+                        keys: 13
+                    },
+                    {
+                        fn: me.onSearchClick,
+                        scope: this,
+                        correctScope: true
+                    }, "keydown").enable();
+
                 // DataList Actions module
                 this.modules.actions = new LogicECM.module.Base.Actions();
 
@@ -357,6 +374,59 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     }
                     this.widgets.selectedItems.set("disabled", (items.length === 0));
+                }
+            },
+
+            onInitDataGrid: function OrgstructureToolbar_onInitDataGrid(layer, args) {
+                var datagrid = args[1].datagrid;
+                this.modules.dataGrid = datagrid;
+            },
+
+            onSearchClick:function OrgstructureToolbar_onSearch() {
+                if (this.modules.dataGrid) {
+                    var searchTerm = Dom.get("full-text-search").value;
+
+                    var dataGrid = this.modules.dataGrid;
+                    var datagridMeta = dataGrid.datagridMeta;
+
+                    if (searchTerm.length > 0) {
+                        var columns = dataGrid.datagridColumns;
+
+                        var fields = "";
+                        for (var i = 0; i < columns.length; i++) {
+                            if (columns[i].dataType == "text") {
+                                fields += columns[i].name + ",";
+                            }
+                        }
+                        if (fields.length > 1) {
+                            fields = fields.substring(0, fields.length - 1);
+                        }
+                        var fullTextSearch = {
+                            parentNodeRef:datagridMeta.nodeRef,
+                            fields:fields,
+                            searchTerm:searchTerm
+                        };
+                        datagridMeta.initialSearch = "";
+                        datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta,
+                                scrollTo:true
+                            });
+
+                        YAHOO.Bubbling.fire("showFilteredLabel");
+                    } else {
+                        var nodeRef = datagridMeta.nodeRef;
+                        datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
+                        datagridMeta.fullTextSearch = "";
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta,
+                                scrollTo:true
+                            });
+                        YAHOO.Bubbling.fire("hideFilteredLabel");
+                    }
                 }
             }
         }, true);

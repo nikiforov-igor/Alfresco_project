@@ -8,12 +8,3 @@
 <input id="workGroups" type="radio" name="type" value="workGroups"/>
 <label for="workGroups">${msg("workgroups.btn")}</label>
 </div>
-<script type="text/javascript">//<![CDATA[
-(function () {
-	function init() {
-		var menu = new LogicECM.module.OrgStructure.Menu();
-		menu.draw();
-	}
-	YAHOO.util.Event.onDOMReady(init);
-})();
-//]]></script>
