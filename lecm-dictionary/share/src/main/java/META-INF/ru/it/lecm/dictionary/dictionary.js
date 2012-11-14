@@ -70,8 +70,7 @@ LogicECM.module = LogicECM.module || {};
 							description: "",
 							itemType: this.rootNode.itemType,
 							nodeRef: this.rootNode.nodeRef,
-							initialSearch: 'PARENT:"' + this.rootNode.nodeRef + '"',
-							title: ""
+							initialSearch: 'PARENT:"' + this.rootNode.nodeRef + '"'
 						},
 						scrollTo:true
 					});

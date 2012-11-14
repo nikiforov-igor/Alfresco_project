@@ -50,6 +50,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             dataTable:null,
             dataSource:null,
             dataColumns:{},
+            datagridMeta:{},
 
             currentSearchTerm: "",
             currentSearchSort:"",
@@ -99,7 +100,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             initSearch:function ADVSearch_onReady(metaData) {
                 var me = this;
-
+                this.datagridMeta = metaData;
                 // DataSource default definition
                 if (!this.dataSource) {
                     var uriSearchResults = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/search";
@@ -285,35 +286,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 formData.datatype = me.currentForm.type;
 
                 var termsValues = Dom.get(this.id + "-search-text").value;
-
-                var terms = termsValues.split(",");
-
-                var termsString = "";
                 var columns = this.dataColumns;
 
+                var fields = "";
                 for (var i = 0; i < columns.length; i++) {
                     if (columns[i].dataType == "text") {
-                        for (var j = 0; j < terms.length; j++) {
-                            var t = terms[j];
-                            if (t.length > 0) {
-                                termsString += columns[i].name + ":" + YAHOO.lang.trim(t) + "#";
-                            }
-                        }
+                        fields += columns[i].name + ",";
                     }
                 }
-
-                if (termsString.length > 0) {
-                    termsString = termsString.substring(0, (termsString.length) - 1); // delete last #
+                if (fields.length > 1) {
+                    fields = fields.substring(0, fields.length - 1);
                 }
 
                 var query = YAHOO.lang.JSON.stringify(formData);
+                var fullTextSearch = {
+                    parentNodeRef: me.datagridMeta.nodeRef,
+                    fields: fields,
+                    searchTerm: termsValues
+                };
 
                 this._performSearch(
                     {
-                        searchTerm:termsString,
-                        searchSort:"",
-                        searchQuery:query,
-                        searchFilter:""
+                        searchTerm:"",
+                        searchSort:me.currentSearchSort,
+                        searchQuery:query,// поиск по заполненной форме
+                        searchFilter:"", // должен отработать полнотекстовый поиск
+                        fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch)
                     });
             },
 

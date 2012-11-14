@@ -144,7 +144,6 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="cm:contains"/>
                     <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
@@ -173,7 +172,6 @@
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
-                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
             <form id="search">
@@ -182,6 +180,7 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:unit-type">

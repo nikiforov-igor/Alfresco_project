@@ -270,7 +270,7 @@ function getSearchResults(params) {
 			logger.log("fields = " + fields);
 			var searchTerm = fullTextSearchJson["searchTerm"];
 			logger.log("searchTerm = " + searchTerm);
-			if (fields !== null && fields.length > 0 && searchTerm !== null && searchTerm.length > 0) {
+			if (fields != null && fields.length > 0 && searchTerm != null && searchTerm.length > 0) {
 				var columns = fields.split(",");
 				var fieldsQuery = "";
 

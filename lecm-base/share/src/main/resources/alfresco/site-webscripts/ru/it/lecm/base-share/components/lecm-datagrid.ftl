@@ -81,6 +81,8 @@
 		<#if showSearchBlock>
 			<@extendedSearch id/>
 		</#if>
+		<h2 id="${id}-title"></h2>
+		<div id="${id}-description" class="datagrid-description"></div>
 	</div>
 	<div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button">
 		<div class="yui-u first align-center">

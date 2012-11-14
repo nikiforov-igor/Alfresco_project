@@ -5,8 +5,7 @@
 		{
 			datagridMeta:{
 				description:"",
-				itemType:"lecm-dic:dictionary",
-				title:""
+				itemType:"lecm-dic:dictionary"
 			},
 			scrollTo:true
 		});

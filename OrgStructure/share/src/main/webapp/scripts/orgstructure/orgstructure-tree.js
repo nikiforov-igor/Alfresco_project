@@ -205,7 +205,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         name:node.data.type,
                         namePattern:node.data.namePattern,
                         nodeRef:node.data.nodeRef,
-                        title:node.label,
                         fullDelete:true,
                         initialSearch:"PARENT:\"" + node.data.nodeRef + "\""
                     }
@@ -306,7 +305,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             name:sNode.data.type,
                             namePattern:sNode.data.namePattern,
                             nodeRef:sNode.data.nodeRef,
-                            title:sNode.label,
                             fullDelete:true,
                             initialSearch:"PARENT:\"" + sNode.data.nodeRef + "\""
                         }
