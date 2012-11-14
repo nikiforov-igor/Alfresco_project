@@ -47,6 +47,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         roots:{},
 
         _draw:function () {
+            const structure = "structure";
+            const employees = "employees";
+            const workGroups = "workGroups";
+            const staffLists = "staffLists";
+
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
                     // draw datagrid
@@ -83,14 +88,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             var type = getUrlVars()["type"];
             if (type == null) {
-                type = "structure";
+                type = structure;
             }
             var root = context.roots[type];
-
-            const structure = "structure";
-            const employees = "employees";
-            const workGroups = "workGroups";
-            const staffLists = "staffLists";
+            if (root == null){
+                root =  context.roots[structure];
+            }
 
             var radio1 = Dom.get(structure);
             radio1.onclick = function (e) {
