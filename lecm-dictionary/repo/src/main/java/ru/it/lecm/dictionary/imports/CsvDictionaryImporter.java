@@ -59,10 +59,14 @@ public class CsvDictionaryImporter {
 		for (int i = 0; i < csvr.getHeaderCount(); i++){
 			header.add(csvr.getHeader(i));
 		}
-		itemsType = QName.createQName(nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString(),
+		if ( nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE) != null) {
+			itemsType = QName.createQName(nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString(),
 				namespaceService);
+		} else {
+			itemsType = nodeService.getType(parentNodeRef);
+		}
 		while(csvr.readRecord()){
-			for (int i = 0; i < csvr.getColumnCount()-1; i++) {
+			for (int i = 0; i < csvr.getColumnCount(); i++) {
 				csvr.get(i);
 				properties.put(QName.createQName(header.get(i), namespaceService), csvr.get(i));
 			}
