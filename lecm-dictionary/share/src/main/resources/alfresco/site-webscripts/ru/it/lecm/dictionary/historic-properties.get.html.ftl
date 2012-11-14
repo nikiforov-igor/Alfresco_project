@@ -1,6 +1,4 @@
 <#assign el=args.htmlid?html>
-<#--<#assign fileExtIndex = document.fileName?last_index_of(".")>-->
-<#--<#assign fileExt = (fileExtIndex > -1)?string(document.fileName?substring(fileExtIndex + 1), "generic")>-->
 <div id="${el}-dialog" class="historic-properties-viewer">
    <div class="hd">
       <span id="${el}-header-span" class="historic-properties-header" style="background-image:url(${url.context}/components/images/filetypes/generic-file-32.png);"></span>

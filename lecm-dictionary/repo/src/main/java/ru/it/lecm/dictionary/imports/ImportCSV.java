@@ -11,7 +11,6 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData;
-import ru.it.lecm.dictionary.export.CsvDictionaryImporter;
 
 import java.io.IOException;
 import java.io.InputStream;

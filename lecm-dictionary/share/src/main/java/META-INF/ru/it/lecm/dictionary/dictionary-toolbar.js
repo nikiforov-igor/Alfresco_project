@@ -438,46 +438,9 @@
 				var datagrid = args[1].datagrid;
 				this.modules.dataGrid = datagrid;
 			},
-	        onFileUpload: function RDLTB_onFileUpload(e, p_obj)
-	        {
-		        if (this.fileUpload === null)
-		        {
-			        this.fileUpload = Alfresco.getFileUploadInstance();
-		        }
-
-		        // Show uploader for multiple files
-		        var singleUploadConfig =
-		        {
-//                    destination: this.modules.docList.doclistMetadata.parent.nodeRef,
-			        filter: [],
-			        mode: this.fileUpload.MODE_SINGLE_UPDATE,
-			        thumbnails: "doclib",
-			        onFileUploadComplete:
-			        {
-				        fn: this.onFileUploadComplete,
-				        scope: this
-			        }
-		        };
-		        this.fileUpload.show(singleUploadConfig);
-	        },
-	        onFileUploadXML: function()
-	        {
-//                var oPanel1 = new YAHOO.widget.Panel("panel-1", {
-//
-//                    visible: false,
-//                    fixedcenter: true,
-//                    constraintoviewport: true,
-//                    width: "300px"
-//
-//                });
-//                oPanel1.render();
-//
-//                Event.on("show-dialog-1", "click", oPanel1.show, null, oPanel1);
-	        },
 	        onInitParameter: function() {
 		        document.getElementById('nodeRef').value=this.modules.dataGrid.datagridMeta.nodeRef;
 		        this.panel.show();
-//		        document.getElementById('panel-2-form').submit();
 	        }
 		}, true);
 })();

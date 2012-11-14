@@ -18,16 +18,6 @@
 	
 -->
 <beans>
-    <!-- Registration of orgStructure models
-    <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/logic-ecm-org-structure-model.xml</value>
-            </list>
-        </property>
-    </bean>
-	-->
 
 	<!-- Registration of dictionary models -->
 	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
@@ -67,7 +57,7 @@
     </bean>
 
     <bean id="webscript.ru.it.lecm.dictionary.import.post"
-          class="ru.it.lecm.dictionary.export.Import"
+          class="ru.it.lecm.dictionary.imports.Import"
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>

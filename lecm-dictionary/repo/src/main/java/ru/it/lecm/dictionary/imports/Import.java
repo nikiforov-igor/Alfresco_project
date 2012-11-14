@@ -1,4 +1,4 @@
-package ru.it.lecm.dictionary.export;
+package ru.it.lecm.dictionary.imports;
 
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeService;
