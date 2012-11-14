@@ -226,7 +226,7 @@ LogicECM.module = LogicECM.module || {};
 			var addAction = new YAHOO.util.Element(actionName.id + "-add");
 			addAction.on("click", function (event) {
 				this.currentStatus = model.nodeRef;
-				this.menu.moveTo(event.x, event.y);
+				this.menu.moveTo(event.clientX, event.clientY);
 				this.menu.show();
 			}.bind(this));
 
