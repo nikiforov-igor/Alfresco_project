@@ -165,12 +165,13 @@ public class TestSearchBean implements ITestSearch
 					}
 
 					if (hasAccess) i_allow++;
-					// final JSONObject obj = makeJson(props);
-					// result.put(obj);
 				}
 			}
 			logger.info( String.format("found %s record(s)", i_total));
-			logger.debug( sb.toString() );
+
+			if (logger.isDebugEnabled())
+				logger.debug( sb.toString() );
+
 			{ // формирование сводки по сканированным данным ...
 				final JSONObject rowsInfo = new JSONObject();
 				rowsInfo.put("found", i_total);
@@ -187,9 +188,11 @@ public class TestSearchBean implements ITestSearch
 				foundSet.close();
 		}
 
-		final Map<QName, Serializable> props = nodesrv.getProperties(commonFolder);
-		final StringBuilder sb = Utils.makePropDump(props, "node "+ commonFolder.toString());
-		logger.info(sb.toString());
+		if (logger.isInfoEnabled()) {
+			final Map<QName, Serializable> props = nodesrv.getProperties(commonFolder);
+			final StringBuilder sb = Utils.makePropDump(props, "node "+ commonFolder.toString());
+			logger.info(sb.toString());
+		}
 
 		return result;
 	}
