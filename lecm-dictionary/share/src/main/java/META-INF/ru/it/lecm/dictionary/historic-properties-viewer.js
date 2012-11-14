@@ -159,7 +159,7 @@
             }
 
             // Read versions from cache
-            var documentVersions = Alfresco.util.ComponentManager.findFirst("Alfresco.component.DataGrid");
+            var documentVersions = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
             if (documentVersions) {
                 this.versions = documentVersions.versionCache;
             }
