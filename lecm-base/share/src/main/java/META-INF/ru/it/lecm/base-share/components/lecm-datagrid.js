@@ -140,7 +140,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 usePagination: false,
 
-                hideExtendSearchBlock: true,
+                showExtendSearchBlock: true,
 
                 /**
                  * Initial page to show on load (otherwise taken from URL hash).
@@ -532,7 +532,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // initialize Search
                 // draw it after get metaData!
                 this.modules.search = new LogicECM.AdvancedSearch(this.id).setOptions({
-                    hideExtendSearchBlock:context.options.hideExtendSearchBlock
+                    showExtendSearchBlock:context.options.showExtendSearchBlock
                 });
 
                 // Reference to Data Grid component (required by actions module)

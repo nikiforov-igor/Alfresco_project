@@ -83,7 +83,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 maxSearchResults:3000,
                 // default hide search block
-                hideExtendSearchBlock: true
+                showExtendSearchBlock: false
             },
 
             /**
@@ -143,7 +143,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 defaultForm.id = "search";
                 defaultForm.type = metaData.itemType;
 
-                if (!this.options.hideExtendSearchBlock) {
+                if (this.options.showExtendSearchBlock) {
                     // search YUI button and menus
                     this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
                     this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);

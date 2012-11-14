@@ -1,6 +1,8 @@
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+
 <#assign id = args.htmlid>
 <#assign showTree = true>
-<#assign hideExtendSearchBlock = true/>
+<#assign showSearchBlock = false/>
 
 <#if page.url.args.type?? && (page.url.args.type == "employees"|| page.url.args.type == "workGroups")>
 	<#assign showTree = false>
@@ -15,22 +17,27 @@
 		}
 	);
 </#if>
-	function init() {
-		// EXTEND DATAGRID HERE
-		new LogicECM.module.Base.DataGrid('${id}').setOptions(
-				{
-					usePagination: true,
-					hideExtendSearchBlock:${hideExtendSearchBlock?string}
-				}).setMessages(${messages});
-	}
-	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 <div class="yui-t1" id="orgstructure-grid-with-tree">
 	<div id="yui-main">
 		<div class="yui-b" id="alf-content" <#if !showTree>style="margin-left: 0;"</#if>>
         <!-- include base datagrid markup-->
-		<#include "/ru/it/lecm/base-share/components/lecm-datagrid.ftl"/>
+		<@grid.datagrid id showSearchBlock false "">
+			<script type="text/javascript">//<![CDATA[
+			(function () {
+				function init() {
+					// EXTEND DATAGRID HERE
+					new LogicECM.module.Base.DataGrid('${id}').setOptions(
+							{
+								usePagination: true,
+								showExtendSearchBlock:${showSearchBlock?string}
+							}).setMessages(${messages});
+				}
+				YAHOO.util.Event.onDOMReady(init);
+			})();
+			//]]></script>
+		</@grid.datagrid>
 		</div>
 	</div>
 <#if showTree>
