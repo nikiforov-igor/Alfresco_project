@@ -15,7 +15,7 @@ new Alfresco.component.AllDictToolbar("${id}").setOptions(
             <div class="import-xml">
                 <div id="show-import-xml" title="${msg('button.import-xml')}"></div>
 
-                <div class="form-container">
+                <div class="form-container" title="${msg('button.import-xml')}">
                     <form method="post" id="import-xml-form" enctype="multipart/form-data"
                           action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
                         <input type="file" id="import-xml-input" name="f">

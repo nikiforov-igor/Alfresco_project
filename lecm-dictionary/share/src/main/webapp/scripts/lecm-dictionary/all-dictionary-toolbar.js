@@ -82,18 +82,18 @@
              * @method onReady
              */
             onReady: function AllDictToolbar_onReady() {
-                Event.on("import-xml-input", "change", this.onSubmit);
+                Event.on("import-xml-input", "change", this.onImportXML);
             },
 
             /**
              * On "submit"-button click.
              */
-            onSubmit: function() {
+            onImportXML: function() {
                 Connect.setForm('import-xml-form', true);
                 var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import";
                 var fileUploadCallback = {
                     upload:function(o){
-                        console.log('Upload successfully' + "\n" + 'Server Response: ' + o.responseText);
+                        console.log('Server Response: ' + o.responseText);
                         document.location.reload(true);
                     }
                 };

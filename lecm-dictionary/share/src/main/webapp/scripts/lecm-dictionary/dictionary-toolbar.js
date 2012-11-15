@@ -31,7 +31,8 @@
      * YUI Library aliases
      */
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+        Event = YAHOO.util.Event,
+        Connect = YAHOO.util.Connect;
 
     /**
      * Toolbar constructor.
@@ -109,7 +110,7 @@
                         value: "create"
                     });
 
-                this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportSCV,
+                this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportCSV,
                     {
                         disabled: true
                     });
@@ -124,47 +125,25 @@
                         disabled:true
                     });
 
-                this.panelXml = new YAHOO.widget.Panel("panel-1", {
-                    visible:false,
-                    fixedcenter:true,
-                    constraintoviewport:true,
-                    width:"300px"
-                });
+                // Import CSV
+                var that = this;
+                Event.on("import-csv-input", "change", function(){that.onImportCSV();});
 
-                this.panelXml.render();
-
-                this.widgets.importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){this.panelXml.show()},
-                    {
-                        disabled: true
-                    });
-
-                this.panelCsv = new YAHOO.widget.Panel("panel-2", {
-                    visible:false,
-                    fixedcenter:true,
-                    constraintoviewport:true,
-                    width:"300px"
-                });
-
-                this.panelCsv.render();
-                this.widgets.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onSetPanelParams,
-                    {
-                        disabled:true
-                    });
-
+                // Search
                 var me = this;
-                var searchInput = Dom.get("dictionaryFullSearchInput");
-                new YAHOO.util.KeyListener(searchInput,
-                    {
-                        keys:13
-                    },
-                    {
-                        fn:me.onSearch,
-                        scope:this,
-                        correctScope:true
-                    }, "keydown").enable();
+	            var searchInput = Dom.get("dictionaryFullSearchInput");
+	            new YAHOO.util.KeyListener(searchInput,
+		            {
+			            keys: 13
+		            },
+		            {
+			            fn: me.onSearch,
+			            scope: this,
+			            correctScope: true
+		            }, "keydown").enable();
 
-                // DataList Actions module
-                this.modules.actions = new LogicECM.module.Base.Actions();
+	            // DataList Actions module
+	            this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
@@ -353,7 +332,7 @@
             /**
              * Экспорт CSV
              */
-            onExportSCV: function(){
+            onExportCSV: function(){
                 var datagridMeta = this.modules.dataGrid.datagridMeta;
                 var selectItems = this.modules.dataGrid.selectedItems;
                 var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
@@ -412,7 +391,7 @@
                             parentNodeRef:datagridMeta.nodeRef,
                             fields:fields,
                             searchTerm:searchTerm
-                        }
+                        };
                         datagridMeta.initialSearch = "";
                         datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
@@ -446,11 +425,19 @@
                 this.modules.dataGrid = args[1].datagrid;
             },
             /**
-             * Отрисовка панели и присвоение значения элементу панели.
+             * Импорт CSV
              */
-            onSetPanelParams:function () {
+            onImportCSV: function() {
                 document.getElementById('nodeRef').value = this.modules.dataGrid.datagridMeta.nodeRef;
-                this.panelCsv.show();
+                Connect.setForm('import-csv-form', true);
+                var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import-csv";
+                var fileUploadCallback = {
+                    upload:function(o){
+                        console.log('Server Response: ' + o.responseText);
+                        document.location.reload(true);
+                    }
+                };
+                Connect.asyncRequest(Alfresco.util.Ajax.GET, url, fileUploadCallback);
             }
         }, true);
 })();
