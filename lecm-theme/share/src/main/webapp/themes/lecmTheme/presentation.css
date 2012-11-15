@@ -1485,3 +1485,8 @@ div.theme-bg-color-7
 {
    border: 1px solid #DDD6A0;
 }
+
+input, select {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
