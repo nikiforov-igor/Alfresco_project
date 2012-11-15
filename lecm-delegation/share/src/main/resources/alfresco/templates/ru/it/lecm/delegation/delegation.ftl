@@ -2,9 +2,6 @@
 
 <@templateHeader>
 <script type="text/javascript"> //<![CDATA[
-	Alfresco.logger.info("${logMsg}");
-	var obj = ${json};
-	Alfresco.logger.info(obj);
 	new Alfresco.widget.Resizer("DelegationResizer").setOptions({
 		divLeft: "divWest",
 		divRight: "divCenter",
@@ -17,6 +14,7 @@
 </script>
 
 <!-- Alfresco default scripts -->
+<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
 <!-- Logic ECM scripts -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/ru/it/lecm/delegation/delegation-const.js"/>
@@ -28,7 +26,6 @@
 	<@region id="title" scope="template"/>
 </div>
 <div id="bd">
-	<@region id="delegation-actions" scope="template"/>
 	<div class="yui-t1" id="alfresco-delegation">
 		<div id="yui-main">
 			<div class="yui-b" id="divCenter">

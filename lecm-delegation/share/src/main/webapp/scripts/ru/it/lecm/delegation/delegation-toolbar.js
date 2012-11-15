@@ -43,6 +43,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Toolbar, Alfresco.component.Base, {
 
+		rootNode: null,
+
 		_createProcuracyBtnClick: function () {
 			var scope = this;
 			return function (e, p_obj) {
@@ -51,9 +53,9 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					text: "createProcuracyBtnClick"
 				});
 
-				var datalistMeta = scope.modules.dataGrid.datalistMeta;
-				var destination = datalistMeta.nodeRef;
-				var itemType = datalistMeta.itemType;
+				var datagridMeta = scope.modules.dataGrid.datagridMeta;
+				var destination = datagridMeta.nodeRef;
+				var itemType = datagridMeta.itemType;
 
 				// Intercept before dialog show
 				var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow (p_form, p_dialog) {
@@ -114,9 +116,12 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				Alfresco.util.PopupManager.displayMessage ({
 					text: "listProcuraciesBtnClick"
 				});
-				YAHOO.Bubbling.fire ("activeDataListChanged", {
-					dataList: {},
-					scrollTo: true
+				YAHOO.Bubbling.fire ("activeGridChanged", {
+                    datagridMeta:{
+						itemType: "lecm-ba:procuracy",
+                        nodeRef:scope.rootNode
+                        //filter:"PARENT:\"" + scope.rootNode + "\""
+                    }
 				});
 			}
 		},
@@ -132,12 +137,16 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			});
 		},
 
+		setRootNode: function (rootNode) {
+			this.rootNode = rootNode;
+		},
+
 		onReady: function () {
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.Toolbar has been created");
 
 			// Reference to Data Grid component
-			this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst ("LogicECM.module.Delegation.DataGrid");
+			this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst ("LogicECM.module.Base.DataGrid");
 
 			this._onToolbarReady ();
 			//			YAHOO.util.Event.onContentReady(this.id, this._onToolbarReady);

@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Delegation datagrid actions</shortname>
-	<description>Delegation: this is actions used in delegation-datagrid</description>
-	<url>/ru/it/lecm/delegation/actions</url>
-</webscript>

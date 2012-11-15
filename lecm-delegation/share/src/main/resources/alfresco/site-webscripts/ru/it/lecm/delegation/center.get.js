@@ -39,8 +39,6 @@ function main () {
 	}
 
 	model.actionSet = actionSet;
-	var rootNode= remote.connect ("alfresco").post ("/logicecm/delegation/getrootnode", "", "json");
-	model.rootNode= rootNode;
 }
 
 main ();

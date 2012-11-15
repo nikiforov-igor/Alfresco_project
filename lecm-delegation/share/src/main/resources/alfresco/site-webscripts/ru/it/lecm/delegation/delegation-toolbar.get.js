@@ -1,0 +1,1 @@
+model.rootNode= remote.connect ("alfresco").post ("/logicecm/delegation/getrootnode", "", "json");
