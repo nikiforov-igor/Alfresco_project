@@ -13,20 +13,13 @@ new Alfresco.component.AllDictToolbar("${id}").setOptions(
                 ${msg('logicecm.dictionary.dictionary-list')}
             </div>
             <div class="import-xml">
-                <button id="show-import-xml" title="${msg('button.import-xml')}">${msg('button.import-xml')}</button>
-                <div id="import-xml-panel">
-                    <div class="hd">
-                        ${msg('title.select-file')}
-                    </div>
-                    <div class="bd">
-                        <form method="post" id="import-xml-form" enctype="multipart/form-data"
-                              action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
-                            <p>
-                                <input type="file" name="f">
-                                <input type="button" id="import-xml-submit" value="Submit">
-                            </p>
-                        </form>
-                    </div>
+                <div id="show-import-xml" title="${msg('button.import-xml')}"></div>
+
+                <div class="form-container">
+                    <form method="post" id="import-xml-form" enctype="multipart/form-data"
+                          action="${url.context}/proxy/alfresco/lecm/dictionary/post/import">
+                        <input type="file" id="import-xml-input" name="f">
+                    </form>
                 </div>
             </div>
 		</div>
