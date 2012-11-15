@@ -1,6 +1,43 @@
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
+<script type="text/javascript">//<![CDATA[
+
+var rootNode = ${rootNode};
+
+/**
+ * Ensure LogicECM root object exists
+ */
+if (typeof LogicECM == "undefined" || !LogicECM) {
+	var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+/**
+ * LogicECM Delegation module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.Delegation
+ */
+LogicECM.module.Delegation = LogicECM.module.Delegation || {};
+
+/**
+ * Delegation module.
+ *
+ * @namespace LogicECM.module
+ * @class LogicECM.module.Delegation.DELEGATION_ROOT
+ */
+LogicECM.module.Delegation.DELEGATION_ROOT = LogicECM.module.Delegation.DELEGATION_ROOT || rootNode.nodeRef;
+//]]>
+</script>
+
 <!-- Alfresco default scripts -->
 <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 

@@ -43,8 +43,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Toolbar, Alfresco.component.Base, {
 
-		rootNode: null,
-
 		_createProcuracyBtnClick: function () {
 			var scope = this;
 			return function (e, p_obj) {
@@ -113,16 +111,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_listProcuraciesBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				Alfresco.util.PopupManager.displayMessage ({
-					text: "listProcuraciesBtnClick"
-				});
-				YAHOO.Bubbling.fire ("activeGridChanged", {
-                    datagridMeta:{
-						itemType: "lecm-ba:procuracy",
-                        nodeRef:scope.rootNode
-                        //filter:"PARENT:\"" + scope.rootNode + "\""
-                    }
-				});
+                var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.location.href = url;
 			}
 		},
 
@@ -133,12 +123,8 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			});
 
 			Alfresco.util.createYUIButton(container, "btnListProcuracies", this._listProcuraciesBtnClick (), {
-				label: "список доверенностей"
+				label: "обновить"
 			});
-		},
-
-		setRootNode: function (rootNode) {
-			this.rootNode = rootNode;
 		},
 
 		onReady: function () {

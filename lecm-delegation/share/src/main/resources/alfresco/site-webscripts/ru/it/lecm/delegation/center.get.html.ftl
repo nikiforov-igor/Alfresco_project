@@ -13,6 +13,15 @@
 		showExtendSearchBlock:${showSearchBlock?string}
 	});
 	datagrid.setMessages(${messages});
+	YAHOO.util.Event.onContentReady ('${id}', function () {
+		YAHOO.Bubbling.fire ("activeGridChanged", {
+			datagridMeta:{
+				itemType: "lecm-ba:procuracy",
+				nodeRef: LogicECM.module.Delegation.DELEGATION_ROOT
+				//filter:"PARENT:\"" + LogicECM.module.Delegation.DELEGATION_ROOT + "\""
+			}
+		});
+	});
 //]]>
 </script>
 </@grid.datagrid>

@@ -1,10 +1,8 @@
 <#assign toolbarId = args.htmlid>
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var rootNode = ${rootNode};
 		var delegationToolbar = new LogicECM.module.Delegation.Toolbar ("${toolbarId}");
 		delegationToolbar.setMessages(${messages});
-		delegationToolbar.setRootNode (rootNode.nodeRef);
 	})();
 //]]>
 </script>
