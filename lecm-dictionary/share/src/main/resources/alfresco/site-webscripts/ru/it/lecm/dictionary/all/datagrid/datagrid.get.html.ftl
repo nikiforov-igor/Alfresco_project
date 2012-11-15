@@ -1,9 +1,8 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
-<#assign showSearchBlock = false/>
 
-<@grid.datagrid id showSearchBlock false "">
+<@grid.datagrid id>
 <script type="text/javascript">//<![CDATA[
 var $html = Alfresco.util.encodeHTML,
 		$links = Alfresco.util.activateLinks,
@@ -143,7 +142,7 @@ LogicECM.module.Base.DataGrid.prototype.getDataTableColumnDefinitions = function
 new LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
 			usePagination: true,
-			showExtendSearchBlock:${showSearchBlock?string}
+			showExtendSearchBlock:false
 		}).setMessages(${messages});
 //]]></script>
 </@grid.datagrid>

@@ -1,10 +1,8 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
-<#assign showSearchBlock = false/>
-<#assign viewFormId = "dictionary-view-node-form">
 
-<@grid.datagrid id showSearchBlock true viewFormId>
+<@grid.datagrid id=id showViewForm=true>
 <script type="text/javascript">//<![CDATA[
 function createDatagrid(attributeForShow) {
 	var $html = Alfresco.util.encodeHTML,
@@ -46,7 +44,7 @@ function createDatagrid(attributeForShow) {
 								case "datetime":
 									var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
 									if (datalistColumn.name == attributeForShow) {
-										content = "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+										content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 									}
 									html += content;
 									break;
@@ -54,7 +52,7 @@ function createDatagrid(attributeForShow) {
 								case "date":
 									var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
 									if (datalistColumn.name == attributeForShow) {
-										content = "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+										content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 									}
 									html += content;
 									break;
@@ -62,7 +60,7 @@ function createDatagrid(attributeForShow) {
 								case "text":
 									var content = $html(data.displayValue);
 									if (datalistColumn.name == attributeForShow) {
-										html += "<a href='javascript:void(0);' onclick=\"viewDictionaryAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+										html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 									} else {
 										html += $links(content);
 									}
@@ -95,44 +93,8 @@ function createDatagrid(attributeForShow) {
 	new LogicECM.module.Base.DataGrid('${id}').setOptions(
 			{
 				usePagination:true,
-				showExtendSearchBlock:${showSearchBlock?string}
+				showExtendSearchBlock:false
 			}).setMessages(${messages});
-}
-
-var viewDialog = null;
-
-function viewDictionaryAttributes(nodeRef) {
-	Alfresco.util.Ajax.request(
-			{
-				url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-				dataObj:{
-					htmlid:"DictionaryMetadata-" + nodeRef,
-					itemKind:"node",
-					itemId:nodeRef,
-					formId:"${viewFormId}",
-					mode:"view"
-				},
-				successCallback:{
-					fn:showViewDialog
-				},
-				failureMessage:"message.failure",
-				execScripts:true
-			});
-	return false;
-}
-
-function showViewDialog(response) {
-	var formEl = Dom.get("${viewFormId}-content");
-	formEl.innerHTML = response.serverResponse.responseText;
-	if (viewDialog != null) {
-		viewDialog.show();
-	}
-}
-
-function hideViewDialog() {
-	if (viewDialog != null) {
-		viewDialog.hide();
-	}
 }
 
 function loadDictionary() {
@@ -157,11 +119,7 @@ function loadDictionary() {
 
 function init() {
 	loadDictionary();
-
-	viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
-			{
-				width:"487px"
-			});
+	createDialog(); // call method from lecm-datagrid.ftl#macro viewFor"
 }
 
 YAHOO.util.Event.onDOMReady(init);

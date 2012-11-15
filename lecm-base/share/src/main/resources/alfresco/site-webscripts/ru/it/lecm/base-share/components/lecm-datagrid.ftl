@@ -1,15 +1,18 @@
+<#-- Макрос для включения блока атрибутивного поиска. По умолчанию скрыт (display: none). Делается видимым в advsearch.js
+Список параметров:
+id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid.
+Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco
+-->
 <#macro extendedSearch id>
 <div id="searchBlock" style="display: none;">
-	<h2 id="${id}-heading" class="thin dark">
-	${msg("search-block")}
-	</h2>
+	<h2 id="${id}-heading" class="thin dark">${msg("search-block")}</h2>
 	<div id="${id}-searchContainer" class="search">
 		<div class="yui-gc form-row">
-		<#-- search button -->
+		<#-- Кнопки Найти и Очистить -->
 			<div class="yui-u align-right">
                     <span id="${id}-search-button-1" class="yui-button yui-push-button search-icon">
                         <span class="first-child">
-                        <button type="button">${msg('button.search')}</button>
+	                        <button type="button">${msg('button.search')}</button>
                         </span>
                     </span>
                     <span id="${id}-clear-button" class="yui-button yui-push-button">
@@ -19,8 +22,7 @@
                     </span>
 			</div>
 		</div>
-
-	<#-- keywords entry box - DIV structure mirrors a generated Form to collect the correct styles -->
+	<#-- Поле для полнотекстового поиска-->
 		<div class="forms-container keywords-box">
 			<div class="share-form">
 				<div class="form-container">
@@ -34,12 +36,12 @@
 				</div>
 			</div>
 		</div>
-	<#-- container for forms retrieved via ajax -->
+	<#-- Контейнер для отрисовки формы -->
 		<div id="${id}-forms" class="forms-container form-fields"></div>
 
 		<div class="yui-gc form-row">
 			<div class="yui-u first"></div>
-		<#-- search button -->
+		<#-- Кнопка Найти -->
 			<div class="yui-u align-right">
                     <span id="${id}-search-button-2" class="yui-button yui-push-button search-icon">
                         <span class="first-child">
@@ -49,13 +51,63 @@
 			</div>
 		</div>
 	</div>
+	<#--Создание твистера-->
 	<script type="text/javascript">//<![CDATA[
-	Alfresco.util.createTwister("${id}-heading", "OrgstructureSearch");
+	Alfresco.util.createTwister("${id}-heading", ${id} + "-ExtendSearch");
 	//]]></script>
 </div>
 </#macro>
 
-<#macro viewForm viewFormId>
+<#-- Макрос для включения включения всплывающего окна по клику на запись.
+Окно будет вызывать по вызову метода viewAttributes. Пример см. в datagrid.get.html.ftl
+Список параметров:
+viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
+-->
+<#macro viewForm viewFormId="view-node-form">
+<script type="text/javascript">
+	var viewDialog = null;
+
+	function viewAttributes(nodeRef) {
+		Alfresco.util.Ajax.request(
+				{
+					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+					dataObj:{
+						htmlid:"NodeMetadata-" + nodeRef,
+						itemKind:"node",
+						itemId:nodeRef,
+						formId:"${viewFormId}",
+						mode:"view"
+					},
+					successCallback:{
+						fn:showViewDialog
+					},
+					failureMessage:"message.failure",
+					execScripts:true
+				});
+		return false;
+	}
+
+	function showViewDialog(response) {
+		var formEl = Dom.get("${viewFormId}-content");
+		formEl.innerHTML = response.serverResponse.responseText;
+		if (viewDialog != null) {
+			viewDialog.show();
+		}
+	}
+
+	function hideViewDialog() {
+		if (viewDialog != null) {
+			viewDialog.hide();
+		}
+	}
+
+	function createDialog() {
+		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
+				{
+					width:"487px"
+				});
+	}
+</script>
 <div id="${viewFormId}" class="yui-panel">
 	<div id="${viewFormId}-head" class="hd">${msg("logicecm.dictionary.view")}</div>
 	<div id="${viewFormId}-body" class="bd">
@@ -67,7 +119,14 @@
 </div>
 </#macro>
 
-<#macro datagrid id showSearchBlock showViewForm viewFormId>
+<#-- Макрос для подключения грида
+Список параметров:
+id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid. Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco)
+showSearchBlock(необязательный) - включать/не включать атрибутивный поиск
+showViewForm(необязательный) - включать/не включать всплывающее окна по клику на запись
+viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
+-->
+<#macro datagrid id showSearchBlock=false showViewForm=false viewFormId="view-node-form">
 <#nested>
 <!--[if IE]>
 <iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>

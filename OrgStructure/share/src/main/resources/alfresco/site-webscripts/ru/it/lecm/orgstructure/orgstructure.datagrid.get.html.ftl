@@ -23,7 +23,7 @@
 	<div id="yui-main">
 		<div class="yui-b" id="alf-content" <#if !showTree>style="margin-left: 0;"</#if>>
         <!-- include base datagrid markup-->
-		<@grid.datagrid id showSearchBlock false "">
+		<@grid.datagrid id showSearchBlock>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function init() {
