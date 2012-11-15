@@ -15,11 +15,6 @@
 				<title>Delegation</title>
 			</properties>
 		</component>
-		<!-- West Region -->
-		<component>
-			<region-id>west</region-id>
-			<url>/ru/it/lecm/delegation/west</url>
-		</component>
 		<!-- Center region -->
 		<component>
 			<region-id>center</region-id>

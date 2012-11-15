@@ -1,18 +1,6 @@
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
-<script type="text/javascript"> //<![CDATA[
-	new Alfresco.widget.Resizer("DelegationResizer").setOptions({
-		divLeft: "divWest",
-		divRight: "divCenter",
-		initialWidth: 300
-	});
-	YAHOO.util.Event.onDOMReady(function () {
-		Alfresco.logger.info("Delegation module ready.");
-	});
-//]]>
-</script>
-
 <!-- Alfresco default scripts -->
 <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
@@ -28,13 +16,8 @@
 <div id="bd">
 	<div class="yui-t1" id="alfresco-delegation">
 		<div id="yui-main">
-			<div class="yui-b" id="divCenter">
-				<@region id="delegation-toolbar" scope="template"/>
-				<@region id="center" scope="template"/>
-			</div>
-		</div>
-		<div class="yui-b" id="divWest">
-			<@region id="west" scope="template"/>
+			<@region id="delegation-toolbar" scope="template"/>
+			<@region id="center" scope="template"/>
 		</div>
 	</div>
 </div>

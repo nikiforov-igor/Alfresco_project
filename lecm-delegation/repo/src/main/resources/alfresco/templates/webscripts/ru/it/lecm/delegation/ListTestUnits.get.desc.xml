@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>test unit listing</shortname>
-	<description>lists all test-units</description>
-	<url>/logicecm/listTestUnits</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-</webscript>

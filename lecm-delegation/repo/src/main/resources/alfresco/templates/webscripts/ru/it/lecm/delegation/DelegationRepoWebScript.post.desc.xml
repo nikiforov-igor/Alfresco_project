@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>delegation web script</shortname>
 	<description>simple delegation web script prototype</description>
-	<url>/logicecm/delegation/{action}</url>
+	<url>/lecm/delegation/{action}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
 	<transaction>required</transaction>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>west</shortname>
-	<description>Returns the delegation content.</description>
-	<url>/ru/it/lecm/delegation/west</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>
