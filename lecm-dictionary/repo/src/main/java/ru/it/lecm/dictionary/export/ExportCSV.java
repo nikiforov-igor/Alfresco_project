@@ -52,6 +52,7 @@ public class ExportCSV extends AbstractWebScript {
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 
+			// По умолчанию charset в UTF-8
 			Charset charset = Charset.defaultCharset();
 			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
 
