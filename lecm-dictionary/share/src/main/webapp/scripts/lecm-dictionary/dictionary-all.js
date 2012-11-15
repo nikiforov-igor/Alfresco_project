@@ -1,3 +1,6 @@
+/**
+ * Перерисовка dataGrid
+ */
 (function () {
 
 	function init() {

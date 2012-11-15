@@ -49,9 +49,9 @@ LogicECM.module = LogicECM.module || {};
     YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
         selectedNode:null,
         button:null,
-        cDoc: null,
-        treeContainer: 'dictionary',
-        rootNode: null,
+        cDoc:null,
+        treeContainer:'dictionary',
+        rootNode:null,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -62,44 +62,55 @@ LogicECM.module = LogicECM.module || {};
                 scope:window
             }
         },
-        init: function(dictionaryName) {
+        /**
+         * Инициализация начальных парметров при старте
+         * @method init
+         * @param dictionaryName {string} имя справочника
+         */
+        init:function (dictionaryName) {
 
-	        this._loadRootNode(dictionaryName);
+            this._loadRootNode(dictionaryName);
 
-	        dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
-	        dragTree = new YAHOO.widget.TreeView(dragContainer);
-	        dragContainer.id = dragContainerId;
+            dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
+            dragTree = new YAHOO.widget.TreeView(dragContainer);
+            dragContainer.id = dragContainerId;
         },
-
+        /**
+         * Отрисовка дерева
+         */
         draw:function () {
             this.cDoc = this.id;
 
             //Добавление дерева
             this._createTree();
         },
-        _createTree: function () {
+        /**
+         * Создание дерева
+         * @method _createTree
+         */
+        _createTree:function () {
             tree = new YAHOO.widget.TreeView(this.treeContainer);
             tree.singleNodeHighlight = true;
             tree.setDynamicLoad(this._loadTree);
 
-	        var root = tree.getRoot();
-	        var newRootNode = null;
-	        if (this.rootNode != null) {
-		        var newNode = {
-			        label:this.rootNode.title,
-			        description: this.rootNode.description,
-			        nodeRef:this.rootNode.nodeRef,
-			        isLeaf:false,
-			        expanded: true,
-			        type:this.rootNode.type,
-			        renderHidden:true
-		        };
-		        newRootNode = new YAHOO.widget.TextNode(newNode, root);
-	        } else {
-		        this._loadTree(root);
-	        }
+            var root = tree.getRoot();
+            var newRootNode = null;
+            if (this.rootNode != null) {
+                var newNode = {
+                    label:this.rootNode.title,
+                    description:this.rootNode.description,
+                    nodeRef:this.rootNode.nodeRef,
+                    isLeaf:false,
+                    expanded:true,
+                    type:this.rootNode.type,
+                    renderHidden:true
+                };
+                newRootNode = new YAHOO.widget.TextNode(newNode, root);
+            } else {
+                this._loadTree(root);
+            }
 
-            tree.subscribe('clickEvent', function(event) {
+            tree.subscribe('clickEvent', function (event) {
                 this._treeNodeSelected(event.node);
                 tree.onEventToggleHighlight(event);
                 return false;
@@ -107,12 +118,15 @@ LogicECM.module = LogicECM.module || {};
             tree.subscribe('dblClickEvent', this._editNode.bind(this));
             tree.render();
 
-	        if (newRootNode != null) {
-	            this._treeNodeSelected(newRootNode);
-	            tree.onEventToggleHighlight(newRootNode);
-	        }
+            if (newRootNode != null) {
+                this._treeNodeSelected(newRootNode);
+                tree.onEventToggleHighlight(newRootNode);
+            }
         },
-        _renderTree: function () {
+        /**
+         * Перерисовка дерева
+         */
+        _renderTree:function () {
             this._loadTree(this.selectedNode);
             this.selectedNode.isLeaf = false;
             this.selectedNode.expanded = true;
@@ -120,6 +134,14 @@ LogicECM.module = LogicECM.module || {};
             this.selectedNode.focus();
             makeDraggable();
         },
+        /**
+         * Формирование адреса при редактировании или создании элемента дерева
+         * @param type {string} тип действия edit - редактирование элемента
+         * @param nodeRef {string} ссылка на узел
+         * @param childNodeType childNodeType {string} ссылка на дочерний узел
+         * @return {*}
+         * @private
+         */
         _createUrl:function (type, nodeRef, childNodeType) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
             if (type == "create") {
@@ -141,54 +163,64 @@ LogicECM.module = LogicECM.module || {};
                 });
             }
         },
-	    _loadRootNode: function (dictionaryName) {
-		    var me = this;
+        /**
+         * Получение корневого узла
+         * @param dictionaryName {string}
+         * @private
+         */
+        _loadRootNode:function (dictionaryName) {
+            var me = this;
 
-		    if (dictionaryName !== null && dictionaryName !== "") {
-			    var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + dictionaryName;
+            if (dictionaryName !== null && dictionaryName !== "") {
+                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + dictionaryName;
 //
-		        var callback = {
-			        success:function (oResponse) {
-				        var oResults = eval("(" + oResponse.responseText + ")");
-				        if (oResults != null && oResults.nodeRef != null) {
-				            nodeDictionary = oResults.nodeRef;
-					        me.rootNode = oResults;
-				        }
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null && oResults.nodeRef != null) {
+                            nodeDictionary = oResults.nodeRef;
+                            me.rootNode = oResults;
+                        }
 
-				        me.draw();
-			        },
-			        failure:function (oResponse) {
-				        alert("Failed to load dictionary " + dictionaryName);
-			        },
-			        argument:{
-			        }
-		        };
-			    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-		    } else {
-	            var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
-	            if (this.cDoc != null) {
-	                sUrl += "?nodeRef=" + encodeURI(this.cDoc);
-	            }
-	            var callback = {
-	                success:function (oResponse) {
-	                    var oResults = eval("(" + oResponse.responseText + ")");
-	                    if (oResults != null) {
-	                        for (var nodeIndex in oResults) {
-	                            nodeDictionary = oResults[nodeIndex].toString();
-	                        }
-	                    }
-		                me.draw();
-	                },
-	                failure:function (oResponse) {
-	                    alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-	                },
-	                argument:{
-	                }
-	            };
+                        me.draw();
+                    },
+                    failure:function (oResponse) {
+                        alert("Failed to load dictionary " + dictionaryName);
+                    },
+                    argument:{
+                    }
+                };
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            } else {
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
+                if (this.cDoc != null) {
+                    sUrl += "?nodeRef=" + encodeURI(this.cDoc);
+                }
+                var callback = {
+                    success:function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null) {
+                            for (var nodeIndex in oResults) {
+                                nodeDictionary = oResults[nodeIndex].toString();
+                            }
+                        }
+                        me.draw();
+                    },
+                    failure:function (oResponse) {
+                        alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
+                    },
+                    argument:{
+                    }
+                };
 
-	            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-		    }
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            }
         },
+        /**
+         * Получение значений дерева
+         * @param node {object} значения узла
+         * @param fnLoadComplete
+         */
         _loadTree:function loadNodeData(node, fnLoadComplete) {
 
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/dictionary-tree";
@@ -227,53 +259,62 @@ LogicECM.module = LogicECM.module || {};
                     node:node,
                     fnLoadComplete:fnLoadComplete,
                     tree:tree,
-                    context: this
+                    context:this
                 },
                 timeout:7000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
+        /**
+         * Выбор ветки/листа в дереве и перерисовка таблицы значений ветки
+         * @param node {object} значения узла
+         * @private
+         */
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
-             var  sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
-             if (node.data.nodeRef != null) {
-                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-             }
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
+            if (node.data.nodeRef != null) {
+                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+            }
 
-             var callback = {
-                 success:function (oResponse) {
-                     var oResults = eval("(" + oResponse.responseText + ")");
-                     var nodeType = "lecm-dic:hierarchical_dictionary_values";
-                     if (oResults != null) {
-                         for (var nodeIndex in oResults) {
-                             nodeType = oResults[nodeIndex].toString();
-                             if (nodeType=="" || nodeType == null){
-                                 nodeType = "lecm-dic:hierarchical_dictionary_values";
-                             }
-                         }
-                     };
-                     Bubbling.fire("activeGridChanged",
-                         {
-	                         datagridMeta: {
-                                 description: "",
-                                 itemType: nodeType,
-		                         nodeRef: node.data.nodeRef,
-		                         initialSearch: 'PARENT:"' + node.data.nodeRef + '"',
-                                 title: ""
-                             },
-                             scrollTo: true
-                         });
-	                 YAHOO.Bubbling.fire("hideFilteredLabel");
-                 },
-                 failure:function (oResponse) {
-                     alert("Failed to load type. " + "[" + oResponse.statusText + "]");
-                 },
-                 argument:{
-                 }
-             };
+            var callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    var nodeType = "lecm-dic:hierarchical_dictionary_values";
+                    if (oResults != null) {
+                        for (var nodeIndex in oResults) {
+                            nodeType = oResults[nodeIndex].toString();
+                            if (nodeType == "" || nodeType == null) {
+                                nodeType = "lecm-dic:hierarchical_dictionary_values";
+                            }
+                        }
+                    };
+                    Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:{
+                                description:"",
+                                itemType:nodeType,
+                                nodeRef:node.data.nodeRef,
+                                initialSearch:'PARENT:"' + node.data.nodeRef + '"',
+                                title:""
+                            },
+                            scrollTo:true
+                        });
+                    YAHOO.Bubbling.fire("hideFilteredLabel");
+                },
+                failure:function (oResponse) {
+                    alert("Failed to load type. " + "[" + oResponse.statusText + "]");
+                },
+                argument:{
+                }
+            };
 
-             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
+        /**
+         * Редактирование элемента дерева в отдельном диалоговом окне
+         * @param event {object}
+         */
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", event.node.data.nodeRef);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
@@ -296,9 +337,14 @@ LogicECM.module = LogicECM.module || {};
                 }
             }).show();
         },
-
+        /**
+         * Заголовок диалогового окна при редактировании значений элемента
+         * @param p_form {object} параметры формы
+         * @param p_dialog {object} параметры диалога
+         * @private
+         */
         _setFormDialogTitle:function (p_form, p_dialog) {
-            // Dialog title
+            // Заголовок диалогового окна
             var fileSpan = '<span class="light">Edit Metatdata</span>';
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
@@ -306,26 +352,27 @@ LogicECM.module = LogicECM.module || {};
         }
     });
 
-    var DDNode = function(id, sGroup, config) {
+    var DDNode = function (id, sGroup, config) {
         DDNode.superclass.constructor.call(this, id, sGroup, config);
 
     };
 
-    var makeDraggable = function() {
-        for (var i = 0, l = ddNodes.length;i < l;i++) {
-//            ddNodes[i].unreg();
+    var makeDraggable = function () {
+        for (var i = 0, l = ddNodes.length; i < l; i++) {
         }
         ddNodes = [];
 
-        var nodes = tree.getNodesBy(function(){return true;});
+        var nodes = tree.getNodesBy(function () {
+            return true;
+        });
         if (nodes) {
-            for (i = 0,l = nodes.length;i<l;i++) {
+            for (i = 0, l = nodes.length; i < l; i++) {
                 ddNodes.push(
                     new DDNode(
                         nodes[i].getContentEl(),
                         'default',
                         {
-                            dragElId: dragContainerId
+                            dragElId:dragContainerId
                         }
                     )
                 );
@@ -337,10 +384,14 @@ LogicECM.module = LogicECM.module || {};
     var dragElementIsLeaf;
 
     YAHOO.extend(DDNode, YAHOO.util.DDProxy, {
-        srcNode: null,
-        destNode: null,
-
-        startDrag: function(x, y) {
+        srcNode:null,
+        destNode:null,
+        /**
+         * Старт перетаскивания ветки дерево в другую
+         * @param x {int}
+         * @param y {int}
+         */
+        startDrag:function (x, y) {
             this.srcNode = tree.getNodeByElement(this.getEl());
             // The following section of code resizes the container of the proxy element.
             (function () {
@@ -348,8 +399,8 @@ LogicECM.module = LogicECM.module || {};
                     dragEl = this.srcNode.getEl(),
                     dragRegion = Dom.getRegion(dragEl);
 
-                Dom.setStyle( proxyEl, "width",  dragRegion.width  + "px" );
-                Dom.setStyle( proxyEl, "height", dragRegion.height + "px" );
+                Dom.setStyle(proxyEl, "width", dragRegion.width + "px");
+                Dom.setStyle(proxyEl, "height", dragRegion.height + "px");
             }).call(this);
 
             if (!isDragElement && this.srcNode.data.type != "dictionary") {
@@ -363,31 +414,36 @@ LogicECM.module = LogicECM.module || {};
                 dragTree.render();
             }
         },
-        onDragDrop: function (e, id) {
+        /**
+         * Метод переносит данные из одной ветки в выбранную, при этом проверяется может ли выбранная ветка перенесена.
+         * Вводится диалоговое окно подверждения переноса данных в другую ветку.
+         * @param e {Event} событие mousemove
+         * @param id {String|DragDrop[]} id на которым находимся. В INTERSECT режиме массив элементов dd
+         */
+        onDragDrop:function (e, id) {
 
             var me = this;
-            if (!this.destNode) { return; }
+            if (!this.destNode) {
+                return;
+            }
 
-            var fnActionMoveConfirm = function DictionaryActions__onActionMove_confirm()
-            {
+            var fnActionMoveConfirm = function DictionaryActions__onActionMove_confirm() {
                 var parent = dest = me.destNode,
                     src = me.srcNode;
 
-                var dataObj = {childNodeRef: encodeURI(src.data.nodeRef), parentNodeRef: encodeURI(dest.data.nodeRef)};
+                var dataObj = {childNodeRef:encodeURI(src.data.nodeRef), parentNodeRef:encodeURI(dest.data.nodeRef)};
 
                 Alfresco.util.Ajax.jsonRequest(
                     {
-                        method: Alfresco.util.Ajax.POST,
-                        url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/action/changeParent/node",
-                        dataObj: dataObj,
-                        successCallback:
-                        {
-                            fn: function(response, obj)
-                            {
+                        method:Alfresco.util.Ajax.POST,
+                        url:Alfresco.constants.PROXY_URI + "/lecm/dictionary/action/changeParent/node",
+                        dataObj:dataObj,
+                        successCallback:{
+                            fn:function (response, obj) {
                                 var oResults = eval("(" + response.responseText + ")");
                                 if (response.json.success) {
                                     dest.isLeaf = false;
-                                    while(parent) {
+                                    while (parent) {
                                         if (parent == src) {
                                             return;
                                         }
@@ -405,21 +461,19 @@ LogicECM.module = LogicECM.module || {};
 
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: Alfresco.util.message("dictionary.message.moveSuccess", "LogicECM.module.Dictionary")
+                                            text:Alfresco.util.message("dictionary.message.moveSuccess", "LogicECM.module.Dictionary")
                                         });
                                 } else {
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary")
+                                            text:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary")
                                         });
-                                    }
+                                }
                             }
                         },
-                        failureMessage: Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary"),
-                        failureCallback:
-                        {
-                            fn: function()
-                            {
+                        failureMessage:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary"),
+                        failureCallback:{
+                            fn:function () {
                                 alert("!!!FALSE!!!");
                             }
                         }
@@ -428,53 +482,62 @@ LogicECM.module = LogicECM.module || {};
 
             Alfresco.util.PopupManager.displayPrompt(
                 {
-                    title: Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary"),
-                    text: Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary", {"0":me.srcNode.label, "1":me.srcNode.parent.label, "2":me.destNode.label}),
-                    buttons: [
+                    title:Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary"),
+                    text:Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary", {"0":me.srcNode.label, "1":me.srcNode.parent.label, "2":me.destNode.label}),
+                    buttons:[
                         {
-                            text: Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary"),
-                            handler: function DataListActions__onActionMove_move()
-                            {
+                            text:Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary"),
+                            handler:function DataListActions__onActionMove_move() {
                                 this.destroy();
                                 fnActionMoveConfirm.call();
                             }
                         },
                         {
-                            text: Alfresco.util.message("button.cancel"),
-                            handler: function DictionaryActions__onActionMove_cancel()
-                            {
+                            text:Alfresco.util.message("button.cancel"),
+                            handler:function DictionaryActions__onActionMove_cancel() {
                                 this.destroy();
                             },
-                            isDefault: true
-                        }]
+                            isDefault:true
+                        }
+                    ]
                 });
 
         },
-
-        endDrag: function(x,y) {
+        /**
+         * Установка стилей и параметров при завершении перетаскивания.
+         * @param x {int}
+         * @param y {int}
+         */
+        endDrag:function (x, y) {
             Dom.setStyle(this.srcNode.getEl(), "visibility", "");
             if (this.destNode) {
-                Dom.removeClass(this.destNode.getContentEl(),'dropTarget');
+                Dom.removeClass(this.destNode.getContentEl(), 'dropTarget');
             }
 
             isDragElement = false;
-            var nodes = dragTree.getNodesBy(function(){return true;});
+            var nodes = dragTree.getNodesBy(function () {
+                return true;
+            });
             if (nodes) {
-                for (i = 0,l = nodes.length;i<l;i++) {
+                for (i = 0, l = nodes.length; i < l; i++) {
                     dragTree.removeNode(nodes[i]);
                 }
             }
             Dom.get(dragContainerId).innerHTML = "";
         },
-
-        onDragOver: function(e, id) {
+        /**
+         * Метод вызывается при зависании над другим элементом при перетаскивании
+         * @param e {Event} событие mousemove
+         * @param id {String|DragDrop[]} id на которым находимся. В INTERSECT режиме массив элементов dd
+         */
+        onDragOver:function (e, id) {
             var tmpTarget = tree.getNodeByElement(Dom.get(id));
 
             if (this.destNode != tmpTarget) {
                 if (this.destNode) {
-                    Dom.removeClass(this.destNode.getContentEl(),'dropTarget');
+                    Dom.removeClass(this.destNode.getContentEl(), 'dropTarget');
                 }
-                Dom.addClass(tmpTarget.getContentEl(),'dropTarget');
+                Dom.addClass(tmpTarget.getContentEl(), 'dropTarget');
                 this.destNode = tmpTarget;
             }
         }

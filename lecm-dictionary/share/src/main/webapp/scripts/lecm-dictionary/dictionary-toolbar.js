@@ -93,8 +93,8 @@
             fileUpload: null,
 
             groupActions: {},
-	        panel: null,
-            panel1: null,
+            panelCsv:null,
+            panelXml: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -119,56 +119,52 @@
                         disabled: true
                     });
 
-	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearch,
-		            {
-			            disabled: true
-		            });
+                this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearch,
+                    {
+                        disabled:true
+                    });
 
-                    this.panel1 = new YAHOO.widget.Panel("panel-1", {
+                this.panelXml = new YAHOO.widget.Panel("panel-1", {
+                    visible:false,
+                    fixedcenter:true,
+                    constraintoviewport:true,
+                    width:"300px"
+                });
 
-		            visible: false,
-		            fixedcenter: true,
-		            constraintoviewport: true,
-		            width: "300px"
+                this.panelXml.render();
 
-	            });
-
-                this.panel1.render();
-
-                this.widgets.importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){this.panel1.show()},
+                this.widgets.importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){this.panelXml.show()},
                     {
                         disabled: true
                     });
 
-	            this.panel = new YAHOO.widget.Panel("panel-2", {
+                this.panelCsv = new YAHOO.widget.Panel("panel-2", {
+                    visible:false,
+                    fixedcenter:true,
+                    constraintoviewport:true,
+                    width:"300px"
+                });
 
-		            visible: false,
-		            fixedcenter: true,
-		            constraintoviewport: true,
-		            width: "300px"
+                this.panelCsv.render();
+                this.widgets.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onSetPanelParams,
+                    {
+                        disabled:true
+                    });
 
-	            });
+                var me = this;
+                var searchInput = Dom.get("dictionaryFullSearchInput");
+                new YAHOO.util.KeyListener(searchInput,
+                    {
+                        keys:13
+                    },
+                    {
+                        fn:me.onSearch,
+                        scope:this,
+                        correctScope:true
+                    }, "keydown").enable();
 
-	            this.panel.render();
-	            this.widgets.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", this.onInitParameter,
-		            {
-			            disabled: true
-		            });
-
-	            var me = this;
-	            var searchInput = Dom.get("dictionaryFullSearchInput");
-	            new YAHOO.util.KeyListener(searchInput,
-		            {
-			            keys: 13
-		            },
-		            {
-			            fn: me.onSearch,
-			            scope: this,
-			            correctScope: true
-		            }, "keydown").enable();
-
-	            // DataList Actions module
-	            this.modules.actions = new LogicECM.module.Base.Actions();
+                // DataList Actions module
+                this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
@@ -176,7 +172,10 @@
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
-
+            /**
+             * Удаление выбранного значения в dataGrid.
+             * Появляется диалоговое окно с потверждением на удаление
+             */
             onDeleteRow: function DataListToolbar_onDeleteRow() {
                 if (this.modules.dataGrid)
                 {
@@ -187,7 +186,6 @@
                         this[fn].call(this, this.modules.dataGrid.getSelectedItems());
                     }
                 }
-
             },
 
             /**
@@ -199,8 +197,7 @@
              */
             onNewRow: function DataListToolbar_onNewRow(e, p_obj)
             {
-	            if (this.modules.dataGrid)
-	            {
+                if (this.modules.dataGrid) {
                 var datagridMeta = this.modules.dataGrid.datagridMeta,
                     destination = datagridMeta.nodeRef,
                     itemType = datagridMeta.itemType;
@@ -265,7 +262,7 @@
                             scope: this
                         }
                     }).show();
-	            }
+                }
             },
 
             /**
@@ -353,8 +350,12 @@
                     }
                 }
             },
+            /**
+             * Экспорт CSV
+             */
             onExportSCV: function(){
                 var datagridMeta = this.modules.dataGrid.datagridMeta;
+                var selectItems = this.modules.dataGrid.selectedItems;
                 var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
                 var fields = "";
                 var items = "";
@@ -368,7 +369,7 @@
                                 for (var nodeIndex in oResults) {
                                     fields += "field=" + oResults[nodeIndex].fild + "&";
                                 }
-                                for (var item in this.modules.dataGrid.selectedItems) {
+                                for (var item in selectItems) {
                                     items += "selectedItems=" + item + "&";
                                 }
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
@@ -379,105 +380,77 @@
                         },
                         failureCallback:
                         {
-                            fn: function() {alert("Failed to load webscript export.")},
+                            fn: function() {alert("Failed to load webscript export CSV.")},
                             scope: this
                         }
                     });
             },
+            /**
+             * Поиск
+             * @constructor
+             */
+            onSearch:function DataListToolbar_onSearch() {
+                if (this.modules.dataGrid) {
+                    var searchTerm = Dom.get("dictionaryFullSearchInput").value;
 
-			onSearch: function DataListToolbar_onSearch() {
-				if (this.modules.dataGrid)
-				{
-					var searchTerm = Dom.get("dictionaryFullSearchInput").value;
+                    var dataGrid = this.modules.dataGrid;
+                    var datagridMeta = dataGrid.datagridMeta;
 
-					var dataGrid = this.modules.dataGrid;
-					var datagridMeta = dataGrid.datagridMeta;
+                    if (searchTerm.length > 0) {
+                        var columns = dataGrid.datagridColumns;
 
-					if (searchTerm.length > 0) {
-						var columns = dataGrid.datagridColumns;
+                        var fields = "";
+                        for (var i = 0; i < columns.length; i++) {
+                            if (columns[i].dataType == "text") {
+                                fields += columns[i].name + ",";
+                            }
+                        }
+                        if (fields.length > 1) {
+                            fields = fields.substring(0, fields.length - 1);
+                        }
+                        var fullTextSearch = {
+                            parentNodeRef:datagridMeta.nodeRef,
+                            fields:fields,
+                            searchTerm:searchTerm
+                        }
+                        datagridMeta.initialSearch = "";
+                        datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
-						var fields = "";
-						for (var i = 0; i < columns.length; i++) {
-							if (columns[i].dataType == "text") {
-								fields += columns[i].name + ",";
-							}
-						}
-						if (fields.length > 1) {
-							fields = fields.substring(0, fields.length - 1);
-						}
-						var fullTextSearch = {
-							parentNodeRef: datagridMeta.nodeRef,
-							fields: fields,
-							searchTerm: searchTerm
-						}
-						datagridMeta.initialSearch = "";
-						datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta,
+                                scrollTo:true
+                            });
 
-						YAHOO.Bubbling.fire("activeGridChanged",
-							{
-								datagridMeta:datagridMeta,
-								scrollTo:true
-							});
-
-						YAHOO.Bubbling.fire("showFilteredLabel");
-					} else {
-						var nodeRef = datagridMeta.nodeRef;
-						datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
-						datagridMeta.fullTextSearch = "";
-							YAHOO.Bubbling.fire("activeGridChanged",
-							{
-								datagridMeta: datagridMeta,
-								scrollTo: true
-							});
-						YAHOO.Bubbling.fire("hideFilteredLabel");
-					}
-				}
-			},
-
-			onInitDataGrid: function DataListToolbar_onInitDataGrid(layer, args) {
-				var datagrid = args[1].datagrid;
-				this.modules.dataGrid = datagrid;
-			},
-	        onFileUpload: function RDLTB_onFileUpload(e, p_obj)
-	        {
-		        if (this.fileUpload === null)
-		        {
-			        this.fileUpload = Alfresco.getFileUploadInstance();
-		        }
-
-		        // Show uploader for multiple files
-		        var singleUploadConfig =
-		        {
-//                    destination: this.modules.docList.doclistMetadata.parent.nodeRef,
-			        filter: [],
-			        mode: this.fileUpload.MODE_SINGLE_UPDATE,
-			        thumbnails: "doclib",
-			        onFileUploadComplete:
-			        {
-				        fn: this.onFileUploadComplete,
-				        scope: this
-			        }
-		        };
-		        this.fileUpload.show(singleUploadConfig);
-	        },
-	        onFileUploadXML: function()
-	        {
-//                var oPanel1 = new YAHOO.widget.Panel("panel-1", {
-//
-//                    visible: false,
-//                    fixedcenter: true,
-//                    constraintoviewport: true,
-//                    width: "300px"
-//
-//                });
-//                oPanel1.render();
-//
-//                Event.on("show-dialog-1", "click", oPanel1.show, null, oPanel1);
-	        },
-	        onInitParameter: function() {
-		        document.getElementById('nodeRef').value=this.modules.dataGrid.datagridMeta.nodeRef;
-		        this.panel.show();
-//		        document.getElementById('panel-2-form').submit();
-	        }
-		}, true);
+                        YAHOO.Bubbling.fire("showFilteredLabel");
+                    } else {
+                        var nodeRef = datagridMeta.nodeRef;
+                        datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
+                        datagridMeta.fullTextSearch = "";
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta,
+                                scrollTo:true
+                            });
+                        YAHOO.Bubbling.fire("hideFilteredLabel");
+                    }
+                }
+            },
+            /**
+             * Метод вызываемый из другого скрипта для передачи параметров
+             * @param layer {object} Event fired
+             * @param args {array} Event parameters (depends on event type)
+             * @constructor
+             */
+            onInitDataGrid:function DataListToolbar_onInitDataGrid(layer, args) {
+                this.modules.dataGrid = args[1].datagrid;
+            },
+            /**
+             * Отрисовка панели и присвоение значения элементу панели.
+             */
+            onSetPanelParams:function () {
+                document.getElementById('nodeRef').value = this.modules.dataGrid.datagridMeta.nodeRef;
+                this.panelCsv.show();
+            }
+        }, true);
 })();
