@@ -42,11 +42,7 @@ function runAction(p_params) {
         return [];
     }
 
-    var full = args["full"];
-    if (full == null) {
-        full = false;
-    }
-    var type = args["deletedType"];
+    var full = args["full"] != null ? args["full"] : false;
 
     for (item in items) {
         nodeRef = items[item];
@@ -61,39 +57,20 @@ function runAction(p_params) {
             var itemNode = search.findNode(nodeRef);
             if (itemNode != null) {
                 var sAssocs;
-                if (type != null) { // delete assocs by type, element dont modified
-                    sAssocs = itemNode.sourceAssocs[type];
-                    if (full) { // remove object what has assocs with given type
-                        var res = true;
-                        for (index in sAssocs) {
-                            var assocEl = sAssocs[index];
-                            //assocEl.removeAssociation(itemNode, type);
-                            //assocEl.save();
-                            res = assocEl.remove();
-                        }
-                        result.success = res;
-                    } else { // remove only links
-                        for (index in sAssocs) {
-                            var assocEl = sAssocs[key];
-                            assocEl.removeAssociation(itemNode, type);
-                        }
-                        result.success = true;
+                sAssocs = itemNode.getSourceAssocs();
+                // удалить все ссылки на объект
+                for (key in sAssocs) {
+                    var assocsList = sAssocs[key];
+                    for (index in assocsList) {
+                        var target = assocsList[index];
+                        target.removeAssociation(itemNode, key)
                     }
-                } else {
-                    if (!full) { // mark object as inactive
-                        itemNode.properties["lecm-dic:active"] = false;
-                        result.success = itemNode.save();
-                    } else {//delete node and all assocs
-                            sAssocs = itemNode.getSourceAssocs();
-                            for (key in sAssocs) {
-                                var assocsList = sAssocs[key];
-                                for (index in assocsList) {
-                                    var target = assocsList[index];
-                                    target.removeAssociation(itemNode, key)
-                                }
-                            }
-                            result.success = itemNode.remove();
-                    }
+                }
+                if (!full) {// пометить объект как неактивный
+                    itemNode.properties["lecm-dic:active"] = false;
+                    result.success = itemNode.save();
+                } else {//реальное удаление объекта
+                    result.success = itemNode.remove();
                 }
             }
         }

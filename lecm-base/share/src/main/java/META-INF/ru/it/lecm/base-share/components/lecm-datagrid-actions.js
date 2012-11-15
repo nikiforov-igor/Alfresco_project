@@ -60,12 +60,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var query = "";
                 if (metadata) {
                     var fullDelete = metadata.fullDelete;
-                    var deletedAssocsType = metadata.deletedAssocsType;
                     if (fullDelete != null) {
                         query = query + "full=" + fullDelete;
-                    }
-                    if (deletedAssocsType != null) {
-                        query = query + "&deletedType=" + deletedAssocsType;
                     }
                 }
                 this.modules.actions.genericAction(
