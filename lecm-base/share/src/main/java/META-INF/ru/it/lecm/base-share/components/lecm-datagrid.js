@@ -1026,14 +1026,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     datatype:this.datagridMeta.itemType
                 };
 
-                var initialSearch = this.datagridMeta.initialSearch != null ? this.datagridMeta.initialSearch: "";
+                var filter = this.datagridMeta.filter != null ? this.datagridMeta.filter: "";
                 // trigger the initial search
                 YAHOO.Bubbling.fire("doSearch",
                     {
-                        searchTerm: "",
                         searchSort:"",
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
-                        searchFilter:initialSearch,
+                        searchFilter:filter,
 	                    fullTextSearch: this.datagridMeta.fullTextSearch
                     });
             },
@@ -1809,10 +1808,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     datatype:this.datagridMeta.itemType
                 };
 
-                var initialSearch = this.datagridMeta.initialSearch != null ? this.datagridMeta.initialSearch: "";
+                var filter = this.datagridMeta.filter != null ? this.datagridMeta.filter: "";
 
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams("", YAHOO.lang.JSON.stringify(initialData), initialSearch, "", this.dataRequestFields.join(","));
+                var requestParams = this.modules.search._buildSearchParams(YAHOO.lang.JSON.stringify(initialData), filter, "", this.dataRequestFields.join(","), null);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

@@ -107,6 +107,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     {
                         disabled: true
                     });
+
+                this.widgets.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
+                    {
+                        disabled: true
+                    });
+
                 var me = this;
                 var searchInput = Dom.get("full-text-search");
                 new YAHOO.util.KeyListener(searchInput,
@@ -406,7 +412,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             fields:fields,
                             searchTerm:searchTerm
                         };
-                        datagridMeta.initialSearch = "";
+                        datagridMeta.filter = "";
                         datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
                         YAHOO.Bubbling.fire("activeGridChanged",
@@ -418,7 +424,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {
                         var nodeRef = datagridMeta.nodeRef;
-                        datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
+                        datagridMeta.filter = 'PARENT:"' + nodeRef + '"';
                         datagridMeta.fullTextSearch = "";
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {
@@ -427,6 +433,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             });
                         YAHOO.Bubbling.fire("hideFilteredLabel");
                     }
+                }
+            },
+
+            onExSearchClick:function OrgstructureToolbar_onExSearch() {
+                if (this.modules.dataGrid) {
+                    var grid = this.modules.dataGrid;
+                    var advSearch = grid.modules.search;
+
+                    advSearch.showDialog(grid.datagridMeta);
                 }
             }
         }, true);

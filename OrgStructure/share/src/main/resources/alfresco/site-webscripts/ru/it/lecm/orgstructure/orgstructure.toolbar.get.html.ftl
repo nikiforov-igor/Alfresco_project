@@ -1,18 +1,31 @@
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
-new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
+function init() {
+	new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages});
+}
+
+YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 <div id="${id}-searchBar" class="datalist-toolbar toolbar" style="visibility: visible;">
 	<div id="${id}-searchHeaderBar" class="header-bar flat-button theme-bg-2">
-		<div class="right">
+		<div class="left">
 			<span id="${id}-searchInput" class="search-input">
 				<input type="text" id="full-text-search" value="">
 			</span>
-			<span id="${id}-searchButton" class="yui-button yui-push-button search">
-				<span class="first-child">
-					<button type="button" title="${msg('button.search')}"/>
+			<div class="search">
+				<span id="${id}-searchButton" class="yui-button yui-push-button">
+					<span class="first-child">
+						<button type="button" id ="searchBtn" title="${msg('button.search')}"/>
+					</span>
 				</span>
-			</span>
+			</div>
+			<div class="ex-search">
+				<span id="${id}-extendSearchButton" class="yui-button yui-push-button">
+					<span class="first-child">
+						<button type="button" id="exsearchBtn" title="${msg('button.ex_search')}"/>
+					</span>
+				</span>
+			</div>
 		</div>
 	</div>
 </div>

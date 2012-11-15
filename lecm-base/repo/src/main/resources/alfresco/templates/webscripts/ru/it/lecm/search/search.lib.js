@@ -131,29 +131,11 @@ function escapeString(value) {
 function getSearchResults(params) {
     var nodes,
         ftsQuery = "",
-        term = params.term,
         formData = params.query,
         fields = params.fields,
         filter = params.filter,
         sort = params.sort,
         fullTextSearch = params.fullTextSearch;
-
-    // Simple keyword search and tag specific search
-    if (term !== null && term.length() > 0) {
-        var elements = term.split('#');
-        var query = "";
-        for (var index = 0; index < elements.length; index++) {
-            var element = elements[index];
-            var obj = element.split(":");
-            var property = obj[0] + ":" + obj[1];
-            var value = "*" + obj[2] + "*";
-            query += escapeQName(property) + ":" + value;
-            if (elements[index + 1] != null) {
-                query += " OR ";
-            }
-        }
-        ftsQuery = query;
-    }
 
     // Advanced search form data search.
     // Supplied as json in the standard Alfresco Forms data structure:
@@ -301,9 +283,6 @@ function getSearchResults(params) {
         if (ftsQuery.indexOf("TYPE:\"") === -1 && ftsQuery.indexOf("TYPE:'") === -1) {
             ftsQuery += ' AND (+TYPE:"cm:content" +TYPE:"cm:folder")';
         }
-
-	    //not show removed dictionaries
-	    ftsQuery += ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
 
         // sort field - expecting field to in one of the following formats:
         //  - short QName form such as: cm:name

@@ -61,7 +61,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 itemType:root.itemType,
                                 name:root.type,
                                 nodeRef:root.nodeRef, // used in toolbar
-                                namePattern:root.namePattern // used on save in toolbar and tree
+                                namePattern:root.namePattern, // used on save in toolbar and tree
+                                filter:"PARENT:\"" + root.nodeRef + "\""
                             }
                         });
                 }

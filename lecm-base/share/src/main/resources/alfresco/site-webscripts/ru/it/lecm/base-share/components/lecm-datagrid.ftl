@@ -4,57 +4,28 @@ id(обязательный) - идентификатор, использующ�
 Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco
 -->
 <#macro extendedSearch id>
-<div id="searchBlock" style="display: none;">
-	<h2 id="${id}-heading" class="thin dark">${msg("search-block")}</h2>
-	<div id="${id}-searchContainer" class="search">
-		<div class="yui-gc form-row">
-		<#-- Кнопки Найти и Очистить -->
-			<div class="yui-u align-right">
-                    <span id="${id}-search-button-1" class="yui-button yui-push-button search-icon">
-                        <span class="first-child">
-	                        <button type="button">${msg('button.search')}</button>
-                        </span>
-                    </span>
-                    <span id="${id}-clear-button" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button type="button">${msg('button.clear')}</button>
-                        </span>
-                    </span>
+<div id="searchBlock" class="yui-panel" style="display:none;">
+	<div id="${id}-search-head" class="hd">${msg("search-block")}</div>
+	<div id="${id}-search-body" class="bd">
+		<div id="${id}-search-content">
+			<div id="searchBlock-content" >
+				<div id="${id}-searchContainer" class="search">
+					<#-- Контейнер для отрисовки формы -->
+					<div id="${id}-forms" class="forms-container form-fields"></div>
+				</div>
 			</div>
-		</div>
-	<#-- Поле для полнотекстового поиска-->
-		<div class="forms-container keywords-box">
-			<div class="share-form">
-				<div class="form-container">
-					<div class="form-fields">
-						<div class="set">
-							<div>${msg("label.keywords")}:</div>
-							<input type="text" class="terms" name="${id}-search-text" id="${id}-search-text"
-							       value="" maxlength="1024"/>
-						</div>
-					</div>
+			<div class="bdft">
+			<#-- Кнопка Найти -->
+				<div class="yui-u align-right">
+                            <span id="${id}-search-button-2" class="yui-button yui-push-button search-icon">
+                                <span class="first-child">
+                                    <button type="button">${msg('button.search')}</button>
+                                </span>
+                            </span>
 				</div>
 			</div>
 		</div>
-	<#-- Контейнер для отрисовки формы -->
-		<div id="${id}-forms" class="forms-container form-fields"></div>
-
-		<div class="yui-gc form-row">
-			<div class="yui-u first"></div>
-		<#-- Кнопка Найти -->
-			<div class="yui-u align-right">
-                    <span id="${id}-search-button-2" class="yui-button yui-push-button search-icon">
-                        <span class="first-child">
-                            <button type="button">${msg('button.search')}</button>
-                        </span>
-                    </span>
-			</div>
-		</div>
 	</div>
-	<#--Создание твистера-->
-	<script type="text/javascript">//<![CDATA[
-	Alfresco.util.createTwister("${id}-heading", ${id} + "-ExtendSearch");
-	//]]></script>
 </div>
 </#macro>
 

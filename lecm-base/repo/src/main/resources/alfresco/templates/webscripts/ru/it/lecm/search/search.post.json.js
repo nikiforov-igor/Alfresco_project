@@ -8,7 +8,6 @@ function main() {
         var pars = json.get("params");
         params =
         {
-            term:(pars.get("term") !== null) ? pars.get("term") : null,
             query:(pars.get("query") !== null) ? pars.get("query") : null,
             sort:(pars.get("sort") !== null) ? pars.get("sort") : null,
             maxResults:(pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS,

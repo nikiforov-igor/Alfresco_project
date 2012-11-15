@@ -277,37 +277,37 @@ LogicECM.module = LogicECM.module || {};
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }
 
-            var callback = {
-                success:function (oResponse) {
-                    var oResults = eval("(" + oResponse.responseText + ")");
-                    var nodeType = "lecm-dic:hierarchical_dictionary_values";
-                    if (oResults != null) {
-                        for (var nodeIndex in oResults) {
-                            nodeType = oResults[nodeIndex].toString();
-                            if (nodeType == "" || nodeType == null) {
-                                nodeType = "lecm-dic:hierarchical_dictionary_values";
-                            }
-                        }
-                    };
-                    Bubbling.fire("activeGridChanged",
-                        {
-                            datagridMeta:{
-                                description:"",
-                                itemType:nodeType,
-                                nodeRef:node.data.nodeRef,
-                                initialSearch:'PARENT:"' + node.data.nodeRef + '"',
-                                title:""
-                            },
-                            scrollTo:true
-                        });
-                    YAHOO.Bubbling.fire("hideFilteredLabel");
-                },
-                failure:function (oResponse) {
-                    alert("Failed to load type. " + "[" + oResponse.statusText + "]");
-                },
-                argument:{
-                }
-            };
+             var callback = {
+                 success:function (oResponse) {
+                     var oResults = eval("(" + oResponse.responseText + ")");
+                     var nodeType = "lecm-dic:hierarchical_dictionary_values";
+                     if (oResults != null) {
+                         for (var nodeIndex in oResults) {
+                             nodeType = oResults[nodeIndex].toString();
+                             if (nodeType=="" || nodeType == null){
+                                 nodeType = "lecm-dic:hierarchical_dictionary_values";
+                             }
+                         }
+                     };
+                     Bubbling.fire("activeGridChanged",
+                         {
+	                         datagridMeta: {
+                                 description: "",
+                                 itemType: nodeType,
+		                         nodeRef: node.data.nodeRef,
+		                         filter: 'PARENT:"' + node.data.nodeRef + '" AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)',
+                                 title: ""
+                             },
+                             scrollTo: true
+                         });
+	                 YAHOO.Bubbling.fire("hideFilteredLabel");
+                 },
+                 failure:function (oResponse) {
+                     alert("Failed to load type. " + "[" + oResponse.statusText + "]");
+                 },
+                 argument:{
+                 }
+             };
 
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },

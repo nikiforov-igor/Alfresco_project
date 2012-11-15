@@ -47,16 +47,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.extend(LogicECM.AdvancedSearch, Alfresco.component.Base,
         {
+            searchDialog: null,
             dataTable:null,
             dataSource:null,
             dataColumns:{},
             datagridMeta:{},
 
-            currentSearchTerm: "",
+            searchStarted: false,
+
             currentSearchSort:"",
             currentSearchFilter:"",
             currentSearchQuery:"",
-
+            currentFullTextSearch:{},
             /**
              * Object container for initialization options
              *
@@ -78,9 +80,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @property searchRepo
                  * @type boolean
                  */
-                searchRepo:true,
+                //searchRepo:true,
 
-                minSearchTermLength:3,
+                //minSearchTermLength:3,
 
                 maxSearchResults:3000,
                 // default hide search block
@@ -140,34 +142,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
                 this.widgets.paginator.subscribe("changeRequest", handlePagination, this);
 
-                var defaultForm = new Object();
-                defaultForm.id = "search";
-                defaultForm.type = metaData.itemType;
-
                 if (this.options.showExtendSearchBlock) {
-                    // search YUI button and menus
-                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
-                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
-                    this.widgets.clearButton = Alfresco.util.createYUIButton(this, "clear-button", this.onClearClick);
-
-                    // render initial form template
-                    this.renderFormTemplate(defaultForm, true);
-
-                    // register the "enter" event on the search text field
-                    var queryInput = Dom.get(this.id + "-search-text");
-
-                    this.widgets.enterListener = new YAHOO.util.KeyListener(queryInput,
-                        {
-                            keys:YAHOO.util.KeyListener.KEY.ENTER
-                        },
-                        {
-                            fn:me._searchEnterHandler,
-                            scope:this,
-                            correctScope:true
-                        }, "keydown").enable();
-
-                    // Finally show the component body here to prevent UI artifacts on YUI button decoration
-                    Dom.setStyle("searchBlock", "display", "block");
+                // создаем диалог
+                this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
+                    {
+                        width:"800px"
+                    });
                 }
             },
 
@@ -181,65 +161,43 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             renderFormTemplate:function ADVSearch_renderFormTemplate(form, repopulate) {
                 // update current form state
                 this.currentForm = form;
-                this.currentForm.repopulate = repopulate;
 
-                var containerDiv = Dom.get(this.id + "-forms");
+                var formDiv = Dom.get(this.id + "-forms");
+                form.htmlid = this.id + "-forms";
 
-                var visibleFormFn = function () {
-                    // hide visible form if any
-                    for (var i = 0, c = containerDiv.children; i < c.length; i++) {
-                        if (!Dom.hasClass(c[i], "hidden")) {
-                            Dom.addClass(c[i], "hidden");
-                            break;
-                        }
-                    }
-                    // display cached form element
-                    Dom.removeClass(form.htmlid, "hidden");
-                    // reset focus to search input textbox
-                    Dom.get(this.id + "-search-text").focus();
-                };
+                Dom.addClass(formDiv, "hidden");
+                //Dom.addClass(formDiv, "share-form");
 
-                if (!form.htmlid) {
-                    // generate child container div for this form
-                    var htmlid = this.id + "_" + containerDiv.children.length;
-                    var formDiv = document.createElement("div");
-                    formDiv.id = htmlid;
-                    Dom.addClass(formDiv, "hidden");
-                    Dom.addClass(formDiv, "share-form");
-
-                    // cache htmlid so we know the form is present on the form
-                    form.htmlid = htmlid;
-
-                    // load the form component for the appropriate type
-                    var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
-                        {
-                            itemId:form.type,
-                            formId:form.id
-                        });
-                    var formData =
+                // load the form component for the appropriate type
+                var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
                     {
-                        htmlid:htmlid
-                    };
-                    Alfresco.util.Ajax.request(
-                        {
-                            url:formUrl,
-                            dataObj:formData,
-                            successCallback:{
-                                fn:function ADVSearch_onFormTemplateLoaded(response) {
-                                    // Inject the template from the XHR request into the child container div
-                                    formDiv.innerHTML = response.serverResponse.responseText;
-                                    containerDiv.appendChild(formDiv);
-                                    visibleFormFn.call(this);
-                                },
-                                scope:this
+                        itemId:form.type,
+                        formId:form.id
+                    });
+                var formData =
+                {
+                    htmlid:form.htmlid
+                };
+                Alfresco.util.Ajax.request(
+                    {
+                        url:formUrl,
+                        dataObj:formData,
+                        successCallback:{
+                            fn:function ADVSearch_onFormTemplateLoaded(response) {
+                                // Inject the template from the XHR request into the child container div
+                                formDiv.innerHTML = response.serverResponse.responseText;
+                                // display cached form element
+                                Dom.removeClass(form.htmlid, "hidden");
+                                if (this.searchDialog) {
+                                    this.searchDialog.show();
+                                }
                             },
-                            failureMessage:"Could not load form component '" + formUrl + "'.",
-                            scope:this,
-                            execScripts:true
-                        });
-                } else {
-                    visibleFormFn.call(this);
-                }
+                            scope:this
+                        },
+                        failureMessage:"Could not load form component '" + formUrl + "'.",
+                        scope:this,
+                        execScripts:true
+                    });
             },
 
             /**
@@ -247,7 +205,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              *
              * @method repopulateCurrentForm
              */
-            repopulateCurrentForm:function ADVSearch_repopulateCurrentForm() {
+            /*repopulateCurrentForm:function ADVSearch_repopulateCurrentForm() {
                 if (this.options.savedQuery.length !== 0) {
                     var savedQuery = YAHOO.lang.JSON.parse(this.options.savedQuery);
                     var elForm = Dom.get(this.currentForm.runtime.formId);
@@ -269,7 +227,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                 }
             },
-
+*/
             /**
              * Event handler that gets fired when user clicks the Search button.
              *
@@ -279,49 +237,38 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onSearchClick:function ADVSearch_onSearchClick(e, obj) {
                 var me = this;
+                if (!me.searchStarted) {
+                    me.searchStarted = true;
+                    // retrieve form data structure directly from the runtime
+                    var formData = me.currentForm.runtime.getFormData();
+                    // add DD type to form data structure
+                    formData.datatype = me.currentForm.type;
 
-                // retrieve form data structure directly from the runtime
-                var formData = me.currentForm.runtime.getFormData();
-                // add DD type to form data structure
-                formData.datatype = me.currentForm.type;
+                    var query = YAHOO.lang.JSON.stringify(formData);
 
-                var termsValues = Dom.get(this.id + "-search-text").value;
-                var columns = this.dataColumns;
+                    var fullTextSearch = {
+                        parentNodeRef:me.datagridMeta.nodeRef
+                    };
 
-                var fields = "";
-                for (var i = 0; i < columns.length; i++) {
-                    if (columns[i].dataType == "text") {
-                        fields += columns[i].name + ",";
-                    }
+                    this._performSearch(
+                        {
+                            searchSort:me.currentSearchSort,
+                            searchQuery:query, // поиск по заполненной форме (тип + данные)
+                            searchFilter:"", // сбросить фильтр
+                            fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch)// поиск во всех вложенных директориях
+                        });
+
+                    this.hideDialog();
                 }
-                if (fields.length > 1) {
-                    fields = fields.substring(0, fields.length - 1);
-                }
-
-                var query = YAHOO.lang.JSON.stringify(formData);
-                var fullTextSearch = {
-                    parentNodeRef: me.datagridMeta.nodeRef,
-                    fields: fields,
-                    searchTerm: termsValues
-                };
-
-                this._performSearch(
-                    {
-                        searchTerm:"",
-                        searchSort:me.currentSearchSort,
-                        searchQuery:query,// поиск по заполненной форме
-                        searchFilter:"", // должен отработать полнотекстовый поиск
-                        fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch)
-                    });
             },
 
             _performSearch:function Search__performSearch(args) {
-                var searchTerm = YAHOO.lang.trim(args.searchTerm),
-                    searchSort = args.searchSort,
+                var searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter,
 	                fullTextSearch = args.fullTextSearch;
 
+                // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
                 for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
                     var column = this.dataColumns[i],
@@ -329,95 +276,75 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     reqFields.push(columnName);
                 }
                 var fields = reqFields.join(",");
-                if (searchQuery.length === 0 &&
-                    searchTerm.replace(/\*/g, "").length < this.options.minSearchTermLength && searchFilter.length === 0) {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:this.msg("message.minimum-length", this.options.minSearchTermLength)
-                        });
-                    return;
-                }
 
-                // empty results table
+                //очистить таблицу и отрисовать
                 this.dataTable.deleteRows(0, this.dataTable.getRecordSet().getLength());
-
-                // update the ui to show that a search is on-going
                 this.dataTable.render();
 
                 var me = this;
+
+                // Запуск сообщения о загрузке
                 var loadingMessage = null,
                     timerShowLoadingMessage = null;
 
-                // Clear the current document list if the data webscript is taking too long
-                var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
-                {
-                    // Check the timer still exists. This is to prevent IE firing the event after we cancelled it. Which is "useful".
-                    if (timerShowLoadingMessage)
-                    {
+                var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage() {
+                    if (timerShowLoadingMessage) {
                         loadingMessage = Alfresco.util.PopupManager.displayMessage(
                             {
-                                displayTime: 0,
-                                text: '<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
-                                noEscape: true
+                                displayTime:0,
+                                text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
+                                noEscape:true
                             });
 
-                        if (YAHOO.env.ua.ie > 0)
-                        {
+                        if (YAHOO.env.ua.ie > 0) {
                             this.loadingMessageShowing = true;
                         }
-                        else
-                        {
-                            loadingMessage.showEvent.subscribe(function()
-                            {
+                        else {
+                            loadingMessage.showEvent.subscribe(function () {
                                 this.loadingMessageShowing = true;
                             }, this, true);
                         }
                     }
                 };
 
-                // Slow data webscript message
                 this.loadingMessageShowing = false;
                 timerShowLoadingMessage = YAHOO.lang.later(500, this, fnShowLoadingMessage);
 
-                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage()
-                {
-                    if (timerShowLoadingMessage)
-                    {
+                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
+                    if (timerShowLoadingMessage) {
                         // Stop the "slow loading" timed function
                         timerShowLoadingMessage.cancel();
                         timerShowLoadingMessage = null;
                     }
-
-                    if (loadingMessage)
-                    {
-                        if (this.loadingMessageShowing)
-                        {
+                    if (loadingMessage) {
+                        if (this.loadingMessageShowing) {
                             // Safe to destroy
                             loadingMessage.destroy();
                             loadingMessage = null;
                         }
-                        else
-                        {
+                        else {
                             // Wait and try again later. Scope doesn't get set correctly with "this"
                             YAHOO.lang.later(100, me, destroyLoaderMessage);
                         }
                     }
                 };
 
-                // Success handler
+                //Обработчик на успех
                 function successHandler(sRequest, oResponse, oPayload) {
                     destroyLoaderMessage();
+                    me.searchStarted = false;
                     // update current state on success
-                    this.currentSearchTerm = searchTerm;
-                    this.currentSearchSort = searchSort;
-                    this.currentSearchFilter = searchFilter;
-                    this.currentSearchQuery = searchQuery;
+                    me.currentSearchSort = searchSort;
+                    me.currentSearchFilter = searchFilter;
+                    me.currentSearchQuery = searchQuery;
+                    me.currentFullTextSearch = fullTextSearch;
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
                 }
 
-                // Failure handler
+                // Обработчик на неудачу
                 function failureHandler(sRequest, oResponse) {
                     destroyLoaderMessage();
+                    me.searchStarted = false;
                     if (oResponse.status == 401) {
                         // Our session has likely timed-out, so refresh to offer the login page
                         window.location.reload();
@@ -427,8 +354,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             var response = YAHOO.lang.JSON.parse(oResponse.responseText);
                             me.dataTable.set("MSG_ERROR", response.message);
                             me.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                            if (oResponse.status == 404)
-                            {
+                            if (oResponse.status == 404) {
                                 // Site or container not found - deactivate controls
                                 YAHOO.Bubbling.fire("deactivateAllControls");
                             }
@@ -439,8 +365,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                 }
 
-                this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // update post header for prevent errors
-                var searchParams = this._buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, fields, fullTextSearch);
+                this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
+                var searchParams = this._buildSearchParams(searchQuery, searchFilter, searchSort, fields, fullTextSearch);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -454,11 +380,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._performSearch(obj);
             },
 
-            _buildSearchParams:function Search__buildSearchParams(searchTerm, searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
+            _buildSearchParams:function Search__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
                 var request =
                 {
                     params:{
-                        term:searchTerm,
                         sort:searchSort,
                         query:searchQuery,
                         filter:searchFilter,
@@ -474,6 +399,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var queryInput = Dom.get(this.id + "-search-text");
                 queryInput.value = "";
                 queryInput.focus();
+
+                this.datagridMeta.filter = this.currentSearchFilter;
+                this.datagridMeta.fullTextSearch = ""; // убрать полнотекстовый поиск
             },
 
             /**
@@ -487,18 +415,36 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // Repopulate current form from url query data?
                     if (this.currentForm.repopulate) {
                         this.currentForm.repopulate = false;
-                        this.repopulateCurrentForm();
                     }
                 }
             },
 
-            /**
-             * Search text box ENTER key event handler
-             *
-             * @method _searchEnterHandler
-             */
-            _searchEnterHandler:function ADVSearch__searchEnterHandler(e, args) {
-                this.onSearchClick(e, args);
+            hideDialog: function ADVSearch_hideDialog() {
+                if (this.searchDialog != null) {
+                        this.searchDialog.hide();
+                }
+            },
+
+            showDialog: function ADVSearch_showDialog(metaData) {
+                var defaultForm = new Object();
+                defaultForm.id = "search";
+                defaultForm.type = metaData.itemType;
+
+                if (this.options.showExtendSearchBlock) {
+                    // создаем кнопки
+                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
+                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
+
+                    // показываем форму
+                    this.renderFormTemplate(defaultForm, true);
+
+                    // Finally show the component body here to prevent UI artifacts on YUI button decoration
+                    Dom.setStyle("searchBlock", "display", "block");
+
+                    if (this.searchDialog != null) {
+                        this.searchDialog.show();
+                    }
+                }
             }
         });
 })();
