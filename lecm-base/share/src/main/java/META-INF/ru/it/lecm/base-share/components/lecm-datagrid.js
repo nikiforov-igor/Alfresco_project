@@ -590,7 +590,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 {
                     return;
                 }
-                // draw searchForm
+                // init search
                 if (this.modules.search) {
                     this.modules.search.initSearch(this.datagridMeta);
                 } else {
@@ -753,7 +753,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     // YUI Paginator definition
                     this.widgets.paginator = new YAHOO.widget.Paginator(
                         {
-                            containers: [this.id + "-paginator", this.id + "-paginatorBottom"],
+                            containers: [this.id + "-paginatorBottom"],
                             rowsPerPage: this.options.pageSize,
                             initialPage: this.currentPage,
                             template: this.msg("pagination.template"),
@@ -1027,10 +1027,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
 
                 var filter = this.datagridMeta.filter != null ? this.datagridMeta.filter: "";
+                var sorting = this.datagridMeta.sort != null ? this.datagridMeta.sort: "cm:name|true";
                 // trigger the initial search
                 YAHOO.Bubbling.fire("doSearch",
                     {
-                        searchSort:"",
+                        searchSort:sorting,
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:filter,
 	                    fullTextSearch: this.datagridMeta.fullTextSearch

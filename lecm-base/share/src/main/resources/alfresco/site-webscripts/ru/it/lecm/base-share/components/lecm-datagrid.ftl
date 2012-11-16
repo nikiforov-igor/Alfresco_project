@@ -114,7 +114,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 		<h2 id="${id}-title"></h2>
 		<div id="${id}-description" class="datagrid-description"></div>
 	</div>
-	<div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button">
+	<div id="${id}-datagridBar" class="yui-ge datagrid-bar flat-button" style="display:none">
 		<div class="yui-u first align-center">
 			<div class="item-select">&nbsp;</div>
 			<div id="${id}-paginator" class="paginator"></div>

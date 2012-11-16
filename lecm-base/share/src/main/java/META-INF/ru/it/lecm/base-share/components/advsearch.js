@@ -39,7 +39,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @constructor
      */
     LogicECM.AdvancedSearch = function (htmlId) {
-        LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container"]);
+        LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container", "datasource", "datatable", "paginator"]);
 
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
@@ -47,14 +47,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.extend(LogicECM.AdvancedSearch, Alfresco.component.Base,
         {
-            searchDialog: null,
-            dataTable:null,
-            dataSource:null,
-            dataColumns:{},
-            datagridMeta:{},
+            searchDialog: null, // окно атрибутивного поиска
+            dataTable:null,   // DataTable из грида
+            dataSource:null,  // DataSource из грида
+            dataColumns:{},   // набор колонок из датагрида
+            datagridMeta:{}, // метаданные из датагрида
 
-            searchStarted: false,
+            searchStarted: false, // флаг, что идет поиск
 
+            // сохраненные настройки предыдущего поиска
             currentSearchSort:"",
             currentSearchFilter:"",
             currentSearchQuery:"",
@@ -66,27 +67,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @type object
              */
             options:{
-                /**
-                 * Previously saved query, if any
-                 *
-                 * @property savedQuery
-                 * @type string
-                 */
-                savedQuery:"",
-
-                /**
-                 * It is possible to disable searching entire repo via config
-                 *
-                 * @property searchRepo
-                 * @type boolean
-                 */
-                //searchRepo:true,
-
-                //minSearchTermLength:3,
-
                 maxSearchResults:3000,
-                // default hide search block
-                showExtendSearchBlock: false
+                showExtendSearchBlock: false  // По умолчанию аттрибутивный поиск скрыт
             },
 
             /**
@@ -95,10 +77,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             currentForm:null,
 
             /**
-             * Fired by YUI when parent element is available for scripting.
-             * Component initialisation, including instantiation of YUI widgets and event listener binding.
-             *
-             * @method onReady
+             * Начальная инициализация поиска (обязательна
              */
             initSearch:function ADVSearch_onReady(metaData) {
                 var me = this;
@@ -121,8 +100,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             }
                         });
 
-                } else {
-                    this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
                 }
 
                 // YUI Paginator definition
@@ -142,17 +119,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
                 this.widgets.paginator.subscribe("changeRequest", handlePagination, this);
 
-                if (this.options.showExtendSearchBlock) {
-                // создаем диалог
-                this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
-                    {
-                        width:"800px"
-                    });
+                if (this.options.showExtendSearchBlock) {//включена опция
+                    // создаем диалог
+                    this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
+                        {
+                            width:"800px"
+                        });
+                    // создаем кнопки
+                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
+                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
                 }
             },
 
             /**
-             * Loads or retrieves from cache the Form template for a given content type
+             * Получение и отрисовка формы
              *
              * @method renderFormTemplate
              * @param form {Object} Form descriptor to render template for
@@ -162,11 +142,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update current form state
                 this.currentForm = form;
 
-                var formDiv = Dom.get(this.id + "-forms");
+                var formDiv = Dom.get(this.id + "-forms"); // элемент в который будет отрисовываться форма
                 form.htmlid = this.id + "-forms";
-
-                Dom.addClass(formDiv, "hidden");
-                //Dom.addClass(formDiv, "share-form");
 
                 // load the form component for the appropriate type
                 var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
@@ -184,13 +161,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         dataObj:formData,
                         successCallback:{
                             fn:function ADVSearch_onFormTemplateLoaded(response) {
-                                // Inject the template from the XHR request into the child container div
                                 formDiv.innerHTML = response.serverResponse.responseText;
-                                // display cached form element
-                                Dom.removeClass(form.htmlid, "hidden");
-                                if (this.searchDialog) {
-                                    this.searchDialog.show();
-                                }
                             },
                             scope:this
                         },
@@ -201,35 +172,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * Repopulate currently displayed Form fields based on saved query data
-             *
-             * @method repopulateCurrentForm
-             */
-            /*repopulateCurrentForm:function ADVSearch_repopulateCurrentForm() {
-                if (this.options.savedQuery.length !== 0) {
-                    var savedQuery = YAHOO.lang.JSON.parse(this.options.savedQuery);
-                    var elForm = Dom.get(this.currentForm.runtime.formId);
-
-                    for (var i = 0, j = elForm.elements.length; i < j; i++) {
-                        var element = elForm.elements[i];
-                        var name = element.name;
-                        if (name != undefined && name !== "-") {
-                            var savedValue = savedQuery[name];
-                            if (savedValue !== undefined) {
-                                if (element.type === "checkbox" || element.type === "radio") {
-                                    element.checked = (savedValue === "true");
-                                }
-                                else {
-                                    element.value = savedValue;
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-*/
-            /**
-             * Event handler that gets fired when user clicks the Search button.
+             * Обработчик для кнопки Найти для аттрибутивного поиска
              *
              * @method onSearchClick
              * @param e {object} DomEvent
@@ -237,24 +180,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onSearchClick:function ADVSearch_onSearchClick(e, obj) {
                 var me = this;
-                if (!me.searchStarted) {
-                    me.searchStarted = true;
-                    // retrieve form data structure directly from the runtime
+                if (!me.searchStarted) { // если поиск еще не начат (для предотвращения повторного взова метода)
+                    me.searchStarted = true; // блокируем остальные запросы
+                    // получает данные из формы
                     var formData = me.currentForm.runtime.getFormData();
-                    // add DD type to form data structure
                     formData.datatype = me.currentForm.type;
 
+                    // формируем запрос
                     var query = YAHOO.lang.JSON.stringify(formData);
 
+                    // включаем поиск во всех вложенных директория относительно родительской
                     var fullTextSearch = {
                         parentNodeRef:me.datagridMeta.nodeRef
                     };
 
                     this._performSearch(
                         {
-                            searchSort:me.currentSearchSort,
+                            searchSort:me.currentSearchSort, // сохраняем текущую сортировку
                             searchQuery:query, // поиск по заполненной форме (тип + данные)
-                            searchFilter:"", // сбросить фильтр
+                            searchFilter:"", // сбрасываем фильтр
                             fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch)// поиск во всех вложенных директориях
                         });
 
@@ -262,7 +206,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            _performSearch:function Search__performSearch(args) {
+            /**
+             * Поиск
+             * args - Объект с настройками поиска
+             */
+            _performSearch:function ADVSearch__performSearch(args) {
                 var searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter,
@@ -375,18 +323,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
+            /**
+             * Обработчки события  "doSearch"
+             */
             onSearch:function AdvSearch_onSearch(layer, args) {
                 var obj = args[1];
                 this._performSearch(obj);
             },
 
-            _buildSearchParams:function Search__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
+            _buildSearchParams:function ADVSearch__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
                 var request =
                 {
                     params:{
                         sort:searchSort,
-                        query:searchQuery,
-                        filter:searchFilter,
+                        query:searchQuery != null ? searchQuery : "",
+                        filter:searchFilter != null ? searchFilter : "" ,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
                         fields:searchFields,
 	                    fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
@@ -395,13 +346,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 return request;
             },
 
+            /**
+             * Очистка input и вызов поиска по умолчанию (метод пока не используется)
+             */
             onClearClick:function ADVSearch_onSearchClick(e, obj) {
-                var queryInput = Dom.get(this.id + "-search-text");
+                var queryInput = Dom.get("full-text-search");
                 queryInput.value = "";
                 queryInput.focus();
 
-                this.datagridMeta.filter = this.currentSearchFilter;
-                this.datagridMeta.fullTextSearch = ""; // убрать полнотекстовый поиск
+                this._performSearch(
+                    {
+                        searchSort:this.currentSearchSort,
+                        searchQuery:this.currentSearchQuery,
+                        searchFilter:this.currentSearchFilter,
+                        fullTextSearch:"" //убрать полнотекстовый поиск
+                    });
             },
 
             /**
@@ -411,32 +370,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // extract the current form runtime - so we can reference it later
                 if (this.currentForm) {
                     this.currentForm.runtime = args[1].runtime;
-
-                    // Repopulate current form from url query data?
-                    if (this.currentForm.repopulate) {
-                        this.currentForm.repopulate = false;
-                    }
                 }
             },
 
+            /**
+             * метод для скрытия диалога с аттриюбутивным поиском
+             */
             hideDialog: function ADVSearch_hideDialog() {
                 if (this.searchDialog != null) {
-                        this.searchDialog.hide();
+                    this.searchDialog.hide();
                 }
             },
 
+            /**
+             * метод для вывода диалога с аттриюбутивным поиском
+             */
             showDialog: function ADVSearch_showDialog(metaData) {
                 var defaultForm = new Object();
                 defaultForm.id = "search";
                 defaultForm.type = metaData.itemType;
 
-                if (this.options.showExtendSearchBlock) {
-                    // создаем кнопки
-                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
-                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
-
-                    // показываем форму
-                    this.renderFormTemplate(defaultForm, true);
+                if (this.options.showExtendSearchBlock) { // если заданы соответствующая опция
+                    if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
+                        // создаем форму
+                        this.renderFormTemplate(defaultForm, true);
+                    }
 
                     // Finally show the component body here to prevent UI artifacts on YUI button decoration
                     Dom.setStyle("searchBlock", "display", "block");

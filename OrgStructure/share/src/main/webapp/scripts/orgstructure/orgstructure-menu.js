@@ -62,7 +62,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 name:root.type,
                                 nodeRef:root.nodeRef, // used in toolbar
                                 namePattern:root.namePattern, // used on save in toolbar and tree
-                                filter:"PARENT:\"" + root.nodeRef + "\""
+                                filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
                             }
                         });
                 }

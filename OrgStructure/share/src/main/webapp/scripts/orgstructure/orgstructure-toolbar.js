@@ -424,7 +424,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {
                         var nodeRef = datagridMeta.nodeRef;
-                        datagridMeta.filter = 'PARENT:"' + nodeRef + '"';
+                        datagridMeta.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
                         datagridMeta.fullTextSearch = "";
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {

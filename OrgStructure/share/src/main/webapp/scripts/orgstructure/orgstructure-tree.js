@@ -206,7 +206,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         namePattern:node.data.namePattern,
                         nodeRef:node.data.nodeRef,
                         fullDelete:true,
-                        filter:"PARENT:\"" + node.data.nodeRef + "\""
+                        filter:'PARENT:\"' + node.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
                     }
                 });
         },
@@ -306,7 +306,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             namePattern:sNode.data.namePattern,
                             nodeRef:sNode.data.nodeRef,
                             fullDelete:true,
-                            filter:"PARENT:\"" + sNode.data.nodeRef + "\""
+                            filter:'PARENT:\"' + sNode.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
                         }
                     });
             }

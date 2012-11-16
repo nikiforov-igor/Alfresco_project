@@ -392,7 +392,7 @@
                             fields:fields,
                             searchTerm:searchTerm
                         };
-                        datagridMeta.initialSearch = "";
+                        datagridMeta.filter = "";
                         datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
                         YAHOO.Bubbling.fire("activeGridChanged",
@@ -404,7 +404,7 @@
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {
                         var nodeRef = datagridMeta.nodeRef;
-                        datagridMeta.initialSearch = 'PARENT:"' + nodeRef + '"';
+                        datagridMeta.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
                         datagridMeta.fullTextSearch = "";
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {
