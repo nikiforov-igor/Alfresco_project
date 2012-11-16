@@ -163,6 +163,8 @@
                     if (fn && (typeof this[fn] == "function"))
                     {
                         this[fn].call(this, this.modules.dataGrid.getSelectedItems());
+                        this.modules.dataGrid.selectItems("selectNone");
+                        this.onSelectedItemsChanged();
                     }
                 }
             },
