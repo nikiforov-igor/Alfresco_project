@@ -4,6 +4,12 @@
   height : 70px;
   background-position: right top;
   background-image: url(/share/res/themes/lecmTheme/images/lecmUI/header-right.png) !important;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width : 100%;
+  min-width: 1200px;
 }
 
 #alf-hd .header .app-items{
@@ -34,6 +40,10 @@ top : -25px;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold
+}
+
+body{
+  margin-top:70px;
 }
 
 
