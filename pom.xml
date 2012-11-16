@@ -68,7 +68,7 @@
 
     <modules>
         <module>lecm-base</module>
-        <module>OrgStructure</module>
+        <module>lecm-orgstructure</module>
         <module>lecm-experts</module>
         <module>lecm-jasperreports-forms</module>
 	    <module>lecm-dictionary</module>
