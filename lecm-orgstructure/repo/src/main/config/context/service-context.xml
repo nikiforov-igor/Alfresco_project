@@ -52,18 +52,6 @@
         </property>
     </bean>
 
-    <bean id="webscript.ru.it.lecm.orgstructure.staff-list-assocs.get"
-          class="ru.it.lecm.orgstructure.scripts.GetStaffListsAssocsBean"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
-
-    <bean id="webscript.ru.it.lecm.orgstructure.workforce-assocs.get"
-          class="ru.it.lecm.orgstructure.scripts.GetWorkforcesAssocsBean"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
-
     <bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap">
         <property name="dictionaries">
             <list>

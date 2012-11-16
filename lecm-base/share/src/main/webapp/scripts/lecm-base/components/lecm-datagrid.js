@@ -151,7 +151,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @property pageSize
                  * @type int
                  */
-                pageSize: 50,
+                pageSize: 20,
 
                 /**
                  * Delay time value for "More Actions" popup, in milliseconds
@@ -1038,15 +1038,20 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     datatype:this.datagridMeta.itemType
                 };
 
-                var filter = this.datagridMeta.filter != null ? this.datagridMeta.filter: "";
-                var sorting = this.datagridMeta.sort != null ? this.datagridMeta.sort: "cm:name|true";
+                var searchConfig = this.datagridMeta.searchConfig;
+                var sorting, filter, fullText;
+                if (searchConfig) {
+                    filter = searchConfig.filter;
+                    sorting = searchConfig.sort != null && searchConfig.sort.length > 0 ? searchConfig.sort : "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
+                    fullText = searchConfig.fullTextSearch;
+                }
                 // trigger the initial search
                 YAHOO.Bubbling.fire("doSearch",
                     {
                         searchSort:sorting,
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:filter,
-                        fullTextSearch:this.datagridMeta.fullTextSearch
+                        fullTextSearch:fullText
                     });
             },
             /**
@@ -1128,10 +1133,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     break;
                                 }
                                 if (!this.versionable && (action.attributes[0].nodeValue == "onActionVersion")){
-                                    clone.removeChild(action);
-                                }
-                                if (this.datagridMeta.itemType.indexOf("lecm-orgstr") > -1 &&
-                                    action.attributes[0].nodeValue == "onActionDuplicate") {
                                     clone.removeChild(action);
                                 }
                             }
@@ -1616,10 +1617,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     datatype:this.datagridMeta.itemType
                 };
 
-                var filter = this.datagridMeta.filter != null ? this.datagridMeta.filter: "";
-
+                var searchConfig = this.datagridMeta.searchConfig;
+                var sorting, filter, fullText;
+                if (searchConfig) {
+                    filter = searchConfig.filter;
+                    sorting = searchConfig.sort != null ? searchConfig.sort : "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
+                    fullText = searchConfig.fullTextSearch;
+                }
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams(YAHOO.lang.JSON.stringify(initialData), filter, "", this.dataRequestFields.join(","), null);
+                var requestParams = this.modules.search._buildSearchParams(YAHOO.lang.JSON.stringify(initialData), filter, sorting, this.dataRequestFields.join(","), fullText);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

@@ -7,11 +7,8 @@
 	YAHOO.Bubbling.fire("activeGridChanged",
 		{
 			datagridMeta:{
-				description:"",
-				itemType:"lecm-dic:dictionary",
-				title:""
-			},
-			scrollTo:true
+				itemType:"lecm-dic:dictionary"
+			}
 		});
 	}
 

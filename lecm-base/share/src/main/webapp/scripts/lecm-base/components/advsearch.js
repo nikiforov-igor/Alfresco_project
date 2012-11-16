@@ -138,7 +138,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param form {Object} Form descriptor to render template for
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
-            renderFormTemplate:function ADVSearch_renderFormTemplate(form, repopulate) {
+            renderFormTemplate:function ADVSearch_renderFormTemplate(form) {
                 // update current form state
                 this.currentForm = form;
 
@@ -335,7 +335,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var request =
                 {
                     params:{
-                        sort:searchSort,
+                        sort:searchSort != null ? searchSort : "",
                         query:searchQuery != null ? searchQuery : "",
                         filter:searchFilter != null ? searchFilter : "" ,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
@@ -393,7 +393,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (this.options.showExtendSearchBlock) { // если заданы соответствующая опция
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
                         // создаем форму
-                        this.renderFormTemplate(defaultForm, true);
+                        this.renderFormTemplate(defaultForm);
                     }
 
                     // Finally show the component body here to prevent UI artifacts on YUI button decoration

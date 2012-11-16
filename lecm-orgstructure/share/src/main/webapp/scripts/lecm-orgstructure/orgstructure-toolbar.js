@@ -205,7 +205,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 var orgMetadata = this.modules.dataGrid.datagridMeta,
                     destination = orgMetadata.nodeRef,
                     itemType = orgMetadata.itemType,
-                    namePattern = orgMetadata.namePattern;
+                    namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
 
                 this._createNode(itemType, destination, namePattern, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
             },
@@ -251,7 +251,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     // Get the function related to the clicked item
                     var fn = Alfresco.util.findEventClass(eventTarget);
                     if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), dataGrid.datagridMeta, null);
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), dataGrid.datagridMeta.actionsConfig, null);
                     }
                 }
 
@@ -406,24 +406,28 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             fields:fields,
                             searchTerm:searchTerm
                         };
-                        datagridMeta.filter = "";
-                        datagridMeta.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+                        if (!datagridMeta.searchConfig) {
+                            datagridMeta.searchConfig = {};
+                        }
+                        datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
+                        datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {
-                                datagridMeta:datagridMeta,
-                                scrollTo:true
+                                datagridMeta:datagridMeta
                             });
 
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {
                         var nodeRef = datagridMeta.nodeRef;
-                        datagridMeta.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
-                        datagridMeta.fullTextSearch = "";
+                        if (!datagridMeta.searchConfig) {
+                            datagridMeta.searchConfig = {};
+                        }
+                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+                        datagridMeta.searchConfig.fullTextSearch = null;
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {
-                                datagridMeta:datagridMeta,
-                                scrollTo:true
+                                datagridMeta:datagridMeta
                             });
                         YAHOO.Bubbling.fire("hideFilteredLabel");
                     }

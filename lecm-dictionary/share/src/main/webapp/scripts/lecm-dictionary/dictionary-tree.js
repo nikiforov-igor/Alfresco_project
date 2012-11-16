@@ -292,11 +292,11 @@ LogicECM.module = LogicECM.module || {};
                      Bubbling.fire("activeGridChanged",
                          {
 	                         datagridMeta: {
-                                 description: "",
                                  itemType: nodeType,
 		                         nodeRef: node.data.nodeRef,
-		                         filter: 'PARENT:"' + node.data.nodeRef + '" AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)',
-                                 title: ""
+                                 searchConfig: {
+                                    filter: 'PARENT:"' + node.data.nodeRef + '" AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                 },
                              },
                              scrollTo: true
                          });

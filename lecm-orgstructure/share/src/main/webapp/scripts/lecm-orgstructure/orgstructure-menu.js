@@ -54,15 +54,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
-                    // draw datagrid
                     Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:{
                                 itemType:root.itemType,
-                                name:root.type,
-                                nodeRef:root.nodeRef, // used in toolbar
-                                namePattern:root.namePattern, // used on save in toolbar and tree
-                                filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                nodeRef:root.nodeRef,
+                                custom: {
+                                    namePattern:root.namePattern
+                                },
+                                searchConfig: {
+                                    filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                }
                             }
                         });
                 }

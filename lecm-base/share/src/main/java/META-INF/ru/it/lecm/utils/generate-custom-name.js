@@ -4,7 +4,7 @@ var SUB_ELEMENT_DELIMITER = ".";
 function generateNodeName(form, pattern, delimiter, override) {
     // for hidden - prop_cm_name
     var nameElement = form['prop_cm_name'];
-    if (nameElement != null) {
+    if (nameElement != null && pattern != null) {
         var elValue = nameElement.value;
         // if cm:name field empty or override it
         if (elValue == null || elValue == "" || override) {
