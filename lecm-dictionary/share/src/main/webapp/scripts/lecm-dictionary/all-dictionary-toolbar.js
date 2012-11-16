@@ -49,11 +49,6 @@
     YAHOO.extend(Alfresco.component.AllDictToolbar, Alfresco.component.Base);
 
     /**
-     * Augment prototype with Common Actions module
-     */
-    YAHOO.lang.augmentProto(Alfresco.component.AllDictToolbar, LogicECM.module.Base.DataActions);
-
-    /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(Alfresco.component.AllDictToolbar.prototype,

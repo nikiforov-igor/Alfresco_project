@@ -114,11 +114,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
     YAHOO.extend(LogicECM.module.Base.DataGrid, Alfresco.component.Base);
 
     /**
-     * Augment prototype with Common Actions module
-     */
-    YAHOO.lang.augmentProto(LogicECM.module.Base.DataGrid, LogicECM.module.Base.DataActions);
-
-    /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.Base.DataGrid.prototype,
@@ -517,7 +512,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         {
                             args[1].stop = true;
                             var asset = me.widgets.dataTable.getRecord(args[1].target.offsetParent).getData();
-                            me[owner.className].call(me, asset, owner, null, me.datagridMeta);
+                            me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
                         }
                     }
                     return true;
@@ -525,7 +520,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 Bubbling.addDefaultAction("action-link", fnActionHandler);
                 Bubbling.addDefaultAction("show-more", fnActionHandler);
 
-                // Actions Actions module
+                // Actions module
                 this.modules.actions = new LogicECM.module.Base.Actions();
 
                 var context = this;
@@ -1137,7 +1132,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 }
                                 if (this.datagridMeta.itemType.indexOf("lecm-orgstr") > -1 &&
                                     action.attributes[0].nodeValue == "onActionDuplicate") {
-                                        clone.removeChild(action);
+                                    clone.removeChild(action);
                                 }
                             }
                         }
@@ -1305,224 +1300,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 Bubbling.fire("selectedItemsChanged");
-            },
-
-            /**
-             * Edit Data Item pop-up
-             *
-             * @method onActionEdit
-             * @param item {object} Object literal representing one data item
-             */
-            onActionEdit: function DataGrid_onActionEdit(item)
-            {
-                var scope = this;
-
-                // Intercept before dialog show
-                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog)
-                {
-                    Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-dialogTitle", this.msg("label.edit-row.title") ]
-                    );
-                };
-
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&submitType={submitType}&showCancelButton=true",
-                    {
-                        itemKind: "node",
-                        itemId: item.nodeRef,
-                        mode: "edit",
-                        submitType: "json"
-                    });
-
-                // Using Forms Service, so always create new instance
-                var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
-                editDetails.setOptions(
-                    {
-                        width: "50em",
-                        templateUrl: templateUrl,
-                        actionUrl: null,
-                        destroyOnHide: true,
-                        doBeforeDialogShow:
-                        {
-                            fn: doBeforeDialogShow,
-                            scope: this
-                        },
-                        onSuccess:
-                        {
-                            fn: function DataGrid_onActionEdit_success(response)
-                            {
-                                // Reload the node's metadata
-                                Alfresco.util.Ajax.jsonPost(
-                                    {
-                                        url: Alfresco.constants.PROXY_URI + "slingshot/datalists/item/node/" + new Alfresco.util.NodeRef(item.nodeRef).uri,
-                                        dataObj: this._buildDataGridParams(),
-                                        successCallback:
-                                        {
-                                            fn: function DataGrid_onActionEdit_refreshSuccess(response)
-                                            {
-                                                // Fire "itemUpdated" event
-                                                Bubbling.fire("dataItemUpdated",
-                                                    {
-                                                        item: response.json.item
-                                                    });
-                                                // Display success message
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: this.msg("message.details.success")
-                                                    });
-                                            },
-                                            scope: this
-                                        },
-                                        failureCallback:
-                                        {
-                                            fn: function DataGrid_onActionEdit_refreshFailure(response)
-                                            {
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: this.msg("message.details.failure")
-                                                    });
-                                            },
-                                            scope: this
-                                        }
-                                    });
-                            },
-                            scope: this
-                        },
-                        onFailure:
-                        {
-                            fn: function DataGrid_onActionEdit_failure(response)
-                            {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg("message.details.failure")
-                                    });
-                            },
-                            scope: this
-                        }
-                    }).show();
-            },
-            /**
-             * Получение списка версий и вывод диалогового окна для просмотра
-             * @param item {object} выбранный элемент
-             */
-            doBeforeParseData: function(item) {
-                var  sUrl = Alfresco.constants.PROXY_URI + "api/version?nodeRef=" + item.nodeRef;
-
-                var callback = {
-                    success:
-                        function (oRequest) {
-                            var oResults = eval("(" + oRequest.responseText + ")");
-                            this.versionCache = oResults;
-                            this.latestVersion = oResults.splice(0, 1)[0];
-                            this.onViewHistoricPropertiesClick(item.nodeRef);
-                        }.bind(this),
-                    failure:function (oRequest) {
-                        alert("Failed to load version data. " + "[" + oRequest.statusText + "]");
-                    },
-                    argument:{
-                    }
-                };
-
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-            },
-            /**
-             * Просмотр версий
-             * @param item {object} выбранный элемент
-             */
-            onActionVersion: function(item) {
-                this.doBeforeParseData(item);
-            },
-            /**
-             * Установка параметров диалогового окна просмотра версий
-             * @param nodeRef {string} ссылка на узел
-             * @constructor
-             */
-            onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)
-            {
-                // Call the Hictoric Properties Viewer Module
-                Alfresco.module.getHistoricPropertiesViewerInstance().show(
-                    {
-                        filename: this.latestVersion.name,
-                        currentNodeRef: nodeRef,
-                        latestVersion: this.latestVersion,
-                        nodeRef: this.latestVersion.nodeRef
-                    });
-            },
-
-            /**
-             * Show more actions pop-up.
-             *
-             * @method onActionShowMore
-             * @param record {object} Object literal representing file or folder to be actioned
-             * @param elMore {element} DOM Element of "More Actions" link
-             */
-            onActionShowMore: function DL_onActionShowMore(record, elMore)
-            {
-                var me = this;
-
-                // Fix "More Actions" hover style
-                Dom.addClass(elMore.firstChild, "highlighted");
-
-                // Get the pop-up div, sibling of the "More Actions" link
-                var elMoreActions = Dom.getNextSibling(elMore);
-                Dom.removeClass(elMoreActions, "hidden");
-                me.showingMoreActions = true;
-
-                // Hide pop-up timer function
-                var fnHidePopup = function DL_oASM_fnHidePopup()
-                {
-                    // Need to rely on the "elMoreActions" enclosed variable, as MSIE doesn't support
-                    // parameter passing for timer functions.
-                    Event.removeListener(elMoreActions, "mouseover");
-                    Event.removeListener(elMoreActions, "mouseout");
-                    Dom.removeClass(elMore.firstChild, "highlighted");
-                    Dom.addClass(elMoreActions, "hidden");
-                    me.showingMoreActions = false;
-                    if (me.deferredActionsMenu !== null)
-                    {
-                        Dom.addClass(me.currentActionsMenu, "hidden");
-                        me.currentActionsMenu = me.deferredActionsMenu;
-                        me.deferredActionsMenu = null;
-                        Dom.removeClass(me.currentActionsMenu, "hidden");
-                    }
-                };
-
-                // Initial after-click hide timer - 4x the mouseOut timer delay
-                if (elMoreActions.hideTimerId)
-                {
-                    window.clearTimeout(elMoreActions.hideTimerId);
-                }
-                elMoreActions.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout * 4);
-
-                // Mouse over handler
-                var onMouseOver = function DLSM_onMouseOver(e, obj)
-                {
-                    // Clear any existing hide timer
-                    if (obj.hideTimerId)
-                    {
-                        window.clearTimeout(obj.hideTimerId);
-                        obj.hideTimerId = null;
-                    }
-                };
-
-                // Mouse out handler
-                var onMouseOut = function DLSM_onMouseOut(e, obj)
-                {
-                    var elTarget = Event.getTarget(e);
-                    var related = elTarget.relatedTarget;
-
-                    // In some cases we should ignore this mouseout event
-                    if ((related !== obj) && (!Dom.isAncestor(obj, related)))
-                    {
-                        if (obj.hideTimerId)
-                        {
-                            window.clearTimeout(obj.hideTimerId);
-                        }
-                        obj.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout);
-                    }
-                };
-
-                Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
-                Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
             },
 
             /**
@@ -1897,6 +1674,549 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                 }
                 return null;
+            },
+
+            //Действия по умолчанию. В конкретных реализациях ДатаГрида эти методы при необходимости следует переопределять
+            /**
+             * Delete item(s).
+             *
+             * @method onActionDelete
+             * @param p_items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
+             * @param owner {Object} не используется Dom-объект
+             * @param actionsConfig {Object} Объект с настройками для экшена
+             * @param fnDeleteComplete {Object} CallBack, который вызовется после завершения удаления
+             */
+            onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+                var me = this,
+                    items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+
+                var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(items) {
+                    var nodeRefs = [];
+                    for (var i = 0, ii = items.length; i < ii; i++) {
+                        nodeRefs.push(items[i].nodeRef);
+                    }
+                    var query = "";
+                    if (actionsConfig) {
+                        var fullDelete = actionsConfig.fullDelete;
+                        if (fullDelete != null) {
+                            query = query + "full=" + fullDelete;
+                        }
+                    }
+                    this.modules.actions.genericAction(
+                        {
+                            success:{
+                                event:{
+                                    name:"dataItemsDeleted",
+                                    obj:{
+                                        items:items
+                                    }
+                                },
+                                message:this.msg("message.delete.success", items.length),
+                                callback:{
+                                    fn:fnDeleteComplete
+                                }
+                            },
+                            failure:{
+                                message:this.msg("message.delete.failure")
+                            },
+                            webscript:{
+                                method:Alfresco.util.Ajax.DELETE,
+                                name:"delete",
+                                queryString:query
+                            },
+                            config:{
+                                requestContentType:Alfresco.util.Ajax.JSON,
+                                dataObj:{
+                                    nodeRefs:nodeRefs
+                                }
+                            }
+                        });
+                };
+
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title:this.msg("message.confirm.delete.title", items.length),
+                        text:this.msg("message.confirm.delete.description", items.length),
+                        buttons:[
+                            {
+                                text:this.msg("button.delete"),
+                                handler:function DataGridActions__onActionDelete_delete() {
+                                    this.destroy();
+                                    fnActionDeleteConfirm.call(me, items);
+                                }
+                            },
+                            {
+                                text:this.msg("button.cancel"),
+                                handler:function DataGridActions__onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault:true
+                            }
+                        ]
+                    });
+            },
+
+            /**
+             * Продублировать item(s).
+             *
+             * @method onActionDuplicate
+             * @param p_items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
+             */
+            onActionDuplicate:function DataListActions_onActionDuplicate(p_items) {
+                var items = YAHOO.lang.isArray(p_items) ? p_items : [p_items],
+                    destinationNodeRef = new Alfresco.util.NodeRef(this.modules.dataGrid.datagridMeta.nodeRef),
+                    nodeRefs = [];
+
+                for (var i = 0, ii = items.length; i < ii; i++) {
+                    nodeRefs.push(items[i].nodeRef);
+                }
+
+                this.modules.actions.genericAction(
+                    {
+                        success:{
+                            event:{
+                                name:"dataItemsDuplicated",
+                                obj:{
+                                    items:items
+                                }
+                            },
+                            message:this.msg("message.duplicate.success", items.length)
+                        },
+                        failure:{
+                            message:this.msg("message.duplicate.failure")
+                        },
+                        webscript:{
+                            method:Alfresco.util.Ajax.POST,
+                            name:"duplicate/node/" + destinationNodeRef.uri
+                        },
+                        config:{
+                            requestContentType:Alfresco.util.Ajax.JSON,
+                            dataObj:{
+                                nodeRefs:nodeRefs
+                            }
+                        }
+                    });
+            },
+
+            /**
+             * Получение списка версий и вывод диалогового окна для просмотра
+             * @param item {object} выбранный элемент
+             */
+            doShowVersions:function (item) {
+                var sUrl = Alfresco.constants.PROXY_URI + "api/version?nodeRef=" + item.nodeRef;
+
+                var callback = {
+                    success:function (oRequest) {
+                        var oResults = eval("(" + oRequest.responseText + ")");
+                        this.versionCache = oResults;
+                        this.latestVersion = oResults.splice(0, 1)[0];
+                        this.onViewHistoricPropertiesClick(item.nodeRef);
+                    }.bind(this),
+                    failure:function (oRequest) {
+                        alert("Failed to load version data. " + "[" + oRequest.statusText + "]");
+                    },
+                    argument:{
+                    }
+                };
+
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            },
+            /**
+             * Просмотр версий
+             * @param item {object} выбранный элемент
+             */
+            onActionVersion:function (item) {
+                this.doShowVersions(item);
+            },
+
+            /**
+             * Установка параметров диалогового окна просмотра версий
+             * @param nodeRef {string} ссылка на узел
+             * @constructor
+             */
+            onViewHistoricPropertiesClick:function DocumentVersions_onViewHistoricPropertiesClick(nodeRef) {
+                // Call the Hictoric Properties Viewer Module
+                Alfresco.module.getHistoricPropertiesViewerInstance().show(
+                    {
+                        filename:this.latestVersion.name,
+                        currentNodeRef:nodeRef,
+                        latestVersion:this.latestVersion,
+                        nodeRef:this.latestVersion.nodeRef
+                    });
+            },
+
+            /**
+             * Edit Data Item pop-up
+             *
+             * @method onActionEdit
+             * @param item {object} Object literal representing one data item
+             */
+            onActionEdit:function DataGrid_onActionEdit(item) {
+                // Intercept before dialog show
+                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                    Alfresco.util.populateHTML(
+                        [ p_dialog.id + "-dialogTitle", this.msg("label.edit-row.title") ]
+                    );
+                };
+
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&submitType={submitType}&showCancelButton=true",
+                    {
+                        itemKind:"node",
+                        itemId:item.nodeRef,
+                        mode:"edit",
+                        submitType:"json"
+                    });
+
+                // Using Forms Service, so always create new instance
+                var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
+                editDetails.setOptions(
+                    {
+                        width:"50em",
+                        templateUrl:templateUrl,
+                        actionUrl:null,
+                        destroyOnHide:true,
+                        doBeforeDialogShow:{
+                            fn:doBeforeDialogShow,
+                            scope:this
+                        },
+                        onSuccess:{
+                            fn:function DataGrid_onActionEdit_success(response) {
+                                // Reload the node's metadata
+                                Alfresco.util.Ajax.jsonPost(
+                                    {
+                                        url:Alfresco.constants.PROXY_URI + "slingshot/datalists/item/node/" + new Alfresco.util.NodeRef(item.nodeRef).uri,
+                                        dataObj:this._buildDataGridParams(),
+                                        successCallback:{
+                                            fn:function DataGrid_onActionEdit_refreshSuccess(response) {
+                                                // Fire "itemUpdated" event
+                                                Bubbling.fire("dataItemUpdated",
+                                                    {
+                                                        item:response.json.item
+                                                    });
+                                                // Display success message
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text:this.msg("message.details.success")
+                                                    });
+                                            },
+                                            scope:this
+                                        },
+                                        failureCallback:{
+                                            fn:function DataGrid_onActionEdit_refreshFailure(response) {
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text:this.msg("message.details.failure")
+                                                    });
+                                            },
+                                            scope:this
+                                        }
+                                    });
+                            },
+                            scope:this
+                        },
+                        onFailure:{
+                            fn:function DataGrid_onActionEdit_failure(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text:this.msg("message.details.failure")
+                                    });
+                            },
+                            scope:this
+                        }
+                    }).show();
+            },
+
+            /**
+             * Show more actions pop-up.
+             *
+             * @method onActionShowMore
+             * @param record {object} Object literal representing file or folder to be actioned
+             * @param elMore {element} DOM Element of "More Actions" link
+             */
+            onActionShowMore:function DL_onActionShowMore(record, elMore) {
+                var me = this;
+
+                // Fix "More Actions" hover style
+                Dom.addClass(elMore.firstChild, "highlighted");
+
+                // Get the pop-up div, sibling of the "More Actions" link
+                var elMoreActions = Dom.getNextSibling(elMore);
+                Dom.removeClass(elMoreActions, "hidden");
+                me.showingMoreActions = true;
+
+                // Hide pop-up timer function
+                var fnHidePopup = function DL_oASM_fnHidePopup() {
+                    // Need to rely on the "elMoreActions" enclosed variable, as MSIE doesn't support
+                    // parameter passing for timer functions.
+                    Event.removeListener(elMoreActions, "mouseover");
+                    Event.removeListener(elMoreActions, "mouseout");
+                    Dom.removeClass(elMore.firstChild, "highlighted");
+                    Dom.addClass(elMoreActions, "hidden");
+                    me.showingMoreActions = false;
+                    if (me.deferredActionsMenu !== null) {
+                        Dom.addClass(me.currentActionsMenu, "hidden");
+                        me.currentActionsMenu = me.deferredActionsMenu;
+                        me.deferredActionsMenu = null;
+                        Dom.removeClass(me.currentActionsMenu, "hidden");
+                    }
+                };
+
+                // Initial after-click hide timer - 4x the mouseOut timer delay
+                if (elMoreActions.hideTimerId) {
+                    window.clearTimeout(elMoreActions.hideTimerId);
+                }
+                elMoreActions.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout * 4);
+
+                // Mouse over handler
+                var onMouseOver = function DLSM_onMouseOver(e, obj) {
+                    // Clear any existing hide timer
+                    if (obj.hideTimerId) {
+                        window.clearTimeout(obj.hideTimerId);
+                        obj.hideTimerId = null;
+                    }
+                };
+
+                // Mouse out handler
+                var onMouseOut = function DLSM_onMouseOut(e, obj) {
+                    var elTarget = Event.getTarget(e);
+                    var related = elTarget.relatedTarget;
+
+                    // In some cases we should ignore this mouseout event
+                    if ((related !== obj) && (!Dom.isAncestor(obj, related))) {
+                        if (obj.hideTimerId) {
+                            window.clearTimeout(obj.hideTimerId);
+                        }
+                        obj.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout);
+                    }
+                };
+
+                Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
+                Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
             }
         }, true);
+})();
+
+/**
+ * Модуль для обработки экшенов в датагриде. ПОдключается непосредственно в датагрид
+ */
+(function () {
+    LogicECM.module.Base.Actions = function () {
+        this.name = "LogicECM.module.Base.Actions";
+
+        /* Load YUI Components */
+        Alfresco.util.YUILoaderHelper.require(["json"], this.onComponentsLoaded, this);
+
+        return this;
+    };
+
+    LogicECM.module.Base.Actions.prototype =
+    {
+        /**
+         * Flag indicating whether module is ready to be used.
+         * Flag is set when all YUI component dependencies have loaded.
+         *
+         * @property isReady
+         * @type boolean
+         */
+        isReady:false,
+
+        /**
+         * Object literal for default AJAX request configuration
+         *
+         * @property defaultConfig
+         * @type object
+         */
+        defaultConfig:{
+            method:"POST",
+            urlStem:Alfresco.constants.PROXY_URI + "lecm/base/action/",
+            dataObj:null,
+            successCallback:null,
+            successMessage:null,
+            failureCallback:null,
+            failureMessage:null,
+            object:null
+        },
+
+        /**
+         * Fired by YUILoaderHelper when required component script files have
+         * been loaded into the browser.
+         *
+         * @method onComponentsLoaded
+         */
+        onComponentsLoaded:function DLA_onComponentsLoaded() {
+            this.isReady = true;
+        },
+
+        /**
+         * Make AJAX request to data webscript
+         *
+         * @method _runAction
+         * @private
+         * @return {boolean} false: module not ready for use
+         */
+        _runAction:function DLA__runAction(config, obj) {
+            // Check components loaded
+            if (!this.isReady) {
+                return false;
+            }
+
+            // Merge-in any supplied object
+            if (typeof obj == "object") {
+                config = YAHOO.lang.merge(config, obj);
+            }
+
+            if (config.method == Alfresco.util.Ajax.DELETE) {
+                if (config.dataObj !== null) {
+                    // Change this request into a POST with the alf_method override
+                    config.method = Alfresco.util.Ajax.POST;
+                    if (config.url.indexOf("alf_method") < 1) {
+                        config.url += (config.url.indexOf("?") < 0 ? "?" : "&") + "alf_method=delete";
+                    }
+                    Alfresco.util.Ajax.jsonRequest(config);
+                }
+                else {
+                    Alfresco.util.Ajax.request(config);
+                }
+            }
+            else {
+                Alfresco.util.Ajax.jsonRequest(config);
+            }
+        },
+
+
+        /**
+         * ACTION: Generic action.
+         * Generic DataList action based on passed-in parameters
+         *
+         * @method genericAction
+         * @param action.success.event.name {string} Bubbling event to fire on success
+         * @param action.success.event.obj {object} Bubbling event success parameter object
+         * @param action.success.message {string} Timed message to display on success
+         * @param action.success.callback.fn {object} Callback function to call on success.
+         * <pre>function(data, obj) where data is an object literal containing config, json, serverResponse</pre>
+         * @param action.success.callback.scope {object} Success callback function scope
+         * @param action.success.callback.obj {object} Success callback function object passed to callback
+         * @param action.failure.event.name {string} Bubbling event to fire on failure
+         * @param action.failure.event.obj {object} Bubbling event failure parameter object
+         * @param action.failure.message {string} Timed message to display on failure
+         * @param action.failure.callback.fn {object} Callback function to call on failure.
+         * <pre>function(data, obj) where data is an object literal containing config, json, serverResponse</pre>
+         * @param action.failure.callback.scope {object} Failure callback function scope
+         * @param action.failure.callback.obj {object} Failure callback function object passed to callback
+         * @param action.webscript.stem {string} optional webscript URL stem
+         * <pre>default: Alfresco.constants.PROXY_URI + "slingshot/datalists/action/"</pre>
+         * @param action.webscript.name {string} data webscript URL name
+         * @param action.webscript.method {string} HTTP method to call the data webscript on
+         * @param action.webscript.queryString {string} Optional queryString to append to the webscript URL
+         * @param action.webscript.params.nodeRef {string} nodeRef of target item
+         * @param action.wait.message {string} if set, show a Please wait-style message during the operation
+         * @param action.config {object} optional additional request configuration overrides
+         * @return {boolean} false: module not ready
+         */
+        genericAction:function DataGridActions_genericAction(action) {
+            var success = action.success,
+                failure = action.failure,
+                webscript = action.webscript,
+                params = action.params ? action.params : action.webscript.params,
+                overrideConfig = action.config,
+                wait = action.wait,
+                configObj = null;
+
+            var fnCallback = function DataGridActions_genericAction_callback(data, obj) {
+                // Check for notification event
+                if (obj) {
+                    // Event(s) specified?
+                    if (obj.event && obj.event.name) {
+                        YAHOO.Bubbling.fire(obj.event.name, obj.event.obj);
+                    }
+                    if (YAHOO.lang.isArray(obj.events)) {
+                        for (var i = 0, ii = obj.events.length; i < ii; i++) {
+                            YAHOO.Bubbling.fire(obj.events[i].name, obj.events[i].obj);
+                        }
+                    }
+
+                    // Please wait pop-up active?
+                    if (obj.popup) {
+                        obj.popup.destroy();
+                    }
+                    // Message?
+                    if (obj.message) {
+                        Alfresco.util.PopupManager.displayMessage(
+                            {
+                                text:obj.message
+                            });
+                    }
+                    // Callback function specified?
+                    if (obj.callback && obj.callback.fn) {
+                        obj.callback.fn.call((typeof obj.callback.scope == "object" ? obj.callback.scope : this),
+                            {
+                                config:data.config,
+                                json:data.json,
+                                serverResponse:data.serverResponse
+                            }, obj.callback.obj);
+                    }
+                }
+            };
+
+            // Please Wait... message pop-up?
+            if (wait && wait.message) {
+                if (typeof success != "object") {
+                    success = {};
+                }
+                if (typeof failure != "object") {
+                    failure = {};
+                }
+
+                success.popup = Alfresco.util.PopupManager.displayMessage(
+                    {
+                        modal:true,
+                        displayTime:0,
+                        text:wait.message,
+                        effect:null
+                    });
+                failure.popup = success.popup;
+            }
+
+            var url;
+            if (webscript.stem) {
+                url = webscript.stem + webscript.name;
+            }
+            else {
+                url = this.defaultConfig.urlStem + webscript.name;
+            }
+
+            if (params) {
+                url = YAHOO.lang.substitute(url, params);
+                configObj = params;
+            }
+            if (webscript.queryString && webscript.queryString != "") {
+                url += "?" + webscript.queryString;
+            }
+
+            var config = YAHOO.lang.merge(this.defaultConfig,
+                {
+                    successCallback:{
+                        fn:fnCallback,
+                        scope:this,
+                        obj:success
+                    },
+                    successMessage:null,
+                    failureCallback:{
+                        fn:fnCallback,
+                        scope:this,
+                        obj:failure
+                    },
+                    failureMessage:null,
+                    url:url,
+                    method:webscript.method,
+                    responseContentType:Alfresco.util.Ajax.JSON,
+                    object:configObj
+                });
+
+            return this._runAction(config, overrideConfig);
+        }
+    };
+
+    /* Dummy instance to load optional YUI components early */
+    var dummyInstance = new LogicECM.module.Base.Actions();
 })();

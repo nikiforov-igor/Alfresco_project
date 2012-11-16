@@ -139,6 +139,56 @@ LogicECM.module.Base.DataGrid.prototype.getDataTableColumnDefinitions = function
 	return columnDefinitions;
 };
 
+/* Экспорт в XML.
+		*
+* @method onActionExportXML
+* @param items {Object} Object literal representing the Data Item to be actioned
+*/
+LogicECM.module.Base.DataGrid.prototype.onActionExportXML = function (item) {
+	var fields = "";
+	var dUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(item.itemData.prop_cm_name.value);
+
+	Alfresco.util.Ajax.jsonGet(
+			{
+				url:dUrl,
+				successCallback:{
+					fn:function (response) {
+						var oResults = eval("(" + response.serverResponse.responseText + ")");
+						var itemType = oResults["itemType"];
+						var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(itemType);
+						Alfresco.util.Ajax.jsonGet(
+								{
+									url:sUrl,
+									successCallback:{
+										fn:function (response) {
+											var oResults = eval("(" + response.serverResponse.responseText + ")");
+											for (var nodeIndex in oResults) {
+												fields += "field=" + oResults[nodeIndex].fild + "&";
+											}
+											document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
+													+ "?" + fields
+													+ "nodeRef=" + item.nodeRef;
+										},
+										scope:this
+									},
+									failureCallback:{
+										fn:function () {
+											alert("Failed to load webscript export.")
+										},
+										scope:this
+									}
+								});
+					},
+					scope:this
+				},
+				failureCallback:{
+					fn:function () {
+						alert("Failed to load webscript export.")
+					},
+					scope:this
+				}
+			});
+}
 new LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
 			usePagination: true,

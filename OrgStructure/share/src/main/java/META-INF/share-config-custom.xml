@@ -2,8 +2,6 @@
     <config>
         <forms>
             <default-controls>
-                <type name="association:lecm-orgstr:staff-list" template="/ru/it/lecm/orgstructure/controls/staffLists.ftl"/>
-                <type name="association:lecm-orgstr:workforce" template="/ru/it/lecm/orgstructure/controls/workForces.ftl"/>
                 <type name="association:lecm-orgstr:employee" template="/ru/it/lecm/base-share/components/associationControl.ftl">
                     <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:employees')]</control-param>
                     <control-param name="xPathLocationRoot">{organization}</control-param>

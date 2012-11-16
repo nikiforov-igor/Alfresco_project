@@ -214,7 +214,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter,
-	                fullTextSearch = args.fullTextSearch;
+                    fullTextSearch = args.fullTextSearch;
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -340,7 +340,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         filter:searchFilter != null ? searchFilter : "" ,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
                         fields:searchFields,
-	                    fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
+                        fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
                     }
                 };
                 return request;

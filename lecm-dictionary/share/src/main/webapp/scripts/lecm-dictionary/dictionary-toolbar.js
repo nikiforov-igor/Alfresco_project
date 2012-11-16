@@ -59,11 +59,6 @@
     YAHOO.extend(Alfresco.component.DataListToolbar, Alfresco.component.Base)
 
     /**
-     * Augment prototype with Common Actions module
-     */
-    YAHOO.lang.augmentProto(Alfresco.component.DataListToolbar, LogicECM.module.Base.DataActions);
-
-    /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(Alfresco.component.DataListToolbar.prototype,
@@ -142,8 +137,6 @@
 			            correctScope: true
 		            }, "keydown").enable();
 
-	            // DataList Actions module
-	            this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
@@ -155,14 +148,13 @@
              * Удаление выбранного значения в dataGrid.
              * Появляется диалоговое окно с потверждением на удаление
              */
-            onDeleteRow: function DataListToolbar_onDeleteRow() {
-                if (this.modules.dataGrid)
-                {
+            onDeleteRow:function DataListToolbar_onDeleteRow() {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
                     // Get the function related to the clicked item
                     var fn = "onActionDelete";
-                    if (fn && (typeof this[fn] == "function"))
-                    {
-                        this[fn].call(this, this.modules.dataGrid.getSelectedItems());
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
                         this.modules.dataGrid.selectItems("selectNone");
                         this.onSelectedItemsChanged();
                     }

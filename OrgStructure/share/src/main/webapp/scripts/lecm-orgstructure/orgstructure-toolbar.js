@@ -61,11 +61,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     YAHOO.extend(LogicECM.module.OrgStructure.Toolbar, Alfresco.component.Base);
 
     /**
-     * Augment prototype with Common Actions module
-     */
-    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Toolbar, LogicECM.module.Base.DataActions);
-
-    /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.OrgStructure.Toolbar.prototype,
@@ -124,9 +119,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         scope: this,
                         correctScope: true
                     }, "keydown").enable();
-
-                // DataList Actions module
-                this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
@@ -202,20 +194,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     }).show();
             }, /**
-         * New Row button click handler
-         *
-         * @method onNewRow
-         * @param e {object} DomEvent
-         * @param p_obj {object} Object passed back from addListener method
-         */
-        onNewRow:function DataListToolbar_onNewRow(e, p_obj) {
-            var orgMetadata = this.modules.dataGrid.datagridMeta,
-                destination = orgMetadata.nodeRef,
-                itemType = orgMetadata.itemType,
-                namePattern = orgMetadata.namePattern;
 
-            this._createNode(itemType, destination, namePattern, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
-        },
+            * New Row button click handler
+             *
+             * @method onNewRow
+             * @param e {object} DomEvent
+             * @param p_obj {object} Object passed back from addListener method
+             */
+            onNewRow:function DataListToolbar_onNewRow(e, p_obj) {
+                var orgMetadata = this.modules.dataGrid.datagridMeta,
+                    destination = orgMetadata.nodeRef,
+                    itemType = orgMetadata.itemType,
+                    namePattern = orgMetadata.namePattern;
+
+                this._createNode(itemType, destination, namePattern, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
+            },
 
             /**
              * New Row button click handler
@@ -253,11 +246,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     eventTarget = aArgs[1];
 
                 // Check mandatory docList module is present
-                if (this.modules.dataGrid) {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
                     // Get the function related to the clicked item
                     var fn = Alfresco.util.findEventClass(eventTarget);
-                    if (fn && (typeof this[fn] == "function")) {
-                        this[fn].call(this, this.modules.dataGrid.getSelectedItems(), null, this.modules.dataGrid.orgstructureMetadata);
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), dataGrid.datagridMeta, null);
                     }
                 }
 

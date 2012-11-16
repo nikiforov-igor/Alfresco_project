@@ -64,7 +64,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         draw:function () {
-            this.modules.actions = new LogicECM.module.Base.Actions();
             var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
             this._createTree(orgStructure);
@@ -205,7 +204,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         name:node.data.type,
                         namePattern:node.data.namePattern,
                         nodeRef:node.data.nodeRef,
-                        fullDelete:true,
+                        actionsConfig: {fullDelete:true},
                         filter:'PARENT:\"' + node.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
                     }
                 });
@@ -305,18 +304,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             name:sNode.data.type,
                             namePattern:sNode.data.namePattern,
                             nodeRef:sNode.data.nodeRef,
-                            fullDelete:true,
+                            actionsConfig: {fullDelete:true},
                             filter:'PARENT:\"' + sNode.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
                         }
                     });
             }
         }
     });
-
-    /**
-     * Augment prototype with Common Actions module
-     */
-    YAHOO.lang.augmentProto(LogicECM.module.OrgStructure.Tree, LogicECM.module.Base.DataActions);
 
     Alfresco.widget.InsituEditor.organizationUnit = function (p_params) {
         this.params = YAHOO.lang.merge({}, p_params);
