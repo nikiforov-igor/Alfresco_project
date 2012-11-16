@@ -34,9 +34,13 @@
 		</property>
 	</bean>
 
-	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean">
+	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean"
+		depends-on="nodeService, NodeService"
+	>
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="secureNodeService" ref="NodeService" />
+		<property name="fastNodeService" ref="nodeService" />
 	</bean>
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
@@ -60,6 +64,10 @@
 		<property name="serviceDelegate" ref="serviceDelegation" />
 	</bean>
 	 -->
+
+	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.get" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
+		<property name="delegationService" ref="serviceDelegationWebScript"/>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
 		<property name="delegationService" ref="serviceDelegationWebScript"/>

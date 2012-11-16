@@ -28,6 +28,12 @@ import ru.it.lecm.delegation.utils.Utils;
 public class TestSearchBean implements ITestSearch 
 {
 
+	/** назвнаие параметра в аргументах args с названием рабочей папки */
+	private static final String ARGNAME_FOLDER = "folder";
+
+	/** название по-умолчани для рабочей папки */
+	private static final String DEFAULT_FOLDERNAME = "Общая папка";
+
 	final private static Logger logger = LoggerFactory.getLogger (TestSearchBean.class);
 
 	private ServiceRegistry serviceRegistry;
@@ -112,7 +118,8 @@ public class TestSearchBean implements ITestSearch
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
 
 		final NodeRef blanksRoot = nodesrv.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "Бланки-тест");
-		final NodeRef commonFolder = nodesrv.getChildByName(blanksRoot, ContentModel.ASSOC_CONTAINS, "Общая папка");
+		final String folderName = getFolderName();
+		final NodeRef commonFolder = nodesrv.getChildByName(blanksRoot, ContentModel.ASSOC_CONTAINS, folderName);
 
 		/* параметры Lucene поиска */
 		final SearchParameters sp = new SearchParameters();
@@ -195,6 +202,21 @@ public class TestSearchBean implements ITestSearch
 		}
 
 		return result;
+	}
+
+	/**
+	 * Получить название папки, внутри которой происходит тестирование объектов
+	 * @return
+	 */
+	private String getFolderName() {
+		if (this.args != null && args.has(ARGNAME_FOLDER)) {
+			try {
+				return args.getString(ARGNAME_FOLDER);
+			} catch (JSONException ex) {
+				logger.error( String.format("Error getting argument '%s' (default will be '%s'):", ARGNAME_FOLDER, DEFAULT_FOLDERNAME), ex);
+			}
+		}
+		return DEFAULT_FOLDERNAME;
 	}
 
 }

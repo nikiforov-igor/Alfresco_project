@@ -56,6 +56,39 @@ public class DynamicByAttribute
 
 	final private Cache<CachingNodePermission> cache = new CacheEx<CachingNodePermission>(4000);
 	private int cacheInterval_ms = 10 * 60 * 1000; // 10 минут - большое время жизни в кеше
+	private boolean enableCache = false;
+
+	/** текущий способ проверки */
+	private EnumCheckStyle checkStyle = DEFAULT_CHECKSTYLE;
+
+	/**
+	 * Ссылка на бин с настройками
+	 */
+	// private Properties settings;
+
+	/** название параметра для типа провеки */
+	// public static String PROPNAME_CHECKSTYLE = "security.checkStyle";
+
+	/**
+	 * Режим работы проверки доступа:
+	 */
+	public enum EnumCheckStyle {
+			dynamic( "dyna-check is on")
+			, alwaysTrue("dyna-check is off, returns true for any node")
+			, alwaysFalse("dyna-check is off, return false for any node");
+
+			final String description;
+
+			private EnumCheckStyle(String description) {
+				this.description = description;
+			}
+
+			public String getDescription() {
+				return description;
+			}
+
+	}
+
 
 	private static int makeId(NodeRef refnode, String username) {
 		final int prime = 31;
@@ -138,6 +171,15 @@ public class DynamicByAttribute
 		this.cacheInterval_ms = value;
 	}
 
+	public boolean getEnableCache() {
+		return this.enableCache;
+	}
+
+	public void setEnableCache(boolean flag) {
+		this.enableCache = flag;
+		logger.info("cache is "+ (this.enableCache ? "Enabled" : "Disabled"));
+	}
+
 	/**
 	 * whenRequired и requiredFor два разнотипных списка отрабатываемых случаев
 	 */
@@ -182,6 +224,53 @@ public class DynamicByAttribute
 
 		logger.info("initialized");
 	}
+
+//	/**
+//	 * @return текущие установки
+//	 */
+//	public Properties getSettings() {
+//		return this.settings;
+//	}
+//
+//	/**
+//	 * Задать бин с установками. Подразумевается присвоение непосредственно в config-xml.  
+//	 * @param settings
+//	 */
+//	public void setSettings(Properties settings) {
+//		this.settings = settings;
+//	}
+
+
+	/** по-умолчанию проверка отключена и положительна */
+	final static EnumCheckStyle DEFAULT_CHECKSTYLE = EnumCheckStyle.alwaysTrue;
+
+	public void setCheckStyle(String value) {
+		this.checkStyle = (value != null && value.length() > 0) ? EnumCheckStyle.valueOf(value) : DEFAULT_CHECKSTYLE;
+		logger.info( String.format( "current SecurityStyle is <%s>", this.checkStyle));
+	}
+
+	/**
+	 * Вернуть текущий способ работы проверки: работает, всегда плоожительна, всегда отрицательна.
+	 * @return способ указанный в settings[PROPNAME_CHECKSTYLE], по-умолчанию см. DEFAULT_CHECKSTYLE
+	 */
+	public EnumCheckStyle getCheckStyleEnum() {
+		return this.checkStyle;
+		/*
+		EnumCheckStyle result = DEFAULT_CHECKSTYLE;
+		try {
+			// достаём глобальный флаг стиля проверки: всегда true/false или "честная" ...
+			if (settings != null && settings.containsKey(PROPNAME_CHECKSTYLE)) {
+				final String s = (String) settings.get(PROPNAME_CHECKSTYLE);
+				result = (s != null && s.length() > 0) ? EnumCheckStyle.valueOf(s) : result;
+			}
+		} catch (Throwable ex) {
+			logger.error( String.format( "Fail to get CheckStyle, default value <%s> is used", DEFAULT_CHECKSTYLE), ex);
+		}
+		// logger.trace( String.format( "SecurityStyle is <%s>", result));
+		return result;
+		 */
+	}
+
 
 	/**
 	 * No-op
@@ -292,7 +381,7 @@ public class DynamicByAttribute
 						, getPercents(this.cache.getHitCount(), this.cache.getMissCount() + this.cache.getHitCount())
 
 						, this.cache.getPushCount()
-						, (this.cache instanceof CacheEx) ? ((CacheEx) this.cache).getExpiredCounter() : "<unused>"
+						, (this.cache instanceof CacheEx) ? ((CacheEx<?>) this.cache).getExpiredCounter() : "<unused>"
 				));
 			}
 		}
@@ -319,12 +408,23 @@ public class DynamicByAttribute
 
 		final DurationLogger d = new DurationLogger();
 		try {
-			final CachingNodePermission item = new CachingNodePermission(nodeRef, userName, null);
-			Boolean found = (Boolean) this.cache.get(item);
-			if (found != null) { // (!) уже есть в кеше
-				cacheInfo();
-				return found;
+			// достаём глобальный флаг стиля проверки: всегда true/false или "честная" ...
+			switch(getCheckStyleEnum()) {
+				case alwaysFalse: return false;
+				case alwaysTrue: return true;
+				default: // надо выполнить детальную проверку ...
 			}
+
+			// проверка наличия объекта в кеше ...
+			if (this.enableCache) {
+				final CachingNodePermission item = new CachingNodePermission(nodeRef, userName, null);
+				Boolean found = (Boolean) this.cache.get(item);
+				if (found != null) { // (!) уже есть в кеше - повезло
+					cacheInfo();
+					return found;
+				}
+			}
+
 			final Boolean result = AuthenticationUtil.runAs(new RunAsWork<Boolean>(){
 
 				public Boolean doWork() throws Exception
@@ -362,9 +462,11 @@ public class DynamicByAttribute
 					return  granted;
 				}}, AuthenticationUtil.getSystemUserName());
 
-				item.hasAccess = result;
-				this.cache.put(item);
-				cacheInfo();
+				if (this.enableCache) {
+					final CachingNodePermission item = new CachingNodePermission(nodeRef, userName, result);
+					this.cache.put(item);
+					cacheInfo();
+				}
 
 				return result;
 
