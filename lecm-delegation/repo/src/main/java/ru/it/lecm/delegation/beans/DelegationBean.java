@@ -187,34 +187,34 @@ public class DelegationBean
 	 * @return
 	 */
 	private NodeRef ensureDelegationsRootRef(String rootName) {
-		if (rootName == null)
-			rootName = NODE_DEFAULT_DELEGATIONS_ROOT;
+		final String rootname = (rootName == null) ? NODE_DEFAULT_DELEGATIONS_ROOT : rootName;
 		final NodeService nodeService = serviceRegistry.getNodeService();
 
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
 
 		// массив, чтобы проще было использовать изнутри doInTransaction ...
-		final NodeRef[] dictionariesRoot = { nodeService.getChildByName(
-				companyHome, ContentModel.ASSOC_CONTAINS, rootName) };
-		if (dictionariesRoot[0] == null) {
-			// создание корневого узла для делегирований в Компании ...
-			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-			final String rootname = rootName;
-			properties.put(ContentModel.PROP_NAME, rootName);
-			transactionService.getRetryingTransactionHelper().doInTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Object>()
-			{
+		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootName);
+		if (delegationRoot == null) {
+			delegationRoot = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 				@Override
-				public Object execute() throws Throwable {
-					final ChildAssociationRef associationRef = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
-					dictionariesRoot[0] = associationRef.getChildRef();
-					logger.warn("container node '"+ rootname+ "' created: "+ dictionariesRoot[0].toString() );
-					return "ok";
+				public NodeRef execute() throws Throwable {
+					NodeRef parentRef = companyHome; //the parent node
+					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
+					QName assocQName = QName.createQName (NSURI_DELEGATIONS, rootname); //the qualified name of the association
+					QName nodeTypeQName = ContentModel.TYPE_FOLDER; //a reference to the node type
+					// создание корневого узла для делегирований в Компании ...
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+					properties.put(ContentModel.PROP_NAME, rootname);
+					ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+					NodeRef delegationRoot = associationRef.getChildRef();
+					logger.warn("container node '"+ rootname+ "' created: "+ delegationRoot.toString() );
+					return delegationRoot;
 				}
 			});
 		}
 		// logger.info( "\n\t(!) all authorities "+ serviceRegistry.getPermissionService().getAllAuthorities());
-		return dictionariesRoot[0];
+		return delegationRoot;
 	}
 
 	/*
@@ -351,10 +351,10 @@ public class DelegationBean
 
 
 	/**
-	 * Получить свойства в json-виде пригодном для отправки в форму ввода 
+	 * Получить свойства в json-виде пригодном для отправки в форму ввода
 	 * @param props
 	 * @param assoclist набор полей-ассоциаций
-	 * @return массив вида 
+	 * @return массив вида
 				"prop_lecm-ba_dateUTCBegin": {
 					"value": sss, //значение свойства
 					"displayValue": sss //отображаемое значение свойства
@@ -365,7 +365,7 @@ public class DelegationBean
 			Map<QName, Serializable> props
 			, Collection<QName> assoclist
 			, NamespaceService nss
-			) 
+			)
 	{
 		final JSONObject result = new JSONObject();
 		if (props != null) {
@@ -376,7 +376,7 @@ public class DelegationBean
 					propObj.put( "value", value);
 					propObj.put( "displayValue", value);
 
-					final String prefix = (assoclist != null && assoclist.contains(entry.getKey())) 
+					final String prefix = (assoclist != null && assoclist.contains(entry.getKey()))
 								? PREFIX_ASSOC : PREFIX_PROP;
 					final String propName = normalizePropName( entry.getKey(), prefix, nss);
 					result.put( propName, propObj);
@@ -423,10 +423,10 @@ public class DelegationBean
 	 * @param namespace namespace для поиска
 	 * @param typename искомый тип внутри namespace
 	 * @param searchArgs список атрибутов и значений для поиска
-	 * @param parentNode 
+	 * @param parentNode
 	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
 	 * пример:
-	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
+	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
 	 */
 	final static StringBuilder makeSearchQuery(
 				final StringBuilder dest
@@ -465,12 +465,12 @@ public class DelegationBean
 	 * Сформировать запрос к Доверенностям.
 	 * @param dest целевой буфер
 	 * @param searchArgs список атрибутов и значений для поиска
-	 * @param parentNode родительский узел для поиска внутри него, если null, то не используется 
+	 * @param parentNode родительский узел для поиска внутри него, если null, то не используется
 	 * @return в буфере формируется текст запроса в виде: TYPE:[доверенность] AND [условия на атрибуты]
 	 * пример:
-	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false" 
+	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
 	 */
-	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest 
+	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest
 			, JSONObject searchArgs, NodeRef parentNode) {
 		return makeSearchQuery( dest, NSURI_DELEGATIONS, TYPE_PROCURACY, searchArgs, parentNode);
 	}
@@ -495,7 +495,7 @@ public class DelegationBean
 		/*
 		 * Пример сформированногозапроса:
 		 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND PARENT:"workspace://SpacesStore/6081c936-e68c-4ecf-a273-04a2a4c53f74" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
-		 */ 
+		 */
 		sp.setQuery(sbQuery.toString());
 
 		/* поиск */
@@ -533,8 +533,8 @@ public class DelegationBean
 		public JsonParent(final NodeRef parent) throws JSONException {
 			this.parent = parent;
 			//ссылка на родительский контейнер в котором лежат элементы ("workspace://SpacesStore/%parentId%")
-			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId()); 
-			put( "nodeRef", parent); 
+			// put( "nodeRef", parent.getStoreRef().toString() + "/"+ parent.getId());
+			put( "nodeRef", parent);
 			put( "permissions", getPermissions(parent) ); // права родительского контейнера
 		}
 
@@ -542,7 +542,7 @@ public class DelegationBean
 		 * Получить права на узел
 		 * @param node
 		 * @return
-		 * @throws JSONException 
+		 * @throws JSONException
 		 */
 		static JSONObject getPermissions(final NodeRef node) throws JSONException {
 			final JSONObject result = new JSONObject();
@@ -560,11 +560,11 @@ public class DelegationBean
 	}
 
 	JSONObject makeResult(final JSONObject result, ResultSet foundSet
-			, NodeRef parent) throws JSONException 
+			, NodeRef parent) throws JSONException
 	{
 		result.put( "totalRecords", (foundSet == null) ? 0 : foundSet.length() ); //общее кол-во строк
 		result.put( "startIndex", 0); //всегда ноль,
-		result.put( "metadata", new JsonMetaDataSection(parent)); 
+		result.put( "metadata", new JsonMetaDataSection(parent));
 
 		result.put( "items", makeItems(foundSet)); // массив с данными (JSONArray) которые мы отображаем в таблице
 		return result;
@@ -591,7 +591,7 @@ public class DelegationBean
 			for(ResultSetRow row : foundSet) {
 				final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
 
-				final Set<QName> assocs = new HashSet <QName>(); 
+				final Set<QName> assocs = new HashSet <QName>();
 				{	// добавление ассоциаций ...
 					final List<AssociationRef> ca = serviceRegistry.getNodeService().getTargetAssocs(row.getNodeRef(), RegexQNamePattern.MATCH_ALL);
 					if (ca != null)
@@ -909,7 +909,7 @@ public class DelegationBean
 	}
 
 	/*
-	public class SecureAccessor 
+	public class SecureAccessor
 		implements net.sf.acegisecurity.afterinvocation.AfterInvocationProvider
 	{
 		// net.sf.acegisecurity.afterinvocation.AfterInvocationProvider
@@ -921,9 +921,9 @@ public class DelegationBean
 		@Override
 		public boolean supports(ConfigAttribute attribute)
 		{
-			return (attribute.getAttribute() != null) 
+			return (attribute.getAttribute() != null)
 					&& (
-						attribute.getAttribute().startsWith(AFTER_ACL_NODE) 
+						attribute.getAttribute().startsWith(AFTER_ACL_NODE)
 						|| attribute.getAttribute().startsWith(AFTER_ACL_PARENT)
 					);
 		}
@@ -936,8 +936,8 @@ public class DelegationBean
 		}
 
 		@Override
-		public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) 
-				throws AccessDeniedException 
+		public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject)
+				throws AccessDeniedException
 		{
 			logger.info("checking object "+ (returnedObject == null ? "NULL" : returnedObject.getClass() + " \n"+ returnedObject.toString()));
 			return returnedObject;
