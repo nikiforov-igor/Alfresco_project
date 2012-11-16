@@ -26,6 +26,7 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("refreshAutocompleteItemList", this.onRefreshAutocompleteItemList, this);
 
         this.controlId = fieldHtmlId + "-cntrl";
+	    this.currentValueHtmlId = fieldHtmlId;
         this.dataArray = [];
         this.selectedItems = {};
 
@@ -36,6 +37,8 @@ LogicECM.module = LogicECM.module || {};
         {
             options:{
                 disabled: false,
+
+	            mandatory:false,
 
                 startLocation: null,
 
@@ -69,6 +72,8 @@ LogicECM.module = LogicECM.module || {};
             dataObject: null,
 
             controlId:"",
+
+	        currentValueHtmlId: "",
 
             selectItem:null,
 
@@ -411,6 +416,23 @@ LogicECM.module = LogicECM.module || {};
                 for (i in removedItems) {
                     el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
                 }
+
+	            var selectedItems = this.getSelectedItems();
+
+	            Dom.get(this.currentValueHtmlId).value = selectedItems.toString();
+
+	            if (this.options.mandatory) {
+		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+	            }
+
+	            YAHOO.Bubbling.fire("formValueChanged",
+		            {
+			            eventGroup:this,
+			            addedItems:addItems,
+			            removedItems:removedItems,
+			            selectedItems:selectedItems,
+			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
+		            });
             },
 
             getAddedItems: function AssociationAutoComplete_getAddedItems()
@@ -448,6 +470,17 @@ LogicECM.module = LogicECM.module || {};
                 }
                 return removedItems;
             },
+
+	        getSelectedItems:function AssociationAutoComplete_getSelectedItems() {
+		        var selectedItems = [];
+
+		        for (var item in this.selectedItems) {
+			        if (this.selectedItems.hasOwnProperty(item)) {
+				        selectedItems.push(item);
+			        }
+		        }
+		        return selectedItems;
+	        },
 
             destroy:function AssociationAutoComplete_destroy() {
                 LogicECM.module.AssociationAutoComplete.superclass.destroy.call(this);

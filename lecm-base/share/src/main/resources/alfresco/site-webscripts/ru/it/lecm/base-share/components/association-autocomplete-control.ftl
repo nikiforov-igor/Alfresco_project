@@ -36,6 +36,11 @@
                 <#if field.control.params.smallItemIcon??>
                     itemIcon: "${field.control.params.smallItemIcon}",
                 </#if>
+	            <#if field.mandatory??>
+		            mandatory: ${field.mandatory?string},
+	            <#elseif field.endpointMandatory??>
+		            mandatory: ${field.endpointMandatory?string},
+	            </#if>
                 multipleSelectMode: ${field.endpointMany?string},
                 itemType: "${field.endpointType}",
                 currentValue: "${field.value!''}",

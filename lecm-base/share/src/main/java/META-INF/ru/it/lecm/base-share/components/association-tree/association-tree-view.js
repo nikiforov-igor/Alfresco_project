@@ -389,8 +389,9 @@ LogicECM.module = LogicECM.module || {};
             }
             // Update parent form
             this.updateFormFields();
-            if(this.options.mandatory)
+            if(this.options.mandatory) {
                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+            }
         },
 
         onCancel: function(e, p_obj)
@@ -1114,6 +1115,23 @@ LogicECM.module = LogicECM.module || {};
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                     YAHOO.Bubbling.fire(this.options.changeItemsFireAction);
                 }
+
+	            var selectedItems = this.getSelectedItems();
+
+	            Dom.get(this.eventGroup).value = selectedItems.toString();
+
+	            if (this.options.mandatory) {
+		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+	            }
+
+	            YAHOO.Bubbling.fire("formValueChanged",
+		            {
+			            eventGroup:this,
+			            addedItems:addItems,
+			            removedItems:removedItems,
+			            selectedItems:selectedItems,
+			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
+		            });
             }
         },
 
@@ -1151,6 +1169,17 @@ LogicECM.module = LogicECM.module || {};
                 }
             }
             return removedItems;
-        }
+        },
+
+		getSelectedItems:function AssociationTreeViewer_getSelectedItems() {
+			var selectedItems = [];
+
+			for (var item in this.selectedItems) {
+				if (this.selectedItems.hasOwnProperty(item)) {
+					selectedItems.push(item);
+				}
+			}
+			return selectedItems;
+		}
   	});
 })();
