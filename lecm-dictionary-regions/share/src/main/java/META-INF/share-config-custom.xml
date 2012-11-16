@@ -4,12 +4,12 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-                    <show id="lecm-dic-regions:code"/>
-                    <show id="lecm-dic-regions:description_values" force="true"/>
-                    <show id="cm:creator" for-mode="view" />
-                    <show id="cm:created" for-mode="view" />
-                    <show id="cm:modifier" for-mode="view" />
-                    <show id="cm:modified" for-mode="view" />
+					<show id="lecm-dic-regions:code"/>
+					<show id="lecm-dic-regions:description_values" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+					<show id="cm:created" for-mode="view"/>
+					<show id="cm:modifier" for-mode="view"/>
+					<show id="cm:modified" for-mode="view"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -20,18 +20,16 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-                    <show id="lecm-dic-regions:code"/>
-                    <show id="lecm-dic:description_values" force="true"/>
+					<show id="lecm-dic-regions:code"/>
 				</field-visibility>
 			</form>
 
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="cm:name" />
-                    <show id="lecm-dic-regions:code"/>
-                    <show id="lecm-dic:description_values" />
-                </field-visibility>
-            </form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-dic-regions:code"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>

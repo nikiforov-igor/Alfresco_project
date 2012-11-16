@@ -1,3 +1,10 @@
+/**
+ * Получение атрибутов объекта
+ *
+ * @param node объект
+ * @param propertiesToSkip массив атрибутов, которые не должны быть включены в конечный список
+ * @return {Array} массив атрибутов объекта
+ */
 function getPropertiesName(node, propertiesToSkip) {
 	var propertiesName = [];
 	var nodeProp = node.getPropertyNames(true);
@@ -10,6 +17,13 @@ function getPropertiesName(node, propertiesToSkip) {
 	return propertiesName;
 }
 
+/**
+ * Получение атрибутов типа объекта
+ *
+ * @param node объект
+ * @param propertiesToSkip массив атрибутов, которые не должны быть включены в конечный список
+ * @return {Array} массив атрибутов объекта
+ */
 function getTypePropertiesName(node, propertiesToSkip) {
 	var propertiesName = [];
 	var nodeProp = node.getTypePropertyNames(true);

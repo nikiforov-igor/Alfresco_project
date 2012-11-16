@@ -28,6 +28,11 @@
                 <#if field.control.params.startLocation??>
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
+	            <#if field.mandatory??>
+		            mandatory: ${field.mandatory?string},
+	            <#elseif field.endpointMandatory??>
+		            mandatory: ${field.endpointMandatory?string},
+	            </#if>
 
                 itemType: "${field.endpointType}",
                 itemFamily: "node",

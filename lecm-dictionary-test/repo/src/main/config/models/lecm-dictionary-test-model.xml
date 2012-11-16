@@ -33,7 +33,7 @@
                     </source>
                     <target>
                         <class>lecm-dic-regions:dictionary_values</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>

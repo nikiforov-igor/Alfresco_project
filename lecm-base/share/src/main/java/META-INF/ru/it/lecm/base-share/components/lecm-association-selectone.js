@@ -26,6 +26,7 @@ LogicECM.module = LogicECM.module || {};
     {
         LogicECM.module.AssociationSelectOne.superclass.constructor.call(this, "LogicECM.module.AssociationSelectOne", fieldHtmlId, [ "container", "resize", "datasource"]);
         this.selectItemId = fieldHtmlId + "-added";
+        this.removedItemId = fieldHtmlId + "-removed";
         this.controlId = fieldHtmlId;
         this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
@@ -46,6 +47,8 @@ LogicECM.module = LogicECM.module || {};
 
                 itemFamily: "node",
 
+	            mandatory: false,
+
                 selectedValueNodeRef: "",
 
                 maxSearchResults: 1000,
@@ -64,6 +67,8 @@ LogicECM.module = LogicECM.module || {};
             createNewButton: null,
 
             selectItemId: null,
+
+	        removedItemId: null,
 
             currentDisplayValueId: null,
 
@@ -90,6 +95,8 @@ LogicECM.module = LogicECM.module || {};
                 if (this.selectItem) {
                     this.populateSelect();
                 }
+	            YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+
                 this.currentDisplayValueElement = Dom.get(this.currentDisplayValueId);
                 if (this.currentDisplayValueElement) {
                     this.populateCurrentValue();
@@ -102,6 +109,23 @@ LogicECM.module = LogicECM.module || {};
                 }
 
             },
+
+	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
+	            Dom.get(this.controlId).value = this.selectItem.value;
+
+		        if (this.options.mandatory) {
+			        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+		        }
+
+		        YAHOO.Bubbling.fire("formValueChanged",
+			        {
+				        eventGroup:this,
+				        addedItems:this.selectItem.value,
+				        removedItems:Dom.get(this.removedItemId).value,
+				        selectedItems:this.selectItem.value,
+				        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
+			        });
+	        },
 
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
                 var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
@@ -118,8 +142,6 @@ LogicECM.module = LogicECM.module || {};
                         fn:function (response) {
                             this.options.selectedValueNodeRef = response.json.persistedObject;
                             this.populateSelect();
-//                            this.addSelectedItem(response.json.persistedObject);
-//                            this._updateItems(this.options.parentNodeRef, "");
                         },
                         scope:this
                     }
@@ -229,6 +251,8 @@ LogicECM.module = LogicECM.module || {};
                         }
                         this.selectItem.appendChild(opt);
                     }
+
+	                this.onSelectChange();
                 }.bind(this);
 
                 var failureHandler = function (sRequest, oResponse)
