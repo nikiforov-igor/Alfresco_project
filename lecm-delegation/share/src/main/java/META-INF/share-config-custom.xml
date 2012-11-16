@@ -40,6 +40,7 @@
 						</control>
 					</field>
 					<field id="lecm-ba:status" read-only="true"/>
+					<field id="cm:author" read-only="true"/>
 				</appearance>
 				<field-visibility>
 					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->
@@ -54,7 +55,7 @@
 					<show id="lecm-ba:parentProcuracy"/>  <!-- документ основание -->
 					<show id="lecm-ba:dateUTCRevoke"/>  <!-- дата прекращения (отзыва) -->
 					<show id="lecm-ba:status"/> <!-- статус -->
-					<!--<show id="cm:author"/>--> <!-- инициатор -->
+					<show id="cm:author"/> <!-- инициатор -->
 				</field-visibility>
 			</form>
 		</forms>
@@ -113,7 +114,6 @@
 					<show id="lecm-ba:parentProcuracy"/>  <!-- документ основание -->
 					<show id="lecm-ba:dateUTCRevoke"/>  <!-- дата прекращения (отзыва) -->
 					<show id="lecm-ba:status"/> <!-- статус -->
-					<!--<show id="cm:author"/>--> <!-- инициатор -->
 				</field-visibility>
 			</form>
 			<form id="datagrid">

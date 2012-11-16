@@ -4,7 +4,6 @@
 <model name="lecm-ba:delegations" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
 	<!-- Optional meta-data about the model -->
-	<description>Business Authority Delegation Model</description>
 	<author>RAA</author>
 	<version>1.0</version>
 
@@ -29,10 +28,10 @@
 		<constraint name="lecm-ba:statusList" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>New</value>
-					<value>Active</value>
-					<value>Revoked</value>
-					<value>Closed</value>
+					<value>NEW</value>
+					<value>ACTIVE</value>
+					<value>REVOKED</value>
+					<value>CLOSED</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -79,21 +78,18 @@
 
 		<!-- Доверенность -->
 		<type name="lecm-ba:procuracy">
-			<title>Доверенность по делегированию прав</title>
 			<parent>cm:content</parent>
 
 			<properties>
 
 				<!-- Дата начала действия -->
 				<property name="lecm-ba:dateUTCBegin">
-					<title>Дата начала действия</title>
 					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 				</property>
 
 				<!-- Дата окончания действия -->
 				<property name="lecm-ba:dateUTCEnd">
-					<title>Дата окончания действия</title>
 					<type>d:datetime</type>
 					<mandatory>false</mandatory>
 				</property>
@@ -101,14 +97,12 @@
 				<!-- Все функции -->
 				<!-- Признак того, что делегируются все функции Доверителя. -->
 				<property name="lecm-ba:allFunctions">
-					<title>Все функции</title>
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
 
 				<!-- Комментарий -->
 				<property name="lecm-ba:comment">
-					<title>Комментарий и детали</title>
 					<type>d:text</type>
 					<default></default>
 					<constraints>
@@ -122,7 +116,6 @@
 				<!-- Признак того что доверенность может быть передоверена -->
 				<!-- Значение «по-умолчанию» = False -->
 				<property name="lecm-ba:canpropogate">
-					<title>Флаг возможности передачи доверенности</title>
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
@@ -130,7 +123,6 @@
 				<!-- Дата и время аннулирования -->
 				<!-- Заполняется системой автоматически при аннулировании доверенности -->
 				<property name="lecm-ba:dateUTCRevoke">
-					<title>Время прекращения</title>
 					<type>d:datetime</type>
 					<mandatory>false</mandatory>
 				</property>
@@ -138,9 +130,8 @@
 				<!-- Статус -->
 				<!-- Заполняется системой автоматически. -->
 				<property name="lecm-ba:status">
-					<title>Состояние Доверенности</title>
 					<type>d:text</type>
-					<default>New</default>
+					<default>NEW</default>
 					<constraints>
 						<constraint ref="lecm-ba:statusList"/>
 					</constraints>
