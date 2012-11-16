@@ -546,10 +546,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
 
-	            Bubbling.fire("initDatagrid",
-		            {
-			            datagrid: this
-		            });
+                Bubbling.fire("initDatagrid",
+                    {
+                        datagrid:this
+                    });
             },
 
             /**
@@ -583,7 +583,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     });
 
             },
-
+            /**
+             * Обновление формы поиска
+             * @constructor
+             */
             renderSearchForm: function DataGrid_renderSearchForm()
             {
                 if (!YAHOO.lang.isObject(this.datagridMeta))
@@ -782,7 +785,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     Alfresco.logger.error(this.name + ": Couldn't initialize HistoryManager.", e2);
                 }
             },
-
+            /**
+             * Поиск
+             * @return {YAHOO.util.DataSource}
+             * @private
+             */
             _setupDataSource:function () {
                 var uriSearchResults = Alfresco.constants.PROXY_URI + "lecm/search";
                 var dSource = new YAHOO.util.DataSource(uriSearchResults,
@@ -817,7 +824,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return oParsedResponse;
                 }.bind(this);
                 return dSource;
-            }, /**
+            },
+            /**
              * DataSource set-up and event registration
              *
              * @method _setupDataSource
@@ -846,39 +854,47 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.modules.search.dataColumns = this.datagridColumns;
             },
+            /**
+             * Получение колонок dataGrid
+             * @return {Array} список колонок
+             * @constructor
+             */
+            getDataTableColumnDefinitions:function DataGrid_getDataTableColumnDefinitions() {
+                // YUI DataTable column definitions
+                var columnDefinitions =
+                    [
+                        { key:"nodeRef", label:"<input type='checkbox' id='select-all-records'>", sortable:false, formatter:this.fnRenderCellSelected(), width:16 }
+                    ];
 
-	        getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
-		        // YUI DataTable column definitions
-		        var columnDefinitions =
-			        [
-				        { key: "nodeRef", label: "<input type='checkbox' id='select-all-records'>", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
-			        ];
+                var column;
+                for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
+                    column = this.datagridColumns[i];
+                    columnDefinitions.push(
+                        {
+                            key:this.dataResponseFields[i],
+                            label:column.label,
+                            sortable:true,
+                            sortOptions:{
+                                field:column.formsName,
+                                sortFunction:this.getSortFunction()
+                            },
+                            formatter:this.getCellFormatter(column.dataType)
+                        });
+                }
 
-		        var column;
-		        for (var i = 0, ii = this.datagridColumns.length; i < ii; i++)
-		        {
-			        column = this.datagridColumns[i];
-			        columnDefinitions.push(
-				        {
-					        key: this.dataResponseFields[i],
-					        label: column.label,
-					        sortable: true,
-					        sortOptions:
-					        {
-						        field: column.formsName,
-						        sortFunction: this.getSortFunction()
-					        },
-					        formatter: this.getCellFormatter(column.dataType)
-				        });
-		        }
-
-		        // Add actions as last column
-		        columnDefinitions.push(
-			        { key: "actions", label: this.msg("label.column.actions"), sortable: false, formatter: this.fnRenderCellActions(), width: 80 }
-		        );
-		        return columnDefinitions;
-	        },
-
+                // Add actions as last column
+                columnDefinitions.push(
+                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
+                );
+                return columnDefinitions;
+            },
+            /**
+             * Прорисовка таблицы, установка свойств, сортировка.
+             * @param columnDefinitions колонки
+             * @param me {object} this
+             * @return {YAHOO.widget.DataTable} таблица
+             * @private
+             */
             _setupDataTable:function (columnDefinitions, me) {
                 var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
@@ -934,7 +950,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     };
                     return true;
                 };
-
+                // Событие когда выбранны все элементы
                 YAHOO.util.Event.onAvailable("select-all-records", function () {
                     YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
                 }, this, true);
@@ -1004,7 +1020,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
 
                 return dTable;
-            }, /**
+            },
+            /**
              * DataTable set-up and event registration
              *
              * @method setupDataTable
@@ -1034,10 +1051,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         searchSort:sorting,
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:filter,
-	                    fullTextSearch: this.datagridMeta.fullTextSearch
+                        fullTextSearch:this.datagridMeta.fullTextSearch
                     });
             },
-
+            /**
+             * Выбор всех значений
+             * @constructor
+             */
             selectAllClick: function DataGrid_selectAllClick() {
                 var selectAllElement = Dom.get("select-all-records");
                 if (selectAllElement.checked) {
@@ -1380,7 +1400,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                     }).show();
             },
-
+            /**
+             * Получение списка версий и вывод диалогового окна для просмотра
+             * @param item {object} выбранный элемент
+             */
             doBeforeParseData: function(item) {
                 var  sUrl = Alfresco.constants.PROXY_URI + "api/version?nodeRef=" + item.nodeRef;
 
@@ -1401,11 +1424,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
             },
-
+            /**
+             * Просмотр версий
+             * @param item {object} выбранный элемент
+             */
             onActionVersion: function(item) {
                 this.doBeforeParseData(item);
             },
-
+            /**
+             * Установка параметров диалогового окна просмотра версий
+             * @param nodeRef {string} ссылка на узел
+             * @constructor
+             */
             onViewHistoricPropertiesClick: function DocumentVersions_onViewHistoricPropertiesClick(nodeRef)
             {
                 // Call the Hictoric Properties Viewer Module
