@@ -73,9 +73,13 @@ LogicECM.module = LogicECM.module || {};
 
             dataSource: null,
 
-            setMessages: function AssociationSelectOne_setMessages(obj)
+            setOptions: function AssociationSelectOne_setOptions(obj)
             {
-                LogicECM.module.AssociationSelectOne.superclass.setMessages.call(this, obj);
+                LogicECM.module.AssociationSelectOne.superclass.setOptions.call(this, obj);
+				YAHOO.Bubbling.fire("afterOptionsSet",
+					{
+						eventGroup: this
+					});
                 return this;
             },
 
@@ -96,6 +100,7 @@ LogicECM.module = LogicECM.module || {};
                         { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
                     );
                 }
+
             },
 
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {

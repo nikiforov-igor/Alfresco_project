@@ -42,6 +42,7 @@
     <@script type="text/javascript" src="${url.context}/yui/layout/layout.js"></@script>
 
     <script type="text/javascript" src="${page.url.context}/scripts/statemachine/editor/main.js"></script>
+    <script type="text/javascript" src="${page.url.context}/scripts/statemachine/editor/transition.js"></script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/statemachine/editor.css">
 </@>
 

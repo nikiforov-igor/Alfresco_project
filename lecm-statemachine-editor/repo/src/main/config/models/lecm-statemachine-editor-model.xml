@@ -12,16 +12,20 @@
 	</namespaces>
 
 	<types>
+
+		<!-- Основной объект хранилища описаний процессов -->
 		<type name="lecm-stmeditor:statemachine">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
 		</type>
 
+		<!-- Объект Статус -->
 		<type name="lecm-stmeditor:status">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
 		</type>
 
+		<!-- Объект Действие. Используется как основной объект для расширения конкретный объектов действий -->
 		<type name="lecm-stmeditor:action">
 			<title>Logic ECM Statemachine Action Object</title>
 			<parent>cm:cmobject</parent>
@@ -31,8 +35,47 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
+			<associations>
+				<child-association name="lecm-stmeditor:transitions">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-stmeditor:transition</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
 		</type>
 
+		<!-- Объект описывающий переход для действия -->
+		<type name="lecm-stmeditor:transition">
+			<title>Logic ECM Statemachine Transition Object</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-stmeditor:transitionExpression">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-stmeditor:transitionStatus">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-stmeditor:status</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<!-- Объект действие StartWorkflow -->
 		<type name="lecm-stmeditor:StartWorkflow">
 			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
@@ -48,11 +91,13 @@
 			</properties>
 		</type>
 
+		<!-- Объект действие FinishStateWithTransition -->
 		<type name="lecm-stmeditor:FinishStateWithTransition">
 			<title>Logic ECM Statemachine FinishStateWithTransition Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
 		</type>
 
+		<!-- Объект действие WaitForDocumentChange -->
 		<type name="lecm-stmeditor:WaitForDocumentChange">
 			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
 			<parent>lecm-stmeditor:action</parent>

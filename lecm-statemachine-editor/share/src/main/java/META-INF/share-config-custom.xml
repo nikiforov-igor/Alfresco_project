@@ -41,4 +41,41 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-stmeditor:FinishStateWithTransition">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:transitions" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:transitions">
+						<control template="/ru/it/lecm/statemachine/editor/transitions.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:transition">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:transitionExpression" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:transitionExpression" />
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/association-select-one-control.ftl">
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel">Empty</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 </alfresco-config>

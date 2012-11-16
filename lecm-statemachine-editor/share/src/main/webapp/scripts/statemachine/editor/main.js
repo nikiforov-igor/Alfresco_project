@@ -63,7 +63,6 @@ LogicECM.module = LogicECM.module || {};
 
 			this.layout = new YAHOO.widget.Layout(this.id, {
 				units: [
-					{ position: 'bottom', height: 200, body: 'bottom1', resize: true, scroll: true },
 					{ position: 'center', body: 'center1', scroll: true }
 				]
 			});
@@ -440,13 +439,14 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_editAction: function(nodeRef) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&packageNodeRef={packageNodeRef}";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 				itemKind:"node",
 				itemId: nodeRef,
 				mode:"edit",
 				submitType:"json",
-				formId:"statemachine-editor-edit-status"
+				formId:"statemachine-editor-edit-status",
+				packageNodeRef: this.packageNodeRef
 			});
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"40em",
