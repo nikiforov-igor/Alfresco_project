@@ -5,4 +5,5 @@
     <type>lecm-orgstr:workRole</type>
     <plane>true</plane>
     <showControlInSeparateWindow>false</showControlInSeparateWindow>
+    <attributeForShow>cm:name</attributeForShow>
 </dictionary>

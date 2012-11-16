@@ -3,6 +3,7 @@
     <name>Виды документов</name>
     <description>Виды документов</description>
     <type>lecm-orgstr-docType:documentType</type>
+    <attributeForShow>cm:name</attributeForShow>
     <plane>true</plane>
     <showControlInSeparateWindow>false</showControlInSeparateWindow>
 </dictionary>
