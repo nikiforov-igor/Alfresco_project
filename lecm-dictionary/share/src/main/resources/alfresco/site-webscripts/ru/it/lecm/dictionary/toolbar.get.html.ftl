@@ -30,7 +30,7 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
                 <div class="form-container" title="${msg('button.import-csv')}">
                     <form method="post" id="import-csv-form" enctype="multipart/form-data"
                           action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
-                        <input type="file" id="import-csv-input" name="f">
+                        <input type="file" id="import-csv-input" name="f" accept=".csv,application/csv,text/csv">
                         <input type="hidden" value="" name="nodeRef" id="nodeRef" />
                     </form>
                 </div>
