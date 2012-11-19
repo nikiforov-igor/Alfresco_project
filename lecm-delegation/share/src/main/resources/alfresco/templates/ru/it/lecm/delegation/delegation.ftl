@@ -42,7 +42,7 @@ LogicECM.module.Delegation.DELEGATION_ROOT = LogicECM.module.Delegation.DELEGATI
 <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
 <!-- Logic ECM scripts -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/ru/it/lecm/delegation/delegation-const.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
 </@>
 
 <@templateBody>

@@ -13,6 +13,16 @@
 		showExtendSearchBlock:${showSearchBlock?string}
 	});
 	datagrid.setMessages(${messages});
+	datagrid.onActionRevoke = function () {
+		Alfresco.util.PopupManager.displayMessage ({
+			text: "onActionRevoke"
+		});
+	};
+	datagrid.onActionPropogate = function () {
+		Alfresco.util.PopupManager.displayMessage ({
+			text: "onActionPropogate"
+		});
+	};
 	YAHOO.util.Event.onContentReady ('${id}', function () {
 		YAHOO.Bubbling.fire ("activeGridChanged", {
 			datagridMeta:{
