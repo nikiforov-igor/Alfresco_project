@@ -1496,29 +1496,30 @@ div.theme-bg-color-7
    border: 1px solid #DDD6A0;
 }
 
-div.selectone-control select,
-div.selectone-control button {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    height:2em;
-    vertical-align: bottom;
-    margin: 0;
-    color: #494949;
-}
-
 div.selectone-control select {
-    width:20em;
-}
+    border: 1px solid #ccc;
+    border-radius: 3px;
 
-span.create_new_button .yui-push-button,
-span.create_new_button .yui-button .first-child {
-    background-image: none;
-    border: none;
+    color: #494949;
+
+    height:28px;
+    min-width: 250px;
+    vertical-align: bottom;
     margin: 0;
     padding: 0;
 }
 
-span.create_new_button button {
+.yui-push-button,
+.yui-button .first-child {
+    border-radius: 3px;
+}
+
+span.create_new_button .yui-button .first-child {
     background: url(images/create_new_button.png) no-repeat center center;
-    width:2em;
+
+    margin: 0;
+    padding: 0;
+
+    height: 26px;
+    width: 26px;
 }
