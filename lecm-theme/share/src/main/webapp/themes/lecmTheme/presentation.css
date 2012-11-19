@@ -1499,11 +1499,11 @@ div.theme-bg-color-7
 div.selectone-control select, button {
     border: 1px solid #ccc;
     border-radius: 3px;
-
     height:2em;
-
     vertical-align: bottom;
     margin: 0;
+    font-color: red;
+    color: #494949;
 }
 
 div.selectone-control select{
