@@ -1499,7 +1499,7 @@ div.theme-bg-color-7
 div.selectone-control select,
 div.selectone-control button {
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
     height:2em;
     vertical-align: bottom;
     margin: 0;
@@ -1508,6 +1508,14 @@ div.selectone-control button {
 
 div.selectone-control select {
     width:20em;
+}
+
+span.create_new_button .yui-push-button,
+span.create_new_button .yui-button .first-child {
+    background-image: none;
+    border: none;
+    margin: 0;
+    padding: 0;
 }
 
 span.create_new_button button {
