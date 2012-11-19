@@ -151,7 +151,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @property pageSize
                  * @type int
                  */
-                pageSize: 20,
+                pageSize: 3,
 
                 /**
                  * Delay time value for "More Actions" popup, in milliseconds
@@ -289,6 +289,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             versionCache: null,
 
             versionable: false,
+            /**
+             * Порядок сортировки
+             */
+            desc: true,
 
             /**
              * Returns selector custom datacell formatter
@@ -970,28 +974,34 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     Bubbling.fire("selectedItemsChanged");
                 }, this, true);
 
-                // Before render event handler
-                dTable.subscribe("beforeRenderEvent", function () {
-                    if (me.currentSort) {
-                        // Is there a custom sort handler function defined?
-                        var oColumn = me.currentSort.oColumn,
-                            sSortDir = me.currentSort.sSortDir,
-                            sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                                // Custom sort function
-                                oColumn.sortOptions.sortFunction : null;
-
-                        // Sort the Records
-                        if (sSortDir || sortFnc) {
-                            // Default sort function if necessary
-                            sortFnc = sortFnc || this.get("sortFunction");
-                            // Get the field to sort
-                            var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
-
-                            // Sort the Records
-                            this._oRecordSet.sortRecords(sortFnc, ((sSortDir == YAHOO.widget.DataTable.CLASS_DESC) ? true : false), sField);
+                // Сортировка. Событие при нажатии на название столбца.
+                dTable.subscribe("beforeRenderEvent",function () {
+//                    me._setupFilter(me), dTable, true);
+                        var dataGrid = me.modules.dataGrid;
+                        var datagridMeta = dataGrid.datagridMeta;
+                        if (me.currentSort) {
+                            if (datagridMeta.searchConfig == undefined) {
+                                datagridMeta.searchConfig = {};
+                            }
+                            datagridMeta.searchConfig.sort = "";
+                            if (me.desc) {
+                                datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_","").replace("_",":") +
+                                   "|false";
+                                me.desc = false;
+                            } else {
+                                datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
+                                    "|true";
+                                me.desc = true;
+                            }
+                            //Обнуляем сортировку иначе зациклится.
+                            me.currentSort = null;
+                            YAHOO.Bubbling.fire("activeGridChanged",
+                                {
+                                    datagridMeta:datagridMeta
+                                });
                         }
-                    }
-                }, dTable, true);
+                    },
+                dTable, true);
 
                 // Rendering complete event handler
                 dTable.subscribe("renderEvent", function () {
