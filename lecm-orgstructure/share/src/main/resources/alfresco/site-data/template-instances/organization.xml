@@ -1,22 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/orgstructure/orgstructure</template-type>
+    <template-type>ru/it/lecm/orgstructure/organization</template-type>
     <components>
         <component>
-            <region-id>tree-and-grid</region-id>
-            <url>/lecm/orgstructure/datagrid</url>
-            <properties>
-                <pagination>true</pagination>
-                <type>orgstructure</type>
-            </properties>
+            <region-id>organization-profile</region-id>
+            <url>/lecm/orgstructure/organization</url>
         </component>
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <pagination>true</pagination>
-                <type>orgstructure</type>
+                <type>organization</type>
             </properties>
         </component>
         <!-- Title -->
@@ -24,7 +19,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.orgstructure</title>
+                <title>page.organization</title>
                 <filteredLabel>page.orgstructure.filter.label</filteredLabel>
             </properties>
         </component>

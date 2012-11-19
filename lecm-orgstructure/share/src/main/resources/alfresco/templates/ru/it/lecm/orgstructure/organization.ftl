@@ -13,5 +13,5 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	<@region id="tree-and-grid" scope="template" />
+	<@region id="organization-profile" scope="template" />
 </@bpage.basePage>

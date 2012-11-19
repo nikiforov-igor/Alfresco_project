@@ -92,7 +92,7 @@
         <!-- Описание организации -->
         <type name="lecm-orgstr:organization">
             <title>Organization</title>
-            <parent>cm:folder</parent>
+            <parent>lecm-orgstr:organization-element</parent>
             <properties>
                 <property name="lecm-orgstr:org-leg-address">
                     <title>Legal Address</title>

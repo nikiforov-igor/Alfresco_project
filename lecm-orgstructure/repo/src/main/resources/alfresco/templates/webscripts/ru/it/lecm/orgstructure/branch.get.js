@@ -116,7 +116,7 @@ if (args["nodeRef"] == null || args["nodeRef"] == "") {
     if (args["onlyRoot"] == null || args["onlyRoot"] == "") {
         nodes = orgstructure.getRoots("_ROOT_",orgFolderRef);
     } else {
-        nodes = orgstructure.getStructure("_ORG_",orgFolderRef);
+        nodes = orgstructure.getStructure("organization",orgFolderRef);
     }
 } else {
     nodes = orgstructure.getStructure(args["type"], args["nodeRef"]);
@@ -130,10 +130,10 @@ model.branch = branch;
 
 function addItems(branch, items) {
     for (var index in items) {
-        title = items[index].title;
-        type = items[index].type;
+        title = (items[index].title != null ? items[index].title : "");
+        type = (items[index].type != null ? items[index].type : "");
         nodeRef = items[index].nodeRef;
-        isLeaf = items[index].isLeaf;
+        isLeaf = (items[index].isLeaf != null ? items[index].isLeaf : true);
         itemType = (items[index].itemType != null ? items[index].itemType : "");
         pattern = (items[index].namePattern != null ? items[index].namePattern : "");
         branch.push({

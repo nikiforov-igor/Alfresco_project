@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>orgstructure dictionary datagrid</shortname>
+    <description>Return orgstructure dictionary datagrid</description>
+    <url>/lecm/orgstructure/dictionary-datagrid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

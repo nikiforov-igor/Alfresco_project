@@ -47,6 +47,7 @@
         <property name="serviceRegistry">
             <ref bean="ServiceRegistry"/>
         </property>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="extensionName">
             <value>orgstructure</value>
         </property>

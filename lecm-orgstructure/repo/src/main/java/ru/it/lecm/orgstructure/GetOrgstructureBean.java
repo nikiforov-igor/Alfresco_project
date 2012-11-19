@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.processor.BaseProcessorExtension;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -24,13 +25,16 @@ import org.json.JSONObject;
  */
 public class GetOrgstructureBean extends BaseProcessorExtension {
 
-	public static final String TYPE_ORGANIZATION = "_ORG_";
+	public static final String TYPE_ORGANIZATION = "organization";
 	public static final String TYPE_ROOT = "_ROOT_";
 
 	public static final String TYPE_EMPLOYEE = "employee";
 	public static final String TYPE_WRK_GROUP = "workGroup";
 	public static final String TYPE_UNIT = "organization-unit";
 	public static final String TYPE_STAFF_LIST = "staff-list";
+	public static final String TYPE_ = "workGroup";
+	public static final String TYPE_POSITION = "staffPosition";
+	public static final String TYPE_ROLE = "workRole";
 
 	public static final String DIRECTORY_EMPLOYEES = "employees";
 	public static final String DIRECTORY_STRUCTURE = "structure";
@@ -51,15 +55,52 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String ELEMENT_FULL_NAME = "element-full-name";
 	public static final String ELEMENT_FULL_NAME_PATTERN = "lecm-orgstr_element-full-name";
 
+	private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
+
 	private static ServiceRegistry serviceRegistry;
+	private Repository repositoryHelper;
 
 	public String getRoots(final String type, final String ref) {
 		JSONArray nodes = new JSONArray();
 		NodeService nodeService = serviceRegistry.getNodeService();
+		repositoryHelper.init();
 		if (ref != null) {
 			final NodeRef currentRef = new NodeRef(ref);
 			if (type == null || type.equals(TYPE_ROOT)) {
 				JSONObject root;
+				try {
+					// Добавить Организацию
+					root = new JSONObject();
+					root.put(NODE_REF, currentRef.toString());
+					root.put(TYPE, TYPE_ORGANIZATION);
+					root.put(ITEM_TYPE, TYPE_ORGANIZATION);
+					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+
+					nodes.put(root);
+
+					final NodeRef companyHome = repositoryHelper.getCompanyHome();
+					NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
+
+					NodeRef positions = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Должностные позиции");
+					// Добавить справочник Должности
+					root = new JSONObject();
+					root.put(NODE_REF, positions.toString());
+					root.put(ITEM_TYPE, TYPE_POSITION);
+					root.put(TYPE, "org-positions");
+					nodes.put(root);
+
+					NodeRef roles = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Роли для рабочих групп");
+					// Добавить справочник Роли в рабочих группах
+					root = new JSONObject();
+					root.put(NODE_REF, roles.toString());
+					root.put(ITEM_TYPE, TYPE_ROLE);
+					root.put(TYPE, "org-roles");
+
+					nodes.put(root);
+				} catch (JSONException e) {
+					logger.error(e);
+				}
+
 				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef);
 				for (ChildAssociationRef childAssociationRef : childs) {
 					QName qType = nodeService.getType(childAssociationRef.getChildRef());
@@ -68,40 +109,32 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 						NodeRef cRef = childAssociationRef.getChildRef();
 
 						root = new JSONObject();
-						root.put(TITLE, getElementName(nodeService, cRef));
 						root.put(NODE_REF, cRef.toString());
-						root.put(TYPE, qTypeLocalName);
-						root.put(IS_LEAF, false);
 
-						// Список справочников по которым будет вестись работа
 						if (qTypeLocalName.equals(DIRECTORY_EMPLOYEES)) {
+							root.put(TYPE,"org-employees");
 							root.put(ITEM_TYPE, TYPE_EMPLOYEE);
 							root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 						} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
+							root.put(TYPE, "orgstructure");
 							root.put(ITEM_TYPE, TYPE_UNIT);
 							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 						}
 						nodes.put(root);
-						//Добавить Штатное расписание и Рабочие группы
+						//Добавить Штатное расписание, Рабочие группы
 						if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
 							root = new JSONObject();
-							root.put(TITLE, "Штатное расписание");
 							root.put(NODE_REF, cRef.toString());
-							root.put(TYPE, "staffLists");
-							root.put(IS_LEAF, false);
+							root.put(TYPE, "staff-list");
 							root.put(ITEM_TYPE, TYPE_STAFF_LIST);
 							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
-
 							nodes.put(root);
 
 							root = new JSONObject();
-							root.put(TITLE, "Рабочие группы");
 							root.put(NODE_REF, cRef.toString());
-							root.put(TYPE, "workGroups");
-							root.put(IS_LEAF, false);
+							root.put(TYPE, "work-groups");
 							root.put(ITEM_TYPE, TYPE_WRK_GROUP);
 							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
-
 							nodes.put(root);
 						}
 					} catch (JSONException e) {
@@ -209,5 +242,9 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
+	}
+
+	public void setRepositoryHelper(Repository repositoryHelper) {
+		this.repositoryHelper = repositoryHelper;
 	}
 }

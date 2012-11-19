@@ -4,10 +4,6 @@
 <#assign showTree = true>
 <#assign showSearchBlock = true/>
 
-<#if page.url.args.type?? && (page.url.args.type == "employees"|| page.url.args.type == "workGroups")>
-	<#assign showTree = false>
-</#if>
-
 <script type="text/javascript">//<![CDATA[
 (function () {
 <#if showTree>

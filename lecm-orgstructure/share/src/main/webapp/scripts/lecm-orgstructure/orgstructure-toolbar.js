@@ -126,9 +126,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 // Reference to Tree component
                 this.modules.tree = Alfresco.util.ComponentManager.findFirst("LogicECM.module.OrgStructure.Tree");
 
-                this.modules.menu = new LogicECM.module.OrgStructure.Menu(this.id);
-                this.modules.menu.draw();
-
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },

@@ -24,7 +24,7 @@ function main()
     // default - show structure and Add Unit Button
     var type = args["type"];
     if (type != null && type != '') {
-        if (type != 'structure') {
+        if (type != 'orgstructure') {
             showNewUnitBtn = false;
         }
     }

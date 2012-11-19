@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Должностные позиции</title>
+    <description>Список должностных позиций</description>
+    <template-instance>org-positions</template-instance>
+    <authentication>user</authentication>
+</page>
