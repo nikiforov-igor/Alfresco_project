@@ -21,15 +21,13 @@
 .dictionary-toolbar .import-xml {
     position: relative;
 }
-.dictionary-toolbar .import-xml #show-import-xml {
-    width: 24px;
-    height: 24px;
+.dictionary-toolbar .import-xml button {
     background: url("../../images/lecm-dictionary/xml-file-16.png") no-repeat 5px 5px;
     cursor: pointer;
 }
 .dictionary-toolbar .import-xml .form-container {
-    width: 24px;
-    height: 24px;
+    width: 33px;
+    height: 29px;
     position: absolute;
     top: 0;
     opacity: 0;

@@ -32,6 +32,7 @@
      */
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
+        UA = YAHOO.util.UserAction,
         Connect = YAHOO.util.Connect;
 
     /**
@@ -56,7 +57,7 @@
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(Alfresco.component.DataListToolbar, Alfresco.component.Base)
+    YAHOO.extend(Alfresco.component.DataListToolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
@@ -115,17 +116,28 @@
                         disabled: true
                     });
 
+                this.widgets.importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", function(){},
+                    {
+                        disabled:true
+                    });
                 this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearch,
                     {
                         disabled:true
                     });
 
+                var me = this;
+
                 // Import CSV
-                var that = this;
-                Event.on("import-csv-input", "change", function(){that.onImportCSV();});
+                var importCsvButton = this.widgets.importCsvButton;
+                Event.on(this.id + "-import-csv-form-container", "mouseenter", function() {
+                    UA.mouseover(importCsvButton);
+                });
+                Event.on(this.id + "-import-csv-form-container", "mouseleave", function() {
+                    UA.mouseout(importCsvButton);
+                });
+                Event.on("import-csv-input", "change", function(){me.onImportCSV();});
 
                 // Search
-                var me = this;
 	            var searchInput = Dom.get("dictionaryFullSearchInput");
 	            new YAHOO.util.KeyListener(searchInput,
 		            {

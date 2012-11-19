@@ -11,23 +11,33 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
 		<div class="left">
 			<div class="create-row">
                 <span id="${id}-newRowButton" class="yui-button yui-push-button">
-                    <button type="button">${msg('logicecm.dictionary.add-element')}</button>
+                    <span class="first-child">
+                        <button type="button">${msg('logicecm.dictionary.add-element')}</button>
+                    </span>
                 </span>
-			</div>
-			<div class="delete-row">
+            </div>
+            <div class="delete-row">
                 <span id="${id}-deleteButton" class="yui-button yui-push-button onActionDelete">
-                    <button type="button" title="${msg('menu.selected-items.delete')}"/>
+                    <span class="first-child">
+                        <button type="button" title="${msg('menu.selected-items.delete')}">&nbsp;</button>
+                    </span>
                 </span>
-			</div>
-			<div class="exportcsv">
+            </div>
+            <div class="exportcsv">
                 <span id="${id}-exportCsvButton" class="yui-button yui-push-button">
-                    <button type="button" title="${msg('button.export-csv')}"/>
+                    <span class="first-child">
+                        <button type="button" title="${msg('button.export-csv')}">&nbsp;</button>
+                    </span>
                 </span>
 			</div>
             <div class="import-csv">
-                <div id="show-import-csv" title="${msg('button.import-csv')}"></div>
+                <span id="${id}-importCsvButton" class="yui-button yui-push-button">
+                    <span class="first-child">
+                        <button type="button" title="${msg('button.import-csv')}">&nbsp;</button>
+                    </span>
+                </span>
 
-                <div class="form-container" title="${msg('button.import-csv')}">
+                <div id="${id}-import-csv-form-container" class="form-container" title="${msg('button.import-csv')}">
                     <form method="post" id="import-csv-form" enctype="multipart/form-data"
                           action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
                         <input type="file" id="import-csv-input" name="f" accept=".csv,application/csv,text/csv">
@@ -36,12 +46,15 @@ new Alfresco.component.DataListToolbar("${id}").setOptions(
                 </div>
             </div>
 		</div>
+
 		<div class="right">
 			<span id="${id}-searchInput" class="search-input">
 				<input type="text" id="dictionaryFullSearchInput" value="">
 			</span>
 			<span id="${id}-searchButton" class="yui-button yui-push-button search">
-                <button type="button" title="${msg('button.search')}"/>
+                <span class="first-child">
+                    <button type="button" title="${msg('button.search')}">&nbsp;</button>
+			    </span>
 			</span>
 		</div>
 	</div>

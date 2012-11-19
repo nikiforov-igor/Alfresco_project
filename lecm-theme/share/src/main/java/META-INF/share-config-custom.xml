@@ -73,6 +73,7 @@
                 <js src="/modules/create-site.js" />
                 <js src="/modules/header/sites.js" />
                 <js src="/scripts/jsButton.js" />
+                <js src="/yui/event-simulate/event-simulate-min.js" />
             </dependencies>
         </header>
     </config>

@@ -29,6 +29,7 @@
      */
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
+        UA = YAHOO.util.UserAction,
         Connect = YAHOO.util.Connect;
 
     /**
@@ -77,6 +78,15 @@
              * @method onReady
              */
             onReady: function AllDictToolbar_onReady() {
+                // Import XML
+                var importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){},{});
+
+                Event.on(this.id + "-import-xml-form-container", "mouseenter", function() {
+                    UA.mouseover(importXmlButton);
+                });
+                Event.on(this.id + "-import-xml-form-container", "mouseleave", function() {
+                    UA.mouseout(importXmlButton);
+                });
                 Event.on("import-xml-input", "change", this.onImportXML);
             },
 
