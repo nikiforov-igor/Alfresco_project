@@ -485,7 +485,7 @@ span.navigation-item a:hover
    color: #0600cc;
    text-decoration: underline;
    font-weight: normal;
-   
+
 }
 
 span.navigation-separator
@@ -798,7 +798,7 @@ body.yui-skin-lecmTheme .wikipage .detailsPage a:hover,
 body.yui-skin-lecmTheme .nodeEdit .onEditBlogPost a:hover,
 body.yui-skin-lecmTheme .nodeEdit .onDeleteBlogPost a:hover
 {
-   
+
 }
 
 /* YUI Menu */
@@ -1024,7 +1024,7 @@ body.yui-skin-lecmTheme .categoryview .category .ygtvdepthcell
 
 /* filter list link */
 
-.yui-skin-lecmTheme li.selected, 
+.yui-skin-lecmTheme li.selected,
 body.yui-skin-lecmTheme .treeview .selected,
 body.yui-skin-lecmTheme .categoryview .selected,
 body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbrowser-column a.yui-columnbrowser-item-selected
@@ -1100,7 +1100,7 @@ body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbr
 
 .yui-skin-lecmTheme .site-navigation
 {
-   background-color: #fff; 
+   background-color: #fff;
    background-image: url(./images/navigation-bg.png);
 }
 
@@ -1130,7 +1130,7 @@ body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbr
 .yui-skin-lecmTheme .yui-button
 {
    background-image: url(images/sprite.png);
-}  
+}
 
 .yui-skin-lecmTheme .calendar-bar .yui-u.first
 {
@@ -1154,7 +1154,7 @@ body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbr
 {
    margin: 0;
    padding-right: 0.3em;
-   background-color: #e8eef7; 
+   background-color: #e8eef7;
 }
 
 .yui-skin-lecmTheme div.vevent.allday div
@@ -1173,7 +1173,7 @@ body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbr
 
 .yui-skin-lecmTheme .calendar.monthview td.current
 {
-   background-color: #FFFEDF; 
+   background-color: #FFFEDF;
 }
 
 .yui-skin-lecmTheme .vcalendar table
@@ -1408,7 +1408,7 @@ a.theme-color-5,
 a.theme-color-5:visited,
 a.theme-color-5:hover
 {
-   color: #fff;   
+   color: #fff;
 }
 
 /* Theme background colors */
@@ -1461,7 +1461,7 @@ div.theme-bg-color-7
 
 .theme-bg-1
 {
-   
+
 }
 
 .theme-bg-2
@@ -1496,7 +1496,15 @@ div.theme-bg-color-7
    border: 1px solid #DDD6A0;
 }
 
-input, select {
+span.select-one-control select, button {
     border: 1px solid #ccc;
     border-radius: 3px;
+
+    height:2em;
+}
+
+span.create_new_button button {
+    background: url(images/create_new_button.png) no-repeat center center;
+    width:2em;
+    height:2em;
 }
