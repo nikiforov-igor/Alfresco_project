@@ -67,7 +67,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @type object
              */
             options:{
-                maxSearchResults:3000,
+                maxSearchResults:10000,
                 showExtendSearchBlock: false  // По умолчанию аттрибутивный поиск скрыт
             },
 
@@ -101,23 +101,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         });
 
                 }
-
-                // YUI Paginator definition
-                var handlePagination = function Search_handlePagination(state, me) {
-                    me.currentPage = state.page;
-                    me.widgets.paginator.setState(state);
-                };
-                this.widgets.paginator = new YAHOO.widget.Paginator(
-                    {
-                        containers:[this.id + "-paginator-top", this.id + "-paginator-bottom"],
-                        rowsPerPage:this.options.pageSize,
-                        initialPage:1,
-                        template:this.msg("pagination.template"),
-                        pageReportTemplate:this.msg("pagination.template.page-report"),
-                        previousPageLinkLabel:this.msg("pagination.previousPageLinkLabel"),
-                        nextPageLinkLabel:this.msg("pagination.nextPageLinkLabel")
-                    });
-                this.widgets.paginator.subscribe("changeRequest", handlePagination, this);
 
                 if (this.options.showExtendSearchBlock) {//включена опция
                     // создаем диалог
