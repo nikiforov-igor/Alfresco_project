@@ -1496,17 +1496,17 @@ div.theme-bg-color-7
    border: 1px solid #DDD6A0;
 }
 
-div.selectone-control select, button {
+div.selectone-control select,
+div.selectone-control button {
     border: 1px solid #ccc;
     border-radius: 3px;
     height:2em;
     vertical-align: bottom;
     margin: 0;
-    font-color: red;
     color: #494949;
 }
 
-div.selectone-control select{
+div.selectone-control select {
     width:20em;
 }
 
