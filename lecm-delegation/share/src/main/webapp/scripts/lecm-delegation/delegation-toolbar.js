@@ -60,7 +60,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					Alfresco.util.populateHTML (
 						[ p_dialog.id + "-dialogTitle", scope.msg ("label.new-row.title") ],
 						[ p_dialog.id + "-dialogHeader", scope.msg ("label.new-row.header") ]
-					);
+						);
 				};
 
 				var url = "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true";
@@ -111,63 +111,61 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_refreshProcuraciesBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-                var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.location.href = url;
+				var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+				window.location.href = url;
 			}
 		},
 
 		_searchProcuraciesBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-                if (scope.modules.dataGrid) {
-                    var searchTerm = Dom.get("full-text-search").value;
+				if (scope.modules.dataGrid) {
+					var searchTerm = YAHOO.util.Dom.get("full-text-search").value;
 
-                    var dataGrid = scope.modules.dataGrid;
-                    var datagridMeta = dataGrid.datagridMeta;
+					var dataGrid = scope.modules.dataGrid;
+					var datagridMeta = dataGrid.datagridMeta;
 
-                    if (searchTerm.length > 0) {
-                        var columns = dataGrid.datagridColumns;
+					if (searchTerm.length > 0) {
+						var columns = dataGrid.datagridColumns;
 
-                        var fields = "";
-                        for (var i = 0; i < columns.length; i++) {
-                            if (columns[i].dataType == "text") {
-                                fields += columns[i].name + ",";
-                            }
-                        }
-                        if (fields.length > 1) {
-                            fields = fields.substring(0, fields.length - 1);
-                        }
-                        var fullTextSearch = {
-                            parentNodeRef:datagridMeta.nodeRef,
-                            fields:fields,
-                            searchTerm:searchTerm
-                        };
-                        if (!datagridMeta.searchConfig) {
-                            datagridMeta.searchConfig = {};
-                        }
-                        datagridMeta.searchConfig.filter = "";
-                        datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+						var fields = "";
+						for (var i = 0; i < columns.length; i++) {
+							if (columns[i].dataType == "text") {
+								fields += columns[i].name + ",";
+							}
+						}
+						if (fields.length > 1) {
+							fields = fields.substring(0, fields.length - 1);
+						}
+						var fullTextSearch = {
+							parentNodeRef:datagridMeta.nodeRef,
+							fields:fields,
+							searchTerm:searchTerm
+						};
+						if (!datagridMeta.searchConfig) {
+							datagridMeta.searchConfig = {};
+						}
+						datagridMeta.searchConfig.filter = "";
+						datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
 
-                        YAHOO.Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:datagridMeta
-                            });
+						YAHOO.Bubbling.fire("activeGridChanged", {
+							datagridMeta:datagridMeta
+						});
 
-                        YAHOO.Bubbling.fire("showFilteredLabel");
-                    } else {
-                        var nodeRef = datagridMeta.nodeRef;
-                        if (!datagridMeta.searchConfig) {
-                            datagridMeta.searchConfig = {};
-                        }
-                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
-                        datagridMeta.searchConfig.fullTextSearch = "";
-                        YAHOO.Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:datagridMeta
-                            });
-                        YAHOO.Bubbling.fire("hideFilteredLabel");
-                    }
-                }
+						YAHOO.Bubbling.fire("showFilteredLabel");
+					} else {
+						var nodeRef = datagridMeta.nodeRef;
+						if (!datagridMeta.searchConfig) {
+							datagridMeta.searchConfig = {};
+						}
+						datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+						datagridMeta.searchConfig.fullTextSearch = "";
+						YAHOO.Bubbling.fire("activeGridChanged", {
+							datagridMeta:datagridMeta
+						});
+						YAHOO.Bubbling.fire("hideFilteredLabel");
+					}
+				}
 			}
 		},
 
@@ -182,6 +180,16 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			});
 
 			Alfresco.util.createYUIButton(container, "searchButton", this._searchProcuraciesBtnClick ());
+
+			var scope = this;
+			var searchInput = YAHOO.util.Dom.get("full-text-search");
+			new YAHOO.util.KeyListener (searchInput, {
+				keys: 13
+			}, {
+				fn: scope._searchProcuraciesBtnClick (),
+				scope: scope,
+				correctScope: true
+			}, "keydown").enable();
 		},
 
 		onReady: function () {

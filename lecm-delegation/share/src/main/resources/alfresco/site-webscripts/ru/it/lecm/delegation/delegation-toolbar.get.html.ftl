@@ -18,7 +18,9 @@
 				<input type="text" id="full-text-search" value="">
 			</span>
 			<span id="${toolbarId}-searchButton" class="yui-button yui-push-button search">
-                <button type="button" title="${msg('button.search')}"/>
+				<span class="first-child">
+					<button id="${toolbarId}-fullTextSearchBtn" type="button" title="${msg('button.search')}"/>
+				</span>
 			</span>
 		</div>
 	</div>
