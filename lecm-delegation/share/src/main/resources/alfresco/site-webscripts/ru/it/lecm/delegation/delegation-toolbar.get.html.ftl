@@ -11,7 +11,13 @@
 	<div id="${toolbarId}-headerBar" class="header-bar flat-button theme-bg-2">
 		<div class="left">
 			<div id="${toolbarId}-btnCreateProcuracy"></div>
-			<div id="${toolbarId}-btnListProcuracies"></div>
+			<div id="${toolbarId}-btnRefreshProcuracies"></div>
+		</div>
+		<div class="right">
+			<span id="${toolbarId}-searchInput" class="search-input">
+				<input type="text" id="delegationFullSearchInput" value="">
+			</span>
+			<div id="${toolbarId}-btnSearchProcuracies"></div>
 		</div>
 	</div>
 </div>

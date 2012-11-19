@@ -8,13 +8,14 @@
 	<components>
 
 		<!-- Title -->
-		<component>
-			<region-id>title</region-id>
-			<url>/components/title/simple-title</url>
-			<properties>
-				<title>Delegation</title>
-			</properties>
-		</component>
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.delegation.title</title>
+                <filteredLabel>page.delegation.filteredLabel</filteredLabel>
+            </properties>
+        </component>
 		<!-- Center region -->
 		<component>
 			<region-id>center</region-id>

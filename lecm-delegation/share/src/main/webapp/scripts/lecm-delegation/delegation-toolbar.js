@@ -108,11 +108,66 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			}
 		},
 
-		_listProcuraciesBtnClick: function () {
+		_refreshProcuraciesBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
                 var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
                 window.location.href = url;
+			}
+		},
+
+		_searchProcuraciesBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+                if (this.modules.dataGrid) {
+                    var searchTerm = YAHOO.util.Dom.get("delegationFullSearchInput").value;
+
+                    var dataGrid = this.modules.dataGrid;
+                    var datagridMeta = dataGrid.datagridMeta;
+
+                    if (searchTerm.length > 0) {
+                        var columns = dataGrid.datagridColumns;
+
+                        var fields = "";
+                        for (var i = 0; i < columns.length; i++) {
+                            if (columns[i].dataType == "text") {
+                                fields += columns[i].name + ",";
+                            }
+                        }
+                        if (fields.length > 1) {
+                            fields = fields.substring(0, fields.length - 1);
+                        }
+                        var fullTextSearch = {
+                            parentNodeRef:datagridMeta.nodeRef,
+                            fields:fields,
+                            searchTerm:searchTerm
+                        };
+                        if (!datagridMeta.searchConfig) {
+                            datagridMeta.searchConfig = {};
+                        }
+                        datagridMeta.searchConfig.filter = "";
+                        datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta
+                            });
+
+                        YAHOO.Bubbling.fire("showFilteredLabel");
+                    } else {
+                        var nodeRef = datagridMeta.nodeRef;
+                        if (!datagridMeta.searchConfig) {
+                            datagridMeta.searchConfig = {};
+                        }
+                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+                        datagridMeta.searchConfig.fullTextSearch = "";
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:datagridMeta
+                            });
+                        YAHOO.Bubbling.fire("hideFilteredLabel");
+                    }
+                }
 			}
 		},
 
@@ -122,8 +177,12 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				label: "создать доверенность"
 			});
 
-			Alfresco.util.createYUIButton(container, "btnListProcuracies", this._listProcuraciesBtnClick (), {
+			Alfresco.util.createYUIButton(container, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
 				label: "обновить"
+			});
+
+			Alfresco.util.createYUIButton(container, "btnSearchProcuracies", this._searchProcuraciesBtnClick (), {
+				label: this.msg("button.search")
 			});
 		},
 
