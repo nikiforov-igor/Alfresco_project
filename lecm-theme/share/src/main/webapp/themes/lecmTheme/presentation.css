@@ -1496,15 +1496,21 @@ div.theme-bg-color-7
    border: 1px solid #DDD6A0;
 }
 
-span.select-one-control select, button {
+div.selectone-control select, button {
     border: 1px solid #ccc;
     border-radius: 3px;
 
     height:2em;
+
+    vertical-align: bottom;
+    margin: 0;
+}
+
+div.selectone-control select{
+    width:20em;
 }
 
 span.create_new_button button {
     background: url(images/create_new_button.png) no-repeat center center;
     width:2em;
-    height:2em;
 }
