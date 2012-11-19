@@ -15,9 +15,11 @@
 		</div>
 		<div class="right">
 			<span id="${toolbarId}-searchInput" class="search-input">
-				<input type="text" id="delegationFullSearchInput" value="">
+				<input type="text" id="full-text-search" value="">
 			</span>
-			<div id="${toolbarId}-btnSearchProcuracies"></div>
+			<span id="${toolbarId}-searchButton" class="yui-button yui-push-button search">
+                <button type="button" title="${msg('button.search')}"/>
+			</span>
 		</div>
 	</div>
 </div>

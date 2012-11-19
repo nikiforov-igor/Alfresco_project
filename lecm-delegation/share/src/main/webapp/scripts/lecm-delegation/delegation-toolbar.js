@@ -119,10 +119,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_searchProcuraciesBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-                if (this.modules.dataGrid) {
-                    var searchTerm = YAHOO.util.Dom.get("delegationFullSearchInput").value;
+                if (scope.modules.dataGrid) {
+                    var searchTerm = Dom.get("full-text-search").value;
 
-                    var dataGrid = this.modules.dataGrid;
+                    var dataGrid = scope.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
 
                     if (searchTerm.length > 0) {
@@ -181,9 +181,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				label: "обновить"
 			});
 
-			Alfresco.util.createYUIButton(container, "btnSearchProcuracies", this._searchProcuraciesBtnClick (), {
-				label: this.msg("button.search")
-			});
+			Alfresco.util.createYUIButton(container, "searchButton", this._searchProcuraciesBtnClick ());
 		},
 
 		onReady: function () {
