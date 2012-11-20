@@ -28,7 +28,6 @@
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
-                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -78,6 +77,7 @@
                     <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:employee-sex">
@@ -142,7 +142,6 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:unit-code"/>
                     <show id="lecm-orgstr:unit-type"/>
-                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>

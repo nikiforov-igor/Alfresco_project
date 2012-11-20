@@ -15,14 +15,14 @@ YAHOO.util.Event.onDOMReady(init);
 			<div class="search">
 				<span id="${id}-searchButton" class="yui-button yui-push-button">
 					<span class="first-child">
-						<button type="button" id ="searchBtn" title="${msg('button.search')}"/>
+						<button type="button" id ="searchBtn" title="${msg('button.search')}"></button>
 					</span>
 				</span>
 			</div>
 			<div class="ex-search">
 				<span id="${id}-extendSearchButton" class="yui-button yui-push-button">
 					<span class="first-child">
-						<button type="button" id="exsearchBtn" title="${msg('button.ex_search')}"/>
+						<button type="button" id="exsearchBtn" title="${msg('button.ex_search')}"></button>
 					</span>
 				</span>
 			</div>
