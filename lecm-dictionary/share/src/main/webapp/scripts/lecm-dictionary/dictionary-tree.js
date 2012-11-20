@@ -402,7 +402,7 @@ LogicECM.module = LogicECM.module || {};
                 Dom.setStyle(proxyEl, "height", dragRegion.height + "px");
             }).call(this);
 
-            if (!isDragElement && this.srcNode.data.type != "dictionary") {
+            if (!isDragElement && this.srcNode.data.type != "lecm-dic:dictionary") {
                 isDragElement = true;
                 Dom.setStyle(this.srcNode.getEl(), "visibility", "hidden");
                 dragTree.buildTreeFromObject(this.getTreeNodeDefinition(this.srcNode));
@@ -509,12 +509,9 @@ LogicECM.module = LogicECM.module || {};
             }
 
             isDragElement = false;
-            var nodes = dragTree.getNodesBy(function () {
-                return true;
-            });
-            if (nodes) {
-				dragTree.removeNode(nodes[0]);
-            }
+	        if (dragTree.getRoot().children.length > 0) {
+				dragTree.removeNode(dragTree.getRoot().children[0]);
+	        }
             Dom.get(dragContainerId).innerHTML = "";
         },
         /**

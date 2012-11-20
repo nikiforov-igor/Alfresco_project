@@ -15,3 +15,12 @@
 .dropTarget{
     background-color:yellow;
 }
+.ygtvfocus{
+	background-color:white!important;
+}
+.ygtvfocus .ygtvlabel,
+.ygtvfocus .ygtvlabel:link,
+.ygtvfocus .ygtvlabel:visited,
+.ygtvfocus .ygtvlabel:hover{
+	background-color:white!important;
+}
