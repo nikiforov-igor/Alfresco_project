@@ -109,7 +109,7 @@ function loadDictionary() {
 			}
 		},
 		failure:function (oResponse) {
-			alert("Failed to load dictionary " + me.options.dictionaryName);
+			alert("Справочник не был загружен. Попробуйте обновить страницу.");
 		},
 		argument:{
 		}

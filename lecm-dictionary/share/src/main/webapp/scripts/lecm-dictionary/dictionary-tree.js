@@ -185,7 +185,7 @@ LogicECM.module = LogicECM.module || {};
                         me.draw();
                     },
                     failure:function (oResponse) {
-                        alert("Failed to load dictionary " + dictionaryName);
+	                    alert("Справочник не был загружен. Попробуйте обновить страницу.");
                     },
                     argument:{
                     }
