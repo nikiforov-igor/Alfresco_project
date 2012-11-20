@@ -738,7 +738,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     YAHOO.util.History.navigate("page", String(state.page));
                 };
 
-                if (this.options.usePagination)
+                if (this.options.usePagination && !this.widgets.paginator)
                 {
                     var bookmarkedPage = YAHOO.util.History.getBookmarkedState("page") || "1";
                     while (bookmarkedPage != (bookmarkedPage = decodeURIComponent(bookmarkedPage))){}
