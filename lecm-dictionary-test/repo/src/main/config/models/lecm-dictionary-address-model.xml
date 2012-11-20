@@ -27,6 +27,11 @@
 					<title>Prefix</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
 				</property>
 			</properties>
 		</type>
