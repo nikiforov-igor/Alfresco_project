@@ -27,6 +27,7 @@
 		})();
 	//]]></script>
 
+	<#include "/org/alfresco/components/form/form.get.head.ftl">
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
