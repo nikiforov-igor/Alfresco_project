@@ -1,30 +1,24 @@
-.datalist-toolbar .search span.first-child
-{
-    background: url('/share/res/components/images/search-16-gray.png') no-repeat 12px 4px;
-    padding-left: 24px;
+.datalist-toolbar .search span.first-child,
+.datalist-toolbar .ex-search span.first-child {
+    width: 26px;
+    height: 26px;
 }
-
-.datalist-toolbar .ex-search span.first-child
-{
-    background: url('/share/res/components/images/search-16-gray.png') no-repeat 12px 4px;
-    padding-left: 24px;
+.datalist-toolbar .right > span:first-child {
+    margin-top: 4px;
 }
-
-.search-input
-{
+.datalist-toolbar .search span.first-child {
+    background: url('/share/res/components/images/search-16-gray.png') no-repeat 5px 5px;
+}
+.datalist-toolbar .ex-search span.first-child {
+    background: url('/share/res/components/images/search-16-gray.png') no-repeat 5px 5px;
+}
+.search-input {
     display: inline-block;
     vertical-align: text-bottom;
 }
-
-#searchBlock .bd
-{
-
-}
-
 #searchBlock-content .search .form-buttons {
-    display:none;
+    display: none;
 }
-
 #searchBlock-content  .search .search-icon span.first-child {
     background: url("../images/search-16.png") no-repeat scroll 12px 4px transparent;
     padding-left: 24px;

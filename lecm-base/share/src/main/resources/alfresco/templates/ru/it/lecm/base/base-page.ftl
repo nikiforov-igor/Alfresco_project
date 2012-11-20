@@ -14,19 +14,22 @@ showFooter - рисовать блок footer
 			<@region id="header" scope="global"/>
 		</#if>
 		<#if showTitle>
-		<@region id="title" scope="template"/>
+		    <@region id="title" scope="template"/>
 		</#if>
 	</div>
-	<div id="bd">
-		<div class="yui-t1" id="lecm-page">
+	<div id="bd" class="yui-skin-lecmTheme">
+        <div class="yui-b flat-button" id="lecm-menu">
+            <@region id="menu" scope="template"/>
+        </div>
+        <div class="yui-t1" id="lecm-page">
 			<div id="yui-main">
-				<div class="yui-b" id="lecm-content">
+				<div class="" id="lecm-content">
 					<@region id="toolbar" scope="template"/>
-					<#nested>
-				</div>
-			</div>
-			<div class="yui-b" id="lecm-menu">
-				<@region id="menu" scope="template"/>
+                    <div id="lecm-content-main">
+                        <#nested>
+                    </div>
+                    <div id="lecm-content-ft"></div>
+                </div>
 			</div>
 		</div>
 	</div>

@@ -6,31 +6,8 @@ function init() {
 
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
-<div id="${id}-searchBar" class="datalist-toolbar toolbar" style="visibility: visible;">
-	<div id="${id}-searchHeaderBar" class="header-bar flat-button theme-bg-2">
-		<div class="left">
-			<span id="${id}-searchInput" class="search-input">
-				<input type="text" id="full-text-search" value="">
-			</span>
-			<div class="search">
-				<span id="${id}-searchButton" class="yui-button yui-push-button">
-					<span class="first-child">
-						<button type="button" id ="searchBtn" title="${msg('button.search')}"></button>
-					</span>
-				</span>
-			</div>
-			<div class="ex-search">
-				<span id="${id}-extendSearchButton" class="yui-button yui-push-button">
-					<span class="first-child">
-						<button type="button" id="exsearchBtn" title="${msg('button.ex_search')}"></button>
-					</span>
-				</span>
-			</div>
-		</div>
-	</div>
-</div>
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
-    <div id="${args.htmlid}-headerBar" class="header-bar flat-button theme-bg-2">
+    <div id="${args.htmlid}-headerBar" class="header-bar flat-button">
         <div class="left">
         <#if showNewUnitBtn>
 	        <div class="new-row">
@@ -63,6 +40,22 @@ YAHOO.util.Event.onDOMReady(init);
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="right">
+            <span id="${id}-searchInput" class="search-input">
+				<input type="text" id="full-text-search" value="">
+			</span>
+            <span id="${id}-searchButton" class="search yui-button yui-push-button">
+                <span class="first-child">
+                    <button type="button" id ="searchBtn" title="${msg('button.search')}"></button>
+                </span>
+            </span>
+            <span id="${id}-extendSearchButton" class="ex-search yui-button yui-push-button">
+                <span class="first-child">
+                    <button type="button" id="exsearchBtn" title="${msg('button.ex_search')}"></button>
+                </span>
+            </span>
         </div>
     </div>
 </div>

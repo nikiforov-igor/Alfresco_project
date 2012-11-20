@@ -1,5 +1,5 @@
 <#macro baseMenu>
-<div id="menu-buttons" style="width:150px">
+<div id="menu-buttons">
 	<#nested>
 </div>
 </#macro>

@@ -1,31 +1,94 @@
 /* My Styles */
 
-#alf-hd .header{
-  height : 70px;
-  background-position: right top;
-  background-image: url(/share/res/themes/lecmTheme/images/lecmUI/header-right.png) !important;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  width : 100%;
-  min-width: 1200px;
+#alf-hd > div:first-child {
+    margin: 0 -10px;
+}
+#alf-hd .header {
+    height: 70px;
+    background-position: right top;
+    background-image: url(/share/res/themes/lecmTheme/images/lecmUI/header-right.png) !important;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    min-width: 1200px;
 }
 
-#alf-hd .header .app-items{
-position : relative;
-top : -25px;
+#alf-hd .header .app-items {
+    position: relative;
+    top: -25px;
 }
 
 #alf-hd .header .app-items > span > span > a {
- position: relative;
- top: 17px;
+    position: relative;
+    top: 17px;
 }
 
 #alf-hd .header .app-items > span > span > button {
- position: relative;
- top: 17px;
+    position: relative;
+    top: 17px;
 }
+
+#bd {
+    background: rgba(204,204,204,.4);
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding-bottom: 0;
+}
+#bd #lecm-menu {
+    width: 50px;
+    float: left;
+    margin: 10px 5px;
+}
+#bd #lecm-menu #menu-buttons > div:not(:last-of-type) {
+    margin-bottom: 10px;
+}
+#bd #lecm-menu button {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+#bd #lecm-page {
+    min-height: 200px;
+    background: #fff;
+    border: 1px solid #acacac;
+    border-radius: 3px;
+    margin: 5px 5px 5px 60px;
+    position: relative;
+}
+#bd #lecm-content-main {
+    margin-left: 5px;
+}
+#bd #lecm-content-ft {
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    background: #c5c5c5;
+}
+#bd #lecm-page #yui-main,
+#bd #lecm-page #yui-main .datalist-toolbar {
+    margin: 0;
+}
+
+#alf-filters .datalists .header-bar,
+#yui-main .datalist-toolbar .header-bar {
+    height: 30px;
+    background: #c5c5c5;
+    margin: 0;
+    padding: 0;
+
+}
+#yui-main .datalist-toolbar {
+    margin: 0 0 0 -10px;
+}
+
+/* Utils: start */
+.clear {
+    height: 0;
+}
+/* Utils: end */
 
 #myElem {
     position: absolute;
@@ -87,6 +150,9 @@ body{
 
 
 /* Site-wide Styles */
+.sticky-footer {
+    margin-top: 10px;
+}
 
 .sticky-wrapper,
 .sticky-footer
@@ -1416,9 +1482,8 @@ a.theme-color-5:hover
 .theme-bg-color-1,
 div.theme-bg-color-1
 {
-   background-color: #bbccff;
-   border-top: 1px solid #9eadd8;
-   border-bottom: 1px solid #8aa5f6;
+   background-color: #fff;
+   border: none;
 }
 
 .theme-bg-color-2,
