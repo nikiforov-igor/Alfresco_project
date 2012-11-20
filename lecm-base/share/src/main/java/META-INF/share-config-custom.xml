@@ -2,12 +2,12 @@
     <config>
         <forms>
             <dependencies>
-                <css src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.css" />
-                <js src="/ru/it/lecm/base-share/components/object-finder/lecm-object-finder.js" />
-                <js src="/ru/it/lecm/base-share/components/lecm-association-selectone.js" />
-                <js src="/ru/it/lecm/base-share/components/lecm-association-autocomplete.js" />
-                <css src="/ru/it/lecm/base-share/components/association-tree/association-tree-view.css" />
-                <js src="/ru/it/lecm/base-share/components/association-tree/association-tree-view.js" />
+                <css src="/scripts/lecm-base/components/object-finder/lecm-object-finder.css" />
+                <js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
+                <js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
+                <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
+                <css src="/scripts/lecm-base/components/association-tree/association-tree-view.css" />
+                <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
             </dependencies>
         </forms>
     </config>
@@ -25,10 +25,10 @@
                     <field id="lecm-sample-field-set:field2" />
                     <field id="lecm-sample-field-set:field5" />
                 </appearance>
+                <field-visibility>
                 <edit-form template="/ru/it/lecm/base-share/template/form.ftl" />
             </form>
             <form id="step2">
-                <field-visibility>
                     <show id="lecm-sample-field-set:field3" force="true"/>
                     <show id="lecm-sample-field-set:field4" force="true"/>
                     <show id="lecm-sample-field-set:field5" force="true"/>
