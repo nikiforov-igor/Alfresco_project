@@ -44,9 +44,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
 
-        Bubbling.on("unitCreated", this.onNewUnitCreated, this);
+        Bubbling.on("nodeCreated", this.onNewNodeCreated, this);
         Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        Bubbling.on("dataItemsDeleted", this.onUnitDeleted, this);
+        Bubbling.on("dataItemsDeleted", this.onNodeDeleted, this);
         return this;
     };
 
@@ -54,18 +54,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         tree:null,
         selectedNode:null,
         options:{
-            templateUrl:null,
-            actionUrl:null,
-            firstFocus:null,
-            insituEditors:null,
-            onSuccess:{
-                fn:null,
-                obj:null,
-                scope:window
-            }
+            itemType: null,
+            nodeType: null,
+            nodePattern: "cm_name",
+            itemPattern: "cm_name",
+            drawEditors: true,
+            insituEditors:null
         },
 
-        draw:function () {
+        onReady:function OT_onReady () {
             var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
             this._createTree(orgStructure);
@@ -93,7 +90,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }.bind(this));
 
             this.tree.render();
-            this.onExpandComplete(null);
+            if (this.options.drawEditors){
+                this.onExpandComplete(null);
+            }
         },
         onExpandComplete:function OT_onExpandComplete(oNode) {
             for (var i in this.options.insituEditors) {
@@ -113,7 +112,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     destination:nodeRef,
                     mode:"create",
                     submitType:"json",
-                    formId:"orgstructure-node-form"
+                    formId:"new-node-form"
                 });
             } else {
                 return YAHOO.lang.substitute(templateUrl, {
@@ -121,7 +120,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     itemId:nodeRef,
                     mode:"edit",
                     submitType:"json",
-                    formId:"orgstructure-node-form"
+                    formId:"edit-node-form"
                 });
             }
         },
@@ -129,10 +128,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-                if (node.data.type != null) {
-                    var type = node.data.type;
-                    sUrl += "&type=" + encodeURI(type.slice(type.indexOf(':') + 1));
-                }
             } else {
                 sUrl += "?onlyRoot=true";
             }
@@ -143,35 +138,33 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     if (oResults != null) {
                         node.children = [];
                         for (var nodeIndex in oResults) {
-                            var namespace = "lecm-orgstr";
                             var newNode = {
                                 label:oResults[nodeIndex].title,
                                 nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf,
-                                type:namespace + ":" + oResults[nodeIndex].type,
-                                namePattern:oResults[nodeIndex].namePattern
+                                isLeaf:oResults[nodeIndex].isLeaf
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
-
                             var ref = curElement.data.nodeRef;
                             curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
                             curElement.id = curElement.labelElId;
 
-                            otree.options.insituEditors.push(
-                                {
-                                    context:curElement.labelElId,
-                                    params:{
-                                        showDelay:300,
-                                        hideDelay:300,
-                                        type:"organizationUnit",
-                                        unitID:curElement.labelElId,
-                                        unitName:curElement.label,
-                                        curElem:curElement,
-                                        unitAdmin:otree
-                                    },
-                                    callback:null
-                                });
+                            if (otree.options.drawEditors) {
+                                otree.options.insituEditors.push(
+                                    {
+                                        context:curElement.labelElId,
+                                        params:{
+                                            showDelay:300,
+                                            hideDelay:300,
+                                            type:"organizationUnit",
+                                            unitID:curElement.labelElId,
+                                            unitName:curElement.label,
+                                            curElem:curElement,
+                                            unitAdmin:otree
+                                        },
+                                        callback:null
+                                    });
+                            }
                         }
                     }
 
@@ -179,7 +172,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         oResponse.argument.fnLoadComplete();
                     } else {
                         otree.tree.render();
-                        otree.onExpandComplete(null);
+                        if (otree.options.drawEditors){
+                            otree.onExpandComplete(null);
+                        }
                     }
                 },
                 failure:function (oResponse) {
@@ -202,39 +197,42 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.tree.currentFocus) {
                 this.tree.currentFocus._removeFocus(); // for correct highlight
             }
-            // Отрисовка датагрида
-            Bubbling.fire("activeGridChanged",
-                {
-                    datagridMeta:{
-                        itemType:"lecm-orgstr:organization-unit", // тип объектов, которые будут рисоваться в гриде (обязателен)
-                        nodeRef:node.data.nodeRef, // ссылка на текущую(корневую) ноды (необязателен)
-                        custom: { // кастомные настройки для вспомогательных целей (необязателен)
-                            namePattern:node.data.namePattern // используется в тулбаре Оргструктуры при сохранении новой ноды
-                        },
-                        title: '', // для вывода заголовка в гриде (необязателен)
-                        description: '', // для вывода описания в заголовке грида (необязателен)
-                        actionsConfig: {// настройки экшенов. (необязателен)
-                            fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
-                        },
-                        searchConfig:{ //настройки поиска (необязателен)
-                            filter:'PARENT:\"' + node.data.nodeRef + '\"'
-                                + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)', // дополнительный запрос(фильтр)
-                            /** Настройки полнотекстового поиска. Пример объекта:
-                             {
-                                parentNodeRef - относительно какой директории искать (чаще всего совпадает с datagridMeta.nodeRef
-                                fields - какие свойства объекта следует заполнить и вернуть
-                                searchTerm - строка для поиска
-                             }
-                            */
-                            fullTextSearch: null,
-                            sort: null // сортировка. Указываем по какому полю и порядок (true - asc), например, cm:name|true
+            var me = this;
+            // Отрисовка датагрида если указан ItemType
+            if(this.options.itemType) {
+                Bubbling.fire("activeGridChanged",
+                    {
+                        datagridMeta:{
+                            itemType:me.options.itemType, // тип объектов, которые будут рисоваться в гриде (обязателен)
+                            nodeRef:node.data.nodeRef, // ссылка на текущую(корневую) ноды (необязателен)
+                            custom: { // кастомные настройки для вспомогательных целей (необязателен)
+                                namePattern:me.options.itemPattern // используется в тулбаре Оргструктуры при сохранении новой ноды
+                            },
+                            title: '', // для вывода заголовка в гриде (необязателен)
+                            description: '', // для вывода описания в заголовке грида (необязателен)
+                            actionsConfig: {// настройки экшенов. (необязателен)
+                                fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
+                            },
+                            searchConfig:{ //настройки поиска (необязателен)
+                                filter:'PARENT:\"' + node.data.nodeRef + '\"'
+                                    + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)', // дополнительный запрос(фильтр)
+                                /** Настройки полнотекстового поиска. Пример объекта:
+                                 {
+                                 parentNodeRef - относительно какой директории искать (чаще всего совпадает с datagridMeta.nodeRef
+                                 fields - какие свойства объекта следует заполнить и вернуть
+                                 searchTerm - строка для поиска
+                                 }
+                                 */
+                                fullTextSearch: null,
+                                sort: "cm:name|true" // сортировка. Указываем по какому полю и порядок (true - asc), например, cm:name|true
+                            }
                         }
-                    }
-                });
+                    });
+            }
         },
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
-            new Alfresco.module.SimpleDialog("editUnit-dialog").setOptions({
+            new Alfresco.module.SimpleDialog("editNode-dialog").setOptions({
                 width:"50em",
                 templateUrl:templateUrl,
                 actionUrl:null,
@@ -255,8 +253,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }).show();
         },
         _addNode:function editNodeByEvent(event) {
-            var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, "lecm-orgstr:organization-unit");
-            var pattern = this.selectedNode.data.namePattern;
+            var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, this.options.nodeType);
+            var pattern = this.options.nodePattern;
             new Alfresco.module.SimpleDialog("addUnit-dialog").setOptions({
                 width:"50em",
                 templateUrl:templateUrl,
@@ -267,7 +265,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 },
                 onSuccess:{
                     fn:function Tree_onNewUnit_success(response) {
-                        YAHOO.Bubbling.fire("unitCreated",
+                        YAHOO.Bubbling.fire("nodeCreated",
                             {
                                 nodeRef:response.json.persistedObject
                             });
@@ -310,7 +308,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
         },
-        onNewUnitCreated:function Tree_onNewUnitCreated(layer, args) {
+        onNewNodeCreated:function Tree_onNewUnitCreated(layer, args) {
             var obj = args[1];
             var otree = this;
             if ((obj !== null) && (obj.nodeRef !== null)) {
@@ -321,26 +319,28 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 otree.tree.render();
                 otree.onExpandComplete(null);
 
-                Bubbling.fire("activeGridChanged",
-                    {
-                        datagridMeta:{
-                            itemType:"lecm-orgstr:organization-unit",
-                            custom:{
-                                namePattern:sNode.data.namePattern
-                            },
-                            nodeRef:sNode.data.nodeRef,
-                            searchConfig: {
-                                filter:'PARENT:\"' + sNode.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                if (otree.options.itemType){
+                    Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:{
+                                itemType:otree.options.itemType,
+                                custom:{
+                                    namePattern:otree.options.itemPattern
+                                },
+                                nodeRef:sNode.data.nodeRef,
+                                searchConfig: {
+                                    filter:'PARENT:\"' + sNode.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                }
                             }
-                        }
-                    });
+                        });
+                }
             }
         },
         onInitDataGrid: function OrgstructureTree_onInitDataGrid(layer, args) {
             var datagrid = args[1].datagrid;
             this.modules.dataGrid = datagrid;
         },
-        onUnitDeleted:function Tree_onNewUnitCreated(layer, args) {
+        onNodeDeleted:function Tree_onNodeDeleted(layer, args) {
             var context = this;
             context._loadTree(context.selectedNode, function () {
                 if (this.selectedNode.children.length == 0) {
@@ -348,7 +348,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     this.selectedNode.expanded = false;
                 }
                 this.tree.render();
-                this.onExpandComplete(null);
+                if (context.options.drawEditors){
+                    this.onExpandComplete(null);
+                }
                 this._treeNodeSelected(this.selectedNode);
             }.bind(context));
         }

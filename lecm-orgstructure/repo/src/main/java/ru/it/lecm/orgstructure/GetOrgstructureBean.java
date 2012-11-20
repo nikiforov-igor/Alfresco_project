@@ -163,13 +163,9 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 						JSONObject unit = new JSONObject();
 						try {
 							unit.put(NODE_REF, child.getChildRef().toString());
-							unit.put(TYPE, TYPE_UNIT);
 							unit.put(TITLE, getElementName(
 									nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 							unit.put(IS_LEAF, !hasChild(child, nodeService, true));
-
-							unit.put(ITEM_TYPE, TYPE_UNIT);
-							unit.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 							nodes.put(unit);
 						} catch (JSONException e) {
 							logger.error(e);
@@ -182,14 +178,10 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					JSONObject root = new JSONObject();
 					try {
 						root.put(NODE_REF, structure.toString());
-						root.put(TYPE, TYPE_UNIT);
 						root.put(TITLE, getElementName(
 								nodeService, structure, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 						root.put(IS_LEAF, nodeService.getChildAssocs(
 								structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
-
-						root.put(ITEM_TYPE, TYPE_UNIT);
-						root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 						nodes.put(root);
 					} catch (JSONException e) {
 						logger.error(e);

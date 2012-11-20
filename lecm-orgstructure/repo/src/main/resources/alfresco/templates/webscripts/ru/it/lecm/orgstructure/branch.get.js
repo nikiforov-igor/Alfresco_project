@@ -119,7 +119,7 @@ if (args["nodeRef"] == null || args["nodeRef"] == "") {
         nodes = orgstructure.getStructure("organization",orgFolderRef);
     }
 } else {
-    nodes = orgstructure.getStructure(args["type"], args["nodeRef"]);
+    nodes = orgstructure.getStructure("organization-unit", args["nodeRef"]);
 }
 //process response
 var oNodes = eval("(" + nodes + ")");

@@ -5,17 +5,17 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
-	new Alfresco.widget.Resizer("OrgStructure").setOptions(
-		{
-			initialWidth: 250
-		}
+	new Alfresco.widget.Resizer("OrgStructure-StaffList").setOptions(
+			{
+				initialWidth: 300
+			}
 	);
 })();
 //]]></script>
-<div class="yui-t1" id="orgstructure-grid-with-tree">
+<div class="yui-t1" id="orgstructure-staff-grid-with-tree">
 	<div id="yui-main">
 		<div class="yui-b" id="alf-content">
-        <!-- include base datagrid markup-->
+			<!-- include base datagrid markup-->
 		<@grid.datagrid id showSearchBlock>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
@@ -34,8 +34,8 @@
 		</div>
 	</div>
 	<div id="alf-filters">
-		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:organization-unit"
-						nodePattern="lecm-orgstr_element-full-name" itemPattern="lecm-orgstr_element-full-name">
+		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:staff-list"
+						nodePattern="lecm-orgstr_element-full-name">
 		</@orgTree.tree>
 	</div>
 </div>
