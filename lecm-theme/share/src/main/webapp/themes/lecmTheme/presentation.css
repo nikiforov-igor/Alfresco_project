@@ -1507,6 +1507,8 @@ div.selectone-control select {
     vertical-align: bottom;
     margin: 0;
     padding: 0;
+
+    /*background-color: green;*/
 }
 
 .yui-push-button,
@@ -1516,9 +1518,6 @@ div.selectone-control select {
 
 span.create_new_button .yui-button .first-child {
     background: url(images/create_new_button.png) no-repeat center center;
-
-    margin: 0;
-    padding: 0;
 
     height: 26px;
     width: 26px;
