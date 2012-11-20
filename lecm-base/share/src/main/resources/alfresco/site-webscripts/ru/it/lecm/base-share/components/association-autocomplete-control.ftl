@@ -88,12 +88,6 @@
 })();
 //]]></script>
 
-<style type="text/css">
-    #${controlId}-autocomplete {padding-bottom:1em;}
-    #${controlId}-autocomplete-input {width:20em;}
-    #${controlId}-tree-picker-button {margin-left:21em;}
-</style>
-
 <div class="form-field">
     <#if form.mode == "view">
         <div class="viewmode-field">
@@ -110,9 +104,13 @@
 
         <div id="${controlId}-autocomplete">
             <input id="${controlId}-autocomplete-input" type="text"/>
-            <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+            <span class="tree-picker-button">
+                <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+            </span>
             <#if showCreateNewLink>
-                <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value="${msg("logicecm.base.create-new-button.label")}"/>
+                <span class="create-new-button">
+                    <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                </span>
             </#if>
             <div id="${controlId}-autocomplete-container"></div>
 

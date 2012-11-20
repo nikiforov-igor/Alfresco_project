@@ -76,7 +76,7 @@
                 </#if>
             </select>
             <#if showCreateNewLink>
-                <span class="create_new_button">
+                <span class="create-new-button">
                     <input type="button" id="${fieldHtmlId}-selectone-create-new-button" name="-"/>
                 </span>
             </#if>
