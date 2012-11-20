@@ -17,6 +17,12 @@
 		<type name="lecm-stmeditor:statemachine">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-stmeditor:machineFolder">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 		</type>
 
 		<!-- Объект Статус -->
@@ -31,6 +37,10 @@
 			<parent>cm:cmobject</parent>
 			<properties>
 				<property name="lecm-stmeditor:actionId">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:actionExecution">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>

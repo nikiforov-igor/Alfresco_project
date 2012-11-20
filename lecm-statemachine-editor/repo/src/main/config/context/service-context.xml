@@ -29,4 +29,20 @@
 		</property>
 	</bean>
 
+	<bean id="statemachineFolderPolicy" class="ru.it.lecm.statemachine.editor.StateMachineFolderPolicy"
+		  init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="statemachineStatusFolderPolicy" class="ru.it.lecm.statemachine.editor.StateMachineStatusFolderPolicy"
+		  init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
 </beans>

@@ -60,6 +60,7 @@
 .add_status {
 	background: URL('/share/res/components/images/add-icon-16.png') 0 0 no-repeat;
 	padding-left: 18px;
+	margin-right: 10px;
 	cursor: pointer;
 }
 

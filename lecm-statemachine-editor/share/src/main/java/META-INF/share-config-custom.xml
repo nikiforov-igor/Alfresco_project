@@ -78,4 +78,18 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-stmeditor:statemachine">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:machineFolder" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:machineFolder"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+
 </alfresco-config>

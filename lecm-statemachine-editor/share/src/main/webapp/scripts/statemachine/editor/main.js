@@ -38,17 +38,14 @@ LogicECM.module = LogicECM.module || {};
 	};
 
 	YAHOO.extend(LogicECM.module.StatemachineEditor, Alfresco.component.Base, {
-		messages:null,
 		statemachineId: null,
 		packageNodeRef: null,
 		layout: null,
-		menu: null,
+		startActionsMenu: null,
+		takeActionsMenu: null,
+		endActionsMenu: null,
 		currentStatus: null,
 		options:{},
-
-		setMessages:function (messages) {
-			this.messages = messages;
-		},
 
 		setStatemachineId: function(statemachineId) {
 			this.statemachineId = statemachineId;
@@ -82,17 +79,12 @@ LogicECM.module = LogicECM.module || {};
 				success:function (oResponse) {
 					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
 					var oResults = eval("(" + oResponse.responseText + ")");
-					var items = [];
-					for (var i = 0; i < oResults.length; i++) {
-						items.push({
-							text: oResults[i].title,
-							value: oResults[i].id
-						});
-					}
-					oResponse.argument.parent.menu = new YAHOO.widget.Menu("actionsmenu");
-					oResponse.argument.parent.menu.addItems(items);
-					oResponse.argument.parent.menu.render(document.body);
-					oResponse.argument.parent.menu.subscribe("click", oResponse.argument.parent._addAction.bind(oResponse.argument.parent));
+					oResponse.argument.parent.startActionsMenu = new YAHOO.widget.Menu("startActionsMenu");
+					oResponse.argument.parent._addMenu(oResponse.argument.parent.startActionsMenu, oResults.start, "start");
+					oResponse.argument.parent.takeActionsMenu = new YAHOO.widget.Menu("takeActionsMenu");
+					oResponse.argument.parent._addMenu(oResponse.argument.parent.takeActionsMenu, oResults.take, "take");
+					oResponse.argument.parent.endActionsMenu = new YAHOO.widget.Menu("endActionsMenu");
+					oResponse.argument.parent._addMenu(oResponse.argument.parent.endActionsMenu, oResults.end, "end");
 				},
 				argument:{
 					parent: this
@@ -101,6 +93,21 @@ LogicECM.module = LogicECM.module || {};
 			};
 			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 
+		},
+
+		_addMenu: function(menu, receivedItems, type) {
+			var items = [];
+			for (var i = 0; i < receivedItems.length; i++) {
+				items.push({
+					text: receivedItems[i].title,
+					value: receivedItems[i].id
+				});
+			}
+			menu.addItems(items);
+			menu.render(document.body);
+			menu.subscribe("click", function (p_sType, p_aArgs) {
+				this._addAction(p_sType, p_aArgs, type);
+			}.bind(this));
 		},
 
 		onResize: function() {
@@ -159,6 +166,15 @@ LogicECM.module = LogicECM.module || {};
 			var addNewelement = new YAHOO.util.Element("new-status");
 			addNewelement.on("click", this._createStatus.bind(this));
 
+			var editStemachine = document.createElement('a');
+			editStemachine.id = "edit-status";
+			editStemachine.className = "add_status";
+			editStemachine.innerHTML = "Свойства";
+			container.appendChild(editStemachine);
+
+			var editStemachineElement = new YAHOO.util.Element("edit-status");
+			editStemachineElement.on("click", this._editStatemachine.bind(this));
+
 			for (var i = 0; i < statusesModel.length; i++) {
 				var id = "status-" + i;
 				this._createElement(rootElement, id, statusesModel[i]);
@@ -210,23 +226,34 @@ LogicECM.module = LogicECM.module || {};
 			container.appendChild(actions);
 			Dom.addClass(id + "-actions", "actions_cont");
 
+			/************** start Actions *********************/
+			this._createActionsElement(actions, id + "-start", model.startActions, this.startActionsMenu, this.msg("statemachine.execution.start"), model.nodeRef);
+
+			/************** take Actions *********************/
+			this._createActionsElement(actions, id + "-take", model.takeActions, this.takeActionsMenu, this.msg("statemachine.execution.take"), model.nodeRef);
+
+			/************** end Actions *********************/
+			this._createActionsElement(actions, id + "-end", model.endActions, this.endActionsMenu, this.msg("statemachine.execution.end"), model.nodeRef);
+		},
+
+		_createActionsElement: function (container, id, items, menu, title, statusNodeRef) {
 			//action container header
 			var action = document.createElement("div");
 			action.id = id + "-action-header";
-			actions.appendChild(action);
+			container.appendChild(action);
 			Dom.addClass(action.id, "action_cont_header");
 			//action_name header
 			var actionName = document.createElement("div");
 			actionName.id = id + "-action-name-header";
-			actionName.innerHTML = "<b>Действия</b> <a id='" + actionName.id + "-add' class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+			actionName.innerHTML = "<b>" + title +"</b> <a id='" + actionName.id + "-add' class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
 			action.appendChild(actionName);
 			Dom.addClass(actionName.id, "action_name_header");
 
 			var addAction = new YAHOO.util.Element(actionName.id + "-add");
 			addAction.on("click", function (event) {
-				this.currentStatus = model.nodeRef;
-				this.menu.moveTo(event.clientX, event.clientY);
-				this.menu.show();
+				this.currentStatus = statusNodeRef;
+				menu.moveTo(event.x, event.y);
+				menu.show();
 			}.bind(this));
 
 			//action_results header
@@ -236,12 +263,12 @@ LogicECM.module = LogicECM.module || {};
 			action.appendChild(actionResults);
 			Dom.addClass(actionResults.id, "action_results_cont");
 
-			for (var i = 0; i < model.actions.length; i++) {
-				var actionModel = model.actions[i];
+			for (var i = 0; i < items.length; i++) {
+				var actionModel = items[i];
 				//action container
 				var action = document.createElement("div");
 				action.id = id + "-action-" + i;
-				actions.appendChild(action);
+				container.appendChild(action);
 				Dom.addClass(action.id, "action_cont");
 				//action_name
 				var actionName = document.createElement("div");
@@ -305,15 +332,16 @@ LogicECM.module = LogicECM.module || {};
 			}).show();
 		},
 
-		_addAction: function(p_sType, p_aArgs) {
+		_addAction: function(p_sType, p_aArgs, type) {
 			var oEvent = p_aArgs[0];    // DOM Event
 			var oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
 			//statusNodeRef
 			//actionId
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/actions?statusNodeRef={statusNodeRef}&actionId={actionId}";
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/actions?statusNodeRef={statusNodeRef}&actionId={actionId}&type={type}";
 			sUrl = YAHOO.lang.substitute(sUrl, {
 				statusNodeRef: this.currentStatus,
-				actionId: oMenuItem.value
+				actionId: oMenuItem.value,
+				type: type
 			});
 			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
 				{
@@ -410,6 +438,24 @@ LogicECM.module = LogicECM.module || {};
 					},
 					scope:this
 				}
+			}).show();
+
+		},
+
+		_editStatemachine: function() {
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			templateUrl = YAHOO.lang.substitute(templateUrl, {
+				itemKind: "node",
+				itemId: this.packageNodeRef,
+				mode: "edit",
+				submitType: "json",
+				formId: "statemachine-editor-edit-statemachine"
+			});
+			new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
+				width:"40em",
+				templateUrl:templateUrl,
+				actionUrl:null,
+				destroyOnHide:true
 			}).show();
 
 		},
