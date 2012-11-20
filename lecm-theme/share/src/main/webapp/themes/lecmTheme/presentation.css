@@ -1505,10 +1505,9 @@ div.selectone-control select {
     height:28px;
     min-width: 250px;
     vertical-align: bottom;
-    margin: 0;
     padding: 0;
 
-    /*background-color: green;*/
+    /*background-color: yellow;*/
 }
 
 .yui-push-button,
