@@ -6,7 +6,7 @@
 	<div id="yui-main">
 		<div class="yui-b" id="alf-content" style="margin-left: 0;">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=true>
+		<@grid.datagrid id=id showSearchBlock=true showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid(attributeForShow) {
 				var $html = Alfresco.util.encodeHTML,
@@ -97,7 +97,7 @@
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
-							showExtendSearchBlock:false
+							showExtendSearchBlock:true
 						}).setMessages(${messages});
 			}
 

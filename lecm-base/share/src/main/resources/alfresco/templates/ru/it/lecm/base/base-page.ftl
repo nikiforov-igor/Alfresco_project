@@ -1,12 +1,21 @@
 <#import "/org/alfresco/include/alfresco-template.ftl" as aft />
 <#-- Макрос, рисующий шаблон странички с region-ами header, title, menu, footer, toolbar, content
 Разметка для content задается nested контентом
+Параметры:
+showHeader - рисовать блок header
+showTitle - рисовать блок title
+showFooter - рисовать блок footer
+По умолчанию - все блоки рисуются
 -->
-<#macro basePage>
+<#macro basePage showHeader=true showTitle=true showFooter=true>
 	<@aft.templateBody>
 	<div id="alf-hd">
-		<@region id="header" scope="global"/>
-    <@region id="title" scope="template"/>
+		<#if showHeader>
+			<@region id="header" scope="global"/>
+		</#if>
+		<#if showTitle>
+		<@region id="title" scope="template"/>
+		</#if>
 	</div>
 	<div id="bd">
 		<div class="yui-t1" id="lecm-page">
@@ -24,7 +33,9 @@
 	</@>
 	<@aft.templateFooter>
 	<div id="alf-ft">
-		<@region id="footer" scope="global"/>
+		<#if showFooter>
+			<@region id="footer" scope="global"/>
+		</#if>
 	</div>
 	</@>
 </#macro>

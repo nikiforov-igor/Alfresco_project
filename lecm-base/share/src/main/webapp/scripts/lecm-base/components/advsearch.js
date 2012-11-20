@@ -67,7 +67,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @type object
              */
             options:{
-                maxSearchResults:10000,
+                maxSearchResults:1000,
                 showExtendSearchBlock: false  // По умолчанию аттрибутивный поиск скрыт
             },
 
