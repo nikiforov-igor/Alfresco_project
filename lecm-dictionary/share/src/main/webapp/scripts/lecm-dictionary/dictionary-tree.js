@@ -288,7 +288,7 @@ LogicECM.module = LogicECM.module || {};
                                  nodeType = "lecm-dic:hierarchical_dictionary_values";
                              }
                          }
-                     };
+                     }
                      Bubbling.fire("activeGridChanged",
                          {
 	                         datagridMeta: {
@@ -296,7 +296,7 @@ LogicECM.module = LogicECM.module || {};
 		                         nodeRef: node.data.nodeRef,
                                  searchConfig: {
                                     filter: 'PARENT:"' + node.data.nodeRef + '" AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
-                                 },
+                                 }
                              },
                              scrollTo: true
                          });
@@ -381,7 +381,6 @@ LogicECM.module = LogicECM.module || {};
     }
 
     var isDragElement = false;
-    var dragElementIsLeaf;
 
     YAHOO.extend(DDNode, YAHOO.util.DDProxy, {
         srcNode:null,
@@ -406,11 +405,7 @@ LogicECM.module = LogicECM.module || {};
             if (!isDragElement && this.srcNode.data.type != "dictionary") {
                 isDragElement = true;
                 Dom.setStyle(this.srcNode.getEl(), "visibility", "hidden");
-
-                dragElementIsLeaf = this.srcNode.isLeaf;
-                this.srcNode.isLeaf = true;
-                dragTree.buildTreeFromObject(this.srcNode.getNodeDefinition());
-                this.srcNode.isLeaf = false;
+                dragTree.buildTreeFromObject(this.getTreeNodeDefinition(this.srcNode));
                 dragTree.render();
             }
         },
@@ -454,7 +449,6 @@ LogicECM.module = LogicECM.module || {};
                                     if (oldParent.children.length == 0) {
                                         oldParent.isLeaf = true;
                                     }
-                                    src.isLeaf = dragElementIsLeaf;
                                     src.appendTo(dest);
                                     tree.render();
                                     makeDraggable();
@@ -519,9 +513,7 @@ LogicECM.module = LogicECM.module || {};
                 return true;
             });
             if (nodes) {
-                for (i = 0, l = nodes.length; i < l; i++) {
-                    dragTree.removeNode(nodes[i]);
-                }
+				dragTree.removeNode(nodes[0]);
             }
             Dom.get(dragContainerId).innerHTML = "";
         },
@@ -540,6 +532,37 @@ LogicECM.module = LogicECM.module || {};
                 Dom.addClass(tmpTarget.getContentEl(), 'dropTarget');
                 this.destNode = tmpTarget;
             }
-        }
+        },
+
+	    getTreeNodeDefinition: function(node) {
+
+			var def, defs = YAHOO.lang.merge(node.data), children = [];
+
+            defs.label = node.label;
+		    if (node.labelStyle != 'ygtvlabel') { defs.style = node.labelStyle; }
+		    if (node.title) { defs.title = node.title; }
+		    if (node.href) { defs.href = node.href; }
+		    if (node.target != '_self') { defs.target = node.target; }
+		    if (node.expanded) {defs.expanded = node.expanded; }
+		    if (!node.multiExpand) { defs.multiExpand = node.multiExpand; }
+		    if (node.renderHidden) { defs.renderHidden = node.renderHidden; }
+		    if (!node.hasIcon) { defs.hasIcon = node.hasIcon; }
+		    if (node.nowrap) { defs.nowrap = node.nowrap; }
+		    if (node.className) { defs.className = node.className; }
+		    if (node.editable) { defs.editable = node.editable; }
+		    if (!node.enableHighlight) { defs.enableHighlight = node.enableHighlight; }
+		    if (node.highlightState) { defs.highlightState = node.highlightState; }
+		    if (node.propagateHighlightUp) { defs.propagateHighlightUp = node.propagateHighlightUp; }
+		    if (node.propagateHighlightDown) { defs.propagateHighlightDown = node.propagateHighlightDown; }
+		    defs.type = node._type;
+
+		    for (var i = 0; i < node.children.length;i++) {
+			    def = this.getTreeNodeDefinition(node.children[i]);
+			    if (def === false) { return false;}
+			    children.push(def);
+		    }
+		    if (children.length) { defs.children = children; }
+		    return defs;
+	    }
     });
 })();
