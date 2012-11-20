@@ -151,7 +151,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @property pageSize
                  * @type int
                  */
-                pageSize: 3,
+                pageSize: 20,
 
                 /**
                  * Delay time value for "More Actions" popup, in milliseconds
