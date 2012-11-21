@@ -1,4 +1,4 @@
-<#include "/org/alfresco/components/form/form.get.head.ftl">
+<#include "/org/alfresco/components/component.head.inc">
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css" />
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/lecm-datagrid.js"/>
 

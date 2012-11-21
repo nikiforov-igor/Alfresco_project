@@ -49,7 +49,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
 
         // Decoupled event listeners
-        YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
+        //YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
+        //YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         return this;
@@ -89,14 +90,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         disabled:true,
                         value:"create"
                     });
-                // Selected Items menu button
-                this.widgets.selectedItems = Alfresco.util.createYUIButton(this, "selectedItems-button", this.onSelectedItems,
-                    {
-                        type:"menu",
-                        menu:"selectedItems-menu",
-                        lazyloadmenu:false,
-                        disabled:true
-                    });
 
                 this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
@@ -122,9 +115,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
                 // Reference to Data Grid component
                 this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
-
-                // Reference to Tree component
-                this.modules.tree = Alfresco.util.ComponentManager.findFirst("LogicECM.module.OrgStructure.Tree");
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -162,11 +152,16 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         },
                         onSuccess:{
                             fn:function DataListToolbar_onNewRow_success(response) {
-                                YAHOO.Bubbling.fire("" + successEvent,
+                                if (successEvent){
+                                    YAHOO.Bubbling.fire("" + successEvent,
+                                        {
+                                            nodeRef:response.json.persistedObject
+                                        });
+                                }
+                                YAHOO.Bubbling.fire("dataItemCreated",
                                     {
                                         nodeRef:response.json.persistedObject
                                     });
-
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
                                         text:this.msg(successMsg)
@@ -189,6 +184,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             },
                             scope:this
                         }
+
                     }).show();
             }, /**
 
@@ -204,7 +200,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     itemType = orgMetadata.itemType,
                     namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
 
-                this._createNode(itemType, destination, namePattern, "dataItemCreated", "message.new-row.success", "message.new-row.failure");
+                this._createNode(itemType, destination, namePattern, null, "message.new-row.success", "message.new-row.failure");
             },
 
             /**
@@ -215,19 +211,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @param p_obj {object} Object passed back from addListener method
              */
             onNewUnit:function DataListToolbar_onNewRow(e, p_obj) {
-                if (this.modules.tree != null) {
-                    var selectedNode = this.modules.tree.selectedNode;
-                    if (selectedNode != null) {
-                        var destination = selectedNode.data.nodeRef;
-                        var itemType = selectedNode.data.type;
-                        var namePattern = selectedNode.data.namePattern;
-                        this._createNode(itemType, destination, namePattern, "unitCreated", "message.new-unit.success", "message.new-unit.failure");
-                    } else {
-                        Alfresco.util.PopupManager.displayMessage(
-                            {
-                                text:this.msg("message.select-unit.info")
-                            });
-                    }
+                var meta = this.modules.dataGrid.datagridMeta;
+                if (meta != null && meta.nodeRef.indexOf(":") > 0) {
+                    var destination = meta.nodeRef;
+                    var itemType = meta.itemType;
+                    var namePattern = meta.custom != null ? meta.custom.namePattern : null;
+                    this._createNode(itemType, destination, namePattern, "nodeCreated", "message.new-unit.success", "message.new-unit.failure");
+                } else {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text:this.msg("message.select-unit.info")
+                        });
                 }
             },
             /**
@@ -238,7 +232,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @param aArgs {array} Arguments array, [0] = DomEvent, [1] = EventTarget
              * @param p_obj {object} Object passed back from subscribe method
              */
-            onSelectedItems:function DataListToolbar_onSelectedItems(sType, aArgs, p_obj) {
+            /*onSelectedItems:function DataListToolbar_onSelectedItems(sType, aArgs, p_obj) {
                 var domEvent = aArgs[0],
                     eventTarget = aArgs[1];
 
@@ -253,16 +247,15 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
 
                 Event.preventDefault(domEvent);
-            },
+            },*/
 
             /**
              * Deselect currectly selected assets.
              *
              * @method onActionDeselectAll
-             */
             onActionDeselectAll:function DataListToolbar_onActionDeselectAll() {
                 this.modules.dataGrid.selectItems("selectNone");
-            },
+            },*/
 
             /**
              * User Access event handler
@@ -324,7 +317,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @param layer {object} Event fired
              * @param args {array} Event parameters (depends on event type)
              */
-            onSelectedItemsChanged:function DataListToolbar_onSelectedItemsChanged(layer, args) {
+            /*onSelectedItemsChanged:function DataListToolbar_onSelectedItemsChanged(layer, args) {
                 if (this.modules.dataGrid) {
                     var items = this.modules.dataGrid.getSelectedItems(), item,
                         userAccess = {}, itemAccess, index,
@@ -372,7 +365,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }
                     this.widgets.selectedItems.set("disabled", (items.length === 0));
                 }
-            },
+            },*/
 
             onInitDataGrid: function OrgstructureToolbar_onInitDataGrid(layer, args) {
                 var datagrid = args[1].datagrid;

@@ -116,6 +116,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 							root.put(ITEM_TYPE, TYPE_EMPLOYEE);
 							root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 						} else if (qTypeLocalName.equals(DIRECTORY_STRUCTURE)) {
+							root.put(NODE_REF, "_NOT_LOAD_");
 							root.put(TYPE, "orgstructure");
 							root.put(ITEM_TYPE, TYPE_UNIT);
 							root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);

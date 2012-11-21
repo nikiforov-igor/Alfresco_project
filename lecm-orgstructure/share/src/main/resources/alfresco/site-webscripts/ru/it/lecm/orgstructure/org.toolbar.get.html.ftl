@@ -26,7 +26,7 @@ YAHOO.util.Event.onDOMReady(init);
             </span>
 	        </div>
         </#if>
-            <div class="selected-items">
+            <#--<div class="selected-items">
                 <button class="no-access-check" id="${args.htmlid}-selectedItems-button" name="doclist-selectedItems-button">${msg("menu.selected-items")}</button>
                 <div id="${args.htmlid}-selectedItems-menu" class="yuimenu">
                     <div class="bd">
@@ -39,7 +39,7 @@ YAHOO.util.Event.onDOMReady(init);
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <div class="right">

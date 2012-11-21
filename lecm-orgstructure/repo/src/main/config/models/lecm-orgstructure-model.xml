@@ -44,11 +44,21 @@
                     <title>Full Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:element-short-name">
                     <title>Short Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <mandatory-aspects>
@@ -191,6 +201,11 @@
                 <property name="lecm-orgstr:unit-code">
                     <title>Code</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:unit-type">
                     <title>Type</title>
@@ -313,16 +328,31 @@
                     <title>First Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:employee-middle-name">
                     <title>Middle Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:employee-last-name">
                     <title>Last Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:employee-sex">
                     <title>Sex</title>

@@ -11,7 +11,6 @@
 				itemPattern:"${itemPattern}",
 				drawEditors:${drawEditors?string}
 			});
-			//orgStructure.draw();
 		}
 		YAHOO.util.Event.onDOMReady(init);
 	})();

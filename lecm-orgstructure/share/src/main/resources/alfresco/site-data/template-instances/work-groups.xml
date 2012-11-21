@@ -2,27 +2,34 @@
 <template-instance>
     <template-type>ru/it/lecm/orgstructure/work-groups</template-type>
     <components>
+        <!-- Grids -->
         <component>
-            <region-id>group-grid</region-id>
-            <url>/lecm/orgstructure/work-groups-datagrid</url>
+            <region-id>groups-grid</region-id>
+            <url>/lecm/orgstructure/workgroups-datagrid</url>
             <properties>
                 <pagination>true</pagination>
             </properties>
         </component>
         <component>
-            <region-id>roles-grid</region-id>
-            <url>/lecm/orgstructure/work-roles-datagrid</url>
+            <region-id>workforces-grid</region-id>
+            <url>/lecm/orgstructure/workforces-datagrid</url>
             <properties>
                 <pagination>true</pagination>
             </properties>
         </component>
-        <!-- Toolbar -->
+        <!-- Toolbars -->
         <component>
-            <region-id>toolbar</region-id>
+            <region-id>workforces-toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <pagination>true</pagination>
-                <type>work-groups</type>
+                <type>workforce</type>
+            </properties>
+        </component>
+        <component>
+            <region-id>groups-toolbar</region-id>
+            <url>/lecm/orgstructure/toolbar</url>
+            <properties>
+                <type>workGroup</type>
             </properties>
         </component>
         <!-- Title -->

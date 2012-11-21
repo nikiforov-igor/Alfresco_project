@@ -3,15 +3,6 @@
 <#assign id = args.htmlid>
 <#assign showSearchBlock = true/>
 
-<script type="text/javascript">//<![CDATA[
-(function () {
-	new Alfresco.widget.Resizer("OrgStructure-StaffList").setOptions(
-			{
-				initialWidth: 300
-			}
-	);
-})();
-//]]></script>
 <div class="yui-t1" id="orgstructure-staff-grid-with-tree">
 	<div id="yui-main">
 		<div class="yui-b" id="alf-content">
