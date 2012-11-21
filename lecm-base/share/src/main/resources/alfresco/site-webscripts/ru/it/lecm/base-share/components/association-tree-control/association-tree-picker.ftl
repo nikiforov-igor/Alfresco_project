@@ -33,9 +33,13 @@
                 <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
                 <div id="${controlId}-itemGroupActions" class="show-picker">
-                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+                    <span class="tree-picker-button">
+                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+                    </span>
                     <#if showCreateNewLink>
-                        <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value="${msg("logicecm.base.create-new-button.label")}"/>
+                        <span class="create-new-button">
+                            <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                        </span>
                     </#if>
                 </div>
 
