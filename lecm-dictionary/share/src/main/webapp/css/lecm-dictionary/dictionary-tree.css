@@ -24,3 +24,8 @@
 .ygtvfocus .ygtvlabel:hover{
 	background-color:white!important;
 }
+
+.tree .header-bar
+{
+	margin-left: -5px!important;
+}

@@ -1,9 +1,10 @@
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
-new Alfresco.component.DataListToolbar("${id}").setOptions(
-		{
-			siteId: "site"
-		}).setMessages(${messages});
+function init() {
+	new LogicECM.module.Dictionary.Toolbar("${id}").setMessages(${messages});
+}
+
+YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">

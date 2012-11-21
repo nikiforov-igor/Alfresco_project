@@ -1,12 +1,4 @@
 <#assign id = args.htmlid>
-<style type="text/css">
-	.header-bar
-	{
-		margin-left: -10px;
-		min-height: 2em;
-		padding: 4px 1em;
-	}
-</style>
 
 <script type="text/javascript">//<![CDATA[
 
@@ -51,9 +43,9 @@
 	};
 
 	function init() {
-		var Dictionary = new LogicECM.module.Dictionary("dictionary");
-		Dictionary.init("${(page.url.args.dic!'')?string}");
-		Dictionary.setMessages(${messages});
+		var Tree = new LogicECM.module.Dictionary.Tree("dictionary");
+		Tree.init("${(page.url.args.dic!'')?string}");
+		Tree.setMessages(${messages});
 	}
 
 	//once the DOM has loaded, we can go ahead and set up our tree:
@@ -61,10 +53,9 @@
 })();
 //]]></script>
 
-<div id="${id}-body" class="datalists">
+<div id="${id}-body" class="datalists tree">
 	<div id="${id}-headerBar" class="header-bar toolbar flat-button theme-bg-2">
 		<div class="left"></div>
 	</div>
-	<br/>
 	<div id="dictionary" class="ygtv-highlight"></div>
 </div>

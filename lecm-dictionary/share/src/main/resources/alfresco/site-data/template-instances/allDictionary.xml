@@ -27,5 +27,10 @@
 			<region-id>datagrid</region-id>
 			<url>/lecm/dictionary/all/datagrid</url>
 		</component>
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/lecm/dictionary/all/menu</url>
+		</component>
 	</components>
 </template-instance>

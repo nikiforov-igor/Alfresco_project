@@ -67,10 +67,6 @@
     bottom: 0;
     background: #c5c5c5;
 }
-#bd #lecm-page #yui-main,
-#bd #lecm-page #yui-main .datalist-toolbar {
-    margin: 0;
-}
 
 #alf-filters .datalists .header-bar,
 #yui-main .datalist-toolbar .header-bar {
@@ -81,7 +77,7 @@
 
 }
 #yui-main .datalist-toolbar {
-    margin: 0 0 0 -10px;
+    margin: 0;
 }
 
 /* Utils: start */
@@ -1622,4 +1618,7 @@ span.tree-picker-button .yui-button .first-child {
 span.tree-picker-button .yui-button .first-child button {
     color: white;
     font-weight: 900;
+}
+.plane-dictionary-content{
+	margin-left: 5px;
 }

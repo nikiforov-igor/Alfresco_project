@@ -18,10 +18,37 @@
  */
 
 /**
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+	var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Dictionary module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.Dictionary.Dictionary
+ */
+LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
+
+/**
  * Data Lists: Toolbar component.
  *
  * @namespace Alfresco
- * @class Alfresco.component.AllDictToolbar
+ * @class LogicECM.module.AllDictionary.Toolbar
  */
 (function() {
     /**
@@ -39,20 +66,20 @@
      * @return {Alfresco.component.AllDictToolbar} The new Toolbar instance
      * @constructor
      */
-    Alfresco.component.AllDictToolbar = function(htmlId) {
-        Alfresco.component.AllDictToolbar.superclass.constructor.call(this, "Alfresco.component.AllDictToolbar", htmlId, ["button", "container"]);
+    LogicECM.module.AllDictionary.Toolbar = function(htmlId) {
+	    LogicECM.module.AllDictionary.Toolbar.superclass.constructor.call(this, "LogicECM.module.AllDictionary.Toolbar", htmlId, ["button", "container"]);
         return this;
     };
 
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(Alfresco.component.AllDictToolbar, Alfresco.component.Base);
+    YAHOO.extend(LogicECM.module.AllDictionary.Toolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(Alfresco.component.AllDictToolbar.prototype,
+    YAHOO.lang.augmentObject(LogicECM.module.AllDictionary.Toolbar.prototype,
         {
             /**
              * Object container for initialization options
@@ -60,24 +87,14 @@
              * @property options
              * @type object
              */
-            options:
-            {
-                /**
-                 * Current siteId.
-                 *
-                 * @property siteId
-                 * @type string
-                 * @default ""
-                 */
-                siteId: ""
-            },
+            options: {},
 
             /**
              * Fired by YUI when parent element is available for scripting.
              *
              * @method onReady
              */
-            onReady: function AllDictToolbar_onReady() {
+            onReady: function Toolbar_onReady() {
                 // Import XML
                 var importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){},{});
 
@@ -88,6 +105,9 @@
                     UA.mouseout(importXmlButton);
                 });
                 Event.on("import-xml-input", "change", this.onImportXML);
+
+	            // Finally show the component body here to prevent UI artifacts on YUI button decoration
+	            Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
             /**

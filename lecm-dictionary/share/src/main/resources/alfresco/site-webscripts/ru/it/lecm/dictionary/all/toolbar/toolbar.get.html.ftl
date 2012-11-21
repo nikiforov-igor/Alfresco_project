@@ -1,13 +1,13 @@
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
-new Alfresco.component.AllDictToolbar("${id}").setOptions(
-        {
-            siteId: "site"
-        }).setMessages(${messages});
-//]]></script>
+function init() {
+	new LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
+}
 
-<div id="${args.htmlid}-body" class="dictionary-toolbar toolbar">
-	<div id="${args.htmlid}-headerBar" class="header-bar flat-button theme-bg-2">
+YAHOO.util.Event.onDOMReady(init);
+//]]></script>
+<div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
+	<div id="${args.htmlid}-headerBar" class="header-bar flat-button">
 		<div class="left">
             <div>
                 ${msg('logicecm.dictionary.dictionary-list')}

@@ -1,21 +1,29 @@
 /**
- * Copyright (C) 2005-2010 Alfresco Software Limited.
+ * LogicECM root namespace.
  *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ * @namespace LogicECM
  */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+	var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Dictionary module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.Dictionary.Dictionary
+ */
+LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
 /**
  * Data Lists: Toolbar component.
@@ -23,7 +31,7 @@
  * Displays a list of Toolbar
  *
  * @namespace Alfresco
- * @class Alfresco.component.DataListToolbar
+ * @class LogicECM.module.Dictionary.Toolbar
  */
 (function()
 {
@@ -39,12 +47,12 @@
      * Toolbar constructor.
      *
      * @param htmlId {String} The HTML id of the parent element
-     * @return {Alfresco.component.DataListToolbar} The new Toolbar instance
+     * @return {LogicECM.module.Dictionary.Toolbar} The new Toolbar instance
      * @constructor
      */
-    Alfresco.component.DataListToolbar = function(htmlId)
+    LogicECM.module.Dictionary.Toolbar = function(htmlId)
     {
-        Alfresco.component.DataListToolbar.superclass.constructor.call(this, "Alfresco.component.DataListToolbar", htmlId, ["button", "container"]);
+	    LogicECM.module.Dictionary.Toolbar.superclass.constructor.call(this, "LogicECM.module.Dictionary.Toolbar", htmlId, ["button", "container"]);
 
         // Decoupled event listeners
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
@@ -57,12 +65,12 @@
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(Alfresco.component.DataListToolbar, Alfresco.component.Base);
+    YAHOO.extend(LogicECM.module.Dictionary.Toolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(Alfresco.component.DataListToolbar.prototype,
+    YAHOO.lang.augmentObject(LogicECM.module.Dictionary.Toolbar.prototype,
         {
             /**
              * Object container for initialization options
@@ -70,17 +78,7 @@
              * @property options
              * @type object
              */
-            options:
-            {
-                /**
-                 * Current siteId.
-                 *
-                 * @property siteId
-                 * @type string
-                 * @default ""
-                 */
-                siteId: ""
-            },
+            options: {},
             /**
              * FileUpload module instance.
              *
@@ -98,7 +96,7 @@
              *
              * @method onReady
              */
-            onReady: function DataListToolbar_onReady()
+            onReady: function Toolbar_onReady()
             {
                 this.widgets.newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
                     {
@@ -160,7 +158,7 @@
              * Удаление выбранного значения в dataGrid.
              * Появляется диалоговое окно с потверждением на удаление
              */
-            onDeleteRow:function DataListToolbar_onDeleteRow() {
+            onDeleteRow:function Toolbar_onDeleteRow() {
                 var dataGrid = this.modules.dataGrid;
                 if (dataGrid) {
                     // Get the function related to the clicked item
@@ -180,7 +178,7 @@
              * @param e {object} DomEvent
              * @param p_obj {object} Object passed back from addListener method
              */
-            onNewRow: function DataListToolbar_onNewRow(e, p_obj)
+            onNewRow: function Toolbar_onNewRow(e, p_obj)
             {
                 if (this.modules.dataGrid) {
                 var datagridMeta = this.modules.dataGrid.datagridMeta,
@@ -188,7 +186,7 @@
                     itemType = datagridMeta.itemType;
 
                 // Intercept before dialog show
-                var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
+                var doBeforeDialogShow = function Toolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
                 {
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-dialogTitle", this.msg("label.new-row.title") ],
@@ -221,7 +219,7 @@
                         },
                         onSuccess:
                         {
-                            fn: function DataListToolbar_onNewRow_success(response)
+                            fn: function Toolbar_onNewRow_success(response)
                             {
                                 YAHOO.Bubbling.fire("dataItemCreated",
                                     {
@@ -237,7 +235,7 @@
                         },
                         onFailure:
                         {
-                            fn: function DataListToolbar_onNewRow_failure(response)
+                            fn: function Toolbar_onNewRow_failure(response)
                             {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
@@ -257,7 +255,7 @@
              * @param layer {object} Event fired
              * @param args {array} Event parameters (depends on event type)
              */
-            onUserAccess: function DataListToolbar_onUserAccess(layer, args)
+            onUserAccess: function Toolbar_onUserAccess(layer, args)
             {
                 var obj = args[1];
                 if (obj && obj.userAccess)
@@ -320,7 +318,7 @@
              * @param layer {object} Event fired
              * @param args {array} Event parameters (depends on event type)
              */
-            onSelectedItemsChanged: function DataListToolbar_onSelectedItemsChanged(layer, args)
+            onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args)
             {
                 if (this.modules.dataGrid)
                 {
@@ -374,7 +372,7 @@
              * Поиск
              * @constructor
              */
-            onSearch:function DataListToolbar_onSearch() {
+            onSearch:function Toolbar_onSearch() {
                 if (this.modules.dataGrid) {
                     var searchTerm = Dom.get("dictionaryFullSearchInput").value;
 
@@ -431,7 +429,7 @@
              * @param args {array} Event parameters (depends on event type)
              * @constructor
              */
-            onInitDataGrid:function DataListToolbar_onInitDataGrid(layer, args) {
+            onInitDataGrid:function Toolbar_onInitDataGrid(layer, args) {
                 this.modules.dataGrid = args[1].datagrid;
             },
             /**

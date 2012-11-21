@@ -31,34 +31,25 @@
 	<@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
 	<#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/base-utils.js"></@script>
 
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-dictionary/dictionary.js"></@script>
 </@>
 
-<@templateBody>
-<div id="alf-hd">
-	<@region id="header" scope="global"/>
-    <@region id="title" scope="template"/>
-</div>
-<div id="bd">
-    <div class="yui-t1" id="lecm-dictionary">
-        <div id="yui-main">
-            <div class="yui-b" id="alf-content" <#if plane>style="margin-left: 0;"</#if>>
-                <@region id="toolbar" scope="template" />
-                <@region id="datagrid" scope="template" />
-            </div>
-        </div>
-		<#if !plane>
-	        <div class="yui-b" id="alf-filters">
-		        <@region id="tree" scope="template"/>
-	        </div>
-		</#if>
-    </div>
-</div>
-</@>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@templateFooter>
-<div id="alf-ft">
-	<@region id="footer" scope="global"/>
-</div>
-</@>
+<@bpage.basePage showToolbar=false>
+	<div class="yui-t1" id="lecm-dictionary">
+		<div id="yui-main">
+			<div class="<#if !plane>yui-b<#else>plane-dictionary-content</#if>" id="alf-content">
+				<@region id="toolbar" scope="template" />
+	            <@region id="datagrid" scope="template" />
+			</div>
+		</div>
+		<#if !plane>
+			<div id="alf-filters">
+				<@region id="tree" scope="template"/>
+			</div>
+		</#if>
+	</div>
+</@bpage.basePage>

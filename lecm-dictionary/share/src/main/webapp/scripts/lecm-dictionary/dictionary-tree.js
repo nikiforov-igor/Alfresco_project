@@ -16,6 +16,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  */
 LogicECM.module = LogicECM.module || {};
 
+/**
+ * LogicECM Dictionary module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.Dictionary.Dictionary
+ */
+LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
 /**
  * Dictionary module.
@@ -29,10 +36,10 @@ LogicECM.module = LogicECM.module || {};
     var Bubbling = YAHOO.Bubbling;
     var nodeDictionary = null;    //TODO
 
-    LogicECM.module.Dictionary = function (htmlId) {
-        LogicECM.module.Dictionary.superclass.constructor.call(
+    LogicECM.module.Dictionary.Tree = function (htmlId) {
+        LogicECM.module.Dictionary.Tree.superclass.constructor.call(
             this,
-            "LogicECM.module.Dictionary",
+            "LogicECM.module.Dictionary.Tree",
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
         Bubbling.on("itemsListChanged", this._renderTree, this);
@@ -46,7 +53,7 @@ LogicECM.module = LogicECM.module || {};
 
     var ddNodes = [];
 
-    YAHOO.extend(LogicECM.module.Dictionary, Alfresco.component.Base, {
+    YAHOO.extend(LogicECM.module.Dictionary.Tree, Alfresco.component.Base, {
         selectedNode:null,
         button:null,
         cDoc:null,
@@ -455,17 +462,17 @@ LogicECM.module = LogicECM.module || {};
 
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text:Alfresco.util.message("dictionary.message.moveSuccess", "LogicECM.module.Dictionary")
+                                            text:Alfresco.util.message("dictionary.message.moveSuccess", "LogicECM.module.Dictionary.Tree")
                                         });
                                 } else {
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary")
+                                            text:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary.Tree")
                                         });
                                 }
                             }
                         },
-                        failureMessage:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary"),
+                        failureMessage:Alfresco.util.message("dictionary.message.moveFailure", "LogicECM.module.Dictionary.Tree"),
                         failureCallback:{
                             fn:function () {
                                 alert("!!!FALSE!!!");
@@ -476,11 +483,11 @@ LogicECM.module = LogicECM.module || {};
 
             Alfresco.util.PopupManager.displayPrompt(
                 {
-                    title:Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary"),
-                    text:Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary", {"0":me.srcNode.label, "1":me.srcNode.parent.label, "2":me.destNode.label}),
+                    title:Alfresco.util.message("dictionary.message.confirm.move.title", "LogicECM.module.Dictionary.Tree"),
+                    text:Alfresco.util.message("dictionary.message.confirm.move.description", "LogicECM.module.Dictionary.Tree", {"0":me.srcNode.label, "1":me.srcNode.parent.label, "2":me.destNode.label}),
                     buttons:[
                         {
-                            text:Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary"),
+                            text:Alfresco.util.message("dictionary.button.move", "LogicECM.module.Dictionary.Tree"),
                             handler:function DataListActions__onActionMove_move() {
                                 this.destroy();
                                 fnActionMoveConfirm.call();
