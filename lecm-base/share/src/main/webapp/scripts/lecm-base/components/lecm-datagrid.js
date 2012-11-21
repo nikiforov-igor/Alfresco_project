@@ -293,6 +293,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * Порядок сортировки
              */
             desc: true,
+            elTh: null,
+            /**
+             * Порядок сортировки. Рисуется стрелочка на отсортированным столбцом
+             */
+//            currentSort:
+//            {
+//                oColumn:null,
+//                sSortDir:null
+//            },
 
             /**
              * Returns selector custom datacell formatter
@@ -946,9 +955,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         oColumn:oColumn,
                         sSortDir:sSortDir
+
                     };
+                    me.sort = {
+                        enable: true
+                    }
                     return true;
                 };
+
                 // Событие когда выбранны все элементы
                 YAHOO.util.Event.onAvailable("select-all-records", function () {
                     YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
@@ -978,7 +992,26 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("beforeRenderEvent",function () {
                         var dataGrid = me.modules.dataGrid;
                         var datagridMeta = dataGrid.datagridMeta;
-                        if (me.currentSort) {
+
+                        if (me.currentSort){
+                            if (me.elTh == null) {
+                                me.elTh = me.currentSort.oColumn.getThEl();
+                            }
+                            if (me.elTh == me.currentSort.oColumn.getThEl()) {
+                                if (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_DESC){
+                                    Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
+                                } else {
+                                    Dom.removeClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
+                                    Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_ASC);
+                                }
+
+                            } else {
+                                Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_DESC);
+                                Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_ASC)
+                                me.elTh = me.currentSort.oColumn.getThEl();
+                            }
+                        }
+                        if (me.sort) {
                             if (datagridMeta.searchConfig == undefined) {
                                 datagridMeta.searchConfig = {};
                             }
@@ -989,18 +1022,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_","").replace("_",":") +
                                        "|false";
                                     me.desc = false;
+                                    me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
+
                                 } else {
                                     datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
                                         "|true";
                                     me.desc = true;
+                                    me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
                                 }
-
+                                //complete initial search
+                                var initialData = {
+                                    datatype:datagridMeta.itemType
+                                };
+                                var searchConfig = datagridMeta.searchConfig;
+                                var sorting, filter, fullText;
+                                    filter = searchConfig.filter;
+                                    fullText = searchConfig.fullTextSearch;
+                                if (me.sort){
                                 // Обнуляем сортировку иначе зациклится.
-                                me.currentSort = null;
-                                YAHOO.Bubbling.fire("activeGridChanged",
+                                me.sort = null;
+                                YAHOO.Bubbling.fire("doSearch",
                                     {
-                                        datagridMeta:datagridMeta
+                                        searchSort:datagridMeta.searchConfig.sort,
+                                        searchQuery:YAHOO.lang.JSON.stringify(initialData),
+                                        searchFilter:filter,
+                                        fullTextSearch:fullText
                                     });
+                                }
                             }
                         }
                     },
