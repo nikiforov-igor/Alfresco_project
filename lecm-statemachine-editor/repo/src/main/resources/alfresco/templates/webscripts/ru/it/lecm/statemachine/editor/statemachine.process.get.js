@@ -24,11 +24,12 @@ if (statemachineId != null && statemachineId != '') {
 	if (machine == null) {
 		machine = machinesFolder.createNode(statemachineId, "lecm-stmeditor:statemachine", "cm:contains");
 		machine.properties["lecm-stmeditor:machineFolder"] = statemachineId;
-		machine.save();
 		var statemachineFolder = search.xpathSearch("/app:company_home/cm:documents/cm:" + statemachineId)[0];
 		if (statemachineFolder == null) {
-			documentsFolder.createNode(statemachineId, "cm:folder", "cm:contains");
+			var machineDocumentsFolder = documentsFolder.createNode(statemachineId, "cm:folder", "cm:contains");
+			machine.properties["lecm-stmeditor:documentsFolder"] = machineDocumentsFolder;
 		}
+		machine.save();
 	}
 
 	var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();

@@ -8,10 +8,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -27,16 +23,17 @@ import java.util.Map;
 public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "status");
+	public final static QName ASSOC_STATUS_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusFolder");
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+		StateMachineStatusFolderPolicy.serviceRegistry = serviceRegistry;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
+		StateMachineStatusFolderPolicy.policyComponent = policyComponent;
 	}
 
 	public final void init() {
@@ -55,21 +52,10 @@ public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpd
 		String prevValue = (String) before.get(ContentModel.PROP_NAME);
 		String curValue = (String) after.get(ContentModel.PROP_NAME);
 		if (curValue != null && !curValue.equals(prevValue)) {
-			NodeService nodeService = serviceRegistry.getNodeService();
-			ChildAssociationRef parentAssoc = nodeService.getPrimaryParent(nodeRef);
-			NodeRef parent = parentAssoc.getParentRef();
-			String parentFolder = (String) nodeService.getProperty(parent, ContentModel.PROP_NAME);
-
-			SearchParameters sp = new SearchParameters();
-			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			sp.setLanguage(SearchService.LANGUAGE_XPATH);
-			sp.setQuery("/app:company_home/cm:documents/cm:" + parentFolder + "/cm:" + prevValue);
-
-			SearchService searchService = serviceRegistry.getSearchService();
-			ResultSet result = searchService.query(sp);
-			if (result.length() > 0) {
-				NodeRef folder = result.getNodeRef(0);
-				nodeService.setProperty(folder, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "name"), curValue);
+			NodeRef folder = (NodeRef) after.get(ASSOC_STATUS_FOLDER);
+			if (folder != null) {
+				NodeService nodeService = serviceRegistry.getNodeService();
+				nodeService.setProperty(folder, ContentModel.PROP_NAME, curValue);
 			}
 		}
 
@@ -80,24 +66,18 @@ public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpd
 		NodeRef node = childAssocRef.getChildRef();
 		NodeRef parent = childAssocRef.getParentRef();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		String parentFolderName = (String) nodeService.getProperty(parent, StateMachineFolderPolicy.PROP_STATEMACHINE_FOLDER);
+		NodeRef folder = (NodeRef) nodeService.getProperty(parent, StateMachineFolderPolicy.PROP_DOCUMENTS_FOLDER);
 		String statusFolderName = (String) nodeService.getProperty(node, ContentModel.PROP_NAME);
 
-		SearchParameters sp = new SearchParameters();
-		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_XPATH);
-		sp.setQuery("/app:company_home/cm:documents/cm:" + parentFolderName);
-
-		SearchService searchService = serviceRegistry.getSearchService();
-		ResultSet result = searchService.query(sp);
-		if (result.length() > 0) {
-			NodeRef parentFolder = result.getNodeRef(0);
-			nodeService.createNode(
-					parentFolder,
+		if (folder != null) {
+			ChildAssociationRef ref = nodeService.createNode(
+					folder,
 					ContentModel.ASSOC_CONTAINS,
 					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(statusFolderName)),
 					ContentModel.TYPE_FOLDER,
 					null);
+			nodeService.setProperty(ref.getChildRef(), ContentModel.PROP_NAME, statusFolderName);
+			nodeService.setProperty(node, ASSOC_STATUS_FOLDER, ref.getChildRef());
 		}
 
 	}

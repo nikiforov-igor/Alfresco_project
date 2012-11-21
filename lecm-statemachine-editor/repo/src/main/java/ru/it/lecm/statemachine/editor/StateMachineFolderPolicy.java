@@ -7,10 +7,6 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 
@@ -26,16 +22,17 @@ public class StateMachineFolderPolicy implements NodeServicePolicies.OnUpdatePro
 
 	public final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statemachine");
 	public final static QName PROP_STATEMACHINE_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "machineFolder");
+	public final static QName PROP_DOCUMENTS_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "documentsFolder");
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+		StateMachineFolderPolicy.serviceRegistry = serviceRegistry;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
+		StateMachineFolderPolicy.policyComponent = policyComponent;
 	}
 
 	public final void init() {
@@ -52,15 +49,8 @@ public class StateMachineFolderPolicy implements NodeServicePolicies.OnUpdatePro
 		String prevValue = (String) before.get(PROP_STATEMACHINE_FOLDER);
 		String curValue = (String) after.get(PROP_STATEMACHINE_FOLDER);
 		if (curValue != null && !curValue.equals(prevValue)) {
-			SearchParameters sp = new SearchParameters();
-			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			sp.setLanguage(SearchService.LANGUAGE_XPATH);
-			sp.setQuery("/app:company_home/cm:documents/cm:" + prevValue);
-
-			SearchService searchService = serviceRegistry.getSearchService();
-			ResultSet result = searchService.query(sp);
-			if (result.length() > 0) {
-				NodeRef folder = result.getNodeRef(0);
+			NodeRef folder = (NodeRef) after.get(PROP_DOCUMENTS_FOLDER);
+			if (folder != null) {
 				NodeService nodeService = serviceRegistry.getNodeService();
 				nodeService.setProperty(folder, ContentModel.PROP_NAME, curValue);
 			}

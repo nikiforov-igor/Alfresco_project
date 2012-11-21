@@ -25,6 +25,9 @@ var workflowForm;
         statemachineEditor.setStatemachineId("${page.url.args.statemachineId}");
         statemachineEditor.setMessages(${messages});
         statemachineEditor.draw();
+        var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
+        menu.setMessages(${messages});
+        menu.draw();
 	}
 
 	YAHOO.util.Event.onDOMReady(init);
