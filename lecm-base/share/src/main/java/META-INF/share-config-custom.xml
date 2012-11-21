@@ -25,10 +25,10 @@
                     <field id="lecm-sample-field-set:field2" />
                     <field id="lecm-sample-field-set:field5" />
                 </appearance>
-                <field-visibility>
                 <edit-form template="/ru/it/lecm/base-share/template/form.ftl" />
             </form>
             <form id="step2">
+                <field-visibility>
                     <show id="lecm-sample-field-set:field3" force="true"/>
                     <show id="lecm-sample-field-set:field4" force="true"/>
                     <show id="lecm-sample-field-set:field5" force="true"/>
