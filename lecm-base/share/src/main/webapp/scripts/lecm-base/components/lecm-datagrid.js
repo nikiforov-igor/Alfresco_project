@@ -976,7 +976,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Сортировка. Событие при нажатии на название столбца.
                 dTable.subscribe("beforeRenderEvent",function () {
-//                    me._setupFilter(me), dTable, true);
                         var dataGrid = me.modules.dataGrid;
                         var datagridMeta = dataGrid.datagridMeta;
                         if (me.currentSort) {
@@ -984,21 +983,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 datagridMeta.searchConfig = {};
                             }
                             datagridMeta.searchConfig.sort = "";
-                            if (me.desc) {
-                                datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_","").replace("_",":") +
-                                   "|false";
-                                me.desc = false;
-                            } else {
-                                datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
-                                    "|true";
-                                me.desc = true;
+                            // Если ассоциация, то не сортируем
+                            if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
+                                if (me.desc) {
+                                    datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_","").replace("_",":") +
+                                       "|false";
+                                    me.desc = false;
+                                } else {
+                                    datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
+                                        "|true";
+                                    me.desc = true;
+                                }
+
+                                // Обнуляем сортировку иначе зациклится.
+                                me.currentSort = null;
+                                YAHOO.Bubbling.fire("activeGridChanged",
+                                    {
+                                        datagridMeta:datagridMeta
+                                    });
                             }
-                            //Обнуляем сортировку иначе зациклится.
-                            me.currentSort = null;
-                            YAHOO.Bubbling.fire("activeGridChanged",
-                                {
-                                    datagridMeta:datagridMeta
-                                });
                         }
                     },
                 dTable, true);

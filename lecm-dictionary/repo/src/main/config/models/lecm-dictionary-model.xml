@@ -112,11 +112,6 @@
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
                     <default>true</default>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
                 </property>
             </properties>
         </aspect>
