@@ -1576,7 +1576,7 @@ div.form-field input[type="text"].yui-ac-input {
     min-width: 260px;
     width: 0;
     vertical-align: bottom;
-    position: relative;
+    position: static;
 
     /*background-color: yellow;*/
 }

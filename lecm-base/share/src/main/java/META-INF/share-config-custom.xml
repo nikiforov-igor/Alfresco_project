@@ -2,44 +2,13 @@
     <config>
         <forms>
             <dependencies>
-                <css src="/scripts/lecm-base/components/object-finder/lecm-object-finder.css" />
+                <css src="/css/lecm-base/components/object-finder/lecm-object-finder.css" />
                 <js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
-                <css src="/scripts/lecm-base/components/association-tree/association-tree-view.css" />
+                <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />
                 <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
             </dependencies>
         </forms>
     </config>
-
-    <config evaluator="node-type" condition="lecm-sample-field-set:fieldset">
-        <forms>
-            <form id="step1">
-                <field-visibility>
-                    <show id="lecm-sample-field-set:field1" force="true"/>
-                    <show id="lecm-sample-field-set:field2" force="true"/>
-                    <show id="lecm-sample-field-set:field5" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-sample-field-set:field1" />
-                    <field id="lecm-sample-field-set:field2" />
-                    <field id="lecm-sample-field-set:field5" />
-                </appearance>
-                <edit-form template="/ru/it/lecm/base-share/template/form.ftl" />
-            </form>
-            <form id="step2">
-                <field-visibility>
-                    <show id="lecm-sample-field-set:field3" force="true"/>
-                    <show id="lecm-sample-field-set:field4" force="true"/>
-                    <show id="lecm-sample-field-set:field5" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-sample-field-set:field3" />
-                    <field id="lecm-sample-field-set:field4" />
-                    <field id="lecm-sample-field-set:field5" />
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
 </alfresco-config>
