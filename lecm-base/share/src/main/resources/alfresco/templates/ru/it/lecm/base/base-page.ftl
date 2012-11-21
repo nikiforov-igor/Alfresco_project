@@ -7,7 +7,7 @@ showTitle - рисовать блок title
 showFooter - рисовать блок footer
 По умолчанию - все блоки рисуются
 -->
-<#macro basePage showHeader=true showTitle=true showFooter=true>
+<#macro basePage showHeader=true showTitle=true showToolbar=true showFooter=true>
 	<@aft.templateBody>
 	<div id="alf-hd">
 		<#if showHeader>
@@ -24,7 +24,9 @@ showFooter - рисовать блок footer
         <div class="yui-t1" id="lecm-page">
 			<div id="yui-main">
 				<div class="" id="lecm-content">
-					<@region id="toolbar" scope="template"/>
+					<#if showToolbar>
+						<@region id="toolbar" scope="template"/>
+					</#if>
                     <div id="lecm-content-main">
                         <#nested>
                     </div>
