@@ -80,6 +80,12 @@
     margin: 0;
 }
 
+#yui-main-2 {
+	float: right;
+	width: 100%;
+	margin-left: -25em;
+}
+
 /* Utils: start */
 .clear {
     height: 0;
