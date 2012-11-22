@@ -12,6 +12,7 @@ YAHOO.util.Event.onDOMReady(init);
             <div>
                 ${msg('logicecm.dictionary.dictionary-list')}
             </div>
+            <div class="divider"></div>
             <div class="import-xml">
                 <span id="${id}-importXmlButton" class="yui-button yui-push-button">
                     <span class="first-child">

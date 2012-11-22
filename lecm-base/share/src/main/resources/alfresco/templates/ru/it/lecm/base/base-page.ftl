@@ -4,10 +4,9 @@
 Параметры:
 showHeader - рисовать блок header
 showTitle - рисовать блок title
-showFooter - рисовать блок footer
 По умолчанию - все блоки рисуются
 -->
-<#macro basePage showHeader=true showTitle=true showToolbar=true showFooter=true>
+<#macro basePage showHeader=true showTitle=true showToolbar=true>
 	<@aft.templateBody>
 	<div id="alf-hd">
 		<#if showHeader>
@@ -37,10 +36,6 @@ showFooter - рисовать блок footer
 	</div>
 	</@>
 	<@aft.templateFooter>
-	<div id="alf-ft">
-		<#if showFooter>
-			<@region id="footer" scope="global"/>
-		</#if>
-	</div>
+	<div id="alf-ft"></div>
 	</@>
 </#macro>

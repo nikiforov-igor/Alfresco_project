@@ -7,13 +7,14 @@
 
     //Set block height
     function setHeight() {
+        var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
-        var footer = Dom.getAncestorByClassName('alf-ft', 'sticky-footer');
+        var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
 
         Dom.setStyle(block, 'height', 'auto');
 
-        var h = Dom.getY(footer) - parseInt(Dom.getStyle(footer, 'margin-top')) - Dom.getY(block)
-            - parseInt(Dom.getStyle(block, 'margin-bottom'));
+        var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
+            - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
 
         Dom.setStyle(block, 'height', h + 'px');
     }

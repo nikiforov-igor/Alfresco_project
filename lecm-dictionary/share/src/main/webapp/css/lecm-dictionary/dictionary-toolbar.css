@@ -4,7 +4,10 @@
     line-height: 24px;
 }
 .datalist-toolbar .left > div {
-    padding-right: 20px;
+    padding: 0 10px;
+}
+.datalist-toolbar .left > div:first-child {
+    padding-left: 5px;
 }
 .datalist-toolbar .exportcsv button {
     background: url(/share/res/components/images/task-16.png) no-repeat 5px 5px;

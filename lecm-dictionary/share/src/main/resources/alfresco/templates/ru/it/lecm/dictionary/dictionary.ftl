@@ -20,11 +20,9 @@
 	//]]></script>
 
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
-	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/base-utils.js"></@script>
 	<#if !plane>
 		<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/base-resizer.js"></@script>
 	</#if>
-
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-dictionary/dictionary.js"></@script>
 </@>
 

@@ -1112,19 +1112,33 @@ display: none;
 position: absolute;
 z-index: 9000;
 }
-.yui-skin-lecmTheme .yui-dt table {
+.yui-skin-lecmTheme .sticky-wrapper {
+    margin: 0;
+}
+.yui-skin-lecmTheme .sticky-wrapper #doc3 {
+    padding-top: 70px;
+}
+.yui-skin-lecmTheme .sticky-push,
+.yui-skin-lecmTheme .sticky-footer {
+    height: 0;
+    margin: 0;
+}
+.yui-skin-lecmTheme .datagrid .grid.yui-dt {
+    overflow: auto;
+}
+.yui-skin-lecmTheme .datagrid .grid.yui-dt table {
 margin: 0;
 padding: 0;
-font-family: arial;
-font-size: inherit;
+font-family: Helvetica, sans-serif;
+font-size: 12px;
 border-collapse: separate;*border-collapse:collapse;
 border-spacing: 0;
-border: 1px solid #7F7F7F;
+border: 1px solid #cbcbcb;
 }
-.yui-skin-lecmTheme .yui-dt thead {
+.yui-skin-lecmTheme .datagrid .yui-dt thead {
 border-spacing: 0;
 }
-.yui-skin-lecmTheme .yui-dt caption {
+.yui-skin-lecmTheme .datagrid .yui-dt caption {
 color: #000000;
 font-size: 85%;
 font-weight: normal;
@@ -1133,25 +1147,23 @@ line-height: 1;
 padding: 1em 0pt;
 text-align: center;
 }
-.yui-skin-lecmTheme .yui-dt th {
-background: #D8D8DA url(sprite.png) repeat-x 0 0;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th {
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    background: rgba(204,204,204,0.4);
+    vertical-align: middle;
 }
-.yui-skin-lecmTheme .yui-dt th,.yui-skin-lecmTheme .yui-dt th a {
-font-weight: normal;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th,
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th a {
+font-weight: bold;
 text-decoration: none;
-color: #000;
+color: #333;
 vertical-align: bottom;
 }
-.yui-skin-lecmTheme .yui-dt th {
-margin: 0;
-padding: 0;
-border: none;
-border-right: 1px solid #CBCBCB;
-}
-.yui-skin-lecmTheme .yui-dt tr.yui-dt-first td {
-border-top: 1px solid #7F7F7F;
-}
-.yui-skin-lecmTheme .yui-dt th .yui-dt-liner {
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th .yui-dt-liner {
 white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-dt-liner {
@@ -1163,12 +1175,13 @@ padding: 4px 10px 4px 10px;
 width: 5px;
 background-color: red;
 }
-.yui-skin-lecmTheme .yui-dt td {
-margin: 0;
-padding: 0;
-border: none;
-border-right: 1px solid #CBCBCB;
-text-align: left;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td {
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    border-width: 0 0 1px 0;
+    text-align: left;
+    vertical-align: middle;
 }
 .yui-skin-lecmTheme .yui-dt-list td {
 border-right: none;
