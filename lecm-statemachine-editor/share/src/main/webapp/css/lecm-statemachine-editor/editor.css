@@ -7,7 +7,6 @@
 	border-radius: 5px;
 	padding: 5px;
 	background-color: #ffffff;
-	height: 1%;
 	overflow: hidden;
 }
 
@@ -29,17 +28,17 @@
 }
 
 .action_cont_header {
-	height: 1%;
 	overflow: hidden;
 	border-bottom: 1px solid #eeeeee;
 	padding-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 .action_cont {
-	height: 1%;
 	overflow: hidden;
 	border-bottom: 1px solid #eeeeee;
-	padding: 5px 0 5px 0;
+	padding: 0 0 5px 0;
+	margin-bottom: 5px;
 }
 
 .action_name_header {

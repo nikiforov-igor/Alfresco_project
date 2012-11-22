@@ -63,9 +63,6 @@ LogicECM.module = LogicECM.module || {};
 					{ position: 'center', body: 'center1', scroll: true }
 				]
 			});
-			this.layout.on('render', function() {
-				this._redraw();
-			}.bind(this));
 			this.layout.render();
 
 			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
@@ -85,6 +82,7 @@ LogicECM.module = LogicECM.module || {};
 					oResponse.argument.parent._addMenu(oResponse.argument.parent.takeActionsMenu, oResults.take, "take");
 					oResponse.argument.parent.endActionsMenu = new YAHOO.widget.Menu("endActionsMenu");
 					oResponse.argument.parent._addMenu(oResponse.argument.parent.endActionsMenu, oResults.end, "end");
+					oResponse.argument.parent._redraw();
 				},
 				argument:{
 					parent: this
@@ -112,7 +110,7 @@ LogicECM.module = LogicECM.module || {};
 
 		onResize: function() {
 			Dom.setStyle(this.id, "height", "");
-			var h = Dom.getXY("alf-ft")[1] - Dom.getXY("alf-hd")[1] - Dom.get("alf-hd").offsetHeight - 50;
+			var h = Dom.getXY("alf-ft")[1] - Dom.getXY("alf-hd")[1] - Dom.get("alf-hd").offsetHeight - 81;
 
 			if (YAHOO.env.ua.ie === 6)
 			{
@@ -315,13 +313,23 @@ LogicECM.module = LogicECM.module || {};
 					submitType:"json",
 					formId:"statemachine-editor-new-status"
 				});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
 			new Alfresco.module.SimpleDialog("statemachine-editor-new-status").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{
-					fn:this._setFormDialogTitle
+					fn: function(p_form, p_dialog) {
+						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._setFormDialogTitle(p_form, p_dialog);
+					},
+					scope: this
 				},
 				onSuccess:{
 					fn:function (response) {
@@ -404,13 +412,24 @@ LogicECM.module = LogicECM.module || {};
 				submitType:"json",
 				formId:"statemachine-editor-edit-status"
 			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
+
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{
-					fn:this._setFormDialogTitle
+					fn: function(p_form, p_dialog) {
+						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._setFormDialogTitle(p_form, p_dialog);
+					},
+					scope: this
 				},
 				onSuccess:{
 					fn:function (response) {
@@ -451,11 +470,24 @@ LogicECM.module = LogicECM.module || {};
 				submitType: "json",
 				formId: "statemachine-editor-edit-statemachine"
 			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
 				actionUrl:null,
-				destroyOnHide:true
+				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn: function(p_form, p_dialog) {
+						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._setFormDialogTitle(p_form, p_dialog);
+					},
+					scope: this
+				}
 			}).show();
 
 		},
@@ -494,13 +526,23 @@ LogicECM.module = LogicECM.module || {};
 				formId:"statemachine-editor-edit-status",
 				packageNodeRef: this.packageNodeRef
 			});
+			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{
-					fn:this._setFormDialogTitle
+					fn: function(p_form, p_dialog) {
+						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._setFormDialogTitle(p_form, p_dialog);
+					},
+					scope: this
 				},
 				onSuccess:{
 					fn:function (response) {

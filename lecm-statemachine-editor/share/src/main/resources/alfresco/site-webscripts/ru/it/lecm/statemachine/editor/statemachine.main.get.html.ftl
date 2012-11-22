@@ -11,7 +11,7 @@
 <#else>
 <div class="title"><h3 style="font-weight: bold; margin: 5px 0 5px 0">${title}</div>
 <div id="statemachine" style="margin: 0 0 20px 0">
-    <div id="center1" style="padding: 3px">
+    <div id="center1">
     </div>
 </div>
 
@@ -27,6 +27,7 @@ var workflowForm;
         statemachineEditor.draw();
         var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
         menu.setMessages(${messages});
+        menu.setEditor(statemachineEditor)
         menu.draw();
 	}
 
