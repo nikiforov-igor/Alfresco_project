@@ -9,20 +9,33 @@
 .ft {
     margin-top:1em;
 }
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover  {
-    background-color:transparent;
-}
+/*.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover  {*/
+    /*background-color:transparent;*/
+/*}*/
 .dropTarget{
     background-color:yellow;
 }
-.ygtvfocus{
-	background-color:white!important;
+#dictionary .ygtvfocus,
+#dictionary .ygtvfocus .ygtvlabel,
+#dictionary .ygtvfocus .ygtvlabel:link,
+#dictionary .ygtvfocus .ygtvlabel:visited,
+#dictionary .ygtvfocus .ygtvlabel:hover{
+	background-color:white;
 }
-.ygtvfocus .ygtvlabel,
-.ygtvfocus .ygtvlabel:link,
-.ygtvfocus .ygtvlabel:visited,
-.ygtvfocus .ygtvlabel:hover{
-	background-color:white!important;
+
+.ygtv-highlight#dictionary .ygtv-highlight1,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvlabel,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvfocus,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvfocus .ygtvlabel,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
+.ygtv-highlight#dictionary .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover{
+	background-color:blue;
+	color:white;
+}
+
+#dictionary a.ygtvspacer {
+	text-decoration: none;
 }
 
 .tree .header-bar
