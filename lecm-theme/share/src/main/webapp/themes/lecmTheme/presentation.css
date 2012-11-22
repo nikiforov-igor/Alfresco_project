@@ -1640,32 +1640,31 @@ span.tree-picker-button .yui-button .first-child button {
 
 /* currentValueDisplay */
 
-/*div.currentValueDisplay span.viewmode-value {*/
-div.currentValueDisplay {
+div.currentValueDisplay,
+div.current-values {
     overflow: auto;
-    height: 100px;
+    min-height: 25px;
+    max-height: 100px;
     max-width: 294px;
     margin-top: 3px;
     border: 1px solid #CCC;
 }
 
-div.currentValueDisplay a.remove-item {
-    /*vertical-align: -webkit-baseline-middle;*/
+a.remove-item {
     background: url(images/remove-item.png) no-repeat right center;
     padding-left: 13px;
     padding-top: 13px;
     float: right;
 }
 
-div.currentValueDisplay div.association-auto-complete-selected-item,
-div.currentValueDisplay div.association-auto-complete-selected-item-even {
+div.association-auto-complete-selected-item,
+div.association-auto-complete-selected-item-even {
     height: 20px;
     border-bottom: 1px solid #CCC;
     color: #494949;
     padding: 5px 5px 0px;
 }
 
-div.currentValueDisplay div.association-auto-complete-selected-item-even {
-    /*background-color: #fa8072;*/
+div.association-auto-complete-selected-item-even {
     background-color: #E4E4E4;
 }

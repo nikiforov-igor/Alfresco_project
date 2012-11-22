@@ -117,7 +117,7 @@
             <@renderTreePickerDialogHTML controlId true/>
         </div>
 
-        <div class="currentValueDisplay" id="${controlId}-currentValueDisplayDiv">
+        <div class="currentValueDisplay">
             <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
         </div>
     </#if>

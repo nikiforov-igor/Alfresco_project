@@ -1022,6 +1022,9 @@ LogicECM.module = LogicECM.module || {};
             var items = this.selectedItems;
             var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
+            Dom.get(fieldId).className = 'currentValueDisplay';
+
+            var num = 0;
             for (i in items) {
 
                 if (this.options.plane) {
@@ -1036,10 +1039,10 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
 
+                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+
                 Dom.get(fieldId).innerHTML
-                    += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
-                    + 'width="16" alt="" title="' + displayName + '"> ' + displayName + ' '
-                    + this.getRemoveButtonHTML(items[i]) + '</div>';
+                    += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
                 YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
             }
         },
@@ -1058,8 +1061,7 @@ LogicECM.module = LogicECM.module || {};
 
         getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node)
         {
-            return '<a href="#" class="remove-item" id="t-' + this.options.controlId + node.nodeRef
-                + '"><img src="/share/res/components/images/remove-icon-16.png" width="16"/></a>';
+            return '<a href="#" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + '"></a>';
         },
 
         attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(node)
@@ -1075,6 +1077,7 @@ LogicECM.module = LogicECM.module || {};
 
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
             el.innerHTML = '';
+            var num = 0;
             for (var i in this.selectedItems) {
                 if (this.options.plane) {
                     var displayName = this.selectedItems[i].name;
@@ -1088,8 +1091,8 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
 
-                el.innerHTML += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.smallItemIcon + '" '
-                    + 'width="16" alt="" title="' + displayName + '"> ' + displayName + ' </div>';
+                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+                el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' </div>';
             }
 
             if(!this.options.disabled)
