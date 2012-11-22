@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | Модель данных для делегирования полномочий
+ | lecm-d8n сокращение от lecm-delegation
+ | 8 - это кол-во букв в слове DelegatioN между d и n
+-->
+<model name="lecm-d8n:delegation-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Business authority delegation model</description>
+	<author>vmalygin</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Импорт модели данных оргструктуры -->
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<!-- Импорт модели данных бизнес ролей -->
+		<import uri="http://www.it.ru/logicECM/model/business-role/1.0" prefix="lecm-br"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/delegation/1.0" prefix="lecm-d8n"/>
+	</namespaces>
+
+	<!-- Type and Aspect definitions go here -->
+	<types>
+		<!--
+		 | Контейнер для хранения параметров делегирования
+		 | target показывает что в нее можно положить 0..N параметров делегирования
+		 | source показывает что параметры делегирования нельзя положить в любую другую папку
+		-->
+		<type name="lecm-d8n:delegation-opts-container">
+			<parent>cm:folder</parent>
+			<associations>
+				<child-association name="lecm-d8n:delegation-opts-assoc">
+					<source>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-d8n:delegation-opts</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+		</type>
+
+		<!--
+		 | Доверенность
+		 | задает связь между указанность бизнес-ролью и сотрудником
+		-->
+		<type name="lecm-d8n:procuracy">
+			<parent>cm:content</parent>
+			<associations>
+				<!-- бизнес роль -->
+				<association name="lecm-d8n:business-role-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-br:business-role</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- сотрудник который является доверенным лицом -->
+				<association name="lecm-d8n:trustee-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+		<!--
+		 | Параметры делегирования
+		-->
+		<type name="lecm-d8n:delegation-opts">
+			<parent>cm:folder</parent>
+			<properties>
+				<!-- передавать права на документы подчиненных -->
+				<property name="lecm-d8n:delegation-opts-can-transfer-rights">
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- делегировать все функции -->
+				<property name="lecm-d8n:delegation-opts-can-delegate-all">
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- статус параметров делегирования -->
+				<property name="lecm-d8n:delegation-opts-status">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>NOT_SET</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint name="lecm-d8n:delegation-opts-status-constraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>NEW</value> <!-- новое, свежесозданное делегирование -->
+									<value>ACTIVE</value> <!-- действующее делегирование -->
+									<value>REVOKED</value> <!-- аннулированное делегирование -->
+									<value>CLOSED</value> <!-- завершенное, закрытое делегирование  -->
+									<value>NOT_SET</value> <!-- ненастроенное делегирование  -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+			<associations>
+				<!-- делегирующее лицо. Тот человек, чьи бизнес роли и права будут переданы -->
+				<association name="lecm-d8n:delegation-opts-owner-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- коллекция доверенностей -->
+				<child-association name="lecm-d8n:delegation-opts-procuracy-assoc">
+					<source>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-d8n:procuracy</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+			<!--
+			 | ссылка на автора
+			 | Автор это пользователь системы который создал эти самые параметры делегирования
+			 | Вот тут конечно вопрос тот еще...Если параметры делегирования создаются автоматически,
+			 | то о каком авторе может идти речь? По идее автором должен быть или технолог или делегирующее лицо
+			-->
+			<mandatory-aspects>
+				<aspect>cm:author</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+</model>
+
+
+

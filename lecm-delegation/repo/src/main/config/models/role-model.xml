@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | Модель данных для бизнес ролей
+ | это не боевая модель, а заглушечная чтобы хоть какие-то бизнес роли завести в системе
+-->
+<model name="lecm-br:business-role-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Business role model</description>
+	<author>vmalygin</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/business-role/1.0" prefix="lecm-br"/>
+	</namespaces>
+
+	<!-- Type and Aspect definitions go here -->
+	<types>
+		<!--
+		 | папка-контейнер для бизнес ролей
+		 | target показывает что в нее можно положить 0..N бизнес ролей
+		 | source показывает что бизнес роль нельзя положить в любую другую папку
+		-->
+		<type name="lecm-br:business-role-container">
+			<parent>cm:folder</parent>
+			<associations>
+				<child-association name="lecm-br:business-role-assoc">
+					<source>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-br:business-role</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+		</type>
+
+		<!--
+		 | бизнес-роль
+		 | состоит только из одного аттрибута - название бизнес роли
+		 | нужна для тестовых целей
+		-->
+		<type name="lecm-br:business-role">
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-br:business-role-name">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>
