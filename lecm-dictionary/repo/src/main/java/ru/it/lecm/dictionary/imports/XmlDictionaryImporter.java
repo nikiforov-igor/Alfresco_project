@@ -17,6 +17,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс загрузчик справочника из XML описания
+ */
 public class XmlDictionaryImporter {
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
@@ -24,6 +27,13 @@ public class XmlDictionaryImporter {
 	private QName itemsType = null;
 	private InputStream inputStream;
 
+	/**
+	 * Конструктор загрузчика XML
+	 * @param inputStream входной XML поток
+	 * @param repositoryHelper      repositoryHelper
+	 * @param nodeService           nodeService
+	 * @param namespaceService      namespaceService
+	 */
 	public XmlDictionaryImporter(InputStream inputStream, Repository repositoryHelper, NodeService nodeService, NamespaceService namespaceService) {
 		this.inputStream = inputStream;
 		this.repositoryHelper = repositoryHelper;
@@ -31,7 +41,20 @@ public class XmlDictionaryImporter {
 		this.namespaceService = namespaceService;
 	}
 
+	/**
+	 * Считывание справочника
+	 * @throws XMLStreamException
+	 */
 	public void readDictionary() throws XMLStreamException {
+		readDictionary(false);
+	}
+
+	/**
+	 * Считывание справочника
+	 * @param doNotUpdateIfExist не обновлять, если такой справочник уже существует, иначе обновить свойства справочника и элементы
+	 * @throws XMLStreamException
+	 */
+	public void readDictionary(boolean doNotUpdateIfExist) throws XMLStreamException {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
 		NodeRef parentNodeRef;
@@ -43,6 +66,9 @@ public class XmlDictionaryImporter {
 		}
 		if (str.equals(ExportNamespace.TAG_DICTIONARY)) {
 			String dictionaryName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
+			if (dictionaryName == null || (doNotUpdateIfExist && nodeService.getChildByName(getDictionariesRoot(), ContentModel.ASSOC_CONTAINS, dictionaryName) != null)) {
+				return;
+			}
 			xmlr.nextTag();
 			Map<QName, Serializable> dicProps = getProperties(xmlr);
 			String type = dicProps.get(ExportNamespace.PROP_TYPE).toString();
@@ -51,6 +77,14 @@ public class XmlDictionaryImporter {
 			readItems(xmlr, parentNodeRef);
 		}
 	}
+
+	/** считывание элементов и создание
+	 *
+	 * @param xmlr XML Reader
+	 * @param parent ссылка на родительский элемент
+	 * @return true если элементы были создан
+	 * @throws XMLStreamException
+	 */
 
 	private boolean readItems(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
 		if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
@@ -68,6 +102,13 @@ public class XmlDictionaryImporter {
 		return true;
 	}
 
+	/** считывание элемента и создание
+	 *
+	 * @param xmlr XML Reader
+	 * @param parent ссылка на родительский элемент
+	 * @return true если элемент был создан
+	 * @throws XMLStreamException
+	 */
 	private boolean readItem(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
 		if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
 				&& xmlr.getLocalName().equals(ExportNamespace.TAG_ITEM))) {
@@ -84,6 +125,12 @@ public class XmlDictionaryImporter {
 		return true;
 	}
 
+	/** создание справочника, если существует - обновить свойства
+	 *
+	 * @param dictionaryName имя справочника
+	 * @param dicProps свойства
+	 * @return ссылка на справочник
+	 */
 	private NodeRef createDictionary(String dictionaryName, Map<QName, Serializable> dicProps) {
 		final NodeRef root = getDictionariesRoot();
 		NodeRef dictionary = nodeService.getChildByName(root, ContentModel.ASSOC_CONTAINS, dictionaryName);
@@ -102,6 +149,12 @@ public class XmlDictionaryImporter {
 		return dictionary;
 	}
 
+	/** создание элемента, если существует - обновить свойства\
+	 *
+	 * @param parentNodeRef родительский элемент/справочник
+	 * @param properties свойства
+	 * @return ссылка на элемент
+	 */
 	private NodeRef createItem(NodeRef parentNodeRef, Map<QName, Serializable> properties) {
 		String name = properties.get(ContentModel.PROP_NAME).toString();
 		NodeRef node = nodeService.getChildByName(parentNodeRef, ContentModel.ASSOC_CONTAINS, name);
@@ -116,13 +169,28 @@ public class XmlDictionaryImporter {
 		return node;
 	}
 
+	/** получение корня справочников, если нет - создать
+	 *
+	 * @return ссылку на корневой контейнер справочников
+	 */
 	private NodeRef getDictionariesRoot() {
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		return nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
-				ExportNamespace.DICTIONARIES_ROOT_NAME);
+		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, ExportNamespace.DICTIONARIES_ROOT_NAME);
+		if (dictionariesRoot == null) {
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+			properties.put(ContentModel.PROP_NAME, ExportNamespace.DICTIONARIES_ROOT_NAME);
+			dictionariesRoot = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, ExportNamespace.DICTIONARIES_ROOT_NAME), ContentModel.TYPE_FOLDER, properties).getChildRef();
+		}
+		return dictionariesRoot;
 	}
 
+	/** считываем свойства из XML
+	 *
+ 	 * @param xmlr XML Reader
+	 * @return карта свойств
+	 * @throws XMLStreamException
+	 */
 	private Map<QName, Serializable> getProperties(XMLStreamReader xmlr) throws XMLStreamException {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		String value;

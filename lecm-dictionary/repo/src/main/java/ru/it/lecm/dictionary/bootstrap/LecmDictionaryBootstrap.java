@@ -1,42 +1,37 @@
 package ru.it.lecm.dictionary.bootstrap;
 
-import com.thoughtworks.xstream.XStream;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.transaction.TransactionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.dictionary.imports.XmlDictionaryImporter;
 
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
  * User: AZinovin
  * Date: 03.10.12
  * Time: 11:19
  */
 public class LecmDictionaryBootstrap {
 
+	private static final Log log = LogFactory.getLog(LecmDictionaryBootstrap.class);
+
 	NodeService nodeService;
 	Repository repositoryHelper;
 
 	private List<String> dictionaries;
-	private static final String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
-	private static final QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
-	private static final QName DESCRIPTION = QName.createQName(DICTIONARY_NAMESPACE_URI, "description");
-	private static final QName TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
-	private static final QName ATTRIBUTE_FOR_SHOW = QName.createQName(DICTIONARY_NAMESPACE_URI, "attributeForShow");
-	private static final QName PLANE = QName.createQName(DICTIONARY_NAMESPACE_URI, "plane");
-	private static final QName SHOW_CONTROL_IN_SEPARATE_WINDOW = QName.createQName(DICTIONARY_NAMESPACE_URI, "show_control_in_separate_window");
 	private TransactionService transactionService;
-	private final static String DICTIONARIES_ROOT_NAME = "Dictionary";
+	private NamespaceService namespaceService;
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setDictionaries(List<String> dictionaries) {
 		this.dictionaries = dictionaries;
 	}
@@ -49,55 +44,44 @@ public class LecmDictionaryBootstrap {
 		this.repositoryHelper = repositoryHelper;
 	}
 
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
 	public void bootstrap() {
-		if (dictionaries != null) {
-			for (String dictionary : dictionaries) {
-				XStream xStream = new XStream();
-				xStream.alias("dictionary", DictionaryDescriptor.class);
-				InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
-				DictionaryDescriptor dictionaryDescriptor = (DictionaryDescriptor) xStream.fromXML(inputStream);
-				createDictionary(dictionaryDescriptor);
+		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
+			@Override
+			public Object doWork() throws Exception {
+				if (dictionaries != null) {
+					for (final String dictionary : dictionaries) {
+						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+							@Override
+							public Object execute() throws Throwable {
+								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
+								try {
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, repositoryHelper, nodeService, namespaceService);
+									importer.readDictionary(true);
+								} catch (XMLStreamException e) {
+									log.warn("Cann not create dictionary: " + dictionary);
+								} finally {
+									try {
+										if (inputStream != null) {
+											inputStream.close();
+										}
+									} catch (IOException ignored) {
+
+									}
+								}
+								return "ok";
+							}
+						});
+					}
+				}
+				return null;  //To change body of implemented methods use File | Settings | File Templates.
 			}
-		}
-	}
+		};
+		AuthenticationUtil.runAsSystem(raw);
 
-	private void createDictionary(final DictionaryDescriptor dictionaryDescriptor) {
-		final NodeRef root = getDictionariesRoot();
-		if (nodeService.getChildByName(root, ContentModel.ASSOC_CONTAINS, dictionaryDescriptor.getName()) == null) {
-			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-				@Override
-				public Object execute() throws Throwable {
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
-					properties.put(ContentModel.PROP_NAME, dictionaryDescriptor.getName());
-					properties.put(DESCRIPTION, dictionaryDescriptor.getDescription());
-					properties.put(TYPE, dictionaryDescriptor.getType());
-					properties.put(SHOW_CONTROL_IN_SEPARATE_WINDOW, dictionaryDescriptor.isShowControlInSeparateWindow());
-					properties.put(ATTRIBUTE_FOR_SHOW, dictionaryDescriptor.getAttributeForShow());
-					properties.put(PLANE, dictionaryDescriptor.isPlane());
-					nodeService.createNode(root, ContentModel.ASSOC_CONTAINS, QName.createQName(DICTIONARY_NAMESPACE_URI, dictionaryDescriptor.getName()), DICTIONARY, properties);
-					return "ok";
-				}
-			});
-		}
-	}
-
-
-	private NodeRef getDictionariesRoot() {
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
-		if (dictionariesRoot == null) {
-			transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-				@Override
-				public Object execute() throws Throwable {
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-					properties.put(ContentModel.PROP_NAME, DICTIONARIES_ROOT_NAME);
-                    nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, QName.createQName(DICTIONARY_NAMESPACE_URI, DICTIONARIES_ROOT_NAME), ContentModel.TYPE_FOLDER, properties);
-					return "ok";
-				}
-			});
-		}
-		return nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
 	}
 
 	public void setTransactionService(TransactionService transactionService) {

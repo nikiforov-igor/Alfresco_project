@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dictionary xmlns="http://www.it.ru/lecm/dictionary/descriptor/1.0">
-    <name>Адрес</name>
-    <description>Адрес</description>
-    <type>lecm-dic-address:dictionary_values</type>
-    <attributeForShow>cm:name</attributeForShow>
-    <plane>false</plane>
-    <showControlInSeparateWindow>false</showControlInSeparateWindow>
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Адрес">
+	<property name="lecm-dic:attributeForShow">cm:name</property>
+	<property name="lecm-dic:type">lecm-dic-address:dictionary_values</property>
+	<property name="lecm-dic:active">true</property>
+	<property name="lecm-dic:show_control_in_separate_window">false</property>
+	<property name="lecm-dic:plane">false</property>
+	<property name="lecm-dic:description">Адрес</property>
 </dictionary>
