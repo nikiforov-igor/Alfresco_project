@@ -356,7 +356,7 @@ LogicECM.module = LogicECM.module || {};
 
             getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)
             {
-                return '<a href="#" class="remove-item" id="ac-' + this.controlId + node.nodeRef + '"></a>';
+                return '<a href="javascript:void(0);" class="remove-item" id="ac-' + this.controlId + node.nodeRef + '"></a>';
             },
 
             attachRemoveItemClickListener: function AssociationAutoComplete_attachRemoveItemClickListener(node)
@@ -377,9 +377,18 @@ LogicECM.module = LogicECM.module || {};
                 return this.options.multipleSelectMode || (Object.keys(this.selectedItems).length == 0);
             },
 
+            canCurrentValuesShow: function() {
+                if (this.options.multipleSelectMode) {
+                    return true;
+                }
+
+                return Object.keys(this.selectedItems).length > 0;
+            },
+
             updateInputUI: function() {
                 Dom.get(this.controlId + "-autocomplete-input").value = "";
                 Dom.setStyle(Dom.get(this.controlId + "-autocomplete"), "display", this.canInputShow() ? "block" : "none");
+                Dom.setStyle(Dom.get(this.controlId + "-currentValueDisplayDiv"), "display", this.canCurrentValuesShow() ? "block" : "none");
             },
 
             updateCurrentDisplayValue: function() {

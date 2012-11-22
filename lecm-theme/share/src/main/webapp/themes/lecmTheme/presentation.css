@@ -1580,13 +1580,17 @@ input[type="text"] {
     color: #494949;
 }
 
+div.form-field div.yui-ac {
+    padding-bottom: 4px;
+}
+
 div.form-field input[type="text"] {
     height:25px;
     padding: 0;
 }
 
 div.form-field input[type="text"].yui-ac-input {
-    min-width: 260px;
+    min-width: 320px;
     width: 0;
     vertical-align: bottom;
     position: static;
@@ -1601,7 +1605,7 @@ div.form-field select {
     color: #494949;
 
     height:28px;
-    min-width: 262px;
+    min-width: 323px;
     vertical-align: bottom;
     padding: 0;
     margin-right: 2px;
@@ -1640,14 +1644,29 @@ span.tree-picker-button .yui-button .first-child button {
 
 /* currentValueDisplay */
 
+div.current-values,
 div.currentValueDisplay,
-div.current-values {
+div.currentValueDisplayInvisible {
+    border-radius: 3px;
     overflow: auto;
     min-height: 25px;
     max-height: 100px;
-    max-width: 294px;
-    margin-top: 3px;
+    width: 320px;
+    margin-right: 4px;
     border: 1px solid #CCC;
+}
+
+div.current-values {
+    float: left;
+}
+
+div.currentValueDisplayInvisible {
+    display: none;
+}
+
+div.object-finder .show-picker
+{
+    clear: initial;
 }
 
 a.remove-item {

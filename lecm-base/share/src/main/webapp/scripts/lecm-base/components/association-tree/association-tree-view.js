@@ -1061,7 +1061,7 @@ LogicECM.module = LogicECM.module || {};
 
         getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node)
         {
-            return '<a href="#" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + '"></a>';
+            return '<a href="javascript:void(0);" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + '"></a>';
         },
 
         attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(node)
