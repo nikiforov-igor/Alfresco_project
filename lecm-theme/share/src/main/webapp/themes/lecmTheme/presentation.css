@@ -1568,6 +1568,12 @@ div.theme-bg-color-7
    border: 1px solid #DDD6A0;
 }
 
+.plane-dictionary-content{
+	margin-left: 5px;
+}
+
+/* input text */
+
 input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -1584,9 +1590,9 @@ div.form-field input[type="text"].yui-ac-input {
     width: 0;
     vertical-align: bottom;
     position: static;
-
-    /*background-color: yellow;*/
 }
+
+/* select */
 
 div.form-field select {
     border: 1px solid #ccc;
@@ -1599,9 +1605,9 @@ div.form-field select {
     vertical-align: bottom;
     padding: 0;
     margin-right: 2px;
-
-    /*background-color: #9acd32;*/
 }
+
+/* button */
 
 .yui-push-button,
 .yui-button .first-child {
@@ -1611,25 +1617,55 @@ div.form-field select {
 div.form-field .yui-push-button,
 div.form-field .yui-button .first-child {
     height: 26px;
+    color: #494949;
+    text-align: center;
 }
 
 span.create-new-button .yui-button {
     margin: 0;
 }
 
-span.create-new-button .yui-button .first-child {
-    background: url(images/create_new_button.png) no-repeat center center;
+span.create-new-button .yui-button .first-child,
+span.tree-picker-button .yui-button .first-child {
     width: 26px;
 }
 
-span.tree-picker-button .yui-button .first-child {
-    background-color: #C5DA5D;
+span.create-new-button .yui-button .first-child {
+    background: url(images/create-new-button.png) no-repeat center center;
 }
 
 span.tree-picker-button .yui-button .first-child button {
-    color: white;
     font-weight: 900;
 }
-.plane-dictionary-content{
-	margin-left: 5px;
+
+/* currentValueDisplay */
+
+/*div.currentValueDisplay span.viewmode-value {*/
+div.currentValueDisplay {
+    overflow: auto;
+    height: 100px;
+    max-width: 294px;
+    margin-top: 3px;
+    border: 1px solid #CCC;
+}
+
+div.currentValueDisplay a.remove-item {
+    /*vertical-align: -webkit-baseline-middle;*/
+    background: url(images/remove-item.png) no-repeat right center;
+    padding-left: 13px;
+    padding-top: 13px;
+    float: right;
+}
+
+div.currentValueDisplay div.association-auto-complete-selected-item,
+div.currentValueDisplay div.association-auto-complete-selected-item-even {
+    height: 20px;
+    border-bottom: 1px solid #CCC;
+    color: #494949;
+    padding: 5px 5px 0px;
+}
+
+div.currentValueDisplay div.association-auto-complete-selected-item-even {
+    /*background-color: #fa8072;*/
+    background-color: #E4E4E4;
 }

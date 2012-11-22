@@ -105,7 +105,7 @@
         <div id="${controlId}-autocomplete">
             <input id="${controlId}-autocomplete-input" type="text"/>
             <span class="tree-picker-button">
-                <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+                <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
             </span>
             <#if showCreateNewLink>
                 <span class="create-new-button">
@@ -117,7 +117,9 @@
             <@renderTreePickerDialogHTML controlId true/>
         </div>
 
-        <span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
+        <div class="currentValueDisplay" id="${controlId}-currentValueDisplayDiv">
+            <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
+        </div>
     </#if>
     <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
 </div>

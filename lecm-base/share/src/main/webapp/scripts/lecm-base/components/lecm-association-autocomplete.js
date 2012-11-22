@@ -344,19 +344,19 @@ LogicECM.module = LogicECM.module || {};
                 var items = this.selectedItems;
                 var fieldId = this.controlId + "-currentValueDisplay";
                 Dom.get(fieldId).innerHTML = '';
+
+                var num = 0;
                 for (var i in items) {
+                    var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
                     Dom.get(fieldId).innerHTML
-                        += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.itemIcon + '" '
-                        + 'width="16" alt="" title="' + items[i].name + '"> ' + items[i].name + ' '
-                        + this.getRemoveButtonHTML(items[i]) + '</div>';
+                        += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + items[i].nodeRef, this.attachRemoveItemClickListener, items[i], this);
                 }
             },
 
             getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)
             {
-                return '<a href="#" class="remove-item" id="ac-' + this.controlId + node.nodeRef
-                    + '"><img src="/share/res/components/images/remove-icon-16.png" width="16"/></a>';
+                return '<a href="#" class="remove-item" id="ac-' + this.controlId + node.nodeRef + '"></a>';
             },
 
             attachRemoveItemClickListener: function AssociationAutoComplete_attachRemoveItemClickListener(node)
@@ -387,10 +387,13 @@ LogicECM.module = LogicECM.module || {};
 
                 el = Dom.get(this.controlId + "-currentValueDisplay");
                 el.innerHTML = '';
+
+                var num = 0;
                 for (var i in this.selectedItems) {
-                    el.innerHTML += '<div><img src="' + Alfresco.constants.URL_RESCONTEXT + this.options.itemIcon + '" '
-                        + 'width="16" alt="" title="' + this.selectedItems[i].name + '"> ' + this.selectedItems[i].name + ' </div>';
+                    var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+                    el.innerHTML += '<div class="' + divClass + '"> ' + this.selectedItems[i].name + ' </div>';
                 }
+
             },
 
             // Updates all form fields

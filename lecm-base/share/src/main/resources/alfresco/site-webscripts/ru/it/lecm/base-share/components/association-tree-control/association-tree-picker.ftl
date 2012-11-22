@@ -34,7 +34,7 @@
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
                 <div id="${controlId}-itemGroupActions" class="show-picker">
                     <span class="tree-picker-button">
-                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="${field.control.params.selectActionLabel!msg("button.select")}"/>
+                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
                     </span>
                     <#if showCreateNewLink>
                         <span class="create-new-button">
