@@ -182,7 +182,7 @@ body{
 .sticky-footer a:hover,
 .yui-panel-container a:hover
 {
-   text-decoration: underline;
+   text-decoration: none;
 }
 
 .sticky-wrapper h1,
