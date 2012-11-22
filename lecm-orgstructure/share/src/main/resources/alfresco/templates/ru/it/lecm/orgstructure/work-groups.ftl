@@ -25,13 +25,13 @@
 	<div class="yui-t1" id="orgstructure-work-groups">
 		<div id="yui-main">
 			<div class="yui-b" id="alf-content">
-				<@region id="groups-toolbar" scope="template" />
-				<@region id="groups-grid" scope="template" />
+				<@region id="workforces-toolbar" scope="template" />
+				<@region id="workforces-grid" scope="template" />
 			</div>
 		</div>
 		<div id="alf-filters">
-			<@region id="workforces-toolbar" scope="template" />
-			<@region id="workforces-grid" scope="template" />
+			<@region id="groups-toolbar" scope="template" />
+			<@region id="groups-grid" scope="template" />
 		</div>
 	</div>
 </@bpage.basePage>

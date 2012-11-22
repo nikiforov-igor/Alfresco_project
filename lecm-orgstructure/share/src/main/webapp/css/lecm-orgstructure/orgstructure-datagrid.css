@@ -1,0 +1,8 @@
+.datagrid a.action-link-workGroup, .datagrid a.action-link-workForce {
+    background-position: 4px 1px;
+    background-repeat: no-repeat;
+    border: 1px solid transparent;
+    display: block;
+    min-height: 16px;
+    padding: 2px 0 2px 24px;
+}

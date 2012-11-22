@@ -7,7 +7,6 @@
             <url>/lecm/orgstructure/datagrid</url>
             <properties>
                 <pagination>true</pagination>
-                <type>orgstructure</type>
             </properties>
         </component>
         <!-- Toolbar -->

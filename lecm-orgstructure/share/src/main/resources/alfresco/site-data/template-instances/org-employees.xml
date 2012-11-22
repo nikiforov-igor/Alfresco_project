@@ -15,7 +15,6 @@
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
                 <pagination>true</pagination>
-                <type>org-employees</type>
             </properties>
         </component>
         <!-- Title -->

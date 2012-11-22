@@ -3,7 +3,7 @@
 <#assign id = args.htmlid>
 
 <div class="yui-t1" id="orgstructure-employees-grid">
-	<div id="yui-main">
+	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content" style="margin-left: 0;">
 			<!-- include base datagrid markup-->
 		<@grid.datagrid id=id showSearchBlock=true showViewForm=true>

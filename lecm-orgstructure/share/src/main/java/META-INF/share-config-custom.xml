@@ -324,7 +324,6 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                 </field-visibility>
             </form>
@@ -383,6 +382,12 @@
                         </control>
                     </field>
                 </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

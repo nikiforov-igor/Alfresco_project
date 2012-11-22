@@ -4,7 +4,7 @@
 <#assign showSearchBlock = true/>
 
 <div class="yui-t1" id="orgstructure-grid-with-tree">
-	<div id="yui-main">
+	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
         <!-- include base datagrid markup-->
 		<@grid.datagrid id showSearchBlock>

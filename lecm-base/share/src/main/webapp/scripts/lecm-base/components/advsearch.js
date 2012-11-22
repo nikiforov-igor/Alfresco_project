@@ -311,7 +311,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onSearch:function AdvSearch_onSearch(layer, args) {
                 var obj = args[1];
-                this._performSearch(obj);
+                if (!obj.bubblingLabel || obj.bubblingLabel == this.datagridMeta.bubblingLabel){
+                    this._performSearch(obj);
+                }
             },
 
             _buildSearchParams:function ADVSearch__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {

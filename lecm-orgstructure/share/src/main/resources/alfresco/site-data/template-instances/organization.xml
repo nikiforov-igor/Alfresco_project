@@ -10,9 +10,6 @@
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
-            <properties>
-                <type>organization</type>
-            </properties>
         </component>
         <!-- Title -->
         <component>

@@ -49,8 +49,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
 
         // Decoupled event listeners
-        //YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
-        //YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         return this;
@@ -72,7 +70,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @property options
              * @type object
              */
-            options:{},
+            options:{
+                bubblingLabel: null
+            },
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -114,12 +114,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }, "keydown").enable();
 
                 // Reference to Data Grid component
-                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
+                this.modules.dataGrid = this.findGrid("LogicECM.module.Base.DataGrid", this.options.bubblingLabel);
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
+            // Добавление новой ноды
             _createNode:function (itemType, destination, pattern, successEvent, successMsg, failureMsg) {
                 var toolbar = this;
                 var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
@@ -152,15 +153,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         },
                         onSuccess:{
                             fn:function DataListToolbar_onNewRow_success(response) {
-                                if (successEvent){
+                                if (successEvent){// вызов дополнительного события
                                     YAHOO.Bubbling.fire("" + successEvent,
                                         {
-                                            nodeRef:response.json.persistedObject
+                                            nodeRef:response.json.persistedObject,
+                                            bubblingLabel:toolbar.options.bubblingLabel
                                         });
                                 }
-                                YAHOO.Bubbling.fire("dataItemCreated",
+                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                     {
-                                        nodeRef:response.json.persistedObject
+                                        nodeRef:response.json.persistedObject,
+                                        bubblingLabel:toolbar.options.bubblingLabel
                                     });
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
@@ -179,7 +182,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             scope:this
                         },
                         doBeforeFormSubmit:{
-                            fn:function GenerateElementName(form) {
+                            fn:function GenerateElementName(form) { // сгенерировать имя перед сохранением
                                 generateNodeName(form, pattern, ",", false);
                             },
                             scope:this
@@ -189,12 +192,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }, /**
 
             * New Row button click handler
-             *
-             * @method onNewRow
-             * @param e {object} DomEvent
-             * @param p_obj {object} Object passed back from addListener method
              */
-            onNewRow:function DataListToolbar_onNewRow(e, p_obj) {
+            onNewRow:function OrgstructureToolbar_onNewRow(e, p_obj) {
                 var orgMetadata = this.modules.dataGrid.datagridMeta,
                     destination = orgMetadata.nodeRef,
                     itemType = orgMetadata.itemType,
@@ -204,13 +203,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             /**
-             * New Row button click handler
-             *
-             * @method onNewRow
-             * @param e {object} DomEvent
-             * @param p_obj {object} Object passed back from addListener method
+             * Создание нового подразделения
              */
-            onNewUnit:function DataListToolbar_onNewRow(e, p_obj) {
+            onNewUnit:function OrgstructureToolbar_onNewUnit(e, p_obj) {
                 var meta = this.modules.dataGrid.datagridMeta;
                 if (meta != null && meta.nodeRef.indexOf(":") > 0) {
                     var destination = meta.nodeRef;
@@ -224,47 +219,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         });
                 }
             },
-            /**
-             * Selected Items button click handler
-             *
-             * @method onSelectedItems
-             * @param sType {string} Event type, e.g. "click"
-             * @param aArgs {array} Arguments array, [0] = DomEvent, [1] = EventTarget
-             * @param p_obj {object} Object passed back from subscribe method
-             */
-            /*onSelectedItems:function DataListToolbar_onSelectedItems(sType, aArgs, p_obj) {
-                var domEvent = aArgs[0],
-                    eventTarget = aArgs[1];
-
-                // Check mandatory docList module is present
-                var dataGrid = this.modules.dataGrid;
-                if (dataGrid) {
-                    // Get the function related to the clicked item
-                    var fn = Alfresco.util.findEventClass(eventTarget);
-                    if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), dataGrid.datagridMeta.actionsConfig, null);
-                    }
-                }
-
-                Event.preventDefault(domEvent);
-            },*/
-
-            /**
-             * Deselect currectly selected assets.
-             *
-             * @method onActionDeselectAll
-            onActionDeselectAll:function DataListToolbar_onActionDeselectAll() {
-                this.modules.dataGrid.selectItems("selectNone");
-            },*/
-
-            /**
-             * User Access event handler
-             *
-             * @method onUserAccess
-             * @param layer {object} Event fired
-             * @param args {array} Event parameters (depends on event type)
-             */
-            onUserAccess:function DataListToolbar_onUserAccess(layer, args) {
+            // разблокировать кнопки согласно правам
+            onUserAccess:function OrgstructureToolbar_onUserAccess(layer, args) {
                 var obj = args[1];
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
@@ -309,128 +265,95 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             },
 
-            /**
-             * Selected Items Changed event handler.
-             * Determines whether to enable or disable the multi-item action drop-down
-             *
-             * @method onSelectedItemsChanged
-             * @param layer {object} Event fired
-             * @param args {array} Event parameters (depends on event type)
-             */
-            /*onSelectedItemsChanged:function DataListToolbar_onSelectedItemsChanged(layer, args) {
-                if (this.modules.dataGrid) {
-                    var items = this.modules.dataGrid.getSelectedItems(), item,
-                        userAccess = {}, itemAccess, index,
-                        menuItems = this.widgets.selectedItems.getMenu().getItems(), menuItem,
-                        actionPermissions, disabled,
-                        i, ii;
-
-                    // Check each item for user permissions
-                    for (i = 0, ii = items.length; i < ii; i++) {
-                        item = items[i];
-
-                        // Required user access level - logical AND of each item's permissions
-                        itemAccess = item.permissions.userAccess;
-                        for (index in itemAccess) {
-                            if (itemAccess.hasOwnProperty(index)) {
-                                userAccess[index] = (userAccess[index] === undefined ? itemAccess[index] : userAccess[index] && itemAccess[index]);
-                            }
-                        }
-                    }
-
-                    // Now go through the menu items, setting the disabled flag appropriately
-                    for (index in menuItems) {
-                        if (menuItems.hasOwnProperty(index)) {
-                            // Defaulting to enabled
-                            menuItem = menuItems[index];
-                            disabled = false;
-
-                            if (menuItem.element.firstChild) {
-                                // Check permissions required - stored in "rel" attribute in the DOM
-                                if (menuItem.element.firstChild.rel && menuItem.element.firstChild.rel !== "") {
-                                    // Comma-separated indicates and "AND" match
-                                    actionPermissions = menuItem.element.firstChild.rel.split(",");
-                                    for (i = 0, ii = actionPermissions.length; i < ii; i++) {
-                                        // Disable if the user doesn't have ALL the permissions
-                                        if (!userAccess[actionPermissions[i]]) {
-                                            disabled = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                menuItem.cfg.setProperty("disabled", disabled);
-                            }
-                        }
-                    }
-                    this.widgets.selectedItems.set("disabled", (items.length === 0));
-                }
-            },*/
-
+            // инициализация грида
             onInitDataGrid: function OrgstructureToolbar_onInitDataGrid(layer, args) {
                 var datagrid = args[1].datagrid;
-                this.modules.dataGrid = datagrid;
+                if (!this.options.bubblingLabel || this.options.bubblingLabel == datagrid.options.bubblingLabel){
+                    this.modules.dataGrid = datagrid;
+                }
             },
 
+            // по нажатию на кнопку Поиск
             onSearchClick:function OrgstructureToolbar_onSearch() {
-                if (this.modules.dataGrid) {
-                    var searchTerm = Dom.get("full-text-search").value;
+                var searchTerm = Dom.get("full-text-search").value;
 
-                    var dataGrid = this.modules.dataGrid;
-                    var datagridMeta = dataGrid.datagridMeta;
+                var dataGrid = this.modules.dataGrid;
+                var datagridMeta = dataGrid.datagridMeta;
 
-                    if (searchTerm.length > 0) {
-                        var columns = dataGrid.datagridColumns;
+                var me = this;
+                if (searchTerm.length > 0) {
+                    var columns = dataGrid.datagridColumns;
 
-                        var fields = "";
-                        for (var i = 0; i < columns.length; i++) {
-                            if (columns[i].dataType == "text") {
-                                fields += columns[i].name + ",";
+                    var fields = "";
+                    for (var i = 0; i < columns.length; i++) {
+                        if (columns[i].dataType == "text") {
+                            fields += columns[i].name + ",";
+                        }
+                    }
+                    if (fields.length > 1) {
+                        fields = fields.substring(0, fields.length - 1);
+                    }
+                    var fullTextSearch = {
+                        parentNodeRef:datagridMeta.nodeRef,
+                        fields:fields,
+                        searchTerm:searchTerm
+                    };
+                    if (!datagridMeta.searchConfig) {
+                        datagridMeta.searchConfig = {};
+                    }
+                    datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
+                    datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+
+                    YAHOO.Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:datagridMeta,
+                            bubblingLable:me.options.bubblingLabel
+                        });
+
+                    YAHOO.Bubbling.fire("showFilteredLabel");
+                } else {
+                    var nodeRef = datagridMeta.nodeRef;
+                    if (!datagridMeta.searchConfig) {
+                        datagridMeta.searchConfig = {};
+                    }
+                    datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+                    datagridMeta.searchConfig.fullTextSearch = null;
+                    YAHOO.Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:datagridMeta,
+                            bubblingLabel:me.options.bubblingLabel
+                        });
+                    YAHOO.Bubbling.fire("hideFilteredLabel");
+                }
+            },
+
+            // клик на Атрибутивном Поиске
+            onExSearchClick:function OrgstructureToolbar_onExSearch() {
+                var grid = this.modules.dataGrid;
+                var advSearch = grid.modules.search;
+
+                advSearch.showDialog(grid.datagridMeta);
+            },
+
+            // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар
+            findGrid:function OrgstructureToolbar_findGrid(p_sName, bubblingLabel) {
+                var found = Alfresco.util.ComponentManager.find(
+                    {
+                        name:p_sName
+                    });
+                if (bubblingLabel) {
+                    for (var i = 0, j = found.length; i < j; i++) {
+                        var component = found[i];
+                        if (typeof component == "object" && component.options.bubblingLabel) {
+                            if (component.options.bubblingLabel == bubblingLabel) {
+                                return component;
                             }
                         }
-                        if (fields.length > 1) {
-                            fields = fields.substring(0, fields.length - 1);
-                        }
-                        var fullTextSearch = {
-                            parentNodeRef:datagridMeta.nodeRef,
-                            fields:fields,
-                            searchTerm:searchTerm
-                        };
-                        if (!datagridMeta.searchConfig) {
-                            datagridMeta.searchConfig = {};
-                        }
-                        datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
-                        datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
-
-                        YAHOO.Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:datagridMeta
-                            });
-
-                        YAHOO.Bubbling.fire("showFilteredLabel");
-                    } else {
-                        var nodeRef = datagridMeta.nodeRef;
-                        if (!datagridMeta.searchConfig) {
-                            datagridMeta.searchConfig = {};
-                        }
-                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
-                        datagridMeta.searchConfig.fullTextSearch = null;
-                        YAHOO.Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:datagridMeta
-                            });
-                        YAHOO.Bubbling.fire("hideFilteredLabel");
                     }
+                } else {
+                    return (typeof found[0] == "object" ? found[0] : null);
                 }
-            },
-
-            onExSearchClick:function OrgstructureToolbar_onExSearch() {
-                if (this.modules.dataGrid) {
-                    var grid = this.modules.dataGrid;
-                    var advSearch = grid.modules.search;
-
-                    advSearch.showDialog(grid.datagridMeta);
-                }
+                return null;
             }
         }, true);
 })();

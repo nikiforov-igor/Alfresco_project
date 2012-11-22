@@ -231,6 +231,9 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Участник рабочей группы -->

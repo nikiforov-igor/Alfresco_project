@@ -29,6 +29,7 @@ function main()
         }
     }
     model.showNewUnitBtn = showNewUnitBtn;
+    model.bubblingLabel = type;
 }
 
 main();

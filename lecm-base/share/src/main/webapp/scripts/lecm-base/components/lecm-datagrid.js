@@ -92,7 +92,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
          * Decoupled event listeners
          */
         Bubbling.on("activeGridChanged", this.onGridTypeChanged, this);
-        Bubbling.on("dataListDetailsUpdated", this.onDataGridDetailsUpdated, this);
         Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
         Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
@@ -178,7 +177,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @type int
                  * @default 3
                  */
-                splitActionsAt: 3
+                splitActionsAt: 3,
+
+                /**
+                 * Метка для bubbling. Используется для отрисовки датагрида. Следует передать в datagridMeta
+                 */
+                bubblingLabel: null
             },
 
             /**
@@ -428,7 +432,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         default:
                                             if (datalistColumn.type == "association")
                                             {
-                                                html += '<a href="' + Alfresco.util.siteURL((data.metadata == "container" ? 'folder' : 'document') + '-details?nodeRef=' + data.value) + '">';
+                                                html += '<a>';
                                                 html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/' + Alfresco.util.getFileIcon(data.displayValue, (data.metadata == "container" ? 'cm:folder' : null), 16) + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                                 html += ' ' + $html(data.displayValue) + '</a>'
                                             }
@@ -524,13 +528,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         if (typeof me[owner.className] == "function")
                         {
                             args[1].stop = true;
-                            var asset = me.widgets.dataTable.getRecord(args[1].target.offsetParent).getData();
-                            me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
+                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
+                            if (row) {
+                                var asset = row.getData();
+                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
+                            }
                         }
                     }
                     return true;
                 };
-                Bubbling.addDefaultAction("action-link", fnActionHandler);
+                Bubbling.addDefaultAction("action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
                 Bubbling.addDefaultAction("show-more", fnActionHandler);
 
                 // Actions module
@@ -1046,7 +1053,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         searchSort:datagridMeta.searchConfig.sort,
                                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                                         searchFilter:filter,
-                                        fullTextSearch:fullText
+                                        fullTextSearch:fullText,
+                                        bubblingLabel:me.options.bubblingLabel
                                     });
                                 }
                             }
@@ -1057,12 +1065,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Rendering complete event handler
                 dTable.subscribe("renderEvent", function () {
                     Alfresco.logger.debug("DataTable renderEvent");
-
-                    // IE6 fix for long filename rendering issue
-                    if (YAHOO.env.ua.ie < 7) {
-                        var ie6fix = dTable.getTableEl().parentNode;
-                        ie6fix.className = ie6fix.className;
-                    }
 
                     // Deferred functions specified?
                     for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
@@ -1112,7 +1114,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         searchSort:sorting,
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:filter,
-                        fullTextSearch:fullText
+                        fullTextSearch:fullText,
+                        bubblingLabel:me.options.bubblingLabel
                     });
             },
             /**
@@ -1371,34 +1374,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param layer {object} Event fired (unused)
              * @param args {array} Event parameters (unused)
              */
-            onGridTypeChanged: function DataGrid_onActiveDataListChanged(layer, args)
-            {
+            onGridTypeChanged:function DataGrid_onActiveDataListChanged(layer, args) {
                 var obj = args[1];
-                if ((obj !== null) && (obj.datagridMeta !== null))
-                {
-                    this.datagridMeta = obj.datagridMeta;
-                    // Could happen more than once, so check return value of fulfil()
-                    if (!this.deferredListPopulation.fulfil("onGridTypeChanged"))
-                    {
-                        this.populateDataGrid();
+                if ((obj !== null) && (obj.datagridMeta !== null)) {
+                    // Если метка не задана, или метки совпадают - дергаем метод
+                    var label = obj.bubblingLabel;
+                    if(this._hasEventInterest(label)){
+                        this.datagridMeta = obj.datagridMeta;
+                        this.datagridMeta.bubblingLabel = obj.bubblingLabel;
+                        // Could happen more than once, so check return value of fulfil()
+                        if (!this.deferredListPopulation.fulfil("onGridTypeChanged")) {
+                            this.populateDataGrid();
+                        }
                     }
-                }
-            },
-
-            /**
-             * Data List modified event handler
-             *
-             * @method onDataGridDetailsUpdated
-             * @param layer {object} Event fired (unused)
-             * @param args {array} Event parameters (unused)
-             */
-            onDataGridDetailsUpdated: function DataGrid_onDataGridDetailsUpdated(layer, args)
-            {
-                var obj = args[1];
-                if ((obj !== null) && (obj.datagridMeta !== null))
-                {
-                    this.dataListMeta = obj.datagridMeta;
-                    this.renderDataGridMeta();
                 }
             },
 
@@ -1411,11 +1399,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             onDataGridRefresh: function DataGrid_onDataGridRefresh(layer, args)
             {
-                this._updateDataGrid.call(this,
-                    {
-                        page: this.currentPage
-                    });
-                Bubbling.fire("itemsListChanged");
+                var obj = args[1];
+                if (!obj || this._hasEventInterest(obj.bubblingLabel)){
+                    this._updateDataGrid.call(this,
+                        {
+                            page: this.currentPage
+                        });
+                    Bubbling.fire("itemsListChanged");
+                }
             },
 
             /**
@@ -1425,28 +1416,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param layer {object} Event fired
              * @param args {array} Event parameters (depends on event type)
              */
-            onDataItemCreated: function DataGrid_onDataItemCreated(layer, args)
-            {
+            onDataItemCreated:function DataGrid_onDataItemCreated(layer, args) {
                 var obj = args[1];
-                if (obj && (obj.nodeRef !== null))
-                {
+                if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
                     var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
                     // Reload the node's metadata
                     Alfresco.util.Ajax.jsonPost(
                         {
-                            url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
-                            dataObj: this._buildDataGridParams(),
-                            successCallback:
-                            {
-                                fn: function DataGrid_onDataItemCreated_refreshSuccess(response)
-                                {
+                            url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
+                            dataObj:this._buildDataGridParams(),
+                            successCallback:{
+                                fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
                                     this.versionable = response.json.versionable;
                                     var item = response.json.item;
-                                    var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate()
-                                    {
+                                    var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
                                         var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
-                                        if (recordFound !== null)
-                                        {
+                                        if (recordFound !== null) {
                                             var el = this.widgets.dataTable.getTrEl(recordFound);
                                             Alfresco.util.Anim.pulse(el);
                                         }
@@ -1454,18 +1439,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     this.afterDataGridUpdate.push(fnAfterUpdate);
                                     this.widgets.dataTable.addRow(item);
                                 },
-                                scope: this
+                                scope:this
                             },
-                            failureCallback:
-                            {
-                                fn: function DataGrid_onDataItemCreated_refreshFailure(response)
-                                {
+                            failureCallback:{
+                                fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: this.msg("message.create.refresh.failure")
+                                            text:this.msg("message.create.refresh.failure")
                                         });
                                 },
-                                scope: this
+                                scope:this
                             }
                         });
                 }
@@ -1481,7 +1464,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onDataItemUpdated: function DataGrid_onDataItemUpdated(layer, args)
             {
                 var obj = args[1];
-                if (obj && (obj.item !== null))
+                if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.item !== null))
                 {
                     var recordFound = this._findRecordByParameter(obj.item.nodeRef, "nodeRef");
                     if (recordFound !== null)
@@ -1503,7 +1486,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args)
             {
                 var obj = args[1];
-                if (obj && (obj.items !== null))
+                if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items !== null))
                 {
                     var recordFound, el,
                         fnCallback = function(record)
@@ -1743,6 +1726,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return null;
             },
 
+            _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
+                if (!this.options.bubblingLabel || !bubbleLabel) {
+                    return true;
+                } else {
+                    return this.options.bubblingLabel == bubbleLabel;
+                }
+            },
             //Действия по умолчанию. В конкретных реализациях ДатаГрида эти методы при необходимости следует переопределять
             /**
              * Delete item(s).
@@ -1775,7 +1765,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 event:{
                                     name:"dataItemsDeleted",
                                     obj:{
-                                        items:items
+                                        items:items,
+                                        bubblingLabel:me.options.bubblingLabel
                                     }
                                 },
                                 message:this.msg("message.delete.success", items.length),
@@ -1830,6 +1821,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param p_items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
              */
             onActionDuplicate:function DataListActions_onActionDuplicate(p_items) {
+                var me = this;
                 var items = YAHOO.lang.isArray(p_items) ? p_items : [p_items],
                     destinationNodeRef = new Alfresco.util.NodeRef(this.modules.dataGrid.datagridMeta.nodeRef),
                     nodeRefs = [];
@@ -1844,7 +1836,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             event:{
                                 name:"dataItemsDuplicated",
                                 obj:{
-                                    items:items
+                                    items:items,
+                                    bubblingLabel:me.options.bubblingLabel
                                 }
                             },
                             message:this.msg("message.duplicate.success", items.length)
@@ -1919,6 +1912,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param item {object} Object literal representing one data item
              */
             onActionEdit:function DataGrid_onActionEdit(item) {
+                var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
@@ -1958,7 +1952,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                 // Fire "itemUpdated" event
                                                 Bubbling.fire("dataItemUpdated",
                                                     {
-                                                        item:response.json.item
+                                                        item:response.json.item,
+                                                        bubblingLabel:me.options.bubblingLabel
                                                     });
                                                 // Display success message
                                                 Alfresco.util.PopupManager.displayMessage(

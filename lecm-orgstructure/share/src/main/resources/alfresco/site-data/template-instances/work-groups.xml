@@ -22,7 +22,7 @@
             <region-id>workforces-toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <type>workforce</type>
+                <type>workForce</type>
             </properties>
         </component>
         <component>

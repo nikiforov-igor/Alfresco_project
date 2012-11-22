@@ -56,19 +56,52 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {
-                    Bubbling.fire("activeGridChanged",
-                        {
-                            datagridMeta:{
-                                itemType:root.itemType,
-                                nodeRef:root.nodeRef,
-                                custom: {
-                                    namePattern:root.namePattern
+                    if(root.itemType == "lecm-orgstr:workGroup") {
+                        // нужно отрисовать два грида
+                        Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:{
+                                    itemType:root.itemType,
+                                    nodeRef:root.nodeRef,
+                                    custom: {
+                                        namePattern:root.namePattern
+                                    },
+                                    searchConfig: {
+                                        filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                    }
                                 },
-                                searchConfig: {
-                                    filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
-                                }
-                            }
-                        });
+                                bubblingLabel:"workGroup"
+                            });
+                        Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:{
+                                    itemType:"lecm-orgstr:workforce",
+                                    nodeRef:root.nodeRef,
+                                    custom: {
+                                        namePattern:root.namePattern
+                                    },
+                                    searchConfig: {
+                                        filter:'PARENT:\"_NOT_LOAD_\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                    }
+                                },
+                                bubblingLabel:"workForce"
+                            });
+                    } else {
+                        Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta:{
+                                    itemType:root.itemType,
+                                    nodeRef:root.nodeRef,
+                                    custom: {
+                                        namePattern:root.namePattern
+                                    },
+                                    searchConfig: {
+                                        filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                    }
+                                },
+                                bubblingLabel:null
+                            });
+                    }
                 }
             }
 
