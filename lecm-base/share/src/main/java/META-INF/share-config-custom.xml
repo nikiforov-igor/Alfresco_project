@@ -8,7 +8,6 @@
                 <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
                 <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />
                 <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
-                <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
 				<js src="/scripts/lecm-base/components/base-utils.js" />
             </dependencies>
         </forms>
