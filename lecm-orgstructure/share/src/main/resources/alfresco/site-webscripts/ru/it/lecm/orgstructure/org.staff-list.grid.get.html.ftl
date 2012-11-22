@@ -7,7 +7,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id showSearchBlock>
+		<@grid.datagrid id>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function init() {

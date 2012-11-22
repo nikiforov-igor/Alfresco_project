@@ -109,8 +109,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             width:"800px"
                         });
                     // создаем кнопки
-                    this.widgets.searchButton1 = Alfresco.util.createYUIButton(this, "search-button-1", this.onSearchClick);
-                    this.widgets.searchButton2 = Alfresco.util.createYUIButton(this, "search-button-2", this.onSearchClick);
+                    this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onSearchClick, {}, Dom.get("searchBlock-search-button"));
                 }
             },
 
@@ -125,8 +124,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update current form state
                 this.currentForm = form;
 
-                var formDiv = Dom.get(this.id + "-forms"); // элемент в который будет отрисовываться форма
-                form.htmlid = this.id + "-forms";
+                var formDiv = Dom.get("searchBlock-forms"); // элемент в который будет отрисовываться форма
+                form.htmlid = "searchBlock-forms";
 
                 // load the form component for the appropriate type
                 var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",

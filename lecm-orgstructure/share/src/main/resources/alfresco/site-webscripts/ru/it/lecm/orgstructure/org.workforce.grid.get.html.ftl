@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div id="${id}-alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showSearchBlock=false showViewForm=false>
+		<@grid.datagrid id=id showViewForm=false>
 			<script type="text/javascript">//<![CDATA[
 			function createWorkforceDatagrid() {
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(

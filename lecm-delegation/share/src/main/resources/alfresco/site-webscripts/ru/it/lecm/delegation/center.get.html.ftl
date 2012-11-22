@@ -5,7 +5,7 @@
 <#assign showViewForm = false/>
 <#assign viewFormId = ""/>
 
-<@grid.datagrid id showSearchBlock showViewForm viewFormId>
+<@grid.datagrid id showViewForm viewFormId>
 <script type="text/javascript">//<![CDATA[
 	var datagrid = new LogicECM.module.Base.DataGrid('${id}');
 	datagrid.setOptions({

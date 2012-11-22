@@ -30,6 +30,12 @@ function main()
     }
     model.showNewUnitBtn = showNewUnitBtn;
     model.bubblingLabel = type;
+
+    var showSearchBlock = args["showSearchBlock"];
+    var showExSearchBtn = args["showExSearchBtn"];
+
+    model.showSearchBlock = (showSearchBlock != null && showSearchBlock == 'true');
+    model.showExSearchBtn = (showExSearchBtn != null && showExSearchBtn == 'true');
 }
 
 main();

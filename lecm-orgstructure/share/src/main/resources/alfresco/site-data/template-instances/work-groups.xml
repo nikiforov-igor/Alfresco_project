@@ -23,6 +23,8 @@
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
                 <type>workForce</type>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
             </properties>
         </component>
         <component>
@@ -30,6 +32,8 @@
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
                 <type>workGroup</type>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
             </properties>
         </component>
         <!-- Title -->

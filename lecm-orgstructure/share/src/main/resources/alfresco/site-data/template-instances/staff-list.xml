@@ -14,8 +14,8 @@
             <region-id>toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <pagination>true</pagination>
-                <type>staff-list</type>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>true</showExSearchBtn>
             </properties>
         </component>
         <!-- Title -->

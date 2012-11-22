@@ -1,33 +1,3 @@
-<#-- Макрос для включения блока атрибутивного поиска. По умолчанию скрыт (display: none). Делается видимым в advsearch.js
-Список параметров:
-id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid.
-Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco
--->
-<#macro extendedSearch id>
-<div id="searchBlock" class="yui-panel" style="display:none;">
-	<div id="${id}-search-head" class="hd">${msg("search-block")}</div>
-	<div id="${id}-search-body" class="bd">
-		<div id="${id}-search-content">
-			<div id="searchBlock-content" >
-				<div id="${id}-searchContainer" class="search">
-					<#-- Контейнер для отрисовки формы -->
-					<div id="${id}-forms" class="forms-container form-fields"></div>
-				</div>
-			</div>
-			<div class="bdft">
-			<#-- Кнопка Найти -->
-				<div class="yui-u align-right">
-                            <span id="${id}-search-button-2" class="yui-button yui-push-button search-icon">
-                                <span class="first-child">
-                                    <button type="button">${msg('button.search')}</button>
-                                </span>
-                            </span>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</#macro>
 
 <#-- Макрос для включения включения всплывающего окна по клику на запись.
 Окно будет вызывать по вызову метода viewAttributes. Пример см. в datagrid.get.html.ftl
@@ -93,11 +63,10 @@ viewFormId(необязательный) - по умолчанию равен vi
 <#-- Макрос для подключения грида
 Список параметров:
 id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid. Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco)
-showSearchBlock(необязательный) - включать/не включать атрибутивный поиск
 showViewForm(необязательный) - включать/не включать всплывающее окна по клику на запись
 viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
 -->
-<#macro datagrid id showSearchBlock=false showViewForm=false viewFormId="view-node-form">
+<#macro datagrid id showViewForm=false viewFormId="view-node-form">
 <#nested>
 <!--[if IE]>
 <iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>
@@ -107,9 +76,6 @@ viewFormId(необязательный) - по умолчанию равен vi
 	<div class="datagrid-meta">
 		<#if showViewForm>
 			<@viewForm viewFormId/>
-		</#if>
-		<#if showSearchBlock>
-			<@extendedSearch id/>
 		</#if>
 		<h2 id="${id}-title"></h2>
 		<div id="${id}-description" class="datagrid-description"></div>
