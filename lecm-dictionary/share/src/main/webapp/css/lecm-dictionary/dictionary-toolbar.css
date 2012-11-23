@@ -1,3 +1,6 @@
+.datalist-toolbar {
+    margin: 0 -5px 0 -10px !important;
+}
 .datalist-toolbar .left,
 .datalist-toolbar .left > div,
 .datalist-toolbar .right {
@@ -42,8 +45,5 @@
 }
 .datalist-toolbar .import-csv .form-container input {
     cursor: pointer;
-}
-.datalist-toolbar {
-	margin-left: -10px!important;
 }
 
