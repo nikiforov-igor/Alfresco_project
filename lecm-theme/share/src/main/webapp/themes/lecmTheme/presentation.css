@@ -1603,7 +1603,8 @@ div.form-field .yui-push-button,
 div.form-field .yui-button .first-child,
 div.current-values,
 div.currentValueDisplay,
-div.currentValueDisplayInvisible {
+div.autocompleteCurrentValueDisplay,
+div.autocompleteCurrentValueDisplayInvisible {
     border-radius: 3px;
 }
 
@@ -1613,7 +1614,8 @@ div.form-field .yui-push-button,
 div.form-field .yui-button .first-child,
 div.current-values,
 div.currentValueDisplay,
-div.currentValueDisplayInvisible {
+div.autocompleteCurrentValueDisplay,
+div.autocompleteCurrentValueDisplayInvisible {
     border-color: #ccc;
     border-style: solid;
 }
@@ -1682,7 +1684,8 @@ span.tree-picker-button .yui-button .first-child button {
 
 div.current-values,
 div.currentValueDisplay,
-div.currentValueDisplayInvisible {
+div.autocompleteCurrentValueDisplay,
+div.autocompleteCurrentValueDisplayInvisible {
     overflow: auto;
     min-height: 25px;
     max-height: 100px;
@@ -1695,7 +1698,12 @@ div.current-values {
     float: left;
 }
 
-div.currentValueDisplayInvisible {
+div.currentValueDisplay {
+    width: 99%;
+    margin-right: 4px;
+}
+
+div.autocompleteCurrentValueDisplayInvisible {
     display: none;
 }
 

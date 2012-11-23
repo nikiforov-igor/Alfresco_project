@@ -117,7 +117,7 @@
             <@renderTreePickerDialogHTML controlId true/>
         </div>
 
-        <div class="<#if field.endpointMany>currentValueDisplay<#else>currentValueDisplayInvisible</#if>" id="${controlId}-currentValueDisplayDiv" >
+        <div class="<#if field.endpointMany>autocompleteCurrentValueDisplay<#else>autocompleteCurrentValueDisplayInvisible</#if>" id="${controlId}-currentValueDisplayDiv" >
             <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
         </div>
     </#if>
