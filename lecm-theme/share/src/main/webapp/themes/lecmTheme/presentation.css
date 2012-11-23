@@ -369,59 +369,63 @@ h4 .lighter
    border-bottom: 1px dashed #e9e9e9;
 }
 
-.yui-skin-lecmTheme .yui-panel
-{
-   border-bottom: medium none;
+.yui-skin-lecmTheme .yui-panel-container {
+    z-index: 100;
+}
+.yui-skin-lecmTheme .yui-panel {
+    border-bottom: medium none;
+    /*box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);*/
 }
 
-.yui-skin-lecmTheme .mask
-{
-   opacity: 0.4;
+.yui-skin-lecmTheme .mask {
+    opacity: 0.4;
 }
-
 .yui-skin-lecmTheme .yui-panel .hd,
 .yui-skin-lecmTheme .yui-panel .form-buttons,
 .yui-skin-lecmTheme .yui-panel .bdft,
-.yui-skin-lecmTheme .yui-panel .ft
-{
-   color: #333333;
-   background: #eff3fa;
-   border-bottom: 1px solid #C5C7C6;
-   border-left-color: #C5C7C6;
-   border-right-color: #C5C7C6;
+.yui-skin-lecmTheme .yui-panel .ft {
+    color: #333333;
+    border-bottom: 1px solid #C5C7C6;
+    border-left-color: #C5C7C6;
+    border-right-color: #C5C7C6;
 }
 
-.yui-skin-lecmTheme .yui-panel .hd
-{
-   font-size: 123.1%;
-   font-weight: bold;
-   border-bottom: 1px solid #C5C7C6;
+.yui-skin-lecmTheme .yui-panel .hd {
+    background: #c5c5c5;
+    font-size: 123.1%;
+    font-weight: bold;
+    border: 1px solid #888;
+    border-radius: 5px 5px 0 0;
 }
 
 .yui-skin-lecmTheme .yui-panel .form-buttons,
-.yui-skin-lecmTheme .yui-panel .bdft
-{
-   font-size: 100%;
-   border-top: 1px solid #C5C7C6;
+.yui-skin-lecmTheme .yui-panel .bdft {
+    font-size: 100%;
+    border-top: 1px solid #C5C7C6;
+}
+.yui-skin-lecmTheme .yui-panel .bd div.form-buttons {
+    text-align: right;
+    border-radius: 0 0 5px 5px;
+}
+.yui-skin-lecmTheme .yui-panel .bd div.bdft,
+.yui-skin-lecmTheme .yui-panel .bd div.ft {
+    text-align: right;
+}
+.yui-skin-lecmTheme .yui-panel div.form-fields {
+    border-bottom: none;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-fields
-{
-   border-bottom: none;
+.yui-skin-lecmTheme .yui-panel .ft {
+    border-top: 1px solid #C5C7C6;
+    padding: 5px;
 }
 
-.yui-skin-lecmTheme .yui-panel .ft
-{
-   border-top: 1px solid #C5C7C6;
-   padding: 5px;
-}
-
-.yui-skin-lecmTheme .yui-panel .bd
-{
-   color: #333333;
-   background-color: #fff;
-   border-left-color: #C5C7C6;
-   border-right-color: #C5C7C6;
+.yui-skin-lecmTheme .yui-panel .bd {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #888;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
 }
 
 .yui-skin-lecmTheme .yui-panel .bd .yui-resize .yui-resize-handle
