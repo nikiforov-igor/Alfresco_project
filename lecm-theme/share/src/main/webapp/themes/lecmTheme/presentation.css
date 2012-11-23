@@ -85,8 +85,17 @@
     background: #c5c5c5;
     margin: 0;
     padding: 0;
-
 }
+
+#alf-filters{
+	margin-left: -5px;
+}
+
+.datalists.tree{
+	overflow: auto;
+	width: 100%;
+}
+
 #yui-main .datalist-toolbar {
     margin: 0;
 }
@@ -431,6 +440,11 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel .bd .yui-resize .yui-resize-handle
 {
    background-color: #F7FDF8;
+}
+
+.yui-resize-handle.yui-resize-handle-r
+{
+	margin-right: -4px;
 }
 
 /* Data Lists: DataTable (Needs to appear before yui-dt-highlighted rule) */

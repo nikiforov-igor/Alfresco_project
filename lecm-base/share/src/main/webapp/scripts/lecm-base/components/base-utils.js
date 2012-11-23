@@ -17,6 +17,9 @@
             - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
 
         Dom.setStyle(block, 'height', h + 'px');
+
+        block = Dom.get('dictionary');
+        Dom.setStyle(block, 'height', h-78+'px');
     }
 
     // Recalculate the vertical size on a browser window resize event
