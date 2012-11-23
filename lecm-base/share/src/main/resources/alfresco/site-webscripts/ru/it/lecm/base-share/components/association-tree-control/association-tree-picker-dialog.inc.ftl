@@ -48,7 +48,7 @@
         <div class="yui-gb orgchart-picker-menu">
             <div id="${pickerId}-searchContainer" class="yui-u first yui-skin-sam search">
                 <input type="text" class="search-input" name="-" id="${pickerId}-searchText" value="" maxlength="256" />
-                <span class="search-button"><button id="${pickerId}-searchButton" name="-">${msg("form.control.object-picker.search")}</button></span>
+                <span class="search-button"><button id="${pickerId}-searchButton" name="-">&nbsp;</button></span>
             </div>
         </div>
 

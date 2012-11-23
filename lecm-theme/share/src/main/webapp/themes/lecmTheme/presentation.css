@@ -1749,6 +1749,18 @@ div.association-auto-complete-selected-item-even {
     background-color: #f8f8f8;
 }
 
+/* */
+
 div.object-finder .picker-items .addIcon {
     background: transparent url(images/add-item.png) no-repeat center center;
+}
+
+div.orgchart-picker-menu .search-button button {
+    background: transparent url(images/search.png) no-repeat center center;
+    height: 25px;
+    width: 25px;
+}
+
+div.orgchart-picker-menu .search-input {
+    margin-right: 3px;
 }
