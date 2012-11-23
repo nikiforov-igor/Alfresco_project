@@ -5,26 +5,40 @@
 
     <style type="text/css" media="screen">
         #${pickerId}-searchContainer {
-            padding-left: 6px;
+            padding: 0;
+            margin: 0;
             text-align: left;
             width: 100%;
         }
         #${pickerId}-view-selector { margin-left: 1%; }
         #${pickerId}-dataTable {
             <#if plane>
-                width: 98%;
+                width: 100%;
             </#if>
-            margin-left: 1%;
         }
         #${pickerId}-userDetails { margin-left: 1% }
         #${pickerId}-group-members thead { display: none; }
         #${pickerId}-group-members table { border: none; width: 100% }
         #${pickerId}-group-members td { border-right: none; }
-        #${pickerId}-selection { padding-left: 6px; border-top: 1px solid #CBCBCB; }
         #${pickerId}-groups td { text-align: left; }
-        #${pickerId}-searchText { padding: 0.3em 1em 0.4em 0.5em; }
+        #${pickerId}-searchText {
+            width: 80%;
+            padding: 0.3em 1em 0.4em 0.5em;
+        }
         #${pickerId}-view-selector { padding-top: 0.7em; }
         #${pickerId}-view-roles, #${pickerId}-view-people { padding-left: 1em; }
+
+        .picker .bd > div:not(.bdft) {
+            margin: 0 10px;
+        }
+        .picker .bd > div:not(.bdft):first-of-type {
+            padding-top: 10px;
+        }
+        .picker .bd > div.yui-gb,
+        .picker .bd > div.yui-g {
+            margin-bottom: 15px;
+        }
+
     </style>
 
     <div id="${pickerId}-head" class="hd">${msg("form.control.object-picker.header")}</div>
@@ -35,8 +49,6 @@
             <div id="${pickerId}-searchContainer" class="yui-u first yui-skin-sam search">
                 <input type="text" class="search-input" name="-" id="${pickerId}-searchText" value="" maxlength="256" />
                 <span class="search-button"><button id="${pickerId}-searchButton" name="-">${msg("form.control.object-picker.search")}</button></span>
-            </div>
-            <div class="yui-u yui-skin-sam">
             </div>
         </div>
 

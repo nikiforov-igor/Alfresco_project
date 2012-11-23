@@ -449,24 +449,24 @@ h4 .lighter
 
 /* Data Lists: DataTable (Needs to appear before yui-dt-highlighted rule) */
 
-.yui-skin-lecmTheme .datagrid tr.yui-dt-even
-{
-   background-color: #ffffff;
-}
-.yui-skin-lecmTheme .datagrid tr.yui-dt-even td.yui-dt-asc,
-.yui-skin-lecmTheme .datagrid tr.yui-dt-even td.yui-dt-desc
-{
-   background-color: #f8f8f8;
+.yui-skin-lecmTheme .datagrid tr.yui-dt-even,
+.yui-skin-lecmTheme .picker-items.yui-dt tr.yui-dt-even {
+    background-color: #ffffff;
 }
 
-.yui-skin-lecmTheme .datagrid tr.yui-dt-odd
-{
-   background-color: #f8f8f8;
+.yui-skin-lecmTheme .datagrid tr.yui-dt-even td.yui-dt-asc,
+.yui-skin-lecmTheme .datagrid tr.yui-dt-even td.yui-dt-desc {
+    background-color: #f8f8f8;
 }
+
+.yui-skin-lecmTheme .datagrid tr.yui-dt-odd,
+.yui-skin-lecmTheme .picker-items.yui-dt tr.yui-dt-odd {
+    background-color: #f8f8f8;
+}
+
 .yui-skin-lecmTheme .datagrid tr.yui-dt-odd td.yui-dt-asc,
-.yui-skin-lecmTheme .datagrid tr.yui-dt-odd td.yui-dt-desc
-{
-   background-color: #f0f0f0;
+.yui-skin-lecmTheme .datagrid tr.yui-dt-odd td.yui-dt-desc {
+    background-color: #f0f0f0;
 }
 
 /* End Data Lists */
@@ -1620,7 +1620,6 @@ div.form-field select,
 div.form-field .yui-push-button,
 div.form-field .yui-button .first-child,
 div.current-values,
-div.currentValueDisplay,
 div.autocompleteCurrentValueDisplay,
 div.autocompleteCurrentValueDisplayInvisible {
     border-radius: 3px;
@@ -1717,8 +1716,7 @@ div.current-values {
 }
 
 div.currentValueDisplay {
-    width: 99%;
-    margin-right: 4px;
+    width: 100%;
 }
 
 div.autocompleteCurrentValueDisplayInvisible {
@@ -1739,10 +1737,14 @@ a.remove-item {
 div.association-auto-complete-selected-item,
 div.association-auto-complete-selected-item-even {
     height: 20px;
-    border-bottom: 1px solid #CCC;
-    padding: 5px 5px 0px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 5px 0;
+}
+div.association-auto-complete-selected-item:last-child,
+div.association-auto-complete-selected-item-even:last-child {
+    border-bottom: none;
 }
 
 div.association-auto-complete-selected-item-even {
-    background-color: #E4E4E4;
+    background-color: #f8f8f8;
 }

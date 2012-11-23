@@ -1128,28 +1128,32 @@ z-index: 9000;
 .yui-skin-lecmTheme .datagrid .grid.yui-dt {
     overflow: auto;
 }
-.yui-skin-lecmTheme .datagrid .grid.yui-dt table {
-margin: 0;
-padding: 0;
-font-family: Helvetica, sans-serif;
-font-size: 12px;
-border-collapse: separate;*border-collapse:collapse;
-border-spacing: 0;
-border: 1px solid #cbcbcb;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt table,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt table {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, sans-serif;
+    font-size: 12px;
+    border-collapse: separate;*border-collapse:collapse;
+    border-spacing: 0;
+    border: 1px solid #cbcbcb;
 }
-.yui-skin-lecmTheme .datagrid .yui-dt thead {
-border-spacing: 0;
+.yui-skin-lecmTheme .datagrid .yui-dt thead,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt thead {
+    border-spacing: 0;
 }
-.yui-skin-lecmTheme .datagrid .yui-dt caption {
-color: #000000;
-font-size: 85%;
-font-weight: normal;
-font-style: italic;
-line-height: 1;
-padding: 1em 0pt;
-text-align: center;
+.yui-skin-lecmTheme .datagrid .yui-dt caption,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt caption {
+    color: #000000;
+    font-size: 85%;
+    font-weight: normal;
+    font-style: italic;
+    line-height: 1;
+    padding: 1em 0pt;
+    text-align: center;
 }
-.yui-skin-lecmTheme .datagrid .grid.yui-dt th {
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt th {
     height: 25px;
     margin: 0;
     padding: 0;
@@ -1159,25 +1163,29 @@ text-align: center;
     vertical-align: middle;
 }
 .yui-skin-lecmTheme .datagrid .grid.yui-dt th,
-.yui-skin-lecmTheme .datagrid .grid.yui-dt th a {
-font-weight: bold;
-text-decoration: none;
-color: #333;
-vertical-align: bottom;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th a,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt th,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt th a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    vertical-align: bottom;
 }
-.yui-skin-lecmTheme .datagrid .grid.yui-dt th .yui-dt-liner {
-white-space: nowrap;
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th .yui-dt-liner,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt th .yui-dt-liner {
+    white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-dt-liner {
-margin: 0;
-padding: 0;
-padding: 4px 10px 4px 10px;
+    margin: 0;
+    padding: 0;
+    padding: 4px 10px 4px 10px;
 }
 .yui-skin-lecmTheme .yui-dt-coltarget {
-width: 5px;
-background-color: red;
+    width: 5px;
+    background-color: red;
 }
-.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td {
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td,
+.yui-skin-lecmTheme .yui-g .picker-items.yui-dt .yui-dt-data td {
     height: 25px;
     margin: 0;
     padding: 0;
