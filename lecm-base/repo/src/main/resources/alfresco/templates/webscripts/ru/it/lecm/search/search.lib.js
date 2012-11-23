@@ -257,7 +257,7 @@ function getSearchResults(params) {
 				var fieldsQuery = "";
 
 				for (var i = 0; i < columns.length; i++) {
-					fieldsQuery += this.escapeQName(columns[i]) + ":*" + searchTerm + "* OR ";
+					fieldsQuery += this.escapeQName(columns[i]) + ':"*' + searchTerm + '*" OR ';
 				}
 				if (fieldsQuery.length > 5) {
 					fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
