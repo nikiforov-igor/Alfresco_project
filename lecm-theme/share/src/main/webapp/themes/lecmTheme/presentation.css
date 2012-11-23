@@ -1748,3 +1748,7 @@ div.association-auto-complete-selected-item-even:last-child {
 div.association-auto-complete-selected-item-even {
     background-color: #f8f8f8;
 }
+
+div.object-finder .picker-items .addIcon {
+    background: transparent url(images/add-item.png) no-repeat center center;
+}
