@@ -130,6 +130,20 @@
 					<show id="lecm-ba:status"/> <!-- статус -->
 				</field-visibility>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-ba:fromEmployee"/> <!-- Делегирующий -->
+					<show id="lecm-ba:toEmployee"/> <!-- Доверенное лицо -->
+					<show id="lecm-ba:dateUTCBegin"/> <!-- Дата начала -->
+					<show id="lecm-ba:dateUTCEnd"/> <!-- Дата окончания -->
+					<!--
+					показать столбец со значением true/false показывающим вторичное это делегирование или нет
+					рендерер видимо навесить надо...на столбец
+					-->
+					<show id="lecm-ba:parentProcuracy"/> <!-- вторично -->
+					<show id="lecm-ba:status"/> <!-- статус -->
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>

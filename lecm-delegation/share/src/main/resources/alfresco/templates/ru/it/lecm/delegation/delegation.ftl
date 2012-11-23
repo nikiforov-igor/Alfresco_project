@@ -48,23 +48,7 @@ LogicECM.module.Delegation.DELEGATION_ROOT = LogicECM.module.Delegation.DELEGATI
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
 </@>
 
-<@templateBody>
-<div id="alf-hd">
-	<@region id="header" scope="global"/>
-	<@region id="title" scope="template"/>
-</div>
-<div id="bd">
-	<div class="yui-t1" id="alfresco-delegation">
-		<div id="yui-main">
-			<@region id="delegation-toolbar" scope="template"/>
-			<@region id="center" scope="template"/>
-		</div>
-	</div>
-</div>
-</@>
-
-<@templateFooter>
-<div id="alf-ft">
-	<@region id="footer" scope="global"/>
-</div>
-</@>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.basePage>
+	<@region id="center" scope="template"/>
+</@bpage.basePage>

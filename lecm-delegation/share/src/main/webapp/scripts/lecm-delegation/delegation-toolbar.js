@@ -1,36 +1,12 @@
-/**
- * LogicECM root namespace.
- *
- * @namespace LogicECM
- */
-// Ensure LogicECM root object exists
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	var LogicECM = {};
 }
 
-/**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- */
 LogicECM.module = LogicECM.module || {};
 
 
-/**
- * LogicECM Delegation module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module.Delegation
- */
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
-/**
- * Delegation module.
- *
- * @namespace LogicECM.module
- * @class LogicECM.module.Delegation.Toolbar
- */
 (function () {
 
 	LogicECM.module.Delegation.Toolbar = function (containerId) {
@@ -116,77 +92,114 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			}
 		},
 
-		_searchProcuraciesBtnClick: function () {
+		_showOnlyConfigured: function () {
 			var scope = this;
 			return function (event, obj) {
-				if (scope.modules.dataGrid) {
-					var searchTerm = YAHOO.util.Dom.get("full-text-search").value;
+				Alfresco.util.PopupManager.displayMessage ({
+					text: "_showOnlyConfigured"
+				});
+			}
+		},
 
-					var dataGrid = scope.modules.dataGrid;
-					var datagridMeta = dataGrid.datagridMeta;
+		_createDelegationOpts: function () {
+			var scope = this;
+			return function (event, obj) {
+				Alfresco.util.PopupManager.displayMessage ({
+					text: "_createDelegationOpts"
+				});
+			}
+		},
 
-					if (searchTerm.length > 0) {
-						var columns = dataGrid.datagridColumns;
+		_onSearchClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				var searchTerm = YAHOO.util.Dom.get("full-text-search").value;
 
-						var fields = "";
-						for (var i = 0; i < columns.length; i++) {
-							if (columns[i].dataType == "text") {
-								fields += columns[i].name + ",";
-							}
+				var dataGrid = scope.modules.dataGrid;
+				var datagridMeta = dataGrid.datagridMeta;
+
+				if (searchTerm.length > 0) {
+					var columns = dataGrid.datagridColumns;
+
+					var fields = "";
+					for (var i = 0; i < columns.length; i++) {
+						if (columns[i].dataType == "text") {
+							fields += columns[i].name + ",";
 						}
-						if (fields.length > 1) {
-							fields = fields.substring(0, fields.length - 1);
-						}
-						var fullTextSearch = {
-							parentNodeRef:datagridMeta.nodeRef,
-							fields:fields,
-							searchTerm:searchTerm
-						};
-						if (!datagridMeta.searchConfig) {
-							datagridMeta.searchConfig = {};
-						}
-						datagridMeta.searchConfig.filter = "";
-						datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
-
-						YAHOO.Bubbling.fire("activeGridChanged", {
-							datagridMeta:datagridMeta
-						});
-
-						YAHOO.Bubbling.fire("showFilteredLabel");
-					} else {
-						var nodeRef = datagridMeta.nodeRef;
-						if (!datagridMeta.searchConfig) {
-							datagridMeta.searchConfig = {};
-						}
-						datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
-						datagridMeta.searchConfig.fullTextSearch = "";
-						YAHOO.Bubbling.fire("activeGridChanged", {
-							datagridMeta:datagridMeta
-						});
-						YAHOO.Bubbling.fire("hideFilteredLabel");
 					}
+					if (fields.length > 1) {
+						fields = fields.substring(0, fields.length - 1);
+					}
+					var fullTextSearch = {
+						parentNodeRef:datagridMeta.nodeRef,
+						fields:fields,
+						searchTerm:searchTerm
+					};
+					if (!datagridMeta.searchConfig) {
+						datagridMeta.searchConfig = {};
+					}
+					datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
+					datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+
+					YAHOO.Bubbling.fire("activeGridChanged", {
+						datagridMeta:datagridMeta
+					});
+
+					YAHOO.Bubbling.fire("showFilteredLabel");
+				} else {
+					var nodeRef = datagridMeta.nodeRef;
+					if (!datagridMeta.searchConfig) {
+						datagridMeta.searchConfig = {};
+					}
+					datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+					datagridMeta.searchConfig.fullTextSearch = null;
+					YAHOO.Bubbling.fire("activeGridChanged", {
+						datagridMeta:datagridMeta
+					});
+					YAHOO.Bubbling.fire("hideFilteredLabel");
 				}
 			}
 		},
 
+		_onExSearchClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				var grid = scope.modules.dataGrid;
+				var advSearch = grid.modules.search;
+
+				advSearch.showDialog(grid.datagridMeta);
+			}
+		},
+
 		_onToolbarReady: function () {
-			var container = YAHOO.util.Dom.get (this.id);
-			Alfresco.util.createYUIButton(container, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
+			Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
 				label: "создать доверенность"
 			});
 
-			Alfresco.util.createYUIButton(container, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
+			Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
 				label: "обновить"
 			});
 
-			Alfresco.util.createYUIButton(container, "searchButton", this._searchProcuraciesBtnClick ());
+			Alfresco.util.createYUIButton(this, "btnShowOnlyConfigured", this._showOnlyConfigured (), {
+				label: "отображать только настроенные",
+				checked: true,
+				type: "checkbox"
+			});
+
+			Alfresco.util.createYUIButton(this, "btnCreateDelegationOpts", this._createDelegationOpts (), {
+				label: "создать параметры делегирования"
+			});
+
+			Alfresco.util.createYUIButton(this, "searchButton", this._onSearchClick ());
+
+			Alfresco.util.createYUIButton(this, "extendSearchButton", this._onExSearchClick ());
 
 			var scope = this;
 			var searchInput = YAHOO.util.Dom.get("full-text-search");
 			new YAHOO.util.KeyListener (searchInput, {
 				keys: 13
 			}, {
-				fn: scope._searchProcuraciesBtnClick (),
+				fn: scope._onSearchClick (),
 				scope: scope,
 				correctScope: true
 			}, "keydown").enable();

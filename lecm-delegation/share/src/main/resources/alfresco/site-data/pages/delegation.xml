@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Delegation</title>
 	<title-id>page.delegation.title</title-id>
-	<description>Delegation Component</description>
 	<description-id>page.delegation.description</description-id>
 	<template-instance>delegation</template-instance>
 	<authentication>user</authentication>

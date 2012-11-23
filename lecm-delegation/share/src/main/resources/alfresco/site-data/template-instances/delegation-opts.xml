@@ -1,22 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/delegation/delegation</template-type>
+	<template-type>ru/it/lecm/delegation/delegation-opts</template-type>
 	<components>
 		<!-- Title -->
 		<component>
 			<region-id>title</region-id>
 			<url>/lecm/base/title-with-filter-label</url>
 			<properties>
-				<title>page.delegation.title</title>
-				<filteredLabel>page.delegation.filteredLabel</filteredLabel>
+				<title>page.delegation-opts.title</title>
+				<filteredLabel>page.delegation-opts.filteredLabel</filteredLabel>
 			</properties>
 		</component>
-		<!-- Center region -->
-		<component>
-			<region-id>center</region-id>
-			<url>/ru/it/lecm/delegation/center</url>
-		</component>
-		<!-- Toolbar region -->
+		<!-- Toolbar -->
 		<component>
 			<region-id>toolbar</region-id>
 			<url>/ru/it/lecm/delegation/toolbar</url>

@@ -1,4 +1,10 @@
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
+
 <#assign toolbarId = args.htmlid>
+
+<#--
+TODO: сделать настройку того, какие кнопки создавать при создании тулбара
+-->
 <script type="text/javascript"> //<![CDATA[
 	(function () {
 		var delegationToolbar = new LogicECM.module.Delegation.Toolbar ("${toolbarId}");
@@ -7,21 +13,12 @@
 //]]>
 </script>
 
-<div id="${toolbarId}-body" class="datalist-toolbar toolbar">
-	<div id="${toolbarId}-headerBar" class="header-bar flat-button theme-bg-2">
-		<div class="left">
-			<div id="${toolbarId}-btnCreateProcuracy"></div>
-			<div id="${toolbarId}-btnRefreshProcuracies"></div>
-		</div>
-		<div class="right">
-			<span id="${toolbarId}-searchInput" class="search-input">
-				<input type="text" id="full-text-search" value="">
-			</span>
-			<span id="${toolbarId}-searchButton" class="yui-button yui-push-button search">
-				<span class="first-child">
-					<button id="${toolbarId}-fullTextSearchBtn" type="button" title="${msg('button.search')}"/>
-				</span>
-			</span>
-		</div>
-	</div>
-</div>
+<#--
+TODO: сделать отображение кнопок по условию, в зависимости от страницы
+-->
+<@comp.baseToolbar toolbarId true true true>
+	<div id="${toolbarId}-btnCreateProcuracy"></div> <!-- кнопка создания доверенности (старая страница) -->
+	<div id="${toolbarId}-btnRefreshProcuracies"></div> <!-- кнопка обновления страницы (старая страница) -->
+	<div id="${toolbarId}-btnShowOnlyConfigured"></div> <!-- checkbox "отображать только настроенные" -->
+	<div id="${toolbarId}-btnCreateDelegationOpts"></div> <!-- кнопка создания параметров делегирования (временная) -->
+</@comp.baseToolbar>
