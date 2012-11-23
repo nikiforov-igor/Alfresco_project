@@ -686,7 +686,6 @@ LogicECM.module = LogicECM.module || {};
             // DataTable column defintions
             var columnDefinitions =
                 [
-                    { key: "nodeRef", label: "Icon", sortable: false, formatter: this.fnRenderItemIcon(), width: this.options.compactMode ? 10 : 26 },
                     { key: "name", label: "Item", sortable: false, formatter: this.fnRenderItemName() },
                     { key: "add", label: "Add", sortable: false, formatter: this.fnRenderCellAdd(), width: 16 }
                 ];
@@ -768,39 +767,6 @@ LogicECM.module = LogicECM.module || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
-        },
-
-        /**
-         * Returns Icon datacell formatter
-         *
-         * @method fnRenderItemIcon
-         */
-        fnRenderItemIcon: function AssociationTreeViewer_fnRenderItemIcon()
-        {
-            var scope = this;
-
-            return function AssociationTreeViewer_renderItemIcon(elCell, oRecord, oColumn, oData)
-            {
-                var iconSize = scope.options.compactMode ? 16 : 32;
-
-                oColumn.width = iconSize - 6;
-                Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-                // Create New item cell type
-                if (oRecord.getData("type") == IDENT_CREATE_NEW)
-                {
-                    Dom.addClass(this.getTrEl(elCell), "create-new-row");
-                    var obj =
-                    {
-                        type: scope.options.createNewItemIcon,
-                        description: scope.msg("form.control.object-picker.create-new")
-                    };
-                    elCell.innerHTML = scope.renderItem(obj, iconSize, '<div class="icon' + iconSize + '"><span class="new-item-overlay"></span>{icon}</div>');
-                    return;
-                }
-
-                elCell.innerHTML = scope.renderItem(oRecord.getData(), iconSize, '<div class="icon' + iconSize + '">{icon}</div>');
-            };
         },
 
         /**
