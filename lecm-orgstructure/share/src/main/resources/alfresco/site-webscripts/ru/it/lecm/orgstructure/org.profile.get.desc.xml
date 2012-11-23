@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>organization profile</shortname>
+    <description>Return organization profile</description>
+    <url>/lecm/orgstructure/organization</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

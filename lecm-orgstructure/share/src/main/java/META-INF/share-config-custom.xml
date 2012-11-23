@@ -1,15 +1,4 @@
 <alfresco-config>
-    <config>
-        <forms>
-            <default-controls>
-                <type name="association:lecm-orgstr:employee" template="/ru/it/lecm/base-share/components/associationControl.ftl">
-                    <control-param name="xPathLocation">*[subtypeOf('lecm-orgstr:employees')]</control-param>
-                    <control-param name="xPathLocationRoot">{organization}</control-param>
-                    <control-param name="numberOfHiddenLayers">2</control-param>
-                </type>
-            </default-controls>
-        </forms>
-    </config>
 
     <config evaluator="node-type" condition="lecm-orgstr:employee">
         <forms>
@@ -107,6 +96,17 @@
                     <show id="lecm-orgstr:org-founding-docs"/>
                     <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:org-boss-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {lecm-orgstr:employee-last-name}</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -130,6 +130,17 @@
                     <show id="lecm-orgstr:org-founding-docs"/>
                     <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:org-boss-assoc">
+                        <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
+                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
+                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
+                            <control-param name="refillable">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

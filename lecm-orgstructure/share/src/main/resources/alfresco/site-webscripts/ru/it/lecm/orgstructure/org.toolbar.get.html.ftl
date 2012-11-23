@@ -1,14 +1,17 @@
 <#assign id = args.htmlid>
-<#--
-<#assign showSearch = false/>
-<#if showSearchBlock?? && showSearchBlock>
-	<#assign showSearch = true/>
+
+<#assign buttons = true/>
+<#if showButtons??>
+	<#assign buttons = showButtons/>
 </#if>
-<#assign showExSearch = false/>
-<#if showSearchBlock?? && showExSearchBtn>
-	<#assign showExSearch = true/>
+<#assign searchBlock = true/>
+<#if showSearchBlock??>
+	<#assign searchBlock = showSearchBlock/>
 </#if>
--->
+<#assign exSearch = false/>
+<#if showExSearchBtn??>
+	<#assign exSearch = showExSearchBtn/>
+</#if>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
@@ -20,7 +23,7 @@ function init() {
 }
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
-<@comp.baseToolbar id true showSearchBlock showExSearchBtn>
+<@comp.baseToolbar id buttons searchBlock exSearch>
 	<#if showNewUnitBtn>
 	<div class="new-row">
             <span id="${id}-newUnitButton" class="yui-button yui-push-button">

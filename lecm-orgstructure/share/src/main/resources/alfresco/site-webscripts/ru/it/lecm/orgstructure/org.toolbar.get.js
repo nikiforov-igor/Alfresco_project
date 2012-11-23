@@ -20,22 +20,30 @@ function main()
 
     model.actionSet = actionSet;
 
-    var showNewUnitBtn = true;
-    // default - show structure and Add Unit Button
-    var type = args["type"];
-    if (type != null && type != '') {
-        if (type != 'orgstructure') {
-            showNewUnitBtn = false;
+    var showNewUnitBtn = false;
+    var page = args["page"];
+    if (page != null && page != '') {
+        if (page == 'orgstructure') {
+            showNewUnitBtn = true;
         }
     }
     model.showNewUnitBtn = showNewUnitBtn;
-    model.bubblingLabel = type;
+    model.bubblingLabel = page;
 
     var showSearchBlock = args["showSearchBlock"];
     var showExSearchBtn = args["showExSearchBtn"];
+    var showButtons = args["showButtons"];
 
-    model.showSearchBlock = (showSearchBlock != null && showSearchBlock == 'true');
-    model.showExSearchBtn = (showExSearchBtn != null && showExSearchBtn == 'true');
+    if (showSearchBlock) {
+        model.showSearchBlock = (showSearchBlock == 'true');
+    }
+    if (showExSearchBtn){
+        model.showExSearchBtn = (showExSearchBtn == 'true');
+    }
+
+    if (showButtons){
+        model.showButtons = (showButtons == 'true');
+    }
 }
 
 main();
