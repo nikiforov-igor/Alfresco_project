@@ -22,7 +22,7 @@
         #${pickerId}-group-members td { border-right: none; }
         #${pickerId}-groups td { text-align: left; }
         #${pickerId}-searchText {
-            width: 420px;
+            width: 410px;
             padding: 0.3em 1em 0.4em 0.5em;
         }
         #${pickerId}-view-selector { padding-top: 0.7em; }
