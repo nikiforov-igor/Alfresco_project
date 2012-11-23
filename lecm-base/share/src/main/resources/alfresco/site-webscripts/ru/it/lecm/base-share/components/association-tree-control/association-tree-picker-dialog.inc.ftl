@@ -22,7 +22,7 @@
         #${pickerId}-group-members td { border-right: none; }
         #${pickerId}-groups td { text-align: left; }
         #${pickerId}-searchText {
-            width: 80%;
+            width: 420px;
             padding: 0.3em 1em 0.4em 0.5em;
         }
         #${pickerId}-view-selector { padding-top: 0.7em; }
@@ -34,8 +34,8 @@
         .picker .bd > div:not(.bdft):first-of-type {
             padding-top: 10px;
         }
-        .picker .bd > div.yui-gb,
-        .picker .bd > div.yui-g {
+        .picker .bd div.yui-gb,
+        .picker .bd div.yui-g {
             margin-bottom: 15px;
         }
 
@@ -52,6 +52,7 @@
             </div>
         </div>
 
+        <div><strong>${msg("logicecm.base.elements-for-select")}</strong></div>
         <div class="yui-g">
             <#if !plane>
                 <div id="${pickerId}-treeSelector" class="yui-u first panel-left">

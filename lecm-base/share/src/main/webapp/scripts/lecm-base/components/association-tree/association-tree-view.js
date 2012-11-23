@@ -352,7 +352,7 @@ LogicECM.module = LogicECM.module || {};
 
             this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
                 {
-                    width: this.options.plane? "487px" : "974px"
+                    width: "500px"
                 });
             this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
 
@@ -789,15 +789,7 @@ LogicECM.module = LogicECM.module || {};
                     return;
                 }
 
-                if (oRecord.getData("isContainer") ||
-                    (!oRecord.getData("isContainer") && (scope.options.allowNavigationToContentChildren || oRecord.getData("type") == "cm:category")))
-                {
-                    template += '<h3 class="item-name"><a href="#" class="theme-color-1 parent-' + scope.eventGroup + '">{name}</a></h3>';
-                }
-                else
-                {
-                    template += '<h3 class="item-name">{name}</h3>';
-                }
+                template += '<h3 class="item-name">{name}</h3>';
 
                 if (!scope.options.compactMode)
                 {

@@ -206,7 +206,7 @@
 
 .object-finder div.picker-items {
    border: 1px solid #aaa;
-   height: 20em;
+   height: 150px;
    overflow: auto;
    position: relative;
 }
@@ -313,17 +313,23 @@
 {
 }
 
-.object-finder .panel-left .picker-items
-{
-   clear: left;
-   margin-left: 0.5em;
-   margin-right: 6px;
+
+.object-finder.yui-panel .bd div.yui-u.panel-left,
+.object-finder.yui-panel .bd div.yui-u.panel-right {
+    width: 49.5%;
+    padding: 0;
+}
+.object-finder div.yui-u.panel-left div.picker-items,
+.object-finder div.yui-u.panel-right div.picker-items {
+    clear: left;
+    margin: 0;
 }
 
-.object-finder .panel-right .picker-items
-{
-   clear: left;
-   margin-right: 0.5em;
+.object-finder div.yui-u.panel-left div.picker-items,
+.object-finder div.yui-u.panel-right div.picker-items {
+    display: block;
+    min-height: 2em;
+    margin: 0;
 }
 
 /* Compact Mode */
