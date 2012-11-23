@@ -103,7 +103,7 @@
         <input type="hidden" id="${controlId}-added" name="${field.name}_added" value="${fieldValue}"/>
 
         <div id="${controlId}-autocomplete">
-            <input id="${controlId}-autocomplete-input" type="text"/>
+            <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>
             <span class="tree-picker-button">
                 <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
             </span>

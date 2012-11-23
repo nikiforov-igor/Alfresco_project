@@ -1581,24 +1581,56 @@ div.theme-bg-color-7
 	margin-left: 5px;
 }
 
+/******* DICTIONARY CONTROLS *******/
+
+div.form-field input[type="text"],
+/*div.form-field input,*/
+div.form-field select,
+div.form-field .yui-push-button button,
+div.form-field .yui-button .first-child button,
+div.association-auto-complete-selected-item,
+div.association-auto-complete-selected-item-even {
+    color: #494949;
+}
+
+input[type="text"],
+select,
+.yui-push-button,
+.yui-button .first-child,
+div.form-field input[type="text"],
+div.form-field select,
+div.form-field .yui-push-button,
+div.form-field .yui-button .first-child,
+div.current-values,
+div.currentValueDisplay,
+div.currentValueDisplayInvisible {
+    border-radius: 3px;
+}
+
+div.form-field input[type="text"],
+div.form-field select,
+div.form-field .yui-push-button,
+div.form-field .yui-button .first-child,
+div.current-values,
+div.currentValueDisplay,
+div.currentValueDisplayInvisible {
+    border-color: #ccc;
+    border-style: solid;
+}
+
 /* input text */
 
-input[type="text"] {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    color: #494949;
+div.form-field input[type="text"] {
+    border-width: 1px;
+    height:25px;
+    padding: 0;
 }
 
 div.form-field div.yui-ac {
     padding-bottom: 4px;
 }
 
-div.form-field input[type="text"] {
-    height:25px;
-    padding: 0;
-}
-
-div.form-field input[type="text"].yui-ac-input {
+div.form-field input[type="text"].autocomplete-input {
     min-width: 320px;
     width: 0;
     vertical-align: bottom;
@@ -1608,11 +1640,7 @@ div.form-field input[type="text"].yui-ac-input {
 /* select */
 
 div.form-field select {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-
-    color: #494949;
-
+    border-width: 1px;
     height:28px;
     min-width: 323px;
     vertical-align: bottom;
@@ -1624,13 +1652,12 @@ div.form-field select {
 
 .yui-push-button,
 .yui-button .first-child {
-    border-radius: 3px;
+    border-width: 1px;
 }
 
 div.form-field .yui-push-button,
 div.form-field .yui-button .first-child {
     height: 26px;
-    color: #494949;
     text-align: center;
 }
 
@@ -1656,13 +1683,12 @@ span.tree-picker-button .yui-button .first-child button {
 div.current-values,
 div.currentValueDisplay,
 div.currentValueDisplayInvisible {
-    border-radius: 3px;
     overflow: auto;
     min-height: 25px;
     max-height: 100px;
     width: 320px;
     margin-right: 4px;
-    border: 1px solid #CCC;
+    border-width: 1px;
 }
 
 div.current-values {
@@ -1673,9 +1699,8 @@ div.currentValueDisplayInvisible {
     display: none;
 }
 
-div.object-finder .show-picker
-{
-    clear: initial;
+div.object-finder .show-picker {
+    clear: none;
 }
 
 a.remove-item {
@@ -1689,7 +1714,6 @@ div.association-auto-complete-selected-item,
 div.association-auto-complete-selected-item-even {
     height: 20px;
     border-bottom: 1px solid #CCC;
-    color: #494949;
     padding: 5px 5px 0px;
 }
 
