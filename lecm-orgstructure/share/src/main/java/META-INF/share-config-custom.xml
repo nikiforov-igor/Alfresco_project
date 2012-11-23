@@ -408,7 +408,6 @@
             <form>
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>
@@ -431,7 +430,6 @@
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>

@@ -11,7 +11,58 @@
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function init() {
-					// EXTEND DATAGRID HERE
+					// Переопределяем метод onActionDelete. Добавляем проверки
+					LogicECM.module.Base.DataGrid.prototype.onActionDelete = function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+						var me = this,
+								items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+						var deletedUnit = items[0]; // для Оргструктуры одновременно удалить можно ТОЛЬКО ОДНО подразделение
+						// Проверим есть ли у подразделения штатные расписания
+						var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + deletedUnit.nodeRef;
+						var callback = {
+							success:function (oResponse) {
+								var oResults = eval("(" + oResponse.responseText + ")");
+								if (oResults && oResults.length > 0) { // нельзя удалять - есть назначенные должности
+									Alfresco.util.PopupManager.displayMessage(
+											{
+												text:me.msg("message.delete.unit.failure.has.composition")
+											});
+								} else {
+									// проверим нет ли дочерних АКТИВНЫХ подразделений
+									var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=false";
+									var callback = {
+										success:function (oResponse) {
+											var oResults = eval("(" + oResponse.responseText + ")");
+											if (oResults && oResults.length > 0) { // нельзя удалять - есть дочерние подразделения
+												Alfresco.util.PopupManager.displayMessage(
+														{
+															text:me.msg("message.delete.unit.failure.has.children")
+														});
+											} else { // удаляем! вызов метода из грида
+												me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete);
+											}
+										},
+										failure:function (oResponse) {
+											Alfresco.util.PopupManager.displayMessage(
+													{
+														text:me.msg("message.delete.unit.error")
+													});
+										},
+										argument:{
+										}
+									};
+									YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+								}
+							},
+							failure:function (oResponse) {
+								Alfresco.util.PopupManager.displayMessage(
+										{
+											text:me.msg("message.delete.unit.error")
+										});
+							}
+						};
+						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+					};
+
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination: true,

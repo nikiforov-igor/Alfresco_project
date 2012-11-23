@@ -457,39 +457,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             onIconClick:function InsituEditorUnitDelete_onIconClick(e, obj) {
                 var context = obj.params.unitAdmin;
                 context.selectedNode = obj.params.curElem;
-                if (!context.selectedNode.isLeaf) {
-                    // has children
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:context.msg("message.delete.unit.failure.has.children")
-                        });
-                } else {
-                    var unitNodeRef = new Alfresco.util.NodeRef(context.selectedNode.data.nodeRef);
-                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/unit/staff-lists/" + unitNodeRef.uri;
-                    var callback = {
-                        success:function (oResponse) {
-                            var oResults = eval("(" + oResponse.responseText + ")");
-                            if (oResults.length > 0) {
-                                // has compositions
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:context.msg("message.delete.unit.failure.has.composition")
-                                    });
-                            } else {
-                                // may delete
-                                context._deleteNode(e).bind(context);
-                            }
-                        },
-                        failure:function (oResponse) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text:context.msg("message.delete.unit.error")
-                                });
-                        }
-                    };
-                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-                }
-
+                context._deleteNode(e).bind(context);
             }
         });
 })();

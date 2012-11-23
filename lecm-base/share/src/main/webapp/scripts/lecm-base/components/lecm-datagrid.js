@@ -1744,6 +1744,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param fnDeleteComplete {Object} CallBack, который вызовется после завершения удаления
              */
             onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+                this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete);
+            },
+
+            /**
+                Удаление элемента. onActionDelete дергает этот метод.
+                Вынесено в отдельный метод, чтобы в конкретных датагридах не копировать
+                код и иметь возможность навешивать доп проверки
+             */
+            onDelete: function DataGridActions_onDelete(p_items, owner, actionsConfig, fnDeleteComplete){
                 var me = this,
                     items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
 
@@ -1813,7 +1822,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         ]
                     });
             },
-
             /**
              * Продублировать item(s).
              *
