@@ -60,7 +60,7 @@
 		<!-- Объект Действие. Используется как основной объект для расширения конкретный объектов действий -->
 		<type name="lecm-stmeditor:action">
 			<title>Logic ECM Statemachine Action Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:folder</parent>
 			<properties>
 				<property name="lecm-stmeditor:actionId">
 					<type>d:text</type>
@@ -71,19 +71,6 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-			<associations>
-				<child-association name="lecm-stmeditor:transitions">
-					<source>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>lecm-stmeditor:transition</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-			</associations>
 		</type>
 
 		<!-- Объект описывающий переход для действия -->
@@ -99,7 +86,7 @@
 			<associations>
 				<association name="lecm-stmeditor:transitionStatus">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<target>

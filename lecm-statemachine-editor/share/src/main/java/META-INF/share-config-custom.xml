@@ -1,5 +1,13 @@
 <alfresco-config>
 
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/ru/it/lecm/experts/experts.js" />
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-stmeditor:status">
 		<forms>
 			<form>
@@ -34,7 +42,12 @@
 					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:workflowId"/>
+					<field id="lecm-stmeditor:workflowId">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
 					<field id="lecm-stmeditor:assignee"/>
 				</appearance>
 			</form>
@@ -49,7 +62,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitions">
-						<control template="/ru/it/lecm/statemachine/editor/transitions.ftl"/>
+						<control template="/ru/it/lecm/statemachine/editor/transitions.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -66,11 +81,10 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/association-select-one-control.ftl">
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
-							<control-param name="refillable">false</control-param>
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 				</appearance>

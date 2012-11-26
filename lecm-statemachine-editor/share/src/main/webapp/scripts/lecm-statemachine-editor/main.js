@@ -110,7 +110,7 @@ LogicECM.module = LogicECM.module || {};
 
 		onResize: function() {
 			Dom.setStyle(this.id, "height", "");
-			var h = Dom.getXY("alf-ft")[1] - Dom.getXY("alf-hd")[1] - Dom.get("alf-hd").offsetHeight - 81;
+			var h = Dom.getXY("alf-ft")[1] - Dom.getXY("alf-hd")[1] - Dom.get("alf-hd").offsetHeight - 92;
 
 			if (YAHOO.env.ua.ie === 6)
 			{

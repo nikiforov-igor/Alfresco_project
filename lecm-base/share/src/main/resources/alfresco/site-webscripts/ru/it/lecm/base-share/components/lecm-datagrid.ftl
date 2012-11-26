@@ -113,9 +113,11 @@ viewFormId(необязательный) - по умолчанию равен vi
 
 		<!-- Action Set Templates -->
 		<div id="${id}-actionSet" class="action-set simple">
-			<#list actionSet as action>
-				<div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
-			</#list>
+			<#if actionSet??>
+                <#list actionSet as action>
+                    <div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
+                </#list>
+            </#if>
 		</div>
 	</div>
 </div>

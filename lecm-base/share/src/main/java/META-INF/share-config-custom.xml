@@ -9,7 +9,10 @@
                 <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />
                 <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
 				<js src="/scripts/lecm-base/components/base-utils.js" />
-            </dependencies>
+				<js src="/scripts/lecm-base/components/lecm-selectone.js" />
+				<js src="/scripts/lecm-base/components/lecm-datagrid.js" />
+				<js src="/scripts/lecm-base/components/advsearch.js" />
+			</dependencies>
         </forms>
     </config>
 </alfresco-config>

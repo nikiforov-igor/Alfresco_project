@@ -82,7 +82,7 @@ LogicECM.module = LogicECM.module || {};
 				context.loadExperts();
 			};
 
-			this.button.on("click", this._addTransition);
+			this.button.on("click", this._addTransition.bind(this));
 		},
 
 		_addTransition: function () {
