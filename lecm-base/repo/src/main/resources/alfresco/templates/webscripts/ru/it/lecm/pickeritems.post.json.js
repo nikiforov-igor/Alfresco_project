@@ -1,4 +1,5 @@
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/repository/forms/pickerresults.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
 
 function main()
 {
@@ -42,7 +43,7 @@ function main()
        itemCloseSubstituteSymbol = json.get("itemCloseSubstituteSymbol");
    }
 
-   var nameParams = splitString(itemNameSubstituteString, itemOpenSubstituteSymbol, itemCloseSubstituteSymbol);
+   var nameParams = splitSubstitudeFieldsString(itemNameSubstituteString, itemOpenSubstituteSymbol, itemCloseSubstituteSymbol);
    
    for (count = 0; count < numItems; count++)
    {
@@ -73,7 +74,7 @@ function main()
 
             var visibleName = itemNameSubstituteString;
             for each(var field in nameParams) {
-                visibleName = visibleName.replace(itemOpenSubstituteSymbol + field + itemCloseSubstituteSymbol, result.properties[field]);
+                visibleName = visibleName.replace(itemOpenSubstituteSymbol + field + itemCloseSubstituteSymbol, getSubstitudeField(result, field));
             }
 
             results.push(
@@ -89,23 +90,6 @@ function main()
        logger.log("#items = " + count + ", #results = " + results.length);
 
    model.results = results;
-}
-
-function splitString(string, openSymbol, closeSymbol) {
-    var result = [];
-    if (string.indexOf(openSymbol) != -1 && string.indexOf(closeSymbol) != -1) {
-        var openIndex = string.indexOf(openSymbol);
-        var closeIndex = string.indexOf(closeSymbol);
-        result.push(string.substring(openIndex + 1, closeIndex));
-        var lastOpenIndex = string.lastIndexOf(openSymbol);
-        var lastCloseIndex = string.lastIndexOf(closeSymbol);
-        while (openIndex != lastOpenIndex && closeIndex != lastCloseIndex) {
-            var openIndex = string.indexOf(openSymbol, openIndex + 1);
-            var closeIndex = string.indexOf(closeSymbol, closeIndex + 1);
-            result.push(string.substring(openIndex + 1, closeIndex));
-        }
-    }
-    return result;
 }
 
 main();

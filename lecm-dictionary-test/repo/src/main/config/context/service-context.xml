@@ -20,11 +20,12 @@
 <beans>
 
 	<!-- Registration of dictionary models -->
-	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-regions-repo.dictionary">
+	<bean id="${groupId}.${artifactId}.dictionary" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-regions-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-dictionary-address-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-dictionary-test-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-dictionary-test-orgstructure-model.xml</value>
             </list>
 		</property>
         <property name="labels">
@@ -40,6 +41,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-dictionary-address.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-dictionary-test.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-dictionary-test-orgstructure.xml</value>
             </list>
         </property>
     </bean>

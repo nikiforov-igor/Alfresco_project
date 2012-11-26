@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
+
 function main()
 {
    var argsFilterType = args['filterType'],
@@ -19,7 +21,7 @@ function main()
       argsXPathLocation = args['xPathLocation'],
       argsXPathRoot = args['xPathRoot'];
 
-   var nameParams = splitString(argsNameSubstituteString, argsOpenSubstituteSymbol, argsCloseSubstituteSymbol);
+   var nameParams = splitSubstitudeFieldsString(argsNameSubstituteString, argsOpenSubstituteSymbol, argsCloseSubstituteSymbol);
    
    if (logger.isLoggingEnabled())
    {
@@ -187,7 +189,7 @@ function main()
 
 	            var visibleName = argsNameSubstituteString;
 	            for each(var field in nameParams) {
-	                visibleName = visibleName.replace(argsOpenSubstituteSymbol + field + argsCloseSubstituteSymbol, result.properties[field]);
+	                visibleName = visibleName.replace(argsOpenSubstituteSymbol + field + argsCloseSubstituteSymbol, getSubstitudeField(result, field));
 	            }
 	            resultObj.visibleName = visibleName;
             }
@@ -432,23 +434,6 @@ function resolveNode(reference)
       return null;
    }
    return node;
-}
-
-function splitString(string, openSymbol, closeSymbol) {
-    var result = [];
-    if (string.indexOf(openSymbol) != -1 && string.indexOf(closeSymbol) != -1) {
-        var openIndex = string.indexOf(openSymbol);
-        var closeIndex = string.indexOf(closeSymbol);
-        result.push(string.substring(openIndex + 1, closeIndex));
-        var lastOpenIndex = string.lastIndexOf(openSymbol);
-        var lastCloseIndex = string.lastIndexOf(closeSymbol);
-        while (openIndex != lastOpenIndex && closeIndex != lastCloseIndex) {
-            var openIndex = string.indexOf(openSymbol, openIndex + 1);
-            var closeIndex = string.indexOf(closeSymbol, closeIndex + 1);
-            result.push(string.substring(openIndex + 1, closeIndex));
-        }
-    }
-    return result;
 }
 
 /**

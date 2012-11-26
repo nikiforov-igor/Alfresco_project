@@ -238,4 +238,132 @@
             </form>
         </forms>
     </config>
+
+	<config evaluator="node-type" condition="lecm-dic-orgstr-test:dictionary_values">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+
+					<show id="lecm-dic-orgstr-test:organization-unit" force="true"/>
+					<show id="lecm-dic-orgstr-test:position" force="true"/>
+					<show id="lecm-dic-orgstr-test:workGroup" force="true"/>
+					<show id="lecm-dic-orgstr-test:employee" force="true"/>
+					<show id="lecm-dic-orgstr-test:workRole" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-dic-orgstr-test:organization-unit">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">false</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:position">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
+							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../cm:name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:workGroup">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:employee">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:workRole">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-dic-orgstr-test:dictionary_values">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+
+					<show id="lecm-dic-orgstr-test:organization-unit" force="true"/>
+					<show id="lecm-dic-orgstr-test:position" force="true"/>
+					<show id="lecm-dic-orgstr-test:workGroup" force="true"/>
+					<show id="lecm-dic-orgstr-test:employee" force="true"/>
+					<show id="lecm-dic-orgstr-test:workRole" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-dic-orgstr-test:organization-unit">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+							<control-param name="plane">false</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:position">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
+							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../cm:name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:workGroup">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:employee">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-dic-orgstr-test:workRole">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+
+					<show id="lecm-dic-orgstr-test:organization-unit" force="true"/>
+					<show id="lecm-dic-orgstr-test:position" force="true"/>
+					<show id="lecm-dic-orgstr-test:workGroup" force="true"/>
+					<show id="lecm-dic-orgstr-test:employee" force="true"/>
+					<show id="lecm-dic-orgstr-test:workRole" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
