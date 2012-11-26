@@ -253,6 +253,10 @@
             <title>Staff List</title>
             <parent>lecm-orgstr:organization-element-member</parent>
             <properties>
+                <property name="lecm-orgstr:staff-list-description">
+                    <title>Description</title>
+                    <type>d:text</type>
+                </property>
                 <property name="lecm-orgstr:staff-list-is-boss">
                     <title>Is Boss Position</title>
                     <type>d:boolean</type>
@@ -390,6 +394,14 @@
                     <title>Is System User</title>
                     <type>d:boolean</type>
                     <default>false</default>
+                </property>
+                <property name="lecm-orgstr:employee-positions">
+                    <title>Hidden property for List positions</title>
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-orgstr:employee-roles">
+                    <title>Hidden property for List roles</title>
+                    <type>d:text</type>
                 </property>
             </properties>
             <associations>

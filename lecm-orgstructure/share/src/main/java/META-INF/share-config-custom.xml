@@ -17,7 +17,17 @@
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
+                    <show id="lecm-orgstr:employee-positions"/>
+                    <show id="lecm-orgstr:employee-roles"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:employee-positions">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-orgstr:employee-roles">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
