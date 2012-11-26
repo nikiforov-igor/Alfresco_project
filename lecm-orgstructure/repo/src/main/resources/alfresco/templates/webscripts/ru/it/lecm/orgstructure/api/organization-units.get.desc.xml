@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Organization units</shortname>
+	<description>Get Organization Units</description>
+	<url>/lecm/orgstructure/api/getOrganizationUnits</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>
