@@ -32,21 +32,6 @@ YAHOO.util.Event.onDOMReady(init);
                     </span>
                 </span>
 			</div>
-            <div class="import-csv">
-                <span id="${id}-importCsvButton" class="yui-button yui-push-button">
-                    <span class="first-child">
-                        <button type="button" title="${msg('button.import-csv')}">&nbsp;</button>
-                    </span>
-                </span>
-
-                <div id="${id}-import-csv-form-container" class="form-container" title="${msg('button.import-csv')}">
-                    <form method="post" id="import-csv-form" enctype="multipart/form-data"
-                          action="${url.context}/proxy/alfresco/lecm/dictionary/post/import-csv">
-                        <input type="file" id="import-csv-input" name="f" accept=".csv,application/csv,text/csv">
-                        <input type="hidden" value="" name="nodeRef" id="nodeRef" />
-                    </form>
-                </div>
-            </div>
 		</div>
 
 		<div class="right">

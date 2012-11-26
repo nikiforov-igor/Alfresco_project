@@ -43,6 +43,7 @@ public class ExportCSV extends AbstractWebScript {
 			ArrayList<String> namespace = new ArrayList<String>();
 			String[] fields = req.getParameterValues("field");
 			String[] selectItems = req.getParameterValues("selectedItems");
+			String[] columnsName = req.getParameterValues("datagridColumns");
 			String nodeRefStr = req.getParameter("nodeRef");
 			NodeRef nodeRef;
 
@@ -53,13 +54,14 @@ public class ExportCSV extends AbstractWebScript {
 			resOutputStream = res.getOutputStream();
 
 			// По умолчанию charset в UTF-8
-			Charset charset = Charset.defaultCharset();
+			Charset charset = Charset.forName("windows-1251");
 			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
 
-			for (String field : fields) {
-				namespace.add(field.split(":")[1]);
-				wr.write(field);
+			for (int i=0; i<fields.length; i++){
+				namespace.add(fields[i].split(":")[1]);
+				wr.write(columnsName[i]);
 			}
+
 			wr.endRecord();
 			if (selectItems != null) {
 				Boolean noProperties = true;

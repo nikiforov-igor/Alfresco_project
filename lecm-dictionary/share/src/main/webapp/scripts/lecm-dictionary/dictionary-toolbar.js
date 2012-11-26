@@ -339,9 +339,11 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             onExportCSV: function(){
                 var datagridMeta = this.modules.dataGrid.datagridMeta;
                 var selectItems = this.modules.dataGrid.selectedItems;
+                var datagridColumns = this.modules.dataGrid.datagridColumns;
                 var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
                 var fields = "";
                 var items = "";
+                var columns = "";
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: sUrl,
@@ -351,13 +353,14 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                 var oResults = eval("(" + response.serverResponse.responseText + ")");
                                 for (var nodeIndex in oResults) {
                                     fields += "field=" + oResults[nodeIndex].fild + "&";
+                                    columns += "datagridColumns=" + datagridColumns[nodeIndex].label + "&";
                                 }
                                 for (var item in selectItems) {
                                     items += "selectedItems=" + item + "&";
                                 }
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
                                                      + "?" + fields
-                                                     + items;
+                                                     + items + columns;
                             },
                             scope: this
                         },
