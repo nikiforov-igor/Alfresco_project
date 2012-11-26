@@ -28,7 +28,7 @@ function main()
         }
     }
     model.showNewUnitBtn = showNewUnitBtn;
-    model.bubblingLabel = page;
+    model.bubblingLabel = args["type"];
 
     var showSearchBlock = args["showSearchBlock"];
     var showExSearchBtn = args["showExSearchBtn"];

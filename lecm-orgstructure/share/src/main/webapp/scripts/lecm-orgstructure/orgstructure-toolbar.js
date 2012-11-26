@@ -268,7 +268,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             // инициализация грида
             onInitDataGrid: function OrgstructureToolbar_onInitDataGrid(layer, args) {
                 var datagrid = args[1].datagrid;
-                if (!this.options.bubblingLabel || this.options.bubblingLabel == datagrid.options.bubblingLabel){
+                if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel){
                     this.modules.dataGrid = datagrid;
                 }
             },
