@@ -13,6 +13,12 @@
 <#else>
     <#assign showCreateNewLink = true>
 </#if>
+<#if field.control.params.showCreateNewItem?? && field.control.params.showCreateNewItem == "false">
+	<#assign showCreateNewItem = false>
+<#else>
+	<#assign showCreateNewItem = true>
+</#if>
+
 
 <div class="form-field">
     <#if form.mode == "view">
@@ -90,6 +96,7 @@
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
         showCreateNewLink: ${showCreateNewLink?string},
+	    showCreateNewItem: ${showCreateNewItem?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
