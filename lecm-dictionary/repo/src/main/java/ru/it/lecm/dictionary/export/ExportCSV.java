@@ -54,9 +54,9 @@ public class ExportCSV extends AbstractWebScript {
 			resOutputStream = res.getOutputStream();
 
 			// По умолчанию charset в UTF-8
-			Charset charset = Charset.forName("windows-1251");
+			Charset charset = Charset.defaultCharset();
 			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
-
+			wr.write("\ufeff"); //UTF c BOM идентификатором
 			for (int i=0; i<fields.length; i++){
 				namespace.add(fields[i].split(":")[1]);
 				wr.write(columnsName[i]);
