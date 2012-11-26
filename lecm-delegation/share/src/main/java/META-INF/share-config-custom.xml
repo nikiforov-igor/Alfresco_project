@@ -40,7 +40,6 @@
 						</control>
 					</field>
 					<field id="lecm-ba:status" read-only="true"/>
-					<field id="cm:author" read-only="true"/>
 				</appearance>
 				<field-visibility>
 					<show id="lecm-ba:fromEmployee"/> <!-- делегирующий -->
@@ -55,7 +54,6 @@
 					<show id="lecm-ba:parentProcuracy"/>  <!-- документ основание -->
 					<show id="lecm-ba:dateUTCRevoke"/>  <!-- дата прекращения (отзыва) -->
 					<show id="lecm-ba:status"/> <!-- статус -->
-					<show id="cm:author"/> <!-- инициатор -->
 				</field-visibility>
 			</form>
 		</forms>
@@ -131,6 +129,31 @@
 				</field-visibility>
 			</form>
 			<form id="search">
+				<appearance>
+					<field id="lecm-ba:fromEmployee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-ba:toEmployee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-ba:parentProcuracy">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<!-- пока так, но боюсь это неправильно, скорее всего неправильно создается DELEGATION_ROOT
+							 | или свой	тип данных надо делать для DELEGATION_ROOT
+							 | или вообще делать общую папку LogicEcm и в нее уже все гадить
+							-->
+							<control-param name="rootLocation">/app:company_home/lecm-ba:DELEGATIONS_ROOT</control-param>
+							<control-param name="refillable">false</control-param>
+							<control-param name="plane">true</control-param>
+						</control>
+					</field>
+				</appearance>
 				<field-visibility>
 					<show id="lecm-ba:fromEmployee"/> <!-- Делегирующий -->
 					<show id="lecm-ba:toEmployee"/> <!-- Доверенное лицо -->
@@ -142,6 +165,60 @@
 					-->
 					<show id="lecm-ba:parentProcuracy"/> <!-- вторично -->
 					<show id="lecm-ba:status"/> <!-- статус -->
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-d8n:delegation-opts">
+		<forms>
+			<form id="createDelegationOptsForm">
+				<appearance>
+					<field id="lecm-d8n:delegation-opts-owner-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-d8n:delegation-opts-can-transfer-rights" read-only="true"/>
+					<field id="lecm-d8n:delegation-opts-can-delegate-all" read-only="true"/>
+					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
+				</appearance>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
+					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
+					<show id="lecm-d8n:delegation-opts-status"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<appearance>
+					<field id="lecm-d8n:delegation-opts-owner-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
+					<show id="lecm-d8n:delegation-opts-status"/>
+				</field-visibility>
+			</form>
+			<form id="search">
+				<appearance>
+					<field id="lecm-d8n:delegation-opts-owner-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="refillable">false</control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-d8n:delegation-opts-status"/>
 				</field-visibility>
 			</form>
 		</forms>

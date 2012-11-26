@@ -48,7 +48,9 @@ public class DelegationRepoWebScript
 		delete,
 
 		getrootnode,
-		test;
+		test,
+
+		getDelegationContainer;
 
 		public boolean equals (String obj) {
 			return this.toString().equalsIgnoreCase(obj);
@@ -117,6 +119,11 @@ public class DelegationRepoWebScript
 	}
 
 	@Override
+	public String getDelegationContainer () {
+		return delegationService.getDelegationContainer ();
+	}
+
+	@Override
 	protected Map<String, Object> executeImpl (WebScriptRequest req, Status status, Cache cache) {
 
 		logger.debug ("executing delegation webscript");
@@ -163,6 +170,9 @@ public class DelegationRepoWebScript
 
 		} else if (Action.test.equals (action)) {
 			model.put ("model", test(jsonContent));
+
+		} else if (Action.getDelegationContainer.equals (action)) {
+			model.put ("model", getDelegationContainer ());
 
 		} else {
 			throw new WebScriptException (String.format ("DelegationRepoWebScript was invoked with unknown template arg: %s", action));

@@ -116,5 +116,16 @@ public class DelegationBeanWebScript implements IWebScriptDelegation {
 		}
 	}
 
-
+	@Override
+	public String getDelegationContainer () {
+		try {
+			NodeRef nodeRef = proxy.getDelegationContainer();
+			JSONObject result = new JSONObject();
+			result.put ("nodeRef", (nodeRef != null) ? nodeRef.toString() : "");
+			result.put ("itemType", "lecm-d8n:delegation-opts"); //TODO: нормально получать имя типа
+			return result.toString ();
+		} catch (JSONException ex) {
+			throw createAndRegException( ex, "error processing getProcuracyRootNodeRef");
+		}
+	}
 }

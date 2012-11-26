@@ -25,5 +25,10 @@
 			<region-id>menu</region-id>
 			<url>/ru/it/lecm/delegation/menu</url>
 		</component>
+		<!-- Grid region -->
+		<component>
+			<region-id>delegation-opts-grid</region-id>
+			<url>/ru/it/lecm/delegation-opts/grid</url>
+		</component>
 	</components>
 </template-instance>

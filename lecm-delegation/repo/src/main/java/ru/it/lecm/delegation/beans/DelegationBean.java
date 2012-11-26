@@ -194,7 +194,7 @@ public class DelegationBean
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
 
 		// массив, чтобы проще было использовать изнутри doInTransaction ...
-		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootName);
+		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootname);
 		if (delegationRoot == null) {
 			delegationRoot = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 				@Override
@@ -945,4 +945,36 @@ public class DelegationBean
 
 	}
 	*/
+
+	@Override
+	public NodeRef getDelegationContainer () {
+		final String rootname = "DelegationOptionsContainer";
+		final NodeService nodeService = serviceRegistry.getNodeService();
+
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+
+		// массив, чтобы проще было использовать изнутри doInTransaction ...
+		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootname);
+		if (delegationRoot == null) {
+			delegationRoot = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				@Override
+				public NodeRef execute() throws Throwable {
+					NodeRef parentRef = companyHome; //the parent node
+					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
+					QName assocQName = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", rootname); //the qualified name of the association
+					QName nodeTypeQName = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", "delegation-opts-container"); //a reference to the node type
+					// создание корневого узла для делегирований в Компании ...
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+					properties.put(ContentModel.PROP_NAME, rootname);
+					ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+					NodeRef delegationRoot = associationRef.getChildRef();
+					logger.warn("container node '"+ rootname+ "' created: "+ delegationRoot.toString() );
+					return delegationRoot;
+				}
+			});
+		}
+		// logger.info( "\n\t(!) all authorities "+ serviceRegistry.getPermissionService().getAllAuthorities());
+		return delegationRoot;
+	}
 }

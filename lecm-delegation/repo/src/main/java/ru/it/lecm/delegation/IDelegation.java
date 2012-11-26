@@ -19,7 +19,7 @@ public interface IDelegation {
 
 
 	/**
-	 * Получить NodeRef корневого узла Доверенностей 
+	 * Получить NodeRef корневого узла Доверенностей
 	 * @return
 	 */
 	NodeRef getProcuracyRootNodeRef();
@@ -40,11 +40,11 @@ public interface IDelegation {
 	/**
 	 * Получить Доверенность(и) удовлетворяющие условиям поиска
 	 * (от указанного пользователя или для него)
-	 * 
+	 *
 	 * @param searchArgs карта с дополнительными критериями для поиска:
-	 *    key="ownerId" id выдавшего Доверенность, при наличии этого параметра в 
-	 * searchArgs, значения null или пусто не допускаются, 
-	 *    key="procuracyId" id нужной Доверенности, null или пусто для получения  
+	 *    key="ownerId" id выдавшего Доверенность, при наличии этого параметра в
+	 * searchArgs, значения null или пусто не допускаются,
+	 *    key="procuracyId" id нужной Доверенности, null или пусто для получения
 	 * списка всех доверенностей от ownerId
 	 *    key="fromEmployee" или "toEmployee" если задачны выполняется фильтрация
 	 * согласно критерию.
@@ -60,9 +60,9 @@ public interface IDelegation {
 	 */
 	// TODO: void setStatusProcuracy(String procuracyId, DelegationStatus status);
 
-	/* TODO: подумать о необходимости методов update/delete - если их реализовать 
+	/* TODO: подумать о необходимости методов update/delete - если их реализовать
 	непосредственно, тогда надо не забыть перегенерировать права (снять прежние,
-	выдать новые) и обратить внимание на: 
+	выдать новые) и обратить внимание на:
 		1) смену источника (владельца) или цели делегирования (делегата),
 		2) смену дат from-to
 		3) смену статуса.
@@ -83,4 +83,9 @@ public interface IDelegation {
 
 	JSONObject test(JSONObject args);
 
+	/**
+	 * Получить NodeRef корневого узла Доверенностей
+	 * @return
+	 */
+	NodeRef getDelegationContainer ();
 }

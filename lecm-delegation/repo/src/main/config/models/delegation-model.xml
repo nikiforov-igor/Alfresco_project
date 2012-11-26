@@ -137,7 +137,7 @@
 				<association name="lecm-d8n:delegation-opts-owner-assoc">
 					<source>
 						<mandatory>false</mandatory>
-						<many>true</many>
+						<many>false</many>
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
@@ -158,15 +158,6 @@
 					</target>
 				</child-association>
 			</associations>
-			<!--
-			 | ссылка на автора
-			 | Автор это пользователь системы который создал эти самые параметры делегирования
-			 | Вот тут конечно вопрос тот еще...Если параметры делегирования создаются автоматически,
-			 | то о каком авторе может идти речь? По идее автором должен быть или технолог или делегирующее лицо
-			-->
-			<mandatory-aspects>
-				<aspect>cm:author</aspect>
-			</mandatory-aspects>
 		</type>
 	</types>
 </model>

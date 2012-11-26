@@ -22,11 +22,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_createProcuracyBtnClick: function () {
 			var scope = this;
 			return function (e, p_obj) {
-				//		_createProcuracyBtnClick: function (event) {
-				Alfresco.util.PopupManager.displayMessage({
-					text: "createProcuracyBtnClick"
-				});
-
 				var datagridMeta = scope.modules.dataGrid.datagridMeta;
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
@@ -104,9 +99,56 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_createDelegationOpts: function () {
 			var scope = this;
 			return function (event, obj) {
-				Alfresco.util.PopupManager.displayMessage ({
-					text: "_createDelegationOpts"
+				var datagridMeta = scope.modules.dataGrid.datagridMeta;
+				var destination = datagridMeta.nodeRef;
+				var itemType = datagridMeta.itemType;
+
+				var url = "components/form"
+							+ "?itemKind={itemKind}"
+							+ "&itemId={itemId}"
+							+ "&formId={formId}"
+							+ "&destination={destination}"
+							+ "&mode={mode}"
+							+ "&submitType={submitType}"
+							+ "&showCancelButton=true";
+				var templateUrl = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + url, {
+					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
+					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
+					formId: "createDelegationOptsForm",//The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
+					destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
+					mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
+					submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
 				});
+
+				// Using Forms Service, so always create new instance
+				var delegationOptsForm = new Alfresco.module.SimpleDialog (scope.id + "-delegationOptsForm");
+
+				delegationOptsForm.setOptions ({
+					width: "33em",
+					templateUrl: templateUrl,
+					destroyOnHide: true,
+					onSuccess: {
+						fn: function DataListToolbar_onNewRow_success (response) {
+							YAHOO.Bubbling.fire ("dataItemCreated", {
+								nodeRef: response.json.persistedObject
+							});
+
+							Alfresco.util.PopupManager.displayMessage ({
+								text: scope.msg ("message.new-row.success")
+							});
+						},
+						scope: scope
+					},
+					onFailure: {
+						fn: function DataListToolbar_onNewRow_failure (response) {
+							Alfresco.util.PopupManager.displayMessage ({
+								text: scope.msg("message.new-row.failure")
+							});
+						},
+						scope: scope
+					}
+				});
+				delegationOptsForm.show ();
 			}
 		},
 

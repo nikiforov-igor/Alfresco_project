@@ -8,7 +8,7 @@ package ru.it.lecm.delegation;
 public interface IWebScriptDelegation {
 
 	/**
-	 * Получить NodeRef корневого узла Доверенностей 
+	 * Получить NodeRef корневого узла Доверенностей
 	 * @return json-строку с результатом "nodeRef"="xxx"
 	 */
 	String getProcuracyRootNodeRef();
@@ -30,11 +30,11 @@ public interface IWebScriptDelegation {
 	/**
 	 * Получить Доверенность(и) удовлетворяющие условиям поиска
 	 * (от указанного пользователя или для него)
-	 * 
+	 *
 	 * @param searchArgs карта с дополнительными критериями для поиска:
-	 *    key="ownerId" id выдавшего Доверенность, при наличии этого параметра в 
-	 * searchArgs, значения null или пусто не допускаются, 
-	 *    key="procuracyId" id нужной Доверенности, null или пусто для получения  
+	 *    key="ownerId" id выдавшего Доверенность, при наличии этого параметра в
+	 * searchArgs, значения null или пусто не допускаются,
+	 *    key="procuracyId" id нужной Доверенности, null или пусто для получения
 	 * списка всех доверенностей от ownerId
 	 *    key="fromEmployee" или "toEmployee" если задачны выполняется фильтрация
 	 * согласно критерию.
@@ -43,7 +43,7 @@ public interface IWebScriptDelegation {
 	 * Формат:
 	{
 		"totalRecords": , // общее кол-во строк
-		"startIndex": 0, // всегда ноль, 
+		"startIndex": 0, // всегда ноль,
 		"metadata": { // непонятная секция, пока захардкодим, позжу доразберусь зачем она нужна
 		},
 
@@ -73,17 +73,23 @@ public interface IWebScriptDelegation {
 	/**
 	 * Обновление данных указанной доверенности
 	 * @param args данные доверенности (+ "id"=xxx)
-	 * @return json-строку с результатом "result"="ok" или поднимается исключение 
+	 * @return json-строку с результатом "result"="ok" или поднимается исключение
 	 */
 	String updateProcuracy(String /*JSONObject*/ args);
 
 	/**
 	 * Удаление указанной Доверенности
 	 * @param json-строка с "id"=procuracyId для удаления
-	 * @return json-строку с результатом "result"="ok" или поднимается исключение 
+	 * @return json-строку с результатом "result"="ok" или поднимается исключение
 	 */
 	String deleteProcuracy(String /*JSONObject*/ argId);
 
 	String test(String /*JSONObject*/ args);
+
+	/**
+	 * Получить NodeRef для корневого узла Доверенностей
+	 * @return json-строка с результатом "nodeRef"="xxx"
+	 */
+	String getDelegationContainer ();
 }
 
