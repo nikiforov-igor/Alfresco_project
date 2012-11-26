@@ -10,25 +10,30 @@
         <@grid.datagrid containerId>
             <script type="text/javascript">//<![CDATA[
                 (function () {
-                    function init() {
-                        // EXTEND DATAGRID HERE
+                    YAHOO.util.Event.onDOMReady(function (){
                         var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                             usePagination: false,
                             showExtendSearchBlock: false,
-
+                            actions: [{
+                                            type: "action-link",
+                                            id: "onActionEdit",
+                                            permission: "edit",
+                                            label: "${msg("actions.edit")}"
+                                        },
+                                        {
+                                            type: "action-link",
+                                            id: "onActionDelete",
+                                            permission: "delete",
+                                            label: "${msg("actions.delete-row")}"
+                                        }],
+                            datagridMeta: {
+                                    itemType: "${field.control.params.itemType!""}",
+                                    nodeRef: "${form.arguments.itemId}"
+                                }
                         }).setMessages(${messages});
 
-                        YAHOO.Bubbling.fire("activeGridChanged", {
-                            datagridMeta: {
-                                itemType: "${field.control.params.itemType!""}",
-                                nodeRef: "${form.arguments.itemId}"
-                            }
-                        });
-
-                        datagrid.onReady();
-                    }
-
-                    YAHOO.util.Event.onDOMReady(init);
+                        datagrid.draw();
+                    });
 
                 })();
             //]]></script>

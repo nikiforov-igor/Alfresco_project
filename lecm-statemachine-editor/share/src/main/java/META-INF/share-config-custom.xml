@@ -92,6 +92,27 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-stmeditor:transition">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:transitionExpression" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:transitionExpression" />
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-stmeditor:statemachine">
 		<forms>
 			<form>

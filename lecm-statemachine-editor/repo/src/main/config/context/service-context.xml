@@ -27,6 +27,12 @@
 				<value>alfresco/module/${artifactId}/models/lecm-statemachine-editor-model.xml</value>
 			</list>
 		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-statemachine-model</value>
+			</list>
+		</property>
+
 	</bean>
 
 	<bean id="statemachineFolderPolicy" class="ru.it.lecm.statemachine.editor.StateMachineFolderPolicy"
