@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>unit parent</shortname>
+    <description>Return unit parent or empty if unit is root</description>
+    <url>/lecm/orgstructure/api/getUnitParent?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
