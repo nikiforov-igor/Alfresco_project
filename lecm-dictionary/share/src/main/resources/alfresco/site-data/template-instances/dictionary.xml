@@ -32,6 +32,9 @@
 		<component>
 			<region-id>menu</region-id>
 			<url>/lecm/dictionary/menu</url>
+            <properties>
+                <selected>dictionaries</selected>
+            </properties>
 		</component>
 	</components>
 </template-instance>

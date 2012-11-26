@@ -42,7 +42,7 @@
     float: left;
     margin: 10px 5px;
 }
-#bd #lecm-menu #menu-buttons > div:not(:last-of-type) {
+#bd #lecm-menu #menu-buttons > span:not(:last-of-type) {
     margin-bottom: 10px;
 }
 #bd #lecm-menu button {

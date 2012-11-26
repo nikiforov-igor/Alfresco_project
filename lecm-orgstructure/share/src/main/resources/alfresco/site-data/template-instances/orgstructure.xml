@@ -32,6 +32,9 @@
         <component>
             <region-id>menu</region-id>
             <url>/lecm/orgstructure/menu</url>
+            <properties>
+                <selected>orgstructure</selected>
+            </properties>
         </component>
     </components>
 </template-instance>

@@ -49,6 +49,9 @@
         <component>
             <region-id>menu</region-id>
             <url>/lecm/orgstructure/menu</url>
+            <properties>
+                <selected>workGroup</selected>
+            </properties>
         </component>
     </components>
 </template-instance>

@@ -12,11 +12,5 @@
 //]]></script>
 
 <@comp.baseMenu>
-	<div class="dictionary-menu">
-		<span id="menu-buttons-dictionariesBtn" class="yui-button yui-push-button">
-			<span class="first-child">
-				<button type="button" title="${msg('lecm.dictionaries.btn')}">&nbsp;</button>
-			</span>
-		</span>
-	</div>
+    <@comp.baseMenuButton "dictionaries" msg('lecm.dictionaries.btn') args.selected/>
 </@comp.baseMenu>

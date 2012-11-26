@@ -1,0 +1,42 @@
+/* Common */
+#lecm-menu #menu-buttons .yui-button.yui-button-disabled span.first-child {
+    opacity: .3;
+}
+#lecm-menu #menu-buttons .yui-button span.first-child {
+    opacity: .5;
+}
+#lecm-menu #menu-buttons .yui-button.yui-button-hover span.first-child {
+    opacity: .8;
+}
+#lecm-menu #menu-buttons .yui-button.yui-button-active span.first-child,
+#lecm-menu #menu-buttons .yui-button.selected span.first-child {
+    opacity: 1;
+}
+
+/* Orgstructure menu */
+#lecm-menu #menu-buttons #menu-buttons-employeesBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-41.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-staffBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-85.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-orgstructureBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-65.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-workGroupBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-73.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-positionsBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-rolesBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-69.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-organizationBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-37.png') no-repeat 4px 4px;
+}
+
+/* Dictionary menu */
+#lecm-menu #menu-buttons #menu-buttons-dictionariesBtn span.first-child {
+    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+}

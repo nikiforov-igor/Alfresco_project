@@ -4,6 +4,20 @@
 </div>
 </#macro>
 
+<#-- Макрос для кнопки вертикального меню
+Список параметров:
+id (обязательный) - идентификатор раздела
+title (необязательный) - всплывающая подсказка кнопки
+selectedEl (необязательный) - идентификатор раздела, выбранного в модуле в данный момент
+-->
+<#macro baseMenuButton id title='' selectedEl=''>
+    <span id="menu-buttons-${id}Btn" class="yui-button yui-push-button <#if selectedEl == id>selected</#if>">
+        <span class="first-child">
+            <button type="button" title="${title}">&nbsp;</button>
+        </span>
+    </span>
+</#macro>
+
 <#-- Макрос для подключения тулбара
 Список параметров:
 id(обязательный) - идентификатор, использующийся для построения html и передающийся в объект DataGrid. Лучше использовать args.htmlid (по аналогии с другими местами в Alfresco)
