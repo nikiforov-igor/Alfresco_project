@@ -1,21 +1,34 @@
 #lecm-menu .organization-menu #menu-buttons-employeesBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-41.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-staffBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-85.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-orgstructureBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-65.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-workGroupBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-73.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-positionsBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-rolesBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-69.png') no-repeat 4px 4px;
 }
 #lecm-menu .organization-menu #menu-buttons-organizationBtn span.first-child {
-    background: url('../../images/lecm-orgstructure/orgstructure_32.png') no-repeat 4px 4px;
+    background: url('../../images/lecm-orgstructure/icons_alfresco_top-menu-37.png') no-repeat 4px 4px;
+}
+
+#lecm-menu .organization-menu .yui-button span.first-child {
+   opacity: .5;
+}
+#lecm-menu .organization-menu .yui-button.yui-button-hover span.first-child {
+   opacity: .7;
+}
+#lecm-menu .organization-menu .yui-button.yui-button-active span.first-child {
+    opacity: 1;
+}
+#lecm-menu .organization-menu .yui-button.yui-button-disabled span.first-child {
+    opacity: .3;
 }

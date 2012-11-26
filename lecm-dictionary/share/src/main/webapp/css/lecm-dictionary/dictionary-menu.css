@@ -1,3 +1,16 @@
 #lecm-menu .dictionary-menu #menu-buttons-dictionariesBtn span.first-child {
 	background: url('../../images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
+
+#lecm-menu .dictionary-menu .yui-button span.first-child {
+    opacity: .5;
+}
+#lecm-menu .dictionary-menu .yui-button.yui-button-hover span.first-child {
+    opacity: .7;
+}
+#lecm-menu .dictionary-menu .yui-button.yui-button-active span.first-child {
+    opacity: 1;
+}
+#lecm-menu .dictionary-menu .yui-button.yui-button-disabled span.first-child {
+    opacity: .3;
+}
