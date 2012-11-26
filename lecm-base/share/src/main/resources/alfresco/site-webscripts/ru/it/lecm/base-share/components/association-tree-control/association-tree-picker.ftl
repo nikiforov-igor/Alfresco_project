@@ -45,9 +45,10 @@
 
                 <@renderTreePickerDialogHTML controlId plane/>
             </#if>
+
+            <div class="clear"></div>
         </div>
     </#if>
-    <div style=" width:100%; height:1px; clear:both;"></div>
     <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
 </div>
 
