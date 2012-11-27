@@ -6,6 +6,7 @@
         <property name="resourceBundles">
             <list>
                 <value>ru.it.lecm.base-share.form.form</value>
+				<value>ru.it.lecm.base-share.base-share</value>
             </list>
         </property>
     </bean>

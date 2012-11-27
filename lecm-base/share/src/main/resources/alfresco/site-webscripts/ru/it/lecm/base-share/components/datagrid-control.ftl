@@ -2,6 +2,7 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container">
+
 <div class="form-field">
     <div id="${controlId}">
         <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
@@ -15,13 +16,13 @@
                             usePagination: false,
                             showExtendSearchBlock: false,
                             actions: [{
-                                            type: "action-link",
+                                            type: "action-link-${containerId}",
                                             id: "onActionEdit",
                                             permission: "edit",
                                             label: "${msg("actions.edit")}"
                                         },
                                         {
-                                            type: "action-link",
+                                            type: "action-link-${containerId}",
                                             id: "onActionDelete",
                                             permission: "delete",
                                             label: "${msg("actions.delete-row")}"
@@ -29,7 +30,10 @@
                             datagridMeta: {
                                     itemType: "${field.control.params.itemType!""}",
                                     nodeRef: "${form.arguments.itemId}"
-                                }
+                                },
+                            bubblingLabel: "${containerId}",
+                            height: 100,
+                            allowCreate: true
                         }).setMessages(${messages});
 
                         datagrid.draw();
