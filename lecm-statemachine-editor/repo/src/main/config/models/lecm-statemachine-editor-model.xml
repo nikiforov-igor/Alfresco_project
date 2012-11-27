@@ -87,7 +87,7 @@
 				<association name="lecm-stmeditor:transitionStatus">
 					<source>
 						<mandatory>false</mandatory>
-						<many>false</many>
+						<many>true</many>
 					</source>
 					<target>
 						<class>lecm-stmeditor:status</class>
@@ -118,6 +118,12 @@
 		<type name="lecm-stmeditor:FinishStateWithTransition">
 			<title>Logic ECM Statemachine FinishStateWithTransition Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
+			<properties>
+				<property name="lecm-stmeditor:transitionVariable">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 		</type>
 
 		<!-- Объект действие WaitForDocumentChange -->
@@ -125,6 +131,110 @@
 			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
 		</type>
+
+		<!-- User Transition -->
+		<type name="lecm-stmeditor:userTransition">
+			<title>Logic ECM Statemachine User Transition Object</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-stmeditor:userTransitionLabel">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:userTransitionVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<!-- transitionWorkflow -->
+		<type name="lecm-stmeditor:transitionWorkflow">
+			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-stmeditor:transitionWorkflowLabel">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:transitionWorkflowId">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:transitionWorkflowVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<!--          Workflow Variables         -->
+		<type name="lecm-stmeditor:workflowVariableData">
+			<title>Logic ECM Statemachine Workflow Variable</title>
+			<parent>cm:cmobject</parent>
+		</type>
+
+		<type name="lecm-stmeditor:inputWorkflowVariableData">
+			<title>Logic ECM Statemachine Input Workflow Variable</title>
+			<parent>lecm-stmeditor:workflowVariableData</parent>
+			<properties>
+				<property name="lecm-stmeditor:inputWorkflowFromVariable">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:inputWorkflowToVariable">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-stmeditor:inputWorkflowVariableValueData">
+			<title>Logic ECM Statemachine Input Workflow Variable Value</title>
+			<parent>lecm-stmeditor:workflowVariableData</parent>
+			<properties>
+				<property name="lecm-stmeditor:inputWorkflowToVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:inputWorkflowVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-stmeditor:outputWorkflowVariableData">
+			<title>Logic ECM Statemachine Output Workflow Variable</title>
+			<parent>lecm-stmeditor:workflowVariableData</parent>
+			<properties>
+				<property name="lecm-stmeditor:outputWorkflowFromVariable">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:outputWorkflowToVariable">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-stmeditor:outputWorkflowVariableValueData">
+			<title>Logic ECM Statemachine Output Workflow Variable Value</title>
+			<parent>lecm-stmeditor:workflowVariableData</parent>
+			<properties>
+				<property name="lecm-stmeditor:outputWorkflowToVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:outputWorkflowVariableValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<!--         #Workflow Variables         -->
 
 	</types>
 
