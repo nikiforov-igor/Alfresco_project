@@ -80,7 +80,7 @@
                 rootNodeRef: "${field.control.params.parentNodeRef}",
             </#if>
             showCreateNewLink: ${showCreateNewLink?string},
-            changeItemsFireAction: "refreshAutocompleteItemList",
+            changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
             plane: true,
             currentValue: "${field.value!''}",
             itemType: "${field.endpointType}"
@@ -99,8 +99,9 @@
         </div>
     <#else>
         <label for="${controlId}-autocomplete-input">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-        <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
-        <input type="hidden" id="${controlId}-added" name="${field.name}_added" value="${fieldValue}"/>
+        <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+        <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+        <input type="hidden" id="${controlId}-selectedItems"/>
 
         <div id="${controlId}-autocomplete">
             <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>

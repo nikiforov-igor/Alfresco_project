@@ -23,7 +23,7 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.AssociationAutoComplete = function LogicECM_module_AssociationAutoComplete(fieldHtmlId) {
         LogicECM.module.AssociationAutoComplete.superclass.constructor.call(this, "LogicECM.module.AssociationAutoComplete", fieldHtmlId, [ "container", "resize", "datasource"]);
-        YAHOO.Bubbling.on("refreshAutocompleteItemList", this.onRefreshAutocompleteItemList, this);
+        YAHOO.Bubbling.on("refreshAutocompleteItemList_" + fieldHtmlId, this.onRefreshAutocompleteItemList, this);
 
         this.controlId = fieldHtmlId + "-cntrl";
 	    this.currentValueHtmlId = fieldHtmlId;
@@ -95,8 +95,14 @@ LogicECM.module = LogicECM.module || {};
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)
             {
-                this.options.selectedValueNodeRef = Dom.get(this.controlId + "-added").value;
-                this.loadSelectedItems();
+                this.selectedItems = args[1].selectedItems;
+
+                if (!this.options.disabled) {
+                    this.updateSelectedItems();
+                    this.updateInputUI();
+                } else {
+                    this.updateCurrentDisplayValue();
+                }
             },
 
             loadSelectedItems: function AssociationAutoComplete__loadSelectedItems()
@@ -429,7 +435,14 @@ LogicECM.module = LogicECM.module || {};
                     el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
                 }
 
-	            var selectedItems = this.getSelectedItems();
+                var selectedItems = this.getSelectedItems();
+
+                // Update selectedItems fields in main form to pass them between popup and form
+                el = Dom.get(this.controlId + "-selectedItems");
+                el.value = '';
+                for (i in selectedItems) {
+                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
+                }
 
 	            Dom.get(this.currentValueHtmlId).value = selectedItems.toString();
 

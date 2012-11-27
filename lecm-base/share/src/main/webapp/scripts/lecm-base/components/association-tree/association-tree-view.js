@@ -206,7 +206,7 @@ LogicECM.module = LogicECM.module || {};
         _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems()
         {
             var arrItems = "";
-            if (this.options.selectedValue)
+            if (this.options.selectedValue != null)
             {
                 arrItems = this.options.selectedValue;
             }
@@ -459,7 +459,7 @@ LogicECM.module = LogicECM.module || {};
             // Show the dialog
             this.widgets.dialog.show();
 
-            this.options.selectedValue = Dom.get(this.options.controlId + "-added").value;
+            this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
             this._loadSelectedItems();
 
             Event.preventDefault(e);
@@ -1082,11 +1082,20 @@ LogicECM.module = LogicECM.module || {};
                     el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
                 }
 
-                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
-                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction);
+                var selectedItems = this.getSelectedItems();
+
+                // Update selectedItems fields in main form to pass them between popup and form
+                el = Dom.get(this.options.controlId + "-selectedItems");
+                el.value = '';
+                for (i in selectedItems) {
+                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
                 }
 
-	            var selectedItems = this.getSelectedItems();
+                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+                        selectedItems: this.selectedItems
+                    });
+                }
 
 	            Dom.get(this.eventGroup).value = selectedItems.toString();
 
