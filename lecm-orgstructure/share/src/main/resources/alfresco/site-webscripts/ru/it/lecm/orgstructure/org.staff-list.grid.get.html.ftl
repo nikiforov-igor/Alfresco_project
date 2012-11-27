@@ -26,7 +26,7 @@
 	</div>
 	<div id="alf-filters">
 		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:staff-list"
-						nodePattern="lecm-orgstr_element-full-name">
+						nodePattern="lecm-orgstr_element-full-name" drawEditors=false>
 		</@orgTree.tree>
 	</div>
 </div>
