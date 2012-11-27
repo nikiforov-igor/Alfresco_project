@@ -18,11 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
  * User: mShafeev
  * Date: 01.11.12
- * Time: 17:44
- * To change this template use File | Settings | File Templates.
  */
 
 public class ExportCSV extends AbstractWebScript {
@@ -44,7 +41,6 @@ public class ExportCSV extends AbstractWebScript {
 			String[] fields = req.getParameterValues("field");
 			String[] selectItems = req.getParameterValues("selectedItems");
 			String[] columnsName = req.getParameterValues("datagridColumns");
-			String nodeRefStr = req.getParameter("nodeRef");
 			NodeRef nodeRef;
 
 			res.setContentEncoding("UTF-8");
@@ -56,25 +52,28 @@ public class ExportCSV extends AbstractWebScript {
 			// По умолчанию charset в UTF-8
 			Charset charset = Charset.defaultCharset();
 			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
-			wr.write("\ufeff"); //UTF c BOM идентификатором
 			for (int i=0; i<fields.length; i++){
 				namespace.add(fields[i].split(":")[1]);
-				wr.write(columnsName[i]);
+				if (i == 0) {
+					wr.write("\ufeff" + columnsName[i]); //UTF c BOM идентификатором
+				} else {
+					wr.write(columnsName[i]);
+				}
 			}
 
 			wr.endRecord();
 			if (selectItems != null) {
-				Boolean noProperties = true;
+				Boolean noProperties;
 				for (String item : selectItems ) {
 					nodeRef = new NodeRef(item);
 					Set set = nodeService.getProperties(nodeRef).entrySet();
-					for (int i = 0; i < namespace.size(); i++) {
+					for (String aNamespace : namespace) {
 						noProperties = true;
 						for (Object aSet : set) {
 							Map.Entry m = (Map.Entry) aSet;
 							QName key = (QName) m.getKey();
 							String value = m.getValue().toString();
-							if (key.getLocalName().equals(namespace.get(i))){
+							if (key.getLocalName().equals(aNamespace)) {
 								wr.write(value);
 								noProperties = false;
 							}
