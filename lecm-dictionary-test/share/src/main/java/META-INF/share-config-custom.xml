@@ -118,6 +118,8 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
+                            <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
+                            <control-param name="showCreateNewItem">false</control-param>
                             <control-param name="refillable">true</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
@@ -215,6 +217,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
+                            <control-param name="showCreateNewItem">false</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                             <control-param name="refillable">true</control-param>

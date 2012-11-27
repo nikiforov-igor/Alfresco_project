@@ -14,6 +14,12 @@
     <#assign showCreateNewLink = true>
 </#if>
 
+<#if field.control.params.showCreateNewItem?? && field.control.params.showCreateNewItem == "false">
+	<#assign showCreateNewItem = false>
+<#else>
+	<#assign showCreateNewItem = true>
+</#if>
+
 <div class="form-field">
     <#if form.mode == "view">
         <div id="${controlId}" class="viewmode-field">
@@ -37,9 +43,11 @@
                         <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
                     </span>
                     <#if showCreateNewLink>
-                        <span class="create-new-button">
-                            <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
-                        </span>
+                        <#if showCreateNewItem>
+                            <span class="create-new-button">
+                                <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                            </span>
+                        </#if>
                     </#if>
                 </div>
 
