@@ -182,7 +182,30 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Метка для bubbling. Используется для отрисовки датагрида. Следует передать в datagridMeta
                  */
-                bubblingLabel: null
+                bubblingLabel: null,
+
+				/**
+				 * Набор действий для списка
+				 */
+				actions: null,
+
+				/**
+				 * Data List metadata retrieved from the Repository
+				 *
+				 * @param datagridMeta
+				 * @type Object
+				 */
+				datagridMeta: null,
+
+				/**
+				 * Grid height for forms control
+				 */
+				height: null,
+
+				/**
+				 * Allow create button toolbar
+				 */
+				allowCreate: false
             },
 
             /**
@@ -360,6 +383,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     elCell.innerHTML = '<div id="' + scope.id + '-actions-' + oRecord.getId() + '" class="hidden"></div>';
                 };
             },
+
+
+			/**
+			 * Draw stanalone grid
+			 * @return {Function}
+			 * @constructor
+			 */
+
+			draw: function() {
+				this.datagridMeta = this.options.datagridMeta;
+				this.deferredListPopulation.fulfil("onGridTypeChanged")
+				this.onReady();
+			},
 
             /**
              * Return data type-specific formatter
@@ -550,6 +586,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     showExtendSearchBlock:context.options.showExtendSearchBlock
                 });
 
+				if (this.options.bubblingLabel != null) {
+					this.datagridMeta.bubblingLabel = this.options.bubblingLabel;
+				}
+
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
 
@@ -646,7 +686,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return;
                 }
 
-                this.renderDataGridMeta();
+				this.renderDataGridMeta();
                 this.renderSearchForm();
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
@@ -685,7 +725,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 this.setupDataSource();
                 // DataTable set-up and event registration
                 this.setupDataTable();
-                // Hide "no list" message
+				// DataTable actions setup
+				this.setupActions();
+
+				if (this.options.allowCreate) {
+					Alfresco.util.createYUIButton(this, "newRowButton", this.onActionCreate.bind(this));
+					Dom.setStyle(this.id + "-toolbar", "display", "block");
+				}
+
+				// Show grid
+				Dom.setStyle(this.id + "-body", "visibility", "visible");
+				// Hide "no list" message
                 Dom.addClass(this.id + "-selectListMessage", "hidden");
             },
 
@@ -1077,7 +1127,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
                 dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
 
-                return dTable;
+				if (this.options.height != null) {
+					YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
+				}
+
+				return dTable;
             },
             /**
              * DataTable set-up and event registration
@@ -1118,6 +1172,34 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         bubblingLabel:me.options.bubblingLabel
                     });
             },
+
+			/**
+			 * Добавляет меню для колонок
+			 */
+			setupActions: function() {
+				if (this.options.actions != null) {
+					var actionsDiv = document.getElementById(this.id + "-actionSet");
+					for (var i = 0; i < this.options.actions.length; i++) {
+						var action = this.options.actions[i];
+
+						var actionDiv = document.createElement("div");
+						actionDiv.className = action.id;
+
+						var actionA = document.createElement("a");
+						actionA.rel = action.permission;
+						actionA.className = "action-link " + action.type;
+						actionA.title = action.label;
+
+						var actionSpan = document.createElement("span");
+						actionSpan.innerHTML = action.label;
+
+						actionA.appendChild(actionSpan);
+						actionDiv.appendChild(actionA);
+						actionsDiv.appendChild(actionDiv);
+					}
+				}
+			},
+
             /**
              * Выбор всех значений
              * @constructor
@@ -1231,7 +1313,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 {
                     this.deferredActionsMenu = elActions;
                 }
-                else if (!Dom.hasClass(document.body, "masked"))
+                else
                 {
                     this.currentActionsMenu = elActions;
                     // Show the actions
@@ -1995,6 +2077,67 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                     }).show();
             },
+
+			/**
+			 * Create Data Item pop-up
+			 *
+			 * @method onActionCreate
+			 */
+			onActionCreate:function DataGrid_onActionCreate() {
+				var me = this;
+				// Intercept before dialog show
+				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+					Alfresco.util.populateHTML(
+						[ p_dialog.id + "-dialogTitle", this.msg("label.edit-row.title") ]
+					);
+				};
+
+				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+					{
+						itemKind: "type",
+						itemId: this.datagridMeta.itemType,
+						destination: this.datagridMeta.nodeRef,
+						mode:"create",
+						submitType:"json"
+					});
+
+				// Using Forms Service, so always create new instance
+				var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+				createDetails.setOptions(
+					{
+						width:"50em",
+						templateUrl:templateUrl,
+						actionUrl:null,
+						destroyOnHide:true,
+						doBeforeDialogShow:{
+							fn:doBeforeDialogShow,
+							scope:this
+						},
+						onSuccess:{
+							fn:function DataGrid_onActionCreate_success(response) {
+									YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+										{
+											nodeRef:response.json.persistedObject,
+											bubblingLabel: this.options.bubblingLabel
+										});
+									Alfresco.util.PopupManager.displayMessage(
+										{
+											text: this.msg("message.details.success")
+										});
+							},
+							scope:this
+						},
+						onFailure:{
+							fn:function DataGrid_onActionCreate_failure(response) {
+								Alfresco.util.PopupManager.displayMessage(
+									{
+										text:this.msg("message.details.failure")
+									});
+							},
+							scope:this
+						}
+					}).show();
+			},
 
             /**
              * Show more actions pop-up.

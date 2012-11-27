@@ -67,7 +67,6 @@ showViewForm(необязательный) - включать/не включа�
 viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
 -->
 <#macro datagrid id showViewForm=false viewFormId="view-node-form">
-<#nested>
 <!--[if IE]>
 <iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>
 <![endif]-->
@@ -92,6 +91,13 @@ viewFormId(необязательный) - по умолчанию равен vi
 		</div>
 	</div>
 
+    <div id="${id}-toolbar" style="display: none; margin-bottom: 3px;">
+         <span id="${id}-newRowButton" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button">${msg('actions.add')}</button>
+               </span>
+         </span>
+    </div>
 	<div id="${id}-grid" class="grid"></div>
 
 	<div id="${id}-selectListMessage" class="hidden select-list-message">${msg("message.select-list")}</div>
@@ -115,10 +121,11 @@ viewFormId(необязательный) - по умолчанию равен vi
 		<div id="${id}-actionSet" class="action-set simple">
 			<#if actionSet??>
                 <#list actionSet as action>
-                    <div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
+                    <div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="action-link ${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
                 </#list>
             </#if>
 		</div>
 	</div>
 </div>
+<#nested>
 </#macro>

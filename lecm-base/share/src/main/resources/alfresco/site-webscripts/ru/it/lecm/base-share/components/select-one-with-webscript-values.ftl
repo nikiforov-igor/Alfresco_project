@@ -27,7 +27,7 @@
     <script type="text/javascript">//<![CDATA[
         new LogicECM.module.SelectOne("${fieldHtmlId}").setOptions({
             controlId: "${controlId}",
-            webscriptType: "${field.control.params.webscriptType}",
+            webscriptType: "${field.control.params.webscriptType!"share"}",
             webscript: "${field.control.params.webscript}",
             selectedValue: "${fieldValue}",
             mandatory: ${field.mandatory?string},
