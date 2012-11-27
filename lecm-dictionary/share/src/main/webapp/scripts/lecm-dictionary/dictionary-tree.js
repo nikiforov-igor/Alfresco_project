@@ -179,7 +179,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             var me = this;
 
             if (dictionaryName !== null && dictionaryName !== "") {
-                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + dictionaryName;
+                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(dictionaryName);
 //
                 var callback = {
                     success:function (oResponse) {
