@@ -259,7 +259,7 @@
 					<field id="lecm-dic-orgstr-test:organization-unit">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
@@ -267,7 +267,7 @@
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
-							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../cm:name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../lecm-orgstr:element-short-name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
@@ -283,7 +283,7 @@
 					<field id="lecm-dic-orgstr-test:employee">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
@@ -325,7 +325,7 @@
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
-							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../cm:name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../lecm-orgstr:element-short-name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
@@ -341,7 +341,7 @@
 					<field id="lecm-dic-orgstr-test:employee">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="plane">true</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
