@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>employee workgroups</shortname>
+    <description>Return all employee work groups</description>
+    <url>/lecm/orgstructure/api/getEmployeeWorkGroups?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
