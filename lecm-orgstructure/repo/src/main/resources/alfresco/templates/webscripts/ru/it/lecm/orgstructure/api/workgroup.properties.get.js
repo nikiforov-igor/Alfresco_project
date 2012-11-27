@@ -1,0 +1,1 @@
+model.workgroup = search.findNode(args["nodeRef"]);
