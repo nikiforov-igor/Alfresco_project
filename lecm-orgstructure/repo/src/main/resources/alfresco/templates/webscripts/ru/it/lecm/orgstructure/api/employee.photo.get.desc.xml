@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>employee photo</shortname>
+    <description>Return employee photo</description>
+    <url>/lecm/orgstructure/api/getEmployeePhoto?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
