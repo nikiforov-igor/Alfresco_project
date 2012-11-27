@@ -62,7 +62,7 @@
                 </div>
             </#if>
             <div id="${pickerId}-dataTable" <#if !plane>class="yui-u panel-right"</#if>>
-                <div id="${pickerId}" class="picker-items"></div>
+                <div id="${pickerId}-group-members" class="picker-items"></div>
             </div>
         </div>
 

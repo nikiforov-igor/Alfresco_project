@@ -70,8 +70,6 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
-            showCreateNewItem: true,
-
             changeItemsFireAction: null,
 
             selectedValue: null,
@@ -783,12 +781,14 @@ LogicECM.module = LogicECM.module || {};
             return function AssociationTreeViewer_renderItemName(elCell, oRecord, oColumn, oData)
             {
                 var template = '';
-                    // Create New item cell type
-                if ((oRecord.getData("type") == IDENT_CREATE_NEW) && (scope.options.showCreateNewItem))
+
+                // Create New item cell type
+                if (oRecord.getData("type") == IDENT_CREATE_NEW)
                 {
                     elCell.innerHTML = '<a href="#" title="' + scope.msg("form.control.object-picker.create-new") + '" class="create-new-item-' + scope.eventGroup + '" >' + scope.msg("form.control.object-picker.create-new") + '</a>';
                     return;
                 }
+
                 template += '<h3 class="item-name">{name}</h3>';
 
                 if (!scope.options.compactMode)
