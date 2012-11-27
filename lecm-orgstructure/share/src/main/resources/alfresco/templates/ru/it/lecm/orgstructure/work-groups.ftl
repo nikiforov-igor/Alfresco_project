@@ -26,7 +26,6 @@
             resizer.setOptions({
                 initialWidth: 500
             });
-//            resizer.MIN_FILTER_PANEL_WIDTH = 400;
         }
         YAHOO.util.Event.onDOMReady(init);
     //]]></script>
