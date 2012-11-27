@@ -98,6 +98,8 @@ LogicECM.module = LogicECM.module || {};
 
             itemType: "cm:content",
 
+			treeItemType: null,
+
             maxSearchResults: 100,
 
             treeRoteNodeTitleProperty: "cm:name",
@@ -606,7 +608,14 @@ LogicECM.module = LogicECM.module || {};
 
         _generateItemsUrlParams: function AssociationTreeViewer__generateItemsUrlParams()
         {
-            return "?nodeTitleProperty=" + encodeURIComponent(this.options.treeNodeTitleProperty);
+
+	        var params = "?nodeTitleProperty=" + encodeURIComponent(this.options.treeNodeTitleProperty);
+	        if (this.options.treeItemType != null) {
+		        params += "&selectableType=" + encodeURIComponent(this.options.treeItemType);
+	        } else {
+		        params += "&selectableType=" + encodeURIComponent(this.options.itemType);
+	        }
+            return params;
         },
 
         treeViewClicked: function AssociationTreeViewer_treeViewClicked(node)

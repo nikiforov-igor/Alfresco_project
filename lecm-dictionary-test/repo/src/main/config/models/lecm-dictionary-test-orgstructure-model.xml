@@ -43,7 +43,7 @@
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-orgstr:position</class>
+						<class>lecm-orgstr:staff-list</class>
 						<mandatory>true</mandatory>
 						<many>true</many>
 					</target>

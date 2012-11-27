@@ -173,7 +173,9 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               containerResults.push(resultObj);
+	               if (resultObj.selectable) {
+		               containerResults.push(resultObj);
+	               }
 	            }
 	            else
 	            {
@@ -184,7 +186,9 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               contentResults.push(resultObj);
+	               if (resultObj.selectable) {
+		               contentResults.push(resultObj);
+	               }
 	            }
 
 	            var visibleName = argsNameSubstituteString;

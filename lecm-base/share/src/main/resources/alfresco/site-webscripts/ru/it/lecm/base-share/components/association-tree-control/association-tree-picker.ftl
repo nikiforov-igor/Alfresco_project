@@ -97,6 +97,9 @@
         <#if field.control.params.rootNodeRef??>
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
+	    <#if field.control.params.treeItemType??>
+		    treeItemType: "${field.control.params.treeItemType}",
+	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",

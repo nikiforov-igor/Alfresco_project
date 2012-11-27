@@ -266,9 +266,10 @@
 					</field>
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
-							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../lecm-orgstr:element-short-name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
-							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
 					</field>
@@ -324,9 +325,10 @@
 					</field>
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
-							<control-param name="nameSubstituteString">{cm:name} {..lecm-orgstr:element-member-position-assoc/../lecm-orgstr:element-short-name} {..lecm-orgstr:element-member-position-assoc/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
-							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
 						</control>
 					</field>
