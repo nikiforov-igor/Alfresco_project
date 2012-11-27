@@ -4,9 +4,9 @@
 	<#include "/org/alfresco/components/form/form.get.head.ftl">
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/utils/generate-custom-name.js"></@script>
-	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/base-resizer.js"></@script>
 
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-orgstructure/orgstructure-work-groups.css" />
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/lecm-datagrid.js"/>
 
 <!-- Advanced Search -->
@@ -18,6 +18,18 @@
 <!-- Historic Properties Viewer -->
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-dictionary/historic-properties-viewer.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/document-details/historic-properties-viewer.css" />
+
+    <script type="text/javascript">//<![CDATA[
+        function init() {
+            var resizer = new LogicECM.module.Base.Resizer('WorkGroupsResizer');
+
+            resizer.setOptions({
+                initialWidth: 500
+            });
+//            resizer.MIN_FILTER_PANEL_WIDTH = 400;
+        }
+        YAHOO.util.Event.onDOMReady(init);
+    //]]></script>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

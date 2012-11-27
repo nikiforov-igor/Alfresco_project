@@ -14,15 +14,16 @@
 						dictionaryName: "${page.url.args.dic!""}",
 						plane: ${plane?string}
 					});
+
+            <#if !plane>
+                new LogicECM.module.Base.Resizer('DictionaryResizer');
+            </#if>
 		}
 
 		YAHOO.util.Event.onDOMReady(init);
 	//]]></script>
 
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
-	<#if !plane>
-		<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/base-resizer.js"></@script>
-	</#if>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-dictionary/dictionary.js"></@script>
 </@>
 
