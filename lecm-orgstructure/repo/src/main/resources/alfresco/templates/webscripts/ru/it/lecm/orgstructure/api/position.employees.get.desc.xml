@@ -1,7 +1,7 @@
 <webscript>
     <shortname>get position </shortname>
     <description>Return all staff-list positions</description>
-    <url>/lecm/orgstructure/api/getPositionEmployees/url>
+    <url>/lecm/orgstructure/api/getPositionEmployees</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
 </webscript>
