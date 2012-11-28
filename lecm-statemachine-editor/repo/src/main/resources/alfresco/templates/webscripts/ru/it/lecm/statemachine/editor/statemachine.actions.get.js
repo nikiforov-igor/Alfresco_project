@@ -14,7 +14,8 @@ function getActions(type, execution) {
 }
 
 model.startActions = getActions("user", "start");
-model.takeActions = getActions("user", "take");
+model.userActions = getActions("user", "user");
+model.transitionActions = getActions("user", "transition");
 model.endActions = getActions("user", "end");
 
 

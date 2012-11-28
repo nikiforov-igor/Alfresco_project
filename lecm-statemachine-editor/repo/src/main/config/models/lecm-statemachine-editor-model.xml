@@ -132,6 +132,12 @@
 			<parent>lecm-stmeditor:action</parent>
 		</type>
 
+		<!-- Объект действие UserWorkflow -->
+		<type name="lecm-stmeditor:UserWorkflow">
+			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
 		<!-- User Transition -->
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>

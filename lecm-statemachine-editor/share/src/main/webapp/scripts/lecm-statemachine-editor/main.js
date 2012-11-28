@@ -42,7 +42,8 @@ LogicECM.module = LogicECM.module || {};
 		packageNodeRef: null,
 		layout: null,
 		startActionsMenu: null,
-		takeActionsMenu: null,
+		userActionsMenu: null,
+		transitionActionsMenu: null,
 		endActionsMenu: null,
 		currentStatus: null,
 		options:{},
@@ -78,8 +79,10 @@ LogicECM.module = LogicECM.module || {};
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.startActionsMenu = new YAHOO.widget.Menu("startActionsMenu");
 					oResponse.argument.parent._addMenu(oResponse.argument.parent.startActionsMenu, oResults.start, "start");
-					oResponse.argument.parent.takeActionsMenu = new YAHOO.widget.Menu("takeActionsMenu");
-					oResponse.argument.parent._addMenu(oResponse.argument.parent.takeActionsMenu, oResults.take, "take");
+					oResponse.argument.parent.userActionsMenu = new YAHOO.widget.Menu("userActionsMenu");
+					oResponse.argument.parent._addMenu(oResponse.argument.parent.userActionsMenu, oResults.user, "user");
+					oResponse.argument.parent.transitionActionsMenu = new YAHOO.widget.Menu("takeActionsMenu");
+					oResponse.argument.parent._addMenu(oResponse.argument.parent.transitionActionsMenu, oResults.transition, "transition");
 					oResponse.argument.parent.endActionsMenu = new YAHOO.widget.Menu("endActionsMenu");
 					oResponse.argument.parent._addMenu(oResponse.argument.parent.endActionsMenu, oResults.end, "end");
 					oResponse.argument.parent._redraw();
@@ -225,16 +228,19 @@ LogicECM.module = LogicECM.module || {};
 			Dom.addClass(id + "-actions", "actions_cont");
 
 			/************** start Actions *********************/
-			this._createActionsElement(actions, id + "-start", model.startActions, this.startActionsMenu, this.msg("statemachine.execution.start"), model.nodeRef);
+			this._createActionsElement(actions, id + "-start", model.startActions, this.startActionsMenu, this.msg("statemachine.execution.start"), model.nodeRef, false);
 
-			/************** take Actions *********************/
-			this._createActionsElement(actions, id + "-take", model.takeActions, this.takeActionsMenu, this.msg("statemachine.execution.take"), model.nodeRef);
+			/************** user Actions *********************/
+			this._createActionsElement(actions, id + "-user", model.userActions, this.userActionsMenu, this.msg("statemachine.execution.user"), model.nodeRef, false);
+
+			/************** transition Actions *********************/
+			this._createActionsElement(actions, id + "-transition", model.transitionActions, this.transitionActionsMenu, this.msg("statemachine.execution.transition"), model.nodeRef, true);
 
 			/************** end Actions *********************/
-			this._createActionsElement(actions, id + "-end", model.endActions, this.endActionsMenu, this.msg("statemachine.execution.end"), model.nodeRef);
+			this._createActionsElement(actions, id + "-end", model.endActions, this.endActionsMenu, this.msg("statemachine.execution.end"), model.nodeRef, false);
 		},
 
-		_createActionsElement: function (container, id, items, menu, title, statusNodeRef) {
+		_createActionsElement: function (container, id, items, menu, title, statusNodeRef, transitionLabel) {
 			//action container header
 			var action = document.createElement("div");
 			action.id = id + "-action-header";
@@ -257,7 +263,9 @@ LogicECM.module = LogicECM.module || {};
 			//action_results header
 			var actionResults = document.createElement("div");
 			actionResults.id = id + "-action-resilts-header";
-			actionResults.innerHTML = "<b>Переход</b>";
+			if (transitionLabel) {
+				actionResults.innerHTML = "<b>Переход</b>";
+			}
 			action.appendChild(actionResults);
 			Dom.addClass(actionResults.id, "action_results_cont");
 

@@ -16,6 +16,7 @@ public class StateMachineActions implements InitializingBean {
 	private static HashMap<String, String> actionNames = new HashMap<String, String>();
 	private static HashMap<String, String> actionClasses = new HashMap<String, String>();
 	private static HashMap<ExecutionKey, ArrayList<String>> actionsByExecution = new HashMap<ExecutionKey, ArrayList<String>>();
+	private static HashMap<ActionKey, String> executionByVirtualExecution = new HashMap<ActionKey, String>();
 
 	private String name;
 	private String action;
@@ -47,7 +48,15 @@ public class StateMachineActions implements InitializingBean {
 			StringTokenizer tokenizer = new StringTokenizer(execution, ",");
 			while (tokenizer.hasMoreTokens()) {
 				String executionKey = tokenizer.nextToken().trim().toLowerCase();
-				ExecutionKey key = new ExecutionKey(type, executionKey);
+				String[] keys = executionKey.split("/");
+				ExecutionKey key = null;
+				if (keys.length == 2) {
+					key = new ExecutionKey(type, keys[1]);
+				} else {
+					key = new ExecutionKey(type, keys[0]);
+				}
+				ActionKey actionKey = new ActionKey(action, key);
+				executionByVirtualExecution.put(actionKey, keys[0]);
 				ArrayList<String> actions = actionsByExecution.get(key);
 				if (actions == null) {
 					actions = new ArrayList<String>();
@@ -105,6 +114,46 @@ public class StateMachineActions implements InitializingBean {
 		public int hashCode() {
 			int result = type != null ? type.hashCode() : 0;
 			result = 31 * result + (execution != null ? execution.hashCode() : 0);
+			return result;
+		}
+	}
+
+	private class ActionKey {
+
+		private String actionClass;
+		private ExecutionKey virtKey;
+
+		private ActionKey(String actionClass, ExecutionKey virtKey) {
+			this.actionClass = actionClass;
+			this.virtKey = virtKey;
+		}
+
+		public String getActionClass() {
+			return actionClass;
+		}
+
+		public ExecutionKey getVirtKey() {
+			return virtKey;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			ActionKey actionKey = (ActionKey) o;
+
+			if (actionClass != null ? !actionClass.equals(actionKey.actionClass) : actionKey.actionClass != null)
+				return false;
+			if (virtKey != null ? !virtKey.equals(actionKey.virtKey) : actionKey.virtKey != null) return false;
+
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			int result = actionClass != null ? actionClass.hashCode() : 0;
+			result = 31 * result + (virtKey != null ? virtKey.hashCode() : 0);
 			return result;
 		}
 	}

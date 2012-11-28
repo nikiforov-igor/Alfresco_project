@@ -42,7 +42,8 @@ if (statemachineId != null && statemachineId != '') {
 	for each (var status in machineStatuses) {
 		var actionsNodes = status.getChildren();
 		var startActions = [];
-		var takeActions = [];
+		var userActions = [];
+		var transitionActions = [];
 		var endActions = [];
 		for each (var action in actionsNodes) {
 			var actionId = action.properties["lecm-stmeditor:actionId"];
@@ -55,8 +56,10 @@ if (statemachineId != null && statemachineId != '') {
 				};
 			if (type == "start") {
 				startActions.push(actionDescriptor);
-			} else if (type == "take") {
-				takeActions.push(actionDescriptor);
+			} else if (type == "user") {
+				userActions.push(actionDescriptor);
+			} else if (type == "transition") {
+				transitionActions.push(actionDescriptor);
 			} else if (type == "end") {
 				endActions.push(actionDescriptor);
 			}
@@ -65,7 +68,8 @@ if (statemachineId != null && statemachineId != '') {
 			name: status.properties["cm:name"],
 			nodeRef: status.nodeRef.toString(),
 			startActions: startActions,
-			takeActions: takeActions,
+			userActions: userActions,
+			transitionActions: transitionActions,
 			endActions: endActions
 		});
 	}

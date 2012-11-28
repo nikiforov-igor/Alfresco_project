@@ -13,24 +13,33 @@
                     actionId: "${action.actionId!"null"}",
                     nodeRef: "${action.nodeRef!"null"}",
                     transitions: [
-                        "Trans1",
-                        "Trans2",
-                        "Trans3"
                     ]
                 }
                     <#if action_has_next>,</#if>
                 </#list>
             ],
-            takeActions: [
-                <#list status.takeActions as action>
+            userActions: [
+                <#list status.userActions as action>
                 {
                     actionName: "${action.actionName!"null"}",
                     actionId: "${action.actionId!"null"}",
                     nodeRef: "${action.nodeRef!"null"}",
                     transitions: [
-                        "Trans1",
-                        "Trans2",
-                        "Trans3"
+                    ]
+                }
+                    <#if action_has_next>,</#if>
+                </#list>
+            ],
+            transitionActions: [
+                <#list status.transitionActions as action>
+                {
+                actionName: "${action.actionName!"null"}",
+                actionId: "${action.actionId!"null"}",
+                nodeRef: "${action.nodeRef!"null"}",
+                transitions: [
+                    "trans1",
+                    "trans2",
+                    "trans3"
                     ]
                 }
                     <#if action_has_next>,</#if>
@@ -43,9 +52,6 @@
                 actionId: "${action.actionId!"null"}",
                 nodeRef: "${action.nodeRef!"null"}",
                     transitions: [
-                        "Trans1",
-                        "Trans2",
-                        "Trans3"
                     ]
                 }
                     <#if action_has_next>,</#if>

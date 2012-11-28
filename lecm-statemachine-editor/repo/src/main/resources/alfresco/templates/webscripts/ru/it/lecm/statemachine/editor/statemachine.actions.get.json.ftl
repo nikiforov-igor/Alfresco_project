@@ -9,8 +9,17 @@ start: [
             <#if action_has_next>,</#if>
         </#list>
         ],
-take: [
-    <#list takeActions as action>
+user: [
+    <#list userActions as action>
+    {
+    id: "${action.id}",
+    title: "${action.title}"
+    }
+        <#if action_has_next>,</#if>
+    </#list>
+],
+transition: [
+    <#list transitionActions as action>
     {
     id: "${action.id}",
     title: "${action.title}"

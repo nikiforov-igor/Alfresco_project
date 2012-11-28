@@ -1,5 +1,5 @@
 .container {
-	width: 650px;
+	width: 680px;
 	margin: auto auto 3px;
 	border: solid black 1px;
 	-webkit-border-radius: 5px;
@@ -23,7 +23,7 @@
 .actions_cont {
 	float: right;
 	border-left: 1px solid #808080;
-	width: 480px;
+	width: 510px;
 	padding-left: 5px;
 }
 
