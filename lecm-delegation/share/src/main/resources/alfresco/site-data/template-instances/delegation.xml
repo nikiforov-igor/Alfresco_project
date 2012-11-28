@@ -21,8 +21,7 @@
 			<region-id>toolbar</region-id>
 			<url>/ru/it/lecm/delegation/toolbar</url>
 			<properties>
-				<showSearchBlock>true</showSearchBlock>
-				<showExSearchBtn>true</showExSearchBtn>
+				<page>delegation</page>
 			</properties>
 		</component>
 		<!-- Menu -->

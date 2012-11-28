@@ -3,7 +3,6 @@
 <#assign id = args.htmlid/>
 <#assign showViewForm = true/>
 
-<@grid.datagrid id showViewForm>
 <script type="text/javascript">//<![CDATA[
 
 	var attributeForShow = "cm:name";
@@ -131,5 +130,4 @@
 	<input type="checkbox" class="formsCheckBox" id="cbShowOnlyConfigured" onChange="onShowOnlyConfiguredChanged()" checked>
 	<label class="checkbox" for="cbShowOnlyConfigured">Отображать только настроенные</label>
 </div>
-
-</@grid.datagrid>
+<@grid.datagrid id showViewForm/>

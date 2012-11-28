@@ -149,7 +149,7 @@
 				<child-association name="lecm-d8n:delegation-opts-procuracy-assoc">
 					<source>
 						<mandatory>true</mandatory>
-						<many>true</many>
+						<many>false</many>
 					</source>
 					<target>
 						<class>lecm-d8n:procuracy</class>

@@ -19,6 +19,10 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Toolbar, Alfresco.component.Base, {
 
+		options: {
+			pageId: null
+		},
+
 		_createProcuracyBtnClick: function () {
 			var scope = this;
 			return function (e, p_obj) {
@@ -84,15 +88,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			return function (event, obj) {
 				var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
 				window.location.href = url;
-			}
-		},
-
-		_showOnlyConfigured: function () {
-			var scope = this;
-			return function (event, obj) {
-				Alfresco.util.PopupManager.displayMessage ({
-					text: "_showOnlyConfigured"
-				});
 			}
 		},
 
@@ -214,23 +209,20 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		},
 
 		_onToolbarReady: function () {
-			Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
-				label: "создать доверенность"
-			});
 
-			Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
-				label: "обновить"
-			});
+			if ("delegation" === this.options.pageId) {
+				Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
+					label: "создать доверенность"
+				});
 
-			Alfresco.util.createYUIButton(this, "btnShowOnlyConfigured", this._showOnlyConfigured (), {
-				label: "отображать только настроенные",
-				checked: true,
-				type: "checkbox"
-			});
-
-			Alfresco.util.createYUIButton(this, "btnCreateDelegationOpts", this._createDelegationOpts (), {
-				label: "создать параметры делегирования"
-			});
+				Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
+					label: "обновить"
+				});
+			} else if ("delegation-opts" === this.options.pageId) {
+				Alfresco.util.createYUIButton(this, "btnCreateDelegationOpts", this._createDelegationOpts (), {
+					label: "создать параметры делегирования"
+				});
+			}
 
 			Alfresco.util.createYUIButton(this, "searchButton", this._onSearchClick ());
 
@@ -255,7 +247,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst ("LogicECM.module.Base.DataGrid");
 
 			this._onToolbarReady ();
-			//			YAHOO.util.Event.onContentReady(this.id, this._onToolbarReady);
 			YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
 		}
 	});
