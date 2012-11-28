@@ -28,6 +28,9 @@
 		<component>
 			<region-id>menu</region-id>
 			<url>/ru/it/lecm/delegation/menu</url>
+			<properties>
+				<page>delegation</page>
+			</properties>
 		</component>
 	</components>
 </template-instance>

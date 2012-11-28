@@ -23,6 +23,9 @@
 		<component>
 			<region-id>menu</region-id>
 			<url>/ru/it/lecm/delegation/menu</url>
+			<properties>
+				<page>delegation-opts</page>
+			</properties>
 		</component>
 		<!-- Grid region -->
 		<component>

@@ -10,6 +10,7 @@
 	var $links = Alfresco.util.activateLinks;
 	var $userProfile = Alfresco.util.userProfileLink;
 
+	/*
 	LogicECM.module.Base.DataGrid.prototype.getCellFormatter = function () {
 		var scope = this;
 
@@ -89,6 +90,13 @@
 
 			elCell.innerHTML = html;
 		};
+	};
+	*/
+
+	LogicECM.module.Base.DataGrid.prototype.onActionEdit = function (item) {
+		var scope = this;
+		var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
+		window.location.href = url + "procuracy";
 	};
 
 	var datagrid = new LogicECM.module.Base.DataGrid('${id}');
