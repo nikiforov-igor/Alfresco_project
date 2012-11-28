@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
+			showSelectedItemsPath: true,
+
             changeItemsFireAction: null,
 
             selectedValue: null,
@@ -102,7 +104,9 @@ LogicECM.module = LogicECM.module || {};
 
             treeNodeTitleProperty: "cm:name",
 
-            nameSubstituteString: "{cm:name}"
+            nameSubstituteString: "{cm:name}",
+
+			selectedItemsNameSubstituteString: null
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -245,7 +249,8 @@ LogicECM.module = LogicECM.module || {};
                         {
                             items: arrItems.split(","),
                             itemValueType: "nodeRef",
-                            itemNameSubstituteString: this.options.nameSubstituteString
+                            itemNameSubstituteString: this.options.nameSubstituteString,
+	                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
                         },
                         successCallback:
                         {
@@ -315,7 +320,8 @@ LogicECM.module = LogicECM.module || {};
                         {
                             items: nodeRef.split(","),
                             itemValueType: "nodeRef",
-                            itemNameSubstituteString: this.options.nameSubstituteString
+                            itemNameSubstituteString: this.options.nameSubstituteString,
+	                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
                         },
                         successCallback:
                         {
@@ -934,7 +940,8 @@ LogicECM.module = LogicECM.module || {};
         _generateChildrenUrlParams: function AssociationTreeViewer__generatePickerChildrenUrlParams(searchTerm)
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
+                "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString());
         },
 
         onSelectedItemAdded: function AssociationTreeViewer_onSelectedItemAdded(layer, args)
@@ -971,11 +978,11 @@ LogicECM.module = LogicECM.module || {};
             var num = 0;
             for (i in items) {
 
-                if (this.options.plane) {
-                    var displayName = items[i].name;
+                if (this.options.plane || !this.options.showSelectedItemsPath) {
+                    var displayName = items[i].selectedName;
                 } else {
-                    displayName = items[i].displayPath + "/" + items[i].name;
-                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+                    displayName = items[i].displayPath + "/" + items[i].selectedName;
+	                      if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
                         var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
                         if (rootNodeDisplayName !== "") {
                             displayName = displayName.replace(rootNodeDisplayName, "");
@@ -1023,10 +1030,10 @@ LogicECM.module = LogicECM.module || {};
             el.innerHTML = '';
             var num = 0;
             for (var i in this.selectedItems) {
-                if (this.options.plane) {
-                    var displayName = this.selectedItems[i].name;
+                if (this.options.plane || !this.options.showSelectedItemsPath) {
+                    var displayName = this.selectedItems[i].selectedName;
                 } else {
-                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].name;
+                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].selectedName;
                     if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
                         var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
                         if (rootNodeDisplayName !== "") {
@@ -1136,6 +1143,14 @@ LogicECM.module = LogicECM.module || {};
 				}
 			}
 			return selectedItems;
+		},
+
+		getSelectedItemsNameSubstituteString:function AssociationTreeViewer_getSelectedItemsNameSubstituteString() {
+			var result = this.options.nameSubstituteString;
+			if (this.options.selectedItemsNameSubstituteString != null) {
+				result = this.options.selectedItemsNameSubstituteString;
+			}
+			return result;
 		}
   	});
 })();

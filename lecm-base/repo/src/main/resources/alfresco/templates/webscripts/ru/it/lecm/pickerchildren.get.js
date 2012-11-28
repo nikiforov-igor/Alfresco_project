@@ -9,6 +9,7 @@ function main()
       argsXPath = args['xpath'],
       argsRootNode = args['rootNode'],
       argsNameSubstituteString = args['nameSubstituteString'],
+      argsSelectedItemsNameSubstituteString = args['selectedItemsNameSubstituteString'] != null ? args['selectedItemsNameSubstituteString'] : argsNameSubstituteString,
       pathElements = url.service.split("/"),
       parent = null,
       rootNode = companyhome,
@@ -28,6 +29,7 @@ function main()
       logger.log("argsMaxResults = " + argsMaxResults);
       logger.log("argsXPath = " + argsXPath);
       logger.log("nameSubstituteString = " + argsNameSubstituteString);
+      logger.log("argsSelectedItemsNameSubstituteString = " + argsSelectedItemsNameSubstituteString);
       logger.log("argsXPathLocation = " + argsXPathLocation);
       logger.log("argsXPathRoot = " + argsXPathRoot);
     }
@@ -185,6 +187,7 @@ function main()
 	            }
 
 	            resultObj.visibleName = formatNodeTitle(result, argsNameSubstituteString);
+	            resultObj.selectedVisibleName = formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
             }
          }
 

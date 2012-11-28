@@ -46,8 +46,6 @@ LogicECM.module = LogicECM.module || {};
 
                 currentValue: "",
 
-                itemIcon: "components/images/filetypes/generic-file-16.png",
-
                 multipleSelectMode: false,
 
                 itemType:"cm:content",
@@ -58,7 +56,9 @@ LogicECM.module = LogicECM.module || {};
 
                 maxSearchResults:1000,
 
-                nameSubstituteString:"{cm:name}"
+                nameSubstituteString:"{cm:name}",
+
+	            selectedItemsNameSubstituteString: null
             },
 
             selectedItems: null,
@@ -149,7 +149,8 @@ LogicECM.module = LogicECM.module || {};
                             {
                                 items: arrItems.split(","),
                                 itemValueType: "nodeRef",
-                                itemNameSubstituteString: this.options.nameSubstituteString
+                                itemNameSubstituteString: this.options.nameSubstituteString,
+	                            selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
                             },
                             successCallback:
                             {
@@ -292,7 +293,8 @@ LogicECM.module = LogicECM.module || {};
             _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
             {
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
+                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+	                "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString());
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
                 {
@@ -501,6 +503,14 @@ LogicECM.module = LogicECM.module || {};
 
             destroy:function AssociationAutoComplete_destroy() {
                 LogicECM.module.AssociationAutoComplete.superclass.destroy.call(this);
-            }
+            },
+
+	        getSelectedItemsNameSubstituteString:function AssociationTreeViewer_getSelectedItemsNameSubstituteString() {
+		        var result = this.options.nameSubstituteString;
+		        if (this.options.selectedItemsNameSubstituteString != null) {
+			        result = this.options.selectedItemsNameSubstituteString;
+		        }
+		        return result;
+	        }
         });
 })();

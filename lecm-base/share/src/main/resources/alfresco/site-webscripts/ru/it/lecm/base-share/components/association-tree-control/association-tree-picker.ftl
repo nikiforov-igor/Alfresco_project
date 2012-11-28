@@ -20,6 +20,12 @@
 	<#assign showCreateNewItem = true>
 </#if>
 
+<#if field.control.params.showSelectedItemsPath?? && field.control.params.showSelectedItemsPath == "false">
+	<#assign showSelectedItemsPath = false>
+<#else>
+	<#assign showSelectedItemsPath = true>
+</#if>
+
 <div class="form-field">
     <#if form.mode == "view">
         <div id="${controlId}" class="viewmode-field">
@@ -90,6 +96,9 @@
         <#if field.control.params.nameSubstituteString??>
             nameSubstituteString: "${field.control.params.nameSubstituteString}",
         </#if>
+	    <#if field.control.params.selectedItemsNameSubstituteString??>
+		    selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+	    </#if>
         <#if field.control.params.rootNodeRef??>
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>
@@ -99,6 +108,7 @@
         showCreateNewLink: ${showCreateNewLink?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
+        showSelectedItemsPath: ${showSelectedItemsPath?string},
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
         itemType: "${field.endpointType}"
     }).setMessages( ${messages} );

@@ -67,8 +67,6 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">false</control-param>
                         </control>
                     </field>
@@ -76,8 +74,6 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">true</control-param>
                         </control>
                     </field>
@@ -88,8 +84,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="refillable">true</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -98,8 +92,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="refillable">false</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                         </control>
                     </field>
 
@@ -109,8 +101,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="refillable">false</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -121,8 +111,6 @@
                             <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
                             <control-param name="showCreateNewItem">false</control-param>
                             <control-param name="refillable">true</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -162,8 +150,6 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">false</control-param>
                         </control>
                     </field>
@@ -171,8 +157,6 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">true</control-param>
                         </control>
                     </field>
@@ -183,8 +167,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">true</control-param>
                         </control>
                     </field>
@@ -194,8 +176,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
                             <control-param name="refillable">false</control-param>
                         </control>
                     </field>
@@ -206,8 +186,6 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                             <control-param name="refillable">false</control-param>
                         </control>
                     </field>
@@ -219,8 +197,6 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
                             <control-param name="showCreateNewItem">false</control-param>
-                            <control-param name="bigItemIcon">components/images/filetypes/generic-user-32.png</control-param>
-                            <control-param name="smallItemIcon">components/images/filetypes/generic-user-16.png</control-param>
                             <control-param name="refillable">true</control-param>
                         </control>
                     </field>
@@ -262,15 +238,18 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-dic-orgstr-test:workGroup">
@@ -321,15 +300,18 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-dic-orgstr-test:position">
 						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="refillable">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-dic-orgstr-test:workGroup">

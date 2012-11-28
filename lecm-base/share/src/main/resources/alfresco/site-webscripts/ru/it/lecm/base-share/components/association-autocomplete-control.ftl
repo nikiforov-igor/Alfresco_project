@@ -33,9 +33,6 @@
                 <#if field.control.params.startLocation??>
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
-                <#if field.control.params.smallItemIcon??>
-                    itemIcon: "${field.control.params.smallItemIcon}",
-                </#if>
 	            <#if field.mandatory??>
 		            mandatory: ${field.mandatory?string},
 	            <#elseif field.endpointMandatory??>
@@ -47,6 +44,9 @@
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
+	            <#if field.control.params.selectedItemsNameSubstituteString??>
+		            selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+	            </#if>
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
             });
 
@@ -68,6 +68,9 @@
             <#if field.control.params.nameSubstituteString??>
                 nameSubstituteString: "${field.control.params.nameSubstituteString}",
             </#if>
+		    <#if field.control.params.selectedItemsNameSubstituteString??>
+			    selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+		    </#if>
             <#if field.control.params.parentNodeRef??>
                 rootNodeRef: "${field.control.params.parentNodeRef}",
             </#if>

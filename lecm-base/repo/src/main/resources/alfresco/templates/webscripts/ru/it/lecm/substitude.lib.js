@@ -30,7 +30,7 @@ function getSubstitudeField(node, field) {
 			firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL, firstIndex + 1);
 			transitions.push(field.substring(oldFirstIndex + 1, firstIndex));
 		}
-		fieldName = field.substring(lastIndex + 1, ("" + field).length);
+		fieldName = field.substring(lastIndex + 1, field.length);
 	} else {
 		fieldName = field;
 	}
@@ -42,7 +42,7 @@ function getSubstitudeField(node, field) {
 		}
 		if (el.indexOf(PARENT_SYMBOL) == 0) {
 			var assocType = el.replace(PARENT_SYMBOL, "");
-			if (("" + assocType).length > 0) {
+			if (assocType.length > 0) {
 				showNode = showNode.sourceAssocs[assocType];
 				if (showNode == null) {
 					break;

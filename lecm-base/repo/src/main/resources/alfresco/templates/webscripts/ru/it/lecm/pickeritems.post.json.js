@@ -19,19 +19,23 @@ function main()
       itemValueType = "nodeRef",
       itemValueTypeHint = "",
       itemNameSubstituteString = "{cm:name}",
+      selectedItemsNameSubstituteString = "{cm:name}",
       numItems = jsonItems.length(),
       item, result;
    
-   if (json.has("itemValueType"))
-   {
+   if (json.has("itemValueType")) {
       var jsonValueTypes = json.get("itemValueType").split(";");
       itemValueType = jsonValueTypes[0];
       itemValueTypeHint = (jsonValueTypes.length > 1) ? jsonValueTypes[1] : "";
    }
-   if (json.has("itemNameSubstituteString"))
-   {
+   if (json.has("itemNameSubstituteString")) {
        itemNameSubstituteString = json.get("itemNameSubstituteString");
    }
+	if (json.has("selectedItemsNameSubstituteString")) {
+		selectedItemsNameSubstituteString = json.get("selectedItemsNameSubstituteString");
+	} else {
+		selectedItemsNameSubstituteString = itemNameSubstituteString;
+	}
 
    for (count = 0; count < numItems; count++)
    {
@@ -63,7 +67,8 @@ function main()
             results.push(
             {
                item: result,
-               visibleName: formatNodeTitle(result, itemNameSubstituteString)
+               visibleName: formatNodeTitle(result, ("" + itemNameSubstituteString)),
+               selectedVisibleName: formatNodeTitle(result, ("" + selectedItemsNameSubstituteString))
             });
          }
       }
