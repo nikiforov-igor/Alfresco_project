@@ -1764,3 +1764,40 @@ div.orgchart-picker-menu .search-button button {
 div.orgchart-picker-menu .search-input {
     margin-right: 3px;
 }
+
+.tree .dropTarget,
+.tree .dropTarget .ygtvlabel
+{
+	background-color:yellow!important;
+	color: black!important;
+}
+
+.tree .ygtv-highlight .ygtvfocus,
+.tree .ygtv-highlight .ygtvfocus .ygtvlabel,
+.tree .ygtv-highlight .ygtvfocus .ygtvlabel:link,
+.tree .ygtv-highlight .ygtvfocus .ygtvlabel:visited,
+.tree .ygtv-highlight .ygtvfocus .ygtvlabel:hover,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:link,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:visited,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:hover
+{
+	background-color:white;
+}
+
+.tree .ygtv-highlight .ygtv-highlight1,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvlabel,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
+.tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
+{
+	background-color:blue;
+	color:white;
+}
+
+.tree .ygtv-highlight a.ygtvspacer {
+	text-decoration: none;
+}
