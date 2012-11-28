@@ -325,7 +325,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         filter:searchFilter != null ? searchFilter : "" ,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
                         fields:searchFields,
-                        showInactive: searchShowInactive,
+                        showInactive: searchShowInactive != null ? searchShowInactive : "false",
                         fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
                     }
             };
