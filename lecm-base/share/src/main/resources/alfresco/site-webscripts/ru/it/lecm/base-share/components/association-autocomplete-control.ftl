@@ -47,9 +47,7 @@
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
-                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-                openSubstituteSymbol: "{",
-                closeSubstituteSymbol: "}"
+                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
             });
 
 
@@ -59,12 +57,6 @@
             </#if>
             <#if field.control.params.startLocation??>
                 rootLocation: "${field.control.params.startLocation}",
-            </#if>
-            <#if field.control.params.bigItemIcon??>
-                bigItemIcon: "${field.control.params.bigItemIcon}",
-            </#if>
-            <#if field.control.params.smallItemIcon??>
-                smallItemIcon: "${field.control.params.smallItemIcon}",
             </#if>
             <#if field.mandatory??>
                 mandatory: ${field.mandatory?string},

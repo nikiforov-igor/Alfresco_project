@@ -39,8 +39,6 @@
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-                openSubstituteSymbol: "{",
-                closeSubstituteSymbol: "}",
                 showCreateNewButton: ${showCreateNewLink?string}
             });
 })();

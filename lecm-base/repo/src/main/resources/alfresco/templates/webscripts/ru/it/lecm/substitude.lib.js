@@ -1,22 +1,33 @@
-var parentSymbol = "..";
-var splitTransitionsSymbol = "/";
-var equalsSymbol = "=";
-var splitExpressionSymbol = ",";
-var openExpressionsSymbol = "(";
-var closeExpressionsSymbol = ")";
+const PARENT_SYMBOL = "..";
+const SPLIT_TRANSITIONS_SYMBOL = "/";
+const EQUALS_SYMBOL = "=";
+const SPLIT_EXPRESSION_SYMBOL = ",";
+const OPEN_EXPRESSIONS_SYMBOL = "(";
+const CLOSE_EXPRESSIONS_SYMBOL = ")";
+const OPEN_SUBSTITUDE_SYMBOL = "{";
+const CLOSE_SUBSTITUDE_SYMBOL = "}";
+
+function formatNodeTitle(node, formatString) {
+	var result = formatString;
+	var nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
+	for each(var field in nameParams) {
+		result = result.replace(OPEN_SUBSTITUDE_SYMBOL + field + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, field));
+	}
+	return result;
+}
 
 function getSubstitudeField(node, field) {
 	var showNode = node;
 	var fieldName = null;
 	var transitions = [];
 
-	if (field.indexOf(splitTransitionsSymbol) != -1) {
-		var firstIndex = field.indexOf(splitTransitionsSymbol);
+	if (field.indexOf(SPLIT_TRANSITIONS_SYMBOL) != -1) {
+		var firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
 		transitions.push(field.substring(0, firstIndex));
-		var lastIndex = field.lastIndexOf(splitTransitionsSymbol);
+		var lastIndex = field.lastIndexOf(SPLIT_TRANSITIONS_SYMBOL);
 		while (firstIndex != lastIndex) {
 			var oldFirstIndex = firstIndex;
-			firstIndex = field.indexOf(splitTransitionsSymbol, firstIndex + 1);
+			firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL, firstIndex + 1);
 			transitions.push(field.substring(oldFirstIndex + 1, firstIndex));
 		}
 		fieldName = field.substring(lastIndex + 1, ("" + field).length);
@@ -24,14 +35,13 @@ function getSubstitudeField(node, field) {
 		fieldName = field;
 	}
 
-	for (var i = 0; i < transitions.length; i++) {
-		var el = transitions[i];
+	for each(var el in transitions) {
 		var expressions = getExpression(el);
 		if (expressions.length > 0) {
-			el = el.substring(0, el.indexOf(openExpressionsSymbol));
+			el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
 		}
-		if (el.indexOf(parentSymbol) == 0) {
-			var assocType = el.replace(parentSymbol, "");
+		if (el.indexOf(PARENT_SYMBOL) == 0) {
+			var assocType = el.replace(PARENT_SYMBOL, "");
 			if (("" + assocType).length > 0) {
 				showNode = showNode.sourceAssocs[assocType];
 				if (showNode == null) {
@@ -54,11 +64,9 @@ function getSubstitudeField(node, field) {
 		if (showNode != null) {
 			if (expressions.length > 0) {
 				var exist = false;
-				for (var i = 0; i < showNode.length; i++) {
-					var node = showNode[i];
+				for each(var node in showNode) {
 					var expressionsFalse = false;
-					for (var j = 0; j < expressions.length; j++) {
-						var expression = expressions[j];
+					for each(var expression in expressions) {
 						if (("" + node.properties[expression.field]) != expression.value) {
 							expressionsFalse = true;
 							break;
@@ -113,18 +121,18 @@ function splitSubstitudeFieldsString(str, openSymbol, closeSymbol) {
 function getExpression(str) {
 	var expressions = [];
 
-	var openIndex = str.indexOf(openExpressionsSymbol);
-	var closeIndex = str.indexOf(closeExpressionsSymbol);
+	var openIndex = str.indexOf(OPEN_EXPRESSIONS_SYMBOL);
+	var closeIndex = str.indexOf(CLOSE_EXPRESSIONS_SYMBOL);
 	if (openIndex > -1 && closeIndex > -1) {
 		var expressionsStr = str.substring(openIndex + 1, closeIndex);
-		if (expressionsStr.length > 0 && expressionsStr.indexOf(equalsSymbol) > -1) {
+		if (expressionsStr.length > 0 && expressionsStr.indexOf(EQUALS_SYMBOL) > -1) {
 			var equalsIndex = -1;
 			var endIndex = -1;
-			var lastEqualsIndex = expressionsStr.lastIndexOf(equalsSymbol);
+			var lastEqualsIndex = expressionsStr.lastIndexOf(EQUALS_SYMBOL);
 			while (equalsIndex != lastEqualsIndex) {
 				var oldEndIndex = endIndex;
-				equalsIndex = expressionsStr.indexOf(equalsSymbol, equalsIndex + 1);
-				endIndex = expressionsStr.indexOf(splitExpressionSymbol, endIndex + 1);
+				equalsIndex = expressionsStr.indexOf(EQUALS_SYMBOL, equalsIndex + 1);
+				endIndex = expressionsStr.indexOf(SPLIT_EXPRESSION_SYMBOL, endIndex + 1);
 				if (endIndex == -1) {
 					endIndex = expressionsStr.length;
 				}

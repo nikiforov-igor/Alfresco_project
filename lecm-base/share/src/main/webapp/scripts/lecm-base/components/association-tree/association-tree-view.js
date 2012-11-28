@@ -88,10 +88,6 @@ LogicECM.module = LogicECM.module || {};
 
             createNewItemIcon: "",
 
-            bigItemIcon: "components/images/filetypes/generic-file-32.png",
-
-            smallItemIcon: "components/images/filetypes/generic-file-16.png",
-
             rootLocation: null,
 
             rootNodeRef: "",
@@ -106,11 +102,7 @@ LogicECM.module = LogicECM.module || {};
 
             treeNodeTitleProperty: "cm:name",
 
-            nameSubstituteString: "{cm:name}",
-
-            openSubstituteSymbol: "{",
-
-            closeSubstituteSymbol: "}"
+            nameSubstituteString: "{cm:name}"
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -253,9 +245,7 @@ LogicECM.module = LogicECM.module || {};
                         {
                             items: arrItems.split(","),
                             itemValueType: "nodeRef",
-                            itemNameSubstituteString: this.options.nameSubstituteString,
-                            itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
-                            itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                            itemNameSubstituteString: this.options.nameSubstituteString
                         },
                         successCallback:
                         {
@@ -325,9 +315,7 @@ LogicECM.module = LogicECM.module || {};
                         {
                             items: nodeRef.split(","),
                             itemValueType: "nodeRef",
-                            itemNameSubstituteString: this.options.nameSubstituteString,
-                            itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
-                            itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                            itemNameSubstituteString: this.options.nameSubstituteString
                         },
                         successCallback:
                         {
@@ -805,7 +793,7 @@ LogicECM.module = LogicECM.module || {};
                     template += '<div class="description">{description}</div>';
                 }
 
-                elCell.innerHTML = scope.renderItem(oRecord.getData(), 0, template);
+                elCell.innerHTML = scope.renderItem(oRecord.getData(), template);
             };
         },
 
@@ -840,25 +828,16 @@ LogicECM.module = LogicECM.module || {};
             };
         },
 
-        renderItem: function AssociationTreeViewer_renderItem(item, iconSize, template)
+        renderItem: function AssociationTreeViewer_renderItem(item, template)
         {
             var me = this;
 
             var renderHelper = function AssociationTreeViewer_renderItem_renderHelper(p_key, p_value, p_metadata)
             {
-                if (p_key.toLowerCase() == "icon")
-                {
-                    return '<img src="' + me.getIconURL(item, iconSize) + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(item.name) + '" />';
-                }
                 return $html(p_value);
             };
 
             return YAHOO.lang.substitute(template, item, renderHelper);
-        },
-
-        getIconURL: function AssociationTreeViewer_getIconURL(item, size)
-        {
-            return Alfresco.constants.URL_RESCONTEXT + this.options.bigItemIcon;
         },
 
         canItemBeSelected: function AssociationTreeViewer_canItemBeSelected(id)
@@ -955,9 +934,7 @@ LogicECM.module = LogicECM.module || {};
         _generateChildrenUrlParams: function AssociationTreeViewer__generatePickerChildrenUrlParams(searchTerm)
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-                "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
-                "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol);
+                "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
         },
 
         onSelectedItemAdded: function AssociationTreeViewer_onSelectedItemAdded(layer, args)

@@ -19,8 +19,6 @@ function main()
       itemValueType = "nodeRef",
       itemValueTypeHint = "",
       itemNameSubstituteString = "{cm:name}",
-      itemOpenSubstituteSymbol = "{",
-      itemCloseSubstituteSymbol = "}",
       numItems = jsonItems.length(),
       item, result;
    
@@ -34,17 +32,7 @@ function main()
    {
        itemNameSubstituteString = json.get("itemNameSubstituteString");
    }
-   if (json.has("itemOpenSubstituteSymbol"))
-   {
-       itemOpenSubstituteSymbol = json.get("itemOpenSubstituteSymbol");
-   }
-   if (json.has("itemCloseSubstituteSymbol"))
-   {
-       itemCloseSubstituteSymbol = json.get("itemCloseSubstituteSymbol");
-   }
 
-   var nameParams = splitSubstitudeFieldsString(itemNameSubstituteString, itemOpenSubstituteSymbol, itemCloseSubstituteSymbol);
-   
    for (count = 0; count < numItems; count++)
    {
       item = jsonItems.get(count);
@@ -72,15 +60,10 @@ function main()
                result = createGroupResult(result);
             }
 
-            var visibleName = itemNameSubstituteString;
-            for each(var field in nameParams) {
-                visibleName = visibleName.replace(itemOpenSubstituteSymbol + field + itemCloseSubstituteSymbol, getSubstitudeField(result, field));
-            }
-
             results.push(
             {
                item: result,
-               visibleName: visibleName
+               visibleName: formatNodeTitle(result, itemNameSubstituteString)
             });
          }
       }

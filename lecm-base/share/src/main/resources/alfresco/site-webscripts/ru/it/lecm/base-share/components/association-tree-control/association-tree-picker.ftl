@@ -38,6 +38,8 @@
             <#if field.disabled == false>
                 <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
                 <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+	            <input type="hidden" id="${controlId}-selectedItems"/>
+
                 <div id="${controlId}-itemGroupActions" class="show-picker">
                     <span class="tree-picker-button">
                         <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
@@ -77,12 +79,6 @@
         </#if>
         <#if field.control.params.rootLocation??>
             rootLocation: "${field.control.params.rootLocation}",
-        </#if>
-        <#if field.control.params.bigItemIcon??>
-            bigItemIcon: "${field.control.params.bigItemIcon}",
-        </#if>
-        <#if field.control.params.smallItemIcon??>
-            smallItemIcon: "${field.control.params.smallItemIcon}",
         </#if>
         <#if field.mandatory??>
             mandatory: ${field.mandatory?string},

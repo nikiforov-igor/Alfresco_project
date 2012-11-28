@@ -58,11 +58,7 @@ LogicECM.module = LogicECM.module || {};
 
                 maxSearchResults:1000,
 
-                nameSubstituteString:"{cm:name}",
-
-                openSubstituteSymbol:"{",
-
-                closeSubstituteSymbol:"}"
+                nameSubstituteString:"{cm:name}"
             },
 
             selectedItems: null,
@@ -153,9 +149,7 @@ LogicECM.module = LogicECM.module || {};
                             {
                                 items: arrItems.split(","),
                                 itemValueType: "nodeRef",
-                                itemNameSubstituteString: this.options.nameSubstituteString,
-                                itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
-                                itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                                itemNameSubstituteString: this.options.nameSubstituteString
                             },
                             successCallback:
                             {
@@ -298,9 +292,7 @@ LogicECM.module = LogicECM.module || {};
             _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
             {
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-                    "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
-                    "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol);
+                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
                 {

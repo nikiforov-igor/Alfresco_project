@@ -9,8 +9,6 @@ function main()
       argsXPath = args['xpath'],
       argsRootNode = args['rootNode'],
       argsNameSubstituteString = args['nameSubstituteString'],
-      argsOpenSubstituteSymbol = args['openSubstituteSymbol'],
-      argsCloseSubstituteSymbol = args['closeSubstituteSymbol'],
       pathElements = url.service.split("/"),
       parent = null,
       rootNode = companyhome,
@@ -21,8 +19,6 @@ function main()
       argsXPathLocation = args['xPathLocation'],
       argsXPathRoot = args['xPathRoot'];
 
-   var nameParams = splitSubstitudeFieldsString(argsNameSubstituteString, argsOpenSubstituteSymbol, argsCloseSubstituteSymbol);
-   
    if (logger.isLoggingEnabled())
    {
       logger.log("children type = " + url.templateArgs.type);
@@ -32,9 +28,6 @@ function main()
       logger.log("argsMaxResults = " + argsMaxResults);
       logger.log("argsXPath = " + argsXPath);
       logger.log("nameSubstituteString = " + argsNameSubstituteString);
-      logger.log("openSubstituteSymbol = " + argsOpenSubstituteSymbol);
-      logger.log("closeSubstituteSymbol = " + argsCloseSubstituteSymbol);
-      logger.log("nameParams = " + nameParams);
       logger.log("argsXPathLocation = " + argsXPathLocation);
       logger.log("argsXPathRoot = " + argsXPathRoot);
     }
@@ -191,11 +184,7 @@ function main()
 	               }
 	            }
 
-	            var visibleName = argsNameSubstituteString;
-	            for each(var field in nameParams) {
-	                visibleName = visibleName.replace(argsOpenSubstituteSymbol + field + argsCloseSubstituteSymbol, getSubstitudeField(result, field));
-	            }
-	            resultObj.visibleName = visibleName;
+	            resultObj.visibleName = formatNodeTitle(result, argsNameSubstituteString);
             }
          }
 
