@@ -13,6 +13,7 @@ function main() {
             maxResults:(pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS,
             fields:(pars.get("fields") !== null) ? pars.get("fields") : null,
             filter:(pars.get("filter") !== null) ? pars.get("filter") : "",
+            showInactive: pars.get("showInactive") == true,
 			fullTextSearch:(pars.get("fullTextSearch") !== null) ? pars.get("fullTextSearch") : ""
         };
     }

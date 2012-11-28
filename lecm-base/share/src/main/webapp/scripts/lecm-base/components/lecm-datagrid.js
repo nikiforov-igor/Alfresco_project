@@ -1169,6 +1169,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         searchQuery:YAHOO.lang.JSON.stringify(initialData),
                         searchFilter:filter,
                         fullTextSearch:fullText,
+                        searchShowInactive:false,
                         bubblingLabel:me.options.bubblingLabel
                     });
             },

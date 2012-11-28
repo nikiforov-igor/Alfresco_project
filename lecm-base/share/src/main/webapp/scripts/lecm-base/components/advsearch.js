@@ -196,7 +196,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var searchSort = args.searchSort,
                     searchQuery = args.searchQuery,
                     searchFilter = args.searchFilter,
-                    fullTextSearch = args.fullTextSearch;
+                    fullTextSearch = args.fullTextSearch,
+                    searchShowInactive = args.searchShowInactive;
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -296,7 +297,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this._buildSearchParams(searchQuery, searchFilter, searchSort, fields, fullTextSearch);
+                var searchParams = this._buildSearchParams(searchQuery, searchFilter, searchSort, fields, fullTextSearch, searchShowInactive);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -315,7 +316,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            _buildSearchParams:function ADVSearch__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch) {
+            _buildSearchParams:function ADVSearch__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch, searchShowInactive) {
                 var request =
                 {
                     params:{
@@ -324,9 +325,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         filter:searchFilter != null ? searchFilter : "" ,
                         maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
                         fields:searchFields,
+                        showInactive: searchShowInactive,
                         fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
                     }
-                };
+            };
                 return request;
             },
 

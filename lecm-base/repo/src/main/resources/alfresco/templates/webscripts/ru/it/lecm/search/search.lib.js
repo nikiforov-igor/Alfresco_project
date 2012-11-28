@@ -135,6 +135,7 @@ function getSearchResults(params) {
         fields = params.fields,
         filter = params.filter,
         sort = params.sort,
+        showInactive = params.showInactive,
         fullTextSearch = params.fullTextSearch;
 
     // Advanced search form data search.
@@ -282,6 +283,11 @@ function getSearchResults(params) {
         // ensure a TYPE is specified - if no add one to remove system objects from result sets
         if (ftsQuery.indexOf("TYPE:\"") === -1 && ftsQuery.indexOf("TYPE:'") === -1) {
             ftsQuery += ' AND (+TYPE:"cm:content" +TYPE:"cm:folder")';
+        }
+
+        //whether show removed dictionaries
+        if (!showInactive) {
+            ftsQuery += ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
         }
 
         // sort field - expecting field to in one of the following formats:
