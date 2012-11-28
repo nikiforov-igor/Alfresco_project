@@ -28,7 +28,11 @@
                                         }],
                             datagridMeta: {
                                     itemType: "${field.control.params.itemType!""}",
-                                    nodeRef: "${form.arguments.itemId}"
+                                    nodeRef: "${form.arguments.itemId}",
+                                    searchConfig:{ //настройки поиска (необязателен)
+                                        filter:'PARENT: "${form.arguments.itemId}"', // дополнительный запрос(фильтр)
+                                        sort: "cm:name|true" // сортировка. Указываем по какому полю и порядок (true - asc), например, cm:name|true
+                                    }
                                 },
                             bubblingLabel: "${containerId}",
                             height: 100,
