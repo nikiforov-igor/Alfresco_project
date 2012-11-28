@@ -16,7 +16,7 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
-                <page>orgstructure</page>
+                <typeButton>newUnitButton</typeButton>
             </properties>
         </component>
         <!-- Title -->

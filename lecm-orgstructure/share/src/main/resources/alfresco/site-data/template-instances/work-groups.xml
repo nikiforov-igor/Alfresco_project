@@ -25,6 +25,7 @@
                 <type>workForce</type>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
+                <typeButton>newRowButtonStaff</typeButton>
             </properties>
         </component>
         <component>

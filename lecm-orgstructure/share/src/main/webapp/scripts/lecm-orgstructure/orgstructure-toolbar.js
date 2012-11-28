@@ -51,6 +51,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
+        YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
         return this;
     };
 
@@ -73,6 +74,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             options:{
                 bubblingLabel: null
             },
+            /**
+             * Дополнительные кнопки, активируемы при выборе элемента в дереве
+             */
+            treeSelectActions: {},
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -99,6 +104,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 this.widgets.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
                         disabled: true
+                    });
+                this.treeSelectActions.newRowButtonStaff = Alfresco.util.createYUIButton(this, "newRowButtonStaff", this.onNewRow,
+                    {
+                        disabled:true,
+                        value:"create"
                     });
 
                 var me = this;
@@ -354,6 +364,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     return (typeof found[0] == "object" ? found[0] : null);
                 }
                 return null;
+            },
+            onInitButton: function Tree_onSelectedItems(layer, args)
+            {
+                if (this.treeSelectActions != null) {
+                    for (var index in this.treeSelectActions)
+                    {
+                        if (this.treeSelectActions.hasOwnProperty(index))
+                        {
+                            var action = this.treeSelectActions[index];
+                            if (action != null) {
+                                action.set("disabled", args[1].disable);
+                            }
+                        }
+                    }
+                }
             }
         }, true);
 })();

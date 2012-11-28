@@ -20,15 +20,8 @@ function main()
 
     model.actionSet = actionSet;
 
-    var showNewUnitBtn = false;
-    var page = args["page"];
-    if (page != null && page != '') {
-        if (page == 'orgstructure') {
-            showNewUnitBtn = true;
-        }
-    }
-    model.showNewUnitBtn = showNewUnitBtn;
     model.bubblingLabel = args["type"];
+    model.typeButton = args["typeButton"];
 
     var showSearchBlock = args["showSearchBlock"];
     var showExSearchBtn = args["showExSearchBtn"];

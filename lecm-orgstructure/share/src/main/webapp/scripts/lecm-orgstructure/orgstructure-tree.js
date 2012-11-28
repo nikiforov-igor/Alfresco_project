@@ -141,7 +141,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             var newNode = {
                                 label:oResults[nodeIndex].title,
                                 nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf
+                                isLeaf:oResults[nodeIndex].isLeaf,
+                                type: oResults[nodeIndex].type
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
@@ -228,6 +229,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             }
                         }
                     });
+            };
+            if (node.data.type == "organization-unit") {
+                YAHOO.Bubbling.fire("initActiveButton",{disable: false});
+            } else {
+                YAHOO.Bubbling.fire("initActiveButton",{disable: true});
             }
         },
         _editNode:function editNodeByEvent(event) {

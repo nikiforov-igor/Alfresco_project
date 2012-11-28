@@ -1,9 +1,5 @@
 package ru.it.lecm.orgstructure;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.processor.BaseProcessorExtension;
@@ -19,6 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author dbashmakov
  *         Date: 30.09.12
@@ -32,7 +32,6 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 	public static final String TYPE_WRK_GROUP = "workGroup";
 	public static final String TYPE_UNIT = "organization-unit";
 	public static final String TYPE_STAFF_LIST = "staff-list";
-	public static final String TYPE_ = "workGroup";
 	public static final String TYPE_POSITION = "staffPosition";
 	public static final String TYPE_ROLE = "workRole";
 
@@ -164,6 +163,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 						JSONObject unit = new JSONObject();
 						try {
 							unit.put(NODE_REF, child.getChildRef().toString());
+							unit.put(TYPE, TYPE_UNIT);
 							unit.put(TITLE, getElementName(
 									nodeService, child.getChildRef(), QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 							unit.put(IS_LEAF, !hasChild(child, nodeService, true));
@@ -179,6 +179,7 @@ public class GetOrgstructureBean extends BaseProcessorExtension {
 					JSONObject root = new JSONObject();
 					try {
 						root.put(NODE_REF, structure.toString());
+						root.put(TYPE, DIRECTORY_STRUCTURE);
 						root.put(TITLE, getElementName(
 								nodeService, structure, QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 						root.put(IS_LEAF, nodeService.getChildAssocs(
