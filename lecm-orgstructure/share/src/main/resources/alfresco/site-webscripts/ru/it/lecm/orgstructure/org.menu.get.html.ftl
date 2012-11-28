@@ -8,7 +8,7 @@
     <@comp.baseMenuButton "workGroup" msg('lecm.orgstructure.work-groups.btn') selected/>
     <@comp.baseMenuButton "positions" msg('lecm.orgstructure.positions.btn') selected/>
     <@comp.baseMenuButton "roles" msg('lecm.orgstructure.roles.btn') selected/>
-    <@comp.baseMenuButton "organization" msg('lecm.organization.roles.btn') selected/>
+    <@comp.baseMenuButton "organization" msg('lecm.orgstructure.organization.btn') selected/>
 </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[
