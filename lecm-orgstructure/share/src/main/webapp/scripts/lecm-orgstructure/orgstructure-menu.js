@@ -165,7 +165,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         draw:function draw() {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/roots";
             var callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
@@ -175,15 +175,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 itemType:oResults[nodeIndex].itemType,
                                 namePattern:oResults[nodeIndex].namePattern,
-                                type:oResults[nodeIndex].type
+                                page:oResults[nodeIndex].page
                             };
                             var namespace = "lecm-orgstr";
-                            var rType = root.type;
+                            var page = root.page;
                             var cType = root.itemType;
-                            root.type = namespace + ":" + rType;
                             root.itemType = namespace + ":" + cType;
 
-                            oResponse.argument.context.roots[rType] = root;
+                            oResponse.argument.context.roots[page] = root;
                         }
                     }
                     oResponse.argument.context._draw();

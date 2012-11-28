@@ -42,17 +42,6 @@
         </property>
     </bean>
 
-    <bean id="${groupId}.${artifactId}.getOrgstructureBean" parent="baseJavaScriptExtension"
-          class="ru.it.lecm.orgstructure.GetOrgstructureBean">
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
-        </property>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
-        <property name="extensionName">
-            <value>orgstructure</value>
-        </property>
-    </bean>
-
     <bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap">
         <property name="dictionaries">
             <list>
@@ -61,5 +50,27 @@
                 <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes.xml</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="orgstructureScript" parent="baseJavaScriptExtension" class="ru.it.lecm.orgstructure.scripts.OrgstructureWebScriptBean"
+          depends-on="serviceOrgstructure">
+        <property name="extensionName">
+            <value>orgstructure</value>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="repositoryHelper">
+            <ref bean="repositoryHelper"/>
+        </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+    </bean>
+
+    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBean">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="transactionService" ref="transactionService"/>
     </bean>
 </beans>

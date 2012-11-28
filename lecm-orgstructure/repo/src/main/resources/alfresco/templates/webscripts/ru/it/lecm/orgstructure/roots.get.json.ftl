@@ -1,11 +1,11 @@
 <#escape x as x?js_string>
 [
-    <#list  branch as b>
+    <#list  roots as b>
         {
-            title: "${b.title}",
-            type: "${b.type}",
+            page: "${b.page}",
             nodeRef: "${b.nodeRef}",
-            isLeaf: ${b.isLeaf}
+            itemType: "${b.itemType}",
+            namePattern: "${b.pattern}"
         }
         <#if b_has_next>,</#if>
     </#list>
