@@ -91,7 +91,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			}
 		},
 
-		_createDelegationOpts: function () {
+		_createDelegationList: function () {
 			var scope = this;
 			return function (event, obj) {
 				var datagridMeta = scope.modules.dataGrid.datagridMeta;
@@ -210,18 +210,23 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 		_onToolbarReady: function () {
 
-			if ("delegation" === this.options.pageId) {
-				Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
-					label: "создать доверенность"
-				});
+			switch (this.options.pageId) {
+				case "delegation-list":
+					Alfresco.util.createYUIButton(this, "btnCreateDelegationList", this._createDelegationList (), {
+						label: "создать параметры делегирования"
+					});
+					break;
+				case "delegation-opts":
+					break;
+				case "delegation":
+					Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
+						label: "создать доверенность"
+					});
 
-				Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
-					label: "обновить"
-				});
-			} else if ("delegation-opts" === this.options.pageId) {
-				Alfresco.util.createYUIButton(this, "btnCreateDelegationOpts", this._createDelegationOpts (), {
-					label: "создать параметры делегирования"
-				});
+					Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
+						label: "обновить"
+					});
+					break;
 			}
 
 			Alfresco.util.createYUIButton(this, "searchButton", this._onSearchClick ());

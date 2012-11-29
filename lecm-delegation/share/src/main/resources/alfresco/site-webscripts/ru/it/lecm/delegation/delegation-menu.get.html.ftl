@@ -9,19 +9,9 @@
 </script>
 
 <@comp.baseMenu>
-	<div class="delegation-menu">
-		<span id="menu-buttons-delegationBtn" class="yui-button yui-push-button">
-	        <span class="first-child">
-	            <button type="button" title="делегирование полномочий (старое)">&nbsp;</button>
-	        </span>
-	    </span>
-	</div>
-	<div class="delegation-menu">
-		<span id="menu-buttons-delegationOptsBtn" class="yui-button yui-push-button">
-            <span class="first-child">
-                <button type="button" title="настройка параметров делегирования">&nbsp;</button>
-            </span>
-	    </span>
-	</div>
+	<@comp.baseMenuButton "delegationOpts" "настройка параметров делегирования" args.selected/>
+	<#-- TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник) -->
+	<@comp.baseMenuButton "delegationList" "перечень делегирования" args.selected/>
+    <@comp.baseMenuButton "delegation" "старая страница делегирования" args.selected/>
 </@comp.baseMenu>
 

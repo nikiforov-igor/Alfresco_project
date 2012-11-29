@@ -18,15 +18,19 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 	YAHOO.lang.extend(LogicECM.module.Delegation.Menu, Alfresco.component.Base, {
 
+		options: {
+			pageId: null
+		},
+
 		_reloadPage: function (type) {
 			var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
 			window.location.href = url + type;
 		},
 
-		_delegationBtnClick: function () {
+		_delegationListBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				scope._reloadPage ("delegation");
+				scope._reloadPage ("delegation-list");
 			}
 		},
 
@@ -37,9 +41,19 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			}
 		},
 
+		_delegationBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				scope._reloadPage ("delegation");
+			}
+		},
+
 		_onMenuReady: function () {
-			Alfresco.util.createYUIButton(this, "delegationBtn", this._delegationBtnClick (), {});
+
 			Alfresco.util.createYUIButton(this, "delegationOptsBtn", this._delegationOptsBtnClick (), {});
+			//TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник)
+			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {});
+			Alfresco.util.createYUIButton(this, "delegationBtn", this._delegationBtnClick (), {});
 		},
 
 		onReady: function () {

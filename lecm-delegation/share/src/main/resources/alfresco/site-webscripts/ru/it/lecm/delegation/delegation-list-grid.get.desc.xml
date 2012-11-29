@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>delegation-opts-grid</shortname>
 	<description>Returns delegation-opts-grid region content.</description>
-	<url>/ru/it/lecm/delegation-opts/grid</url>
+	<url>/ru/it/lecm/delegation/delegation-list/grid</url>
 	<format default="html"/>
 	<authentication>user</authentication>
 </webscript>

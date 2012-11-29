@@ -11,26 +11,13 @@
 				<filteredLabel>page.delegation-opts.filteredLabel</filteredLabel>
 			</properties>
 		</component>
-		<!-- Toolbar -->
-		<component>
-			<region-id>toolbar</region-id>
-			<url>/ru/it/lecm/delegation/toolbar</url>
-			<properties>
-				<page>delegation-opts</page>
-			</properties>
-		</component>
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>
 			<url>/ru/it/lecm/delegation/menu</url>
 			<properties>
-				<page>delegation-opts</page>
+				<selected>delegationOpts</selected>
 			</properties>
-		</component>
-		<!-- Grid region -->
-		<component>
-			<region-id>delegation-opts-grid</region-id>
-			<url>/ru/it/lecm/delegation-opts/grid</url>
 		</component>
 	</components>
 </template-instance>

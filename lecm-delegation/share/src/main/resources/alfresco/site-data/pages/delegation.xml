@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title-id>page.delegation.title</title-id>
-	<description-id>page.delegation.description</description-id>
+	<title>Делегирование полномочий</title>
+	<description>Старая страница делегирования полномочий</description>
 	<template-instance>delegation</template-instance>
 	<authentication>user</authentication>
 </page>

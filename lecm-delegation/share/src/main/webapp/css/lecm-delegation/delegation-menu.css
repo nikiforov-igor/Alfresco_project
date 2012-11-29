@@ -1,6 +1,9 @@
-#lecm-menu .delegation-menu #menu-buttons-delegationBtn span.first-child {
-    background: url('../../images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
+#lecm-menu #menu-buttons #menu-buttons-delegationListBtn span.first-child {
+    background: url('/share/res/images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
 }
-#lecm-menu .delegation-menu #menu-buttons-delegationOptsBtn span.first-child {
-    background: url('../../images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
+#lecm-menu #menu-buttons #menu-buttons-delegationOptsBtn span.first-child {
+    background: url('/share/res/images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-delegationBtn span.first-child {
+    background: url('/share/res/images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
 }
