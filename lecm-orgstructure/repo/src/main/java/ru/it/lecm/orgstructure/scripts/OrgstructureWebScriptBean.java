@@ -64,7 +64,8 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	protected ServiceRegistry services;
 
 	/**
-	 * Repository helper */
+	 * Repository helper
+	 */
 	protected Repository repository;
 
 	private OrgstructureBean orgstructureService;
@@ -109,7 +110,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	/**
 	 * Получаем список "корневых" объектов для меню в Оргструктуре
-
+	 *
 	 * @return Текстовое представление JSONArrray c объектами
 	 */
 	public String getRoots() {
@@ -197,6 +198,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	/**
 	 * Получаем список Дочерних объектов в офрмате, используемом в дереве Оргструктуры
+	 *
 	 * @return Текстовое представление JSONArrray c объектами
 	 */
 	public String getStructure(final String type, final String ref) {
@@ -261,7 +263,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	/**
 	 * Возвращает ноду руководителя Организации
-	 * @return ScriptNode или Null
 	 */
 	public ScriptNode getOrganizationBoss() {
 		NodeRef boss = orgstructureService.getOrganizationBoss();
@@ -274,8 +275,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	/**
 	 * Возвращает ноду логотипа Организации
-	 *
-	 * @return ScriptNode или Null
 	 */
 	public ScriptNode getOrganizationLogo() {
 		NodeRef logo = orgstructureService.getOrganizationLogo();
@@ -287,9 +286,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список рабочих групп Организации
-	 *
-	 * @return Scriptable
+	 * Получение полного перечня рабочих групп Организации
 	 */
 	public Scriptable getWorkGroups(boolean onlyActive) {
 		List<NodeRef> wgs = orgstructureService.getWorkGroups(onlyActive);
@@ -297,9 +294,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список дочерних подразделений
-	 *
-	 * @return Scriptable
+	 * Получение перечня подчиненных подразделений
 	 */
 	public Scriptable getSubUnits(String parent, boolean onlyActive) {
 		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive);
@@ -308,8 +303,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	/**
 	 * Возвращает список "рутовых" подразделений
-	 *
-	 * @return список "рутовых" подразделений
 	 */
 	public Scriptable getRootUnits(boolean onlyActive) {
 		List<NodeRef> units = orgstructureService.getSubUnits(orgstructureService.getStructureDirectory(), onlyActive);
@@ -317,7 +310,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * @return Primary предок
+	 * Получение вышестоящего подразделения
 	 */
 	public ScriptNode getParent(String nodeRef) {
 		NodeRef parent = orgstructureService.getParent(new NodeRef(nodeRef));
@@ -328,9 +321,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает подразделение
-	 *
-	 * @return подразделение или null
+	 * Получение значений атрибутов подразделения
 	 */
 	public ScriptNode getUnit(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
@@ -344,16 +335,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает руководителя
-	 *
-	 * @return
+	 * Получение информации о руководителе подразделения
 	 */
 	public ScriptNode findUnitBoss(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef ref = new NodeRef(nodeRef);
 		if (this.services.getNodeService().exists(ref)) {
 			if (orgstructureService.isUnit(ref)) {
-				NodeRef bossRef = orgstructureService.getBoss(ref);
+				NodeRef bossRef = orgstructureService.getUnitBoss(ref);
 				if (bossRef != null) {
 					return new ScriptNode(bossRef, this.services, getScope());
 				}
@@ -363,20 +352,22 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список штатных расписаний для подразделения
-	 *
-	 * @return Scriptable список шт. расписаний
+	 * Получение перечня должностей подразделения
 	 */
-	public Scriptable getStaffLists(String unit, boolean onlyVacant) {
+	public Scriptable getAllStaffLists(String unit) {
+		return getStaffLists(unit, false);
+	}
+
+	private Scriptable getStaffLists(String unit, boolean onlyVacant) {
 		ParameterCheck.mandatory("unit", unit);
 		NodeRef ref = new NodeRef(unit);
-		List<NodeRef> staffs = orgstructureService.getStaffLists(ref);
+		List<NodeRef> staffs = orgstructureService.getUnitStaffLists(ref);
 		if (!onlyVacant) {
 			return createScriptable(staffs);
 		} else {
 			List<NodeRef> vstaffs = new ArrayList<NodeRef>();
 			for (NodeRef staff : staffs) {
-				NodeRef employeeInStaff = orgstructureService.getEmployee(staff);
+				NodeRef employeeInStaff = orgstructureService.getEmployeeByPosition(staff);
 				if (employeeInStaff == null) {// сотрудник не задан - вакантно
 					vstaffs.add(staff);
 				}
@@ -386,9 +377,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список вакантных штатных расписаний для подразделения
-	 *
-	 * @return Scriptable список шт. расписаний
+	 * Получение перечня вакантных должностей в подразделении
 	 */
 	public Scriptable getVacantStaffLists(String unit) {
 		return getStaffLists(unit, true);
@@ -408,9 +397,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список должностных позиций
-	 *
-	 * @return Scriptable список должностных позиций
+	 * Получение полного перечня должностных позиций
 	 */
 	public Scriptable getStaffPositions(boolean onlyActive) {
 		List<NodeRef> staffPositions = orgstructureService.getStaffPositions(onlyActive);
@@ -418,9 +405,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список сотрудников, занимающих данную должностную позицию
-	 *
-	 * @return Scriptable список сотрудников
+	 * Получение перечня сотрудников, которые занимают должностную позицию
 	 */
 	public Scriptable getPositionEmployees(String positionRef) {
 		ParameterCheck.mandatory("positionRef", positionRef);
@@ -430,9 +415,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает рабочую группу
-	 *
-	 * @return рабочая группа или null
+	 * Получение информации о Рабочей группе
 	 */
 	public ScriptNode getWorkGroup(String groupRef) {
 		ParameterCheck.mandatory("groupRef", groupRef);
@@ -446,14 +429,90 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает список сотрудников, участвующих в Рабочей группе
-	 *
-	 * @return Scriptable список сотрудников
+	 * Получение информации о Сотрудниках, участвующих в Рабочей группе
 	 */
 	public Scriptable getWorkGroupEmployees(String workGroupRef) {
 		ParameterCheck.mandatory("workGroupRef", workGroupRef);
 		NodeRef ref = new NodeRef(workGroupRef);
 		List<NodeRef> employees = orgstructureService.getWorkGroupEmployees(ref);
 		return createScriptable(employees);
+	}
+
+	/**
+	 * Получение информации о сотруднике
+	 */
+	public ScriptNode getEmployee(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isEmployee(ref)) {
+				return new ScriptNode(ref, this.services, getScope());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение информации о руководителе сотрудника
+	 */
+	public ScriptNode findEmployeeBoss(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isEmployee(ref)) {
+				// получаем основную должностную позицию
+				NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(ref);
+				NodeRef bossRef = null;
+				if (primaryStaff != null) {
+					// получаем подразделение для штатного расписания
+					NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+					// получаем руководителя для подразделения
+					bossRef = orgstructureService.getUnitBoss(unit);
+				} else {
+					bossRef = orgstructureService.getOrganizationBoss();
+				}
+				if (bossRef != null) {
+					return new ScriptNode(bossRef, this.services, getScope());
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение фотографии сотрудника
+	 */
+	public ScriptNode getEmployeePhoto(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isEmployee(ref)) {
+				NodeRef photo = orgstructureService.getEmployeePhoto(ref);
+				if (photo != null) {
+					return new ScriptNode(ref, this.services, getScope());
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение должностных позиций, занимаемых сотрудником
+	 */
+	public Scriptable getEmployeeStaffs(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
+		List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(ref);
+		return createScriptable(staffs);
+	}
+
+	/**
+	 * Получение Рабочих групп, в которых участвует сотрудник
+	 */
+	public Scriptable getEmployeeWorkGroups(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
+		List<NodeRef> staffs = orgstructureService.getEmployeeWorkGroups(ref);
+		return createScriptable(staffs);
 	}
 }

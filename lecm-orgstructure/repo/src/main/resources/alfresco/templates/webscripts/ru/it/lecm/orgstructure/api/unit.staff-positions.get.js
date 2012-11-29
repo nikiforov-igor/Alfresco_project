@@ -1,1 +1,1 @@
-model.staffs = orgstructure.getStaffLists(args["nodeRef"], false);
+model.staffs = orgstructure.getAllStaffLists(args["nodeRef"]);
