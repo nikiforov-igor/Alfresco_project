@@ -336,6 +336,17 @@ public class OrgstructureBean {
 	}
 
 	/**
+	 * проверяет что объект является рабочей группой
+	 *
+	 * @return true - если рабочая группа или false - в ином случае
+	 */
+	public boolean isWorkGroup(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_WORK_GROUP);
+		return isProperType(ref, types);
+	}
+
+	/**
 	 * проверяет что объект имеет подходящий тип
 	 *
 	 * @return true - если объект подходит по критериям или false - в ином случае
@@ -352,17 +363,7 @@ public class OrgstructureBean {
 	public NodeRef getBoss(NodeRef unitRef) {
 		NodeRef bossLink = null;
 		if (isUnit(unitRef)) { // ищем руководителя Подразделения
-			// Получаем список штатных расписаний
-			List<NodeRef> staffs = getStaffLists(unitRef);
-			// находим то, которое помечено как руководящая позиция
-			NodeRef bossStaff = null;
-
-			for (NodeRef staff : staffs) {
-				if ((Boolean) nodeService.getProperty(staff, PROP_STAFF_LIST_IS_BOSS)) {
-					bossStaff = staff;
-					break;
-				}
-			}
+			NodeRef bossStaff = getBossStaff(unitRef);
 			if (bossStaff != null) {
 				//вытаскиваем ссылку на сотрудника и непосредственно сотрудника (если ссылка имеется)
 				bossLink = getEmployee(bossStaff);
@@ -380,6 +381,21 @@ public class OrgstructureBean {
 			}
 		}
 		return bossLink;
+	}
+
+	public NodeRef getBossStaff(NodeRef unitRef) {
+		// Получаем список штатных расписаний
+		List<NodeRef> staffs = getStaffLists(unitRef);
+		// находим то, которое помечено как руководящая позиция
+		NodeRef bossStaff = null;
+
+		for (NodeRef staff : staffs) {
+			if ((Boolean) nodeService.getProperty(staff, PROP_STAFF_LIST_IS_BOSS)) {
+				bossStaff = staff;
+				break;
+			}
+		}
+		return bossStaff;
 	}
 
 	/**
@@ -487,6 +503,35 @@ public class OrgstructureBean {
 				links.add(TYPE_EMPLOYEE_LINK);
 				// из штатного расписания получает ссылку на сотрудника
 				List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(staff.getSourceRef(), links);
+				if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+					NodeRef employee = getEmployeeFromLink(empLinks.get(0).getChildRef());
+					results.add(employee);
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Получение перечня сотрудников, участвующих в рабочей группе
+	 *
+	 * @return List<NodeRef> - перечень сотрудников
+	 */
+	public List<NodeRef> getWorkGroupEmployees(NodeRef workGroup) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_WORK_GROUP);
+
+		if (isProperType(workGroup, properTypes)) { // если рабочая группа
+			// получаем участников для рабочей группы
+			Set<QName> workforces = new HashSet<QName>();
+			workforces.add(TYPE_WORKFORCE);
+			List<ChildAssociationRef> workForces = nodeService.getChildAssocs(workGroup, workforces);
+			for (ChildAssociationRef wf : workForces) {
+				Set<QName> links = new HashSet<QName>();
+				links.add(TYPE_EMPLOYEE_LINK);
+				//получает ссылку на сотрудника
+				List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(wf.getChildRef(), links);
 				if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
 					NodeRef employee = getEmployeeFromLink(empLinks.get(0).getChildRef());
 					results.add(employee);

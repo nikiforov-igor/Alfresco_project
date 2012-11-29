@@ -428,4 +428,32 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		List<NodeRef> employees = orgstructureService.getPositionEmployees(ref);
 		return createScriptable(employees);
 	}
+
+	/**
+	 * Возвращает рабочую группу
+	 *
+	 * @return рабочая группа или null
+	 */
+	public ScriptNode getWorkGroup(String groupRef) {
+		ParameterCheck.mandatory("groupRef", groupRef);
+		NodeRef ref = new NodeRef(groupRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isWorkGroup(ref)) {
+				return new ScriptNode(ref, this.services, getScope());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Возвращает список сотрудников, участвующих в Рабочей группе
+	 *
+	 * @return Scriptable список сотрудников
+	 */
+	public Scriptable getWorkGroupEmployees(String workGroupRef) {
+		ParameterCheck.mandatory("workGroupRef", workGroupRef);
+		NodeRef ref = new NodeRef(workGroupRef);
+		List<NodeRef> employees = orgstructureService.getWorkGroupEmployees(ref);
+		return createScriptable(employees);
+	}
 }

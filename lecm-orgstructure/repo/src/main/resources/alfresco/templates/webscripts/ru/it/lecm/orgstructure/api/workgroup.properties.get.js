@@ -1,1 +1,1 @@
-model.workgroup = search.findNode(args["nodeRef"]);
+model.workgroup = orgstructure.getWorkGroup(args["nodeRef"]);
