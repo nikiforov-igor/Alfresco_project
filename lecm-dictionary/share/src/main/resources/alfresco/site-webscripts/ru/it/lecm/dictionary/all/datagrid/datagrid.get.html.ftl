@@ -107,7 +107,8 @@ LogicECM.module.Base.DataGrid.prototype.getDataTableColumnDefinitions = function
 	// YUI DataTable column definitions
 	var columnDefinitions =
 			[
-				{ key: "nodeRef", label: "<input type='checkbox' id='select-all-records'>", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
+				{ key: "nodeRef", label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
+					sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
 			];
 
 	var column;

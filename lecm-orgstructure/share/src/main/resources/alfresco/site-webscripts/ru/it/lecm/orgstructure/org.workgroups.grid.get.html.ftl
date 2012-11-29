@@ -72,8 +72,8 @@
 					};
 
 					// Событие когда выбранны все элементы
-					YAHOO.util.Event.onAvailable("select-all-records", function () {
-						YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
+					YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
+						YAHOO.util.Event.on(this.id + "-select-all-records", 'click', this.selectAllClick, this, true);
 					}, this, true);
 
 					// File checked handler
@@ -91,7 +91,7 @@
 								break;
 							}
 						}
-						Dom.get('select-all-records').checked = allChecked;
+						Dom.get(this.id + '-select-all-records').checked = allChecked;
 //						Bubbling.fire("selectedItemsChanged");
 					}, this, true);
 

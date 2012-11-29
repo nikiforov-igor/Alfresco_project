@@ -928,7 +928,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // YUI DataTable column definitions
                 var columnDefinitions =
                     [
-                        { key:"nodeRef", label:"<input type='checkbox' id='select-all-records'>", sortable:false, formatter:this.fnRenderCellSelected(), width:16 }
+                        { key:"nodeRef", label:"<input type='checkbox' id='" + this.id + "-select-all-records'>", sortable:false, formatter:this.fnRenderCellSelected(), width:16 }
                     ];
 
                 var column;
@@ -1021,8 +1021,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
 
                 // Событие когда выбранны все элементы
-                YAHOO.util.Event.onAvailable("select-all-records", function () {
-                    YAHOO.util.Event.on("select-all-records", 'click', this.selectAllClick, this, true);
+                YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
+                    YAHOO.util.Event.on(this.id +"-select-all-records", 'click', this.selectAllClick, this, true);
                 }, this, true);
 
                 // File checked handler
@@ -1040,7 +1040,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             break;
                         }
                     }
-                    Dom.get('select-all-records').checked = allChecked;
+                    Dom.get(this.id + '-select-all-records').checked = allChecked;
 
                     Bubbling.fire("selectedItemsChanged");
                 }, this, true);
@@ -1206,7 +1206,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @constructor
              */
             selectAllClick: function DataGrid_selectAllClick() {
-                var selectAllElement = Dom.get("select-all-records");
+                var selectAllElement = Dom.get(this.id + "-select-all-records");
                 if (selectAllElement.checked) {
                     this.selectItems("selectAll");
                 } else {
