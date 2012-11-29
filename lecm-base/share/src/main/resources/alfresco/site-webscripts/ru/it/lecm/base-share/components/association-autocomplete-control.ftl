@@ -18,6 +18,12 @@
     <#assign showCreateNewLink = true>
 </#if>
 
+<#if field.control.params.showSearch?? && field.control.params.showSearch == "false">
+	<#assign showSearch = false>
+<#else>
+	<#assign showSearch = true>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -75,6 +81,7 @@
                 rootNodeRef: "${field.control.params.parentNodeRef}",
             </#if>
             showCreateNewLink: ${showCreateNewLink?string},
+	        showSearch: ${showSearch?string},
             changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
             plane: true,
             currentValue: "${field.value!''}",
@@ -110,7 +117,7 @@
             </#if>
             <div id="${controlId}-autocomplete-container"></div>
 
-            <@renderTreePickerDialogHTML controlId true/>
+            <@renderTreePickerDialogHTML controlId true showSearch/>
         </div>
 
         <div class="<#if field.endpointMany>autocompleteCurrentValueDisplay<#else>autocompleteCurrentValueDisplayInvisible</#if>" id="${controlId}-currentValueDisplayDiv" >

@@ -24,6 +24,7 @@
 			        <control-param name="plane">false</control-param>
 			        <control-param name="refillable">false</control-param>
 			        <control-param name="showSelectedItemsPath">false</control-param>
+			        <control-param name="showSearch">false</control-param>
 		        </type>
 		        <type name="association:lecm-orgstr:workGroup" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>

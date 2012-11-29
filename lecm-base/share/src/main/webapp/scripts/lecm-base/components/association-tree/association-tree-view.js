@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
+			showSearch: true,
+
 			showSelectedItemsPath: true,
 
             changeItemsFireAction: null,
@@ -87,8 +89,6 @@ LogicECM.module = LogicECM.module || {};
 			multipleSelectMode: false,
 
 			initialized: false,
-
-            createNewItemIcon: "",
 
             rootLocation: null,
 
@@ -352,21 +352,23 @@ LogicECM.module = LogicECM.module || {};
                 });
             this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
 
-            // Setup search button
-            this.widgets.searchButton = new YAHOO.widget.Button(this.options.pickerId + "-searchButton");
-            this.widgets.searchButton.on("click", this.onSearch, this.widgets.searchButton, this);
+	        if (this.options.showSearch) {
+	            // Setup search button
+	            this.widgets.searchButton = new YAHOO.widget.Button(this.options.pickerId + "-searchButton");
+	            this.widgets.searchButton.on("click", this.onSearch, this.widgets.searchButton, this);
 
-            // Register the "enter" event on the search text field
-            var zinput = Dom.get(this.options.pickerId + "-searchText");
-            new YAHOO.util.KeyListener(zinput,
-                {
-                    keys: 13
-                },
-                {
-                    fn: me.onSearch,
-                    scope: this,
-                    correctScope: true
-                }, "keydown").enable();
+	            // Register the "enter" event on the search text field
+	            var zinput = Dom.get(this.options.pickerId + "-searchText");
+	            new YAHOO.util.KeyListener(zinput,
+	                {
+	                    keys: 13
+	                },
+	                {
+	                    fn: me.onSearch,
+	                    scope: this,
+	                    correctScope: true
+	                }, "keydown").enable();
+	        }
 
             // Create tree in the dialog
             this.fillPickerDialog();

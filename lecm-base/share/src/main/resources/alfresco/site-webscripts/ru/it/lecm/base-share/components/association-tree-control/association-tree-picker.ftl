@@ -26,6 +26,12 @@
 	<#assign showSelectedItemsPath = true>
 </#if>
 
+<#if field.control.params.showSearch?? && field.control.params.showSearch == "false">
+	<#assign showSearch = false>
+<#else>
+	<#assign showSearch = true>
+</#if>
+
 <div class="form-field">
     <#if form.mode == "view">
         <div id="${controlId}" class="viewmode-field">
@@ -59,7 +65,7 @@
                     </#if>
                 </div>
 
-                <@renderTreePickerDialogHTML controlId plane/>
+                <@renderTreePickerDialogHTML controlId plane showSearch/>
             </#if>
 
             <div class="clear"></div>
@@ -106,6 +112,7 @@
 		    treeItemType: "${field.control.params.treeItemType}",
 	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
+	    showSearch: ${showSearch?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
         showSelectedItemsPath: ${showSelectedItemsPath?string},
