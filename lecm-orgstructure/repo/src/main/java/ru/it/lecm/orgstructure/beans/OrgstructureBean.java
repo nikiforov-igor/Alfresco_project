@@ -27,13 +27,7 @@ public class OrgstructureBean {
 
 	public static final String TYPE_ORGANIZATION = "organization";
 
-	public static final String TYPE_EMPLOYEE = "employee";
-	public static final String TYPE_STRUCTURE = "structure";
-	public static final String TYPE_WRK_GROUP = "workGroup";
-	public static final String TYPE_UNIT = "organization-unit";
-	public static final String TYPE_STAFF_LIST = "staff-list";
-	public static final String TYPE_POSITION = "staffPosition";
-	public static final String TYPE_ROLE = "workRole";
+
 
 	public static final String TYPE_DIRECTORY_EMPLOYEES = "employees";
 	public static final String TYPE_DIRECTORY_STRUCTURE = "structure";
@@ -51,11 +45,22 @@ public class OrgstructureBean {
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
+	private NodeService nodeService;
 
-	public static final QName ORG_BOSS_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
-	public static final QName ORG_LOGO_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
+	public static final QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
+	public static final QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
+	public static final QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
+
+	public static final QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
 
 	public static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
+
+	public static final QName TYPE_ORGANIZATION_UNIT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit");
+	public static final QName TYPE_STRUCTURE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "structure");
+	public static final QName TYPE_WORK_GROUP = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workGroup");
+	public static final QName TYPE_STAFF_LIST = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list");
+	public static final QName TYPE_WORKFORCE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce");
+	public static final QName TYPE_EMPLOYEE_LINK = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link");
 
 	private final Object lock = new Object();
 
@@ -71,6 +76,9 @@ public class OrgstructureBean {
 		this.transactionService = transactionService;
 	}
 
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 	/**
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.
@@ -78,7 +86,6 @@ public class OrgstructureBean {
 	 * @return NodeRef
 	 */
 	public NodeRef getOrganizationRootRef() {
-		final NodeService nodeService = serviceRegistry.getNodeService();
 		repositoryHelper.init();
 
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
@@ -95,7 +102,6 @@ public class OrgstructureBean {
 		final String rootName = ORGANIZATION_ROOT_NAME;
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		final NodeService nodeService = serviceRegistry.getNodeService();
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -163,8 +169,7 @@ public class OrgstructureBean {
 		NodeRef bossRef = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
-			List<AssociationRef> boss = nodeService.getTargetAssocs(organization, ORG_BOSS_ASSOC);
+			List<AssociationRef> boss = nodeService.getTargetAssocs(organization, ASSOC_ORG_BOSS);
 			if (boss != null && boss.size() > 0){
 				bossRef = boss.get(0).getTargetRef();
 			}
@@ -181,8 +186,7 @@ public class OrgstructureBean {
 		NodeRef logoRef = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
-			List<AssociationRef> logo = nodeService.getTargetAssocs(organization, ORG_LOGO_ASSOC);
+			List<AssociationRef> logo = nodeService.getTargetAssocs(organization, ASSOC_ORG_LOGO);
 			if (logo != null && logo.size() > 0){
 				logoRef = logo.get(0).getTargetRef();
 			}
@@ -199,7 +203,6 @@ public class OrgstructureBean {
 		NodeRef structure = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
 			structure = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
 		}
 		return structure;
@@ -214,7 +217,6 @@ public class OrgstructureBean {
 		NodeRef emp = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
 			emp = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME);
 		}
 		return emp;
@@ -229,7 +231,6 @@ public class OrgstructureBean {
 		NodeRef pd = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
 			pd = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, PERSONAL_DATA_ROOT_NAME);
 		}
 		return pd;
@@ -244,10 +245,9 @@ public class OrgstructureBean {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		NodeRef structureDirectory = getStructureDirectory();
 		if (structureDirectory != null) {
-			final NodeService nodeService = serviceRegistry.getNodeService();
 
 			Set<QName> workgroups = new HashSet<QName>();
-			workgroups.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_WRK_GROUP));
+			workgroups.add(TYPE_WORK_GROUP);
 			List<ChildAssociationRef> wgs = nodeService.getChildAssocs(structureDirectory, workgroups);
 			for (ChildAssociationRef wg : wgs) {
 				if (onlyActive){
@@ -269,9 +269,8 @@ public class OrgstructureBean {
 	 */
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
-		final NodeService nodeService = serviceRegistry.getNodeService();
 		Set<QName> units = new HashSet<QName>();
-		units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_UNIT));
+		units.add(TYPE_ORGANIZATION_UNIT);
 
 		List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(parent, units);
 		for (ChildAssociationRef uRef : uRefs) {
@@ -289,7 +288,6 @@ public class OrgstructureBean {
 	public boolean hasChild(NodeRef parent,boolean onlyActive) {
 		List<NodeRef> childs = getSubUnits(parent, onlyActive);
 		boolean hasChild = !childs.isEmpty();
-		final NodeService nodeService = serviceRegistry.getNodeService();
 		if (onlyActive && !childs.isEmpty()) {
 			hasChild = false;
 			for (NodeRef ref : childs) {
@@ -302,5 +300,138 @@ public class OrgstructureBean {
 			}
 		}
 		return hasChild;
+	}
+
+	/**
+	 * Получение родительского подразделения
+	 *
+	 * @return NodeRef родителя или NULL, если подразделение не имеет родителя
+	 */
+	public NodeRef getParent(NodeRef unitRef) {
+		ChildAssociationRef parentRef = nodeService.getPrimaryParent(unitRef);
+		if (parentRef != null) {
+			NodeRef parent = parentRef.getParentRef();
+			if (isUnit(parent)) {
+				return parent;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * проверяет что объект является подразделением
+	 *
+	 * @return true - если подразделение или false - в ином случае
+	 */
+	public boolean isUnit(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ORGANIZATION_UNIT);
+		return isProperType(ref, types);
+	}
+
+	/**
+	 * проверяет что объект имеет подходящий тип
+	 *
+	 * @return true - если объект подходит по критериям или false - в ином случае
+	 */
+	public boolean isProperType(NodeRef ref, Set<QName> types) {
+		QName type = nodeService.getType(ref);
+		return types.contains(type);
+	}
+	/**
+	 * Получение руководителя подразделения
+	 *
+	 * @return NodeRef руководителя или NULL, если руководитель не найден или объект не является подразделением
+	 */
+	public NodeRef getBoss(NodeRef unitRef) {
+		NodeRef bossLink = null;
+		if (isUnit(unitRef)) { // ищем руководителя Подразделения
+			// Получаем список штатных расписаний
+			List<NodeRef> staffs = getStaffLists(unitRef);
+			// находим то, которое помечено как руководящая позиция
+			NodeRef bossStaff = null;
+
+			for (NodeRef staff : staffs) {
+				if ((Boolean) nodeService.getProperty(staff, PROP_STAFF_LIST_IS_BOSS)) {
+					bossStaff = staff;
+					break;
+				}
+			}
+			if (bossStaff != null) {
+				//вытаскиваем ссылку на сотрудника и непосредственно сотрудника (если ссылка имеется)
+				bossLink = getEmployee(bossStaff);
+			}
+			if (bossLink == null) {
+				// если не нашли руководителя в текущем подразделении, пробуем найти в вышестоящем
+				NodeRef parent = getParent(unitRef);
+				if (parent != null) {
+					bossLink = getBoss(parent);
+				} else {
+					// дошли до директории Структура, пробуем получить руководителя Организации
+					bossLink = getOrganizationBoss();
+				}
+
+			}
+		}
+		return bossLink;
+	}
+
+	/**
+	 * Получение списка Штатных Расписаний для Подразделения
+	 *
+	 * @return List<NodeRef>
+	 */
+	public List<NodeRef> getStaffLists(NodeRef unitRef) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		if (isUnit(unitRef)) {
+			Set<QName> staffs = new HashSet<QName>();
+			staffs.add(TYPE_STAFF_LIST);
+
+			List<ChildAssociationRef> sls = nodeService.getChildAssocs(unitRef, staffs);
+			for (ChildAssociationRef sl : sls) {
+				results.add(sl.getChildRef());
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
+	 *
+	 * @return ссылка на объект (lecm-orgstr:employee-link)
+	 */
+	public NodeRef getEmployee(NodeRef ref) {
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_STAFF_LIST);
+		properTypes.add(TYPE_WORKFORCE);
+
+		if (isProperType(ref, properTypes)) {
+			Set<QName> link = new HashSet<QName>();
+			link.add(TYPE_EMPLOYEE_LINK);
+
+			List<ChildAssociationRef> links = nodeService.getChildAssocs(ref, link);
+			if (links.size() > 0) {
+				NodeRef linkRef = links.get(0).getChildRef();
+				return getEmployeeFromLink(linkRef);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение ссылки на сотрудника из объекта (lecm-orgstr:employee-link)
+	 *
+	 * @return ссылка на сотрудника (lecm-orgstr:employee) или Null, если у объекта некорректный тип
+	 */
+	public NodeRef getEmployeeFromLink(NodeRef ref) {
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_EMPLOYEE_LINK);
+
+		if (isProperType(ref, properTypes)) {
+			List<AssociationRef> links = nodeService.getTargetAssocs(ref, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
+			// сотрудник всегда существует и только один
+			return links.get(0).getTargetRef();
+		}
+		return null;
 	}
 }

@@ -1,2 +1,1 @@
-var node = search.findNode(args["nodeRef"]);
-model.unit = node;
+model.unit = orgstructure.getUnit(args["nodeRef"]);

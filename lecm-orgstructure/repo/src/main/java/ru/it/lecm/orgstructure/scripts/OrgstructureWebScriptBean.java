@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -48,6 +49,15 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
+
+	public static final String TYPE_EMPLOYEE = "employee";
+	public static final String TYPE_STRUCTURE = "structure";
+	public static final String TYPE_WRK_GROUP = "workGroup";
+	public static final String TYPE_UNIT = "organization-unit";
+	public static final String TYPE_STAFF_LIST = "staff-list";
+	public static final String TYPE_POSITION = "staffPosition";
+	public static final String TYPE_ROLE = "workRole";
+
 	/**
 	 * Service registry
 	 */
@@ -125,7 +135,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			// Добавить справочник Должности
 			root = new JSONObject();
 			root.put(NODE_REF, positions.toString());
-			root.put(ITEM_TYPE, OrgstructureBean.TYPE_POSITION);
+			root.put(ITEM_TYPE, TYPE_POSITION);
 			root.put(PAGE, ORG_POSITIONS);
 			nodes.put(root);
 
@@ -133,7 +143,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			// Добавить справочник Роли в рабочих группах
 			root = new JSONObject();
 			root.put(NODE_REF, roles.toString());
-			root.put(ITEM_TYPE, OrgstructureBean.TYPE_ROLE);
+			root.put(ITEM_TYPE, TYPE_ROLE);
 			root.put(PAGE, ORG_ROLES);
 
 			nodes.put(root);
@@ -153,12 +163,12 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
 					root.put(PAGE, ORG_EMPLOYEES);
-					root.put(ITEM_TYPE, OrgstructureBean.TYPE_EMPLOYEE);
+					root.put(ITEM_TYPE, TYPE_EMPLOYEE);
 					root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
 				} else if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root.put(NODE_REF, "_NOT_LOAD_");
 					root.put(PAGE, "orgstructure");
-					root.put(ITEM_TYPE, OrgstructureBean.TYPE_UNIT);
+					root.put(ITEM_TYPE, TYPE_UNIT);
 					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 				}
 				nodes.put(root);
@@ -167,14 +177,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					root = new JSONObject();
 					root.put(NODE_REF, cRef.toString());
 					root.put(PAGE, STAFF_LIST);
-					root.put(ITEM_TYPE, OrgstructureBean.TYPE_STAFF_LIST);
+					root.put(ITEM_TYPE, TYPE_STAFF_LIST);
 					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					nodes.put(root);
 
 					root = new JSONObject();
 					root.put(NODE_REF, cRef.toString());
 					root.put(PAGE, WORK_GROUPS);
-					root.put(ITEM_TYPE, OrgstructureBean.TYPE_WRK_GROUP);
+					root.put(ITEM_TYPE, TYPE_WRK_GROUP);
 					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					nodes.put(root);
 				}
@@ -194,9 +204,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeService nodeService = services.getNodeService();
 		if (ref != null) {
 			final NodeRef currentRef = new NodeRef(ref);
-			if (type.equalsIgnoreCase(OrgstructureBean.TYPE_UNIT)) {// построить дерево подразделений
+			if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
 				Set<QName> units = new HashSet<QName>();
-				units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_UNIT));
+				units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT));
 				// получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
 				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
 				for (ChildAssociationRef child : childs) {
@@ -206,7 +216,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 						JSONObject unit = new JSONObject();
 						try {
 							unit.put(NODE_REF, child.getChildRef().toString());
-							unit.put(ITEM_TYPE, OrgstructureBean.TYPE_UNIT);
+							unit.put(ITEM_TYPE, TYPE_UNIT);
 							unit.put(TITLE, getElementName(
 									nodeService, child.getChildRef(), QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
@@ -222,7 +232,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					JSONObject root = new JSONObject();
 					try {
 						root.put(NODE_REF, structure.toString());
-						root.put(ITEM_TYPE, OrgstructureBean.TYPE_STRUCTURE);
+						root.put(ITEM_TYPE, TYPE_STRUCTURE);
 						root.put(TITLE, getElementName(
 								nodeService, structure, QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
 						root.put(IS_LEAF, nodeService.getChildAssocs(
@@ -283,11 +293,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public Scriptable getWorkGroups(boolean onlyActive) {
 		List<NodeRef> wgs = orgstructureService.getWorkGroups(onlyActive);
-		Object[] results = new Object[wgs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(wgs.get(i), services, getScope());
-		}
-		return Context.getCurrentContext().newArray(getScope(), results);
+		return createScriptable(wgs);
 	}
 
 	/**
@@ -297,24 +303,102 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public Scriptable getSubUnits(String parent, boolean onlyActive) {
 		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive);
-		Object[] results = new Object[units.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(units.get(i), services, getScope());
-		}
-        return Context.getCurrentContext().newArray(getScope(), results);
+		return createScriptable(units);
 	}
 
 	/**
 	 * Возвращает список "рутовых" подразделений
 	 *
-	 * @return Scriptable
+	 * @return список "рутовых" подразделений
 	 */
 	public Scriptable getRootUnits(boolean onlyActive) {
 		List<NodeRef> units = orgstructureService.getSubUnits(orgstructureService.getStructureDirectory(), onlyActive);
-		Object[] results = new Object[units.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(units.get(i), services, getScope());
+		return createScriptable(units);
+	}
+
+	/**
+	 * @return Primary предок
+	 */
+	public ScriptNode getParent(String nodeRef) {
+		NodeRef parent = orgstructureService.getParent(new NodeRef(nodeRef));
+		if (parent != null) {
+			return new ScriptNode(parent, services, getScope());
 		}
-        return Context.getCurrentContext().newArray(getScope(), results);
+		return null;
+	}
+
+	/**
+	 * Возвращает подразделение
+	 *
+	 * @return подразделение или null
+	 */
+	public ScriptNode getUnit(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isUnit(ref)) {
+				return new ScriptNode(ref, this.services, getScope());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Возвращает руководителя
+	 *
+	 * @return
+	 */
+	public ScriptNode findUnitBoss(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if (orgstructureService.isUnit(ref)) {
+				NodeRef bossRef = orgstructureService.getBoss(ref);
+				if (bossRef != null) {
+					return new ScriptNode(bossRef, this.services, getScope());
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Возвращает список штатных расписаний для подразделения
+	 *
+	 * @return Scriptable список шт. расписаний
+	 */
+	public Scriptable getStaffLists(String unit, boolean onlyVacant) {
+		ParameterCheck.mandatory("unit", unit);
+		NodeRef ref = new NodeRef(unit);
+		List<NodeRef> staffs = orgstructureService.getStaffLists(ref);
+		if (!onlyVacant) {
+			return createScriptable(staffs);
+		} else {
+			List<NodeRef> vstaffs = new ArrayList<NodeRef>();
+			for (NodeRef staff : staffs) {
+				NodeRef employeeInStaff = orgstructureService.getEmployee(staff);
+				if (employeeInStaff == null) {// сотрудник не задан - вакантно
+					vstaffs.add(staff);
+				}
+			}
+			return createScriptable(vstaffs);
+		}
+	}
+
+	/**
+	 * Возвращает список вакантных штатных расписаний для подразделения
+	 *
+	 * @return Scriptable список шт. расписаний
+	 */
+	public Scriptable getVacantStaffLists(String unit) {
+		return getStaffLists(unit, true);
+	}
+
+	private Scriptable createScriptable(List<NodeRef> refs) {
+		Object[] results = new Object[refs.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(refs.get(i), services, getScope());
+		}
+		return Context.getCurrentContext().newArray(getScope(), results);
 	}
 }

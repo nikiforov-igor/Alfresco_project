@@ -72,5 +72,6 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 </beans>
