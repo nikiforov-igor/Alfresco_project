@@ -352,11 +352,11 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                             fn: function(response){
                                 var oResults = eval("(" + response.serverResponse.responseText + ")");
                                 for (var nodeIndex in oResults) {
-                                    fields += "field=" + oResults[nodeIndex].fild + "&";
-                                    columns += "datagridColumns=" + datagridColumns[nodeIndex].label + "&";
+                                    fields += "field=" + encodeURIComponent(oResults[nodeIndex].fild) + "&";
+                                    columns += "datagridColumns=" + encodeURIComponent(datagridColumns[nodeIndex].label) + "&";
                                 }
                                 for (var item in selectItems) {
-                                    items += "selectedItems=" + item + "&";
+                                    items += "selectedItems=" + encodeURIComponent(item) + "&";
                                 }
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
                                                      + "?" + fields
