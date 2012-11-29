@@ -188,6 +188,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					if (!datagridMeta.searchConfig) {
 						datagridMeta.searchConfig = {};
 					}
+					//TODO: не знаю что делать с этим фильтром
 					datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
 					datagridMeta.searchConfig.fullTextSearch = null;
 					YAHOO.Bubbling.fire("activeGridChanged", {
