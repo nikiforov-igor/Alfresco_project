@@ -112,7 +112,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     });
 
                 var me = this;
-                var searchInput = Dom.get("full-text-search");
+                var searchInput = Dom.get(this.id + "-full-text-search");
                 new YAHOO.util.KeyListener(searchInput,
                     {
                         keys: 13
@@ -285,7 +285,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
             // по нажатию на кнопку Поиск
             onSearchClick:function OrgstructureToolbar_onSearch() {
-                var searchTerm = Dom.get("full-text-search").value;
+                var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
                 var dataGrid = this.modules.dataGrid;
                 var datagridMeta = dataGrid.datagridMeta;
@@ -317,7 +317,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta,
-                            bubblingLable:me.options.bubblingLabel
+                            bubblingLabel:me.options.bubblingLabel
                         });
 
                     YAHOO.Bubbling.fire("showFilteredLabel");

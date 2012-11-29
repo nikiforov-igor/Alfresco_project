@@ -197,6 +197,8 @@
 				 * Выделение строки в таблице
 				 */
 				LogicECM.module.Base.DataGrid.prototype.onEventSelectRow = function DataGrid_onEventSelectRow(oArgs){
+					// Проверка а из той ли песочницы (два dataGrida) мы вызвали метод. Переопределяz метод мы
+					// переопределяем его для всех песочниц на странице.
 					if (this._hasEventInterest("workGroup")) {
 						// Выделяем строку в DataGrid
 						this.widgets.dataTable.onEventSelectRow(oArgs);
@@ -226,7 +228,8 @@
 										title: '', // для вывода заголовка в гриде (необязателен)
 										description: '', // для вывода описания в заголовке грида (необязателен)
 										actionsConfig: {// настройки экшенов. (необязателен)
-											fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
+											fullDelete:true // если true - удаляем ноды, иначе выставляем им флаг
+											// "неактивен"
 										},
 										searchConfig:{ //настройки поиска (необязателен)
 											filter:'PARENT:\"' + selectItem.getData().nodeRef + '\"'

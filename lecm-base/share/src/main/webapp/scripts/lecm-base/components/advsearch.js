@@ -336,7 +336,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * Очистка input и вызов поиска по умолчанию (метод пока не используется)
              */
             onClearClick:function ADVSearch_onSearchClick(e, obj) {
-                var queryInput = Dom.get("full-text-search");
+                var queryInput = Dom.get(this.id + "-full-text-search");
                 queryInput.value = "";
                 queryInput.focus();
 

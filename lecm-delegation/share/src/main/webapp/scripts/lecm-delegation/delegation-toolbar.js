@@ -150,7 +150,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		_onSearchClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				var searchTerm = YAHOO.util.Dom.get("full-text-search").value;
+				var searchTerm = YAHOO.util.Dom.get(this.id + "-full-text-search").value;
 
 				var dataGrid = scope.modules.dataGrid;
 				var datagridMeta = dataGrid.datagridMeta;
@@ -234,7 +234,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			Alfresco.util.createYUIButton(this, "extendSearchButton", this._onExSearchClick ());
 
 			var scope = this;
-			var searchInput = YAHOO.util.Dom.get("full-text-search");
+			var searchInput = YAHOO.util.Dom.get(this.id + "-full-text-search");
 			new YAHOO.util.KeyListener (searchInput, {
 				keys: 13
 			}, {
