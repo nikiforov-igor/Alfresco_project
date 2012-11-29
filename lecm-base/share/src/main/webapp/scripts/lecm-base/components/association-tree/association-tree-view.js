@@ -873,8 +873,12 @@ LogicECM.module = LogicECM.module || {};
         _updateItems: function AssociationTreeViewer__updateItems(nodeRef, searchTerm)
         {
             // Empty results table - leave tag entry if it's been rendered
-            this.widgets.dataTable.set("MSG_EMPTY", this.msg("logicecm.base.select-tree-element"));
-            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
+            this.widgets.dataTable.set("MSG_EMPTY", this.msg("label.loading"));
+	        if (this.widgets.dataTable.getRecordSet().getLength() > 0) {
+                this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
+	        } else {
+		        this.widgets.dataTable._runRenderChain();
+	        }
 
             var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
             {
