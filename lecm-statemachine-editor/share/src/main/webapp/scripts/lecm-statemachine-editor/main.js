@@ -46,6 +46,7 @@ LogicECM.module = LogicECM.module || {};
 		transitionActionsMenu: null,
 		endActionsMenu: null,
 		currentStatus: null,
+		splashScreen: null,
 		options:{},
 
 		setStatemachineId: function(statemachineId) {
@@ -66,16 +67,11 @@ LogicECM.module = LogicECM.module || {};
 			});
 			this.layout.render();
 
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
 			var callback = {
 				success:function (oResponse) {
-					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._hideSplash();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.startActionsMenu = new YAHOO.widget.Menu("startActionsMenu");
 					oResponse.argument.parent._addMenu(oResponse.argument.parent.startActionsMenu, oResults.start, "start");
@@ -134,16 +130,11 @@ LogicECM.module = LogicECM.module || {};
 			var el = this.layout.getUnitByPosition('center').body.firstChild;
 			el.innerHTML = "";
 
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/process?statemachineId=" + this.statemachineId;
 			var callback = {
 				success:function (oResponse) {
-					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._hideSplash();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
@@ -321,12 +312,7 @@ LogicECM.module = LogicECM.module || {};
 					submitType:"json",
 					formId:"statemachine-editor-new-status"
 				});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			new Alfresco.module.SimpleDialog("statemachine-editor-new-status").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
@@ -334,7 +320,7 @@ LogicECM.module = LogicECM.module || {};
 				destroyOnHide:true,
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
-						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._hideSplash();
 						this._setFormDialogTitle(p_form, p_dialog);
 					},
 					scope: this
@@ -359,15 +345,10 @@ LogicECM.module = LogicECM.module || {};
 				actionId: oMenuItem.value,
 				type: type
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			var callback = {
 				success:function (oResponse) {
-					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._hideSplash();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent._redraw();
 				},
@@ -392,15 +373,10 @@ LogicECM.module = LogicECM.module || {};
 			sUrl = YAHOO.lang.substitute(sUrl, {
 				nodeRef: nodeRef
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			var callback = {
 				success:function (oResponse) {
-					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._hideSplash();
 					oResponse.argument.parent._redraw();
 				},
 				argument:{
@@ -420,12 +396,8 @@ LogicECM.module = LogicECM.module || {};
 				submitType:"json",
 				formId:"statemachine-editor-edit-status"
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+
+			this._showSplash();
 
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"40em",
@@ -434,7 +406,7 @@ LogicECM.module = LogicECM.module || {};
 				destroyOnHide:true,
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
-						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._hideSplash();
 						this._setFormDialogTitle(p_form, p_dialog);
 					},
 					scope: this
@@ -445,15 +417,10 @@ LogicECM.module = LogicECM.module || {};
 						sUrl = YAHOO.lang.substitute(sUrl, {
 							nodeRef: nodeRef
 						});
-						var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-							{
-								text: Alfresco.util.message("label.loading"),
-								spanClass: "wait",
-								displayTime: 0
-							});
+						this._showSplash();
 						var callback = {
 							success:function (oResponse) {
-								YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+								oResponse.argument.parent._hideSplash();
 								oResponse.argument.parent._redraw();
 							},
 							argument:{
@@ -478,12 +445,8 @@ LogicECM.module = LogicECM.module || {};
 				submitType: "json",
 				formId: "statemachine-editor-edit-statemachine"
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+
+			this._showSplash();
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
@@ -491,7 +454,7 @@ LogicECM.module = LogicECM.module || {};
 				destroyOnHide:true,
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
-						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._hideSplash();
 						this._setFormDialogTitle(p_form, p_dialog);
 					},
 					scope: this
@@ -505,15 +468,10 @@ LogicECM.module = LogicECM.module || {};
 			sUrl = YAHOO.lang.substitute(sUrl, {
 				nodeRef: nodeRef
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			var callback = {
 				success:function (oResponse) {
-					YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+					oResponse.argument.parent._hideSplash();
 					oResponse.argument.parent._redraw();
 				},
 				argument:{
@@ -534,12 +492,7 @@ LogicECM.module = LogicECM.module || {};
 				formId:"statemachine-editor-edit-status",
 				packageNodeRef: this.packageNodeRef
 			});
-			var feedbackMessage = Alfresco.util.PopupManager.displayMessage(
-				{
-					text: Alfresco.util.message("label.loading"),
-					spanClass: "wait",
-					displayTime: 0
-				});
+			this._showSplash();
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"40em",
 				templateUrl:templateUrl,
@@ -547,7 +500,7 @@ LogicECM.module = LogicECM.module || {};
 				destroyOnHide:true,
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
-						YAHOO.lang.later(500, feedbackMessage, feedbackMessage.destroy);
+						this._hideSplash();
 						this._setFormDialogTitle(p_form, p_dialog);
 					},
 					scope: this
@@ -560,7 +513,20 @@ LogicECM.module = LogicECM.module || {};
 				}
 			}).show();
 
+		},
+
+		_showSplash: function() {
+			this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+				{
+					text: Alfresco.util.message("label.loading"),
+					spanClass: "wait",
+					displayTime: 0
+				});
+		},
+		_hideSplash: function() {
+			YAHOO.lang.later(1000, this.splashScreen, this.splashScreen.destroy);
 		}
+
 	});
 
 	Alfresco.widget.InsituEditor.statemachineEditActions = function (p_params) {

@@ -130,4 +130,11 @@
 		<property name="execution" value="take/user" />
 	</bean>
 
+	<bean id="transitionAction.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="TransitionAction"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.TransitionAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="end" />
+	</bean>
+
 </beans>

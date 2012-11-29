@@ -48,11 +48,19 @@ if (statemachineId != null && statemachineId != '') {
 		for each (var action in actionsNodes) {
 			var actionId = action.properties["lecm-stmeditor:actionId"];
 			var type = action.properties["lecm-stmeditor:actionExecution"];
-			var actionDescriptor  ={
+			var transitions = [];
+			var actionChildren = action.getChildren();
+			for each (var transition in actionChildren) {
+				if (transition.assocs["lecm-stmeditor:transitionStatus"] != null) {
+					var transitionStatus = transition.assocs["lecm-stmeditor:transitionStatus"][0];
+					transitions.push(transitionStatus.properties["cm:name"]);
+				}
+			}
+			var actionDescriptor = {
 					actionName: actionsBean.getActionTitle(actionId),
 					actionId: actionId,
 					nodeRef: action.nodeRef.toString(),
-					transitions: []
+					transitions: transitions
 				};
 			if (type == "start") {
 				startActions.push(actionDescriptor);
@@ -63,6 +71,7 @@ if (statemachineId != null && statemachineId != '') {
 			} else if (type == "end") {
 				endActions.push(actionDescriptor);
 			}
+
 		}
 		statuses.push({
 			name: status.properties["cm:name"],
@@ -70,7 +79,7 @@ if (statemachineId != null && statemachineId != '') {
 			startActions: startActions,
 			userActions: userActions,
 			transitionActions: transitionActions,
-			endActions: endActions
+			endActions: endActions,
 		});
 	}
 	model.statuses = statuses;

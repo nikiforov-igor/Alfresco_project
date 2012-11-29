@@ -11,6 +11,17 @@
 		<namespace uri="http://www.it.ru/logicECM/statemachine/editor/1.0" prefix="lecm-stmeditor"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-stmeditor:variableSettingType" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>VARIABLE</value>
+					<value>VALUE</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 
 		<!-- Основной объект хранилища описаний процессов -->
@@ -83,35 +94,29 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-			<associations>
-				<association name="lecm-stmeditor:transitionStatus">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-stmeditor:status</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!-- Объект действие StartWorkflow -->
 		<type name="lecm-stmeditor:StartWorkflow">
 			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
+		</type>
+
+		<type name="lecm-stmeditor:StartWorkflowEntity">
+			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
 			<properties>
-				<property name="lecm-stmeditor:workflowId">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-stmeditor:assignee">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:workflowAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!-- Объект действие FinishStateWithTransition -->
@@ -138,6 +143,26 @@
 			<parent>lecm-stmeditor:action</parent>
 		</type>
 
+		<type name="lecm-stmeditor:UserWorkflowEntity">
+			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-stmeditor:workflowLabel">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:workflowAspect</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- Объект действие TransitionAction -->
+		<type name="lecm-stmeditor:TransitionAction">
+			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
 		<!-- User Transition -->
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>
@@ -147,11 +172,10 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-				<property name="lecm-stmeditor:userTransitionVariableValue">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!-- transitionWorkflow -->
@@ -163,15 +187,11 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-				<property name="lecm-stmeditor:transitionWorkflowId">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-				<property name="lecm-stmeditor:transitionWorkflowVariableValue">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+				<aspect>lecm-stmeditor:workflowAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!--          Workflow Variables         -->
@@ -184,24 +204,16 @@
 			<title>Logic ECM Statemachine Input Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
 			<properties>
-				<property name="lecm-stmeditor:inputWorkflowFromVariable">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-stmeditor:inputWorkflowToVariable">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-			</properties>
-		</type>
-
-		<type name="lecm-stmeditor:inputWorkflowVariableValueData">
-			<title>Logic ECM Statemachine Input Workflow Variable Value</title>
-			<parent>lecm-stmeditor:workflowVariableData</parent>
-			<properties>
-				<property name="lecm-stmeditor:inputWorkflowToVariableValue">
+				<property name="lecm-stmeditor:inputWorkflowVariableType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-stmeditor:variableSettingType" />
+					</constraints>
 				</property>
 				<property name="lecm-stmeditor:inputWorkflowVariableValue">
 					<type>d:text</type>
@@ -209,29 +221,20 @@
 				</property>
 			</properties>
 		</type>
-
 		<type name="lecm-stmeditor:outputWorkflowVariableData">
 			<title>Logic ECM Statemachine Output Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
 			<properties>
-				<property name="lecm-stmeditor:outputWorkflowFromVariable">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="lecm-stmeditor:outputWorkflowToVariable">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-			</properties>
-		</type>
-
-		<type name="lecm-stmeditor:outputWorkflowVariableValueData">
-			<title>Logic ECM Statemachine Output Workflow Variable Value</title>
-			<parent>lecm-stmeditor:workflowVariableData</parent>
-			<properties>
-				<property name="lecm-stmeditor:outputWorkflowToVariableValue">
+				<property name="lecm-stmeditor:outputWorkflowVariableType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-stmeditor:variableSettingType" />
+					</constraints>
 				</property>
 				<property name="lecm-stmeditor:outputWorkflowVariableValue">
 					<type>d:text</type>
@@ -239,10 +242,39 @@
 				</property>
 			</properties>
 		</type>
-
 		<!--         #Workflow Variables         -->
 
 	</types>
 
+	<aspects>
+
+		<aspect name="lecm-stmeditor:transitionStatusAspect">
+			<title>Transition Status Aspect</title>
+			<associations>
+				<association name="lecm-stmeditor:transitionStatus">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-stmeditor:status</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<aspect name="lecm-stmeditor:workflowAspect">
+			<title>Workflow Aspect</title>
+			<properties>
+				<property name="lecm-stmeditor:workflowId">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+
+	</aspects>
 
 </model>

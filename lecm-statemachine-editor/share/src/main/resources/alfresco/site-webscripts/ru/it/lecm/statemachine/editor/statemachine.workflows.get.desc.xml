@@ -3,5 +3,5 @@
 	<description>Statemachine Editor Module Main page</description>
 	<url>/lecm/statemachine/editor/workflows</url>
 	<format default="json">extension</format>
-	<authentication>user</authentication>
+	<authentication>none</authentication>
 </webscript>

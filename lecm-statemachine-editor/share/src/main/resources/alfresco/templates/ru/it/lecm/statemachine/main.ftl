@@ -28,7 +28,7 @@
     <#include "/org/alfresco/components/documentlibrary/documentlist.get.head.ftl" />
 
     <!-- Source file -->
-    <script src=""${url.context}/yui/button/button-min.js"></script>
+    <script src="${url.context}/yui/button/button-min.js"></script>
 
     <!-- Skin CSS files resize.css must load before layout.css -->
     <link rel="stylesheet" type="text/css" href="${url.context}/yui/assets/skins/sam/resize.css">
@@ -41,7 +41,6 @@
     <@script type="text/javascript" src="${url.context}/yui/layout/layout.js"></@script>
 
     <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/main.js"></script>
-    <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/transition.js"></script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/editor.css">
 </@>
 

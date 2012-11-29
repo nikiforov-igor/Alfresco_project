@@ -30,6 +30,23 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="lecm-stmeditor:workflows" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:StartWorkflowEntity">
+		<forms>
+			<form>
+				<field-visibility>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
@@ -46,28 +63,131 @@
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-stmeditor:FinishStateWithTransition">
+	<config evaluator="model-type" condition="lecm-stmeditor:StartWorkflowEntity">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:transitions" force="true"/>
-					<show id="lecm-stmeditor:transitionVariable" force="true"/>
-					<show id="lecm-stmeditor:userTransition" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflow" force="true"/>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:transitionVariable"/>
-					<field id="lecm-stmeditor:transitions">
+					<field id="lecm-stmeditor:workflowId">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:assignee"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:WaitForDocumentChange">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:expressions" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:userTransition">
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:TransitionAction">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:expressions" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:UserWorkflow">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:workflows" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:UserWorkflowEntity">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:workflowLabel" force="true"/>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:workflowLabel" />
+					<field id="lecm-stmeditor:workflowId">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:UserWorkflowEntity">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:workflowLabel" force="true"/>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:workflowLabel" />
+					<field id="lecm-stmeditor:workflowId">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:FinishStateWithTransition">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:userTransition" force="true"/>
+					<show id="lecm-stmeditor:transitionWorkflow" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:userTransition" label-id="statemachine.editor.form.label.userTransition">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:transitionWorkflow">
+					<field id="lecm-stmeditor:transitionWorkflow" label-id="statemachine.editor.form.label.transitionWorkflow">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
 						</control>
@@ -82,11 +202,17 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:userTransitionLabel" force="true"/>
-					<show id="lecm-stmeditor:userTransitionVariableValue" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:userTransitionLabel"/>
-					<field id="lecm-stmeditor:userTransitionVariableValue" />
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -97,11 +223,17 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:userTransitionLabel" force="true"/>
-					<show id="lecm-stmeditor:userTransitionVariableValue" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:userTransitionLabel"/>
-					<field id="lecm-stmeditor:userTransitionVariableValue" />
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -112,23 +244,30 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowId" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowVariableValue" force="true"/>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionWorkflowLabel" />
-					<field id="lecm-stmeditor:transitionWorkflowId">
+					<field id="lecm-stmeditor:workflowId">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:transitionWorkflowVariableValue" />
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -139,40 +278,34 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowId" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowVariableValue" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowInputVariable" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflowInputVariableValue" force="true"/>
-					<show id="lecm-stmeditor:outputWorkflowVariableData" force="true"/>
-					<show id="lecm-stmeditor:outputWorkflowVariableValueData" force="true"/>
+					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionWorkflowLabel" />
-					<field id="lecm-stmeditor:transitionWorkflowId">
+					<field id="lecm-stmeditor:workflowId">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:transitionWorkflowVariableValue" />
-					<field id="lecm-stmeditor:transitionWorkflowInputVariable">
+					<field id="lecm-stmeditor:transitionStatus">
+						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableData</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:transitionWorkflowInputVariableValue">
+					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableValueData</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:outputWorkflowVariableData">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableData</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:outputWorkflowVariableValueData">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableData</control-param>
+							<control-param name="itemType">lecm-stmeditor:outputWorkflowVariableData</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -231,6 +364,74 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:machineFolder"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:inputWorkflowVariableData">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:inputWorkflowToVariable" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowVariableType" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowVariableValue" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:inputWorkflowToVariable" />
+					<field id="lecm-stmeditor:inputWorkflowVariableType" />
+					<field id="lecm-stmeditor:inputWorkflowVariableValue" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:inputWorkflowVariableData">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:inputWorkflowToVariable" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowVariableType" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowVariableValue" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:inputWorkflowToVariable" />
+					<field id="lecm-stmeditor:inputWorkflowVariableType" />
+					<field id="lecm-stmeditor:inputWorkflowVariableValue" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:outputWorkflowVariableData">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:outputWorkflowToVariable" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowVariableType" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowVariableValue" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:outputWorkflowToVariable" />
+					<field id="lecm-stmeditor:outputWorkflowVariableType" />
+					<field id="lecm-stmeditor:outputWorkflowVariableValue" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:outputWorkflowVariableData">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:outputWorkflowToVariable" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowVariableType" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowVariableValue" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:outputWorkflowToVariable" />
+					<field id="lecm-stmeditor:outputWorkflowVariableType" />
+					<field id="lecm-stmeditor:outputWorkflowVariableValue" />
 				</appearance>
 			</form>
 		</forms>
