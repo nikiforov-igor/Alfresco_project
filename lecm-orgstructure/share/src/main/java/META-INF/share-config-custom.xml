@@ -90,6 +90,7 @@
     <config evaluator="node-type" condition="lecm-orgstr:organization">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
@@ -107,8 +108,8 @@
                     <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="main" appearance="bordered-panel" label-id="info.main" />
-                    <set id="other" appearance="bordered-panel" label-id="info.more" />
+                    <set id="main" appearance="" label-id="info.main" />
+                    <set id="other" appearance="" label-id="info.more" />
                     <field id="lecm-orgstr:element-full-name" set="main"/>
                     <field id="lecm-orgstr:element-short-name" set="main"/>
                     <field id="lecm-orgstr:org-leg-address" set="main"/>
@@ -140,6 +141,7 @@
     <config evaluator="model-type" condition="lecm-orgstr:organization">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
@@ -157,8 +159,8 @@
                     <show id="lecm-orgstr:org-boss-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="main" appearance="bordered-panel" label-id="info.main" />
-                    <set id="other" appearance="bordered-panel" label-id="info.more" />
+                    <set id="main" appearance="" label-id="info.main" />
+                    <set id="other" appearance="" label-id="info.more" />
                     <field id="lecm-orgstr:element-full-name" set="main"/>
                     <field id="lecm-orgstr:element-short-name" set="main"/>
                     <field id="lecm-orgstr:org-leg-address" set="main"/>

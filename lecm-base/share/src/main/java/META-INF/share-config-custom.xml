@@ -64,6 +64,7 @@
 				<js src="/scripts/lecm-base/components/lecm-datagrid.js" />
 				<js src="/scripts/lecm-base/components/advsearch.js" />
                 <js src="/yui/resize/resize-min.js" />
+                <js src="/yui/tabview/tabview-min.js" />
             </dependencies>
         </forms>
     </config>

@@ -3,7 +3,8 @@
 <script type="text/javascript">//<![CDATA[
 var Dom = YAHOO.util.Dom,
     Connect = YAHOO.util.Connect,
-    Event = YAHOO.util.Event;
+    Event = YAHOO.util.Event,
+    Selector = YAHOO.util.Selector;
 var organizationRef;
 
 function drawForm(nodeRef){
@@ -65,30 +66,14 @@ function saveOrganization() {
     Connect.asyncRequest(Alfresco.util.Ajax.GET, url, organizationSaveCallBack);
 }
 function setActions(form) {
-    Dom.getElementsByClassName('set-bordered-panel', 'div', form, function() {
-        var panel = this;
-        var header = Dom.getElementsByClassName('set-bordered-panel-heading', 'div', panel);
-        var body = Dom.getElementsByClassName('set-bordered-panel-body', 'div', panel);
-        var height = Dom.getStyle(body, 'height');
+    var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', form)[0]);
+    var ul = Dom.getElementsByClassName('yui-nav', 'ul', form)[0];
+    var links = Selector.query('a', ul, false);
 
-        Dom.setStyle(body, 'height', height);
-        Event.addListener(header, 'click', function() {
-            var hasClass = Dom.hasClass(body, 'closed');
-
-            if (typeof(hasClass) == 'object') {
-                hasClass = hasClass[0] || false;
-            }
-            if (hasClass) {
-                Dom.setStyle(body, 'height', height);
-                Dom.removeClass(body, 'closed');
-            } else {
-                Dom.setStyle(body, 'height', 0);
-                Dom.addClass(body, 'closed');
-            }
-            setTimeout(function() {
-                LogicECM.module.Base.Util.setHeight();
-            }, 350); // height transition duration = 300
-        });
+    Event.addListener(links, 'click', function() {
+        setTimeout(function() {
+            LogicECM.module.Base.Util.setHeight();
+        }, 10);
     });
 }
 YAHOO.util.Event.onDOMReady(init);
