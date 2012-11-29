@@ -25,15 +25,17 @@ LogicECM.module = LogicECM.module || {};
  */
 LogicECM.module.Base = LogicECM.module.Base || {};
 
-(function(){
-    /**
-     * YUI Library aliases
+/**
+ * LogicECM Base Util
+ *
+ * @namespace LogicECM
+ */
+LogicECM.module.Base.Util = {
+    /*
+     * Set common block height
      */
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-
-    //Set block height
-    function setHeight() {
+    setHeight: function() {
+        var Dom = YAHOO.util.Dom;
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
         var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
@@ -45,14 +47,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
         Dom.setStyle(block, 'height', h + 'px');
     }
+};
+
+(function(){
+    /**
+     * YUI Library aliases
+     */
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
 
     // Recalculate the vertical size on a browser window resize event
     Event.on(window, "resize", function(e) {
-        setHeight();
+        LogicECM.module.Base.Util.setHeight();
     }, this, true);
 
     Event.onDOMReady(function() {
-        setHeight();
+        LogicECM.module.Base.Util.setHeight();
     });
 
     /**
