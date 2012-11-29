@@ -1992,7 +1992,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         filename:this.latestVersion.name,
                         currentNodeRef:nodeRef,
                         latestVersion:this.latestVersion,
-                        nodeRef:this.latestVersion.nodeRef
+                        nodeRef:this.latestVersion.nodeRef,
+                        versionCache: this.versionCache
                     });
             },
 

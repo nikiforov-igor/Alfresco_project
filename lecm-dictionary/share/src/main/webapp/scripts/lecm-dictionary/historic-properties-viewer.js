@@ -159,9 +159,9 @@
             }
 
             // Read versions from cache
-            var documentVersions = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
+            var documentVersions = this.showConfig.versionCache;
             if (documentVersions) {
-                this.versions = documentVersions.versionCache;
+                this.versions = documentVersions;
             }
 
             // Check if the dialog has been showed before
