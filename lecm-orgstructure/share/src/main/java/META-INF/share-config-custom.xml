@@ -346,10 +346,6 @@
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:workGroup-description"/>
-                    <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
-                    <show id="cm:contains"/>
-                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
@@ -364,8 +360,6 @@
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:workGroup-description"/>
-                    <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">
@@ -392,8 +386,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
-                    <show id="lecm-orgstr:workforce-role-assoc"/>
+                    <show id="lecm-orgstr:workforce-comment"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:workforce-comment">
@@ -418,7 +411,6 @@
                 <field-visibility>
                     <show id="lecm-orgstr:workforce-comment"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:workforce-comment">
@@ -437,7 +429,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-employee-assoc"/>
-                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:workforce-comment"/>
                 </field-visibility>
             </form>
         </forms>
