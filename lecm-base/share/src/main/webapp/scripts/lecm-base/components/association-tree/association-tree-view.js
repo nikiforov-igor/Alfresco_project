@@ -140,8 +140,10 @@ LogicECM.module = LogicECM.module || {};
                 this._createSelectedControls();
                 this.createPickerDialog();
                 this._loadSearchProperties();
+	            this._loadSelectedItems();
+            } else {
+	            this.updateViewForm();
             }
-            this._loadSelectedItems();
 		},
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
@@ -269,11 +271,11 @@ LogicECM.module = LogicECM.module || {};
                 // if disabled show the (None) message
                 this.selectedItems = {};
                 this.singleSelectedItem = null;
-                this.updateSelectedItems();
-                this.updateAddButtons();
-                if (this.options.disabled && this.options.displayMode == "items")
-                {
-                    Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+	            if (!this.options.disabled) {
+	                this.updateSelectedItems();
+	                this.updateAddButtons();
+	            } else {
+                    Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
                 }
             }
         },
@@ -876,11 +878,8 @@ LogicECM.module = LogicECM.module || {};
         {
             // Empty results table - leave tag entry if it's been rendered
             this.widgets.dataTable.set("MSG_EMPTY", this.msg("label.loading"));
-	        if (this.widgets.dataTable.getRecordSet().getLength() > 0) {
-                this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
-	        } else {
-		        this.widgets.dataTable._runRenderChain();
-	        }
+	        this.widgets.dataTable.showTableMessage(this.msg("label.loading"), YAHOO.widget.DataTable.CLASS_EMPTY);
+            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
 
             var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
             {
@@ -1157,6 +1156,41 @@ LogicECM.module = LogicECM.module || {};
 				result = this.options.selectedItemsNameSubstituteString;
 			}
 			return result;
+		},
+
+		updateViewForm: function AssociationTreeViewer_getSelectedItemsNameSubstituteString() {
+			var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
+
+			Alfresco.util.Ajax.jsonGet(
+				{
+					url: sUrl,
+					successCallback:
+					{
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults != null) {
+								this.rootNode =  {
+									label:oResults.title,
+									data: {
+										nodeRef:oResults.nodeRef,
+										type:oResults.type,
+										displayPath: oResults.displayPath
+									}
+								};
+								this.options.rootNodeRef = oResults.nodeRef;
+								this._loadSelectedItems();
+							}
+						},
+						scope: this
+					},
+					failureCallback:
+					{
+						fn: function (oResponse) {
+							alert(YAHOO.lang.JSON.parse(oResponse.responseText));
+						},
+						scope: this
+					}
+				});
 		}
   	});
 })();
