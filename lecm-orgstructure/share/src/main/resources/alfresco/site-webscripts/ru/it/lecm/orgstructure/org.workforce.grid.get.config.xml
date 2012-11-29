@@ -1,6 +1,7 @@
 <dataGrid>
     <actionSet>
         <action type="action-link-workForce" id="onActionView" permission="view" label="actions.view"/>
+        <action type="action-link-workForce" id="onActionEdit" permission="edit" label="actions.edit"/>
         <action type="action-link-workForce" id="onActionDelete" permission="delete" label="actions.delete-row"/>
     </actionSet>
 </dataGrid>

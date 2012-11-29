@@ -47,7 +47,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
      */
     LogicECM.module.OrgStructure.Toolbar = function (htmlId) {
         LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
-
+        this.treeSelectActions = {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
@@ -77,7 +77,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             /**
              * Дополнительные кнопки, активируемы при выборе элемента в дереве
              */
-            treeSelectActions: {},
+            treeSelectActions: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -199,9 +199,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
 
                     }).show();
-            }, /**
-
-            * New Row button click handler
+            },
+            /**
+             * New Row button click handler
              */
             onNewRow:function OrgstructureToolbar_onNewRow(e, p_obj) {
                 var orgMetadata = this.modules.dataGrid.datagridMeta,
@@ -367,17 +367,29 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
             onInitButton: function Tree_onSelectedItems(layer, args)
             {
-                if (this.treeSelectActions != null) {
-                    for (var index in this.treeSelectActions)
-                    {
-                        if (this.treeSelectActions.hasOwnProperty(index))
+                var obj = args[1];
+                var label = obj.bubblingLabel;
+                if(this._hasEventInterest(label)){
+                    if (this.treeSelectActions != null) {
+                        for (var index in this.treeSelectActions)
                         {
-                            var action = this.treeSelectActions[index];
-                            if (action != null) {
-                                action.set("disabled", args[1].disable);
+                            if (this.treeSelectActions.hasOwnProperty(index))
+                            {
+                                var action = this.treeSelectActions[index];
+                                if (action != null) {
+                                    action.set("disabled", args[1].disable);
+                                }
                             }
                         }
                     }
+                }
+            },
+
+            _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
+                if (!this.options.bubblingLabel || !bubbleLabel) {
+                    return true;
+                } else {
+                    return this.options.bubblingLabel == bubbleLabel;
                 }
             }
         }, true);
