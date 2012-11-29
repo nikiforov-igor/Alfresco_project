@@ -394,11 +394,38 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		return getStaffLists(unit, true);
 	}
 
+	/**
+	 * Возвращает массив, пригодный для использования в веб-скриптах
+	 *
+	 * @return Scriptable
+	 */
 	private Scriptable createScriptable(List<NodeRef> refs) {
 		Object[] results = new Object[refs.size()];
 		for (int i = 0; i < results.length; i++) {
 			results[i] = new ScriptNode(refs.get(i), services, getScope());
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
+	}
+
+	/**
+	 * Возвращает список должностных позиций
+	 *
+	 * @return Scriptable список должностных позиций
+	 */
+	public Scriptable getStaffPositions(boolean onlyActive) {
+		List<NodeRef> staffPositions = orgstructureService.getStaffPositions(onlyActive);
+		return createScriptable(staffPositions);
+	}
+
+	/**
+	 * Возвращает список сотрудников, занимающих данную должностную позицию
+	 *
+	 * @return Scriptable список сотрудников
+	 */
+	public Scriptable getPositionEmployees(String positionRef) {
+		ParameterCheck.mandatory("positionRef", positionRef);
+		NodeRef ref = new NodeRef(positionRef);
+		List<NodeRef> employees = orgstructureService.getPositionEmployees(ref);
+		return createScriptable(employees);
 	}
 }

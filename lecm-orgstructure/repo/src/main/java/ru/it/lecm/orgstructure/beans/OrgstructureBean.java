@@ -41,6 +41,8 @@ public class OrgstructureBean {
 	public static final String PERSONAL_DATA_ROOT_NAME = "Персональные данные";
 
 	public static final String DICTIONARIES_ROOT_NAME = "Dictionary";
+	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
+	public static final String ROLES_DICTIONARY_NAME = "Роли для рабочих групп";
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -50,6 +52,8 @@ public class OrgstructureBean {
 	public static final QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
 	public static final QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
 	public static final QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
+	public static final QName ASSOC_ELEMENT_MEMBER_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-member-position-assoc");
+	public static final QName ASSOC_ELEMENT_MEMBER_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-member-employee-assoc");
 
 	public static final QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
 
@@ -61,6 +65,8 @@ public class OrgstructureBean {
 	public static final QName TYPE_STAFF_LIST = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list");
 	public static final QName TYPE_WORKFORCE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce");
 	public static final QName TYPE_EMPLOYEE_LINK = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link");
+	public static final QName TYPE_STAFF_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staffPosition");
+	public static final QName TYPE_WORK_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workRole");
 
 	private final Object lock = new Object();
 
@@ -433,5 +439,60 @@ public class OrgstructureBean {
 			return links.get(0).getTargetRef();
 		}
 		return null;
+	}
+
+	/**
+	 * Получение списка должностных позиций
+	 *
+	 * @return List<NodeRef>
+	 */
+	public List<NodeRef> getStaffPositions(boolean onlyActive) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
+		NodeRef positionsRoot = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, POSITIONS_DICTIONARY_NAME);
+
+		Set<QName> positions = new HashSet<QName>();
+		positions.add(TYPE_STAFF_POSITION);
+
+		List<ChildAssociationRef> staffPositions = nodeService.getChildAssocs(positionsRoot, positions);
+		for (ChildAssociationRef staffPosition : staffPositions) {
+			if (!onlyActive) {
+				results.add(staffPosition.getChildRef());
+			} else {
+				if ((Boolean) nodeService.getProperty(staffPosition.getChildRef(), IS_ACTIVE)) {
+					results.add(staffPosition.getChildRef());
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Получение перечня сотрудников, которые занимают должностную позицию
+	 *
+	 * @return List<NodeRef> - перечень сотрудников
+	 */
+	public List<NodeRef> getPositionEmployees(NodeRef position) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_STAFF_POSITION);
+
+		if (isProperType(position, properTypes)) { // если должностная позиция
+			// получаем список объектов Штатное расписание для заданной позиции
+			List<AssociationRef> staffs = nodeService.getSourceAssocs(position, ASSOC_ELEMENT_MEMBER_POSITION);
+			for (AssociationRef staff : staffs) {
+				Set<QName> links = new HashSet<QName>();
+				links.add(TYPE_EMPLOYEE_LINK);
+				// из штатного расписания получает ссылку на сотрудника
+				List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(staff.getSourceRef(), links);
+				if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+					NodeRef employee = getEmployeeFromLink(empLinks.get(0).getChildRef());
+					results.add(employee);
+				}
+			}
+		}
+		return results;
 	}
 }

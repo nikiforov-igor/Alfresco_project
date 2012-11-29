@@ -1,4 +1,2 @@
-var positionDictionary = companyhome.childByNamePath("Dictionary/Должностные позиции");
-var nodes = positionDictionary.getChildAssocsByType("lecm-orgstr:staffPosition");
-
-model.positions = nodes;
+var active = (args["onlyActive"] != null && args["onlyActive"] == "true");
+model.positions = orgstructure.getStaffPositions(active);
