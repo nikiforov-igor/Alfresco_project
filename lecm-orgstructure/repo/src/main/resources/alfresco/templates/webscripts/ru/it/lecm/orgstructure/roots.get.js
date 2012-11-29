@@ -1,4 +1,4 @@
-var organization = orgstructure.getOrganizationDirectory();
+var organization = orgstructure.getOrganization();
 var roots = [];
 var nodes = nodes = orgstructure.getRoots();
 //process response

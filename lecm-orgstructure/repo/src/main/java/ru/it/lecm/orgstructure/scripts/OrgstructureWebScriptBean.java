@@ -1,8 +1,6 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -19,6 +17,8 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -82,7 +82,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Создает дерево директорий Организации
+	 * Возвращает ноду Организация или создает дерево директорий Организации
 	 * /**
 	 * Структура директорий
 	 * Организация
@@ -92,7 +92,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 *
 	 * @return Созданную ноду Организация или Null, если произошла ошибка
 	 */
-	public ScriptNode getOrganizationDirectory() {
+	public ScriptNode getOrganization() {
 		NodeRef organization = orgstructureService.ensureOrganizationRootRef();
 		return new ScriptNode(organization, services, getScope());
 	}
@@ -209,7 +209,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 							unit.put(ITEM_TYPE, OrgstructureBean.TYPE_UNIT);
 							unit.put(TITLE, getElementName(
 									nodeService, child.getChildRef(), QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
-							unit.put(IS_LEAF, !hasChild(child, nodeService, true));
+							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
 							nodes.put(unit);
 						} catch (JSONException e) {
 							logger.error(e);
@@ -237,26 +237,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		return nodes.toString();
 	}
 
-	private boolean hasChild(ChildAssociationRef child, NodeService nodeService, boolean onlyActive) {
-		Set<QName> units = new HashSet<QName>();
-		units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_UNIT));
-		// получаем список только Подразделений (внутри могут находиться другие объекты)
-		List<ChildAssociationRef> childs = nodeService.getChildAssocs(child.getChildRef(), units);
-		boolean hasChild = !childs.isEmpty();
-		if (onlyActive && !childs.isEmpty()) {
-			hasChild = false;
-			for (ChildAssociationRef ref : childs) {
-				Boolean isActive = (Boolean) nodeService.getProperty(ref.getChildRef(), IS_ACTIVE);
-				isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
-				if (isActive) {
-					hasChild = isActive; // if one active exist -> hasChild == true
-					break;
-				}
-			}
-		}
-		return hasChild;
-	}
-
 	private String getElementName(final NodeService service, final NodeRef ref, QName property, QName defaultProperty) {
 		String value = null;
 		if (property != null) {
@@ -267,5 +247,74 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	private String getElementName(final NodeService service, final NodeRef ref, QName property) {
 		return getElementName(service, ref, property, DEFAULT_NAME);
+	}
+
+	/**
+	 * Возвращает ноду руководителя Организации
+	 * @return ScriptNode или Null
+	 */
+	public ScriptNode getOrganizationBoss() {
+		NodeRef boss = orgstructureService.getOrganizationBoss();
+		if (boss != null) {
+			return new ScriptNode(boss, services, getScope());
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Возвращает ноду логотипа Организации
+	 *
+	 * @return ScriptNode или Null
+	 */
+	public ScriptNode getOrganizationLogo() {
+		NodeRef logo = orgstructureService.getOrganizationLogo();
+		if (logo != null) {
+			return new ScriptNode(logo, services, getScope());
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Возвращает список рабочих групп Организации
+	 *
+	 * @return Scriptable
+	 */
+	public Scriptable getWorkGroups(boolean onlyActive) {
+		List<NodeRef> wgs = orgstructureService.getWorkGroups(onlyActive);
+		Object[] results = new Object[wgs.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(wgs.get(i), services, getScope());
+		}
+		return Context.getCurrentContext().newArray(getScope(), results);
+	}
+
+	/**
+	 * Возвращает список дочерних подразделений
+	 *
+	 * @return Scriptable
+	 */
+	public Scriptable getSubUnits(String parent, boolean onlyActive) {
+		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive);
+		Object[] results = new Object[units.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(units.get(i), services, getScope());
+		}
+        return Context.getCurrentContext().newArray(getScope(), results);
+	}
+
+	/**
+	 * Возвращает список "рутовых" подразделений
+	 *
+	 * @return Scriptable
+	 */
+	public Scriptable getRootUnits(boolean onlyActive) {
+		List<NodeRef> units = orgstructureService.getSubUnits(orgstructureService.getStructureDirectory(), onlyActive);
+		Object[] results = new Object[units.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(units.get(i), services, getScope());
+		}
+        return Context.getCurrentContext().newArray(getScope(), results);
 	}
 }

@@ -1,14 +1,14 @@
 package ru.it.lecm.orgstructure.beans;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -51,6 +51,11 @@ public class OrgstructureBean {
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
+
+	public static final QName ORG_BOSS_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
+	public static final QName ORG_LOGO_ASSOC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
+
+	public static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
 	private final Object lock = new Object();
 
@@ -147,5 +152,155 @@ public class OrgstructureBean {
 			}
 		};
 		return AuthenticationUtil.runAsSystem(raw);
+	}
+
+	/**
+	 * Получение руководителя Организации
+	 *
+	 * @return NodeRef или NULL если руководитель не задан
+	 */
+	public NodeRef getOrganizationBoss() {
+		NodeRef bossRef = null;
+		NodeRef organization = getOrganizationRootRef();
+		if (organization != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+			List<AssociationRef> boss = nodeService.getTargetAssocs(organization, ORG_BOSS_ASSOC);
+			if (boss != null && boss.size() > 0){
+				bossRef = boss.get(0).getTargetRef();
+			}
+		}
+		return bossRef;
+	}
+
+	/**
+	 * Получение логотипа Организации
+	 *
+	 * @return NodeRef или NULL если логотип не задан
+	 */
+	public NodeRef getOrganizationLogo() {
+		NodeRef logoRef = null;
+		NodeRef organization = getOrganizationRootRef();
+		if (organization != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+			List<AssociationRef> logo = nodeService.getTargetAssocs(organization, ORG_LOGO_ASSOC);
+			if (logo != null && logo.size() > 0){
+				logoRef = logo.get(0).getTargetRef();
+			}
+		}
+		return logoRef;
+	}
+
+	/**
+	 * Получение Директории с Оргструктурой
+	 *
+	 * @return NodeRef или NULL
+	 */
+	public NodeRef getStructureDirectory() {
+		NodeRef structure = null;
+		NodeRef organization = getOrganizationRootRef();
+		if (organization != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+			structure = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
+		}
+		return structure;
+	}
+
+	/**
+	 * Получение Директории с Сотрудниками
+	 *
+	 * @return NodeRef или NULL
+	 */
+	public NodeRef getEmployeesDirectory() {
+		NodeRef emp = null;
+		NodeRef organization = getOrganizationRootRef();
+		if (organization != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+			emp = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME);
+		}
+		return emp;
+	}
+
+	/**
+	 * Получение Директории с Персональными данными
+	 *
+	 * @return NodeRef или NULL
+	 */
+	public NodeRef getPersonalDataDirectory() {
+		NodeRef pd = null;
+		NodeRef organization = getOrganizationRootRef();
+		if (organization != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+			pd = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, PERSONAL_DATA_ROOT_NAME);
+		}
+		return pd;
+	}
+
+	/**
+	 * Получение списка Рабочих групп для Организации
+	 *
+	 * @return List<NodeRef>
+	 */
+	public List<NodeRef> getWorkGroups(boolean onlyActive) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		NodeRef structureDirectory = getStructureDirectory();
+		if (structureDirectory != null) {
+			final NodeService nodeService = serviceRegistry.getNodeService();
+
+			Set<QName> workgroups = new HashSet<QName>();
+			workgroups.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_WRK_GROUP));
+			List<ChildAssociationRef> wgs = nodeService.getChildAssocs(structureDirectory, workgroups);
+			for (ChildAssociationRef wg : wgs) {
+				if (onlyActive){
+					if ((Boolean)nodeService.getProperty(wg.getChildRef(), IS_ACTIVE)){
+						results.add(wg.getChildRef());
+					}
+				} else {
+					results.add(wg.getChildRef());
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Получение списка дочерних подразделений
+	 *
+	 * @return List<NodeRef>
+	 */
+	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		final NodeService nodeService = serviceRegistry.getNodeService();
+		Set<QName> units = new HashSet<QName>();
+		units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, OrgstructureBean.TYPE_UNIT));
+
+		List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(parent, units);
+		for (ChildAssociationRef uRef : uRefs) {
+			if (onlyActive){
+				if ((Boolean)nodeService.getProperty(uRef.getChildRef(), IS_ACTIVE)){
+					results.add(uRef.getChildRef());
+				}
+			} else {
+				results.add(uRef.getChildRef());
+			}
+		}
+		return results;
+	}
+
+	public boolean hasChild(NodeRef parent,boolean onlyActive) {
+		List<NodeRef> childs = getSubUnits(parent, onlyActive);
+		boolean hasChild = !childs.isEmpty();
+		final NodeService nodeService = serviceRegistry.getNodeService();
+		if (onlyActive && !childs.isEmpty()) {
+			hasChild = false;
+			for (NodeRef ref : childs) {
+				Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
+				isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
+				if (isActive) {
+					hasChild = isActive; // if one active exist -> hasChild == true
+					break;
+				}
+			}
+		}
+		return hasChild;
 	}
 }

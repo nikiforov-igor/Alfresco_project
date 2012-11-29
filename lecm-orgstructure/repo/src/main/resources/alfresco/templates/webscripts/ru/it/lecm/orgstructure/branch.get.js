@@ -1,4 +1,4 @@
-var organization = orgstructure.getOrganizationDirectory();
+var organization = orgstructure.getOrganization();
 var branch = [];
 var nodes;
 if (args["nodeRef"] == null || args["nodeRef"] == "") {
