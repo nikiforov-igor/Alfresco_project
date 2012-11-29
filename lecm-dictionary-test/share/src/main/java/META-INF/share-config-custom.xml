@@ -59,7 +59,7 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
-                            <control-param name="refillable">true</control-param>
+                            <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
 
@@ -67,14 +67,16 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="refillable">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
 
@@ -83,7 +85,8 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -91,7 +94,8 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
 
@@ -100,7 +104,8 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -108,9 +113,8 @@
                             <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
-                            <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
-                            <control-param name="showCreateNewItem">false</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -142,7 +146,7 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
 
@@ -150,14 +154,16 @@
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
 
@@ -167,7 +173,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:regManyTree">
@@ -176,7 +183,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
 
@@ -186,7 +194,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
@@ -195,9 +204,8 @@
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
-                            <!--Удаляем кнопку "Создать элемент" с формы. По умолчанию true-->
-                            <control-param name="showCreateNewItem">false</control-param>
-                            <control-param name="refillable">true</control-param>
+	                        <control-param name="showCreateNewLink">true</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>

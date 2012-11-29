@@ -13,7 +13,8 @@
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 			        <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 			        <control-param name="plane">false</control-param>
-			        <control-param name="refillable">false</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
 			        <control-param name="showSelectedItemsPath">false</control-param>
 		        </type>
 		        <type name="association:lecm-orgstr:staff-list" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
@@ -22,7 +23,8 @@
 			        <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 			        <control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 			        <control-param name="plane">false</control-param>
-			        <control-param name="refillable">false</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
 			        <control-param name="showSelectedItemsPath">false</control-param>
 			        <control-param name="showSearch">false</control-param>
 		        </type>
@@ -30,19 +32,22 @@
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 			        <control-param name="nameSubstituteString">{cm:name}</control-param>
 			        <control-param name="plane">true</control-param>
-			        <control-param name="refillable">false</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
 		        </type>
 		        <type name="association:lecm-orgstr:employee" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 			        <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 			        <control-param name="plane">true</control-param>
-			        <control-param name="refillable">false</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
 		        </type>
 		        <type name="association:lecm-orgstr:workRole" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 			        <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
 			        <control-param name="nameSubstituteString">{cm:name}</control-param>
 			        <control-param name="plane">true</control-param>
-			        <control-param name="refillable">false</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
 		        </type>
 	        </default-controls>
 

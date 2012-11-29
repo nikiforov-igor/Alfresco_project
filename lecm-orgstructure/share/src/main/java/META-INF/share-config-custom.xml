@@ -128,7 +128,8 @@
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {lecm-orgstr:employee-last-name}</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -177,7 +178,8 @@
                             <control-param name="nameSubstituteString">{cm:name} ({lecm-dic-regions:code})</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -397,7 +399,8 @@
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -421,7 +424,8 @@
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -448,7 +452,8 @@
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -473,7 +478,8 @@
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
-                            <control-param name="refillable">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
                 </appearance>

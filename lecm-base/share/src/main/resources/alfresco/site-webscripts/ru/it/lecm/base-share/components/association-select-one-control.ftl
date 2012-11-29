@@ -10,10 +10,10 @@
     </#if>
 </#if>
 
-<#if field.control.params.refillable?? && field.control.params.refillable == "false">
-    <#assign showCreateNewLink = false>
+<#if field.control.params.showCreateNewButton?? && field.control.params.showCreateNewButton == "false">
+    <#assign showCreateNewButton = false>
 <#else>
-    <#assign showCreateNewLink = true>
+    <#assign showCreateNewButton = true>
 </#if>
 
 <script type="text/javascript">//<![CDATA[
@@ -39,7 +39,7 @@
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-                showCreateNewButton: ${showCreateNewLink?string}
+                showCreateNewButton: ${showCreateNewButton?string}
             });
 })();
 //]]></script>
@@ -73,7 +73,7 @@
                     </option>
                 </#if>
             </select>
-            <#if showCreateNewLink>
+            <#if showCreateNewButton>
                 <span class="create-new-button">
                     <input type="button" id="${fieldHtmlId}-selectone-create-new-button" name="-"/>
                 </span>

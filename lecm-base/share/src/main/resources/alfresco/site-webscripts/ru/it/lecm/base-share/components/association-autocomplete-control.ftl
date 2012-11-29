@@ -12,7 +12,7 @@
     </#if>
 </#if>
 
-<#if field.control.params.refillable?? && field.control.params.refillable == "false">
+<#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
     <#assign showCreateNewLink = false>
 <#else>
     <#assign showCreateNewLink = true>

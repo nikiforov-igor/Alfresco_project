@@ -8,16 +8,16 @@
     <#assign plane = false>
 </#if>
 
-<#if field.control.params.refillable?? && field.control.params.refillable == "false">
+<#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
     <#assign showCreateNewLink = false>
 <#else>
     <#assign showCreateNewLink = true>
 </#if>
 
-<#if field.control.params.showCreateNewItem?? && field.control.params.showCreateNewItem == "false">
-	<#assign showCreateNewItem = false>
+<#if field.control.params.showCreateNewButton?? && field.control.params.showCreateNewButton == "false">
+	<#assign showCreateNewButton = false>
 <#else>
-	<#assign showCreateNewItem = true>
+	<#assign showCreateNewButton = true>
 </#if>
 
 <#if field.control.params.showSelectedItemsPath?? && field.control.params.showSelectedItemsPath == "false">
@@ -56,12 +56,10 @@
                     <span class="tree-picker-button">
                         <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
                     </span>
-                    <#if showCreateNewLink>
-                        <#if showCreateNewItem>
-                            <span class="create-new-button">
-                                <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
-                            </span>
-                        </#if>
+                    <#if showCreateNewButton>
+                        <span class="create-new-button">
+                            <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                        </span>
                     </#if>
                 </div>
 
