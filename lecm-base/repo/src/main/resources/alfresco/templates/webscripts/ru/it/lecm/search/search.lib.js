@@ -43,6 +43,9 @@ function processResults(nodes, fields, maxResults) {
 
     var flds = [];
     if (fields != null) {
+	    if (fields.indexOf("cm_versionLabel") == -1) {
+		    fields = fields + ",cm_versionLabel";
+	    }
         var arrayFields = fields.split(","),
             numFields = arrayFields.length;
 
