@@ -953,7 +953,71 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 );
                 return columnDefinitions;
             },
-            /**
+            beforeRenderFunction:function () {
+                var me = this;
+                var dataGrid = me.modules.dataGrid;
+                var datagridMeta = dataGrid.datagridMeta;
+
+                if (me.currentSort) {
+                    if (me.elTh == null) {
+                        me.elTh = me.currentSort.oColumn.getThEl();
+                    }
+                    if (me.elTh == me.currentSort.oColumn.getThEl()) {
+                        if (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_DESC) {
+                            Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
+                        } else {
+                            Dom.removeClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
+                            Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_ASC);
+                        }
+
+                    } else {
+                        Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_DESC);
+                        Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_ASC)
+                        me.elTh = me.currentSort.oColumn.getThEl();
+                    }
+                }
+                if (me.sort) {
+                    if (datagridMeta.searchConfig == undefined) {
+                        datagridMeta.searchConfig = {};
+                    }
+                    datagridMeta.searchConfig.sort = "";
+                    // Если ассоциация, то не сортируем
+                    if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
+                        if (me.desc) {
+                            datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
+                                "|false";
+                            me.desc = false;
+                            me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
+
+                        } else {
+                            datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
+                                "|true";
+                            me.desc = true;
+                            me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
+                        }
+                        //complete initial search
+                        var initialData = {
+                            datatype:datagridMeta.itemType
+                        };
+                        var searchConfig = datagridMeta.searchConfig;
+                        var sorting, filter, fullText;
+                        filter = searchConfig.filter;
+                        fullText = searchConfig.fullTextSearch;
+                        if (me.sort) {
+                            // Обнуляем сортировку иначе зациклится.
+                            me.sort = null;
+                            YAHOO.Bubbling.fire("doSearch",
+                                {
+                                    searchSort:datagridMeta.searchConfig.sort,
+                                    searchQuery:YAHOO.lang.JSON.stringify(initialData),
+                                    searchFilter:filter,
+                                    fullTextSearch:fullText,
+                                    bubblingLabel:me.options.bubblingLabel
+                                });
+                        }
+                    }
+                }
+            }, /**
              * Прорисовка таблицы, установка свойств, сортировка.
              * @param columnDefinitions колонки
              * @param me {object} this
@@ -1046,71 +1110,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }, this, true);
 
                 // Сортировка. Событие при нажатии на название столбца.
-                dTable.subscribe("beforeRenderEvent",function () {
-                        var dataGrid = me.modules.dataGrid;
-                        var datagridMeta = dataGrid.datagridMeta;
-
-                        if (me.currentSort){
-                            if (me.elTh == null) {
-                                me.elTh = me.currentSort.oColumn.getThEl();
-                            }
-                            if (me.elTh == me.currentSort.oColumn.getThEl()) {
-                                if (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_DESC){
-                                    Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
-                                } else {
-                                    Dom.removeClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_DESC);
-                                    Dom.addClass(me.currentSort.oColumn.getThEl(), YAHOO.widget.DataTable.CLASS_ASC);
-                                }
-
-                            } else {
-                                Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_DESC);
-                                Dom.removeClass(me.elTh, YAHOO.widget.DataTable.CLASS_ASC)
-                                me.elTh = me.currentSort.oColumn.getThEl();
-                            }
-                        }
-                        if (me.sort) {
-                            if (datagridMeta.searchConfig == undefined) {
-                                datagridMeta.searchConfig = {};
-                            }
-                            datagridMeta.searchConfig.sort = "";
-                            // Если ассоциация, то не сортируем
-                            if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
-                                if (me.desc) {
-                                    datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_","").replace("_",":") +
-                                       "|false";
-                                    me.desc = false;
-                                    me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
-
-                                } else {
-                                    datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
-                                        "|true";
-                                    me.desc = true;
-                                    me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
-                                }
-                                //complete initial search
-                                var initialData = {
-                                    datatype:datagridMeta.itemType
-                                };
-                                var searchConfig = datagridMeta.searchConfig;
-                                var sorting, filter, fullText;
-                                    filter = searchConfig.filter;
-                                    fullText = searchConfig.fullTextSearch;
-                                if (me.sort){
-                                // Обнуляем сортировку иначе зациклится.
-                                me.sort = null;
-                                YAHOO.Bubbling.fire("doSearch",
-                                    {
-                                        searchSort:datagridMeta.searchConfig.sort,
-                                        searchQuery:YAHOO.lang.JSON.stringify(initialData),
-                                        searchFilter:filter,
-                                        fullTextSearch:fullText,
-                                        bubblingLabel:me.options.bubblingLabel
-                                    });
-                                }
-                            }
-                        }
-                    },
-                dTable, true);
+                dTable.subscribe("beforeRenderEvent", this.beforeRenderFunction.bind(this), dTable, true);
 
                 // Rendering complete event handler
                 dTable.subscribe("renderEvent", function () {

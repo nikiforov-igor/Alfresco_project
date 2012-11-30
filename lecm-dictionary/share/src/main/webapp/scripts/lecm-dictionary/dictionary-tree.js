@@ -302,7 +302,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                  itemType: nodeType,
 		                         nodeRef: node.data.nodeRef,
                                  searchConfig: {
-                                    filter: 'PARENT:"' + node.data.nodeRef + '" AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                    filter: 'PARENT:"' + node.data.nodeRef + '"'
                                  }
                              },
                              scrollTo: true

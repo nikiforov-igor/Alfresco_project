@@ -23,7 +23,7 @@
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
                 <type>workForce</type>
-                <showSearchBlock>true</showSearchBlock>
+                <showSearchBlock>false</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
                 <typeButton>newRowButtonStaff</typeButton>
             </properties>

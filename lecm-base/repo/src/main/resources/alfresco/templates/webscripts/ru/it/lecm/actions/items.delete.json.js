@@ -66,7 +66,7 @@ function runAction(p_params) {
                         target.removeAssociation(itemNode, key)
                     }
                 }
-                if (!full) {// пометить объект как неактивный
+                if (full == "false") {// пометить объект как неактивный
                     itemNode.properties["lecm-dic:active"] = false;
                     result.success = itemNode.save();
                 } else {//реальное удаление объекта

@@ -67,7 +67,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                         namePattern:root.namePattern
                                     },
                                     searchConfig: {
-                                        filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                        filter:'PARENT:\"' + root.nodeRef + '\"'
                                     }
                                 },
                                 bubblingLabel:"workGroup"
@@ -81,7 +81,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                         namePattern:root.namePattern
                                     },
                                     searchConfig: {
-                                        filter:'PARENT:\"_NOT_LOAD_\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                        filter:'PARENT:\"_NOT_LOAD_\"'
                                     }
                                 },
                                 bubblingLabel:"workForce"
@@ -96,7 +96,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                         namePattern:root.namePattern
                                     },
                                     searchConfig: {
-                                        filter:'PARENT:\"' + root.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                        filter:'PARENT:\"' + root.nodeRef + '\"'
                                     }
                                 },
                                 bubblingLabel:null

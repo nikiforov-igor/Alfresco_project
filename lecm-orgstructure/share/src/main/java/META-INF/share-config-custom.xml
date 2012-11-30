@@ -414,8 +414,8 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-orgstr:workforce-comment"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:workforce-comment"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:workforce-comment">

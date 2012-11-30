@@ -416,7 +416,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         if (!datagridMeta.searchConfig) {
                             datagridMeta.searchConfig = {};
                         }
-                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
+                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"';
                         datagridMeta.searchConfig.fullTextSearch = "";
                         YAHOO.Bubbling.fire("activeGridChanged",
                             {

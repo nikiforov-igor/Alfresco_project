@@ -70,7 +70,7 @@ LogicECM.module = LogicECM.module || {};
 							itemType: this.rootNode.itemType,
 							nodeRef: this.rootNode.nodeRef,
                             searchConfig: {
-                                filter: 'PARENT:"' + this.rootNode.nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                filter: 'PARENT:"' + this.rootNode.nodeRef + '"'
                             }
 						},
 						scrollTo:true

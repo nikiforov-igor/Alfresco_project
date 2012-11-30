@@ -181,7 +181,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             searchSort:me.currentSearchSort, // сохраняем текущую сортировку
                             searchQuery:query, // поиск по заполненной форме (тип + данные)
                             searchFilter:"", // сбрасываем фильтр
-                            fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch)// поиск во всех вложенных директориях
+                            fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch),// поиск во всех вложенных директориях
+                            searchShowInactive:true
                         });
 
                     this.hideDialog();

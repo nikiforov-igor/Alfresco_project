@@ -213,8 +213,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
                             },
                             searchConfig:{ //настройки поиска (необязателен)
-                                filter:'PARENT:\"' + node.data.nodeRef + '\"'
-                                    + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)', // дополнительный запрос(фильтр)
+                                filter:'PARENT:\"' + node.data.nodeRef + '\"', // дополнительный запрос(фильтр)
                                 /** Настройки полнотекстового поиска. Пример объекта:
                                  {
                                  parentNodeRef - относительно какой директории искать (чаще всего совпадает с datagridMeta.nodeRef
@@ -333,7 +332,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 },
                                 nodeRef:sNode.data.nodeRef,
                                 searchConfig: {
-                                    filter:'PARENT:\"' + sNode.data.nodeRef + '\"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)'
+                                    filter:'PARENT:\"' + sNode.data.nodeRef + '\"'
                                 }
                             }
                         });

@@ -249,12 +249,12 @@ function getSearchResults(params) {
 				}
 			}
 
-			var fields = fullTextSearchJson["fields"];
-			logger.log("fields = " + fields);
+			var ftsFields = fullTextSearchJson["fields"];
+			logger.log("ftsFields = " + ftsFields);
 			var searchTerm = fullTextSearchJson["searchTerm"];
 			logger.log("searchTerm = " + searchTerm);
-			if (fields != null && fields.length > 0 && searchTerm != null && searchTerm.length > 0) {
-				var columns = fields.split(",");
+			if (ftsFields != null && ftsFields.length > 0 && searchTerm != null && searchTerm.length > 0) {
+				var columns = ftsFields.split(",");
 				var fieldsQuery = "";
 
 				for (var i = 0; i < columns.length; i++) {
