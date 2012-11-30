@@ -972,6 +972,7 @@ LogicECM.module = LogicECM.module || {};
             this.singleSelectedItem = null;
             this.updateSelectedItems();
             this.updateAddButtons();
+	        this.updateFormFields();
         },
 
         updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
@@ -999,7 +1000,7 @@ LogicECM.module = LogicECM.module || {};
 
                 Dom.get(fieldId).innerHTML
                     += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
-                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, items[i], this);
+                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
             }
         },
 
@@ -1015,14 +1016,17 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node)
+        getRemoveButtonHTML: function AssociationTreeViewer_getRemoveButtonHTML(node, dopId)
         {
-            return '<a href="javascript:void(0);" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + '"></a>';
+	        if (!dopId) {
+		        dopId = "";
+	        }
+            return '<a href="javascript:void(0);" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + dopId + '"></a>';
         },
 
-        attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(node)
+        attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(params)
         {
-            YAHOO.util.Event.on("t-" + this.options.controlId + node.nodeRef, 'click', this.removeNode, node, this);
+            YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, params.node, this);
         },
 
         // Updates all form fields
@@ -1048,7 +1052,13 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-                el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' </div>';
+	            if(this.options.disabled) {
+		            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+	            } else {
+		            el.innerHTML
+			            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+		            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
+	            }
             }
 
             if(!this.options.disabled)
