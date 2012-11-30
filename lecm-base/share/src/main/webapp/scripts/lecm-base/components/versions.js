@@ -160,9 +160,10 @@
 
             // Read versions from cache
             var documentVersions = this.showConfig.versionCache;
-            if (documentVersions) {
-                this.versions = documentVersions;
+            if (documentVersions.length == 0){
+                this.earliestVersion.nodeRef = this.showConfig.nodeRef;
             }
+            this.versions = documentVersions;
 
             // Check if the dialog has been showed before
                 // If it hasn't load the gui (template) from the server
@@ -294,7 +295,7 @@
                 // At earliest, so disable the previous button
                 Dom.addClass(navEls[0], "disabled");
             }
-            else if (this.showConfig.nodeRef === this.showConfig.latestVersion.nodeRef)
+            if (this.showConfig.nodeRef === this.showConfig.latestVersion.nodeRef)
             {
                 // at latest, so disable the next button.
                 Dom.addClass(navEls[1], "disabled");
