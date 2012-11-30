@@ -25,11 +25,25 @@
 .datalist-toolbar .search button {
     background: url(/share/res/components/images/search-16-gray.png) no-repeat 5px 5px;
 }
+.datalist-toolbar .clear-search span {
+	padding-right: 16px;
+	background: url(/share/res/components/images/delete-disabled-16.png) no-repeat;
+}
 .datalist-toolbar .search-input {
     display: inline-block;
     vertical-align: text-bottom;
     margin-top: 4px;
+	background-color: white;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	line-height: 0;
 }
+.datalist-toolbar .search-input input {
+	border: 0;
+	outline: none;
+	padding-right: 0;
+}
+
 /*import csv block*/
 .datalist-toolbar .import-csv {
     position: relative;

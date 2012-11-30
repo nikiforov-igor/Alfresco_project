@@ -35,8 +35,11 @@ YAHOO.util.Event.onDOMReady(init);
 		</div>
 
 		<div class="right">
-			<span id="${id}-searchInput" class="search-input">
-				<input type="text" id="dictionaryFullSearchInput" value="">
+			<span class="search-input">
+				<input type="text" id="${id}-searchInput" value="">
+				<a href="javascript:void(0);" id="${id}-clearSearchInput"  class="clear-search">
+					<span>&nbsp;</span>
+				</a>
 			</span>
 			<span id="${id}-searchButton" class="yui-button yui-push-button search">
                 <span class="first-child">

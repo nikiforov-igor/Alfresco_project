@@ -135,11 +135,15 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 });
                 Event.on("import-csv-input", "change", function(){me.onImportCSV();});
 
-                // Search
-	            var searchInput = Dom.get("dictionaryFullSearchInput");
+	            // Search
+	            this.checkShowClearSearch();
+	            Event.on(this.id + "-clearSearchInput", "click", this.onClearSearch, null, this);
+	            Event.on(this.id + "-searchInput", "keyup", this.checkShowClearSearch, null, this);
+
+	            var searchInput = Dom.get(this.id + "-searchInput");
 	            new YAHOO.util.KeyListener(searchInput,
 		            {
-			            keys: 13
+			            keys: YAHOO.util.KeyListener.KEY.ENTER
 		            },
 		            {
 			            fn: me.onSearch,
@@ -375,7 +379,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
              */
             onSearch:function Toolbar_onSearch() {
                 if (this.modules.dataGrid) {
-                    var searchTerm = Dom.get("dictionaryFullSearchInput").value;
+                    var searchTerm = Dom.get(this.id + "-searchInput").value;
 
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
@@ -424,6 +428,42 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     }
                 }
             },
+
+	        /**
+	         * Очистка поиска
+	         * @constructor
+	         */
+			onClearSearch: function Toolbar_onSearch() {
+		        Dom.get(this.id + "-searchInput").value = "";
+				if (this.modules.dataGrid) {
+					var dataGrid = this.modules.dataGrid;
+					var datagridMeta = dataGrid.datagridMeta;
+					if (!datagridMeta.searchConfig) {
+						datagridMeta.searchConfig = {};
+					}
+					datagridMeta.searchConfig.filter = 'PARENT:"' + datagridMeta.nodeRef + '"';
+					datagridMeta.searchConfig.fullTextSearch = "";
+					YAHOO.Bubbling.fire("activeGridChanged",
+						{
+							datagridMeta:datagridMeta
+						});
+					YAHOO.Bubbling.fire("hideFilteredLabel");
+					this.checkShowClearSearch();
+				}
+			},
+
+	        /**
+	         * Скрывает кнопку поиска, если строка ввода пустая
+	         * @constructor
+	         */
+	        checkShowClearSearch: function Toolbar_checkShowClearSearch() {
+		        if (Dom.get(this.id + "-searchInput").value.length > 0) {
+			        Dom.setStyle(this.id + "-clearSearchInput", "visibility", "visible");
+		        } else {
+			        Dom.setStyle(this.id + "-clearSearchInput", "visibility", "hidden");
+		        }
+	        },
+
             /**
              * Метод вызываемый из другого скрипта для передачи параметров
              * @param layer {object} Event fired
