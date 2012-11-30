@@ -13,6 +13,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,20 +21,21 @@ import java.util.Map;
  * Date: 16.11.12
  * Time: 14:45
  */
-public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
+public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "status");
 	public final static QName ASSOC_STATUS_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusFolder");
+	public final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		StateMachineStatusFolderPolicy.serviceRegistry = serviceRegistry;
+		StateMachineStatusPolicy.serviceRegistry = serviceRegistry;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
-		StateMachineStatusFolderPolicy.policyComponent = policyComponent;
+		StateMachineStatusPolicy.policyComponent = policyComponent;
 	}
 
 	public final void init() {
@@ -49,16 +51,19 @@ public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpd
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		NodeService nodeService = serviceRegistry.getNodeService();
 		String prevValue = (String) before.get(ContentModel.PROP_NAME);
 		String curValue = (String) after.get(ContentModel.PROP_NAME);
 		if (curValue != null && !curValue.equals(prevValue)) {
 			NodeRef folder = (NodeRef) after.get(ASSOC_STATUS_FOLDER);
 			if (folder != null) {
-				NodeService nodeService = serviceRegistry.getNodeService();
 				nodeService.setProperty(folder, ContentModel.PROP_NAME, curValue);
 			}
 		}
 
+		if (after.get(PROP_START_STATUS) != null) {
+			setStartStatus(nodeRef, (Boolean) after.get(PROP_START_STATUS));
+		}
 	}
 
 	@Override
@@ -80,5 +85,23 @@ public class StateMachineStatusFolderPolicy implements NodeServicePolicies.OnUpd
 			nodeService.setProperty(node, ASSOC_STATUS_FOLDER, ref.getChildRef());
 		}
 
+		if (nodeService.getProperty(node, PROP_START_STATUS) != null) {
+			setStartStatus(node, (Boolean) nodeService.getProperty(node, PROP_START_STATUS));
+		}
+
 	}
+
+	private void setStartStatus(NodeRef statusRef, boolean isStart) {
+		if (!isStart) {
+			return;
+		}
+		NodeService nodeService = serviceRegistry.getNodeService();
+		ChildAssociationRef statemachineRef = nodeService.getPrimaryParent(statusRef);
+		List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statemachineRef.getParentRef());
+		for (ChildAssociationRef status : statuses) {
+			nodeService.setProperty(status.getChildRef(), PROP_START_STATUS, false);
+		}
+		nodeService.setProperty(statusRef, PROP_START_STATUS, true);
+	}
+
 }

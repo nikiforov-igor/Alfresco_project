@@ -30,6 +30,10 @@ if (statemachineId != null && statemachineId != '') {
 			machine.properties["lecm-stmeditor:documentsFolder"] = machineDocumentsFolder;
 		}
 		machine.save();
+
+		var endStatus = machine.createNode("END", "lecm-stmeditor:status", "cm:contains")
+		endStatus.properties["lecm-stmeditor:endStatus"] = true;
+		endStatus.save();
 	}
 
 	var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
@@ -39,7 +43,12 @@ if (statemachineId != null && statemachineId != '') {
 
 	var machineStatuses = machine.getChildren();
 	var statuses = [];
+	var endStatus = null;
 	for each (var status in machineStatuses) {
+		if (status.properties["lecm-stmeditor:endStatus"]) {
+			endStatus = status;
+			continue;
+		}
 		var actionsNodes = status.getChildren();
 		var startActions = [];
 		var userActions = [];
@@ -53,7 +62,11 @@ if (statemachineId != null && statemachineId != '') {
 			for each (var transition in actionChildren) {
 				if (transition.assocs["lecm-stmeditor:transitionStatus"] != null) {
 					var transitionStatus = transition.assocs["lecm-stmeditor:transitionStatus"][0];
-					transitions.push(transitionStatus.properties["cm:name"]);
+					if (transitionStatus.properties["lecm-stmeditor:endStatus"]) {
+						transitions.push("Завершено");
+					} else {
+						transitions.push(transitionStatus.properties["cm:name"]);
+					}
 				}
 			}
 			var actionDescriptor = {
@@ -74,13 +87,27 @@ if (statemachineId != null && statemachineId != '') {
 
 		}
 		statuses.push({
-			name: status.properties["cm:name"],
+			name: status.properties["cm:name"] + (status.properties["lecm-stmeditor:startStatus"] ? " (S)" : ""),
 			nodeRef: status.nodeRef.toString(),
 			startActions: startActions,
 			userActions: userActions,
 			transitionActions: transitionActions,
 			endActions: endActions,
+			editable: "true"
 		});
 	}
+
+	if (endStatus != null) {
+		statuses.push({
+			name: "Завершено",
+			nodeRef: endStatus.nodeRef.toString(),
+			startActions: [],
+			userActions: [],
+			transitionActions: [],
+			endActions: [],
+			editable: "false"
+		});
+	}
+
 	model.statuses = statuses;
 }

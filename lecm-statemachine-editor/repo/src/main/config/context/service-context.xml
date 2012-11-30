@@ -43,12 +43,20 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-	<bean id="statemachineStatusFolderPolicy" class="ru.it.lecm.statemachine.editor.StateMachineStatusFolderPolicy"
+	<bean id="statemachineStatusPolicy" class="ru.it.lecm.statemachine.editor.StateMachineStatusPolicy"
 		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
+
+	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.diagramm.get"
+		  class="ru.it.lecm.statemachine.editor.script.BPMNDiagrammScript"
+		  parent="webscript">
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+
+	</bean>
+
 
 </beans>

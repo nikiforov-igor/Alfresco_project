@@ -198,6 +198,10 @@ LogicECM.module = LogicECM.module || {};
 			status.appendChild(statusName);
 			Dom.addClass(statusName.id, "status_name");
 
+			if (!model.editable) {
+				return;
+			}
+
 			Alfresco.util.createInsituEditor(
 				statusName.id,
 				{

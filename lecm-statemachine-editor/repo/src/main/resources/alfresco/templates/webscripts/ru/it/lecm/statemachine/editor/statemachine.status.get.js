@@ -16,7 +16,7 @@ if (nodeRef != null) {
 	for each (var status in children) {
 		statuses.push({
 			nodeRef: status.nodeRef.toString(),
-			name: status.properties["cm:name"]
+			name: status.properties["lecm-stmeditor:endStatus"] ? "Завершено" : status.properties["cm:name"]
 		});
 
 	}

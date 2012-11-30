@@ -13,6 +13,7 @@
 {
     name: "${status.name}",
     nodeRef: "${status.nodeRef}",
+    editable: ${status.editable},
     startActions: [
         <#list status.startActions as action>
             <@printAction action />

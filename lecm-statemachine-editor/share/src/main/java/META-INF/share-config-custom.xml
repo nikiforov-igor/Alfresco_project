@@ -5,9 +5,11 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-stmeditor:startStatus" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
+					<field id="lecm-stmeditor:startStatus"/>
 				</appearance>
 			</form>
 		</forms>
@@ -18,9 +20,11 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-stmeditor:startStatus" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
+					<field id="lecm-stmeditor:startStatus"/>
 				</appearance>
 			</form>
 		</forms>

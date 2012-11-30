@@ -53,6 +53,16 @@
 		<type name="lecm-stmeditor:status">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-stmeditor:startStatus">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:endStatus">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 			<associations>
 				<association name="lecm-stmeditor:statusFolder">
 					<source>
