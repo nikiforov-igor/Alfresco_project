@@ -3,8 +3,7 @@
 <script type="text/javascript">//<![CDATA[
 var Dom = YAHOO.util.Dom,
     Connect = YAHOO.util.Connect,
-    Event = YAHOO.util.Event,
-    Selector = YAHOO.util.Selector;
+    Event = YAHOO.util.Event;
 var organizationRef;
 
 function drawForm(nodeRef){
@@ -24,8 +23,6 @@ function drawForm(nodeRef){
                     var formEl = Dom.get("${id}-content");
                     formEl.innerHTML = response.serverResponse.responseText;
                     Dom.setStyle("${id}-footer", "opacity", "1");
-                    setActions(formEl);
-                    LogicECM.module.Base.Util.setHeight();
                 }
             },
             failureMessage:"message.failure",
@@ -65,18 +62,7 @@ function saveOrganization() {
     };
     Connect.asyncRequest(Alfresco.util.Ajax.GET, url, organizationSaveCallBack);
 }
-function setActions(form) {
-    var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', form)[0]);
-    var ul = Dom.getElementsByClassName('yui-nav', 'ul', form)[0];
-    var links = Selector.query('a', ul, false);
-
-    Event.addListener(links, 'click', function() {
-        setTimeout(function() {
-            LogicECM.module.Base.Util.setHeight();
-        }, 10);
-    });
-}
-YAHOO.util.Event.onDOMReady(init);
+Event.onDOMReady(init);
 //]]></script>
 
 <div id="${id}">

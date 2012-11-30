@@ -26,3 +26,27 @@
     </div>
 </div>
 </@>
+
+<script type="text/javascript">//<![CDATA[
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Selector = YAHOO.util.Selector;
+
+    function init() {
+        Event.onContentReady("${formId}-tabs", function() {
+            var parent = Dom.get("${formId}-tabs")[0];
+            var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', parent)[0]);
+            var links = Selector.query('a', Dom.getElementsByClassName('yui-nav', 'ul', parent)[0], false);
+
+            Event.addListener(links, 'click', function () {
+                setTimeout(function () {
+                    LogicECM.module.Base.Util.setHeight();
+                }, 10);
+            });
+            LogicECM.module.Base.Util.setHeight();
+        });
+    }
+
+    Event.onDOMReady(init);
+//]]></script>
+

@@ -3,6 +3,7 @@
     <config evaluator="node-type" condition="lecm-orgstr:employee">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
@@ -21,10 +22,25 @@
                     <show id="lecm-orgstr:employee-roles"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-orgstr:employee-positions">
+                    <set id="common" appearance="" label-id="info.common-info" />
+                    <set id="personal" appearance="" label-id="info.personal-info" />
+                    <field id="lecm-orgstr:employee-first-name" set="common"/>
+                    <field id="lecm-orgstr:employee-middle-name" set="common"/>
+                    <field id="lecm-orgstr:employee-last-name" set="common"/>
+                    <field id="lecm-orgstr:employee-sex" set="common"/>
+                    <field id="lecm-orgstr:employee-email" set="common"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-phone" set="common"/>
+                    <field id="lecm-orgstr:employee-number" set="common"/>
+                    <field id="lecm-orgstr:employee-fio-g" set="common"/>
+                    <field id="lecm-orgstr:employee-fio-d" set="common"/>
+                    <field id="lecm-orgstr:employee-is-system-user" set="common"/>
+                    <field id="lecm-orgstr:employee-person-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal"/>
+                    <field id="lecm-orgstr:employee-positions" set="personal">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:employee-roles">
+                    <field id="lecm-orgstr:employee-roles" set="personal">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
@@ -35,6 +51,7 @@
     <config evaluator="model-type" condition="lecm-orgstr:employee">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:name"/>
                     <!-- чтобы иметь возможность сохранить с требуемым именем-->
@@ -53,7 +70,22 @@
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name">
+                    <set id="common" appearance="" label-id="info.common-info" />
+                    <set id="personal" appearance="" label-id="info.personal-info" />
+                    <field id="lecm-orgstr:employee-first-name" set="common"/>
+                    <field id="lecm-orgstr:employee-middle-name" set="common"/>
+                    <field id="lecm-orgstr:employee-last-name" set="common"/>
+                    <field id="lecm-orgstr:employee-sex" set="common"/>
+                    <field id="lecm-orgstr:employee-email" set="common"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-phone" set="common"/>
+                    <field id="lecm-orgstr:employee-number" set="common"/>
+                    <field id="lecm-orgstr:employee-fio-g" set="common"/>
+                    <field id="lecm-orgstr:employee-fio-d" set="common"/>
+                    <field id="lecm-orgstr:employee-is-system-user" set="common"/>
+                    <field id="lecm-orgstr:employee-person-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal"/>
+                    <field id="cm:name" set="personal">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
