@@ -14,5 +14,5 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePage>
-	<@region id="delegation-opts-form" scope="template"/>
+	<@region id="delegation-opts" scope="template"/>
 </@bpage.basePage>

@@ -1,14 +1,16 @@
 [#ftl]
-[#assign id=args.htmlid?html/]
+[#assign id = args.htmlid/]
 
+[#assign hasDelegator = args.delegator??/]
 [#assign delegator]
-	[#if page.url.args["delegator"]??]
-		${page.url.args["delegator"]}
+	[#if hasDelegator]
+		${args.delegator}
 	[#else/]
-		this is me!!!
+		""
 	[/#if]
 [/#assign]
 
+[#if hasDelegator]
 <div id="${id}-dialog" class="delegation-opts">
 	<div class="hd">${msg("delegation.opts.form.title")}</div>
 	<div class="bd">
@@ -23,3 +25,6 @@
 		</form>
 	</div>
 </div>
+[#else/]
+<h2>There is no delegator specified, form won't be show</h2>
+[/#if]
