@@ -1,12 +1,59 @@
+/**
+ * Символ ссылки на родителя
+ * @type {String}
+ */
 const PARENT_SYMBOL = "..";
+
+/**
+ * Разделитель элементов в выражении
+ * @type {String}
+ */
 const SPLIT_TRANSITIONS_SYMBOL = "/";
+
+/**
+ * Символ эквивалентности в условиях
+ * @type {String}
+ */
 const EQUALS_SYMBOL = "=";
+
+/**
+ * Разделитель условий
+ * @type {String}
+ */
 const SPLIT_EXPRESSION_SYMBOL = ",";
+
+/**
+ * Символ открытия условия
+ * @type {String}
+ */
 const OPEN_EXPRESSIONS_SYMBOL = "(";
+
+/**
+ * Символ закрытия условий
+ * @type {String}
+ */
 const CLOSE_EXPRESSIONS_SYMBOL = ")";
+
+/**
+ * Символ открытия выражения
+ * @type {String}
+ */
 const OPEN_SUBSTITUDE_SYMBOL = "{";
+
+/**
+ * Символ закрытия выражения
+ * @type {String}
+ */
 const CLOSE_SUBSTITUDE_SYMBOL = "}";
 
+/**
+ * Получение заголовка элемента в соответствии с форматной строкой.
+ * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
+ *
+ * @param node ScriptNode элемент
+ * @param formatString форматная строка
+ * @return Заголовок элемента
+ */
 function formatNodeTitle(node, formatString) {
 	var result = formatString;
 	var nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
@@ -16,6 +63,25 @@ function formatNodeTitle(node, formatString) {
 	return result;
 }
 
+/**
+ * Получение значения выражения для элемента.
+ * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)
+ * Элементами выражения могут быть:
+ *      - Ссылка на родителя (@see SPLIT_TRANSITIONS_SYMBOL)
+ *      - Source ассоциация (..<Название ассоциации>)
+ *      - Target ассоциация (<Название ассоциации>)
+ *      -Child ассоциация (<Название ассоциации>)
+ * Последним элементов выражения обязательно должен быть атрибут элемента
+ *
+ * Для ассоциаций можно указать условия.
+ * Условия должно быть написано сразу после ассоциации, начиная с символа открытия (@see OPEN_EXPRESSIONS_SYMBOL) и заканчивая символом закрытия(@see OPEN_EXPRESSIONS_SYMBOL).
+ * Условия должно содержать название атрибута и его значения, через знак равенства (@see EQUALS_SYMBOL).
+ * Условий может быть несколько, в этом случае они должны разделяться специальным символом (@see SPLIT_EXPRESSION_SYMBOL).
+ *
+ * @param node ScriptNode элемент
+ * @param field выражение для элемента (ассоциации, условия и атрибуты)
+ * @return {String}
+ */
 function getSubstitudeField(node, field) {
 	var showNode = node;
 	var fieldName = null;
@@ -101,6 +167,14 @@ function getSubstitudeField(node, field) {
 	return result;
 }
 
+/**
+ * Получение выражений из форматной строки
+ *
+ * @param str форматная строка
+ * @param openSymbol символ открытия выражения
+ * @param closeSymbol символ закрытия выражения
+ * @return {Array} список строк с выражениями
+ */
 function splitSubstitudeFieldsString(str, openSymbol, closeSymbol) {
 	var result = [];
 	if (str.indexOf(openSymbol) != -1 && str.indexOf(closeSymbol) != -1) {
@@ -118,6 +192,11 @@ function splitSubstitudeFieldsString(str, openSymbol, closeSymbol) {
 	return result;
 }
 
+/**
+ * Получение условий
+ * @param str строка с условием
+ * @return {Array} список строк с условиями
+ */
 function getExpression(str) {
 	var expressions = [];
 
@@ -147,6 +226,11 @@ function getExpression(str) {
 	return expressions;
 }
 
+/**
+ * Обрезка пробелов на концах строки
+ * @param str строка для обрезки пробелов
+ * @return String строка без пробелов на концах
+ */
 function trim(str) {
 	return str.replace(/^\s+|\s+$/g, "");
 }
