@@ -1886,12 +1886,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 Alfresco.util.PopupManager.displayPrompt(
                     {
                         title:this.msg("message.confirm.delete.title", items.length),
-                        text:this.msg("message.confirm.delete.description", items.length),
+                        text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", items.length),
                         buttons:[
                             {
                                 text:this.msg("button.delete"),
                                 handler:function DataGridActions__onActionDelete_delete() {
                                     this.destroy();
+	                                me.selectItems("selectNone");
                                     fnActionDeleteConfirm.call(me, items);
                                 }
                             },

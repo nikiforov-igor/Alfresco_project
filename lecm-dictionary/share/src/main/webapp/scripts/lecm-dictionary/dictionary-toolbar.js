@@ -165,8 +165,6 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     var fn = "onActionDelete";
                     if (fn && (typeof dataGrid[fn] == "function")) {
                         dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
-                        this.modules.dataGrid.selectItems("selectNone");
-                        this.onSelectedItemsChanged();
                     }
                 }
             },
