@@ -515,4 +515,18 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		List<NodeRef> staffs = orgstructureService.getEmployeeWorkGroups(ref);
 		return createScriptable(staffs);
 	}
+
+	/**
+	 * Возвращает ноду ссылки на сотрудника для Позиции (Штатного расписания или Участника Рабочей группы)
+	 */
+	public ScriptNode getEmployeeLink(String positionRef) {
+		ParameterCheck.mandatory("positionRef", positionRef);
+		NodeRef ref = new NodeRef(positionRef);
+		NodeRef link = orgstructureService.getEmployeeLinkByPosition(ref);
+		if (link != null) {
+			return new ScriptNode(link, services, getScope());
+		} else {
+			return null;
+		}
+	}
 }

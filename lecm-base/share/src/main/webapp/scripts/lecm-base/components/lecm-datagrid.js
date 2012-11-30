@@ -2095,66 +2095,73 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }).show();
             },
 
-			/**
-			 * Create Data Item pop-up
-			 *
-			 * @method onActionCreate
-			 */
-			onActionCreate:function DataGrid_onActionCreate() {
-				var me = this;
-				// Intercept before dialog show
-				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-					Alfresco.util.populateHTML(
-						[ p_dialog.id + "-dialogTitle", this.msg("label.edit-row.title") ]
-					);
-				};
+            createDialogShow:function (meta, callback) {
+                // Intercept before dialog show
+                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                    Alfresco.util.populateHTML(
+                        [ p_dialog.id + "-dialogTitle", this.msg("label.edit-row.title") ]
+                    );
+                };
 
-				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-					{
-						itemKind: "type",
-						itemId: this.datagridMeta.itemType,
-						destination: this.datagridMeta.nodeRef,
-						mode:"create",
-						submitType:"json"
-					});
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                    {
+                        itemKind:"type",
+                        itemId:meta.itemType,
+                        destination:meta.nodeRef,
+                        mode:"create",
+                        submitType:"json"
+                    });
 
-				// Using Forms Service, so always create new instance
-				var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-				createDetails.setOptions(
-					{
-						width:"50em",
-						templateUrl:templateUrl,
-						actionUrl:null,
-						destroyOnHide:true,
-						doBeforeDialogShow:{
-							fn:doBeforeDialogShow,
-							scope:this
-						},
-						onSuccess:{
-							fn:function DataGrid_onActionCreate_success(response) {
-									YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-										{
-											nodeRef:response.json.persistedObject,
-											bubblingLabel: this.options.bubblingLabel
-										});
-									Alfresco.util.PopupManager.displayMessage(
-										{
-											text: this.msg("message.details.success")
-										});
-							},
-							scope:this
-						},
-						onFailure:{
-							fn:function DataGrid_onActionCreate_failure(response) {
-								Alfresco.util.PopupManager.displayMessage(
-									{
-										text:this.msg("message.details.failure")
-									});
-							},
-							scope:this
-						}
-					}).show();
-			},
+                // Using Forms Service, so always create new instance
+                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+                createDetails.setOptions(
+                    {
+                        width:"50em",
+                        templateUrl:templateUrl,
+                        actionUrl:null,
+                        destroyOnHide:true,
+                        doBeforeDialogShow:{
+                            fn:doBeforeDialogShow,
+                            scope:this
+                        },
+                        onSuccess:{
+                            fn:function DataGrid_onActionCreate_success(response) {
+                                if (callback){// вызов дополнительного события
+                                    callback.call(this, response.json.persistedObject);
+                                } else {
+                                    YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                        {
+                                            nodeRef:response.json.persistedObject,
+                                            bubblingLabel:this.options.bubblingLabel
+                                        });
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text:this.msg("message.details.success")
+                                        });
+                                }
+                            },
+                            scope:this
+                        },
+                        onFailure:{
+                            fn:function DataGrid_onActionCreate_failure(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text:this.msg("message.details.failure")
+                                    });
+                            },
+                            scope:this
+                        }
+                    }).show();
+            },
+
+            /**
+             * Create Data Item pop-up
+             *
+             * @method onActionCreate
+             */
+            onActionCreate:function DataGrid_onActionCreate() {
+                this.createDialogShow(this.datagridMeta, null, null);
+            },
 
             /**
              * Show more actions pop-up.

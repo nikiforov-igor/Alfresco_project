@@ -435,19 +435,9 @@ public class OrgstructureBean {
 	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
 	 */
 	public NodeRef getEmployeeByPosition(NodeRef ref) {
-		Set<QName> properTypes = new HashSet<QName>();
-		properTypes.add(TYPE_STAFF_LIST);
-		properTypes.add(TYPE_WORKFORCE);
-
-		if (isProperType(ref, properTypes)) {
-			Set<QName> link = new HashSet<QName>();
-			link.add(TYPE_EMPLOYEE_LINK);
-
-			List<ChildAssociationRef> links = nodeService.getChildAssocs(ref, link);
-			if (links.size() > 0) {
-				NodeRef linkRef = links.get(0).getChildRef();
-				return getEmployeeByLink(linkRef);
-			}
+		NodeRef employeeLink = getEmployeeLinkByPosition(ref);
+		if (employeeLink != null){
+			return getEmployeeByLink(employeeLink);
 		}
 		return null;
 	}
@@ -688,5 +678,26 @@ public class OrgstructureBean {
 			}
 		}
 		return results;
+	}
+
+	/**
+	 * Получение ссылки на сотрудника для Позиции (Штатного расписания или Участника Рабочей группы)
+	 */
+	public NodeRef getEmployeeLinkByPosition(NodeRef positionRef) {
+		NodeRef employeeLink = null;
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_STAFF_LIST);
+		properTypes.add(TYPE_WORKFORCE);
+
+		if (isProperType(positionRef, properTypes)) {
+			Set<QName> link = new HashSet<QName>();
+			link.add(TYPE_EMPLOYEE_LINK);
+
+			List<ChildAssociationRef> links = nodeService.getChildAssocs(positionRef, link);
+			if (links.size() > 0) {
+				employeeLink = links.get(0).getChildRef();
+			}
+		}
+		return employeeLink;
 	}
 }

@@ -1,7 +1,7 @@
 <dataGrid>
     <actionSet>
-        <action type="action-link" id="onActionEdit" permission="edit" label="actions.edit"/>
-        <action type="action-link" id="onActionVersion" permission="edit" label="actions.version"/>
+        <action type="action-link" id="onActionEmployeeAdd" permission="edit" label="actions.addEmployee"/>
+        <action type="action-link" id="onActionEmployeeDelete" permission="edit" label="actions.deleteEmployee"/>
         <action type="action-link" id="onActionDelete" permission="delete" label="actions.delete-row"/>
     </actionSet>
 </dataGrid>

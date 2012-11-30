@@ -193,7 +193,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 argument:{
                     context:this
                 },
-                timeout:7000
+                timeout:10000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         }

@@ -186,7 +186,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     node:node,
                     fnLoadComplete:fnLoadComplete
                 },
-                timeout:7000
+                timeout:10000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
