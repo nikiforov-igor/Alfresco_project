@@ -1,29 +1,27 @@
 package ru.it.lecm.statemachine.editor.script;
 
-import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
-import org.activiti.engine.impl.bpmn.parser.BpmnParse;
-import org.activiti.engine.impl.bpmn.parser.BpmnParser;
-import org.activiti.engine.impl.context.Context;
-import org.activiti.engine.impl.persistence.entity.DeploymentEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * User: PMelnikov
  * Date: 29.11.12
  * Time: 16:43
  */
-public class BPMNDiagrammScript extends AbstractWebScript {
+public class BPMNDiagramScript extends AbstractWebScript {
 
 	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+	private NodeService nodeService;
+
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
 	public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
 		this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
@@ -31,8 +29,12 @@ public class BPMNDiagrammScript extends AbstractWebScript {
 
 	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+		String statemachineNodeRef = req.getParameter("statemachineNodeRef");
+		if (statemachineNodeRef != null) {
+			new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+		}
 
-		FileInputStream inputStream = new FileInputStream("D:\\Project\\Application\\LogicECM\\lecm-contracts\\repo\\src\\main\\config\\models\\contracts.bpmn20.xml");
+		/*FileInputStream inputStream = new FileInputStream("D:\\Project\\Application\\LogicECM\\lecm-contracts\\repo\\src\\main\\config\\models\\contracts.bpmn20.xml");
 
 		DeploymentEntity deployment = new DeploymentEntity();
 		deployment.setId("preview");
@@ -59,6 +61,6 @@ public class BPMNDiagrammScript extends AbstractWebScript {
 			fos.flush();
 			fos.close();
 			diagramm.close();
-		}
+		}*/
 	}
 }

@@ -51,11 +51,11 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.diagramm.get"
-		  class="ru.it.lecm.statemachine.editor.script.BPMNDiagrammScript"
+	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.diagram.get"
+		  class="ru.it.lecm.statemachine.editor.script.BPMNDiagramScript"
 		  parent="webscript">
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
-
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
 

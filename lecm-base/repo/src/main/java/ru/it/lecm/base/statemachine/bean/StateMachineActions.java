@@ -55,7 +55,7 @@ public class StateMachineActions implements InitializingBean {
 				} else {
 					key = new ExecutionKey(type, keys[0]);
 				}
-				ActionKey actionKey = new ActionKey(action, key);
+				ActionKey actionKey = new ActionKey(name, key);
 				executionByVirtualExecution.put(actionKey, keys[0]);
 				ArrayList<String> actions = actionsByExecution.get(key);
 				if (actions == null) {
@@ -73,6 +73,11 @@ public class StateMachineActions implements InitializingBean {
 
 	public static String getClassName(String actionName) {
 		return actionClasses.get(actionName);
+	}
+
+	public String getRealExecution(String actionId, String type, String execution) {
+		ActionKey key = new ActionKey(actionId, new ExecutionKey(type, execution));
+		return executionByVirtualExecution.get(key);
 	}
 
 	public List<String> getActions(String type, String execution) {
