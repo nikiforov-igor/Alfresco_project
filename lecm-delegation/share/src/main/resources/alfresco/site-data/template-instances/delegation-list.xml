@@ -26,8 +26,8 @@
 		</component>
 		<!-- Grid region -->
 		<component>
-			<region-id>delegation-list-grid</region-id>
-			<url>/ru/it/lecm/delegation/delegation-list/grid</url>
+			<region-id>delegation-list</region-id>
+			<url>/ru/it/lecm/delegation/delegation-list</url>
 		</component>
 	</components>
 </template-instance>

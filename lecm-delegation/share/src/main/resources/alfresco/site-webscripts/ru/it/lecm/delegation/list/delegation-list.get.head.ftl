@@ -9,4 +9,4 @@
 <#-- Advanced search -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/advsearch.js"/>
 <#-- DelegationList Data Grid javascript -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-list-grid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-list.js"/>

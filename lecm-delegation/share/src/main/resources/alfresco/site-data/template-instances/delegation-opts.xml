@@ -19,5 +19,13 @@
 				<selected>delegationOpts</selected>
 			</properties>
 		</component>
+		<component>
+			<region-id>delegation-opts</region-id>
+			<url>/ru/it/lecm/delegation/delegation-opts</url>
+		</component>
+		<component>
+			<region-id>delegation-opts-form</region-id>
+			<url>/ru/it/lecm/delegation/delegation-opts/form</url>
+		</component>
 	</components>
 </template-instance>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>delegation-list</shortname>
+	<description>Returns delegation-list region content.</description>
+	<url>/ru/it/lecm/delegation/delegation-list</url>
+	<format default="html"/>
+	<authentication>user</authentication>
+</webscript>

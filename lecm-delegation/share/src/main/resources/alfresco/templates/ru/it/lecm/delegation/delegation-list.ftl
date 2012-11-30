@@ -30,5 +30,5 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	<@region id="delegation-list-grid" scope="template"/>
+	<@region id="delegation-list" scope="template"/>
 </@bpage.basePage>

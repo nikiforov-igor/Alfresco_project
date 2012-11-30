@@ -13,4 +13,6 @@
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<@bpage.basePage/>
+<@bpage.basePage>
+	<@region id="delegation-opts-form" scope="template"/>
+</@bpage.basePage>
