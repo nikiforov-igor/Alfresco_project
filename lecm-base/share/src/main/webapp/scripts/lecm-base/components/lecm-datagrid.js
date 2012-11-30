@@ -1226,6 +1226,20 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // elActions is the element id of the active table cell where we'll inject the actions
                 var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
 
+                if (this.versionable) {
+                    // Номер строки в таблице
+                    var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
+                    // Выбранный элемент
+                    var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
+                    var versionValue = selectItem.getData().itemData.prop_cm_versionLabel.value;
+                    // Получаем список ячеек tr
+                    var childTrElement =  Dom.getChildren(oArgs.target.id);
+                    // Количество элементов tr
+                    var colTr = Dom.getChildren(Dom.get(oArgs.target.id)).length;
+                    for (i = 0; i < colTr; i++) {
+                        Dom.setAttribute(childTrElement[i], "title", this.msg("message.version") + " " + versionValue);
+                    }
+                }
                 // Inject the correct action elements into the actionsId element
                 if (elActions && elActions.firstChild === null)
                 {
@@ -2038,7 +2052,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 // Reload the node's metadata
                                 Alfresco.util.Ajax.jsonPost(
                                     {
-                                        url:Alfresco.constants.PROXY_URI + "slingshot/datalists/item/node/" + new Alfresco.util.NodeRef(item.nodeRef).uri,
+                                        url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(item.nodeRef).uri,
                                         dataObj:this._buildDataGridParams(),
                                         successCallback:{
                                             fn:function DataGrid_onActionEdit_refreshSuccess(response) {

@@ -40,9 +40,14 @@ function getData()
    {
       // Convert the JSONArray object into a native JavaScript array
       fields = [];
-      var jsonFields = json.get("fields"),
-         numFields = jsonFields.length();
-      
+      var jsonFields = json.get("fields");
+
+      if (jsonFields.length() > 0) {
+          if (!("cm_versionLabel" in jsonFields)) {
+             jsonFields.put("cm_versionLabel");
+          }
+      }
+      numFields = jsonFields.length();
       for (count = 0; count < numFields; count++)
       {
          fields.push(jsonFields.get(count).replaceFirst("_", ":"));
