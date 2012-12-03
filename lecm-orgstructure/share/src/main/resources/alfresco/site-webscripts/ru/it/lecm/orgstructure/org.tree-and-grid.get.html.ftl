@@ -38,7 +38,7 @@
 															text:me.msg("message.delete.unit.failure.has.children")
 														});
 											} else { // удаляем! вызов метода из грида
-												me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete);
+												me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
 											}
 										},
 										failure:function (oResponse) {

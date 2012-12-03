@@ -11,57 +11,86 @@
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function init() {
-					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnDeleteComplete) {
+					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {
 						var me = this;
-						this.createDialogShow({itemType:"lecm-orgstr:employee-link", nodeRef:p_item.nodeRef}, function (employeeRef){
+						var metaData = {
+							itemType:"lecm-orgstr:employee-link",
+							nodeRef:p_item.nodeRef
+						};
+
+						var onAddCallback = function (employeeRef) {
 							// создаем ассоциацию
-							var onSuccess = function ObjectFinder__loadSelectedItems_onSuccess(response) {
+							var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
 								var createdAssoc = response.json.createdAssoc;
-								if (createdAssoc){
-									YAHOO.Bubbling.fire("dataItemUpdated",
+								if (createdAssoc) {
+									// Reload the node's metadata
+									Alfresco.util.Ajax.jsonPost(
 											{
-												item:p_item,
-												bubblingLabel:me.options.bubblingLabel
+												url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(p_item.nodeRef).uri,
+												dataObj:this._buildDataGridParams(),
+												successCallback:{
+													fn:function DataGrid_onActionEdit_refreshSuccess(response) {
+														// Fire "itemUpdated" event
+														YAHOO.Bubbling.fire("dataItemUpdated",
+																{
+																	item:response.json.item,
+																	bubblingLabel:me.options.bubblingLabel
+																});
+													},
+													scope:this
+												},
+												failureCallback:{
+													fn:function DataGrid_onActionEdit_refreshFailure(response) {
+														Alfresco.util.PopupManager.displayMessage(
+																{
+																	text:this.msg("message.details.failure")
+																});
+													},
+													scope:this
+												}
 											});
 									Alfresco.util.PopupManager.displayMessage(
 											{
-												text:this.msg("message.updated")
+												text:this.msg("message.employee.add.success")
 											});
+								} else {
+									onFailure.call(me, response);
 								}
 							};
-							var onFailure = function onFailure(response) {
-								this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true}, fnDeleteComplete);
+							var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
+								// при создание ассоциации произошла ошибка - удаляем ссылку на сотрудника
+								this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true}, fnCallback, null);
 								Alfresco.util.PopupManager.displayMessage(
 										{
-											text:"Ошибка"
+											text:this.msg("message.employee.add.failure")
 										});
 							};
 							Alfresco.util.Ajax.jsonRequest(
 									{
-										url: Alfresco.constants.PROXY_URI + "lecm/base/createAssoc",
-										method: "POST",
-										dataObj:
-										{
+										url:Alfresco.constants.PROXY_URI + "lecm/base/createAssoc",
+										method:"POST",
+										dataObj:{
 											source:p_item.nodeRef,
 											target:employeeRef,
 											assocType:"lecm-orgstr:element-member-employee-assoc"
 										},
-										successCallback:
-										{
-											fn: onSuccess,
-											scope: this
+										successCallback:{
+											fn:onSuccess,
+											scope:this
 										},
-										failureCallback:
-										{
-											fn: onFailure,
-											scope: this
+										failureCallback:{
+											fn:onFailure,
+											scope:this
 										}
 									});
-						}.bind(me));
+						}.bind(me);
+
+						this.createDialogShow(metaData, onAddCallback);
+
 					};
 					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeDelete = function DataGridActions_onActionEmployeeDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 						var me = this,
-								items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+							items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
 						var staffRow = items[0];
 						// Получаем для штатного расписания ссылку на сотрудника
 						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
@@ -69,20 +98,50 @@
 							success:function (oResponse) {
 								var oResult = eval("(" + oResponse.responseText + ")");
 								if (oResult) {
-									var linkRef = oResult.nodeRef;
-									me.onDelete([oResult], owner, {fullDelete:true}, fnDeleteComplete);
+									var onPrompt = function (fnAfterPrompt) {
+										Alfresco.util.PopupManager.displayPrompt(
+												{
+													title:this.msg("message.employee.delete.title"),
+													text: this.msg("message.employee.delete.prompt",
+															staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
+															staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
+													buttons:[
+														{
+															text:this.msg("button.delete"),
+															handler:function DataGridActions__onActionDelete_delete() {
+																this.destroy();
+																fnAfterPrompt.call(me, [oResult]);
+															}
+														},
+														{
+															text:this.msg("button.cancel"),
+															handler:function DataGridActions__onActionDelete_cancel() {
+																this.destroy();
+															},
+															isDefault:true
+														}
+													]
+												});
+									};
+
+									me.onDelete([oResult], owner, {fullDelete:true, successMessage: "message.employee.delete.success"}, fnDeleteComplete, onPrompt);
+								} else {
+									Alfresco.util.PopupManager.displayMessage(
+											{
+												text:this.msg("message.employee.delete.failure")
+											});
 								}
 							},
 							failure:function (oResponse) {
 								Alfresco.util.PopupManager.displayMessage(
 										{
-											text:"Ошибка!"
+											text:this.msg("message.employee.delete.failure")
 										});
 							}
 						};
 						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					};
-					// EXTEND DATAGRID HERE
+
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,

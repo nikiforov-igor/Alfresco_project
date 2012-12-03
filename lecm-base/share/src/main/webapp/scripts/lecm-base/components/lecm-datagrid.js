@@ -1841,7 +1841,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param fnDeleteComplete {Object} CallBack, который вызовется после завершения удаления
              */
             onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
-                this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete);
+                this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
             },
 
             /**
@@ -1849,7 +1849,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 Вынесено в отдельный метод, чтобы в конкретных датагридах не копировать
                 код и иметь возможность навешивать доп проверки
              */
-            onDelete: function DataGridActions_onDelete(p_items, owner, actionsConfig, fnDeleteComplete){
+            onDelete: function DataGridActions_onDelete(p_items, owner, actionsConfig, fnDeleteComplete, fnPrompt){
                 var me = this,
                     items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
 
@@ -1875,7 +1875,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         bubblingLabel:me.options.bubblingLabel
                                     }
                                 },
-                                message:this.msg("message.delete.success", items.length),
+                                message:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length),
                                 callback:{
                                     fn:fnDeleteComplete
                                 }
@@ -1897,28 +1897,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         });
                 };
 
-                Alfresco.util.PopupManager.displayPrompt(
-                    {
-                        title:this.msg("message.confirm.delete.title", items.length),
-                        text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", items.length),
-                        buttons:[
+                if (!fnPrompt){
+                    fnPrompt = function onDelete_Prompt(fnAfterPrompt){
+                        Alfresco.util.PopupManager.displayPrompt(
                             {
-                                text:this.msg("button.delete"),
-                                handler:function DataGridActions__onActionDelete_delete() {
-                                    this.destroy();
-	                                me.selectItems("selectNone");
-                                    fnActionDeleteConfirm.call(me, items);
-                                }
-                            },
-                            {
-                                text:this.msg("button.cancel"),
-                                handler:function DataGridActions__onActionDelete_cancel() {
-                                    this.destroy();
-                                },
-                                isDefault:true
-                            }
-                        ]
-                    });
+                                title:this.msg("message.confirm.delete.title", items.length),
+                                text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", items.length),
+                                buttons:[
+                                    {
+                                        text:this.msg("button.delete"),
+                                        handler:function DataGridActions__onActionDelete_delete() {
+                                            this.destroy();
+                                            me.selectItems("selectNone");
+                                            fnAfterPrompt.call(me, items);
+                                        }
+                                    },
+                                    {
+                                        text:this.msg("button.cancel"),
+                                        handler:function DataGridActions__onActionDelete_cancel() {
+                                            this.destroy();
+                                        },
+                                        isDefault:true
+                                    }
+                                ]
+                            });
+                    }
+                }
+                fnPrompt.call(this, fnActionDeleteConfirm);
             },
             /**
              * Продублировать item(s).
@@ -2126,9 +2131,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         onSuccess:{
                             fn:function DataGrid_onActionCreate_success(response) {
-                                if (callback){// вызов дополнительного события
+                                if (callback) {// вызов дополнительного события
                                     callback.call(this, response.json.persistedObject);
-                                } else {
+                                } else { // вызов события по умолчанию
                                     YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                         {
                                             nodeRef:response.json.persistedObject,
@@ -2160,7 +2165,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @method onActionCreate
              */
             onActionCreate:function DataGrid_onActionCreate() {
-                this.createDialogShow(this.datagridMeta, null, null);
+                this.createDialogShow(this.datagridMeta, null);
             },
 
             /**
