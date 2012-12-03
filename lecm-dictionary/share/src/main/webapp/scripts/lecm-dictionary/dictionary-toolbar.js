@@ -358,7 +358,9 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                     columns += "datagridColumns=" + encodeURIComponent(datagridColumns[nodeIndex].label) + "&";
                                 }
                                 for (var item in selectItems) {
-                                    items += "selectedItems=" + encodeURIComponent(item) + "&";
+	                                if (selectItems[item]) {
+                                        items += "selectedItems=" + encodeURIComponent(item) + "&";
+	                                }
                                 }
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
                                                      + "?" + fields
