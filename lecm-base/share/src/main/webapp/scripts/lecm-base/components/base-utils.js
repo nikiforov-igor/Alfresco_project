@@ -39,13 +39,16 @@ LogicECM.module.Base.Util = {
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
         var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
+        var minHeight = parseInt(Dom.getStyle(block, 'min-height'));
 
         Dom.setStyle(block, 'height', 'auto');
 
         var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
             - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
 
-        Dom.setStyle(block, 'height', h + 'px');
+        if (h > minHeight) {
+            Dom.setStyle(block, 'min-height', h + 'px');
+        }
     }
 };
 

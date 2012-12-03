@@ -16,11 +16,13 @@ LogicECM.module = LogicECM.module || {};
 	var Dom = YAHOO.util.Dom;
 
 	LogicECM.module.DictionaryMain = function () {
-		return LogicECM.module.DictionaryMain.superclass.constructor.call(
+		LogicECM.module.DictionaryMain.superclass.constructor.call(
 			this,
 			"LogicECM.module.DictionaryMain",
 			"lecm-dictionary",
 			["button", "container", "connection", "json"]);
+
+        return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.DictionaryMain, Alfresco.component.Base, {

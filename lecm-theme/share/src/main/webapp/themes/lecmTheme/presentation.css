@@ -57,6 +57,8 @@
     border-radius: 3px;
     margin: 5px 5px 5px 60px;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 #bd #lecm-content .toolbar .header-bar > div {
     margin-top: 1px;
