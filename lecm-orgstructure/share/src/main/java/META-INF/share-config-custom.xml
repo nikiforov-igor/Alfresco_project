@@ -707,9 +707,14 @@
 
     <config evaluator="node-type" condition="lecm-orgstr:employee-link">
         <forms>
-            <form>
+            <form id="el-staff">
                 <field-visibility>
+                    <show id="lecm-orgstr:employee-link-employee-assoc"/>
                     <show id="lecm-orgstr:employee-link-is-primary"/>
+                </field-visibility>
+            </form>
+            <form id="el-work">
+                <field-visibility>
                     <show id="lecm-orgstr:employee-link-employee-assoc"/>
                 </field-visibility>
             </form>
@@ -718,9 +723,14 @@
 
     <config evaluator="model-type" condition="lecm-orgstr:employee-link">
         <forms>
-            <form>
+            <form id="el-staff">
                 <field-visibility>
+                    <show id="lecm-orgstr:employee-link-employee-assoc"/>
                     <show id="lecm-orgstr:employee-link-is-primary"/>
+                </field-visibility>
+            </form>
+            <form id="el-work">
+                <field-visibility>
                     <show id="lecm-orgstr:employee-link-employee-assoc"/>
                 </field-visibility>
             </form>

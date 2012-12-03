@@ -15,7 +15,8 @@
 						var me = this;
 						var metaData = {
 							itemType:"lecm-orgstr:employee-link",
-							nodeRef:p_item.nodeRef
+							nodeRef:p_item.nodeRef,
+							formId:"el-staff"
 						};
 
 						var onAddCallback = function (employeeRef) {
@@ -88,10 +89,9 @@
 						this.createDialogShow(metaData, onAddCallback);
 
 					};
-					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeDelete = function DataGridActions_onActionEmployeeDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
-						var me = this,
-							items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
-						var staffRow = items[0];
+					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeDelete = function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
+						var me = this;
+						var staffRow = p_item;
 						// Получаем для штатного расписания ссылку на сотрудника
 						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
 						var callback = {
@@ -107,7 +107,7 @@
 															staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
 													buttons:[
 														{
-															text:this.msg("button.delete"),
+															text:this.msg("button.employee.remove"),
 															handler:function DataGridActions__onActionDelete_delete() {
 																this.destroy();
 																fnAfterPrompt.call(me, [oResult]);
