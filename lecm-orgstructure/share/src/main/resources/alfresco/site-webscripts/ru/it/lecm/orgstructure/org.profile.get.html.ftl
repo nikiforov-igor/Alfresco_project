@@ -68,6 +68,10 @@ Event.onDOMReady(init);
 <div id="${id}">
     <div id="${id}-content"></div>
     <div id="${id}-footer" class="org-profile-ft">
-        <button id="${id}-save" tabindex="0" onclick="saveOrganization();">${msg("button.save")}</button>
+        <span class="yui-button yui-push-button">
+            <span class="first-child">
+                <button id="${id}-save" tabindex="0" onclick="saveOrganization();">${msg("button.save")}</button>
+            </span>
+        </span>
     </div>
 </div>
