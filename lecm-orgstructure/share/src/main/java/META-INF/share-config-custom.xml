@@ -36,7 +36,9 @@
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-is-system-user" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
-                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal"/>
+                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
+                        <control template="/ru/it/lecm/orgstructure/viewPersonalData.ftl"/>
+                    </field>
                     <field id="lecm-orgstr:employee-positions" set="personal">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>

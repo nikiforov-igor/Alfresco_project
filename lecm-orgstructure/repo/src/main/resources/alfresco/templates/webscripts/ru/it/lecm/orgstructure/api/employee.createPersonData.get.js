@@ -1,0 +1,1 @@
+model.person = orgstructure.getPersonDataFolder();

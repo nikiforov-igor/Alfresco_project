@@ -1,7 +1,5 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -21,6 +19,11 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dbashmakov
@@ -448,6 +451,32 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			if (orgstructureService.isEmployee(ref)) {
 				return new ScriptNode(ref, this.services, getScope());
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение персональных данных сотрудника
+	 */
+	public  ScriptNode getPersonData(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			if(orgstructureService.isEmployee(ref)) {
+				NodeRef person = orgstructureService.getEmployeePerson(ref);
+				if (person != null) {
+				return new ScriptNode(person, this.services, getScope());
+				}
+			}
+		}
+		return null;
+	}
+
+	public ScriptNode getPersonDataFolder() {
+		NodeRef personDataRef = null;
+		personDataRef = orgstructureService.getPersonalDataDirectory();
+		if (personDataRef != null) {
+			return new ScriptNode(personDataRef, this.services, getScope());
 		}
 		return null;
 	}

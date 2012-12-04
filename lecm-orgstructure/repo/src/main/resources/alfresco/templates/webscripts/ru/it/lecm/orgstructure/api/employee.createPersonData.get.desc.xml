@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>create employee person data</shortname>
+    <description>Create employee person data</description>
+    <url>/lecm/orgstructure/api/createEmployeePersonData</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
