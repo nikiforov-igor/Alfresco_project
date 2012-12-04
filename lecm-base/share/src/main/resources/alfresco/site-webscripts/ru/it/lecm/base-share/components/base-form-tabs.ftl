@@ -36,13 +36,25 @@
         Event.onContentReady("${formId}-tabs", function() {
             var parent = Dom.get("${formId}-tabs")[0];
             var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', parent)[0]);
-            var links = Selector.query('a', Dom.getElementsByClassName('yui-nav', 'ul', parent)[0], false);
 
-            Event.addListener(links, 'click', function () {
+            function onBeforeActive(e) {
+                YAHOO.Bubbling.fire("beforeBaseTabChanged", {
+                    prev: e.prevValue.get("contentEl"),
+                    current: e.newValue.get("contentEl")
+                });
+            }
+            function onActive(e) {
+                YAHOO.Bubbling.fire("baseTabChanged", {
+                    prev: e.prevValue.get("contentEl"),
+                    current: e.newValue.get("contentEl")
+                });
                 setTimeout(function () {
                     LogicECM.module.Base.Util.setHeight();
                 }, 10);
-            });
+            }
+
+            tabs.addListener('beforeActiveTabChange', onBeforeActive);
+            tabs.addListener('activeTabChange', onActive);
             LogicECM.module.Base.Util.setHeight();
         });
     }
