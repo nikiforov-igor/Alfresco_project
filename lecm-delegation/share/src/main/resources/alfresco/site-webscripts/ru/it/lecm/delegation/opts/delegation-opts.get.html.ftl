@@ -13,5 +13,10 @@
 
 
 <div id="${id}">
+    <div id="${id}-content-part1"></div>
+    <div id="${id}-content-part2">
+	<!-- тут у нас будет таблица жить и радио-батон -->
+	</div>
+    <div id="${id}-content-part3"></div>
     <div id="${id}-content"></div>
 </div>

@@ -237,4 +237,39 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="node-type" condition="lecm-d8n:delegation-opts">
+		<forms>
+			<form id="delegation-opts-part1">
+				<appearance>
+					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
+					<field id="lecm-d8n:delegation-opts-owner-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-status"/>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+				</field-visibility>
+			</form>
+			<form id="delegation-opts-part3">
+				<appearance>
+					<field id="lecm-d8n:delegation-opts-trustee-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-trustee-assoc"/>
+					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

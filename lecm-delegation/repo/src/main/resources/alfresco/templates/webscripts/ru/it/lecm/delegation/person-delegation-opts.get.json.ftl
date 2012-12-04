@@ -11,9 +11,9 @@
 	"employee": null,
 </#if>
 <#if delegationOpts??>
-	"delegation-opts": "${delegationOpts}"
+	"delegationOpts": "${delegationOpts}"
 <#else/>
-	"delegation-opts": null
+	"delegationOpts": null
 </#if>
 }
 </#escape>

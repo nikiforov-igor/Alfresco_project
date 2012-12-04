@@ -45,7 +45,7 @@ if (personEmployee) {
 				var ownerAssoc = assocs[0]; //я знаю что ассоциация должна быть 1 к 1
 				if (ownerAssoc.nodeRef.equals(personEmployee.nodeRef)) {
 					employeeDelegationOpts = currentOpts;
-					logger.log ("employeeDelegationOpts = " + employeeDelegationOpts);
+					logger.log ("current authenticated employee's delegation options is " + employeeDelegationOpts.nodeRef);
 				}
 			}
 		}
