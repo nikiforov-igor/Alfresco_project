@@ -426,6 +426,10 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields {
     border-bottom: none;
 }
+.yui-skin-lecmTheme .yui-panel div.form-fields,
+.yui-skin-lecmTheme .yui-panel div.form-fields div {
+    text-align: left;
+}
 
 .yui-skin-lecmTheme .yui-panel .ft {
     border-top: 1px solid #C5C7C6;
