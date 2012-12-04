@@ -1126,6 +1126,7 @@ z-index: 9000;
     margin: 0;
 }
 .yui-skin-lecmTheme .datagrid .grid.yui-dt {
+    min-height: 0%; /* important IE9 fix */
     overflow: auto;
 }
 .yui-skin-lecmTheme .datagrid .grid.yui-dt table,
