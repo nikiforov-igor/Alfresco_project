@@ -205,15 +205,6 @@
 				</field-visibility>
 			</form>
 			<form id="datagrid">
-				<appearance>
-					<field id="lecm-d8n:delegation-opts-owner-assoc">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
-				</appearance>
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
@@ -255,7 +246,7 @@
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 				</field-visibility>
 			</form>
-			<form id="delegation-opts-part3">
+			<form id="delegation-opts-part2">
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-trustee-assoc">
 						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
@@ -268,6 +259,16 @@
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-trustee-assoc"/>
 					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-d8n:procuracy">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-d8n:trustee-assoc"/>
+					<show id="lecm-d8n:business-role-assoc"/>
 				</field-visibility>
 			</form>
 		</forms>

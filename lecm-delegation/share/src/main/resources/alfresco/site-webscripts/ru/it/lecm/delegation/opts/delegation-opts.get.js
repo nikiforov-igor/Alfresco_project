@@ -12,3 +12,21 @@ if (delegator && delegator.length > 0) {
 	var obj = jsonUtils.toObject (jsonStr);
 	model.delegator = obj.delegationOpts;
 }
+
+
+// Actions
+var actionSet = [],
+myConfig = new XML(config.script),
+xmlActionSet = myConfig.actionSet;
+
+for each (var xmlAction in xmlActionSet.action) {
+	actionSet.push ({
+		id: xmlAction.@id.toString(),
+		type: xmlAction.@type.toString(),
+		permission: xmlAction.@permission.toString(),
+		href: xmlAction.@href.toString(),
+		label: xmlAction.@label.toString()
+	});
+}
+
+model.actionSet = actionSet;
