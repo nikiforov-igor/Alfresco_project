@@ -28,15 +28,15 @@
     background: url("../../images/lecm-dictionary/xml-file-16.png") no-repeat 5px 5px;
     cursor: pointer;
 }
-.datalist-toolbar .import-xml .form-container {
-    width: 33px;
-    height: 29px;
+.datalist-toolbar .import-xml {
+    position: relative;
+    overflow: hidden;
+}
+.datalist-toolbar .import-xml input {
     position: absolute;
+    right: 0;
     top: 0;
     opacity: 0;
-    overflow: hidden;
     cursor: pointer;
-}
-.datalist-toolbar .import-xml .form-container input {
-    cursor: pointer;
+    font-size: 30px;
 }

@@ -97,14 +97,15 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
             onReady: function Toolbar_onReady() {
                 // Import XML
                 var importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){},{});
+                var inputId = this.id + "-import-xml-input";
 
-                Event.on(this.id + "-import-xml-form-container", "mouseenter", function() {
+                Event.on(inputId, "mouseenter", function() {
                     UA.mouseover(importXmlButton);
                 });
-                Event.on(this.id + "-import-xml-form-container", "mouseleave", function() {
+                Event.on(inputId, "mouseleave", function() {
                     UA.mouseout(importXmlButton);
                 });
-                Event.on("import-xml-input", "change", this.onImportXML);
+                Event.on(inputId, "change", this.onImportXML);
 
 	            // Finally show the component body here to prevent UI artifacts on YUI button decoration
 	            Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -114,7 +115,7 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
              * On "submit"-button click.
              */
             onImportXML: function() {
-                Connect.setForm('import-xml-form', true);
+                Connect.setForm(this.id + '-import-xml-form', true);
                 var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import";
                 var fileUploadCallback = {
                     upload:function(o){

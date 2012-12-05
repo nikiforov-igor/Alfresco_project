@@ -125,16 +125,6 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
                 var me = this;
 
-                // Import CSV
-                var importCsvButton = this.widgets.importCsvButton;
-                Event.on(this.id + "-import-csv-form-container", "mouseenter", function() {
-                    UA.mouseover(importCsvButton);
-                });
-                Event.on(this.id + "-import-csv-form-container", "mouseleave", function() {
-                    UA.mouseout(importCsvButton);
-                });
-                Event.on("import-csv-input", "change", function(){me.onImportCSV();});
-
 	            // Search
 	            this.checkShowClearSearch();
 	            Event.on(this.id + "-clearSearchInput", "click", this.onClearSearch, null, this);
@@ -475,20 +465,5 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             onInitDataGrid:function Toolbar_onInitDataGrid(layer, args) {
                 this.modules.dataGrid = args[1].datagrid;
             },
-            /**
-             * Импорт CSV
-             */
-            onImportCSV: function() {
-                document.getElementById('nodeRef').value = this.modules.dataGrid.datagridMeta.nodeRef;
-                Connect.setForm('import-csv-form', true);
-                var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import-csv";
-                var fileUploadCallback = {
-                    upload:function(o){
-                        console.log('Server Response: ' + o.responseText);
-                        document.location.reload(true);
-                    }
-                };
-                Connect.asyncRequest(Alfresco.util.Ajax.GET, url, fileUploadCallback);
-            }
         }, true);
 })();

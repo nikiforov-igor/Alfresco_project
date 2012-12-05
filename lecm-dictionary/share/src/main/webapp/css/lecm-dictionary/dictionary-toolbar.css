@@ -18,10 +18,6 @@
 .datalist-toolbar .delete-row button {
     background: url(/share/res/components/images/delete-row-16.png) no-repeat 5px 5px;
 }
-.datalist-toolbar .import-csv button {
-    background: url("../../components/images/details-16.png") no-repeat 5px 5px;
-    cursor: pointer;
-}
 .datalist-toolbar .search button {
     background: url(/share/res/components/images/search-16-gray.png) no-repeat 5px 5px;
 }
@@ -42,22 +38,5 @@
 	border: 0;
 	outline: none;
 	padding-right: 0;
-}
-
-/*import csv block*/
-.datalist-toolbar .import-csv {
-    position: relative;
-}
-.datalist-toolbar .import-csv .form-container {
-    width: 33px;
-    height: 29px;
-    position: absolute;
-    top: 0;
-    opacity: 0;
-    overflow: hidden;
-    cursor: pointer;
-}
-.datalist-toolbar .import-csv .form-container input {
-    cursor: pointer;
 }
 
