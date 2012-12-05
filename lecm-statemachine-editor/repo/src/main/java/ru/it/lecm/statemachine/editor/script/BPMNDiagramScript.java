@@ -6,7 +6,9 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * User: PMelnikov
@@ -30,8 +32,18 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 		String statemachineNodeRef = req.getParameter("statemachineNodeRef");
-		if (statemachineNodeRef != null) {
-			new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+		String type = req.getParameter("type");
+		if (statemachineNodeRef != null && "deploy".equals(type)) {
+			InputStream is = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+			FileOutputStream fos = new FileOutputStream("d:/2.xml");
+			byte[] buf = new byte[8 * 1024];
+			int c = -1;
+			while ((c = is.read(buf)) != -1) {
+				fos.write(buf, 0, c);
+			}
+			fos.flush();
+			fos.close();
+			is.close();
 		}
 
 		/*FileInputStream inputStream = new FileInputStream("D:\\Project\\Application\\LogicECM\\lecm-contracts\\repo\\src\\main\\config\\models\\contracts.bpmn20.xml");
