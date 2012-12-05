@@ -205,7 +205,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				/**
 				 * Allow create button toolbar
 				 */
-				allowCreate: false
+				allowCreate: false,
+
+				/**
+				 * Отображать или скрывать столбец с checkbox-ами
+				 * по-умолчанию - отображать
+				 */
+				showCheckboxColumn: true
             },
 
             /**
@@ -926,10 +932,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             getDataTableColumnDefinitions:function DataGrid_getDataTableColumnDefinitions() {
                 // YUI DataTable column definitions
-                var columnDefinitions =
-                    [
-                        { key:"nodeRef", label:"<input type='checkbox' id='" + this.id + "-select-all-records'>", sortable:false, formatter:this.fnRenderCellSelected(), width:16 }
-                    ];
+				var columnDefinitions = [];
+				if (this.options.showCheckboxColumn) {
+                    columnDefinitions.push({
+						key: "nodeRef",
+						label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
+						sortable: false,
+						formatter: this.fnRenderCellSelected (),
+						width: 16
+					});
+				}
 
                 var column;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
@@ -1084,31 +1096,32 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return true;
                 };
 
-                // Событие когда выбранны все элементы
-                YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
-                    YAHOO.util.Event.on(this.id +"-select-all-records", 'click', this.selectAllClick, this, true);
-                }, this, true);
+				if (this.options.showCheckboxColumn) {
+					// Событие когда выбранны все элементы
+					YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
+						YAHOO.util.Event.on(this.id +"-select-all-records", 'click', this.selectAllClick, this, true);
+					}, this, true);
 
-                // File checked handler
-                dTable.subscribe("checkboxClickEvent", function (e) {
-                    var id = e.target.value;
-                    this.selectedItems[id] = e.target.checked;
+					// File checked handler
+					dTable.subscribe("checkboxClickEvent", function (e) {
+						var id = e.target.value;
+						this.selectedItems[id] = e.target.checked;
 
-                    var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
-                        len = checks.length, i;
+						var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
+							len = checks.length, i;
 
-                    var allChecked = true;
-                    for (i = 0; i < len; i++) {
-                        if (!checks[i].checked) {
-                            allChecked = false;
-                            break;
-                        }
-                    }
-                    Dom.get(this.id + '-select-all-records').checked = allChecked;
+						var allChecked = true;
+						for (i = 0; i < len; i++) {
+							if (!checks[i].checked) {
+								allChecked = false;
+								break;
+							}
+						}
+						Dom.get(this.id + '-select-all-records').checked = allChecked;
 
-                    Bubbling.fire("selectedItemsChanged");
-                }, this, true);
-
+						Bubbling.fire("selectedItemsChanged");
+					}, this, true);
+				}
                 // Сортировка. Событие при нажатии на название столбца.
                 dTable.subscribe("beforeRenderEvent", this.beforeRenderFunction.bind(this), dTable, true);
 
@@ -1418,50 +1431,52 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             selectItems: function DataGrid_selectItems(p_selectType)
             {
-                var recordSet = this.widgets.dataTable.getRecordSet(),
-                    checks = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl()),
-                    aPageRecords = this.widgets.paginator.getPageRecords(),
-                    startRecord = aPageRecords[0],
-                    len = checks.length,
-                    record, i, fnCheck;
+				if (this.options.showCheckboxColumn) {
+					var recordSet = this.widgets.dataTable.getRecordSet(),
+						checks = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl()),
+						aPageRecords = this.widgets.paginator.getPageRecords(),
+						startRecord = aPageRecords[0],
+						len = checks.length,
+						record, i, fnCheck;
 
-                switch (p_selectType)
-                {
-                    case "selectAll":
-                        fnCheck = function(assetType, isChecked)
-                        {
-                            return true;
-                        };
-                        break;
+					switch (p_selectType)
+					{
+						case "selectAll":
+							fnCheck = function(assetType, isChecked)
+							{
+								return true;
+							};
+							break;
 
-                    case "selectNone":
-                        fnCheck = function(assetType, isChecked)
-                        {
-                            return false;
-                        };
-                        break;
+						case "selectNone":
+							fnCheck = function(assetType, isChecked)
+							{
+								return false;
+							};
+							break;
 
-                    case "selectInvert":
-                        fnCheck = function(assetType, isChecked)
-                        {
-                            return !isChecked;
-                        };
-                        break;
+						case "selectInvert":
+							fnCheck = function(assetType, isChecked)
+							{
+								return !isChecked;
+							};
+							break;
 
-                    default:
-                        fnCheck = function(assetType, isChecked)
-                        {
-                            return isChecked;
-                        };
-                }
+						default:
+							fnCheck = function(assetType, isChecked)
+							{
+								return isChecked;
+							};
+					}
 
-                for (i = 0; i < len; i++)
-                {
-                    record = recordSet.getRecord(i + startRecord);
-                    this.selectedItems[record.getData("nodeRef")] = checks[i].checked = fnCheck(record.getData("type"), checks[i].checked);
-                }
+					for (i = 0; i < len; i++)
+					{
+						record = recordSet.getRecord(i + startRecord);
+						this.selectedItems[record.getData("nodeRef")] = checks[i].checked = fnCheck(record.getData("type"), checks[i].checked);
+					}
 
-                Bubbling.fire("selectedItemsChanged");
+					Bubbling.fire("selectedItemsChanged");
+				}
             },
 
             /**
@@ -1908,7 +1923,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         text:this.msg("button.delete"),
                                         handler:function DataGridActions__onActionDelete_delete() {
                                             this.destroy();
-                                            me.selectItems("selectNone");
+											me.selectItems("selectNone");
                                             fnAfterPrompt.call(me, items);
                                         }
                                     },

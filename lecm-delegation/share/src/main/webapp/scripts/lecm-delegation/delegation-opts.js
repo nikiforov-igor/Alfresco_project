@@ -79,8 +79,8 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				var datagrid = new LogicECM.module.Delegation.Procuracy.Grid(this.id);
 				datagrid.setOptions({
 					usePagination:false,
-					showExtendSearchBlock:false/*,
-					width: 500*/
+					showExtendSearchBlock:false,
+					showCheckboxColumn: false
 				});
 
 				YAHOO.Bubbling.fire ("activeGridChanged", {

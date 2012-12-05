@@ -4,5 +4,11 @@
     <description>Returns content for delegation options</description>
 	<url>/ru/it/lecm/delegation/delegation-opts</url>
 	<format default="html"/>
-    <authentication>user</authentication>
+	<!--
+	 | авторизация отключена умышленно
+	 | это сделано потому, что этот скрипт выполняет remote.connect к alfresco
+	 | и если авторизация будет активна, то вылезет окошко авторизации
+	 | в общем плохо понятно почему так. Вероятно бага альфреско
+	-->
+    <authentication>none</authentication>
 </webscript>
