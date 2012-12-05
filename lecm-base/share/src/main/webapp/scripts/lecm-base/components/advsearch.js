@@ -312,7 +312,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onSearch:function AdvSearch_onSearch(layer, args) {
                 var obj = args[1];
-                if (!obj.bubblingLabel || obj.bubblingLabel == this.datagridMeta.bubblingLabel){
+                if (!obj.bubblingLabel || !this.datagridMeta.bubblingLabel || obj.bubblingLabel == this.datagridMeta.bubblingLabel){
                     this._performSearch(obj);
                 }
             },
