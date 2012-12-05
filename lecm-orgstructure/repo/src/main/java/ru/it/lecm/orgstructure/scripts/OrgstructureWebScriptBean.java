@@ -558,4 +558,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			return null;
 		}
 	}
+
+	public ScriptNode getBossExists(String subUnit) {
+		NodeRef sunUnitRef = new NodeRef(subUnit);
+		NodeRef bossExists = orgstructureService.getBossStaff(sunUnitRef);
+		if (bossExists != null) {
+			return new ScriptNode(bossExists, services, getScope());
+		} else {
+		return null;
+		}
+	}
 }

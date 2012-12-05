@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Boos</shortname>
+    <description>Returns boss position</description>
+    <url>/lecm/orgstructure/boss</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

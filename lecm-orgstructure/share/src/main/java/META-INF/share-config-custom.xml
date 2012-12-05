@@ -492,6 +492,9 @@
 	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
+                    <field id="lecm-orgstr:staff-list-is-boss">
+                        <control template="/ru/it/lecm/orgstructure/control.boss.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -517,6 +520,9 @@
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-orgstr:staff-list-is-boss">
+                        <control template="/ru/it/lecm/orgstructure/control.boss.ftl"/>
                     </field>
                 </appearance>
             </form>

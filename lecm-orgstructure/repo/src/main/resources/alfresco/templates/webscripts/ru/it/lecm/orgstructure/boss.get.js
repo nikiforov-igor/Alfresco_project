@@ -1,0 +1,1 @@
+model.boss = orgstructure.getBossExists(args["nodeRef"]);
