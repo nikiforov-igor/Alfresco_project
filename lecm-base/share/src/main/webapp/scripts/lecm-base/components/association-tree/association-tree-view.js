@@ -140,7 +140,6 @@ LogicECM.module = LogicECM.module || {};
                 this._createSelectedControls();
                 this.createPickerDialog();
                 this._loadSearchProperties();
-	            this._loadSelectedItems();
             } else {
 	            this.updateViewForm();
             }
@@ -518,6 +517,7 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
+                                this._loadSelectedItems();
                             }
                         },
                         scope: this
