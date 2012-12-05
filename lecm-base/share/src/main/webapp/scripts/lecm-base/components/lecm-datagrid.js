@@ -2135,7 +2135,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         itemId:meta.itemType,
                         destination:meta.nodeRef,
                         mode:"create",
-                        formId: meta.formId != null ? meta.formId : "{formId}",
+                        formId: meta.formId != null ? meta.formId : "",
                         submitType:"json"
                     });
 
