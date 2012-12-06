@@ -754,4 +754,31 @@
             </forms>
         </advanced-search>
     </config>
+
+	<config evaluator="model-type" condition="lecm-orgstr:business-role">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-orgstr:business-role-description"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-orgstr:business-role-description"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-orgstr:business-role">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-orgstr:business-role-description"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
