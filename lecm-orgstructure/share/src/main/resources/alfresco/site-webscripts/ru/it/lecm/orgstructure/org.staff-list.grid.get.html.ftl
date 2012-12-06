@@ -101,8 +101,8 @@
 									var onPrompt = function (fnAfterPrompt) {
 										Alfresco.util.PopupManager.displayPrompt(
 												{
-													title:this.msg("message.employee.delete.title"),
-													text: this.msg("message.employee.delete.prompt",
+													title:this.msg("message.employee.position.delete.title"),
+													text: this.msg("message.employee.position.delete.prompt",
 															staffRow.itemData["assoc_lecm-orgstr_element-member-employee-assoc"].displayValue,
 															staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
 													buttons:[
@@ -124,18 +124,18 @@
 												});
 									};
 
-									me.onDelete([oResult], owner, {fullDelete:true, successMessage: "message.employee.delete.success"}, fnDeleteComplete, onPrompt);
+									me.onDelete([oResult], owner, {fullDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
 								} else {
 									Alfresco.util.PopupManager.displayMessage(
 											{
-												text:this.msg("message.employee.delete.failure")
+												text:this.msg("message.employee.position.delete.failure")
 											});
 								}
 							},
 							failure:function (oResponse) {
 								Alfresco.util.PopupManager.displayMessage(
 										{
-											text:this.msg("message.employee.delete.failure")
+											text:this.msg("message.employee.position.delete.failure")
 										});
 							}
 						};
