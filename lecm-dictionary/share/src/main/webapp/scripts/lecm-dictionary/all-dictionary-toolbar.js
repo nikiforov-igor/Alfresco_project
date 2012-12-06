@@ -105,7 +105,7 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
                 Event.on(inputId, "mouseleave", function() {
                     UA.mouseout(importXmlButton);
                 });
-                Event.on(inputId, "change", this.onImportXML);
+                Event.on(inputId, "change", this.onImportXML, null, this);
 
 	            // Finally show the component body here to prevent UI artifacts on YUI button decoration
 	            Dom.setStyle(this.id + "-body", "visibility", "visible");
