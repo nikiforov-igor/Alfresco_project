@@ -141,7 +141,10 @@
 						};
 						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					};
-
+					LogicECM.module.Base.DataGrid.prototype.deleteStaffEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
+						var itemData = rowData.itemData;
+						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined;
+					};
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -169,7 +172,8 @@
 										type:"action-link-staff",
 										id:"onActionDelete",
 										permission:"delete",
-										label:"${msg("actions.delete-row")}"
+										label:"${msg("actions.delete-row")}",
+										evaluator: "deleteStaffEvaluator"
 									}
 								],
 								bubblingLabel: "staff",
