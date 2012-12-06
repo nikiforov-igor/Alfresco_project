@@ -145,7 +145,35 @@
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
-								showExtendSearchBlock:${showSearchBlock?string}
+								showExtendSearchBlock:${showSearchBlock?string},
+								actions: [
+									{
+										type:"action-link-staff",
+										id:"onActionEmployeeAdd",
+										permission:"edit",
+										label:"${msg("actions.addEmployee")}"
+									},
+									{
+										type:"action-link-staff",
+										id:"onActionEmployeeDelete",
+										permission:"edit",
+										label:"${msg("actions.deleteEmployee")}"
+									},
+									{
+										type:"action-link-staff",
+										id:"onActionEdit",
+										permission:"edit",
+										label:"${msg("actions.edit")}"
+									},
+									{
+										type:"action-link-staff",
+										id:"onActionDelete",
+										permission:"delete",
+										label:"${msg("actions.delete-row")}"
+									}
+								],
+								bubblingLabel: "staff",
+								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}
 

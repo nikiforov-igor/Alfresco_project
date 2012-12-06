@@ -1,8 +1,0 @@
-<dataGrid>
-    <actionSet>
-        <action type="action-link-workForce" id="onActionEmployeeAdd" permission="edit" label="actions.addEmployee"/>
-        <action type="action-link-workForce" id="onActionEmployeeDelete" permission="edit" label="actions.deleteEmployee"/>
-        <action type="action-link-workForce" id="onActionEdit" permission="edit" label="actions.edit"/>
-        <action type="action-link-workForce" id="onActionDelete" permission="delete" label="actions.delete-row"/>
-    </actionSet>
-</dataGrid>

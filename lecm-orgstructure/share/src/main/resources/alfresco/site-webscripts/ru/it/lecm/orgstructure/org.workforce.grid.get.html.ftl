@@ -173,7 +173,34 @@
 						{
 							bubblingLabel: "workForce",
 							usePagination:true,
-							showExtendSearchBlock:false
+							showExtendSearchBlock:false,
+							actions: [
+								{
+									type:"action-link-workForce",
+									id:"onActionEmployeeAdd",
+									permission:"edit",
+									label:"${msg("actions.addEmployee")}"
+								},
+								{
+									type:"action-link-workForce",
+									id:"onActionEmployeeDelete",
+									permission:"edit",
+									label:"${msg("actions.deleteEmployee")}"
+								},
+								{
+									type:"action-link-workForce",
+									id:"onActionEdit",
+									permission:"edit",
+									label:"${msg("actions.edit")}"
+								},
+								{
+									type:"action-link-workForce",
+									id:"onActionDelete",
+									permission:"delete",
+									label:"${msg("actions.delete-row")}"
+								}
+							],
+							showCheckboxColumn: false
 						}).setMessages(${messages});
 			}
 

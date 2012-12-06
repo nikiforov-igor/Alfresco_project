@@ -16,7 +16,11 @@ function checkboxInit() {
 	var callback = {
 		success:function (oResponse) {
 			var oResults = eval("(" + oResponse.responseText + ")");
-			Dom.get("${fieldHtmlId}-entry").setAttribute('disabled', oResults.bossExists != undefined);
+			if (oResults.bossExists != undefined) {
+				Dom.get("${fieldHtmlId}-entry").setAttribute('disabled', true);
+			} else {
+				Dom.get("${fieldHtmlId}-entry").removeAttribute('disabled');
+			}
 		},
 		failure:function (oResponse) {
 			alert("Не удалось загрузить данные о руководящей должности. Попробуйте обновить страницу.");

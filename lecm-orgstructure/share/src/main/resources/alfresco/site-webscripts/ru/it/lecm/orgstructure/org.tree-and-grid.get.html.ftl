@@ -65,8 +65,30 @@
 
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
-								usePagination: true,
-								showExtendSearchBlock:${showSearchBlock?string}
+								usePagination:true,
+								showExtendSearchBlock:${showSearchBlock?string},
+								actions:[
+									{
+										type:"action-link-orgstructure",
+										id:"onActionEdit",
+										permission:"edit",
+										label:"${msg("actions.edit")}"
+									},
+									{
+										type:"action-link-orgstructure",
+										id:"onActionVersion",
+										permission:"edit",
+										label:"${msg("actions.version")}"
+									},
+									{
+										type:"action-link-orgstructure",
+										id:"onActionDelete",
+										permission:"delete",
+										label:"${msg("actions.delete-row")}"
+									}
+								],
+								bubblingLabel: "orgstructure",
+								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}
 				YAHOO.util.Event.onDOMReady(init);

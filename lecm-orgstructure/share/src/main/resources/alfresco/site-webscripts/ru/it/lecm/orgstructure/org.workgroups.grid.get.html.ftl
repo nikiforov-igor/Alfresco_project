@@ -104,7 +104,28 @@
 						{
 							bubblingLabel:"workGroup",
 							usePagination:true,
-							showExtendSearchBlock:false
+							showExtendSearchBlock:false,
+							actions: [
+								{
+									type:"action-link-workGroup",
+									id:"onActionEdit",
+									permission:"edit",
+									label:"${msg("actions.edit")}"
+								},
+								{
+									type:"action-link-workGroup",
+									id:"onActionVersion",
+									permission:"edit",
+									label:"${msg("actions.version")}"
+								},
+								{
+									type:"action-link-workGroup",
+									id:"onActionDelete",
+									permission:"delete",
+									label:"${msg("actions.delete-row")}"
+								}
+							],
+							showCheckboxColumn: false
 						}).setMessages(${messages});
 			}
 

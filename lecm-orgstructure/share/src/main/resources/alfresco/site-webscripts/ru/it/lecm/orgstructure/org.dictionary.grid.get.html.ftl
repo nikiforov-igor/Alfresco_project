@@ -97,7 +97,29 @@
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
-							showExtendSearchBlock:true
+							showExtendSearchBlock:true,
+							actions: [
+								{
+									type:"action-link-dictionary",
+									id:"onActionEdit",
+									permission:"edit",
+									label:"${msg("actions.edit")}"
+								},
+								{
+									type:"action-link-dictionary",
+									id:"onActionVersion",
+									permission:"edit",
+									label:"${msg("actions.version")}"
+								},
+								{
+									type:"action-link-dictionary",
+									id:"onActionDelete",
+									permission:"delete",
+									label:"${msg("actions.delete-row")}"
+								}
+							],
+							bubblingLabel: "dictionary",
+							showCheckboxColumn: false
 						}).setMessages(${messages});
 			}
 

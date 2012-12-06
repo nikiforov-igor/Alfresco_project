@@ -1306,7 +1306,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 // Inject the correct action elements into the actionsId element
-                if (elActions) {
+                if (elActions && !this.showingMoreActions) {
                     // Call through to get the row highlighted by YUI
                     this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
