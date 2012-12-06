@@ -8,20 +8,18 @@ var bossRef;
 
 
 function checkboxInit() {
+	// блокируем checkbox по умолчанию - чтоыб избежать "быстрого" клика
+	Dom.get("${fieldHtmlId}-entry").setAttribute('disabled', true);
+
 	bossRef = Dom.get("toolbar-createRow-form").children[0].value;
 	var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/boss?nodeRef=" + bossRef;
 	var callback = {
 		success:function (oResponse) {
 			var oResults = eval("(" + oResponse.responseText + ")");
-			if (oResults.bossExists != undefined) {
-				// скрываем checkbox
-				Dom.get("${fieldHtmlId}-entry").setAttribute('disabled', true);
-			}
+			Dom.get("${fieldHtmlId}-entry").setAttribute('disabled', oResults.bossExists != undefined);
 		},
 		failure:function (oResponse) {
 			alert("Не удалось загрузить данные о руководящей должности. Попробуйте обновить страницу.");
-		},
-		argument:{
 		}
 	};
 	YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
