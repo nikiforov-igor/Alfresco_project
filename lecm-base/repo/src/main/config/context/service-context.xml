@@ -38,11 +38,14 @@
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 	</bean>
 
-	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.base.statemachine.LecmWorkflowDeployer" parent="workflowDeployer"
-		  abstract="true">
+	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.base.statemachine.LecmWorkflowDeployer">
 		<property name="workflowService" ref="WorkflowService"/>
-		<property name="workflowAdminService" ref="workflowAdminService"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="repositoryHelper" ref="repositoryHelper" />
+		<property name="contentService" ref="contentService"/>
+		<property name="authenticationContext" ref="authenticationContext" />
+		<property name="transactionService" ref="transactionService" />
 	</bean>
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.base.statemachine.StateMachineHelper">

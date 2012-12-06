@@ -56,6 +56,9 @@
 		  parent="webscript">
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="lecmWorkflowDeployer" ref="lecmWorkflowDeployer"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="contentService" ref="contentService"/>
 	</bean>
 
 

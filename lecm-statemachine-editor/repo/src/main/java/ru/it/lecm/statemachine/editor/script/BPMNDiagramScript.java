@@ -1,14 +1,20 @@
 package ru.it.lecm.statemachine.editor.script;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.base.statemachine.LecmWorkflowDeployer;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -19,6 +25,9 @@ public class BPMNDiagramScript extends AbstractWebScript {
 
 	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 	private NodeService nodeService;
+	private LecmWorkflowDeployer lecmWorkflowDeployer;
+	private Repository repositoryHelper;
+	private ContentService contentService;
 
 
 	public void setNodeService(NodeService nodeService) {
@@ -29,21 +38,45 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
 	}
 
+	public void setLecmWorkflowDeployer(LecmWorkflowDeployer lecmWorkflowDeployer) {
+		this.lecmWorkflowDeployer = lecmWorkflowDeployer;
+	}
+
+	public void setRepositoryHelper(Repository repositoryHelper) {
+		this.repositoryHelper = repositoryHelper;
+	}
+
+	public void setContentService(ContentService contentService) {
+		this.contentService = contentService;
+	}
+
 	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 		String statemachineNodeRef = req.getParameter("statemachineNodeRef");
 		String type = req.getParameter("type");
 		if (statemachineNodeRef != null && "deploy".equals(type)) {
-			InputStream is = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
-			FileOutputStream fos = new FileOutputStream("d:/2.xml");
-			byte[] buf = new byte[8 * 1024];
-			int c = -1;
-			while ((c = is.read(buf)) != -1) {
-				fos.write(buf, 0, c);
+			NodeRef statemachine = new NodeRef(statemachineNodeRef);
+			String fileName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME) + ".bpmn20.xml";
+			NodeRef companyHome = repositoryHelper.getCompanyHome();
+			NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflow");
+			NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
+			if (file == null) {
+				HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+				props.put(ContentModel.PROP_NAME, fileName);
+				ChildAssociationRef childAssocRef = nodeService.createNode(
+						workflowFolder,
+						ContentModel.ASSOC_CONTAINS,
+						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(fileName)),
+						ContentModel.TYPE_CONTENT,
+						props);
+				file = childAssocRef.getChildRef();
 			}
-			fos.flush();
-			fos.close();
+			ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
+			writer.setMimetype("text/xml");
+			InputStream is = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+			writer.putContent(is);
 			is.close();
+			lecmWorkflowDeployer.redeploy();
 		}
 
 		/*FileInputStream inputStream = new FileInputStream("D:\\Project\\Application\\LogicECM\\lecm-contracts\\repo\\src\\main\\config\\models\\contracts.bpmn20.xml");

@@ -28,7 +28,7 @@ public class StatusChangeAction extends StateMachineAction {
 		String name = attribute.attribute("name");
 		String value = attribute.attribute("value");
 		if ("status".equalsIgnoreCase(name)) {
-			status = value.toUpperCase();
+			status = value;
 		}
 	}
 

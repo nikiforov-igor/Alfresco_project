@@ -167,6 +167,15 @@ LogicECM.module = LogicECM.module || {};
 			var editStemachineElement = new YAHOO.util.Element("edit-status");
 			editStemachineElement.on("click", this._editStatemachine.bind(this));
 
+			var deploy = document.createElement('a');
+			deploy.id = "deploy";
+			deploy.className = "add_status";
+			deploy.innerHTML = "Задеплоить";
+			container.appendChild(deploy);
+
+			var deployElement = new YAHOO.util.Element("deploy");
+			deployElement.on("click", this._deployStatemachine.bind(this));
+
 			for (var i = 0; i < statusesModel.length; i++) {
 				var id = "status-" + i;
 				this._createElement(rootElement, id, statusesModel[i]);
@@ -389,6 +398,24 @@ LogicECM.module = LogicECM.module || {};
 				timeout: 20000
 			};
 			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
+		},
+
+		_deployStatemachine: function(nodeRef) {
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=deploy";
+			sUrl = YAHOO.lang.substitute(sUrl, {
+				statemachineNodeRef: this.packageNodeRef
+			});
+			this._showSplash();
+			var callback = {
+				success:function (oResponse) {
+					oResponse.argument.parent._hideSplash();
+				},
+				argument:{
+					parent: this
+				},
+				timeout: 20000
+			};
+			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 		},
 
 		_editStatus: function(nodeRef) {

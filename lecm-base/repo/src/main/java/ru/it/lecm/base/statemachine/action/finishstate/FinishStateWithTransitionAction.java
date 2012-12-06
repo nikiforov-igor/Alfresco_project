@@ -44,7 +44,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 				if (PROP_LABEL.equalsIgnoreCase(name)) {
 					label = value;
 				} else if (PROP_WORKFLOW.equalsIgnoreCase(name)) {
-					workflowId = "activiti$" + value;
+					workflowId = value;
 				} else if (PROP_OUTPUT_VARIABLE_VALUE.equalsIgnoreCase(name)) {
 					variableValue = value;
 				}

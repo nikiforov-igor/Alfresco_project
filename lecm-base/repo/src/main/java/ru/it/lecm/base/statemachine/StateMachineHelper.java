@@ -111,7 +111,7 @@ public class StateMachineHelper {
 							workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
 						}
 						// get the moderated workflow
-						WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(ACTIVITI_PREFIX + workflowId);
+						WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
 						if (wfDefinition == null) {
 							// handle workflow definition does not exist
 							throw new IllegalStateException("noworkflow: " + workflowId);

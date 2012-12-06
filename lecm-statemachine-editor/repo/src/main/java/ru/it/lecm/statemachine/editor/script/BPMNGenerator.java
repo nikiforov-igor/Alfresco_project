@@ -46,6 +46,7 @@ public class BPMNGenerator {
 	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
 	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
 	private final static QName PROP_USER_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "userTransitionLabel");
+	private final static QName PROP_WORKFLOW_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflowLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
 	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
 	private final static QName PROP_INPUT_WORKFLOW_TO_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowToVariable");
@@ -91,6 +92,9 @@ public class BPMNGenerator {
 			root.setAttribute("xmlns:omgdc", NAMESPACE_OMGDC);
 			root.setAttribute("xmlns:omgdi", NAMESPACE_OMGDI);
 			root.setAttribute("xmlns:lecm", NAMESPACE_LECM);
+			root.setAttribute("typeLanguage", "http://www.w3.org/2001/XMLSchema");
+			root.setAttribute("expressionLanguage", "http://www.w3.org/1999/XPath");
+			root.setAttribute("targetNamespace", "http://www.activiti.org/test");
 
 			doc.appendChild(root);
 
@@ -103,13 +107,13 @@ public class BPMNGenerator {
 			//create start event
 			Element startEvent = doc.createElementNS(NAMESPACE_XLNS, "startEvent");
 			startEvent.setAttribute("id", "start");
-			startEvent.setAttribute("activiti:formKey", "cwf:startTask");
+			startEvent.setAttribute("activiti:formKey", "lecm-statemachine:startTask");
 			process.appendChild(startEvent);
 
 			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(nodeRef);
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
-				String statusVar = status.getChildRef().getId().replace("-", "_");
+				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
 				if (statusName.equals("END")) {
 					//create end event
 					Element endEvent = doc.createElementNS(NAMESPACE_XLNS, "endEvent");
@@ -124,8 +128,11 @@ public class BPMNGenerator {
 				process.appendChild(statusTask);
 
 				//create extention
-				Element extention = doc.createElement("extensionElements");
-				statusTask.appendChild(extention);
+				Element extentionElements = doc.createElement("extensionElements");
+				statusTask.appendChild(extentionElements);
+
+				Element extention = doc.createElement("lecm:extension");
+				extentionElements.appendChild(extention);
 
 				//statemachine start event
 				Element start = doc.createElement("lecm:event");
@@ -188,14 +195,14 @@ public class BPMNGenerator {
 				//install start actions
 				for (ChildAssociationRef action : startActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = action.getChildRef().getId().replace("-", "_");
-					createEvent(process, end, statusVar, action, actionId, actionVar);
+					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
+					createEvent(process, start, statusVar, action, actionId, actionVar);
 				}
 
 				//install take actions
 				for (ChildAssociationRef action : takeActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = action.getChildRef().getId().replace("-", "_");
+					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 					createEvent(process, take, statusVar, action, actionId, actionVar);
 
 				}
@@ -203,7 +210,7 @@ public class BPMNGenerator {
 				//install end actions
 				for (ChildAssociationRef action : endActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = action.getChildRef().getId().replace("-", "_");
+					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 					createEvent(process, end, statusVar, action, actionId, actionVar);
 				}
 			}
@@ -240,7 +247,7 @@ public class BPMNGenerator {
 		for (ChildAssociationRef expression : expressions) {
 			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
 			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
-			String target = statusRef.getTargetRef().getId().replace("-", "_");
+			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 			Element flow = createFlow(statusVar + "_gateway", target, "${" + expressionValue + "}");
 			process.appendChild(flow);
 		}
@@ -262,7 +269,7 @@ public class BPMNGenerator {
 			eventElement.appendChild(actionElement);
 
 			Element expressionsElement = doc.createElement("lecm:expressions");
-			expressionsElement.setAttribute("outputVariable","var_" + actionVar);
+			expressionsElement.setAttribute("outputVariable","var" + actionVar);
 			actionElement.appendChild(expressionsElement);
 
 			for (ChildAssociationRef expression : expressions) {
@@ -270,11 +277,11 @@ public class BPMNGenerator {
 				String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
 				expressionElement.setAttribute("expression", expressionValue);
 				AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
-				String target = statusRef.getTargetRef().getId().replace("-", "_");
+				String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 				expressionElement.setAttribute("outputValue", target);
 
 				expressionsElement.appendChild(expressionElement);
-				Element flow = createFlow(statusVar + "_gateway", target, "${var_" + actionVar + " == '" + target + "'}");
+				Element flow = createFlow(statusVar + "_gateway", target, "${var" + actionVar + " == '" + target + "'}");
 				process.appendChild(flow);
 			}
 		}
@@ -327,7 +334,7 @@ public class BPMNGenerator {
 		Element attribute;
 		Element actionElement = doc.createElement("lecm:action");
 		actionElement.setAttribute("type", ACTION_FINISH_STATE_WITH_TRANSITION);
-		actionElement.setAttribute("variable", "var_" + actionVar);
+		actionElement.setAttribute("variable", "var" + actionVar);
 		take.appendChild(actionElement);
 
 		List<ChildAssociationRef> transitions = nodeService.getChildAssocs(action.getChildRef());
@@ -341,26 +348,26 @@ public class BPMNGenerator {
 			elementCount++;
 			actionElement.appendChild(attribute);
 
-			String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_USER_TRANSITION_LABEL);
-			Element parameter = doc.createElement("lecm:parameter");
-			parameter.setAttribute("name", "labelId");
-			parameter.setAttribute("value", labelId);
-			attribute.appendChild(parameter);
-
-			String variableValue = transition.getChildRef().getId().replace("-", "_");
+			String variableValue = "id" + transition.getChildRef().getId().replace("-", "");
 			elementCount++;
 
-			parameter = doc.createElement("lecm:parameter");
+			Element parameter = doc.createElement("lecm:parameter");
 			parameter.setAttribute("name", "variableValue");
 			parameter.setAttribute("value", variableValue);
 			attribute.appendChild(parameter);
 
 			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
-			String target = statusRef.getTargetRef().getId().replace("-", "_");
-			Element flow = createFlow(statusVar + "_gateway", target, "${var_" + actionVar + " == '" + variableValue + "'}");
+			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
+			Element flow = createFlow(statusVar + "_gateway", target, "${var" + actionVar + " == '" + variableValue + "'}");
 			process.appendChild(flow);
 
 			if (TYPE_WORKFLOW_TRANSITION.equals(type)) {
+				String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_TRANSITION_LABEL);
+				parameter = doc.createElement("lecm:parameter");
+				parameter.setAttribute("name", "labelId");
+				parameter.setAttribute("value", labelId);
+				attribute.appendChild(parameter);
+
 				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_ID);
 				parameter = doc.createElement("lecm:parameter");
 				parameter.setAttribute("name", "workflowId");
@@ -406,6 +413,12 @@ public class BPMNGenerator {
 						}
 					}
 				}
+			} else {
+				String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_USER_TRANSITION_LABEL);
+				parameter = doc.createElement("lecm:parameter");
+				parameter.setAttribute("name", "labelId");
+				parameter.setAttribute("value", labelId);
+				attribute.appendChild(parameter);
 			}
 		}
 	}
@@ -434,7 +447,10 @@ public class BPMNGenerator {
 		flow.setAttribute("sourceRef", sourceRef);
 		flow.setAttribute("targetRef", targetRef);
 		if (content != null) {
-			flow.setTextContent(content);
+			Element expression = doc.createElement("conditionExpression");
+			expression.setAttribute("xsi:type", "tFormalExpression");
+			expression.setTextContent(content);
+			flow.appendChild(expression);
 		}
 		return flow;
 	}
