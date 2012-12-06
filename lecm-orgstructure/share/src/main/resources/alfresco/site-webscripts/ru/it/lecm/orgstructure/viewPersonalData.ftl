@@ -22,7 +22,6 @@ function drawForm(nodeRef){
 				},
 				successCallback:{
 					fn:function(response){
-						console.log("${id}-contentPersonalData");
 						var formEl = document.getElementById("${id}-contentPersonalData");
 						formEl.innerHTML = response.serverResponse.responseText;
 					}
@@ -36,7 +35,7 @@ function showDialogCreate(nodeRef){
 	// Intercept before dialog show
 	var doBeforeDialogShow = function BeforeDialogShow(p_form, p_dialog) {
 		Alfresco.util.populateHTML(
-				[ "${id}-dialogTitle", "dfgdfgdfgdfg" ]
+				[ "${id}-dialogTitle", "Personal Data" ]
 		);
 	};
 
@@ -49,7 +48,6 @@ function showDialogCreate(nodeRef){
 				mode:"create",
 				submitType:"json"
 			});
-	console.log("Выводим диалоговое окно");
 
 	// Using Forms Service, so always create new instance
 	var createDetails = new Alfresco.module.SimpleDialog("${id}-personalDataDialog");
@@ -105,7 +103,7 @@ function showDialogEdit(nodeRef){
 	// Intercept before dialog show
 	var doBeforeDialogShow = function BeforeDialogShow(p_form, p_dialog) {
 		Alfresco.util.populateHTML(
-				[ "${id}-dialogTitle", "dfgdfgdfgdfg" ]
+				[ "${id}-dialogTitle", "Personal Data" ]
 		);
 	};
 
@@ -197,7 +195,6 @@ function createPersonalData() {
 	};
 	YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
-
 
      initialize();
 //]]></script>

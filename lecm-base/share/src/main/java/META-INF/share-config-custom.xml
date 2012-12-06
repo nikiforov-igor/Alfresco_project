@@ -49,6 +49,13 @@
 			        <control-param name="showCreateNewLink">false</control-param>
 			        <control-param name="showCreateNewButton">false</control-param>
 		        </type>
+                <type name="association:lecm-orgstr-docType:documentType" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+                    <control-param name="rootLocation"> /app:company_home/lecm-dic:Dictionary/lecm-dic:Виды_x0020_документов</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="plane">true</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                </type>
 	        </default-controls>
 
             <dependencies>
