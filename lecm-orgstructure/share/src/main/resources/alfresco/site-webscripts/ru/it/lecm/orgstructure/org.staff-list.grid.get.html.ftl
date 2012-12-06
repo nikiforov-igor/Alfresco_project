@@ -145,6 +145,14 @@
 						var itemData = rowData.itemData;
 						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined;
 					};
+					LogicECM.module.Base.DataGrid.prototype.addEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
+						var itemData = rowData.itemData;
+						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined;
+					};
+					LogicECM.module.Base.DataGrid.prototype.deleteEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
+						var itemData = rowData.itemData;
+						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined;
+					};
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -154,13 +162,15 @@
 										type:"action-link-staff",
 										id:"onActionEmployeeAdd",
 										permission:"edit",
-										label:"${msg("actions.addEmployee")}"
+										label:"${msg("actions.addEmployee")}",
+										evaluator:"addEmployeeEvaluator"
 									},
 									{
 										type:"action-link-staff",
 										id:"onActionEmployeeDelete",
 										permission:"edit",
-										label:"${msg("actions.deleteEmployee")}"
+										label:"${msg("actions.deleteEmployee")}",
+										evaluator:"deleteEmployeeEvaluator"
 									},
 									{
 										type:"action-link-staff",
