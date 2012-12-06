@@ -35,6 +35,9 @@
 #lecm-menu #menu-buttons #menu-buttons-organizationBtn span.first-child {
     background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-37.png') no-repeat 4px 4px;
 }
+#lecm-menu #menu-buttons #menu-buttons-businessRolesBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
+}
 
 /* Dictionary menu */
 #lecm-menu #menu-buttons #menu-buttons-dictionariesBtn span.first-child {

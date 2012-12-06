@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Бизнес роли</title>
+	<description>Справочник бизнес ролей</description>
+	<template-instance>business-roles</template-instance>
+	<authentication>user</authentication>
+</page>

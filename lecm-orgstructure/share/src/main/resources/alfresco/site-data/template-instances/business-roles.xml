@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/orgstructure/business-roles</template-type>
+	<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.business-roles</title>
+				<filteredLabel>page.orgstructure.filter.label</filteredLabel>
+			</properties>
+		</component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/orgstructure/toolbar</url>
+            <properties>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>true</showExSearchBtn>
+            </properties>
+        </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/orgstructure/menu</url>
+            <properties>
+                <selected>businessRoles</selected>
+            </properties>
+        </component>
+	</components>
+</template-instance>

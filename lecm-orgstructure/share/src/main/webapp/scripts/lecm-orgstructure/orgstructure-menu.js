@@ -152,6 +152,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             };
             this.widgets.organizationButton = Alfresco.util.createYUIButton(this, "organizationBtn", onButtonClick7, {});
 
+			var onButtonClick8 = function (e) {
+				reloadPage("business-roles");
+			};
+            this.widgets.businessRolesButton = Alfresco.util.createYUIButton(this, "businessRolesBtn", onButtonClick8, {});
+
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();
             if (type == null || type == '') {
