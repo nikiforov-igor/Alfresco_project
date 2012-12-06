@@ -147,6 +147,9 @@ function showDialogEdit(nodeRef){
 }
 
 function initialize() {
+    Alfresco.util.createYUIButton(this, "createPersonalData", createPersonalData, {});
+    Alfresco.util.createYUIButton(this, "editPersonalData", editPersonalData, {});
+
 	employeeRef = "${form.arguments.itemId}";
 	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePerson?nodeRef="+employeeRef;
 	var callback = {
@@ -155,11 +158,11 @@ function initialize() {
 			if (oResults != null) {
 				if (oResults.nodeRef == null) {
 					// скрываем кнопку редактировать
-					Dom.get("${id}-editPersonalData").hidden = true;
+					Dom.addClass("${id}-editPersonalData", 'hidden');
 				} else {
 					drawForm(oResults.nodeRef);
 					// скрываем кнопку создать
-					Dom.get("${id}-createPersonalData").hidden = true;
+					Dom.addClass("${id}-createPersonalData", 'hidden');
 				}
 
 			}
@@ -196,15 +199,21 @@ function createPersonalData() {
 	YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
 
-     initialize();
+    Event.onDOMReady(initialize);
 //]]></script>
 
 <div id="${id}">
 	<div id="${id}-contentPersonalData"></div>
 	<div id="${id}-buttonPersonalData">
-		<input type="button" id="${id}-createPersonalData" tabindex="0" onclick="createPersonalData()"
-		       value="${msg("button.create")}"/>
-		<input type="button" id="${id}-editPersonalData" tabindex="0" onclick="editPersonalData()"
-		       value="${msg("button.edit")}"/>
+        <span id="${id}-createPersonalData" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button">${msg('button.create')}</button>
+           </span>
+        </span>
+		<span id="${id}-editPersonalData" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button">${msg('button.edit')}</button>
+           </span>
+        </span>
 	</div>
 </div>
