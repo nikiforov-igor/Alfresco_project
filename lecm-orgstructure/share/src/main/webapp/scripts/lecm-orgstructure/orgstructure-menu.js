@@ -52,7 +52,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _draw:function () {
-            const structure = "orgstructure";
+            var structure = "orgstructure";
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null) {

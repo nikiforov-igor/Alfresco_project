@@ -36,18 +36,20 @@
         Event.onContentReady("${formId}-tabs", function() {
             var parent = Dom.get("${formId}-tabs")[0];
             var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', parent)[0]);
+            var prevTabHeight;
 
             function onBeforeActive(e) {
-                YAHOO.Bubbling.fire("beforeBaseTabChanged", {
-                    prev: e.prevValue.get("contentEl"),
-                    current: e.newValue.get("contentEl")
-                });
+                var prev = e.prevValue.get("contentEl");
+
+                prevTabHeight = parseFloat(Dom.getStyle(prev, 'height'));
             }
             function onActive(e) {
-                YAHOO.Bubbling.fire("baseTabChanged", {
-                    prev: e.prevValue.get("contentEl"),
-                    current: e.newValue.get("contentEl")
-                });
+                var current = e.newValue.get("contentEl");
+                var currentHeight = parseFloat(Dom.getStyle(current, 'height'));
+
+                if ((prevTabHeight > 0) && (currentHeight < prevTabHeight)) {
+                    Dom.setStyle(current, 'height', prevTabHeight + 'px');
+                }
                 setTimeout(function () {
                     LogicECM.module.Base.Util.setHeight();
                 }, 10);

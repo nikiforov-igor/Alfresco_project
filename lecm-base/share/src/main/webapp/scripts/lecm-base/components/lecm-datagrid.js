@@ -2191,27 +2191,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             scope:this
                         }
                     }).show();
-
-                Bubbling.on("beforeBaseTabChanged", this.onBeforeTabChange, this);
-                Bubbling.on("baseTabChanged", this.onTabChange, this);
-            },
-
-            onBeforeTabChange: function(layer, args) {
-                if (args && args[1]) {
-                    this.prevTabHeight = parseFloat(Dom.getStyle(args[1].prev, 'height'));
-                }
-            },
-
-            onTabChange: function(layer, args) {
-                if (args && args[1]) {
-                    var current = args[1].current;
-                    var prevHeight = this.prevTabHeight;
-                    var currentHeight = parseFloat(Dom.getStyle(current, 'height'));
-
-                    if ((prevHeight > 0) && (currentHeight < prevHeight)) {
-                        Dom.setStyle(current, 'height', prevHeight + 'px');
-                    }
-                }
             },
 
             createDialogShow:function (meta, callback) {
