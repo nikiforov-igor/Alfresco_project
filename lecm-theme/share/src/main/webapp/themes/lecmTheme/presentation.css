@@ -1,5 +1,9 @@
 /* My Styles */
 
+input, textarea {
+    outline: none;
+}
+
 #alf-hd > div:first-child {
     margin: 0 -10px;
 }
@@ -429,6 +433,50 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields,
 .yui-skin-lecmTheme .yui-panel div.form-fields div {
     text-align: left;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field {
+    line-height: 25px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > label {
+    max-width: 10em;
+    float: left;
+    clear: none;
+    vertical-align: middle;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > label.checkbox {
+    line-height: 25px;
+    float: none;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > input[type='text'],
+.yui-skin-lecmTheme .yui-panel div.form-field > select {
+    width: 36em;
+    height: 28px;
+    float: right;
+    clear: none;
+    padding: 2px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > input[type='checkbox'] {
+    vertical-align: middle;
+    margin: auto 0;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > div {
+    width: 36em;
+    float: right;
+    margin: 0;
+    white-space: nowrap;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > div.object-finder > div.current-values {
+    float: left;
+    clear: none;
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > div.object-finder > div.show-picker {
+    float: right;
+    clear: none;
 }
 
 .yui-skin-lecmTheme .yui-panel .ft {
@@ -1644,14 +1692,6 @@ div.autocompleteCurrentValueDisplayInvisible {
     border-style: solid;
 }
 
-/* input text */
-
-div.form-field input[type="text"] {
-    border-width: 1px;
-    height:25px;
-    padding: 0;
-}
-
 div.form-field div.yui-ac {
     padding-bottom: 4px;
 }
@@ -1661,17 +1701,6 @@ div.form-field input[type="text"].autocomplete-input {
     width: 0;
     vertical-align: bottom;
     position: static;
-}
-
-/* select */
-
-div.form-field select {
-    border-width: 1px;
-    height:28px;
-    min-width: 323px;
-    vertical-align: bottom;
-    padding: 0;
-    margin-right: 2px;
 }
 
 /* button */
@@ -1711,10 +1740,10 @@ div.currentValueDisplay,
 div.autocompleteCurrentValueDisplay,
 div.autocompleteCurrentValueDisplayInvisible {
     overflow: auto;
-    min-height: 25px;
+    min-height: 26px;
     max-height: 100px;
-    width: 320px;
-    margin-right: 4px;
+    width: 28em;
+    margin: 0 4px;
     border-width: 1px;
 }
 
@@ -1728,10 +1757,6 @@ div.currentValueDisplay {
 
 div.autocompleteCurrentValueDisplayInvisible {
     display: none;
-}
-
-div.object-finder .show-picker {
-    clear: none;
 }
 
 a.remove-item {
