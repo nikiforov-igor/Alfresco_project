@@ -60,14 +60,6 @@ LogicECM.module = LogicECM.module || {};
 				this.onResize();
 			}, this, true);
 
-			this.layout = new YAHOO.widget.Layout(this.id, {
-				units: [
-					{ position: 'center', body: 'center1', scroll: true },
-					{ position: 'top', body: 'top1', scroll: true, height: 150, resize: true}
-				]
-			});
-			this.layout.render();
-
 			this._showSplash();
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
 			var callback = {
@@ -128,7 +120,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_redraw: function() {
-			var el = this.layout.getUnitByPosition('center').body.firstChild;
+			var el = document.getElementById("statuses-cont");
 			el.innerHTML = "";
 
 			this._showSplash();
@@ -155,6 +147,92 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_drawElements: function(rootElement, statusesModel) {
+			/*
+			<table width="100%" cellpadding="3" cellspacing="1" border="0" class="lecm_tbl">
+				<tr>
+					<td class="lecm_tbl_td_h" rowspan="2">Статус</td>
+					<td class="lecm_tbl_td_h" colspan="3">Переходы</td>
+					<td class="lecm_tbl_td_h" rowspan="2">Действия</td>
+				</tr>
+				<tr>
+					<td class="lecm_tbl_td_h">Тип перехода</td>
+					<td class="lecm_tbl_td_h">Условие</td>
+					<td class="lecm_tbl_td_h">Статус</td>
+				</tr>
+				<tr>
+					<td class="lecm_tbl_td">Статус</td>
+					<td class="lecm_tbl_td" colspan="3">Переходы</td>
+					<td class="lecm_tbl_td">Действия</td>
+				</tr>
+			</table>
+			*/
+			var table = document.createElement("table");
+			table.className = "lecm_tbl";
+			table.width = "100%";
+			table.cellPadding = 3;
+			table.cellSpacing = 1;
+			table.border = 0;
+
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+			td.rowSpan = 2;
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Статус";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.colSpan = 3;
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Переходы";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.rowSpan = 2;
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Статус";
+			tr.appendChild(td);
+
+			table.appendChild(tr);
+
+			tr = document.createElement("tr");
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Тип перхода";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Условие";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td_h";
+			td.innerHTML = "Статус";
+			tr.appendChild(td);
+
+			table.appendChild(tr);
+
+			tr = document.createElement("tr");
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td";
+			td.innerHTML = "Тип перхода";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td";
+			td.colSpan = 3;
+			td.innerHTML = "Условие";
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td";
+			td.innerHTML = "Статус";
+			tr.appendChild(td);
+
+			table.appendChild(tr);
+
+			rootElement.appendChild(table);
+
 			var container = this._createContainer(rootElement, "addMenu");
 			var addNew = document.createElement('a');
 			addNew.id = "new-status";

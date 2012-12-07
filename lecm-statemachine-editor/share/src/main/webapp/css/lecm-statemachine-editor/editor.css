@@ -1,3 +1,18 @@
+.lecm_tbl {
+	background-color: gray;
+}
+
+.lecm_tbl_td_h {
+	background-color: #d3d3d3;
+}
+
+.lecm_tbl_td {
+	background-color: white;
+}
+
+
+
+
 .container {
 	width: 680px;
 	margin: auto auto 3px;

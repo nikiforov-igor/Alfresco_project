@@ -2,12 +2,12 @@ var statemachineId = args["statemachineId"];
 
 if (statemachineId != null && statemachineId != '') {
 
-	var machinesFolder = search.xpathSearch("/app:company_home/cm:statemachines")[0];
+	var machinesFolder = companyhome.childByNamePath("statemachines");
 	if (machinesFolder == null) {
 		machinesFolder = companyhome.createNode("statemachines", "cm:folder", "cm:contains");
 	}
 
-	var documentsFolder = search.xpathSearch("/app:company_home/cm:documents")[0];
+	var documentsFolder = companyhome.childByNamePath("documents");
 	if (documentsFolder == null) {
 		documentsFolder = companyhome.createNode("documents", "cm:folder", "cm:contains");
 	}
@@ -24,7 +24,7 @@ if (statemachineId != null && statemachineId != '') {
 	if (machine == null) {
 		machine = machinesFolder.createNode(statemachineId, "lecm-stmeditor:statemachine", "cm:contains");
 		machine.properties["lecm-stmeditor:machineFolder"] = statemachineId;
-		var statemachineFolder = search.xpathSearch("/app:company_home/cm:documents/cm:" + statemachineId)[0];
+		var statemachineFolder = companyhome.childByNamePath("documents/" + statemachineId);
 		if (statemachineFolder == null) {
 			var machineDocumentsFolder = documentsFolder.createNode(statemachineId, "cm:folder", "cm:contains");
 			machine.properties["lecm-stmeditor:documentsFolder"] = machineDocumentsFolder;

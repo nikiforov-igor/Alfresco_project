@@ -10,14 +10,15 @@
 
 <#else>
 <div class="title"><h3 style="font-weight: bold; margin: 5px 0 5px 0">${title}</div>
-<div id="statemachine" style="margin: 0 0 20px 0">
-    <div id="top1" style="padding: 5px; background-color: white;">
-        <img id="diagram" />
-    </div>
-    <div id="center1" style="padding: 5px;">
-    </div>
+<hr/>
+<div class="title"><h3 style="font-weight: bold; margin: 5px 0 5px 0">Карта</div>
+<div style="height: 150px; overflow: auto; border: solid 1px #d3d3d3; margin-bottom: 10px; padding: 10px;">
+    <img id="diagram" />
 </div>
-
+<hr/>
+<div class="title"><h3 style="font-weight: bold; margin: 5px 0 5px 0">Статусы</div>
+<div id="statuses-cont">
+</div>
 <script type="text/javascript">
 //<![CDATA[
 
