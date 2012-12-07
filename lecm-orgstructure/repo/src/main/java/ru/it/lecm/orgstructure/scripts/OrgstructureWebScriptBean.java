@@ -49,6 +49,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String ORG_EMPLOYEES = "org-employees";
 	public static final String STAFF_LIST = "staff-list";
 	public static final String WORK_GROUPS = "work-groups";
+	public static final String BUSINESS_ROLES = "business-roles";
 
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
@@ -60,6 +61,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String TYPE_STAFF_LIST = "staff-list";
 	public static final String TYPE_POSITION = "staffPosition";
 	public static final String TYPE_ROLE = "workRole";
+	public static final String TYPE_BUSINESS_ROLE = "business-role";
 
 	/**
 	 * Service registry
@@ -149,6 +151,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root.put(NODE_REF, roles.toString());
 			root.put(ITEM_TYPE, TYPE_ROLE);
 			root.put(PAGE, ORG_ROLES);
+			nodes.put(root);
+
+			//Добавить справочник Бизнес Роли
+			NodeRef businessRoles = nodeService.getChildByName (dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Бизнес роли");
+			root = new JSONObject();
+			root.put(NODE_REF, businessRoles.toString());
+			root.put(ITEM_TYPE, TYPE_BUSINESS_ROLE);
+			root.put(PAGE, BUSINESS_ROLES);
 
 			nodes.put(root);
 		} catch (JSONException e) {

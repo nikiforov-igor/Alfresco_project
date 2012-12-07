@@ -779,6 +779,49 @@
 					<show id="lecm-orgstr:business-role-description"/>
 				</field-visibility>
 			</form>
+			<form id="configureBusinessRole">
+				<appearance>
+					<field id="lecm-orgstr:business-role-employee-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-orgstr:business-role-organization-element-assoc">
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-orgstr:business-role-organization-element-member-assoc">
+<!--						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">false</control-param>
+						</control>-->
+						<control template="/org/alfresco/components/form/controls/association.ftl">
+							<control-param name="compactMode">false</control-param><!-- Determines whether the picker will be shown in compact mode -->
+							<control-param name="displayMode">items</control-param><!-- Determines the way to display current values, the default is "items", when set to "list" the current items are shown in a rich list with buttons to manage the current items -->
+							<control-param name="showTargetLink">false</control-param><!-- Determines whether a link to the document details page will be rendered to content items (only applicable when displayMode is set to "items") -->
+							<control-param name="selectedValueContextProperty">cm:name</control-param><!-- The name of a component binding property or url parameter that contains the values of the items to pre-select in the picker -->
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Структура</control-param><!-- Determines where to start the picker -->
+							<control-param name="startLocationParams"></control-param> <!-- Query string formatted parameters for startLocation -->
+							<control-param name="allowNavigationToContentChildren">false</control-param> <!-- Determines whether the picker can navigate the children of content nodes, the default is false. -->
+							<control-param name=""></control-param>
+						</control>
+					</field>
+				</appearance>
+				<field-visibility>
+					<show id="lecm-orgstr:business-role-description"/>
+					<show id="lecm-orgstr:business-role-employee-assoc"/>
+					<show id="lecm-orgstr:business-role-organization-element-assoc"/>
+					<show id="lecm-orgstr:business-role-organization-element-member-assoc"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>
