@@ -1007,23 +1007,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             me.desc = true;
                             me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
                         }
-                        //complete initial search
-                        var initialData = {
+                        var searchConfig = datagridMeta.searchConfig;
+                        searchConfig.formData = {
                             datatype:datagridMeta.itemType
                         };
-                        var searchConfig = datagridMeta.searchConfig;
-                        var sorting, filter, fullText;
-                        filter = searchConfig.filter;
-                        fullText = searchConfig.fullTextSearch;
+                        searchConfig.parent = datagridMeta.nodeRef;
                         if (me.sort) {
                             // Обнуляем сортировку иначе зациклится.
                             me.sort = null;
                             YAHOO.Bubbling.fire("doSearch",
                                 {
-                                    searchSort:datagridMeta.searchConfig.sort,
-                                    searchQuery:YAHOO.lang.JSON.stringify(initialData),
-                                    searchFilter:filter,
-                                    fullTextSearch:fullText,
+                                    searchConfig:searchConfig,
+                                    searchShowInactive:false,
                                     bubblingLabel:me.options.bubblingLabel
                                 });
                         }
@@ -1163,28 +1158,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     // link current table with search and do search
                     this.modules.search.dataTable = this.widgets.dataTable;
                 }
-                //complete initial search
-                var initialData = {
-                    datatype:this.datagridMeta.itemType
-                };
 
                 var searchConfig = this.datagridMeta.searchConfig;
-                var sorting, filter, fullText;
-                if (searchConfig) {
-                    filter = searchConfig.filter;
-                    sorting = searchConfig.sort != null && searchConfig.sort.length > 0 ? searchConfig.sort : "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                    fullText = searchConfig.fullTextSearch;
+                if (searchConfig) { // Поиск через SOLR
+                    if (searchConfig.sort == null || searchConfig.sort.length == 0) {
+                        searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
+                    }
+                    if (searchConfig.parent == null || searchConfig.parent.length == 0){
+                        searchConfig.parent = this.datagridMeta.nodeRef;
+                    }
+                    searchConfig.formData = {
+                        datatype:this.datagridMeta.itemType
+                    };
+                    YAHOO.Bubbling.fire("doSearch",
+                        {
+                            searchConfig:searchConfig,
+                            searchShowInactive:false,
+                            bubblingLabel:me.options.bubblingLabel
+                        });
+                } else { // Поиск без использования SOLR
+                    YAHOO.Bubbling.fire("doSearch",
+                        {
+                            parent:this.datagridMeta.nodeRef,
+                            itemType:this.datagridMeta.itemType,
+                            searchShowInactive:false,
+                            bubblingLabel:me.options.bubblingLabel
+                        });
                 }
-                // trigger the initial search
-                YAHOO.Bubbling.fire("doSearch",
-                    {
-                        searchSort:sorting,
-                        searchQuery:YAHOO.lang.JSON.stringify(initialData),
-                        searchFilter:filter,
-                        fullTextSearch:fullText,
-                        searchShowInactive:false,
-                        bubblingLabel:me.options.bubblingLabel
-                    });
             },
 
 			/**
@@ -1846,20 +1846,26 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                 };
 
-                //complete initial search
-                var initialData = {
-                    datatype:this.datagridMeta.itemType
-                };
-
                 var searchConfig = this.datagridMeta.searchConfig;
-                var sorting, filter, fullText;
-                if (searchConfig) {
-                    filter = searchConfig.filter;
-                    sorting = searchConfig.sort != null ? searchConfig.sort : "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                    fullText = searchConfig.fullTextSearch;
+                if (searchConfig) { // Поиск через SOLR
+                    if (searchConfig.sort == null || searchConfig.sort.length == 0) {
+                        searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
+                    }
+                    if (searchConfig.parent == null || searchConfig.parent.length == 0){
+                        searchConfig.parent = this.datagridMeta.nodeRef;
+                    }
+                    searchConfig.formData = {
+                        datatype:this.datagridMeta.itemType
+                    };
+                    YAHOO.Bubbling.fire("doSearch",
+                        {
+                            searchConfig:searchConfig,
+                            searchShowInactive:false,
+                            bubblingLabel:me.options.bubblingLabel
+                        });
                 }
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams(YAHOO.lang.JSON.stringify(initialData), filter, sorting, this.dataRequestFields.join(","), fullText);
+                var requestParams = this.modules.search._buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), false);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

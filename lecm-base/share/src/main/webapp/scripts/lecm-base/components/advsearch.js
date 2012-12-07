@@ -56,10 +56,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             searchStarted: false, // флаг, что идет поиск
 
             // сохраненные настройки предыдущего поиска
-            currentSearchSort:"",
-            currentSearchFilter:"",
-            currentSearchQuery:"",
-            currentFullTextSearch:{},
+            currentSearchConfig:null,
             /**
              * Object container for initialization options
              *
@@ -169,19 +166,22 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     formData.datatype = me.currentForm.type;
 
                     // формируем запрос
-                    var query = YAHOO.lang.JSON.stringify(formData);
+                    //var query = YAHOO.lang.JSON.stringify(formData);
 
                     // включаем поиск во всех вложенных директория относительно родительской
                     var fullTextSearch = {
                         parentNodeRef:me.datagridMeta.nodeRef
                     };
-
+                    var sConfig = me.currentSearchConfig;
+                    if (!sConfig) {
+                        sConfig = {};
+                    }
+                    sConfig.formData = formData; // запрос
+                    sConfig.fullTextSearch = fullTextSearch;
+                    sConfig.filter = "";
                     this._performSearch(
                         {
-                            searchSort:me.currentSearchSort, // сохраняем текущую сортировку
-                            searchQuery:query, // поиск по заполненной форме (тип + данные)
-                            searchFilter:"", // сбрасываем фильтр
-                            fullTextSearch:YAHOO.lang.JSON.stringify(fullTextSearch),// поиск во всех вложенных директориях
+                            searchConfig:sConfig,
                             searchShowInactive:true
                         });
 
@@ -194,11 +194,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * args - Объект с настройками поиска
              */
             _performSearch:function ADVSearch__performSearch(args) {
-                var searchSort = args.searchSort,
-                    searchQuery = args.searchQuery,
-                    searchFilter = args.searchFilter,
-                    fullTextSearch = args.fullTextSearch,
-                    searchShowInactive = args.searchShowInactive;
+                var searchConfig = args.searchConfig,
+                    searchShowInactive = args.searchShowInactive,
+                    parent = args.parent,
+                    itemType = args.itemType;
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -266,10 +265,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     destroyLoaderMessage();
                     me.searchStarted = false;
                     // update current state on success
-                    me.currentSearchSort = searchSort;
-                    me.currentSearchFilter = searchFilter;
-                    me.currentSearchQuery = searchQuery;
-                    me.currentFullTextSearch = fullTextSearch;
+                    me.currentSearchConfig = searchConfig;
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
                 }
 
@@ -298,7 +294,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this._buildSearchParams(searchQuery, searchFilter, searchSort, fields, fullTextSearch, searchShowInactive);
+                var searchParams = this._buildSearchParams(parent, itemType, searchConfig, fields, searchShowInactive);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -317,20 +313,24 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            _buildSearchParams:function ADVSearch__buildSearchParams(searchQuery, searchFilter, searchSort, searchFields, fullTextSearch, searchShowInactive) {
-                var request =
-                {
+            _buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, searchShowInactive) {
+                // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
+                if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
+                    searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
+                }
+                if (searchConfig && searchConfig.fullTextSearch && typeof searchConfig.fullTextSearch == "object") {
+                    searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchConfig.fullTextSearch);
+                }
+                return {
                     params:{
-                        sort:searchSort != null ? searchSort : "",
-                        query:searchQuery != null ? searchQuery : "",
-                        filter:searchFilter != null ? searchFilter : "" ,
-                        maxResults:this.options.maxSearchResults + 1, // to calculate whether more results were available,
-                        fields:searchFields,
-                        showInactive: searchShowInactive != null ? searchShowInactive : "false",
-                        fullTextSearch: fullTextSearch != null ? fullTextSearch : ""
+                        parent:parent != null ? parent : ((searchConfig != null && searchConfig.parent != null) ? searchConfig.parent : ""),
+                        itemType:itemType != null ? itemType : "",
+                        searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
+                        maxResults:this.options.maxSearchResults + 1,
+                        fields:searchFields != null ? searchFields : "",
+                        showInactive:searchShowInactive != null ? searchShowInactive : "false"
                     }
-            };
-                return request;
+                };
             },
 
             /**

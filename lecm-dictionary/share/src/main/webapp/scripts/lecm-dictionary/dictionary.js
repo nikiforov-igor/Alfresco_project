@@ -70,10 +70,7 @@ LogicECM.module = LogicECM.module || {};
 					{
 						datagridMeta:{
 							itemType: this.rootNode.itemType,
-							nodeRef: this.rootNode.nodeRef,
-                            searchConfig: {
-                                filter: 'PARENT:"' + this.rootNode.nodeRef + '"'
-                            }
+							nodeRef: this.rootNode.nodeRef
 						},
 						scrollTo:true
 					});

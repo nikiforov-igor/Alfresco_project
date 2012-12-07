@@ -300,10 +300,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                          {
 	                         datagridMeta: {
                                  itemType: nodeType,
-		                         nodeRef: node.data.nodeRef,
-                                 searchConfig: {
-                                    filter: 'PARENT:"' + node.data.nodeRef + '"'
-                                 }
+		                         nodeRef: node.data.nodeRef
                              },
                              scrollTo: true
                          });

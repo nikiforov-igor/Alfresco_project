@@ -31,28 +31,32 @@
 						// link current table with search and do search
 						this.modules.search.dataTable = this.widgets.dataTable;
 					}
-					//complete initial search
-					var initialData = {
-						datatype:this.datagridMeta.itemType
-					};
-
 					var searchConfig = this.datagridMeta.searchConfig;
-					var sorting, filter, fullText;
-					if (searchConfig) {
-						filter = searchConfig.filter;
-						sorting = searchConfig.sort != null && searchConfig.sort.length > 0 ? searchConfig.sort : "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-						fullText = searchConfig.fullTextSearch;
+					if (searchConfig) { // Поиск через SOLR
+						if (searchConfig.sort == null || searchConfig.sort.length == 0) {
+							searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
+						}
+						if (searchConfig.parent == null || searchConfig.parent.length == 0){
+							searchConfig.parent = this.datagridMeta.nodeRef;
+						}
+						searchConfig.formData = {
+							datatype:this.datagridMeta.itemType
+						};
+						YAHOO.Bubbling.fire("doSearch",
+								{
+									searchConfig:searchConfig,
+									searchShowInactive:false,
+									bubblingLabel:me.options.bubblingLabel
+								});
+					} else { // Поиск без использования SOLR
+						YAHOO.Bubbling.fire("doSearch",
+								{
+									parent:this.datagridMeta.nodeRef,
+									itemType:this.datagridMeta.itemType,
+									searchShowInactive:false,
+									bubblingLabel:me.options.bubblingLabel
+								});
 					}
-					// trigger the initial search
-					YAHOO.Bubbling.fire("doSearch",
-							{
-								searchSort:sorting,
-								searchQuery:YAHOO.lang.JSON.stringify(initialData),
-								searchFilter:filter,
-								fullTextSearch:fullText,
-								searchShowInactive:false,
-								bubblingLabel:me.options.bubblingLabel
-							});
 				};
 				/**
 				 * Выделение строки в таблице
@@ -65,14 +69,6 @@
 						this.widgets.dataTable.onEventSelectRow(oArgs);
 						// Перерисовываем таблицу, здесь
 						var me = this;
-						//complete initial search
-						var initialData = {
-							datatype:"lecm-orgstr:workforce"
-						};
-						if (me.datagridMeta.searchConfig == undefined) {
-							me.datagridMeta.searchConfig = {};
-						}
-						me.datagridMeta.searchConfig.sort = "";
 						// Номер строки в таблице
 						var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
 						// Выбранный элемент
@@ -85,10 +81,6 @@
 										nodeRef: selectItem.getData().nodeRef,
 										actionsConfig: {
 											fullDelete:true
-										},
-										searchConfig:{
-											filter:'PARENT:\"' + selectItem.getData().nodeRef + '\"',
-											sort: "cm:name|true"
 										}
 									},
 									bubblingLabel: "workForce"

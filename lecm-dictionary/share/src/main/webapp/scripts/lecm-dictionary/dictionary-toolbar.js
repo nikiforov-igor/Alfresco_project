@@ -396,25 +396,29 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         if (!datagridMeta.searchConfig) {
                             datagridMeta.searchConfig = {};
                         }
-                        datagridMeta.searchConfig.filter = "";
-                        datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+                        datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
+                        datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
+                        datagridMeta.searchConfig.sort = "cm:name|true";
+                        datagridMeta.searchConfig.formData = {
+                            datatype:datagridMeta.itemType
+                        };
 
-                        YAHOO.Bubbling.fire("activeGridChanged",
+                        YAHOO.Bubbling.fire("doSearch",
                             {
-                                datagridMeta:datagridMeta
+                                searchConfig:datagridMeta.searchConfig,
+                                searchShowInactive:false,
+                                bubblingLabel:dataGrid.options.bubblingLabel
                             });
-
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {
-                        var nodeRef = datagridMeta.nodeRef;
-                        if (!datagridMeta.searchConfig) {
-                            datagridMeta.searchConfig = {};
-                        }
-                        datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"';
-                        datagridMeta.searchConfig.fullTextSearch = "";
-                        YAHOO.Bubbling.fire("activeGridChanged",
+                        datagridMeta.searchConfig = null;
+                        YAHOO.Bubbling.fire("doSearch",
                             {
-                                datagridMeta:datagridMeta
+                                parent:datagridMeta.nodeRef,
+                                itemType:datagridMeta.itemType,
+                                searchConfig:null,
+                                searchShowInactive:false,
+                                bubblingLabel:me.options.bubblingLabel
                             });
                         YAHOO.Bubbling.fire("hideFilteredLabel");
                     }
@@ -430,11 +434,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 				if (this.modules.dataGrid) {
 					var dataGrid = this.modules.dataGrid;
 					var datagridMeta = dataGrid.datagridMeta;
-					if (!datagridMeta.searchConfig) {
-						datagridMeta.searchConfig = {};
-					}
-					datagridMeta.searchConfig.filter = 'PARENT:"' + datagridMeta.nodeRef + '"';
-					datagridMeta.searchConfig.fullTextSearch = "";
+					datagridMeta.searchConfig = null;
 					YAHOO.Bubbling.fire("activeGridChanged",
 						{
 							datagridMeta:datagridMeta

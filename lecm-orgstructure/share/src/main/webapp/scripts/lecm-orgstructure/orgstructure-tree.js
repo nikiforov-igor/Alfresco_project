@@ -207,22 +207,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             custom: { // кастомные настройки для вспомогательных целей (необязателен)
                                 namePattern:me.options.itemPattern // используется в тулбаре Оргструктуры при сохранении новой ноды
                             },
-                            title: '', // для вывода заголовка в гриде (необязателен)
-                            description: '', // для вывода описания в заголовке грида (необязателен)
                             actionsConfig: {// настройки экшенов. (необязателен)
                                 fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
-                            },
-                            searchConfig:{ //настройки поиска (необязателен)
-                                filter:'PARENT:\"' + node.data.nodeRef + '\"', // дополнительный запрос(фильтр)
-                                /** Настройки полнотекстового поиска. Пример объекта:
-                                 {
-                                 parentNodeRef - относительно какой директории искать (чаще всего совпадает с datagridMeta.nodeRef
-                                 fields - какие свойства объекта следует заполнить и вернуть
-                                 searchTerm - строка для поиска
-                                 }
-                                 */
-                                fullTextSearch: null,
-                                sort: "cm:name|true" // сортировка. Указываем по какому полю и порядок (true - asc), например, cm:name|true
                             }
                         }
                     });
@@ -330,10 +316,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 custom:{
                                     namePattern:otree.options.itemPattern
                                 },
-                                nodeRef:sNode.data.nodeRef,
-                                searchConfig: {
-                                    filter:'PARENT:\"' + sNode.data.nodeRef + '\"'
-                                }
+                                nodeRef:sNode.data.nodeRef
                             }
                         });
                 }

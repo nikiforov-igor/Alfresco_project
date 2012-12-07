@@ -1,6 +1,7 @@
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
+const DEFAULT_MAX_RESULTS = 3000;
 
 function main() {
     var params = {};
@@ -8,13 +9,12 @@ function main() {
         var pars = json.get("params");
         params =
         {
-            query:(pars.get("query") !== null) ? pars.get("query") : null,
-            sort:(pars.get("sort") !== null) ? pars.get("sort") : null,
+            searchConfig: (pars.get("searchConfig").length() > 0)  ? pars.get("searchConfig") : null,
             maxResults:(pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS,
-            fields:(pars.get("fields") !== null) ? pars.get("fields") : null,
-            filter:(pars.get("filter") !== null) ? pars.get("filter") : "",
+            fields:(pars.get("fields").length() > 0) ? pars.get("fields") : null,
             showInactive: pars.get("showInactive") == true,
-			fullTextSearch:(pars.get("fullTextSearch") !== null) ? pars.get("fullTextSearch") : ""
+            parent: (pars.get("parent").length() > 0)  ? pars.get("parent") : null,
+            itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
         };
     }
 

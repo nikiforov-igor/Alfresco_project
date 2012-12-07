@@ -312,25 +312,27 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         datagridMeta.searchConfig = {};
                     }
                     datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
-                    datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+                    datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
+                    datagridMeta.searchConfig.sort = "cm:name|true";
+                    datagridMeta.searchConfig.formData = {
+                        datatype:datagridMeta.itemType
+                    };
 
-                    YAHOO.Bubbling.fire("activeGridChanged",
+                    YAHOO.Bubbling.fire("doSearch",
                         {
-                            datagridMeta:datagridMeta,
-                            bubblingLabel:me.options.bubblingLabel
+                            searchConfig:datagridMeta.searchConfig,
+                            searchShowInactive:false,
+                            bubblingLabel:dataGrid.options.bubblingLabel
                         });
-
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
-                    var nodeRef = datagridMeta.nodeRef;
-                    if (!datagridMeta.searchConfig) {
-                        datagridMeta.searchConfig = {};
-                    }
-                    datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"' + ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR lecm\\-dic:active:true)';
-                    datagridMeta.searchConfig.fullTextSearch = null;
-                    YAHOO.Bubbling.fire("activeGridChanged",
+                    datagridMeta.searchConfig = null;
+                    YAHOO.Bubbling.fire("doSearch",
                         {
-                            datagridMeta:datagridMeta,
+                            parent:datagridMeta.nodeRef,
+                            itemType:datagridMeta.itemType,
+                            searchConfig:null,
+                            searchShowInactive:false,
                             bubblingLabel:me.options.bubblingLabel
                         });
                     YAHOO.Bubbling.fire("hideFilteredLabel");

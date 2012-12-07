@@ -172,29 +172,34 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 						fields:fields,
 						searchTerm:searchTerm
 					};
-					if (!datagridMeta.searchConfig) {
-						datagridMeta.searchConfig = {};
-					}
-					datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
-					datagridMeta.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(fullTextSearch);
+                    if (!datagridMeta.searchConfig) {
+                        datagridMeta.searchConfig = {};
+                    }
+                    datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
+                    datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
+                    datagridMeta.searchConfig.sort = "cm:name|true";
+                    datagridMeta.searchConfig.formData = {
+                        datatype:datagridMeta.itemType
+                    };
 
-					YAHOO.Bubbling.fire("activeGridChanged", {
-						datagridMeta:datagridMeta
-					});
-
-					YAHOO.Bubbling.fire("showFilteredLabel");
+                    YAHOO.Bubbling.fire("doSearch",
+                        {
+                            searchConfig:datagridMeta.searchConfig,
+                            searchShowInactive:false,
+                            bubblingLabel:dataGrid.options.bubblingLabel
+                        });
+                    YAHOO.Bubbling.fire("showFilteredLabel");
 				} else {
-					var nodeRef = datagridMeta.nodeRef;
-					if (!datagridMeta.searchConfig) {
-						datagridMeta.searchConfig = {};
-					}
-					//TODO: не знаю что делать с этим фильтром
-					datagridMeta.searchConfig.filter = 'PARENT:"' + nodeRef + '"';
-					datagridMeta.searchConfig.fullTextSearch = null;
-					YAHOO.Bubbling.fire("activeGridChanged", {
-						datagridMeta:datagridMeta
-					});
-					YAHOO.Bubbling.fire("hideFilteredLabel");
+                    datagridMeta.searchConfig = null;
+                    YAHOO.Bubbling.fire("doSearch",
+                        {
+                            parent:datagridMeta.nodeRef,
+                            itemType:datagridMeta.itemType,
+                            searchConfig:null,
+                            searchShowInactive:false,
+                            bubblingLabel:me.options.bubblingLabel
+                        });
+                    YAHOO.Bubbling.fire("hideFilteredLabel");
 				}
 			}
 		},
