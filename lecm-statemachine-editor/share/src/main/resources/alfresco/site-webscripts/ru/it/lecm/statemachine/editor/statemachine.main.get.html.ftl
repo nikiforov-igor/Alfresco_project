@@ -11,6 +11,9 @@
 <#else>
 <div class="title"><h3 style="font-weight: bold; margin: 5px 0 5px 0">${title}</div>
 <div id="statemachine" style="margin: 0 0 20px 0">
+    <div id="top1" style="padding: 5px; background-color: white;">
+        <img id="diagram" />
+    </div>
     <div id="center1" style="padding: 5px;">
     </div>
 </div>

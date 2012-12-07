@@ -62,7 +62,8 @@ LogicECM.module = LogicECM.module || {};
 
 			this.layout = new YAHOO.widget.Layout(this.id, {
 				units: [
-					{ position: 'center', body: 'center1', scroll: true }
+					{ position: 'center', body: 'center1', scroll: true },
+					{ position: 'top', body: 'top1', scroll: true, height: 150, resize: true}
 				]
 			});
 			this.layout.render();
@@ -138,6 +139,12 @@ LogicECM.module = LogicECM.module || {};
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
+					sUrl = YAHOO.lang.substitute(sUrl, {
+						statemachineNodeRef: oResults.packageNodeRef
+					});
+					var diagram = document.getElementById("diagram");
+					diagram.src = sUrl;
 				},
 				argument:{
 					parent: this

@@ -13,6 +13,7 @@ import ru.it.lecm.base.statemachine.LecmWorkflowDeployer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -77,35 +78,21 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			writer.putContent(is);
 			is.close();
 			lecmWorkflowDeployer.redeploy();
-		}
-
-		/*FileInputStream inputStream = new FileInputStream("D:\\Project\\Application\\LogicECM\\lecm-contracts\\repo\\src\\main\\config\\models\\contracts.bpmn20.xml");
-
-		DeploymentEntity deployment = new DeploymentEntity();
-		deployment.setId("preview");
-
-		Context.setProcessEngineConfiguration(activitiProcessEngineConfiguration);
-		BpmnParser bpmnParser = new BpmnParser(activitiProcessEngineConfiguration.getExpressionManager());
-		BpmnParse bpmnParse = bpmnParser
-				.createParse()
-				.deployment(deployment)
-				.sourceInputStream(inputStream);
-
-
-		bpmnParse.execute();
-
-		ProcessDefinitionEntity processDefinition = bpmnParse.getProcessDefinitions().get(0);
-		if (processDefinition != null) {
-			InputStream diagramm = ProcessDiagramGenerator.generatePngDiagram(processDefinition);
-			FileOutputStream fos = new FileOutputStream("d:/1.png", false);
-			byte[] buf = new byte[8 * 1024];
-			int bytes = 0;
-			while ((bytes = diagramm.read(buf)) != -1) {
-				fos.write(buf, 0, bytes);
+		} else if (statemachineNodeRef != null && "diagram".equals(type)) {
+			res.setContentEncoding("UTF-8");
+			res.setContentType("image/png");
+			// Create an XML stream writer
+			OutputStream output = res.getOutputStream();
+			InputStream bpmn = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+			InputStream is = new BPMNGraphGenerator().generate(bpmn);
+			byte[] buf = new byte[1 << 8];
+			int c;
+			while ((c = is.read(buf)) != -1) {
+				output.write(buf, 0, c);
 			}
-			fos.flush();
-			fos.close();
-			diagramm.close();
-		}*/
+			output.flush();
+			output.close();
+			is.close();
+		}
 	}
 }

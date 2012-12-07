@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -125,6 +126,7 @@ public class BPMNGenerator {
 				Element statusTask = doc.createElement("userTask");
 				statusTask.setAttribute("id", statusVar);
 				statusTask.setAttribute("activiti:assignee", "${bpm_assignee.properties.userName}");
+				statusTask.setAttribute("name", statusName);
 				process.appendChild(statusTask);
 
 				//create extention
@@ -185,25 +187,20 @@ public class BPMNGenerator {
 					}
 				}
 
-				Element exclusiveGateway = doc.createElement("exclusiveGateway");
-				exclusiveGateway.setAttribute("id", statusVar + "_gateway");
-				process.appendChild(exclusiveGateway);
-
-				Element gatewayFlow = createFlow(statusVar, statusVar + "_gateway");
-				process.appendChild(gatewayFlow);
+				List<Flow> flows = new ArrayList<Flow>();
 
 				//install start actions
 				for (ChildAssociationRef action : startActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					createEvent(process, start, statusVar, action, actionId, actionVar);
+					flows.addAll(createEvent(start, statusVar, action, actionId, actionVar));
 				}
 
 				//install take actions
 				for (ChildAssociationRef action : takeActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					createEvent(process, take, statusVar, action, actionId, actionVar);
+					flows.addAll(createEvent(take, statusVar, action, actionId, actionVar));
 
 				}
 
@@ -211,7 +208,26 @@ public class BPMNGenerator {
 				for (ChildAssociationRef action : endActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					createEvent(process, end, statusVar, action, actionId, actionVar);
+					flows.addAll(createEvent(end, statusVar, action, actionId, actionVar));
+				}
+
+				if (flows.size() == 1) {
+					Flow flow = flows.get(0);
+					Element flowElement = createFlow(flow.getSourceRef(), flow.getTargetRef(), flow.getContent());
+					process.appendChild(flowElement);
+				} else if (flows.size() > 1) {
+					Element exclusiveGateway = doc.createElement("exclusiveGateway");
+					exclusiveGateway.setAttribute("id", statusVar + "_gateway");
+					process.appendChild(exclusiveGateway);
+
+					Element gatewayFlow = createFlow(statusVar, statusVar + "_gateway");
+					process.appendChild(gatewayFlow);
+
+					for (Flow flow : flows) {
+						Element flowElement = createFlow(flow.getSourceRef() + "_gateway", flow.getTargetRef(), flow.getContent());
+						process.appendChild(flowElement);
+					}
+
 				}
 			}
 
@@ -228,29 +244,41 @@ public class BPMNGenerator {
 		return new ByteArrayInputStream(baos.toByteArray());
 	}
 
-	private void createEvent(Element process, Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
+	/**
+	 *
+	 * @param eventElement
+	 * @param statusVar
+	 * @param action
+	 * @param actionId
+	 * @param actionVar
+	 * @return true если
+	 */
+	private List<Flow> createEvent(Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
 		if (ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
-			createActionFinishStateWithTransition(process, eventElement, statusVar, action, actionVar);
+			return createActionFinishStateWithTransition(eventElement, statusVar, action, actionVar);
 		} else if (ACTION_START_WORKFLOW.equals(actionId)) {
-			createaStartWorkflowAction(eventElement, action);
+			return createStartWorkflowAction(eventElement, action);
 		} else if (ACTION_TRANSITION_ACTION.equals(actionId)) {
-			createTransitionAction(process, statusVar, action);
+			return createTransitionAction(statusVar, action);
 		} else if (ACTION_USER_WORKFLOW.equals(actionId)) {
 			System.out.println("ACTION_USER_WORKFLOW");
+			return Collections.EMPTY_LIST;
 		} else if (ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
-			createWaitForDocumentChangeEvent(process, eventElement, statusVar, action, actionVar);
+			return createWaitForDocumentChangeEvent(eventElement, statusVar, action, actionVar);
 		}
+		return Collections.EMPTY_LIST;
 	}
 
-	private void createTransitionAction(Element process, String statusVar, ChildAssociationRef action) {
+	private List<Flow> createTransitionAction(String statusVar, ChildAssociationRef action) {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
+		List<Flow> flows = new ArrayList<Flow>();
 		for (ChildAssociationRef expression : expressions) {
 			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
 			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
-			Element flow = createFlow(statusVar + "_gateway", target, "${" + expressionValue + "}");
-			process.appendChild(flow);
+			flows.add(new Flow(statusVar, target, "${" + expressionValue + "}"));
 		}
+		return flows;
 	}
 
 	/*
@@ -261,7 +289,8 @@ public class BPMNGenerator {
 			</lecm:expressions>
 			</lecm:action>
 	*/
-	private void createWaitForDocumentChangeEvent(Element process, Element eventElement, String statusVar, ChildAssociationRef action, String actionVar) {
+	private List<Flow> createWaitForDocumentChangeEvent(Element eventElement, String statusVar, ChildAssociationRef action, String actionVar) {
+		List<Flow> flows = new ArrayList<Flow>();
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
 		if (expressions.size() > 0) {
 			Element actionElement = doc.createElement("lecm:action");
@@ -281,10 +310,10 @@ public class BPMNGenerator {
 				expressionElement.setAttribute("outputValue", target);
 
 				expressionsElement.appendChild(expressionElement);
-				Element flow = createFlow(statusVar + "_gateway", target, "${var" + actionVar + " == '" + target + "'}");
-				process.appendChild(flow);
+				flows.add(new Flow(statusVar, target, "${var" + actionVar + " == '" + target + "'}"));
 			}
 		}
+		return flows;
 	}
 
 
@@ -294,7 +323,7 @@ public class BPMNGenerator {
 		  <lecm:attribute name="assignee" value="admin"/>
 		  </lecm:action>
 	 */
-	private void createaStartWorkflowAction(Element eventElement, ChildAssociationRef action) {
+	private List<Flow> createStartWorkflowAction(Element eventElement, ChildAssociationRef action) {
 		List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
 		for (ChildAssociationRef workflow : workflows) {
 			Element attribute;
@@ -310,6 +339,7 @@ public class BPMNGenerator {
 			actionElement.appendChild(attribute);
 			eventElement.appendChild(actionElement);
 		}
+		return Collections.EMPTY_LIST;
 	}
 
 	/**
@@ -330,7 +360,8 @@ public class BPMNGenerator {
 					<lecm:parameter name="variableValue" value="signing"/>
 				</lecm:attribute>
 			</lecm:action>*/
-	private void createActionFinishStateWithTransition(Element process, Element take, String statusVar, ChildAssociationRef action, String actionVar) {
+	private List<Flow> createActionFinishStateWithTransition(Element take, String statusVar, ChildAssociationRef action, String actionVar) {
+		List<Flow> flows = new ArrayList<Flow>();
 		Element attribute;
 		Element actionElement = doc.createElement("lecm:action");
 		actionElement.setAttribute("type", ACTION_FINISH_STATE_WITH_TRANSITION);
@@ -358,8 +389,7 @@ public class BPMNGenerator {
 
 			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
-			Element flow = createFlow(statusVar + "_gateway", target, "${var" + actionVar + " == '" + variableValue + "'}");
-			process.appendChild(flow);
+			flows.add(new Flow(statusVar, target, "${var" + actionVar + " == '" + variableValue + "'}"));
 
 			if (TYPE_WORKFLOW_TRANSITION.equals(type)) {
 				String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_TRANSITION_LABEL);
@@ -421,6 +451,7 @@ public class BPMNGenerator {
 				attribute.appendChild(parameter);
 			}
 		}
+		return flows;
 	}
 
 	/**
@@ -453,6 +484,53 @@ public class BPMNGenerator {
 			flow.appendChild(expression);
 		}
 		return flow;
+	}
+
+	private class Flow {
+
+		private String sourceRef;
+		private String targetRef;
+		private String content;
+
+		private Flow(String sourceRef, String targetRef, String content) {
+			this.sourceRef = sourceRef;
+			this.targetRef = targetRef;
+			this.content = content;
+		}
+
+		public String getSourceRef() {
+			return sourceRef;
+		}
+
+		public String getTargetRef() {
+			return targetRef;
+		}
+
+		public String getContent() {
+			return content;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			Flow flow = (Flow) o;
+
+			if (content != null ? !content.equals(flow.content) : flow.content != null) return false;
+			if (sourceRef != null ? !sourceRef.equals(flow.sourceRef) : flow.sourceRef != null) return false;
+			if (targetRef != null ? !targetRef.equals(flow.targetRef) : flow.targetRef != null) return false;
+
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			int result = sourceRef != null ? sourceRef.hashCode() : 0;
+			result = 31 * result + (targetRef != null ? targetRef.hashCode() : 0);
+			result = 31 * result + (content != null ? content.hashCode() : 0);
+			return result;
+		}
 	}
 
 }

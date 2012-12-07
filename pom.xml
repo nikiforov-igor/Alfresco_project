@@ -216,8 +216,8 @@
 				<version>1.0.1B</version>
 				<scope>provided</scope>
 		    </dependency>
-        </dependencies>
-    </dependencyManagement>
+		</dependencies>
+	</dependencyManagement>
 
     <build>
         <pluginManagement>

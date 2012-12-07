@@ -60,6 +60,13 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/../../lecm-base/repo/target/base-repo-${platform.version}/lib/base-repo-${platform.version}.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>com.mxgraph</groupId>
+			<artifactId>jgraphx</artifactId>
+			<version>1.10.4.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jgraphx.jar</systemPath>
+		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
