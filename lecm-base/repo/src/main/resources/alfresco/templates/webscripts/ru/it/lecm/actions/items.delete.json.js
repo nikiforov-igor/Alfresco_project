@@ -63,7 +63,17 @@ function runAction(p_params) {
                     var assocsList = sAssocs[key];
                     for (index in assocsList) {
                         var target = assocsList[index];
-                        target.removeAssociation(itemNode, key)
+                        target.removeAssociation(itemNode, key);
+                    }
+                }
+                var tAssocs;
+                tAssocs = itemNode.getAssocs();
+                // удалить все ссылки на объект
+                for (key in tAssocs) {
+                    var assocsList = tAssocs[key];
+                    for (index in assocsList) {
+                        var target = assocsList[index];
+                        itemNode.removeAssociation(target, key);
                     }
                 }
                 if (full == "false") {// пометить объект как неактивный
