@@ -262,7 +262,7 @@
 					<show id="cm:name" force="true"/>
 
 					<show id="lecm-dic-orgstr-test:organization-unit" force="true"/>
-					<show id="lecm-dic-orgstr-test:position" force="true"/>
+					<show id="lecm-dic-orgstr-test:position|{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}" force="true"/>
 					<show id="lecm-dic-orgstr-test:workGroup" force="true"/>
 					<show id="lecm-dic-orgstr-test:employee" force="true"/>
 					<show id="lecm-dic-orgstr-test:workRole" force="true"/>

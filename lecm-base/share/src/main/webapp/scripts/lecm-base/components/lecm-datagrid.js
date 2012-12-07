@@ -300,6 +300,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             dataRequestFields: null,
 
             /**
+             * Fields name substitute strings
+             *
+             * @param dataRequestFields
+             * @type Object
+             */
+            dataRequestNameSubstituteStrings: null,
+
+            /**
              * Fields returned from the data request
              *
              * @param dataResponseFields
@@ -697,7 +705,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
-                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType)),
+                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType)),
                         successCallback:
                         {
                             fn: this.onDataGridColumns,
@@ -905,6 +913,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             setupDataSource: function DataGrid__setupDataSource()
             {
                 this.dataRequestFields = [];
+                this.dataRequestNameSubstituteStrings = [];
                 this.dataResponseFields = [];
 
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
@@ -913,6 +922,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         fieldLookup = (column.type == "property" ? "prop" : "assoc") + "_" + columnName;
 
                     this.dataRequestFields.push(columnName);
+                    this.dataRequestNameSubstituteStrings.push(column.nameSubstituteString);
                     this.dataResponseFields.push(fieldLookup);
                     this.datagridColumns[fieldLookup] = column;
                 }
@@ -1865,7 +1875,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         });
                 }
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), false);
+                var requestParams = this.modules.search._buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), false);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

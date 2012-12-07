@@ -201,12 +201,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
+                var reqNameSubstituteStrings = [];
                 for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
                     var column = this.dataColumns[i],
                         columnName = column.name.replace(":", "_");
                     reqFields.push(columnName);
+	                reqNameSubstituteStrings.push(column.nameSubstituteString);
                 }
                 var fields = reqFields.join(",");
+                var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
 
                 //очистить таблицу и отрисовать
                 this.dataTable.deleteRows(0, this.dataTable.getRecordSet().getLength());
@@ -294,7 +297,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this._buildSearchParams(parent, itemType, searchConfig, fields, searchShowInactive);
+                var searchParams = this._buildSearchParams(parent, itemType, searchConfig, fields, nameSubstituteStrings, searchShowInactive);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -313,7 +316,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            _buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, searchShowInactive) {
+            _buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -328,6 +331,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
                         maxResults:this.options.maxSearchResults + 1,
                         fields:searchFields != null ? searchFields : "",
+	                    nameSubstituteStrings:dataRequestNameSubstituteStrings,
                         showInactive:searchShowInactive != null ? searchShowInactive : "false"
                     }
                 };

@@ -29,7 +29,7 @@
  *
  * @return the final search results object
  */
-function processResults(nodes, fields, maxResults) {
+function processResults(nodes, fields, nameSubstituteStrings, maxResults) {
     // empty cache state
     processedCache = {};
     var results = [],
@@ -59,7 +59,7 @@ function processResults(nodes, fields, maxResults) {
     }
 
     for (i = 0, j = nodes.length; i < j && added < maxResults; i++) {
-        results.push(Evaluator.run(nodes[i], flds));
+        results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(",")));
         added++;
     }
     var versionable = false;
@@ -136,6 +136,7 @@ function getSearchResults(params) {
         ftsQuery = "",
         searchConfigString = params.searchConfig,
         fields = params.fields,
+	    nameSubstituteStrings = params.nameSubstituteStrings,
         showInactive = params.showInactive,
         parent = params.parent,
         itemType = params.itemType;
@@ -380,5 +381,5 @@ function getSearchResults(params) {
         }
     }
 
-    return processResults(nodes, fields, params.maxResults);
+    return processResults(nodes, fields, nameSubstituteStrings, params.maxResults);
 }
