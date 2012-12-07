@@ -107,12 +107,6 @@
 								},
 								{
 									type:"action-link-dictionary",
-									id:"onActionVersion",
-									permission:"edit",
-									label:"${msg("actions.version")}"
-								},
-								{
-									type:"action-link-dictionary",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}"
