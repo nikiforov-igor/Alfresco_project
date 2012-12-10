@@ -147,9 +147,6 @@ function showDialogEdit(nodeRef){
 }
 
 function initialize() {
-    Alfresco.util.createYUIButton(this, "createPersonalData", createPersonalData, {});
-    Alfresco.util.createYUIButton(this, "editPersonalData", editPersonalData, {});
-
 	employeeRef = "${form.arguments.itemId}";
 	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePerson?nodeRef="+employeeRef;
 	var callback = {
@@ -207,12 +204,12 @@ function createPersonalData() {
 	<div id="${id}-buttonPersonalData">
         <span id="${id}-createPersonalData" class="yui-button yui-push-button">
            <span class="first-child">
-              <button type="button">${msg('button.create')}</button>
+              <button type="button" onclick="createPersonalData();">${msg('button.create')}</button>
            </span>
         </span>
 		<span id="${id}-editPersonalData" class="yui-button yui-push-button">
            <span class="first-child">
-              <button type="button">${msg('button.edit')}</button>
+              <button type="button" onclick="editPersonalData();">${msg('button.edit')}</button>
            </span>
         </span>
 	</div>
