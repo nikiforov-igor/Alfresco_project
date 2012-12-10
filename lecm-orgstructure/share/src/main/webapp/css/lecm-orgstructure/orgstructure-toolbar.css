@@ -24,3 +24,22 @@
     padding-left: 24px;
     text-align: center;
 }
+
+.datalist-toolbar .clear-search span {
+	background: url("/share/res/components/images/delete-disabled-16.png") no-repeat scroll 0 0 transparent;
+	padding-right: 16px;
+}
+.datalist-toolbar .search-input {
+	display: inline-block;
+	vertical-align: text-bottom;
+	margin-top: 4px;
+	background-color: white;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	line-height: 0;
+}
+.datalist-toolbar .search-input input {
+	border: 0;
+	outline: none;
+	padding-right: 0;
+}

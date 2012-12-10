@@ -112,6 +112,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     });
 
                 var me = this;
+
+                // Search
+                this.checkShowClearSearch();
+                Event.on(this.id + "-clearSearchInput", "click", this.onClearSearch, null, this);
+                Event.on(this.id + "-full-text-search", "keyup", this.checkShowClearSearch, null, this);
                 var searchInput = Dom.get(this.id + "-full-text-search");
                 new YAHOO.util.KeyListener(searchInput,
                     {
@@ -392,6 +397,35 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     return true;
                 } else {
                     return this.options.bubblingLabel == bubbleLabel;
+                }
+            },
+            /**
+             * Скрывает кнопку поиска, если строка ввода пустая
+             * @constructor
+             */
+            checkShowClearSearch: function Toolbar_checkShowClearSearch() {
+                if (Dom.get(this.id + "-full-text-search").value.length > 0) {
+                    Dom.setStyle(this.id + "-clearSearchInput", "visibility", "visible");
+                } else {
+                    Dom.setStyle(this.id + "-clearSearchInput", "visibility", "hidden");
+                }
+            },
+            /**
+             * Очистка поиска
+             * @constructor
+             */
+            onClearSearch: function Toolbar_onSearch() {
+                Dom.get(this.id + "-full-text-search").value = "";
+                if (this.modules.dataGrid) {
+                    var dataGrid = this.modules.dataGrid;
+                    var datagridMeta = dataGrid.datagridMeta;
+                    datagridMeta.searchConfig = null;
+                    YAHOO.Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:datagridMeta
+                        });
+                    YAHOO.Bubbling.fire("hideFilteredLabel");
+                    this.checkShowClearSearch();
                 }
             }
         }, true);
