@@ -47,7 +47,7 @@
 
 	    <#if showSearch>
 	        <div class="yui-gb orgchart-picker-menu">
-	            <div id="${pickerId}-searchContainer" class="yui-u first yui-skin-sam search">
+	            <div id="${pickerId}-searchContainer" class="first yui-skin-sam search">
 	                <input type="text" class="search-input" name="-" id="${pickerId}-searchText" value="" maxlength="256" />
 	                <span class="search-button"><button id="${pickerId}-searchButton" name="-">&nbsp;</button></span>
 	            </div>
@@ -57,7 +57,7 @@
         <div><strong>${msg("logicecm.base.elements-for-select")}</strong></div>
         <div class="yui-g">
             <#if !plane>
-                <div id="${pickerId}-treeSelector" class="yui-u first panel-left tree">
+                <div id="${pickerId}-treeSelector" class="first panel-left tree">
                     <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
                         <#nested>
                     </div>

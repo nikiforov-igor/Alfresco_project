@@ -74,9 +74,11 @@
                 </#if>
             </select>
             <#if showCreateNewButton>
+            <div class="show-picker">
                 <span class="create-new-button">
                     <input type="button" id="${fieldHtmlId}-selectone-create-new-button" name="-"/>
                 </span>
+            </div>
             </#if>
         </div>
 

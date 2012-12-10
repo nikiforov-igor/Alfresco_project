@@ -107,14 +107,16 @@
 
         <div id="${controlId}-autocomplete">
             <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>
-            <span class="tree-picker-button">
-                <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
-            </span>
-            <#if showCreateNewLink>
+            <div class="show-picker">
+                <span class="tree-picker-button">
+                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                </span>
+                <#if showCreateNewLink>
                 <span class="create-new-button">
                     <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
                 </span>
-            </#if>
+                </#if>
+            </div>
             <div id="${controlId}-autocomplete-container"></div>
 
             <@renderTreePickerDialogHTML controlId true showSearch/>
