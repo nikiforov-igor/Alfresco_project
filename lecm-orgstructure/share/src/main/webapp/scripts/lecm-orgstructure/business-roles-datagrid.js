@@ -10,6 +10,8 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 
 (function () {
 
+	var attributeForShow = "cm:name";
+
 	LogicECM.module.OrgStructure.BusinessRoles.DataGrid = function (containerId) {
 		return LogicECM.module.OrgStructure.BusinessRoles.DataGrid.superclass.constructor.call(this, containerId);
 	};
@@ -23,6 +25,106 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
 	YAHOO.lang.augmentObject (LogicECM.module.OrgStructure.BusinessRoles.DataGrid.prototype, {
+
+		getCellFormatter: function DataGrid_getCellFormatter () {
+			var scope = this;
+
+			return function DataGrid_renderCellDataType (elCell, oRecord, oColumn, oData) {
+				var html = "";
+				var content;
+
+				if (!oRecord) {
+					oRecord = this.getRecord (elCell);
+				}
+				if (!oColumn) {
+					oColumn = this.getColumn (elCell.parentNode.cellIndex);
+				}
+
+				if (oRecord && oColumn) {
+					if (!oData) {
+						oData = oRecord.getData ("itemData")[oColumn.field];
+					}
+					if (oData) {
+						var datalistColumn = scope.datagridColumns[oColumn.key];
+						if (datalistColumn) {
+							oData = YAHOO.lang.isArray (oData) ? oData : [oData];
+							var plane = true;
+
+							for (var i = 0, ii = oData.length, data; i < ii; i++) {
+								data = oData[i];
+
+								switch (datalistColumn.dataType.toLowerCase ()) {
+									case "cm:person":
+										html += '<span class="person">'
+											 + Alfresco.util.userProfileLink (data.metadata, data.displayValue)
+											 + '</span>';
+										break;
+
+									case "datetime":
+										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("date-format.default"));
+										if (datalistColumn.name == attributeForShow) {
+											content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
+													+ oRecord.getData ("nodeRef")
+													+ "\')\">"
+													+ content
+													+ "</a>";
+										}
+										html += content;
+										break;
+
+									case "date":
+										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("date-format.defaultDateOnly"));
+										if (datalistColumn.name == attributeForShow) {
+											content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
+													+ oRecord.getData ("nodeRef")
+													+ "\')\">"
+													+ content
+													+ "</a>";
+										}
+										html += content;
+										break;
+
+									case "text":
+										content = Alfresco.util.encodeHTML (data.displayValue);
+										if (datalistColumn.name == attributeForShow) {
+											html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
+												 + oRecord.getData("nodeRef")
+												 + "\')\">"
+												 + content
+												 + "</a>";
+										} else {
+											html += Alfresco.util.activateLinks (content);
+										}
+										break;
+
+									default:
+										if (datalistColumn.type == "association") {
+											html += '<a><img src="'
+												 + Alfresco.constants.URL_RESCONTEXT
+												 + 'components/images/filetypes/'
+												 + Alfresco.util.getFileIcon (data.displayValue, (data.metadata == "container" ? 'cm:folder' : null), 16)
+												 + '" width="16" alt="'
+												 + Alfresco.util.encodeHTML (data.displayValue)
+												 + '" title="'
+												 + Alfresco.util.encodeHTML (data.displayValue)
+												 + '" /> '
+												 + Alfresco.util.encodeHTML (data.displayValue)
+												 + '</a>'
+										} else {
+											html += Alfresco.util.activateLinks (Alfresco.util.encodeHTML (data.displayValue));
+										}
+										break;
+								}
+								if (i < ii - 1) {
+									html += "<br />";
+								}
+							}
+						}
+					}
+				}
+				elCell.innerHTML = html;
+			};
+		},
 
 		/**
 		 * Edit Data Item pop-up

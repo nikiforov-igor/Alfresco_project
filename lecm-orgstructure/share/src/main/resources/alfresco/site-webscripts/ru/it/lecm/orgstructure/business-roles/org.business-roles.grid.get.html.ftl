@@ -2,6 +2,8 @@
 
 <#assign id = args.htmlid/>
 
+<@grid.datagrid id true>
+
 <script type="text/javascript">//<![CDATA[
 
 var datagrid = new LogicECM.module.OrgStructure.BusinessRoles.DataGrid ("${id}");
@@ -18,7 +20,9 @@ datagrid.setOptions ({
 	]
 });
 datagrid.setMessages (${messages});
+
+YAHOO.util.Event.onContentReady ("view-node-form", createDialog);
 //]]>
 </script>
 
-<@grid.datagrid id/>
+</@grid.datagrid>
