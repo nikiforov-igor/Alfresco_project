@@ -243,39 +243,43 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             // разблокировать кнопки согласно правам
             onUserAccess:function OrgstructureToolbar_onUserAccess(layer, args) {
                 var obj = args[1];
+                var searchActive = this.options.searchActive;
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
                     for (index in this.widgets) {
-                        if (this.widgets.hasOwnProperty(index)) {
-                            widget = this.widgets[index];
-                            if (widget != null) {
-                                // Skip if this action specifies "no-access-check"
-                                if (widget.get("srcelement").className != "no-access-check") {
-                                    // Default to disabled: must be enabled via permission
-                                    widget.set("disabled", false);
-                                    if (typeof widget.get("value") == "string") {
-                                        // Comma-separation indicates "AND"
-                                        widgetPermissions = widget.get("value").split(",");
-                                        for (var i = 0, ii = widgetPermissions.length; i < ii; i++) {
-                                            // Pipe-separation is a special case and indicates an "OR" match. The matched permission is stored in "activePermission" on the widget.
-                                            if (widgetPermissions[i].indexOf("|") !== -1) {
-                                                orMatch = false;
-                                                orPermissions = widgetPermissions[i].split("|");
-                                                for (var j = 0, jj = orPermissions.length; j < jj; j++) {
-                                                    if (obj.userAccess[orPermissions[j]]) {
-                                                        orMatch = true;
-                                                        widget.set("activePermission", orPermissions[j], true);
+                        // если задан параметр searchActive = false то кнопки поиска разблокируем.
+                        if (!(index == "searchButton" || index == "extendSearchButton") && !(searchActive == "false")) {
+                            if (this.widgets.hasOwnProperty(index)) {
+                                widget = this.widgets[index];
+                                if (widget != null) {
+                                    // Skip if this action specifies "no-access-check"
+                                    if (widget.get("srcelement").className != "no-access-check") {
+                                        // Default to disabled: must be enabled via permission
+                                        widget.set("disabled", false);
+                                        if (typeof widget.get("value") == "string") {
+                                            // Comma-separation indicates "AND"
+                                            widgetPermissions = widget.get("value").split(",");
+                                            for (var i = 0, ii = widgetPermissions.length; i < ii; i++) {
+                                                // Pipe-separation is a special case and indicates an "OR" match. The matched permission is stored in "activePermission" on the widget.
+                                                if (widgetPermissions[i].indexOf("|") !== -1) {
+                                                    orMatch = false;
+                                                    orPermissions = widgetPermissions[i].split("|");
+                                                    for (var j = 0, jj = orPermissions.length; j < jj; j++) {
+                                                        if (obj.userAccess[orPermissions[j]]) {
+                                                            orMatch = true;
+                                                            widget.set("activePermission", orPermissions[j], true);
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!orMatch) {
+                                                        widget.set("disabled", true);
                                                         break;
                                                     }
                                                 }
-                                                if (!orMatch) {
+                                                else if (!obj.userAccess[widgetPermissions[i]]) {
                                                     widget.set("disabled", true);
                                                     break;
                                                 }
-                                            }
-                                            else if (!obj.userAccess[widgetPermissions[i]]) {
-                                                widget.set("disabled", true);
-                                                break;
                                             }
                                         }
                                     }
@@ -399,6 +403,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
                 Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
                 Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
+                // Разблокируем кнопки поиска
+                if (this.widgets.searchButton != null) {
+                    this.widgets.searchButton.set("disabled", false);
+                }
+                if (this.widgets.exSearchButton != null) {
+                    this.widgets.exSearchButton.set("disabled", false);
+                }
             },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
