@@ -22,6 +22,7 @@ function main()
 
     model.bubblingLabel = args["type"];
     model.typeButton = args["typeButton"];
+    model.active = args["active"];
 
     var showSearchBlock = args["showSearchBlock"];
     var showExSearchBtn = args["showExSearchBtn"];

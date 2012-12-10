@@ -16,11 +16,17 @@
 <#if typeButton??>
 	<#assign initButtons = typeButton/>
 </#if>
+<#assign searchActive = true/>
+<#if active??>
+	<#assign searchActive = active/>
+</#if>
+
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <script type="text/javascript">//<![CDATA[
 function init() {
 	new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages}).setOptions({
+		searchActive: "${searchActive?string}",
 		bubblingLabel:"${bubblingLabel!''}"
 	});
 }

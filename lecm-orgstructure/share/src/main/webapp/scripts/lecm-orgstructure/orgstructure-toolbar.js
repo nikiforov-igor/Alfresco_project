@@ -72,7 +72,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              * @type object
              */
             options:{
-                bubblingLabel: null
+                bubblingLabel: null,
+                searchActive: null
             },
             /**
              * Дополнительные кнопки, активируемы при выборе элемента в дереве
@@ -113,6 +114,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
                 var me = this;
 
+
                 // Search
                 this.checkShowClearSearch();
                 Event.on(this.id + "-clearSearchInput", "click", this.onClearSearch, null, this);
@@ -127,7 +129,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         scope: this,
                         correctScope: true
                     }, "keydown").enable();
-
+                if (this.options.searchActive != null && this.options.searchActive == "false") {
+                    Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','#eeeeee');
+                    Dom.get(this.id + "-full-text-search").setAttribute('disabled', true);
+                    Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','#eeeeee');
+                }
                 // Reference to Data Grid component
                 this.modules.dataGrid = this.findGrid("LogicECM.module.Base.DataGrid", this.options.bubblingLabel);
 
@@ -390,6 +396,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     }
                 }
+                Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
+                Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
+                Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
             },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){

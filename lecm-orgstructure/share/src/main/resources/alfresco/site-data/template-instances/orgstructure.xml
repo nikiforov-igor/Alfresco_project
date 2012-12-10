@@ -17,6 +17,7 @@
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
                 <typeButton>newUnitButton</typeButton>
+                <active>false</active>
             </properties>
         </component>
         <!-- Title -->
