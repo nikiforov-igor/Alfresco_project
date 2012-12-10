@@ -58,7 +58,7 @@
 						};
 						var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
 							// при создание ассоциации произошла ошибка - удаляем ссылку на сотрудника
-							this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true}, fnCallback, null);
+							this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true, targetDelete:true}, fnCallback, null);
 							Alfresco.util.PopupManager.displayMessage(
 									{
 										text:this.msg("message.employee.add.failure")
@@ -150,7 +150,7 @@
 											});
 								}.bind(me);
 
-								me.onDelete([oResult], owner, {fullDelete:true, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
+								me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
 							} else {
 								Alfresco.util.PopupManager.displayMessage(
 										{

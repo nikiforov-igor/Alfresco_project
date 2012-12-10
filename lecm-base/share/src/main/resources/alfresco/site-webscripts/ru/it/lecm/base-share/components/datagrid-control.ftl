@@ -3,6 +3,16 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container">
 
+<#assign allowCreate = true/>
+<#if field.control.params.allowCreate??>
+	<#assign allowCreate = field.control.params.allowCreate/>
+</#if>
+
+<#assign showActions = true/>
+<#if field.control.params.showActions??>
+	<#assign showActions = field.control.params.showActions/>
+</#if>
+
 <div class="form-field">
     <div id="${controlId}">
         <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
@@ -28,11 +38,17 @@
                                         }],
                             datagridMeta: {
                                     itemType: "${field.control.params.itemType!""}",
+	                                formId: "${field.control.params.formId!"datagrid"}",
                                     nodeRef: "${form.arguments.itemId}"
                                 },
-                            bubblingLabel: "${containerId}",
-                            height: 100,
-                            allowCreate: true
+	                        dataSource:"${field.control.params.ds!"lecm/search"}",
+                            bubblingLabel: "${containerId}" + "${field.control.params.itemType}",
+	                        <#if field.control.params.height??>
+		                        height: ${field.control.params.height},
+	                        </#if>
+		                    allowCreate: ${allowCreate?string},
+		                    showActionColumn: ${showActions?string},
+	                        showCheckboxColumn: false
                         }).setMessages(${messages});
 
                         datagrid.draw();

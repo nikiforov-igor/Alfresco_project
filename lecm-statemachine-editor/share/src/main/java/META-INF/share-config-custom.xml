@@ -40,6 +40,7 @@
 					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -97,6 +98,7 @@
 					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -114,6 +116,7 @@
 					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -131,6 +134,7 @@
 					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -189,11 +193,13 @@
 					<field id="lecm-stmeditor:userTransition" label-id="statemachine.editor.form.label.userTransition">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:transitionWorkflow" label-id="statemachine.editor.form.label.transitionWorkflow">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -305,11 +311,13 @@
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableData</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:outputWorkflowVariableData</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>

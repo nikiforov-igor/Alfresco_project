@@ -1,5 +1,8 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -12,9 +15,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author dbashmakov
@@ -294,7 +294,7 @@ public class OrgstructureBean {
 	public boolean hasChild(NodeRef parent, boolean onlyActive) {
 		List<NodeRef> childs = getSubUnits(parent, onlyActive);
 		boolean hasChild = !childs.isEmpty();
-		if (onlyActive && !childs.isEmpty()) {
+		if (onlyActive && hasChild) {
 			hasChild = false;
 			for (NodeRef ref : childs) {
 				Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
@@ -427,7 +427,9 @@ public class OrgstructureBean {
 
 			List<ChildAssociationRef> sls = nodeService.getChildAssocs(unitRef, staffs);
 			for (ChildAssociationRef sl : sls) {
-				results.add(sl.getChildRef());
+                if (!isArchive(sl.getChildRef())) {
+                    results.add(sl.getChildRef());    
+                }
 			}
 		}
 		return results;
@@ -436,8 +438,8 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
 	 */
-	public NodeRef getEmployeeByPosition(NodeRef ref) {
-		NodeRef employeeLink = getEmployeeLinkByPosition(ref);
+	public NodeRef getEmployeeByPosition(NodeRef employeeRef) {
+		NodeRef employeeLink = getEmployeeLinkByPosition(employeeRef);
 		if (employeeLink != null){
 			return getEmployeeByLink(employeeLink);
 		}
@@ -497,14 +499,16 @@ public class OrgstructureBean {
 			// получаем список объектов Штатное расписание для заданной позиции
 			List<AssociationRef> staffs = nodeService.getSourceAssocs(position, ASSOC_ELEMENT_MEMBER_POSITION);
 			for (AssociationRef staff : staffs) {
-				Set<QName> links = new HashSet<QName>();
-				links.add(TYPE_EMPLOYEE_LINK);
-				// из штатного расписания получает ссылку на сотрудника
-				List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(staff.getSourceRef(), links);
-				if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
-					NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
-					results.add(employee);
-				}
+                if (!isArchive(staff.getSourceRef())){
+                    Set<QName> links = new HashSet<QName>();
+                    links.add(TYPE_EMPLOYEE_LINK);
+                    // из штатного расписания получает ссылку на сотрудника
+                    List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(staff.getSourceRef(), links);
+                    if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+                        NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
+                        results.add(employee);
+                    }    
+                }
 			}
 		}
 		return results;
@@ -521,14 +525,16 @@ public class OrgstructureBean {
 			workforces.add(TYPE_WORKFORCE);
 			List<ChildAssociationRef> workForces = nodeService.getChildAssocs(workGroup, workforces);
 			for (ChildAssociationRef wf : workForces) {
-				Set<QName> links = new HashSet<QName>();
-				links.add(TYPE_EMPLOYEE_LINK);
-				//получает ссылку на сотрудника
-				List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(wf.getChildRef(), links);
-				if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
-					NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
-					results.add(employee);
-				}
+                if (!isArchive(wf.getChildRef())){
+                    Set<QName> links = new HashSet<QName>();
+                    links.add(TYPE_EMPLOYEE_LINK);
+                    //получает ссылку на сотрудника
+                    List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(wf.getChildRef(), links);
+                    if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+                        NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
+                        results.add(employee);
+                    }
+                }
 			}
 		}
 		return results;
@@ -544,7 +550,7 @@ public class OrgstructureBean {
 			for (AssociationRef link : links) {
 				if ((Boolean) nodeService.getProperty(link.getSourceRef(), PROP_EMP_LINK_IS_PRIMARY)) {
 					primaryStaff = getStaffByEmployeeLink(link.getSourceRef());
-					if (isStaffList(primaryStaff)) {
+					if (primaryStaff != null && isStaffList(primaryStaff)) {
 						break;
 					}
 				}
@@ -564,7 +570,10 @@ public class OrgstructureBean {
 		if (isProperType(empLink, properTypes)) {
 			List<AssociationRef> staffs = nodeService.getSourceAssocs(empLink, ASSOC_ELEMENT_MEMBER_EMPLOYEE);
 			if (staffs.size() > 0) {
-				staff = staffs.get(0).getTargetRef();
+                NodeRef ref = staffs.get(0).getSourceRef();
+                if(!isArchive(ref)){
+                    staff = ref;
+                }
 			}
 		}
 		return staff;
@@ -598,9 +607,8 @@ public class OrgstructureBean {
 	/**
 	 * Получение персональных данных сотрудника
 	 */
-	public NodeRef getEmployeePerson(NodeRef employeeRef) {
+	public NodeRef getEmployeePersonalData(NodeRef employeeRef) {
 		NodeRef personRef = null;
-
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> personData = nodeService.getTargetAssocs(employeeRef, ASSOC_EMPLOYEE_PERSON_DATA);
 			if (personData.size() > 0) {
@@ -633,8 +641,8 @@ public class OrgstructureBean {
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
-				NodeRef staff = getStaffByEmployeeLink(link.getTargetRef());
-				if (isProperType(staff, types)) {
+				NodeRef staff = getStaffByEmployeeLink(link.getSourceRef());
+				if (staff != null && isProperType(staff, types)) {
 					positions.add(staff);
 				}
 			}
@@ -712,9 +720,16 @@ public class OrgstructureBean {
 
 			List<ChildAssociationRef> links = nodeService.getChildAssocs(positionRef, link);
 			if (links.size() > 0) {
-				employeeLink = links.get(0).getChildRef();
+                NodeRef empRef = links.get(0).getChildRef();
+                if(!isArchive(empRef)){
+                    employeeLink = empRef;   
+                }
 			}
 		}
 		return employeeLink;
 	}
+    
+    public boolean isArchive(NodeRef ref){
+        return ref.getStoreRef().getProtocol().equals("archive");    
+    }
 }

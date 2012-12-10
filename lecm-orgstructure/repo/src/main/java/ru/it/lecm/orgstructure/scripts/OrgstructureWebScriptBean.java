@@ -1,5 +1,10 @@
 package ru.it.lecm.orgstructure.scripts;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -19,11 +24,6 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author dbashmakov
@@ -473,9 +473,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef ref = new NodeRef(employeeRef);
 		if (this.services.getNodeService().exists(ref)) {
 			if(orgstructureService.isEmployee(ref)) {
-				NodeRef person = orgstructureService.getEmployeePerson(ref);
+				NodeRef person = orgstructureService.getEmployeePersonalData(ref);
 				if (person != null) {
-				return new ScriptNode(person, this.services, getScope());
+					return new ScriptNode(person, this.services, getScope());
 				}
 			}
 		}
@@ -588,4 +588,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			return null;
 		}
 	}
+
+    /**
+     * Получение списка ролей в рабочих группах, занимаемых сотрудником
+     */
+    public Scriptable getEmployeeRoles(String employeeRef) {
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+        NodeRef ref = new NodeRef(employeeRef);
+        List<NodeRef> roles = orgstructureService.getEmployeeWorkForces(ref);
+        return createScriptable(roles);
+    }
 }

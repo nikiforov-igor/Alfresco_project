@@ -211,7 +211,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				 * Отображать или скрывать столбец с checkbox-ами
 				 * по-умолчанию - отображать
 				 */
-				showCheckboxColumn: true
+				showCheckboxColumn: true,
+
+                /**
+                 * Отображать или скрывать столбец с action-ами
+                 * по-умолчанию - отображать
+                 */
+                showActionColumn: true
             },
 
             /**
@@ -569,26 +575,28 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 var me = this;
 
-                // Hook action events
-                var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
-                {
-                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
-                    if (owner !== null)
+                if (this.options.showActionColumn){
+                    // Hook action events
+                    var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
                     {
-                        if (typeof me[owner.className] == "function")
+                        var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                        if (owner !== null)
                         {
-                            args[1].stop = true;
-                            var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
-                            if (row) {
-                                var asset = row.getData();
-                                me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
+                            if (typeof me[owner.className] == "function")
+                            {
+                                args[1].stop = true;
+                                var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
+                                if (row) {
+                                    var asset = row.getData();
+                                    me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
+                                }
                             }
                         }
-                    }
-                    return true;
-                };
-                Bubbling.addDefaultAction("action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
-                Bubbling.addDefaultAction("show-more", fnActionHandler);
+                        return true;
+                    };
+                    Bubbling.addDefaultAction("action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
+                    Bubbling.addDefaultAction("show-more", fnActionHandler);
+                }
 
                 // Actions module
                 this.modules.actions = new LogicECM.module.Base.Actions();
@@ -705,7 +713,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
-                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType)),
+                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.formId != null && this.datagridMeta.formId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.formId) : "")),
                         successCallback:
                         {
                             fn: this.onDataGridColumns,
@@ -870,7 +878,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @private
              */
             _setupDataSource:function () {
-                var uriSearchResults = Alfresco.constants.PROXY_URI + "lecm/search";
+                var ds = this.options.dataSource ? this.options.dataSource : "lecm/search";
+                var uriSearchResults = Alfresco.constants.PROXY_URI + ds;
                 var dSource = new YAHOO.util.DataSource(uriSearchResults,
                     {
                         connMethodPost:true,
@@ -968,11 +977,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             formatter:this.getCellFormatter(column.dataType)
                         });
                 }
-
-                // Add actions as last column
-                columnDefinitions.push(
-                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
-                );
+                if (this.options.showActionColumn){
+                    // Add actions as last column
+                    columnDefinitions.push(
+                        { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
+                    );
+                }
                 return columnDefinitions;
             },
             beforeRenderFunction:function () {
@@ -1581,7 +1591,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var label = obj.bubblingLabel;
                     if(this._hasEventInterest(label)){
                         this.datagridMeta = obj.datagridMeta;
-                        this.datagridMeta.bubblingLabel = obj.bubblingLabel;
+                        this.datagridMeta.bubblingLabel = this.options.bubblingLabel;
                         // Could happen more than once, so check return value of fulfil()
                         if (!this.deferredListPopulation.fulfil("onGridTypeChanged")) {
                             this.populateDataGrid();
@@ -1972,6 +1982,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         var fullDelete = actionsConfig.fullDelete;
                         if (fullDelete != null) {
                             query = query + "full=" + fullDelete;
+                        }
+                        var target = actionsConfig.targetDelete;
+                        if (target != null) {
+                            query = query + (query.length > 0 ? "&": "") +  "target=" + target;
                         }
                     }
                     this.modules.actions.genericAction(

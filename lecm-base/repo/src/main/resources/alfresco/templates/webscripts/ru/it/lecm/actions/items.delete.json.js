@@ -1,4 +1,4 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/action/action.lib.js">
+/*<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/action/action.lib.js">*/
 
 /**
  * Copyright (C) 2005-2010 Alfresco Software Limited.
@@ -43,7 +43,7 @@ function runAction(p_params) {
     }
 
     var full = args["full"] != null ? args["full"] : false;
-
+    var target = args["target"] != null ? args["target"] : false;
     for (item in items) {
         nodeRef = items[item];
         result =
@@ -66,20 +66,21 @@ function runAction(p_params) {
                         target.removeAssociation(itemNode, key);
                     }
                 }
-                var tAssocs;
-                tAssocs = itemNode.getAssocs();
-                // удалить все ссылки на объект
-                for (key in tAssocs) {
-                    var assocsList = tAssocs[key];
-                    for (index in assocsList) {
-                        var target = assocsList[index];
-                        itemNode.removeAssociation(target, key);
-                    }
-                }
                 if (full == "false") {// пометить объект как неактивный
                     itemNode.properties["lecm-dic:active"] = false;
                     result.success = itemNode.save();
                 } else {//реальное удаление объекта
+                    if (target == "true") {
+                        var tAssocs;
+                        tAssocs = itemNode.getAssocs();
+                        for (key in tAssocs) {
+                            var assocsList = tAssocs[key];
+                            for (index in assocsList) {
+                                var target = assocsList[index];
+                                itemNode.removeAssociation(target, key);
+                            }
+                        }
+                    }
                     result.success = itemNode.remove();
                 }
             }

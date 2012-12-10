@@ -80,7 +80,8 @@
 										itemType: "lecm-orgstr:workforce",
 										nodeRef: selectItem.getData().nodeRef,
 										actionsConfig: {
-											fullDelete:true
+											fullDelete:true,
+											targetDelete:true
 										}
 									},
 									bubblingLabel: "workForce"

@@ -189,13 +189,14 @@ function createPostBody(itemKind, itemId, visibleFields, formConfig)
 function main()
 {
    var itemType = getArgument("itemType"),
-      columns = [],
+       formId = getArgument("formId", "datagrid"),
+       columns = [],
 	   columnDefs = [];
    
    if (itemType !== null && itemType.length > 0)
    {
       // get the config for the form
-      var formConfig = getFormConfig(itemType, "datagrid");
+      var formConfig = getFormConfig(itemType, formId);
       
       // может содержать форматную строку для колонки послке "|"
       var visibleFields = getVisibleFields("view", formConfig);

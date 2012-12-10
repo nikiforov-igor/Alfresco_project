@@ -24,6 +24,8 @@
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
                     <set id="personal" appearance="" label-id="info.personal-info" />
+                    <set id="positions" appearance="" label-id="info.personal-positions" />
+                    <set id="groups" appearance="" label-id="info.personal-groups" />
                     <field id="lecm-orgstr:employee-first-name" set="common"/>
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
@@ -39,11 +41,23 @@
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
                         <control template="/ru/it/lecm/orgstructure/controls/viewPersonalData.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:employee-positions" set="personal">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    <field id="lecm-orgstr:employee-positions" set="positions">
+                        <control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-orgstr:staff-list</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="formId">employee-positions</control-param>
+                            <control-param name="ds">lecm/orgstructure/ds/employee-positions</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-orgstr:employee-roles" set="personal">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    <field id="lecm-orgstr:employee-roles" set="groups">
+                        <control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-orgstr:workforce</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="formId">employee-groups</control-param>
+                            <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -313,38 +327,6 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:office">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:office-short-name"/>
-                    <show id="lecm-orgstr:office-phone"/>
-                    <show id="lecm-orgstr:office-fax"/>
-                    <show id="lecm-orgstr:office-address"/>
-                    <show id="lecm-orgstr:office-transit-scheme"/>
-                    <show id="lecm-dic:active"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="model-type" condition="lecm-orgstr:office">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-orgstr:office-short-name"/>
-                    <show id="lecm-orgstr:office-phone"/>
-                    <show id="lecm-orgstr:office-fax"/>
-                    <show id="lecm-orgstr:office-address"/>
-                    <show id="lecm-orgstr:office-transit-scheme"/>
-                    <show id="lecm-dic:active"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
     <config evaluator="node-type" condition="lecm-orgstr:personal-data">
         <forms>
             <form>
@@ -474,6 +456,12 @@
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                 </field-visibility>
             </form>
+            <form id="employee-groups">
+                <field-visibility>
+                    <show id="lecm-orgstr:workforce-group|{../lecm-orgstr:element-short-name}" force="true"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 
@@ -532,6 +520,13 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                     <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:staff-list-is-boss"/>
+                </field-visibility>
+            </form>
+            <form id="employee-positions">
+                <field-visibility>
+                    <show id="lecm-orgstr:staff-unit|{../lecm-orgstr:element-short-name}" force="true"/>
+                    <show id="lecm-orgstr:element-member-position-assoc"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
             </form>
