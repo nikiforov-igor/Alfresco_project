@@ -73,9 +73,10 @@ function showDialogCreate(nodeRef){
 										assocType:"lecm-orgstr:employee-person-data-assoc"
 									},
 									successCallback:{
-										fn:function(){drawForm(response.json.persistedObject);
-											Dom.get("${id}-createPersonalData").hidden = true;
-											Dom.get("${id}-editPersonalData").hidden = false;
+										fn:function(){
+											Dom.removeClass("${id}-editPersonalData", 'hidden');
+											Dom.addClass("${id}-createPersonalData", 'hidden');
+											drawForm(response.json.persistedObject);
 										},
 										scope:this
 									},
@@ -92,7 +93,7 @@ function showDialogCreate(nodeRef){
 					fn:function DataGrid_onActionCreate_failure(response) {
 						Alfresco.util.PopupManager.displayMessage(
 								{
-									text:"Данные не зугружены"
+									text:"Данные не загружены"
 								});
 					},
 					scope:this
