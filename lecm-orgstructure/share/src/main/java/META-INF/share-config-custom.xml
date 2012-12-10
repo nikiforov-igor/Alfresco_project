@@ -471,6 +471,7 @@
             <form>
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:staff-list-description"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>
@@ -482,6 +483,9 @@
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-orgstr:staff-list-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-orgstr:staff-list-is-boss">
                         <control template="/ru/it/lecm/orgstructure/controls/control.boss.ftl"/>
@@ -497,6 +501,7 @@
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
+                    <show id="lecm-orgstr:staff-list-description"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>
@@ -511,6 +516,9 @@
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-orgstr:staff-list-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-orgstr:staff-list-is-boss">
                         <control template="/ru/it/lecm/orgstructure/controls/control.boss.ftl"/>
