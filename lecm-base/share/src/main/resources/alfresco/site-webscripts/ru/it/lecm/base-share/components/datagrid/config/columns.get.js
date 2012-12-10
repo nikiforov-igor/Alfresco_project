@@ -256,7 +256,7 @@ function main()
 			colDef = {
 				type:"",
 				name:obj,
-				label:obj,
+				label:"",
 				dataType:""
 			}
 		}

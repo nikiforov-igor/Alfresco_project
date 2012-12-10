@@ -959,7 +959,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     columnDefinitions.push(
                         {
                             key:this.dataResponseFields[i],
-                            label:column.label,
+                            label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
                             sortable:true,
                             sortOptions:{
                                 field:column.formsName,

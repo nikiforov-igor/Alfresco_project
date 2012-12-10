@@ -99,6 +99,7 @@
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-phone"/>
 	                <show id="lecm-orgstr:employee-main-unit|{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}" force="true"/>
+	                <show id="lecm-orgstr:employee-main-position|{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}" force="true"/>
                     <show id="lecm-orgstr:employee-email"/>
                 </field-visibility>
             </form>
