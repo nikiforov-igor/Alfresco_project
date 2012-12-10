@@ -125,7 +125,6 @@
 
 			function init() {
 				createDatagrid("lecm-orgstr:employee-last-name");
-				createDialog(); // call method from lecm-datagrid.ftl#macro viewFor"
 			}
 
 			YAHOO.util.Event.onDOMReady(init);

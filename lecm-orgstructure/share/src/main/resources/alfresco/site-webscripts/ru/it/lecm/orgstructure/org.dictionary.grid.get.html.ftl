@@ -119,7 +119,6 @@
 
 			function init() {
 				createDatagrid("cm:name");
-				createDialog(); // call method from lecm-datagrid.ftl#macro viewFor"
 			}
 
 			YAHOO.util.Event.onDOMReady(init);

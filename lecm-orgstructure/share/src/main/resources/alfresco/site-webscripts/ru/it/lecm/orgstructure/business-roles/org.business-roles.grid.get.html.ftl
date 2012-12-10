@@ -20,8 +20,6 @@ datagrid.setOptions ({
 	]
 });
 datagrid.setMessages (${messages});
-
-YAHOO.util.Event.onContentReady ("view-node-form", createDialog);
 //]]>
 </script>
 

@@ -120,7 +120,6 @@ function loadDictionary() {
 
 function init() {
 	loadDictionary();
-	createDialog(); // call method from lecm-datagrid.ftl#macro viewFor"
 }
 
 YAHOO.util.Event.onDOMReady(init);

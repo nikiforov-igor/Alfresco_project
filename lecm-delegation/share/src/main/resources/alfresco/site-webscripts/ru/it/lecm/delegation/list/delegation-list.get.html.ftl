@@ -13,7 +13,6 @@
 	datagrid.setMessages(${messages});
 
 	YAHOO.util.Event.onContentReady ('${id}', function () {
-	    createDialog(); // call method from lecm-datagrid.ftl#macro viewFor"
 		YAHOO.Bubbling.fire ("activeGridChanged", {
 			datagridMeta:{
 				itemType: LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER.itemType,

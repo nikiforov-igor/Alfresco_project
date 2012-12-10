@@ -5,7 +5,7 @@
 viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
 -->
 <#macro viewForm viewFormId="view-node-form">
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 	var viewDialog = null;
 
 	function viewAttributes(nodeRef) {
@@ -48,6 +48,10 @@ viewFormId(необязательный) - по умолчанию равен vi
 					width:"487px"
 				});
 	}
+
+	//инициализация view-node-form для того, чтобы каждый раз самостоятельно не вызывать этот метод
+	YAHOO.util.Event.onContentReady ("${viewFormId}", createDialog);
+//]]>
 </script>
 <div id="${viewFormId}" class="yui-panel">
 	<div id="${viewFormId}-head" class="hd">${msg("logicecm.dictionary.view")}</div>
