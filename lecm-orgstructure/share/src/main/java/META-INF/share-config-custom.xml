@@ -273,6 +273,7 @@
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
+                    <show id="lecm-orgstr:boss|{cm:contains(lecm-orgstr:staff-list-is-boss=true)/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
                     <show id="lecm-orgstr:unit-code"/>
                 </field-visibility>
             </form>
@@ -452,7 +453,7 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+	                <show id="lecm-orgstr:employee|{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                 </field-visibility>
             </form>
@@ -519,7 +520,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
+                    <show id="lecm-orgstr:employee|{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
             </form>
