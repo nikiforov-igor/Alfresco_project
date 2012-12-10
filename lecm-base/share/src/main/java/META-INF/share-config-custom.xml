@@ -41,6 +41,8 @@
 			        <control-param name="plane">true</control-param>
 			        <control-param name="showCreateNewLink">false</control-param>
 			        <control-param name="showCreateNewButton">false</control-param>
+                    <!-- Настройка для bubbling. type1:nameAction1,nameAction2|type2:nameAction1,nameAction2-->
+                    <control-param name="fireAction">addItem:checkboxMainJob</control-param>
 		        </type>
 		        <type name="association:lecm-orgstr:workRole" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 			        <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>

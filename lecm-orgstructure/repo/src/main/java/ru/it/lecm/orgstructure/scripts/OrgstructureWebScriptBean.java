@@ -1,10 +1,5 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -24,6 +19,11 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dbashmakov
@@ -576,6 +576,16 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			return new ScriptNode(bossExists, services, getScope());
 		} else {
 		return null;
+		}
+	}
+
+	public ScriptNode getMainJob(String employee) {
+		NodeRef employeeRef = new NodeRef(employee);
+		NodeRef mainJob = orgstructureService.getEmployeePrimaryStaff(employeeRef);
+		if (mainJob != null) {
+			return new ScriptNode(mainJob, services, getScope());
+		} else {
+			return null;
 		}
 	}
 }

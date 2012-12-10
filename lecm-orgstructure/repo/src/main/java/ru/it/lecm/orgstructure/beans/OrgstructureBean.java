@@ -542,8 +542,8 @@ public class OrgstructureBean {
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
-				if ((Boolean) nodeService.getProperty(link.getTargetRef(), PROP_EMP_LINK_IS_PRIMARY)) {
-					primaryStaff = getStaffByEmployeeLink(link.getTargetRef());
+				if ((Boolean) nodeService.getProperty(link.getSourceRef(), PROP_EMP_LINK_IS_PRIMARY)) {
+					primaryStaff = getStaffByEmployeeLink(link.getSourceRef());
 					if (isStaffList(primaryStaff)) {
 						break;
 					}

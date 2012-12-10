@@ -106,7 +106,20 @@ LogicECM.module = LogicECM.module || {};
 
             nameSubstituteString: "{cm:name}",
 
-			selectedItemsNameSubstituteString: null
+			selectedItemsNameSubstituteString: null,
+
+            // fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
+            fireAction:
+            {
+                // кнопка addItem + в таблице элемента выбора
+                addItem: null,
+                // кнопка ok при submite
+                ok: null,
+                // кнопка cancel
+                cancel: null,
+                // кнопка поиска
+                find: null
+            }
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -725,6 +738,15 @@ LogicECM.module = LogicECM.module || {};
                                 item: record.getData(),
                                 highlight: true
                             });
+                        if (me.options.fireAction.addItem != null) {
+                            var fireName = me.options.fireAction.addItem.split(",");
+                            for (var i in fireName){
+                                YAHOO.Bubbling.fire(fireName[i],
+                                    {
+                                        nodeRef: record.getData().nodeRef
+                                    });
+                            }
+                        }
                     }
                 }
                 return true;

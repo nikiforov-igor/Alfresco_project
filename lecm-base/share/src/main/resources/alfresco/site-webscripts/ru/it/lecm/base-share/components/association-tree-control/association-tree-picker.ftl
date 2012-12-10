@@ -82,6 +82,9 @@
             <#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
         </#if>
     </#if>
+    <#assign optionSeparator="|">
+    <#assign labelSeparator=":">
+
 
     new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
@@ -115,6 +118,21 @@
         currentValue: "${field.value!''}",
         showSelectedItemsPath: ${showSelectedItemsPath?string},
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
+	    <#if field.control.params.fireAction?? && field.control.params.fireAction != "">
+	    fireAction: {
+		    <#list field.control.params.fireAction?split(optionSeparator) as typeValue>
+			    <#if typeValue?index_of(labelSeparator) != -1>
+				    <#assign type=typeValue?split(labelSeparator)>
+				    <#if type[0] == "addItem">
+					    addItem: "${type[1]}",
+				    </#if>
+				    <#if type[0] == "cancel">
+					    cancel: "${type[1]}",
+				    </#if>
+			    </#if>
+		    </#list>
+	    },
+	    </#if>
         itemType: "${field.endpointType}"
     }).setMessages( ${messages} );
 </script>
