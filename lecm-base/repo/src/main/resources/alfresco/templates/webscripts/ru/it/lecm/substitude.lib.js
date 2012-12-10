@@ -86,6 +86,7 @@ function getSubstitudeField(node, field) {
 	var showNode = node;
 	var fieldName = null;
 	var transitions = [];
+	field = "" + field; //хак, приведение типа
 
 	if (field.indexOf(SPLIT_TRANSITIONS_SYMBOL) != -1) {
 		var firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
