@@ -50,49 +50,38 @@ if (statemachineId != null && statemachineId != '') {
 			continue;
 		}
 		var actionsNodes = status.getChildren();
-		var startActions = [];
-		var userActions = [];
-		var transitionActions = [];
-		var endActions = [];
+		var transitions = [];
 		for each (var action in actionsNodes) {
 			var actionId = action.properties["lecm-stmeditor:actionId"];
 			var type = action.properties["lecm-stmeditor:actionExecution"];
-			var transitions = [];
 			var actionChildren = action.getChildren();
 			for each (var transition in actionChildren) {
 				if (transition.assocs["lecm-stmeditor:transitionStatus"] != null) {
 					var transitionStatus = transition.assocs["lecm-stmeditor:transitionStatus"][0];
-					if (transitionStatus.properties["lecm-stmeditor:endStatus"]) {
-						transitions.push("Завершено");
-					} else {
-						transitions.push(transitionStatus.properties["cm:name"]);
+					var transitionLabel = transition.properties["lecm-stmeditor:transitionLabel"];
+					var userTransition = transitionLabel != null;
+					if (!userTransition) {
+						transitionLabel = transition.properties["lecm-stmeditor:transitionExpression"];
 					}
+					var transitionStatusLabel;
+					if (transitionStatus.properties["lecm-stmeditor:endStatus"]) {
+						transitionStatusLabel = "Завершено";
+					} else {
+						transitionStatusLabel = transitionStatus.properties["cm:name"];
+					}
+					transitions.push({
+						user: userTransition,
+						exp: transitionLabel,
+						status: transitionStatusLabel
+					});
+
 				}
 			}
-			var actionDescriptor = {
-					actionName: actionsBean.getActionTitle(actionId),
-					actionId: actionId,
-					nodeRef: action.nodeRef.toString(),
-					transitions: transitions
-				};
-			if (type == "start") {
-				startActions.push(actionDescriptor);
-			} else if (type == "user") {
-				userActions.push(actionDescriptor);
-			} else if (type == "transition") {
-				transitionActions.push(actionDescriptor);
-			} else if (type == "end") {
-				endActions.push(actionDescriptor);
-			}
-
 		}
 		statuses.push({
 			name: status.properties["cm:name"] + (status.properties["lecm-stmeditor:startStatus"] ? " (S)" : ""),
 			nodeRef: status.nodeRef.toString(),
-			startActions: startActions,
-			userActions: userActions,
-			transitionActions: transitionActions,
-			endActions: endActions,
+			transitions: transitions,
 			editable: "true"
 		});
 	}
@@ -101,10 +90,7 @@ if (statemachineId != null && statemachineId != '') {
 		statuses.push({
 			name: "Завершено",
 			nodeRef: endStatus.nodeRef.toString(),
-			startActions: [],
-			userActions: [],
-			transitionActions: [],
-			endActions: [],
+			transitions: [],
 			editable: "false"
 		});
 	}

@@ -97,7 +97,7 @@
 		<!-- Объект описывающий переход для действия -->
 		<type name="lecm-stmeditor:transition">
 			<title>Logic ECM Statemachine Transition Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:cmob ject</parent>
 			<properties>
 				<property name="lecm-stmeditor:transitionExpression">
 					<type>d:text</type>
@@ -177,14 +177,9 @@
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>
 			<parent>cm:cmobject</parent>
-			<properties>
-				<property name="lecm-stmeditor:userTransitionLabel">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -192,14 +187,9 @@
 		<type name="lecm-stmeditor:transitionWorkflow">
 			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
 			<parent>cm:folder</parent>
-			<properties>
-				<property name="lecm-stmeditor:transitionWorkflowLabel">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
 			</mandatory-aspects>
 		</type>
@@ -273,6 +263,16 @@
 					</target>
 				</association>
 			</associations>
+		</aspect>
+
+		<aspect name="lecm-stmeditor:transitionLabelAspect">
+			<title>Transition Label Aspect</title>
+			<properties>
+				<property name="lecm-stmeditor:transitionLabel">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 		</aspect>
 
 		<aspect name="lecm-stmeditor:workflowAspect">

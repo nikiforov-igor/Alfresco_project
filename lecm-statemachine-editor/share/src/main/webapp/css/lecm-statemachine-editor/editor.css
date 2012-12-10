@@ -4,107 +4,33 @@
 
 .lecm_tbl_td_h {
 	background-color: #d3d3d3;
+	text-align: center;
+}
+
+.lecm_tbl_td_odd {
+	background-color: white;
+}
+
+.lecm_tbl_td_even {
+	background-color: #eee;
 }
 
 .lecm_tbl_td {
 	background-color: white;
 }
 
-
-
-
-.container {
-	width: 680px;
-	margin: auto auto 3px;
-	border: solid black 1px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 5px;
-	background-color: #ffffff;
-	overflow: hidden;
+.lecm_tbl_td_empty {
+	padding: 0;
 }
 
-.status_dis {
-	float: left;
-	width: 150px;
-}
-
-.status_name {
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.actions_cont {
-	float: right;
-	border-left: 1px solid #808080;
-	width: 510px;
-	padding-left: 5px;
-}
-
-.action_cont_header {
-	overflow: hidden;
-	border-bottom: 1px solid #eeeeee;
-	padding-bottom: 5px;
-	margin-bottom: 5px;
-}
-
-.action_cont {
-	overflow: hidden;
-	border-bottom: 1px solid #eeeeee;
-	padding: 0 0 5px 0;
-	margin-bottom: 5px;
-}
-
-.action_name_header {
-	float: left;
-}
-
-.action_name {
-	float: left;
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.action_results_cont {
-	float: right;
-	width: 200px
-}
-
-.add_status {
-	background: URL('/share/res/components/images/add-icon-16.png') 0 0 no-repeat;
-	padding-left: 18px;
-	margin-right: 10px;
-	cursor: pointer;
-}
-
-.add_action {
-	background: URL('/share/res/components/images/add-icon-16.png') 0 0 no-repeat;
-	cursor: pointer;
-}
-
-span.insitu-edit-unit
-{
-	background-image: url(/share/res/components/images/edit-16.png);
-	background-repeat: no-repeat;
-	cursor: pointer;
-	height: 16px;
-	margin-left: 10px;
-	opacity: 0;
-	position: absolute;
-	visibility: hidden;
+.lecm_tbl_action_edit {
 	width: 16px;
+	background-image: url('/share/res/components/images/edit-16.png');
+	cursor: pointer;
 }
 
-span.insitu-delete-unit
-{
-	background-image: url(/share/res/components/images/delete-16.png);
-	background-repeat: no-repeat;
-	cursor: pointer;
-	height: 16px;
-	margin-left: 30px;
-	opacity: 0;
-	position: absolute;
-	visibility: hidden;
+.lecm_tbl_action_delete {
 	width: 16px;
+	background-image: url('/share/res/components/images/delete-16.png');
+	cursor: pointer;
 }

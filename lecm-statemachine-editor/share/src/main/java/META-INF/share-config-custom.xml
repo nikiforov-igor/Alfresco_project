@@ -211,11 +211,11 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:userTransitionLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:userTransitionLabel"/>
+					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
@@ -232,11 +232,11 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:userTransitionLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:userTransitionLabel"/>
+					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
@@ -253,12 +253,12 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:transitionWorkflowLabel" />
+					<field id="lecm-stmeditor:transitionLabel" />
 					<field id="lecm-stmeditor:workflowId">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
@@ -276,7 +276,7 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 				</field-visibility>
 			</form>
@@ -287,14 +287,14 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:transitionWorkflowLabel" force="true"/>
+					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:transitionWorkflowLabel" />
+					<field id="lecm-stmeditor:transitionLabel" />
 					<field id="lecm-stmeditor:workflowId">
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>

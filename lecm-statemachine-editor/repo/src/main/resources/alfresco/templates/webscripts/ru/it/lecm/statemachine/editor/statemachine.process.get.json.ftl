@@ -14,44 +14,21 @@
     name: "${status.name}",
     nodeRef: "${status.nodeRef}",
     editable: ${status.editable},
-    startActions: [
-        <#list status.startActions as action>
-            <@printAction action />
-            <#if action_has_next>,</#if>
-        </#list>
-    ],
-    userActions: [
-        <#list status.userActions as action>
-            <@printAction action />
-            <#if action_has_next>,</#if>
-        </#list>
-    ],
-    transitionActions: [
-        <#list status.transitionActions as action>
-            <@printAction action />
-            <#if action_has_next>,</#if>
-        </#list>
-    ],
-    endActions: [
-        <#list status.endActions as action>
-            <@printAction action />
-            <#if action_has_next>,</#if>
+    transitions: [
+        <#list status.transitions as transition>
+            <@printTransition transition />
+            <#if transition_has_next>,</#if>
         </#list>
     ]
 }
 </#macro>
 
-<#macro printAction action>
-{
-    actionName: "${action.actionName!"null"}",
-    actionId: "${action.actionId!"null"}",
-    nodeRef: "${action.nodeRef!"null"}",
-    transitions: [
-                <#list action.transitions as transition>
-                    "${transition}"
-                    <#if transition_has_next>,</#if>
-                </#list>
-                 ]
-}
+<#macro printTransition transition>
+    {
+        user: ${transition.user?string},
+        exp: "${transition.exp!"null"}",
+        status: "${transition.status}"
+    }
 </#macro>
+
 </#escape>

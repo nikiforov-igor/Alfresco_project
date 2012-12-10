@@ -54,72 +54,6 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		draw: function () {
-			this.onResize();
-			YAHOO.util.Event.on(window, "resize", function(e)
-			{
-				this.onResize();
-			}, this, true);
-
-			this._showSplash();
-			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions";
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-					var oResults = eval("(" + oResponse.responseText + ")");
-					oResponse.argument.parent.startActionsMenu = new YAHOO.widget.Menu("startActionsMenu");
-					oResponse.argument.parent._addMenu(oResponse.argument.parent.startActionsMenu, oResults.start, "start");
-					oResponse.argument.parent.userActionsMenu = new YAHOO.widget.Menu("userActionsMenu");
-					oResponse.argument.parent._addMenu(oResponse.argument.parent.userActionsMenu, oResults.user, "user");
-					oResponse.argument.parent.transitionActionsMenu = new YAHOO.widget.Menu("takeActionsMenu");
-					oResponse.argument.parent._addMenu(oResponse.argument.parent.transitionActionsMenu, oResults.transition, "transition");
-					oResponse.argument.parent.endActionsMenu = new YAHOO.widget.Menu("endActionsMenu");
-					oResponse.argument.parent._addMenu(oResponse.argument.parent.endActionsMenu, oResults.end, "end");
-					oResponse.argument.parent._redraw();
-				},
-				argument:{
-					parent: this
-				},
-				timeout: 20000
-			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-
-		},
-
-		_addMenu: function(menu, receivedItems, type) {
-			var items = [];
-			for (var i = 0; i < receivedItems.length; i++) {
-				items.push({
-					text: receivedItems[i].title,
-					value: receivedItems[i].id
-				});
-			}
-			menu.addItems(items);
-			menu.render(document.body);
-			menu.subscribe("click", function (p_sType, p_aArgs) {
-				this._addAction(p_sType, p_aArgs, type);
-			}.bind(this));
-		},
-
-		onResize: function() {
-			Dom.setStyle(this.id, "height", "");
-			var h = Dom.getXY("alf-ft")[1] - Dom.getXY("alf-hd")[1] - Dom.get("alf-hd").offsetHeight - 92;
-
-			if (YAHOO.env.ua.ie === 6)
-			{
-				var hd = Dom.get("alf-hd"), tmpHeight = 0;
-				for (var i = 0, il = hd.childNodes.length; i < il; i++)
-				{
-					tmpHeight += hd.childNodes[i].offsetHeight;
-				}
-				h = Dom.get("alf-ft").parentNode.offsetTop - tmpHeight;
-			}
-			if (h < 200) {
-				h = 200;
-			}
-			Dom.setStyle(this.id, "height", h + "px");
-		},
-
-		_redraw: function() {
 			var el = document.getElementById("statuses-cont");
 			el.innerHTML = "";
 
@@ -147,25 +81,6 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_drawElements: function(rootElement, statusesModel) {
-			/*
-			<table width="100%" cellpadding="3" cellspacing="1" border="0" class="lecm_tbl">
-				<tr>
-					<td class="lecm_tbl_td_h" rowspan="2">Статус</td>
-					<td class="lecm_tbl_td_h" colspan="3">Переходы</td>
-					<td class="lecm_tbl_td_h" rowspan="2">Действия</td>
-				</tr>
-				<tr>
-					<td class="lecm_tbl_td_h">Тип перехода</td>
-					<td class="lecm_tbl_td_h">Условие</td>
-					<td class="lecm_tbl_td_h">Статус</td>
-				</tr>
-				<tr>
-					<td class="lecm_tbl_td">Статус</td>
-					<td class="lecm_tbl_td" colspan="3">Переходы</td>
-					<td class="lecm_tbl_td">Действия</td>
-				</tr>
-			</table>
-			*/
 			var table = document.createElement("table");
 			table.className = "lecm_tbl";
 			table.width = "100%";
@@ -189,7 +104,7 @@ LogicECM.module = LogicECM.module || {};
 			td = document.createElement("td");
 			td.rowSpan = 2;
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Статус";
+			td.innerHTML = "Действия";
 			tr.appendChild(td);
 
 			table.appendChild(tr);
@@ -207,25 +122,6 @@ LogicECM.module = LogicECM.module || {};
 
 			td = document.createElement("td");
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Статус";
-			tr.appendChild(td);
-
-			table.appendChild(tr);
-
-			tr = document.createElement("tr");
-			td = document.createElement("td");
-			td.className = "lecm_tbl_td";
-			td.innerHTML = "Тип перхода";
-			tr.appendChild(td);
-
-			td = document.createElement("td");
-			td.className = "lecm_tbl_td";
-			td.colSpan = 3;
-			td.innerHTML = "Условие";
-			tr.appendChild(td);
-
-			td = document.createElement("td");
-			td.className = "lecm_tbl_td";
 			td.innerHTML = "Статус";
 			tr.appendChild(td);
 
@@ -233,171 +129,113 @@ LogicECM.module = LogicECM.module || {};
 
 			rootElement.appendChild(table);
 
-			var container = this._createContainer(rootElement, "addMenu");
-			var addNew = document.createElement('a');
-			addNew.id = "new-status";
-			addNew.className = "add_status";
-			addNew.innerHTML = "Добавить статус";
-			container.appendChild(addNew);
-
-			var addNewelement = new YAHOO.util.Element("new-status");
-			addNewelement.on("click", this._createStatus.bind(this));
-
-			var editStemachine = document.createElement('a');
-			editStemachine.id = "edit-status";
-			editStemachine.className = "add_status";
-			editStemachine.innerHTML = "Свойства";
-			container.appendChild(editStemachine);
-
-			var editStemachineElement = new YAHOO.util.Element("edit-status");
-			editStemachineElement.on("click", this._editStatemachine.bind(this));
-
-			var deploy = document.createElement('a');
-			deploy.id = "deploy";
-			deploy.className = "add_status";
-			deploy.innerHTML = "Задеплоить";
-			container.appendChild(deploy);
-
-			var deployElement = new YAHOO.util.Element("deploy");
-			deployElement.on("click", this._deployStatemachine.bind(this));
-
 			for (var i = 0; i < statusesModel.length; i++) {
-				var id = "status-" + i;
-				this._createElement(rootElement, id, statusesModel[i]);
+				this._createElement(table, statusesModel[i], i % 2 == 0 ? "odd" : "even");
 			}
 
 		},
 
-		_createContainer: function(parent, containerId) {
-			var container = document.createElement("div");
-			container.id = containerId;
-			parent.appendChild(container);
-			Dom.addClass(containerId, "container");
-			return container;
-		},
+		_createElement: function(table, model, parity) {
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+			td.className = "lecm_tbl_td_" + parity;
+			td.innerHTML = model.name;
+			td.rowSpan = model.transitions.length > 1 ? model.transitions.length : 1;
+			tr.appendChild(td);
 
-		_createElement: function(parent, id, model) {
-			var container = this._createContainer(parent, id);
-			//status
-			var status = document.createElement("div");
-			status.id = id + "-status";
-			container.appendChild(status);
-			Dom.addClass(id + "-status", "status_dis");
-			var statusHeader = document.createElement("div");
-			statusHeader.innerHTML = "<b>Статус</b>";
-			status.appendChild(statusHeader);
-			var statusName = document.createElement("div");
-			statusName.id = id + "-status-name";
-			statusName.innerHTML = model.name;
-			status.appendChild(statusName);
-			Dom.addClass(statusName.id, "status_name");
-
-			if (!model.editable) {
-				return;
+			if (model.transitions.length == 0) {
+				td = document.createElement("td");
+				td.className = "lecm_tbl_td_" + parity;
+				td.colSpan = 3;
+				td.style.textAlign = "center";
+				td.innerHTML = "--";
+				tr.appendChild(td);
+			} else {
+				this._addTransition(tr, model.transitions[0], parity);
 			}
 
-			Alfresco.util.createInsituEditor(
-				statusName.id,
-				{
-					showDelay: 300,
-					hideDelay: 300,
-					type: "statemachineEditActions",
-					nodeRef: model.nodeRef,
-					elementType: "status",
-					elementName: model.name,
-					parent: this
-				},
-				null
-			);
+			td = document.createElement("td");
+			td.className = "lecm_tbl_td_" + parity;
+			td.style.textAlign = "center";
 
-			//actions container
-			var actions = document.createElement("div");
-			actions.id = id + "-actions";
-			container.appendChild(actions);
-			Dom.addClass(id + "-actions", "actions_cont");
+			if (model.editable) {
+				var me = this;
+				var edit = document.createElement("a");
+				edit.className = "lecm_tbl_action_edit";
+				edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+				td.appendChild(edit);
 
-			/************** start Actions *********************/
-			this._createActionsElement(actions, id + "-start", model.startActions, this.startActionsMenu, this.msg("statemachine.execution.start"), model.nodeRef, false);
+				var span = document.createElement("span");
+				span.innerHTML = "&nbsp;&nbsp;";
+				td.appendChild(span);
 
-			/************** user Actions *********************/
-			this._createActionsElement(actions, id + "-user", model.userActions, this.userActionsMenu, this.msg("statemachine.execution.user"), model.nodeRef, false);
+				var del = document.createElement("a");
+				del.className = "lecm_tbl_action_delete";
+				del.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+				td.appendChild(del);
+				tr.appendChild(td);
 
-			/************** transition Actions *********************/
-			this._createActionsElement(actions, id + "-transition", model.transitionActions, this.transitionActionsMenu, this.msg("statemachine.execution.transition"), model.nodeRef, true);
+				YAHOO.util.Event.addListener(del, "click", function() {
 
-			/************** end Actions *********************/
-			this._createActionsElement(actions, id + "-end", model.endActions, this.endActionsMenu, this.msg("statemachine.execution.end"), model.nodeRef, false);
-		},
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							title: "Удаление статуса",
+							text: "Вы действительно хотите удалить статус \"" + model.name + "\"",
+							buttons: [
+								{
+									text: "Удалить",
+									handler: function dlA_onActionDelete_delete()
+									{
+										this.destroy();
+										me._deleteStatus(model.nodeRef);
+									}
+								},
+								{
+									text: "Отмена",
+									handler: function dlA_onActionDelete_cancel()
+									{
+										this.destroy();
+									},
+									isDefault: true
+								}]
+						});
 
-		_createActionsElement: function (container, id, items, menu, title, statusNodeRef, transitionLabel) {
-			//action container header
-			var action = document.createElement("div");
-			action.id = id + "-action-header";
-			container.appendChild(action);
-			Dom.addClass(action.id, "action_cont_header");
-			//action_name header
-			var actionName = document.createElement("div");
-			actionName.id = id + "-action-name-header";
-			actionName.innerHTML = "<b>" + title +"</b> <a id='" + actionName.id + "-add' class='add_action'>&nbsp;&nbsp;&nbsp;&nbsp;</a>";
-			action.appendChild(actionName);
-			Dom.addClass(actionName.id, "action_name_header");
-
-			var addAction = new YAHOO.util.Element(actionName.id + "-add");
-			addAction.on("click", function (event) {
-				this.currentStatus = statusNodeRef;
-				menu.moveTo(event.clientX, event.clientY);
-				menu.show();
-			}.bind(this));
-
-			//action_results header
-			var actionResults = document.createElement("div");
-			actionResults.id = id + "-action-resilts-header";
-			if (transitionLabel) {
-				actionResults.innerHTML = "<b>Переход</b>";
+				});
 			}
-			action.appendChild(actionResults);
-			Dom.addClass(actionResults.id, "action_results_cont");
 
-			for (var i = 0; i < items.length; i++) {
-				var actionModel = items[i];
-				//action container
-				var action = document.createElement("div");
-				action.id = id + "-action-" + i;
-				container.appendChild(action);
-				Dom.addClass(action.id, "action_cont");
-				//action_name
-				var actionName = document.createElement("div");
-				actionName.id = id + "-action-name-" + i;
-				actionName.innerHTML = actionModel.actionName;
-				action.appendChild(actionName);
-				Dom.addClass(actionName.id, "action_name");
+			td.rowSpan = model.transitions.length > 1 ? model.transitions.length : 1;
+			tr.appendChild(td);
 
-				Alfresco.util.createInsituEditor(
-					actionName.id,
-					{
-						showDelay: 300,
-						hideDelay: 300,
-						type: "statemachineEditActions",
-						nodeRef: actionModel.nodeRef,
-						elementType: "action",
-						elementName: actionModel.actionName,
-						parent: this
-					},
-					null
-				);
+			table.appendChild(tr);
 
-				//action_results
-				var actionResults = document.createElement("div");
-				actionResults.id = id + "-action-resilts-" + i;
-				action.appendChild(actionResults);
-				Dom.addClass(actionResults.id, "action_results_cont");
-				//action result
-				for (var j = 0; j < actionModel.transitions.length; j++) {
-					var result = document.createElement("div");
-					result.innerHTML = actionModel.transitions[j];
-					actionResults.appendChild(result);
+			if (model.transitions.length > 1) {
+				for (var i = 1; i < model.transitions.length; i++) {
+					tr = document.createElement("tr");
+					this._addTransition(tr, model.transitions[i], parity);
+					table.appendChild(tr);
 				}
 			}
+			tr = document.createElement("tr");
+			td = document.createElement("td");
+			td.colSpan = 5;
+			td.className = "lecm_tbl_td_empty";
+			tr.appendChild(td);
+			table.appendChild(tr);
+		},
+
+		_addTransition: function (trEl, transition, parity) {
+				var td = document.createElement("td");
+				td.className = "lecm_tbl_td_" + parity;
+				td.innerHTML = transition.user ? "По действию пользователя" : "По завершению";
+				trEl.appendChild(td);
+				td = document.createElement("td");
+				td.className = "lecm_tbl_td_" + parity;
+				td.innerHTML = transition.exp;
+				trEl.appendChild(td);
+				td = document.createElement("td");
+				td.className = "lecm_tbl_td_" + parity;
+				td.innerHTML = transition.status;
+				trEl.appendChild(td);
 		},
 
 		_createStatus: function() {
@@ -425,37 +263,11 @@ LogicECM.module = LogicECM.module || {};
 				},
 				onSuccess:{
 					fn:function (response) {
-						this._redraw();
+						this.draw();
 					},
 					scope:this
 				}
 			}).show();
-		},
-
-		_addAction: function(p_sType, p_aArgs, type) {
-			var oEvent = p_aArgs[0];    // DOM Event
-			var oMenuItem = p_aArgs[1]; // YAHOO.widget.MenuItem instance
-			//statusNodeRef
-			//actionId
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/actions?statusNodeRef={statusNodeRef}&actionId={actionId}&type={type}";
-			sUrl = YAHOO.lang.substitute(sUrl, {
-				statusNodeRef: this.currentStatus,
-				actionId: oMenuItem.value,
-				type: type
-			});
-			this._showSplash();
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-					var oResults = eval("(" + oResponse.responseText + ")");
-					oResponse.argument.parent._redraw();
-				},
-				argument:{
-					parent: this
-				},
-				timeout: 20000
-			};
-			YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
 		},
 
 		_setFormDialogTitle:function (p_form, p_dialog) {
@@ -475,7 +287,7 @@ LogicECM.module = LogicECM.module || {};
 			var callback = {
 				success:function (oResponse) {
 					oResponse.argument.parent._hideSplash();
-					oResponse.argument.parent._redraw();
+					oResponse.argument.parent.draw();
 				},
 				argument:{
 					parent: this
@@ -537,7 +349,7 @@ LogicECM.module = LogicECM.module || {};
 						var callback = {
 							success:function (oResponse) {
 								oResponse.argument.parent._hideSplash();
-								oResponse.argument.parent._redraw();
+								oResponse.argument.parent.draw();
 							},
 							argument:{
 								parent: this
@@ -579,58 +391,6 @@ LogicECM.module = LogicECM.module || {};
 
 		},
 
-		_deleteAction: function(nodeRef) {
-			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/actions?nodeRef={nodeRef}";
-			sUrl = YAHOO.lang.substitute(sUrl, {
-				nodeRef: nodeRef
-			});
-			this._showSplash();
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-					oResponse.argument.parent._redraw();
-				},
-				argument:{
-					parent: this
-				},
-				timeout: 20000
-			};
-			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
-		},
-
-		_editAction: function(nodeRef) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&packageNodeRef={packageNodeRef}";
-			templateUrl = YAHOO.lang.substitute(templateUrl, {
-				itemKind:"node",
-				itemId: nodeRef,
-				mode:"edit",
-				submitType:"json",
-				formId:"statemachine-editor-edit-status",
-				packageNodeRef: this.packageNodeRef
-			});
-			this._showSplash();
-			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
-				width:"40em",
-				templateUrl:templateUrl,
-				actionUrl:null,
-				destroyOnHide:true,
-				doBeforeDialogShow:{
-					fn: function(p_form, p_dialog) {
-						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog);
-					},
-					scope: this
-				},
-				onSuccess:{
-					fn:function (response) {
-						this._redraw();
-					},
-					scope:this
-				}
-			}).show();
-
-		},
-
 		_showSplash: function() {
 			this.splashScreen = Alfresco.util.PopupManager.displayMessage(
 				{
@@ -644,6 +404,8 @@ LogicECM.module = LogicECM.module || {};
 		}
 
 	});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Alfresco.widget.InsituEditor.statemachineEditActions = function (p_params) {
 		this.params = YAHOO.lang.merge({}, p_params);
