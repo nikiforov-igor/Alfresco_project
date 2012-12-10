@@ -8,7 +8,8 @@
 	var datagrid = new LogicECM.module.Delegation.DelegationList.Grid('${id}');
 	datagrid.setOptions({
 		usePagination:true,
-		showExtendSearchBlock:true
+		showExtendSearchBlock:true,
+		showCheckboxColumn: false
 	});
 	datagrid.setMessages(${messages});
 

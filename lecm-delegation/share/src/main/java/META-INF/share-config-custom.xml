@@ -230,6 +230,14 @@
 	</config>
 	<config evaluator="node-type" condition="lecm-d8n:delegation-opts">
 		<forms>
+			<form id="view-node-form">
+				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-d8n:delegation-opts-status"/>
+					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
+					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
+				</field-visibility>
+			</form>
 			<form id="delegation-opts-part1">
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
