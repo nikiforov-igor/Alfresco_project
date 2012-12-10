@@ -795,24 +795,21 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="plane">false</control-param>
+							<control-param name="showSearch">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
 						</control>
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-member-assoc">
-<!--						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary</control-param>
+						<control template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="plane">false</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">false</control-param>
-						</control>-->
-						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="compactMode">false</control-param><!-- Determines whether the picker will be shown in compact mode -->
-							<control-param name="displayMode">items</control-param><!-- Determines the way to display current values, the default is "items", when set to "list" the current items are shown in a rich list with buttons to manage the current items -->
-							<control-param name="showTargetLink">false</control-param><!-- Determines whether a link to the document details page will be rendered to content items (only applicable when displayMode is set to "items") -->
-							<control-param name="selectedValueContextProperty">cm:name</control-param><!-- The name of a component binding property or url parameter that contains the values of the items to pre-select in the picker -->
-							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Структура</control-param><!-- Determines where to start the picker -->
-							<control-param name="startLocationParams"></control-param> <!-- Query string formatted parameters for startLocation -->
-							<control-param name="allowNavigationToContentChildren">false</control-param> <!-- Determines whether the picker can navigate the children of content nodes, the default is false. -->
-							<control-param name=""></control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
+							<control-param name="showSearch">false</control-param>
 						</control>
 					</field>
 				</appearance>
