@@ -80,7 +80,8 @@ function showDialogCreate(nodeRef){
 										scope:this
 									},
 									failureCallback:{
-										fn: function() {alert("ERROR")},
+										fn: function() {
+											alert("Не удалось создать ассоциацию. Попробуйте обновить страницу")},
 										scope:this
 									}
 								});
@@ -202,6 +203,7 @@ function createPersonalData() {
 <div id="${id}">
 	<div id="${id}-contentPersonalData"></div>
 	<div id="${id}-buttonPersonalData">
+	<#if form.mode == "edit" || form.mode == "create">
         <span id="${id}-createPersonalData" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button" onclick="createPersonalData();">${msg('button.create')}</button>
@@ -213,4 +215,5 @@ function createPersonalData() {
            </span>
         </span>
 	</div>
+	</#if>
 </div>
