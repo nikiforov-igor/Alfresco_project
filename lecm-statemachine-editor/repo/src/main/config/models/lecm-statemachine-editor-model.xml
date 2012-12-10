@@ -97,7 +97,7 @@
 		<!-- Объект описывающий переход для действия -->
 		<type name="lecm-stmeditor:transition">
 			<title>Logic ECM Statemachine Transition Object</title>
-			<parent>cm:cmob ject</parent>
+			<parent>cm:cmobject</parent>
 			<properties>
 				<property name="lecm-stmeditor:transitionExpression">
 					<type>d:text</type>
