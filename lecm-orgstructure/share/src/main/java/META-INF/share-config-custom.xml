@@ -797,6 +797,7 @@
 							<control-param name="plane">false</control-param>
 							<control-param name="showSearch">false</control-param>
 							<control-param name="showSelectedItemsPath">false</control-param>
+							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 						</control>
 					</field>
 					<field id="lecm-orgstr:business-role-organization-element-member-assoc">
