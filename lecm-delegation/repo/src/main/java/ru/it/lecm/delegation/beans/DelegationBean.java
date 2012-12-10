@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.delegation.utils.DurationLogger;
+import ru.it.lecm.delegation.utils.SearchHelper;
 import ru.it.lecm.delegation.utils.Utils;
 
 public class DelegationBean
@@ -49,12 +50,15 @@ public class DelegationBean
 {
 
 	// Namespace URI of delegations model structure
-	public static final String NSURI_DELEGATIONS = "http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0"; // prefix="lecm-ba"
-	public static final String PREFIX_PROCURACY ="lecm-ba";
-	public static final String URI_DATA_PROCURACY = "lecm/delegation/"; // "lecm/business/authority/delegation/"
+	// "http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0";
+	public static final String NSURI_DELEGATIONS = "http://www.it.ru/logicECM/model/delegation/1.0"; // prefix PREFIX_PROCURACY
+	public static final String PREFIX_PROCURACY = "lecm-d8n"; // "lecm-ba";
+	public static final String URI_DATA_PROCURACY = "lecm/delegation/";
 
+	public static final String TYPE_DELEGATION_OPTS = "delegation-opts";
 	public static final String TYPE_PROCURACY = "procuracy";
-	public static final String ASSOCNAME_PROCURACY = "PROCURACY";
+
+	public static final String NAME_PROCURACY = "PROCURACY";
 	public static final String STATUS_ACTIVE = "Active";
 
 	/*
@@ -77,28 +81,29 @@ public class DelegationBean
 	/**
 	 * Свойства Доверенности
 	 */
-	final public static QName NTYPE_PROCURACY = QName.createQName(NSURI_DELEGATIONS, TYPE_PROCURACY);
-
-	/** datetime, Время начала действия */
-	final static public QName PROP_DATEBEGIN = QName.createQName(NSURI_DELEGATIONS, "dateUTCBegin");
-
-	/** datetime, Время окончания действия */
-	final static public QName PROP_DATEEND = QName.createQName(NSURI_DELEGATIONS, "dateUTCEnd");
-
-	/** datetime, Время прекращения */
-	final static public QName PROP_DATEREVOKE = QName.createQName(NSURI_DELEGATIONS, "dateUTCRevoke");
-
-	/** datetime, Комментарий и детали */
-	final static public QName PROP_COMMENT = QName.createQName(NSURI_DELEGATIONS, "comment");
-
-	/** boolean, Флаг возможности передачи доверенности */
-	final static public QName PROP_CANPROPOGATE = QName.createQName(NSURI_DELEGATIONS, "canpropogate");
-
-	/** boolean, Флаг для разрешения завершить доверенные задачи после отзыва Доверенности */
-	final static public QName PROP_CANPOSTPROCESS = QName.createQName(NSURI_DELEGATIONS, "canpostprocess");
-
+//	final public static QName NTYPE_PROCURACY = QName.createQName(NSURI_DELEGATIONS, TYPE_PROCURACY);
+//
+//	/** datetime, Время начала действия */
+//	final static public QName PROP_DATEBEGIN = QName.createQName(NSURI_DELEGATIONS, "dateUTCBegin");
+//
+//	/** datetime, Время окончания действия */
+//	final static public QName PROP_DATEEND = QName.createQName(NSURI_DELEGATIONS, "dateUTCEnd");
+//
+//	/** datetime, Время прекращения */
+//	final static public QName PROP_DATEREVOKE = QName.createQName(NSURI_DELEGATIONS, "dateUTCRevoke");
+//
+//	/** datetime, Комментарий и детали */
+//	final static public QName PROP_COMMENT = QName.createQName(NSURI_DELEGATIONS, "comment");
+//
+//	/** boolean, Флаг возможности передачи доверенности */
+//	final static public QName PROP_CANPROPOGATE = QName.createQName(NSURI_DELEGATIONS, "canpropogate");
+//
+//	/** boolean, Флаг для разрешения завершить доверенные задачи после отзыва Доверенности */
+//	final static public QName PROP_CANPOSTPROCESS = QName.createQName(NSURI_DELEGATIONS, "canpostprocess");
+//
+	// Статус параметров делегирования
 	/** text, Состояние Доверенности */
-	final static public QName PROP_STATUS = QName.createQName(NSURI_DELEGATIONS, "status");
+	final static public QName PROP_STATUS = QName.createQName(NSURI_DELEGATIONS, "delegation-opts-status");
 
 	/*
 	final static public QName PROP_ = QName.createQName(NSURI_DELEGATIONS, "");
@@ -107,10 +112,19 @@ public class DelegationBean
 	/**
 	 * Ссылки Доверенности
 	 */
-	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "fromEmployee"); // (1-1) Ссылки "От кого"
-	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "toEmployee"); // (1-1) Ссылки "Кому"
-	final static public QName ASSOC_GIVE_ROLES = QName.createQName(NSURI_DELEGATIONS, "delegateRoles"); //  (1-M) Список делегируемых бизнес-ролей
-	final static public QName ASSOC_PARENT_PROCURACY = QName.createQName(NSURI_DELEGATIONS, "parentProcuracy"); // (1-M) Ссылка на основную родительскую доверенность (для доверенностей второго уровня)
+
+	
+	// 	(1-1) делегирующее лицо. Тот человек, чьи бизнес роли и права будут переданы (из type"lecm-d8n:delegation-opts")
+	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "delegation-opts-owner-assoc");
+
+	// (1-M) коллекция доверенностей (из type"lecm-d8n:delegation-opts")
+	final static public QName ASSOC_PROCURACY_LIST = QName.createQName(NSURI_DELEGATIONS, "delegation-opts-procuracy-assoc");
+
+	//  (M-1) Список делегируемых бизнес-ролей (из type"lecm-d8n:procuracy")
+	final static public QName ASSOC_GIVE_ROLE = QName.createQName(NSURI_DELEGATIONS, "business-role-assoc");
+
+	// (M-1) Сотрудник который является доверенным лицом (из type"lecm-d8n:procuracy")
+	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "trustee-assoc");
 
 	/*
 	 * props
@@ -270,8 +284,8 @@ public class DelegationBean
 		final ChildAssociationRef ref = nodeService.createNode (
 					rootDelegates
 					, ContentModel.ASSOC_CONTAINS
-					, QName.createQName (NSURI_DELEGATIONS, ASSOCNAME_PROCURACY)
-					, QName.createQName (NSURI_DELEGATIONS, TYPE_PROCURACY)
+					, QName.createQName (NSURI_DELEGATIONS, NAME_PROCURACY)
+					, QName.createQName (NSURI_DELEGATIONS, TYPE_DELEGATION_OPTS)
 					, props);
 		nodeService.setProperties(ref.getChildRef(), props);
 
@@ -442,7 +456,7 @@ public class DelegationBean
 		if (parentNode != null)
 			dest.append( String.format( " AND PARENT:\"%s\"", parentNode));
 
-		/* добавление условий поиска, если есть */
+		/* добавление условий поиска по атрибутам, если есть */
 		if (searchArgs != null && JSONObject.getNames(searchArgs) != null) {
 			for (String key: JSONObject.getNames(searchArgs)) {
 				try {
@@ -457,6 +471,19 @@ public class DelegationBean
 					logger.error("", ex);
 				}
 			}
+			org.alfresco.repo.security.permissions.impl.PermissionServiceImpl impl;
+			org.alfresco.repo.security.permissions.impl.acegi.ACLEntryVoter aclVoter;
+			net.sf.acegisecurity.vote.RoleVoter grpVoter;
+			org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor metinter;
+
+			/* 
+			 * нужен воутер, чтобы убирать права (sec-группу) при доступе к
+			 * некоторым методам. Логика примерно такая "у текущего пользователя 
+			 * и документа есть одинаковый атрибут".
+			 * Реализовать можнно так: иметь явную sec-group для прользователя,
+			 * которую мы будем ассоциировать с подразделением, в документ
+			 * включим аспект, который будет относиться к этой группе.
+			 */
 		}
 		return dest;
 	}
@@ -483,12 +510,23 @@ public class DelegationBean
 	 * 		, "{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate":"false"
 	 */
 	@Override
-	public JSONObject findProcuracyList(JSONObject searchArgs) {
+	public JSONObject findProcuracyList(JSONObject args) {
 		// TODO: сейчас тип в ссылках на атрибуты надо указывать полностью, обдумать как перейти на префиксную систему ...
-		/* параметры Lucene поиска */
+
+		/* параметры поиска */
 		final SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO); // FTS (!)
+
+		JSONObject searchArgs = null;
+		try {
+			searchArgs = (args != null) ? new JSONObject(args, JSONObject.getNames(args)) : null;
+			/* добавление параметров pg_limit/offset ... */
+			SearchHelper.assignArgs(sp, searchArgs, true); // убрать найденное из searchArgs ...
+		} catch (JSONException ex) {
+			logger.error("Problem building JSON answer", ex);
+			throw new RuntimeException(ex);
+		}
 
 		final StringBuilder sbQuery = makeSearchQuery4Procuracy( new StringBuilder(), searchArgs, getDelegationRootRef());
 
@@ -631,7 +669,7 @@ public class DelegationBean
 	final private static String ARG_TESTNAME = "testName";
 
 	private enum TestAction {
-		test1
+		  test1
 		, test2
 		, test3
 		, test4
@@ -757,9 +795,9 @@ public class DelegationBean
 
 			/* ообновление ассоциаций ... */
 			updateAcccossiations( ASSOC_FROM_EMPLOYEE, currentRef, args);
-			updateAcccossiations( ASSOC_TO_EMPLOYEE, currentRef, args);
-			updateAcccossiations( ASSOC_GIVE_ROLES, currentRef, args);
-			updateAcccossiations( ASSOC_PARENT_PROCURACY, currentRef, args);
+			// updateAcccossiations( ASSOC_TO_EMPLOYEE, currentRef, args);
+			// updateAcccossiations( ASSOC_GIVE_ROLES, currentRef, args);
+			// updateAcccossiations( ASSOC_PARENT_PROCURACY, currentRef, args);
 
 			/* (!) выдаём новые права если статус активный ... */
 			final Serializable status = (props.containsKey(PROP_STATUS)) ? props.get(PROP_STATUS) : null;

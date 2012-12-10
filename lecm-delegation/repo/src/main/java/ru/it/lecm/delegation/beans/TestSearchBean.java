@@ -23,22 +23,32 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.delegation.utils.DurationLogger;
+import ru.it.lecm.delegation.utils.SearchHelper;
 import ru.it.lecm.delegation.utils.Utils;
+import ru.it.lecm.security.impl.OrgStrucureAfterInvocationProvider;
 
 public class TestSearchBean implements ITestSearch 
 {
 
-	/** назвнаие параметра в аргументах args с названием рабочей папки */
+	private static final String NAMESPACE = "http://www.it.ru/lecm/model/blanks/1.0";
+	private static final String TYPENAME = "blank";
+
+	/** название параметра в аргументах args с названием рабочей папки */
 	private static final String ARGNAME_FOLDER = "folder";
 
 	/** название по-умолчани для рабочей папки */
 	private static final String DEFAULT_FOLDERNAME = "Общая папка";
+
 
 	final private static Logger logger = LoggerFactory.getLogger (TestSearchBean.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 
+	/**
+	 * fastNodeService не выполняет проверку прав досту (bean_id="nodeService")
+	 * secureNodeService выполняет (bean_id="NodeService")
+	 */
 	private NodeService fastNodeService;
 	private NodeService secureNodeService;
 
@@ -90,6 +100,7 @@ public class TestSearchBean implements ITestSearch
 	@Override
 	public JSONObject runTest(int testnum) throws JSONException {
 		final JSONObject result;
+		// org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor;
 		final boolean needPermChk = (args != null && args.optBoolean("secure", false));
 		switch (testnum) {
 			case 1:	result = doSearchTest( "New", false, needPermChk); break;
@@ -105,6 +116,7 @@ public class TestSearchBean implements ITestSearch
 			result.put("testNum", testnum);
 		return result;
 	}
+
 
 	private JSONObject doSearchTest(final String status, final boolean flag, final boolean permcheck)
 			throws JSONException
@@ -129,15 +141,15 @@ public class TestSearchBean implements ITestSearch
 
 		final StringBuilder sbQuery = new StringBuilder();
 
-		final String namespace = "http://www.it.ru/lecm/model/blanks/1.0";
-		final String typename = "blank";
-
 		/* строго задаём тип */
-		sbQuery.append(String.format("TYPE:\"{%s}%s\"", namespace, typename));
+		sbQuery.append(String.format("TYPE:\"{%s}%s\"", NAMESPACE, TYPENAME));
 
 		/* добавление условий поиска */
-		sbQuery.append(String.format(" AND @{%s}%s:\"%s\"", namespace, "status", status));
-		sbQuery.append(String.format(" AND @{%s}%s:\"%s\"", namespace, "flag", flag));
+		sbQuery.append(String.format(" AND @{%s}%s:\"%s\"", NAMESPACE, "status", status));
+		sbQuery.append(String.format(" AND @{%s}%s:\"%s\"", NAMESPACE, "flag", flag));
+
+		/* добавление параметров pg_limit/offset ... */
+		SearchHelper.assignArgs(sp, this.args);
 
 		/* запрос */
 		final DurationLogger d = new DurationLogger();
@@ -151,10 +163,10 @@ public class TestSearchBean implements ITestSearch
 		/* поиск */
 		ResultSet foundSet = null;
 		try {
-			// проходим по набору, эмулируя обращение к данным ...
+			// проходим по набору perms, эмулируя обращение к данным ...
 			final StringBuilder sb = new StringBuilder( "permissions: \n");
 			foundSet = serviceRegistry.getSearchService().query(sp);
-			int i_total = 0, i_allow = 0;
+			int i_total = 0, i_allow = 0, i_rawLength = -1;
 			if (foundSet != null) {
 				for(ResultSetRow row : foundSet) {
 					i_total++;
@@ -173,6 +185,8 @@ public class TestSearchBean implements ITestSearch
 
 					if (hasAccess) i_allow++;
 				}
+				if (foundSet instanceof OrgStrucureAfterInvocationProvider.FilteringResultSet)
+					i_rawLength = ((OrgStrucureAfterInvocationProvider.FilteringResultSet)foundSet).rawLength();
 			}
 			logger.info( String.format("found %s record(s)", i_total));
 
@@ -184,6 +198,7 @@ public class TestSearchBean implements ITestSearch
 				rowsInfo.put("found", i_total);
 				rowsInfo.put("allowed", i_allow);
 				rowsInfo.put("denied", i_total - i_allow);
+				rowsInfo.put("raw_length", i_rawLength);
 				result.put("rows", rowsInfo);
 			}
 		} finally {

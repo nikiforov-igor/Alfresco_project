@@ -405,7 +405,7 @@ public class DynamicByAttribute
 		// logger.debug( String.format( "hasAuthority performing: user '%s', nodeRef %s ", userName, nodeRef));
 
 		// net.sf.acegisecurity.vote.RoleVoter
-
+		
 		final DurationLogger d = new DurationLogger();
 		try {
 			// достаём глобальный флаг стиля проверки: всегда true/false или "честная" ...
