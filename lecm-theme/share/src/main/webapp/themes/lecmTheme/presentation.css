@@ -1843,3 +1843,14 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight a.ygtvspacer {
 	text-decoration: none;
 }
+
+/*datagrid control*/
+.yui-skin-lecmTheme .yui-panel div.form-field.with-grid > label {
+    float: none;
+    max-width: 100%;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field.with-grid > div.datagrid {
+    width: 100%;
+    float: none;
+    padding: 0;
+}
