@@ -1420,8 +1420,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }.bind(this);
 
                     var visibleActions = getVisibleActions(actionsBlock);
+                    var showMoreDiv = null;
+                    for (var k=0; k < visibleActions.length; k++) {
+                        var testDiv = visibleActions[k];
+                        if (Dom.hasClass(testDiv, "onActionShowMore")){
+                            showMoreDiv = testDiv;
+                            break;
+                        }
+                    }
                    // actions = YAHOO.util.Selector.query("div", actionsBlock);
-                    if (visibleActions.length > 3) {
+                    if (!showMoreDiv && visibleActions.length > 3) {
                         var moreContainer = Dom.get(this.id + "-moreActions").cloneNode(true);
                         var containerDivs = YAHOO.util.Selector.query("div", moreContainer);
                         // Insert the two necessary DIVs before the splitAt action item
