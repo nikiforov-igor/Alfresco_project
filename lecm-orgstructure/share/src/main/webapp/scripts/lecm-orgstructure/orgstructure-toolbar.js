@@ -48,6 +48,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     LogicECM.module.OrgStructure.Toolbar = function (htmlId) {
         LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
         this.treeSelectActions = {};
+        this.toolbarButtons ={};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
@@ -81,30 +82,40 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             treeSelectActions: null,
 
             /**
+             * Кнопки Tollbara, активируются при выборе элемента в дереве
+             * @constructor
+             */
+            toolbarButtons: null,
+
+            /**
              * Fired by YUI when parent element is available for scripting.
              *
              * @method onReady
              */
             onReady:function DataListToolbar_onReady() {
+                var disable = false;
+                if (this.options.searchActive == "false"){
+                    disable = true;
+                }
                 this.widgets.newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
                     {
                         disabled:true,
                         value:"create"
                     });
-                this.widgets.newUnitButton = Alfresco.util.createYUIButton(this, "newUnitButton", this.onNewUnit,
+                this.toolbarButtons.newUnitButton = Alfresco.util.createYUIButton(this, "newUnitButton", this.onNewUnit,
                     {
-                        disabled:true,
+                        disabled:disable,
                         value:"create"
                     });
 
-                this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
+                this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
-                        disabled: true
+                        disabled: disable
                     });
 
-                this.widgets.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
+                this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
-                        disabled: true
+                        disabled: disable
                     });
                 this.treeSelectActions.newRowButtonStaff = Alfresco.util.createYUIButton(this, "newRowButtonStaff", this.onNewRow,
                     {
@@ -248,7 +259,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var widget, widgetPermissions, index, orPermissions, orMatch;
                     for (index in this.widgets) {
                         // если задан параметр searchActive = false то кнопки поиска разблокируем.
-                        if (!(index == "searchButton" || index == "exSearchButton") && !(searchActive == "true")) {
                             if (this.widgets.hasOwnProperty(index)) {
                                 widget = this.widgets[index];
                                 if (widget != null) {
@@ -285,7 +295,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     }
                                 }
                             }
-                        }
                     }
                 }
             },
@@ -400,19 +409,23 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     }
                 }
+                if (this.options.searchActive == "false"){
+                    if (this.toolbarButtons != null) {
+                        for (var index in this.toolbarButtons)
+                        {
+                            if (this.toolbarButtons.hasOwnProperty(index))
+                            {
+                                var action = this.toolbarButtons[index];
+                                if (action != null) {
+                                    action.set("disabled", false);
+                                }
+                            }
+                        }
+                }
+                }
                 Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
                 Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
                 Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
-                    // Разблокируем кнопки поиска
-                    if (this.widgets.searchButton != null) {
-                        this.widgets.searchButton.set("disabled", false);
-                    }
-                    if (this.widgets.exSearchButton != null) {
-                        this.widgets.exSearchButton.set("disabled", false);
-                    }
-                    if (this.widgets.newUnitButton != null) {
-                        this.widgets.newUnitButton.set("disabled", false);
-                    }
 
 
             },
