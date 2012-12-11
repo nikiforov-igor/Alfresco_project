@@ -21,7 +21,7 @@ function createName(form, nameParts) {
 
         var prop, usedLen;
         var startBr = part.indexOf("{");
-        if (startBr > 0) { // used word, not property
+        if (startBr >= 0) { // used word, not property
             var lastBr = part.indexOf("}"); // must ended on '}'
             if (lastBr > 0) {
                 prop = part.substring(startBr + 1, lastBr);
@@ -29,7 +29,7 @@ function createName(form, nameParts) {
                 break;
             }
             // simple add word to result
-            result = result + prop + SUB_ELEMENT_DELIMITER;
+            result = result + prop;
         } else { // if property used
             startBr = part.indexOf("[");
             if (startBr > 0) {  // check used length
@@ -46,10 +46,9 @@ function createName(form, nameParts) {
                 if (usedLen != null && usedLen.length > 0) {
                     propValue = propValue.substring(0, usedLen);
                 }
-                result = result + propValue + SUB_ELEMENT_DELIMITER;
+                result = result + propValue;
             }
         }
     }
-    result = (result.length > 0) ? result.substring(0, result.length - SUB_ELEMENT_DELIMITER.length) : result; //delete last element delimiter
     return result;
 }

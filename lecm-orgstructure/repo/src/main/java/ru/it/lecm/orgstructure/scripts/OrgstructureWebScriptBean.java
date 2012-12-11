@@ -178,7 +178,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
 					root.put(PAGE, ORG_EMPLOYEES);
 					root.put(ITEM_TYPE, TYPE_EMPLOYEE);
-					root.put(NAME_PATTERN, "lecm-orgstr_employee-first-name[1],lecm-orgstr_employee-middle-name[1],lecm-orgstr_employee-last-name");
+					root.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
 				} else if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root.put(NODE_REF, "NOT_LOAD");
 					root.put(PAGE, "orgstructure");
