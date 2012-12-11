@@ -213,10 +213,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         {
                             fn: function Toolbar_onNewRow_success(response)
                             {
-                                YAHOO.Bubbling.fire("dataItemCreated",
-                                    {
-                                        nodeRef: response.json.persistedObject
-                                    });
+	                            YAHOO.Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:this.options.bubblingLabel
+		                            });
 
                                 Alfresco.util.PopupManager.displayMessage(
                                     {

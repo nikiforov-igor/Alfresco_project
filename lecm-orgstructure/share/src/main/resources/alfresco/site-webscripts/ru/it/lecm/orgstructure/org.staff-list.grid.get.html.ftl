@@ -25,31 +25,10 @@
 								var createdAssoc = response.json.createdAssoc;
 								if (createdAssoc) {
 									// Reload the node's metadata
-									Alfresco.util.Ajax.jsonPost(
-											{
-												url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(p_item.nodeRef).uri,
-												dataObj:this._buildDataGridParams(),
-												successCallback:{
-													fn:function DataGrid_onActionEdit_refreshSuccess(response) {
-														// Fire "itemUpdated" event
-														YAHOO.Bubbling.fire("dataItemUpdated",
-																{
-																	item:response.json.item,
-																	bubblingLabel:me.options.bubblingLabel
-																});
-													},
-													scope:this
-												},
-												failureCallback:{
-													fn:function DataGrid_onActionEdit_refreshFailure(response) {
-														Alfresco.util.PopupManager.displayMessage(
-																{
-																	text:this.msg("message.details.failure")
-																});
-													},
-													scope:this
-												}
-											});
+                                    YAHOO.Bubbling.fire("datagridRefresh",
+                                            {
+                                                bubblingLabel:me.options.bubblingLabel
+                                            });
 									Alfresco.util.PopupManager.displayMessage(
 											{
 												text:this.msg("message.employee.add.success")

@@ -95,7 +95,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemCreated", this.onDataItemCreated, this);
         Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
-        Bubbling.on("dataItemsDuplicated", this.onDataGridRefresh, this);
+        Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
@@ -2076,7 +2076,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         success:{
                             event:{
-                                name:"dataItemsDuplicated",
+                                name:"datagridRefresh",
                                 obj:{
                                     items:items,
                                     bubblingLabel:me.options.bubblingLabel
@@ -2186,36 +2186,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         onSuccess:{
                             fn:function DataGrid_onActionEdit_success(response) {
                                 // Reload the node's metadata
-                                Alfresco.util.Ajax.jsonPost(
-                                    {
-                                        url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(item.nodeRef).uri,
-                                        dataObj:this._buildDataGridParams(),
-                                        successCallback:{
-                                            fn:function DataGrid_onActionEdit_refreshSuccess(response) {
-                                                // Fire "itemUpdated" event
-                                                Bubbling.fire("dataItemUpdated",
-                                                    {
-                                                        item:response.json.item,
-                                                        bubblingLabel:me.options.bubblingLabel
-                                                    });
-                                                // Display success message
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text:this.msg("message.details.success")
-                                                    });
-                                            },
-                                            scope:this
-                                        },
-                                        failureCallback:{
-                                            fn:function DataGrid_onActionEdit_refreshFailure(response) {
-                                                Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text:this.msg("message.details.failure")
-                                                    });
-                                            },
-                                            scope:this
-                                        }
-                                    });
+	                            Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:me.options.bubblingLabel
+		                            });
                             },
                             scope:this
                         },
