@@ -248,7 +248,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var widget, widgetPermissions, index, orPermissions, orMatch;
                     for (index in this.widgets) {
                         // если задан параметр searchActive = false то кнопки поиска разблокируем.
-//                        if (!(index == "searchButton" || index == "extendSearchButton") && !(searchActive == "false")) {
+                        if (!(index == "searchButton" || index == "exSearchButton") && !(searchActive == "true")) {
                             if (this.widgets.hasOwnProperty(index)) {
                                 widget = this.widgets[index];
                                 if (widget != null) {
@@ -285,7 +285,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     }
                                 }
                             }
-//                        }
+                        }
                     }
                 }
             },
@@ -403,13 +403,18 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
                 Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
                 Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
-                // Разблокируем кнопки поиска
-                if (this.widgets.searchButton != null) {
-                    this.widgets.searchButton.set("disabled", false);
-                }
-                if (this.widgets.exSearchButton != null) {
-                    this.widgets.exSearchButton.set("disabled", false);
-                }
+                    // Разблокируем кнопки поиска
+                    if (this.widgets.searchButton != null) {
+                        this.widgets.searchButton.set("disabled", false);
+                    }
+                    if (this.widgets.exSearchButton != null) {
+                        this.widgets.exSearchButton.set("disabled", false);
+                    }
+                    if (this.widgets.newUnitButton != null) {
+                        this.widgets.newUnitButton.set("disabled", false);
+                    }
+
+
             },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
