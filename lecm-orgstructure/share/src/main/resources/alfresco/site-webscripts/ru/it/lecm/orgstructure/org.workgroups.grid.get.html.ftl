@@ -95,7 +95,7 @@
 
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
-							bubblingLabel:"workGroup",
+							bubblingLabel:"${bubblingLabel!"workGroup"}",
 							usePagination:true,
 							showExtendSearchBlock:false,
 							actions: [

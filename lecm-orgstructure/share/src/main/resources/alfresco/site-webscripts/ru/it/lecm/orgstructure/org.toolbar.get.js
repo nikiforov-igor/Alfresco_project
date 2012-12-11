@@ -20,7 +20,7 @@ function main()
 
     model.actionSet = actionSet;
 
-    model.bubblingLabel = args["type"];
+    model.bubblingLabel = args["bubblingLabel"];
     model.typeButton = args["typeButton"];
     model.active = args["active"];
 

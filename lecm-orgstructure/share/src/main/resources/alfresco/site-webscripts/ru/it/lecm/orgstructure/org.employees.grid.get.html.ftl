@@ -116,7 +116,7 @@
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							bubblingLabel: "employees",
+							bubblingLabel: "${bubblingLabel!"employees"}",
 							showCheckboxColumn: false
 						}).setMessages(${messages});
 			}

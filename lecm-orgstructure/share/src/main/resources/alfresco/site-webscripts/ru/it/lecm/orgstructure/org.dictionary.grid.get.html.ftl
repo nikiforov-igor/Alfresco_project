@@ -110,7 +110,7 @@
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							bubblingLabel: "dictionary",
+							bubblingLabel: "${bubblingLabel!"dictionary"}",
 							showCheckboxColumn: false
 						}).setMessages(${messages});
 			}

@@ -8,11 +8,13 @@
             <url>/lecm/orgstructure/workgroups-datagrid</url>
             <properties>
                 <pagination>true</pagination>
+                <bubblingLabel>workGroup</bubblingLabel>
             </properties>
         </component>
         <component>
             <region-id>workforces-grid</region-id>
             <url>/lecm/orgstructure/workforces-datagrid</url>
+            <bubblingLabel>workForce</bubblingLabel>
             <properties>
                 <pagination>true</pagination>
             </properties>
@@ -22,19 +24,19 @@
             <region-id>workforces-toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <type>workForce</type>
                 <showSearchBlock>false</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
                 <typeButton>newRowButtonStaff</typeButton>
+                <bubblingLabel>workForce</bubblingLabel>
             </properties>
         </component>
         <component>
             <region-id>groups-toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <type>workGroup</type>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
+                <bubblingLabel>workGroup</bubblingLabel>
             </properties>
         </component>
         <!-- Title -->

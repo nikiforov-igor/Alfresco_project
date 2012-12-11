@@ -7,6 +7,7 @@
             <url>/lecm/orgstructure/employees-datagrid</url>
             <properties>
                 <pagination>true</pagination>
+                <bubblingLabel>employees</bubblingLabel>
             </properties>
         </component>
         <!-- Toolbar -->
@@ -16,6 +17,7 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
+                <bubblingLabel>employees</bubblingLabel>
             </properties>
         </component>
         <!-- Title -->

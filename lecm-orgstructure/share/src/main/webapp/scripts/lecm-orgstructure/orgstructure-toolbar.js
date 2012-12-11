@@ -152,76 +152,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
-            // Добавление новой ноды
-            _createNode:function (itemType, destination, pattern, successEvent, successMsg, failureMsg) {
-                var toolbar = this;
-                var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog) {
-                    Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-dialogTitle", this.msg("label.new-row.title") ]
-                    );
-                };
-
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true",
-                    {
-                        itemKind:"type",
-                        itemId:itemType,
-                        destination:destination,
-                        mode:"create",
-                        submitType:"json"
-                    });
-
-                // Using Forms Service, so always create new instance
-                var createRow = new Alfresco.module.SimpleDialog("toolbar-createRow");
-
-                createRow.setOptions(
-                    {
-                        width:"50em",
-                        templateUrl:templateUrl,
-                        actionUrl:null,
-                        destroyOnHide:false,
-                        doBeforeDialogShow:{
-                            fn:doBeforeDialogShow,
-                            scope:this
-                        },
-                        onSuccess:{
-                            fn:function DataListToolbar_onNewRow_success(response) {
-                                if (successEvent){// вызов дополнительного события
-                                    YAHOO.Bubbling.fire("" + successEvent,
-                                        {
-                                            nodeRef:response.json.persistedObject,
-                                            bubblingLabel:toolbar.options.bubblingLabel
-                                        });
-                                }
-                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-                                    {
-                                        nodeRef:response.json.persistedObject,
-                                        bubblingLabel:toolbar.options.bubblingLabel
-                                    });
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:this.msg(successMsg)
-                                    });
-                            },
-                            scope:this
-                        },
-                        onFailure:{
-                            fn:function DataListToolbar_onNewRow_failure(response) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:this.msg(failureMsg)
-                                    });
-                            },
-                            scope:this
-                        },
-                        doBeforeFormSubmit:{
-                            fn:function GenerateElementName(form) { // сгенерировать имя перед сохранением
-                                generateNodeName(form, pattern, ",", false);
-                            },
-                            scope:this
-                        }
-
-                    }).show();
-            },
             /**
              * New Row button click handler
              */
@@ -230,8 +160,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     destination = orgMetadata.nodeRef,
                     itemType = orgMetadata.itemType,
                     namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
-
-                this._createNode(itemType, destination, namePattern, null, "message.new-row.success", "message.new-row.failure");
+                this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, null, namePattern);
             },
 
             /**
@@ -239,11 +168,20 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              */
             onNewUnit:function OrgstructureToolbar_onNewUnit(e, p_obj) {
                 var meta = this.modules.dataGrid.datagridMeta;
+                var toolbar = this;
                 if (meta != null && meta.nodeRef.indexOf(":") > 0) {
                     var destination = meta.nodeRef;
                     var itemType = meta.itemType;
                     var namePattern = meta.custom != null ? meta.custom.namePattern : null;
-                    this._createNode(itemType, destination, namePattern, "nodeCreated", "message.new-unit.success", "message.new-unit.failure");
+                    var callBack = function(ref) {
+                        YAHOO.Bubbling.fire("nodeCreated",
+                            {
+                                nodeRef:ref,
+                                bubblingLabel:toolbar.options.bubblingLabel
+                            });
+                    };
+
+                    this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, callBack, namePattern);
                 } else {
                     Alfresco.util.PopupManager.displayMessage(
                         {

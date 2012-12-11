@@ -60,7 +60,7 @@ function saveOrganization() {
                 });
         }
     };
-    Connect.asyncRequest(Alfresco.util.Ajax.GET, url, organizationSaveCallBack);
+    Connect.asyncRequest(Alfresco.util.Ajax.POST, url, organizationSaveCallBack);
 }
 Event.onDOMReady(init);
 //]]></script>

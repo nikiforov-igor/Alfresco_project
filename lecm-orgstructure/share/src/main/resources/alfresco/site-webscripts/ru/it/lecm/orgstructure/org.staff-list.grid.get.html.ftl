@@ -165,7 +165,7 @@
 										evaluator: "deleteStaffEvaluator"
 									}
 								],
-								bubblingLabel: "staff",
+								bubblingLabel: "${bubblingLabel!"staff"}",
 								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}

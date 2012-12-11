@@ -87,7 +87,7 @@
 										label:"${msg("actions.delete-row")}"
 									}
 								],
-								bubblingLabel: "orgstructure",
+								bubblingLabel: "${bubblingLabel!"orgstructure"}",
 								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}

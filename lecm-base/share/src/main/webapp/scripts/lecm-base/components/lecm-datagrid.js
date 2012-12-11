@@ -2203,7 +2203,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }).show();
             },
 
-            createDialogShow:function (meta, callback) {
+            createDialogShow:function (meta, callback, pattern, successMessage) {
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
@@ -2245,7 +2245,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         });
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text:this.msg("message.details.success")
+                                            text:this.msg(successMessage ? successMessage : "message.details.success")
                                         });
                                 }
                             },
@@ -2259,6 +2259,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     });
                             },
                             scope:this
+                        },
+                        doBeforeFormSubmit:{
+                            fn:function GenerateElementName(form) { // сгенерировать имя перед сохранением
+                                if (pattern != null && pattern != undefined && pattern != "") {
+                                    generateNodeName(form, pattern, ",", false);
+                                }
+                            },
+                            scope:this
                         }
                     }).show();
             },
@@ -2269,7 +2277,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @method onActionCreate
              */
             onActionCreate:function DataGrid_onActionCreate() {
-                this.createDialogShow(this.datagridMeta, null);
+                this.createDialogShow(this.datagridMeta, null, null, null);
             },
 
             /**
