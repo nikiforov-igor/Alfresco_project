@@ -139,7 +139,7 @@ function getSubstitudeField(node, field) {
 							break;
 						}
 					}
-					if (!expressionsFalse) {
+					if (node.getStoreType() == "workspace" && !expressionsFalse) {
 						showNode = node;
 						exist = true;
 						break;
@@ -150,7 +150,12 @@ function getSubstitudeField(node, field) {
 					break;
 				}
 			} else if (showNode.length > 0) {
-				showNode = showNode[0];
+				for (var i = 0; i < showNode.length; i++) {
+					var node = showNode[i];
+					if (node.getStoreType() == "workspace") {
+						showNode = node;
+					}
+				}
 			}
 		}
 	}
