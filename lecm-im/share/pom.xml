@@ -14,7 +14,6 @@
 	<description>Lecm Share XMPP Client</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
-        <gwt.extraJvmArgs>-Xms256M -Xmx5632M -XX:PermSize=64M -XX:MaxPermSize=256M -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=90</gwt.extraJvmArgs>
 	</properties>
 	<!--
 		need to list these as a provided so that Maven doesn't download them
@@ -40,6 +39,11 @@
             <!--<version>2.5.0</version>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>ru.it.lecm.lecm-im</groupId>
+            <artifactId>lecm-im-lib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -97,6 +101,9 @@
                 <!--<optimizationLevel>9</optimizationLevel>-->
                 <webappDirectory>${project.build.directory}/${project.build.finalName}/web/scripts</webappDirectory>
                 <draftCompile>true</draftCompile>
+                <compileSourcesArtifacts>
+                    <compileSourcesArtifact>${project.groupId}:lecm-im-lib</compileSourcesArtifact>
+                </compileSourcesArtifacts>
             </configuration>
         </plugin>
 
@@ -121,6 +128,9 @@
 					<exclude>**.java</exclude>
 				</excludes>
 			</resource>
+            <resource>
+                <directory>${basedir}/../lib/src/main/resources</directory>
+            </resource>
 		</resources>
     </build>
 </project>
