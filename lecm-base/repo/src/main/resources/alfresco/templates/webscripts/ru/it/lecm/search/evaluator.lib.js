@@ -125,17 +125,16 @@ var Evaluator =
       }
       else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject"))
       {
-         obj = Evaluator.getContentObject(value);
+          obj = Evaluator.getContentObject(value);
+	      if (obj == null) {
+		      return false;
+	      }
 	      if (nameSubstituteString == null) {
-		      if (obj == null)
-		      {
-			      return false;
-		      }
 		      objData.displayValue = obj.properties["cm:name"];
 	      } else {
 		      objData.displayValue = formatNodeTitle(obj, nameSubstituteString);
 	      }
-         objData.metadata = obj.isContainer ? "container" : "document";
+          objData.metadata = obj.isContainer ? "container" : "document";
       } else if (nameSubstituteString != null) {
 	      objData.displayValue = formatNodeTitle(node, nameSubstituteString);
 	      objData.value = objData.displayValue;

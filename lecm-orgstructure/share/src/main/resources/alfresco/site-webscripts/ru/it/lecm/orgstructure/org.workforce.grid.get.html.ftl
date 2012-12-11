@@ -170,15 +170,15 @@
 
 				LogicECM.module.Base.DataGrid.prototype.deleteWorkForceEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
 					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined;
+					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
 				};
 				LogicECM.module.Base.DataGrid.prototype.addEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
 					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined;
+					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
 				};
 				LogicECM.module.Base.DataGrid.prototype.deleteEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
 					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined;
+					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined && itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
 				};
 
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
