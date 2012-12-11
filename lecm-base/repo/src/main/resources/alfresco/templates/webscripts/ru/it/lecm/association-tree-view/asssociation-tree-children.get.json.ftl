@@ -2,6 +2,7 @@
 [
 	<#list  branch as b>
 	{
+		label: "${b.label}",
 		title: "${b.title}",
 		type: "${b.type}",
 		nodeRef: "${b.nodeRef}",

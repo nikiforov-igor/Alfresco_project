@@ -106,6 +106,12 @@
 	    <#if field.control.params.selectedItemsNameSubstituteString??>
 		    selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
 	    </#if>
+        <#if field.control.params.treeNodeSubstituteString??>
+            treeNodeSubstituteString: "${field.control.params.treeNodeSubstituteString}",
+	    </#if>
+        <#if field.control.params.treeNodeTitleSubstituteString??>
+            treeNodeTitleSubstituteString: "${field.control.params.treeNodeTitleSubstituteString}",
+	    </#if>
         <#if field.control.params.rootNodeRef??>
             rootNodeRef: "${field.control.params.rootNodeRef}",
         </#if>

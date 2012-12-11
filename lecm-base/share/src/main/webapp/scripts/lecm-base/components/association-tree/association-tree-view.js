@@ -102,7 +102,9 @@ LogicECM.module = LogicECM.module || {};
 
             treeRoteNodeTitleProperty: "cm:name",
 
-            treeNodeTitleProperty: "cm:name",
+            treeNodeSubstituteString: "{cm:name}",
+
+            treeNodeTitleSubstituteString: "",
 
             nameSubstituteString: "{cm:name}",
 
@@ -579,7 +581,8 @@ LogicECM.module = LogicECM.module || {};
                         node.children = [];
                         for (var nodeIndex in oResults) {
                             var newNode = {
-                                label:oResults[nodeIndex].title,
+                                label:oResults[nodeIndex].label,
+	                            title:oResults[nodeIndex].title,
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
                                 type:oResults[nodeIndex].type,
@@ -620,7 +623,8 @@ LogicECM.module = LogicECM.module || {};
         _generateItemsUrlParams: function AssociationTreeViewer__generateItemsUrlParams()
         {
 
-	        var params = "?nodeTitleProperty=" + encodeURIComponent(this.options.treeNodeTitleProperty);
+	        var params = "?nodeSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
+		        "&nodeTitleSubstituteString=" + encodeURIComponent(this.options.treeNodeTitleSubstituteString);
 	        if (this.options.treeItemType != null) {
 		        params += "&selectableType=" + encodeURIComponent(this.options.treeItemType);
 	        } else {

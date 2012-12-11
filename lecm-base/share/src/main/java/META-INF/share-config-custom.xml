@@ -12,6 +12,8 @@
 		        <type name="association:lecm-orgstr:organization-unit" template="/ru/it/lecm/base-share/components/association-tree-control/association-tree-picker.ftl">
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 			        <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+			        <control-param name="treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+			        <control-param name="treeNodeTitleSubstituteString">{cm:name}</control-param>
 			        <control-param name="plane">false</control-param>
 			        <control-param name="showCreateNewLink">false</control-param>
 			        <control-param name="showCreateNewButton">false</control-param>
@@ -21,6 +23,8 @@
 			        <control-param name="rootLocation">/app:company_home/cm:Организация/cm:Структура</control-param>
 			        <control-param name="nameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
 			        <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:element-member-position-assoc/cm:name} {../lecm-orgstr:element-short-name} {lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}</control-param>
+			        <control-param name="treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+			        <control-param name="treeNodeTitleSubstituteString">{cm:name}</control-param>
 			        <control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 			        <control-param name="plane">false</control-param>
 			        <control-param name="showCreateNewLink">false</control-param>
