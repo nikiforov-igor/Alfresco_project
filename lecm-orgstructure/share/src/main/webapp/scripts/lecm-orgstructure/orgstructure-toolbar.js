@@ -248,7 +248,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var widget, widgetPermissions, index, orPermissions, orMatch;
                     for (index in this.widgets) {
                         // если задан параметр searchActive = false то кнопки поиска разблокируем.
-                        if (!(index == "searchButton" || index == "extendSearchButton") && !(searchActive == "false")) {
+//                        if (!(index == "searchButton" || index == "extendSearchButton") && !(searchActive == "false")) {
                             if (this.widgets.hasOwnProperty(index)) {
                                 widget = this.widgets[index];
                                 if (widget != null) {
@@ -285,7 +285,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     }
                                 }
                             }
-                        }
+//                        }
                     }
                 }
             },
