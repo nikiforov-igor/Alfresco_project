@@ -83,7 +83,6 @@
                     <show id="lecm-orgstr:employee-fio-d"/>
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
-                    <show id="lecm-orgstr:employee-person-data-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
@@ -100,8 +99,7 @@
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-is-system-user" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
-                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal"/>
-                    <field id="cm:name" set="personal">
+                    <field id="cm:name" set="common">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
@@ -370,6 +368,11 @@
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:workGroup-description"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:workGroup-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -387,6 +390,9 @@
                 <appearance>
                     <field id="cm:name">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-orgstr:workGroup-description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                 </appearance>
             </form>
