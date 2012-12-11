@@ -438,6 +438,8 @@ h4 .lighter
     line-height: 25px;
     vertical-align: middle;
     overflow: hidden;
+    padding-top: 1px;
+    margin-bottom: 10px;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field label {
     max-width: 10em;

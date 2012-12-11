@@ -51,7 +51,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				var createRow = new Alfresco.module.SimpleDialog (scope.id + "-createRow");
 
 				createRow.setOptions ({
-					width: "33em",
+					width: "50em",
 					templateUrl: templateUrl,
 					actionUrl: null,
 					destroyOnHide: true,
@@ -119,7 +119,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				var delegationOptsForm = new Alfresco.module.SimpleDialog (scope.id + "-delegationOptsForm");
 
 				delegationOptsForm.setOptions ({
-					width: "33em",
+					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
 					onSuccess: {

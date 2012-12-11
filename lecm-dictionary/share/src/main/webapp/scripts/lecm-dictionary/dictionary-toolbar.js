@@ -200,7 +200,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
                 createRow.setOptions(
                     {
-                        width: "33em",
+                        width: "50em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,
