@@ -36,10 +36,12 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String PAGE = "page";
 	public static final String ITEM_TYPE = "itemType";
 	public static final String TITLE = "title";
+	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String NAME_PATTERN = "namePattern";
 
-	public static final String ELEMENT_FULL_NAME = "element-full-name";
+	public static final QName ELEMENT_FULL_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
+	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
 	public static final String ELEMENT_FULL_NAME_PATTERN = "lecm-orgstr_element-full-name";
 
 	private static Log logger = LogFactory.getLog(OrgstructureWebScriptBean.class);
@@ -232,8 +234,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 						try {
 							unit.put(NODE_REF, child.getChildRef().toString());
 							unit.put(ITEM_TYPE, TYPE_UNIT);
+							unit.put(LABEL, getElementName(
+									nodeService, child.getChildRef(), ELEMENT_SHORT_NAME));
 							unit.put(TITLE, getElementName(
-									nodeService, child.getChildRef(), QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
+									nodeService, child.getChildRef(), ELEMENT_FULL_NAME));
 							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
 							nodes.put(unit);
 						} catch (JSONException e) {
@@ -248,8 +252,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					try {
 						root.put(NODE_REF, structure.toString());
 						root.put(ITEM_TYPE, TYPE_STRUCTURE);
+						root.put(LABEL, getElementName(
+								nodeService, structure, ELEMENT_FULL_NAME));
 						root.put(TITLE, getElementName(
-								nodeService, structure, QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, ELEMENT_FULL_NAME)));
+								nodeService, structure, ELEMENT_FULL_NAME));
 						root.put(IS_LEAF, nodeService.getChildAssocs(
 								structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 						nodes.put(root);

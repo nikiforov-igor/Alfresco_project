@@ -3,6 +3,7 @@
     <#list  branch as b>
         {
             title: "${b.title}",
+            label: "${b.label}",
             type: "${b.type}",
             nodeRef: "${b.nodeRef}",
             isLeaf: ${b.isLeaf}

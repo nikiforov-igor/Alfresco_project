@@ -80,7 +80,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 },
                                 bubblingLabel:"workForce"
                             });
-                    } else {
+                    } else if (root.nodeRef != "NOT_LOAD"){
                         Bubbling.fire("activeGridChanged",
                             {
                                 datagridMeta:{

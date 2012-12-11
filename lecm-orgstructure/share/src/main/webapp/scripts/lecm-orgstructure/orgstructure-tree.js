@@ -47,6 +47,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         Bubbling.on("nodeCreated", this.onNewNodeCreated, this);
         Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         Bubbling.on("dataItemsDeleted", this.onNodeDeleted, this);
+        Bubbling.on("datagridRefresh", this.onNodeUpdated, this);
         return this;
     };
 
@@ -137,9 +138,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         node.children = [];
                         for (var nodeIndex in oResults) {
                             var newNode = {
-                                label:oResults[nodeIndex].title,
+                                label:oResults[nodeIndex].label,
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 isLeaf:oResults[nodeIndex].isLeaf,
+                                title:oResults[nodeIndex].title,
                                 type: oResults[nodeIndex].type
                             };
 
@@ -170,6 +172,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
+                        if (curElement.data.type == "structure") {
+                            curElement.expanded = true;
+                            otree._treeNodeSelected(curElement);
+                        }
                         otree.tree.render();
                         if (otree.options.drawEditors){
                             otree.onExpandComplete(null);
@@ -339,6 +345,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
                 this._treeNodeSelected(this.selectedNode);
             }.bind(context));
+        },
+        onNodeUpdated:function Tree_onNodeUpdated(layer, args) {
+            this._loadTree(this.selectedNode, function () {
+                this.tree.render();
+            }.bind(this));
         }
     });
 
