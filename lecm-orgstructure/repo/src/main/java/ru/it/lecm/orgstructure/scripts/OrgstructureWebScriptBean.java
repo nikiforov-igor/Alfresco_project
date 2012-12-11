@@ -1,10 +1,5 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -24,6 +19,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -212,12 +209,12 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Получаем список Дочерних объектов в офрмате, используемом в дереве Оргструктуры
+	 * Получаем список Дочерних объектов в формате, используемом в дереве Оргструктуры
 	 *
 	 * @return Текстовое представление JSONArrray c объектами
 	 */
 	public String getStructure(final String type, final String ref) {
-		JSONArray nodes = new JSONArray();
+		List<JSONObject> nodes = new ArrayList<JSONObject>();
 		NodeService nodeService = services.getNodeService();
 		if (ref != null) {
 			final NodeRef currentRef = new NodeRef(ref);
@@ -239,12 +236,13 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 							unit.put(TITLE, getElementName(
 									nodeService, child.getChildRef(), ELEMENT_FULL_NAME));
 							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
-							nodes.put(unit);
+							nodes.add(unit);
 						} catch (JSONException e) {
 							logger.error(e);
 						}
 					}
 				}
+				sort(nodes,"title",true);
 			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION)) { //Вывести директорию "Структура"
 				NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, OrgstructureBean.STRUCTURE_ROOT_NAME);
 				if (structure != null) {
@@ -258,7 +256,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 								nodeService, structure, ELEMENT_FULL_NAME));
 						root.put(IS_LEAF, nodeService.getChildAssocs(
 								structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
-						nodes.put(root);
+						nodes.add(root);
 					} catch (JSONException e) {
 						logger.error(e);
 					}
@@ -266,6 +264,38 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			}
 		}
 		return nodes.toString();
+	}
+
+	/**
+	 * Сортировка объекта списка JSONObject по значению
+	 * @param jsonObject - список JSONObject
+	 * @param sortField - строка по которой сортируем
+	 * @param sorting true - desc, false - asc
+	 */
+	private void sort(List<JSONObject> jsonObject, final String sortField, final Boolean sorting) {
+		Collections.sort(jsonObject, new Comparator<JSONObject>() {
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+				try {
+					String valA;
+					String valB;
+					valA = a.getString(sortField);
+					valB = b.getString(sortField);
+					int comp = valA.compareTo(valB);
+					if (sorting) {
+						if (comp > 0) return 1;
+						if (comp < 0) return -1;
+					} else {
+						if (comp > 0) return -1;
+						if (comp < 0) return 1;
+					}
+					return 0;
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				return 0;
+			}
+		});
 	}
 
 	private String getElementName(final NodeService service, final NodeRef ref, QName property, QName defaultProperty) {
