@@ -19,8 +19,8 @@
                     <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
-                    <show id="lecm-orgstr:employee-positions"/>
-                    <show id="lecm-orgstr:employee-roles"/>
+                    <show id="lecm-orgstr:employee-positions" for-mode="edit"/>
+                    <show id="lecm-orgstr:employee-roles" for-mode="edit"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
