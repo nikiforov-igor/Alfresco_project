@@ -23,7 +23,7 @@ import ru.it.lecm.delegation.IWebScriptDelegation;
  *
  * @author VLadimir Malygin
  * @since 18.10.2012 14:41:08
- * @see <p>mailto: <a href="mailto:vladimir.malygin@aplana.com">vladimir.malygin@aplana.com</a></p>
+ * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
 public class DelegationRepoWebScript
 		extends DeclarativeWebScript

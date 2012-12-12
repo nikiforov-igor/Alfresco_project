@@ -30,7 +30,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author VLadimir Malygin
  * @since 03.10.2012 17:27:25
- * @see <p>mailto: <a href="mailto:vladimir.malygin@aplana.com">vladimir.malygin@aplana.com</a></p>
+ * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
 public class SampleWebScript extends DeclarativeWebScript implements ApplicationContextAware {
 

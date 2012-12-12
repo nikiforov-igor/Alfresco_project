@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author VLadimir Malygin
  * @since 08.10.2012 12:14:58
- * @see <p>mailto: <a href="mailto:vladimir.malygin@aplana.com">vladimir.malygin@aplana.com</a></p>
+ * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
 public class SampleSessionBean implements ISampleSession {
 
