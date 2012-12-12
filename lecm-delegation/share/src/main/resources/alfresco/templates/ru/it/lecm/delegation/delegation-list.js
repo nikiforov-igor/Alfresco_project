@@ -1,2 +1,4 @@
 //скрипт для получения корневой (корневых) папок
-model.delegationContainer = remote.connect ("alfresco").post ("/lecm/delegation/get/container", "", "json");
+var jsonStr = remote.connect ("alfresco").get ("/lecm/delegation/get/container");
+//var obj = jsonUtils.toObject (jsonStr);
+model.delegationContainer = jsonStr;
