@@ -510,7 +510,6 @@
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                     <show id="lecm-orgstr:staff-list-description"/>
-                    <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name">

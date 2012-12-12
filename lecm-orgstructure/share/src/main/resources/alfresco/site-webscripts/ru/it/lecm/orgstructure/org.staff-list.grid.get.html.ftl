@@ -120,6 +120,84 @@
 						};
 						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					};
+					LogicECM.module.Base.DataGrid.prototype.onActionMakeBoss = function DataGridActions_onActionMakeBoss(p_item, owner, actionsConfig, fnCallback) {
+						var me = this;
+						var staffRow = p_item;
+						// Получаем для штатного расписания ссылку на сотрудника
+						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
+						var callback = {
+							success:function (oResponse) {
+								var oResult = eval("(" + oResponse.responseText + ")");
+								if (oResult) {
+									Alfresco.util.PopupManager.displayPrompt(
+											{
+												title:me.msg("message.position.boss.title"),
+												text: me.msg("message.position.boss.prompt",
+														staffRow.itemData["assoc_lecm-orgstr_element-member-position-assoc"].displayValue),
+												buttons:[
+													{
+														text:me.msg("button.position.makeBoss"),
+														handler:function DataGridActions__onActionDelete_delete() {
+															this.destroy();
+															var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
+																YAHOO.Bubbling.fire("datagridRefresh",
+																		{
+																			bubblingLabel:me.options.bubblingLabel
+																		});
+																Alfresco.util.PopupManager.displayMessage(
+																		{
+																			text:me.msg("message.position.boss.success")
+																		});
+															};
+															var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
+																Alfresco.util.PopupManager.displayMessage(
+																		{
+																			text:me.msg("message.position.boss.failure")
+																		});
+															};
+															Alfresco.util.Ajax.jsonRequest(
+																	{
+																		url:Alfresco.constants.PROXY_URI + "/lecm/orgstructure/action/makeBoss",
+																		method:"POST",
+																		dataObj:{
+																			nodeRef:staffRow.nodeRef
+																		},
+																		successCallback:{
+																			fn:onSuccess,
+																			scope:this
+																		},
+																		failureCallback:{
+																			fn:onFailure,
+																			scope:this
+																		}
+																	});
+														}
+													},
+													{
+														text:me.msg("button.cancel"),
+														handler:function DataGridActions__onActionDelete_cancel() {
+															this.destroy();
+														},
+														isDefault:true
+													}
+												]
+											});
+								} else {
+									Alfresco.util.PopupManager.displayMessage(
+											{
+												text:this.msg("message.position.boss.failure")
+											});
+								}
+							},
+							failure:function (oResponse) {
+								Alfresco.util.PopupManager.displayMessage(
+										{
+											text:this.msg("message.position.boss.failure")
+										});
+							}
+						};
+						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+					};
 					LogicECM.module.Base.DataGrid.prototype.deleteStaffEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
 						var itemData = rowData.itemData;
 						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
@@ -131,6 +209,10 @@
 					LogicECM.module.Base.DataGrid.prototype.deleteEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
 						var itemData = rowData.itemData;
 						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined && itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
+					};
+					LogicECM.module.Base.DataGrid.prototype.makeBossEvaluator = function DataGridActions_makeBossEvaluatorEvaluator(rowData) {
+						var itemData = rowData.itemData;
+						return itemData["prop_lecm-orgstr_staff-list-is-boss"].value == false;
 					};
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
@@ -163,7 +245,14 @@
 										permission:"delete",
 										label:"${msg("actions.delete-row")}",
 										evaluator: "deleteStaffEvaluator"
-									}
+									},
+									{
+										type:"action-link-staff",
+										id:"onActionMakeBoss",
+										permission:"edit",
+										label:"${msg("actions.makeBoss")}",
+										evaluator:"makeBossEvaluator"
+									},
 								],
 								bubblingLabel: "${bubblingLabel!"staff"}",
 								showCheckboxColumn: false
