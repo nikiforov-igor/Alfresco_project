@@ -4,6 +4,7 @@
         <forms>
             <form>
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-first-name"/>
