@@ -37,8 +37,9 @@
                                     }],
                         datagridMeta: {
                                 itemType: "${field.control.params.itemType!""}",
-                                formId: "${field.control.params.formId!"datagrid"}",
-                                nodeRef: "${form.arguments.itemId}"
+                                datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
+                                createFormId: "${field.control.params.createFormId!""}",
+                                nodeRef: "${field.value!form.arguments.itemId}"
                             },
                         dataSource:"${field.control.params.ds!"lecm/search"}",
                         bubblingLabel: "${containerId}" + "${field.control.params.itemType}",

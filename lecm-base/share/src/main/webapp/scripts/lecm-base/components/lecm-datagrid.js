@@ -711,7 +711,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
-                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.formId != null && this.datagridMeta.formId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.formId) : "")),
+                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.datagridFormId) : "")),
                         successCallback:
                         {
                             fn: this.onDataGridColumns,
@@ -2217,7 +2217,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         itemId:meta.itemType,
                         destination:meta.nodeRef,
                         mode:"create",
-                        formId: meta.formId != null ? meta.formId : "",
+                        formId: meta.createFormId != null ? meta.createFormId : "",
                         submitType:"json"
                     });
 

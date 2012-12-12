@@ -46,7 +46,8 @@
                             <control-param name="itemType">lecm-orgstr:staff-list</control-param>
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
-                            <control-param name="formId">employee-positions</control-param>
+                            <control-param name="datagridFormId">employee-positions</control-param>
+                            <control-param name="createFormId">employee-positions</control-param>
                             <control-param name="ds">lecm/orgstructure/ds/employee-positions</control-param>
                         </control>
                     </field>
@@ -55,7 +56,8 @@
                             <control-param name="itemType">lecm-orgstr:workforce</control-param>
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
-                            <control-param name="formId">employee-groups</control-param>
+                            <control-param name="datagridFormId">employee-groups</control-param>
+                            <control-param name="createFormId">employee-groups</control-param>
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
