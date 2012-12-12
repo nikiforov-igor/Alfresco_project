@@ -39,10 +39,10 @@
                                 itemType: "${field.control.params.itemType!""}",
                                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                                 createFormId: "${field.control.params.createFormId!""}",
-                                nodeRef: "${field.value!form.arguments.itemId}"
+                                nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>
                             },
                         dataSource:"${field.control.params.ds!"lecm/search"}",
-                        bubblingLabel: "${containerId}" + "${field.control.params.itemType}",
+                        bubblingLabel: "${containerId}",
                         <#if field.control.params.height??>
                             height: ${field.control.params.height},
                         </#if>
