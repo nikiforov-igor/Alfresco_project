@@ -461,6 +461,14 @@ h4 .lighter
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+.yui-skin-lecmTheme .yui-panel div.form-field textarea {
+    width: 36em;
+    float: right;
+    clear: none;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+}
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='checkbox'] {
     vertical-align: middle;
     margin: auto 0;
