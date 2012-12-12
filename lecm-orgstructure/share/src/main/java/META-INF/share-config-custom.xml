@@ -40,7 +40,7 @@
                     <field id="lecm-orgstr:employee-is-system-user" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
-                        <control template="/ru/it/lecm/orgstructure/controls/viewPersonalData.ftl"/>
+                        <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-positions" set="positions">
                         <control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
