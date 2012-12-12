@@ -15,4 +15,11 @@
 	        </span>
 	    </span>
 </div>
+<div class="statemachine-menu">
+		<span id="menu-buttons-machine-deploy" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Задеплоить">&nbsp;</button>
+	        </span>
+	    </span>
+</div>
 </@comp.baseMenu>

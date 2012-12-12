@@ -62,20 +62,57 @@
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
+				<property name="lecm-stmeditor:statusUUID">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<!-- Ссылки на действия -->
+				<property name="lecm-stmeditor:takeFinishStateWithTransitionUser">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:takeFinishStateWithTransitionWorkflow">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:startStartWorkflow">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:endStartWorkflow">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:startScriptAction">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:endScriptAction">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:startWaitForDocumentChange">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:takeUserWorkflow">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:endTransitionAction">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
 			</properties>
-			<associations>
-				<association name="lecm-stmeditor:statusFolder">
-					<source>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>cm:folder</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
 		</type>
 
 		<!-- Объект Действие. Используется как основной объект для расширения конкретный объектов действий -->
@@ -181,6 +218,27 @@
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 			</mandatory-aspects>
+		</type>
+
+		<!-- Объект действие ScriptAction -->
+		<type name="lecm-stmeditor:ScriptAction">
+			<title>Logic ECM Statemachine Script Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
+		<type name="lecm-stmeditor:ScriptActionEntity">
+			<title>Logic ECM Statemachine Script Action Object</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-stmeditor:scriptLabel">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:actionScript">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
 		</type>
 
 		<!-- transitionWorkflow -->

@@ -3,13 +3,103 @@
 	<config evaluator="node-type" condition="lecm-stmeditor:status">
 		<forms>
 			<form>
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-stmeditor:startStatus" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
+					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
+					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
+					<show id="lecm-stmeditor:startStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:startScriptAction" force="true"/>
+					<show id="lecm-stmeditor:endStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endScriptAction" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:name"/>
-					<field id="lecm-stmeditor:startStatus"/>
+					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
+					<set id="behavior" appearance="" label-id="statemachine.editor.form.behavior" />
+					<set id="actions" appearance="" label-id="statemachine.editor.form.actions" />
+					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
+					<field id="cm:name" set="info" />
+					<field id="lecm-stmeditor:startStatus" set="info"/>
+
+					<!-- behavior Set -->
+					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endTransitionAction" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<!-- Action Set -->
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionUser" set="actions">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<!-- Events Set -->
+					<field id="lecm-stmeditor:startStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:startScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+						</control>
+					</field>
+
 				</appearance>
 			</form>
 		</forms>
@@ -20,29 +110,9 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-					<show id="lecm-stmeditor:startStatus" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:name"/>
-					<field id="lecm-stmeditor:startStatus"/>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="node-type" condition="lecm-stmeditor:StartWorkflow">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:workflows" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
-                            <control-param name="height">100</control-param>
-						</control>
-					</field>
+					<field id="cm:name" />
 				</appearance>
 			</form>
 		</forms>
@@ -88,60 +158,6 @@
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-stmeditor:WaitForDocumentChange">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:expressions" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:transition</control-param>
-                            <control-param name="height">100</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="node-type" condition="lecm-stmeditor:TransitionAction">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:expressions" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:expressions" label-id="statemachine.editor.form.label.expressions">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:transition</control-param>
-                            <control-param name="height">100</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="node-type" condition="lecm-stmeditor:UserWorkflow">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:workflows" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:workflows" label-id="statemachine.editor.form.label.workflows">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
-                            <control-param name="height">100</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
 	<config evaluator="model-type" condition="lecm-stmeditor:UserWorkflowEntity">
 		<forms>
 			<form>
@@ -175,31 +191,6 @@
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="node-type" condition="lecm-stmeditor:FinishStateWithTransition">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:userTransition" force="true"/>
-					<show id="lecm-stmeditor:transitionWorkflow" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:userTransition" label-id="statemachine.editor.form.label.userTransition">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
-                            <control-param name="height">100</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:transitionWorkflow" label-id="statemachine.editor.form.label.transitionWorkflow">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
-							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
-                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -444,6 +435,44 @@
 					<field id="lecm-stmeditor:outputWorkflowToVariable" />
 					<field id="lecm-stmeditor:outputWorkflowVariableType" />
 					<field id="lecm-stmeditor:outputWorkflowVariableValue" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:ScriptActionEntity">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:scriptLabel" force="true"/>
+					<show id="lecm-stmeditor:actionScript" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:scriptLabel" />
+					<field id="lecm-stmeditor:actionScript" >
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">5</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:ScriptActionEntity">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-stmeditor:scriptLabel" force="true"/>
+					<show id="lecm-stmeditor:actionScript" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:scriptLabel" />
+					<field id="lecm-stmeditor:actionScript" >
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">5</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>

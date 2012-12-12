@@ -49,6 +49,7 @@
 			<ref bean="policyComponent"/>
 		</property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="stateMachineActions" ref="stateMachineActions"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.diagram.get"

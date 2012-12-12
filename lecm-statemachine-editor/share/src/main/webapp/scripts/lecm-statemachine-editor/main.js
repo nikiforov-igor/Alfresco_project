@@ -165,6 +165,10 @@ LogicECM.module = LogicECM.module || {};
 				edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
 				td.appendChild(edit);
 
+				YAHOO.util.Event.addListener(edit, "click", function() {
+					me._editStatus(model.nodeRef);
+				});
+
 				var span = document.createElement("span");
 				span.innerHTML = "&nbsp;&nbsp;";
 				td.appendChild(span);
@@ -297,7 +301,7 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
 		},
 
-		_deployStatemachine: function(nodeRef) {
+		_deployStatemachine: function() {
 			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=deploy";
 			sUrl = YAHOO.lang.substitute(sUrl, {
 				statemachineNodeRef: this.packageNodeRef
@@ -328,7 +332,7 @@ LogicECM.module = LogicECM.module || {};
 			this._showSplash();
 
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
-				width:"40em",
+				width:"50em",
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,

@@ -8,7 +8,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import ru.it.lecm.base.statemachine.bean.StateMachineActions;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,8 +45,7 @@ public class BPMNGenerator {
 	private final static QName PROP_ACTION_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionId");
 	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
 	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
-	private final static QName PROP_USER_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "userTransitionLabel");
-	private final static QName PROP_WORKFLOW_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflowLabel");
+	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
 	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
 	private final static QName PROP_INPUT_WORKFLOW_TO_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowToVariable");
@@ -173,16 +171,13 @@ public class BPMNGenerator {
 				ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
 
 				List<ChildAssociationRef> actions = nodeService.getChildAssocs(status.getChildRef());
-				StateMachineActions actionsBean = new StateMachineActions();
 				for (ChildAssociationRef action : actions) {
-					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String execution = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_EXECUTION);
-					String realExecution = actionsBean.getRealExecution(actionId, "user", execution);
-					if (realExecution.equals("start")) {
+					if (execution.equals("start")) {
 						startActions.add(action);
-					} else if (realExecution.equals("take")) {
+					} else if (execution.equals("take")) {
 						takeActions.add(action);
-					} else if (realExecution.equals("end")) {
+					} else if (execution.equals("end")) {
 						endActions.add(action);
 					}
 				}
@@ -387,17 +382,17 @@ public class BPMNGenerator {
 			parameter.setAttribute("value", variableValue);
 			attribute.appendChild(parameter);
 
+			String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_TRANSITION_LABEL);
+			parameter = doc.createElement("lecm:parameter");
+			parameter.setAttribute("name", "labelId");
+			parameter.setAttribute("value", labelId);
+			attribute.appendChild(parameter);
+
 			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 			flows.add(new Flow(statusVar, target, "${var" + actionVar + " == '" + variableValue + "'}"));
 
 			if (TYPE_WORKFLOW_TRANSITION.equals(type)) {
-				String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_TRANSITION_LABEL);
-				parameter = doc.createElement("lecm:parameter");
-				parameter.setAttribute("name", "labelId");
-				parameter.setAttribute("value", labelId);
-				attribute.appendChild(parameter);
-
 				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_ID);
 				parameter = doc.createElement("lecm:parameter");
 				parameter.setAttribute("name", "workflowId");
@@ -443,12 +438,6 @@ public class BPMNGenerator {
 						}
 					}
 				}
-			} else {
-				String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_USER_TRANSITION_LABEL);
-				parameter = doc.createElement("lecm:parameter");
-				parameter.setAttribute("name", "labelId");
-				parameter.setAttribute("value", labelId);
-				attribute.appendChild(parameter);
 			}
 		}
 		return flows;

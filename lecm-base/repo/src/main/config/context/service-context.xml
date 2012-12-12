@@ -109,7 +109,7 @@
 		<property name="name" value="FinishStateWithTransition"/>
 		<property name="action" value="ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction" />
 		<property name="type" value="user" />
-		<property name="execution" value="take/transition" />
+		<property name="execution" value="take" />
 	</bean>
 
 	<bean id="startWorkflow.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
@@ -123,14 +123,14 @@
 		<property name="name" value="WaitForDocumentChange"/>
 		<property name="action" value="ru.it.lecm.base.statemachine.action.document.WaitForDocumentChangeAction" />
 		<property name="type" value="user" />
-		<property name="execution" value="start/transition" />
+		<property name="execution" value="start" />
 	</bean>
 
 	<bean id="userWorkflow.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
 		<property name="name" value="UserWorkflow"/>
 		<property name="action" value="ru.it.lecm.base.statemachine.action.UserWorkflow" />
 		<property name="type" value="user" />
-		<property name="execution" value="take/user" />
+		<property name="execution" value="take" />
 	</bean>
 
 	<bean id="transitionAction.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
@@ -138,6 +138,13 @@
 		<property name="action" value="ru.it.lecm.base.statemachine.action.TransitionAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="end" />
+	</bean>
+
+	<bean id="scriptAction.StateMachineAction" class="ru.it.lecm.base.statemachine.bean.StateMachineActions">
+		<property name="name" value="ScriptAction"/>
+		<property name="action" value="ru.it.lecm.base.statemachine.action.ScriptAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="start, end" />
 	</bean>
 
 </beans>

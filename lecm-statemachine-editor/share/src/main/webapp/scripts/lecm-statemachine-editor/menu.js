@@ -73,7 +73,12 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 			};
             this.widgets.staffButton = Alfresco.util.createYUIButton(this, "machine-properties", onButtonClick2, {});
 
-        }
+			var onButtonClick3 = function (e) {
+				this.editor._deployStatemachine();
+			};
+			this.widgets.deployButton = Alfresco.util.createYUIButton(this, "machine-deploy", onButtonClick3, {});
+
+		}
 
     });
 })();
