@@ -633,4 +633,22 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
         List<NodeRef> roles = orgstructureService.getEmployeeWorkForces(ref);
         return createScriptable(roles);
     }
+
+	/**
+	 * Получение полного перечня бизнес ролей
+	 */
+	public Scriptable getBusinesRoles(boolean onlyActive) {
+		List<NodeRef> businesRoles = orgstructureService.getBusinesRoles(onlyActive);
+		return createScriptable(businesRoles);
+	}
+
+	/**
+	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
+	 */
+	public Scriptable getEmployeesByBusinessRole(String businessRoleRef) {
+		ParameterCheck.mandatory("businessRoleRef", businessRoleRef);
+		NodeRef ref = new NodeRef(businessRoleRef);
+		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(ref);
+		return createScriptable(results);
+	}
 }

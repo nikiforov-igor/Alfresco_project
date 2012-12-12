@@ -42,6 +42,7 @@ public class OrgstructureBean {
 	public static final String DICTIONARIES_ROOT_NAME = "Dictionary";
 	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
 	public static final String ROLES_DICTIONARY_NAME = "Роли для рабочих групп";
+	public static final String BUSINESS_ROLES_DICTIONARY_NAME = "Бизнес роли";
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -55,6 +56,7 @@ public class OrgstructureBean {
 	public static final QName ASSOC_ELEMENT_MEMBER_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-member-employee-assoc");
 	public static final QName ASSOC_EMPLOYEE_PHOTO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-photo-assoc");
 	public static final QName ASSOC_EMPLOYEE_PERSON_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-data-assoc");
+	public static final QName ASSOC_BUSINESS_ROLE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-employee-assoc");
 
 	public static final QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
 	public static final QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");
@@ -71,6 +73,7 @@ public class OrgstructureBean {
 	public static final QName TYPE_WORK_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workRole");
 	public static final QName TYPE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee");
 	public static final QName TYPE_PERSONAL_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "personal-data");
+	public static final QName TYPE_BUSINESS_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role");
 
 	private final Object lock = new Object();
 
@@ -337,6 +340,15 @@ public class OrgstructureBean {
 	public boolean isWorkGroup(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORK_GROUP);
+		return isProperType(ref, types);
+	}
+
+	/**
+	 * проверяет что объект является бизнес ролью
+	 */
+	public boolean isBusinessRole(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_BUSINESS_ROLE);
 		return isProperType(ref, types);
 	}
 
@@ -784,4 +796,47 @@ public class OrgstructureBean {
     public boolean isArchive(NodeRef ref){
         return ref.getStoreRef().getProtocol().equals("archive");    
     }
+
+	/**
+	 * Получение полного перечня бизнес ролей
+	 */
+	public List<NodeRef> getBusinesRoles(boolean onlyActive) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
+		NodeRef rolesRoot = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, BUSINESS_ROLES_DICTIONARY_NAME);
+
+		Set<QName> roles = new HashSet<QName>();
+		roles.add(TYPE_BUSINESS_ROLE);
+
+		List<ChildAssociationRef> businessRoles = nodeService.getChildAssocs(rolesRoot, roles);
+		for (ChildAssociationRef businessRole : businessRoles) {
+			if (!onlyActive || !isArchive(businessRole.getChildRef())) {
+				results.add(businessRole.getChildRef());
+			} else {
+				if ((Boolean) nodeService.getProperty(businessRole.getChildRef(), IS_ACTIVE)) {
+					results.add(businessRole.getChildRef());
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
+	 */
+	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
+			// получаем сотрудников
+			List<AssociationRef> employees = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_EMPLOYEE);
+			for (AssociationRef empChildRef : employees) {
+				if (!isArchive(empChildRef.getTargetRef())){
+						results.add(empChildRef.getTargetRef());
+				}
+			}
+		}
+		return results;
+	}
 }
