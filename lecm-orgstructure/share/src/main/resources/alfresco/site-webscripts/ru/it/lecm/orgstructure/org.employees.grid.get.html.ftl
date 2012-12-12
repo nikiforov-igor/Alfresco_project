@@ -70,6 +70,12 @@
 												}
 												break;
 
+                                            case "boolean":
+                                                if (data.displayValue) {
+                                                    html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                }
+                                                break;
+
 											default:
 												if (datalistColumn.type == "association") {
 													html += $html(data.displayValue);
