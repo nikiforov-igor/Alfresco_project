@@ -2,7 +2,10 @@
 <#import "/ru/it/lecm/orgstructure/orgstructure-tree.ftl" as orgTree/>
 <#assign id = args.htmlid>
 <#assign showSearchBlock = true/>
-
+<#assign realDelete = false/>
+<#if fullDelete??>
+	<#assign realDelete = fullDelete/>
+</#if>
 <div class="yui-t1" id="orgstructure-grid-with-tree">
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
@@ -69,19 +72,19 @@
 								showExtendSearchBlock:${showSearchBlock?string},
 								actions:[
 									{
-										type:"action-link-orgstructure",
+										type:"action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionEdit",
 										permission:"edit",
 										label:"${msg("actions.edit")}"
 									},
 									{
-										type:"action-link-orgstructure",
+										type:"action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionVersion",
 										permission:"edit",
 										label:"${msg("actions.version")}"
 									},
 									{
-										type:"action-link-orgstructure",
+										type:"action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionDelete",
 										permission:"delete",
 										label:"${msg("actions.delete-row")}"
@@ -100,7 +103,7 @@
 	<div id="alf-filters">
 		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:organization-unit"
 						nodePattern="lecm-orgstr_element-full-name" itemPattern="lecm-orgstr_element-full-name"
-						drawEditors=false>
+						drawEditors=false fullDelete=realDelete>
 		</@orgTree.tree>
 	</div>
 </div>

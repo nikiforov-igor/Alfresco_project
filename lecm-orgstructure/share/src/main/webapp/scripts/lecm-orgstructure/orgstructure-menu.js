@@ -65,6 +65,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     nodeRef:root.nodeRef,
                                     custom: {
                                         namePattern:root.namePattern
+                                    },
+                                    actionsConfig:{
+                                        fullDelete:root.fullDelete
                                     }
                                 },
                                 bubblingLabel:"workGroup"
@@ -73,9 +76,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             {
                                 datagridMeta:{
                                     itemType:"lecm-orgstr:workforce",
-                                    nodeRef:root.nodeRef,
-                                    custom: {
-                                        namePattern:root.namePattern
+                                    nodeRef:"NOT_LOAD",
+                                    actionsConfig:{
+                                        fullDelete:true
                                     }
                                 },
                                 bubblingLabel:"workForce"
@@ -86,11 +89,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 datagridMeta:{
                                     itemType:root.itemType,
                                     nodeRef:root.nodeRef,
+                                    actionsConfig:{
+                                        fullDelete:root.fullDelete
+                                    },
                                     custom: {
                                         namePattern:root.namePattern
                                     }
                                 },
-                                bubblingLabel:null
+                                bubblingLabel:root.bubblingLabel
                             });
                     }
                 }
@@ -171,13 +177,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 nodeRef:oResults[nodeIndex].nodeRef,
                                 itemType:oResults[nodeIndex].itemType,
                                 namePattern:oResults[nodeIndex].namePattern,
-                                page:oResults[nodeIndex].page
+                                page:oResults[nodeIndex].page,
+                                fullDelete:oResults[nodeIndex].fullDelete
                             };
                             var namespace = "lecm-orgstr";
                             var page = root.page;
                             var cType = root.itemType;
                             root.itemType = namespace + ":" + cType;
-
+                            root.bubblingLabel = cType;
                             oResponse.argument.context.roots[page] = root;
                         }
                     }

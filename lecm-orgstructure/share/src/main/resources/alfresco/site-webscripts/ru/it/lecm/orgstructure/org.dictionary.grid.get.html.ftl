@@ -98,13 +98,13 @@
 							showExtendSearchBlock:true,
 							actions: [
 								{
-									type:"action-link-dictionary",
+									type:"action-link-${bubblingLabel!"dictionary"}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-dictionary",
+									type:"action-link-${bubblingLabel!"dictionary"}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}"

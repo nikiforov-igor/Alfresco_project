@@ -1,4 +1,4 @@
-<#macro tree nodeType itemType nodePattern="cm_name" itemPattern="cm_name" drawEditors=true>
+<#macro tree nodeType itemType nodePattern="cm_name" itemPattern="cm_name" drawEditors=true fullDelete=false>
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
@@ -9,7 +9,8 @@
 				itemType:"${itemType}",
 				nodePattern:"${nodePattern}",
 				itemPattern:"${itemPattern}",
-				drawEditors:${drawEditors?string}
+				drawEditors:${drawEditors?string},
+				fullDelete:${fullDelete?string}
 			});
 		}
 		YAHOO.util.Event.onDOMReady(init);

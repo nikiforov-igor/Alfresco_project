@@ -160,34 +160,34 @@
 					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined && itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
 				};
 
-				new LogicECM.module.Base.DataGrid('${id}').setOptions(
+				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							bubblingLabel: "${bubblingLabel!"workForce"}",
 							usePagination:true,
 							showExtendSearchBlock:false,
 							actions: [
 								{
-									type:"action-link-workForce",
+									type:"action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEmployeeAdd",
 									permission:"edit",
 									label:"${msg("actions.addEmployee")}",
 									evaluator:"addEmployeeEvaluator"
 								},
 								{
-									type:"action-link-workForce",
+									type:"action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEmployeeDelete",
 									permission:"edit",
 									label:"${msg("actions.deleteEmployee")}",
 									evaluator:"deleteEmployeeEvaluator"
 								},
 								{
-									type:"action-link-workForce",
+									type:"action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-workForce",
+									type:"action-link-${bubblingLabel!"workForce"}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",

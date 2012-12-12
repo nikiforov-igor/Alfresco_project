@@ -60,6 +60,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             nodePattern: "cm_name",
             itemPattern: "cm_name",
             drawEditors: true,
+            fullDelete: false,
             insituEditors:null
         },
 
@@ -214,7 +215,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                 namePattern:me.options.itemPattern // используется в тулбаре Оргструктуры при сохранении новой ноды
                             },
                             actionsConfig: {// настройки экшенов. (необязателен)
-                                fullDelete:false // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
+                                fullDelete:me.options.fullDelete // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
                             }
                         }
                     });

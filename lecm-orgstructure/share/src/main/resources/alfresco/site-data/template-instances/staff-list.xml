@@ -7,7 +7,8 @@
             <url>/lecm/orgstructure/staff-list-datagrid</url>
             <properties>
                 <pagination>true</pagination>
-                <bubblingLabel>staff</bubblingLabel>
+                <bubblingLabel>staff-list</bubblingLabel>
+                <fullDelete>true</fullDelete>
             </properties>
         </component>
         <!-- Toolbar -->
@@ -18,7 +19,7 @@
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
                 <typeButton>newRowButtonStaff</typeButton>
-                <bubblingLabel>staff</bubblingLabel>
+                <bubblingLabel>staff-list</bubblingLabel>
                 <active>false</active>
             </properties>
         </component>

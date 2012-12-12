@@ -19,6 +19,7 @@
 				<showButtons>false</showButtons>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
+                <bubblingLabel>business-role</bubblingLabel>
             </properties>
         </component>
         <!-- Menu -->
@@ -35,6 +36,7 @@
 			<url>/lecm/orgstructure/business-roles/datagrid</url>
             <properties>
                 <pagination>true</pagination>
+                <bubblingLabel>business-role</bubblingLabel>
             </properties>
 		</component>
 	</components>

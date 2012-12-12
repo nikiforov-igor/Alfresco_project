@@ -14,11 +14,13 @@ function addItems(branch, items) {
         nodeRef = items[index].nodeRef;
         itemType = (items[index].itemType != null ? items[index].itemType : "");
         pattern = (items[index].namePattern != null ? items[index].namePattern : "");
+        deleteNode = (items[index].deleteNode != null && items[index].deleteNode != undefined ? items[index].deleteNode : false);
         branch.push({
             page:page,
             nodeRef:nodeRef,
             itemType:itemType,
-            pattern:pattern
+            pattern:pattern,
+            deleteNode:"" + deleteNode
         });
     }
 }

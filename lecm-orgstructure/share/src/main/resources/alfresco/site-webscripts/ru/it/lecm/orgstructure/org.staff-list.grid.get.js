@@ -29,6 +29,7 @@ function main()
     var repoconfig = config.scoped['Search']['search'].getChildValue('repository-search');
     // config override can force repository search on/off
     model.searchRepo = (repoconfig != "none");
+    model.bubblingLabel = args["bubblingLabel"];
 }
 
 main();

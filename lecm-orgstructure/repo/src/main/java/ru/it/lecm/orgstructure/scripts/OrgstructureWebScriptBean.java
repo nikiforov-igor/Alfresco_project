@@ -1,5 +1,7 @@
 package ru.it.lecm.orgstructure.scripts;
 
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -20,8 +22,6 @@ import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.util.*;
-
 /**
  * @author dbashmakov
  *         Date: 27.11.12
@@ -36,6 +36,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String NAME_PATTERN = "namePattern";
+	public static final String DELETE_NODE = "deleteNode";
 
 	public static final QName ELEMENT_FULL_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
@@ -126,10 +127,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		try {
 			// Добавить Организацию
 			root = new JSONObject();
-			root.put(NODE_REF, organizationRef);
+			root.put(NODE_REF, "NOT_LOAD");
 			root.put(PAGE, OrgstructureBean.TYPE_ORGANIZATION);
-			root.put(ITEM_TYPE, OrgstructureBean.TYPE_ORGANIZATION);
-			root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+			/*root.put(ITEM_TYPE, OrgstructureBean.TYPE_ORGANIZATION);
+			root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);*/
 
 			nodes.put(root);
 
@@ -142,6 +143,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root.put(NODE_REF, positions.toString());
 			root.put(ITEM_TYPE, TYPE_POSITION);
 			root.put(PAGE, ORG_POSITIONS);
+			root.put(DELETE_NODE, false);
 			nodes.put(root);
 
 			NodeRef roles = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Роли для рабочих групп");
@@ -150,6 +152,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root.put(NODE_REF, roles.toString());
 			root.put(ITEM_TYPE, TYPE_ROLE);
 			root.put(PAGE, ORG_ROLES);
+			root.put(DELETE_NODE, false);
 			nodes.put(root);
 
 			//Добавить справочник Бизнес Роли
@@ -158,6 +161,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root.put(NODE_REF, businessRoles.toString());
 			root.put(ITEM_TYPE, TYPE_BUSINESS_ROLE);
 			root.put(PAGE, BUSINESS_ROLES);
+			root.put(DELETE_NODE, false);
 
 			nodes.put(root);
 		} catch (JSONException e) {
@@ -172,26 +176,27 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 				NodeRef cRef = childAssociationRef.getChildRef();
 
 				root = new JSONObject();
-				root.put(NODE_REF, cRef.toString());
 
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
+					root.put(NODE_REF, cRef.toString());
 					root.put(PAGE, ORG_EMPLOYEES);
 					root.put(ITEM_TYPE, TYPE_EMPLOYEE);
+					root.put(DELETE_NODE, false);
 					root.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
 				} else if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root.put(NODE_REF, "NOT_LOAD");
 					root.put(PAGE, "orgstructure");
-					root.put(ITEM_TYPE, TYPE_UNIT);
-					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+					/*root.put(ITEM_TYPE, TYPE_UNIT);
+					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);*/
 				}
 				nodes.put(root);
 				//Добавить Штатное расписание, Рабочие группы
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root = new JSONObject();
-					root.put(NODE_REF, cRef.toString());
+					root.put(NODE_REF, "NOT_LOAD");
 					root.put(PAGE, STAFF_LIST);
-					root.put(ITEM_TYPE, TYPE_STAFF_LIST);
-					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+					/*root.put(ITEM_TYPE, TYPE_STAFF_LIST);
+					root.put(DELETE_NODE, true);*/
 					nodes.put(root);
 
 					root = new JSONObject();
@@ -199,6 +204,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					root.put(PAGE, WORK_GROUPS);
 					root.put(ITEM_TYPE, TYPE_WRK_GROUP);
 					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+					root.put(DELETE_NODE, false);
 					nodes.put(root);
 				}
 			} catch (JSONException e) {
@@ -242,7 +248,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 						}
 					}
 				}
-				sort(nodes,"title",true);
+				sort(nodes,LABEL,true);
 			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION)) { //Вывести директорию "Структура"
 				NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, OrgstructureBean.STRUCTURE_ROOT_NAME);
 				if (structure != null) {

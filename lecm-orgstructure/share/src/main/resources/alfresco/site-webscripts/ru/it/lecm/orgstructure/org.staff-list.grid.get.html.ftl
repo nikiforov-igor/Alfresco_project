@@ -276,41 +276,41 @@
 								showExtendSearchBlock:${showSearchBlock?string},
 								actions: [
 									{
-										type:"action-link-staff",
+										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEmployeeAdd",
 										permission:"edit",
 										label:"${msg("actions.addEmployee")}",
 										evaluator:"addEmployeeEvaluator"
 									},
 									{
-										type:"action-link-staff",
+										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEmployeeDelete",
 										permission:"edit",
 										label:"${msg("actions.deleteEmployee")}",
 										evaluator:"deleteEmployeeEvaluator"
 									},
 									{
-										type:"action-link-staff",
+										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEdit",
 										permission:"edit",
 										label:"${msg("actions.edit")}"
 									},
 									{
-										type:"action-link-staff",
+										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionDelete",
 										permission:"delete",
 										label:"${msg("actions.delete-row")}",
 										evaluator: "deleteStaffEvaluator"
 									},
 									{
-										type:"action-link-staff",
+										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionMakeBoss",
 										permission:"edit",
 										label:"${msg("actions.makeBoss")}",
 										evaluator:"makeBossEvaluator"
 									},
 								],
-								bubblingLabel: "${bubblingLabel!"staff"}",
+								bubblingLabel: "${bubblingLabel!"staff-list"}",
 								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}

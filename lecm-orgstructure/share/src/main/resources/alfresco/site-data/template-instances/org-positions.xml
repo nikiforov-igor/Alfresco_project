@@ -7,7 +7,7 @@
             <url>/lecm/orgstructure/dictionary-datagrid</url>
             <properties>
                 <pagination>true</pagination>
-                <bubblingLabel>dictionary</bubblingLabel>
+                <bubblingLabel>staffPosition</bubblingLabel>
             </properties>
         </component>
         <!-- Toolbar -->
@@ -17,7 +17,7 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
-                <bubblingLabel>dictionary</bubblingLabel>
+                <bubblingLabel>staffPosition</bubblingLabel>
             </properties>
         </component>
         <!-- Title -->
