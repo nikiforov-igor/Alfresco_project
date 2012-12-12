@@ -157,11 +157,11 @@ function initialize() {
 			if (oResults != null) {
 				if (oResults.nodeRef == null) {
 					// скрываем кнопку редактировать
-					Dom.addClass("${id}-editPersonalData", 'hidden');
+					Dom.removeClass("${id}-createPersonalData", 'hidden');
 				} else {
 					drawForm(oResults.nodeRef);
 					// скрываем кнопку создать
-					Dom.addClass("${id}-createPersonalData", 'hidden');
+					Dom.removeClass("${id}-editPersonalData", 'hidden');
 				}
 
 			}
@@ -205,12 +205,12 @@ function createPersonalData() {
 	<div id="${id}-contentPersonalData"></div>
 	<div id="${id}-buttonPersonalData">
 	<#if form.mode == "edit" || form.mode == "create">
-        <span id="${id}-createPersonalData" class="yui-button yui-push-button">
+        <span id="${id}-createPersonalData" class="yui-button yui-push-button hidden">
            <span class="first-child">
               <button type="button" onclick="createPersonalData();">${msg('button.create')}</button>
            </span>
         </span>
-		<span id="${id}-editPersonalData" class="yui-button yui-push-button">
+		<span id="${id}-editPersonalData" class="yui-button yui-push-button hidden">
            <span class="first-child">
               <button type="button" onclick="editPersonalData();">${msg('button.edit')}</button>
            </span>

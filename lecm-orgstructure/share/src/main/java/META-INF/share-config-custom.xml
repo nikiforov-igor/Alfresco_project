@@ -496,7 +496,7 @@
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
                     <field id="lecm-orgstr:staff-list-is-boss">
-                        <control template="/ru/it/lecm/orgstructure/controls/control.boss.ftl"/>
+                        <control template="/ru/it/lecm/orgstructure/controls/checkbox.readonly.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -526,9 +526,6 @@
                     </field>
                     <field id="lecm-orgstr:staff-list-description">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
-                    </field>
-                    <field id="lecm-orgstr:staff-list-is-boss">
-                        <control template="/ru/it/lecm/orgstructure/controls/control.boss.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -735,7 +732,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:employee-link-is-primary">
-                        <control template="/ru/it/lecm/orgstructure/controls/control.main.job.ftl"/>
+                        <control template="/ru/it/lecm/orgstructure/controls/checkbox.readonly.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -756,7 +753,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:employee-link-is-primary">
-                        <control template="/ru/it/lecm/orgstructure/controls/control.main.job.ftl"/>
+                        <control template="/ru/it/lecm/orgstructure/controls/checkbox.readonly.ftl"/>
                     </field>
                 </appearance>
             </form>

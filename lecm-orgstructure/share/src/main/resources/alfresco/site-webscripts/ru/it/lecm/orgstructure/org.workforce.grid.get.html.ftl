@@ -14,7 +14,7 @@
 					var metaData = {
 						itemType:"lecm-orgstr:employee-link",
 						nodeRef:p_item.nodeRef,
-						formId:"el-work"
+						createFormId:"el-work"
 					};
 
 					var onAddCallback = function (employeeRef) {
