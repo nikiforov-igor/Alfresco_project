@@ -1,6 +1,7 @@
 package ru.it.lecm.delegation;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 
 /**
@@ -83,9 +84,7 @@ public interface IDelegation {
 
 	JSONObject test(JSONObject args);
 
-	/**
-	 * Получить NodeRef корневого узла Доверенностей
-	 * @return
-	 */
-	NodeRef getDelegationContainer ();
+	NodeRef getDelegationOptsContainer ();
+
+	QName getItemType ();
 }

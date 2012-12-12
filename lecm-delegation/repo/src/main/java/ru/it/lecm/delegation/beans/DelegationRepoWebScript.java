@@ -1,12 +1,8 @@
 package ru.it.lecm.delegation.beans;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.ServletUtil;
@@ -39,7 +35,6 @@ public class DelegationRepoWebScript
 	 * вариант действия указывается в URLе вебскрипта, см DelegationRepoWebScript.post.desc.xml
 	 */
 	private static enum Action {
-		createDummy,
 		create,
 		get,
 
@@ -48,9 +43,7 @@ public class DelegationRepoWebScript
 		delete,
 
 		getrootnode,
-		test,
-
-		getDelegationContainer;
+		test;
 
 		public boolean equals (String obj) {
 			return this.toString().equalsIgnoreCase(obj);
@@ -66,21 +59,6 @@ public class DelegationRepoWebScript
 
 	public void setDelegationService (IWebScriptDelegation service) {
 		this.delegationService = service;
-	}
-
-	private String createDummy () {
-		final JSONObject dummy = new JSONObject ();
-		try {
-			dummy.put ("id", UUID.randomUUID ());
-			dummy.put ("name", "someData");
-			dummy.put ("title", "this is some data. It is unique by it's id and can be serialized to json");
-			dummy.put ("date", new Date ());
-		} catch (Exception ex) { // JSONException
-			logger.error (ex.getMessage (), ex);
-			// dummy.put("message", ex.toString());
-			return  "{}";
-		}
-		return dummy.toString();
 	}
 
 	@Override
@@ -119,11 +97,6 @@ public class DelegationRepoWebScript
 	}
 
 	@Override
-	public String getDelegationContainer () {
-		return delegationService.getDelegationContainer ();
-	}
-
-	@Override
 	protected Map<String, Object> executeImpl (WebScriptRequest req, Status status, Cache cache) {
 
 		logger.debug ("executing delegation webscript");
@@ -150,9 +123,6 @@ public class DelegationRepoWebScript
 		if (Action.getrootnode.equals (action)) {
 			model.put ("model", getProcuracyRootNodeRef());
 
-		} else if (Action.createDummy.equals (action)) {
-			model.put ("model", createDummy());
-
 		} else if (Action.create.equals (action)) {
 			model.put ("model", createProcuracy (jsonContent));
 
@@ -170,9 +140,6 @@ public class DelegationRepoWebScript
 
 		} else if (Action.test.equals (action)) {
 			model.put ("model", test(jsonContent));
-
-		} else if (Action.getDelegationContainer.equals (action)) {
-			model.put ("model", getDelegationContainer ());
 
 		} else {
 			throw new WebScriptException (String.format ("DelegationRepoWebScript was invoked with unknown template arg: %s", action));

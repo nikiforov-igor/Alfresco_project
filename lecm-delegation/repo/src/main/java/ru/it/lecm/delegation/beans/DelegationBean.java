@@ -15,6 +15,7 @@ import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.processor.BaseProcessorExtension;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.lock.LockService;
@@ -28,10 +29,12 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
+import org.alfresco.util.PropertyCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +49,7 @@ import ru.it.lecm.utils.alfresco.Utils;
 
 public class DelegationBean
 		extends BaseProcessorExtension
-		implements IDelegation
+		implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>
 {
 
 	// Namespace URI of delegations model structure
@@ -113,7 +116,7 @@ public class DelegationBean
 	 * Ссылки Доверенности
 	 */
 
-	
+
 	// 	(1-1) делегирующее лицо. Тот человек, чьи бизнес роли и права будут переданы (из type"lecm-d8n:delegation-opts")
 	final static public QName ASSOC_FROM_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "delegation-opts-owner-assoc");
 
@@ -126,15 +129,20 @@ public class DelegationBean
 	// (M-1) Сотрудник который является доверенным лицом (из type"lecm-d8n:procuracy")
 	final static public QName ASSOC_TO_EMPLOYEE = QName.createQName(NSURI_DELEGATIONS, "trustee-assoc");
 
+	private final static String CONTAINER = "DelegationOptionsContainer";
+	private final static String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
+	private final static QName TYPE_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-container");
 	/*
 	 * props
 	 */
 	final private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
 
 	private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
+	private Repository repository;
 	private TransactionService transactionService;
 	private ITestSearch tester;
+
+	private NodeRef delegationOptsContainer;
 
 
 	public ServiceRegistry getServiceRegistry() {
@@ -146,11 +154,11 @@ public class DelegationBean
 	}
 
 	public Repository getRepositoryHelper() {
-		return this.repositoryHelper;
+		return this.repository;
 	}
 
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 	public TransactionService getTransactionService() {
@@ -178,9 +186,9 @@ public class DelegationBean
 	 */
 	private NodeRef getDelegationRootRef() {
 		final NodeService nodeService = serviceRegistry.getNodeService();
-		repositoryHelper.init();
+		repository.init();
 
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		final NodeRef companyHome = repository.getCompanyHome();
 		return nodeService.getChildByName( companyHome, ContentModel.ASSOC_CONTAINS, NODE_DEFAULT_DELEGATIONS_ROOT);
 	}
 
@@ -204,8 +212,8 @@ public class DelegationBean
 		final String rootname = (rootName == null) ? NODE_DEFAULT_DELEGATIONS_ROOT : rootName;
 		final NodeService nodeService = serviceRegistry.getNodeService();
 
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		repository.init();
+		final NodeRef companyHome = repository.getCompanyHome();
 
 		// массив, чтобы проще было использовать изнутри doInTransaction ...
 		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootname);
@@ -476,9 +484,9 @@ public class DelegationBean
 			net.sf.acegisecurity.vote.RoleVoter grpVoter;
 			org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor metinter;
 
-			/* 
+			/*
 			 * нужен воутер, чтобы убирать права (sec-группу) при доступе к
-			 * некоторым методам. Логика примерно такая "у текущего пользователя 
+			 * некоторым методам. Логика примерно такая "у текущего пользователя
 			 * и документа есть одинаковый атрибут".
 			 * Реализовать можнно так: иметь явную sec-group для прользователя,
 			 * которую мы будем ассоциировать с подразделением, в документ
@@ -984,35 +992,55 @@ public class DelegationBean
 	}
 	*/
 
+	public final void bootstrap () {
+		PropertyCheck.mandatory (this, "serviceRegistry", serviceRegistry);
+		PropertyCheck.mandatory (this, "repository", repository);
+		PropertyCheck.mandatory (this, "transactionService", transactionService);
+
+		//создание контейнера для хранения параметров делегирования
+		delegationOptsContainer = AuthenticationUtil.runAsSystem (this);
+	}
+
 	@Override
-	public NodeRef getDelegationContainer () {
-		final String rootname = "DelegationOptionsContainer";
+	public NodeRef doWork () throws Exception {
+		repository.init ();
 		final NodeService nodeService = serviceRegistry.getNodeService();
-
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-
-		// массив, чтобы проще было использовать изнутри doInTransaction ...
-		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootname);
-		if (delegationRoot == null) {
-			delegationRoot = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+		final NodeRef companyHome = repository.getCompanyHome();
+		NodeRef container = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
+		if (container == null) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+			container = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 				@Override
 				public NodeRef execute() throws Throwable {
 					NodeRef parentRef = companyHome; //the parent node
 					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
-					QName assocQName = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", rootname); //the qualified name of the association
-					QName nodeTypeQName = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", "delegation-opts-container"); //a reference to the node type
+					QName assocQName = QName.createQName (DELEGATION_NAMESPACE, CONTAINER); //the qualified name of the association
+					QName nodeTypeQName = TYPE_DELEGATION_OPTS_CONTAINER; //a reference to the node type
 					// создание корневого узла для делегирований в Компании ...
 					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
-					properties.put(ContentModel.PROP_NAME, rootname);
+					properties.put(ContentModel.PROP_NAME, CONTAINER);
 					ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 					NodeRef delegationRoot = associationRef.getChildRef();
-					logger.warn("container node '"+ rootname+ "' created: "+ delegationRoot.toString() );
+					logger.debug (String.format ("container node '%s' created", delegationRoot.toString ()));
 					return delegationRoot;
 				}
 			});
 		}
-		// logger.info( "\n\t(!) all authorities "+ serviceRegistry.getPermissionService().getAllAuthorities());
-		return delegationRoot;
+		return container;
+	}
+
+	@Override
+	public NodeRef getDelegationOptsContainer () {
+		try {
+			delegationOptsContainer = doWork ();
+		} catch (Exception ex) {
+			logger.warn (ex.getMessage (), ex);
+		}
+		return delegationOptsContainer;
+	}
+
+	@Override
+	public QName getItemType () {
+		return TYPE_DELEGATION_OPTS_CONTAINER;
 	}
 }

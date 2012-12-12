@@ -85,11 +85,5 @@ public interface IWebScriptDelegation {
 	String deleteProcuracy(String /*JSONObject*/ argId);
 
 	String test(String /*JSONObject*/ args);
-
-	/**
-	 * Получить NodeRef для корневого узла Доверенностей
-	 * @return json-строка с результатом "nodeRef"="xxx"
-	 */
-	String getDelegationContainer ();
 }
 

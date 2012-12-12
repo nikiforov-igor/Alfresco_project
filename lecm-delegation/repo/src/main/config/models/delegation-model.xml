@@ -53,7 +53,7 @@
 		 | задает связь между указанность бизнес-ролью и сотрудником
 		-->
 		<type name="lecm-d8n:procuracy">
-			<parent>cm:content</parent>
+			<parent>cm:content</parent> <!-- тут вообще можно cm:cmobject заюзать я думаю -->
 			<associations>
 				<!-- бизнес роль -->
 				<association name="lecm-d8n:business-role-assoc">
