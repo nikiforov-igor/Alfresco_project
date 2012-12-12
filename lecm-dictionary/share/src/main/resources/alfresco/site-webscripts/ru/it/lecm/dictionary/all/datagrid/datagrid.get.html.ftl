@@ -103,11 +103,7 @@ LogicECM.module.Base.DataGrid.prototype.getCellFormatter = function () {
 
 LogicECM.module.Base.DataGrid.prototype.getDataTableColumnDefinitions = function () {
 	// YUI DataTable column definitions
-	var columnDefinitions =
-			[
-				{ key: "nodeRef", label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
-					sortable: false, formatter: this.fnRenderCellSelected(), width: 16 }
-			];
+	var columnDefinitions =	[];
 
 	var column;
 	for (var i = 0, ii = this.datagridColumns.length; i < ii; i++)
@@ -191,7 +187,8 @@ LogicECM.module.Base.DataGrid.prototype.onActionExportXML = function (item) {
 new LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
 			usePagination: true,
-			showExtendSearchBlock:false
+			showExtendSearchBlock:false,
+            showCheckboxColumn:false
 		}).setMessages(${messages});
 //]]></script>
 </@grid.datagrid>
