@@ -417,6 +417,34 @@ public class OrgstructureBean {
 	}
 
 	/**
+	 * Получение руководителя сотрудника
+	 */
+	public NodeRef findEmployeeBoss(NodeRef employeeRef) {
+		NodeRef bossRef = null;
+		if (nodeService.exists(employeeRef)) {
+			if (isEmployee(employeeRef)) {
+				// получаем основную должностную позицию
+				NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
+				if (primaryStaff != null) {
+					// получаем подразделение для штатного расписания
+					NodeRef unit = getUnitByStaff(primaryStaff);
+					// получаем руководителя для подразделения
+					bossRef = getUnitBoss(unit);
+					//сотрудник не может быть руководителем у себя (кроме случая, если он руководитель организации)
+					while (bossRef.equals(employeeRef) && ((unit = getParent(unit)) != null)) {
+						bossRef = getUnitBoss(unit);
+					}
+				}
+			}
+			//если не нашли - возвращаем руководителя организации
+			if (bossRef == null || bossRef.equals(employeeRef)) {
+				bossRef = getOrganizationBoss();
+			}
+		}
+		return bossRef;
+	}
+
+	/**
 	 * Получение списка Штатных Расписаний для Подразделения
 	 */
 	public List<NodeRef> getUnitStaffLists(NodeRef unitRef) {

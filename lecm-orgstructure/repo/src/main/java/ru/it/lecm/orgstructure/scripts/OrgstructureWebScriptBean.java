@@ -533,23 +533,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode findEmployeeBoss(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef ref = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(ref)) {
-			if (orgstructureService.isEmployee(ref)) {
-				// получаем основную должностную позицию
-				NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(ref);
-				NodeRef bossRef = null;
-				if (primaryStaff != null) {
-					// получаем подразделение для штатного расписания
-					NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
-					// получаем руководителя для подразделения
-					bossRef = orgstructureService.getUnitBoss(unit);
-				} else {
-					bossRef = orgstructureService.getOrganizationBoss();
-				}
-				if (bossRef != null) {
-					return new ScriptNode(bossRef, this.services, getScope());
-				}
-			}
+		NodeRef bossRef = orgstructureService.findEmployeeBoss(ref);
+		if (bossRef != null) {
+			return new ScriptNode(bossRef, this.services, getScope());
 		}
 		return null;
 	}
