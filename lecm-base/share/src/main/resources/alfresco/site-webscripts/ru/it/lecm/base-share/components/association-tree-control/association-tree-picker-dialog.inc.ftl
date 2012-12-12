@@ -57,7 +57,7 @@
         <div><strong>${msg("logicecm.base.elements-for-select")}</strong></div>
         <div class="yui-g">
             <#if !plane>
-                <div id="${pickerId}-treeSelector" class="first panel-left tree">
+                <div id="${pickerId}-treeSelector" class="yui-u first panel-left tree">
                     <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
                         <#nested>
                     </div>
