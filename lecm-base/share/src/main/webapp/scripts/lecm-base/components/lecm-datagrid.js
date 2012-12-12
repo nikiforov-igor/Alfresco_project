@@ -975,7 +975,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 field:column.formsName,
                                 sortFunction:this.getSortFunction()
                             },
-                            formatter:this.getCellFormatter(column.dataType)
+                            formatter:this.getCellFormatter(column.dataType),
+                            className: (column.dataType == 'boolean') ? 'centered' : ''
                         });
                 }
                 if (this.options.showActionColumn){

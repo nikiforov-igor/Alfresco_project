@@ -1161,6 +1161,7 @@ z-index: 9000;
     border: none;
     border-bottom: 1px solid #cbcbcb;
     background: rgba(204,204,204,0.4);
+    text-align: left;
     vertical-align: middle;
 }
 .yui-skin-lecmTheme .datagrid .grid.yui-dt th,
@@ -1195,13 +1196,9 @@ z-index: 9000;
     vertical-align: middle;
 }
 
-.yui-skin-lecmTheme .datagrid .grid.yui-dt th,
-.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td {
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th.centered,
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td.centered {
     text-align: center;
-}
-.yui-skin-lecmTheme .datagrid .grid.yui-dt th:first-of-type,
-.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td:first-of-type {
-    text-align: left;
 }
 
 .yui-skin-lecmTheme .yui-dt-list td {
