@@ -582,6 +582,19 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
+	 * Получение списка сотрудников, занимающих в указанном подразделении указанную должностную позицию
+	 * @param unitRef подразделение
+	 * @param positionRef доложностная позиция
+	 * @return список ссылок на сотрудников
+	 */
+	public Scriptable getEmployeesByPosition(String unitRef, String positionRef) {
+		ParameterCheck.mandatory("unitRef", unitRef);
+		ParameterCheck.mandatory("positionRef", positionRef);
+		List<NodeRef> employees = orgstructureService.getEmployeesByPosition(new NodeRef(unitRef), new NodeRef(positionRef));
+		return createScriptable(employees);
+	}
+
+	/**
 	 * Получение Рабочих групп, в которых участвует сотрудник
 	 */
 	public Scriptable getEmployeeWorkGroups(String employeeRef) {

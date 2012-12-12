@@ -1,8 +1,5 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -15,6 +12,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -444,6 +444,30 @@ public class OrgstructureBean {
 			return getEmployeeByLink(employeeLink);
 		}
 		return null;
+	}
+
+	/**
+	 * Получение списка сотрудников, занимающих в указанном подразделении указанную должностную позицию
+	 * @param unit подразделение
+	 * @param position доложностная позиция
+	 * @return список ссылок на сотрудников
+	 */
+	public List<NodeRef> getEmployeesByPosition(NodeRef unit, NodeRef position) {
+		Set<NodeRef> result = new HashSet<NodeRef>();
+		List<NodeRef> staffLists = getUnitStaffLists(unit);
+		for (NodeRef staffList : staffLists) {
+			if (isArchive(staffList)) {
+				continue;
+			}
+			List<AssociationRef> posAssoc = nodeService.getTargetAssocs(staffList, ASSOC_ELEMENT_MEMBER_POSITION);
+			if (posAssoc.get(0).getTargetRef().equals(position)) { //ссылка на должность - всегда одна и обязательна
+				NodeRef employee = getEmployeeByPosition(staffList);
+				if (employee != null) {
+					result.add(employee);
+				}
+			}
+		}
+		return new ArrayList<NodeRef>(result);
 	}
 
 	/**
