@@ -1194,6 +1194,16 @@ z-index: 9000;
     text-align: left;
     vertical-align: middle;
 }
+
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th,
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td {
+    text-align: center;
+}
+.yui-skin-lecmTheme .datagrid .grid.yui-dt th:first-of-type,
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td:first-of-type {
+    text-align: left;
+}
+
 .yui-skin-lecmTheme .yui-dt-list td {
 border-right: none;
 }
