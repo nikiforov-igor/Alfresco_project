@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.model.BusinessRole;
 import ru.it.lecm.model.Employee;
 import ru.it.lecm.security.IBusinessRoleManager;
-import ru.it.lecm.utils.DataMapper;
-import ru.it.lecm.utils.DataMapper.MapException;
+import ru.it.lecm.utils.alfresco.DataMapper;
+import ru.it.lecm.utils.alfresco.DataMapper.MapException;
 
 public class BusinessRoleManagerImpl 
 	implements IBusinessRoleManager 

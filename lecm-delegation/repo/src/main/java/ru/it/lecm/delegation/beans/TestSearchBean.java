@@ -22,10 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.delegation.ITestSearch;
-import ru.it.lecm.delegation.utils.DurationLogger;
-import ru.it.lecm.delegation.utils.SearchHelper;
-import ru.it.lecm.delegation.utils.Utils;
 import ru.it.lecm.security.impl.OrgStrucureAfterInvocationProvider;
+import ru.it.lecm.utils.DurationLogger;
+import ru.it.lecm.utils.alfresco.SearchHelper;
+import ru.it.lecm.utils.alfresco.Utils;
 
 public class TestSearchBean implements ITestSearch 
 {

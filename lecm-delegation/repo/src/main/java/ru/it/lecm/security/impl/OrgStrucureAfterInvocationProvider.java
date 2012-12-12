@@ -45,7 +45,8 @@ import org.alfresco.util.Pair;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.AccessDeniedException;
 
-import ru.it.lecm.delegation.utils.StrUtils;
+import ru.it.lecm.utils.StrUtils;
+import ru.it.lecm.utils.alfresco.QNameResolver;
 
 /**
  * Проверка прав доступа на узлы ПОСЛЕ выполнения вызова secured-методов служ

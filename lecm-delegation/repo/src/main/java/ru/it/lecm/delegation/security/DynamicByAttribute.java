@@ -20,15 +20,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
-import ru.it.lecm.delegation.utils.DurationLogger;
-import ru.it.lecm.utils.Cache;
-import ru.it.lecm.utils.CacheEx;
-import ru.it.lecm.utils.CacheableBase;
+import ru.it.lecm.utils.DurationLogger;
+import ru.it.lecm.utils.cache.Cache;
+import ru.it.lecm.utils.cache.CacheEx;
+import ru.it.lecm.utils.cache.CacheableBase;
 
 /**
  * Динамическая авторизация согласно значениям атрибутов.
- */
-/**
  * @author rabdullin
  *
  */

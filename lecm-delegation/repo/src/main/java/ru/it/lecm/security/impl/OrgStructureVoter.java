@@ -25,6 +25,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.SpringSecurityMessageSource;
 
+import ru.it.lecm.utils.alfresco.QNameResolver;
+
 /**
  * Реализация custom-логики для днамической проверки доступа к методам (actions)
  * 

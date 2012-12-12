@@ -11,6 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 
+import ru.it.lecm.utils.alfresco.QNameResolver;
+
 /**
  * Базовый бин для обеспечения проверок в системе безопасности.
  * Имеет набор служб (NodeService, PermissionService, NamespacePrefixResolver, AuthorityService)

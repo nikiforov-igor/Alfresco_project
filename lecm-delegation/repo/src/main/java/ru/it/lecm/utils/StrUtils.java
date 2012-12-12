@@ -1,4 +1,4 @@
-package ru.it.lecm.delegation.utils;
+package ru.it.lecm.utils;
 
 import java.util.Collection;
 import java.util.Iterator;
