@@ -541,6 +541,21 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
+	 * Получение информации о подразделении сотрудника
+	 */
+	public ScriptNode getUnitByStaff(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(ref)) {
+			NodeRef unitRef = orgstructureService.getUnitByStaff(ref);
+			if (orgstructureService.isUnit(unitRef)) {
+				return new ScriptNode(unitRef, this.services, getScope());
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Получение фотографии сотрудника
 	 */
 	public ScriptNode getEmployeePhoto(String employeeRef) {

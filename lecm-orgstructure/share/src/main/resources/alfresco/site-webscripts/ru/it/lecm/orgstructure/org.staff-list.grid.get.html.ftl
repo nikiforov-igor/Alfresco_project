@@ -198,6 +198,62 @@
 						};
 						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					};
+					// Переопределяем метод onActionDelete. Добавляем проверки
+					LogicECM.module.Base.DataGrid.prototype.onActionDelete = function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+						var me = this;
+						var	items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+						var deletedUnit = items[0]; // для штатного расписания одновременно удалить можно ТОЛЬКО ОДНУ должность
+						if (deletedUnit.itemData["prop_lecm-orgstr_staff-list-is-boss"].value == false) {
+							this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+						} else {
+							//Получаем подразделение сотрудника
+							var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + deletedUnit.nodeRef;
+							var callback = {
+								success:function (oResponse) {
+									var oResults = eval("(" + oResponse.responseText + ")");
+									if (oResults && oResults.nodeRef) {
+										//Получаем все должности подразделения
+										var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + oResults.nodeRef;
+										var callback = {
+											success:function (oResponse) {
+												var oResults = eval("(" + oResponse.responseText + ")");
+												if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
+													Alfresco.util.PopupManager.displayMessage(
+															{
+																text:me.msg("message.delete.staff-lest.failure.boss")
+															});
+												} else { // удаляем! вызов метода из грида
+													me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+												}
+											},
+											failure:function (oResponse) {
+												Alfresco.util.PopupManager.displayMessage(
+														{
+															text:me.msg("message.delete.staff-lest.error")
+														});
+											},
+											argument:{
+											}
+										};
+										YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+									} else {
+										Alfresco.util.PopupManager.displayMessage(
+												{
+													text:me.msg("message.delete.staff-lest.error")
+												});
+									}
+								},
+								failure:function (oResponse) {
+									Alfresco.util.PopupManager.displayMessage(
+											{
+												text:me.msg("message.delete.staff-lest.error")
+											});
+								}
+							};
+							YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+						}
+					};
+
 					LogicECM.module.Base.DataGrid.prototype.deleteStaffEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
 						var itemData = rowData.itemData;
 						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
