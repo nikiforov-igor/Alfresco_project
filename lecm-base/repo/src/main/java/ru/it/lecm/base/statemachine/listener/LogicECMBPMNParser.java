@@ -115,7 +115,8 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 		if (extentionElements != null) {
 			Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extension");
 			if (lecmExtention != null) {
-				StateMachineHandler handler = new StateMachineHandler(lecmExtention);
+				String processId = ((ProcessDefinitionEntity)activity.getParent()).getKey();
+				StateMachineHandler handler = new StateMachineHandler(lecmExtention, processId);
 				activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
 				activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, handler);
 				activity.addExecutionListener(ExecutionListener.EVENTNAME_END, handler);

@@ -1,7 +1,7 @@
 package ru.it.lecm.statemachine.editor.script;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxGraph;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -95,20 +95,8 @@ public class BPMNGraphGenerator {
 			layout.setOrientation(SwingConstants.WEST);
 			layout.execute(parent);
 			graph.getModel().endUpdate();
-			mxGraphComponent graphComponent = new mxGraphComponent(graph);
-			JFrame f = new JFrame(); // for paint
-			graphComponent.getViewport().setOpaque(true);
-			graphComponent.getViewport().setBackground(Color.WHITE);
-			graphComponent.setBorder(BorderFactory.createEmptyBorder());
-			f.add(graphComponent);
-			f.pack();
-
-			BufferedImage image = new BufferedImage(graphComponent.getWidth(), graphComponent.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g = image.createGraphics();
-			graphComponent.paint(g);
-			f.dispose();
+			BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null);
 			ImageIO.write(image, "png", baos);
-
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

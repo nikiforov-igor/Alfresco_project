@@ -44,6 +44,7 @@ public class BPMNGenerator {
 
 	private final static QName PROP_ACTION_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionId");
 	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
+	private final static QName PROP_STATUS_UUID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusUUID");
 	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
 	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
@@ -162,6 +163,12 @@ public class BPMNGenerator {
 				Element attribute = doc.createElement("lecm:attribute");
 				attribute.setAttribute("name", "status");
 				attribute.setAttribute("value", statusName);
+				setStatusAction.appendChild(attribute);
+
+				String statusUUID = (String) nodeService.getProperty(status.getChildRef(), PROP_STATUS_UUID);
+				attribute = doc.createElement("lecm:attribute");
+				attribute.setAttribute("name", "uuid");
+				attribute.setAttribute("value", statusUUID);
 				setStatusAction.appendChild(attribute);
 				start.appendChild(setStatusAction);
 

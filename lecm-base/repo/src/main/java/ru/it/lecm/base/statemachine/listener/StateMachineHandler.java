@@ -28,10 +28,13 @@ public class StateMachineHandler implements ExecutionListener {
 	private static ServiceRegistry serviceRegistry;
 	private static Log logger = LogFactory.getLog(StateMachineHandler.class);
 
+	private String processId = "";
+
 	public StateMachineHandler() {
 	}
 
-	public StateMachineHandler(Element lecmExtention) {
+	public StateMachineHandler(Element lecmExtention, String processId) {
+		this.processId = processId;
 		this.events.put(ExecutionListener.EVENTNAME_START, new ArrayList<StateMachineAction>());
 		this.events.put(ExecutionListener.EVENTNAME_TAKE, new ArrayList<StateMachineAction>());
 		this.events.put(ExecutionListener.EVENTNAME_END, new ArrayList<StateMachineAction>());
@@ -79,7 +82,7 @@ public class StateMachineHandler implements ExecutionListener {
 
 		if (action != null) {
 			action.setServiceRegistry(serviceRegistry);
-			action.init(actionElement);
+			action.init(actionElement, processId);
 		}
 		return action;
 	}

@@ -24,7 +24,7 @@ abstract public class StateMachineAction {
 
 	abstract public void execute(DelegateExecution execution);
 
-	abstract public void init(Element actionElement);
+	abstract public void init(Element actionElement, String processId);
 
 	public String getActionName() {
 		return StateMachineActions.getActionName(getClass());

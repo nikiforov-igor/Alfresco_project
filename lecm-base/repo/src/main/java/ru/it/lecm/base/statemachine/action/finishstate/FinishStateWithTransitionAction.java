@@ -29,7 +29,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 	private static String PROP_OUTPUT_VARIABLE_VALUE = "variableValue";
 
 	@Override
-	public void init(Element action) {
+	public void init(Element action, String processId) {
 		String outputVariable = action.attribute(PROP_OUTPUT_VARIABLE_NAME);
 		List<Element> attributes = action.elements("attribute");
 		for (Element attribute : attributes) {

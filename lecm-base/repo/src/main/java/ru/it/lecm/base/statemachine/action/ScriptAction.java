@@ -9,11 +9,12 @@ import org.activiti.engine.impl.util.xml.Element;
  * Time: 10:10
  */
 public class ScriptAction extends StateMachineAction {
+
 	@Override
 	public void execute(DelegateExecution execution) {
 	}
 
 	@Override
-	public void init(Element actionElement) {
+	public void init(Element actionElement, String processId) {
 	}
 }

@@ -28,7 +28,7 @@ public class WaitForDocumentChangeAction extends StateMachineAction {
 	private static final String PROP_OUTPUT_VALUE = "outputValue";
 
 	@Override
-	public void init(Element element) {
+	public void init(Element element, String processId) {
 		Element expressions = element.element(TAG_EXPRESSIONS);
 
 		String outputVariable = expressions.attribute(PROP_OUTPUT_VARIABLE);

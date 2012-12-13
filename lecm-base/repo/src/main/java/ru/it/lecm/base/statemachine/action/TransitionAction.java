@@ -15,6 +15,6 @@ public class TransitionAction extends StateMachineAction {
 	}
 
 	@Override
-	public void init(Element actionElement) {
+	public void init(Element actionElement, String processId) {
 	}
 }

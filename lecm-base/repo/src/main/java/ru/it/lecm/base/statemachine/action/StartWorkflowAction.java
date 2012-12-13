@@ -22,7 +22,7 @@ public class StartWorkflowAction extends StateMachineAction {
 	private static final String PROP_ASSIGNEE = "assignee";
 
 	@Override
-	public void init(Element action) {
+	public void init(Element action, String processId) {
 		List<Element> attributes = action.elements("attribute");
 		for (Element attribute : attributes) {
 			if (PROP_WORKFLOW_ID.equalsIgnoreCase(attribute.attribute("name"))) {
