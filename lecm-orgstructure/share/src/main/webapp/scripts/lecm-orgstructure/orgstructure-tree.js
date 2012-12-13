@@ -82,9 +82,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var root = this.tree.getRoot();
             this._loadTree(root);
 
-            this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
-            this.tree.subscribe("expandComplete", this.onExpandComplete, this, true);
-            this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
+//            this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
+//            this.tree.subscribe("expandComplete", this.onExpandComplete, this, true);
+//            this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.subscribe('clickEvent', function (event) {
                 this._treeNodeSelected(event.node);
