@@ -29,14 +29,14 @@
         #${pickerId}-view-roles, #${pickerId}-view-people { padding-left: 1em; }
 
         .picker .bd > div:not(.bdft) {
-            margin: 0 10px;
+            margin: 0 2px;
         }
         .picker .bd > div:not(.bdft):first-of-type {
             padding-top: 10px;
         }
         .picker .bd div.yui-gb,
         .picker .bd div.yui-g {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
     </style>
