@@ -3,7 +3,6 @@ package ru.it.lecm.delegation.beans;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,8 +17,6 @@ import org.alfresco.repo.processor.BaseProcessorExtension;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.lock.LockService;
-import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -27,9 +24,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -42,15 +36,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.utils.DurationLogger;
-import ru.it.lecm.utils.alfresco.SearchHelper;
 import ru.it.lecm.utils.alfresco.Utils;
 
-public class DelegationBean
-		extends BaseProcessorExtension
-		implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>
-{
+public class DelegationBean extends BaseProcessorExtension implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
 	// Namespace URI of delegations model structure
 	// "http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0";
@@ -177,68 +168,6 @@ public class DelegationBean
 		this.tester = tester;
 	}
 
-	/**
-	 * Получение корневого узла (в Компании), в котором хрянятся все доверенности.
-	 * Если такой узел отсутствует - он здесь НЕ создаётся.
-	 * см. также {@link:ensureDelegationsRootRef}
-	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
-	 * @return
-	 */
-	private NodeRef getDelegationRootRef() {
-		final NodeService nodeService = serviceRegistry.getNodeService();
-		repository.init();
-
-		final NodeRef companyHome = repository.getCompanyHome();
-		return nodeService.getChildByName( companyHome, ContentModel.ASSOC_CONTAINS, NODE_DEFAULT_DELEGATIONS_ROOT);
-	}
-
-	/**
-	 * Получение корневого узла, в котором хрянятся все доверенности.
-	 * Если такой узел отсутствует - он создаётся автоматом (внутри CompanyHome).
-	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
-	 * @return
-	 */
-	private NodeRef ensureDelegationsRootRef() {
-		return ensureDelegationsRootRef(NODE_DEFAULT_DELEGATIONS_ROOT);
-	}
-
-	/**
-	 * Получение указанного узла в CompanyHome.
-	 * Если такой узел отсутствует - он создаётся автоматом (внутри CompanyHome).
-	 * @param rootName название узла, если null, то используется NODE_DEFAULT_DELEGATIONS_ROOT.
-	 * @return
-	 */
-	private NodeRef ensureDelegationsRootRef(String rootName) {
-		final String rootname = (rootName == null) ? NODE_DEFAULT_DELEGATIONS_ROOT : rootName;
-		final NodeService nodeService = serviceRegistry.getNodeService();
-
-		repository.init();
-		final NodeRef companyHome = repository.getCompanyHome();
-
-		// массив, чтобы проще было использовать изнутри doInTransaction ...
-		NodeRef delegationRoot = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, rootname);
-		if (delegationRoot == null) {
-			delegationRoot = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-				@Override
-				public NodeRef execute() throws Throwable {
-					NodeRef parentRef = companyHome; //the parent node
-					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
-					QName assocQName = QName.createQName (NSURI_DELEGATIONS, rootname); //the qualified name of the association
-					QName nodeTypeQName = ContentModel.TYPE_FOLDER; //a reference to the node type
-					// создание корневого узла для делегирований в Компании ...
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
-					properties.put(ContentModel.PROP_NAME, rootname);
-					ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-					NodeRef delegationRoot = associationRef.getChildRef();
-					logger.warn("container node '"+ rootname+ "' created: "+ delegationRoot.toString() );
-					return delegationRoot;
-				}
-			});
-		}
-		// logger.info( "\n\t(!) all authorities "+ serviceRegistry.getPermissionService().getAllAuthorities());
-		return delegationRoot;
-	}
-
 	/*
 	@Override
 	public String getExtensionName() {
@@ -251,13 +180,6 @@ public class DelegationBean
 	}
 	 */
 
-
-	@Override
-	public JSONObject getProcuracy(String procuracyId) {
-		return getProcuracy(NODE_DEFAULT_DELEGATIONS_ROOT, procuracyId);
-	}
-
-
 	/**
 	 * Получить ссылку на узел по id узла
 	 * @param procuracyid
@@ -265,61 +187,6 @@ public class DelegationBean
 	 */
 	static NodeRef makeFullRef(String procuracyid) {
 		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, procuracyid);
-	}
-
-
-	@Override
-	public NodeRef getProcuracyRootNodeRef() {
-		return ensureDelegationsRootRef();
-	}
-
-
-	@Override
-	public String createProcuracy(JSONObject args) {
-
-		final NodeService nodeService = serviceRegistry.getNodeService();
-
-		final Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-		try {
-			Utils.setProps(props, NSURI_DELEGATIONS, args);
-		} catch (Exception ex) {
-			logger.error("setProperties errros: ", ex);
-			return null;
-		}
-
-		/* (!) Обновление данных */
-		final NodeRef rootDelegates = ensureDelegationsRootRef();
-		final ChildAssociationRef ref = nodeService.createNode (
-					rootDelegates
-					, ContentModel.ASSOC_CONTAINS
-					, QName.createQName (NSURI_DELEGATIONS, NAME_PROCURACY)
-					, QName.createQName (NSURI_DELEGATIONS, TYPE_DELEGATION_OPTS)
-					, props);
-		nodeService.setProperties(ref.getChildRef(), props);
-
-		final String result = ref.getChildRef().getId();
-		logger.info("Procuracy created with id "+ result);
-		return result;
-	}
-
-
-	/**
-	 * Получить указанную доверенность
-	 * @param rootName название корневого узла доверенностей
-	 * @param procuracyId id Доверенности (id для строки storeType + "//" + storeId + "/" + id);
-	 * @return
-	 */
-	private JSONObject getProcuracy(String rootName, final String procuracyId)
-	{
-		JSONObject result = new JSONObject();
-
-		if (procuracyId == null)
-			return result;
-
-		final NodeRef currentRef = makeFullRef(procuracyId);
-		final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(currentRef);
-		result = makeJson(props);
-		return result;
 	}
 
 	/*
@@ -351,26 +218,11 @@ public class DelegationBean
 	 * @param value
 	 * @return
 	 */
-	final static Object convertModelValueIntoJson(Object value) {
+	static Object convertModelValueIntoJson(Object value) {
 		return (value instanceof Date)
 				? DateFormatISO8601.format((Date) value)
 				: value;
 	}
-
-	final static JSONObject makeJson(final Map<QName, Serializable> props) {
-		final JSONObject result = new JSONObject();
-		if (props != null) {
-			for (Map.Entry<QName, Serializable> entry: props.entrySet()) {
-				try {
-					result.put( entry.getKey().getLocalName(), entry.getValue());
-				} catch (JSONException ex) {
-					logger.error("Problem loading procuracy node ", ex);
-				}
-			}
-		}
-		return result;
-	}
-
 
 	/**
 	 * Получить свойства в json-виде пригодном для отправки в форму ввода
@@ -383,7 +235,7 @@ public class DelegationBean
 				}
 				, ... other properties ...
 	 */
-	final static JSONObject makeJsonPropeties(
+	static JSONObject makeJsonPropeties(
 			Map<QName, Serializable> props
 			, Collection<QName> assoclist
 			, NamespaceService nss
@@ -434,7 +286,7 @@ public class DelegationBean
 	 */
 
 
-	final static String quots(final String value) {
+	static String quots(final String value) {
 		// return StringUtils.quote(value);
 		return (value == null) ? null : '"'+ value + '"';
 	}
@@ -450,7 +302,7 @@ public class DelegationBean
 	 * пример:
 	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
 	 */
-	final static StringBuilder makeSearchQuery(
+	static StringBuilder makeSearchQuery(
 				final StringBuilder dest
 				, final String namespace
 				, final String typename
@@ -505,61 +357,9 @@ public class DelegationBean
 	 * пример:
 	 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
 	 */
-	final static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest
+	static StringBuilder makeSearchQuery4Procuracy(final StringBuilder dest
 			, JSONObject searchArgs, NodeRef parentNode) {
 		return makeSearchQuery( dest, NSURI_DELEGATIONS, TYPE_PROCURACY, searchArgs, parentNode);
-	}
-
-	/**
-	 * Выполнить поиск.
-	 * Пример правильного JSON (верно поименованные данные):
-	 * {
-	 * 		"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess":"false"
-	 * 		, "{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate":"false"
-	 */
-	@Override
-	public JSONObject findProcuracyList(JSONObject args) {
-		// TODO: сейчас тип в ссылках на атрибуты надо указывать полностью, обдумать как перейти на префиксную систему ...
-
-		/* параметры поиска */
-		final SearchParameters sp = new SearchParameters();
-		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO); // FTS (!)
-
-		JSONObject searchArgs = null;
-		try {
-			searchArgs = (args != null) ? new JSONObject(args, JSONObject.getNames(args)) : null;
-			/* добавление параметров pg_limit/offset ... */
-			SearchHelper.assignArgs(sp, searchArgs, true); // убрать найденное из searchArgs ...
-		} catch (JSONException ex) {
-			logger.error("Problem building JSON answer", ex);
-			throw new RuntimeException(ex);
-		}
-
-		final StringBuilder sbQuery = makeSearchQuery4Procuracy( new StringBuilder(), searchArgs, getDelegationRootRef());
-
-		/*
-		 * Пример сформированногозапроса:
-		 * TYPE:"{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}procuracy" AND PARENT:"workspace://SpacesStore/6081c936-e68c-4ecf-a273-04a2a4c53f74" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpropogate:"false" AND @{http://www.it.ru/lecm/model/business/authority/delegations/structure/1.0}canpostprocess:"false"
-		 */
-		sp.setQuery(sbQuery.toString());
-
-		/* поиск */
-		final JSONObject result = new JSONObject();
-		ResultSet foundSet = null;
-		try {
-			foundSet = serviceRegistry.getSearchService().query(sp);
-			try {
-				makeResult(result,  foundSet, getDelegationRootRef());
-			} catch (JSONException ex) {
-				logger.error("Problem building JSON answer", ex);
-			}
-		} finally {
-			if(foundSet != null)
-				foundSet.close();
-		}
-
-		return result;
 	}
 
 	// пока непонятная секция
@@ -660,20 +460,6 @@ public class DelegationBean
 		return result;
 	}
 
-
-	@Override
-	public void updateProcuracy(final String procuracyId, final JSONObject args) {
-		transactionService.getRetryingTransactionHelper ().doInTransaction (
-				new RetryingTransactionHelper.RetryingTransactionCallback<Object> () {
-					@Override
-					public Object execute() throws Throwable {
-						internalUpdateProcuracy(procuracyId, args);
-						return "ok";
-					}
-				});
-	}
-
-
 	final private static String ARG_TESTNAME = "testName";
 
 	private enum TestAction {
@@ -739,92 +525,7 @@ public class DelegationBean
 		if (dest != null && source != null && source.keys() != null)
 			for(String key: JSONObject.getNames(source))
 				dest.put(key, source.get(key));
-	}
-
-	private void internalUpdateProcuracy(final String procuracyId, final JSONObject args) {
-		// if (procuracyId == null) throw new InvalidActivityException("No UID for node");
-
-		/*
-		final JSONArray curData  = new JSONArray( getProcuracy(procuracyId) );
-		if (isEquals( curData, args)) {
-			logger.warn( String.format( "node %s has no changes -> no action performed", procuracyId));
-			return;
-		}
-		 */
-
-		final NodeService nodeService = serviceRegistry.getNodeService();
-		final LockService lockService = serviceRegistry.getLockService();
-
-		final NodeRef currentRef = makeFullRef(procuracyId);
-		// lockService.checkForLock(currentRef);
-		lockService.lock(currentRef, LockType.WRITE_LOCK); // блокировка узла перед обновлением
-		try {
-
-			// текущие значения свойств ...
-			final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties( currentRef);
-
-			// TODO: если изменений не было (свойства + ссылки assoc) -> выходим
-			/*
-			if (isEquals( props, args)) {
-				logger.warn( String.format( "node %s has no changes -> no action performed", procuracyId));
-				return;
 			}
-			 */
-
-			// отзываем прошлые права ...
-			revokeAccessRights(currentRef);
-			logger.debug( "pre-update: grants revoked from the node id=" + currentRef.getId());
-
-			// обновление данных - замена свойств по именам ...
-			/*
-			final Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-			// для свойств объекта явно задаём новые ...
-			props.put( ContentModel.PROP_NAME, args.getString("NAME") );
-
-			props.put( PROP_DATEBEGIN, getArgsDate( args, PROP_DATEEND.getLocalName()));
-			props.put( PROP_DATEEND, getArgsDate( args, PROP_DATEEND.getLocalName()));
-			// props.put( PROP_DATEREVOKE, getArgsDate( args, PROP_DATEREVOKE.getLocalName()));
-
-			props.put( PROP_COMMENT, args.getString(PROP_COMMENT.getLocalName() ) );
-			props.put( PROP_CANPROPOGATE, args.getBoolean( PROP_CANPROPOGATE.getLocalName()));
-			props.put( PROP_CANPOSTPROCESS, args.getBoolean( PROP_CANPOSTPROCESS.getLocalName()));
-
-			props.put( PROP_STATUS, args.getString( PROP_STATUS.getLocalName()));
-			 */
-			Utils.setProps(props, NSURI_DELEGATIONS, args);
-
-			/* (!) Обновление данных */
-			nodeService.setProperties(currentRef, props);
-			// nodeService.setAssociations(arg0, arg1, arg2)
-			// nodeService.removeAssociation(arg0, arg1, arg2)
-			// nodeService.getAssoc(Long)
-			// nodeService.getSourceAssocs(arg0, arg1);
-			logger.debug( "update: properties updated for node id=" + currentRef.getId());
-
-			/* ообновление ассоциаций ... */
-			updateAcccossiations( ASSOC_FROM_EMPLOYEE, currentRef, args);
-			// updateAcccossiations( ASSOC_TO_EMPLOYEE, currentRef, args);
-			// updateAcccossiations( ASSOC_GIVE_ROLES, currentRef, args);
-			// updateAcccossiations( ASSOC_PARENT_PROCURACY, currentRef, args);
-
-			/* (!) выдаём новые права если статус активный ... */
-			final Serializable status = (props.containsKey(PROP_STATUS)) ? props.get(PROP_STATUS) : null;
-			if (STATUS_ACTIVE.equals(status)) {
-				logger.debug( "post-update: granting permissons for the node id=" + currentRef.getId());
-				grantAccessRights(currentRef);
-				logger.debug( "post-update: granted permissons for the node id=" + currentRef.getId());
-			} else {
-				logger.warn( "post-update: status is "+ status+" -> NO permissons granted for the node id=" + currentRef.getId());
-			}
-
-			logger.info( "node updated successfully id=" + currentRef.getId());
-		} catch (JSONException ex) {
-			logger.error("", ex);
-		} finally  {
-			lockService.unlock(currentRef);
-		}
-	}
-
 
 /*
 	@Override
@@ -834,45 +535,18 @@ public class DelegationBean
 	}
  */
 
-	/**
-	 * Обновить список ассоциаций
-	 * @param assocTypeName
-	 * @param currentRef
-	 * @param args
-	 * @throws JSONException
-	 */
-	private void updateAcccossiations(QName assocTypeName,
-			NodeRef nodeRef, JSONObject args) throws JSONException {
-		final Object jlist = args.get(assocTypeName.getLocalName());
-		if (jlist == null)
-			return;
-		final List<String> ids = new ArrayList<String>();
-		if (jlist instanceof Collection) {
-			ids.addAll( (Collection<String>)jlist );
-		} else
-			ids.add(jlist.toString());
-		updateAcccossiations(assocTypeName, nodeRef, ids);
-	}
-
-	static final Serializable getArgsDate(JSONObject args, String propName)
+	static Serializable getArgsDate(JSONObject args, String propName)
 			throws JSONException {
 		return getArgsDate(args, propName, null);
 	}
 
-	static final Serializable getArgsDate(JSONObject args, String propName
+	static Serializable getArgsDate(JSONObject args, String propName
 			, Date dtDefault
 		) throws JSONException
 	{
 		return (args == null || !args.has(propName)) ? dtDefault : (Date) args.get(propName);
 	}
 
-	@Override
-	public void deleteProcuracy(String procuracyId) {
-		if (procuracyId == null)
-			return;
-		final NodeService nodeService = serviceRegistry.getNodeService();
-		nodeService.deleteNode( new NodeRef(procuracyId));
-	}
 
 
 	/**
@@ -1004,23 +678,23 @@ public class DelegationBean
 	@Override
 	public NodeRef doWork () throws Exception {
 		repository.init ();
-		final NodeService nodeService = serviceRegistry.getNodeService();
-		final NodeRef companyHome = repository.getCompanyHome();
+		final NodeService nodeService = serviceRegistry.getNodeService ();
+		final NodeRef companyHome = repository.getCompanyHome ();
 		NodeRef container = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
 		if (container == null) {
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-			container = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			container = transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef> () {
 				@Override
-				public NodeRef execute() throws Throwable {
+				public NodeRef execute () throws Throwable {
 					NodeRef parentRef = companyHome; //the parent node
 					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
 					QName assocQName = QName.createQName (DELEGATION_NAMESPACE, CONTAINER); //the qualified name of the association
 					QName nodeTypeQName = TYPE_DELEGATION_OPTS_CONTAINER; //a reference to the node type
 					// создание корневого узла для делегирований в Компании ...
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
-					properties.put(ContentModel.PROP_NAME, CONTAINER);
-					ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-					NodeRef delegationRoot = associationRef.getChildRef();
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable> (1); //optional map of properties to keyed by their qualified names
+					properties.put (ContentModel.PROP_NAME, CONTAINER);
+					ChildAssociationRef associationRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+					NodeRef delegationRoot = associationRef.getChildRef ();
 					logger.debug (String.format ("container node '%s' created", delegationRoot.toString ()));
 					return delegationRoot;
 				}
@@ -1040,7 +714,12 @@ public class DelegationBean
 	}
 
 	@Override
-	public QName getItemType () {
-		return TYPE_DELEGATION_OPTS_CONTAINER;
+	public QName getDelegationOptsItemType () {
+		return QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+	}
+
+	@Override
+	public IDelegationDescriptor getDelegationDescriptor () {
+		return this;
 	}
 }

@@ -20,11 +20,11 @@ import ru.it.lecm.delegation.IDelegation;
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
 public class DelegationJavascriptExtension extends BaseScopableProcessorExtension {
-	private final static Logger logger = LoggerFactory.getLogger (DelegationJavascriptExtension.class);
 
+	private final static Logger logger = LoggerFactory.getLogger (DelegationJavascriptExtension.class);
 	private ServiceRegistry serviceRegistry;
 	private NamespacePrefixResolver namespacePrefixResolver;
-	private IDelegation serviceDelegation;
+	private IDelegation delegationService;
 
 	public void setServiceRegistry (ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
@@ -34,12 +34,12 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		this.namespacePrefixResolver = namespacePrefixResolver;
 	}
 
-	public void setServiceDelegation (IDelegation serviceDelegation) {
-		this.serviceDelegation = serviceDelegation;
+	public void setDelegationService (IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	public ScriptNode getDelegationOptsContainer () {
-		NodeRef container = serviceDelegation.getDelegationOptsContainer ();
+		NodeRef container = delegationService.getDelegationDescriptor ().getDelegationOptsContainer ();
 		if (container != null) {
 			return new ScriptNode (container, serviceRegistry, getScope ());
 		}
@@ -47,7 +47,7 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 	}
 
 	public String getItemType () {
-		QName itemType = serviceDelegation.getItemType ();
+		QName itemType = delegationService.getDelegationDescriptor ().getDelegationOptsItemType ();
 		if (itemType != null) {
 			PropertyCheck.mandatory (this, "namespacePrefixResolver", namespacePrefixResolver);
 			return itemType.toPrefixString (namespacePrefixResolver);

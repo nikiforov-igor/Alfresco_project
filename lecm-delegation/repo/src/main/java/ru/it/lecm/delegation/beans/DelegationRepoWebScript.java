@@ -3,6 +3,8 @@ package ru.it.lecm.delegation.beans;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.ServletUtil;
@@ -12,6 +14,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.delegation.IDelegation;
 
 import ru.it.lecm.delegation.IWebScriptDelegation;
 
@@ -35,14 +38,6 @@ public class DelegationRepoWebScript
 	 * вариант действия указывается в URLе вебскрипта, см DelegationRepoWebScript.post.desc.xml
 	 */
 	private static enum Action {
-		create,
-		get,
-
-		find,
-		update,
-		delete,
-
-		getrootnode,
 		test;
 
 		public boolean equals (String obj) {
@@ -50,50 +45,31 @@ public class DelegationRepoWebScript
 		}
 	};
 
-	private IWebScriptDelegation delegationService;
-
-
-	public IWebScriptDelegation getDelegationService() {
-		return this.delegationService;
+	private static RuntimeException createAndRegException (final Throwable t, final String info) {
+		logger.error (info, t);
+		return new WebScriptException (info, t);
 	}
 
-	public void setDelegationService (IWebScriptDelegation service) {
-		this.delegationService = service;
+	private IDelegation delegationService;
+
+	public IDelegation getDelegationService () {
+		return delegationService;
 	}
 
-	@Override
-	public String getProcuracyRootNodeRef() {
-		return delegationService.getProcuracyRootNodeRef();
-	}
-
-	@Override
-	public String deleteProcuracy(String argId) {
-		return delegationService.deleteProcuracy(argId);
+	public void setDelegationService (IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	@Override
-	public String createProcuracy(String args) {
-		return delegationService.createProcuracy(args);
-	}
-
-	@Override
-	public String getProcuracy(String argId) {
-		return delegationService.getProcuracy(argId);
-	}
-
-	@Override
-	public String findProcuracyList(String searchArgs) {
-		return delegationService.findProcuracyList(searchArgs);
-	}
-
-	@Override
-	public String updateProcuracy(String args) {
-		return delegationService.updateProcuracy(args);
-	}
-
-	@Override
-	public String test(String args) {
-		return delegationService.test(args);
+	// TODO: possibly NOT temporary method
+	public String test(String /*JSONObject*/ args) {
+		try {
+			final JSONObject jargs = new JSONObject(args);
+			final JSONObject result = delegationService.test( jargs);
+			return result.toString();
+		} catch (JSONException ex) {
+			throw createAndRegException( ex, "error processing test with args:\n"+ args);
+		}
 	}
 
 	@Override
@@ -120,25 +96,7 @@ public class DelegationRepoWebScript
 
 
 		HashMap<String, Object> model = new HashMap<String, Object> ();
-		if (Action.getrootnode.equals (action)) {
-			model.put ("model", getProcuracyRootNodeRef());
-
-		} else if (Action.create.equals (action)) {
-			model.put ("model", createProcuracy (jsonContent));
-
-		} else if (Action.get.equals (action)) {
-			model.put ("model", getProcuracy (jsonContent));
-
-		} else if (Action.find.equals (action)) {
-			model.put ("model", findProcuracyList (jsonContent));
-
-		} else if (Action.update.equals (action)) {
-			model.put ("model", updateProcuracy (jsonContent));
-
-		} else if (Action.delete.equals (action)) {
-			model.put ("model", deleteProcuracy (jsonContent));
-
-		} else if (Action.test.equals (action)) {
+		if (Action.test.equals (action)) {
 			model.put ("model", test(jsonContent));
 
 		} else {

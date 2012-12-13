@@ -27,19 +27,15 @@
 	</bean>
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
-	<bean id="serviceDelegation" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="testSearch" init-method="bootstrap">
+	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="testSearch" init-method="bootstrap">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repository" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="tester" ref="testSearch"/>
 	</bean>
 
-	<bean id="serviceDelegationWebScript" class="ru.it.lecm.delegation.beans.DelegationBeanWebScript" depends-on="serviceDelegation">
-		<property name="proxy" ref="serviceDelegation" />
-	</bean>
-
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
-		<property name="delegationService" ref="serviceDelegationWebScript"/>
+		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
 	<bean id="delegationOptsPolicy" class="ru.it.lecm.delegation.policies.DelegationOptsPolicy" init-method="init">
@@ -50,7 +46,7 @@
 		<property name="extensionName" value="delegation"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="namespacePrefixResolver" ref="namespaceService"/>
-		<property name="serviceDelegation" ref="serviceDelegation"/>
+		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
 </beans>
