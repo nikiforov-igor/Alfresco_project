@@ -32,6 +32,10 @@
                 </list>
             </parameter>
         </constraint>
+        <constraint name="lecm-orgstr:email-const" type="REGEX">
+            <parameter name="expression"><value>(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})</value></parameter>
+            <parameter name="requiresMatch"><value>true</value></parameter>
+        </constraint>
     </constraints>
 
     <types>
@@ -390,6 +394,9 @@
                         <stored>false</stored>
                         <tokenised>both</tokenised>
                     </index>
+                    <constraints>
+                        <constraint ref="lecm-orgstr:email-const"/>
+                    </constraints>
                 </property>
                 <property name="lecm-orgstr:employee-number">
                     <title>Employee number</title>

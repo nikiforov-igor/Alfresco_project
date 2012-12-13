@@ -31,7 +31,11 @@
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
                     <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common"/>
+                    <field id="lecm-orgstr:employee-email" set="common">
+                        <constraint-handlers>
+                            <constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common"/>
@@ -43,7 +47,7 @@
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-positions" set="positions">
-                        <control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+                        <control template="/ru/it/lecm/orgstructure/controls/employee.positions.ctrl.ftl">
                             <control-param name="itemType">lecm-orgstr:staff-list</control-param>
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
@@ -92,7 +96,11 @@
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
                     <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common"/>
+                    <field id="lecm-orgstr:employee-email" set="common">
+                        <constraint-handlers>
+                            <constraint type="REGEXP" validation-handler="Alfresco.forms.validation.email" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common"/>
@@ -538,7 +546,7 @@
                 <field-visibility>
                     <show id="lecm-orgstr:staff-unit|{../lecm-orgstr:element-short-name}" force="true"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:staff-list-is-boss"/>
+                    <show id="lecm-orgstr:primary-position|{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-is-primary}" force="true"/>
                 </field-visibility>
             </form>
             <form id="search">
@@ -744,12 +752,7 @@
 
     <config evaluator="model-type" condition="lecm-orgstr:employee-link">
         <forms>
-            <form id="el-staff">
-                <field-visibility>
-                    <show id="lecm-orgstr:employee-link-employee-assoc"/>
-                </field-visibility>
-            </form>
-            <form id="el-work">
+            <form>
                 <field-visibility>
                     <show id="lecm-orgstr:employee-link-employee-assoc"/>
                 </field-visibility>

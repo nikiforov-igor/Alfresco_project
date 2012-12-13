@@ -238,5 +238,5 @@ function getExpression(str) {
  * @return String строка без пробелов на концах
  */
 function trim(str) {
-	return str.replace(/^\s+|\s+$/g, "");
+	return ("" + str).replace(/^\s+|\s+$/g, "");
 }

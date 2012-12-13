@@ -45,30 +45,29 @@
 												html += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
 												break;
 
-											case "datetime":
-												var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
-												if (datalistColumn.name == attributeForShow) {
-													content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
-												}
-												html += content;
-												break;
+                                            case "datetime":
+                                                html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+                                                break;
 
-											case "date":
-												var content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
-												if (datalistColumn.name == attributeForShow) {
-													content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
-												}
-												html += content;
-												break;
+                                            case "date":
+                                                html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+                                                break;
 
-											case "text":
-												var content = $html(data.displayValue);
-												if (datalistColumn.name == attributeForShow) {
-													html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
-												} else {
-													html += $links(content);
-												}
-												break;
+                                            case "text":
+                                                if (data.displayValue != "true" && data.displayValue != "false") {
+                                                    var content = $html(data.displayValue);
+                                                    if (datalistColumn.name == attributeForShow) {
+                                                        html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+                                                    } else {
+                                                        html += content;
+                                                    }
+                                                    break;
+                                                } else {
+                                                    if (data.displayValue && data.displayValue == "true") {
+                                                        html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                    }
+	                                                break;
+                                                }
 
                                             case "boolean":
                                                 if (data.displayValue) {
@@ -77,12 +76,17 @@
                                                 break;
 
 											default:
-												if (datalistColumn.type == "association") {
-													html += $html(data.displayValue);
-												}
-												else {
-													html += $links($html(data.displayValue));
-												}
+                                                if (datalistColumn.type == "association") {
+                                                    html += $html(data.displayValue);
+                                                } else {
+                                                    if (data.displayValue != "false" && data.displayValue != "true") {
+                                                        html += $html(data.displayValue);
+                                                    } else {
+                                                        if (data.displayValue == "true") {
+                                                            html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                        }
+                                                    }
+                                                }
 												break;
 										}
 

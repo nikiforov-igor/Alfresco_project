@@ -478,8 +478,8 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
 	 */
-	public NodeRef getEmployeeByPosition(NodeRef employeeRef) {
-		NodeRef employeeLink = getEmployeeLinkByPosition(employeeRef);
+	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
+		NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
 		if (employeeLink != null){
 			return getEmployeeByLink(employeeLink);
 		}
@@ -513,12 +513,12 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника из объекта (lecm-orgstr:employee-link)
 	 */
-	public NodeRef getEmployeeByLink(NodeRef ref) {
+	public NodeRef getEmployeeByLink(NodeRef linkRef) {
 		Set<QName> properTypes = new HashSet<QName>();
 		properTypes.add(TYPE_EMPLOYEE_LINK);
 
-		if (isProperType(ref, properTypes)) {
-			List<AssociationRef> links = nodeService.getTargetAssocs(ref, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
+		if (isProperType(linkRef, properTypes)) {
+			List<AssociationRef> links = nodeService.getTargetAssocs(linkRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			// сотрудник всегда существует и только один
 			return links.get(0).getTargetRef();
 		}
@@ -613,7 +613,7 @@ public class OrgstructureBean {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
 				if ((Boolean) nodeService.getProperty(link.getSourceRef(), PROP_EMP_LINK_IS_PRIMARY)) {
-					primaryStaff = getStaffByEmployeeLink(link.getSourceRef());
+					primaryStaff = getPositionByEmployeeLink(link.getSourceRef());
 					if (primaryStaff != null && isStaffList(primaryStaff)) {
 						break;
 					}
@@ -626,7 +626,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение штатного расписания или участника Рабочей группы по ссылке на сотрудника
 	 */
-	public NodeRef getStaffByEmployeeLink(NodeRef empLink) {
+	public NodeRef getPositionByEmployeeLink(NodeRef empLink) {
 		NodeRef staff = null;
 
 		Set<QName> properTypes = new HashSet<QName>();
@@ -705,7 +705,7 @@ public class OrgstructureBean {
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
-				NodeRef staff = getStaffByEmployeeLink(link.getSourceRef());
+				NodeRef staff = getPositionByEmployeeLink(link.getSourceRef());
 				if (staff != null && isProperType(staff, types)) {
 					positions.add(staff);
 				}
@@ -840,5 +840,37 @@ public class OrgstructureBean {
 			}
 		}
 		return results;
+	}
+
+	/**
+	 * Получение ссылок на сотрудника
+	 */
+	public List<NodeRef> getEmployeeLinks(NodeRef employeeRef) {
+		List<NodeRef> links = new ArrayList<NodeRef>();
+		if (isEmployee(employeeRef)) {
+			List<AssociationRef> lRefs = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
+			for (AssociationRef lRef : lRefs) {
+				if (!isArchive(lRef.getSourceRef())) {
+				   links.add(lRef.getSourceRef());
+				}
+			}
+		}
+		return links;
+	}
+	/**
+	 * Получение ссылок на сотрудника в Штатных расписаниях
+	 */
+	public List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef) {
+		List<NodeRef> links = new ArrayList<NodeRef>();
+		if (isEmployee(employeeRef)) {
+			List<NodeRef> aLinks = getEmployeeLinks(employeeRef);
+			for (NodeRef link : aLinks) {
+				NodeRef position = getPositionByEmployeeLink(link);
+				if (position != null && !isArchive(position) && isStaffList(position)) {
+					links.add(link);
+				}
+			}
+		}
+		return links;
 	}
 }

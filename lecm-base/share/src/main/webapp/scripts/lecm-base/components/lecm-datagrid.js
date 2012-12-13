@@ -496,7 +496,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             if (datalistColumn.type == "association") {
                                                 html += $html(data.displayValue);
                                             } else {
-                                                html += $links($html(data.displayValue));
+                                                if (data.displayValue != "false" && data.displayValue != "true") {
+                                                    html += $html(data.displayValue);
+                                                } else {
+                                                    if (data.displayValue == "true") {
+                                                        html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                    }
+                                                }
                                             }
                                             break;
                                     }
@@ -1232,7 +1238,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             }
                         }
                         var actionDiv = getActionDivByClass(action.id);
-                        Dom.setStyle(actionDiv.id, "display", showAction ? "block" : "none");
+                        if (actionDiv != null && actionDiv != undefined) {
+                            Dom.setStyle(actionDiv.id, "display", showAction ? "block" : "none");
+                        }
+
                     }
                     // удаляем блоки Показать еще
                     var showMoreBlock = getActionDivByClass("onActionShowMore");
