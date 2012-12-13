@@ -12,6 +12,5 @@
 	<@comp.baseMenuButton "delegationOpts" "настройка параметров делегирования" args.selected/>
 	<#-- TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник) -->
 	<@comp.baseMenuButton "delegationList" "перечень делегирования" args.selected/>
-    <@comp.baseMenuButton "delegation" "старая страница делегирования" args.selected/>
 </@comp.baseMenu>
 

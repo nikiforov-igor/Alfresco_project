@@ -16,8 +16,6 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<!-- Импорт модели данных оргструктуры -->
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-		<!-- Импорт модели данных бизнес ролей -->
-		<import uri="http://www.it.ru/logicECM/model/business-role/1.0" prefix="lecm-br"/>
 	</imports>
 
 	<namespaces>
@@ -34,7 +32,7 @@
 		<type name="lecm-d8n:delegation-opts-container">
 			<parent>cm:folder</parent>
 			<associations>
-				<child-association name="lecm-d8n:delegation-opts-assoc">
+				<child-association name="lecm-d8n:container-delegation-opts-assoc">
 					<source>
 						<mandatory>true</mandatory>
 						<many>true</many>
@@ -56,19 +54,19 @@
 			<parent>cm:content</parent> <!-- тут вообще можно cm:cmobject заюзать я думаю -->
 			<associations>
 				<!-- бизнес роль -->
-				<association name="lecm-d8n:business-role-assoc">
+				<association name="lecm-d8n:procuracy-business-role-assoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-br:business-role</class>
+						<class>lecm-orgstr:business-role</class>
 						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
 				</association>
 				<!-- сотрудник который является доверенным лицом -->
-				<association name="lecm-d8n:trustee-assoc">
+				<association name="lecm-d8n:procuracy-trustee-assoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -107,7 +105,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!-- статус параметров делегирования -->
+				<!-- с�атус параметров делегирования -->
 				<property name="lecm-d8n:delegation-opts-status">
 					<type>d:text</type>
 					<mandatory>true</mandatory>

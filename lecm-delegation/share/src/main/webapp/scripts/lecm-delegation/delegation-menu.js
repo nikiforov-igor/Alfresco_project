@@ -41,19 +41,11 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			}
 		},
 
-		_delegationBtnClick: function () {
-			var scope = this;
-			return function (event, obj) {
-				scope._reloadPage ("delegation");
-			}
-		},
-
 		_onMenuReady: function () {
 
 			Alfresco.util.createYUIButton(this, "delegationOptsBtn", this._delegationOptsBtnClick (), {});
 			//TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник)
 			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {});
-			Alfresco.util.createYUIButton(this, "delegationBtn", this._delegationBtnClick (), {});
 		},
 
 		onReady: function () {

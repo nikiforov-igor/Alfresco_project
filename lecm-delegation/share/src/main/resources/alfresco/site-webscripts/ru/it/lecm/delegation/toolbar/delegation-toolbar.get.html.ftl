@@ -19,8 +19,5 @@
 	<#if "delegation-list" == pageId>
 		<div id="${toolbarId}-btnCreateDelegationList"></div> <!-- кнопка создания параметров делегирования (временная) -->
 	<#elseif "delegation-opts" == pageId>
-	<#elseif "delegation" == pageId>
-		<div id="${toolbarId}-btnCreateProcuracy"></div> <!-- кнопка создания доверенности (старая страница) -->
-		<div id="${toolbarId}-btnRefreshProcuracies"></div> <!-- кнопка обновления страницы (старая страница) -->
 	</#if>
 </@comp.baseToolbar>

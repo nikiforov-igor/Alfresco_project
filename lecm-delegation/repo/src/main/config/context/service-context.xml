@@ -7,9 +7,7 @@
 	<bean id="${groupId}.${artifactId}.delegationBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-delegations-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/role-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/delegation-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-delegation-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">

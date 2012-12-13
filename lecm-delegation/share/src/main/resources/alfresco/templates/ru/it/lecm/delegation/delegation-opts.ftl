@@ -9,7 +9,6 @@
 <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
 <#-- Далее перечисляются самописные скрипты LogicECM  -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

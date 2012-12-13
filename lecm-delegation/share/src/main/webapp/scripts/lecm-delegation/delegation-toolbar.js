@@ -23,74 +23,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			pageId: null
 		},
 
-		_createProcuracyBtnClick: function () {
-			var scope = this;
-			return function (e, p_obj) {
-				var datagridMeta = scope.modules.dataGrid.datagridMeta;
-				var destination = datagridMeta.nodeRef;
-				var itemType = datagridMeta.itemType;
-
-				// Intercept before dialog show
-				var doBeforeDialogShow = function DataListToolbar_onNewRow_doBeforeDialogShow (p_form, p_dialog) {
-					Alfresco.util.populateHTML (
-						[ p_dialog.id + "-dialogTitle", scope.msg ("label.new-row.title") ],
-						[ p_dialog.id + "-dialogHeader", scope.msg ("label.new-row.header") ]
-						);
-				};
-
-				var url = "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton=true";
-				var templateUrl = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + url, {
-					itemKind: "type",
-					itemId: itemType,
-					destination: destination,
-					mode: "create",
-					submitType: "json"
-				});
-
-				// Using Forms Service, so always create new instance
-				var createRow = new Alfresco.module.SimpleDialog (scope.id + "-createRow");
-
-				createRow.setOptions ({
-					width: "50em",
-					templateUrl: templateUrl,
-					actionUrl: null,
-					destroyOnHide: true,
-					doBeforeDialogShow: {
-						fn: doBeforeDialogShow,
-						scope: scope
-					},
-					onSuccess: {
-						fn: function DataListToolbar_onNewRow_success (response) {
-							YAHOO.Bubbling.fire ("dataItemCreated", {
-								nodeRef: response.json.persistedObject
-							});
-
-							Alfresco.util.PopupManager.displayMessage ({
-								text: scope.msg ("message.new-row.success")
-							});
-						},
-						scope: scope
-					},
-					onFailure: {
-						fn: function DataListToolbar_onNewRow_failure (response) {
-							Alfresco.util.PopupManager.displayMessage ({
-								text: scope.msg("message.new-row.failure")
-							});
-						},
-						scope: scope
-					}
-				}).show ();
-			}
-		},
-
-		_refreshProcuraciesBtnClick: function () {
-			var scope = this;
-			return function (event, obj) {
-				var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-				window.location.href = url;
-			}
-		},
-
 		_createDelegationList: function () {
 			var scope = this;
 			return function (event, obj) {
@@ -223,15 +155,6 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					});
 					break;
 				case "delegation-opts":
-					break;
-				case "delegation":
-					Alfresco.util.createYUIButton(this, "btnCreateProcuracy", this._createProcuracyBtnClick (), {
-						label: "создать доверенность"
-					});
-
-					Alfresco.util.createYUIButton(this, "btnRefreshProcuracies", this._refreshProcuraciesBtnClick (), {
-						label: "обновить"
-					});
 					break;
 			}
 

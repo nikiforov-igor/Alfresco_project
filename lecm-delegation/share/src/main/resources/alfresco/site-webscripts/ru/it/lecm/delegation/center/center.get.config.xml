@@ -1,8 +1,0 @@
-<dataGrid>
-	<actionSet>
-		<action type="action-link" id="onActionEdit" permission="edit" label="actions.edit" />
-		<action type="action-link" id="onActionDelete" permission="delete" label="actions.delete" />
-		<action type="action-link" id="onActionRevoke" permission="edit" label="actions.revoke" />
-		<action type="action-link" id="onActionPropogate" permission="edit" label="actions.propogate" />
-	</actionSet>
-</dataGrid>

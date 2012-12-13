@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>center</shortname>
-	<description>Returns center region content.</description>
-	<url>/ru/it/lecm/delegation/center</url>
-	<format default="html"/>
-	<authentication>user</authentication>
-</webscript>

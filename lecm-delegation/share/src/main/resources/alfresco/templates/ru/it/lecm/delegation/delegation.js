@@ -1,1 +1,0 @@
-model.rootNode= remote.connect ("alfresco").post ("/lecm/delegation/getrootnode", "", "json");
