@@ -440,6 +440,10 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields div {
     text-align: left;
 }
+.yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
+.yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div {
+    text-align: center;
+}
 .yui-skin-lecmTheme .yui-panel div.form-field {
     line-height: 25px;
     vertical-align: middle;
@@ -479,7 +483,7 @@ h4 .lighter
     vertical-align: middle;
     margin: auto 0;
 }
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
     width: 36em;
     float: right;
     margin: 0;
