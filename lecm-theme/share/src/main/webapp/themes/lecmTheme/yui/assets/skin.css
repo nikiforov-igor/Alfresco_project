@@ -1287,40 +1287,39 @@ color: #000;
 .yui-skin-lecmTheme tr.yui-dt-even {
 background-color: #FFF;
 }
-.yui-skin-lecmTheme tr.yui-dt-odd {
-background-color: #EDF5FF;
+.yui-skin-lecmTheme tr.yui-dt-odd,
+.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-asc,
+.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-desc {
+    background-color: #EDF5FF;
 }
-.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-asc,.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-desc {
-background-color: #EDF5FF;
+.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-asc,
+.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-desc {
+    background-color: #DBEAFF;
 }
-.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-asc,.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-desc {
-background-color: #DBEAFF;
-}
-.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even {
-background-color: #FFF;
-}
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even,
 .yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd {
-background-color: #FFF;
+    background-color: #FFF;
 }
-.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-asc,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-desc {
-background-color: #EDF5FF;
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-asc,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-desc,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-asc,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {
+    background-color: #EDF5FF;
 }
-.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-asc,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {
-background-color: #EDF5FF;
-}
-.yui-skin-lecmTheme th.yui-dt-highlighted,.yui-skin-lecmTheme th.yui-dt-highlighted a {
-background-color: #B2D2FF;
-}
-.yui-skin-lecmTheme tr.yui-dt-highlighted,.yui-skin-lecmTheme tr.yui-dt-highlighted td.yui-dt-asc,.yui-skin-lecmTheme tr.yui-dt-highlighted td.yui-dt-desc,.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-highlighted,.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-highlighted {
-cursor: pointer;
-background-color: #B2D2FF;
-}
-.yui-skin-lecmTheme .yui-dt-list th.yui-dt-highlighted,.yui-skin-lecmTheme .yui-dt-list th.yui-dt-highlighted a {
-background-color: #B2D2FF;
-}
-.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted {
-cursor: pointer;
-background-color: #B2D2FF;
+.yui-skin-lecmTheme th.yui-dt-highlighted,
+.yui-skin-lecmTheme th.yui-dt-highlighted a,
+.yui-skin-lecmTheme tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-lecmTheme tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-lecmTheme tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-lecmTheme tr.yui-dt-odd td.yui-dt-highlighted,
+.yui-skin-lecmTheme .yui-dt-list th.yui-dt-highlighted,
+.yui-skin-lecmTheme .yui-dt-list th.yui-dt-highlighted a,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-lecmTheme .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted {
+    background-color: #B2D2FF;
 }
 .yui-skin-lecmTheme th.yui-dt-selected,.yui-skin-lecmTheme th.yui-dt-selected a {
 background-color: #446CD7;

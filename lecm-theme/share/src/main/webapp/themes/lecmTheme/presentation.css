@@ -204,6 +204,12 @@ input, textarea {
    color: #333333;
    text-decoration: none;
 }
+.sticky-wrapper .grid a,
+.sticky-wrapper .grid a:visited,
+.yui-panel-container .grid a,
+.yui-panel-container .grid a:visited {
+   text-decoration: underline;
+}
 
 .sticky-wrapper a:hover,
 .sticky-footer a:hover,
