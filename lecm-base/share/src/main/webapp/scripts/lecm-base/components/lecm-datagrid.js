@@ -931,14 +931,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					});
 				}
 
-                var column;
+                var column, sortable;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
+                    sortable = column.sortable;
                     columnDefinitions.push(
                         {
                             key:this.dataResponseFields[i],
                             label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                            sortable:true,
+                            sortable:sortable,
                             sortOptions:{
                                 field:column.formsName,
                                 sortFunction:this.getSortFunction()

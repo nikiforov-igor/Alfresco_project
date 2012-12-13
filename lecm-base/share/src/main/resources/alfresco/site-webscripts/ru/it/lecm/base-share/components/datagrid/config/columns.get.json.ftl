@@ -15,11 +15,15 @@
 			"nameSubstituteString":"${col.nameSubstituteString}",
 			</#if>
 			<#if col.dataType??>
-			"dataType": "${col.dataType}"
+			"dataType": "${col.dataType}",
 			<#else>
-			"dataType": "${col.endpointType}"
+			"dataType": "${col.endpointType}",
 			</#if>
-
+		<#if col.sortable??>
+        "sortable": ${col.sortable?string}
+		<#else>
+        "sortable": true
+		</#if>
 		}<#if col_has_next>,</#if>
 		</#list>
 	]

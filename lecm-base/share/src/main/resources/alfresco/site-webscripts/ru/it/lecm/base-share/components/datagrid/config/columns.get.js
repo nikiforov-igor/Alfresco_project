@@ -258,7 +258,8 @@ function main()
 				type:"",
 				name:obj,
 				label:"",
-				dataType:""
+				dataType:"",
+                sortable: false
 			}
 		}
 		if (substituteStrings[obj] != null) {
