@@ -1,0 +1,8 @@
+.datagrid div.simple a.action-link,
+.datagrid div.simple a.simple-link,
+.datagrid div.simple a.show-more {
+    cursor: pointer;
+}
+.datagrid .onActionExportXML a {
+    background-image: url("../../images/lecm-dictionary/xml-file-16.png");
+}
