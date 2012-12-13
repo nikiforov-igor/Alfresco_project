@@ -747,13 +747,7 @@
             <form id="el-staff">
                 <field-visibility>
                     <show id="lecm-orgstr:employee-link-employee-assoc"/>
-                    <show id="lecm-orgstr:employee-link-is-primary"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-orgstr:employee-link-is-primary">
-                        <control template="/ru/it/lecm/orgstructure/controls/checkbox.readonly.ftl"/>
-                    </field>
-                </appearance>
             </form>
             <form id="el-work">
                 <field-visibility>

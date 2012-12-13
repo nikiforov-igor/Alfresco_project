@@ -86,4 +86,14 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
+	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.beans.OrgstructurePrimaryPositionPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="orgstructureService">
+			<ref bean="serviceOrgstructure"/>
+		</property>
+	</bean>
 </beans>
