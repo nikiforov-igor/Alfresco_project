@@ -473,7 +473,7 @@ h4 .lighter
     vertical-align: middle;
     margin: auto 0;
 }
-.yui-skin-lecmTheme .yui-panel div.form-field > div {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field) {
     width: 36em;
     float: right;
     margin: 0;
