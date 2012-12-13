@@ -16,3 +16,6 @@
 #orgstructure-work-groups #alf-filters .toolbar.datalist-toolbar .header-bar {
     min-width: 400px;
 }
+#orgstructure-work-groups #alf-filters .grid tr.yui-dt-highlighted {
+    cursor: pointer;
+}
