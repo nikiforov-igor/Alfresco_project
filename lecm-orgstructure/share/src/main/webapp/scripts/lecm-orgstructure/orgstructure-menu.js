@@ -33,7 +33,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
  */
 (function () {
 
-    var Dom = YAHOO.util.Dom
+    var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
     LogicECM.module.OrgStructure.Menu = function (htmlId) {
         return LogicECM.module.OrgStructure.Menu.superclass.constructor.call(
@@ -55,50 +55,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var structure = "orgstructure";
 
             function bubbleTable(root) {
-                if (root != "undefined" && root != null) {
-                    if(root.itemType == "lecm-orgstr:workGroup") {
-                        // нужно отрисовать два грида
-                        Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:{
-                                    itemType:root.itemType,
-                                    nodeRef:root.nodeRef,
-                                    custom: {
-                                        namePattern:root.namePattern
-                                    },
-                                    actionsConfig:{
-                                        fullDelete:root.fullDelete
-                                    }
+                if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
+                    Bubbling.fire("activeGridChanged",
+                        {
+                            datagridMeta:{
+                                itemType:root.itemType,
+                                nodeRef:root.nodeRef,
+                                actionsConfig:{
+                                    fullDelete:root.fullDelete
                                 },
-                                bubblingLabel:"workGroup"
-                            });
-                        Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:{
-                                    itemType:"lecm-orgstr:workforce",
-                                    nodeRef:"NOT_LOAD",
-                                    actionsConfig:{
-                                        fullDelete:true
-                                    }
-                                },
-                                bubblingLabel:"workForce"
-                            });
-                    } else if (root.nodeRef != "NOT_LOAD"){
-                        Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta:{
-                                    itemType:root.itemType,
-                                    nodeRef:root.nodeRef,
-                                    actionsConfig:{
-                                        fullDelete:root.fullDelete
-                                    },
-                                    custom: {
-                                        namePattern:root.namePattern
-                                    }
-                                },
-                                bubblingLabel:root.bubblingLabel
-                            });
-                    }
+                                custom:{
+                                    namePattern:root.namePattern
+                                }
+                            },
+                            bubblingLabel:root.bubblingLabel
+                        });
                 }
             }
 

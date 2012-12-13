@@ -208,7 +208,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			var scope = this;
 			return function (event, obj) {
 				var grid = scope.modules.dataGrid;
-				var advSearch = grid.modules.search;
+				var advSearch = grid.search;
 
 				advSearch.showDialog(grid.datagridMeta);
 			}

@@ -96,6 +96,9 @@
                     </target>
                 </child-association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Описание моделей -->

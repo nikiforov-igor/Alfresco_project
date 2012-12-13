@@ -38,8 +38,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @return {LogicECM.AdvancedSearch} The new AdvancedSearch instance
      * @constructor
      */
-    LogicECM.AdvancedSearch = function (htmlId) {
+    LogicECM.AdvancedSearch = function (htmlId, meta, table, columns, source, label) {
         LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container", "datasource", "datatable", "paginator"]);
+
+        // Initialise prototype properties
+        this.dataTable = table;
+        this.dataSource = source;
+        this.dataColumns = columns;
+        this.datagridMeta = meta;
+        this.bubblingLabel = label;
+
+        this.searchDialog = null;
+        this.searchStarted = false;
+        this.currentSearchConfig = null;
+        this.currentForm = null;
 
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
@@ -55,8 +67,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             searchStarted: false, // флаг, что идет поиск
 
+            bubblingLabel: null, // метка грида для которого будет выполнен поиск
+
             // сохраненные настройки предыдущего поиска
             currentSearchConfig:null,
+
             /**
              * Object container for initialization options
              *
@@ -72,43 +87,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * Currently visible Search Form object
              */
             currentForm:null,
-
-            /**
-             * Начальная инициализация поиска (обязательна
-             */
-            initSearch:function ADVSearch_onReady(metaData) {
-                var me = this;
-                this.datagridMeta = metaData;
-                // DataSource default definition
-                if (!this.dataSource) {
-                    var uriSearchResults = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/search";
-                    this.dataSource = new YAHOO.util.DataSource(uriSearchResults,
-                        {
-                            connMethodPost: true,
-                            responseType:YAHOO.util.DataSource.TYPE_JSON,
-                            responseSchema:{
-                                resultsList:"items",
-                                metaFields:{
-                                    paginationRecordOffset:"startIndex",
-                                    totalRecords:"totalRecords",
-                                    isVersionable:"versionable",
-                                    meta:"metadata"
-                                }
-                            }
-                        });
-
-                }
-
-                if (this.options.showExtendSearchBlock) {//включена опция
-                    // создаем диалог
-                    this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
-                        {
-                            width:"800px"
-                        });
-                    // создаем кнопки
-                    this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onSearchClick, {}, Dom.get("searchBlock-search-button"));
-                }
-            },
 
             /**
              * Получение и отрисовка формы
@@ -141,6 +119,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         successCallback:{
                             fn:function ADVSearch_onFormTemplateLoaded(response) {
                                 formDiv.innerHTML = response.serverResponse.responseText;
+                                // Finally show the component body here to prevent UI artifacts on YUI button decoration
+                                Dom.setStyle("searchBlock", "display", "block");
+                                if (this.searchDialog != null) {
+                                    this.searchDialog.show();
+                                }
                             },
                             scope:this
                         },
@@ -179,13 +162,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     sConfig.formData = formData; // запрос
                     sConfig.fullTextSearch = fullTextSearch;
                     sConfig.filter = "";
-                    this._performSearch(
+                    this.performSearch(
                         {
                             searchConfig:sConfig,
                             searchShowInactive:true
                         });
 
-                    this.hideDialog();
+                    this.searchDialog.hide();
                 }
             },
 
@@ -193,7 +176,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * Поиск
              * args - Объект с настройками поиска
              */
-            _performSearch:function ADVSearch__performSearch(args) {
+            performSearch:function ADVSearch__performSearch(args) {
                 var searchConfig = args.searchConfig,
                     searchShowInactive = args.searchShowInactive,
                     parent = args.parent,
@@ -297,7 +280,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this._buildSearchParams(parent, itemType, searchConfig, fields, nameSubstituteStrings, searchShowInactive);
+                var searchParams = this.buildSearchParams(parent, itemType, searchConfig, fields, nameSubstituteStrings, searchShowInactive);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -311,12 +294,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onSearch:function AdvSearch_onSearch(layer, args) {
                 var obj = args[1];
-                if (!obj.bubblingLabel || !this.datagridMeta.bubblingLabel || obj.bubblingLabel == this.datagridMeta.bubblingLabel){
-                    this._performSearch(obj);
+                if (!obj.bubblingLabel || !this.bubblingLabel || obj.bubblingLabel == this.bubblingLabel){
+                    this.performSearch(obj);
                 }
             },
 
-            _buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -338,38 +321,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * Очистка input и вызов поиска по умолчанию (метод пока не используется)
-             */
-            onClearClick:function ADVSearch_onSearchClick(e, obj) {
-                var queryInput = Dom.get(this.id + "-full-text-search");
-                queryInput.value = "";
-                queryInput.focus();
-
-                this._performSearch(
-                    {
-                        searchSort:this.currentSearchSort,
-                        searchQuery:this.currentSearchQuery,
-                        searchFilter:this.currentSearchFilter,
-                        fullTextSearch:"" //убрать полнотекстовый поиск
-                    });
-            },
-
-            /**
              * Event handler called when the "beforeFormRuntimeInit" event is received
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
                 if (this.currentForm) {
                     this.currentForm.runtime = args[1].runtime;
-                }
-            },
-
-            /**
-             * метод для скрытия диалога с аттриюбутивным поиском
-             */
-            hideDialog: function ADVSearch_hideDialog() {
-                if (this.searchDialog != null) {
-                    this.searchDialog.hide();
                 }
             },
 
@@ -382,16 +339,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 defaultForm.type = metaData.itemType;
 
                 if (this.options.showExtendSearchBlock) { // если заданы соответствующая опция
+                    if(this.searchDialog == null){
+                        // создаем диалог
+                        this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
+                            {
+                                width:"800px"
+                            });
+                        // создаем кнопки
+                        this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onSearchClick, {}, Dom.get("searchBlock-search-button"));
+                    }
+
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
                         // создаем форму
                         this.renderFormTemplate(defaultForm);
-                    }
-
-                    // Finally show the component body here to prevent UI artifacts on YUI button decoration
-                    Dom.setStyle("searchBlock", "display", "block");
-
-                    if (this.searchDialog != null) {
-                        this.searchDialog.show();
+                    } else {
+                        // Finally show the component body here to prevent UI artifacts on YUI button decoration
+                        Dom.setStyle("searchBlock", "display", "block");
+                        if (this.searchDialog != null) {
+                            this.searchDialog.show();
+                        }
                     }
                 }
             }

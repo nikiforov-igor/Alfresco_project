@@ -28,9 +28,12 @@
 						if (this._hasEventInterest("workGroup")) {
 							this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
 						}
-						// link current table with search and do search
-						this.modules.search.dataTable = this.widgets.dataTable;
 					}
+                    // initialize Search
+                    this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
+                        showExtendSearchBlock:this.options.showExtendSearchBlock
+                    });
+
 					var searchConfig = this.datagridMeta.searchConfig;
 					if (searchConfig) { // Поиск через SOLR
 						if (searchConfig.sort == null || searchConfig.sort.length == 0) {
@@ -42,20 +45,16 @@
 						searchConfig.formData = {
 							datatype:this.datagridMeta.itemType
 						};
-						YAHOO.Bubbling.fire("doSearch",
-								{
-									searchConfig:searchConfig,
-									searchShowInactive:false,
-									bubblingLabel:me.options.bubblingLabel
-								});
+                        this.search.performSearch({
+                            searchConfig:searchConfig,
+                            searchShowInactive:false
+                        });
 					} else { // Поиск без использования SOLR
-						YAHOO.Bubbling.fire("doSearch",
-								{
-									parent:this.datagridMeta.nodeRef,
-									itemType:this.datagridMeta.itemType,
-									searchShowInactive:false,
-									bubblingLabel:me.options.bubblingLabel
-								});
+                        this.search.performSearch({
+                            parent:this.datagridMeta.nodeRef,
+                            itemType:this.datagridMeta.itemType,
+                            searchShowInactive:false
+                        });
 					}
 				};
 				/**

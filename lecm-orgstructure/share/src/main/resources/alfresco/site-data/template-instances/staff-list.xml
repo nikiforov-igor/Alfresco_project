@@ -8,7 +8,7 @@
             <properties>
                 <pagination>true</pagination>
                 <bubblingLabel>staff-list</bubblingLabel>
-                <fullDelete>true</fullDelete>
+                <fullDelete>false</fullDelete>
             </properties>
         </component>
         <!-- Toolbar -->

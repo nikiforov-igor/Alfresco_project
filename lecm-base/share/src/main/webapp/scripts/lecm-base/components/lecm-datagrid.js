@@ -87,7 +87,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.showingMoreActions = false;
         this.selectedItems = {};
         this.afterDataGridUpdate = [];
-
+        this.search = null;
         /**
          * Decoupled event listeners
          */
@@ -349,6 +349,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 //                oColumn:null,
 //                sSortDir:null
 //            },
+            search: null, //Объект, отвечающий за заполнение датагрида
 
             /**
              * Returns selector custom datacell formatter
@@ -602,17 +603,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Actions module
                 this.modules.actions = new LogicECM.module.Base.Actions();
 
-                var context = this;
-                // initialize Search
-                // draw it after get metaData!
-                this.modules.search = new LogicECM.AdvancedSearch(this.id).setOptions({
-                    showExtendSearchBlock:context.options.showExtendSearchBlock
-                });
-
-				if (this.options.bubblingLabel != null) {
-					this.datagridMeta.bubblingLabel = this.options.bubblingLabel;
-				}
-
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
 
@@ -662,24 +652,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             },
             /**
-             * Обновление формы поиска
-             * @constructor
-             */
-            renderSearchForm: function DataGrid_renderSearchForm()
-            {
-                if (!YAHOO.lang.isObject(this.datagridMeta))
-                {
-                    return;
-                }
-                // init search
-                if (this.modules.search) {
-                    this.modules.search.initSearch(this.datagridMeta);
-                } else {
-                    this.modules.search = new LogicECM.AdvancedSearch(this.id);
-                    this.modules.search.initSearch(this.datagridMeta);
-                }
-            },
-            /**
              * Renders Data List metadata, i.e. title and description
              *
              * @method renderDataGridMeta
@@ -710,7 +682,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
 				this.renderDataGridMeta();
-                this.renderSearchForm();
                 // Query the visible columns for this list's item type
                 Alfresco.util.Ajax.jsonGet(
                     {
@@ -940,10 +911,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // DataSource definition if not alfready defined
                 if (!this.widgets.dataSource) {
                     this.widgets.dataSource = this._setupDataSource();
-                    // link dataSource with search
-                    this.modules.search.dataSource = this.widgets.dataSource;
                 }
-                this.modules.search.dataColumns = this.datagridColumns;
             },
             /**
              * Получение колонок dataGrid
@@ -1037,12 +1005,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         if (me.sort) {
                             // Обнуляем сортировку иначе зациклится.
                             me.sort = null;
-                            YAHOO.Bubbling.fire("doSearch",
-                                {
-                                    searchConfig:searchConfig,
-                                    searchShowInactive:false,
-                                    bubblingLabel:me.options.bubblingLabel
-                                });
+                            this.search.performSearch({
+                                searchConfig:searchConfig,
+                                searchShowInactive:false
+                            });
                         }
                     }
                 }
@@ -1177,10 +1143,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var me = this;
                 if (!this.widgets.dataTable) {
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
-                    // link current table with search and do search
-                    this.modules.search.dataTable = this.widgets.dataTable;
                 }
 
+                // initialize Search
+                this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
+                    showExtendSearchBlock:this.options.showExtendSearchBlock
+                });
                 var searchConfig = this.datagridMeta.searchConfig;
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
@@ -1192,20 +1160,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
-                    YAHOO.Bubbling.fire("doSearch",
-                        {
-                            searchConfig:searchConfig,
-                            searchShowInactive:false,
-                            bubblingLabel:me.options.bubblingLabel
-                        });
+                    this.search.performSearch({
+                        searchConfig:searchConfig,
+                        searchShowInactive:false
+                    });
                 } else { // Поиск без использования SOLR
-                    YAHOO.Bubbling.fire("doSearch",
-                        {
-                            parent:this.datagridMeta.nodeRef,
-                            itemType:this.datagridMeta.itemType,
-                            searchShowInactive:false,
-                            bubblingLabel:me.options.bubblingLabel
-                        });
+                    this.search.performSearch({
+                        parent:this.datagridMeta.nodeRef,
+                        itemType:this.datagridMeta.itemType,
+                        searchShowInactive:false
+                    });
                 }
             },
 
@@ -1601,7 +1565,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var label = obj.bubblingLabel;
                     if(this._hasEventInterest(label)){
                         this.datagridMeta = obj.datagridMeta;
-                        this.datagridMeta.bubblingLabel = this.options.bubblingLabel;
                         // Could happen more than once, so check return value of fulfil()
                         if (!this.deferredListPopulation.fulfil("onGridTypeChanged")) {
                             this.populateDataGrid();
@@ -1887,15 +1850,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
-                    YAHOO.Bubbling.fire("doSearch",
-                        {
-                            searchConfig:searchConfig,
-                            searchShowInactive:false,
-                            bubblingLabel:me.options.bubblingLabel
-                        });
+                    this.search.performSearch({
+                        searchConfig:searchConfig,
+                        searchShowInactive:false
+                    });
                 }
                 // Update the DataSource
-                var requestParams = this.modules.search._buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), false);
+                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), false);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

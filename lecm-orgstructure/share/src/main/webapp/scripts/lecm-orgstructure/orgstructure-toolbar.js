@@ -279,24 +279,19 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
-
-                    YAHOO.Bubbling.fire("doSearch",
-                        {
-                            searchConfig:datagridMeta.searchConfig,
-                            searchShowInactive:false,
-                            bubblingLabel:dataGrid.options.bubblingLabel
-                        });
+                    this.modules.dataGrid.search.performSearch({
+                        searchConfig:datagridMeta.searchConfig,
+                        searchShowInactive:false
+                    });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     datagridMeta.searchConfig = null;
-                    YAHOO.Bubbling.fire("doSearch",
-                        {
-                            parent:datagridMeta.nodeRef,
-                            itemType:datagridMeta.itemType,
-                            searchConfig:null,
-                            searchShowInactive:false,
-                            bubblingLabel:me.options.bubblingLabel
-                        });
+                    this.modules.dataGrid.search.performSearch({
+                        parent:datagridMeta.nodeRef,
+                        itemType:datagridMeta.itemType,
+                        searchConfig:null,
+                        searchShowInactive:false
+                    });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                 }
             },
@@ -304,7 +299,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             // клик на Атрибутивном Поиске
             onExSearchClick:function OrgstructureToolbar_onExSearch() {
                 var grid = this.modules.dataGrid;
-                var advSearch = grid.modules.search;
+                var advSearch = grid.search;
 
                 advSearch.showDialog(grid.datagridMeta);
             },

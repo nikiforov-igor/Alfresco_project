@@ -194,8 +194,16 @@
 									evaluator: "deleteWorkForceEvaluator"
 								}
 							],
+                            datagridMeta: {
+                                itemType: "lecm-orgstr:workforce",
+                                nodeRef: "NOT_LOAD",
+                                actionsConfig: {
+                                    fullDelete:false
+                                }
+                            },
 							showCheckboxColumn: false
 						}).setMessages(${messages});
+                datagrid.draw();
 			}
 
 			function init() {
