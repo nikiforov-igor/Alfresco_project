@@ -341,14 +341,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             desc: true,
             elTh: null,
-            /**
-             * Порядок сортировки. Рисуется стрелочка на отсортированным столбцом
-             */
-//            currentSort:
-//            {
-//                oColumn:null,
-//                sSortDir:null
-//            },
             search: null, //Объект, отвечающий за заполнение датагрида
 
             /**

@@ -34,10 +34,9 @@
 
     function init() {
         Event.onContentReady("${formId}-tabs", function() {
-            var parent = Dom.get("${formId}-tabs")[0];
+            var parent = Dom.get("${formId}-fields");
             var tabs = new YAHOO.widget.TabView(Dom.getElementsByClassName('yui-navset', 'div', parent)[0]);
             var prevTabHeight;
-
             function onBeforeActive(e) {
                 var prev = e.prevValue.get("contentEl");
 
