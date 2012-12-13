@@ -103,7 +103,33 @@
 												});
 									};
 
-									me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+									if (("" + oResult.is_primary) == "true") {
+										var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePositions?nodeRef=" + oResult.employee;
+										var callback = {
+											success:function (oResponse) {
+												var oResults = eval("(" + oResponse.responseText + ")");
+												if (oResults && oResults.length > 1) { // нельзя удалять руководящую должность, пока есть другие должности
+													Alfresco.util.PopupManager.displayMessage(
+															{
+																text:me.msg("message.employee.position.delete.failure.primary")
+															});
+												} else { // удаляем! вызов метода из грида
+													me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+												}
+											},
+											failure:function (oResponse) {
+												Alfresco.util.PopupManager.displayMessage(
+														{
+															text:me.msg("message.employee.position.delete.failure")
+														});
+											},
+											argument:{
+											}
+										};
+										YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+									} else {
+										me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+									}
 								} else {
 									Alfresco.util.PopupManager.displayMessage(
 											{
