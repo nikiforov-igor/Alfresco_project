@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -36,7 +37,7 @@ public class BPMNGenerator {
 
 	private final static String NAMESPACE_XLNS = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 	private final static String NAMESPACE_XSI = "http://www.w3.org/2001/XMLSchema-instance";
-	private final static String NAMESPACE_ACTIVITI ="http://activiti.org/bpmn";
+	private final static String NAMESPACE_ACTIVITI = "http://activiti.org/bpmn";
 	private final static String NAMESPACE_BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI";
 	private final static String NAMESPACE_OMGDC = "http://www.omg.org/spec/DD/20100524/DC";
 	private final static String NAMESPACE_OMGDI = "http://www.omg.org/spec/DD/20100524/DI";
@@ -56,6 +57,7 @@ public class BPMNGenerator {
 	private final static QName PROP_OUTPUT_WORKFLOW_VARIABLE_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableType");
 	private final static QName PROP_OUTPUT_WORKFLOW_VARIABLE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableValue");
 	private final static QName PROP_TRANSITION_EXPRESSION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionExpression");
+	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
 
 	private final static String VARIABLE = "VARIABLE";
 	private final static String VALUE = "VALUE";
@@ -67,6 +69,7 @@ public class BPMNGenerator {
 	private final static QName TYPE_INPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableData");
 
 	private final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
+	private final static String ACTION_SCRIPT_ACTION = "ScriptAction";
 	private final static String ACTION_START_WORKFLOW = "StartWorkflow";
 	private final static String ACTION_WAIT_FOR_DOCUMENT_CHANGE = "WaitForDocumentChange";
 	private final static String ACTION_USER_WORKFLOW = "UserWorkflow";
@@ -195,14 +198,14 @@ public class BPMNGenerator {
 				for (ChildAssociationRef action : startActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(start, statusVar, action, actionId, actionVar));
+					flows.addAll(createEvent(extentionElements, start, statusVar, action, actionId, actionVar));
 				}
 
 				//install take actions
 				for (ChildAssociationRef action : takeActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(take, statusVar, action, actionId, actionVar));
+					flows.addAll(createEvent(extentionElements, take, statusVar, action, actionId, actionVar));
 
 				}
 
@@ -210,7 +213,7 @@ public class BPMNGenerator {
 				for (ChildAssociationRef action : endActions) {
 					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
 					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(end, statusVar, action, actionId, actionVar));
+					flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
 				}
 
 				if (flows.size() == 1) {
@@ -247,7 +250,6 @@ public class BPMNGenerator {
 	}
 
 	/**
-	 *
 	 * @param eventElement
 	 * @param statusVar
 	 * @param action
@@ -255,7 +257,7 @@ public class BPMNGenerator {
 	 * @param actionVar
 	 * @return true если
 	 */
-	private List<Flow> createEvent(Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
+	private List<Flow> createEvent(Element extensions, Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
 		if (ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
 			return createActionFinishStateWithTransition(eventElement, statusVar, action, actionVar);
 		} else if (ACTION_START_WORKFLOW.equals(actionId)) {
@@ -264,6 +266,31 @@ public class BPMNGenerator {
 			return createTransitionAction(statusVar, action);
 		} else if (ACTION_USER_WORKFLOW.equals(actionId)) {
 			System.out.println("ACTION_USER_WORKFLOW");
+			return Collections.EMPTY_LIST;
+		} else if (ACTION_SCRIPT_ACTION.equals(actionId)) {
+			List<ChildAssociationRef> scripts = nodeService.getChildAssocs(action.getChildRef());
+			for (ChildAssociationRef script : scripts) {
+				String on = eventElement.getAttribute("on");
+				String eventType = "create";
+				if (on.equals("start")) {
+					eventType = "create";
+				} else if (on.equals("end")) {
+					eventType = "complete";
+				}
+				Element extension = doc.createElement("activiti:taskListener");
+				extension.setAttribute("event", eventType);
+				extension.setAttribute("class", "org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener");
+				extensions.appendChild(extension);
+
+				Element activitiField = doc.createElement("activiti:field");
+				Element activitiString = doc.createElement("activiti:string");
+				String data = (String) nodeService.getProperty(script.getChildRef(),PROP_ACTION_SCRIPT);
+				CDATASection cdata = doc.createCDATASection(data);
+				activitiString.appendChild(cdata);
+				activitiField.appendChild(activitiString);
+				extension.appendChild(activitiField);
+			}
+
 			return Collections.EMPTY_LIST;
 		} else if (ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
 			return createWaitForDocumentChangeEvent(eventElement, statusVar, action, actionVar);
@@ -300,7 +327,7 @@ public class BPMNGenerator {
 			eventElement.appendChild(actionElement);
 
 			Element expressionsElement = doc.createElement("lecm:expressions");
-			expressionsElement.setAttribute("outputVariable","var" + actionVar);
+			expressionsElement.setAttribute("outputVariable", "var" + actionVar);
 			actionElement.appendChild(expressionsElement);
 
 			for (ChildAssociationRef expression : expressions) {
@@ -320,10 +347,10 @@ public class BPMNGenerator {
 
 
 	/**
-		  <lecm:action type="StartWorkflow">
-		  <lecm:attribute name="workflowId" value="activitiReview"/>
-		  <lecm:attribute name="assignee" value="admin"/>
-		  </lecm:action>
+	 * <lecm:action type="StartWorkflow">
+	 * <lecm:attribute name="workflowId" value="activitiReview"/>
+	 * <lecm:attribute name="assignee" value="admin"/>
+	 * </lecm:action>
 	 */
 	private List<Flow> createStartWorkflowAction(Element eventElement, ChildAssociationRef action) {
 		List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
@@ -345,23 +372,24 @@ public class BPMNGenerator {
 	}
 
 	/**
-	    <lecm:action type="FinishStateWithTransition" variable="trans">
-				<lecm:attribute name="agreement">
-					<lecm:parameter name="labelId" value="На согласование"/>
-					<lecm:parameter name="workflowId" value="activitiReview"/>
-					<lecm:parameter name="variableValue" value="agreement"/>
-					<lecm:workflowVariables>
-						<lecm:input from="inputVariable" to="workflowInputVariable"/>
-						<lecm:input to="workflowInputVariableValue" value="fromDescriptor"/>
-						<lecm:output from="wf_reviewOutcome" to="agree"/>
-						<lecm:output to="stateProcessInputVariableValue" value="fromDescriptor"/>
-					</lecm:workflowVariables>
-				</lecm:attribute>
-				<lecm:attribute name="signing">
-					<lecm:parameter name="labelId" value="На подписание"/>
-					<lecm:parameter name="variableValue" value="signing"/>
-				</lecm:attribute>
-			</lecm:action>*/
+	 * <lecm:action type="FinishStateWithTransition" variable="trans">
+	 * <lecm:attribute name="agreement">
+	 * <lecm:parameter name="labelId" value="На согласование"/>
+	 * <lecm:parameter name="workflowId" value="activitiReview"/>
+	 * <lecm:parameter name="variableValue" value="agreement"/>
+	 * <lecm:workflowVariables>
+	 * <lecm:input from="inputVariable" to="workflowInputVariable"/>
+	 * <lecm:input to="workflowInputVariableValue" value="fromDescriptor"/>
+	 * <lecm:output from="wf_reviewOutcome" to="agree"/>
+	 * <lecm:output to="stateProcessInputVariableValue" value="fromDescriptor"/>
+	 * </lecm:workflowVariables>
+	 * </lecm:attribute>
+	 * <lecm:attribute name="signing">
+	 * <lecm:parameter name="labelId" value="На подписание"/>
+	 * <lecm:parameter name="variableValue" value="signing"/>
+	 * </lecm:attribute>
+	 * </lecm:action>
+	 */
 	private List<Flow> createActionFinishStateWithTransition(Element take, String statusVar, ChildAssociationRef action, String actionVar) {
 		List<Flow> flows = new ArrayList<Flow>();
 		Element attribute;
@@ -452,6 +480,7 @@ public class BPMNGenerator {
 
 	/**
 	 * Добавляем коннектор без условия
+	 *
 	 * @param sourceRef исходный элемент
 	 * @param targetRef конечный элемент
 	 * @return Flow Element
@@ -462,9 +491,10 @@ public class BPMNGenerator {
 
 	/**
 	 * Добавляем коннектор с условным переходом
+	 *
 	 * @param sourceRef исходный элемент
 	 * @param targetRef конечный элемент
-	 * @param content условие перехода
+	 * @param content   условие перехода
 	 * @return Flow Element
 	 */
 	private Element createFlow(String sourceRef, String targetRef, String content) {
@@ -476,7 +506,8 @@ public class BPMNGenerator {
 		if (content != null) {
 			Element expression = doc.createElement("conditionExpression");
 			expression.setAttribute("xsi:type", "tFormalExpression");
-			expression.setTextContent(content);
+			CDATASection cdata = doc.createCDATASection(content);
+			expression.appendChild(cdata);
 			flow.appendChild(expression);
 		}
 		return flow;
