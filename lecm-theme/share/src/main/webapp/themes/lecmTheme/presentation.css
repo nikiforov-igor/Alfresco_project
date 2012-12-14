@@ -207,7 +207,11 @@ input, textarea {
 .sticky-wrapper .grid a,
 .sticky-wrapper .grid a:visited,
 .yui-panel-container .grid a,
-.yui-panel-container .grid a:visited {
+.yui-panel-container .grid a:visited,
+.sticky-wrapper .person a,
+.sticky-wrapper .person a:visited,
+.yui-panel-container .person a,
+.yui-panel-container .person a:visited{
    text-decoration: underline;
 }
 
@@ -1873,4 +1877,15 @@ div.orgchart-picker-menu .search-input {
     width: 100%;
     float: none;
     padding: 0;
+}
+
+span.person
+{
+	background: url(../../components/images/filetypes/generic-user-16.png) no-repeat;
+}
+
+span.person a
+{
+	display: inline-block;
+	margin-left: 20px;
 }

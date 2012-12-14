@@ -348,11 +348,20 @@ LogicECM.module = LogicECM.module || {};
                 var num = 0;
                 for (var i in items) {
                     var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-                    Dom.get(fieldId).innerHTML
-                        += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	                if (this.options.itemType == "lecm-orgstr:employee") {
+		                Dom.get(fieldId).innerHTML
+			                += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, items[i].name) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	                } else {
+		                Dom.get(fieldId).innerHTML
+			                += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	                }
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + items[i].nodeRef, this.attachRemoveItemClickListener, items[i], this);
                 }
             },
+
+	        getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+	        },
 
             getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)
             {
@@ -400,7 +409,11 @@ LogicECM.module = LogicECM.module || {};
                 var num = 0;
                 for (var i in this.selectedItems) {
                     var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-                    el.innerHTML += '<div class="' + divClass + '"> ' + this.selectedItems[i].name + ' </div>';
+	                if (this.options.itemType == "lecm-orgstr:employee") {
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name) + ' </div>';
+	                } else {
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.selectedItems[i].name + ' </div>';
+	                }
                 }
 
             },

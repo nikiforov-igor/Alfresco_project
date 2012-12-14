@@ -520,11 +520,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
             },
 
-	        getEmployeeViewByLink: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+	        getEmployeeViewByLink: function DataGrid_getEmployeeViewByLink(employeeNodeRef, displayValue) {
 		        return "<a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
 	        },
 
-	        getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+	        getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
 		        return "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
 	        },
 

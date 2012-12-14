@@ -829,7 +829,12 @@ LogicECM.module = LogicECM.module || {};
                     template += '<div class="description">{description}</div>';
                 }
 
-                elCell.innerHTML = scope.renderItem(oRecord.getData(), template);
+	            if (oRecord.getData("type") == "lecm-orgstr:employee")
+	            {
+		            elCell.innerHTML = scope.getEmployeeView(oRecord.getData("nodeRef"), scope.renderItem(oRecord.getData(), template));
+	            } else {
+		            elCell.innerHTML = scope.renderItem(oRecord.getData(), template);
+	            }
             };
         },
 
@@ -1024,11 +1029,21 @@ LogicECM.module = LogicECM.module || {};
 
                 var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 
-                Dom.get(fieldId).innerHTML
-                    += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	            if (this.options.itemType == "lecm-orgstr:employee") {
+		            Dom.get(fieldId).innerHTML
+			            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	            } else {
+		            Dom.get(fieldId).innerHTML
+			            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	            }
+
                 YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
             }
         },
+
+		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+			return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+		},
 
         updateAddButtons: function AssociationTreeViewer_updateAddButtons() {
             var button;
@@ -1079,10 +1094,19 @@ LogicECM.module = LogicECM.module || {};
 
                 var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 	            if(this.options.disabled) {
-		            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+		            if (this.options.itemType == "lecm-orgstr:employee") {
+			            el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
+		            } else {
+			            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+		            }
 	            } else {
-		            el.innerHTML
-			            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+		            if (this.options.itemType == "lecm-orgstr:employee") {
+			            el.innerHTML
+				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+		            } else {
+			            el.innerHTML
+				            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+		            }
 		            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 	            }
             }
