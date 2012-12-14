@@ -139,7 +139,7 @@ function getSubstitudeField(node, field) {
 							break;
 						}
 					}
-					if (node.getStoreType() == "workspace" && !expressionsFalse) {
+					if (!isArchive(node) && !expressionsFalse) {
 						showNode = node;
 						exist = true;
 						break;
@@ -152,7 +152,7 @@ function getSubstitudeField(node, field) {
 			} else if (showNode.length > 0) {
 				for (var i = 0; i < showNode.length; i++) {
 					var node = showNode[i];
-					if (node.getStoreType() == "workspace") {
+					if (!isArchive(node)) {
 						showNode = node;
 					}
 				}
@@ -239,4 +239,9 @@ function getExpression(str) {
  */
 function trim(str) {
 	return ("" + str).replace(/^\s+|\s+$/g, "");
+}
+
+function isArchive(node) {
+	var active = node.properties["lecm-dic:active"];
+	return (node.getStoreType() == "archive") || (active != null && ("" + active) == "false");
 }
