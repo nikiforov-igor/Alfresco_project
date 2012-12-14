@@ -1,6 +1,6 @@
 /* My Styles */
 
-input, textarea {
+input, textarea, a {
     outline: none;
 }
 
@@ -444,16 +444,22 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields div {
     text-align: left;
 }
+.yui-skin-lecmTheme .yui-panel div.form-fields,
+.yui-skin-lecmTheme .yui-panel div.form-fields div.set {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div {
     text-align: center;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field {
+    width: 100%;
     line-height: 25px;
     vertical-align: middle;
-    overflow: hidden;
     padding-top: 1px;
     margin-bottom: 10px;
+    float: left;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field label {
     max-width: 10em;
@@ -466,35 +472,30 @@ h4 .lighter
     float: none;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
-.yui-skin-lecmTheme .yui-panel div.form-field select {
-    width: 36em;
-    height: 28px;
+.yui-skin-lecmTheme .yui-panel div.form-field select,
+.yui-skin-lecmTheme .yui-panel div.form-field textarea,
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
+    width: 470px;
     float: right;
     clear: none;
-    padding: 2px;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.yui-skin-lecmTheme .yui-panel div.form-field textarea {
-    width: 36em;
-    float: right;
-    clear: none;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    resize: none;
+.yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
+.yui-skin-lecmTheme .yui-panel div.form-field select {
+    height: 28px;
+    padding: 2px;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='checkbox'] {
     vertical-align: middle;
     margin: auto 0;
 }
+.yui-skin-lecmTheme .yui-panel div.form-field textarea {
+    resize: none;
+}
 .yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
-    width: 36em;
-    float: right;
     margin: 0;
-    padding-left: 5px;
     white-space: nowrap;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field > div.object-finder > div.current-values,
 .yui-skin-lecmTheme .yui-panel div.form-field input.autocomplete-input {
@@ -1696,6 +1697,7 @@ div.association-auto-complete-selected-item-even {
 }
 
 input[type="text"],
+textarea,
 select,
 .yui-push-button,
 .yui-button .first-child,
