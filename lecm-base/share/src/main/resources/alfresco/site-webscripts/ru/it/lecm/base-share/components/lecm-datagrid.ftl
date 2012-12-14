@@ -49,12 +49,36 @@ viewFormId(необязательный) - по умолчанию равен vi
 				});
 	}
 
+	function showEmployeeViewByLink(employeeLinkNodeRef) {
+		var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeLinkEmployee?nodeRef=" + employeeLinkNodeRef;
+		var callback = {
+			success:function (oResponse) {
+				var oResults = eval("(" + oResponse.responseText + ")");
+				if (oResults && oResults.nodeRef) {
+					viewAttributes(oResults.nodeRef);
+				} else {
+					Alfresco.util.PopupManager.displayMessage(
+							{
+								text:me.msg("message.details.failure")
+							});
+				}
+			},
+			failure:function (oResponse) {
+				Alfresco.util.PopupManager.displayMessage(
+						{
+							text:me.msg("message.details.failure")
+						});
+			}
+		};
+		YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+	}
+
 	//инициализация view-node-form для того, чтобы каждый раз самостоятельно не вызывать этот метод
 	YAHOO.util.Event.onContentReady ("${viewFormId}", createDialog);
 //]]>
 </script>
 <div id="${viewFormId}" class="yui-panel">
-	<div id="${viewFormId}-head" class="hd">${msg("logicecm.dictionary.view")}</div>
+	<div id="${viewFormId}-head" class="hd">${msg("logicecm.view")}</div>
 	<div id="${viewFormId}-body" class="bd">
 		<div id="${viewFormId}-content"></div>
 		<div class="bdft">
@@ -74,7 +98,7 @@ id(обязательный) - идентификатор, использующ�
 showViewForm(необязательный) - включать/не включать всплывающее окна по клику на запись
 viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
 -->
-<#macro datagrid id showViewForm=false viewFormId="view-node-form">
+<#macro datagrid id showViewForm=true viewFormId="view-node-form">
 <!--[if IE]>
 <iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>
 <![endif]-->
@@ -107,8 +131,6 @@ viewFormId(необязательный) - по умолчанию равен vi
          </span>
     </div>
 	<div id="${id}-grid" class="grid"></div>
-
-	<div id="${id}-selectListMessage" class="hidden select-list-message">${msg("message.select-list")}</div>
 
 	<div id="${id}-datagridBarBottom" class="yui-ge datagrid-bar datagrid-bar-bottom flat-button">
 		<div class="yui-u first align-center">

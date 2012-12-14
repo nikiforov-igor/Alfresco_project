@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div id="${id}-alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=false>
+		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
 			function createWorkforceDatagrid() {
 				LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {

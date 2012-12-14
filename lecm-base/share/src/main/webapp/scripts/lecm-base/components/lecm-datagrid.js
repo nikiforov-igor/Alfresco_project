@@ -462,7 +462,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                     switch (datalistColumn.dataType.toLowerCase())
                                     {
-                                        case "cm:person":
+                                        case "lecm-orgstr:employee":
+                                            html += '<span class="person">' + scope.getEmployeeView(data.value, data.displayValue) +  '</span>';
+                                            break;
+
+	                                    case "lecm-orgstr:employee-link":
+                                            html += '<span class="person">' + scope.getEmployeeViewByLink(data.value, data.displayValue) +  '</span>';
+                                            break;
+
+	                                    case "cm:person":
                                             html += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
                                             break;
 
@@ -511,6 +519,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     elCell.innerHTML = html;
                 };
             },
+
+	        getEmployeeViewByLink: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+		        return "<a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
+	        },
+
+	        getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
+		        return "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
+	        },
 
             /**
              * Return data type-specific sorter
@@ -603,9 +619,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
-
-                // Assume no list chosen for now
-                Dom.removeClass(this.id + "-selectListMessage", "hidden");
 
                 this.deferredListPopulation.fulfil("onReady");
 
@@ -727,8 +740,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 				// Show grid
 				Dom.setStyle(this.id + "-body", "visibility", "visible");
-				// Hide "no list" message
-                Dom.addClass(this.id + "-selectListMessage", "hidden");
             },
 
             /**
