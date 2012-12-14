@@ -48,4 +48,20 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		}
 		return null;
 	}
+
+	public ScriptNode getDelegationOptsByPerson (final String personRef) {
+		NodeRef nodeRef = delegationService.getDelegationOptsByPerson (new NodeRef (personRef));
+		if (nodeRef != null) {
+			return new ScriptNode (nodeRef, serviceRegistry, getScope ());
+		}
+		return null;
+	}
+
+	public ScriptNode getDelegationOptsByEmployee (final String employeeRef) {
+		NodeRef nodeRef = delegationService.getDelegationOptsByEmployee (new NodeRef (employeeRef));
+		if (nodeRef != null) {
+			return new ScriptNode (nodeRef, serviceRegistry, getScope ());
+		}
+		return null;
+	}
 }

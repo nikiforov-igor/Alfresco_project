@@ -11,6 +11,12 @@ public interface IDelegation {
 
 	JSONObject test(JSONObject args);
 
+	/**
+	 * получение начальной информации от модуля делегирования
+	 * @return структура данных IDelegationDescriptor которая содержит в себе:
+	 * <li>NodeRef папки где хранятся все параметры делегирования</li>
+	 * <li>название типа данных элементов которые в ней хранятся</li>
+	 */
 	IDelegationDescriptor getDelegationDescriptor ();
 
 	/**
@@ -18,5 +24,19 @@ public interface IDelegation {
 	 * @param employeeNodeRef идентификатор сотрудника
 	 * @return идентификатор параметров делегирования
 	 */
-	NodeRef getOrCreateDelegationOpts (NodeRef employeeNodeRef);
+	NodeRef getOrCreateDelegationOpts (final NodeRef employeeNodeRef);
+
+	/**
+	 * получение параметров делегирования для пользователя системы
+	 * @param personNodeRef идентификатор пользователя системы
+	 * @return NodeRef идентификатор параметров делегирования или null если ничего не нашел
+	 */
+	NodeRef getDelegationOptsByPerson (final NodeRef personNodeRef);
+
+	/**
+	 * получение параметров делегирования для сотрудника
+	 * @param employeeNodeRef идентификатор сотрудника
+	 * @return NodeRef идентификатор параметров делегирования или null если ничего не нашел
+	 */
+	NodeRef getDelegationOptsByEmployee (final NodeRef employeeNodeRef);
 }

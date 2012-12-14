@@ -3,6 +3,7 @@ package ru.it.lecm.delegation.beans;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.processor.BaseProcessorExtension;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -25,6 +27,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
@@ -121,10 +124,18 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 	private final static String CONTAINER = "DelegationOptionsContainer";
 	private final static String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
+	private final static String ORGSTRUCTURE_NAMESPACE = "http://www.it.ru/lecm/org/structure/1.0";
 	private final static QName TYPE_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-container");
 	private final static QName TYPE_DELEGATION_OPTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+	private final static QName TYPE_EMPLOYEE = QName.createQName (ORGSTRUCTURE_NAMESPACE, "employee");
 	private final static QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
 	private final static QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
+	private final static QName ASSOC_EMPLOYEE_PERSON = QName.createQName (ORGSTRUCTURE_NAMESPACE, "employee-person-assoc");
+
+	private static enum ASSOCIATION_TYPE {
+		SOURCE,
+		TARGET
+	};
 	/*
 	 * props
 	 */
@@ -716,26 +727,52 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 		return this;
 	}
 
-	@Override
-	public NodeRef getOrCreateDelegationOpts (NodeRef employeeNodeRef) {
-		//делаем поиск по всем delegation-opts, если не нашли то создаем новую
-		boolean delegationOptsExists = false;
-		NodeRef delegationOptsNodeRef = null;
+	/**
+	 * получение связанной ноды по ассоциации. Для типа связи 1:1, 1:0, 0:1
+	 * @param nodeRef исходная нода
+	 * @param assocTypeName имя типа ассоциации
+	 * @param typeName  имя типа данных который завязан на ассоциацию
+	 * @param type направление ассоциации source или target
+	 * @return найденный NodeRef или null
+	 */
+	private NodeRef findNodeAssociationRef (NodeRef nodeRef, QNamePattern assocTypeName, QNamePattern typeName, ASSOCIATION_TYPE type) {
+		List<AssociationRef> associationRefs;
 
-		List<AssociationRef> sourceRefs = nodeService.getSourceAssocs (employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
-		if (sourceRefs != null) {
-			for (AssociationRef sourceRef : sourceRefs) {
-				NodeRef foundDelegationOptsNodeRef = sourceRef.getSourceRef ();
-				QName foundType = nodeService.getType (foundDelegationOptsNodeRef);
-				if (TYPE_DELEGATION_OPTS.equals (foundType)) {
-					delegationOptsExists = true;
-					delegationOptsNodeRef = foundDelegationOptsNodeRef;
+		switch (type) {
+			case SOURCE: associationRefs = nodeService.getSourceAssocs (nodeRef, assocTypeName);
+				break;
+			case TARGET: associationRefs = nodeService.getTargetAssocs (nodeRef, assocTypeName);
+				break;
+			default: associationRefs = new ArrayList<AssociationRef> ();
+		}
+		NodeRef foundNodeRef = null;
+		for (AssociationRef associationRef : associationRefs) {
+			NodeRef assocNodeRef;
+			switch (type) {
+				case SOURCE: assocNodeRef = associationRef.getSourceRef ();
 					break;
+				case TARGET: assocNodeRef = associationRef.getTargetRef ();
+					break;
+				default: assocNodeRef = null;
+					break;
+			}
+			if (assocNodeRef != null) {
+				QName foundType = nodeService.getType (assocNodeRef);
+				if (typeName.isMatch (foundType)) {
+					foundNodeRef = assocNodeRef;
 				}
 			}
 		}
+		return foundNodeRef;
+	}
+
+	@Override
+	public NodeRef getOrCreateDelegationOpts (NodeRef employeeNodeRef) {
+		//делаем поиск по всем delegation-opts, если не нашли то создаем новую
+		NodeRef delegationOptsNodeRef = findNodeAssociationRef (employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER, TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+
 		//создаем новый delegation-opts так как его нет
-		if (!delegationOptsExists) {
+		if (delegationOptsNodeRef == null) {
 			delegationOptsNodeRef = createDelegationOpts (employeeNodeRef);
 		}
 		return delegationOptsNodeRef;
@@ -754,5 +791,30 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 		NodeRef delegationOptsNodeRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef ();
 		nodeService.createAssociation (delegationOptsNodeRef, employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
 		return delegationOptsNodeRef;
+	}
+
+	@Override
+	public NodeRef getDelegationOptsByPerson (final NodeRef personNodeRef) {
+		//смотрим у person ассоциацию на employee если нету то null, иначе ищем по employee
+		NodeRef employeeRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
+
+			@Override
+			public NodeRef doWork () throws Exception {
+				return findNodeAssociationRef (personNodeRef, ASSOC_EMPLOYEE_PERSON, TYPE_EMPLOYEE, ASSOCIATION_TYPE.SOURCE);
+			}
+		});
+		return (employeeRef != null) ? getDelegationOptsByEmployee (employeeRef) : null;
+	}
+
+	@Override
+	public NodeRef getDelegationOptsByEmployee (final NodeRef employeeNodeRef) {
+		//смотрим у employee ассоциацию на delegation-opts если нету то null, иначе возвращаем delegation-opts
+		return AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
+
+			@Override
+			public NodeRef doWork () throws Exception {
+				return getOrCreateDelegationOpts (employeeNodeRef);
+			}
+		});
 	}
 }

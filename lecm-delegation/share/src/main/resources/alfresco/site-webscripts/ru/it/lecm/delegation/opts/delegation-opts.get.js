@@ -8,7 +8,7 @@ if (delegator && delegator.length > 0) {
 	model.delegator = delegator;
 } else {
 	//дергание скрипта и получение настоящего делегатора
-	var jsonStr = remote.connect ("alfresco").get ("/lecm/delegation/get/person/options");
+	var jsonStr = remote.connect ("alfresco").get ("/lecm/delegation/get/options/person");
 	var obj = jsonUtils.toObject (jsonStr);
 	model.delegator = obj.delegationOpts;
 }
