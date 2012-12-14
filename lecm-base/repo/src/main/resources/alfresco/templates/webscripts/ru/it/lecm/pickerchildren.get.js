@@ -18,7 +18,8 @@ function main()
       resultObj = null,
       lastPathElement = null,
       argsXPathLocation = args['xPathLocation'],
-      argsXPathRoot = args['xPathRoot'];
+      argsXPathRoot = args['xPathRoot'],
+      showNotSelectable = args['showNotSelectableItems'];
 
    if (logger.isLoggingEnabled())
    {
@@ -168,7 +169,7 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               if (resultObj.selectable) {
+	               if (resultObj.selectable || showNotSelectable == "true") {
 		               containerResults.push(resultObj);
 	               }
 	            }
@@ -181,7 +182,7 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               if (resultObj.selectable) {
+	               if (resultObj.selectable || showNotSelectable == "true") {
 		               contentResults.push(resultObj);
 	               }
 	            }

@@ -55,9 +55,7 @@ function saveOrganization() {
     var url = Alfresco.constants.URL_CONTEXT + "/proxy/alfresco/api/node/" + nodeRef.uri + "/formprocessor";
     var organizationSaveCallBack = {
         upload:function(o){
-            Alfresco.util.PopupManager.displayMessage({
-                    text:"Данные обновлены"
-                });
+	        window.location.reload();
         }
     };
     Connect.asyncRequest(Alfresco.util.Ajax.POST, url, organizationSaveCallBack);

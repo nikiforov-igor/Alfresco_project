@@ -36,7 +36,9 @@
                             <constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="common">
+                        <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
+                    </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common"/>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
@@ -101,7 +103,9 @@
                             <constraint type="REGEXP" validation-handler="Alfresco.forms.validation.email" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-orgstr:employee-photo-assoc" set="common"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="common">
+                        <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
+                    </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common"/>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
@@ -175,7 +179,12 @@
                     <field id="lecm-orgstr:org-phone" set="main"/>
                     <field id="lecm-orgstr:org-fax" set="main"/>
                     <field id="lecm-orgstr:org-email" set="main"/>
-                    <field id="lecm-orgstr:org-logo-assoc" set="other"/>
+                    <field id="lecm-orgstr:org-logo-assoc" set="other">
+                        <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl">
+                            <!-- Настройка для bubbling. type1:nameAction1,nameAction2|type2:nameAction1,nameAction2-->
+                            <control-param name="fireAction">ok:imageUpdated</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-orgstr:org-tin" set="other"/>
                     <field id="lecm-orgstr:org-ownership-type" set="other"/>
                     <field id="lecm-orgstr:org-incorporation-form" set="other"/>

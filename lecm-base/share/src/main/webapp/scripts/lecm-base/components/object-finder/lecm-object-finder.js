@@ -422,7 +422,24 @@ LogicECM.module = LogicECM.module || {};
          xPathLocation: null,
          xPathLocationRoot:null,
 
-         numberOfHiddenLayers:0
+         numberOfHiddenLayers:0,
+
+          // fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
+          fireAction:
+          {
+              // кнопка ok при submite
+              ok: null,
+              // кнопка cancel
+              cancel: null
+          },
+
+          /**
+           * Показывать или скрывать невыбираемые элементы
+           *
+           * @property
+           * @type string
+           */
+          showNotSelectableItems: false
       },
 
       /**
@@ -731,6 +748,12 @@ LogicECM.module = LogicECM.module || {};
          {
             eventGroup: this
          });
+          if (this.options.fireAction.ok != null) {
+              var fireName = this.options.fireAction.ok.split(",");
+              for (var i in fireName){
+                  YAHOO.Bubbling.fire(fireName[i], this);
+              }
+          }
       },
 
       /**
@@ -2298,7 +2321,15 @@ LogicECM.module = LogicECM.module || {};
            * @property parentRootRef
            * @type string
            */
-          rootRef: ""
+          rootRef: "",
+
+          /**
+           * Показывать или скрывать невыбираемые элементы
+           *
+           * @property
+           * @type string
+           */
+          showNotSelectableItems: false
       },
 
       /**
@@ -2735,7 +2766,7 @@ LogicECM.module = LogicECM.module || {};
          this.widgets.dataSource.doBeforeParseData = function ObjectRenderer_doBeforeParseData(oRequest, oFullResponse)
          {
             var updatedResponse = oFullResponse;
-            
+
             if (oFullResponse)
             {
                var items = oFullResponse.data.items;
@@ -3039,7 +3070,8 @@ LogicECM.module = LogicECM.module || {};
          var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) + 
                       "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                       "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
-                      "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol);
+                      "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol) +
+                      "&showNotSelectableItems=" + encodeURIComponent(this.options.showNotSelectableItems);  ;
 
 
          // if an XPath start location has been provided and it has not been resolved 
