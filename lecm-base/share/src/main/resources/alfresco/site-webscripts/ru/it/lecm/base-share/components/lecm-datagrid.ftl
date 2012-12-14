@@ -58,7 +58,11 @@ viewFormId(необязательный) - по умолчанию равен vi
 	<div id="${viewFormId}-body" class="bd">
 		<div id="${viewFormId}-content"></div>
 		<div class="bdft">
-			<button id="${viewFormId}-cancel" tabindex="0" onclick="hideViewDialog();">${msg("button.close")}</button>
+            <span id="${viewFormId}-cancel" class="yui-button yui-push-button">
+                <span class="first-child">
+                    <button type="button" tabindex="0" onclick="hideViewDialog();">${msg("button.close")}</button>
+                </span>
+            </span>
 		</div>
 	</div>
 </div>
