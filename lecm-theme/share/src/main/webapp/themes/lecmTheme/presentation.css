@@ -1889,3 +1889,8 @@ span.person a
 	display: inline-block;
 	margin-left: 20px;
 }
+
+.datagrid span.person a
+{
+	margin-left: 0;
+}
