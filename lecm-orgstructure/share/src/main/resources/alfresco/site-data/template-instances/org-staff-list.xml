@@ -1,19 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/orgstructure/organization</template-type>
+    <template-type>ru/it/lecm/orgstructure/org-staff-list</template-type>
     <components>
         <component>
-            <region-id>organization-profile</region-id>
-            <url>/lecm/orgstructure/organization</url>
+            <region-id>tree-and-grid</region-id>
+            <url>/lecm/orgstructure/staff-list-datagrid</url>
+            <properties>
+                <pagination>true</pagination>
+                <bubblingLabel>staff-list</bubblingLabel>
+                <fullDelete>false</fullDelete>
+            </properties>
         </component>
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
-                <showSearchBlock>false</showSearchBlock>
-                <showExSearchBtn>false</showExSearchBtn>
-                <showButtons>false</showButtons>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>true</showExSearchBtn>
+                <typeButton>newRowButtonStaff</typeButton>
+                <bubblingLabel>staff-list</bubblingLabel>
+                <active>false</active>
             </properties>
         </component>
         <!-- Title -->
@@ -21,7 +28,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.organization</title>
+                <title>page.staff-list</title>
                 <filteredLabel>page.orgstructure.filter.label</filteredLabel>
             </properties>
         </component>
@@ -30,7 +37,7 @@
             <region-id>menu</region-id>
             <url>/lecm/orgstructure/menu</url>
             <properties>
-                <selected>organization</selected>
+                <selected>staff</selected>
             </properties>
         </component>
     </components>

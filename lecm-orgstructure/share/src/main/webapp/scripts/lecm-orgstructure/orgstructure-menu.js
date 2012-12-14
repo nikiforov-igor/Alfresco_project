@@ -52,7 +52,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _draw:function () {
-            var structure = "orgstructure";
+            var employees = "org-employees";
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
@@ -91,17 +91,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.widgets.employeesButton = Alfresco.util.createYUIButton(this, "employeesBtn", onButtonClick1, {});
 
             var onButtonClick2 = function (e) {
-                reloadPage("staff-list");
+                reloadPage("org-staff-list");
             };
             this.widgets.staffButton = Alfresco.util.createYUIButton(this, "staffBtn", onButtonClick2, {});
 
             var onButtonClick3 = function (e) {
-                reloadPage("orgstructure");
+                reloadPage("org-structure");
             };
             this.widgets.orgstructureButton = Alfresco.util.createYUIButton(this, "orgstructureBtn", onButtonClick3, {});
 
             var onButtonClick4 = function (e) {
-                reloadPage("work-groups");
+                reloadPage("org-work-groups");
             };
             this.widgets.workGroupButton = Alfresco.util.createYUIButton(this, "workGroupBtn", onButtonClick4, {});
 
@@ -116,24 +116,21 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.widgets.rolesButton = Alfresco.util.createYUIButton(this, "rolesBtn", onButtonClick6, {});
 
             var onButtonClick7 = function (e) {
-                reloadPage("organization");
+                reloadPage("org-profile");
             };
             this.widgets.organizationButton = Alfresco.util.createYUIButton(this, "organizationBtn", onButtonClick7, {});
 
 			var onButtonClick8 = function (e) {
-				reloadPage("business-roles");
+				reloadPage("org-business-roles");
 			};
             this.widgets.businessRolesButton = Alfresco.util.createYUIButton(this, "businessRolesBtn", onButtonClick8, {});
 
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();
             if (type == null || type == '') {
-                type = structure; // по умолчанию, будем рисовать страницу с подразделениями
+                type = employees; // по умолчанию, будем рисовать страницу с сотрудниками
             }
             var root = context.roots[type];
-            if (root == null){ // введено неверное значение - рисуем страницу с подразделениями
-                root =  context.roots[structure];
-            }
             bubbleTable(root);
         },
 

@@ -44,12 +44,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	private static Log logger = LogFactory.getLog(OrgstructureWebScriptBean.class);
 	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
-	public static final String ORG_POSITIONS = "org-positions";
-	public static final String ORG_ROLES = "org-roles";
-	public static final String ORG_EMPLOYEES = "org-employees";
-	public static final String STAFF_LIST = "staff-list";
-	public static final String WORK_GROUPS = "work-groups";
-	public static final String BUSINESS_ROLES = "business-roles";
+	public static final String PAGE_ORG_POSITIONS = "org-positions";
+	public static final String PAGE_ORG_ROLES = "org-roles";
+	public static final String PAGE_ORG_EMPLOYEES = "org-employees";
+	public static final String PAGE_ORG_STAFF_LIST = "org-staff-list";
+	public static final String PAGE_ORG_WORK_GROUPS = "org-work-groups";
+	public static final String PAGE_ORG_BUSINESS_ROLES = "org-business-roles";
+	public static final String PAGE_ORG_PROFILE = "org-profile";
+	public static final String PAGE_ORG_STRUCTURE= "org-structure";
 
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
@@ -128,12 +130,11 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			// Добавить Организацию
 			root = new JSONObject();
 			root.put(NODE_REF, "NOT_LOAD");
-			root.put(PAGE, OrgstructureBean.TYPE_ORGANIZATION);
-			/*root.put(ITEM_TYPE, OrgstructureBean.TYPE_ORGANIZATION);
-			root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);*/
+			root.put(PAGE, PAGE_ORG_PROFILE);
 
 			nodes.put(root);
 
+			// Справочники
 			final NodeRef companyHome = repository.getCompanyHome();
 			NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
 
@@ -142,7 +143,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root = new JSONObject();
 			root.put(NODE_REF, positions.toString());
 			root.put(ITEM_TYPE, TYPE_POSITION);
-			root.put(PAGE, ORG_POSITIONS);
+			root.put(PAGE, PAGE_ORG_POSITIONS);
 			root.put(DELETE_NODE, false);
 			nodes.put(root);
 
@@ -151,7 +152,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root = new JSONObject();
 			root.put(NODE_REF, roles.toString());
 			root.put(ITEM_TYPE, TYPE_ROLE);
-			root.put(PAGE, ORG_ROLES);
+			root.put(PAGE, PAGE_ORG_ROLES);
 			root.put(DELETE_NODE, false);
 			nodes.put(root);
 
@@ -160,7 +161,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root = new JSONObject();
 			root.put(NODE_REF, businessRoles.toString());
 			root.put(ITEM_TYPE, TYPE_BUSINESS_ROLE);
-			root.put(PAGE, BUSINESS_ROLES);
+			root.put(PAGE, PAGE_ORG_BUSINESS_ROLES);
 			root.put(DELETE_NODE, false);
 
 			nodes.put(root);
@@ -179,29 +180,26 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
 					root.put(NODE_REF, cRef.toString());
-					root.put(PAGE, ORG_EMPLOYEES);
+					root.put(PAGE, PAGE_ORG_EMPLOYEES);
 					root.put(ITEM_TYPE, TYPE_EMPLOYEE);
 					root.put(DELETE_NODE, false);
 					root.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
 				} else if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root.put(NODE_REF, "NOT_LOAD");
-					root.put(PAGE, "orgstructure");
-					/*root.put(ITEM_TYPE, TYPE_UNIT);
-					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);*/
+					root.put(PAGE, PAGE_ORG_STRUCTURE);
 				}
 				nodes.put(root);
+
 				//Добавить Штатное расписание, Рабочие группы
 				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
 					root = new JSONObject();
 					root.put(NODE_REF, "NOT_LOAD");
-					root.put(PAGE, STAFF_LIST);
-					/*root.put(ITEM_TYPE, TYPE_STAFF_LIST);
-					root.put(DELETE_NODE, true);*/
+					root.put(PAGE, PAGE_ORG_STAFF_LIST);
 					nodes.put(root);
 
 					root = new JSONObject();
 					root.put(NODE_REF, cRef.toString());
-					root.put(PAGE, WORK_GROUPS);
+					root.put(PAGE, PAGE_ORG_WORK_GROUPS);
 					root.put(ITEM_TYPE, TYPE_WRK_GROUP);
 					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
 					root.put(DELETE_NODE, false);

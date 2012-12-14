@@ -2,6 +2,6 @@
 <page>
 	<title>Бизнес роли</title>
 	<description>Справочник бизнес ролей</description>
-	<template-instance>business-roles</template-instance>
+	<template-instance>org-business-roles</template-instance>
 	<authentication>user</authentication>
 </page>

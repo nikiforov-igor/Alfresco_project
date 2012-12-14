@@ -2,6 +2,6 @@
 <page>
     <title>Штатное расписание</title>
     <description>Штатное расписание</description>
-    <template-instance>staff-list</template-instance>
+    <template-instance>org-staff-list</template-instance>
     <authentication>user</authentication>
 </page>

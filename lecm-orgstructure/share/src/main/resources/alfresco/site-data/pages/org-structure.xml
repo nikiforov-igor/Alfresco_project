@@ -2,6 +2,6 @@
 <page>
     <title>Подразделения</title>
     <description>Подразделения</description>
-    <template-instance>orgstructure</template-instance>
+    <template-instance>org-structure</template-instance>
     <authentication>user</authentication>
 </page>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/orgstructure/work-groups</template-type>
+    <template-type>ru/it/lecm/orgstructure/org-work-groups</template-type>
     <components>
         <!-- Grids -->
         <component>

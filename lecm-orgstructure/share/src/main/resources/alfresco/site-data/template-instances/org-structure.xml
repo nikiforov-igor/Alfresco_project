@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/orgstructure/staff-list</template-type>
+    <template-type>ru/it/lecm/orgstructure/org-structure</template-type>
     <components>
         <component>
             <region-id>tree-and-grid</region-id>
-            <url>/lecm/orgstructure/staff-list-datagrid</url>
+            <url>/lecm/orgstructure/datagrid</url>
             <properties>
                 <pagination>true</pagination>
-                <bubblingLabel>staff-list</bubblingLabel>
+                <bubblingLabel>orgstructure</bubblingLabel>
                 <fullDelete>false</fullDelete>
             </properties>
         </component>
@@ -18,8 +18,8 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
-                <typeButton>newRowButtonStaff</typeButton>
-                <bubblingLabel>staff-list</bubblingLabel>
+                <typeButton>newUnitButton</typeButton>
+                <bubblingLabel>orgstructure</bubblingLabel>
                 <active>false</active>
             </properties>
         </component>
@@ -28,7 +28,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.staff-list</title>
+                <title>page.orgstructure</title>
                 <filteredLabel>page.orgstructure.filter.label</filteredLabel>
             </properties>
         </component>
@@ -37,7 +37,7 @@
             <region-id>menu</region-id>
             <url>/lecm/orgstructure/menu</url>
             <properties>
-                <selected>staff</selected>
+                <selected>orgstructure</selected>
             </properties>
         </component>
     </components>

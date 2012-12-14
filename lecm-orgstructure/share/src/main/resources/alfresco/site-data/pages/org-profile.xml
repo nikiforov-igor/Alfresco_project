@@ -2,6 +2,6 @@
 <page>
     <title>Профиль</title>
     <description>Профиль Организации</description>
-    <template-instance>organization</template-instance>
+    <template-instance>org-profile</template-instance>
     <authentication>user</authentication>
 </page>

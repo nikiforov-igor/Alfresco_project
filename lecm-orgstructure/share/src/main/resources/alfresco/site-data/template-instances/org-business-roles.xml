@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/orgstructure/business-roles</template-type>
+	<template-type>ru/it/lecm/orgstructure/org-business-roles</template-type>
 	<components>
 		<!-- Title -->
 		<component>
