@@ -1,7 +1,5 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -21,6 +19,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -537,6 +537,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		return null;
 	}
 
+	/**
+	 * Получение папки персональных данных сотрудника
+	 */
 	public ScriptNode getPersonDataFolder() {
 		NodeRef personDataRef = null;
 		personDataRef = orgstructureService.getPersonalDataDirectory();

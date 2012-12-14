@@ -96,4 +96,14 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
+    <bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.beans.OrgstructureEmployeePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+    </bean>
 </beans>
