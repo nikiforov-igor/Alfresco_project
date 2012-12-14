@@ -16,7 +16,6 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.processor.BaseProcessorExtension;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -49,7 +48,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	public static final String PREFIX_PROCURACY = "lecm-d8n"; // "lecm-ba";
 	public static final String URI_DATA_PROCURACY = "lecm/delegation/";
 
-	public static final String TYPE_DELEGATION_OPTS = "delegation-opts";
+//	public static final String TYPE_DELEGATION_OPTS = "delegation-opts";
 	public static final String TYPE_PROCURACY = "procuracy";
 
 	public static final String NAME_PROCURACY = "PROCURACY";
@@ -123,40 +122,34 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	private final static String CONTAINER = "DelegationOptionsContainer";
 	private final static String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
 	private final static QName TYPE_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-container");
+	private final static QName TYPE_DELEGATION_OPTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+	private final static QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
+	private final static QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
 	/*
 	 * props
 	 */
 	final private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
 
-	private ServiceRegistry serviceRegistry;
 	private Repository repository;
+	private NodeService nodeService;
+	private NamespaceService namespaceService;
 	private TransactionService transactionService;
+
 	private ITestSearch tester;
 
-	private NodeRef delegationOptsContainer;
-
-
-	public ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
-	}
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
-	public Repository getRepositoryHelper() {
-		return this.repository;
-	}
-
-	public void setRepository(Repository repository) {
+	public void setRepositoryHelper (Repository repository) {
 		this.repository = repository;
 	}
 
-	public TransactionService getTransactionService() {
-		return this.transactionService;
+	public void setNodeService (NodeService nodeService) {
+		this.nodeService = nodeService;
 	}
 
-	public void setTransactionService(TransactionService transactionService) {
+	public void setNamespaceService (NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
+	public void setTransactionService (TransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
 
@@ -435,11 +428,11 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 		final JSONArray result = new JSONArray();
 		if (foundSet != null) {
 			for(ResultSetRow row : foundSet) {
-				final Map<QName, Serializable> props = serviceRegistry.getNodeService().getProperties(row.getNodeRef());
+				final Map<QName, Serializable> props = nodeService.getProperties(row.getNodeRef());
 
 				final Set<QName> assocs = new HashSet <QName>();
 				{	// добавление ассоциаций ...
-					final List<AssociationRef> ca = serviceRegistry.getNodeService().getTargetAssocs(row.getNodeRef(), RegexQNamePattern.MATCH_ALL);
+					final List<AssociationRef> ca = nodeService.getTargetAssocs(row.getNodeRef(), RegexQNamePattern.MATCH_ALL);
 					if (ca != null)
 						for (AssociationRef ref: ca)
 							assocs.add(ref.getTypeQName());
@@ -448,7 +441,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 				{
 					final JSONObject obj = new JSONObject();
 					obj.put("nodeRef", row.getNodeRef());
-					obj.put("itemData", makeJsonPropeties(props, assocs, serviceRegistry.getNamespaceService()));
+					obj.put("itemData", makeJsonPropeties(props, assocs, namespaceService));
 
 					// TODO: временный хардкод для того чтобы actionset-ы в таблице заработали
 					obj.put ("permissions", new JSONObject ("{\"userAccess\":{\"create\": true, \"edit\":true, \"delete\":true}}"));
@@ -585,9 +578,6 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	{
 		// TODOL: locks
 
-		// session.nodeService
-		final NodeService nodeService = serviceRegistry.getNodeService();
-
 		// получить текущий список связей ...
 		final List<ChildAssociationRef> listOld = nodeService.getChildAssocs( srcParentRef, assocTypeName, RegexQNamePattern.MATCH_ALL);
 		final List<String> oldIds = Utils.makeIdList(listOld);
@@ -667,18 +657,20 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	*/
 
 	public final void bootstrap () {
-		PropertyCheck.mandatory (this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory (this, "repository", repository);
+		PropertyCheck.mandatory (this, "nodeService", nodeService);
+		PropertyCheck.mandatory (this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory (this, "transactionService", transactionService);
 
 		//создание контейнера для хранения параметров делегирования
-		delegationOptsContainer = AuthenticationUtil.runAsSystem (this);
+		AuthenticationUtil.runAsSystem (this);
+
+		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
 	}
 
 	@Override
 	public NodeRef doWork () throws Exception {
 		repository.init ();
-		final NodeService nodeService = serviceRegistry.getNodeService ();
 		final NodeRef companyHome = repository.getCompanyHome ();
 		NodeRef container = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
 		if (container == null) {
@@ -705,6 +697,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 	@Override
 	public NodeRef getDelegationOptsContainer () {
+		NodeRef delegationOptsContainer = null;
 		try {
 			delegationOptsContainer = doWork ();
 		} catch (Exception ex) {
@@ -715,11 +708,51 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 	@Override
 	public QName getDelegationOptsItemType () {
-		return QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+		return TYPE_DELEGATION_OPTS;
 	}
 
 	@Override
 	public IDelegationDescriptor getDelegationDescriptor () {
 		return this;
+	}
+
+	@Override
+	public NodeRef getOrCreateDelegationOpts (NodeRef employeeNodeRef) {
+		//делаем поиск по всем delegation-opts, если не нашли то создаем новую
+		boolean delegationOptsExists = false;
+		NodeRef delegationOptsNodeRef = null;
+
+		List<AssociationRef> sourceRefs = nodeService.getSourceAssocs (employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
+		if (sourceRefs != null) {
+			for (AssociationRef sourceRef : sourceRefs) {
+				NodeRef foundDelegationOptsNodeRef = sourceRef.getSourceRef ();
+				QName foundType = nodeService.getType (foundDelegationOptsNodeRef);
+				if (TYPE_DELEGATION_OPTS.equals (foundType)) {
+					delegationOptsExists = true;
+					delegationOptsNodeRef = foundDelegationOptsNodeRef;
+					break;
+				}
+			}
+		}
+		//создаем новый delegation-opts так как его нет
+		if (!delegationOptsExists) {
+			delegationOptsNodeRef = createDelegationOpts (employeeNodeRef);
+		}
+		return delegationOptsNodeRef;
+	}
+
+	private NodeRef createDelegationOpts (final NodeRef employeeNodeRef) {
+		Serializable employeeName = nodeService.getProperty (employeeNodeRef, ContentModel.PROP_NAME);
+		String delegationOptsName = String.format ("параметры делегирования для %s", employeeName);
+		//создание ноды и установка ей ассоциации
+		NodeRef parentRef = getDelegationOptsContainer (); //the parent node
+		QName assocTypeQName = ASSOC_DELEGATION_OPTS_CONTAINER; //the type of the association to create. This is used for verification against the data dictionary.
+		QName assocQName = QName.createQName (DELEGATION_NAMESPACE, delegationOptsName); //the qualified name of the association
+		QName nodeTypeQName = TYPE_DELEGATION_OPTS; //a reference to the node type
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable> (); //optional map of properties to keyed by their qualified names
+		properties.put (ContentModel.PROP_NAME, delegationOptsName);
+		NodeRef delegationOptsNodeRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef ();
+		nodeService.createAssociation (delegationOptsNodeRef, employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
+		return delegationOptsNodeRef;
 	}
 }

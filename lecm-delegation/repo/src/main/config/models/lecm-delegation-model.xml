@@ -105,7 +105,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!-- с�атус параметров делегирования -->
+				<!-- статус параметров делегирования -->
 				<property name="lecm-d8n:delegation-opts-status">
 					<type>d:text</type>
 					<mandatory>true</mandatory>

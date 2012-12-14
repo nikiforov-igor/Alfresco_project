@@ -6,7 +6,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
@@ -23,15 +22,10 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 
 	private final static Logger logger = LoggerFactory.getLogger (DelegationJavascriptExtension.class);
 	private ServiceRegistry serviceRegistry;
-	private NamespacePrefixResolver namespacePrefixResolver;
 	private IDelegation delegationService;
 
 	public void setServiceRegistry (ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setNamespacePrefixResolver (NamespacePrefixResolver namespacePrefixResolver) {
-		this.namespacePrefixResolver = namespacePrefixResolver;
 	}
 
 	public void setDelegationService (IDelegation delegationService) {
@@ -49,7 +43,7 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 	public String getItemType () {
 		QName itemType = delegationService.getDelegationDescriptor ().getDelegationOptsItemType ();
 		if (itemType != null) {
-			PropertyCheck.mandatory (this, "namespacePrefixResolver", namespacePrefixResolver);
+			NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService ();
 			return itemType.toPrefixString (namespacePrefixResolver);
 		}
 		return null;

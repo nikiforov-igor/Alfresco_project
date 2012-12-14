@@ -26,8 +26,9 @@
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
 	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="testSearch" init-method="bootstrap">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="repository" ref="repositoryHelper"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="tester" ref="testSearch"/>
 	</bean>
@@ -38,12 +39,12 @@
 
 	<bean id="delegationOptsPolicy" class="ru.it.lecm.delegation.policies.DelegationOptsPolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
+		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
 	<bean id="delegationJavascriptExtension" class="ru.it.lecm.delegation.extensions.DelegationJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="delegation"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="namespacePrefixResolver" ref="namespaceService"/>
 		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
