@@ -1,8 +1,5 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -15,6 +12,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -57,6 +57,8 @@ public class OrgstructureBean {
 	public static final QName ASSOC_EMPLOYEE_PHOTO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-photo-assoc");
 	public static final QName ASSOC_EMPLOYEE_PERSON_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-data-assoc");
 	public static final QName ASSOC_BUSINESS_ROLE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-employee-assoc");
+	public static final QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-assoc");
+	public static final QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-member-assoc");
 
 	public static final QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
 	public static final QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");
@@ -274,18 +276,24 @@ public class OrgstructureBean {
 	 * Получение списка дочерних подразделений
 	 */
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive) {
+		return getSubUnits(parent, onlyActive, false);
+	}
+
+	/**
+     * Получение списка дочерних подразделений
+     */
+	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		Set<QName> units = new HashSet<QName>();
 		units.add(TYPE_ORGANIZATION_UNIT);
 
 		List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(parent, units);
 		for (ChildAssociationRef uRef : uRefs) {
-			if (onlyActive) {
-				if ((Boolean) nodeService.getProperty(uRef.getChildRef(), IS_ACTIVE)) {
-					results.add(uRef.getChildRef());
-				}
-			} else {
+			if (!onlyActive || !isArchive(uRef.getChildRef())) {
 				results.add(uRef.getChildRef());
+				if (includeSubunits) {
+					results.addAll(getSubUnits(uRef.getChildRef(), onlyActive, includeSubunits));
+				}
 			}
 		}
 		return results;
@@ -609,6 +617,35 @@ public class OrgstructureBean {
 	}
 
 	/**
+	 * Получение перечня сотрудников подразделения либо рабочей группы
+	 */
+	public List<NodeRef> getOrganizationElementEmployees(NodeRef organizationElement) {
+		Set<NodeRef> results = new HashSet<NodeRef>();
+		if (isWorkGroup(organizationElement) || isUnit(organizationElement)) { // если рабочая группа
+			// получаем участников для рабочей группы
+			Set<QName> workforces = new HashSet<QName>();
+			workforces.add(TYPE_WORKFORCE);
+			workforces.add(TYPE_STAFF_LIST);
+			List<ChildAssociationRef> orgElementMembers = nodeService.getChildAssocs(organizationElement, workforces);
+			for (ChildAssociationRef wf : orgElementMembers) {
+                if (!isArchive(wf.getChildRef())){
+                    Set<QName> links = new HashSet<QName>();
+                    links.add(TYPE_EMPLOYEE_LINK);
+                    //получает ссылку на сотрудника
+                    List<ChildAssociationRef> empLinks = nodeService.getChildAssocs(wf.getChildRef(), links);
+                    if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+                        NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
+	                    if (!isArchive(employee)) {
+                            results.add(employee);
+	                    }
+                    }
+                }
+			}
+		}
+		return new ArrayList<NodeRef>(results);
+	}
+
+	/**
 	 * Получение основной должностной позиции (штатного расписания) у сотрудника
 	 */
 	public NodeRef getEmployeePrimaryStaff(NodeRef employeeRef) {
@@ -833,18 +870,61 @@ public class OrgstructureBean {
 	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
 	 */
 	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
-		List<NodeRef> results = new ArrayList<NodeRef>();
+		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
 			// получаем сотрудников
+			// напрямую имеющих роль
 			List<AssociationRef> employees = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_EMPLOYEE);
 			for (AssociationRef empChildRef : employees) {
 				if (!isArchive(empChildRef.getTargetRef())){
 						results.add(empChildRef.getTargetRef());
 				}
 			}
+			//через структурные единицы (подразделения и рабочие группы)
+			List<NodeRef> elementsByBusinessRole = getOrganizationElementsByBusinessRole(businessRoleRef);
+			for (NodeRef orgElement : elementsByBusinessRole) {
+				List<NodeRef> organizationElementEmployees = getOrganizationElementEmployees(orgElement);
+				results.addAll(organizationElementEmployees);
+			}
+			//через позиции (должности и роли в рабочих группах)
+			Set<NodeRef> results1 = new HashSet<NodeRef>();
+			if (isBusinessRole(businessRoleRef)) { // если бизнес роль
+				// получаем организационные элементы (подразделения и рабочие группы)
+				List<AssociationRef> orgElementMembers = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+				for (AssociationRef orgElementChildRef : orgElementMembers) {
+					if (!isArchive(orgElementChildRef.getTargetRef())){
+						NodeRef employeeByPosition = getEmployeeByPosition(orgElementChildRef.getTargetRef());
+						if (!isArchive(employeeByPosition)) {
+							results1.add(employeeByPosition);
+						}
+					}
+				}
+			}
+			results.addAll(new ArrayList<NodeRef>(results1));
+		}
+		return new ArrayList<NodeRef>(results);
+	}
+
+
+	/**
+	 * Получение перечня организационных элементов (подразделений и рабочих групп),
+	 * исполняющих определенную Бизнес-роль (включая вложенные)
+	 */
+	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
+			// получаем организационные элементы (подразделения и рабочие группы)
+			List<AssociationRef> orgElements = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
+			for (AssociationRef orgElementChildRef : orgElements) {
+				if (!isArchive(orgElementChildRef.getTargetRef())){
+					results.add(orgElementChildRef.getTargetRef());
+					results.addAll(getSubUnits(orgElementChildRef.getTargetRef(), true, true));
+				}
+			}
 		}
 		return results;
 	}
+
 
 	/**
 	 * Получение ссылок на сотрудника
