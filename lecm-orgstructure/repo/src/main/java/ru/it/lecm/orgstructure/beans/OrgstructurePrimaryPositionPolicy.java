@@ -1,15 +1,16 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.util.List;
+
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,7 +51,10 @@ public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.On
 		NodeRef emplyoeeLink = associationRef.getSourceRef();
 		NodeRef emplyoee = associationRef.getTargetRef();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(emplyoee);
-		nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 0);
+		ChildAssociationRef parent = nodeService.getPrimaryParent(emplyoeeLink);
+		if (orgstructureService.isStaffList(parent.getParentRef())) {
+			List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(emplyoee);
+			nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 0);
+		}
 	}
 }
