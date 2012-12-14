@@ -381,8 +381,12 @@ public class OrgstructureBean {
 	 * проверяет что объект имеет подходящий тип
 	 */
 	private boolean isProperType(NodeRef ref, Set<QName> types) {
-		QName type = nodeService.getType(ref);
-		return types.contains(type);
+		if (ref != null) {
+			QName type = nodeService.getType(ref);
+			return types.contains(type);
+		} else {
+			return false;
+		}
 	}
 
 	/**
