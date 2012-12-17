@@ -98,7 +98,9 @@ var obj = new OnElementAvaiable("${controlId}-container");
             </#if>
                 itemFamily: "node",
                 displayMode: "${field.control.params.displayMode!"items"}",
-                showNotSelectableItems: true
+                showNotSelectableItems: false,
+                showFolderItems: true,
+                docType: "img"
             });
 })();
 //]]></script>

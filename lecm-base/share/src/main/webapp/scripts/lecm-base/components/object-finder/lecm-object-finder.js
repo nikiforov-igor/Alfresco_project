@@ -439,7 +439,23 @@ LogicECM.module = LogicECM.module || {};
            * @property
            * @type string
            */
-          showNotSelectableItems: false
+          showNotSelectableItems: false,
+
+	      /**
+	       * Показывать или скрывать папки, если showNotSelectableItems=false
+	       *
+	       * @property
+	       * @type string
+	       */
+          showFolderItems: false,
+
+	      /**
+	       * Тип отображаемых документов
+	       *
+	       * @property
+	       * @type string
+	       */
+	      docType: null
       },
 
       /**
@@ -2329,7 +2345,23 @@ LogicECM.module = LogicECM.module || {};
            * @property
            * @type string
            */
-          showNotSelectableItems: false
+          showNotSelectableItems: false,
+
+	      /**
+	       * Показывать или скрывать папки, если showNotSelectableItems=false
+	       *
+	       * @property
+	       * @type string
+	       */
+	      showFolderItems: false,
+
+	      /**
+	       * Тип отображаемых документов
+	       *
+	       * @property
+	       * @type string
+	       */
+	      docType: null
       },
 
       /**
@@ -3071,7 +3103,12 @@ LogicECM.module = LogicECM.module || {};
                       "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                       "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
                       "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol) +
-                      "&showNotSelectableItems=" + encodeURIComponent(this.options.showNotSelectableItems);  ;
+                      "&showNotSelectableItems=" + encodeURIComponent(this.options.showNotSelectableItems) +
+                      "&showFolders=" + encodeURIComponent(this.options.showFolderItems);
+
+	     if (this.options.docType != null) {
+		      params += "&docType=" + encodeURIComponent(this.options.docType);
+	     }
 
 
          // if an XPath start location has been provided and it has not been resolved 

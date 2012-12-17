@@ -19,7 +19,9 @@ function main()
       lastPathElement = null,
       argsXPathLocation = args['xPathLocation'],
       argsXPathRoot = args['xPathRoot'],
-      showNotSelectable = args['showNotSelectableItems'];
+      showNotSelectable = args['showNotSelectableItems'],
+      showFolders = args['showFolders'],
+      docType = args['docType'];
 
    if (logger.isLoggingEnabled())
    {
@@ -169,7 +171,7 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               if (resultObj.selectable || showNotSelectable == "true") {
+	               if (resultObj.selectable || showNotSelectable == "true" || showFolders == "true") {
 		               containerResults.push(resultObj);
 	               }
 	            }
@@ -182,7 +184,7 @@ function main()
 	               };
 	               resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-	               if (resultObj.selectable || showNotSelectable == "true") {
+	               if ((resultObj.selectable || showNotSelectable == "true") && checkDocType(result, docType)) {
 		               contentResults.push(resultObj);
 	               }
 	            }
@@ -541,6 +543,85 @@ function getFilterParams(filterData, parentNode)
     }
     filterParams.query += " AND " + "(" + params + " )";
     return filterParams;
+}
+
+function checkDocType(item, docType) {
+	var result = false;
+	if (docType == null) {
+		return true;
+	}
+	var extns =
+	{
+		"aep": "aep",
+		"ai": "ai",
+		"aiff": "aiff",
+		"asf": "video",
+		"asnd": "asnd",
+		"asx": "video",
+		"au": "audio",
+		"avi": "video",
+		"avx": "video",
+		"bmp": "img",
+		"css": "text",
+		"divx": "video",
+		"doc": "doc",
+		"docx": "doc",
+		"eml": "eml",
+		"fla": "fla",
+		"flv": "video",
+		"fxp": "fxp",
+		"gif": "img",
+		"htm": "html",
+		"html": "html",
+		"indd": "indd",
+		"jpeg": "img",
+		"jpg": "img",
+		"key": "key",
+		"mkv": "video",
+		"mov": "video",
+		"movie": "video",
+		"mp3": "mp3",
+		"mp4": "video",
+		"mpeg": "video",
+		"mpeg2": "video",
+		"mpv2": "video",
+		"numbers": "numbers",
+		"odg": "odg",
+		"odp": "odp",
+		"ods": "ods",
+		"odt": "odt",
+		"ogg": "video",
+		"ogv": "video",
+		"pages": "pages",
+		"pdf": "pdf",
+		"png": "img",
+		"ppj": "ppj",
+		"ppt": "ppt",
+		"pptx": "ppt",
+		"psd": "psd",
+		"qt": "video",
+		"rtf": "rtf",
+		"snd": "audio",
+		"spx": "audio",
+		"svg": "img",
+		"swf": "swf",
+		"tiff": "img",
+		"txt": "text",
+		"wav": "audio",
+		"webm": "video",
+		"wmv": "video",
+		"xls": "xls",
+		"xlsx": "xls",
+		"xml": "xml",
+		"xvid": "video",
+		"zip": "zip"
+	};
+	var extn = item.getName().substring(item.getName().lastIndexOf(".") + 1).toLowerCase();
+	if (extn in extns)
+	{
+		result = extns[extn] == docType;
+	}
+	return result;
 }
 
 main();
