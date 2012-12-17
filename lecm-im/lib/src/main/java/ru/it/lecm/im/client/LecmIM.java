@@ -16,20 +16,22 @@ import com.google.gwt.user.client.ui.TextBox;
  * To change this template use File | Settings | File Templates.
  */
 public class LecmIM implements EntryPoint {
-    @Override
+
     public void onModuleLoad() {
         //To change body of implemented methods use File | Settings | File Templates.
 
-        Button button = new Button("Btn");
+        Button button = new Button("Btn helo");
         RootPanel.get().add(new TextBox());
         RootPanel.get().add(button);
 
         button.addClickHandler(new ClickHandler() {
-            @Override
             public void onClick(ClickEvent clickEvent) {
                 Window.alert("Hello!");
             }
         });
+
+       iJab jab = new iJab();
+       jab.onModuleLoad();
 
     }
 }

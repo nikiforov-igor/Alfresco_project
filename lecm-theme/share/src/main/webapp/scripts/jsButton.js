@@ -94,25 +94,26 @@ LogicECM.module.Header = LogicECM.module.Header || {};
         initMenu : function(){
 
             // Содержимое меню можно запрашивать с сервера
-            var containerDiv = document.createElement("div");
-            containerDiv.innerHTML =
-                '<div id="jsButton-menu" class="yuimenu menu-with-icons yui-overlay yui-overlay-hidden">' +
-                    '   <div class="bd"> '+
-                    '       <ul> ' +
-                    '           <li> '+
-                    '               <a href="#" onclick=\'alert("hello"); return false;\'>Hello!</a>' +
-                    '           </li>' +
-                    '       </ul>' +
-                    '       <div> <input id="myPassword" type="password"/></div>' +
-                    '       <div> <div  id="' + this.id +'-goBtn"></div></div>' +
-                    '   </div>'+
-                    '</div>';
-            document.body.insertBefore(containerDiv, document.body.firstChild);
+//            var containerDiv = document.createElement("div");
+//            containerDiv.innerHTML =
+//                '<div id="jsButton-menu" class="yuimenu menu-with-icons yui-overlay yui-overlay-hidden">' +
+//                    '   <div class="bd"> '+
+//                    '       <ul> ' +
+//                    '           <li> '+
+//                    '               <a href="#" onclick=\'alert("hello"); return false;\'>Hello!</a>' +
+//                    '           </li>' +
+//                    '       </ul>' +
+//                    '       <div> <input id="myPassword" type="password"/></div>' +
+//                    '       <div> <div  id="' + this.id +'-goBtn"></div></div>' +
+//                    '   </div>'+
+//                    '</div>';
+//            document.body.insertBefore(containerDiv, document.body.firstChild);
 
+            /*
             this.widgets.myButton = new YAHOO.widget.Button(this.id,
                 {
                     type: "menu",
-                    //menu: this.id + "-sites-menu",
+                    //////menu: this.id + "-sites-menu",
                     menu: "jsButton-menu",
                     lazyloadmenu: false
                 });
@@ -121,7 +122,22 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
             // Обработчик кнопки в меню
             Alfresco.util.createYUIButton(container, "goBtn", this.go, {label: "Показать введённое значение"});
+              */
 
+            var toggleChat = function(e)
+            {
+                YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
+                    {
+                        message: "Hello World."
+                    });
+
+            };
+
+            this.widgets.myButton = new YAHOO.widget.Button(this.id, {
+                onclick: { fn: toggleChat }
+            });
+
+            //this.widgets.myButton.on("click", toggleChat);
         }
     });
 })();

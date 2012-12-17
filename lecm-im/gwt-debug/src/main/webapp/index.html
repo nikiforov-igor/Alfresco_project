@@ -23,7 +23,57 @@
     <!-- If you add any GWT meta tags, they must   -->
     <!-- be added before this line.                -->
     <!--                                           -->
+    <script type="text/javascript" language="javascript">
+        var spamCall = function(callback)
+        {
+            callback(true);
+        }
+
+        function setCookie(c_name,value,exdays)
+        {
+            var exdate=new Date();
+            exdate.setDate(exdate.getDate() + exdays);
+            var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+            document.cookie=c_name + "=" + c_value;
+        }
+
+        setCookie('JID', 'q', new Date() + 1);
+        setCookie('JIDPWD', 'q', new Date() + 1);
+
+
+    </script>
+
+
+
+    <script type="text/javascript" language="javascript" src="js/yui-common.js"></script>
+    <script type="text/javascript" language="javascript" src="js/bubbling.v2.1.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        var iBubblingSubscriber = function(callback)
+        {
+            YAHOO.Bubbling.on("ru.it.lecm.im.toggle-chat", function(layer, args) {
+                console.log("Before CallBack");
+                callback(true);
+                console.log(callback);
+            });
+        }
+    </script>
+
+    <script type="text/javascript" language="javascript" src="LecmIM/ijab_config.js"></script>
     <script type="text/javascript" language="javascript" src="LecmIM/LecmIM.nocache.js"></script>
+
+
+    <script type="text/javascript" language="javascript">
+        var toggleChat = function()
+        {
+            YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
+                    {
+                        message: "Hello World."
+                    });
+
+        }
+    </script>
+
 </head>
 
 <!--                                           -->
@@ -46,6 +96,8 @@
 </noscript>
 
 <h1>Web Application Starter Project</h1>
+
+<button onclick="toggleChat()">Toggle Chat</button>
 
 </body>
 </html>

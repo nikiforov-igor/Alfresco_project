@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:iJab="urn:import:ru.it.lecm.im.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:FlowPanel styleName="ijab-mainwidget" ui:field="mainWidget">
+		<iJab:UserIndicator ui:field="indicator"></iJab:UserIndicator>
+		<iJab:SearchBox ui:field="searchBox"></iJab:SearchBox>
+		<iJab:ContactView ui:field="contactView"></iJab:ContactView>
+		<!-- Закоментарил Я -->
+        <!--<g:FlowPanel ui:field="toolBar" styleName="ijab-mainwidget-toolbar">-->
+			<!--<g:Anchor ui:field="gatewayButton" styleName="ijab-toolbutton" title="Gateways">-->
+				<!--<span class="button_icon ui-icon-wrench">+</span>-->
+				<!--<span ui:field="gatewayButtonText">Gateway</span>-->
+			<!--</g:Anchor> -->
+			<!--<g:Anchor ui:field="addButton" styleName="ijab-toolbutton" title="Search/Add Friend">-->
+				<!--<span class="button_icon ui-icon-plusthick">+</span>-->
+				<!--<span ui:field="addButtonText">Search/Add</span>-->
+			<!--</g:Anchor>-->
+		<!--</g:FlowPanel> -->
+		<g:HTMLPanel ui:field="disconnected"><span ui:field="disText">Disconnected</span></g:HTMLPanel>
+	</g:FlowPanel>
+</ui:UiBinder> 
