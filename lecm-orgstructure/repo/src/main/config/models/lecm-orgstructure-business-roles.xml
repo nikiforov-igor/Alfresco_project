@@ -6,4 +6,46 @@
 	<property name="lecm-dic:show_control_in_separate_window">false</property>
 	<property name="lecm-dic:plane">true</property>
 	<property name="lecm-dic:active">true</property>
+	<items>
+		<item name="Бизнес роль 1">
+			<property name="cm:name">Бизнес роль 1</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 1</property>
+		</item>
+		<item name="Бизнес роль 2">
+			<property name="cm:name">Бизнес роль 2</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 2</property>
+		</item>
+		<item name="Бизнес роль 3">
+			<property name="cm:name">Бизнес роль 3</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 3</property>
+		</item>
+		<item name="Бизнес роль 4">
+			<property name="cm:name">Бизнес роль 4</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 4</property>
+		</item>
+		<item name="Бизнес роль 5">
+			<property name="cm:name">Бизнес роль 5</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 5</property>
+		</item>
+		<item name="Бизнес роль 6">
+			<property name="cm:name">Бизнес роль 6</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 6</property>
+		</item>
+		<item name="Бизнес роль 7">
+			<property name="cm:name">Бизнес роль 7</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 7</property>
+		</item>
+		<item name="Бизнес роль 8">
+			<property name="cm:name">Бизнес роль 8</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 8</property>
+		</item>
+		<item name="Бизнес роль 9">
+			<property name="cm:name">Бизнес роль 9</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 9</property>
+		</item>
+		<item name="Бизнес роль 10">
+			<property name="cm:name">Бизнес роль 10</property>
+			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 10</property>
+		</item>
+	</items>
 </dictionary>
