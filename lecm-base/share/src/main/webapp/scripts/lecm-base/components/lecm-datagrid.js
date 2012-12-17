@@ -450,7 +450,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             oData = oRecord.getData("itemData")[oColumn.field];
                         }
 
-                        if (oData)
+                        if (oData && oData.value.length > 0)
                         {
                             var datalistColumn = scope.datagridColumns[oColumn.key];
                             if (datalistColumn)
