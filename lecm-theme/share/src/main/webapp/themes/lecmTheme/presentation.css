@@ -75,6 +75,8 @@ input, textarea, a {
     border-right: 1px solid #999;
 }
 #bd #lecm-content-main {
+    width: 100%;
+    float: left;
     margin: 0 5px;
     padding-bottom: 30px;
 }
