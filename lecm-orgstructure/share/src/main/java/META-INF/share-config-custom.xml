@@ -693,6 +693,14 @@
                     <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr:staffPosition-name-g"/>
+                    <show id="lecm-orgstr:staffPosition-name-d"/>
+                    <show id="lecm-dic:active"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 
@@ -713,6 +721,13 @@
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workRole-description"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-orgstr:workRole-description"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
         </forms>
