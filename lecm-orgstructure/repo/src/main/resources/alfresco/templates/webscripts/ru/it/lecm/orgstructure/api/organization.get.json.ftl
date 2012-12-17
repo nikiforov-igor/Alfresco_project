@@ -1,4 +1,4 @@
-<#escape x as x!""?js_string>
+<#escape x as (x!"")?js_string>
 	{
 		"title": "${organization.getName()}",
 		"nodeRef": "${organization.getNodeRef()}",
