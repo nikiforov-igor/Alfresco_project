@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-cal:calendar-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Calendar Data Model</description>
+    <author>Vsevolod Levin</author>
+    <version>1.0</version>
+
+    <imports>
+        <!-- Import Alfresco Dictionary Definitions -->
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <!-- Import Alfresco Content Domain Model Definitions -->
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/model/business-calendar/calendar/1.0" prefix="lecm-cal"/>
+    </namespaces>
+
+    <types>
+        <!-- Производственный календарь. В поле year нам интересен только год.  -->
+        <type name="lecm-cal:calendar">
+            <title>Calendar</title>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="lecm-cal:year">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-cal:comment">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+            </properties>
+            <associations>
+                <!-- Рабочие дни принадлежат отпределенному календарю (году) -->
+                <child-association name="lecm-cal:contains-special-days">
+                    <!-- День без года не имеет смысла. -->
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <!-- В году может быть много рабочих дней. -->
+                    <target>
+                        <class>lecm-cal:special-days</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </type>
+        <!-- Сущность, от которой наследуются выходные и рабочие дни. -->
+        <type name="lecm-cal:special-days">
+            <title>Parent for working-days and non-working-days</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!-- День, который несправедливо является рабочим или нерабочим -->
+                <property name="lecm-cal:day">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <!-- Причина несправедливости. -->
+                <property name="lecm-cal:reason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+        <!-- Выходные дни, которые стали рабочими из-за переноса праздников. -->
+        <type name="lecm-cal:working-days">
+            <title>Non-standart working days</title>
+            <parent>lecm-cal:special-days</parent>
+        </type>
+        <!-- Нерабочие дни, праздники. Кроме суббот и воскресений. -->
+        <type name="lecm-cal:non-working-days">
+            <title>Holydays, non-working days</title>
+            <parent>lecm-cal:special-days</parent>
+        </type>
+    </types>
+</model>

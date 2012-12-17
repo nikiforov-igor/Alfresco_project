@@ -3,30 +3,40 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="webscript.ru.it.lecm.sample.SampleWebScript.get" class="ru.it.lecm.sample.SampleWebScript" parent="webscript">
+<!--	<bean id="webscript.ru.it.lecm.sample.SampleWebScript.get" class="ru.it.lecm.sample.SampleWebScript" parent="webscript">
 		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 
 	<bean id="sampleSessionBean" class="ru.it.lecm.sample.beans.SampleSessionBean"/>
 
     <bean id="sampleSessionWrapper" class="ru.it.lecm.sample.beans.SampleSessionWrapper" parent="baseJavaScriptExtension">
-		<property name="sampleSession" ref="sampleSessionBean"/>
+      		<property name="sampleSession" ref="sampleSessionBean"/>
         <property name="extensionName" value="sampleSessionJSExtension"/>
+    </bean>-->
+
+    <!-- Registration of Delegations models -->
+    <bean id="${groupId}.${artifactId}.calendarBootstrap" parent="dictionaryModelBootstrap" 
+          depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/bcal-common.xml</value>
+                <value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/absence-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/calendar</value>
+            </list>
+        </property>
     </bean>
-
-
-	<!-- A simple class that is initialized by Spring
-	<bean id="${groupId}.${artifactId}.exampleBean" class="org.alfresco.demoamp.Demo" init-method="init" />
-	-->
-
-	<!-- A simple module component that will be executed once
-	<bean id="${artifactId}.exampleComponent" class="org.alfresco.demoamp.DemoComponent" parent="module.baseComponent" >
-		<property name="moduleId" value="${pom.artifactId}" />
-		<property name="name" value="exampleComponent" />
-		<property name="description" value="A demonstration component" />
-		<property name="sinceVersion" value="2.0" />
-		<property name="appliesFromVersion" value="2.0" />
-	</bean>
-	-->
-
+    <bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
+              parent="lecmDictionaryBootstrap">
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>
