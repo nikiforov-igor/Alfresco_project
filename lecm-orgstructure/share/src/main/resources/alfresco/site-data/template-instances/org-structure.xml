@@ -21,6 +21,7 @@
                 <typeButton>newUnitButton</typeButton>
                 <bubblingLabel>orgstructure</bubblingLabel>
                 <active>false</active>
+	            <newRowLabel>button.new-unit</newRowLabel>
             </properties>
         </component>
         <!-- Title -->

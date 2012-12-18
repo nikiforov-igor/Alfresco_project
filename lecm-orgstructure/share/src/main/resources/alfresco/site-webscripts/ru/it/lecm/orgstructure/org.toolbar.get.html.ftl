@@ -21,6 +21,11 @@
 	<#assign searchActive = active/>
 </#if>
 
+<#assign newRowButtonLabel = "button.new-row"/>
+<#if newRowLabel??>
+	<#assign newRowButtonLabel = newRowLabel/>
+</#if>
+
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <script type="text/javascript">//<![CDATA[
@@ -53,7 +58,7 @@ YAHOO.util.Event.onDOMReady(init);
 	<div class="new-row">
             <span id="${id}-newRowButton" class="yui-button yui-push-button">
                <span class="first-child">
-                  <button type="button">${msg('button.new-row')}</button>
+                  <button type="button">${msg(newRowButtonLabel)}</button>
                </span>
             </span>
 	</div>

@@ -18,6 +18,7 @@
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
                 <bubblingLabel>workRole</bubblingLabel>
+	            <newRowLabel>button.new-role</newRowLabel>
             </properties>
         </component>
         <!-- Title -->

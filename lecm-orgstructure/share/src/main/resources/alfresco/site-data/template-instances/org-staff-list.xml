@@ -21,6 +21,7 @@
                 <typeButton>newRowButtonStaff</typeButton>
                 <bubblingLabel>staff-list</bubblingLabel>
                 <active>false</active>
+	            <newRowLabel>button.new-row-staff</newRowLabel>
             </properties>
         </component>
         <!-- Title -->

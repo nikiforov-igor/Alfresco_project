@@ -28,6 +28,7 @@
                 <showExSearchBtn>false</showExSearchBtn>
                 <typeButton>newRowButtonStaff</typeButton>
                 <bubblingLabel>workForce</bubblingLabel>
+	            <newRowLabel>button.new-work-force</newRowLabel>
             </properties>
         </component>
         <component>
@@ -37,6 +38,7 @@
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
                 <bubblingLabel>workGroup</bubblingLabel>
+	            <newRowLabel>button.new-work-group</newRowLabel>
             </properties>
         </component>
         <!-- Title -->
