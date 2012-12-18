@@ -450,7 +450,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             oData = oRecord.getData("itemData")[oColumn.field];
                         }
 
-                        if (oData && oData.value.length > 0)
+                        if (oData)
                         {
                             var datalistColumn = scope.datagridColumns[oColumn.key];
                             if (datalistColumn)
@@ -463,11 +463,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     switch (datalistColumn.dataType.toLowerCase())
                                     {
                                         case "lecm-orgstr:employee":
-                                            html += '<span class="person">' + scope.getEmployeeView(data.value, data.displayValue) +  '</span>';
+                                            html += scope.getEmployeeView(data.value, data.displayValue);
                                             break;
 
 	                                    case "lecm-orgstr:employee-link":
-                                            html += '<span class="person">' + scope.getEmployeeViewByLink(data.value, data.displayValue) +  '</span>';
+                                            html += scope.getEmployeeViewByLink(data.value, data.displayValue);
                                             break;
 
 	                                    case "cm:person":
@@ -521,11 +521,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
 	        getEmployeeViewByLink: function DataGrid_getEmployeeViewByLink(employeeNodeRef, displayValue) {
-		        return "<a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
+		        if (displayValue.length == 0) {
+			        return "";
+		        }
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
 	        },
 
 	        getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
-		        return "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
+		        if (displayValue.length == 0) {
+			        return "";
+		        }
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
 	        },
 
             /**
