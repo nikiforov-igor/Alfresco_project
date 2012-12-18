@@ -47,6 +47,12 @@
 			<scope>provided</scope>
 			<classifier>patched</classifier>
 		</dependency>
+	 <dependency>
+	  <groupId>org.slf4j</groupId>
+	  <artifactId>com.springsource.slf4j.api</artifactId>
+	  <version>1.6.1</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 
 	<scm>

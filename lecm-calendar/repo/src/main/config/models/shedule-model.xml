@@ -15,7 +15,7 @@
     </imports>
 
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/business-calendar/shedule/1.0" prefix="lecm-shed"/>
+        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/shedule/1.0" prefix="lecm-shed"/>
     </namespaces>
 
     <types>

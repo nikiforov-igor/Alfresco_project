@@ -22,7 +22,7 @@
                 <value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/absence-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/bcal-common.xml</value>
+                <value>alfresco/module/${artifactId}/models/wcal-common.xml</value>
             </list>
         </property>
         <property name="labels">
@@ -39,4 +39,16 @@
             </list>
         </property>
     </bean>
+    
+    <bean id="calendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.calendarBootstrap">
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="nodeService" ref="nodeService"/>
+		<!--<property name="namespaceService" ref="namespaceService"/>-->
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+    <bean id="wCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="calendar"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="wCalService" ref="calendarService"/>
+	</bean>
 </beans>

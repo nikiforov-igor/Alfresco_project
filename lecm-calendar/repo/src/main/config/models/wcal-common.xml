@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model name="lecm-absence:absence-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+<model name="lecm-wcal:wcal-common" xmlns="http://www.alfresco.org/model/dictionary/1.0">
     <description>Worker absence Data Model</description>
     <author>Vsevolod Levin</author>
     <version>1.0</version>
@@ -12,20 +12,20 @@
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <!-- Import Dictionary Model Definitions -->
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
-        <import uri="http://www.it.ru/logicECM/model/business-calendar/calendar/1.0" prefix="lecm-cal"/>
-        <import uri="http://www.it.ru/logicECM/model/business-calendar/absence/1.0" prefix="lecm-absence"/>
-        <import uri="http://www.it.ru/logicECM/model/business-calendar/shedule/1.0" prefix="lecm-shed"/>
+        <import uri="http://www.it.ru/logicECM/model/work-calendar/calendar/1.0" prefix="lecm-cal"/>
+        <import uri="http://www.it.ru/logicECM/model/work-calendar/absence/1.0" prefix="lecm-absence"/>
+        <import uri="http://www.it.ru/logicECM/model/work-calendar/shedule/1.0" prefix="lecm-shed"/>
     </imports>
 
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/business-calendar/1.0" prefix="lecm-bcal"/>
+        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/1.0" prefix="lecm-wcal"/>
     </namespaces>
     <types>
         <!-- Данная сущность будет играть роль папки для календарей, расписаний и отсутствий. -->
-        <type name="lecm-bcal:bcal-container">
+        <type name="lecm-wcal:wcal-container">
             <parent>cm:folder</parent>
             <associations>
-                <child-association name="lecm-bcal:container-calendar-assoc">
+                <child-association name="lecm-wcal:container-calendar-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
@@ -36,7 +36,7 @@
                         <many>true</many>
                     </target>
                 </child-association>
-                <child-association name="lecm-bcal:container-absence-assoc">
+                <child-association name="lecm-wcal:container-absence-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
@@ -47,7 +47,7 @@
                         <many>true</many>
                     </target>
                 </child-association>
-                <child-association name="lecm-bcal:container-shedule-assoc">
+                <child-association name="lecm-wcal:container-shedule-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>

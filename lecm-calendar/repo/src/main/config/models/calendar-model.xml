@@ -13,7 +13,7 @@
     </imports>
 
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/business-calendar/calendar/1.0" prefix="lecm-cal"/>
+        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/calendar/1.0" prefix="lecm-cal"/>
     </namespaces>
 
     <types>

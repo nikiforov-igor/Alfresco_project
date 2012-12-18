@@ -17,7 +17,7 @@
     </imports>
 
     <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/business-calendar/absence/1.0" prefix="lecm-absence"/>
+        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/absence/1.0" prefix="lecm-absence"/>
     </namespaces>
 
     <types>
