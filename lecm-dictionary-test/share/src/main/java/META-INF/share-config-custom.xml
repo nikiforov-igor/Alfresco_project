@@ -23,13 +23,6 @@
                 <field-visibility>
                     <show id="cm:name" />
                     <show id="lecm-dic-address:prefix"/>
-                    <show id="lecm-dic-test:regOneSelect" />
-                    <show id="lecm-dic-test:regOneAutocomplete" />
-                    <show id="lecm-dic-test:regManyAutocomplete" />
-                    <show id="lecm-dic-test:regOneTree" />
-                    <show id="lecm-dic-test:regManyTree" />
-                    <show id="lecm-dic-test:addressOneTree" />
-                    <show id="lecm-dic-test:addressManyTree" />
                 </field-visibility>
             </form>
 		</forms>
@@ -214,7 +207,6 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name" />
-                    <show id="lecm-dic-address:prefix"/>
                     <show id="lecm-dic-test:regOneSelect" />
                     <show id="lecm-dic-test:regOneAutocomplete" />
                     <show id="lecm-dic-test:regManyAutocomplete" />
