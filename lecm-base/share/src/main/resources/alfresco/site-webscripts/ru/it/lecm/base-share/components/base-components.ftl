@@ -64,7 +64,16 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
 							</div>
 						</div>
 						<div class="bdft">
-						<#-- Кнопка Найти -->
+							<#-- Кнопка Очистки -->
+							<div class="yui-u align-right right">
+                            <span id="searchBlock-clearSearch-button" class="yui-button yui-push-button search-icon">
+                                <span class="first-child">
+                                    <button type="button">${msg('button.clear')}</button>
+                                </span>
+                            </span>
+							</div>
+
+							<#-- Кнопка Найти -->
 							<div class="yui-u align-right">
                             <span id="searchBlock-search-button" class="yui-button yui-push-button search-icon">
                                 <span class="first-child">

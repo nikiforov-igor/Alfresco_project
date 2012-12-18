@@ -1902,3 +1902,7 @@ span.person a
 {
 	margin-left: 0;
 }
+
+#searchBlock .right {
+	float: right;
+}

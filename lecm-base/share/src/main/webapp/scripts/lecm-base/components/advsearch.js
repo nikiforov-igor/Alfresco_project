@@ -95,7 +95,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param form {Object} Form descriptor to render template for
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
-            renderFormTemplate:function ADVSearch_renderFormTemplate(form) {
+            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
+	            if (isClearSearch == undefined) {
+		            isClearSearch = false;
+	            }
                 // update current form state
                 this.currentForm = form;
 
@@ -122,7 +125,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                                 Dom.setStyle("searchBlock", "display", "block");
                                 if (this.searchDialog != null) {
-                                    this.searchDialog.show();
+	                                if (isClearSearch) {
+		                                this.onSearchClick(e, obj, false);
+	                                } else {
+		                                this.searchDialog.show();
+	                                }
                                 }
                             },
                             scope:this
@@ -140,7 +147,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param e {object} DomEvent
              * @param obj {object} Object passed back from addListener method
              */
-            onSearchClick:function ADVSearch_onSearchClick(e, obj) {
+            onSearchClick:function ADVSearch_onSearchClick(e, obj, showFilteredLabel) {
+	            if (showFilteredLabel == undefined) {
+		            showFilteredLabel = true;
+	            }
                 var me = this;
                 if (!me.searchStarted) { // если поиск еще не начат (для предотвращения повторного взова метода)
                     me.searchStarted = true; // блокируем остальные запросы
@@ -168,9 +178,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             searchShowInactive:true
                         });
 
+	                if (showFilteredLabel) {
+	                    YAHOO.Bubbling.fire("showFilteredLabel");
+	                }
+
                     this.searchDialog.hide();
                 }
             },
+
+	        /**
+	         * Обработчик для кнопки "Очитста" для аттрибутивного поиска
+	         *
+	         * @method onClearSearchClick
+	         * @param e {object} DomEvent
+	         * @param obj {object} Object passed back from addListener method
+	         */
+	        onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
+		        this.renderFormTemplate(this.currentForm, true, e, obj);
+		        YAHOO.Bubbling.fire("hideFilteredLabel");
+	        },
 
             /**
              * Поиск
@@ -347,6 +373,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             });
                         // создаем кнопки
                         this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onSearchClick, {}, Dom.get("searchBlock-search-button"));
+                        this.widgets.clearSearchButton = Alfresco.util.createYUIButton(this, "searchBlock-clearSearch-button", this.onClearSearchClick, {}, Dom.get("searchBlock-clearSearch-button"));
                     }
 
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
