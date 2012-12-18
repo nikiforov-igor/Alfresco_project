@@ -16,13 +16,43 @@ function drawForm(nodeRef){
                 itemId:nodeRef,
                 formId:"${id}",
                 mode:"edit",
-                showSubmitButton:"false"
+                submitType:"json",
+                showSubmitButton:"true"
             },
             successCallback:{
                 fn:function(response){
                     var formEl = Dom.get("${id}-content");
                     formEl.innerHTML = response.serverResponse.responseText;
                     Dom.setStyle("${id}-footer", "opacity", "1");
+                    var forms = Dom.get('OrganizationMetadata-' + organizationRef + '-form');
+                    // Form definition
+                    var form = new Alfresco.forms.Form('OrganizationMetadata-' + organizationRef + '-form');
+                    form.ajaxSubmit = true;
+                    form.setAJAXSubmit(true,
+                            {
+                                successCallback: {
+                                    fn: function () {
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text:"Данные обновлены"
+                                                });
+                                    },
+                                    scope: this
+                                },
+                                failureCallback: {
+                                    fn: function () {
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text:"Не удалось обновить данные"
+                                                });
+                                    },
+                                    scope: this
+                                }
+                            });
+                    form.setSubmitAsJSON(true);
+                    form.setShowSubmitStateDynamically(true, false);
+                    // Initialise the form
+                    form.init();
                 }
             },
             failureMessage:"message.failure",
@@ -41,7 +71,10 @@ function init() {
             }
         },
         failure:function (oResponse) {
-            alert("Не удалось загрузить данные об Организации. Попробуйте обновить страницу.");
+            Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text:"Не удалось загрузить данные об Организации. Попробуйте обновить страницу."
+                    });
         },
         argument:{
         }
@@ -49,27 +82,9 @@ function init() {
     YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
 
-function saveOrganization() {
-    var nodeRef = new Alfresco.util.NodeRef(organizationRef);
-    Connect.setForm('OrganizationMetadata-' + organizationRef + '-form', true);
-    var url = Alfresco.constants.URL_CONTEXT + "/proxy/alfresco/api/node/" + nodeRef.uri + "/formprocessor";
-    var organizationSaveCallBack = {
-        upload:function(o){
-	        window.location.reload();
-        }
-    };
-    Connect.asyncRequest(Alfresco.util.Ajax.POST, url, organizationSaveCallBack);
-}
 Event.onDOMReady(init);
 //]]></script>
 
 <div id="${id}">
     <div id="${id}-content"></div>
-    <div id="${id}-footer" class="org-profile-ft">
-        <span class="yui-button yui-push-button">
-            <span class="first-child">
-                <button id="${id}-save" tabindex="0" onclick="saveOrganization();">${msg("button.save")}</button>
-            </span>
-        </span>
-    </div>
 </div>
