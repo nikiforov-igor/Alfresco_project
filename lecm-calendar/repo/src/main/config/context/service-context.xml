@@ -16,13 +16,13 @@
 
     <!-- Registration of Delegations models -->
     <bean id="${groupId}.${artifactId}.calendarBootstrap" parent="dictionaryModelBootstrap" 
-          depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/models/bcal-common.xml</value>
                 <value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/absence-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/bcal-common.xml</value>
             </list>
         </property>
         <property name="labels">
@@ -32,7 +32,7 @@
         </property>
     </bean>
     <bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
-              parent="lecmDictionaryBootstrap">
+              parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.calendarBootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
