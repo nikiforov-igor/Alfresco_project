@@ -13,7 +13,100 @@
 		<@grid.datagrid id>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
-				function init() {
+				function createDatagrid(attributeForShow) {
+					var $html = Alfresco.util.encodeHTML,
+							$links = Alfresco.util.activateLinks,
+							$userProfile = Alfresco.util.userProfileLink;
+
+					LogicECM.module.Base.DataGrid.prototype.getCellFormatter = function () {
+						var scope = this;
+
+						return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
+							var html = "";
+
+							if (!oRecord) {
+								oRecord = this.getRecord(elCell);
+							}
+							if (!oColumn) {
+								oColumn = this.getColumn(elCell.parentNode.cellIndex);
+							}
+
+							if (oRecord && oColumn) {
+								if (!oData) {
+									oData = oRecord.getData("itemData")[oColumn.field];
+								}
+
+								if (oData) {
+									var datalistColumn = scope.datagridColumns[oColumn.key];
+									if (datalistColumn) {
+										oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+										var plane = true;
+
+										for (var i = 0, ii = oData.length, data; i < ii; i++) {
+											data = oData[i];
+
+											switch (datalistColumn.dataType.toLowerCase()) {
+												case "cm:person":
+													html += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
+													break;
+
+												case "datetime":
+													html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+													break;
+
+												case "date":
+													html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+													break;
+
+												case "text":
+													if (data.displayValue != "true" && data.displayValue != "false") {
+														var content = Alfresco.util.encodeHTML(data.displayValue);
+														if (datalistColumn.name == attributeForShow) {
+															html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
+														} else {
+															html += content;
+														}
+														break;
+													} else {
+														if (data.displayValue && data.displayValue == "true") {
+															html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+														}
+														break;
+													}
+
+												case "boolean":
+													if (data.displayValue) {
+														html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+													}
+													break;
+
+												default:
+													if (datalistColumn.type == "association") {
+														html += $html(data.displayValue);
+													} else {
+														if (data.displayValue != "false" && data.displayValue != "true") {
+															html += $html(data.displayValue);
+														} else {
+															if (data.displayValue == "true") {
+																html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+															}
+														}
+													}
+													break;
+											}
+
+											if (i < ii - 1) {
+												html += "<br />";
+											}
+										}
+									}
+								}
+							}
+
+							elCell.innerHTML = html;
+						};
+					};
+
 					// Переопределяем метод onActionDelete. Добавляем проверки
 					LogicECM.module.Base.DataGrid.prototype.onActionDelete = function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 						var me = this,
@@ -94,6 +187,11 @@
 								showCheckboxColumn: false
 							}).setMessages(${messages});
 				}
+
+				function init() {
+					createDatagrid("lecm-orgstr:element-short-name");
+				}
+
 				YAHOO.util.Event.onDOMReady(init);
 			})();
 			//]]></script>
