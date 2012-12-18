@@ -701,6 +701,11 @@
                     <show id="lecm-dic:active"/>
                 </field-visibility>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 

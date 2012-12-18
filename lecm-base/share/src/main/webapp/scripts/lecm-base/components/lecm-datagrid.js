@@ -2223,7 +2223,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         });
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text:this.msg(successMessage ? successMessage : "message.details.success")
+                                            text:this.msg(successMessage ? successMessage : "message.save.success")
                                         });
                                 }
                             },
@@ -2233,7 +2233,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             fn:function DataGrid_onActionCreate_failure(response) {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text:this.msg("message.details.failure")
+                                        text:this.msg("message.save.failure")
                                     });
                             },
                             scope:this
