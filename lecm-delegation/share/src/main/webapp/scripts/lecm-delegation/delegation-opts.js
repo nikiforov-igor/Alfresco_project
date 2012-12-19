@@ -80,7 +80,8 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				datagrid.setOptions({
 					usePagination:false,
 					showExtendSearchBlock:false,
-					showCheckboxColumn: false
+					showCheckboxColumn: false,
+					dataSource: "lecm/delegation/get/procuracies"
 				});
 
 				YAHOO.Bubbling.fire ("activeGridChanged", {

@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.delegation.ITestSearch;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.utils.DurationLogger;
 import ru.it.lecm.utils.alfresco.Utils;
 
@@ -131,6 +132,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	private final static QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
 	private final static QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
 	private final static QName ASSOC_EMPLOYEE_PERSON = QName.createQName (ORGSTRUCTURE_NAMESPACE, "employee-person-assoc");
+	private final static QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
 
 	private static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -145,6 +147,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
 	private TransactionService transactionService;
+	private OrgstructureBean orgstructureService;
 
 	private ITestSearch tester;
 
@@ -170,6 +173,10 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 	public void setTester(ITestSearch tester) {
 		this.tester = tester;
+	}
+
+	public void setOrgstructureService (OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	/*
@@ -816,5 +823,57 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 				return getOrCreateDelegationOpts (employeeNodeRef);
 			}
 		});
+	}
+
+	@Override
+	public List<NodeRef> getUniqueBusinessRolesByEmployee (final NodeRef employeeNodeRef) {
+		//получаем все бизнес роли
+		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<NodeRef> ();
+		List<NodeRef> result = new ArrayList<NodeRef> ();
+		List<NodeRef> businessRoleNodeRefs = orgstructureService.getBusinesRoles (true);
+		if (businessRoleNodeRefs != null) {
+			//пробегаемся по всем бизнес ролям которые есть в системе и находим employees которые с ними связаны
+			for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
+				List<NodeRef> employeeNodeRefs = orgstructureService.getEmployeesByBusinessRole (businessRoleNodeRef);
+				//если текущая бизнес роль связана с одним и только одним пользователем, то мы ее рассматриваем
+				//остальные пропускаем
+				if (employeeNodeRefs != null && employeeNodeRefs.size () == 1 && employeeNodeRef.equals (employeeNodeRefs.get (0))) {
+					uniqueBusinessRoleNodeRefs.add (businessRoleNodeRef);
+				}
+			}
+			result.addAll (uniqueBusinessRoleNodeRefs);
+		}
+		return result;
+	}
+
+	@Override
+	public List<NodeRef> getUniqueBusinessRolesByPerson (NodeRef personNodeRef) {
+		NodeRef employeeNodeRef = findNodeAssociationRef (personNodeRef, ASSOC_EMPLOYEE_PERSON, TYPE_EMPLOYEE, ASSOCIATION_TYPE.SOURCE);
+		return getUniqueBusinessRolesByEmployee (employeeNodeRef);
+	}
+
+	@Override
+	public List<NodeRef> getUniqueBusinessRolesByDelegationOpts (NodeRef delegationOptsNodeRef) {
+		NodeRef employeeNodeRef = findNodeAssociationRef (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		return getUniqueBusinessRolesByEmployee (employeeNodeRef);
+	}
+
+	@Override
+	public List<NodeRef> getProcuraciesByEmployee (final NodeRef employeeNodeRef) {
+		//получаем параметры делегирования для сотрудника
+		List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef> ();
+		NodeRef delegationOptsNodeRef = getDelegationOptsByEmployee (employeeNodeRef);
+		if (delegationOptsNodeRef != null) {
+			Set<QName> childNodeTypeQNames = new HashSet<QName> (1);
+			childNodeTypeQNames.add (ASSOC_DELEGATION_OPTS_PROCURACY);
+			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs (delegationOptsNodeRef, childNodeTypeQNames);
+			if (childAssociationRefs != null) {
+				for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+					NodeRef procuracyNodeRef = childAssociationRef.getChildRef ();
+					procuracyNodeRefs.add (procuracyNodeRef);
+				}
+			}
+		}
+		return procuracyNodeRefs;
 	}
 }

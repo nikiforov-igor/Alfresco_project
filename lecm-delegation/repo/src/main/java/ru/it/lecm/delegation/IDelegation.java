@@ -1,5 +1,6 @@
 package ru.it.lecm.delegation;
 
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONObject;
 
@@ -39,4 +40,31 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор параметров делегирования или null если ничего не нашел
 	 */
 	NodeRef getDelegationOptsByEmployee (final NodeRef employeeNodeRef);
+
+	/**
+	 * Получение списка уникальных бизнес ролей для сотрудника
+	 * @param employeeNodeRef идентификатор сотрудника
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getUniqueBusinessRolesByEmployee (final NodeRef employeeNodeRef);
+
+	/**
+	 * Получение списка уникальных бизнес ролей для пользователя системы
+	 * @param personNodeRef идентификатор пользователя
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getUniqueBusinessRolesByPerson (final NodeRef personNodeRef);
+
+	/**
+	 * Получение списка уникальных бизнес ролей для параметров делегирования сотрудника
+	 * @param delegationOptsNodeRef идентификатор параметров делегирования сотрудника
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getUniqueBusinessRolesByDelegationOpts (final NodeRef delegationOptsNodeRef);
+	/**
+	 * получение списка доверенностей для сотрудника
+	 * @param employeeNodeRef идентификатор сотрудника
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getProcuraciesByEmployee (final NodeRef employeeNodeRef);
 }

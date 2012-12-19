@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
@@ -56,6 +56,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/../../lecm-orgstructure/repo/target/orgstructure-repo-${platform.version}/lib/orgstructure-repo-${platform.version}.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<!--

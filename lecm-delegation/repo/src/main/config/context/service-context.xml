@@ -25,12 +25,13 @@
 	</bean>
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
-	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="testSearch" init-method="bootstrap">
+	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="${groupId}.${artifactId}.delegationBootstrap" init-method="bootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="tester" ref="testSearch"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
