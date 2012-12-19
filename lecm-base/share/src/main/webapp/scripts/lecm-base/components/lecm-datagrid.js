@@ -1127,7 +1127,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Rendering complete event handler
                 dTable.subscribe("renderEvent", function () {
                     Alfresco.logger.debug("DataTable renderEvent");
-
+                    Bubbling.fire("GridRendered");
                     // Deferred functions specified?
                     for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
                         this.afterDataGridUpdate[i].call(this);

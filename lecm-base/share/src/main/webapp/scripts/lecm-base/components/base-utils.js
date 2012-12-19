@@ -36,19 +36,19 @@ LogicECM.module.Base.Util = {
      */
     setHeight: function() {
         var Dom = YAHOO.util.Dom;
+        var Bubbling = YAHOO.Bubbling;
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
         var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
         var minHeight = parseInt(Dom.getStyle(block, 'min-height'));
-
+        Bubbling.fire("HeightSetting");
         Dom.setStyle(block, 'height', 'auto');
 
         var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
             - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
 
-        if (h > minHeight) {
-            Dom.setStyle(block, 'min-height', h + 'px');
-        }
+        Dom.setStyle(block, 'min-height', h + 'px');
+        Bubbling.fire("HeightSetted");
     }
 };
 

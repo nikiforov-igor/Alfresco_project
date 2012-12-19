@@ -9,3 +9,8 @@
 .ft {
     margin-top:1em;
 }
+
+#orgstructure-tree {
+	min-width: 100%;
+	overflow: auto;
+}
