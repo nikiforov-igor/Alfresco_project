@@ -9,7 +9,6 @@
 	number: "${employee.properties["lecm-orgstr:employee-number"]!''}",
 	fio-g: "${employee.properties["lecm-orgstr:employee-fio-g"]!''}",
 	fio-d: "${employee.properties["lecm-orgstr:employee-fio-d"]!''}",
-	system-user: "${employee.properties["lecm-orgstr:employee-is-system-user"]?string}",
 	name: "${employee.getName()}",
 	active: "${employee.properties["lecm-dic:active"]?string}",
 	nodeRef:"${employee.getNodeRef()}"

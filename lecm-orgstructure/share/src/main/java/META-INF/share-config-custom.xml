@@ -16,7 +16,6 @@
                     <show id="lecm-orgstr:employee-number"/>
                     <show id="lecm-orgstr:employee-fio-g"/>
                     <show id="lecm-orgstr:employee-fio-d"/>
-                    <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
                     <show id="lecm-orgstr:employee-positions" for-mode="edit"/>
@@ -43,7 +42,6 @@
                     <field id="lecm-orgstr:employee-number" set="common"/>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
-                    <field id="lecm-orgstr:employee-is-system-user" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
@@ -88,7 +86,6 @@
                     <show id="lecm-orgstr:employee-number"/>
                     <show id="lecm-orgstr:employee-fio-g"/>
                     <show id="lecm-orgstr:employee-fio-d"/>
-                    <show id="lecm-orgstr:employee-is-system-user"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                 </field-visibility>
                 <appearance>
@@ -110,7 +107,6 @@
                     <field id="lecm-orgstr:employee-number" set="common"/>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
-                    <field id="lecm-orgstr:employee-is-system-user" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
                     <field id="cm:name" set="common">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
