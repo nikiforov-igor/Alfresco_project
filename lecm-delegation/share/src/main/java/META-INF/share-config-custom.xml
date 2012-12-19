@@ -94,8 +94,8 @@
 		<forms>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-d8n:procuracy-trustee-assoc"/>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
+					<show id="lecm-d8n:procuracy-trustee-assoc"/>
 				</field-visibility>
 			</form>
 		</forms>
