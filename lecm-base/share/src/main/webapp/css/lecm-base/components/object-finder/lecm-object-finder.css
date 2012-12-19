@@ -188,9 +188,9 @@
 {
 }
 
-.object-finder .picker-header .search
-{
-   display: none;
+.object-finder .picker-header div.search {
+    display: none;
+    float: none;
 }
 
 .object-finder .picker-header .search .search-input
