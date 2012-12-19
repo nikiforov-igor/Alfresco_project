@@ -18,7 +18,7 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.net;
+package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -33,7 +33,7 @@ public class NativeClientListener implements ClientListener
 	
 	private native void handleBeforeLogin()
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onBeforeLogin();
@@ -45,7 +45,7 @@ public class NativeClientListener implements ClientListener
 	
 	private native void handleEndLogin()
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onEndLogin();
@@ -57,7 +57,7 @@ public class NativeClientListener implements ClientListener
 	
 	private native void handleError(String message)
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onError(message);
@@ -69,7 +69,7 @@ public class NativeClientListener implements ClientListener
 	
 	private native void handleLogout()
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onLogout();
@@ -100,7 +100,7 @@ public class NativeClientListener implements ClientListener
 
 	public native void  onResume() 
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onResume();
@@ -112,7 +112,7 @@ public class NativeClientListener implements ClientListener
 
 	public native void onSuspend()
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onSuspend();
@@ -125,7 +125,7 @@ public class NativeClientListener implements ClientListener
 	public native void onAvatarClicked(int clientX, int clientY, String username,
 			String bareJid)
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onAvatarClicked(clientX,clientY,username,bareJid);
@@ -138,7 +138,7 @@ public class NativeClientListener implements ClientListener
 	public native void onAvatarMouseOver(int clientX, int clientY, String username,
 			String bareJid) 
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onAvatarMouseOver(clientX,clientY,username,bareJid);
@@ -154,7 +154,7 @@ public class NativeClientListener implements ClientListener
 	public native void onAvatarMouseOut(int clientX, int clientY, String usrname,
 			String bareJid) 
 	/*-{
-	var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+	var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 	try
 	{
 		delegate.onAvatarMouseOut(clientX,clientY,username,bareJid);
@@ -166,7 +166,7 @@ public class NativeClientListener implements ClientListener
 
 	public native void onStatusTextUpdated(String text) 
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onStatusTextUpdated(text);
@@ -181,7 +181,7 @@ public class NativeClientListener implements ClientListener
 	 */
 	public native void onMessageReceive(String jid, String message) 
 	/*-{
-		var delegate = this.@ru.it.lecm.im.client.net.NativeClientListener::delegate;
+		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
 		try
 		{
 			delegate.onMessageReceive(jid,message);

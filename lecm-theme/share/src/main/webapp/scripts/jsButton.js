@@ -61,7 +61,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
         createNotifyer: function(){
             var btn = YAHOO.util.Dom.get(this.id);
             var div=document.createElement("div");
-            div.innerHTML='<div id="myElem">1<div/>';
+            div.innerHTML='<div id="myElem">1</div>';
             btn.appendChild(div);
         },
 
@@ -124,14 +124,14 @@ LogicECM.module.Header = LogicECM.module.Header || {};
             Alfresco.util.createYUIButton(container, "goBtn", this.go, {label: "Показать введённое значение"});
               */
 
-            var toggleChat = function(e)
-            {
-                YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
-                    {
-                        message: "Hello World."
-                    });
+            // var toggleChat = function(e)
+            // {
+            //     YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
+            //         {
+            //             message: "Hello World."
+            //         });
 
-            };
+            // };
 
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
                 onclick: { fn: toggleChat }

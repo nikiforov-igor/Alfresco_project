@@ -22,7 +22,6 @@
 package ru.it.lecm.im.client;
 
 import com.google.gwt.user.client.ui.Widget;
-import ru.it.lecm.im.client.net.ClientListener;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
 import ru.it.lecm.im.client.ui.ContactView;
 import ru.it.lecm.im.client.ui.SearchBox;

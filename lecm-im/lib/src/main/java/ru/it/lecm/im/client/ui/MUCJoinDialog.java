@@ -25,7 +25,6 @@ import java.util.List;
 
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChat;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChatEvent;
@@ -47,9 +46,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.i18n;
-import ru.it.lecm.im.client.xmpp.JID;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"

@@ -18,14 +18,14 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.net;
+package ru.it.lecm.im.client;
 
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.stanzas.Message;
-import ru.it.lecm.im.client.xmpp.xmpp.message.Chat;
 import ru.it.lecm.im.client.ui.ChatPanelButton;
 import ru.it.lecm.im.client.ui.ChatPanelButtonListener;
 import ru.it.lecm.im.client.utils.i18n;
+import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.stanzas.Message;
+import ru.it.lecm.im.client.xmpp.xmpp.message.Chat;
 
 public class XmppChat 
 {
@@ -46,19 +46,22 @@ public class XmppChat
 
 			public void onMessageSend(String message) 
 			{
-				chatItem.send(message);
+                Log.consoleLog("XmppChat.ChatPanelButtonListener.onMessageSend()");
+                chatItem.send(message);
 			}
 		});
 	}
 	
 	public void openChat()
 	{
+        Log.consoleLog("XmppChat.openChat()");
 		offlineTip();
 		button.openWindow();
 	}
 	
 	public void process(Message message,boolean firstMessage)
 	{
+        Log.consoleLog("XmppChat.process()");
 		if(firstMessage)
 			offlineTip();
 		
@@ -67,6 +70,7 @@ public class XmppChat
 	
 	public void processSyncSend(Message message,boolean firstMessage)
 	{
+        Log.consoleLog("XmppChat.processSyncSend()");
 		if(firstMessage)
 			offlineTip();
 		button.processSyncSend(message, firstMessage);
@@ -74,6 +78,7 @@ public class XmppChat
 	
 	public ChatPanelButton getButton()
 	{
+        Log.consoleLog("XmppChat.getButton()");
 		return button;
 	}
 	

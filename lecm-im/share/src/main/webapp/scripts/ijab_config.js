@@ -23,6 +23,22 @@ var iBubblingSubscriber = function(callback)
     });
 };
 
+var updateMessagesCount = function (c)
+{
+    YAHOO.Bubbling.fire("ru.it.lecm.im.update-messages-count",
+        {
+            count: c
+        });
+}
+
+var updateMessagesCountSubscriber = function(callback){
+    YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
+        console.log("Before updateMessagesCount");
+        callback(args[1].count);
+        console.log(callback);
+    });
+};
+
 var iJabConf =
 {
     client_type:"xmpp",

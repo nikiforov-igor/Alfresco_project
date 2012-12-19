@@ -18,20 +18,17 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.net;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.GWT;
-
-import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.util.StringUtil;
-import ru.it.lecm.im.client.iJab;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class XmppProfileManager 

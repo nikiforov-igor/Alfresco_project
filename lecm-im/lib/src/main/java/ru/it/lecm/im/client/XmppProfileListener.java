@@ -18,7 +18,7 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.net;
+package ru.it.lecm.im.client;
 
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 

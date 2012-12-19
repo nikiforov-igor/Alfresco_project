@@ -47,11 +47,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.net.XmppProfileListener;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppProfileListener;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.i18n;
-import ru.it.lecm.im.client.xmpp.Session;
 
 public class UserIndicator extends FlexTable
 {

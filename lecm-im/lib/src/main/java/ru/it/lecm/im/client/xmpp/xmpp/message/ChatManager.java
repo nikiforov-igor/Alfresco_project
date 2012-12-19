@@ -21,12 +21,12 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.message;
 
-import java.util.ArrayList;
-
+import com.google.gwt.core.shared.GWT;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
-import ru.it.lecm.im.client.xmpp.JID;
+
+import java.util.ArrayList;
 
 public class ChatManager<T> {
 
@@ -45,13 +45,15 @@ public class ChatManager<T> {
 	}
 
 	private void fireChatCreated(Chat<T> chat) {
-		for (ChatListener<T> l : this.chatListeners) {
+        GWT.log("ChatManager.fireChatCreated()");
+        for (ChatListener<T> l : this.chatListeners) {
 			l.onStartNewChat(chat);
 		}
 	}
 
 	private void fireReceivedMessage(Chat<T> chat, Message message,boolean firstMessage) {
-		for (ChatListener<T> l : this.chatListeners) {
+        GWT.log("ChatManager.fireReceivedMessage()");
+        for (ChatListener<T> l : this.chatListeners) {
 			l.onMessageReceived(chat, message,firstMessage);
 		}
 	}
@@ -113,6 +115,7 @@ public class ChatManager<T> {
 
 	void process(Message message) 
 	{
+        GWT.log("ChatManager.process()");
 		if(message.getType().equals(Message.Type.notify))
 		{
 			Notify notify = new Notify(message.getFirstChild("notify"));
@@ -180,7 +183,8 @@ public class ChatManager<T> {
 	}
 
 	void removeChat(Chat<T> chat) {
-		this.chats.remove(chat);
+        GWT.log("ChatManager.removeChat()");
+        this.chats.remove(chat);
 	}
 
 	public void removeListener(ChatListener<T> listener) {
@@ -188,15 +192,18 @@ public class ChatManager<T> {
 	}
 
 	void send(Chat<T> chat, String message, String userNickname) {
-		this.messagePlugin.sendChatMessage(chat.getJid(), message, chat.getThreadId(), null, userNickname);
+        GWT.log("ChatManager.send()");
+        this.messagePlugin.sendChatMessage(chat.getJid(), message, chat.getThreadId(), null, userNickname);
 	}
 
 	public Chat<T> startChat(JID jid) {
-		return startChat(jid, null);
+        GWT.log("ChatManager.startChat()");
+        return startChat(jid, null);
 	}
 
 	public Chat<T> startChat(JID jid, T userData) 
 	{
+        GWT.log("ChatManager.startChat()");
 		final String threadId = Session.nextId();
 		final Chat<T> chat = new Chat<T>(this, jid, threadId);
 		chat.setUserData(userData);

@@ -1,10 +1,64 @@
+var spamCall = function(callback)
+{
+    callback(true);
+};
+
+function setCookie(c_name,value,exdays)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+}
+
+setCookie('JID', 'q', new Date() + 1);
+setCookie('JIDPWD', 'q', new Date() + 1);
+
+var iBubblingSubscriber = function(callback)
+{
+    YAHOO.Bubbling.on("ru.it.lecm.im.toggle-chat", function(layer, args) {
+        console.log("Before CallBack");
+        callback(true);
+        console.log(callback);
+    });
+};
+
+var toggleChat = function()
+{
+    YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
+        {
+            message: "Hello World."
+        });
+
+};
+
+var updateMessagesCount = function (c)
+{
+    YAHOO.Bubbling.fire("ru.it.lecm.im.update-messages-count",
+        {
+            count: c
+        });
+}
+
+var updateMessagesCountSubscriber = function(callback){
+    YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
+        console.log("Before updateMessagesCount");
+        callback(args[1].count);
+        console.log(callback);
+    });
+};
+
+
+
+
+
 var iJabConf =
 {
     client_type:"xmpp",
     app_type:"bar",
     theme:"standard",
     debug:false,
-    avatar_url:"http://samespace.anzsoft.com/portal_memberdata/portraits/{username}",
+    avatar_url:"http://dummyimage.com/32x32/?text={username}",
     enable_roster_manage:true,
     enable_talkto_stranger:true,
     expand_bar_default:true,
@@ -36,7 +90,7 @@ var iJabConf =
         max_reconnect:3,
         enable_muc:true,
         muc_servernode:"conference.akatamanov-pc",
-        vcard_search_servernode:"vjud.anzsoft.com",
+        vcard_search_servernode:"akatamanov-pc",
         gateways:
         [
 //        	{

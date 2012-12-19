@@ -20,17 +20,52 @@
  */
 package ru.it.lecm.im.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import ru.it.lecm.im.client.data.XmppConf;
+import ru.it.lecm.im.client.data.iJabConfImpl;
+import ru.it.lecm.im.client.data.iJabOptions;
+import ru.it.lecm.im.client.ui.ChatPanelBar;
+import ru.it.lecm.im.client.ui.ContactView;
+import ru.it.lecm.im.client.ui.ContactViewListener;
+import ru.it.lecm.im.client.ui.MUCPanelButton;
+import ru.it.lecm.im.client.utils.*;
+import ru.it.lecm.im.client.utils.TextUtils;
+import ru.it.lecm.im.client.xmpp.Connector.BoshErrorCondition;
+import ru.it.lecm.im.client.xmpp.*;
+import ru.it.lecm.im.client.xmpp.events.Events;
+import ru.it.lecm.im.client.xmpp.events.Listener;
+import ru.it.lecm.im.client.xmpp.stanzas.Message;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence.Show;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence.Type;
+import ru.it.lecm.im.client.xmpp.util.StringUtil;
+import ru.it.lecm.im.client.xmpp.xmpp.message.ChatManager;
+import ru.it.lecm.im.client.xmpp.xmpp.presence.PresenceEvent;
+import ru.it.lecm.im.client.xmpp.xmpp.presence.PresenceListener;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem.Action;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem.Kind;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyList;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin.RetrieveListHandler;
+import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin.RetrieveListsNamesHandler;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterListener;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChat;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChatEvent;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChatListener;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MultiUserChatPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 //import anzsoft.iJab.client.data.XmppConf;
 //import anzsoft.iJab.client.data.iJabOptions;
@@ -45,48 +80,6 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 //import anzsoft.iJab.client.utils.TextUtils;
 //import anzsoft.iJab.client.utils.XmppStatus;
 //import anzsoft.iJab.client.utils.i18n;
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.SessionListener;
-import ru.it.lecm.im.client.xmpp.Storage;
-import ru.it.lecm.im.client.xmpp.User;
-import ru.it.lecm.im.client.xmpp.Connector.BoshErrorCondition;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.events.Events;
-import ru.it.lecm.im.client.xmpp.events.Listener;
-import ru.it.lecm.im.client.xmpp.stanzas.Message;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence.Show;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence.Type;
-import ru.it.lecm.im.client.xmpp.util.StringUtil;
-import ru.it.lecm.im.client.xmpp.xmpp.message.ChatManager;
-import ru.it.lecm.im.client.xmpp.xmpp.presence.PresenceEvent;
-import ru.it.lecm.im.client.xmpp.xmpp.presence.PresenceListener;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem;
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyList;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem.Action;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyItem.Kind;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin.RetrieveListHandler;
-import ru.it.lecm.im.client.xmpp.xmpp.privacy.PrivacyListsPlugin.RetrieveListsNamesHandler;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterListener;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChat;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChatEvent;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChatListener;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MultiUserChatPlugin;
-import ru.it.lecm.im.client.data.XmppConf;
-import ru.it.lecm.im.client.data.iJabConfImpl;
-import ru.it.lecm.im.client.data.iJabOptions;
-import ru.it.lecm.im.client.net.XmppChat;
-import ru.it.lecm.im.client.net.XmppChatManager;
-import ru.it.lecm.im.client.net.XmppProfileManager;
-import ru.it.lecm.im.client.ui.ChatPanelBar;
-import ru.it.lecm.im.client.ui.ContactView;
-import ru.it.lecm.im.client.ui.ContactViewListener;
-import ru.it.lecm.im.client.ui.MUCPanelButton;
-import ru.it.lecm.im.client.utils.*;
 
 public class XmppClient extends Client
 {
@@ -275,7 +268,8 @@ public class XmppClient extends Client
 	
 	public void resume() 
 	{
-		reset();
+        Log.consoleLog("XmppClient.resume()");
+        reset();
 		XmppProfileManager.reset();
 		BrowserHelper.init();
 		if(BrowserHelper.isOpera)
@@ -288,11 +282,13 @@ public class XmppClient extends Client
 
 	public void run() 
 	{
+        Log.consoleLog("XmppClient.run()");
 		resume();
 	}
 
 	public boolean suspend() 
 	{
+        Log.consoleLog("XmppClient.suspend()");
 		session.suspend();
 		fireOnSuspend();
 		return true;
@@ -454,7 +450,8 @@ public class XmppClient extends Client
 	
 	private void connect(final String id,final String password)
 	{
-		reset();
+        Log.consoleLog("XmppClient.connect()");
+        reset();
 		session.reset();
 		User user = session.getUser();
 		user.setUsername(id);
@@ -478,7 +475,8 @@ public class XmppClient extends Client
 
 			public void onAddItem(RosterItem item) 
 			{
-				if(!item.getJid().toString().contains("@"))
+                Log.consoleLog("XmppClient.RosterListener.onAddItem()");
+                if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
 				contactView.addRosterItem(item);
@@ -487,8 +485,9 @@ public class XmppClient extends Client
 			}
 
 			public void onEndRosterUpdating() 
-			{			
-				MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
+			{
+                Log.consoleLog("XmppClient.RosterListener.onEndRosterUpdating()");
+                MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
 				oracle.addAll(XmppProfileManager.names.keySet());
 				oracle.addAll(XmppProfileManager.names.values());
 				readNickFromCache();
@@ -503,6 +502,7 @@ public class XmppClient extends Client
 
 			public void onStartRosterUpdating() 
 			{
+                Log.consoleLog("XmppClient.RosterListener.onStartRosterUpdating()");
 				//onlineContactCount = 0;
 				totalContactCount = 0;
 				if(!iJab.conf.getXmppConf().isGetRosterDelay())
@@ -514,8 +514,8 @@ public class XmppClient extends Client
 			}
 
 			public void onUpdateItem(RosterItem item) 
-			{			
-				if(!item.getJid().toString().contains("@"))
+			{
+                if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
 				contactView.updateRosterItem(item);
@@ -534,7 +534,8 @@ public class XmppClient extends Client
 
 			public void onContactAvailable(Presence presenceItem) 
 			{
-				if(!presenceItem.getFrom().toString().contains("@"))
+                Log.consoleLog("XmppClient.PresenceListener.onContactAvailable()");
+                if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				final String bareJid = presenceItem.getFrom().toStringBare();
 				XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
@@ -545,8 +546,9 @@ public class XmppClient extends Client
 				iJab.ui.updateOnlineCount(onlineContactCount);
 			}
 
-			public void onContactUnavailable(Presence presenceItem) {	
-				if(!presenceItem.getFrom().toString().contains("@"))
+			public void onContactUnavailable(Presence presenceItem) {
+                Log.consoleLog("XmppClient.PresenceListener.onContactUnavailable()");
+                if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				SoundManager.playOffline();
 				contactView.removeOnlineGroupItem(presenceItem, session.getRosterPlugin().getRosterItem(presenceItem.getFrom()));
@@ -555,8 +557,9 @@ public class XmppClient extends Client
 			}
 
 			public void onPresenceChange(Presence presenceItem) 
-			{				
-				if(!presenceItem.getFrom().toString().contains("@"))
+			{
+                Log.consoleLog("XmppClient.PresenceListener.onPresenceChange()");
+                if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				final String bareJid = presenceItem.getFrom().toStringBare();
 				XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
@@ -576,7 +579,8 @@ public class XmppClient extends Client
 
 			public void onItemClick(RosterItem item) 
 			{
-				xmppChatManager.openChat(item.getJid());
+                Log.consoleLog("XmppClient.ContactViewListener.onItemClick()");
+                xmppChatManager.openChat(item.getJid());
 			}
 
 			public void onAvatarOut(RosterItem item) {
@@ -674,7 +678,8 @@ public class XmppClient extends Client
 	
 	private void Idle()
 	{
-		if(session.isDisconnected())
+        Log.consoleLog("XmppClient.Idle()");
+        if(session.isDisconnected())
 			return;
 		weekShow = session.getPresencePlugin().getCurrentShow();
 		session.getPresencePlugin().sendStatus(Show.away);
@@ -682,6 +687,7 @@ public class XmppClient extends Client
 	
 	private void Week()
 	{
+        Log.consoleLog("XmppClient.Week()");
 		if(session.isDisconnected())
 			return;
 		session.getPresencePlugin().sendStatus(weekShow);

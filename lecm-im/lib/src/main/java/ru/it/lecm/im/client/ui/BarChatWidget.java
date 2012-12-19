@@ -21,7 +21,6 @@
 package ru.it.lecm.im.client.ui;
 
 import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.Storage;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
@@ -42,8 +41,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import ru.it.lecm.im.client.net.XmppChat;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppChat;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.ChatTextFormatter;
 import ru.it.lecm.im.client.utils.SoundManager;
 import ru.it.lecm.im.client.utils.i18n;

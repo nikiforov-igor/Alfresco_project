@@ -27,7 +27,7 @@ import java.util.Map;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 
 public class ContactViewGroup extends ContactViewGroupUI

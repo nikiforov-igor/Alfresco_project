@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ru.it.lecm.im.client.xmpp.*;
 import ru.it.lecm.im.client.xmpp.ResponseHandler;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
 import ru.it.lecm.im.client.xmpp.Session;
@@ -46,7 +45,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.XmppClient;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.PopupPrompt;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.JID;

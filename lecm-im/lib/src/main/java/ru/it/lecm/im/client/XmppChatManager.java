@@ -18,14 +18,15 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.net;
+package ru.it.lecm.im.client;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
-import ru.it.lecm.im.client.iJab;
+import ru.it.lecm.im.client.bubling.MessageCountUpdater;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
 import ru.it.lecm.im.client.ui.ChatPanelButton;
+import ru.it.lecm.im.client.ui.ContactView;
 import ru.it.lecm.im.client.utils.WindowPrompt;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
@@ -37,6 +38,7 @@ import ru.it.lecm.im.client.xmpp.xmpp.message.ChatManager;
 import ru.it.lecm.im.client.xmpp.xmpp.message.Notify;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,10 +62,15 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 	public void onMessageReceived(Chat<XmppChat> chat, Message message,
 			boolean firstMessage) 
 	{
+        Log.consoleLog("XmppChatManager.onMessageReceived()");
 		XmppChat xmppChat = chat.getUserData();
 		xmppChat.process(message, firstMessage);
 		if(message.getBody()!=null&&message.getBody().length() > 0)
 		{
+            RefreshNewMessagesCount();
+            Integer messages = xmppChat.getButton().getOldMessageCount();
+            ContactView contactView = iJab.ui.getContactView();
+            //contactView.
 			String bareJid = chat.getJid().toStringBare();
 			iJab.client.onMessageReceive(bareJid, message.getBody());
 			String prompt = XmppProfileManager.getName(bareJid)+" Say:"+message.getBody();
@@ -74,12 +81,31 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 		}
 	}
 
+    public void RefreshNewMessagesCount()
+    {
+        Collection<Chat<XmppChat>> chatCollection = chats.values();
+        int oldMessagesCount = 0;
+        for (Chat<XmppChat> chat : chatCollection ) {
+            XmppChat xmppChat = chat.getUserData();
+            oldMessagesCount = oldMessagesCount + xmppChat.getButton().getOldMessageCount();
+        }
+
+        Log.consoleLog("oldMessagesCount: " + oldMessagesCount);
+        Log.consoleLog("MessageCountUpdater.Update()");
+        MessageCountUpdater.Update(oldMessagesCount);
+        Log.consoleLog("MessageCountUpdater.Update() - Complete!");
+
+
+
+    }
+
 	public void onNotifyReceive(Notify notify) 
 	{
 	}
 
 	public void onStartNewChat(Chat<XmppChat> chat) 
 	{
+        Log.consoleLog("XmppChatManager.onStartNewChat()");
 		if(chat.getUserData() == null)
 		{
 			String nick = Session.instance().getRosterPlugin().getNameByJid(chat.getJid());
@@ -113,6 +139,7 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 	
 	public ChatPanelButton openChat(JID jid)
 	{
+        Log.consoleLog("XmppChatManager.openChat()");
 		Chat<XmppChat> chat = chats.get(jid.toStringBare());
 		if(chat != null&&chat.getUserData() != null)
 		{
@@ -120,6 +147,7 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 			if(!resumeing)
 				xmppChat.openChat();
 			chatPanel.ensureButtonInBar(xmppChat.getButton());
+            RefreshNewMessagesCount();
 			return xmppChat.getButton();
 		}
 		else
@@ -127,12 +155,14 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 			XmppChat xmppChat = manager.startChat(jid).getUserData();
 			if(!resumeing)
 				xmppChat.openChat();
+            RefreshNewMessagesCount();
 			return xmppChat.getButton();
 		}
 	}
 	
 	public ChatPanelButton openChat(String jid)
 	{
+        Log.consoleLog("XmppChatManager.openChat()");
 		return openChat(JID.fromString(jid));
 	}
 	
@@ -148,6 +178,7 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 
 	public void onResume() 
 	{
+        Log.consoleLog("XmppChatManager.onResume()");
 		final String prefix = Session.instance().getUser().getStorageID();
 		Storage storage = Storage.createStorage(STORAGE_KEY, prefix);
 		//first ,get all button in bar 
@@ -184,6 +215,7 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 
 	public void onSuspend() 
 	{
+        Log.consoleLog("XmppChatManager.onSuspend()");
 		//first get all button in the bar
 		final String prefix = Session.instance().getUser().getStorageID();
 		Storage storage = Storage.createStorage(STORAGE_KEY,prefix);

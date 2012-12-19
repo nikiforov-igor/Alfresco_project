@@ -21,13 +21,13 @@
  */
 package ru.it.lecm.im.client.xmpp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.*;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.XMLParser;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketGwtImpl;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
@@ -35,17 +35,7 @@ import ru.it.lecm.im.client.xmpp.packet.PacketRenderer;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
 import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestTimeoutException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.XMLParser;
+import java.util.*;
 
 public class Bosh2Connector implements Connector {
 
@@ -821,7 +811,7 @@ public class Bosh2Connector implements Connector {
 			return;
 		}
 		builder = new RequestBuilder(RequestBuilder.POST, boshUrl);
-		builder.setHeader("Connection", "close");
+		//builder.setHeader("Connection", "close");
 	}
 	
 	public void setCrossDomainHttpBase(final String boshUrl) 

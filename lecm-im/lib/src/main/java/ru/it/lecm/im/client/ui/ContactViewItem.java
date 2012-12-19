@@ -23,8 +23,8 @@ package ru.it.lecm.im.client.ui;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.net.XmppProfileListener;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppProfileListener;
+import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.XmppStatus.Status;
 

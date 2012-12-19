@@ -27,9 +27,9 @@ import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.message.Chat;
 import com.google.gwt.user.client.Timer;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.net.XmppChat;
-import ru.it.lecm.im.client.net.XmppProfileListener;
-import ru.it.lecm.im.client.net.XmppProfileManager;
+import ru.it.lecm.im.client.XmppChat;
+import ru.it.lecm.im.client.XmppProfileListener;
+import ru.it.lecm.im.client.XmppProfileManager;
 
 import java.util.ArrayList;
 import java.util.List;

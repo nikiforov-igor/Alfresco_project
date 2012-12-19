@@ -28,9 +28,6 @@ import ru.it.lecm.im.client.xmpp.JID;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
-import ru.it.lecm.im.client.net.ClientListener;
-import ru.it.lecm.im.client.net.NativeClientListener;
-import ru.it.lecm.im.client.xmpp.JID;
 
 public abstract class Client 
 {
