@@ -27,7 +27,7 @@ import ru.it.lecm.wcalendar.IWCalCommon;
 public abstract class AbstractWCalCommonBean implements IWCalCommon, AuthenticationUtil.RunAsWork<NodeRef> {
 
     private final static String CONTAINER = "WCalContainer";
-    private final static String WCAL_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/1.0";
+    protected final static String WCAL_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/1.0";
     protected final static String SHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/shedule/1.0";
     protected final static String ABSENCE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/absence/1.0";
     protected final static String CALENDAR_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/calendar/1.0";
