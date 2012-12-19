@@ -141,10 +141,19 @@
                     <title>E-mails</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-orgstr:email-const"/>
+                    </constraints>
                 </property>
                 <property name="lecm-orgstr:org-tin">
                     <title>TIN</title>
                     <type>d:text</type>
+                    <constraints>
+                        <constraint type="LENGTH">
+                            <parameter name="minLength"><value>10</value></parameter>
+                            <parameter name="maxLength"><value>10</value></parameter>
+                        </constraint>
+                    </constraints>
                 </property>
                 <property name="lecm-orgstr:org-ownership-type">
                     <title>Type of ownership</title>
