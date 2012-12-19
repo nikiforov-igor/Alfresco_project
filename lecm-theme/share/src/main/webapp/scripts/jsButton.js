@@ -134,7 +134,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
             // };
 
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
-                onclick: { fn: toggleChat }
+//                onclick: { fn: toggleChat }
             });
 
             //this.widgets.myButton.on("click", toggleChat);
