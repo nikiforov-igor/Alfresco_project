@@ -9,7 +9,7 @@ function generateNodeName(form, pattern, delimiter, override) {
         // if cm:name field empty or override it
         if (elValue == null || elValue == "" || override) {
             var props = pattern.split(delimiter != null ? delimiter : DEFAULT_DELIMITER);
-            nameElement.value = createName(form, props);
+            nameElement.value = prepareCmName(createName(form, props));
         }
     }
 }
@@ -51,4 +51,20 @@ function createName(form, nameParts) {
         }
     }
     return result;
+}
+
+function prepareCmName(str) {
+	var result = str;
+	result = deleteAllSymbols(str, '"');
+	result = deleteAllSymbols(result, '*');
+	result = result.replace(/\.$/g, '');
+	return result;
+}
+
+function replaceAll(str, find, replaceWith) {
+	return str.split(find).join(replaceWith);
+}
+
+function deleteAllSymbols(str, deleteSymbol) {
+	return replaceAll(str, deleteSymbol, '');
 }
