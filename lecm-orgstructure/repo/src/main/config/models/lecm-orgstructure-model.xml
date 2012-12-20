@@ -245,7 +245,6 @@
                 <property name="lecm-orgstr:workGroup-description">
                     <title>Working Group Description</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
                 </property>
             </properties>
             <mandatory-aspects>
