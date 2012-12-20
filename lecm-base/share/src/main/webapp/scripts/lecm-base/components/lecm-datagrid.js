@@ -222,7 +222,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            /**
 	             * Атрибут для ссылки на форму view
 	             */
-	            attributeForShow: null
+	            attributeForShow: null,
+
+                /**
+                 * Отображать или скрывать столбец с action-ами
+                 * по-умолчанию - отображать
+                 */
+                dataSource:"lecm/search",
+                /**
+                 * Максимальное число возвращаемых запросом элементов
+                 */
+                maxResults: 1000
             },
 
             /**
@@ -1174,7 +1184,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // initialize Search
                 this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
-                    showExtendSearchBlock:this.options.showExtendSearchBlock
+                    showExtendSearchBlock:this.options.showExtendSearchBlock,
+                    maxSearchResults: this.options.maxResults
                 });
                 var searchConfig = this.datagridMeta.searchConfig;
                 if (searchConfig) { // Поиск через SOLR
