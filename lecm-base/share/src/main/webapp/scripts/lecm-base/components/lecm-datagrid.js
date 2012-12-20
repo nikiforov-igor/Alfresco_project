@@ -217,7 +217,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * Отображать или скрывать столбец с action-ами
                  * по-умолчанию - отображать
                  */
-                showActionColumn: true
+                showActionColumn: true,
+
+	            /**
+	             * Атрибут для ссылки на форму view
+	             */
+	            attributeForShow: null
             },
 
             /**
@@ -460,52 +465,59 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 {
                                     data = oData[i];
 
+	                                var columnContent = "";
                                     switch (datalistColumn.dataType.toLowerCase())
                                     {
                                         case "lecm-orgstr:employee":
-                                            html += scope.getEmployeeView(data.value, data.displayValue);
+	                                        columnContent += scope.getEmployeeView(data.value, data.displayValue);
                                             break;
 
 	                                    case "lecm-orgstr:employee-link":
-                                            html += scope.getEmployeeViewByLink(data.value, data.displayValue);
+		                                    columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
                                             break;
 
 	                                    case "cm:person":
-                                            html += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
+		                                    columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
                                             break;
 
                                         case "datetime":
-                                            html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+	                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
                                             break;
 
                                         case "date":
-                                            html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+	                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
                                             break;
 
                                         case "text":
-                                            html += $links($html(data.displayValue));
+	                                        columnContent += $links($html(data.displayValue));
                                             break;
 
                                         case "boolean":
                                             if (data.displayValue) {
-                                                html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+	                                            columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                             }
                                             break;
 
                                         default:
                                             if (datalistColumn.type == "association") {
-                                                html += $html(data.displayValue);
+	                                            columnContent += $html(data.displayValue);
                                             } else {
                                                 if (data.displayValue != "false" && data.displayValue != "true") {
-                                                    html += $html(data.displayValue);
+	                                                columnContent += $html(data.displayValue);
                                                 } else {
                                                     if (data.displayValue == "true") {
-                                                        html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+	                                                    columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                                     }
                                                 }
                                             }
                                             break;
                                     }
+
+	                                if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
+		                                html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+	                                } else {
+		                                html += columnContent;
+	                                }
 
                                     if (i < ii - 1)
                                     {

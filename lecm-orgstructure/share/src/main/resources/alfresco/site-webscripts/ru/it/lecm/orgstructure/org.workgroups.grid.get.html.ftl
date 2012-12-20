@@ -114,7 +114,8 @@
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							showCheckboxColumn: false
+							showCheckboxColumn: false,
+							attributeForShow:"lecm-orgstr:element-short-name"
 						}).setMessages(${messages});
 			}
 

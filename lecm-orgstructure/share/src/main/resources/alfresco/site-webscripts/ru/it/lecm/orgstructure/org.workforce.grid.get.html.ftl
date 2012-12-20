@@ -199,7 +199,8 @@
                                     fullDelete:false
                                 }
                             },
-							showCheckboxColumn: false
+							showCheckboxColumn: false,
+							attributeForShow:"lecm-orgstr:element-member-position-assoc"
 						}).setMessages(${messages});
                 datagrid.draw();
 			}
