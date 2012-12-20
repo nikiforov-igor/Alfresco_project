@@ -74,7 +74,6 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
                     QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
                     QName assocQName = QName.createQName(WCAL_NAMESPACE, CONTAINER); //the qualified name of the association
                     QName nodeTypeQName = TYPE_W_CAL_OPTS_CONTAINER; //a reference to the node type
-                    // создание корневого узла для делегирований в Компании ...
                     Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
                     properties.put(ContentModel.PROP_NAME, CONTAINER);
                     ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);

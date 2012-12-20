@@ -30,17 +30,14 @@ public class AbsenceBean extends AbstractWCalCommonBean {
     public QName getWCalendarItemType() {
         return TYPE_ABSENCE;
     }
-    
-    public final void bootstrap () {
-		PropertyCheck.mandatory (this, "repository", repository);
-		PropertyCheck.mandatory (this, "nodeService", nodeService);
-//		PropertyCheck.mandatory (this, "namespaceService", namespaceService);
-		PropertyCheck.mandatory (this, "transactionService", transactionService);
 
-		//создание контейнера для хранения параметров делегирования
-//		AuthenticationUtil.runAsSystem (this);
-		AuthenticationUtil.runAsSystem (this);
+    public final void bootstrap() {
+        PropertyCheck.mandatory(this, "repository", repository);
+        PropertyCheck.mandatory(this, "nodeService", nodeService);
+//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+        PropertyCheck.mandatory(this, "transactionService", transactionService);
 
-		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
-	}        
+
+        AuthenticationUtil.runAsSystem(this);
+    }
 }

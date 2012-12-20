@@ -79,13 +79,14 @@
             </associations>
         </type>
         <!-- Список возможных причин отсутствия. -->
-        
+
         <type name="lecm-absence:reason">
             <title>Absence reason</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <!-- Наименование причины отсутсвия. -->
                 <property name="lecm-absence:denomination">
+                    <title>Наименование</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
@@ -96,6 +97,7 @@
                 </property>
                 <!-- Код причины. -->
                 <property name="lecm-absence:code">
+                    <title>Код причины</title>
                     <type>d:int</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
@@ -107,6 +109,7 @@
                 <!-- Цвет для отображения в диаграме отсутствия. -->
                 <!-- Не уверен насчет типа. Уточнить. Полагаю, это будт HEX-код цвета. -->
                 <property name="lecm-absence:color">
+                    <title>Код для отображения</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>

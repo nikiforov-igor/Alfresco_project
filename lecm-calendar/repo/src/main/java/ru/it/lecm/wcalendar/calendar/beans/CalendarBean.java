@@ -5,7 +5,6 @@
 package ru.it.lecm.wcalendar.calendar.beans;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -31,17 +30,13 @@ public class CalendarBean extends AbstractWCalCommonBean {
     public QName getWCalendarItemType() {
         return TYPE_CALENDAR;
     }
-    
-    public final void bootstrap () {
-		PropertyCheck.mandatory (this, "repository", repository);
-		PropertyCheck.mandatory (this, "nodeService", nodeService);
-//		PropertyCheck.mandatory (this, "namespaceService", namespaceService);
-		PropertyCheck.mandatory (this, "transactionService", transactionService);
 
-		//создание контейнера для хранения параметров делегирования
-//		AuthenticationUtil.runAsSystem (this);
-		AuthenticationUtil.runAsSystem (this);
+    public final void bootstrap() {
+        PropertyCheck.mandatory(this, "repository", repository);
+        PropertyCheck.mandatory(this, "nodeService", nodeService);
+//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+        PropertyCheck.mandatory(this, "transactionService", transactionService);
 
-		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
-	}        
+        AuthenticationUtil.runAsSystem(this);
+    }
 }
