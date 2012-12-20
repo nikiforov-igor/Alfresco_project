@@ -335,7 +335,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
                 return {
                     params:{
-                        parent:parent,
+                        parent:parent != null ? parent : "",
                         itemType:itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
                         maxResults:this.options.maxSearchResults + 1,
