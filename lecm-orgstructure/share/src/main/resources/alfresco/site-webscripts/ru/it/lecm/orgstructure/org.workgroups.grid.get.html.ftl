@@ -9,6 +9,148 @@
 		<@grid.datagrid id=id showViewForm=false>
 			<script type="text/javascript">//<![CDATA[
 			function createWorkgroupDatagrid() {
+            /** Прорисовка таблицы, установка свойств, сортировка.
+              * @param columnDefinitions колонки
+              * @param me {object} this
+              * @return {YAHOO.widget.DataTable} таблица
+              * @private
+            */
+                LogicECM.module.Base.DataGrid.prototype._setupDataTable = function (columnDefinitions, me) {
+                var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
+                        {
+                            renderLoopSize:this.options.usePagination ? 16 : 32,
+                            initialLoad:false,
+                            dynamicData:false,
+                            "MSG_EMPTY":this.msg("message.empty"),
+                            "MSG_ERROR":this.msg("message.error"),
+                            paginator:this.widgets.paginator
+                        });
+
+                // Update totalRecords with value from server
+                dTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
+                    me.totalRecords = oResponse.meta.totalRecords;
+                    oResponse.meta.pagination =
+                    {
+                        rowsPerPage:me.options.pageSize,
+                        recordOffset:(me.currentPage - 1) * me.options.pageSize
+                    };
+                    return oResponse.meta;
+                };
+
+                // Override abstract function within DataTable to set custom error message
+                dTable.doBeforeLoadData = function DataGrid_doBeforeLoadData(sRequest, oResponse, oPayload) {
+                    if (oResponse.error) {
+                        try {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            me.widgets.dataTable.set("MSG_ERROR", response.message);
+                        }
+                        catch (e) {
+                            me._setDefaultDataTableErrors(me.widgets.dataTable);
+                        }
+                    }
+
+                    // We don't get an renderEvent for an empty recordSet, but we'd like one anyway
+                    if (oResponse.results.length === 0) {
+                        this.fireEvent("renderEvent",
+                                {
+                                    type:"renderEvent"
+                                });
+                    }
+
+                    // Must return true to have the "Loading..." message replaced by the error message
+                    return true;
+                };
+
+                // Override default function so the "Loading..." message is suppressed
+                dTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir) {
+                    me.currentSort =
+                    {
+                        oColumn:oColumn,
+                        sSortDir:sSortDir
+
+                    };
+                    me.sort = {
+                        enable: true
+                    }
+                    return true;
+                };
+
+                if (this.options.showCheckboxColumn) {
+                    // Событие когда выбранны все элементы
+                    YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
+                        YAHOO.util.Event.on(this.id +"-select-all-records", 'click', this.selectAllClick, this, true);
+                    }, this, true);
+
+                    // File checked handler
+                    dTable.subscribe("checkboxClickEvent", function (e) {
+                        var id = e.target.value;
+                        this.selectedItems[id] = e.target.checked;
+
+                        var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
+                                len = checks.length, i;
+
+                        var allChecked = true;
+                        for (i = 0; i < len; i++) {
+                            if (!checks[i].checked) {
+                                allChecked = false;
+                                break;
+                            }
+                        }
+                        Dom.get(this.id + '-select-all-records').checked = allChecked;
+
+                        Bubbling.fire("selectedItemsChanged");
+                    }, this, true);
+                }
+                // Сортировка. Событие при нажатии на название столбца.
+                dTable.subscribe("beforeRenderEvent", this.beforeRenderFunction.bind(this), dTable, true);
+
+                // Rendering complete event handler
+                dTable.subscribe("renderEvent", function () {
+                    Alfresco.logger.debug("DataTable renderEvent");
+                    if (me._hasEventInterest("workGroup")) {
+                        var nodeRef = me.datagridMeta.nodeRef;
+	                    var buttonToolbarDisable = true;
+	                    var selectItem = me.widgets.dataTable.getSelectedTrEls()[0];
+                        if (selectItem != undefined) {
+                            var numItems = me.widgets.dataTable.getTrIndex(selectItem);
+                            nodeRef = me.widgets.dataTable.getRecordSet().getRecord(numItems).getData().nodeRef;
+                            buttonToolbarDisable = false;
+                        }
+                        // Отрисовка датагрида для Участников Рабочих групп
+                        YAHOO.Bubbling.fire("activeGridChanged",
+                                {
+                                    datagridMeta:{
+                                        itemType: "lecm-orgstr:workforce",
+                                        nodeRef: nodeRef,
+                                        actionsConfig: {
+                                            fullDelete:true,
+                                            targetDelete:true
+                                        }
+                                    },
+                                    bubblingLabel: "workForce"
+                                });
+                        // Дективируем кнопку "Новый элемент" в правом TollBar-е
+                        YAHOO.Bubbling.fire("initActiveButton",{
+                            bubblingLabel: "workForce",
+                            disable: buttonToolbarDisable});
+                    }
+                    // Deferred functions specified?
+                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
+                        this.afterDataGridUpdate[i].call(this);
+                    }
+                    this.afterDataGridUpdate = [];
+                }, this, true);
+
+                // Enable row highlighting
+                dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
+                dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
+
+                if (this.options.height != null) {
+                    YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
+                }
+
+                return dTable;
+            };
 				LogicECM.module.Base.DataGrid.prototype.setupDataTable = function (columns) {
 					// YUI DataTable colum
 					var columnDefinitions = this.getDataTableColumnDefinitions();
