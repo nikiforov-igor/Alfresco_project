@@ -1,6 +1,6 @@
 <#escape x as x?js_string>
 [
-	<#list  employees as emp>
+	<#list  employees as employee>
 	{
 		firstName: "${employee.properties["lecm-orgstr:employee-first-name"]}",
 		middleName: "${employee.properties["lecm-orgstr:employee-middle-name"]}",
@@ -13,7 +13,7 @@
 		name: "${employee.getName()}",
 		nodeRef:"${employee.getNodeRef()}"
 	}
-		<#if emp_has_next>,</#if>
+		<#if employee_has_next>,</#if>
 	</#list>
 ]
 </#escape>

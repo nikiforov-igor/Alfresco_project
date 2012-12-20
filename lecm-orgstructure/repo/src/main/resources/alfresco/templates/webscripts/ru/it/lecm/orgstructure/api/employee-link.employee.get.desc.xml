@@ -1,7 +1,7 @@
 <webscript>
 	<shortname>employee link employee</shortname>
 	<description>Return employee by employee-link</description>
-	<url>/lecm/orgstructure/api/getEmployeeLinkEmployee?nodeRef={nodeRef}</url>
+	<url>/lecm/orgstructure/api/getEmployeeByLink?nodeRef={nodeRef}</url>
 	<format default="json">extension</format>
 	<authentication>user</authentication>
 </webscript>

@@ -1,5 +1,8 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -12,9 +15,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author dbashmakov
@@ -701,7 +701,7 @@ public class OrgstructureBean {
 	public NodeRef getEmployeePhoto(NodeRef employeeRef) {
 		NodeRef photoRef = null;
 		if (isEmployee(employeeRef)) {
-			List<AssociationRef> photos = nodeService.getTargetAssocs(photoRef, ASSOC_EMPLOYEE_PHOTO);
+			List<AssociationRef> photos = nodeService.getTargetAssocs(employeeRef, ASSOC_EMPLOYEE_PHOTO);
 			if (photos.size() > 0) {
 				photoRef = photos.get(0).getTargetRef();
 			}
@@ -779,7 +779,7 @@ public class OrgstructureBean {
 	public NodeRef getWorkGroupByWorkForce(NodeRef workRef) {
 		NodeRef groupRef = null;
 		if (isWorkForce(workRef)) {
-			groupRef = getParent(workRef);
+			groupRef = nodeService.getPrimaryParent(workRef).getParentRef();
 		}
 		return groupRef;
 	}

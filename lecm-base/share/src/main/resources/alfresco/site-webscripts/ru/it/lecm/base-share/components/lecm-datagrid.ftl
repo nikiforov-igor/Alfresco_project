@@ -50,7 +50,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 	}
 
 	function showEmployeeViewByLink(employeeLinkNodeRef) {
-		var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeLinkEmployee?nodeRef=" + employeeLinkNodeRef;
+		var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef;
 		var callback = {
 			success:function (oResponse) {
 				var oResults = eval("(" + oResponse.responseText + ")");
