@@ -1,6 +1,7 @@
 <#assign  id = args.htmlid/>
 
 <script type="text/javascript">//<![CDATA[
+(function () {
 var Dom = YAHOO.util.Dom,
 		Connect = YAHOO.util.Connect,
 		Event = YAHOO.util.Event;
@@ -148,9 +149,35 @@ function showDialogEdit(nodeRef){
 			}).show();
 }
 
+    function editPersonalData() {
+        showDialogEdit(dataRef);
+    }
+
+    function createPersonalData() {
+        employeeRef = "${form.arguments.itemId}";
+        var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/createEmployeePersonData";
+        var callback = {
+            success:function (oResponse) {
+                var oResults = eval("(" + oResponse.responseText + ")");
+                if (oResults != null) {
+                    showDialogCreate(oResults.nodeRef);
+                }
+            },
+            failure:function (oResponse) {
+                alert("Не удалось загрузить персональные данные. Попробуйте обновить страницу.");
+            },
+            argument:{
+            }
+        };
+        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+    }
+
 function initialize() {
 	employeeRef = "${form.arguments.itemId}";
 	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePersonalData?nodeRef="+employeeRef;
+	new YAHOO.widget.Button("${id}-editPersonalData",{ onclick: { fn: editPersonalData} });
+	new YAHOO.widget.Button("${id}-createPersonalData",{ onclick: { fn: createPersonalData} });
+	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePerson?nodeRef="+employeeRef;
 	var callback = {
 		success:function (oResponse) {
 			var oResults = eval("(" + oResponse.responseText + ")");
@@ -175,30 +202,15 @@ function initialize() {
 	YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
 
-function editPersonalData() {
-	showDialogEdit(dataRef);
-}
+    function OnButtonAvaiable(id) {
+        YAHOO.util.Event.onContentReady(id, this.handleOnAvailable, this);
+    }
+    OnButtonAvaiable.prototype.handleOnAvailable = function (me) {
+        initialize();
+    };
 
-function createPersonalData() {
-	employeeRef = "${form.arguments.itemId}";
-	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getPersonalDataDirectory";
-	var callback = {
-		success:function (oResponse) {
-			var oResults = eval("(" + oResponse.responseText + ")");
-			if (oResults != null) {
-				showDialogCreate(oResults.nodeRef);
-			}
-		},
-		failure:function (oResponse) {
-			alert("Не удалось загрузить персональные данные. Попробуйте обновить страницу.");
-		},
-		argument:{
-		}
-	};
-	YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-}
-
-    Event.onDOMReady(initialize);
+    var obj = new OnButtonAvaiable("${id}-buttonPersonalData");
+})();
 //]]></script>
 
 <div id="${id}">
@@ -207,12 +219,12 @@ function createPersonalData() {
 	<#if form.mode == "edit" || form.mode == "create">
         <span id="${id}-createPersonalData" class="yui-button yui-push-button hidden">
            <span class="first-child">
-              <button type="button" onclick="createPersonalData();">${msg('button.create')}</button>
+              <button type="button">${msg('button.create')}</button>
            </span>
         </span>
 		<span id="${id}-editPersonalData" class="yui-button yui-push-button hidden">
            <span class="first-child">
-              <button type="button" onclick="editPersonalData();">${msg('button.edit')}</button>
+              <button type="button">${msg('button.edit')}</button>
            </span>
         </span>
 	</div>
