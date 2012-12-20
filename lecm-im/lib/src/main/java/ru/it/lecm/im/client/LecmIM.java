@@ -1,12 +1,6 @@
 package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,21 +11,12 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class LecmIM implements EntryPoint {
 
+    private iJab ijab ;
+
     public void onModuleLoad() {
-        //To change body of implemented methods use File | Settings | File Templates.
-
-        Button button = new Button("Btn helo");
-        RootPanel.get().add(new TextBox());
-        RootPanel.get().add(button);
-
-        button.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent clickEvent) {
-                Window.alert("Hello!");
-            }
-        });
-
-       iJab jab = new iJab();
-       jab.onModuleLoad();
+       Log.consoleLog("lib module EntryPoint ");
+       ijab = new iJab();
+       ijab.onModuleLoad();
 
     }
 }

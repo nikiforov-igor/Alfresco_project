@@ -10,20 +10,13 @@ import com.google.gwt.core.client.EntryPoint;
  * To change this template use File | Settings | File Templates.
  */
 public class LecmIM implements EntryPoint {
-    public void onModuleLoad() {
-        //To change body of implemented methods use File | Settings | File Templates.
 
-//        Button button = new Button("Btn");
-//        RootPanel.get().add(button);
-//
-//        button.addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent clickEvent) {
-//                Window.alert("Hello!");
-//            }
-//        });
-        iJab jab = new iJab();
-        jab.onModuleLoad();
+    private iJab ijab;
+
+    public void onModuleLoad() {
+        Log.consoleLog("Share module EntryPoint ");
+        ijab = new iJab();
+        ijab.onModuleLoad();
 
     }
 }

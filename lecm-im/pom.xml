@@ -24,6 +24,6 @@
         <!-- <module>repo</module> -->
         <module>share</module>
         <module>lib</module>
-        <module>gwt-debug</module>
+        <!--<module>gwt-debug</module>-->
     </modules>
 </project>

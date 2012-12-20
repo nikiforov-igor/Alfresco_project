@@ -130,6 +130,7 @@
 			</resource>
             <resource>
                 <directory>${basedir}/../lib/src/main/resources</directory>
+                <targetPath>${project.build.directory}/${project.build.finalName}/web/scripts/LecmIM</targetPath>
             </resource>
 		</resources>
     </build>
