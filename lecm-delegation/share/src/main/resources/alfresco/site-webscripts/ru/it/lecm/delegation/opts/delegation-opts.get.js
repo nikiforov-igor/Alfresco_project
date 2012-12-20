@@ -1,6 +1,7 @@
 //получение delegator-а из параметров url-а
 //если delegator передан то передача его в ftl-ку
 //если не передан то дергаем наш скрипт и получаем delegator-а через пользователя системы
+//TODO надо воткнуть какую-то проверку на то, что сотрудник является пользователем системы
 var delegator = page.url.args["delegator"];
 if (delegator && delegator.length > 0) {
 	//проверям права на технолога или руководителя,
@@ -12,21 +13,3 @@ if (delegator && delegator.length > 0) {
 	var obj = jsonUtils.toObject (jsonStr);
 	model.delegator = obj.delegationOpts;
 }
-
-
-// Actions
-var actionSet = [],
-myConfig = new XML(config.script),
-xmlActionSet = myConfig.actionSet;
-
-for each (var xmlAction in xmlActionSet.action) {
-	actionSet.push ({
-		id: xmlAction.@id.toString(),
-		type: xmlAction.@type.toString(),
-		permission: xmlAction.@permission.toString(),
-		href: xmlAction.@href.toString(),
-		label: xmlAction.@label.toString()
-	});
-}
-
-model.actionSet = actionSet;
