@@ -1978,6 +1978,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var me = this,
                     items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
 
+	            var itemNames = [];
+	            var propToShow = "prop_cm_name";
+	            for (var j = 0, jj = this.datagridColumns.length; j < jj; j++) {
+		            var column = this.datagridColumns[j];
+		            if (me.options.attributeForShow != null && column.name == me.options.attributeForShow) {
+			            propToShow = column.formsName;
+			            break;
+		            }
+	            }
+	            for (var k = 0; k < items.length; k++) {
+		            if (items[k] && items[k].itemData && items[k].itemData[propToShow]) {
+		                itemNames.push("'" + items[k].itemData[propToShow].displayValue + "'");
+	                }
+	            }
+
+	            var itemsString = itemNames.join(", ");
                 var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(items) {
                     var nodeRefs = [];
                     for (var i = 0, ii = items.length; i < ii; i++) {
@@ -2031,7 +2047,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         Alfresco.util.PopupManager.displayPrompt(
                             {
                                 title:this.msg("message.confirm.delete.title", items.length),
-                                text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", items.length),
+                                text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
                                 buttons:[
                                     {
                                         text:this.msg("button.delete"),
