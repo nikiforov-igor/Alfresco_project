@@ -39,9 +39,6 @@
 						if (searchConfig.sort == null || searchConfig.sort.length == 0) {
 							searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
 						}
-						if (searchConfig.parent == null || searchConfig.parent.length == 0){
-							searchConfig.parent = this.datagridMeta.nodeRef;
-						}
 						searchConfig.formData = {
 							datatype:this.datagridMeta.itemType
 						};

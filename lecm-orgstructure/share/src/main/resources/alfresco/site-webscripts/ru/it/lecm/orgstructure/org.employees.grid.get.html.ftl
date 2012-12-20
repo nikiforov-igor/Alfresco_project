@@ -102,11 +102,6 @@
 					};
 				};
 
-				LogicECM.module.Base.DataGrid.prototype.deleteEvaluator = function DataGridActions_deleteEvaluator(rowData) {
-					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_employee-main-position"] == undefined || itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0;
-				};
-
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
@@ -129,7 +124,11 @@
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",
-									evaluator:"deleteEvaluator"
+									evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["assoc_lecm-orgstr_employee-main-position"] == undefined ||
+		                                        itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0;
+                                    }
 								}
 							],
 							bubblingLabel: "${bubblingLabel!"employee"}",

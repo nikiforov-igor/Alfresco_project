@@ -146,19 +146,6 @@
 					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 				};
 
-				LogicECM.module.Base.DataGrid.prototype.deleteWorkForceEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
-					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
-				};
-				LogicECM.module.Base.DataGrid.prototype.addEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
-					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
-				};
-				LogicECM.module.Base.DataGrid.prototype.deleteEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
-					var itemData = rowData.itemData;
-					return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined && itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
-				};
-
 				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							bubblingLabel: "${bubblingLabel!"workForce"}",
@@ -170,14 +157,22 @@
 									id:"onActionEmployeeAdd",
 									permission:"edit",
 									label:"${msg("actions.addEmployee")}",
-									evaluator:"addEmployeeEvaluator"
+									evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined ||
+		                                        itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
+                                    }
 								},
 								{
 									type:"action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEmployeeDelete",
 									permission:"edit",
 									label:"${msg("actions.deleteEmployee")}",
-									evaluator:"deleteEmployeeEvaluator"
+									evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != "undefined" &&
+		                                        itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
+                                    }
 								},
 								{
 									type:"action-link-${bubblingLabel!"workForce"}",
@@ -190,7 +185,11 @@
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",
-									evaluator: "deleteWorkForceEvaluator"
+									evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined ||
+		                                        itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
+                                    }
 								}
 							],
                             datagridMeta: {

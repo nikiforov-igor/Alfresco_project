@@ -296,22 +296,6 @@
 						}
 					};
 
-					LogicECM.module.Base.DataGrid.prototype.deleteStaffEvaluator = function DataGridActions_deleteStaffEvaluator(rowData) {
-						var itemData = rowData.itemData;
-						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
-					};
-					LogicECM.module.Base.DataGrid.prototype.addEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
-						var itemData = rowData.itemData;
-						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined || itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
-					};
-					LogicECM.module.Base.DataGrid.prototype.deleteEmployeeEvaluator = function DataGridActions_addEmployeeEvaluator(rowData) {
-						var itemData = rowData.itemData;
-						return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined && itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
-					};
-					LogicECM.module.Base.DataGrid.prototype.makeBossEvaluator = function DataGridActions_makeBossEvaluatorEvaluator(rowData) {
-						var itemData = rowData.itemData;
-						return itemData["prop_lecm-orgstr_staff-list-is-boss"].value == false;
-					};
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -322,14 +306,22 @@
 										id:"onActionEmployeeAdd",
 										permission:"edit",
 										label:"${msg("actions.addEmployee")}",
-										evaluator:"addEmployeeEvaluator"
+										evaluator: function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined ||
+		                                            itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
+                                        }
 									},
 									{
 										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEmployeeDelete",
 										permission:"edit",
 										label:"${msg("actions.deleteEmployee")}",
-										evaluator:"deleteEmployeeEvaluator"
+										evaluator:function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined &&
+		                                            itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
+                                        }
 									},
 									{
 										type:"action-link-${bubblingLabel!"staff-list"}",
@@ -342,14 +334,21 @@
 										id:"onActionDelete",
 										permission:"delete",
 										label:"${msg("actions.delete-row")}",
-										evaluator: "deleteStaffEvaluator"
+										evaluator: function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] == undefined ||
+		                                            itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length == 0;
+                                        }
 									},
 									{
 										type:"action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionMakeBoss",
 										permission:"edit",
 										label:"${msg("actions.makeBoss")}",
-										evaluator:"makeBossEvaluator"
+										evaluator:function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["prop_lecm-orgstr_staff-list-is-boss"].value == false;
+                                        }
 									},
 								],
 								bubblingLabel: "${bubblingLabel!"staff-list"}",

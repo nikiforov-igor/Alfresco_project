@@ -97,10 +97,6 @@
                         };
                         YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                     };
-                    LogicECM.module.Base.DataGrid.prototype.makePrimaryEvaluator = function DataGridActions_makeBossEvaluatorEvaluator(rowData) {
-                        var itemData = rowData.itemData;
-                        return itemData["assoc_lecm-orgstr_primary-position"].value == "false";
-                    };
                     var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
@@ -109,7 +105,10 @@
                                         id: "onActionMakePrimary",
                                         permission: "edit",
                                         label: "${msg("actions.makePrimary")}",
-	                                    evaluator:"makePrimaryEvaluator"
+	                                    evaluator: function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["assoc_lecm-orgstr_primary-position"].value == "false";
+                                        }
                                   }],
                         datagridMeta: {
                                 itemType: "lecm-orgstr:staff-list",

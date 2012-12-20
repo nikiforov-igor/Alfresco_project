@@ -1017,7 +1017,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         searchConfig.formData = {
                             datatype:datagridMeta.itemType
                         };
-                        searchConfig.parent = datagridMeta.nodeRef;
                         if (me.sort) {
                             // Обнуляем сортировку иначе зациклится.
                             me.sort = null;
@@ -1170,9 +1169,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
                         searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
                     }
-                    if (searchConfig.parent == null || searchConfig.parent.length == 0){
-                        searchConfig.parent = this.datagridMeta.nodeRef;
-                    }
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
@@ -1240,11 +1236,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         var showAction = true; // по умолчанию - показывать
                         var action = this.options.actions[i];
                         var evaluator = action.evaluator;
-                        if (evaluator) {
-                            var result = this[evaluator].call(this, oData);
-                            if (result != undefined){
-                                showAction = result;
-                            }
+                        if (evaluator != null && typeof evaluator == "function") {
+                            //var result = ;
+                            //if (result != undefined){
+                            showAction = evaluator(oData);
+                            //}
                         }
                         var actionDiv = getActionDivByClass(action.id);
                         if (actionDiv != null && actionDiv != undefined) {
@@ -1862,9 +1858,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
                         searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                    }
-                    if (searchConfig.parent == null || searchConfig.parent.length == 0){
-                        searchConfig.parent = this.datagridMeta.nodeRef;
                     }
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
