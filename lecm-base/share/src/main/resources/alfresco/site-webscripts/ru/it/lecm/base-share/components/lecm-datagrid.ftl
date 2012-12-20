@@ -32,6 +32,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 		var formEl = Dom.get("${viewFormId}-content");
 		formEl.innerHTML = response.serverResponse.responseText;
 		if (viewDialog != null) {
+			Dom.setStyle("${viewFormId}", "display", "block");
 			viewDialog.show();
 		}
 	}
@@ -39,13 +40,14 @@ viewFormId(необязательный) - по умолчанию равен vi
 	function hideViewDialog() {
 		if (viewDialog != null) {
 			viewDialog.hide();
+			Dom.setStyle("${viewFormId}", "display", "none");
 		}
 	}
 
 	function createDialog() {
 		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
 				{
-					width:"487px"
+					width:"570px"
 				});
 	}
 

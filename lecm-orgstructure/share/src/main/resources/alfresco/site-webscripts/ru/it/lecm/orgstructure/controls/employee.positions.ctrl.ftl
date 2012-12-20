@@ -100,16 +100,20 @@
                     var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
-                        actions: [{
-                                        type: "action-link-${containerId}",
-                                        id: "onActionMakePrimary",
-                                        permission: "edit",
-                                        label: "${msg("actions.makePrimary")}",
-	                                    evaluator: function (rowData) {
-                                            var itemData = rowData.itemData;
-                                            return itemData["assoc_lecm-orgstr_primary-position"].value == "false";
-                                        }
-                                  }],
+                        actions: [
+	                        <#if form.mode != "view">
+		                        {
+	                                type: "action-link-${containerId}",
+	                                id: "onActionMakePrimary",
+	                                permission: "edit",
+	                                label: "${msg("actions.makePrimary")}",
+	                                evaluator: function (rowData) {
+	                                    var itemData = rowData.itemData;
+	                                    return itemData["assoc_lecm-orgstr_primary-position"].value == "false";
+	                                }
+	                            }
+	                        </#if>
+                        ],
                         datagridMeta: {
                                 itemType: "lecm-orgstr:staff-list",
                                 datagridFormId: "employee-positions",
@@ -118,7 +122,7 @@
                         dataSource:"lecm/orgstructure/ds/employee-positions",
                         bubblingLabel: "${containerId}",
                         allowCreate: false,
-                        showActionColumn: true,
+                        showActionColumn: <#if form.mode == "view">false<#else>true</#if>,
                         showCheckboxColumn: false
                     }).setMessages(${messages});
 

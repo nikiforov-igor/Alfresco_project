@@ -18,8 +18,8 @@
                     <show id="lecm-orgstr:employee-fio-d"/>
                     <show id="lecm-orgstr:employee-person-assoc"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
-                    <show id="lecm-orgstr:employee-positions" for-mode="edit"/>
-                    <show id="lecm-orgstr:employee-roles" for-mode="edit"/>
+                    <show id="lecm-orgstr:employee-positions"/>
+                    <show id="lecm-orgstr:employee-roles"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />

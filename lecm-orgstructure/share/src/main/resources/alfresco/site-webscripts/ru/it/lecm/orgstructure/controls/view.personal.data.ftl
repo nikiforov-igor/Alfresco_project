@@ -227,6 +227,6 @@ function initialize() {
               <button type="button">${msg('button.edit')}</button>
            </span>
         </span>
-	</div>
 	</#if>
+	</div>
 </div>
