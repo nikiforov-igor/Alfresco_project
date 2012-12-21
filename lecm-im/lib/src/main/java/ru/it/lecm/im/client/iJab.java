@@ -41,17 +41,18 @@ import java.util.List;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class iJab  {
+public class iJab implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	
+
 	static String theme = "standard";
-	
+
 	public static iJabUI ui;
 	public static iJabConf conf ;
 	public static Client client;
-	public void onModuleLoad() 
+	@Override
+	public void onModuleLoad()
 	{
         conf = iJabConfImpl.getConf();
 		if(conf == null)
@@ -59,21 +60,21 @@ public class iJab  {
 			Window.alert("Please make conf of iJab!");
 			return;
 		}
-		
+
 		theme = conf.getTheme();
 		ui = createUI();
 		client = createClient();
 		chageTheme(theme,"");
 		DeferredCommand.addCommand(new Command()
 		{
-			public void execute() 
+			public void execute()
 			{
 				defineBridgeMethod(client);
 				client.run();
 			}
 		});
 	}
-	
+
 	private iJabUI createUI()
 	{
 		if(conf.getAppType().equals(iJabConf.AppType.bar))
@@ -82,7 +83,7 @@ public class iJab  {
 			//return (new FullUI());
             return null;
 	}
-	
+
 	private Client createClient()
 	{
 		if(conf.getClientType().equals(iJabConf.ClientType.xmpp))
@@ -91,9 +92,9 @@ public class iJab  {
 			//return new CometdClient();
             return null;
 	}
-	
-	
-	
+
+
+
 	private void chageTheme(final String newThem,final String oldThem)
 	{
 		String oldThemeStyle = oldThem + "/iJab.css";
@@ -103,42 +104,42 @@ public class iJab  {
 		final HeadElement headElem = StyleSheetLoader.getHeadElement();
 		final List<Element> toRemove = new ArrayList<Element>();
 		NodeList<Node> children = headElem.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++) 
+		for (int i = 0; i < children.getLength(); i++)
 		{
 			Node node = children.getItem(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE) 
+			if (node.getNodeType() == Node.ELEMENT_NODE)
 			{
 				Element elem = Element.as(node);
 				if (elem.getTagName().equalsIgnoreCase("link")
-						&& elem.getPropertyString("rel").equalsIgnoreCase("stylesheet")) 
+						&& elem.getPropertyString("rel").equalsIgnoreCase("stylesheet"))
 				{
 					String href = elem.getPropertyString("href");
 					if(href.contains(newThemStyle))
 					{
 						styleSheetsFound = true;
 					}
-					if (href.contains(oldThemeStyle)) 
+					if (href.contains(oldThemeStyle))
 					{
 						toRemove.add(elem);
 					}
 				}
 			}
 		}
-		
+
 		if (styleSheetsFound && toRemove.size() == 0) {
 			return;
 		}
-		
+
 		// Detach the app while we manipulate the styles to avoid rendering issues
 		for(Widget w:ui.getTopWidgets())
 		{
 			RootPanel.get().remove(w);
 		}
-		
+
 		for (Element elem : toRemove) {
 			headElem.removeChild(elem);
 		}
-		
+
 		String modulePath = GWT.getModuleBaseURL();
 		Command callback = new Command() {
 			/**
@@ -170,7 +171,7 @@ public class iJab  {
 	/**
 	 * Get the style name of the reference element defined in the current GWT
 	 * theme style sheet.
-	 * 
+	 *
 	 * @param prefix the prefix of the reference style name
 	 * @return the style name
 	 */
@@ -178,96 +179,96 @@ public class iJab  {
 		String gwtRef = prefix + "-Reference-" + theme;
 		return gwtRef;
 	}
-	
+
 	private native void defineBridgeMethod(Client client)
 	/*-{
-		$wnd.iJab = 
+		$wnd.iJab =
 		{
 			login:function(id,password)
 			{
 				client.@ru.it.lecm.im.client.Client::login(Ljava/lang/String;Ljava/lang/String;)(id,password);
 			},
-			
+
 			loginWithStatus:function(id,password,status)
 			{
                 client.@ru.it.lecm.im.client.Client::loginWithStatus(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(id,password,status);
 			},
-						
+
 			logout:function()
 			{
                 client.@ru.it.lecm.im.client.Client::logout()();
 			},
-			
+
 			addListener:function(listener)
 			{
                 client.@ru.it.lecm.im.client.Client::addNativeListener(Lcom/google/gwt/core/client/JavaScriptObject;)(listener);
 			},
-			
+
 			talkTo:function(jid)
 			{
                 client.@ru.it.lecm.im.client.Client::talkTo(Ljava/lang/String;)(jid);
 			},
-			
+
 			isActive:function()
 			{
 				return client.@ru.it.lecm.im.client.Client::isConnected()();
 			},
-			
+
 			version:function()
 			{
 				return "1.0.0-beta3";
 			},
-			
+
 			getNickname:function()
 			{
 				return client.@ru.it.lecm.im.client.Client::getNickname()();
 			},
-			
+
 			getStatusText:function()
 			{
 				return client.@ru.it.lecm.im.client.Client::getStatusText()();
 			},
-			
+
 			setStatusText:function(statusText)
 			{
                 client.@ru.it.lecm.im.client.Client::setStatusText(Ljava/lang/String;)(statusText);
 			},
-			
+
 			getStatus:function()
 			{
 				return client.@ru.it.lecm.im.client.Client::getStatus()();
 			},
-			
+
 			setStatus:function(status)
 			{
                 client.@ru.it.lecm.im.client.Client::setStatus(Ljava/lang/String;)(status);
 			},
-			
+
 			addRoster:function(users,group)
 			{
                 client.@ru.it.lecm.im.client.Client::addRoster(Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)(users,group);
 			},
-			
+
 			removeRoster:function(users)
 			{
                 client.@ru.it.lecm.im.client.Client::removeRoster(Lcom/google/gwt/core/client/JsArrayString;)(users);
 			},
-			
+
 			joinMUC:function(room,nick)
 			{
                 client.@ru.it.lecm.im.client.Client::joinMUC(Ljava/lang/String;Ljava/lang/String;)(room,nick);
 			},
-			
+
 			leaveMUC:function(room)
 			{
                 client.@ru.it.lecm.im.client.Client::leaveMUC(Ljava/lang/String;)(room);
 			},
-			
+
 			addToBlackList:function(users)
 			{
                 client.@ru.it.lecm.im.client.Client::addUsersToBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
 			},
-			
+
 			removeUsersFromBlacklist:function(users)
 			{
                 client.@ru.it.lecm.im.client.Client::removeUsersFromBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
@@ -275,5 +276,5 @@ public class iJab  {
 		};
 	  }-*/;
 
-	
+
 }

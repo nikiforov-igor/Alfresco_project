@@ -15,7 +15,7 @@
     <inherits name='ru.it.lecm.im.lecm-im-lib'/>
 
     <!-- Specify the app entry point class.                         -->
-    <entry-point class='ru.it.lecm.im.client.LecmIM'/>
+    <entry-point class='ru.it.lecm.im.client.iJab'/>
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
