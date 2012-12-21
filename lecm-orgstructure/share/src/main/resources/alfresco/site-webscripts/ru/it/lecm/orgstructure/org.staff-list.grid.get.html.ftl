@@ -352,7 +352,8 @@
 									},
 								],
 								bubblingLabel: "${bubblingLabel!"staff-list"}",
-								showCheckboxColumn: false
+								showCheckboxColumn: false,
+								attributeForShow:"lecm-orgstr:element-member-position-assoc"
 							}).setMessages(${messages});
 				}
 
