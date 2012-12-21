@@ -549,6 +549,7 @@
                     <show id="lecm-orgstr:staff-unit|{../lecm-orgstr:element-short-name}" force="true"/>
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                     <show id="lecm-orgstr:primary-position|{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-is-primary}" force="true"/>
+	                <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
             </form>
             <form id="search">
