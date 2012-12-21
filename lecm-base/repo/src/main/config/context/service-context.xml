@@ -147,4 +147,8 @@
 		<property name="execution" value="start, end" />
 	</bean>
 
+    <bean id="uniqueLongPropertyConstraint" class="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
 </beans>

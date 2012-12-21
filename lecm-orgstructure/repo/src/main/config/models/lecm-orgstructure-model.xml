@@ -412,7 +412,11 @@
                     <type>d:long</type>
 	                <constraints>
 		                <constraint ref="lecm-orgstr:int-number-const"/>
-	                </constraints>
+                        <constraint type="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint">
+                            <parameter name="typeName"><value>lecm-orgstr:employee</value></parameter>
+                            <parameter name="propertyName"><value>lecm-orgstr:employee-number</value></parameter>
+                        </constraint>
+                    </constraints>
                 </property>
                 <property name="lecm-orgstr:employee-fio-g">
                     <title>Full name in genitive</title>
