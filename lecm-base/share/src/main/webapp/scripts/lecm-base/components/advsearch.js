@@ -122,8 +122,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         successCallback:{
                             fn:function ADVSearch_onFormTemplateLoaded(response) {
                                 formDiv.innerHTML = response.serverResponse.responseText;
-                                // Finally show the component body here to prevent UI artifacts on YUI button decoration
-                                Dom.setStyle("searchBlock", "display", "block");
                                 if (this.searchDialog != null) {
 	                                if (isClearSearch) {
 		                                this.onSearchClick(e, obj, false);
@@ -380,8 +378,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         // создаем форму
                         this.renderFormTemplate(defaultForm);
                     } else {
-                        // Finally show the component body here to prevent UI artifacts on YUI button decoration
-                        Dom.setStyle("searchBlock", "display", "block");
                         if (this.searchDialog != null) {
                             this.searchDialog.show();
                         }

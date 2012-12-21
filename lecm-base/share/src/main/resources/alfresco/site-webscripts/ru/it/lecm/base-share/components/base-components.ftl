@@ -53,7 +53,8 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
             </span>
 		</div>
 		<#if showExSeacrhBtn>
-			<div id="searchBlock" class="yui-panel" style="display:none;">
+        <div style="position: absolute; left: -1000px;">
+			<div id="searchBlock" class="yui-panel">
 				<div id="${id}-search-head" class="hd">${msg("search-block")}</div>
 				<div id="${id}-search-body" class="bd">
 					<div id="${id}-search-content">
@@ -85,6 +86,7 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
 					</div>
 				</div>
 			</div>
+        </div>
 		</#if>
 	</div>
 </div>
