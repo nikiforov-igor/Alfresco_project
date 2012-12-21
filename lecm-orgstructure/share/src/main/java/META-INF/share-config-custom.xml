@@ -30,11 +30,7 @@
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
                     <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common">
-                        <constraint-handlers>
-                            <constraint type="REGEX" validation-handler="Alfresco.forms.validation.email" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+                    <field id="lecm-orgstr:employee-email" set="common"/>
                     <field id="lecm-orgstr:employee-photo-assoc" set="common">
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>
@@ -95,11 +91,7 @@
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
                     <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common">
-                        <constraint-handlers>
-                            <constraint type="REGEXP" validation-handler="Alfresco.forms.validation.email" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+                    <field id="lecm-orgstr:employee-email" set="common"/>
                     <field id="lecm-orgstr:employee-photo-assoc" set="common">
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>

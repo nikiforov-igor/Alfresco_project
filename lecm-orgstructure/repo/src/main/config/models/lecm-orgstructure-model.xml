@@ -33,7 +33,7 @@
             </parameter>
         </constraint>
         <constraint name="lecm-orgstr:email-const" type="REGEX">
-            <parameter name="expression"><value>(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})</value></parameter>
+            <parameter name="expression"><value>^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$</value></parameter>
             <parameter name="requiresMatch"><value>true</value></parameter>
         </constraint>
 	    <constraint name="lecm-orgstr:int-number-const" type="REGEX">
