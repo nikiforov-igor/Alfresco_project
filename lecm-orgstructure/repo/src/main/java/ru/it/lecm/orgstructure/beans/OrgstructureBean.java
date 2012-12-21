@@ -261,7 +261,7 @@ public class OrgstructureBean {
 			List<ChildAssociationRef> wgs = nodeService.getChildAssocs(structureDirectory, workgroups);
 			for (ChildAssociationRef wg : wgs) {
 				if (onlyActive) {
-					if ((Boolean) nodeService.getProperty(wg.getChildRef(), IS_ACTIVE)) {
+					if (!isArchive(wg.getChildRef())) {
 						results.add(wg.getChildRef());
 					}
 				} else {
@@ -492,7 +492,7 @@ public class OrgstructureBean {
 	 */
 	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
-		if (employeeLink != null){
+		if (employeeLink != null && !isArchive(employeeLink)){
 			return getEmployeeByLink(employeeLink);
 		}
 		return null;
@@ -653,7 +653,7 @@ public class OrgstructureBean {
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
-				if ((Boolean) nodeService.getProperty(link.getSourceRef(), PROP_EMP_LINK_IS_PRIMARY)) {
+				if (!isArchive(link.getSourceRef()) && (Boolean) nodeService.getProperty(link.getSourceRef(), PROP_EMP_LINK_IS_PRIMARY)) {
 					primaryStaff = getPositionByEmployeeLink(link.getSourceRef());
 					if (primaryStaff != null && isStaffList(primaryStaff)) {
 						break;
@@ -746,9 +746,11 @@ public class OrgstructureBean {
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> links = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef link : links) {
-				NodeRef staff = getPositionByEmployeeLink(link.getSourceRef());
-				if (staff != null && isProperType(staff, types)) {
-					positions.add(staff);
+				if (!isArchive(link.getSourceRef())){
+					NodeRef staff = getPositionByEmployeeLink(link.getSourceRef());
+					if (staff != null && isProperType(staff, types)) {
+						positions.add(staff);
+					}
 				}
 			}
 		}
@@ -802,7 +804,7 @@ public class OrgstructureBean {
 			if (!onlyActive) {
 				results.add(workRole.getChildRef());
 			} else {
-				if ((Boolean) nodeService.getProperty(workRole.getChildRef(), IS_ACTIVE)) {
+				if (!isArchive(workRole.getChildRef())) {
 					results.add(workRole.getChildRef());
 				}
 			}
