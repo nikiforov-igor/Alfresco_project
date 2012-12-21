@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='LecmIMlib'>
+<module>
     <!-- Inherit the core Web Toolkit stuff.                        -->
     <inherits name='com.google.gwt.user.User'/>
 
@@ -7,7 +7,7 @@
 	<inherits name="com.google.gwt.http.HTTP" />
 	<inherits name="com.google.gwt.xml.XML" />
 	<inherits name="com.google.gwt.jsonp.Jsonp" />
-	
+
 	<script src="persist-all-min.js" />
 	<!-- end from xmpp4GWT -->
 
@@ -18,4 +18,5 @@
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
+	<public path='public'/>
 </module>

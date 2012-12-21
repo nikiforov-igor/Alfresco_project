@@ -12,18 +12,18 @@
 
     <!--Подгружаем чатик и настройки-->
 
-    <script type="text/javascript" language="javascript" src="LecmIM/ijab_config.js"></script>
-    <script type="text/javascript" language="javascript" src="LecmIM/LecmIM.nocache.js"></script>
+    <script type="text/javascript" language="javascript" src="lecm_im/ijab_config.js"></script>
+    <script type="text/javascript" language="javascript" src="lecm_im/lecm_im.nocache.js"></script>
 
     <!--Подписываемся на события-->
 
-    <script type="text/javascript" lang="javascript">
+    <script type="text/javascript" language="javascript">//<![CDATA[
 
         updateMessagesCountSubscriber( function(count){
             var elem = document.getElementById("myElem");
             elem.innerHTML = count;
         } ) ;
-
+	//]]>
     </script>
 
 

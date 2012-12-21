@@ -71,6 +71,9 @@
                     <compileSourcesArtifacts>
                         <compileSourcesArtifact>${project.groupId}:lecm-im-lib</compileSourcesArtifact>
                     </compileSourcesArtifacts>
+					<logLevel>TRACE</logLevel>
+					<style>DETAILED</style>
+					<draftCompile>true</draftCompile>
                 </configuration>
             </plugin>
 
