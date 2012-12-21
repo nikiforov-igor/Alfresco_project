@@ -55,6 +55,9 @@ const CLOSE_SUBSTITUDE_SYMBOL = "}";
  * @return Заголовок элемента
  */
 function formatNodeTitle(node, formatString) {
+	if (node == null || isArchive(node)) {
+		return "";
+	}
 	var result = formatString;
 	var nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
 	for each(var field in nameParams) {
