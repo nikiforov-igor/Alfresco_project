@@ -59,31 +59,10 @@ function runAction(p_params) {
         try {
             var itemNode = search.findNode(nodeRef);
             if (itemNode != null) {
-                var sAssocs;
-                sAssocs = itemNode.getSourceAssocs();
-                // удалить все ссылки на объект
-                for (key in sAssocs) {
-                    var assocsList = sAssocs[key];
-                    for (index in assocsList) {
-                        var targetA = assocsList[index];
-                        targetA.removeAssociation(itemNode, key);
-                    }
-                }
                 if (full == "false") {// пометить объект как неактивный
                     itemNode.properties["lecm-dic:active"] = false;
                     result.success = itemNode.save();
                 } else {//реальное удаление объекта
-                    if (target == "true") {
-                        var tAssocs;
-                        tAssocs = itemNode.getAssocs();
-                        for (key in tAssocs) {
-                            var assocsList = tAssocs[key];
-                            for (index in assocsList) {
-                                var targetA = assocsList[index];
-                                itemNode.removeAssociation(targetA, key);
-                            }
-                        }
-                    }
                     result.success = itemNode.remove();
                 }
             }
