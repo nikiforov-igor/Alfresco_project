@@ -174,10 +174,9 @@ function showDialogEdit(nodeRef){
 
 function initialize() {
 	employeeRef = "${form.arguments.itemId}";
-	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePersonalData?nodeRef="+employeeRef;
 	new YAHOO.widget.Button("${id}-editPersonalData",{ onclick: { fn: editPersonalData} });
 	new YAHOO.widget.Button("${id}-createPersonalData",{ onclick: { fn: createPersonalData} });
-	var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeePerson?nodeRef="+employeeRef;
+	var  sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getEmployeePersonalData?nodeRef="+employeeRef;
 	var callback = {
 		success:function (oResponse) {
 			var oResults = eval("(" + oResponse.responseText + ")");
