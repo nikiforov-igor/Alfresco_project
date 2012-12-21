@@ -108,7 +108,7 @@
                 dTable.subscribe("renderEvent", function () {
                     Alfresco.logger.debug("DataTable renderEvent");
                     if (me._hasEventInterest("workGroup")) {
-                        var nodeRef = me.datagridMeta.nodeRef;
+                        var nodeRef = "NOT_LOAD";
 	                    var buttonToolbarDisable = true;
 	                    var selectItem = me.widgets.dataTable.getSelectedTrEls()[0];
                         if (selectItem != undefined) {
