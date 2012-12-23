@@ -15,7 +15,17 @@
 		}
 			<#if state_has_next>,</#if>
 		</#list>
-	]
+	],
+    workflows: [
+        <#list document.workflows as workflow>
+        {
+        label: "${workflow.label}",
+        workflowId: "${workflow.workflowId!"null"}",
+        assignee: "${workflow.assignee!"null"}"
+        }
+            <#if workflow_has_next>,</#if>
+        </#list>
+    ]
 	}
 		<#if document_has_next>,</#if>
 	</#list>

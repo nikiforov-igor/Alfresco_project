@@ -155,14 +155,9 @@
 		<type name="lecm-stmeditor:StartWorkflowEntity">
 			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-			<properties>
-				<property name="lecm-stmeditor:assignee">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
+				<aspect>lecm-stmeditor:assigneeAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -201,6 +196,7 @@
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
+                <aspect>lecm-stmeditor:assigneeAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -343,6 +339,16 @@
 			</properties>
 		</aspect>
 
-	</aspects>
+        <aspect name="lecm-stmeditor:assigneeAspect">
+            <title>Assignee Aspect</title>
+            <properties>
+                <property name="lecm-stmeditor:assignee">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
+
+    </aspects>
 
 </model>

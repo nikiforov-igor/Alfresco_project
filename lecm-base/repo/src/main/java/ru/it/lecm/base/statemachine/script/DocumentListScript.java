@@ -7,6 +7,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.Cache;
@@ -16,6 +17,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.statemachine.StateMachineHelper;
 import ru.it.lecm.base.statemachine.StateMachineModel;
 import ru.it.lecm.base.statemachine.action.StateMachineAction;
+import ru.it.lecm.base.statemachine.action.UserWorkflow;
 import ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean;
 import ru.it.lecm.base.statemachine.bean.StateMachineActions;
@@ -78,6 +80,23 @@ public class DocumentListScript extends DeclarativeWebScript {
 										}
 									}
 									document.put("states", resultStates);
+
+                                    ArrayList<HashMap<String, String>> workflows = new ArrayList<HashMap<String, String>>();
+                                    actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+                                    for (StateMachineAction action : actions) {
+                                        UserWorkflow userWorkflow = (UserWorkflow) action;
+                                        List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
+                                        PersonService personService = serviceRegistry.getPersonService();
+                                        for (UserWorkflow.UserWorkflowEntity entity : entities) {
+                                            HashMap<String, String> workflow = new HashMap<String, String>();
+                                            workflow.put("label", entity.getLabel());
+                                            workflow.put("workflowId", entity.getWorkflowId());
+                                            NodeRef assigneeNodeRef = personService.getPerson(entity.getAssignee());
+                                            workflow.put("assignee", assigneeNodeRef.toString());
+                                            workflows.add(workflow);
+                                        }
+                                    }
+                                    document.put("workflows", workflows);
 									documents.add(document);
 								}
 							}

@@ -164,6 +164,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />

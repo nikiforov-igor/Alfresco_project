@@ -58,6 +58,7 @@ public class BPMNGenerator {
 	private final static QName PROP_OUTPUT_WORKFLOW_VARIABLE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableValue");
 	private final static QName PROP_TRANSITION_EXPRESSION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionExpression");
 	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
+	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
 
 	private final static String VARIABLE = "VARIABLE";
 	private final static String VALUE = "VALUE";
@@ -255,7 +256,7 @@ public class BPMNGenerator {
 	 * @param action
 	 * @param actionId
 	 * @param actionVar
-	 * @return true если
+	 * @return true
 	 */
 	private List<Flow> createEvent(Element extensions, Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
 		if (ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
@@ -265,32 +266,10 @@ public class BPMNGenerator {
 		} else if (ACTION_TRANSITION_ACTION.equals(actionId)) {
 			return createTransitionAction(statusVar, action);
 		} else if (ACTION_USER_WORKFLOW.equals(actionId)) {
-			System.out.println("ACTION_USER_WORKFLOW");
+            createUserWorkflowAction(eventElement, action);
 			return Collections.EMPTY_LIST;
 		} else if (ACTION_SCRIPT_ACTION.equals(actionId)) {
-			List<ChildAssociationRef> scripts = nodeService.getChildAssocs(action.getChildRef());
-			for (ChildAssociationRef script : scripts) {
-				String on = eventElement.getAttribute("on");
-				String eventType = "create";
-				if (on.equals("start")) {
-					eventType = "create";
-				} else if (on.equals("end")) {
-					eventType = "complete";
-				}
-				Element extension = doc.createElement("activiti:taskListener");
-				extension.setAttribute("event", eventType);
-				extension.setAttribute("class", "org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener");
-				extensions.appendChild(extension);
-
-				Element activitiField = doc.createElement("activiti:field");
-				Element activitiString = doc.createElement("activiti:string");
-				String data = (String) nodeService.getProperty(script.getChildRef(),PROP_ACTION_SCRIPT);
-				CDATASection cdata = doc.createCDATASection(data);
-				activitiString.appendChild(cdata);
-				activitiField.appendChild(activitiString);
-				extension.appendChild(activitiField);
-			}
-
+            createScriptAction(extensions, eventElement, action);
 			return Collections.EMPTY_LIST;
 		} else if (ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
 			return createWaitForDocumentChangeEvent(eventElement, statusVar, action, actionVar);
@@ -298,7 +277,31 @@ public class BPMNGenerator {
 		return Collections.EMPTY_LIST;
 	}
 
-	private List<Flow> createTransitionAction(String statusVar, ChildAssociationRef action) {
+    /*
+        <lecm:action type="UserWorkflow" >
+            <lecm:attribute label="На подпись" workflowId="activitiReview" assignee="admin" />
+        </lecm:action>
+    */
+    private void createUserWorkflowAction(Element eventElement, ChildAssociationRef action) {
+        Element actionElement = doc.createElement("lecm:action");
+        List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
+        for (ChildAssociationRef workflow : workflows) {
+            Element attribute;
+            actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
+            String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
+            String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
+            String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+            attribute = doc.createElement("lecm:attribute");
+            attribute.setAttribute("label", workflowLabel);
+            attribute.setAttribute("workflowId", workflowId);
+            attribute.setAttribute("assignee", assignee);
+            actionElement.appendChild(attribute);
+        }
+        eventElement.appendChild(actionElement);
+    }
+
+
+    private List<Flow> createTransitionAction(String statusVar, ChildAssociationRef action) {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
 		List<Flow> flows = new ArrayList<Flow>();
 		for (ChildAssociationRef expression : expressions) {
@@ -477,6 +480,37 @@ public class BPMNGenerator {
 		}
 		return flows;
 	}
+
+    /**
+     * Метод добавляет расширение Activiti BPM для Alfresco для выполнения произвольного скрипта
+     * @param extensions
+     * @param eventElement
+     * @param action
+     */
+    private void createScriptAction(Element extensions, Element eventElement, ChildAssociationRef action) {
+        List<ChildAssociationRef> scripts = nodeService.getChildAssocs(action.getChildRef());
+        for (ChildAssociationRef script : scripts) {
+            String on = eventElement.getAttribute("on");
+            String eventType = "create";
+            if (on.equals("start")) {
+                eventType = "create";
+            } else if (on.equals("end")) {
+                eventType = "complete";
+            }
+            Element extension = doc.createElement("activiti:taskListener");
+            extension.setAttribute("event", eventType);
+            extension.setAttribute("class", "org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener");
+            extensions.appendChild(extension);
+
+            Element activitiField = doc.createElement("activiti:field");
+            Element activitiString = doc.createElement("activiti:string");
+            String data = (String) nodeService.getProperty(script.getChildRef(),PROP_ACTION_SCRIPT);
+            CDATASection cdata = doc.createCDATASection(data);
+            activitiString.appendChild(cdata);
+            activitiField.appendChild(activitiString);
+            extension.appendChild(activitiField);
+        }
+    }
 
 	/**
 	 * Добавляем коннектор без условия

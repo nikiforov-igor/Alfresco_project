@@ -25,6 +25,9 @@
 						</lecm:action>
 					</lecm:event>
 					<lecm:event on="take">
+                        <lecm:action type="UserWorkflow" >
+                            <lecm:attribute label="На подпись" workflowId="activitiReview" assignee="admin" />
+                        </lecm:action>
 						<lecm:action type="FinishStateWithTransition" variable="trans">
 							<lecm:attribute name="agreement">
 								<lecm:parameter name="labelId" value="На согласование"/>

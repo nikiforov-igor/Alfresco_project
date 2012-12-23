@@ -41,14 +41,18 @@ LogicECM.module = LogicECM.module || {};
 	YAHOO.extend(LogicECM.module.StartWorkflow, Alfresco.component.ShareFormManager, {
 		selectedItem:null,
 		taskId:null,
+        assignee: null,
 		onObjectFinderReady:function StartWorkflow_onObjectFinderReady(layer, args) {
 			var objectFinder = args[1].eventGroup;
 			if (objectFinder.options.field == "assoc_packageItems") {
 				objectFinder.selectItems(this.selectedItem);
-			}
+			} else if (this.assignee != null && objectFinder.options.field == "assoc_bpm_assignee") {
+                objectFinder.selectItems(this.assignee);
+            }
 		},
 
-		show:function showWorkflowForm(nodeRef, workflowId, taskId, actionId) {
+		show:function showWorkflowForm(nodeRef, workflowId, taskId, actionId, assignee) {
+            this.assignee = assignee;
 			if (workflowId != null && workflowId != 'null') {
 				this.selectedItem = nodeRef;
 				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formUI={formUI}&showCancelButton=true";

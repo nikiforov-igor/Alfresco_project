@@ -7,6 +7,7 @@
 		<td>Статус:</td>
 		<td>ID:</td>
 		<td>Действие:</td>
+		<td>Процессы:</td>
 	</tr>
 	<#list documents as document>
 		<tr>
@@ -18,6 +19,11 @@
 					<button onclick="workflowForm.show('${document.nodeRef}', '${state.workflowId}', '${document.taskId}', '${state.actionId}')">${state.label}</button>
 				</#list>
 			</td>
+            <td>
+                <#list document.workflows as workflow>
+                    <button onclick="workflowForm.show('${document.nodeRef}', '${workflow.workflowId}', '${document.taskId}', null, '${workflow.assignee}')">${workflow.label}</button>
+                </#list>
+            </td>
 		</tr>
 	</#list>
 </table>
