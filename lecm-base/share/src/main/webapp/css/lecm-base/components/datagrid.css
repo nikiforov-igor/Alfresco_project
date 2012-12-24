@@ -6,3 +6,18 @@
 .datagrid .onActionExportXML a {
     background-image: url("../../../images/lecm-dictionary/xml-file-16.png");
 }
+.datagrid .onActionVersion a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_versions_16.png");
+}
+.datagrid .onActionEmployeeAdd a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_naznachit_16.png");
+}
+.datagrid .onActionEmployeeDelete a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_snyat_16.png");
+}
+.datagrid .onActionMakeBoss a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_rukovod_16.png");
+}
+.datagrid .onActionMakePrimary a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
+}
