@@ -18,15 +18,20 @@
 	
 -->
 <beans>
-    <!-- Registration of orgStructure models 
-    <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/logic-ecm-org-structure-model.xml</value>
-            </list>
-        </property>
-    </bean>
--->
+	<bean id="${groupId}.${artifactId}.notificationsDictionaryBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
+	<bean id="${groupId}.${artifactId}.notificationsBootstrap" parent="lecmDictionaryBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-notifications-type.xml</value>
+			</list>
+		</property>
+	</bean>
 </beans>

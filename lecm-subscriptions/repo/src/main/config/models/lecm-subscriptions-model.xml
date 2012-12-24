@@ -12,6 +12,7 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/lecm/notifications/types/1.0" prefix="lecm-notf-type"/>
 	</imports>
 
 	<namespaces>
@@ -36,6 +37,18 @@
 				</property>
 			</properties>
 			<associations>
+				<!-- Ссылка на тип доставки-->
+				<association name="lecm-subscr:notification-type-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-notf-type:notification-type</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
 				<!-- Ссылка на адресата "сотрудник" -->
 				<association name="lecm-subscr:destination-employee-assoc">
 					<source>

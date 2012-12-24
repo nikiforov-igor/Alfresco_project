@@ -1,4 +1,30 @@
 <alfresco-config>
+	<config evaluator="node-type" condition="lecm-notf-type:notification-type">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-notf-type:code"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 
+	<config evaluator="model-type" condition="lecm-notf-type:notification-type">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-notf-type:code"/>
+				</field-visibility>
+			</form>
 
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" />
+					<show id="lecm-notf-type:code"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Типы доставки уведомлений">
+	<property name="lecm-dic:attributeForShow">cm:name</property>
+	<property name="lecm-dic:type">lecm-notf-type:notification-type</property>
+	<property name="lecm-dic:active">true</property>
+	<property name="lecm-dic:show_control_in_separate_window">false</property>
+	<property name="lecm-dic:plane">true</property>
+	<property name="lecm-dic:description">Типы доставки уведомлений</property>
+	<items>
+		<item name="Email">
+			<property name="cm:name">email</property>
+			<property name="lecm-notf-type:code">1</property>
+		</item>
+		<item name="sms">
+			<property name="cm:name">sms</property>
+			<property name="lecm-notf-type:code">2</property>
+		</item>
+	</items>
+</dictionary>
