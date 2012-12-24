@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dictionary name="Тип объекта">
-    <property name="lecm-dic:description">Справочник типов объектов для бизнес-журнала</property>
+    <property name="lecm-dic:description">Справочник, содержащий перечень объектов, действия с которым подлежат записи в бизнес-журнал</property>
     <property name="lecm-dic:type">lecm-busjournal:objectType</property>
     <property name="lecm-dic:attributeForShow">cm:name</property>
     <property name="lecm-dic:show_control_in_separate_window">false</property>
@@ -9,33 +9,33 @@
     <items>
         <item name="Справочник">
             <property name="cm:name">Справочник</property>
-            <property name="lecm-busjournal:objectTypeCode">Код - Справочник</property>
-            <property name="lecm-busjournal:objectTypeClass">Класс - Справочник</property>
-            <property name="lecm-busjournal:objectTypeTemplate">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Код - Справочник</property>
+            <property name="lecm-busjournal:objectType-class">Класс - Справочник</property>
+            <property name="lecm-busjournal:objectType-template">${name}</property>
         </item>
         <item name="Организационно-штатная структура">
             <property name="cm:name">Организационно-штатная структура</property>
-            <property name="lecm-busjournal:objectTypeCode">Код - Оргструктура</property>
-            <property name="lecm-busjournal:objectTypeClass">Класс - Оргструктура</property>
-            <property name="lecm-busjournal:objectTypeTemplate">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Код - Оргструктура</property>
+            <property name="lecm-busjournal:objectType-class">Класс - Оргструктура</property>
+            <property name="lecm-busjournal:objectType-template">${name}</property>
         </item>
         <item name="Делегирование">
             <property name="cm:name">Делегирование</property>
-            <property name="lecm-busjournal:objectTypeCode">Код - Делегирование</property>
-            <property name="lecm-busjournal:objectTypeClass">Класс - Делегирование</property>
-            <property name="lecm-busjournal:objectTypeTemplate">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Код - Делегирование</property>
+            <property name="lecm-busjournal:objectType-class">Класс - Делегирование</property>
+            <property name="lecm-busjournal:objectType-template">${name}</property>
         </item>
         <item name="Документ">
             <property name="cm:name">Документ</property>
-            <property name="lecm-busjournal:objectTypeCode">Код - Документ</property>
-            <property name="lecm-busjournal:objectTypeClass">Класс - Документ</property>
-            <property name="lecm-busjournal:objectTypeTemplate">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Код - Документ</property>
+            <property name="lecm-busjournal:objectType-class">Класс - Документ</property>
+            <property name="lecm-busjournal:objectType-template">${name}</property>
         </item>
         <item name="Задача">
             <property name="cm:name">Задача</property>
-            <property name="lecm-busjournal:objectTypeCode">Код - Задача</property>
-            <property name="lecm-busjournal:objectTypeClass">Класс - Задача</property>
-            <property name="lecm-busjournal:objectTypeTemplate">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Код - Задача</property>
+            <property name="lecm-busjournal:objectType-class">Класс - Задача</property>
+            <property name="lecm-busjournal:objectType-template">${name}</property>
         </item>
     </items>
 </dictionary>

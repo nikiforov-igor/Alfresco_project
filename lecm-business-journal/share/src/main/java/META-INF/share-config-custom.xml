@@ -1,4 +1,160 @@
 <alfresco-config>
+    <config evaluator="node-type" condition="lecm-busjournal:objectType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:objectType-code"/>
+                    <show id="lecm-busjournal:objectType-class"/>
+                    <show id="lecm-busjournal:objectType-template"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
+    <config evaluator="model-type" condition="lecm-busjournal:objectType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:objectType-code"/>
+                    <show id="lecm-busjournal:objectType-class"/>
+                    <show id="lecm-busjournal:objectType-template"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:objectType-code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
+    <config evaluator="node-type" condition="lecm-busjournal:eventCategory">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:eventCategory-code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-busjournal:eventCategory">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:eventCategory-code"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:eventCategory-code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-busjournal:messageTemplate">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:messageTemplate-template"/>
+                    <show id="lecm-busjournal:messageTemplate-code"/>
+                    <show id="lecm-busjournal:messageTemplate-objType-assoc"/>
+                    <show id="lecm-busjournal:messageTemplate-evCategory-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-busjournal:messageTemplate">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:messageTemplate-template"/>
+                    <show id="lecm-busjournal:messageTemplate-code"/>
+                    <show id="lecm-busjournal:messageTemplate-objType-assoc"/>
+                    <show id="lecm-busjournal:messageTemplate-evCategory-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-busjournal:messageTemplate-template"/>
+                    <show id="lecm-busjournal:messageTemplate-code"/>
+                    <show id="lecm-busjournal:messageTemplate-objType-assoc"/>
+                    <show id="lecm-busjournal:messageTemplate-evCategory-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-busjournal:bjRecord">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
+
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject5"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-busjournal:bjRecord">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
+
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObject5"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
