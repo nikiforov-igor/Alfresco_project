@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Категория события">
+    <property name="lecm-dic:description">Справочник, содержащий перечень имеющих бизнес-значение действий над объектами в системе, например: создание объекта, удаление, редактирование</property>
+    <property name="lecm-dic:type">lecm-busjournal:eventCategory</property>
+    <property name="lecm-dic:attributeForShow">cm:name</property>
+    <property name="lecm-dic:show_control_in_separate_window">false</property>
+    <property name="lecm-dic:plane">true</property>
+    <property name="lecm-dic:active">true</property>
+    <items>
+        <item name="Создание">
+            <property name="cm:name">Создание</property>
+            <property name="lecm-busjournal:eventCategoryCode">1</property>
+        </item>
+        <item name="Редактирование">
+            <property name="cm:name">Редактирование</property>
+            <property name="lecm-busjournal:eventCategoryCode">2</property>
+        </item>
+        <item name="Удаление">
+            <property name="cm:name">Удаление</property>
+            <property name="lecm-busjournal:eventCategoryCode">3</property>
+        </item>
+        <item name="Создание новой версии">
+            <property name="cm:name">Создание новой версии</property>
+            <property name="lecm-busjournal:eventCategoryCode">4</property>
+        </item>
+        <item name="Назначение на должность">
+            <property name="cm:name">Назначение на должность</property>
+            <property name="lecm-busjournal:eventCategoryCode">5</property>
+        </item>
+        <item name="Снятие с должности">
+            <property name="cm:name">Снятие с должности</property>
+            <property name="lecm-busjournal:eventCategoryCode">6</property>
+        </item>
+        <item name="Включение в рабочую группу">
+            <property name="cm:name">Включение в рабочую группу</property>
+            <property name="lecm-busjournal:eventCategoryCode">7</property>
+        </item>
+        <item name="Исключение из рабочей группы">
+            <property name="cm:name">Исключение из рабочей группы</property>
+            <property name="lecm-busjournal:eventCategoryCode">8</property>
+        </item>
+        <item name="Передача полномочий">
+            <property name="cm:name">Передача полномочий</property>
+            <property name="lecm-busjournal:eventCategoryCode">9</property>
+        </item>
+        <item name="Отмена передачи полномочий">
+            <property name="cm:name">Отмена передачи полномочий</property>
+            <property name="lecm-busjournal:eventCategoryCode">10</property>
+        </item>
+    </items>
+</dictionary>
