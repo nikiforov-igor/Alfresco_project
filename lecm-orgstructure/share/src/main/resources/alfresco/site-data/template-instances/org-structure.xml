@@ -4,7 +4,7 @@
     <components>
         <component>
             <region-id>tree-and-grid</region-id>
-            <url>/lecm/orgstructure/datagrid</url>
+            <url>/lecm/orgstructure/tree-and-grid</url>
             <properties>
                 <pagination>true</pagination>
                 <bubblingLabel>orgstructure</bubblingLabel>

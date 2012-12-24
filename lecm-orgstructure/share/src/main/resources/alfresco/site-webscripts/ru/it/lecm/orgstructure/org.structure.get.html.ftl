@@ -1,5 +1,5 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#import "/ru/it/lecm/orgstructure/orgstructure-tree.ftl" as orgTree/>
+<#import "/ru/it/lecm/orgstructure/components/orgstructure-tree.ftl" as orgTree/>
 <#assign id = args.htmlid>
 <#assign showSearchBlock = true/>
 <#assign realDelete = false/>

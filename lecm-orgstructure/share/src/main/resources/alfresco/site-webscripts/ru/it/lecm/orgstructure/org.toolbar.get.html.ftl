@@ -26,12 +26,9 @@
 	<#assign newRowButtonLabel = newRowLabel/>
 </#if>
 
-<#if initButtons == "newUnitButton">
-	<#assign newUnitSpanId = "${id}-newUnitButton"/>
-<#elseif initButtons == "newRowButtonStaff">
-	<#assign newUnitSpanId = "${id}-newRowButtonStaff"/>
-<#else>
-	<#assign newUnitSpanId = "${id}-newRowButton"/>
+<#assign newUnitSpanId = "${id}-newRowButton"/>
+<#if initButtons??>
+	<#assign newUnitSpanId = "${id}-${initButtons}"/>
 </#if>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
