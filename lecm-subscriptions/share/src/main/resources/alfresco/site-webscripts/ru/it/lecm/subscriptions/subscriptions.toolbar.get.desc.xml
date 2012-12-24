@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>toolbar</shortname>
+    <description>Subscriptions: Toolbar</description>
+    <url>/lecm/subscriptions/toolbar</url>
+    <authentication>user</authentication>
+</webscript>

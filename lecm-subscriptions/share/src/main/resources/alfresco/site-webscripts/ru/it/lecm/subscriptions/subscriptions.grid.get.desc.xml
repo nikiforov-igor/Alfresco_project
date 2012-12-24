@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>subscriptions dictionary datagrid</shortname>
+    <description>Return subscriptions dictionary datagrid</description>
+    <url>/lecm/subscriptions/subscriptions-datagrid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

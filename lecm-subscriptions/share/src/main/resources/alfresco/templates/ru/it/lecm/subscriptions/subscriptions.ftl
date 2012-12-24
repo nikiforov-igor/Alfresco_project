@@ -7,5 +7,5 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	<#--<@region id="roles-grid" scope="template" />-->
+	<@region id="roles-grid" scope="template" />
 </@bpage.basePage>

@@ -12,16 +12,16 @@
             </properties>
         </component>
         <!-- Toolbar -->
-        <!--<component>-->
-            <!--<region-id>toolbar</region-id>-->
-            <!--<url>/lecm/orgstructure/toolbar</url>-->
-            <!--<properties>-->
-                <!--<showButtons>false</showButtons>-->
-                <!--<showSearchBlock>true</showSearchBlock>-->
-                <!--<showExSearchBtn>true</showExSearchBtn>-->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/subscriptions/toolbar</url>
+            <properties>
+                <showButtons>true</showButtons>
+                <showSearchBlock>false</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
                 <!--<bubblingLabel>business-role</bubblingLabel>-->
-            <!--</properties>-->
-        <!--</component>-->
+            </properties>
+        </component>
         <!--&lt;!&ndash; Menu &ndash;&gt;-->
         <!--<component>-->
             <!--<region-id>menu</region-id>-->
@@ -30,14 +30,15 @@
                 <!--<selected>businessRoles</selected>-->
             <!--</properties>-->
         <!--</component>-->
-        <!--&lt;!&ndash; Datagrid &ndash;&gt;-->
-        <!--<component>-->
-            <!--<region-id>roles-grid</region-id>-->
-            <!--<url>/lecm/orgstructure/business-roles/datagrid</url>-->
+        <!-- Datagrid -->
+        <component>
+            <region-id>roles-grid</region-id>
+            <url>/lecm/subscriptions/subscriptions-datagrid</url>
+                                     subscriptions
             <!--<properties>-->
                 <!--<pagination>true</pagination>-->
                 <!--<bubblingLabel>business-role</bubblingLabel>-->
             <!--</properties>-->
-        <!--</component>-->
+        </component>
     </components>
 </template-instance>
