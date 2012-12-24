@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/subscriptions/subscriptions</template-type>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.subscriptions</title>
+                <filteredLabel>page.subscriptions.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <!--<component>-->
+            <!--<region-id>toolbar</region-id>-->
+            <!--<url>/lecm/orgstructure/toolbar</url>-->
+            <!--<properties>-->
+                <!--<showButtons>false</showButtons>-->
+                <!--<showSearchBlock>true</showSearchBlock>-->
+                <!--<showExSearchBtn>true</showExSearchBtn>-->
+                <!--<bubblingLabel>business-role</bubblingLabel>-->
+            <!--</properties>-->
+        <!--</component>-->
+        <!--&lt;!&ndash; Menu &ndash;&gt;-->
+        <!--<component>-->
+            <!--<region-id>menu</region-id>-->
+            <!--<url>/lecm/orgstructure/menu</url>-->
+            <!--<properties>-->
+                <!--<selected>businessRoles</selected>-->
+            <!--</properties>-->
+        <!--</component>-->
+        <!--&lt;!&ndash; Datagrid &ndash;&gt;-->
+        <!--<component>-->
+            <!--<region-id>roles-grid</region-id>-->
+            <!--<url>/lecm/orgstructure/business-roles/datagrid</url>-->
+            <!--<properties>-->
+                <!--<pagination>true</pagination>-->
+                <!--<bubblingLabel>business-role</bubblingLabel>-->
+            <!--</properties>-->
+        <!--</component>-->
+    </components>
+</template-instance>
