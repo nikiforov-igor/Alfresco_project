@@ -44,27 +44,56 @@ public interface IDelegation {
 	/**
 	 * Получение списка уникальных бизнес ролей для сотрудника
 	 * @param employeeNodeRef идентификатор сотрудника
+	 * @param onlyActive только активные
 	 * @return список идентификаторов бизнес ролей или пустой список
 	 */
-	List<NodeRef> getUniqueBusinessRolesByEmployee (final NodeRef employeeNodeRef);
+	List<NodeRef> getUniqueBusinessRolesByEmployee (final NodeRef employeeNodeRef, final boolean onlyActive);
 
 	/**
 	 * Получение списка уникальных бизнес ролей для пользователя системы
 	 * @param personNodeRef идентификатор пользователя
+	 * @param onlyActive только активные
 	 * @return список идентификаторов бизнес ролей или пустой список
 	 */
-	List<NodeRef> getUniqueBusinessRolesByPerson (final NodeRef personNodeRef);
+	List<NodeRef> getUniqueBusinessRolesByPerson (final NodeRef personNodeRef, final boolean onlyActive);
 
 	/**
 	 * Получение списка уникальных бизнес ролей для параметров делегирования сотрудника
 	 * @param delegationOptsNodeRef идентификатор параметров делегирования сотрудника
+	 * @param onlyActive только активные
 	 * @return список идентификаторов бизнес ролей или пустой список
 	 */
-	List<NodeRef> getUniqueBusinessRolesByDelegationOpts (final NodeRef delegationOptsNodeRef);
+	List<NodeRef> getUniqueBusinessRolesByDelegationOpts (final NodeRef delegationOptsNodeRef, final boolean onlyActive);
+
+	/**
+	 * получение списка доверенностей для пользователя
+	 * @param personNodeRef идентификатор пользователя
+	 * @param onlyActive только активные
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getProcuraciesByPerson (final NodeRef personNodeRef, final boolean onlyActive);
+
 	/**
 	 * получение списка доверенностей для сотрудника
 	 * @param employeeNodeRef идентификатор сотрудника
+	 * @param onlyActive только активные
 	 * @return список идентификаторов бизнес ролей или пустой список
 	 */
-	List<NodeRef> getProcuraciesByEmployee (final NodeRef employeeNodeRef);
+	List<NodeRef> getProcuraciesByEmployee (final NodeRef employeeNodeRef, final boolean onlyActive);
+
+	/**
+	 * получение списка доверенностей по параметрам делегирования
+	 * @param delegationOptsNodeRef идентификатор параметров делегирования
+	 * @param onlyActive только активные
+	 * @return список идентификаторов бизнес ролей или пустой список
+	 */
+	List<NodeRef> getProcuraciesByDelegationOpts (final NodeRef delegationOptsNodeRef, final boolean onlyActive);
+
+	/**
+	 * создать список пустых доверенностей для указанных бизнес ролей
+	 * @param delegationOptsNodeRef для каких параметров делегирования создаем доверенности
+	 * @param businessRoleNodeRefs список бизнес ролей для которых надо создать доверенность
+	 * @return список доверенностей
+	 */
+	List<NodeRef> createEmptyProcuracies (final NodeRef delegationOptsNodeRef, final List<NodeRef> businessRoleNodeRefs);
 }

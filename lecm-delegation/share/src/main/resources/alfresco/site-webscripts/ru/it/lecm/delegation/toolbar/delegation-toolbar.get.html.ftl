@@ -16,8 +16,4 @@
 </script>
 
 <@comp.baseToolbar toolbarId true true true>
-	<#if "delegation-list" == pageId>
-		<div id="${toolbarId}-btnCreateDelegationList"></div> <!-- кнопка создания параметров делегирования (временная) -->
-	<#elseif "delegation-opts" == pageId>
-	</#if>
 </@comp.baseToolbar>

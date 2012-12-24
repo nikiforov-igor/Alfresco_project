@@ -2,27 +2,6 @@
 <alfresco-config>
 	<config evaluator="model-type" condition="lecm-d8n:delegation-opts">
 		<forms>
-			<form id="createDelegationOptsForm">
-				<appearance>
-					<field id="lecm-d8n:delegation-opts-owner-assoc">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
-					<field id="lecm-d8n:delegation-opts-can-transfer-rights" read-only="true"/>
-					<field id="lecm-d8n:delegation-opts-can-delegate-all" read-only="true"/>
-					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
-				</appearance>
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
-					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
-					<show id="lecm-d8n:delegation-opts-status"/>
-				</field-visibility>
-			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
@@ -60,7 +39,7 @@
 			<form id="delegation-opts-part1">
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
-					<field id="lecm-d8n:delegation-opts-owner-assoc">
+					<field id="lecm-d8n:delegation-opts-owner-assoc"> <!-- read-only="true" -->
 						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -93,6 +72,32 @@
 	<config evaluator="model-type" condition="lecm-d8n:procuracy">
 		<forms>
 			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-d8n:procuracy-business-role-assoc"/>
+					<show id="lecm-d8n:procuracy-trustee-assoc"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-d8n:procuracy">
+		<forms>
+			<form id="editProcuracy"> <!--submission-url="url"-->
+				<appearance>
+					<field id="lecm-d8n:procuracy-business-role-assoc"> <!-- read-only="true" -->
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-d8n:procuracy-trustee-assoc" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>

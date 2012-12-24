@@ -23,6 +23,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 			pageId: null
 		},
 
+		/*
 		_createDelegationList: function () {
 			var scope = this;
 			return function (event, obj) {
@@ -78,6 +79,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				delegationOptsForm.show ();
 			}
 		},
+		*/
 
 		_onSearchClick: function () {
 			var scope = this;
@@ -148,6 +150,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 		_onToolbarReady: function () {
 
+			/*
 			switch (this.options.pageId) {
 				case "delegation-list":
 					Alfresco.util.createYUIButton(this, "btnCreateDelegationList", this._createDelegationList (), {
@@ -157,6 +160,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 				case "delegation-opts":
 					break;
 			}
+			*/
 
 			Alfresco.util.createYUIButton(this, "searchButton", this._onSearchClick ());
 

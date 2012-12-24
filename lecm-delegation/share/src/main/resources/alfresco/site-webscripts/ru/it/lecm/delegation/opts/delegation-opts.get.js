@@ -13,3 +13,5 @@ if (delegator && delegator.length > 0) {
 	var obj = jsonUtils.toObject (jsonStr);
 	model.delegator = obj.delegationOpts;
 }
+//актуализируем список доверенностей у делегатора (сотрудник, пользователь, параметры делегирования)
+remote.connect ("alfresco").get ("/lecm/delegation/get/procuracies/delegator?nodeRef=" + model.delegator);
