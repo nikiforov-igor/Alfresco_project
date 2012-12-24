@@ -219,6 +219,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 showActionColumn: true,
 
+				/**
+				 * Отображать или скрывать те результаты для которых lecm-dic:active == false
+				 * По-умолчанию скрывать
+				 */
+				searchShowInactive:false,
+
 	            /**
 	             * Атрибут для ссылки на форму view
 	             */
@@ -1044,7 +1050,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             me.sort = null;
                             this.search.performSearch({
                                 searchConfig:searchConfig,
-                                searchShowInactive:false
+                                searchShowInactive:me.options.searchShowInactive
                             });
                         }
                     }
@@ -1197,13 +1203,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     };
                     this.search.performSearch({
                         searchConfig:searchConfig,
-                        searchShowInactive:false
+                        searchShowInactive:this.options.searchShowInactive
                     });
                 } else { // Поиск без использования SOLR
                     this.search.performSearch({
                         parent:this.datagridMeta.nodeRef,
                         itemType:this.datagridMeta.itemType,
-                        searchShowInactive:false
+                        searchShowInactive:this.options.searchShowInactive
                     });
                 }
             },
@@ -1887,7 +1893,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     };
                     this.search.performSearch({
                         searchConfig:searchConfig,
-                        searchShowInactive:false
+                        searchShowInactive:this.options.searchShowInactive
                     });
                 }
                 // Update the DataSource
