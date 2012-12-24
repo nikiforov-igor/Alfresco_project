@@ -194,6 +194,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.business-journal</groupId>
+            <artifactId>business-journal-repo</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>

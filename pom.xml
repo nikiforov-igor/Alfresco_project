@@ -86,6 +86,7 @@
 	    <module>lecm-delegation</module>
 	    <module>lecm-subscriptions</module>
         <module>lecm-notifications</module>
+        <module>lecm-business-journal</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
