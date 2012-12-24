@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-subscr:subscriptionsStructure" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>dictionary</description>
+	<author>AIvkin</author>
+	<published>2012-12-24</published>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/subscriptions/1.0" prefix="lecm-subscr"/>
+	</namespaces>
+
+	<types>
+		<!--Описание подписки-->
+		<type name="lecm-subscr:subscription">
+			<title>Subscription Object</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-subscr:description">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+				</property>
+			</properties>
+			<associations>
+				<!-- Ссылка на адресата "сотрудник" -->
+				<association name="lecm-subscr:destination-employee-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- Ссылка на адресата "должностная позиция" -->
+				<association name="lecm-subscr:destination-position-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:position</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- Ссылка на адресата "подразделение" -->
+				<association name="lecm-subscr:destination-organization-unit-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- Ссылка на адресата "рабочая группа" -->
+				<association name="lecm-subscr:destination-work-group-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:workGroup</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- Ссылка на объект подписки -->
+				<association name="lecm-subscr:subscription-object-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:cmobject</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+	</types>
+</model>
