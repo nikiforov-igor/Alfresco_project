@@ -93,7 +93,7 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 				onSuccess: {
 					fn: function (response) {
 						// Reload the node's metadata
-						Bubbling.fire("datagridRefresh", {
+						YAHOO.Bubbling.fire("datagridRefresh", {
 							bubblingLabel: scope.options.bubblingLabel
 						});
 					},
