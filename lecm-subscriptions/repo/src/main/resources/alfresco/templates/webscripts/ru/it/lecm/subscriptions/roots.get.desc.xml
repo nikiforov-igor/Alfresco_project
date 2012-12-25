@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Roots</shortname>
+    <description>Returns roots of subscriptions</description>
+    <url>/lecm/subscriptions/roots</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

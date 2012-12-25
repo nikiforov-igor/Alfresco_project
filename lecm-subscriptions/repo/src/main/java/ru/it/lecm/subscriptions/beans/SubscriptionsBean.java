@@ -55,6 +55,21 @@ public class SubscriptionsBean {
 
 	private final Object lock = new Object();
 
+	/**
+	 * Получение директории подписки.
+	 * Если такой узел отсутствует - он НЕ создаётся.
+	 */
+	public NodeRef getSubscriptionRootRef() {
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		return nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, SUBSCRIPTIONS_ROOT_NAME);
+	}
+
+	/**
+	 * Получение узла подписки, в котором хрянится информация об подписках.
+	 * Если такой узел отсутствует - он создаётся автоматически (внутри /CompanyHome)
+	 * @return
+	 */
 	public NodeRef ensureSubscriptionsRootRef() {
 		final String rootName = SUBSCRIPTIONS_ROOT_NAME;
 		repositoryHelper.init();

@@ -5,6 +5,12 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
 
 /**
@@ -13,8 +19,23 @@ import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
  * Time: 17:47
  */
 public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
+	public static final String NODE_REF = "nodeRef";
+	public static final String PAGE = "page";
+	public static final String ITEM_TYPE = "itemType";
+	public static final String TITLE = "title";
+	public static final String LABEL = "label";
+	public static final String IS_LEAF = "isLeaf";
+	public static final String NAME_PATTERN = "namePattern";
+	public static final String DELETE_NODE = "deleteNode";
+
+	public static final String PAGE_SUBSCRIPT_PROFILE = "subscr-positions";
+	public static final String PAGE_SUBSCRIPT_OBJECT = "subscr-object";
+	public static final String PAGE_SUBSCRIPT_TYPE = "subscr-type";
+	public static final String TYPE_SUBSCRIPT_OBJECT = "subscription-to-object";
+	public static final String TYPE_SUBSCRIPT_TYPE = "subscription-to-type";
 
 
+	private static Log logger = LogFactory.getLog(SubscriptionsWebScriptBean.class);
 	/**
 	 * Service registry
 	 */
@@ -57,5 +78,44 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getSubscriptions() {
 		NodeRef subscribtions = subscriptionsService.ensureSubscriptionsRootRef();
 		return new ScriptNode(subscribtions, services, getScope());
+	}
+
+	/**
+	 * Получаем список "корневых" объектов для меню в подписках
+	 *
+	 * @return Текстовое представление JSONArrray c объектами
+	 */
+	public String getRoots() {
+		JSONArray nodes = new JSONArray();
+		NodeService nodeService = services.getNodeService();
+		repository.init();
+		JSONObject root;
+		NodeRef subscriptionRef = subscriptionsService.getSubscriptionRootRef();
+		try {
+			// Добавить подписки
+			root = new JSONObject();
+			root.put(NODE_REF, "NOT_LOAD");
+			root.put(PAGE, PAGE_SUBSCRIPT_PROFILE);
+
+			nodes.put(root);
+
+			root = new JSONObject();
+			root.put(NODE_REF, subscriptionRef.toString());
+			root.put(ITEM_TYPE, TYPE_SUBSCRIPT_OBJECT);
+			root.put(PAGE, PAGE_SUBSCRIPT_OBJECT);
+			root.put(DELETE_NODE, false);
+			nodes.put(root);
+
+			root = new JSONObject();
+			root.put(NODE_REF, subscriptionRef.toString());
+			root.put(ITEM_TYPE, TYPE_SUBSCRIPT_TYPE);
+			root.put(PAGE, PAGE_SUBSCRIPT_TYPE);
+			root.put(DELETE_NODE, false);
+			nodes.put(root);
+
+		} catch (JSONException e) {
+			logger.error(e);
+		}
+		return nodes.toString();
 	}
 }
