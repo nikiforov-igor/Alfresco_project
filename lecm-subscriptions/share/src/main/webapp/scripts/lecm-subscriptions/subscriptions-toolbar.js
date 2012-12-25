@@ -18,18 +18,18 @@ LogicECM.module = LogicECM.module || {};
 
 
 /**
- * LogicECM Orgstructure module namespace.
+ * LogicECM Subscriptions module namespace.
  *
  * @namespace LogicECM
- * @class LogicECM.module.OrgStructure.OrgStructure
+ * @class LogicECM.module.Subscriptions.Subscriptions
  */
-LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
+LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 /**
  * Displays a list of Toolbar
  *
  * @namespace LogicECM
- * @class LogicECM.module.OrgStructure.Toolbar
+ * @class LogicECM.module.Subscriptions.Toolbar
  */
 (function () {
     /**
@@ -42,11 +42,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
      * Toolbar constructor.
      *
      * @param htmlId {String} The HTML id of the parent element
-     * @return {LogicECM.module.OrgStructure.Toolbar} The new Toolbar instance
+     * @return {LogicECM.module.Subscriptions.Toolbar} The new Toolbar instance
      * @constructor
      */
-    LogicECM.module.OrgStructure.Toolbar = function (htmlId) {
-        LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
+    LogicECM.module.Subscriptions.Toolbar = function (htmlId) {
+        LogicECM.module.Subscriptions.Toolbar.superclass.constructor.call(this, "LogicECM.module.Subscriptions.Toolbar", htmlId, ["button", "container"]);
         this.treeSelectActions = {};
         this.toolbarButtons ={};
         // Decoupled event listeners
@@ -59,12 +59,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(LogicECM.module.OrgStructure.Toolbar, Alfresco.component.Base);
+    YAHOO.extend(LogicECM.module.Subscriptions.Toolbar, Alfresco.component.Base);
 
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(LogicECM.module.OrgStructure.Toolbar.prototype,
+    YAHOO.lang.augmentObject(LogicECM.module.Subscriptions.Toolbar.prototype,
         {
             /**
              * Object container for initialization options
@@ -102,11 +102,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         disabled:false,
                         value:"create"
                     });
-                this.toolbarButtons.newUnitButton = Alfresco.util.createYUIButton(this, "newUnitButton", this.onNewUnit,
-                    {
-                        disabled:disable,
-                        value:"create"
-                    });
 
                 this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
@@ -116,11 +111,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
                         disabled: disable
-                    });
-                this.treeSelectActions.newRowButtonStaff = Alfresco.util.createYUIButton(this, "newRowButtonStaff", this.onNewRow,
-                    {
-                        disabled:true,
-                        value:"create"
                     });
 
                 var me = this;
@@ -155,42 +145,16 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             /**
              * New Row button click handler
              */
-            onNewRow:function OrgstructureToolbar_onNewRow(e, p_obj) {
-                var orgMetadata = this.modules.dataGrid.datagridMeta,
-                    destination = orgMetadata.nodeRef,
-                    itemType = orgMetadata.itemType,
-                    namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
+            onNewRow:function (e, p_obj) {
+                var metadata = this.modules.dataGrid.datagridMeta,
+                    destination = metadata.nodeRef,
+                    itemType = metadata.itemType,
+                    namePattern = metadata.custom != null ? metadata.custom.namePattern : null;
                 this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, null, namePattern);
             },
 
-            /**
-             * Создание нового подразделения
-             */
-            onNewUnit:function OrgstructureToolbar_onNewUnit(e, p_obj) {
-                var meta = this.modules.dataGrid.datagridMeta;
-                var toolbar = this;
-                if (meta != null && meta.nodeRef.indexOf(":") > 0) {
-                    var destination = meta.nodeRef;
-                    var itemType = meta.itemType;
-                    var namePattern = meta.custom != null ? meta.custom.namePattern : null;
-                    var callBack = function(ref) {
-                        YAHOO.Bubbling.fire("nodeCreated",
-                            {
-                                nodeRef:ref,
-                                bubblingLabel:toolbar.options.bubblingLabel
-                            });
-                    };
-
-                    this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, callBack, namePattern);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:this.msg("message.select-unit.info")
-                        });
-                }
-            },
             // разблокировать кнопки согласно правам
-            onUserAccess:function OrgstructureToolbar_onUserAccess(layer, args) {
+            onUserAccess:function (layer, args) {
                 var obj = args[1];
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
@@ -236,7 +200,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             // инициализация грида
-            onInitDataGrid: function OrgstructureToolbar_onInitDataGrid(layer, args) {
+            onInitDataGrid: function (layer, args) {
                 var datagrid = args[1].datagrid;
                 if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel){
                     this.modules.dataGrid = datagrid;
@@ -244,7 +208,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             // по нажатию на кнопку Поиск
-            onSearchClick:function OrgstructureToolbar_onSearch() {
+            onSearchClick:function () {
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
                 var dataGrid = this.modules.dataGrid;
@@ -295,7 +259,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             // клик на Атрибутивном Поиске
-            onExSearchClick:function OrgstructureToolbar_onExSearch() {
+            onExSearchClick:function () {
                 var grid = this.modules.dataGrid;
                 var advSearch = grid.search;
 
@@ -303,7 +267,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар
-            findGrid:function OrgstructureToolbar_findGrid(p_sName, bubblingLabel) {
+            findGrid:function (p_sName, bubblingLabel) {
                 var found = Alfresco.util.ComponentManager.find(
                     {
                         name:p_sName
