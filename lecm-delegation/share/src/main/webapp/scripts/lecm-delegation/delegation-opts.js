@@ -68,10 +68,8 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 
 			if (this.options.delegator) {
-				var radioDelegateByFunc = YAHOO.util.Dom.get ("radioDelegateByFunc");
-				var radioDelegateAllFunc = YAHOO.util.Dom.get ("radioDelegateAllFunc");
-				YAHOO.util.Event.addListener (radioDelegateByFunc, "onchange", this._delegateByFunc ());
-				YAHOO.util.Event.addListener (radioDelegateAllFunc, "onchange", this._delegateAllFunc ());
+				YAHOO.util.Event.addListener ("radioDelegateByFunc", "change", this._delegateByFunc ());
+				YAHOO.util.Event.addListener ("radioDelegateAllFunc", "change", this._delegateAllFunc ());
 
 				var argsPart1 = {
 					htmlid:"delegation-opts-part1",
