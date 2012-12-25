@@ -18,7 +18,7 @@
 	
 -->
 <beans>
-    <!-- Registration of orgStructure models -->
+    <!-- Registration of Business Journal models -->
     <bean id="${groupId}.${artifactId}.businessJournalBootstrap" parent="dictionaryModelBootstrap"
           depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
@@ -40,6 +40,23 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-messageTemplate.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType.xml</value>
             </list>
+        </property>
+    </bean>
+
+    <bean id="businessJournalService" init-method="bootstrap" class="ru.it.lecm.businessjournal.beans.BusinessJournalService" depends-on="ServiceRegistry,repositoryHelper,transactionService,nodeService">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="businessJournalScript" parent="baseJavaScriptExtension" class="ru.it.lecm.businessjournal.script.BusinessJournalWebScriptBean"
+          depends-on="businessJournalService">
+        <property name="extensionName">
+            <value>businessJournal</value>
+        </property>
+        <property name="service">
+            <ref bean="businessJournalService"/>
         </property>
     </bean>
 </beans>

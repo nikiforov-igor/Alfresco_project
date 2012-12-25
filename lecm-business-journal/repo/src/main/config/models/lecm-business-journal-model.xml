@@ -121,23 +121,23 @@
                     <title>Description</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-busjournal:bjRecord-secondaryObject1">
+                <property name="lecm-busjournal:bjRecord-secondaryObj1">
                     <title>Secondary Object 1</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-busjournal:bjRecord-secondaryObject2">
+                <property name="lecm-busjournal:bjRecord-secondaryObj2">
                     <title>Secondary Object 2</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-busjournal:bjRecord-secondaryObject3">
+                <property name="lecm-busjournal:bjRecord-secondaryObj3">
                     <title>Secondary Object 3</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-busjournal:bjRecord-secondaryObject4">
+                <property name="lecm-busjournal:bjRecord-secondaryObj4">
                     <title>Secondary Object 4</title>
                     <type>d:text</type>
                 </property>
-                <property name="lecm-busjournal:bjRecord-secondaryObject5">
+                <property name="lecm-busjournal:bjRecord-secondaryObj5">
                     <title>Secondary Object 5</title>
                     <type>d:text</type>
                 </property>
@@ -146,7 +146,7 @@
                 <association name="lecm-busjournal:bjRecord-initiator-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:person</class>
@@ -157,7 +157,7 @@
                 <association name="lecm-busjournal:bjRecord-mainObject-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>
@@ -192,7 +192,7 @@
                 <association name="lecm-busjournal:bjRecord-secondaryObj1-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>
@@ -203,7 +203,7 @@
                 <association name="lecm-busjournal:bjRecord-secondaryObj2-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>
@@ -214,7 +214,7 @@
                 <association name="lecm-busjournal:bjRecord-secondaryObj3-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>
@@ -225,7 +225,7 @@
                 <association name="lecm-busjournal:bjRecord-secondaryObj4-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>
@@ -236,7 +236,7 @@
                 <association name="lecm-busjournal:bjRecord-secondaryObj5-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:cmobject</class>

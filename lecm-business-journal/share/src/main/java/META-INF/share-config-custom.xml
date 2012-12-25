@@ -108,15 +108,15 @@
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
 
                     <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject5"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
                 </field-visibility>
             </form>
         </forms>
@@ -134,15 +134,15 @@
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
 
                     <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObject5"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
