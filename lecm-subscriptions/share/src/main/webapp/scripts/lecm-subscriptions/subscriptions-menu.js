@@ -52,7 +52,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
         },
 
         _draw:function () {
-            var employees = "org-employees";
+            var subscriptions = "subscr-object";
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
@@ -79,7 +79,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
             function reloadPage(type) {
                 var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
-                window.location.href = url + (type != null && type != '' ? type : "orgstructure");
+                window.location.href = url + (type != null && type != '' ? type : "subscriptions");
             }
 
             var context = this;
@@ -128,7 +128,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();
             if (type == null || type == '') {
-                type = employees; // по умолчанию, будем рисовать страницу с сотрудниками
+                type = subscriptions; // по умолчанию, будем рисовать страницу с сотрудниками
             }
             var root = context.roots[type];
             bubbleTable(root);

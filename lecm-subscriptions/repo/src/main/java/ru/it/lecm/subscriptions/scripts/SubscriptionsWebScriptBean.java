@@ -29,8 +29,8 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String DELETE_NODE = "deleteNode";
 
 	public static final String PAGE_SUBSCRIPT_PROFILE = "subscr-positions";
-	public static final String PAGE_SUBSCRIPT_OBJECT = "subscr-object";
-	public static final String PAGE_SUBSCRIPT_TYPE = "subscr-type";
+	public static final String PAGE_SUBSCRIPT_OBJECT = "subscriptions-to-object";
+	public static final String PAGE_SUBSCRIPT_TYPE = "subscriptions-to-type";
 	public static final String TYPE_SUBSCRIPT_OBJECT = "subscription-to-object";
 	public static final String TYPE_SUBSCRIPT_TYPE = "subscription-to-type";
 

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Подписчики</title>
+    <title>Подписки</title>
     <description>Подписка на события</description>
     <template-instance>subscriptions</template-instance>
     <authentication>user</authentication>
