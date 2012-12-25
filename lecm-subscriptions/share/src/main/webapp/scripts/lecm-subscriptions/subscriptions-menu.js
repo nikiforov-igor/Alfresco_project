@@ -86,44 +86,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
             // Создание кнопок
             var onButtonClick1 = function (e) {
-                reloadPage("subscr-object");
+                reloadPage("subscriptions-to-object");
             };
             this.widgets.employeesButton = Alfresco.util.createYUIButton(this, "objectBtn", onButtonClick1, {});
 
             var onButtonClick2 = function (e) {
-                reloadPage("subscr-type");
+                reloadPage("subscriptions-to-type");
             };
             this.widgets.staffButton = Alfresco.util.createYUIButton(this, "typeBtn", onButtonClick2, {});
-
-            var onButtonClick3 = function (e) {
-                reloadPage("org-structure");
-            };
-            this.widgets.orgstructureButton = Alfresco.util.createYUIButton(this, "orgstructureBtn", onButtonClick3, {});
-
-            var onButtonClick4 = function (e) {
-                reloadPage("org-work-groups");
-            };
-            this.widgets.workGroupButton = Alfresco.util.createYUIButton(this, "workGroupBtn", onButtonClick4, {});
-
-            var onButtonClick5 = function (e) {
-                reloadPage("org-positions");
-            };
-            this.widgets.positionsButton = Alfresco.util.createYUIButton(this, "positionsBtn", onButtonClick5, {});
-
-            var onButtonClick6 = function (e) {
-                reloadPage("org-roles");
-            };
-            this.widgets.rolesButton = Alfresco.util.createYUIButton(this, "rolesBtn", onButtonClick6, {});
-
-            var onButtonClick7 = function (e) {
-                reloadPage("org-profile");
-            };
-            this.widgets.organizationButton = Alfresco.util.createYUIButton(this, "organizationBtn", onButtonClick7, {});
-
-            var onButtonClick8 = function (e) {
-                reloadPage("org-business-roles");
-            };
-            this.widgets.businessRolesButton = Alfresco.util.createYUIButton(this, "businessRolesBtn", onButtonClick8, {});
 
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();
@@ -148,7 +118,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                                 page:oResults[nodeIndex].page,
                                 fullDelete:oResults[nodeIndex].fullDelete
                             };
-                            var namespace = "lecm-orgstr";
+                            var namespace = "lecm-subscr";
                             var page = root.page;
                             var cType = root.itemType;
                             root.itemType = namespace + ":" + cType;
