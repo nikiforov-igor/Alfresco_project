@@ -81,20 +81,21 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					usePagination:false,
 					showExtendSearchBlock:false,
 					showCheckboxColumn: false,
-//					dataSource: "lecm/delegation/get/procuracies",
+					dataSource: "lecm/delegation/get/procuracies",
 					searchShowInactive: true,
-					actions: [/*{
-						type: "action-link-procuracy",
-						id: "onActionCreate",
-						permission: "create",
-						label: "создать доверенность",
-						evaluator: datagrid.canCreateProcuracy ()
-						},*/{
-						type: "action-link-procuracy",
-						id: "onActionEdit",
-						permission: "edit",
-						label: "редактировать доверенность",
-						evaluator: datagrid.canEditProcuracy ()
+					actions: [
+						{
+							type: "action-link-procuracy",
+							id: "onActionEdit",
+							permission: "edit",
+							label: "редактировать доверенность"/*,
+							evaluator: datagrid.canEditProcuracy ()*/
+						},
+						{
+							type: "action-link-procuracy",
+							id: "onActionDelete",
+							permission: "delete",
+							label: "удалить доверенность"
 						}
 					]
 				});
