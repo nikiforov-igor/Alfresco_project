@@ -13,7 +13,7 @@
 	<groupId>ru.it.lecm.theme</groupId>
 	<artifactId>lecm-theme</artifactId>
 	<packaging>pom</packaging>
-	<name>${project.artifactId}-${project.version}</name>
+	<name>Logic ECM Theme</name>
 
 	<modules>
 		<module>share</module>

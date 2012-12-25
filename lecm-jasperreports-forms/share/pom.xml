@@ -10,8 +10,8 @@
 
     <artifactId>jasperforms-share</artifactId>
     <packaging>amp</packaging>
-    <name>jasperforms forms share</name>
-	<description>jasperforms forms share</description>
+    <name>Logic ECM Jasperforms Module Share</name>
+	<description>Logic ECM Jasperforms Module Share</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
 	</properties>

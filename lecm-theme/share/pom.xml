@@ -10,7 +10,7 @@
 
 	<artifactId>lecm-theme-share</artifactId>
 	<packaging>amp</packaging>
-	<name>${project.artifactId}-${project.version}</name>
+	<name>Logic ECM Theme Share</name>
 	<description>this is delegation share module</description>
 	<properties>
 		<module.log.level>debug</module.log.level>

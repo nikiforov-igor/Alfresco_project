@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.experts</groupId>
     <artifactId>experts</artifactId>
     <packaging>pom</packaging>
-    <name>Get Experts</name>
+    <name>Logic ECM Experts</name>
 
     <modules>
         <module>repo</module>

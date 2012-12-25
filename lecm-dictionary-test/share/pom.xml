@@ -10,8 +10,8 @@
 
     <artifactId>dictionary-test-share</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Test Share</name>
-	<description>Dictionary Test Share project</description>
+    <name>Logic ECM Dictionary Test Share</name>
+	<description>Logic ECM Dictionary Test Share project</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
 	</properties>

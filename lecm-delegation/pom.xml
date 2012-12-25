@@ -13,7 +13,7 @@
 	<groupId>ru.it.lecm.delegation</groupId>
 	<artifactId>lecm-delegation</artifactId>
 	<packaging>pom</packaging>
-	<name>${project.artifactId}-${project.version}</name>
+	<name>Logic ECM Delegation</name>
 
 	<modules>
 		<module>repo</module>

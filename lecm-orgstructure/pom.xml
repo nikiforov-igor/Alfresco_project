@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.orgstructure</groupId>
     <artifactId>orgstructure</artifactId>
     <packaging>pom</packaging>
-    <name>OrgStructure</name>
+    <name>Logic ECM Organization Structure</name>
 
     <modules>
         <module>repo</module>

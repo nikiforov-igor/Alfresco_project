@@ -10,7 +10,7 @@
 
     <artifactId>dictionary-share</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Share</name>
+    <name>Logic ECM Dictionary Share</name>
 	<description>Dictionary Share project</description>
 	<properties>
 		<module.log.level>debug</module.log.level>

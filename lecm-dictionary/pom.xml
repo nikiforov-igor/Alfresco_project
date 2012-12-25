@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.dictionary</groupId>
     <artifactId>dictionary</artifactId>
     <packaging>pom</packaging>
-    <name>Dictionary</name>
+    <name>Logic ECM Dictionary</name>
 
     <modules>
         <module>repo</module>

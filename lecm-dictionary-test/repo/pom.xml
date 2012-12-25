@@ -11,7 +11,7 @@
 
     <artifactId>dictionary-test-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Test Repo</name>
+    <name>Logic ECM Dictionary Test Repo</name>
     <description>Dictionary Test Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>

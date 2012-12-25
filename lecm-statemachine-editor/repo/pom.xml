@@ -61,11 +61,8 @@
 			<systemPath>${project.basedir}/../../lecm-statemachine/repo/target/statemachine-repo-${platform.version}/lib/statemachine-repo-${platform.version}.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>com.mxgraph</groupId>
+			<groupId>org.tinyjee.jgraphx</groupId>
 			<artifactId>jgraphx</artifactId>
-			<version>1.10.4.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jgraphx.jar</systemPath>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>

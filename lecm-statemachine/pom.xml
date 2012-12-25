@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.statemachine</groupId>
     <artifactId>statemachine</artifactId>
     <packaging>pom</packaging>
-    <name>Logic ECM Statemachine</name>
+    <name>Logic ECM State Machine</name>
 
     <modules>
         <module>repo</module>

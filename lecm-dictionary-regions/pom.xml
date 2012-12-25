@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.dictionary</groupId>
     <artifactId>dictionary-regions</artifactId>
     <packaging>pom</packaging>
-    <name>Dictionary Regions</name>
+    <name>Logic ECM Dictionary Regions</name>
 
     <modules>
         <module>repo</module>

@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.forms.jasperforms</groupId>
     <artifactId>jasperforms</artifactId>
     <packaging>pom</packaging>
-    <name>LECM jasper forms module</name>
+    <name>Logic ECM Jasperforms Module</name>
 
     <modules>
         <module>repo</module>

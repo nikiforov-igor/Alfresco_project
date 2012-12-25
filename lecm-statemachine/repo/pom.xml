@@ -11,8 +11,8 @@
 
     <artifactId>statemachine-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Statemachine Repo</name>
-    <description>Logic ECM Statemachine Repo</description>
+    <name>Logic ECM State Machine Repo</name>
+    <description>Logic ECM State Machine Repo</description>
     <properties>
         <module.log.level>debug</module.log.level>
     </properties>

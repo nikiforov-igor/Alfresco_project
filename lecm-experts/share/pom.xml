@@ -25,7 +25,7 @@
 
     <artifactId>experts-share</artifactId>
     <packaging>amp</packaging>
-    <name>GetExperts Share</name>
+    <name>Logic ECM Experts Share</name>
     <!--
        An Alfresco version number must be of the form 1.2.3.4. Using
        1.0-SNAPSHOT as the AMP version will create an exception. See

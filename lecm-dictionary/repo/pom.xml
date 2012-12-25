@@ -11,7 +11,7 @@
 
     <artifactId>dictionary-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Repo</name>
+    <name>Logic ECM Dictionary Repo</name>
     <description>Dictionary Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>

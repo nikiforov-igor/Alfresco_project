@@ -10,7 +10,7 @@
 
     <artifactId>dictionary-regions-share</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Regions Share</name>
+    <name>Logic ECM Dictionary Regions Share</name>
 	<description>Dictionary Regions Share project</description>
 	<properties>
 		<module.log.level>debug</module.log.level>

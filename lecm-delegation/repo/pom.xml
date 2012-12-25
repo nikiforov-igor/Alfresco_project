@@ -11,7 +11,7 @@
 
 	<artifactId>lecm-delegation-repo</artifactId>
 	<packaging>amp</packaging>
-	<name>${project.artifactId}-${project.version}</name>
+	<name>Logic ECM Delegation Repo</name>
 	<description>this is delegation repo module</description>
 	<properties>
 		<module.log.level>info</module.log.level>

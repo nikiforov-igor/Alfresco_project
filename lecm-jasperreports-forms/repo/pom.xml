@@ -11,7 +11,7 @@
 
     <artifactId>jasperforms-repo</artifactId>
     <packaging>amp</packaging>
-    <name>jasperforms forms repo</name>
+    <name>Logic ECM Jasperforms Module Repo</name>
     <description>jasperforms forms repo</description>
     <properties>
         <module.log.level>debug</module.log.level>

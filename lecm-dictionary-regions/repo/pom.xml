@@ -11,7 +11,7 @@
 
     <artifactId>dictionary-regions-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Dictionary Regions Repo</name>
+    <name>Logic ECM Dictionary Regions Repo</name>
     <description>Dictionary Regions Repo project</description>
     <properties>
         <module.log.level>debug</module.log.level>

@@ -241,6 +241,11 @@
 				<version>${acegisecurity.version}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.tinyjee.jgraphx</groupId>
+				<artifactId>jgraphx</artifactId>
+				<version>1.10.3.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

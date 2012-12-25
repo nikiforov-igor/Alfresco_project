@@ -10,8 +10,8 @@
 
     <artifactId>statemachine-share</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Statemachine Share</name>
-	<description>Logic ECM Statemachine Share</description>
+    <name>Logic ECM State Machine Share</name>
+	<description>Logic ECM State Machine Share</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
 	</properties>
