@@ -57,6 +57,7 @@ public abstract class ContactViewItemUI extends Composite {
 	@UiField Image avatarImg;
 	@UiField Element nameElement;
 	@UiField Element nameTextElement;
+	@UiField Element msgCounterTextElement;
 	@UiField Element statusIconElement;
 	@UiField Element statusTextElement;
 	@UiField FocusHTMLPanel mainWidget;

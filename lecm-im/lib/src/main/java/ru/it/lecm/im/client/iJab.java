@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.data.iJabConf;
 import ru.it.lecm.im.client.data.iJabConfImpl;
-import ru.it.lecm.im.client.XmppClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +53,7 @@ public class iJab implements EntryPoint {
 	@Override
 	public void onModuleLoad()
 	{
+        // Инициализация конфига
         conf = iJabConfImpl.getConf();
 		if(conf == null)
 		{

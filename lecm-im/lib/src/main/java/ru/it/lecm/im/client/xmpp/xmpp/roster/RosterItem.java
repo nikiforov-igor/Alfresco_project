@@ -24,10 +24,30 @@ package ru.it.lecm.im.client.xmpp.xmpp.roster;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import ru.it.lecm.im.client.Log;
+
+import java.util.ArrayList;
 
 public class RosterItem {
 
-	public static enum Subscription {
+     // +События
+
+    public void fireOldMessagesCount(int oldMessagesCount) {
+        Log.consoleLog( "RosterItem.fireOldMessagesCount() " + jid   + " " + oldMessagesCount     );
+        for (RosterItemListener l : this.itemListeners) {
+            l.onNewMessage(oldMessagesCount);
+        }
+    }
+
+    private ArrayList<RosterItemListener> itemListeners = new ArrayList<RosterItemListener>();
+
+    public void addListener(RosterItemListener listener) {
+        this.itemListeners.add(listener);
+    }
+
+    // -События
+
+    public static enum Subscription {
 		both(true, true), from(true, false), none(false, false), to(false, true);
 
 		private final boolean sFrom;

@@ -21,7 +21,6 @@
 package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Cookies;
@@ -465,6 +464,7 @@ public class XmppClient extends Client
 	
 	private void connectRosterEvents()
 	{
+        Log.consoleLog("XmppClient.connectRosterEvents()");
 		final ContactView contactView = iJab.ui.getContactView();
 		RosterListener listener = new RosterListener()
 		{

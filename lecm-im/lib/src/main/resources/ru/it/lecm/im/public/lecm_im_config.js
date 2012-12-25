@@ -38,7 +38,7 @@ var updateMessagesCount = function (c)
         {
             count: c
         });
-}
+};
 
 var updateMessagesCountSubscriber = function(callback){
     YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {

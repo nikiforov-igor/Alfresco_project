@@ -1,3 +1,7 @@
+.has-unread-messages{
+    font-weight: bold;
+}
+
 .ijab-panels-next-wrap{
     display: none;
 }

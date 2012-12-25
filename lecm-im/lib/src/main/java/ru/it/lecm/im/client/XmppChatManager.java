@@ -36,11 +36,9 @@ import ru.it.lecm.im.client.xmpp.xmpp.message.Chat;
 import ru.it.lecm.im.client.xmpp.xmpp.message.ChatListener;
 import ru.it.lecm.im.client.xmpp.xmpp.message.ChatManager;
 import ru.it.lecm.im.client.xmpp.xmpp.message.Notify;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 {
@@ -77,17 +75,28 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 			WindowPrompt.prompt(prompt);
 
             chatPanel.ensureButtonInBar(xmppChat.getButton());
-
 		}
 	}
 
     public void RefreshNewMessagesCount()
     {
+        List<RosterItem> allRosteritems = Session.instance().getRosterPlugin().getAllRosteritems();
+
         Collection<Chat<XmppChat>> chatCollection = chats.values();
         int oldMessagesCount = 0;
         for (Chat<XmppChat> chat : chatCollection ) {
             XmppChat xmppChat = chat.getUserData();
-            oldMessagesCount = oldMessagesCount + xmppChat.getButton().getOldMessageCount();
+            int currChatMessages = xmppChat.getButton().getOldMessageCount();
+            oldMessagesCount = oldMessagesCount + currChatMessages;
+            String jid = chat.getJid().getBareJID().toStringBare();
+            for(RosterItem item : allRosteritems)
+            {
+                String itemJid = item.getJid();
+                if (itemJid.equals(jid))
+                {
+                    item.fireOldMessagesCount(currChatMessages);
+                }
+            }
         }
 
         Log.consoleLog("oldMessagesCount: " + oldMessagesCount);
@@ -95,7 +104,9 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
         MessageCountUpdater.Update(oldMessagesCount);
         Log.consoleLog("MessageCountUpdater.Update() - Complete!");
 
-
+        // XmppClient client = (XmppClient) iJab.client;
+        // iJab.ui.getContactView().
+        // client.getChatManager().
 
     }
 

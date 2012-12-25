@@ -21,9 +21,9 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.roster;
 
-import java.util.List;
-
 import ru.it.lecm.im.client.xmpp.JID;
+
+import java.util.List;
 
 public interface RosterListener 
 {
@@ -40,3 +40,4 @@ public interface RosterListener
 
 	void onUpdateItem(RosterItem item);
 }
+

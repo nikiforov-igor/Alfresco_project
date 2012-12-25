@@ -20,6 +20,7 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 import ru.it.lecm.im.client.iJab;
@@ -27,6 +28,7 @@ import ru.it.lecm.im.client.XmppProfileListener;
 import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.XmppStatus.Status;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItemListener;
 
 public class ContactViewItem extends ContactViewItemUI
 {
@@ -64,6 +66,24 @@ public class ContactViewItem extends ContactViewItemUI
 		};
 		XmppProfileManager.regsiterLister(item.getJid(),profileListener);
 		setAvatar(XmppProfileManager.getAvatarUrl(item.getJid()));
+
+        item.addListener(new RosterItemListener() {
+            @Override
+            public void onNewMessage(int oldMessages) {
+                Log.consoleLog(XmppProfileManager.getName("RosterItemListener.onNewMessage(): " + item.getJid()) + " " + oldMessages);
+                if (oldMessages > 0)
+                {
+                    nameElement.addClassName("has-unread-messages");
+                    msgCounterTextElement.setInnerText("("+oldMessages+")");
+                }
+                else
+                {
+                    nameElement.removeClassName("has-unread-messages");
+                    msgCounterTextElement.setInnerText("");
+                }
+
+            }
+        });
 	}
 	
 	public void destory()
