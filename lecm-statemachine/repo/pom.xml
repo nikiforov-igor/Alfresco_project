@@ -53,12 +53,11 @@
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
-			<artifactId>orgstructure-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../../lecm-orgstructure/repo/target/orgstructure-repo-${platform.version}/lib/orgstructure-repo-${platform.version}.jar</systemPath>
+			<artifactId>orgstructure-repo-api</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->

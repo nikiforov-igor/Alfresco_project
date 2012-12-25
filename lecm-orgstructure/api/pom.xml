@@ -24,10 +24,11 @@
         <version>0.1.0</version>
     </parent>
 
-    <artifactId>orgstructure-repo</artifactId>
-    <packaging>amp</packaging>
-    <name>Logic ECM Organization Structure Repo</name>
-    <!--
+    <artifactId>orgstructure-repo-api</artifactId>
+    <packaging>jar</packaging>
+    <name>Logic ECM Organization Structure Repo API</name>
+
+	<!--
        An Alfresco version number must be of the form 1.2.3.4. Using
        1.0-SNAPSHOT as the AMP version will create an exception. See
        http://wiki.alfresco.com/wiki/Developing_an_Alfresco_Module: "The
@@ -78,11 +79,6 @@
             <groupId>org.springframework.extensions.surf</groupId>
             <artifactId>spring-webscripts</artifactId>
         </dependency>
-		<dependency>
-			<groupId>ru.it.lecm.orgstructure</groupId>
-			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

@@ -21,62 +21,12 @@ import java.util.*;
  *         Date: 27.11.12
  *         Time: 17:08
  */
-public class OrgstructureBean {
-
-	public static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
-
-	public static final String TYPE_ORGANIZATION = "organization";
-
-
-	public static final String TYPE_DIRECTORY_EMPLOYEES = "employees";
-	public static final String TYPE_DIRECTORY_STRUCTURE = "structure";
-	public static final String TYPE_DIRECTORY_PERSONAL_DATA = "personal-data-container";
-	/**
-	 * Корневой узел Организации
-	 */
-	public static final String ORGANIZATION_ROOT_NAME = "Организация";
-	public static final String STRUCTURE_ROOT_NAME = "Структура";
-	public static final String EMPLOYEES_ROOT_NAME = "Сотрудники";
-	public static final String PERSONAL_DATA_ROOT_NAME = "Персональные данные";
-
-	public static final String DICTIONARIES_ROOT_NAME = "Dictionary";
-	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
-	public static final String ROLES_DICTIONARY_NAME = "Роли для рабочих групп";
-	public static final String BUSINESS_ROLES_DICTIONARY_NAME = "Бизнес роли";
+public class OrgstructureBeanImpl implements OrgstructureBean {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	private NodeService nodeService;
-
-	public static final QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
-	public static final QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
-	public static final QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
-	public static final QName ASSOC_ELEMENT_MEMBER_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-member-position-assoc");
-	public static final QName ASSOC_ELEMENT_MEMBER_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-member-employee-assoc");
-	public static final QName ASSOC_EMPLOYEE_PHOTO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-photo-assoc");
-	public static final QName ASSOC_EMPLOYEE_PERSON_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-data-assoc");
-	public static final QName ASSOC_EMPLOYEE_PERSON = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-assoc");
-	public static final QName ASSOC_BUSINESS_ROLE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-employee-assoc");
-	public static final QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-assoc");
-	public static final QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-member-assoc");
-
-	public static final QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
-	public static final QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");
-
-	public static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
-
-	public static final QName TYPE_ORGANIZATION_UNIT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit");
-	public static final QName TYPE_STRUCTURE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "structure");
-	public static final QName TYPE_WORK_GROUP = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workGroup");
-	public static final QName TYPE_STAFF_LIST = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list");
-	public static final QName TYPE_WORKFORCE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce");
-	public static final QName TYPE_EMPLOYEE_LINK = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link");
-	public static final QName TYPE_STAFF_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staffPosition");
-	public static final QName TYPE_WORK_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workRole");
-	public static final QName TYPE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee");
-	public static final QName TYPE_PERSONAL_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "personal-data");
-	public static final QName TYPE_BUSINESS_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role");
 
 	private final Object lock = new Object();
 
@@ -100,6 +50,7 @@ public class OrgstructureBean {
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.
 	 */
+	@Override
 	public NodeRef getOrganizationRootRef() {
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
@@ -112,6 +63,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef
 	 */
+	@Override
 	public NodeRef ensureOrganizationRootRef() {
 		final String rootName = ORGANIZATION_ROOT_NAME;
 		repositoryHelper.init();
@@ -179,6 +131,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef или NULL если руководитель не задан
 	 */
+	@Override
 	public NodeRef getOrganizationBoss() {
 		NodeRef bossRef = null;
 		NodeRef organization = getOrganizationRootRef();
@@ -196,6 +149,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef или NULL если логотип не задан
 	 */
+	@Override
 	public NodeRef getOrganizationLogo() {
 		NodeRef logoRef = null;
 		NodeRef organization = getOrganizationRootRef();
@@ -213,6 +167,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef или NULL
 	 */
+	@Override
 	public NodeRef getStructureDirectory() {
 		NodeRef structure = null;
 		NodeRef organization = getOrganizationRootRef();
@@ -227,6 +182,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef или NULL
 	 */
+	@Override
 	public NodeRef getEmployeesDirectory() {
 		NodeRef emp = null;
 		NodeRef organization = getOrganizationRootRef();
@@ -241,6 +197,7 @@ public class OrgstructureBean {
 	 *
 	 * @return NodeRef или NULL
 	 */
+	@Override
 	public NodeRef getPersonalDataDirectory() {
 		NodeRef pd = null;
 		NodeRef organization = getOrganizationRootRef();
@@ -253,6 +210,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка Рабочих групп для Организации
 	 */
+	@Override
 	public List<NodeRef> getWorkGroups(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		NodeRef structureDirectory = getStructureDirectory();
@@ -276,6 +234,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка дочерних подразделений
 	 */
+	@Override
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive) {
 		return getSubUnits(parent, onlyActive, false);
 	}
@@ -283,6 +242,7 @@ public class OrgstructureBean {
 	/**
      * Получение списка дочерних подразделений
      */
+	@Override
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		Set<QName> units = new HashSet<QName>();
@@ -303,6 +263,7 @@ public class OrgstructureBean {
 	/**
 	 * Проверка есть ли у подразделения дочерние элементы
 	 */
+	@Override
 	public boolean hasChild(NodeRef parent, boolean onlyActive) {
 		List<NodeRef> childs = getSubUnits(parent, onlyActive);
 		boolean hasChild = !childs.isEmpty();
@@ -323,6 +284,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение родительского подразделения
 	 */
+	@Override
 	public NodeRef getParent(NodeRef unitRef) {
 		ChildAssociationRef parentRef = nodeService.getPrimaryParent(unitRef);
 		if (parentRef != null) {
@@ -337,6 +299,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является подразделением
 	 */
+	@Override
 	public boolean isUnit(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_ORGANIZATION_UNIT);
@@ -346,6 +309,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является рабочей группой
 	 */
+	@Override
 	public boolean isWorkGroup(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORK_GROUP);
@@ -355,6 +319,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является бизнес ролью
 	 */
+	@Override
 	public boolean isBusinessRole(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_BUSINESS_ROLE);
@@ -364,6 +329,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является сотрудником
 	 */
+	@Override
 	public boolean isEmployee(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_EMPLOYEE);
@@ -373,6 +339,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является штатным расписанием
 	 */
+	@Override
 	public boolean isStaffList(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_STAFF_LIST);
@@ -381,6 +348,7 @@ public class OrgstructureBean {
 	/**
 	 * проверяет что объект является Участником рабочей группы
 	 */
+	@Override
 	public boolean isWorkForce(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORKFORCE);
@@ -401,6 +369,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение руководителя подразделения
 	 */
+	@Override
 	public NodeRef getUnitBoss(NodeRef unitRef) {
 		NodeRef bossLink = null;
 		if (isUnit(unitRef)) { // ищем руководителя Подразделения
@@ -427,6 +396,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение Штатного расписания, содержащего руководящую позицию
 	 */
+	@Override
 	public NodeRef getBossStaff(NodeRef unitRef) {
 		// Получаем список штатных расписаний
 		List<NodeRef> staffs = getUnitStaffLists(unitRef);
@@ -444,6 +414,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение руководителя сотрудника
 	 */
+	@Override
 	public NodeRef findEmployeeBoss(NodeRef employeeRef) {
 		NodeRef bossRef = null;
 		if (nodeService.exists(employeeRef)) {
@@ -472,6 +443,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка Штатных Расписаний для Подразделения
 	 */
+	@Override
 	public List<NodeRef> getUnitStaffLists(NodeRef unitRef) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		if (isUnit(unitRef)) {
@@ -491,6 +463,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
 	 */
+	@Override
 	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
 		if (employeeLink != null && !isArchive(employeeLink)){
@@ -505,6 +478,7 @@ public class OrgstructureBean {
 	 * @param position доложностная позиция
 	 * @return список ссылок на сотрудников
 	 */
+	@Override
 	public List<NodeRef> getEmployeesByPosition(NodeRef unit, NodeRef position) {
 		Set<NodeRef> result = new HashSet<NodeRef>();
 		List<NodeRef> staffLists = getUnitStaffLists(unit);
@@ -526,6 +500,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника из объекта (lecm-orgstr:employee-link)
 	 */
+	@Override
 	public NodeRef getEmployeeByLink(NodeRef linkRef) {
 		Set<QName> properTypes = new HashSet<QName>();
 		properTypes.add(TYPE_EMPLOYEE_LINK);
@@ -541,6 +516,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка должностных позиций в системе
 	 */
+	@Override
 	public List<NodeRef> getStaffPositions(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		repositoryHelper.init();
@@ -567,6 +543,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение перечня сотрудников, которые занимают должностную позицию
 	 */
+	@Override
 	public List<NodeRef> getPositionEmployees(NodeRef position) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		Set<QName> properTypes = new HashSet<QName>();
@@ -594,6 +571,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение перечня сотрудников, участвующих в рабочей группе
 	 */
+	@Override
 	public List<NodeRef> getWorkGroupEmployees(NodeRef workGroup) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		if (isWorkGroup(workGroup)) { // если рабочая группа
@@ -620,6 +598,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение перечня сотрудников подразделения либо рабочей группы
 	 */
+	@Override
 	public List<NodeRef> getOrganizationElementEmployees(NodeRef organizationElement) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isWorkGroup(organizationElement) || isUnit(organizationElement)) { // если рабочая группа
@@ -649,6 +628,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение основной должностной позиции (штатного расписания) у сотрудника
 	 */
+	@Override
 	public NodeRef getEmployeePrimaryStaff(NodeRef employeeRef) {
 		NodeRef primaryStaff = null;
 		if (isEmployee(employeeRef)) {
@@ -668,6 +648,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение штатного расписания или участника Рабочей группы по ссылке на сотрудника
 	 */
+	@Override
 	public NodeRef getPositionByEmployeeLink(NodeRef empLink) {
 		NodeRef staff = null;
 
@@ -688,6 +669,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение подразделения, к которому относится штатное расписание
 	 */
+	@Override
 	public NodeRef getUnitByStaff(NodeRef staffRef) {
 		NodeRef unitRef = null;
 		if (isStaffList(staffRef)) {
@@ -699,6 +681,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение фотографии сотрудника
 	 */
+	@Override
 	public NodeRef getEmployeePhoto(NodeRef employeeRef) {
 		NodeRef photoRef = null;
 		if (isEmployee(employeeRef)) {
@@ -713,6 +696,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение персональных данных сотрудника
 	 */
+	@Override
 	public NodeRef getEmployeePersonalData(NodeRef employeeRef) {
 		NodeRef personRef = null;
 		if (isEmployee(employeeRef)) {
@@ -727,6 +711,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка должностных позиций сотрудника
 	 */
+	@Override
 	public List<NodeRef> getEmployeeStaffs(NodeRef employeeRef) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_STAFF_LIST);
@@ -736,6 +721,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка Участников Рабочих Групп для сотрудника
 	 */
+	@Override
 	public List<NodeRef> getEmployeeWorkForces(NodeRef employeeRef) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORKFORCE);
@@ -761,6 +747,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка Рабочих Групп, в которых участвует сотрудник
 	 */
+	@Override
 	public List<NodeRef> getEmployeeWorkGroups(NodeRef employeeRef) {
 		List<NodeRef> wGroups = new ArrayList<NodeRef>();
 		Set<QName> types = new HashSet<QName>();
@@ -779,6 +766,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение рабочей группы, к которому относится участник
 	 */
+	@Override
 	public NodeRef getWorkGroupByWorkForce(NodeRef workRef) {
 		NodeRef groupRef = null;
 		if (isWorkForce(workRef)) {
@@ -790,6 +778,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение списка ролей в рабочих группах
 	 */
+	@Override
 	public List<NodeRef> getWorkRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		repositoryHelper.init();
@@ -816,6 +805,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылки на сотрудника для Позиции (Штатного расписания или Участника Рабочей группы)
 	 */
+	@Override
 	public NodeRef getEmployeeLinkByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = null;
 		Set<QName> properTypes = new HashSet<QName>();
@@ -837,7 +827,8 @@ public class OrgstructureBean {
 		return employeeLink;
 	}
     
-    public boolean isArchive(NodeRef ref){
+    @Override
+	public boolean isArchive(NodeRef ref){
 	    boolean isArchive = ref.getStoreRef().getProtocol().equals("archive");
 	    Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
         return isArchive || (isActive != null && !isActive);
@@ -846,6 +837,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение полного перечня бизнес ролей
 	 */
+	@Override
 	public List<NodeRef> getBusinesRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		repositoryHelper.init();
@@ -872,6 +864,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
 	 */
+	@Override
 	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
@@ -913,6 +906,7 @@ public class OrgstructureBean {
 	 * Получение перечня организационных элементов (подразделений и рабочих групп),
 	 * исполняющих определенную Бизнес-роль (включая вложенные)
 	 */
+	@Override
 	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
@@ -932,6 +926,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылок на сотрудника
 	 */
+	@Override
 	public List<NodeRef> getEmployeeLinks(NodeRef employeeRef) {
 		List<NodeRef> links = new ArrayList<NodeRef>();
 		if (isEmployee(employeeRef)) {
@@ -947,6 +942,7 @@ public class OrgstructureBean {
 	/**
 	 * Получение ссылок на сотрудника в Штатных расписаниях
 	 */
+	@Override
 	public List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef) {
 		List<NodeRef> links = new ArrayList<NodeRef>();
 		if (isEmployee(employeeRef)) {
