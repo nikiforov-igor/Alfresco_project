@@ -26,7 +26,7 @@ public class SubscriptionsBean {
 	/**
 	 *
 	 */
-	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписчики";
+	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписки";
 	public static final String SUBSCRIPTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/subscriptions/1.0";
 	public static final String TYPE_SUBSCRIPTION = "subscription";
 
@@ -73,8 +73,7 @@ public class SubscriptionsBean {
 							if (subscriptionsRef == null) {
 								QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 								QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
-								QName nodeTypeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-										NamespaceService.CONTENT_MODEL_PREFIX);
+								QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
 								Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
 								properties.put(ContentModel.PROP_NAME, rootName);
