@@ -25,10 +25,20 @@
                 <property name="lecm-cal:year">
                     <type>d:date</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-cal:comment">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <associations>
@@ -50,29 +60,36 @@
         </type>
         <!-- Сущность, от которой наследуются выходные и рабочие дни. -->
         <type name="lecm-cal:special-days">
-            <title>Parent for working-days and non-working-days</title>
             <parent>cm:cmobject</parent>
             <properties>
                 <!-- День, который несправедливо является рабочим или нерабочим -->
                 <property name="lecm-cal:day">
                     <type>d:date</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Причина несправедливости. -->
                 <property name="lecm-cal:reason">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
         </type>
         <!-- Выходные дни, которые стали рабочими из-за переноса праздников. -->
         <type name="lecm-cal:working-days">
-            <title>Non-standart working days</title>
             <parent>lecm-cal:special-days</parent>
         </type>
         <!-- Нерабочие дни, праздники. Кроме суббот и воскресений. -->
         <type name="lecm-cal:non-working-days">
-            <title>Holydays, non-working days</title>
             <parent>lecm-cal:special-days</parent>
         </type>
     </types>

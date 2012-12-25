@@ -44,11 +44,21 @@
                 <property name="lecm-shed:std-begin">
                     <type>d:datetime</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Конец работы по обычному графику. -->
                 <property name="lecm-shed:std-end">
                     <type>d:datetime</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <associations>
@@ -118,14 +128,29 @@
                 <property name="lecm-shed:begin">
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-shed:end">
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-shed:comment">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
         </type>

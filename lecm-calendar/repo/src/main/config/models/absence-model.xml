@@ -23,18 +23,27 @@
     <types>
         <!-- Дата, время и причина отсутсвия сотрудника на рабочем месте  -->
         <type name="lecm-absence:absence">
-            <title>Worker absence</title>
             <parent>cm:cmobject</parent>
             <properties>
                 <!-- Дата и время начала отсутствия сотрудника -->
                 <property name="lecm-absence:begin">
                     <type>d:date</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Дата и время окончания отсутствия -->
                 <property name="lecm-absence:end">
                     <type>d:date</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Бессрочно отсутствие? -->
                 <property name="lecm-absence:unlimited">
@@ -45,6 +54,11 @@
                 <property name="lecm-absence:comment">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <associations>
@@ -109,7 +123,7 @@
                 <!-- Цвет для отображения в диаграме отсутствия. -->
                 <!-- Не уверен насчет типа. Уточнить. Полагаю, это будт HEX-код цвета. -->
                 <property name="lecm-absence:color">
-                    <title>Код для отображения</title>
+                    <title>Цвет для отображения</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
