@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/subscriptions/subscriptions-to-object</template-type>
+	<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.subscriptions</title>
+				<filteredLabel>page.subscriptions.filter.label</filteredLabel>
+			</properties>
+		</component>
+	</components>
+</template-instance>
