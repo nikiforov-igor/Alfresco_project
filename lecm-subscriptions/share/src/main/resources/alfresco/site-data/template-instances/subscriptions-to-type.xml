@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/subscriptions/subscriptions-to-type</template-type>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.subscriptions</title>
+                <filteredLabel>page.subscriptions.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/subscriptions/toolbar</url>
+            <properties>
+                <showButtons>true</showButtons>
+                <showSearchBlock>false</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
+                <!--<bubblingLabel>business-role</bubblingLabel>-->
+            </properties>
+        </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/subscriptions/menu</url>
+            <properties>
+                <selected>type</selected>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>roles-grid</region-id>
+            <url>/lecm/subscriptions/subscriptions-datagrid</url>
+            subscriptions
+            <!--<properties>-->
+            <!--<pagination>true</pagination>-->
+            <!--<bubblingLabel>business-role</bubblingLabel>-->
+            <!--</properties>-->
+        </component>
+    </components>
+</template-instance>
