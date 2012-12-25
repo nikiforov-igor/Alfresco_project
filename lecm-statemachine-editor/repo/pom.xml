@@ -54,11 +54,11 @@
 			<artifactId>spring-webscripts</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.base</groupId>
-			<artifactId>base-repo</artifactId>
+			<groupId>ru.it.lecm.statemachine</groupId>
+			<artifactId>statemachine-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/../../lecm-base/repo/target/base-repo-${platform.version}/lib/base-repo-${platform.version}.jar</systemPath>
+			<systemPath>${project.basedir}/../../lecm-statemachine/repo/target/statemachine-repo-${platform.version}/lib/statemachine-repo-${platform.version}.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.mxgraph</groupId>

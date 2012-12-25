@@ -9,7 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import ru.it.lecm.base.statemachine.LecmWorkflowDeployer;
+import ru.it.lecm.statemachine.LecmWorkflowDeployer;
 
 import java.io.IOException;
 import java.io.InputStream;

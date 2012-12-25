@@ -20,7 +20,7 @@
 <beans>
 
 	<bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap,ru.it.lecm.base.base-repo.LogicEcmModelsBootstrap">
+		  depends-on="dictionaryBootstrap, statemachine.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
@@ -34,7 +34,7 @@
 	</bean>
 
 	<bean id="${groupId}.${artifactId}.documentStateMachineBean"
-		  class="ru.it.lecm.base.statemachine.bean.DocumentStateMachineBean">
+		  class="ru.it.lecm.statemachine.bean.DocumentStateMachineBean">
 		<property name="documentType" value="lecm-contract:document"/>
 		<property name="stateMachineId" value="contractWorkflow"/>
 	</bean>

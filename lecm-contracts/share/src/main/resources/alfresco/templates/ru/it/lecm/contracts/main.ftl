@@ -35,7 +35,7 @@ new Alfresco.widget.Resizer("Contracts");
     <script src=""${url.context}/yui/button/button-min.js"></script>
 
     <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/contracts/main.js"></script>
-    <script type="text/javascript" src="${page.url.context}/res/ru/it/lecm/statemachine/form.js"></script>
+    <script type="text/javascript" src="${page.url.context}/scripts/statemachine/form.js"></script>
 </@>
 
 <@templateBody>

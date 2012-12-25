@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import ru.it.lecm.statemachine.assign.AssignWorkflow;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,7 +50,6 @@ public class BPMNGenerator {
 	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
 	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
-	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
 	private final static QName PROP_INPUT_WORKFLOW_TO_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowToVariable");
 	private final static QName PROP_INPUT_WORKFLOW_VARIABLE_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableType");
 	private final static QName PROP_INPUT_WORKFLOW_VARIABLE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableValue");
@@ -64,6 +64,7 @@ public class BPMNGenerator {
 	private final static String VALUE = "VALUE";
 
 	private final static QName ASSOC_TRANSITION_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionStatus");
+	private final static QName ASSOC_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
 
 	private final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflow");
 	private final static QName TYPE_OUTPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableData");
@@ -290,7 +291,7 @@ public class BPMNGenerator {
             actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
             String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
             String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
-            String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+            String assignee =  encodeBusinessRoleAssign(workflow.getChildRef());
             attribute = doc.createElement("lecm:attribute");
             attribute.setAttribute("label", workflowLabel);
             attribute.setAttribute("workflowId", workflowId);
@@ -362,7 +363,7 @@ public class BPMNGenerator {
 			Element actionElement = doc.createElement("lecm:action");
 			actionElement.setAttribute("type", ACTION_START_WORKFLOW);
 			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
-			String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+			String assignee = encodeBusinessRoleAssign(workflow.getChildRef());
 			attribute = doc.createElement("lecm:attribute");
 			attribute.setAttribute("workflowId", workflowId);
 			actionElement.appendChild(attribute);
@@ -545,6 +546,17 @@ public class BPMNGenerator {
 			flow.appendChild(expression);
 		}
 		return flow;
+	}
+
+	/**
+	 * Метод извлекает ассоциацию assign из действия и преобразует объекты Бизнес ролей в закодированную строку для BPMN схемы
+	 *
+	 * @param nodeRef ссылка на действие
+	 * @return
+	 */
+	private String encodeBusinessRoleAssign(NodeRef nodeRef) {
+		List<AssociationRef> roles = nodeService.getTargetAssocs(nodeRef, ASSOC_ASSIGNEE);
+		return new AssignWorkflow().encode(roles);
 	}
 
 	private class Flow {

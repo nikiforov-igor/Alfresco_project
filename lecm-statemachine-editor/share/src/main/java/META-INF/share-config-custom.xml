@@ -12,10 +12,10 @@
 					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
 					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
 					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
-					<show id="lecm-stmeditor:startStartWorkflow" force="true"/>
 					<show id="lecm-stmeditor:startScriptAction" force="true"/>
-					<show id="lecm-stmeditor:endStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:startStartWorkflow" force="true"/>
 					<show id="lecm-stmeditor:endScriptAction" force="true"/>
+					<show id="lecm-stmeditor:endStartWorkflow" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
@@ -132,7 +132,13 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:assignee"/>
+					<field id="lecm-stmeditor:assignee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -152,7 +158,13 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:assignee"/>
+					<field id="lecm-stmeditor:assignee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -174,17 +186,25 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:assignee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-stmeditor:UserWorkflowEntity">
+	<config evaluator="node-type" condition="lecm-stmeditor:UserWorkflowEntity">
 		<forms>
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
+					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
@@ -192,6 +212,13 @@
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:assignee">
+						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 				</appearance>

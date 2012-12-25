@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	
+-->
+<beans>
+
+	<bean id="statemachine.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-statemachine-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-statemachine</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="activitiCustomizer" class="ru.it.lecm.statemachine.listener.ActivitiConfigurationCustomizer">
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+	</bean>
+
+	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployer">
+		<property name="workflowService" ref="WorkflowService"/>
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="repositoryHelper" ref="repositoryHelper" />
+		<property name="contentService" ref="contentService"/>
+		<property name="authenticationContext" ref="authenticationContext" />
+		<property name="transactionService" ref="transactionService" />
+	</bean>
+
+	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StateMachineHelper">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+	</bean>
+
+	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignWorkflow">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+	</bean>
+
+	<bean id="stateMachineHandler" class="ru.it.lecm.statemachine.listener.StateMachineHandler">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
+		  init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="documentStateMachineBean" class="ru.it.lecm.statemachine.bean.DocumentStateMachineBean"/>
+
+	<bean id="stateMachineCreateDocumentPolicy"
+		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
+		<property name="policyComponent" ref="policyComponent"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
+		  class="ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionScript"
+		  parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.statemachine.documents.get"
+		  class="ru.it.lecm.statemachine.script.DocumentListScript"
+		  parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
+	</bean>
+
+	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActions" />
+
+	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="StatusChange"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.StatusChangeAction" />
+		<property name="type" value="system" />
+		<property name="execution" value="start" />
+	</bean>
+
+	<bean id="finishStateWithTransition.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="FinishStateWithTransition"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="take" />
+	</bean>
+
+	<bean id="startWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="StartWorkflow"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.StartWorkflowAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="start, end" />
+	</bean>
+
+	<bean id="waitForDocumentChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="WaitForDocumentChange"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="start" />
+	</bean>
+
+	<bean id="userWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="UserWorkflow"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.UserWorkflow" />
+		<property name="type" value="user" />
+		<property name="execution" value="take" />
+	</bean>
+
+	<bean id="transitionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="TransitionAction"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.TransitionAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="end" />
+	</bean>
+
+	<bean id="scriptAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="ScriptAction"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.ScriptAction" />
+		<property name="type" value="user" />
+		<property name="execution" value="start, end" />
+	</bean>
+
+</beans>

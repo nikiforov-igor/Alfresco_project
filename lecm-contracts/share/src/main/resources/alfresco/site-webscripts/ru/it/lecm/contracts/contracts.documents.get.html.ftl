@@ -21,7 +21,7 @@
 			</td>
             <td>
                 <#list document.workflows as workflow>
-                    <button onclick="workflowForm.show('${document.nodeRef}', '${workflow.workflowId}', '${document.taskId}', null, '${workflow.assignee}')">${workflow.label}</button>
+                    <button onclick="workflowForm.show('${document.nodeRef}', '${workflow.workflowId}', '${document.taskId}', null, '<#list workflow.assignees as assignee>${assignee}<#if assignee_has_next>,</#if></#list>')">${workflow.label}</button>
                 </#list>
             </td>
 		</tr>

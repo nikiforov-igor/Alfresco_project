@@ -13,7 +13,7 @@
     <groupId>ru.it.lecm.statemachine.editor</groupId>
     <artifactId>statemachine-editor</artifactId>
     <packaging>pom</packaging>
-    <name>Logic ECM Statemachine editor</name>
+    <name>Logic ECM Statemachine Editor</name>
 
     <modules>
         <module>repo</module>

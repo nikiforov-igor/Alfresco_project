@@ -12,8 +12,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.base.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.base.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
+import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Map;
  * Date: 16.11.12
  * Time: 14:45
  */
-public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnDeleteNodePolicy {
+public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
 	public final static QName TYPE_CONTENT = QName.createQName(STATEMACHINE_URI, "status");
@@ -60,8 +60,6 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 				TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				TYPE_CONTENT, new JavaBehaviour(this, "onDeleteNode"));
 
 	}
 
@@ -124,16 +122,6 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 		nodeService.setProperty(statusRef, PROP_START_STATUS, true);
 	}
 
-	@Override
-	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-	/*
-		Заменить на бефоре делит)))
-		NodeService nodeService = serviceRegistry.getNodeService();
-		Object isStartStatus = nodeService.getProperty(childAssocRef.getChildRef(), PROP_START_STATUS);
-		if (isStartStatus != null && (Boolean) isStaStatuson) {
-			thr new w IllegalStateException("Can't delete start status");
-		*/
-	}
 
 	private void createActions(NodeRef status, List<String> actions, String execution) {
 		NodeService nodeService = serviceRegistry.getNodeService();
@@ -156,4 +144,5 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 			}
 		}
 	}
+
 }

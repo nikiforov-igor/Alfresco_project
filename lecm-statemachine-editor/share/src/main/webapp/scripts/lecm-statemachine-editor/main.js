@@ -396,15 +396,15 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_showSplash: function() {
-			this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+		/*	this.splashScreen = Alfresco.util.PopupManager.displayMessage(
 				{
 					text: Alfresco.util.message("label.loading"),
 					spanClass: "wait",
 					displayTime: 0
-				});
+				});*/
 		},
 		_hideSplash: function() {
-			YAHOO.lang.later(1000, this.splashScreen, this.splashScreen.destroy);
+			//YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
 		}
 
 	});
