@@ -9,7 +9,15 @@
 	datagrid.setOptions({
 		usePagination:true,
 		showExtendSearchBlock:true,
-		showCheckboxColumn: false
+		showCheckboxColumn: false,
+		actions: [
+			{
+				type: "action-link-delegation-list",
+				id: "onActionEdit",
+				permission: "edit",
+				label: "делегировать полномочия"
+			}
+		]
 	});
 	datagrid.setMessages(${messages});
 

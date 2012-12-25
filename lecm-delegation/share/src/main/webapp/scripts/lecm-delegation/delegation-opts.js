@@ -33,12 +33,12 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 		},
 
 		onDelegationOptsPart1: function (result) {
-			var formEl = Dom.get(this.id + "-content-part1");
+			var formEl = YAHOO.util.Dom.get(this.id + "-content-part1");
 			formEl.innerHTML = result.serverResponse.responseText;
 		},
 
 		onDelegationOptsPart2: function (result) {
-			var formEl = Dom.get(this.id + "-content-part2");
+			var formEl = YAHOO.util.Dom.get(this.id + "-content-part2");
 			formEl.innerHTML = result.serverResponse.responseText;
 		},
 
@@ -49,11 +49,30 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 			}
 		},
 
+		_delegateByFunc: function () {
+			var scope = this;
+			return function (event, obj) {
+				alert ("делегировать по бизнес функциям");
+			}
+		},
+
+		_delegateAllFunc: function () {
+			var scope = this;
+			return function (event, obj) {
+				alert ("делегировать все функции");
+			}
+		},
+
 		onReady: function () {
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 
 			if (this.options.delegator) {
+				var radioDelegateByFunc = YAHOO.util.Dom.get ("radioDelegateByFunc");
+				var radioDelegateAllFunc = YAHOO.util.Dom.get ("radioDelegateAllFunc");
+				YAHOO.util.Event.addListener (radioDelegateByFunc, "onchange", this._delegateByFunc ());
+				YAHOO.util.Event.addListener (radioDelegateAllFunc, "onchange", this._delegateAllFunc ());
+
 				var argsPart1 = {
 					htmlid:"delegation-opts-part1",
 					itemKind:"node",
@@ -83,6 +102,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					showCheckboxColumn: false,
 					dataSource: "lecm/delegation/get/procuracies",
 					searchShowInactive: true,
+					editForm: "editProcuracy",
 					actions: [
 						{
 							type: "action-link-procuracy",

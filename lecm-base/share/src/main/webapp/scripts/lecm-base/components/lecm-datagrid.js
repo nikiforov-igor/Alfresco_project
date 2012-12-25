@@ -238,7 +238,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Максимальное число возвращаемых запросом элементов
                  */
-                maxResults: 1000
+                maxResults: 1000,
+
+				/**
+				 * идентификатор формы редактирования из share-config-custom
+				 * по-умолчанию он не задан и при редактировании записи таблицы будет использоваться форма по-умолчанию
+				 */
+				editForm: null
             },
 
             /**
@@ -2183,20 +2189,30 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     );
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&submitType={submitType}&showCancelButton=true",
-                    {
-                        itemKind:"node",
-                        itemId:item.nodeRef,
-                        mode:"edit",
-                        submitType:"json"
-                    });
+				var templateUrl = "components/form"
+							+ "?itemKind={itemKind}"
+							+ "&itemId={itemId}"
+							+ "&mode={mode}"
+							+ "&submitType={submitType}"
+							+ "&showCancelButton=true";
+				//если мы задали ИД-шник формы, то передаем и его
+				if (this.options.editForm) {
+					templateUrl += "&formId=" + this.options.editForm;
+				}
+
+				var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
+					itemKind: "node",
+					itemId: item.nodeRef,
+					mode: "edit",
+					submitType: "json"
+				});
 
                 // Using Forms Service, so always create new instance
                 var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
                 editDetails.setOptions(
                     {
                         width:"50em",
-                        templateUrl:templateUrl,
+                        templateUrl:url,
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{

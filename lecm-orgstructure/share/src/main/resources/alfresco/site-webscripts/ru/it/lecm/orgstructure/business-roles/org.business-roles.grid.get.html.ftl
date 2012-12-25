@@ -11,6 +11,7 @@ datagrid.setOptions ({
 	usePagination:true,
 	showExtendSearchBlock:true,
 	showCheckboxColumn: false,
+	editForm: "configureBusinessRole",
 	actions: [{
 		type:"action-link-businessRole",
 		id:"onActionEdit",

@@ -1,5 +1,0 @@
-<dataGrid>
-	<actionSet>
-		<action type="action-link" id="onActionEdit" permission="edit" label="actions.edit" />
-	</actionSet>
-</dataGrid>
