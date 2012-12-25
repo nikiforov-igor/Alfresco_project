@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+   <template-type>ru/it/lecm/wcalendar/shedule</template-type>
+   <properties>
+      <pageFamily>wcalendar</pageFamily>
+      <container>wcalendar</container>
+   </properties>
+<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.shedule.title</title>
+				<filteredLabel>page.wcalendar.filteredLabel</filteredLabel>
+			</properties>
+		</component>
+		<!-- Toolbar -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/ru/it/lecm/wcalendar/shedule/toolbar</url>
+		</component>
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/ru/it/lecm/wcalendar/menu</url>
+			<properties>
+				<selected>wcalendarShedule</selected>
+			</properties>
+		</component>
+		<!-- Grid region -->
+		<component>
+			<region-id>shedule</region-id>
+			<url>/ru/it/lecm/wcalendar/shedule/shedule</url>
+		</component>
+	</components>
+   </template-instance>

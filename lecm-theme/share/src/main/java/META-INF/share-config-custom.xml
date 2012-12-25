@@ -29,6 +29,7 @@
                 <item type="link" id="orgstructure">/org-employees</item>
                 <item type="link" id="delegation">/delegation-list</item>
                 <item type="link" id="dictionary">/allDictionary</item>
+                <item type="link" id="wcalendar">/wcalendar</item>
                 <item type="js" id="jsButton">LogicECM.module.Header.JsButton</item>
                 <item type="js" id="sites">Alfresco.module.Sites</item>
 
