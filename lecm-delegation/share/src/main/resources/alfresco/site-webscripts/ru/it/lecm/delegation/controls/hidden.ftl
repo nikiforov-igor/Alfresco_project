@@ -13,15 +13,6 @@
 </#if>
 
 <#if form.mode == "edit" || form.mode == "create">
-	<#assign hiddenFieldValue>
-		<#if fieldValue?is_number>
-			${fieldValue?c}
-		<#elseif fieldValue?is_boolean/>
-			${fieldValue?b}
-		<#else/>
-			${fieldValue?html}
-		</#if>
-	</#assign>
-
-	<input type="hidden" name="${field.name}" value="${hiddenFieldValue}"/>
+<#assign hiddenFieldValue><#if fieldValue?is_number>${fieldValue?c}<#elseif fieldValue?is_boolean/>${fieldValue?string}<#else/>${fieldValue?html}</#if></#assign>
+<input type="hidden" name="${field.name}" value="${hiddenFieldValue}"/>
 </#if>
