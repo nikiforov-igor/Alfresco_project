@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Business Journal</shortname>
+    <description>Dashlet for Business Journal</description>
+    <family>dashlet</family>
+    <url>/components/dashlets/business-journal</url>
+</webscript>
