@@ -13,6 +13,7 @@
 		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/lecm/notifications/types/1.0" prefix="lecm-notf-type"/>
+		<import uri="http://www.it.ru/logicECM/business-journal/1.0" prefix="lecm-busjournal"/>
 	</imports>
 
 	<namespaces>
@@ -20,20 +21,20 @@
 	</namespaces>
 
 	<types>
-		<!--Описание подписки-->
-		<type name="lecm-subscr:subscription">
-			<title>Subscription Object</title>
+		<!--Описание подписки - базовый тип-->
+		<type name="lecm-subscr:subscription-base">
+			<title>Subscription Base Object</title>
 			<parent>cm:content</parent>
 			<properties>
 				<property name="lecm-subscr:description">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
 				</property>
 			</properties>
 			<associations>
@@ -61,6 +62,14 @@
 						<many>true</many>
 					</target>
 				</association>
+			</associations>
+		</type>
+
+		<!--Описание подписки на тип-->
+		<type name="lecm-subscr:subscription-to-type">
+			<title>Subscription To Type</title>
+			<parent>lecm-subscr:subscription-base</parent>
+			<associations>
 				<!-- Ссылка на адресата "должностная позиция" -->
 				<association name="lecm-subscr:destination-position-assoc">
 					<source>
@@ -97,6 +106,38 @@
 						<many>true</many>
 					</target>
 				</association>
+				<!-- Ссылка на тип объекта -->
+				<association name="lecm-subscr:object-type-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-busjournal:objectType</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Ссылка на категорию события -->
+				<association name="lecm-subscr:event-category-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-busjournal:eventCategory</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<!--Описание подписки на экземпляр-->
+		<type name="lecm-subscr:subscription-to-object">
+			<title>Subscription To Object</title>
+			<parent>lecm-subscr:subscription-base</parent>
+			<associations>
 				<!-- Ссылка на объект подписки -->
 				<association name="lecm-subscr:subscription-object-assoc">
 					<source>

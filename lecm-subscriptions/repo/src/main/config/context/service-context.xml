@@ -18,17 +18,18 @@
 	
 -->
 <beans>
-    <!-- Registration of orgStructure models -->
-    <bean id="${groupId}.${artifactId}.subscriptionsBootstrap" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-subscriptions-model.xml</value>
-            </list>
-        </property>
-	    <property name="labels">
-		    <list>
-			    <value>alfresco/module/${artifactId}/messages/subscriptions</value>
-		    </list>
-	    </property>
-    </bean>
+	<!-- Registration of orgStructure models -->
+	<bean id="${groupId}.${artifactId}.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/subscriptions</value>
+			</list>
+		</property>
+	</bean>
 </beans>

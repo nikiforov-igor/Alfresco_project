@@ -1,5 +1,5 @@
 <alfresco-config>
-	<config evaluator="node-type" condition="lecm-subscr:subscription">
+	<config evaluator="node-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
 				<field-visibility>
@@ -9,14 +9,15 @@
 					<show id="lecm-subscr:destination-position-assoc"/>
 					<show id="lecm-subscr:destination-organization-unit-assoc"/>
 					<show id="lecm-subscr:destination-work-group-assoc"/>
-					<show id="lecm-subscr:subscription-object-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:event-category-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-subscr:subscription">
+	<config evaluator="model-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
 				<field-visibility>
@@ -26,7 +27,8 @@
 					<show id="lecm-subscr:destination-position-assoc"/>
 					<show id="lecm-subscr:destination-organization-unit-assoc"/>
 					<show id="lecm-subscr:destination-work-group-assoc"/>
-					<show id="lecm-subscr:subscription-object-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:event-category-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
@@ -38,7 +40,49 @@
 					<show id="lecm-subscr:destination-position-assoc"/>
 					<show id="lecm-subscr:destination-organization-unit-assoc"/>
 					<show id="lecm-subscr:destination-work-group-assoc"/>
-					<show id="lecm-subscr:subscription-object-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:event-category-assoc"/>
+					<show id="lecm-subscr:description"/>
+				</field-visibility>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-subscr:description"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-subscr:subscription-to-object">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:destination-employee-assoc"/>
+					<show id="lecm-subscr:description"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-subscr:subscription-to-object">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:destination-employee-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:destination-employee-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
 				</field-visibility>
 			</form>
 			<form id="search">
