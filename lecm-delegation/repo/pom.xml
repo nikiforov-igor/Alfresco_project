@@ -37,13 +37,10 @@
 		<dependency>
 			<groupId>acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
-			<version>0.8.3</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>3.1.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
@@ -52,8 +49,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.5.11</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 		<dependency>

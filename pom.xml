@@ -68,6 +68,9 @@
         <activiti.version>5.7</activiti.version>
         <spring.surf.version>1.0.0</spring.surf.version>
         <jasperreports.version>4.7.0</jasperreports.version>
+		<slf4j.version>1.5.11</slf4j.version>
+		<spring.security.version>3.1.0.RC2</spring.security.version>
+		<acegisecurity.version>0.8.2</acegisecurity.version>
         <platform.version>0.1.0</platform.version>
         <buildNumber>1</buildNumber>
     </properties>
@@ -219,6 +222,24 @@
 				<version>1.0.1B</version>
 				<scope>provided</scope>
 		    </dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring.security.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>acegisecurity</groupId>
+				<artifactId>acegi-security</artifactId>
+				<version>${acegisecurity.version}</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
