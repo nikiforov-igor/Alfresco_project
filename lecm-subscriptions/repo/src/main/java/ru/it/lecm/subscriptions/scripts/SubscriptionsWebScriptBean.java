@@ -96,21 +96,20 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 			root = new JSONObject();
 			root.put(NODE_REF, "NOT_LOAD");
 			root.put(PAGE, PAGE_SUBSCRIPT_PROFILE);
-
 			nodes.put(root);
 
 			root = new JSONObject();
 			root.put(NODE_REF, subscriptionRef.toString());
 			root.put(ITEM_TYPE, TYPE_SUBSCRIPT_OBJECT);
 			root.put(PAGE, PAGE_SUBSCRIPT_OBJECT);
-			root.put(DELETE_NODE, false);
+			root.put(DELETE_NODE, true);
 			nodes.put(root);
 
 			root = new JSONObject();
 			root.put(NODE_REF, subscriptionRef.toString());
 			root.put(ITEM_TYPE, TYPE_SUBSCRIPT_TYPE);
 			root.put(PAGE, PAGE_SUBSCRIPT_TYPE);
-			root.put(DELETE_NODE, false);
+			root.put(DELETE_NODE, true);
 			nodes.put(root);
 
 		} catch (JSONException e) {

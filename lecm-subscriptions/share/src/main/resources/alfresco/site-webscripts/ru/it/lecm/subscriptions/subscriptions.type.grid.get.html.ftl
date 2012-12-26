@@ -11,36 +11,22 @@
             function createDatagrid() {
                 new LogicECM.module.Base.DataGrid('${id}').setOptions(
                         {
-                            usePagination:true,
-//                            showExtendSearchBlock:true,
+                            usePagination: true,
                             actions: [
                                 {
-                                    type:"action-link-${id}",
-                                    id:"onActionEdit",
-                                    permission:"edit",
-                                    label:"${msg("actions.edit")}"
+                                    type: "action-link-${id}",
+                                    id: "onActionEdit",
+                                    permission: "edit",
+                                    label: "${msg("actions.edit")}"
+                                },
+                                {
+                                    type: "action-link-${id}",
+                                    id: "onActionDelete",
+                                    permission: "delete",
+                                    label: "${msg("actions.delete-row")}"
                                 }
-                                <#--{-->
-                                    <#--type:"action-link-${id}",-->
-                                    <#--id:"onActionVersion",-->
-                                    <#--permission:"edit",-->
-                                    <#--label:"${msg("actions.version")}"-->
-                                <#--}-->
-							<#--{-->
-							<#--type:"action-link-${id}",-->
-							<#--id:"onActionDelete",-->
-							<#--permission:"delete",-->
-							<#--label:"${msg("actions.delete-row")}",-->
-							<#--evaluator: function (rowData) {-->
-							<#--var itemData = rowData.itemData;-->
-							<#--return itemData["assoc_lecm-orgstr_employee-main-position"] == undefined ||-->
-							<#--itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0;-->
-							<#--}-->
-							<#--}-->
                             ],
-						<#--bubblingLabel: "${id}",-->
                             showCheckboxColumn: false
-//                            attributeForShow:"lecm-orgstr:employee-last-name"
                         }).setMessages(${messages});
             }
 
