@@ -62,10 +62,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                                 itemType:root.itemType,
                                 nodeRef:root.nodeRef,
                                 actionsConfig:{
-                                    fullDelete:root.fullDelete
-                                },
-                                custom:{
-                                    namePattern:root.namePattern
+                                    fullDelete:true
                                 }
                             },
                             bubblingLabel:root.bubblingLabel

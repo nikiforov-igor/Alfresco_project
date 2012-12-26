@@ -1,4 +1,12 @@
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-subscriptions/controls/lecm-subscribe.js" />
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
@@ -54,8 +62,6 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
-					<show id="lecm-subscr:destination-employee-assoc"/>
-					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
@@ -68,10 +74,14 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
-					<show id="lecm-subscr:destination-employee-assoc"/>
 					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-subscr:subscription-object-assoc">
+						<control template="/ru/it/lecm/base-share/components/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>

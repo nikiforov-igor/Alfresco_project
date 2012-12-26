@@ -57,6 +57,12 @@
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                 </type>
+		        <type name="association:lecm-notf-type:notification-type" template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+			        <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Типы_x0020_доставки_x0020_уведомлений</control-param>
+			        <control-param name="nameSubstituteString">{cm:name}</control-param>
+			        <control-param name="showCreateNewLink">false</control-param>
+			        <control-param name="showCreateNewButton">false</control-param>
+                </type>
 		        <!--<type name="property:lecm-subscr-aspects:has-subscribers" template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>-->
 	        </default-controls>
 
