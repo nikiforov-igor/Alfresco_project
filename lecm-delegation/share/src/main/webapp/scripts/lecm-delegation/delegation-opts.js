@@ -35,8 +35,13 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 		onDelegationOptsPart1: function (result) {
 			var formEl = YAHOO.util.Dom.get(this.id + "-content-part1");
 			formEl.innerHTML = result.serverResponse.responseText;
-			YAHOO.util.Event.addListener ("radioDelegateByFunc", "change", this._delegateByFunc ());
-			YAHOO.util.Event.addListener ("radioDelegateAllFunc", "change", this._delegateAllFunc ());
+//			YAHOO.util.Event.addListener ("radioDelegateByFunc", "change", this._delegateByFunc ());
+//			YAHOO.util.Event.addListener ("radioDelegateAllFunc", "change", this._delegateAllFunc ());
+			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/save/node/" + this.options.delegator + "/options";
+			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
+//			YAHOO.util.Event.addListener ("delegation-opts-part1-form", "submit", function (form) {
+//				alert (YAHOO.lang.JSON.stringify (form, [], 4));
+//			});
 			var datagrid = new LogicECM.module.Delegation.Procuracy.Grid(this.id);
 			datagrid.setOptions({
 				usePagination:false,
@@ -104,6 +109,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					itemId: this.options.delegator,
 					formId: "delegation-opts-part1",
 					mode: "edit",
+					submitType: "json",
 					showCancelButton: false,
 					showResetButton: false,
 					showSubmitButton: false

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Delegation options persistence</shortname>
+	<description>Handles the submission of a delegation options</description>
+	<url>/lecm/delegation/save/{item_kind}/{item_id}/options</url>
+	<format default="json"/>
+	<authentication>user</authentication>
+	<transaction>required</transaction>
+	<lifecycle>internal</lifecycle>
+</webscript>

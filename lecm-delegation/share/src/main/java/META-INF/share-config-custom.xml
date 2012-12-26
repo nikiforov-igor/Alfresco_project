@@ -36,7 +36,7 @@
 					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>
 			</form>
-			<form id="delegation-opts-part1">
+			<form id="delegation-opts-part1"> <!--submission-url="url"-->
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
 					<field id="lecm-d8n:delegation-opts-owner-assoc"> <!-- read-only="true" -->
@@ -79,7 +79,7 @@
 	</config>
 	<config evaluator="node-type" condition="lecm-d8n:procuracy">
 		<forms>
-			<form id="editProcuracy"> <!--submission-url="url"-->
+			<form id="editProcuracy">
 				<appearance>
 					<field id="lecm-d8n:procuracy-business-role-assoc"> <!-- read-only="true" -->
 						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
