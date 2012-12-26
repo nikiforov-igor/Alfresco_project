@@ -74,7 +74,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             }
 
             function getPageName() {
-                return window.location.href.slice(window.location.href.indexOf('share/page/') + 11);
+                return window.location.href.slice(window.location.href.indexOf('share/page/') + "subscriptions-to-type");
             }
 
             function reloadPage(type) {
@@ -86,14 +86,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
             // Создание кнопок
             var onButtonClick1 = function (e) {
-                reloadPage("subscriptions-to-object");
-            };
-            this.widgets.employeesButton = Alfresco.util.createYUIButton(this, "objectBtn", onButtonClick1, {});
-
-            var onButtonClick2 = function (e) {
                 reloadPage("subscriptions-to-type");
             };
-            this.widgets.staffButton = Alfresco.util.createYUIButton(this, "typeBtn", onButtonClick2, {});
+            this.widgets.subscrTypeButton = Alfresco.util.createYUIButton(this, "typeBtn", onButtonClick1, {});
+
+            var onButtonClick2 = function (e) {
+                reloadPage("subscriptions-to-object");
+            };
+            this.widgets.subscrObjectButton = Alfresco.util.createYUIButton(this, "objectBtn", onButtonClick2, {});
 
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();

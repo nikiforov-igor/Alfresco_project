@@ -19,7 +19,6 @@
                 <showButtons>true</showButtons>
                 <showSearchBlock>false</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
-                <!--<bubblingLabel>business-role</bubblingLabel>-->
             </properties>
         </component>
         <!-- Menu -->
@@ -34,11 +33,6 @@
         <component>
             <region-id>roles-grid</region-id>
             <url>/lecm/subscriptions/subscriptions-datagrid</url>
-            subscriptions
-            <!--<properties>-->
-            <!--<pagination>true</pagination>-->
-            <!--<bubblingLabel>business-role</bubblingLabel>-->
-            <!--</properties>-->
         </component>
     </components>
 </template-instance>
