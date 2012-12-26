@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>subscriptions type datagrid</shortname>
+    <description>Return subscriptions type datagrid</description>
+    <url>/lecm/subscriptions/subscriptions-type-datagrid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

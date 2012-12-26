@@ -74,12 +74,12 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             }
 
             function getPageName() {
-                return window.location.href.slice(window.location.href.indexOf('share/page/') + "subscriptions-to-type");
+                return window.location.href.slice(window.location.href.indexOf('share/page/') + 11);
             }
 
             function reloadPage(type) {
                 var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
-                window.location.href = url + (type != null && type != '' ? type : "subscriptions");
+                window.location.href = url + (type != null && type != '' ? type : "subscriptions-to-type");
             }
 
             var context = this;

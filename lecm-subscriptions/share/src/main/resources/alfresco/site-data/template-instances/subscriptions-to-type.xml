@@ -31,8 +31,8 @@
         </component>
         <!-- Datagrid -->
         <component>
-            <region-id>roles-grid</region-id>
-            <url>/lecm/subscriptions/subscriptions-datagrid</url>
+            <region-id>type-grid</region-id>
+            <url>/lecm/subscriptions/subscriptions-type-datagrid</url>
         </component>
     </components>
 </template-instance>
