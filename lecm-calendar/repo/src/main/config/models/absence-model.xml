@@ -1,136 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <model name="lecm-absence:absence-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Worker absence Data Model</description>
-    <author>Vsevolod Levin</author>
-    <version>1.0</version>
+	<description>Worker absence Data Model</description>
+	<author>Vsevolod Levin</author>
+	<version>1.0</version>
 
-    <imports>
-        <!-- Import Alfresco Dictionary Definitions -->
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <!-- Import Alfresco Content Domain Model Definitions -->
-        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-        <!-- Import Org Structure Model Definitions -->
-        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <!-- Import Dictionary Model Definitions -->
-        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
-    </imports>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Import Org Structure Model Definitions -->
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<!-- Import Dictionary Model Definitions -->
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+	</imports>
 
-    <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/absence/1.0" prefix="lecm-absence"/>
-    </namespaces>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/work-calendar/absence/1.0" prefix="lecm-absence"/>
+	</namespaces>
 
-    <types>
-        <!-- Дата, время и причина отсутсвия сотрудника на рабочем месте  -->
-        <type name="lecm-absence:absence">
-            <parent>cm:cmobject</parent>
-            <properties>
-                <!-- Дата и время начала отсутствия сотрудника -->
-                <property name="lecm-absence:begin">
-                    <type>d:date</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Дата и время окончания отсутствия -->
-                <property name="lecm-absence:end">
-                    <type>d:date</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Бессрочно отсутствие? -->
-                <property name="lecm-absence:unlimited">
-                    <type>d:boolean</type>
-                    <mandatory>true</mandatory>
-                </property>
-                <!-- Произвольный комментарий -->
-                <property name="lecm-absence:comment">
-                    <type>d:text</type>
-                    <mandatory>false</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-            </properties>
-            <associations>
-                <!-- Отсутствующий сотрудник -->
-                <association name="lecm-absence:abscent-employee-assoc">
-                    <!-- Сотрудник может отсутствовать только единожды в данный момент. А может и не отсутствовать. -->
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <!-- Может отсутствовать один и только один сотрудник. -->
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-                <!-- Причина отсутствия -->
-                <association name="lecm-absence:abscence-reason-assoc">
-                    <source>
-                        <!-- По одной причине могут отсутствовать многие. -->
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <!-- Причина должна быть. Причем только одна. -->
-                    <target>
-                        <class>lecm-absence:reason</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-            </associations>
-        </type>
-        <!-- Список возможных причин отсутствия. -->
+	<types>
+		<!-- Дата, время и причина отсутсвия сотрудника на рабочем месте  -->
+		<type name="lecm-absence:absence">
+			<parent>cm:cmobject</parent>
+			<properties>
+				<!-- Дата и время начала отсутствия сотрудника -->
+				<property name="lecm-absence:begin">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Дата и время окончания отсутствия -->
+				<property name="lecm-absence:end">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Бессрочно отсутствие? -->
+				<property name="lecm-absence:unlimited">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<!-- Произвольный комментарий -->
+				<property name="lecm-absence:comment">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<!-- Отсутствующий сотрудник -->
+				<association name="lecm-absence:abscent-employee-assoc">
+					<!-- Сотрудник может отсутствовать только единожды в данный момент. А может и не отсутствовать. -->
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<!-- Может отсутствовать один и только один сотрудник. -->
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Причина отсутствия -->
+				<association name="lecm-absence:abscence-reason-assoc">
+					<source>
+						<!-- По одно� причине могут отсутствовать многие. -->
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<!-- Причина должна быть. Причем только одна. -->
+					<target>
+						<class>lecm-absence:reason</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+		<!-- Список возможных причин отсутствия. -->
 
-        <type name="lecm-absence:reason">
-            <title>Absence reason</title>
-            <parent>lecm-dic:plane_dictionary_values</parent>
-            <properties>
-                <!-- Наименование причины отсутсвия. -->
-                <property name="lecm-absence:denomination">
-                    <title>Наименование</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Код причины. -->
-                <property name="lecm-absence:code">
-                    <title>Код причины</title>
-                    <type>d:int</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Цвет для отображения в диаграме отсутствия. -->
-                <!-- Не уверен насчет типа. Уточнить. Полагаю, это будт HEX-код цвета. -->
-                <property name="lecm-absence:color">
-                    <title>Цвет для отображения</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-            </properties>
-            <mandatory-aspects>
-                <aspect>cm:versionable</aspect>
-            </mandatory-aspects>
-        </type>
-    </types>
+		<type name="lecm-absence:reason">
+			<title>Absence reason</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<!-- Наименование причины отсутсвия. -->
+				<property name="lecm-absence:denomination">
+					<title>Наименование</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Код причины. -->
+				<property name="lecm-absence:code">
+					<title>Код причины</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Цвет для отображения в диаграме отсутствия. -->
+				<!-- Не уверен насчет типа. Уточнить. Полагаю, это будт HEX-код цвета. -->
+				<property name="lecm-absence:color">
+					<title>Цвет для отображения</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cm:versionable</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
 </model>

@@ -18,25 +18,25 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
  */
 public class CalendarBean extends AbstractWCalCommonBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(CalendarBean.class);
-    private final static QName TYPE_CALENDAR = QName.createQName(CALENDAR_NAMESPACE, "calendar");
+	private final static Logger logger = LoggerFactory.getLogger(CalendarBean.class);
+	private final static QName TYPE_CALENDAR = QName.createQName(CALENDAR_NAMESPACE, "calendar");
 
-    @Override
-    public IWCalCommon getWCalendarDescriptor() {
-        return this;
-    }
+	@Override
+	public IWCalCommon getWCalendarDescriptor() {
+		return this;
+	}
 
-    @Override
-    public QName getWCalendarItemType() {
-        return TYPE_CALENDAR;
-    }
+	@Override
+	public QName getWCalendarItemType() {
+		return TYPE_CALENDAR;
+	}
 
-    public final void bootstrap() {
-        PropertyCheck.mandatory(this, "repository", repository);
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
+	public final void bootstrap() {
+		PropertyCheck.mandatory(this, "repository", repository);
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
 //		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-        PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "transactionService", transactionService);
 
-        AuthenticationUtil.runAsSystem(this);
-    }
+		AuthenticationUtil.runAsSystem(this);
+	}
 }

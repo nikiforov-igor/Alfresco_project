@@ -9,66 +9,66 @@
 
 	<bean id="sampleSessionBean" class="ru.it.lecm.sample.beans.SampleSessionBean"/>
 
-    <bean id="sampleSessionWrapper" class="ru.it.lecm.sample.beans.SampleSessionWrapper" parent="baseJavaScriptExtension">
-      		<property name="sampleSession" ref="sampleSessionBean"/>
-        <property name="extensionName" value="sampleSessionJSExtension"/>
-    </bean>-->
+ <bean id="sampleSessionWrapper" class="ru.it.lecm.sample.beans.SampleSessionWrapper" parent="baseJavaScriptExtension">
+ 		<property name="sampleSession" ref="sampleSessionBean"/>
+  <property name="extensionName" value="sampleSessionJSExtension"/>
+ </bean>-->
 
-    <!-- Registration of Delegations models -->
-    <bean id="${groupId}.${artifactId}.wCalendarBootstrap" parent="dictionaryModelBootstrap" 
-          depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/absence-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/wcal-common.xml</value>
-            </list>
-        </property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${artifactId}/messages/calendar</value>
-            </list>
-        </property>
-    </bean>
-    <bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
-              parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-        <property name="dictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
-            </list>
-        </property>
-    </bean>
+	<!-- Registration of Delegations models -->
+	<bean id="${groupId}.${artifactId}.wCalendarBootstrap" parent="dictionaryModelBootstrap" 
+		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/absence-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/wcal-common.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/calendar</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
+			</list>
+		</property>
+	</bean>
     
-    <bean id="calendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="calendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-    <bean id="sheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="sheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-    <bean id="absenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="absenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-    <bean id="calendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="calendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="calendarService"/>
 	</bean>
-    <bean id="sheduleJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="sheduleJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="sheduleService"/>
 	</bean>
-    <bean id="absenceJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="absenceJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="absenceService"/>

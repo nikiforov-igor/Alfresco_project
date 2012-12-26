@@ -13,14 +13,14 @@ import org.alfresco.service.namespace.QName;
  */
 public interface IWCalCommon {
 
-    /**
-     * получение ссылки на папку, в которой хранятся календари
-     *
-     * @return nodeRef
-     */
-    NodeRef getWCalendarContainer();
+	/**
+	 * получение ссылки на папку, в которой хранятся календари
+	 *
+	 * @return nodeRef
+	 */
+	NodeRef getWCalendarContainer();
 
-    IWCalCommon getWCalendarDescriptor();
+	IWCalCommon getWCalendarDescriptor();
 
-    QName getWCalendarItemType();
+	QName getWCalendarItemType();
 }

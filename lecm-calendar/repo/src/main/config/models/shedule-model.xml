@@ -1,158 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <model name="lecm-shed:shedule-model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Calendar Data Model</description>
-    <author>Vsevolod Levin</author>
-    <version>1.0</version>
+	<description>Calendar Data Model</description>
+	<author>Vsevolod Levin</author>
+	<version>1.0</version>
 
-    <imports>
-        <!-- Import Alfresco Dictionary Definitions -->
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <!-- Import Alfresco Content Domain Model Definitions -->
-        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-        <!-- Import Org Structure Model Definitions -->
-        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-    </imports>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Import Org Structure Model Definitions -->
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+	</imports>
 
-    <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/model/work-calendar/shedule/1.0" prefix="lecm-shed"/>
-    </namespaces>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/work-calendar/shedule/1.0" prefix="lecm-shed"/>
+	</namespaces>
 
-    <types>
-        <!--  График работы сотрудника или подразделения -->
-        <type name="lecm-shed:shedule">
-            <title>Shedule for employee or structure</title>
-            <parent>cm:folder</parent>
-            <properties>
-                <!-- Тип расписания: обычный или особый. Обычный - согласно трудовому календарю. Все остальное - особый. -->
-                <property name="lecm-shed:type">
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <default>COMMON</default>
-                    <constraints>
-                        <constraint name="lecm-shed:shedule-types-constraint" type="LIST">
-                            <parameter name="allowedValues">
-                                <list>
-                                    <value>COMMON</value>
-                                    <value>SPECIAL</value>
-                                </list>
-                            </parameter>
-                        </constraint>
-                    </constraints>
-                </property>
-                <!-- Начало работы по обычному графику. -->
-                <property name="lecm-shed:std-begin">
-                    <type>d:datetime</type>
-                    <mandatory>false</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Конец работы по обычному графику. -->
-                <property name="lecm-shed:std-end">
-                    <type>d:datetime</type>
-                    <mandatory>false</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-            </properties>
-            <associations>
-                <!-- Сотрудник/подразделение, работающий по данному графику. -->
-                <association name="lecm-shed:shed-employee-link-assoc">
-                    <!-- Сотрудник/подразделение может работать только по одному графику. -->
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <!-- График должен быть к кому-то привязан. -->
-                    <target>
-                        <class>lecm-shed:shedule-employee-struct-link</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-                <!-- Если сотрудник работает не по стандартному графику, то здесь ссылки на элементы рабочего графика. -->
-                <!-- Элемент графика должен быть привязан к кому-нибудь, причем только к одному. -->
-                <child-association name="lecm-shed:contains-element">
-                    <source>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </source>
-                    <!-- График может быть стандартным. Элементов может быть много. -->
-                    <target>
-                        <class>lecm-shed:special-shed-element</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </child-association>
-            </associations>
-        </type>
-        <!-- Связь между нестандартным графиком работы и сотрудником ИЛИ структурным подразделением -->
-        <type name="lecm-shed:shedule-employee-struct-link">
-            <title>Link with employee OR strucrure</title>
-            <parent>cm:cmobject</parent>
-            <associations>
-                <association name="lecm-shed:shedule-employee-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-                <association name="lecm-shed:shedule-org-element-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:organization-element</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-            </associations>
-        </type>
-        <type name="lecm-shed:special-shed-element">
-            <title>Elements for non-standart shedule</title>
-            <parent>cm:cmobject</parent>
-            <properties>
-                <property name="lecm-shed:begin">
-                    <type>d:datetime</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-shed:end">
-                    <type>d:datetime</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-shed:comment">
-                    <type>d:text</type>
-                    <mandatory>false</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-            </properties>
-        </type>
-    </types>
+	<types>
+		<!--  График работы сотрудника или подразделения -->
+		<type name="lecm-shed:shedule">
+			<title>Shedule for employee or structure</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<!-- Тип расписания: обычный или особый. Обычный - согласно трудовому календарю. Все остальное - особый. -->
+				<property name="lecm-shed:type">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>COMMON</default>
+					<constraints>
+						<constraint name="lecm-shed:shedule-types-constraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>COMMON</value>
+									<value>SPECIAL</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<!-- Начало работы по обычному графику. -->
+				<property name="lecm-shed:std-begin">
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Конец работы по обычному графику. -->
+				<property name="lecm-shed:std-end">
+					<type>d:datetime</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<!-- Сотрудник/подразделение, работающий по данному графику. -->
+				<association name="lecm-shed:shed-employee-link-assoc">
+					<!-- Сотрудник/подразделение может работать только по одному графику. -->
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<!-- График должен быть к кому-то привязан. -->
+					<target>
+						<class>lecm-shed:shedule-employee-struct-link</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Если сотрудник работает не по стандартному графику, то здесь ссылки на элементы рабочего графика. -->
+				<!-- Элемент графика должен быть привязан к кому-нибудь, причем только к одному. -->
+				<child-association name="lecm-shed:contains-element">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<!-- График может быть стандартным. Элементов может быть много. -->
+					<target>
+						<class>lecm-shed:special-shed-element</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+		</type>
+		<!-- Связь между нестандартным графиком работы и сотрудником ИЛИ структурным подразделением -->
+		<type name="lecm-shed:shedule-employee-struct-link">
+			<title>Link with employee OR strucrure</title>
+			<parent>cm:cmobject</parent>
+			<associations>
+				<association name="lecm-shed:shedule-employee-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-shed:shedule-org-element-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-element</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+		<type name="lecm-shed:special-shed-element">
+			<title>Elements for non-standart shedule</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-shed:begin">
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-shed:end">
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-shed:comment">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
 </model>

@@ -18,26 +18,26 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
  */
 public class AbsenceBean extends AbstractWCalCommonBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
-    private final static QName TYPE_ABSENCE = QName.createQName(ABSENCE_NAMESPACE, "absence");
+	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
+	private final static QName TYPE_ABSENCE = QName.createQName(ABSENCE_NAMESPACE, "absence");
 
-    @Override
-    public IWCalCommon getWCalendarDescriptor() {
-        return this;
-    }
+	@Override
+	public IWCalCommon getWCalendarDescriptor() {
+		return this;
+	}
 
-    @Override
-    public QName getWCalendarItemType() {
-        return TYPE_ABSENCE;
-    }
+	@Override
+	public QName getWCalendarItemType() {
+		return TYPE_ABSENCE;
+	}
 
-    public final void bootstrap() {
-        PropertyCheck.mandatory(this, "repository", repository);
-        PropertyCheck.mandatory(this, "nodeService", nodeService);
+	public final void bootstrap() {
+		PropertyCheck.mandatory(this, "repository", repository);
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
 //		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-        PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "transactionService", transactionService);
 
 
-        AuthenticationUtil.runAsSystem(this);
-    }
+		AuthenticationUtil.runAsSystem(this);
+	}
 }
