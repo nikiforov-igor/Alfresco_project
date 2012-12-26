@@ -20,6 +20,7 @@
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
                     <show id="lecm-orgstr:employee-positions"/>
                     <show id="lecm-orgstr:employee-roles"/>
+                    <show id="lecm-subscr-aspects:has-subscribers"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
@@ -39,6 +40,10 @@
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
+                    <field id="lecm-subscr-aspects:has-subscribers" set="common"/>
+	                <field id="lecm-subscr-aspects:has-subscribers" set="common">
+		                <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
+	                </field>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>

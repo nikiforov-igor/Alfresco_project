@@ -7,5 +7,5 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	тест
+	<@region id="to-object-grid" scope="template" />
 </@bpage.basePage>

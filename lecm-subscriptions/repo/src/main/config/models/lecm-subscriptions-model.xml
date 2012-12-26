@@ -2,7 +2,7 @@
 
 <model name="lecm-subscr:subscriptionsStructure" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
-	<description>dictionary</description>
+	<description>Subscriptions</description>
 	<author>AIvkin</author>
 	<published>2012-12-24</published>
 	<version>1.0</version>

@@ -45,12 +45,6 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
-			<form id="search">
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-subscr:description"/>
-				</field-visibility>
-			</form>
 		</forms>
 	</config>
 
@@ -61,6 +55,7 @@
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
+					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
@@ -74,7 +69,8 @@
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
-					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:subscription-object-assoc"/>
+					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
 			<form id="datagrid">
@@ -82,12 +78,16 @@
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
-					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:subscription-object-assoc"/>
+					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>
 			<form id="search">
 				<field-visibility>
 					<show id="cm:name"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:destination-employee-assoc"/>
+					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 			</form>

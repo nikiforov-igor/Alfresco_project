@@ -10,7 +10,7 @@
 	background: url('/share/res/components/images/search-16-gray.png') no-repeat 5px 5px;
 }
 .datalist-toolbar .ex-search span.first-child {
-	background: url('/share/res/components/images/search-16-gray.png') no-repeat 5px 5px;
+	background: url('../../images/lecm-base/components/base/alf_base_filter_16.png') no-repeat 5px 5px;
 }
 .search-input {
 	display: inline-block;

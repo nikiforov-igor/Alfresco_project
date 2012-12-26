@@ -57,6 +57,7 @@
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                 </type>
+		        <!--<type name="property:lecm-subscr-aspects:has-subscribers" template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>-->
 	        </default-controls>
 
             <dependencies>

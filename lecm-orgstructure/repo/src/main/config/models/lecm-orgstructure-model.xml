@@ -9,6 +9,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
         <import uri="http://www.it.ru/lecm/org/structure/docTypes/1.0" prefix="lecm-orgstr-docType"/>
+        <import uri="http://www.it.ru/lecm/subscriptions/aspects/1.0" prefix="lecm-subscr-aspects"/>
     </imports>
 
     <namespaces>
@@ -477,6 +478,7 @@
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
                 <aspect>cm:versionable</aspect>
+                <aspect>lecm-subscr-aspects:subscribed</aspect>
             </mandatory-aspects>
         </type>
 

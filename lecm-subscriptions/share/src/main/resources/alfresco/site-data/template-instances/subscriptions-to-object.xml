@@ -11,5 +11,32 @@
 				<filteredLabel>page.subscriptions.filter.label</filteredLabel>
 			</properties>
 		</component>
+		<!-- Toolbar -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/lecm/subscriptions/toolbar</url>
+			<properties>
+				<showButtons>false</showButtons>
+				<showSearchBlock>true</showSearchBlock>
+				<showExSearchBtn>true</showExSearchBtn>
+			</properties>
+		</component>
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/lecm/subscriptions/menu</url>
+			<properties>
+				<selected>object</selected>
+			</properties>
+		</component>
+		<!--Grid-->
+		<component>
+			<region-id>to-object-grid</region-id>
+			<url>/lecm/subscriptions/to-object-datagrid</url>
+			<properties>
+				<pagination>true</pagination>
+				<bubblingLabel>subscription-to-object</bubblingLabel>
+			</properties>
+		</component>
 	</components>
 </template-instance>

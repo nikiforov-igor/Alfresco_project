@@ -52,7 +52,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
         },
 
         _draw:function () {
-            var subscriptions = "subscr-object";
+            var subscriptions = "subscriptions-to-type";
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
@@ -98,7 +98,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             // начальлная загрузка Грида (на основании текущей странички)
             var type = getPageName();
             if (type == null || type == '') {
-                type = subscriptions; // по умолчанию, будем рисовать страницу с сотрудниками
+                type = subscriptions;
             }
             var root = context.roots[type];
             bubbleTable(root);

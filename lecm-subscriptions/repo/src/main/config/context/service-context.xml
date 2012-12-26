@@ -33,27 +33,36 @@
 		</property>
 	</bean>
 
-    <bean id="subscriptionScript" parent="baseJavaScriptExtension"
-          class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
-          depends-on="serviceSubscriptions">
-        <property name="extensionName">
-            <value>subscription</value>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
-        </property>
-        <property name="repositoryHelper">
-            <ref bean="repositoryHelper"/>
-        </property>
-        <property name="subscriptionsService">
-            <ref bean="serviceSubscriptions"/>
-        </property>
-    </bean>
+	<!-- Registration of subscriptions aspects models -->
+	<bean id="${groupId}.${artifactId}.subscriptionsAspectBootstrap" parent="dictionaryModelBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-aspects-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="serviceSubscriptions" class="ru.it.lecm.subscriptions.beans.SubscriptionsBean">
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
-        <property name="transactionService" ref="transactionService"/>
-        <property name="nodeService" ref="nodeService"/>
-    </bean>
+	<bean id="subscriptionScript" parent="baseJavaScriptExtension"
+	      class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
+	      depends-on="serviceSubscriptions">
+		<property name="extensionName">
+			<value>subscription</value>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+		<property name="repositoryHelper">
+			<ref bean="repositoryHelper"/>
+		</property>
+		<property name="subscriptionsService">
+			<ref bean="serviceSubscriptions"/>
+		</property>
+	</bean>
+
+	<bean id="serviceSubscriptions" class="ru.it.lecm.subscriptions.beans.SubscriptionsBean">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
 </beans>
