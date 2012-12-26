@@ -9,7 +9,7 @@ wDaysDatagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock:false,
 	showCheckboxColumn: false,
-    bubblingLabel: "wcalendarWorkingDays",
+    bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL,
 	actions: [{
 		type:"action-link-${bubblingLabel!"wcalendarWorkingDays"}",
 		id:"onActionEdit",
@@ -36,7 +36,7 @@ YAHOO.util.Event.onContentReady ('${id}', function () {
                 targetDelete:true
             }
         },
-    bubblingLabel: "wcalendarWorkingDays"
+    bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL
     });
 });
 //]]>

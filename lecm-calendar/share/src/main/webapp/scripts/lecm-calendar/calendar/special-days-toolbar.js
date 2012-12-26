@@ -1,5 +1,5 @@
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
+	var LogicECM = {};
 }
 
 LogicECM.module = LogicECM.module || {};
@@ -9,126 +9,106 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 
 (function () {
 
-    LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar = function (containerId) {
-        return  LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar.superclass.constructor.call(
-            this,
-            "LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar",
-            containerId,
-            ["button", "container", "connection", "json", "selector"]);
-    };
+	LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar = function (containerId) {
+		return  LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar.superclass.constructor.call(
+			this,
+			"LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar",
+			containerId,
+			["button", "container", "connection", "json", "selector"]);
+	};
 
-    YAHOO.lang.extend(LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar, Alfresco.component.Base, {
+	YAHOO.lang.extend(LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar, Alfresco.component.Base, {
 
-        options: {
-            pageId: null
-        },
+		options: {
+			pageId: null
+		},
 
-        _createSpecialDay: function WCalendarToolbar_createSpecialDay(wantedBubblingLabel) {
-            var scope = this;
-            return function (event, obj) {
-                var dataGrid = this.findGrid("LogicECM.module.Base.DataGrid", wantedBubblingLabel);
-                var datagridMeta = dataGrid.datagridMeta;
-                var destination = datagridMeta.nodeRef;
-                var itemType = datagridMeta.itemType;
+		_createSpecialDay: function WCalendarToolbar_createSpecialDay(wantedBubblingLabel) {
+			var scope = this;
+			return function (event, obj) {
+				var dataGrid = LogicECM.module.WCalendar.Utils.findGridByName("LogicECM.module.Base.DataGrid", wantedBubblingLabel);
+				var datagridMeta = dataGrid.datagridMeta;
+				var destination = datagridMeta.nodeRef;
+				var itemType = datagridMeta.itemType;
 
-                var url = "components/form"
-                + "?itemKind={itemKind}"
-                + "&itemId={itemId}"
-                + "&formId={formId}"
-                + "&destination={destination}"
-                + "&mode={mode}"
-                + "&submitType={submitType}"
-                + "&showCancelButton=true";
-                var templateUrl = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + url, {
-                    itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
-                    itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
-                    formId: "createNewSpecialDayForm",//The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
-                    destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
-                    mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
-                    submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
-                });
+				var url = "components/form"
+				+ "?itemKind={itemKind}"
+				+ "&itemId={itemId}"
+				+ "&formId={formId}"
+				+ "&destination={destination}"
+				+ "&mode={mode}"
+				+ "&submitType={submitType}"
+				+ "&showCancelButton=true";
+				var templateUrl = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + url, {
+					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
+					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
+					formId: "createNewSpecialDayForm",//The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
+					destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
+					mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
+					submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
+				});
 
-                // Using Forms Service, so always create new instance
-                var workingDayForm = new Alfresco.module.SimpleDialog (scope.id + "-workingDayForm");
+				// Using Forms Service, so always create new instance
+				var workingDayForm = new Alfresco.module.SimpleDialog(scope.id + "-workingDayForm");
 
-                workingDayForm.setOptions ({
-                    width: "50em",
-                    templateUrl: templateUrl,
-                    destroyOnHide: true,
-                    onSuccess: {
-                        fn: function DataListToolbar_onNewRow_success (response) {
-                            YAHOO.Bubbling.fire ("dataItemCreated", {
-                                nodeRef: response.json.persistedObject,
-                                bubblingLabel: wantedBubblingLabel
-                            });
+				workingDayForm.setOptions ({
+					width: "50em",
+					templateUrl: templateUrl,
+					destroyOnHide: true,
+					onSuccess: {
+						fn: function DataListToolbar_onNewRow_success (response) {
+							YAHOO.Bubbling.fire ("dataItemCreated", {
+								nodeRef: response.json.persistedObject,
+								bubblingLabel: wantedBubblingLabel
+							});
 
-                            Alfresco.util.PopupManager.displayMessage ({
-                                text: scope.msg ("message.new-row.success")
-                            });
-                        },
-                        scope: scope
-                    },
-                    onFailure: {
-                        fn: function DataListToolbar_onNewRow_failure (response) {
-                            Alfresco.util.PopupManager.displayMessage ({
-                                text: scope.msg("message.new-row.failure")
-                            });
-                        },
-                        scope: scope
-                    }
-                });
-                workingDayForm.show ();
-            }
-        },
+							Alfresco.util.PopupManager.displayMessage ({
+								text: scope.msg ("message.new-row.success")
+							});
+						},
+						scope: scope
+					},
+					onFailure: {
+						fn: function DataListToolbar_onNewRow_failure (response) {
+							Alfresco.util.PopupManager.displayMessage ({
+								text: scope.msg("message.new-row.failure")
+							});
+						},
+						scope: scope
+					}
+				});
+				workingDayForm.show ();
+			}
+		},
 
-        _onToolbarReady: function () {
-            var scope = this;
-            this.widgets.CreateWorkingDayBtn =  Alfresco.util.createYUIButton(this, "btnCreateWorkingDay", this._createSpecialDay("wcalendarWorkingDays"), {
-                label: scope.msg("button.new-working-day"),
-                value: "create",
-                disabled: true
-            });
-            this.widgets.CreateNonWorkingDayBtn =  Alfresco.util.createYUIButton(this, "btnCreateNonWorkingDay", this._createSpecialDay("wcalendarNonWorkingDays"), {
-                label: scope.msg("button.new-non-working-day"),
-                value: "create",
-                disabled: true
-            });
-            YAHOO.Bubbling.on("enableAddButton", function () {
-                this.widgets.CreateWorkingDayBtn.set("disabled", false);
-                this.widgets.CreateNonWorkingDayBtn.set("disabled", false);
-            }, this);
+		_onToolbarReady: function () {
+			var scope = this;
+			this.widgets.CreateWorkingDayBtn =  Alfresco.util.createYUIButton(this, "btnCreateWorkingDay", this._createSpecialDay(LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL), {
+				label: scope.msg("button.new-working-day"),
+				value: "create",
+				disabled: true
+			});
+			this.widgets.CreateNonWorkingDayBtn =  Alfresco.util.createYUIButton(this, "btnCreateNonWorkingDay", this._createSpecialDay(LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL), {
+				label: scope.msg("button.new-non-working-day"),
+				value: "create",
+				disabled: true
+			});
+			YAHOO.Bubbling.on("enableAddButton", function () {
+				this.widgets.CreateWorkingDayBtn.set("disabled", false);
+				this.widgets.CreateNonWorkingDayBtn.set("disabled", false);
+			}, this);
 
-        },
+		},
 
-        onReady: function () {
+		onReady: function () {
 
-            Alfresco.logger.info ("A new LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar has been created");
+			Alfresco.logger.info ("A new LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar has been created");
 
-            // Reference to Data Grid component
-            // this.modules.workingDataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
+			// Reference to Data Grid component
+			// this.modules.workingDataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
 
-            this._onToolbarReady ();
-            YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
-        },
-        // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар
-        findGrid:function WCalendarToolbar_findGrid(p_sName, bubblingLabel) {
-            var found = Alfresco.util.ComponentManager.find(
-            {
-                name:p_sName
-            });
-            if (bubblingLabel) {
-                for (var i = 0, j = found.length; i < j; i++) {
-                    var component = found[i];
-                    if (typeof component == "object" && component.options.bubblingLabel) {
-                        if (component.options.bubblingLabel == bubblingLabel) {
-                            return component;
-                        }
-                    }
-                }
-            } else {
-                return (typeof found[0] == "object" ? found[0] : null);
-            }
-            return null;
-        }
-    });
+			this._onToolbarReady ();
+			YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
+		}
+	});
 })();

@@ -9,7 +9,7 @@ nwDaysDatagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock:false,
 	showCheckboxColumn: false,
-    bubblingLabel: "wcalendarNonWorkingDays",
+    bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL,
 	actions: [{
 		type:"action-link-${bubblingLabel!"wcalendarNonWorkingDays"}",
 		id:"onActionEdit",
@@ -36,7 +36,7 @@ YAHOO.util.Event.onContentReady ('${id}', function () {
                 targetDelete:true
             }
         },
-    bubblingLabel: "wcalendarNonWorkingDays"
+    bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL
     });
 });
 //]]>

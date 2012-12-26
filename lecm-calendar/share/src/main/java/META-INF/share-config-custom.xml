@@ -1,83 +1,104 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
-    <!--Список годов-->
-    <config evaluator="model-type" condition="lecm-cal:calendar">
-        <forms>
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="lecm-cal:year"/>
-                    <show id="lecm-cal:comment"/>
-                </field-visibility>
-            </form>
-            <form id="createNewYearForm">
-                <field-visibility>
-                    <show id="lecm-cal:year"/>
-                    <show id="lecm-cal:comment"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-    <config evaluator="node-type" condition="lecm-cal:calendar">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-cal:comment"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-    <!--Рабочие дни-->
-    <config evaluator="model-type" condition="lecm-cal:working-days">
-        <forms>
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-            <form id="createNewSpecialDayForm">
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-    <config evaluator="node-type" condition="lecm-cal:working-days">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-      <!--Выходные дни-->
-    <config evaluator="model-type" condition="lecm-cal:non-working-days">
-        <forms>
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-            <form id="createNewSpecialDayForm">
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-    <config evaluator="node-type" condition="lecm-cal:non-working-days">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-cal:day"/>
-                    <show id="lecm-cal:reason"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
+	<!--Список годов-->
+	<config evaluator="model-type" condition="lecm-cal:calendar">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-cal:year"/>
+					<show id="lecm-cal:comment"/>
+				</field-visibility>
+			</form>
+			<form id="createNewYearForm">
+				<field-visibility>
+					<show id="lecm-cal:year"/>
+					<show id="lecm-cal:comment"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-cal:calendar">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-cal:comment"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<!--Рабочие дни-->
+	<config evaluator="model-type" condition="lecm-cal:working-days">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+			</form>
+			<form id="createNewSpecialDayForm">
+				<!--                <dependencies>
+     <js src="/share/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
+    </dependencies>-->
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-cal:day"  mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"
+										event="onblur" message-id="message.new-date.error" />
+						</constraint-handlers>
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-cal:working-days">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<!--Выходные дни-->
+	<config evaluator="model-type" condition="lecm-cal:non-working-days">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+			</form>
+			<form id="createNewSpecialDayForm">
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-cal:day"  mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"
+										event="onblur" message-id="message.new-date.error" />
+						</constraint-handlers>
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-cal:non-working-days">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-cal:day"/>
+					<show id="lecm-cal:reason"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

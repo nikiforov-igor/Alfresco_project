@@ -9,7 +9,7 @@ datagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock:true,
 	showCheckboxColumn: false,
-    bubblingLabel: "wcalendarYears",
+    bubblingLabel: LogicECM.module.WCalendar.Calendar.YEARS_LABEL,
 	actions: [{
 		type:"action-link-${bubblingLabel!"wcalendarYears"}",
 		id:"onActionEdit",
@@ -34,7 +34,7 @@ datagrid.setMessages (${messages});
 				//	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
 				//}
 			},
-            bubblingLabel: "wcalendarYears"
+            bubblingLabel: LogicECM.module.WCalendar.Calendar.YEARS_LABEL
 		});
 	});
 //]]>

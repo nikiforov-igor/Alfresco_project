@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-   <template-type>ru/it/lecm/wcalendar/shedule</template-type>
-   <properties>
-      <pageFamily>wcalendar</pageFamily>
-      <container>wcalendar</container>
-   </properties>
-<components>
+	<template-type>ru/it/lecm/wcalendar/shedule</template-type>
+	<properties>
+		<pageFamily>wcalendar</pageFamily>
+		<container>wcalendar</container>
+	</properties>
+	<components>
 		<!-- Title -->
 		<component>
 			<region-id>title</region-id>
@@ -34,4 +34,4 @@
 			<url>/ru/it/lecm/wcalendar/shedule/shedule</url>
 		</component>
 	</components>
-   </template-instance>
+</template-instance>

@@ -14,6 +14,10 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
 <#-- Advanced search -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/advsearch.js"/>
+<#-- Служебные функции -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
+<#-- Скрипт для валидации формы. Определяет, нет ли уже в списке дня, который пытаются добавить -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
 
 <script type="text/javascript">//<![CDATA[
       function init() {
@@ -38,6 +42,9 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Calendar = LogicECM.module.WCalendar.Calendar || {};
 
 LogicECM.module.WCalendar.Calendar.CALENDAR_CONTAINER = LogicECM.module.WCalendar.Calendar.CALENDAR_CONTAINER || calendarContainer;
+LogicECM.module.WCalendar.Calendar.YEARS_LABEL = LogicECM.module.WCalendar.Calendar.YEARS_LABEL || "wcalendarYears";
+LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL = LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL || "wcalendarWorkingDays";
+LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL = LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL || "wcalendarNonWorkingDays";
 
 //]]></script>
 </@>

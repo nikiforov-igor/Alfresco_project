@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-   <title>График работы</title>
-   <title-id>page.shedule.title</title-id>
-   <description>График работы сотрудников</description>
-   <description-id>page.shedule.description</description-id>
-   <template-instance>shedule</template-instance>
-   <authentication>user</authentication>
+	<title>График работы</title>
+	<title-id>page.shedule.title</title-id>
+	<description>График работы сотрудников</description>
+	<description-id>page.shedule.description</description-id>
+	<template-instance>shedule</template-instance>
+	<authentication>user</authentication>
 </page>
