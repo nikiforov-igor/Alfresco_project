@@ -1925,3 +1925,22 @@ span.person a
 #searchBlock .right {
 	float: right;
 }
+
+.form-container input[type="radio"]
+{
+	width: auto;
+}
+
+.form-container label.radio
+{
+	clear: both;
+	display: inline;
+	margin-left: 0.2em;
+	vertical-align: top;
+}
+
+/* for IE6 */
+.form-container .formsRadio
+{
+	width: auto;
+}

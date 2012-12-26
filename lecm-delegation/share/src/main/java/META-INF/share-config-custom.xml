@@ -49,15 +49,6 @@
 					<field id="lecm-d8n:delegation-opts-can-delegate-all">
 						<control template="/ru/it/lecm/delegation/controls/hidden.ftl"/>
 					</field>
-				</appearance>
-				<field-visibility>
-					<show id="lecm-d8n:delegation-opts-status"/>
-					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
-				</field-visibility>
-			</form>
-			<form id="delegation-opts-part2">
-				<appearance>
 					<field id="lecm-d8n:delegation-opts-trustee-assoc">
 						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
@@ -67,6 +58,9 @@
 					</field>
 				</appearance>
 				<field-visibility>
+					<show id="lecm-d8n:delegation-opts-status"/>
+					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 					<show id="lecm-d8n:delegation-opts-trustee-assoc"/>
 					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>

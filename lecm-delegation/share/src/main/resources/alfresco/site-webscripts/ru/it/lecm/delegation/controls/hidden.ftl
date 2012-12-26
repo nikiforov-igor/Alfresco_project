@@ -1,18 +1,41 @@
-<#-- Renders a hidden form field for edit and create modes only -->
-<#assign fieldValue = "">
-<#if field.control.params.contextProperty??>
-	<#if context.properties[field.control.params.contextProperty]??>
-			<#assign fieldValue = context.properties[field.control.params.contextProperty]>
-	<#elseif args[field.control.params.contextProperty]??>
-			<#assign fieldValue = args[field.control.params.contextProperty]>
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#assign isTrue=false>
+<#if field.value??>
+	<#if field.value?is_boolean>
+		<#assign isTrue=field.value>
+	<#elseif field.value?is_string && field.value == "true">
+		<#assign isTrue=true>
 	</#if>
-<#elseif context.properties[field.name]??>
-	<#assign fieldValue = context.properties[field.name]>
-<#else>
-	<#assign fieldValue = field.value>
 </#if>
 
+
 <#if form.mode == "edit" || form.mode == "create">
-<#assign hiddenFieldValue><#if fieldValue?is_number>${fieldValue?c}<#elseif fieldValue?is_boolean/>${fieldValue?string}<#else/>${fieldValue?html}</#if></#assign>
-<input type="hidden" name="${field.name}" value="${hiddenFieldValue}"/>
+<div class="form-field">
+	<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>"/>
+</div>
+<div class="form-field">
+	<input id="radioDelegateByFunc"
+		class="formsRadio"
+		type="radio"
+		name="delegate-group"
+		value="delegate-by"
+		onchange='javascript:YAHOO.util.Dom.get("${fieldHtmlId}").value=!YAHOO.util.Dom.get("radioDelegateByFunc").checked;'
+		<#if !isTrue>checked="checked"</#if>
+	/>
+	<label for="radioDelegateByFunc" class="radio">делегировать по бизнес функциям</label>
+</div>
+<div class="form-field">
+	<@grid.datagrid args.datagridId/>
+</div>
+<div class="form-field">
+	<input id="radioDelegateAllFunc"
+		class="formsRadio"
+		type="radio"
+		name="delegate-group"
+		value="delegate-all"
+		onchange='javascript:YAHOO.util.Dom.get("${fieldHtmlId}").value=YAHOO.util.Dom.get("radioDelegateAllFunc").checked;'
+		<#if isTrue>checked="checked"</#if>
+	/>
+	<label for="radioDelegateAllFunc" class="radio">делегировать все функции</label>
+</div>
 </#if>
