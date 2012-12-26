@@ -163,6 +163,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.calendar</groupId>
+            <artifactId>lecm-calendar-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
