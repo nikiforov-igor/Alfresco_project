@@ -7,13 +7,18 @@
 	<property name="lecm-dic:plane">true</property>
 	<property name="lecm-dic:description">Типы доставки уведомлений</property>
 	<items>
-		<item name="Email">
-			<property name="cm:name">email</property>
+		<item name="UI">
+			<property name="cm:name">Активный канал</property>
 			<property name="lecm-notf-type:code">1</property>
 		</item>
-		<item name="sms">
-			<property name="cm:name">sms</property>
+		<item name="Dashlet">
+			<property name="cm:name">Дашлет</property>
+			<property name="cm:name">Дашлет</property>
 			<property name="lecm-notf-type:code">2</property>
+		</item>
+		<item name="Email">
+			<property name="cm:name">Электронная почта</property>
+			<property name="lecm-notf-type:code">3</property>
 		</item>
 	</items>
 </dictionary>
