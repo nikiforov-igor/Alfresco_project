@@ -43,16 +43,11 @@
 		<dependency>
 			<groupId>acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
-			<version>0.8.2</version>
-			<scope>provided</scope>
-			<classifier>patched</classifier>
 		</dependency>
-	 <dependency>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>com.springsource.slf4j.api</artifactId>
-	  <version>1.6.1</version>
-	  <type>jar</type>
-	 </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
 	</dependencies>
 
 	<scm>
