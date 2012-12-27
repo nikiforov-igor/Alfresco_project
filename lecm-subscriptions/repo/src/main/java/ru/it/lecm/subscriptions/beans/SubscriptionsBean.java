@@ -5,36 +5,45 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: mShafeev
  * Date: 24.12.12
  * Time: 17:09
  */
-public class SubscriptionsBean {
+public class SubscriptionsBean extends BaseBean {
 
 	/**
 	 *
 	 */
 	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписки";
 	public static final String SUBSCRIPTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/subscriptions/1.0";
-	public static final String TYPE_SUBSCRIPTION = "subscription";
+	QName TYPE_SUBSCRIPTION_TO_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-object");
+	QName TYPE_SUBSCRIPTION_TO_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-type");
+	QName ASSOC_NOTIFICATION_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "notification-type-assoc");
+	QName ASSOC_DESTINATION_EMPLOYEE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-employee-assoc");
+	QName ASSOC_SUBSCRIPTION_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-object-assoc");
+	QName ASSOC_DESTINATION_POSITION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-position-assoc");
+	QName ASSOC_DESTINATION_ORGANIZATION_UNIT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-organization-unit-assoc");
+	QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
+	QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
+	QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
-	private NodeService nodeService;
-
+	private OrgstructureBean orgstructureService;
 
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -49,8 +58,12 @@ public class SubscriptionsBean {
 		this.transactionService = transactionService;
 	}
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
+
+	public OrgstructureBean getOrgstructureService() {
+		return orgstructureService;
 	}
 
 	private final Object lock = new Object();
@@ -102,5 +115,54 @@ public class SubscriptionsBean {
 			}
 		};
 		return AuthenticationUtil.runAsSystem(raw);
+	}
+
+	/**
+	 * проверяет что объект является подпиской на объект
+	 */
+	public boolean isSubscriptionToObject(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_SUBSCRIPTION_TO_OBJECT);
+		return isProperType(ref, types);
+	}
+
+	/**
+	 * Получение списка подписок сотрудника
+	 *
+	 * @param employeeRef Ссылка на сотрудника
+	 * @return Список ссылок на подписки
+	 */
+	public List<NodeRef> getEmployeeSubscriptionsToObject(NodeRef employeeRef) {
+		List<NodeRef> subscriptions = new ArrayList<NodeRef>();
+		if (orgstructureService.isEmployee(employeeRef)) {
+			List<AssociationRef> lRefs = nodeService.getSourceAssocs(employeeRef, ASSOC_DESTINATION_EMPLOYEE);
+			for (AssociationRef lRef : lRefs) {
+				if (!isArchive(lRef.getSourceRef())) {
+					subscriptions.add(lRef.getSourceRef());
+				}
+			}
+		}
+		return subscriptions;
+	}
+
+	/**
+	 * Получения подписки сотрудника на объект
+	 *
+	 * @param employeeRef Ссылка на сотрудника
+	 * @param objectNodeRef Ссылка на объект
+	 * @return Ссылка на подписку
+	 */
+	public NodeRef getEmployeeSubscriptionToObject(NodeRef employeeRef, NodeRef objectNodeRef) {
+		NodeRef result = null;
+		List<NodeRef> subscriptions = getEmployeeSubscriptionsToObject(employeeRef);
+		for (NodeRef subscriptionRef: subscriptions) {
+			List<AssociationRef> lRefs = nodeService.getTargetAssocs(subscriptionRef, ASSOC_SUBSCRIPTION_OBJECT);
+			for (AssociationRef lRef : lRefs) {
+				if (!isArchive(lRef.getTargetRef()) && lRef.getTargetRef().equals(objectNodeRef)) {
+					return subscriptionRef;
+				}
+			}
+		}
+		return result;
 	}
 }

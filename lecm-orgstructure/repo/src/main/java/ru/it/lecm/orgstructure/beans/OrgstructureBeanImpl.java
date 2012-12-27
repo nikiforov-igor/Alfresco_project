@@ -8,12 +8,12 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -23,12 +23,11 @@ import java.util.*;
  *         Date: 27.11.12
  *         Time: 17:08
  */
-public class OrgstructureBeanImpl implements OrgstructureBean {
+public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
-	private NodeService nodeService;
 	private AuthenticationService authService;
 	private PersonService personService;
 
@@ -44,10 +43,6 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
 	}
 
 	public void setAuthService(AuthenticationService authService) {
@@ -365,17 +360,6 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORKFORCE);
 		return isProperType(ref, types);
-	}
-	/**
-	 * проверяет что объект имеет подходящий тип
-	 */
-	private boolean isProperType(NodeRef ref, Set<QName> types) {
-		if (ref != null) {
-			QName type = nodeService.getType(ref);
-			return types.contains(type);
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -839,13 +823,6 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 		return employeeLink;
 	}
     
-    @Override
-	public boolean isArchive(NodeRef ref){
-	    boolean isArchive = ref.getStoreRef().getProtocol().equals("archive");
-	    Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
-        return isArchive || (isActive != null && !isActive);
-    }
-
 	/**
 	 * Получение полного перечня бизнес ролей
 	 */

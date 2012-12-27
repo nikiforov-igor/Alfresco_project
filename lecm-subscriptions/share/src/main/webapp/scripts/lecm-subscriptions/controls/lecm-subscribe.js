@@ -53,6 +53,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			root: null,
 
+			currentEmployeeSubscription: null,
+
 			currentEmployee: null,
 
 			onReady: function()

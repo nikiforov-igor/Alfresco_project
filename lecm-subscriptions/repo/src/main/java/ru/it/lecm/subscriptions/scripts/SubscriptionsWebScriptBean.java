@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
 
 /**
@@ -116,5 +117,28 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 			logger.error(e);
 		}
 		return nodes.toString();
+	}
+
+	/**
+	 *  Получения подписки сотрудника на объект
+	 *
+	 * @param employeeRefStr Ссылка на сотрудника
+	 * @param objectRefStr Ссылка на объект
+	 * @return Подписка
+	 */
+	public ScriptNode getEmployeeSubscriptionToObject(String employeeRefStr, String objectRefStr) {
+		ParameterCheck.mandatory("employeeRefStr", employeeRefStr);
+		ParameterCheck.mandatory("objectRefStr", objectRefStr);
+		NodeRef employeeRef = new NodeRef(employeeRefStr);
+		NodeRef objectRef = new NodeRef(objectRefStr);
+		if (this.services.getNodeService().exists(employeeRef) && this.services.getNodeService().exists(objectRef)) {
+			if (subscriptionsService.getOrgstructureService().isEmployee(employeeRef)) {
+				NodeRef subscriptionRef = subscriptionsService.getEmployeeSubscriptionToObject(employeeRef, objectRef);
+				if (subscriptionRef != null && subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
+					return new ScriptNode(subscriptionRef, this.services, getScope());
+				}
+			}
+		}
+		return null;
 	}
 }

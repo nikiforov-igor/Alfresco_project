@@ -64,5 +64,6 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 </beans>

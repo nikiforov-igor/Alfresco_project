@@ -1,0 +1,1 @@
+model.subscription = subscription.getEmployeeSubscriptionToObject(args["employeeRef"], args["objectRef"]);

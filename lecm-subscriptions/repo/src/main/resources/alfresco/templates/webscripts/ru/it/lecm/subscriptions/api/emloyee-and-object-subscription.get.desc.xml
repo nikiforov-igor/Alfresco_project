@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>current employee</shortname>
+	<description>Return current employee</description>
+	<url>/lecm/subscriptions/api/getEmployeeSubscriptionToObject?employeeRef={employeeRef}&amp;objectRef={objectRef}</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>
