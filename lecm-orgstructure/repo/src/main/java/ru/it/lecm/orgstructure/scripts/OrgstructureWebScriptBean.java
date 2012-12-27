@@ -703,4 +703,15 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			return null;
 		}
 	}
+
+	/**
+	 * Получение информации о текущем сотруднике
+	 */
+	public ScriptNode getCurrentEmployee() {
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		if (orgstructureService.isEmployee(employeeRef)) {
+			return new ScriptNode(employeeRef, this.services, getScope());
+		}
+		return null;
+	}
 }

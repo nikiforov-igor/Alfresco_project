@@ -74,6 +74,8 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="personService" ref="personService"/>
+        <property name="authService" ref="authenticationService"/>
     </bean>
 
 	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.beans.OrgstructureBossPolicy"

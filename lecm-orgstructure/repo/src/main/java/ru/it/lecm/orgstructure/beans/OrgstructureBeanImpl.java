@@ -9,6 +9,8 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
@@ -27,6 +29,8 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	private NodeService nodeService;
+	private AuthenticationService authService;
+	private PersonService personService;
 
 	private final Object lock = new Object();
 
@@ -44,6 +48,14 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
+	}
+
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
 	}
 
 	/**
@@ -955,5 +967,25 @@ public class OrgstructureBeanImpl implements OrgstructureBean {
 			}
 		}
 		return links;
+	}
+
+	/**
+	 * Получение текущего сотрудника
+	 */
+	@Override
+	public NodeRef getCurrentEmployee() {
+		String username = authService.getCurrentUserName();
+		if (username != null) {
+			NodeRef personNodeRef = personService.getPerson(username, false);
+			if (personNodeRef != null) {
+				List<AssociationRef> lRefs = nodeService.getSourceAssocs(personNodeRef, ASSOC_EMPLOYEE_PERSON);
+				for (AssociationRef lRef : lRefs) {
+					if (!isArchive(lRef.getSourceRef())) {
+						return lRef.getSourceRef();
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

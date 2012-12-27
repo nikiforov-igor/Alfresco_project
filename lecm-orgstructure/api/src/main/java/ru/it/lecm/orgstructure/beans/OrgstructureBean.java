@@ -145,4 +145,6 @@ public interface OrgstructureBean {
 	List<NodeRef> getEmployeeLinks(NodeRef employeeRef);
 
 	List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef);
+
+	NodeRef getCurrentEmployee();
 }
