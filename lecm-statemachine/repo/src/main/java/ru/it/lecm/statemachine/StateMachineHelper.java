@@ -28,7 +28,7 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
-import ru.it.lecm.statemachine.assign.AssignWorkflow;
+import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
@@ -102,15 +102,15 @@ public class StateMachineHelper {
 						}
 						workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
 						//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
-						AssignWorkflow assignWorkflow = new AssignWorkflow();
-						Set<NodeRef> persons = assignWorkflow.getRealPersons(assignee);
+						AssignExecution assignExecution = new AssignExecution();
+						/*Set<NodeRef> persons = assignExecution.getRealPersons(assignee);
 						if (persons.size() > 1) {
 							//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEES, persons);
 						} else if (persons.size() > 0) {
 							for (NodeRef person : persons) {
 								workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
 							};
-						}
+						}*/
 
 						if (!async) {
 							workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));

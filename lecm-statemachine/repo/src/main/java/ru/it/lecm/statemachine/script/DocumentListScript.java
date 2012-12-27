@@ -18,12 +18,15 @@ import ru.it.lecm.statemachine.StateMachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.statemachine.assign.AssignWorkflow;
+import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.DocumentStateMachineBean;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -83,15 +86,15 @@ public class DocumentListScript extends DeclarativeWebScript {
                                     for (StateMachineAction action : actions) {
                                         UserWorkflow userWorkflow = (UserWorkflow) action;
                                         List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
-										AssignWorkflow assignWorkflow = new AssignWorkflow();
+										AssignExecution assignExecution = new AssignExecution();
                                         for (UserWorkflow.UserWorkflowEntity entity : entities) {
                                             HashMap<String, Object> workflow = new HashMap<String, Object>();
                                             workflow.put("label", entity.getLabel());
                                             workflow.put("workflowId", entity.getWorkflowId());
-											Set<NodeRef> persons = assignWorkflow.getRealPersons(entity.getAssignee());
+											assignExecution.execute(entity.getAssignee());
                                             List<String> refs = new ArrayList<String>();
-											for (NodeRef person : persons) {
-												refs.add(person.toString());
+											if (assignExecution.getNodeRefResult() != null) {
+												refs.add(assignExecution.getNodeRefResult().toString());
 											}
                                             workflow.put("assignees", refs);
                                             workflows.add(workflow);

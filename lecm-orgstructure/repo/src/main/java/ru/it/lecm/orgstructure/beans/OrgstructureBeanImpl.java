@@ -952,17 +952,48 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getCurrentEmployee() {
 		String username = authService.getCurrentUserName();
-		if (username != null) {
-			NodeRef personNodeRef = personService.getPerson(username, false);
+		return getEmployeeByPerson(username);
+	}
+
+	/**
+	 * Получение текущего сотрудника по имени пользователя
+	 */
+	@Override
+	public NodeRef getEmployeeByPerson(String personName) {
+		if (personName != null) {
+			NodeRef personNodeRef = personService.getPerson(personName, false);
 			if (personNodeRef != null) {
-				List<AssociationRef> lRefs = nodeService.getSourceAssocs(personNodeRef, ASSOC_EMPLOYEE_PERSON);
-				for (AssociationRef lRef : lRefs) {
-					if (!isArchive(lRef.getSourceRef())) {
-						return lRef.getSourceRef();
-					}
-				}
+				getEmployeeByPerson(personNodeRef);
 			}
 		}
 		return null;
 	}
+
+	/**
+	 * Получение текущего сотрудника по NodeRef пользователя
+	 */
+	@Override
+	public NodeRef getEmployeeByPerson(NodeRef person) {
+		List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
+		for (AssociationRef lRef : lRefs) {
+			if (!isArchive(lRef.getSourceRef())) {
+				return lRef.getSourceRef();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получение пользователя сотрудника
+	 */
+	@Override
+	public NodeRef getPersonForEmployee(NodeRef employee) {
+		List<AssociationRef> persons = nodeService.getTargetAssocs(employee, ASSOC_EMPLOYEE_PERSON);
+		if (persons.size() > 0) {
+			return persons.get(0).getTargetRef();
+		} else {
+			return null;
+		}
+	}
+
 }

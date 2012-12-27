@@ -144,4 +144,11 @@ public interface OrgstructureBean {
 	List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef);
 
 	NodeRef getCurrentEmployee();
+
+	NodeRef getEmployeeByPerson(String personName);
+
+	NodeRef getEmployeeByPerson(NodeRef person);
+
+	NodeRef getPersonForEmployee(NodeRef employee);
+
 }

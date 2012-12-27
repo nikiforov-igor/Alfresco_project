@@ -39,7 +39,10 @@
                                 itemType: "${field.control.params.itemType!""}",
                                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                                 createFormId: "${field.control.params.createFormId!""}",
-                                nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>
+                                nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>,
+                                actionsConfig: {
+                                    fullDelete: "${field.control.params.fullDelete!"false"}"
+                                }
                             },
                         dataSource:"${field.control.params.ds!"lecm/search"}",
                         bubblingLabel: "${containerId}",

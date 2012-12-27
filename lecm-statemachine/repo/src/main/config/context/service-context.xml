@@ -53,7 +53,7 @@
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 	</bean>
 
-	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignWorkflow">
+	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignExecution">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>

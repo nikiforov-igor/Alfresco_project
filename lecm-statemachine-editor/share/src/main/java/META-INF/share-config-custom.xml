@@ -31,6 +31,7 @@
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -39,6 +40,7 @@
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -48,6 +50,7 @@
 							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -56,6 +59,7 @@
 							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -64,6 +68,7 @@
 							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -73,6 +78,7 @@
 							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -81,6 +87,7 @@
 							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -89,6 +96,7 @@
 							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -97,6 +105,7 @@
 							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 
@@ -186,13 +195,6 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -212,13 +214,6 @@
 						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 				</appearance>

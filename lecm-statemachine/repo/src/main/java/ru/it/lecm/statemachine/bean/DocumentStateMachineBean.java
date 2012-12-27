@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.bean;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.extensions.surf.util.I18NUtil;
+import ru.it.lecm.statemachine.assign.AssignExecution;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +32,10 @@ public class DocumentStateMachineBean implements InitializingBean {
 
 	public Collection<String> getProcesses() {
 		return stateMachines.values();
+	}
+
+	public AssignExecution testExecution() {
+		return new AssignExecution();
 	}
 
 	@Override
