@@ -63,7 +63,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <show id="lecm-busjournal:messageTemplate-template"/>
                     <show id="lecm-busjournal:messageTemplate-code"/>
                     <show id="lecm-busjournal:messageTemplate-objType-assoc"/>
@@ -77,7 +76,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <show id="lecm-busjournal:messageTemplate-template"/>
                     <show id="lecm-busjournal:messageTemplate-code"/>
                     <show id="lecm-busjournal:messageTemplate-objType-assoc"/>
@@ -86,7 +84,6 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name"/>
                     <show id="lecm-busjournal:messageTemplate-template"/>
                     <show id="lecm-busjournal:messageTemplate-code"/>
                     <show id="lecm-busjournal:messageTemplate-objType-assoc"/>

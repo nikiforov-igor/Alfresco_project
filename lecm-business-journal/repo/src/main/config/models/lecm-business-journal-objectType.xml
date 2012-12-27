@@ -9,33 +9,39 @@
     <items>
         <item name="Справочник">
             <property name="cm:name">Справочник</property>
-            <property name="lecm-busjournal:objectType-code">Код - Справочник</property>
-            <property name="lecm-busjournal:objectType-class">Класс - Справочник</property>
-            <property name="lecm-busjournal:objectType-template">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Справочник</property>
+            <property name="lecm-busjournal:objectType-class">lecm-dic:dictionary</property>
+            <property name="lecm-busjournal:objectType-template">{сm:name}</property>
         </item>
-        <item name="Организационно-штатная структура">
-            <property name="cm:name">Организационно-штатная структура</property>
-            <property name="lecm-busjournal:objectType-code">Код - Оргструктура</property>
-            <property name="lecm-busjournal:objectType-class">Класс - Оргструктура</property>
-            <property name="lecm-busjournal:objectType-template">${name}</property>
+        <item name="Подразделение">
+            <property name="cm:name">Подразделение</property>
+            <property name="lecm-busjournal:objectType-code">Подразделение</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:organization-unit</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-short-name}</property>
         </item>
         <item name="Делегирование">
             <property name="cm:name">Делегирование</property>
             <property name="lecm-busjournal:objectType-code">Код - Делегирование</property>
             <property name="lecm-busjournal:objectType-class">Класс - Делегирование</property>
-            <property name="lecm-busjournal:objectType-template">${name}</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
         </item>
         <item name="Документ">
             <property name="cm:name">Документ</property>
-            <property name="lecm-busjournal:objectType-code">Код - Документ</property>
-            <property name="lecm-busjournal:objectType-class">Класс - Документ</property>
-            <property name="lecm-busjournal:objectType-template">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Документ</property>
+            <property name="lecm-busjournal:objectType-class">lecm-document:base</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
         </item>
         <item name="Задача">
             <property name="cm:name">Задача</property>
-            <property name="lecm-busjournal:objectType-code">Код - Задача</property>
-            <property name="lecm-busjournal:objectType-class">Класс - Задача</property>
-            <property name="lecm-busjournal:objectType-template">${name}</property>
+            <property name="lecm-busjournal:objectType-code">Задача</property>
+            <property name="lecm-busjournal:objectType-class">Задача</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+        </item>
+        <item name="Сотрудник">
+            <property name="cm:name">Сотрудник</property>
+            <property name="lecm-busjournal:objectType-code">Сотрудник</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:employee</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} - {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}</property>
         </item>
     </items>
 </dictionary>
