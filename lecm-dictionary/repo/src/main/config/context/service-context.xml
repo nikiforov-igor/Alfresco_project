@@ -71,4 +71,23 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
+
+    <bean id="serviceDictionary" class="ru.it.lecm.dictionary.beans.DictionaryBeanImpl">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+    </bean>
+
+    <bean id="dictionaryScript" parent="baseJavaScriptExtension" class="ru.it.lecm.dictionary.scripts.DictionaryWebScriptBean"
+          depends-on="serviceDictionary">
+        <property name="extensionName">
+            <value>dictionary</value>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="serviceDictionary"/>
+        </property>
+    </bean>
+
 </beans>

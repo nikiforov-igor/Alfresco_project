@@ -16,6 +16,7 @@
     <name>Logic ECM Dictionary</name>
 
     <modules>
+        <module>api</module>
         <module>repo</module>
         <module>share</module>
     </modules>
