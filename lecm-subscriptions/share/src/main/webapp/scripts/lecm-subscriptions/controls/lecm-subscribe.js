@@ -53,9 +53,12 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			root: null,
 
+			currentEmployee: null,
+
 			onReady: function()
 			{
 				this.loadSubscriptionsRoot();
+				this.loadCurrentEmployee();
 				this.subscribeButton =  new YAHOO.widget.Button(
 					this.controlId + "-subscribe-button",
 					{
@@ -66,6 +69,25 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						}
 					}
 				);
+			},
+
+			loadCurrentEmployee: function() {
+				var me = this;
+				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getCurrentEmployee";
+				var callback = {
+					success:function (oResponse) {
+						var oResults = eval("(" + oResponse.responseText + ")");
+						if (oResults && oResults.nodeRef) {
+							me.currentEmployee = oResults;
+						} else {
+							YAHOO.log("Failed to process XHR transaction.", "info", "example");
+						}
+					},
+					failure:function (oResponse) {
+						YAHOO.log("Failed to process XHR transaction.", "info", "example");
+					}
+				};
+				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			},
 
 			loadSubscriptionsRoot: function() {
@@ -154,6 +176,12 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 								var objectAddedInput = form['assoc_lecm-subscr_subscription-object-assoc_added'];
 								if (objectAddedInput != null) {
 									objectAddedInput.value = this.options.objectNodeRef;
+								}
+								if (this.currentEmployee != null && this.currentEmployee.nodeRef != null) {
+									var employeeAddedInput = form['assoc_lecm-subscr_destination-employee-assoc_added'];
+									if (employeeAddedInput != null) {
+										employeeAddedInput.value = this.currentEmployee.nodeRef;
+									}
 								}
 							},
 							scope:this
