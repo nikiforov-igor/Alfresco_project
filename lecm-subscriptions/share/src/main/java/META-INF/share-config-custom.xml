@@ -103,4 +103,20 @@
 			</form>
 		</forms>
 	</config>
+
+	<!-- Custom Aspects forms-->
+	<config evaluator="aspect" condition="lecm-subscr-aspects:subscribed">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-subscr-aspects"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-subscr-aspects">
+						<control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

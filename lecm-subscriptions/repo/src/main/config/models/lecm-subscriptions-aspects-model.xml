@@ -19,13 +19,6 @@
 
 	<!--Аспект для подписки да объект-->
 	<aspects>
-		<aspect name="lecm-subscr-aspects:subscribed">
-			<properties>
-				<property name="lecm-subscr-aspects:has-subscribers">
-					<type>d:boolean</type>
-					<mandatory>false</mandatory>
-				</property>
-			</properties>
-		</aspect>
+		<aspect name="lecm-subscr-aspects:subscribed"/>
 	</aspects>
 </model>
