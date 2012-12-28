@@ -51,9 +51,11 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			subscribeButton: null,
 
+			unsubscribeButton: null,
+
 			root: null,
 
-			currentEmployeeSubscription: null,
+			currentEmployeeSubscriptionRef: null,
 
 			currentEmployee: null,
 
@@ -71,6 +73,17 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						}
 					}
 				);
+				this.unsubscribeButton =  new YAHOO.widget.Button(
+					this.controlId + "-unsubscribe-button",
+					{
+						onclick: {
+							fn: this.onUnsubscribe,
+							obj: null,
+							scope: this
+						}
+					}
+				);
+				this.updateFormButtons();
 			},
 
 			loadCurrentEmployee: function() {
@@ -81,6 +94,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						var oResults = eval("(" + oResponse.responseText + ")");
 						if (oResults && oResults.nodeRef) {
 							me.currentEmployee = oResults;
+							me.loadSubscriptionForEmployee();
 						} else {
 							YAHOO.log("Failed to process XHR transaction.", "info", "example");
 						}
@@ -120,7 +134,36 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			},
 
+			loadSubscriptionForEmployee: function() {
+				if (this.options.objectNodeRef != null && this.currentEmployee != null && this.currentEmployee.nodeRef != null) {
+					var me = this;
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/getEmployeeSubscriptionToObject?employeeRef=" +
+						this.currentEmployee.nodeRef + "&objectRef=" + this.options.objectNodeRef;
+					var callback = {
+						success:function (oResponse) {
+							var oResults = eval("(" + oResponse.responseText + ")");
+							if (oResults && oResults.nodeRef) {
+								me.currentEmployeeSubscriptionRef = oResults.nodeRef;
+							} else {
+								YAHOO.log("Failed to process XHR transaction.", "info", "example");
+							}
+							me.updateFormButtons();
+						},
+						failure:function (oResponse) {
+							YAHOO.log("Failed to process XHR transaction.", "info", "example");
+						}
+					};
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+				}
+			},
+
+			updateFormButtons: function() {
+				Dom.setStyle(this.subscribeButton.get("id"), "display", (this.currentEmployee == null || this.currentEmployeeSubscriptionRef != null) ? "none" : "");
+				Dom.setStyle(this.unsubscribeButton.get("id"), "display", (this.currentEmployee == null || this.currentEmployeeSubscriptionRef == null) ? "none" : "");
+			},
+
 			onSubscribe: function(e, p_obj) {
+				var me = this;
 				// Intercept before dialog show
 				var doBeforeDialogShow = function(p_form, p_dialog) {
 					Alfresco.util.populateHTML(
@@ -152,11 +195,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						},
 						onSuccess:{
 							fn:function (response) {
-//									YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-//										{
-//											nodeRef:response.json.persistedObject,
-//											bubblingLabel:this.options.bubblingLabel
-//										});
+								me.currentEmployeeSubscriptionRef = response.json.persistedObject;
+								me.updateFormButtons();
 								Alfresco.util.PopupManager.displayMessage(
 									{
 										text:this.msg("message.save.subscribe.success")
@@ -189,6 +229,60 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 							scope:this
 						}
 					}).show();
+			},
+
+			onUnsubscribe: function(e, p_obj) {
+				var me = this;
+				var fnActionUnsibscribeConfirm = function DataGridActions__onActionDelete_confirm(items) {
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/subscriptions/api/unsubscribeObject?nodeRef=" + me.currentEmployeeSubscriptionRef;
+					var callback = {
+						success:function (oResponse) {
+							var oResults = eval("(" + oResponse.responseText + ")");
+							if (oResults && oResults.success) {
+								me.currentEmployeeSubscriptionRef = null;
+								Alfresco.util.PopupManager.displayMessage(
+									{
+										text: me.msg("message.unsibscribe.success")
+									});
+							} else {
+								Alfresco.util.PopupManager.displayMessage(
+									{
+										text: me.msg("message.unsibscribe.failure")
+									});
+							}
+							me.updateFormButtons();
+						},
+						failure:function (oResponse) {
+							Alfresco.util.PopupManager.displayMessage(
+								{
+									text: me.msg("message.unsibscribe.failure")
+								});
+						}
+					};
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+				};
+
+				Alfresco.util.PopupManager.displayPrompt(
+					{
+						title:me.msg("message.confirm.unsubscribe.title"),
+						text: me.msg("message.confirm.unsubscribe.description"),
+						buttons:[
+							{
+								text:me.msg("button.unsubscribe"),
+								handler:function () {
+									this.destroy();
+									fnActionUnsibscribeConfirm.call();
+								}
+							},
+							{
+								text: me.msg("button.cancel"),
+								handler:function () {
+									this.destroy();
+								},
+								isDefault:true
+							}
+						]
+					});
 			}
 		});
 })();

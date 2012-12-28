@@ -165,4 +165,13 @@ public class SubscriptionsBean extends BaseBean {
 		}
 		return result;
 	}
+
+	/**
+	 * Удаление подписки на объект
+	 *
+	 * @param nodeRef Ссылка на подписку
+	 */
+	public void unsubscribeObject(NodeRef nodeRef) {
+		nodeService.deleteNode(nodeRef);
+	}
 }

@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Unsubscribe object</shortname>
+	<description>Unsubscribe object</description>
+	<url>/lecm/subscriptions/api/unsubscribeObject?nodeRef={nodeRef}</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

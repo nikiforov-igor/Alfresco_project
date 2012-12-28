@@ -120,10 +120,10 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 *  Получения подписки сотрудника на объект
+	 * Получения подписки сотрудника на объект
 	 *
 	 * @param employeeRefStr Ссылка на сотрудника
-	 * @param objectRefStr Ссылка на объект
+	 * @param objectRefStr   Ссылка на объект
 	 * @return Подписка
 	 */
 	public ScriptNode getEmployeeSubscriptionToObject(String employeeRefStr, String objectRefStr) {
@@ -140,5 +140,23 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Удаление подписки на объект
+	 *
+	 * @param nodeRef Ссылка на объект
+	 * @return true если удачно удалена подписка, иначе false
+	 */
+	public boolean unsubscribeObject(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef subscriptionRef = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(subscriptionRef) &&
+				subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
+
+			subscriptionsService.unsubscribeObject(subscriptionRef);
+			return true;
+		}
+		return false;
 	}
 }
