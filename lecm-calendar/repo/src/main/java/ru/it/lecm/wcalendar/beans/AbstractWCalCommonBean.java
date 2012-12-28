@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.it.lecm.wcalendar.beans;
 
 import java.io.Serializable;
@@ -26,6 +22,7 @@ import ru.it.lecm.wcalendar.IWCalCommon;
  */
 public abstract class AbstractWCalCommonBean implements IWCalCommon, AuthenticationUtil.RunAsWork<NodeRef> {
 
+	// Статически задаем namespace-ы из моделей данных
 	protected final static String WCAL_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/1.0";
 	protected final static String SHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/shedule/1.0";
 	protected final static String ABSENCE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/absence/1.0";
@@ -33,16 +30,35 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 	protected Repository repository;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
+	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalCommonBean.class);
 
+	/**
+	 * Получить экземпляр NodeService от Spring-а для последующей работы с
+	 * нодами.
+	 *
+	 * @param nodeService передается Spring-ом
+	 */
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
+	/**
+	 * Получить экземпляр Repository от Spring-а для последующей работы с
+	 * репозиторием.
+	 *
+	 * @param repository передается Spring-ом
+	 */
 	public void setRepositoryHelper(Repository repository) {
 		this.repository = repository;
 	}
 
+	/**
+	 * Получить экземпляр TransactionService от Spring-а для того, чтобы
+	 * оборачивать работу с репозиторием в транзакции
+	 *
+	 * @param transactionService передается Spring-ом
+	 */
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
@@ -58,6 +74,14 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 		return calendarContainer;
 	}
 
+	/**
+	 * Задание параметров для инициализации контейнера для каленларей или
+	 * графиков работы или отсутствия. Используется в doWork(). CONTAINER_NAME -
+	 * название контейнеров. CONTAINER_TYPE - тип контейнера. Все три контейнера
+	 * создаются в корне хранилища (company home).
+	 *
+	 * @return HashMap с параметрами контейнера.
+	 */
 	protected abstract Map<String, Object> containerParams();
 
 	@Override

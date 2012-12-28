@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.it.lecm.wcalendar.shedule.beans;
 
 import java.util.HashMap;
@@ -20,10 +16,11 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
  */
 public class SheduleBean extends AbstractWCalCommonBean {
 
-	private final static Logger logger = LoggerFactory.getLogger(SheduleBean.class);
 	private final static QName TYPE_SHEDULE = QName.createQName(SHEDULE_NAMESPACE, "shedule");
 	private final static String CONTAINER_NAME = "SheduleContainer";
 	private final static QName TYPE_SHEDULE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "shedule-container");
+	// Получить логгер, чтобы писать, что с нами происходит.
+	private final static Logger logger = LoggerFactory.getLogger(SheduleBean.class);
 
 	@Override
 	public IWCalCommon getWCalendarDescriptor() {
@@ -34,13 +31,17 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	public QName getWCalendarItemType() {
 		return TYPE_SHEDULE;
 	}
-
+/**
+	 * Метод, который запускает Spring при старте Tomcat-а. Создает корневой
+	 * объект для графиков работы.
+	 */
 	public final void bootstrap() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 //		PropertyCheck.mandatory (this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 
+		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
 	}
 

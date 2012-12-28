@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<!--	<bean id="webscript.ru.it.lecm.sample.SampleWebScript.get" class="ru.it.lecm.sample.SampleWebScript" parent="webscript">
-		<property name="repository" ref="repositoryHelper"/>
-	</bean>
-
-	<bean id="sampleSessionBean" class="ru.it.lecm.sample.beans.SampleSessionBean"/>
-
- <bean id="sampleSessionWrapper" class="ru.it.lecm.sample.beans.SampleSessionWrapper" parent="baseJavaScriptExtension">
- 		<property name="sampleSession" ref="sampleSessionBean"/>
-  <property name="extensionName" value="sampleSessionJSExtension"/>
- </bean>-->
-
-	<!-- Registration of Delegations models -->
-	<bean id="${groupId}.${artifactId}.wCalendarBootstrap" parent="dictionaryModelBootstrap" 
+	<bean id="${groupId}.${artifactId}.wCalendarBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
@@ -39,7 +27,7 @@
 			</list>
 		</property>
 	</bean>
-    
+
 	<bean id="calendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
