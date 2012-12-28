@@ -963,7 +963,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		if (personName != null) {
 			NodeRef personNodeRef = personService.getPerson(personName, false);
 			if (personNodeRef != null) {
-				getEmployeeByPerson(personNodeRef);
+				return getEmployeeByPerson(personNodeRef);
 			}
 		}
 		return null;
