@@ -816,6 +816,7 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-orgstr:business-role-description"/>
+					<show id="lecm-dic:active"/>
 				</field-visibility>
 			</form>
 			<form id="configureBusinessRole">

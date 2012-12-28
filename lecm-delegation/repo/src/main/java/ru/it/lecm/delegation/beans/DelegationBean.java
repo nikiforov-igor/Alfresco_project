@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -138,6 +139,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	private final static QName ASSOC_EMPLOYEE_PERSON = QName.createQName (ORGSTRUCTURE_NAMESPACE, "employee-person-assoc");
 	private final static QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
 	private final static QName ASSOC_PROCURACY_BUSINESS_ROLE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-business-role-assoc");
+	private final static QName ASSOC_PROCURACY_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-trustee-assoc");
 	private final static QName PROP_ACTIVE = QName.createQName (DICTIONARY_NAMESPACE, "active");
 
 	private static enum ASSOCIATION_TYPE {
@@ -929,20 +931,159 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 			}
 		});
 	}
-}
-/*
- 				public NodeRef execute () throws Throwable {
-					NodeRef parentRef = companyHome; //the parent node
-					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
-					QName assocQName = QName.createQName (DELEGATION_NAMESPACE, CONTAINER); //the qualified name of the association
-					QName nodeTypeQName = TYPE_DELEGATION_OPTS_CONTAINER; //a reference to the node type
-					// создание корневого узла для делегирований в Компании ...
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable> (1); //optional map of properties to keyed by their qualified names
-					properties.put (ContentModel.PROP_NAME, CONTAINER);
-					ChildAssociationRef associationRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-					NodeRef delegationRoot = associationRef.getChildRef ();
-					logger.debug (String.format ("container node '%s' created", delegationRoot.toString ()));
-					return delegationRoot;
-				}
 
- */
+	//проперти и ассоциации которые будут использоваться при сохранении
+	private final static QName PROP_DELEGATION_OPTS_STATUS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-status");
+	private final static QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
+	private final static QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
+	private final static QName ASSOC_DELEGATION_OPTS_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-trustee-assoc");
+
+	private static enum DELEGATION_OPTS_STATUS {
+		NEW,
+		ACTIVE,
+		REVOKED,
+		CLOSED,
+		NOT_SET;
+
+		public final boolean equals (String other) {
+			return this.toString ().equals (other);
+		}
+	}
+
+	/**
+	 * поиск значения проверти или ассоциации в JSON объекте который пришел с формы
+	 * @param options JSON объект по которому искать
+	 * @param pattern кусочек имени по которому пытаться искать
+	 * @return Object если нашел, null в противном случае
+	 */
+	private <T>T findInOptions (final JSONObject options, final String pattern, final String typeName) {
+		Object result = null;
+		try {
+			Iterator<Object> itr = options.keys ();
+			while (itr.hasNext ()) {
+				String key = itr.next ().toString ();
+				if (key.contains (pattern)) {
+					if ("Boolean".equals (typeName)) {
+						result = options.getBoolean (key);
+					} else if ("Double".equals (typeName)) {
+						result = options.getDouble (key);
+					} else if ("Integer".equals (typeName)) {
+						result = options.getInt (key);
+					} else if ("JSONArray".equals (typeName)) {
+						result = options.getJSONArray (key);
+					} else if ("JSONObject".equals (typeName)) {
+						result = options.getJSONObject (key);
+					} else if ("Long".equals (typeName)) {
+						result = options.getLong (key);
+					} else if ("String".equals (typeName)) {
+						result = options.getString (key);
+					} else {
+						result = options.get (key);
+					}
+				}
+			}
+		} catch (JSONException ex) {
+			logger.error (ex.getMessage (), ex);
+		}
+		return (T) result;
+	}
+
+	@Override
+	public String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options) {
+		//получаем все properties
+		Map<QName, Serializable> properties = nodeService.getProperties (delegationOptsNodeRef);
+		//если статус "не настроено" то меняет его на "новое"
+		Serializable status = properties.get (PROP_DELEGATION_OPTS_STATUS);
+		if (DELEGATION_OPTS_STATUS.NOT_SET.equals (status.toString ())) {
+			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_STATUS, DELEGATION_OPTS_STATUS.NEW.toString ());
+		}
+		//передавать права на документы подчиненных
+		String propCanTransfer = PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS.getLocalName ();
+		Boolean canTransfer = findInOptions (options, propCanTransfer, "Boolean");
+		if (canTransfer != null) {
+			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS, canTransfer);
+		}
+		//делегировать все функции
+		String propCanDelegate = PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL.getLocalName ();
+		Boolean canDelegate = findInOptions (options, propCanDelegate, "Boolean");
+		if (canDelegate != null) {
+			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL, canDelegate);
+		}
+		//ссылка на доверенное лицо
+		if (canDelegate != null && canDelegate) {
+			//получаем ссылку на доверенное лицо из options
+			String propTrustee = ASSOC_DELEGATION_OPTS_TRUSTEE.getLocalName ();
+			String trusteeRef = findInOptions (options, propTrustee + "_added", "String");
+			if (trusteeRef != null) {
+				//переназначем ассоциацию на доверенное лицо
+				List<NodeRef> trusteeRefs = NodeRef.getNodeRefs (trusteeRef);
+				nodeService.setAssociations (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE, trusteeRefs);
+				//получить список доверенностей таких что бизнес роли у них active = true
+				List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+				if (childAssocs != null) {
+					for (ChildAssociationRef childAssoc : childAssocs) {
+						NodeRef procuracyNodeRef = childAssoc.getChildRef ();
+						nodeService.setAssociations (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE, trusteeRefs);
+					}
+				}
+			}
+		} else { //если галка "делегировать все функции" снята то удаляем ассоциацию
+			//по ассоциации получаем ссылку на доверенное лицо, если она есть
+			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE);
+			//если по ассоциациям кто-то есть, берем его и удаляем.
+			if (targetAssocs != null && !targetAssocs.isEmpty ()) {
+				for (AssociationRef targetAssoc : targetAssocs) {
+					NodeRef trusteeNodeRef = targetAssoc.getTargetRef ();
+					nodeService.removeAssociation (delegationOptsNodeRef, trusteeNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE);
+					//все доверенности которые участвуют с этим доверенным лицом переводим в статус active = false
+					//ассоциацию с доверенным лицом также разрываем
+					List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+					if (childAssocs != null) {
+						for (ChildAssociationRef childAssoc : childAssocs) {
+							NodeRef procuracyNodeRef = childAssoc.getChildRef ();
+							List<AssociationRef> procuracyTargetRefs = nodeService.getTargetAssocs (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE);
+							if (procuracyTargetRefs != null) {
+								for (AssociationRef targetRef : procuracyTargetRefs) {
+									if (trusteeNodeRef.equals (targetRef.getTargetRef ())) {
+										nodeService.removeAssociation (procuracyNodeRef, trusteeNodeRef, ASSOC_PROCURACY_TRUSTEE);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return "";
+	}
+
+	@Override
+	public void actualizeProcuracyActivity (final NodeRef procuracyNodeRef) {
+		List<AssociationRef> associationRefs = nodeService.getTargetAssocs (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE);
+		if (associationRefs == null || associationRefs.isEmpty ()) {
+			nodeService.setProperty (procuracyNodeRef, PROP_ACTIVE, false);
+		} else {
+			nodeService.setProperty (procuracyNodeRef, PROP_ACTIVE, true);
+		}
+	}
+
+	@Override
+	public void deleteProcuracies (final JSONArray nodeRefs) {
+		for (int i = 0; i < nodeRefs.length (); ++i) {
+			NodeRef nodeRef = null;
+			try {
+				nodeRef = new NodeRef (nodeRefs.getJSONObject (i).getString ("nodeRef"));
+			} catch (JSONException ex) {
+				logger.error (ex.getMessage (), ex);
+			}
+			if (nodeRef != null) {
+				List<AssociationRef> associationRefs = nodeService.getTargetAssocs (nodeRef, ASSOC_PROCURACY_TRUSTEE);
+				if (associationRefs != null) {
+					for (AssociationRef associationRef : associationRefs) {
+						nodeService.removeAssociation (nodeRef, associationRef.getTargetRef (), ASSOC_PROCURACY_TRUSTEE);
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,5 +1,13 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.post.json.js">
 //пробегаемся по результирующему списку доверенностей и выгоняем оттуда те, бизнес роли которых active=false
+logger.log ("*********************************************************************************************");
+for (var prop in model) {
+	logger.log (prop);
+}
+if (model.data) {
+	logger.log ("model.data = " + jsonUtils.toJSONString (model.data));
+}
+logger.log ("*********************************************************************************************");
 var items = model.data.items;
 var activeItems = [];
 for (var i = 0; i < items.length; ++i) {

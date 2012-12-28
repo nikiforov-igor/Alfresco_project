@@ -37,7 +37,8 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 			formEl.innerHTML = result.serverResponse.responseText;
 //			YAHOO.util.Event.addListener ("radioDelegateByFunc", "change", this._delegateByFunc ());
 //			YAHOO.util.Event.addListener ("radioDelegateAllFunc", "change", this._delegateAllFunc ());
-			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/save/node/" + this.options.delegator + "/options";
+			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
+			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
 			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
 //			YAHOO.util.Event.addListener ("delegation-opts-part1-form", "submit", function (form) {
 //				alert (YAHOO.lang.JSON.stringify (form, [], 4));
@@ -55,8 +56,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 						type: "action-link-procuracy",
 						id: "onActionEdit",
 						permission: "edit",
-						label: "редактировать доверенность"/*,
-						evaluator: datagrid.canEditProcuracy ()*/
+						label: "редактировать доверенность"
 					},
 					{
 						type: "action-link-procuracy",
@@ -75,12 +75,12 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 			});
 		},
 
-		_saveDelegationOpts: function () {
-			var scope = this;
-			return function (event, obj) {
-
-			}
-		},
+//		_saveDelegationOpts: function () {
+//			var scope = this;
+//			return function (event, obj) {
+//
+//			}
+//		},
 
 		_delegateByFunc: function () {
 			var scope = this;
@@ -112,7 +112,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					submitType: "json",
 					showCancelButton: false,
 					showResetButton: false,
-					showSubmitButton: false
+					showSubmitButton: true
 				};
 				Alfresco.util.Ajax.request ({
 					method: "GET",
@@ -126,9 +126,9 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					execScripts: true
 				});
 
-				Alfresco.util.createYUIButton(this, "btnSaveDelegationOpts", this._saveDelegationOpts (), {
-					label: "Сохранить"
-				});
+//				Alfresco.util.createYUIButton(this, "btnSaveDelegationOpts", this._saveDelegationOpts (), {
+//					label: "Сохранить"
+//				});
 
 			} else {
 				Alfresco.util.PopupManager.displayPrompt ({

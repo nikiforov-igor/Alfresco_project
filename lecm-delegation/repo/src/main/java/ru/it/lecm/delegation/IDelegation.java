@@ -2,6 +2,7 @@ package ru.it.lecm.delegation;
 
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -96,4 +97,23 @@ public interface IDelegation {
 	 * @return список доверенностей
 	 */
 	List<NodeRef> createEmptyProcuracies (final NodeRef delegationOptsNodeRef, final List<NodeRef> businessRoleNodeRefs);
+
+	/**
+	 * сохранение настроенных параметров делегирования
+	 * @param delegationOptsRef идентификатор параметров делегирования которые мы сохраняем
+	 * @param options JSON-объект с параметрами которые подлежат сохранению. Эти параметры приходят с формы
+	 */
+	String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options);
+
+	/**
+	 * Актуализировать active true/false у доверенности в зависимости от наличия ассоциации на доверенное лицо
+	 * @param procuracyNodeRef
+	 */
+	void actualizeProcuracyActivity (final NodeRef procuracyNodeRef);
+
+	/**
+	 * "удаление" доверенностей. На самом деле отрывается ассоциация на дловеренное лицо. И автоматом, с помощью policy active меняется на false
+	 * @param nodeRefs json массив нодов для удаления
+	 */
+	void deleteProcuracies (final JSONArray nodeRefs);
 }

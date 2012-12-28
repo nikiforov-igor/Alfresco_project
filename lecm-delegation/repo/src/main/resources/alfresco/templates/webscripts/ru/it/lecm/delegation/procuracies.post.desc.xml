@@ -6,5 +6,4 @@
    <authentication>user</authentication>
    <format default="json"/>
    <transaction allow="readonly">required</transaction>
-   <lifecycle>internal</lifecycle>
 </webscript>

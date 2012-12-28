@@ -48,6 +48,7 @@ public class DelegationOptsPolicy implements OnCreateNodePolicy, OnUpdateNodePol
 
 	@Override
 	public void onCreateNode (final ChildAssociationRef childAssocRef) {
+		//TODO судя по всему эту полиси можно удалить
 		final NodeRef nodeRef = childAssocRef.getChildRef ();
 		logger.info ("new employee sucessfully created. It's  nodeRef is '{}'", nodeRef);
 		AuthenticationUtil.runAsSystem (new AuthenticationUtil.RunAsWork<NodeRef> () {

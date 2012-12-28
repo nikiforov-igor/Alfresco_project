@@ -9,6 +9,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
@@ -152,5 +155,13 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		}
 		//для оставшихся бизнес ролей создаем доверенности с флагом active=false и возвращаем кол-во доверенностей
 		return getAsScriptable (delegationService.createEmptyProcuracies (new NodeRef (delegationOptsRef), businessRoleNodeRefs));
+	}
+
+	public String saveDelegationOpts (final String delegationOptsRef, final JSONObject options) {
+		return delegationService.saveDelegationOpts (new NodeRef (delegationOptsRef), options);
+	}
+
+	public void deleteProcuracies (final JSONArray nodeRefs) {
+		delegationService.deleteProcuracies (nodeRefs);
 	}
 }

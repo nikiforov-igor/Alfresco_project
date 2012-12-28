@@ -43,6 +43,12 @@
 		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
+<!--	<bean id="procuracyPolicy" class="ru.it.lecm.delegation.policies.ProcuracyPolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="delegationService" ref="delegationService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>-->
+
 	<bean id="delegationJavascriptExtension" class="ru.it.lecm.delegation.extensions.DelegationJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="delegation"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
