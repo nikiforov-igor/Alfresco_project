@@ -38,7 +38,7 @@ LogicECM.module = LogicECM.module || {};
 		return module;
 	};
 
-	YAHOO.extend(LogicECM.module.StartWorkflow, Alfresco.component.ShareFormManager, {
+	YAHOO.extend(LogicECM.module.StartWorkflow, Alfresco.component.Base, {
 		selectedItem:null,
 		taskId:null,
         assignee: null,
