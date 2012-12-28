@@ -47,7 +47,8 @@ viewFormId(необязательный) - по умолчанию равен vi
 	function createDialog() {
 		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
 				{
-					width:"570px"
+					width:"570px",
+					close: false
 				});
 	}
 
