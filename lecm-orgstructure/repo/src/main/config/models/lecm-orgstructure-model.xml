@@ -250,6 +250,7 @@
             </properties>
             <mandatory-aspects>
                 <aspect>cm:versionable</aspect>
+	            <aspect>lecm-subscr-aspects:subscribed</aspect>
             </mandatory-aspects>
         </type>
 
