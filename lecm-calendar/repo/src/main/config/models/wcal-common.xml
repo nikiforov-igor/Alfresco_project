@@ -21,7 +21,7 @@
 		<namespace uri="http://www.it.ru/logicECM/model/work-calendar/1.0" prefix="lecm-wcal"/>
 	</namespaces>
 	<types>
-		<!-- Данная сущность будет играть роль папки для календарей, расписаний и отсутствий. -->
+		<!-- Дынные сущности будут играть роль папки для календарей, расписаний и отсутствий. -->
 		<type name="lecm-wcal:wcal-container">
 			<parent>cm:folder</parent>
 			<associations>
@@ -36,6 +36,11 @@
 						<many>true</many>
 					</target>
 				</child-association>
+			</associations>
+		</type>
+		<type name="lecm-wcal:absence-container">
+			<parent>cm:folder</parent>
+			<associations>
 				<child-association name="lecm-wcal:container-absence-assoc">
 					<source>
 						<mandatory>true</mandatory>
@@ -47,6 +52,11 @@
 						<many>true</many>
 					</target>
 				</child-association>
+			</associations>
+		</type>
+		<type name="lecm-wcal:shedule-container">
+			<parent>cm:folder</parent>
+			<associations>
 				<child-association name="lecm-wcal:container-shedule-assoc">
 					<source>
 						<mandatory>true</mandatory>

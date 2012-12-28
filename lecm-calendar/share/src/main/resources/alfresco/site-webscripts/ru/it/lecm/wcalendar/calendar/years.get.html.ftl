@@ -15,13 +15,13 @@ datagrid.setOptions({
 		id:"onActionEdit",
 		permission:"edit",
 		label:"${msg("actions.edit")}"
-		},
+		} <#-- ,
         {
 		type:"action-link-${bubblingLabel!"wcalendarYears"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"
-        }
+        } -->
 	]
 });
 datagrid.setMessages (${messages});

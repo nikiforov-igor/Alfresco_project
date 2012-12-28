@@ -45,6 +45,8 @@
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
+		<!--На сколько лет вперед сгенерировать календари-->
+		<property name="yearsAmountToCreate" value="3"/>
 	</bean>
 	<bean id="sheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>

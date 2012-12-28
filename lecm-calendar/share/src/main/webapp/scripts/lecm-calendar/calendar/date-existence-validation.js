@@ -18,7 +18,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation =
 		var htmlNode = Dom.get(form.errorContainer);
 		htmlNode.innerHTML = "";
 
-// Привести даты к одному простому формату
+		// Привести даты к одному простому формату
 		var shortDateInField = Alfresco.util.formatDate(Alfresco.util.fromISO8601(field.value), "d/m")
 
 		// Подгрузить два датагрида
@@ -28,12 +28,14 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation =
 		for(var i = 0; i < dataGrids.length; i++) {
 			var tableRows = [];
 			tableRows = dataGrids[i].widgets.dataTable.getRecordSet().getRecords();
-			for (var j = 0; j < tableRows.length; j++) {
+			// Перебираем все строки датагрида
+			for (var j = 0; j < tableRows.length; j++) {			
 				var tableRow = tableRows[j].getData("itemData");
 				var value = tableRow["prop_lecm-cal_day"].value;
 				var shortDateInValue = Alfresco.util.formatDate(Alfresco.util.fromISO8601(value), "d/m");
 				if (shortDateInField == shortDateInValue) {
 					valid = false;
+					break;
 				}
 			}
 
