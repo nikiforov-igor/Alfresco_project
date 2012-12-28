@@ -59,7 +59,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-cal:day"/>
 					<show id="lecm-cal:reason"/>
 				</field-visibility>
 			</form>
@@ -95,7 +94,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-cal:day"/>
 					<show id="lecm-cal:reason"/>
 				</field-visibility>
 			</form>
