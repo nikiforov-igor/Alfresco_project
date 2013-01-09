@@ -365,10 +365,12 @@ public class BPMNGenerator {
 			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
 			String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
 			attribute = doc.createElement("lecm:attribute");
-			attribute.setAttribute("workflowId", workflowId);
+			attribute.setAttribute("name", "workflowId");
+			attribute.setAttribute("value", workflowId);
 			actionElement.appendChild(attribute);
 			attribute = doc.createElement("lecm:attribute");
-			attribute.setAttribute("assignee", assignee);
+			attribute.setAttribute("name", "assignee");
+			attribute.setAttribute("value", assignee);
 			actionElement.appendChild(attribute);
 			eventElement.appendChild(actionElement);
 		}

@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -89,7 +90,10 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 				throw new IllegalStateException("noworkflow: " + stateMashineId);
 			}
 			// start the workflow
+			String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
+			AuthenticationUtil.setFullyAuthenticatedUser("workflow");
 			WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+			AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
 			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
 			for (WorkflowTask task : tasks) {
 				workflowService.endTask(task.getId(), null);

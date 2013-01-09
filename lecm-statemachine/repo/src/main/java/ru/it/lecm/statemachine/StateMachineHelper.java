@@ -23,6 +23,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
+import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
@@ -79,6 +80,7 @@ public class StateMachineHelper {
 
 	public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee, final boolean async) {
 		Timer timer = new Timer();
+		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
@@ -103,6 +105,16 @@ public class StateMachineHelper {
 						workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
 						//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
 						AssignExecution assignExecution = new AssignExecution();
+						assignExecution.execute(assignee);
+						NodeRef person = assignExecution.getNodeRefResult();
+						if (person == null) return null;
+						workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
+
+/*
+						List<NodeRef> assignees = Arrays.asList(personManager.get(USER2), personManager.get(USER3));
+						params.put(WorkflowModel.ASSOC_ASSIGNEES, (Serializable) assignees);
+*/
+
 						/*Set<NodeRef> persons = assignExecution.getRealPersons(assignee);
 						if (persons.size() > 1) {
 							//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEES, persons);
@@ -118,15 +130,18 @@ public class StateMachineHelper {
 						// get the moderated workflow
 						WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
 						if (wfDefinition == null) {
-							// handle workflow definition does not exist
 							throw new IllegalStateException("noworkflow: " + workflowId);
 						}
+
 						// start the workflow
-						workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+						WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+						String instnaceId = path.getInstance().getId();
+						WorkflowTask startTask = workflowService.getStartTask(instnaceId);
+						workflowService.endTask(startTask.getId(), null);
 						//workflowService.endTask(task.getId(), null);
 						return null;
 					}
-				}, AuthenticationUtil.SYSTEM_USER_NAME);
+				}, user);
 
 			}
 		};
@@ -285,7 +300,11 @@ public class StateMachineHelper {
 		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
 		TaskQuery taskQuery = taskService.createTaskQuery();
 		Task task = taskQuery.executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		return ACTIVITI_PREFIX + task.getId();
+		if (task != null) {
+			return ACTIVITI_PREFIX + task.getId();
+		} else {
+			return null;
+		}
 	}
 
 	public String getCurrentExecutionId(String taskId) {

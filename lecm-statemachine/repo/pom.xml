@@ -53,11 +53,14 @@
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>acegisecurity</groupId>
+			<artifactId>acegi-security</artifactId>
 		</dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->

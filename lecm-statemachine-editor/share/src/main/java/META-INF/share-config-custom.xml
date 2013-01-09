@@ -141,13 +141,6 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -165,13 +158,6 @@
 						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
 				</appearance>

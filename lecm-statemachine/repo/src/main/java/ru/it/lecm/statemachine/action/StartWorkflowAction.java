@@ -36,7 +36,10 @@ public class StartWorkflowAction extends StateMachineAction {
 	@Override
 	public void execute(DelegateExecution execution) {
 		final String processId = execution.getProcessInstanceId();
+		StateMachineHelper helper = new StateMachineHelper();
+		final String taskId = helper.getCurrentTaskId(processId);
 		Timer timer = new Timer();
+		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
@@ -45,11 +48,14 @@ public class StartWorkflowAction extends StateMachineAction {
 					@Override
 					public Object doWork() throws Exception {
 						StateMachineHelper helper = new StateMachineHelper();
-						String taskId = helper.getCurrentTaskId(processId);
-						helper.startUserWorkflowProcessing(taskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee, true);
+						String currentTaskId = taskId;
+						if (currentTaskId == null) {
+							currentTaskId = helper.getCurrentTaskId(processId);
+						}
+						helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee, true);
 						return null;
 					}
-				}, AuthenticationUtil.SYSTEM_USER_NAME);
+				}, user);
 			}
 		};
 		timer.schedule(task, 1000);
