@@ -70,6 +70,12 @@
             </dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-web-framework-commons</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-core</artifactId>
                 <version>${alfresco.version}</version>
                 <scope>provided</scope>
