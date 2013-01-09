@@ -6,15 +6,14 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
 
+import javax.net.ssl.SSLSocket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-
-import javax.net.ssl.SSLSocket;
 
 public class SSLSocketReader extends BufferedReader {	
 	private SSLSocket sock;

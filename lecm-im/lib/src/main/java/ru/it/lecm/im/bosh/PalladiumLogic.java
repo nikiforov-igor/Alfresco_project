@@ -6,8 +6,22 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -15,22 +29,8 @@ import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 // An implementation of http://xmpp.org/extensions/xep-0124.html
-public final class PalladiumServlet extends HttpServlet {
+public final class PalladiumLogic {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String APP_VERSION = "1.4";
@@ -44,8 +44,8 @@ public final class PalladiumServlet extends HttpServlet {
 	private DocumentBuilder db;
 	
 	private Janitor janitor;
-	
-	private static PalladiumServlet srv;
+
+    private final static Logger logger = LoggerFactory.getLogger(PalladiumLogic.class);
 	
 	public void init() throws ServletException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -55,14 +55,13 @@ public final class PalladiumServlet extends HttpServlet {
 		}
 		
 		catch (ParserConfigurationException e) {
-			log("failed to create DocumentBuilderFactory", e);
+            logger.error("failed to create DocumentBuilderFactory", e);
 		}
 		
 		// Clean up the sessions
 		janitor = new Janitor();
 		new Thread(janitor).start();
-		srv = this;
-	}
+    }
 	
 	public void destroy() {
 		Session.stopSessions();
@@ -89,19 +88,6 @@ public final class PalladiumServlet extends HttpServlet {
 		catch (NoSuchAlgorithmException e) { }
 		
 		return null;
-	}
-	
-	public static void dbg(String msg) {
-		dbg(msg, 0);
-	}
-	
-	public static void dbg(String msg, int lvl) {
-		if (!DEBUG)
-			return;
-		if (lvl > DEBUG_LEVEL)
-			return;
-		
-		srv.log("[" + lvl + "] " + msg);
 	}
 
 	// Reply to POST requests
@@ -131,12 +117,12 @@ public final class PalladiumServlet extends HttpServlet {
 								"sid").getNodeValue());
 						
 						if (sess != null) {
-							dbg("incoming request for " + sess.getSID(), 3);
+							logger.debug("incoming request for " + sess.getSID());
 							
 							// Check the validity of the request
 							if (attribs.getNamedItem("rid") == null) {
 								// RID missing
-								dbg("rid missing", 1);
+                                logger.debug("rid missing");
 								response.sendError(HttpServletResponse.SC_NOT_FOUND);
 								sess.terminate();
 							}
@@ -147,7 +133,7 @@ public final class PalladiumServlet extends HttpServlet {
 								}
 								
 								catch (NumberFormatException e) {
-									dbg("rid not a number", 1);
+                                    logger.debug("rid not a number");
 									response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 									return;
 								}
@@ -156,25 +142,25 @@ public final class PalladiumServlet extends HttpServlet {
 								
 								// Re-send
 								if (r != null) {
-									dbg("resend rid " + rid, 2);
+                                    logger.debug("resend rid " + rid);
 									r.setAborted(true);
 									r.send(response);
 									return;
 								}	
 							
 								if (!sess.checkValidRID(rid)) {
-									dbg("invalid rid " + rid, 1);
+                                    logger.debug("invalid rid " + rid);
 									response.sendError(HttpServletResponse.SC_NOT_FOUND);
 									sess.terminate();
 									return;
 								}
 							}
-							
-							dbg("found valid rid " + rid, 3);
+
+                            logger.debug("found valid rid " + rid);
 							
 							// Too many simultaneous requests
 							if (sess.numPendingRequests() >= Session.MAX_REQUESTS) {
-								dbg("too many simultaneous requests: " + sess.numPendingRequests(), 1);
+                                logger.debug("too many simultaneous requests: " + sess.numPendingRequests());
 								response.sendError(HttpServletResponse.SC_FORBIDDEN);
 								
 								// Kick it!
@@ -194,7 +180,7 @@ public final class PalladiumServlet extends HttpServlet {
 									long lastrid = sess.getLastDoneRID();
 									while (rid != lastrid + 1) {
 										if (sess.isStatus(Session.SESS_TERM)) {
-											dbg("session terminated for " + rid, 1);
+                                            logger.debug("session terminated for " + rid);
 											
 											response.sendError(HttpServletResponse.SC_NOT_FOUND);
 											sess.sock.notifyAll();
@@ -203,28 +189,28 @@ public final class PalladiumServlet extends HttpServlet {
 										}
 										
 										try {
-											dbg(rid + " waiting for " + (lastrid + 1), 2);
+                                            logger.debug(rid + " waiting for " + (lastrid + 1));
 											
 											sess.sock.wait();
-											
-											dbg("bell for " + rid, 2);
+
+                                            logger.debug("bell for " + rid);
 											
 											lastrid = sess.getLastDoneRID();
 										}
 										
 										catch (InterruptedException e) { }
 									}
-									
-									dbg("handling response " + rid, 3);
+
+                                    logger.debug("handling response " + rid);
 									
 									// Check the key
 									String key = sess.getKey();
 									
 									if (key != null) {
-										dbg("checking keys for " + rid, 3);
+                                        logger.debug("checking keys for " + rid);
 										
 										if (attribs.getNamedItem("key") == null || !sha1(attribs.getNamedItem("key").getNodeValue()).equals(key)) {
-											dbg("Key sequence error", 1);
+                                            logger.debug("Key sequence error");
 											
 											response.sendError(HttpServletResponse.SC_NOT_FOUND);
 											
@@ -237,12 +223,12 @@ public final class PalladiumServlet extends HttpServlet {
 											sess.setKey(attribs.getNamedItem("newkey").getNodeValue());
 										else
 											sess.setKey(attribs.getNamedItem("key").getNodeValue());
-										
-										dbg("key valid for " + rid, 3);
+
+                                        logger.debug("key valid for " + rid);
 									}
 									
 									if (attribs.getNamedItem("xmpp:restart") != null) {
-										dbg("XMPP RESTART", 2);
+                                        logger.debug("XMPP RESTART");
 										sess.setReinit(true);
 									}
 									
@@ -256,7 +242,7 @@ public final class PalladiumServlet extends HttpServlet {
 										
 										if (sess.getHold() == 0 && 
 												now - sess.getLastPoll() < Session.MIN_POLLING * 1000) {
-											dbg("polling too frequently! [now:" + now + ", last:" + sess.getLastPoll() + "(" + (now - sess.getLastPoll()) + ")]", 1);
+                                            logger.debug("polling too frequently! [now:" + now + ", last:" + sess.getLastPoll() + "(" + (now - sess.getLastPoll()) + ")]");
 											
 											response.sendError(HttpServletResponse.SC_FORBIDDEN);
 											
@@ -489,7 +475,7 @@ public final class PalladiumServlet extends HttpServlet {
 			
 			catch (SAXException se) {
 				// Error: Parser error
-				dbg(se.toString(), 1);
+                logger.debug(se.toString());
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
 			

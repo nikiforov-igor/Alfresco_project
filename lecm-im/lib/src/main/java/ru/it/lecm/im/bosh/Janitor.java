@@ -6,12 +6,18 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Enumeration;
 
 public class Janitor implements Runnable {
-	public static final int SLEEPMILLIS = 1000;
+
+    private final static Logger logger = LoggerFactory.getLogger(Janitor.class);
+
+    public static final int SLEEPMILLIS = 1000;
 	
 	private boolean keep_running = true;
 	
@@ -22,8 +28,9 @@ public class Janitor implements Runnable {
 				
 				// Stop inactive sessions
 				if (System.currentTimeMillis() - sess.getLastActive() > Session.MAX_INACTIVITY * 1000) {
-					if (PalladiumServlet.DEBUG)
-						System.err.println("Session timed out: " + sess.getSID());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Session timed out: " + sess.getSID());
+                    }
 					sess.terminate();
 				}
 			}
@@ -33,7 +40,7 @@ public class Janitor implements Runnable {
 			}
 			
 			catch (InterruptedException ie) {
-				ie.printStackTrace();
+                logger.error(ie.getMessage(), ie);
 			}
 		}
 	}

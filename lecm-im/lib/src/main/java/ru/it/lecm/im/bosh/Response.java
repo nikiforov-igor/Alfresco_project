@@ -6,9 +6,13 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
 
-import java.io.StringWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +20,12 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import java.io.StringWriter;
 
 public class Response {
+
+    private final static Logger logger = LoggerFactory.getLogger(Response.class);
+
 	private static TransformerFactory tff = TransformerFactory.newInstance();
 	public static final String STATUS_LEAVING = "leaving"; 
 	public static final String STATUS_PENDING = "pending"; 
@@ -100,13 +104,13 @@ public class Response {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 			
-			PalladiumServlet.dbg("sending response ["+this.getRID()+"]: "+strResult.getWriter().toString(),2);
+			logger.info("sending response ["+this.getRID()+"]: "+strResult.getWriter().toString(),2);
 			response.getWriter().println(strResult.getWriter().toString());
-			PalladiumServlet.dbg("sent response for "+this.getRID(),3);
+            logger.info("sent response for "+this.getRID(),3);
 		}
 		
 		catch (Exception e) {
-			PalladiumServlet.dbg("XML.toString(Document): " + e,1);
+            logger.error("XML.toString(Document): " + e);
 		}
 		
 		setStatus(STATUS_DONE);
@@ -119,7 +123,7 @@ public class Response {
 	
 	// Status to set
 	public synchronized void setStatus(String status) {
-		PalladiumServlet.dbg("response status "+status+" for "+this.getRID(),3);
+        logger.debug("response status "+status+" for "+this.getRID());
 		this.status = status;
 	}
 	

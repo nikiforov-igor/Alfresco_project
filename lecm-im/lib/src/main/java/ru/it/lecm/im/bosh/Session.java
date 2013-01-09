@@ -6,49 +6,36 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
-import java.security.cert.X509Certificate;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.net.ssl.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Session with HTTP Bind
 public class Session {
+
+    private final static Logger logger = LoggerFactory.getLogger(Session.class);
+
 	// Content-type header
 	public static final String DEFAULT_CONTENT = "text/xml; charset=utf-8";
 	
@@ -186,7 +173,7 @@ public class Session {
 		
 		// First, try connecting throught the 'route' attribute.
 		if (route != null && !route.equals("")) {
-			PalladiumServlet.dbg("Trying to use 'route' attribute to open a socket...", 3);
+			logger.debug("Trying to use 'route' attribute to open a socket...");
 			
 			if (route.startsWith("xmpp:"))
 				route = route.substring("xmpp:".length());
@@ -200,7 +187,7 @@ public class Session {
 					
 					if (p >= 0 && p <= 65535) {
 						port = p;
-						PalladiumServlet.dbg("...route attribute holds a valid port (" + port + ").", 3);
+                        logger.debug("...route attribute holds a valid port (" + port + ").");
 					}
 				}
 				
@@ -208,38 +195,38 @@ public class Session {
 				
 				route = route.substring(0, i);
 			}
-			
-			PalladiumServlet.dbg("Trying to open a socket to '" + route + "', using port " + port + ".", 3);
+
+            logger.debug("Trying to open a socket to '" + route + "', using port " + port + ".");
 			
 			try {
 				this.sock.connect(new InetSocketAddress(route, port), SOCKET_TIMEOUT);
 			}
 			
 			catch (Exception e) {
-				PalladiumServlet.dbg("Failed to open a socket using the 'route' attribute", 3);
+                logger.debug("Failed to open a socket using the 'route' attribute");
 			}
 		}
 		
 		// If no socket has been opened, try connecting trough the 'to' attribute
 		if (this.sock == null || !this.sock.isConnected()) {
 			this.sock = new Socket();
-			PalladiumServlet.dbg("Trying to use 'to' attribute to open a socket...", 3);
+            logger.debug("Trying to use 'to' attribute to open a socket...");
 			
 			host = DNSUtil.resolveXMPPServerDomain(to, DEFAULT_XMPPPORT);
 			
 			try {
-				PalladiumServlet.dbg("Trying to open a socket to '" + host.getHost() + "', using port " + host.getPort() + ".", 3);
+                logger.debug("Trying to open a socket to '" + host.getHost() + "', using port " + host.getPort() + ".");
 				this.sock.connect(new InetSocketAddress(host.getHost(), host.getPort()), SOCKET_TIMEOUT);
 			}
 			
 			catch (UnknownHostException uhe) {
-				PalladiumServlet.dbg("Failed to open a socket using the 'to' attribute: " + uhe.toString(), 3);
+                logger.debug("Failed to open a socket using the 'to' attribute: " + uhe.toString());
 				throw uhe;
 			
 			}
 			
 			catch (IOException ioe) {
-				PalladiumServlet.dbg("Failed to open a socket using the 'to' attribute: " + ioe.toString(), 3);
+                logger.debug("Failed to open a socket using the 'to' attribute: " + ioe.toString());
 				throw ioe;
 			}
 		}
@@ -247,7 +234,7 @@ public class Session {
 		// At this point, we either have a socket, or an exception has already been thrown
 		try {
 			if (this.sock.isConnected())
-				PalladiumServlet.dbg("Succesfully connected to " + to, 2);
+                logger.debug("Succesfully connected to " + to);
 			
 			this.sock.setSoTimeout(SOCKET_TIMEOUT);
 			
@@ -264,8 +251,8 @@ public class Session {
 			
 			// Create unique session id
 			while (sessions.get(this.sid = createSessionID(24)) != null);
-			
-			PalladiumServlet.dbg("creating session with id " + this.sid, 2);
+
+            logger.debug("creating session with id " + this.sid);
 			
 			// Register session
 			sessions.put(this.sid, this);
@@ -304,8 +291,8 @@ public class Session {
 		NodeList nl = null;
 		
 		inQueue += this.readFromSocket(rid);
-		
-		PalladiumServlet.dbg("inQueue: " + inQueue, 2);
+
+        logger.debug("inQueue: " + inQueue);
 		
 		if (init_retry < 1000 && (this.authid == null || this.isReinit()) && inQueue.length() > 0) {
 			init_retry++;
@@ -316,12 +303,12 @@ public class Session {
 				if (m.matches()) {
 					this.authid = m.group(1);
 					inQueue = m.group(2);
-					PalladiumServlet.dbg("inQueue: " + inQueue, 2);
+                    logger.debug("inQueue: " + inQueue);
 					streamFeatures = inQueue.length() > 0;
 				}
 				
 				else {
-					PalladiumServlet.dbg("failed to get stream features", 2);
+                    logger.debug("failed to get stream features");
 					
 					try {
 						Thread.sleep(5);
@@ -342,7 +329,7 @@ public class Session {
 					this.authid = m.group(1);
 				
 				else {
-					PalladiumServlet.dbg("failed to get authid", 2);
+                    logger.debug("failed to get authid");
 					
 					try {
 						Thread.sleep(5);
@@ -390,12 +377,12 @@ public class Session {
 					for (int i = 0; i < nl.item(0).getChildNodes().getLength(); i++) {
 						if (nl.item(0).getChildNodes().item(i).getNodeName().equals("starttls")) {
 							if (!this.isReinit()) {
-								PalladiumServlet.dbg("starttls present, trying to use it", 2);
+                                logger.debug("starttls present, trying to use it");
 								this.osw.write("<starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>");
 								this.osw.flush();
 								
 								String response = this.readFromSocket(rid);
-								PalladiumServlet.dbg(response, 2);
+                                logger.debug(response);
 								
 								TrustManager[] trustAllCerts = new TrustManager[] {
 									new X509TrustManager() {
@@ -421,21 +408,21 @@ public class Session {
 									tls.addHandshakeCompletedListener(new HandShakeFinished(this));
 									
 									this.pauseForHandshake = true;
-									
-									PalladiumServlet.dbg("initiating handshake", 2);
+
+                                    logger.debug("initiating handshake");
 									
 									tls.startHandshake();
 									
 									try {
 										while (this.pauseForHandshake) {
-											PalladiumServlet.dbg(".");
+                                            logger.debug(".");
 											Thread.sleep(5);
 										}
 									}
 									
 									catch (InterruptedException ire) { }
-									
-									PalladiumServlet.dbg("TLS Handshake complete", 2);
+
+                                    logger.debug("TLS Handshake complete");
 									
 									this.sock = tls;
 									this.sock.setSoTimeout(SOCKET_TIMEOUT);
@@ -454,25 +441,25 @@ public class Session {
 								}
 								
 								catch (Exception ssle) {
-									PalladiumServlet.dbg("STARTTLS failed: " + ssle.toString(), 1);
+                                    logger.debug("STARTTLS failed: " + ssle.toString());
 									
 									this.setReinit(false);
 									
 									if (this.isSecure()) {
 										if (!this.sock.getInetAddress().getHostName().equals("localhost") && !this.getResponse(rid).getReq().getServerName().equals(this.sock.getInetAddress().getHostName())) {
-											PalladiumServlet.dbg("secure connection requested but failed", 2);
+                                            logger.debug("secure connection requested but failed");
 											throw new IOException();
 										}
 										
 										else
-											PalladiumServlet.dbg("secure requested and we're local", 1);
+                                            logger.debug("secure requested and we're local");
 									}
 									
 									else
-										PalladiumServlet.dbg("tls failed but we don't need to be secure", 2);
+                                        logger.debug("tls failed but we don't need to be secure");
 									
 									if (this.sock.isClosed()) {
-										PalladiumServlet.dbg("socket closed", 1);
+                                        logger.debug("socket closed");
 										
 										// Reconnect
 										Socket s = new Socket();
@@ -507,7 +494,7 @@ public class Session {
 			
 			catch (SAXException sex3) {
 				this.setReinit(false);
-				PalladiumServlet.dbg("failed to parse inQueue: " + inQueue + "\n" + sex3.toString(), 1);
+                logger.debug("failed to parse inQueue: " + inQueue + "\n" + sex3.toString());
 				
 				return null;
 			}
@@ -526,7 +513,7 @@ public class Session {
 		}
 		
 		public void handshakeCompleted(javax.net.ssl.HandshakeCompletedEvent event) {
-			PalladiumServlet.dbg("startTLS: Handshake is complete", 2);
+            logger.debug("startTLS: Handshake is complete");
 			
 			this.sess.pauseForHandshake = false;
 			return;
@@ -540,7 +527,7 @@ public class Session {
 				return true;
 			
 			else {
-				PalladiumServlet.dbg("invalid request id: " + rid + " (last: " + ((Long) this.responses.lastKey()).longValue() + ")", 1);
+                logger.debug("invalid request id: " + rid + " (last: " + ((Long) this.responses.lastKey()).longValue() + ")");
 				
 				return false;
 			}
@@ -645,7 +632,7 @@ public class Session {
 				
 				else {
 					if ((this.hold == 0 && r != null && System.currentTimeMillis() - r.getCDate() > 200) || (this.hold > 0 && ((r != null && System.currentTimeMillis() - r.getCDate() >= this.getWait() * 1000) || this.numPendingRequests() > this.getHold() || !retval.equals(""))) || r.isAborted()) {
-						PalladiumServlet.dbg("readFromSocket done for " + rid, 3);
+                        logger.debug("readFromSocket done for " + rid);
 						break;
 					}
 					
@@ -694,12 +681,12 @@ public class Session {
 		}
 		
 		catch (Exception e) {
-			PalladiumServlet.dbg("XML.toString(Document): " + e, 1);
+            logger.debug("XML.toString(Document): " + e);
 		}
 		
 		try {
 			if (this.isReinit()) {
-				PalladiumServlet.dbg("Reinitializing Stream!", 2);
+                logger.debug("Reinitializing Stream!");
 				this.osw.write("<stream:stream to='" + this.to + "'" + appendXMLLang(this.getXMLLang()) + " xmlns='jabber:client' " + " xmlns:stream='http://etherx.jabber.org/streams'" + " version='1.0'" + ">");
 			}
 			
@@ -708,7 +695,7 @@ public class Session {
 		}
 		
 		catch (IOException ioe) {
-			PalladiumServlet.dbg(this.sid + " failed to write to stream", 1);
+            logger.debug(this.sid + " failed to write to stream");
 		}
 		
 		return this;
@@ -783,7 +770,7 @@ public class Session {
 	
 	// Kill this session
 	public void terminate() {
-		PalladiumServlet.dbg("terminating session " + this.getSID(), 2);
+        logger.debug("terminating session " + this.getSID());
 		this.setStatus(SESS_TERM);
 		synchronized (this.sock) {
 			if (!this.sock.isClosed()) {

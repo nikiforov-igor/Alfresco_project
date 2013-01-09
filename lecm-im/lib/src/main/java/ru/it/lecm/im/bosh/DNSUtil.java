@@ -6,11 +6,11 @@
  * Last revision: 24/10/10
  */
 
-package org.xmpp.Palladium;
+package ru.it.lecm.im.bosh;
 
 import javax.naming.directory.Attributes;
-import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import java.util.Hashtable;
 
 public class DNSUtil {

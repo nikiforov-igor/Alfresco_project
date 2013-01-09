@@ -8,7 +8,7 @@
     <!-- Servlets -->
     <servlet>
         <servlet-name>Palladium</servlet-name>
-        <servlet-class>org.xmpp.Palladium.PalladiumServlet</servlet-class>
+        <servlet-class>ru.it.lecm.gwt.debug.server.PalladiumServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
