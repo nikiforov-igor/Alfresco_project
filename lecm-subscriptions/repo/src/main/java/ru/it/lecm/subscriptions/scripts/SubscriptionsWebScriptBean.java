@@ -11,8 +11,12 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
+
+import java.util.List;
 
 /**
  * User: mShafeev
@@ -140,6 +144,28 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Возвращает массив, пригодный для использования в веб-скриптах
+	 *
+	 * @return Scriptable
+	 */
+	private Scriptable createScriptable(List<NodeRef> refs) {
+		Object[] results = new Object[refs.size()];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(refs.get(i), services, getScope());
+		}
+		return Context.getCurrentContext().newArray(getScope(), results);
+	}
+
+	/**
+	 * Получение списка значений Категорий события при выбранном элементе Тип Объекта
+	 */
+	public Scriptable findEventCategoryList(String selectTypeNodeRef) {
+		NodeRef nodeRef = new NodeRef(selectTypeNodeRef);
+		List<NodeRef> evenCategoryList = subscriptionsService.findEventCategoryList(nodeRef);
+		return createScriptable(evenCategoryList);
 	}
 
 	/**

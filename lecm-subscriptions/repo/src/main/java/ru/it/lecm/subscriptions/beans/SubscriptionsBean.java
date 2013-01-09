@@ -28,6 +28,10 @@ public class SubscriptionsBean extends BaseBean {
 	 *
 	 */
 	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписки";
+	public static final String DICTIONARY_ROOT_NAME = "Dictionary";
+	public static final String DICTIONARY_ROOT_NAME_EVENT_CATEGORY = "Категория события";
+	public static final String DICTIONARY_ROOT_NAME_TYPE_OBJECT = "Тип объекта";
+	public static final String DICTIONARY_ROOT_NAME_TYPE_TEMPLATE_MESSAGE = "Шаблон сообщения";
 	public static final String SUBSCRIPTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/subscriptions/1.0";
 	QName TYPE_SUBSCRIPTION_TO_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-object");
 	QName TYPE_SUBSCRIPTION_TO_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-type");
@@ -39,11 +43,18 @@ public class SubscriptionsBean extends BaseBean {
 	QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
 	QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
 	QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
+	public static final String BUSJOURNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
+	public static final String TYPE_SUBSCRIPTION = "subscription";
+
+	QName ASSOC_BUSJOURNAL_LINK_EMPLOYEE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "lecm-busjournal");
+	QName ASSOC_BUSJOURNAL_EVENT_CATEGORY = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-evCategory-assoc");
+	QName ASSOC_BUSJOURNAL_OBJECT_TYPE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-objType-assoc");
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	private OrgstructureBean orgstructureService;
+
 
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -163,6 +174,72 @@ public class SubscriptionsBean extends BaseBean {
 				}
 			}
 		}
+		return result;
+	}
+
+	/**
+	 * Получение директории справочника "Категории событий".
+	 */
+	public NodeRef getDictionaryEventCategory() {
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
+				DICTIONARY_ROOT_NAME);
+		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS,
+				DICTIONARY_ROOT_NAME_EVENT_CATEGORY);
+	}
+
+	/**
+	 * Получение директории справочника "Тип объекта".
+	 */
+	public NodeRef getDictionaryTypeObject() {
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
+				DICTIONARY_ROOT_NAME);
+		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, DICTIONARY_ROOT_NAME_TYPE_OBJECT);
+	}
+
+	/**
+	 * Получение директории справочника "Тип объекта".
+	 */
+	public NodeRef getDictionaryTypeObject(NodeRef nodeRefChild) {
+		return nodeService.getPrimaryParent(nodeRefChild).getParentRef();
+	}
+
+	/**
+	 * Получение директории справочника "Шаблон сообщения".
+	 */
+	public NodeRef getDictionaryTemplateMessage() {
+		repositoryHelper.init();
+		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
+				DICTIONARY_ROOT_NAME);
+		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, DICTIONARY_ROOT_NAME_TYPE_TEMPLATE_MESSAGE);
+	}
+
+
+	/**
+	 * Получение списка категорий событий по выбранному типу объекта в сравочнике "Шаблон сообщения"
+	 */
+	public List<NodeRef> findEventCategoryList(NodeRef nodeRef) {
+		List<NodeRef> eventCategory = new ArrayList<NodeRef>();
+		// Находим элементы в справочнике Шаблон сообщения по выбранной ноде и ассоциации
+		List<AssociationRef> tmRefs = nodeService.getSourceAssocs(nodeRef,ASSOC_BUSJOURNAL_OBJECT_TYPE);
+		for (AssociationRef tmRef : tmRefs) {
+			if (!isArchive(tmRef.getSourceRef())) {
+				List<AssociationRef> ecRefs = nodeService.getTargetAssocs(tmRef.getSourceRef(), ASSOC_BUSJOURNAL_EVENT_CATEGORY);
+				for (AssociationRef ecRef : ecRefs) {
+					if (!isArchive(ecRef.getSourceRef())) {
+						if (!isArchive(ecRef.getTargetRef())){
+							eventCategory.add(ecRef.getTargetRef());
+						}
+					}
+				}
+			}
+		}
+		// удалаяем дубликаты
+		List<NodeRef> result = new ArrayList<NodeRef>(new HashSet<NodeRef>(eventCategory));
 		return result;
 	}
 
