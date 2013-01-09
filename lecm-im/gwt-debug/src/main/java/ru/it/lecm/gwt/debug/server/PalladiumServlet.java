@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,23 +20,34 @@ import java.io.IOException;
  */
 public class PalladiumServlet extends HttpServlet {
 
-    private final PalladiumLogic logic = new PalladiumLogic();;
+//    private final PalladiumLogic logic = new PalladiumLogic();
+    private PalladiumLogic logic;
+
+	private final static Logger logger = LoggerFactory.getLogger (PalladiumServlet.class);
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init(config);    //To change body of overridden methods use File | Settings | File Templates.
-        logic.init();
+        super.init(config);
+		try {
+			logger.info ("logic = new PalladiumLogic()");
+			logic = new PalladiumLogic();
+			logger.info ("logic.init()");
+			logic.init();
+			logger.info ("PalladiumLogic successfully created and inited");
+		} catch (Exception ex) {
+			logger.error (ex.getMessage (), ex);
+		}
     }
 
     @Override
     public void destroy() {
-        super.destroy();    //To change body of overridden methods use File | Settings | File Templates.
+        super.destroy();
         logic.destroy();
     }
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doOptions(req, resp);    //To change body of overridden methods use File | Settings | File Templates.
+        super.doOptions(req, resp);
         logic.doOptions(req, resp);
     }
 
