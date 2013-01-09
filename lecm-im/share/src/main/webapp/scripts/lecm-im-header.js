@@ -52,7 +52,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
             Alfresco.logger.info ("A new LogicECM.module.LecmIM.JsButton has been created");
 
             this.createNotifyer();
-            this.startFakeTimer();
+            this.subscribeToNewMessages();
 
             this.initButton();
         },
@@ -61,35 +61,58 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         createNotifyer: function(){
             var btn = YAHOO.util.Dom.get(this.id);
             var div=document.createElement("div");
-            div.innerHTML='<div id="myElem">1</div>';
+            div.innerHTML='<div id="myElem" hidden>0</div>';
             btn.appendChild(div);
         },
 
-        /// Инициализатор счетчика-обманки
-        startFakeTimer : function(){
-            var counter = 0;
+        /// Инициализатор счетчика в заголовке
+        subscribeToNewMessages : function(){
 
-            function increaseTimer(){
-                var elem = YAHOO.util.Dom.get("myElem");
-                counter++;
-                if (counter > 25){
-                    counter =0;
+            YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
+
+                    var count = args[1].count;
+                    var elem = YAHOO.util.Dom.get("myElem");
+                    elem.innerHTML = count;
+                    if (count > 0)
+                    {
+                        elem.removeAttribute("hidden");
+
+                    }
+                    else
+                    {
+                        elem.setAttribute("hidden","hidden");
+                    }
 
                 }
-                elem.innerHTML = counter;
-            }
-
-            setInterval(increaseTimer, 1500);
-
+            );
 
         },
 
-        // Создание обработчика нажатия на кнопку
-        initMenu : function(){
 
+
+        // Создание обработчика нажатия на кнопку
+        initButton : function(){
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
-//                onclick: { fn: toggleChat }
+                onclick: { fn: function(){
+                    var elem = YAHOO.util.Dom.get("ijab");
+                    if (elem.hasAttribute("hidden"))
+                    {
+                        elem.removeAttribute("hidden");
+                    }
+                    else
+                    {
+                        elem.setAttribute("hidden","hidden");
+                    }
+
+                } }
             });
+
+
+            /*
+             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
+             onclick: { fn: toggleChat }
+             });
+             */
         }
     });
 })();
