@@ -113,7 +113,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Метод для создания записи бизнеса-журнала
 	 * @param date - дата создания записи
-	 * @param initiator  - инициатор события
+	 * @param initiator  - инициатор события (cm:person)
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
@@ -127,14 +127,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		}
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
-		//получаем тип объекта
-		NodeRef objectType = getObjectType(mainObject);
 		// получаем шаблон описания
-		String templateString = getTemplateString(objectType, eventCategory, description);
+		String templateString = getTemplateString(getObjectType(mainObject), eventCategory, description);
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
 		// создаем записи
-		return createRecord(date, initiator, mainObject, objectType, eventCategory, objects, filled);
+		return createRecord(date, initiator, mainObject, eventCategory, objects, filled);
 	}
 
     /**
@@ -167,12 +165,36 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return fire(date, initiator, getObjectTypeByName(mainObject), getEventCategoryByName(eventCategory), description, objects);
     }
 
+	/**
+	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
+	 * @param mainObject - основной объект
+	 * @param objects    - список дополнительных объектов
+	 * @param  eventCategory  - категория события
+	 * @param  description  - описание события
+	 * @return ссылка на ноду записи в бизнес журнале
+	 */
+	@Override
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
+		return fire(new Date(), initiator, mainObject, eventCategory, description, objects);
+	}
+
+	/**
+	 * Получение ссылки на Категорию События по имени категории
+	 * @param  eventCategory  - название категории события
+	 * @return ссылка на ноду
+	 */
     private NodeRef getEventCategoryByName(String eventCategory) {
         return getDicElementByName(eventCategory, DICTIONARY_EVENT_CATEGORY);
     }
 
-    private NodeRef getObjectTypeByName(String objectName) {
-        return getDicElementByName(objectName, DICTIONARY_OBJECT_TYPE);
+	/**
+	 * Получение ссылки на Тип Объекта по имени типа
+	 * @param  objectType  - название типа объекта
+	 * @return ссылка на ноду
+	 */
+    private NodeRef getObjectTypeByName(String objectType) {
+        return getDicElementByName(objectType, DICTIONARY_OBJECT_TYPE);
     }
 
     private NodeRef getDicElementByName(String elName, String dictionaryName) {
@@ -185,15 +207,18 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return null;
     }
     
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef objectType, final NodeRef eventCategory, final List<NodeRef> objects, final String description) {
+    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<NodeRef> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
+				final NodeRef objectType = getObjectType(mainObject);
 				final NodeRef saveDirectoryRef = getSaveFolder(date, objectType, eventCategory);
 				// создаем ноду
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
 				properties.put(PROP_BR_RECORD_DATE, date);
 				properties.put(PROP_BR_RECORD_DESC, description);
+				properties.put(PROP_BR_RECORD_INITIATOR, getInitiatorDescription(initiator));
+				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
 						NodeRef obj = objects.get(i);
@@ -204,6 +229,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 						QName.createQName(BJ_NAMESPACE_URI, GUID.generate()), TYPE_BR_RECORD, properties);
 
 				NodeRef result = associationRef.getChildRef();
+
 				// создаем ассоциации
 				// обязательные
 				nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
@@ -237,9 +263,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	private Map<String, String> fillHolders(NodeRef initiator, NodeRef mainObject, List<NodeRef> objects) {
 		Map<String, String> holders = new HashMap<String, String>();
-		String initiatorType = resolveInitiatorType(initiator);
-
-		holders.put(BASE_USER_HOLDER, initiatorType.equals(SYSTEM) ? DEFAULT_SYSTEM_TEMPLATE : getObjectDescription(orgstructureService.getEmployeeByPerson(initiator)));
+		holders.put(BASE_USER_HOLDER, getInitiatorDescription(initiator));
 		holders.put(MAIN_OBJECT_HOLDER, getObjectDescription(mainObject));
 		if (objects != null && objects.size() > 0) {
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
@@ -252,25 +276,21 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     /**
      * Метод возвращающий правильный тип для инициатора
      * Подразумеваем, что инициировать событие может только сотрудник или Система
-     * @param initiator - инициатор события
+     * @param initiator - инициатор события (cm:person)
      * @return тип инициатора (lecm-orgst:employee или System)
      */
-	private String resolveInitiatorType(NodeRef initiator) {
-		String initiatorType;
-		if (!orgstructureService.isEmployee(initiator)) { // если не сотрудник - получаем сотрудника
-			// инициатор - объект cm:person, Пытаемся получить сотрудника
-			NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
-			if (employee != null) {
-				initiatorType = nodeService.getType(employee).toPrefixString(serviceRegistry.getNamespaceService());
-			} else {
-				// если не удалось получить сотрудника - считаем, что изменения сделала система
-				initiatorType = SYSTEM;
-			}
-		} else {
-			initiatorType = nodeService.getType(initiator).toPrefixString(serviceRegistry.getNamespaceService());
-		}
-		return initiatorType;
-	}
+    private String resolveInitiatorType(NodeRef initiator) {
+	    String initiatorType;
+	    // инициатор - объект cm:person, Пытаемся получить сотрудника
+	    NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
+	    if (employee != null) {
+		    initiatorType = nodeService.getType(employee).toPrefixString(serviceRegistry.getNamespaceService());
+	    } else {
+		    // если не удалось получить сотрудника - считаем, что изменения сделала система
+		    initiatorType = SYSTEM;
+	    }
+	    return initiatorType;
+    }
 
 	/**
 	 * Метод формирующий описание заданного объекта по шаблону, определяемому по типу объекта
@@ -289,6 +309,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	private String substinateDescription(NodeRef object, String templateString) {
 		return substituteService.formatNodeTitle(object, templateString);
+	}
+
+	private String getInitiatorDescription(NodeRef initiator) {
+		String initiatorType = resolveInitiatorType(initiator);
+		return initiatorType.equals(SYSTEM) ? DEFAULT_SYSTEM_TEMPLATE : getObjectDescription(orgstructureService.getEmployeeByPerson(initiator));
 	}
 
 	/**
@@ -316,7 +341,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Метод для получения шаблонной строки для заданного типа
 	 * @param type - ссылка на объект справочника "Тип Объекта"
-	 * @return шаблонную строку или null, если не удалось найти соответствие
+	 * @return шаблонную строку или DEFAULT_OBJECT_TYPE_TEMPLATE, если не удалось найти соответствие
 	 */
 	@Override
 	public String getTemplateByType(NodeRef type) {
@@ -422,24 +447,28 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		final Map<QName, Serializable> props = nodeService.getProperties(recordRef);
 		if (!props.isEmpty()) {
 			try {
-				record.put("bjRecord-date", DateFormatISO8601.format((Date) props.get(PROP_BR_RECORD_DATE)));
-				record.put("bjRecord-description", props.get(PROP_BR_RECORD_DESC) != null ? props.get(PROP_BR_RECORD_DESC) : "");
+				record.put(PROP_BR_RECORD_DATE.getLocalName(), DateFormatISO8601.format((Date) props.get(PROP_BR_RECORD_DATE)));
+				record.put(PROP_BR_RECORD_DESC.getLocalName(), props.get(PROP_BR_RECORD_DESC) != null ? props.get(PROP_BR_RECORD_DESC) : "");
 				for (int i = 0; i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
 					QName key = QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i));
 					if (props.get(key) != null) {
-						record.put(getSecondObjPropName(i), props.get(key));
+						record.put(key.getLocalName(), props.get(key));
 					}
 				}
-				record.put("bjRecord-initiator-assoc", findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_INITIATOR, null, ASSOCIATION_TYPE.TARGET));
-				record.put("bjRecord-mainObject-assoc", findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET));
+
+				record.put(PROP_BR_RECORD_INITIATOR.getLocalName(), props.get(PROP_BR_RECORD_INITIATOR));
+				record.put(PROP_BR_RECORD_MAIN_OBJECT.getLocalName(), props.get(PROP_BR_RECORD_MAIN_OBJECT));
+
+				record.put(ASSOC_BR_RECORD_INITIATOR.getLocalName(), findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_INITIATOR, null, ASSOCIATION_TYPE.TARGET));
+				record.put(ASSOC_BR_RECORD_MAIN_OBJ.getLocalName(), findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET));
 
 				NodeRef eventCategory = findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_EVENT_CAT, null, ASSOCIATION_TYPE.TARGET);
 				if (eventCategory != null) {
-					record.put("bjRecord-evCategory-assoc", eventCategory.toString());
+					record.put(ASSOC_BR_RECORD_EVENT_CAT.getLocalName(), eventCategory.toString());
 				}
 				NodeRef objectType = findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_OBJ_TYPE, null, ASSOCIATION_TYPE.TARGET);
 				if (objectType != null) {
-					record.put("bjRecord-objType-assoc", objectType.toString());
+					record.put(ASSOC_BR_RECORD_OBJ_TYPE.getLocalName(), objectType.toString());
 				}
 
 				for (int j = 0; j < MAX_SECONDARY_OBJECTS_COUNT; j++) {

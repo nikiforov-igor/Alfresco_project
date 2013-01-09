@@ -55,8 +55,10 @@ public interface BusinessJournalService {
 	public final QName PROP_MESSAGE_TEMP_CODE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-code");
 
 	public final QName PROP_BR_RECORD_DATE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-date");
-	public QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-description");
-	public QName PROP_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1");
+	public final QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-description");
+	public final QName PROP_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator");
+	public final QName PROP_BR_RECORD_MAIN_OBJECT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject");
+	public final QName PROP_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1");
 	public final QName PROP_BR_RECORD_SEC_OBJ2 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj2");
 	public final QName PROP_BR_RECORD_SEC_OBJ3 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj3");
 	public final QName PROP_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4");
@@ -127,6 +129,17 @@ public interface BusinessJournalService {
      * @return ссылка на ноду записи в бизнес журнале
      */
     public NodeRef fire(Date date, String initiator, String mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+
+	/**
+	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
+	 * @param mainObject - основной объект
+	 * @param objects    - список дополнительных объектов
+	 * @param  eventCategory  - категория события
+	 * @param  description  - описание события
+	 * @return ссылка на ноду записи в бизнес журнале
+	 */
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект

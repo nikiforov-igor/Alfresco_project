@@ -25,11 +25,9 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	public void setService(BusinessJournalServiceImpl service) {
 		this.service = service;
 	}
-	//TODO метод для тестирования. возможно будет переработан и оставлен
-	public ScriptNode fire(long time, String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
+
+	public ScriptNode fire(String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
 		NodeRef record = null;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(time);
 		Object[] objs = Context.getCurrentContext().getElements(objects);
 		List<NodeRef> refs = new ArrayList<NodeRef>();
 		for (Object obj : objs) {
@@ -37,7 +35,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			refs.add(new NodeRef(ref));
 		}
 		try {
-			record = service.fire(calendar.getTime(), new NodeRef(initiator), new NodeRef(mainObject), new NodeRef(eventCategory), description, refs);
+			record = service.fire(new NodeRef(initiator), new NodeRef(mainObject), new NodeRef(eventCategory), description, refs);
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось создать запись бизнес-журнала", e);
 		}

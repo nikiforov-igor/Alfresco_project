@@ -97,7 +97,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 					showNodes = findNodesByAssociationRef(showNode,
 							QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
 					if (showNodes.isEmpty()) {
-						logger.error("", "Не удалось получить список Source ассоциаций для [" + showNode.toString() + "]");
+						logger.debug("Не удалось получить список Source ассоциаций для [" + showNode.toString() + "]");
                         showNode = null;
 						break;
 					}
@@ -112,7 +112,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 						showNodes.add(child.getChildRef());
 					}
 					if (showNodes.isEmpty()) {
-						logger.error("", "Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
+						logger.debug("Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
                         showNode = null;
 						break;
 					}
@@ -139,7 +139,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 					}
 				}
 				if (!exist) {
-					logger.error("", String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+					logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
 					showNode = null;
 					break;
 				}

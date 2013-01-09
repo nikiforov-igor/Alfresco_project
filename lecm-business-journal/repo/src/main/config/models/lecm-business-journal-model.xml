@@ -121,6 +121,16 @@
                     <title>Description</title>
                     <type>d:text</type>
                 </property>
+                <property name="lecm-busjournal:bjRecord-initiator">
+                    <title>Initiator</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-busjournal:bjRecord-mainObject">
+                    <title>Main Object</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj1">
                     <title>Secondary Object 1</title>
                     <type>d:text</type>
@@ -245,6 +255,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>
