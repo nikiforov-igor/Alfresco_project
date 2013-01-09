@@ -1,5 +1,3 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
-
 var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id;
 var nodeSubstituteString = args['nodeSubstituteString'];
 var nodeTitleSubstituteString = args['nodeTitleSubstituteString'];
@@ -14,8 +12,8 @@ if (parentNode != null) {
     for each(var item in values) {
 		if (item.isSubType(selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])) {
 	        branch.push({
-	            label: formatNodeTitle(item, nodeSubstituteString),
-	            title: formatNodeTitle(item, nodeTitleSubstituteString),
+	            label: substitude.formatNodeTitle(item, nodeSubstituteString),
+	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 	            type: item.getTypeShort(),
 	            nodeRef: item.getNodeRef().toString(),
 	            isLeaf: "" + !item.hasChildren,

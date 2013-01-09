@@ -1,4 +1,3 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">

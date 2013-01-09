@@ -1,5 +1,3 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
-
 function main()
 {
    var argsFilterType = args['filterType'],
@@ -189,8 +187,8 @@ function main()
 	               }
 	            }
 
-	            resultObj.visibleName = formatNodeTitle(result, argsNameSubstituteString);
-	            resultObj.selectedVisibleName = formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
+	            resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
+	            resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
             }
          }
 

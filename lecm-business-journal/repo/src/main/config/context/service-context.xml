@@ -43,9 +43,12 @@
         </property>
     </bean>
 
-    <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" depends-on="ServiceRegistry,repositoryHelper">
+    <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="substituteService" ref="substitudeService"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 
     <bean id="businessJournalScript" parent="baseJavaScriptExtension" class="ru.it.lecm.businessjournal.script.BusinessJournalWebScriptBean"

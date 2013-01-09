@@ -29,4 +29,18 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
+    <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="substitudeWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SubstitudeWebScriptBean"
+          depends-on="substitudeService">
+        <property name="extensionName">
+            <value>substitude</value>
+        </property>
+        <property name="service">
+            <ref bean="substitudeService"/>
+        </property>
+    </bean>
 </beans>

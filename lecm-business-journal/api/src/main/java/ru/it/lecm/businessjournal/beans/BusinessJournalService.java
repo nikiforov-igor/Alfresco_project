@@ -62,9 +62,9 @@ public interface BusinessJournalService {
 	public final QName PROP_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4");
 	public final QName PROP_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5");
 
-	public final String BASE_USER_HOLDER = "$baseuser";
-	public final String MAIN_OBJECT_HOLDER = "$mainobject";
-	public final String OBJECT_HOLDER = "$object";
+	public final String BASE_USER_HOLDER = "#baseuser";
+	public final String MAIN_OBJECT_HOLDER = "#mainobject";
+	public final String OBJECT_HOLDER = "#object";
 
 	public final String DEFAULT_MESSAGE_TEMPLATE =
 			"Запись журнала, не имеющая шаблонов описания. Основной объект: " + MAIN_OBJECT_HOLDER +
@@ -72,14 +72,61 @@ public interface BusinessJournalService {
 					", дополнительные объекты: " + OBJECT_HOLDER + "1 ," + OBJECT_HOLDER + "2 ," + OBJECT_HOLDER + "3 ," + OBJECT_HOLDER + "4 ," + OBJECT_HOLDER + "5";
 	public final int MAX_SECONDARY_OBJECTS_COUNT = 5;
 
+	public final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
+	public final String DEFAULT_SYSTEM_TEMPLATE = "Система";
+
+	public final String SYSTEM = "System";
+
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-	final DateFormat FolderNameFormat = new SimpleDateFormat("yyyy-MM");
+	final DateFormat FolderNameFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * Метод для создания записи бизнеса-журнала
+     * @param date - дата создания записи
+     * @param initiator  - инициатор события (логин пользователя)
+     * @param mainObject - основной объект
+     * @param objects    - список дополнительных объектов
+     * @param  eventCategory  - категория события
+     * @param  description  - описание события
+     * @return ссылка на ноду записи в бизнес журнале
+     */
+	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
 
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects);
+    /**
+     * Метод для создания записи бизнеса-журнала
+     * @param date - дата создания записи
+     * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
+     * @param mainObject - основной объект
+     * @param objects    - список дополнительных объектов
+     * @param  eventCategory  - категория события
+     * @param  description  - описание события
+     * @return ссылка на ноду записи в бизнес журнале
+     */
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
 
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, NodeRef[] objects);
+    /**
+     * Метод для создания записи бизнеса-журнала
+     * @param date - дата создания записи
+     * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
+     * @param mainObject - основной объект
+     * @param objects    - массив дополнительных объектов
+     * @param  eventCategory  - категория события
+     * @param  description  - описание события
+     * @return ссылка на ноду записи в бизнес журнале
+     */
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, NodeRef[] objects) throws Exception;
 
+    /**
+     * Метод для создания записи бизнеса-журнала
+     * @param date - дата создания записи
+     * @param initiator  - инициатор события (логин пользователя)
+     * @param mainObject - имя основного объекта
+     * @param objects    - список дополнительных объектов
+     * @param  eventCategory  - название категории события
+     * @param  description  - описание события
+     * @return ссылка на ноду записи в бизнес журнале
+     */
+    public NodeRef fire(Date date, String initiator, String mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект
@@ -93,22 +140,6 @@ public interface BusinessJournalService {
 	 * @return шаблонную строку или null, если не удалось найти соответствие
 	 */
 	public String getTemplateByType(NodeRef type);
-
-	/**
-	 * Получение стрковый шаблона Сообщения по типу объекта и категории события
-	 * @param objectType - тип объекта
-	 * @param eventCategory - категория события
-	 * @param description - описание по умолчанию
-	 * @return шаблон сообщения
-	 */
-	public String getTemplateString(NodeRef objectType, NodeRef eventCategory, String description);
-
-	/**
-	 * Метод для получения шаблонной строки для заданного Шаблона Сообщения
-	 * @param messageTemplate - ссылка на объект Шаблон Сообщения
-	 * @return шаблонную строку или null, если не удалось найти соответствие
-	 */
-	public String getMessageTemplateByTemplate(NodeRef messageTemplate);
 
 	public NodeRef getBusinessJournalDirectory();
 

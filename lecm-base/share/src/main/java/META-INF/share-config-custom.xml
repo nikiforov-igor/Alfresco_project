@@ -63,6 +63,18 @@
 			        <control-param name="showCreateNewLink">false</control-param>
 			        <control-param name="showCreateNewButton">false</control-param>
                 </type>
+                <type name="association:lecm-busjournal:objectType" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Тип_x0020_объекта</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                </type>
+                <type name="association:lecm-busjournal:eventCategory" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Категория_x0020_события</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                </type>
 		        <!--<type name="property:lecm-subscr-aspects:has-subscribers" template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>-->
 	        </default-controls>
 

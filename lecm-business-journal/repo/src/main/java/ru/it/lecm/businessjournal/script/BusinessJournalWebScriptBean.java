@@ -36,16 +36,27 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			String ref = (String) obj;
 			refs.add(new NodeRef(ref));
 		}
-		record = service.fire(calendar.getTime(), new NodeRef(initiator), new NodeRef(mainObject), new NodeRef(eventCategory), description, refs);
+		try {
+			record = service.fire(calendar.getTime(), new NodeRef(initiator), new NodeRef(mainObject), new NodeRef(eventCategory), description, refs);
+		} catch (Exception e) {
+			throw new ScriptException("Не удалось создать запись бизнес-журнала", e);
+		}
 		return new ScriptNode(record, service.getServiceRegistry(), getScope());
 	}
 
 	public Scriptable getRecordsByInterval(long start, long end) {
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTimeInMillis(start);
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTimeInMillis(end);
-		List<NodeRef> refs = service.getRecordsByInterval(calendar1.getTime(), calendar2.getTime());
+		Calendar calendar1 = null;
+		if (start != -1) {
+			calendar1 = Calendar.getInstance();
+			calendar1.setTimeInMillis(start);
+		}
+		Calendar calendar2 = null;
+		if (end != -1) {
+			calendar2 = Calendar.getInstance();
+			calendar2.setTimeInMillis(end);
+		}
+
+		List<NodeRef> refs = service.getRecordsByInterval(calendar1 != null ? calendar1.getTime() : null, calendar2 != null ? calendar2.getTime(): null);
 		return createScriptable(refs);
 	}
 

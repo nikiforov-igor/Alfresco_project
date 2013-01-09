@@ -21,8 +21,8 @@
         </item>
         <item name="Делегирование">
             <property name="cm:name">Делегирование</property>
-            <property name="lecm-busjournal:objectType-code">Код - Делегирование</property>
-            <property name="lecm-busjournal:objectType-class">Класс - Делегирование</property>
+            <property name="lecm-busjournal:objectType-code">Делегирование</property>
+            <property name="lecm-busjournal:objectType-class">lecm-d8n:procuracy</property>
             <property name="lecm-busjournal:objectType-template">{cm:name}</property>
         </item>
         <item name="Документ">
@@ -41,7 +41,7 @@
             <property name="cm:name">Сотрудник</property>
             <property name="lecm-busjournal:objectType-code">Сотрудник</property>
             <property name="lecm-busjournal:objectType-class">lecm-orgstr:employee</property>
-            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} - {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</property>
         </item>
     </items>
 </dictionary>

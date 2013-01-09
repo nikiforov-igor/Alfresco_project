@@ -132,11 +132,11 @@ var Evaluator =
 	      if (nameSubstituteString == null) {
 		      objData.displayValue = obj.properties["cm:name"];
 	      } else {
-		      objData.displayValue = formatNodeTitle(obj, nameSubstituteString);
+		      objData.displayValue = substitude.formatNodeTitle(obj, nameSubstituteString);
 	      }
           objData.metadata = obj.isContainer ? "container" : "document";
       } else if (nameSubstituteString != null) {
-	      objData.displayValue = formatNodeTitle(node, nameSubstituteString);
+	      objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
 	      objData.value = objData.displayValue;
       }
       return true;

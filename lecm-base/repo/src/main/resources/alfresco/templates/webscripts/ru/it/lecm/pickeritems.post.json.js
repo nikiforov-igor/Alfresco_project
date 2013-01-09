@@ -1,5 +1,4 @@
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/repository/forms/pickerresults.lib.js">
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/substitude.lib.js">
 
 function main()
 {
@@ -67,8 +66,8 @@ function main()
             results.push(
             {
                item: result,
-               visibleName: formatNodeTitle(result, ("" + itemNameSubstituteString)),
-               selectedVisibleName: formatNodeTitle(result, ("" + selectedItemsNameSubstituteString))
+               visibleName: substitude.formatNodeTitle(result, ("" + itemNameSubstituteString)),
+               selectedVisibleName: substitude.formatNodeTitle(result, ("" + selectedItemsNameSubstituteString))
             });
          }
       }
