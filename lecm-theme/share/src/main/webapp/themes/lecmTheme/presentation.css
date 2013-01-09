@@ -1781,6 +1781,7 @@ span.tree-picker-button .yui-button .first-child button {
 /* currentValueDisplay */
 
 div.form-field input[type="text"],
+div.form-field ul,
 div.current-values,
 div.currentValueDisplay,
 div.autocompleteCurrentValueDisplay,
