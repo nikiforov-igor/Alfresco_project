@@ -1,4 +1,4 @@
-<#include "/ru/it/lecm/base-share/components/picker.inc.ftl" />
+<#include "/ru/it/lecm/base-share/components/controls/picker.inc.ftl" />
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign optionSeparator="|">

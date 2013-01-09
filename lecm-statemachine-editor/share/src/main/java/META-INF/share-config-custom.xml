@@ -27,7 +27,7 @@
 
 					<!-- behavior Set -->
 					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -36,7 +36,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:endTransitionAction" set="behavior">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -46,7 +46,7 @@
 
 					<!-- Action Set -->
 					<field id="lecm-stmeditor:takeFinishStateWithTransitionUser" set="actions">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -55,7 +55,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" set="actions">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -64,7 +64,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -74,7 +74,7 @@
 
 					<!-- Events Set -->
 					<field id="lecm-stmeditor:startStartWorkflow" set="events">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -83,7 +83,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:startScriptAction" set="events">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -92,7 +92,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:endStartWorkflow" set="events">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -101,7 +101,7 @@
 					</field>
 
 					<field id="lecm-stmeditor:endScriptAction" set="events">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
@@ -136,13 +136,13 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
@@ -162,13 +162,13 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:assignee">
-						<control template="/ru/it/lecm/base-share/components/association-autocomplete-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
@@ -190,7 +190,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
@@ -211,7 +211,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
@@ -231,7 +231,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -252,7 +252,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -274,13 +274,13 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel" />
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -310,20 +310,20 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel" />
 					<field id="lecm-stmeditor:workflowId">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputWorkflowVariableData</control-param>
                             <control-param name="height">100</control-param>
 						</control>
@@ -350,7 +350,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -371,7 +371,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
