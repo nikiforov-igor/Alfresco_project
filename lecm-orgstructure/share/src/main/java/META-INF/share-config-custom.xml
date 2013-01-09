@@ -492,7 +492,7 @@
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-orgstr:element-member-position-assoc">
+                    <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
@@ -524,7 +524,7 @@
                     <field id="cm:name">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:element-member-position-assoc">
+	                <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
                             <control-param name="bigItemIcon">components/images/filetypes/generic-site-32.png</control-param>
@@ -544,6 +544,9 @@
                     <show id="lecm-orgstr:element-member-employee-assoc|{lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
+	            <appearance>
+		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
+	            </appearance>
             </form>
             <form id="employee-positions">
                 <field-visibility>
@@ -552,6 +555,9 @@
                     <show id="lecm-orgstr:primary-position|{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-is-primary}" force="true"/>
 	                <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
+	            <appearance>
+		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
+	            </appearance>
             </form>
             <form id="search">
                 <field-visibility>
@@ -559,6 +565,9 @@
                     <show id="lecm-orgstr:element-member-employee-assoc"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
+	            <appearance>
+		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
+	            </appearance>
             </form>
         </forms>
     </config>
