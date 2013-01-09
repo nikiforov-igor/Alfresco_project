@@ -46,10 +46,10 @@ viewFormId(необязательный) - по умолчанию равен vi
 
 	function createDialog() {
 		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
-				{
-					width:"570px",
-					close: false
-				});
+            {
+                width: "600px"
+            });
+        YAHOO.Bubbling.on("hidePanel", hideViewDialog);
 	}
 
 	function showEmployeeViewByLink(employeeLinkNodeRef) {
