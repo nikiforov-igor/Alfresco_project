@@ -265,17 +265,22 @@ function main()
 		if (substituteStrings[obj] != null) {
 			colDef.nameSubstituteString = substituteStrings[obj];
 		}
-		var label = null;
 		var formField = formConfig.fields[obj];
 		if (formField != null) {
+			var label = null;
 			if (formField.labelId != null && formField.labelId != "") {
 				label = msg.get(formField.labelId);
 			}else if (formField.label != null && formField.label != "") {
 				label = formField.label;
 			}
-		}
-		if (label != null) {
-			colDef.label = label;
+			if (label != null) {
+				colDef.label = label;
+			}
+			if (formField.attributes) {
+				if (formField.attributes.substituteString != null && formField.attributes.substituteString != "") {
+					colDef.nameSubstituteString = formField.attributes.substituteString;
+				}
+			}
 		}
 		model.columns.push(colDef);
 	}
