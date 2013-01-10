@@ -57,13 +57,13 @@
 	                        }
 	                    });
 	        } else {
-//                var id = this.options.htmlId +"_assoc_" + this.options.assocName.replace(":","_") + "-added";
-//                YAHOO.util.Event.onContentReady(id,
-//                        function () {
-//                            var selected = Dom.get(id);
-//                            selected.options.length = 0;
-//                            selected.options[0] = new Option("Empty", "", false, true);
-//                        });
+                var id = this.options.htmlId +"_assoc_" + this.options.assocName.replace(":","_") + "-added";
+                YAHOO.util.Event.onContentReady(id,
+                        function () {
+                            var selected = Dom.get(id);
+                            selected.options.length = 0;
+                            selected.options[0] = new Option("Empty", "", false, true);
+                        });
 
 	        }
 

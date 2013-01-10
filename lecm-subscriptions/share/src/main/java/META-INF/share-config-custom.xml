@@ -23,7 +23,7 @@
 				</field-visibility>
                 <appearance>
                     <field id="lecm-subscr:object-type-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                        <control template="/ru/it/lecm/subscriptions/controls/cascading.drop-down.ftl">
                             <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Тип_x0020_объекта</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
