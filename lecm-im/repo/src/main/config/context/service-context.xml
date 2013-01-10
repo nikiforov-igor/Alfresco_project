@@ -29,7 +29,7 @@
     </bean>
 -->
 
-    <bean id="webscript.ru.it.lecm.im.bosh.BoshWebScript.post" class="ru.it.lecm.im.bosh.BoshWebScript" parent="webscript">
+    <bean id="webscript.ru.it.lecm.im.bosh.post" class="ru.it.lecm.im.bosh.BoshWebScript" parent="webscript">
         <property name="logic" ref="palladiumLogic"/>
     </bean>
 

@@ -42,9 +42,13 @@ public class BoshWebScript extends AbstractWebScript {
         HttpServletResponse response = WebScriptServletRuntime.getHttpServletResponse(res);
         try {
             logic.doPost(request, response);
+            response.getWriter().flush();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
+//        res.getWriter().write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+//        res.getWriter().write("<data>Хуй!</data>");
+        res.getWriter().flush();
     }
 
 
