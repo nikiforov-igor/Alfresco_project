@@ -18,8 +18,17 @@
 	
 -->
 <beans>
+	<bean id="${groupId}.${artifactId}.notificationsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-notifications-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="${groupId}.${artifactId}.notificationsDictionaryBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-model.xml</value>
@@ -27,12 +36,12 @@
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/${artifactId}/messages/notifications</value>
+				<value>alfresco/module/${artifactId}/messages/notifications_type</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.notificationsBootstrap" parent="lecmDictionaryBootstrap">
+	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type.xml</value>
