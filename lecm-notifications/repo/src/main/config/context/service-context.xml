@@ -25,6 +25,11 @@
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-model.xml</value>
 			</list>
 		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/notifications</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="${groupId}.${artifactId}.notificationsBootstrap" parent="lecmDictionaryBootstrap">

@@ -32,6 +32,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-notf-type:spring-bean-id">
+					<title>Bean ID</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
 			</properties>
 		</type>
 	</types>

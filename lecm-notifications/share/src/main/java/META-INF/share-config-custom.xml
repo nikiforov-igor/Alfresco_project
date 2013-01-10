@@ -5,6 +5,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-notf-type:code"/>
+					<show id="lecm-notf-type:spring-bean-id"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -16,6 +17,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-notf-type:code"/>
+					<show id="lecm-notf-type:spring-bean-id"/>
 				</field-visibility>
 			</form>
 
@@ -23,6 +25,7 @@
 				<field-visibility>
 					<show id="cm:name" />
 					<show id="lecm-notf-type:code"/>
+					<show id="lecm-notf-type:spring-bean-id"/>
 				</field-visibility>
 			</form>
 		</forms>
