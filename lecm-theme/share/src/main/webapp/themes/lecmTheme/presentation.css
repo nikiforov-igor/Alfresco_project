@@ -3,6 +3,11 @@
 input, textarea, a {
     outline: none;
 }
+ul, ul li,
+ol, ol li {
+    margin: 0;
+    padding: 0;
+}
 
 #alf-hd > div:first-child {
     margin: 0 -10px;
@@ -482,6 +487,7 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
 .yui-skin-lecmTheme .yui-panel div.form-field select,
 .yui-skin-lecmTheme .yui-panel div.form-field textarea,
+.yui-skin-lecmTheme .yui-panel div.form-field ul,
 .yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
     width: 460px;
     max-width: 100%;

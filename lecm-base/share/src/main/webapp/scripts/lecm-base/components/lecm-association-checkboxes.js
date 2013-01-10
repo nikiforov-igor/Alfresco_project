@@ -193,7 +193,7 @@ LogicECM.module = LogicECM.module || {};
 							content += 'disabled="disabled"';
 						}
 						content += '>';
-						content += '<label for="' + this.dataArray[i].inputId + '">' + this.dataArray[i].name + '</label></li>';
+						content += '<label class="checkbox" for="' + this.dataArray[i].inputId + '">' + this.dataArray[i].name + '</label></li>';
 						YAHOO.util.Event.onAvailable(this.dataArray[i].inputId, this.attachCheckboxClickListener, this.dataArray[i], this);
 					}
 					Dom.get(this.checkboxesContainerId).innerHTML = content;
