@@ -25,10 +25,6 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-    <bean id="uniqueLongPropertyConstraint" class="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint">
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-    </bean>
-
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>

@@ -35,7 +35,12 @@
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common"/>
+                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
@@ -97,7 +102,12 @@
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common"/>
+                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>

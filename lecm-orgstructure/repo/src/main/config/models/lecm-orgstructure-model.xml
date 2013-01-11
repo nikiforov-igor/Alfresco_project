@@ -41,6 +41,7 @@
             <parameter name="expression"><value>^[0-9]\d*$</value></parameter>
             <parameter name="requiresMatch"><value>true</value></parameter>
         </constraint>
+        <constraint name="lecm-orgstr:unique-property-const" type="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint"/>
     </constraints>
 
     <types>
@@ -414,10 +415,7 @@
                     <type>d:long</type>
 	                <constraints>
 		                <constraint ref="lecm-orgstr:int-number-const"/>
-                        <!--<constraint name="lecm-orgstr:unique-long-property-const" type="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint">-->
-                            <!--<parameter name="typeName"><value>lecm-orgstr:employee</value></parameter>-->
-                            <!--<parameter name="propertyName"><value>lecm-orgstr:employee-number</value></parameter>-->
-                        <!--</constraint>-->
+                        <constraint ref="lecm-orgstr:unique-property-const"/>
                     </constraints>
                 </property>
                 <property name="lecm-orgstr:employee-fio-g">
