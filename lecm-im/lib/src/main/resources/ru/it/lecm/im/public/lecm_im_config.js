@@ -11,8 +11,8 @@ function setCookie(c_name,value,exdays)
     document.cookie=c_name + "=" + c_value;
 }
 
-setCookie('JID', 'q', new Date() + 1);
-setCookie('JIDPWD', 'q', new Date() + 1);
+setCookie('JID', Alfresco.constants.USERNAME, new Date() + 1);
+setCookie('JIDPWD', Alfresco.constants.USERNAME, new Date() + 1);
 
 var iBubblingSubscriber = function(callback)
 {
@@ -73,7 +73,7 @@ var iJabConf =
     xmpp:{
         domain:"akatamanov-pc",
         //http_bind:"http://akatamanov-pc:8080/palladium/",
-        http_bind:"/http-bind/",
+        http_bind:"/share/proxy/alfresco/bosh",
         host:"",
         //domain:"localhost",
         //http_bind:"http://127.0.0.1:7070/http-bind/",
@@ -83,7 +83,7 @@ var iJabConf =
         server_type:"ejabberd",
         auto_login:true,
         none_roster:false,
-        get_roster_delay:true,
+        get_roster_delay:false,
         username_cookie_field:"JID",
         token_cookie_field:"JIDPWD",
         anonymous_prefix:"",
