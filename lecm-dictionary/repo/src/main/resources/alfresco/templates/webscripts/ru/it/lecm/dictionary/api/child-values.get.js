@@ -2,6 +2,8 @@
 
 var children = dictionary.getChildren(args["nodeRef"]);
 if (children != null && children.length > 0) {
+    model.children = children;
+
     var items = [];
     for (var i = 0; i < children.length; i++) {
         var child = children[i];

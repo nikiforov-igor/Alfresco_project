@@ -1,0 +1,24 @@
+.dashlet.business-journal a,
+.dashlet.business-journal a:hover,
+.dashlet.business-journal a:visited {
+    color: #05c;
+}
+.dashlet.business-journal .controls {
+    padding: 10px 5px;
+}
+.dashlet.business-journal .controls form {
+    white-space: nowrap;
+}
+.dashlet.business-journal .controls select {
+    width: 30%;
+    margin-right: 4%;
+}
+.dashlet.business-journal .controls select:last-of-type {
+    margin-right: 0;
+}
+.dashlet.business-journal .results {
+    margin: 5px;
+}
+.dashlet.business-journal .results .row {
+    line-height: 24px;
+}
