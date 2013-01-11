@@ -2,6 +2,8 @@ package ru.it.lecm.experts.polices;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.ContentServicePolicies;
@@ -38,7 +40,15 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 	private final static QName EXPERTS_ASPECT = QName.createQName("http://www.it.ru/logicECM/experts/1.0", "hasExperts");
 	private final static QName EXPERTS_ASPECT_PROPERTY = QName.createQName("http://www.it.ru/logicECM/experts/1.0", "experts");
 
-	private final static String AFFECTED_EXTENSIONS = "DOC,DOCX,PPTX,XLSX,TXT,PDF";
+	private final Set<String> AFFECTED_EXTENSIONS
+			= new HashSet<String>() {{
+		add("DOC");
+		add("DOCX");
+		add("PPTX");
+		add("XLSX");
+		add("TXT");
+		add("PDF");
+	}};
 
 	private final long DELAY = 1000;
 	private final int ATTEMPTS = 30;
