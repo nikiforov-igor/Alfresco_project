@@ -96,7 +96,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
-
+        Bubbling.on("activeCheckBoxClicked", this.onActiveCheckBoxClicked, this);
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
             {
@@ -370,6 +370,20 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             elTh: null,
             search: null, //Объект, отвечающий за заполнение датагрида
 
+            onActiveCheckBoxClicked: function (layer, args) {
+                var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
+                if (cbShowArchive) {
+                    var obj = {
+                        datagridMeta: this.datagridMeta
+                    };
+                    if (cbShowArchive.checked) {
+                        this.options.searchShowInactive = true;
+                    } else {
+                        this.options.searchShowInactive = false;
+                    }
+                    YAHOO.Bubbling.fire("activeGridChanged", obj);
+                }
+            },
             /**
              * Returns selector custom datacell formatter
              *

@@ -101,7 +101,7 @@ id(обязательный) - идентификатор, использующ�
 showViewForm(необязательный) - включать/не включать всплывающее окна по клику на запись
 viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
 -->
-<#macro datagrid id showViewForm=true viewFormId="view-node-form">
+<#macro datagrid id showViewForm=true viewFormId="view-node-form" showActiveCheckBox=false>
 <!--[if IE]>
 <iframe id="yui-history-iframe" src="${url.context}/res/yui/history/assets/blank.html"></iframe>
 <![endif]-->
@@ -133,6 +133,12 @@ viewFormId(необязательный) - по умолчанию равен vi
                </span>
          </span>
     </div>
+	<#if showActiveCheckBox>
+        <div align="right" style="padding-top: 0.5em;">
+            <input type="checkbox" class="formsCheckBox" id="${id}-cbShowArchive" onChange="YAHOO.Bubbling.fire('activeCheckBoxClicked', null)">
+            <label class="checkbox" for="${id}-cbShowArchive">Отображать архивные</label>
+        </div>
+	</#if>
 	<div id="${id}-grid" class="grid"></div>
 
 	<div id="${id}-datagridBarBottom" class="yui-ge datagrid-bar datagrid-bar-bottom flat-button">
