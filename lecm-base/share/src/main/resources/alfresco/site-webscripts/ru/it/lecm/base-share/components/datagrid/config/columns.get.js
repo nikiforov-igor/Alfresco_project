@@ -157,12 +157,10 @@ function createPostBody(itemKind, itemId, visibleFields, formConfig)
 		for (var f = 0; f < visibleFields.length; f++)
 		{
 			fieldId = visibleFields[f];
-			var indexOf = fieldId.indexOf("|");
-			var parsedFieldsId = indexOf == -1 ? fieldId : fieldId.substring(0, indexOf);
-			postBodyFields.push(parsedFieldsId);
+			postBodyFields.push(fieldId);
 			if (formConfig.isFieldForced(fieldId))
 			{
-				postBodyForcedFields.push(parsedFieldsId);
+				postBodyForcedFields.push(fieldId);
 			}
 		}
 
@@ -200,14 +198,6 @@ function main()
 
 		// может содержать форматную строку для колонки послке "|"
 		var visibleFields = getVisibleFields("view", formConfig);
-		var substituteStrings = [];
-		for (var i = 0; i < visibleFields.length; i++) {
-			var vf = visibleFields[i];
-			var indexOf = vf.indexOf("|");
-			if (indexOf != -1) {
-				substituteStrings[vf.substring(0, indexOf)] = vf.substring(indexOf + 1);
-			}
-		}
 		// build the JSON object to send to the server
 		var postBody = createPostBody("type", itemType, visibleFields, formConfig);
 
@@ -247,13 +237,13 @@ function main()
 
 	// pass form ui model to FTL
 	model.columns = [];
+	//проходим все поля, включая фиктивные
 	for (var k = 0; k < visibleFields.length; k++) {
 		var obj = visibleFields[k];
-		if (obj.indexOf("|") != -1) {
-			obj = obj.substring(0, obj.indexOf("|"));
-		}
+
 		var colDef = columnDefs[obj];
-		if (colDef == null) {
+
+		if (colDef == null) {   //поле фиктивное, создаем колонку
 			colDef = {
 				type:"",
 				name:obj,
@@ -262,12 +252,11 @@ function main()
 				sortable: false
 			}
 		}
-		if (substituteStrings[obj] != null) {
-			colDef.nameSubstituteString = substituteStrings[obj];
-		}
+
 		var formField = formConfig.fields[obj];
 		if (formField != null) {
 			var label = null;
+			//забираем подпись из конфига
 			if (formField.labelId != null && formField.labelId != "") {
 				label = msg.get(formField.labelId);
 			}else if (formField.label != null && formField.label != "") {
@@ -277,6 +266,7 @@ function main()
 				colDef.label = label;
 			}
 			if (formField.attributes) {
+				//забираем форматную строку
 				if (formField.attributes.substituteString != null && formField.attributes.substituteString != "") {
 					colDef.nameSubstituteString = formField.attributes.substituteString;
 				}
