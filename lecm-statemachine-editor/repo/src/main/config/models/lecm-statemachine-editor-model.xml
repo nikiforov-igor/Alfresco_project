@@ -29,7 +29,7 @@
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
 			<properties>
-				<property name="lecm-stmeditor:machineFolder">
+				<property name="lecm-stmeditor:archiveFolder">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>

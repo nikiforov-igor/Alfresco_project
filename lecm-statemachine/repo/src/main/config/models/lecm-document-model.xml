@@ -14,7 +14,7 @@
 	<types>
 		<type name="lecm-document:base">
 			<title>Logic ECM Base Document</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 		</type>
 	</types>
 

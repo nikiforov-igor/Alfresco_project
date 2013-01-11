@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.listener;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +27,7 @@ public class StateMachineHandler implements ExecutionListener {
 
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
+	private static Repository repositoryHelper;
 	private static Log logger = LogFactory.getLog(StateMachineHandler.class);
 
 	private String processId = "";
@@ -70,6 +72,10 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.serviceRegistry = serviceRegistry;
 	}
 
+	public void setRepositoryHelper(Repository repositoryHelper) {
+		StateMachineHandler.repositoryHelper = repositoryHelper;
+	}
+
 	private StateMachineAction getStateMachineAction(Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
@@ -82,6 +88,7 @@ public class StateMachineHandler implements ExecutionListener {
 
 		if (action != null) {
 			action.setServiceRegistry(serviceRegistry);
+			action.setRepositoryHelper(repositoryHelper);
 			action.init(actionElement, processId);
 		}
 		return action;

@@ -69,6 +69,7 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 	@Override
 	public void parseEndEvent(Element element, ScopeImpl scope, ActivityImpl activity) {
 		activity.addExecutionListener(ExecutionListener.EVENTNAME_END, new FinishStateWithTransitionEndWorkflowEvent());
+		appendExtention(element, activity);
 	}
 
 	@Override

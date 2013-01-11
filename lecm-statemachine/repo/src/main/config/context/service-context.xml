@@ -60,6 +60,7 @@
 
 	<bean id="stateMachineHandler" class="ru.it.lecm.statemachine.listener.StateMachineHandler">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repositoryHelper" ref="repositoryHelper" />
 	</bean>
 
 	<bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
@@ -144,6 +145,13 @@
 		<property name="action" value="ru.it.lecm.statemachine.action.ScriptAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="start, end" />
+	</bean>
+
+	<bean id="archiveDocumentAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="ArchiveDocumentAction"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.ArchiveDocumentAction" />
+		<property name="type" value="system" />
+		<property name="execution" value="end" />
 	</bean>
 
 </beans>

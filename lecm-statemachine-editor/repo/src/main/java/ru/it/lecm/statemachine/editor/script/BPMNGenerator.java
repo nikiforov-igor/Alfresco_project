@@ -59,6 +59,7 @@ public class BPMNGenerator {
 	private final static QName PROP_TRANSITION_EXPRESSION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionExpression");
 	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
 	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
+	private final static QName PROP_ARCHIVE_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "archiveFolder");
 
 	private final static String VARIABLE = "VARIABLE";
 	private final static String VALUE = "VALUE";
@@ -124,6 +125,29 @@ public class BPMNGenerator {
 					Element endEvent = doc.createElementNS(NAMESPACE_XLNS, "endEvent");
 					endEvent.setAttributeNS(NAMESPACE_XLNS, "id", statusVar);
 					process.appendChild(endEvent);
+
+					//create extention
+					Element extentionElements = doc.createElement("extensionElements");
+					endEvent.appendChild(extentionElements);
+
+					Element extention = doc.createElement("lecm:extension");
+					extentionElements.appendChild(extention);
+
+					//statemachine end event
+					Element end = doc.createElement("lecm:event");
+					end.setAttribute("on", "end");
+					extention.appendChild(end);
+
+					//install ArchiveDocumentAction
+					Element archiveDocumentAction = doc.createElement("lecm:action");
+					archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
+					Element attribute = doc.createElement("lecm:attribute");
+					attribute.setAttribute("name", "archiveFolder");
+					String archiveFolder = (String) nodeService.getProperty(nodeRef, PROP_ARCHIVE_FOLDER);
+					attribute.setAttribute("value", archiveFolder);
+					archiveDocumentAction.appendChild(attribute);
+
+					end.appendChild(archiveDocumentAction);
 					continue;
 				}
 				//create status

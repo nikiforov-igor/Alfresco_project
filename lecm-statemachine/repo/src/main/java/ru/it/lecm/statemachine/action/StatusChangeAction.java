@@ -10,15 +10,11 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -82,10 +78,10 @@ public class StatusChangeAction extends StateMachineAction {
 			NodeRef processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
 			if (processFolder == null) {
 				//Создаем папку
-				createFolder(documents, processId);
+				processFolder = createFolder(documents, processId);
 			}
 
-			//Существует ли папка с именем нового статуса
+			//Существует ли папка с именем нового статуса, если существует переименовываем
 			checkStatus(processFolder);
 
 			//Создаем папку статуса
@@ -123,40 +119,6 @@ public class StatusChangeAction extends StateMachineAction {
 				throw new AlfrescoRuntimeException("Set Status Exception", e);
 			}
 		}
-	}
-
-	private NodeRef createFolder(NodeRef parent, String name) {
-		return createFolder(parent, name, null);
-	}
-
-	private NodeRef createFolder(NodeRef parent, String name, String uuid) {
-		NodeService nodeService = getServiceRegistry().getNodeService();
-		HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-		props.put(ContentModel.PROP_NAME, name);
-		if (uuid != null) {
-			props.put(ContentModel.PROP_NODE_UUID, uuid);
-		}
-		ChildAssociationRef childAssocRef = nodeService.createNode(
-				parent,
-				ContentModel.ASSOC_CONTAINS,
-				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
-				ContentModel.TYPE_FOLDER,
-				props);
-		return childAssocRef.getChildRef();
-	}
-
-	private NodeRef getCompanyHome() {
-		NodeRef companyHome;
-		ResultSet rs = getServiceRegistry().getSearchService().query(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, SearchService.LANGUAGE_XPATH, "/app:company_home");
-		try {
-			if (rs.length() == 0) {
-				throw new AlfrescoRuntimeException("Didn't find Company Home");
-			}
-			companyHome = rs.getNodeRef(0);
-		} finally {
-			rs.close();
-		}
-		return companyHome;
 	}
 
 }

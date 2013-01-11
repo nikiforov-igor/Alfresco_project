@@ -2,8 +2,18 @@ package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -13,6 +23,7 @@ import ru.it.lecm.statemachine.bean.StateMachineActions;
 abstract public class StateMachineAction {
 
 	private ServiceRegistry serviceRegistry;
+	private Repository repositoryHelper;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -20,6 +31,10 @@ abstract public class StateMachineAction {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
+	}
+
+	public void setRepositoryHelper(Repository repositoryHelper) {
+		this.repositoryHelper = repositoryHelper;
 	}
 
 	abstract public void execute(DelegateExecution execution);
@@ -30,4 +45,27 @@ abstract public class StateMachineAction {
 		return StateMachineActions.getActionName(getClass());
 	}
 
+	protected NodeRef createFolder(NodeRef parent, String name) {
+		return createFolder(parent, name, null);
+	}
+
+	protected NodeRef createFolder(NodeRef parent, String name, String uuid) {
+		NodeService nodeService = getServiceRegistry().getNodeService();
+		HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+		props.put(ContentModel.PROP_NAME, name);
+		if (uuid != null) {
+			props.put(ContentModel.PROP_NODE_UUID, uuid);
+		}
+		ChildAssociationRef childAssocRef = nodeService.createNode(
+				parent,
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
+				ContentModel.TYPE_FOLDER,
+				props);
+		return childAssocRef.getChildRef();
+	}
+
+	protected NodeRef getCompanyHome() {
+		return repositoryHelper.getCompanyHome();
+	}
 }

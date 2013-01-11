@@ -372,10 +372,10 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:machineFolder" force="true"/>
+					<show id="lecm-stmeditor:archiveFolder" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:machineFolder"/>
+					<field id="lecm-stmeditor:archiveFolder"/>
 				</appearance>
 			</form>
 		</forms>
