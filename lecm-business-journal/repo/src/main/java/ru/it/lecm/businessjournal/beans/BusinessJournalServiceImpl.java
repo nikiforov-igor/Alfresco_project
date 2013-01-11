@@ -161,8 +161,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      * @return ссылка на ноду записи в бизнес журнале
      */
     @Override
-    public NodeRef fire(Date date, String initiator, String mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
-        return fire(date, initiator, getObjectTypeByName(mainObject), getEventCategoryByName(eventCategory), description, objects);
+    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
+        return fire(date, initiator, mainObject, getEventCategoryByName(eventCategory), description, objects);
     }
 
 	/**
@@ -177,6 +177,21 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	@Override
 	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
 		return fire(new Date(), initiator, mainObject, eventCategory, description, objects);
+	}
+
+	@Override
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
+		return fire(initiator, mainObject,getEventCategoryByName(eventCategory), description, objects);
+	}
+
+	@Override
+	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
+		PersonService personService = serviceRegistry.getPersonService();
+		NodeRef person = null;
+		if (personService.personExists(initiator)) {
+			person = personService.getPerson(initiator, false);
+		}
+		return fire(new Date(), person, mainObject, getEventCategoryByName(eventCategory), description, objects);
 	}
 
 	/**

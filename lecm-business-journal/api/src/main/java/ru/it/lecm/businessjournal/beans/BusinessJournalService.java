@@ -128,7 +128,7 @@ public interface BusinessJournalService {
      * @param  description  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public NodeRef fire(Date date, String initiator, String mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -140,6 +140,28 @@ public interface BusinessJournalService {
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
+
+	/**
+	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
+	 * @param mainObject - основной объект
+	 * @param objects    - список дополнительных объектов
+	 * @param  eventCategory  - категория события
+	 * @param  description  - описание события
+	 * @return ссылка на ноду записи в бизнес журнале
+	 */
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+
+	/**
+	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 * @param initiator  - инициатор события
+	 * @param mainObject - основной объект
+	 * @param objects    - список дополнительных объектов
+	 * @param  eventCategory  - категория события
+	 * @param  description  - описание события
+	 * @return ссылка на ноду записи в бизнес журнале
+	 */
+	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект

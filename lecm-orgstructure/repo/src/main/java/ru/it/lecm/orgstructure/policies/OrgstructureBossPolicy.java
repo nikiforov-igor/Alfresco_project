@@ -1,4 +1,4 @@
-package ru.it.lecm.orgstructure.beans;
+package ru.it.lecm.orgstructure.policies;
 
 import java.util.List;
 
@@ -6,34 +6,34 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * Created with IntelliJ IDEA.
  * User: AIvkin
- * Date: 12.12.12
- * Time: 16:06
+ * Date: 11.12.12
+ * Time: 15:19
  * To change this template use File | Settings | File Templates.
  */
-public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
+public class OrgstructureBossPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 	private static OrgstructureBean orgstructureService;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		OrgstructurePrimaryPositionPolicy.serviceRegistry = serviceRegistry;
+		OrgstructureBossPolicy.serviceRegistry = serviceRegistry;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
-		OrgstructurePrimaryPositionPolicy.policyComponent = policyComponent;
+		OrgstructureBossPolicy.policyComponent = policyComponent;
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		OrgstructurePrimaryPositionPolicy.orgstructureService = orgstructureService;
+		OrgstructureBossPolicy.orgstructureService = orgstructureService;
 	}
 
 	public final void init() {
@@ -41,20 +41,18 @@ public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.On
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
-				new JavaBehaviour(this, "onCreateAssociation"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateNode"));
+
 	}
 
 	@Override
-	public void onCreateAssociation(AssociationRef associationRef) {
-		NodeRef emplyoeeLink = associationRef.getSourceRef();
-		NodeRef emplyoee = associationRef.getTargetRef();
+	public void onCreateNode(ChildAssociationRef childAssocRef) {
+		NodeRef node = childAssocRef.getChildRef();
+		NodeRef parent = childAssocRef.getParentRef();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		ChildAssociationRef parent = nodeService.getPrimaryParent(emplyoeeLink);
-		if (orgstructureService.isStaffList(parent.getParentRef())) {
-			List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(emplyoee);
-			nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 0);
-		}
+
+		List<NodeRef> staffList = orgstructureService.getUnitStaffLists(parent);
+		nodeService.setProperty(node, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, staffList.size() == 1 && staffList.get(0).equals(node));
 	}
 }

@@ -1,5 +1,8 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -14,9 +17,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.BaseBean;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author dbashmakov
@@ -996,4 +996,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 	}
 
+	@Override
+	public NodeRef getPositionByStaff(NodeRef staffList) {
+		return findNodeByAssociationRef(staffList, ASSOC_ELEMENT_MEMBER_POSITION, TYPE_STAFF_POSITION, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public NodeRef getRoleByWorkForce(NodeRef workforce) {
+		return findNodeByAssociationRef(workforce, ASSOC_ELEMENT_MEMBER_POSITION, TYPE_WORK_ROLE, ASSOCIATION_TYPE.TARGET);
+	}
 }

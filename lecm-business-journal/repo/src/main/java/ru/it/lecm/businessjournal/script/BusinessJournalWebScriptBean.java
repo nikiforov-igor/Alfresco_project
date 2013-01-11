@@ -79,4 +79,13 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
 	}
+
+	public ScriptNode getDirectory() {
+		try {
+			NodeRef ref = service.getBusinessJournalDirectory();
+			return new ScriptNode(ref, service.getServiceRegistry(), getScope());
+		} catch (Exception e) {
+			throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
+		}
+	}
 }

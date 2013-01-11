@@ -1,4 +1,8 @@
-package ru.it.lecm.orgstructure.beans;
+package ru.it.lecm.orgstructure.policies;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
@@ -12,10 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * User: mShafeev

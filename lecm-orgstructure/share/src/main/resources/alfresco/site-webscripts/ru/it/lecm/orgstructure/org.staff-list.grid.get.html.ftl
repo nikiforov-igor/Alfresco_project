@@ -11,62 +11,27 @@
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function init() {
-					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {
-						var me = this;
-						var metaData = {
-							itemType:"lecm-orgstr:employee-link",
-							nodeRef:p_item.nodeRef
-						};
+                    LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {
+                        var me = this;
+                        var metaData = {
+                            itemType: "lecm-orgstr:employee-link",
+                            nodeRef: p_item.nodeRef
+                        };
 
-						var onAddCallback = function (employeeRef) {
-							// создаем ассоциацию
-							var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
-								var createdAssoc = response.json.createdAssoc;
-								if (createdAssoc) {
-									// Reload the node's metadata
-                                    YAHOO.Bubbling.fire("datagridRefresh",
-                                            {
-                                                bubblingLabel:me.options.bubblingLabel
-                                            });
-									Alfresco.util.PopupManager.displayMessage(
-											{
-												text:this.msg("message.employee.add.success")
-											});
-								} else {
-									onFailure.call(me, response);
-								}
-							};
-							var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
-								// при создание ассоциации произошла ошибка - удаляем ссылку на сотрудника
-								this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true, targetDelete:true}, fnCallback, null);
-								Alfresco.util.PopupManager.displayMessage(
-										{
-											text:this.msg("message.employee.add.failure")
-										});
-							};
-							Alfresco.util.Ajax.jsonRequest(
-									{
-										url:Alfresco.constants.PROXY_URI + "lecm/base/createAssoc",
-										method:"POST",
-										dataObj:{
-											source:p_item.nodeRef,
-											target:employeeRef,
-											assocType:"lecm-orgstr:element-member-employee-assoc"
-										},
-										successCallback:{
-											fn:onSuccess,
-											scope:this
-										},
-										failureCallback:{
-											fn:onFailure,
-											scope:this
-										}
-									});
-						}.bind(me);
+                        var onAddCallback = function (employeeRef) {
+                            // Reload the node's metadata
+                            YAHOO.Bubbling.fire("datagridRefresh",
+                                    {
+                                        bubblingLabel: me.options.bubblingLabel
+                                    });
+                            Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: this.msg("message.employee.add.success")
+                                    });
+                        }.bind(me);
 
-						this.createDialogShow(metaData, onAddCallback);
-
-					};
+                        this.createDialogShow(metaData, onAddCallback);
+                    };
 					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeDelete = function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
 						var me = this;
 						var staffRow = p_item;

@@ -17,49 +17,15 @@
 					};
 
 					var onAddCallback = function (employeeRef) {
-						// создаем ассоциацию
-						var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
-							var createdAssoc = response.json.createdAssoc;
-							if (createdAssoc) {
-								// Reload the node's metadata
-                                YAHOO.Bubbling.fire("datagridRefresh",
-                                        {
-                                            bubblingLabel:me.options.bubblingLabel
-                                        });
-								Alfresco.util.PopupManager.displayMessage(
-										{
-											text:this.msg("message.employee.add.success")
-										});
-							} else {
-								onFailure.call(me, response);
-							}
-						};
-						var onFailure = function DataGrid_onActionEmployeeAdd_onFailure(response) {
-							// при создание ассоциации произошла ошибка - удаляем ссылку на сотрудника
-							this.onDelete([{nodeRef:employeeRef}], owner, {fullDelete:true, targetDelete:true}, fnCallback, null);
-							Alfresco.util.PopupManager.displayMessage(
-									{
-										text:this.msg("message.employee.add.failure")
-									});
-						};
-						Alfresco.util.Ajax.jsonRequest(
-								{
-									url:Alfresco.constants.PROXY_URI + "lecm/base/createAssoc",
-									method:"POST",
-									dataObj:{
-										source:p_item.nodeRef,
-										target:employeeRef,
-										assocType:"lecm-orgstr:element-member-employee-assoc"
-									},
-									successCallback:{
-										fn:onSuccess,
-										scope:this
-									},
-									failureCallback:{
-										fn:onFailure,
-										scope:this
-									}
-								});
+                        // Reload the node's metadata
+                        YAHOO.Bubbling.fire("datagridRefresh",
+                                {
+                                    bubblingLabel:me.options.bubblingLabel
+                                });
+                        Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text:this.msg("message.employee.add.success")
+                                });
 					}.bind(me);
 
 					this.createDialogShow(metaData, onAddCallback);

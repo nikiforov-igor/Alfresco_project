@@ -78,7 +78,7 @@
         <property name="authService" ref="authenticationService"/>
     </bean>
 
-	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.beans.OrgstructureBossPolicy"
+	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"
 	      init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
@@ -88,7 +88,7 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
-	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.beans.OrgstructurePrimaryPositionPolicy"
+	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
 	      init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
@@ -98,7 +98,7 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
-    <bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.beans.OrgstructureEmployeePolicy"
+    <bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
           init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
@@ -106,6 +106,19 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="orgstructureService">
             <ref bean="serviceOrgstructure"/>
+        </property>
+    </bean>
+    <bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
         </property>
     </bean>
 </beans>
