@@ -8,13 +8,19 @@
 
 package ru.it.lecm.im.bosh;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import java.util.Hashtable;
 
 public class DNSUtil {
-	private static DirContext context;
+
+    private static DirContext context;
+
+    private final static Logger logger = LoggerFactory.getLogger(DNSUtil.class);
 	
 	// Set the DNS environment variable
 	static {
@@ -51,12 +57,16 @@ public class DNSUtil {
 	
 	// Encapsulates a hostname and port.
 	public static class HostAddress {
+
+        private final static Logger logger = LoggerFactory.getLogger(HostAddress.class);
+
 		private String host;
 		private int port;
 		
 		private HostAddress(String host, int port) {
 			this.host = host;
 			this.port = port;
+            logger.trace("Creating HostAddress [" + this.toString() + "]");
 		}
 		
 		public String getHost() {

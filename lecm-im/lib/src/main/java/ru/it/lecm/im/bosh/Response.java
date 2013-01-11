@@ -36,7 +36,7 @@ public class Response {
 	private Element body;
 	private long rid;
 	
-	private String contentType = Session.DEFAULT_CONTENT;
+	private String contentType = SessionConstants.DEFAULT_CONTENT;
 	
 	private String status;
 	

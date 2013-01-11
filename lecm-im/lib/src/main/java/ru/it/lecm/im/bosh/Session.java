@@ -31,45 +31,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 // Session with HTTP Bind
 public class Session {
 
     private final static Logger logger = LoggerFactory.getLogger(Session.class);
 
-	// Content-type header
-	public static final String DEFAULT_CONTENT = "text/xml; charset=utf-8";
-	
-	// Maximum inactivity period
-	public static final int MAX_INACTIVITY = 60;
-	
-	// Maximum number of simultaneous requests allowed
-	public static final int MAX_REQUESTS = 5;
-	
-	// Maximum time to wait for XMPP server replies
-	public static final int MAX_WAIT = 300;
-	
-	// Shortest polling period
-	public static final int MIN_POLLING = 2;
-	
-	// Sleep time
-	private static final int READ_TIMEOUT = 1;
-	
-	// Socket timeout
-	private static final int SOCKET_TIMEOUT = 6000;
-	
-	// Default XMPP port to connect
-	public static final int DEFAULT_XMPPPORT = 5222;
-	
-	// Session starting
-	protected static final String SESS_START = "starting";
-	
-	// Session active
-	protected static final String SESS_ACTIVE = "active";
-	
-	// Session terminate
-	protected static final String SESS_TERM = "term";
-	
-	private static Hashtable sessions = new Hashtable();
+    private static Hashtable sessions = new Hashtable();
 	
 	private static TransformerFactory tff = TransformerFactory.newInstance();
 	
@@ -82,7 +50,9 @@ public class Session {
 		
 		for (int i = 0; i < len; i++)
 			str += charlist.charAt(rand.nextInt(charlist.length()));
-		
+
+        logger.debug("New session id created: " + str);
+
 		return str;
 	}
 	
@@ -109,11 +79,11 @@ public class Session {
 	
 	boolean streamFeatures = false;
 	
-	private String content = DEFAULT_CONTENT;
+	private String content = SessionConstants.DEFAULT_CONTENT;
 	
 	private DocumentBuilder db;
 	
-	private int hold = MAX_REQUESTS - 1;
+	private int hold = SessionConstants.MAX_REQUESTS - 1;
 	
 	private String inQueue = "";
 	
@@ -129,7 +99,7 @@ public class Session {
 	
 	private TreeMap responses;
 	
-	private String status = SESS_START;
+	private String status = SessionConstants.SESS_START;
 	
 	private String sid;
 	
@@ -139,7 +109,7 @@ public class Session {
 	
 	private DNSUtil.HostAddress host = null;
 	
-	private int wait = MAX_WAIT;
+	private int wait = SessionConstants.MAX_WAIT;
 	
 	private String xmllang = null;
 	
@@ -160,7 +130,7 @@ public class Session {
 		this.to = to;
 		this.xmllang = xmllang;
 		
-		int port = DEFAULT_XMPPPORT;
+		int port = SessionConstants.DEFAULT_XMPPPORT;
 		
 		this.sock = new Socket();
 		this.setLastActive();
@@ -199,7 +169,7 @@ public class Session {
             logger.debug("Trying to open a socket to '" + route + "', using port " + port + ".");
 			
 			try {
-				this.sock.connect(new InetSocketAddress(route, port), SOCKET_TIMEOUT);
+				this.sock.connect(new InetSocketAddress(route, port), SessionConstants.SOCKET_TIMEOUT);
 			}
 			
 			catch (Exception e) {
@@ -212,11 +182,11 @@ public class Session {
 			this.sock = new Socket();
             logger.debug("Trying to use 'to' attribute to open a socket...");
 			
-			host = DNSUtil.resolveXMPPServerDomain(to, DEFAULT_XMPPPORT);
+			host = DNSUtil.resolveXMPPServerDomain(to, SessionConstants.DEFAULT_XMPPPORT);
 			
 			try {
                 logger.debug("Trying to open a socket to '" + host.getHost() + "', using port " + host.getPort() + ".");
-				this.sock.connect(new InetSocketAddress(host.getHost(), host.getPort()), SOCKET_TIMEOUT);
+				this.sock.connect(new InetSocketAddress(host.getHost(), host.getPort()), SessionConstants.SOCKET_TIMEOUT);
 			}
 			
 			catch (UnknownHostException uhe) {
@@ -236,7 +206,7 @@ public class Session {
 			if (this.sock.isConnected())
                 logger.debug("Succesfully connected to " + to);
 			
-			this.sock.setSoTimeout(SOCKET_TIMEOUT);
+			this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
 			
 			this.osw = new OutputStreamWriter(this.sock.getOutputStream(),
 					"UTF-8");
@@ -250,7 +220,9 @@ public class Session {
 			this.osw.flush();
 			
 			// Create unique session id
-			while (sessions.get(this.sid = createSessionID(24)) != null);
+			while (sessions.get(this.sid = createSessionID(24)) != null){
+                logger.debug("Created invalid session id");
+            }
 
             logger.debug("creating session with id " + this.sid);
 			
@@ -268,7 +240,7 @@ public class Session {
 			
 			this.stream10Test = Pattern.compile(".*<stream:stream[^>]*version=['|\"]1.0['|\"][^>]*>.*", Pattern.DOTALL);
 			
-			this.setStatus(SESS_ACTIVE);
+			this.setStatus(SessionConstants.SESS_ACTIVE);
 		}
 		
 		catch (IOException ioe) {
@@ -278,7 +250,7 @@ public class Session {
 
 	// Adds new response to list of known responses.
 	public synchronized Response addResponse(Response r) {
-		while (this.responses.size() > 0 && this.responses.size() >= Session.MAX_REQUESTS)
+		while (this.responses.size() > 0 && this.responses.size() >= SessionConstants.MAX_REQUESTS)
 			this.responses.remove(this.responses.firstKey());
 		
 		return (Response) this.responses.put(new Long(r.getRID()), r);
@@ -286,14 +258,20 @@ public class Session {
 
 	// Checks InputStream from server for incoming packets blocks until request timeout or packets available
 	private int init_retry = 0;
-	
-	public NodeList checkInQ(long rid) throws IOException {
+
+    public NodeList checkInQ(long rid) throws IOException {
+        return checkInQ(rid, 0);
+    }
+
+	private NodeList checkInQ(long rid, long depth) throws IOException {
 		NodeList nl = null;
 		
 		inQueue += this.readFromSocket(rid);
 
         logger.debug("inQueue: " + inQueue);
-		
+
+        logger.debug("Session id " + this.sid + " inQueue depth:" + depth);
+
 		if (init_retry < 1000 && (this.authid == null || this.isReinit()) && inQueue.length() > 0) {
 			init_retry++;
 			
@@ -314,10 +292,12 @@ public class Session {
 						Thread.sleep(5);
 					}
 					
-					catch (InterruptedException ie) { }
+					catch (InterruptedException ie) {
+                        logger.debug("Session interrpted", ie);
+                    }
 					
 					// Retry
-					return this.checkInQ(rid);
+					return this.checkInQ(rid, depth + 1);
 				}
 			}
 			
@@ -338,7 +318,7 @@ public class Session {
 					catch (InterruptedException ie) { }
 					
 					// Retry
-					return this.checkInQ(rid);
+                    return this.checkInQ(rid, depth + 1);
 				}
 			}
 			
@@ -425,7 +405,7 @@ public class Session {
                                     logger.debug("TLS Handshake complete");
 									
 									this.sock = tls;
-									this.sock.setSoTimeout(SOCKET_TIMEOUT);
+									this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
 									
 									this.br = new SSLSocketReader((SSLSocket) tls);
 									
@@ -436,8 +416,8 @@ public class Session {
 									this.setReinit(true);
 									this.osw.write("<stream:stream to='" + this.to + "'" + appendXMLLang(this.getXMLLang()) + " xmlns='jabber:client' " + " xmlns:stream='http://etherx.jabber.org/streams'" + " version='1.0'" + ">");
 									this.osw.flush();
-									
-									return this.checkInQ(rid);
+
+                                    return this.checkInQ(rid, depth + 1);
 								}
 								
 								catch (Exception ssle) {
@@ -463,10 +443,10 @@ public class Session {
 										
 										// Reconnect
 										Socket s = new Socket();
-										s.connect(this.sock.getRemoteSocketAddress(), SOCKET_TIMEOUT);
+										s.connect(this.sock.getRemoteSocketAddress(), SessionConstants.SOCKET_TIMEOUT);
 										
 										this.sock = s;
-										this.sock.setSoTimeout(SOCKET_TIMEOUT);
+										this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
 										this.br = new BufferedReader(new InputStreamReader(this.sock.getInputStream(), "UTF-8"));
 										this.osw = new OutputStreamWriter(this.sock.getOutputStream(), "UTF-8");
 										
@@ -476,8 +456,8 @@ public class Session {
 										
 										this.osw.write("<stream:stream to='" + this.to + "'" + appendXMLLang(this.getXMLLang()) + " xmlns='jabber:client' " + " xmlns:stream='http://etherx.jabber.org/streams'" + " version='1.0'" + ">");
 										this.osw.flush();
-										
-										return this.checkInQ(rid);
+
+                                        return this.checkInQ(rid, depth + 1);
 									}
 								}
 							}
@@ -523,7 +503,7 @@ public class Session {
 	// Checks whether given request ID is valid within context of this session.
 	public synchronized boolean checkValidRID(long rid) {
 		try {
-			if (rid <= ((Long) this.responses.lastKey()).longValue() + MAX_REQUESTS && rid >= ((Long) this.responses.firstKey()).longValue())
+			if (rid <= ((Long) this.responses.lastKey()).longValue() + SessionConstants.MAX_REQUESTS && rid >= ((Long) this.responses.firstKey()).longValue())
 				return true;
 			
 			else {
@@ -621,7 +601,7 @@ public class Session {
 		
 		Response r = this.getResponse(rid);
 		
-		while (!this.sock.isClosed() && !this.isStatus(SESS_TERM)) {
+		while (!this.sock.isClosed() && !this.isStatus(SessionConstants.SESS_TERM)) {
 			this.setLastActive();
 			try {
 				if (this.br.ready()) {
@@ -638,7 +618,7 @@ public class Session {
 					
 					try {
 						// Wait for incoming packets
-						Thread.sleep(READ_TIMEOUT);
+						Thread.sleep(SessionConstants.READ_TIMEOUT);
 					}
 					
 					catch (InterruptedException ie) {
@@ -707,7 +687,7 @@ public class Session {
 	}
 	
 	public Session setHold(int hold) {
-		if (hold < MAX_REQUESTS && hold >= 0)
+		if (hold < SessionConstants.MAX_REQUESTS && hold >= 0)
 			this.hold = hold;
 		return this;
 	}
@@ -734,8 +714,8 @@ public class Session {
 	public int setWait(int wait) {
 		if (wait < 0)
 			wait = 0;
-		if (wait > MAX_WAIT)
-			wait = MAX_WAIT;
+		if (wait > SessionConstants.MAX_WAIT)
+			wait = SessionConstants.MAX_WAIT;
 		this.wait = wait;
 		return wait;
 	}
@@ -771,7 +751,7 @@ public class Session {
 	// Kill this session
 	public void terminate() {
         logger.debug("terminating session " + this.getSID());
-		this.setStatus(SESS_TERM);
+		this.setStatus(SessionConstants.SESS_TERM);
 		synchronized (this.sock) {
 			if (!this.sock.isClosed()) {
 				try {

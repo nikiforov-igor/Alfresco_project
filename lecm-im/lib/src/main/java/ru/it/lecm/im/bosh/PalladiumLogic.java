@@ -36,11 +36,7 @@ public final class PalladiumLogic {
 	public static final String APP_VERSION = "1.4";
 	
 	public static final String APP_NAME = "Palladium";
-	
-	public static final boolean DEBUG = false;
-	
-	public static final int DEBUG_LEVEL = 2;
-	
+
 	private DocumentBuilder db;
 	
 	private Janitor janitor;
@@ -48,7 +44,10 @@ public final class PalladiumLogic {
     private final static Logger logger = LoggerFactory.getLogger(PalladiumLogic.class);
 	
 	public void init() throws ServletException {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+        logger.trace("Initialization of PalladiumLogic");
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		try {
 			db = dbf.newDocumentBuilder();
@@ -159,7 +158,7 @@ public final class PalladiumLogic {
                             logger.debug("found valid rid " + rid);
 							
 							// Too many simultaneous requests
-							if (sess.numPendingRequests() >= Session.MAX_REQUESTS) {
+							if (sess.numPendingRequests() >= SessionConstants.MAX_REQUESTS) {
                                 logger.debug("too many simultaneous requests: " + sess.numPendingRequests());
 								response.sendError(HttpServletResponse.SC_FORBIDDEN);
 								
@@ -179,7 +178,7 @@ public final class PalladiumLogic {
 									// Wait until it's our turn
 									long lastrid = sess.getLastDoneRID();
 									while (rid != lastrid + 1) {
-										if (sess.isStatus(Session.SESS_TERM)) {
+										if (sess.isStatus(SessionConstants.SESS_TERM)) {
                                             logger.debug("session terminated for " + rid);
 											
 											response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -241,7 +240,7 @@ public final class PalladiumLogic {
 										long now = System.currentTimeMillis();
 										
 										if (sess.getHold() == 0 && 
-												now - sess.getLastPoll() < Session.MIN_POLLING * 1000) {
+												now - sess.getLastPoll() < SessionConstants.MIN_POLLING * 1000) {
                                             logger.debug("polling too frequently! [now:" + now + ", last:" + sess.getLastPoll() + "(" + (now - sess.getLastPoll()) + ")]");
 											
 											response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -292,7 +291,7 @@ public final class PalladiumLogic {
 										jresp.setAttribute("authid", sess.getAuthid());
 									}
 									
-									if (sess.isStatus(Session.SESS_TERM)) {
+									if (sess.isStatus(SessionConstants.SESS_TERM)) {
 										// Stream error: close the session
 										jresp.setAttribute("type", "terminate");
 										jresp.setAttribute("condition", "remote-stream-error");
@@ -366,7 +365,7 @@ public final class PalladiumLogic {
 							if (attribs.getNamedItem("content") != null)
 								jresp.setContentType(attribs.getNamedItem("content").getNodeValue());
 							else
-								jresp.setContentType(Session.DEFAULT_CONTENT);
+								jresp.setContentType(SessionConstants.DEFAULT_CONTENT);
 							
 							jresp.setAttribute("type", "terminate");
 							jresp.setAttribute("condition", "improper-addressing");
@@ -422,16 +421,16 @@ public final class PalladiumLogic {
 							
 							jresp.setAttribute("sid", sess.getSID());
 							jresp.setAttribute("wait", String.valueOf(sess.getWait()));
-							jresp.setAttribute("inactivity", String.valueOf(Session.MAX_INACTIVITY));
-							jresp.setAttribute("polling", String.valueOf(Session.MIN_POLLING));
-							jresp.setAttribute("requests", String.valueOf(Session.MAX_REQUESTS));
+							jresp.setAttribute("inactivity", String.valueOf(SessionConstants.MAX_INACTIVITY));
+							jresp.setAttribute("polling", String.valueOf(SessionConstants.MIN_POLLING));
+							jresp.setAttribute("requests", String.valueOf(SessionConstants.MAX_REQUESTS));
 							
 							if (sess.getAuthid() != null) {
 								sess.authidSent = true;
 								jresp.setAttribute("authid", sess.getAuthid());
 							}
 							
-							if (sess.isStatus(Session.SESS_TERM))
+							if (sess.isStatus(SessionConstants.SESS_TERM))
 								jresp.setAttribute("type", "terminate");
 							
 							jresp.send(response);
@@ -443,7 +442,7 @@ public final class PalladiumLogic {
 							if (attribs.getNamedItem("content") != null)
 								jresp.setContentType(attribs.getNamedItem("content").getNodeValue());
 							else
-								jresp.setContentType(Session.DEFAULT_CONTENT);
+								jresp.setContentType(SessionConstants.DEFAULT_CONTENT);
 							
 							jresp.setAttribute("type", "terminate");
 							jresp.setAttribute("condition", "host-unknown");
@@ -456,7 +455,7 @@ public final class PalladiumLogic {
 							if (attribs.getNamedItem("content") != null)
 								jresp.setContentType(attribs.getNamedItem("content").getNodeValue());
 							else
-								jresp.setContentType(Session.DEFAULT_CONTENT);
+								jresp.setContentType(SessionConstants.DEFAULT_CONTENT);
 							
 							jresp.setAttribute("type", "terminate");
 							jresp.setAttribute("condition", "remote-connection-failed");
@@ -482,6 +481,7 @@ public final class PalladiumLogic {
 			catch (Exception e) {
 				System.err.println(e.toString());
 				e.printStackTrace();
+                logger.error("error1", e);
 				
 				try {
 					Response jresp = new Response(db.newDocument());
@@ -492,6 +492,7 @@ public final class PalladiumLogic {
 				
 				catch (Exception e2) {
 					e2.printStackTrace();
+                    logger.error("error2", e2);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			}
