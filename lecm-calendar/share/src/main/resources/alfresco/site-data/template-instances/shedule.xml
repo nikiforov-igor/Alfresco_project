@@ -19,6 +19,9 @@
 		<component>
 			<region-id>toolbar</region-id>
 			<url>/ru/it/lecm/wcalendar/shedule/toolbar</url>
+			<properties>
+				<bubblingLabel>sheduleToolbar</bubblingLabel>
+			</properties>
 		</component>
 		<!-- Menu -->
 		<component>
@@ -32,6 +35,9 @@
 		<component>
 			<region-id>shedule</region-id>
 			<url>/ru/it/lecm/wcalendar/shedule/shedule</url>
+			<properties>
+				<bubblingLabel>sheduleDatagrid</bubblingLabel>
+			</properties>
 		</component>
 	</components>
 </template-instance>

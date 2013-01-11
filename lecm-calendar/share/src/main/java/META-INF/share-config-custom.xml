@@ -36,9 +36,6 @@
 				</field-visibility>
 			</form>
 			<form id="createNewSpecialDayForm">
-				<!--                <dependencies>
-     <js src="/share/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
-    </dependencies>-->
 				<field-visibility>
 					<show id="lecm-cal:day"/>
 					<show id="lecm-cal:reason"/>
@@ -97,6 +94,66 @@
 					<show id="lecm-cal:reason"/>
 				</field-visibility>
 			</form>
+		</forms>
+	</config>
+
+
+	<config evaluator="model-type" condition="lecm-shed:shedule">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-shed:shed-employee-link-assoc"/>
+					<show id="lecm-shed:std-begin"/>
+					<show id="lecm-shed:std-end"/>
+					<show id="lecm-shed:type"/>
+				</field-visibility>
+			</form>
+			<form id="createNewCommonSheduleForm">
+				<field-visibility>
+					<show id="lecm-shed:std-begin"/>
+					<show id="lecm-shed:std-end"/>
+					<show id="lecm-shed:shed-employee-link-assoc"/>
+					<show id="lecm-shed:type"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-shed:std-begin" mandatory="true">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Shedule.timeValidation"
+										event="onblur" message-id="message.time-format.error" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-shed:std-end" mandatory="true">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.time"
+										event="onblur" message-id="message.time-format.error" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-shed:shed-employee-link-assoc" mandatory="true">
+						<control template="/ru/it/lecm/wcalendar/controls/double-picker-control.ftl">
+							<control-param name="startLocation1">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="startLocation2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="rootNode1">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="rootNode2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="pickerLabel1">label.form.picker.orgstructure</control-param>
+							<control-param name="pickerLabel2">label.form.picker.employees</control-param>
+							<control-param name="itemType1">lecm-orgstr:organization-element</control-param>
+							<control-param name="itemType2">lecm-orgstr:employee</control-param>
+							<control-param name="endpointMandatory">false</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="multipleSelectMode">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-shed:type">
+						<control template="/ru/it/lecm/wcalendar/controls/hidden-patiently-value.ftl">
+							<control-param name="value">COMMON</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+
 		</forms>
 	</config>
 </alfresco-config>

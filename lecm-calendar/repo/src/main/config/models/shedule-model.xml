@@ -42,7 +42,7 @@
 				</property>
 				<!-- Начало работы по обычному графику. -->
 				<property name="lecm-shed:std-begin">
-					<type>d:datetime</type>
+					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -52,7 +52,7 @@
 				</property>
 				<!-- Конец работы по обычному графику. -->
 				<property name="lecm-shed:std-end">
-					<type>d:datetime</type>
+					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -66,14 +66,15 @@
 				<association name="lecm-shed:shed-employee-link-assoc">
 					<!-- Сотрудник/подразделение может работать только по одному графику. -->
 					<source>
-						<mandatory>false</mandatory>
+						<mandatory>true</mandatory>
 						<many>false</many>
 					</source>
 					<!-- График должен быть к кому-то привязан. -->
 					<target>
-						<class>lecm-shed:shedule-employee-struct-link</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
+						<!--<class>lecm-shed:shedule-employee-struct-link</class>-->
+						<class>cm:cmobject</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
 					</target>
 				</association>
 				<!-- Если сотрудник работает не по стандартному графику, то здесь ссылки на элементы рабочего графика. -->
