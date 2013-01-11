@@ -1,4 +1,3 @@
-<#include "/ru/it/lecm/base-share/components/controls/picker.inc.ftl" />
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign compactMode = field.control.params.compactMode!false>
@@ -15,47 +14,8 @@
 	</#if>
 </#if>
 
-<#macro htmlMarkup field>
-	<#if form.mode == "view">
-		<div id="${controlId}" class="viewmode-field">
-			<#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-			</#if>
-			<span class="viewmode-label">${field.label?html}:</span>
-			<span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
-		</div>
-	<#else>
-		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-		<div id="${controlId}" class="object-finder">
-			<div>
-				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="LogicECM.module.Shedule.DrawPicker(this);" checked>${msg(field.control.params.pickerLabel1)}<br>
-				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="LogicECM.module.Shedule.DrawPicker(this);" >${msg(field.control.params.pickerLabel2)}
-			</div>
-			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
-
-			<#if field.disabled == false>
-				<input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
-				<input type="hidden" id="${controlId}-added" name="${field.name}_added" />
-				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
-				<div id="${controlId}-itemGroupActions" class="show-picker"></div>
-				<@renderPickerHTML controlId />
-			</#if>
-		</div>
-	</#if>
-</#macro>
-
-<div class="form-field" id="${controlContainerId}">
-	<@htmlMarkup field/>
-</div>
 
 <script type="text/javascript">//<![CDATA[
-
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
-LogicECM.module = LogicECM.module || {};
-LogicECM.module.Shedule = LogicECM.module.Shedule || {};
 
 (function() {
 var picker;
@@ -65,7 +25,7 @@ var markupToDraw = '<@compress single_line=true>
 	<@htmlMarkup field/>
 </@compress>';
 
-LogicECM.module.Shedule.DrawPicker = function Shedule_DrawPicker(instance) {
+LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(instance) {
 	picker = new LogicECM.module.ObjectFinder("${controlId}", "${fieldHtmlId}").setOptions({
 		<#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
 		field: "${field.name}",
@@ -151,8 +111,78 @@ LogicECM.module.Shedule.DrawPicker = function Shedule_DrawPicker(instance) {
 	}
 }
 
-LogicECM.module.Shedule.DrawPicker({ value: '1'});
+LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
 })();
 
 //]]></script>
 
+
+<div class="form-field" id="${controlContainerId}">
+	<@htmlMarkup field/>
+</div>
+
+
+<#macro htmlMarkup field>
+<#assign pickerId = controlId + "-picker">
+	<#if form.mode == "view">
+		<div id="${controlId}" class="viewmode-field">
+			<#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
+			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
+			</#if>
+			<span class="viewmode-label">${field.label?html}:</span>
+			<span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
+		</div>
+	<#else>
+		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+		<div id="${controlId}" class="object-finder">
+			<div>
+				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="LogicECM.module.WCalendar.Shedule.DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
+				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="LogicECM.module.WCalendar.Shedule.DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
+			</div>
+			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
+
+			<#if field.disabled == false>
+				<input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
+				<input type="hidden" id="${controlId}-added" name="${field.name}_added" />
+				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
+				<div id="${controlId}-itemGroupActions" class="show-picker"></div>
+				<div id="${pickerId}" class="picker yui-panel">
+				   <div id="${pickerId}-head" class="hd">${msg("form.control.object-picker.header")}</div>
+				   <div id="${pickerId}-body" class="bd">
+					  <div class="picker-header">
+						 <div id="${pickerId}-folderUpContainer" class="folder-up"><button id="${pickerId}-folderUp"></button></div>
+						 <div id="${pickerId}-navigatorContainer" class="navigator">
+							<button id="${pickerId}-navigator"></button>
+							<div id="${pickerId}-navigatorMenu" class="yuimenu">
+							   <div class="bd">
+								  <ul id="${pickerId}-navigatorItems" class="navigator-items-list">
+									 <li>&nbsp;</li>
+								  </ul>
+							   </div>
+							</div>
+						 </div>
+						 <div id="${pickerId}-searchContainer" class="search">
+							<input type="text" class="search-input" name="-" id="${pickerId}-searchText" value="" maxlength="256" />
+							<span class="search-button"><button id="${pickerId}-searchButton">${msg("form.control.object-picker.search")}</button></span>
+						 </div>
+					  </div>
+					  <div class="yui-g">
+						 <div id="${pickerId}-left" class="yui-u first panel-left">
+							<div id="${pickerId}-results" class="picker-items">
+							   <#nested>
+							</div>
+						 </div>
+						 <div id="${pickerId}-right" class="yui-u panel-right">
+							<div id="${pickerId}-selectedItems" class="picker-items"></div>
+						 </div>
+					  </div>
+					  <div class="bdft">
+						 <button id="${controlId}-ok" tabindex="0">${msg("button.ok")}</button>
+						 <button id="${controlId}-cancel" tabindex="0">${msg("button.cancel")}</button>
+					  </div>
+				   </div>
+				</div>
+			</#if>
+		</div>
+	</#if>
+</#macro>

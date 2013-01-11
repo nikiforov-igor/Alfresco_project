@@ -3,10 +3,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 }
 
 LogicECM.module = LogicECM.module || {};
-LogicECM.module.Shedule = LogicECM.module.Shedule || {};
+LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
+LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 
 
-LogicECM.module.Shedule.timeValidation = function time(field, args, event, form, silent, message) {
+LogicECM.module.WCalendar.Shedule.timeValidation = function time(field, args, event, form, silent, message) {
 	if (Alfresco.logger.isDebugEnabled())
 		Alfresco.logger.debug("Validating field '" + field.id + "' with custom time validator");
 

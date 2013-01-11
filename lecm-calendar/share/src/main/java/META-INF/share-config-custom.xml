@@ -119,14 +119,14 @@
 					<field id="lecm-shed:std-begin" mandatory="true">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Shedule.timeValidation"
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
 										event="onblur" message-id="message.time-format.error" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-shed:std-end" mandatory="true">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.time"
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
 										event="onblur" message-id="message.time-format.error" />
 						</constraint-handlers>
 					</field>
