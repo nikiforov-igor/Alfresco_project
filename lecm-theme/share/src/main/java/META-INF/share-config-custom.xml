@@ -54,6 +54,7 @@
                         <item type="link" id="trashcan">/console/admin-console/trashcan</item>
                         <item type="link" id="users">/console/admin-console/users</item>
                         <item type="link" id="subscriptions">/subscriptions-to-type</item>
+                        <item type="link" id="business-journal">/business-journal</item>
                         <item type="link" id="more">/console/admin-console/</item>
                     </container-group>
                 </item>

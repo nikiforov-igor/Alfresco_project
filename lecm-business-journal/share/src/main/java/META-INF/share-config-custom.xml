@@ -99,6 +99,9 @@
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+
                     <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
                     <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
                     <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
@@ -125,6 +128,9 @@
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+
                     <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
                     <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
                     <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
@@ -144,12 +150,12 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-busjournal:bjRecord-date"/>
-                    <show id="lecm-busjournal:bjRecord-description"/>
-                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-date"/>
                 </field-visibility>
             </form>
         </forms>

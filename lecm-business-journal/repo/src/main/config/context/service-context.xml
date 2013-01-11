@@ -60,4 +60,18 @@
             <ref bean="businessJournalService"/>
         </property>
     </bean>
+
+    <bean id="createObjectsEventPolicy" class="ru.it.lecm.businessjournal.policies.BusinessEventsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+    </bean>
 </beans>

@@ -116,40 +116,85 @@
                     <title>Date</title>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-description">
                     <title>Description</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-initiator">
                     <title>Initiator</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-mainObject">
                     <title>Main Object</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj1">
                     <title>Secondary Object 1</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj2">
                     <title>Secondary Object 2</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj3">
                     <title>Secondary Object 3</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj4">
                     <title>Secondary Object 4</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj5">
                     <title>Secondary Object 5</title>
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <associations>

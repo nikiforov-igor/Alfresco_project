@@ -88,6 +88,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.selectedItems = {};
         this.afterDataGridUpdate = [];
         this.search = null;
+        this.initialSearchConfig = null;
         /**
          * Decoupled event listeners
          */
@@ -96,7 +97,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemUpdated", this.onDataItemUpdated, this);
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
-        Bubbling.on("activeCheckBoxClicked", this.onActiveCheckBoxClicked, this);
+        Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
             {
@@ -369,8 +370,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             desc: true,
             elTh: null,
             search: null, //Объект, отвечающий за заполнение датагрида
+            initialSearchConfig: {},
 
-            onActiveCheckBoxClicked: function (layer, args) {
+            onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
                 if (cbShowArchive) {
                     var obj = {
@@ -1214,6 +1216,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     maxSearchResults: this.options.maxResults
                 });
                 var searchConfig = this.datagridMeta.searchConfig;
+                if (this.initialSearchConfig == null){
+                    this.initialSearchConfig = searchConfig;
+                }
+
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
                         searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
@@ -1911,10 +1917,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
-                    this.search.performSearch({
-                        searchConfig:searchConfig,
-                        searchShowInactive:this.options.searchShowInactive
-                    });
                 }
                 // Update the DataSource
                 var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive);

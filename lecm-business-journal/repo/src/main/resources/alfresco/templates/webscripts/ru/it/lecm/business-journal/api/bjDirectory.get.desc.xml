@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>BJ Directory</shortname>
+	<description>BJ Directory</description>
+	<url>/lecm/business-journal/api/directory</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

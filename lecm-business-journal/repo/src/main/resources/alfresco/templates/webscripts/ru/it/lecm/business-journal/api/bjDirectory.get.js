@@ -1,0 +1,1 @@
+model.directory = businessJournal.getDirectory();
