@@ -201,6 +201,20 @@ public class BPMNGenerator {
 				setStatusAction.appendChild(attribute);
 				start.appendChild(setStatusAction);
 
+				if (startStatus != null && startStatus) {
+					attribute = doc.createElement("lecm:attribute");
+					attribute.setAttribute("name", "startStatus");
+					attribute.setAttribute("value", "true");
+					setStatusAction.appendChild(attribute);
+					start.appendChild(setStatusAction);
+				} else {
+					attribute = doc.createElement("lecm:attribute");
+					attribute.setAttribute("name", "startStatus");
+					attribute.setAttribute("value", "false");
+					setStatusAction.appendChild(attribute);
+					start.appendChild(setStatusAction);
+				}
+
 				//Sorting actions by execution type
 				ArrayList<ChildAssociationRef> startActions = new ArrayList<ChildAssociationRef>();
 				ArrayList<ChildAssociationRef> takeActions = new ArrayList<ChildAssociationRef>();
@@ -308,21 +322,23 @@ public class BPMNGenerator {
         </lecm:action>
     */
     private void createUserWorkflowAction(Element eventElement, ChildAssociationRef action) {
-        Element actionElement = doc.createElement("lecm:action");
-        List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
-        for (ChildAssociationRef workflow : workflows) {
-            Element attribute;
-            actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
-            String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
-            String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
-            String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
-            attribute = doc.createElement("lecm:attribute");
-            attribute.setAttribute("label", workflowLabel);
-            attribute.setAttribute("workflowId", workflowId);
-            attribute.setAttribute("assignee", assignee);
-            actionElement.appendChild(attribute);
-        }
-        eventElement.appendChild(actionElement);
+		List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
+		if (workflows.size() > 0) {
+			Element actionElement = doc.createElement("lecm:action");
+			for (ChildAssociationRef workflow : workflows) {
+				Element attribute;
+				actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
+				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
+				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
+				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+				attribute = doc.createElement("lecm:attribute");
+				attribute.setAttribute("label", workflowLabel);
+				attribute.setAttribute("workflowId", workflowId);
+				attribute.setAttribute("assignee", assignee);
+				actionElement.appendChild(attribute);
+			}
+			eventElement.appendChild(actionElement);
+		}
     }
 
 

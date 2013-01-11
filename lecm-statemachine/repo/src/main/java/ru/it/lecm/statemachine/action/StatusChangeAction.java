@@ -29,6 +29,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private String status = "UNKNOWN";
 	private NodeRef folder = null;
 	private String uuid = null;
+	private boolean startStatus = false;
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -43,8 +44,14 @@ public class StatusChangeAction extends StateMachineAction {
 			} else if ("uuid".equalsIgnoreCase(name)) {
 				uuid = value;
 				folder = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, uuid);
+			} else if ("startStatus".equalsIgnoreCase(name)) {
+				startStatus = Boolean.parseBoolean(value);
 			}
 		}
+
+		//Если начальный статус, то папки для него не требуется
+		if (startStatus) return;
+
 		//Проверяем существует ли папка для этого статуса
 		NodeService nodeService = getServiceRegistry().getNodeService();
 		if (nodeService.exists(folder)) {
@@ -99,6 +106,9 @@ public class StatusChangeAction extends StateMachineAction {
 		for (ChildAssociationRef child : children) {
 			nodeService.setProperty(child.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
 		}
+
+		//Если стартовый статус, то ничего никуда не перемещаем
+		if (startStatus) return;
 
 		//Перемещаем в нужную папку
 		for (ChildAssociationRef child : children) {
