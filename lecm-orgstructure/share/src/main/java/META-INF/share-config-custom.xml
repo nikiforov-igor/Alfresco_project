@@ -587,13 +587,8 @@
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="lecm-orgstr:element-member-position-assoc"/>
-                    <show id="lecm-orgstr:element-member-employee-assoc"/>
                     <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
-	            <appearance>
-		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
-	            </appearance>
             </form>
         </forms>
     </config>

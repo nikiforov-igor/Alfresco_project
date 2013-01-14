@@ -145,8 +145,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     Dom.get(this.id + "-full-text-search").setAttribute('disabled', true);
                     Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','#eeeeee');
                 }
-                // Reference to Data Grid component
-                this.modules.dataGrid = this.findGrid("LogicECM.module.Base.DataGrid", this.options.bubblingLabel);
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -285,7 +283,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
-                    datagridMeta.searchConfig = null;
+                    //сбрасываем на значение по умолчанию
+                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
                     this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
@@ -304,26 +303,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 advSearch.showDialog(grid.datagridMeta);
             },
 
-            // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар
-            findGrid:function OrgstructureToolbar_findGrid(p_sName, bubblingLabel) {
-                var found = Alfresco.util.ComponentManager.find(
-                    {
-                        name:p_sName
-                    });
-                if (bubblingLabel) {
-                    for (var i = 0, j = found.length; i < j; i++) {
-                        var component = found[i];
-                        if (typeof component == "object" && component.options.bubblingLabel) {
-                            if (component.options.bubblingLabel == bubblingLabel) {
-                                return component;
-                            }
-                        }
-                    }
-                } else {
-                    return (typeof found[0] == "object" ? found[0] : null);
-                }
-                return null;
-            },
             onInitButton: function Tree_onSelectedItems(layer, args)
             {
                 var obj = args[1];
@@ -390,7 +369,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 if (this.modules.dataGrid) {
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
-                    datagridMeta.searchConfig = null;
+                    //сбрасываем на значение по умолчанию
+                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta
