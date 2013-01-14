@@ -99,9 +99,8 @@ LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(insta
 			startLocation: "${field.control.params.startLocation2}",
 			itemType: "${field.control.params.itemType2}"
 		});
-	} else {
-		alert("WTF? radioButton.value = " + radioButton.value);
 	}
+
 	htmlNode = Dom.get("${controlContainerId}");
 	if (htmlNode) {
 		htmlNode.innerHTML = "";
@@ -123,7 +122,7 @@ LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
 
 
 <#macro htmlMarkup field>
-<#assign pickerId = controlId + "-picker">
+	<#assign pickerId = controlId + "-picker">
 	<#if form.mode == "view">
 		<div id="${controlId}" class="viewmode-field">
 			<#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
