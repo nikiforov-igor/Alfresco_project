@@ -46,6 +46,9 @@ function processResults(nodes, fields, nameSubstituteStrings, maxResults) {
 	    if (fields.indexOf("cm_versionLabel") == -1) {
 		    fields = fields + ",cm_versionLabel";
 	    }
+        if (fields.indexOf("lecm-dic_active") == -1) {
+            fields = fields + ",lecm-dic_active";
+        }
         var arrayFields = fields.split(","),
             numFields = arrayFields.length;
 

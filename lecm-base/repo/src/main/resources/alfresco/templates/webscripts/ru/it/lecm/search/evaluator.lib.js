@@ -102,16 +102,18 @@ var Evaluator =
       var value = objData.value,
          type = objData.type,
          obj;
-      
-      if (type == "cm:person")
-      {
-         obj = Evaluator.getPersonObject(value);
-         if (obj == null)
-         {
-            return false;
-         }
-         objData.displayValue = obj.displayName;
-         objData.metadata = obj.userName;
+
+      if (type == "cm:person") {
+           obj = Evaluator.getPersonObject(value);
+           if (obj == null) {
+               return false;
+           }
+           if (nameSubstituteString == null) {
+               objData.displayValue = obj.displayName;
+           } else {
+               objData.displayValue = substitude.formatNodeTitle(value, nameSubstituteString);
+           }
+           objData.metadata = obj.userName;
       }
       else if (type == "cm:folder")
       {

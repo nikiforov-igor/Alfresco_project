@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <model name="lecm-busjournal:businessJournalModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Orgstructure Model</description>
+    <description>Business Journal Model</description>
     <author>DBashmakov</author>
     <version>1.0</version>
     <imports>

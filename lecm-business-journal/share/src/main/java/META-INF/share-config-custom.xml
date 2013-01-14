@@ -96,16 +96,21 @@
     <config evaluator="node-type" condition="lecm-busjournal:bjRecord">
         <forms>
             <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
+
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
+
+                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
+
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
+
                     <show id="lecm-busjournal:bjRecord-date"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
-                    <show id="lecm-busjournal:bjRecord-initiator"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject"/>
-
-                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
 
                     <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
@@ -118,6 +123,66 @@
                     <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
                 </field-visibility>
+                <appearance>
+                    <set id="common" appearance="" label-id="info.common-info" />
+                    <set id="secondary" appearance="" label-id="info.secondary-info" />
+
+                    <field id="lecm-busjournal:bjRecord-date" set="common"/>
+                    <field id="lecm-busjournal:bjRecord-initiator" set="common"/>
+                    <field id="lecm-busjournal:bjRecord-initiator-assoc" set="common">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-mainObject" set="common"/>
+                    <field id="lecm-busjournal:bjRecord-mainObject-assoc" set="common">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-objType-assoc" set="common">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-evCategory-assoc" set="common">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-description" set="common"/>
+
+                    <field id="lecm-busjournal:bjRecord-secondaryObj1-assoc" set="secondary">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj1" set="secondary"/>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj2-assoc" set="secondary">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj2" set="secondary"/>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj3-assoc" set="secondary">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj3" set="secondary"/>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj4-assoc" set="secondary">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj4" set="secondary"/>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj5-assoc" set="secondary">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="showTargetLink">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-busjournal:bjRecord-secondaryObj5" set="secondary"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -125,6 +190,8 @@
     <config evaluator="model-type" condition="lecm-busjournal:bjRecord">
         <forms>
             <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
@@ -150,13 +217,36 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
                     <show id="lecm-busjournal:bjRecord-mainObject"/>
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
                     <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
                     <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:secondary-objects" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-busjournal:bjRecord-initiator-assoc" substituteString="{..lecm-orgstr:employee-person-assoc/cm:name} - {cm:userName}"/>
+                    <field id="lecm-busjournal:secondary-objects" substituteString="{lecm-busjournal:bjRecord-secondaryObj1} {lecm-busjournal:bjRecord-secondaryObj2} {lecm-busjournal:bjRecord-secondaryObj3} {lecm-busjournal:bjRecord-secondaryObj4} {lecm-busjournal:bjRecord-secondaryObj5}"/>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-busjournal:bjRecord-date">
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

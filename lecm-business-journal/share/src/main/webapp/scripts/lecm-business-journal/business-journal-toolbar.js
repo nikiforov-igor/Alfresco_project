@@ -227,7 +227,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
-                    datagridMeta.searchConfig = dataGrid.initialSearchConfig;
+                    //сбрасываем на значение по умолчанию
+                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
                     this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
@@ -266,11 +267,14 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 if (this.modules.dataGrid) {
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
-                    datagridMeta.searchConfig = dataGrid.initialSearchConfig;
-                    YAHOO.Bubbling.fire("activeGridChanged",
-                        {
-                            datagridMeta:datagridMeta
-                        });
+                    //сбрасываем на значение по умолчанию
+                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    dataGrid.search.performSearch({
+                        parent:datagridMeta.nodeRef,
+                        itemType:datagridMeta.itemType,
+                        searchConfig:datagridMeta.searchConfig,
+                        searchShowInactive:dataGrid.options.searchShowInactive
+                    });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                     this.checkShowClearSearch();
                 }

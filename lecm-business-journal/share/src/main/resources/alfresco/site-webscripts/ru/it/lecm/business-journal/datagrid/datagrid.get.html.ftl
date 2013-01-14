@@ -18,7 +18,12 @@
 									type:"action-link-${bubblingLabel!"bj-records"}",
 									id:"onActionDelete",
 									permission:"delete",
-									label:"${msg("actions.delete-row")}"
+									label:"${msg("actions.delete-row")}",
+                                    evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["prop_lecm-dic_active"] == undefined ||
+                                                itemData["prop_lecm-dic_active"].value == true;
+                                    }
 								}
 							],
 							bubblingLabel: "${bubblingLabel!"bj-records"}",
@@ -32,7 +37,8 @@
                             itemType: "lecm-busjournal:bjRecord",
 	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER.nodeRef,
                             searchConfig: {
-                                filter: '+PATH:"/app:company_home/lecm-busjournal:businessJournal//*"'
+                                filter: '+PATH:"/app:company_home/lecm-busjournal:businessJournal//*"',
+                                sort:"lecm-busjournal:bjRecord-date|desc"
                             }
                         },
                         bubblingLabel: "bj-records"
