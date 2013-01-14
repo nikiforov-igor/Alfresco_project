@@ -3,6 +3,7 @@ package ru.it.lecm.delegation.beans;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
@@ -15,6 +16,8 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +30,7 @@ import ru.it.lecm.utils.DurationLogger;
 import ru.it.lecm.utils.alfresco.SearchHelper;
 import ru.it.lecm.utils.alfresco.Utils;
 
-public class TestSearchBean implements ITestSearch 
+public class TestSearchBean implements ITestSearch
 {
 
 	private static final String NAMESPACE = "http://www.it.ru/lecm/model/blanks/1.0";
@@ -51,6 +54,8 @@ public class TestSearchBean implements ITestSearch
 	 */
 	private NodeService fastNodeService;
 	private NodeService secureNodeService;
+
+	private AuthorityService authorityService;
 
 	private JSONObject args;
 
@@ -86,9 +91,17 @@ public class TestSearchBean implements ITestSearch
 		this.secureNodeService = secureNodeService;
 	}
 
+	public AuthorityService getAuthorityService() {
+		return authorityService;
+	}
+
+	public void setAuthorityService(AuthorityService authorityService) {
+		this.authorityService = authorityService;
+	}
+
 	@Override
 	public void setConfig(JSONObject config) throws JSONException {
-		this.args = config; 
+		this.args = config;
 	}
 
 	/**
@@ -107,6 +120,8 @@ public class TestSearchBean implements ITestSearch
 			case 2: result = doSearchTest( "New", true, needPermChk); break;
 			case 3: result = doSearchTest( "Active", false, needPermChk); break;
 			case 4: result = doSearchTest( "Active", true, needPermChk); break;
+			case 5: result = doCreateSGTest(); break;
+			case 6: result = doCreateNestedSGTest(); break;
 			default:
 				result = new JSONObject();
 				result.put( "error", "invalid test number: "+ testnum);
@@ -118,6 +133,14 @@ public class TestSearchBean implements ITestSearch
 	}
 
 
+	/**
+	 * param: см также this.args
+	 * @param status
+	 * @param flag
+	 * @param permcheck
+	 * @return
+	 * @throws JSONException
+	 */
 	private JSONObject doSearchTest(final String status, final boolean flag, final boolean permcheck)
 			throws JSONException
 	{
@@ -232,6 +255,150 @@ public class TestSearchBean implements ITestSearch
 			}
 		}
 		return DEFAULT_FOLDERNAME;
+	}
+
+	private final static String ARG_SG_ROOTNAME = "sg.rootName";
+	private static final String ARG_SG_ROOTNAME_DEFAULT = "SG_ME_";
+	private final static String ARG_SG_N0 = "sg.n0";
+	private final static String ARG_SG_N  = "sg.n";
+	private final static String ARG_SG_LEVELS = "sg.levels";
+
+
+	private boolean hasAuth(String shortName, String parentName) {
+		// есть авторизация? ...
+		final Set<String> found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
+		return (found != null && found.size() > 0);
+		/*
+		// есть групповая авторизация? ...
+		Set<String> found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
+		if (found != null && found.size() > 0)
+			return true;
+		// есть не группа? ...
+		found = this.authorityService.findAuthorities(AuthorityType.ROLE, parentName, true, shortName, null);
+		if (found != null && found.size() > 0)
+			return true;
+		return false; // NOT FOUND
+		 */
+	}
+
+	/**
+	 * Выполняется создание SG-групп вида (см параметры this.args):
+	 * 		args['sg.rootName'] + "_" + (args['sg.n0'] + i)
+	 * , где i принимает значения от 0 до args['sg.n']
+	 * @return
+	 * @throws JSONException
+	 */
+	private JSONObject doCreateSGTest() throws JSONException
+	{
+		final JSONObject result = new JSONObject();
+
+		final DurationLogger d = new DurationLogger();
+		try {
+			final int n0 = this.args.optInt(ARG_SG_N0, 0);
+			final int n = this.args.optInt(ARG_SG_N, 1);
+			final String rootName = this.args.optString(ARG_SG_ROOTNAME, ARG_SG_ROOTNAME_DEFAULT);
+			logger.info( String.format("Security-group testing:\n\trootName:%s\n\t[start..stop]: [%s..%s]", rootName, n0, n0+n));
+
+			int i_total = 0;
+			String lastName = "";
+			for (int i=0; i < n; i++) {
+				final String gname = String.format("%s%s", rootName, i+n0);
+				lastName = gname;
+
+				if (hasAuth(gname, null)) {
+					logger.info( String.format("already exists '%s' -> skipped", gname));
+					continue;
+				}
+
+				final String newname = this.authorityService.createAuthority(AuthorityType.GROUP, gname);
+				logger.info( String.format("created '%s' as '%s'", gname, newname));
+
+				i_total++;
+			}
+
+			{ // формирование сводки по отработанным данным ...
+				result.put("processed", i_total);
+				result.put("nameExample", lastName);
+			}
+
+		} catch (JSONException ex) {
+			logger.error("SG test problem:", ex);
+			throw ex;
+		} catch (Throwable ex) {
+			logger.error("SG test problem:", ex);
+			result.put("exception", ex.toString());
+		}
+		finally {
+			final String info = d.fmtDuration("SecurityGroup test time is {t}, msec");
+			logger.info( "processTime "+ info);
+			result.put("processTime", info);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Выполняется создание SG-групп вида (см параметры this.args):
+	 * 		args['sg.rootName'] + "_" + (args['sg.n0'] + i)
+	 * , где i принимает значения от 0 до args['sg.n']
+	 * и для них создаются вложенные до уровня sg.level
+	 * @return
+	 * @throws JSONException
+	 */
+	private JSONObject doCreateNestedSGTest() throws JSONException
+	{
+		final JSONObject result = new JSONObject();
+
+		final DurationLogger d = new DurationLogger();
+		try {
+			final int n0 = this.args.optInt(ARG_SG_N0, 0);
+			final int n = this.args.optInt(ARG_SG_N, 1);
+			final int levels = this.args.optInt(ARG_SG_LEVELS, 1);
+			final String rootName = this.args.optString(ARG_SG_ROOTNAME, ARG_SG_ROOTNAME_DEFAULT);
+			logger.info( String.format("Security-group testing:\n\trootName:%s\n\t[start..stop]: [%s..%s]", rootName, n0, n0+n));
+
+			int i_total = 0;
+			String lastName = "";
+			for (int i=0; i < n; i++) {
+				final String gname = String.format("%s%s", rootName, i+n0);
+				lastName = gname;
+
+				if (!hasAuth(gname, null)) {
+					logger.info( String.format("not exists '%s' -> skipped", gname));
+					continue;
+				}
+
+				String curParent = "GROUP_" + gname;
+				for (int lev = 2; lev <= levels; lev++) {
+					final String deepName = String.format( "%s_%s", gname, UUID.randomUUID ().toString ());
+					final String newname = this.authorityService.createAuthority(AuthorityType.GROUP, deepName);
+					this.authorityService.addAuthority(curParent, newname);
+					curParent = newname;
+					logger.info( String.format("nested created '%s' as '%s'", deepName, newname));
+				}
+
+				i_total++;
+			}
+
+			{ // формирование сводки по отработанным данным ...
+				result.put("processed", i_total);
+				result.put("nameExample", lastName);
+			}
+
+		} catch (JSONException ex) {
+			logger.error("SG test problem:", ex);
+			throw ex;
+		} catch (Throwable ex) {
+			logger.error("SG test problem:", ex);
+			result.put("exception", ex.toString());
+		}
+		finally {
+			final String info = d.fmtDuration("SecurityGroup test time is {t}, msec");
+			logger.info( "processTime "+ info);
+			result.put("processTime", info);
+		}
+
+		return result;
 	}
 
 }

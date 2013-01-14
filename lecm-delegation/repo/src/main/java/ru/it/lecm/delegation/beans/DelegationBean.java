@@ -486,6 +486,8 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 		, test2
 		, test3
 		, test4
+		, test5
+		, test6
 		;
 
 		public boolean eq(Object s) {
@@ -520,7 +522,12 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 				copyJson( result, tester.runTest(3));
 			} else if (TestAction.test4.eq(testName)) {
 				copyJson( result, tester.runTest(4));
-			} else
+			} else if (TestAction.test5.eq(testName)) {
+				copyJson( result, tester.runTest(5));
+			} else if (TestAction.test6.eq(testName)) {
+				copyJson( result, tester.runTest(6));
+			}
+			else
 				result.put("message", "Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
 
 		} catch(Throwable ex) {

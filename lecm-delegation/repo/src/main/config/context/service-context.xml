@@ -22,6 +22,7 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="secureNodeService" ref="NodeService" />
 		<property name="fastNodeService" ref="nodeService" />
+		<property name="authorityService" ref="authorityService" />
 	</bean>
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->
