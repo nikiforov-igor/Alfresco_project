@@ -38,20 +38,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @return {LogicECM.AdvancedSearch} The new AdvancedSearch instance
      * @constructor
      */
-    LogicECM.AdvancedSearch = function (htmlId, meta, table, columns, source, label) {
+    LogicECM.AdvancedSearch = function (htmlId, grid) {
         LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container", "datasource", "datatable", "paginator"]);
-
         // Initialise prototype properties
-        this.dataTable = table;
-        this.dataSource = source;
-        this.dataColumns = columns;
-        this.datagridMeta = meta;
-        this.bubblingLabel = label;
+        this.dataTable = grid.widgets.dataTable;
+        this.dataSource = grid.widgets.dataSource;
+        this.dataColumns = grid.datagridColumns;
+        this.bubblingLabel = grid.options.bubblingLabel;
 
         this.searchDialog = null;
         this.searchStarted = false;
         this.currentSearchConfig = null;
         this.currentForm = null;
+        this.dataGrid = grid;
 
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
@@ -63,7 +62,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             dataTable:null,   // DataTable из грида
             dataSource:null,  // DataSource из грида
             dataColumns:{},   // набор колонок из датагрида
-            datagridMeta:{}, // метаданные из датагрида
 
             searchStarted: false, // флаг, что идет поиск
 
@@ -87,6 +85,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * Currently visible Search Form object
              */
             currentForm:null,
+
+            dataGrid:null,
 
             /**
              * Получение и отрисовка формы
@@ -124,7 +124,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 formDiv.innerHTML = response.serverResponse.responseText;
                                 if (this.searchDialog != null) {
 	                                if (isClearSearch) {
-		                                this.onSearchClick(e, obj, false);
+                                        //сбрасываем на значение по умолчанию
+                                        this.dataGrid.datagridMeta.searchConfig = YAHOO.lang.merge({}, this.dataGrid.initialSearchConfig);
+                                        this.searchDialog.hide();
+                                        this.performSearch({
+                                            parent:this.dataGrid.datagridMeta.nodeRef,
+                                            itemType:this.dataGrid.datagridMeta.itemType,
+                                            searchConfig:this.dataGrid.datagridMeta.searchConfig,
+                                            searchShowInactive:this.dataGrid.options.searchShowInactive
+                                        });
 	                                } else {
 		                                this.searchDialog.show();
 	                                }
@@ -161,7 +169,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     // включаем поиск во всех вложенных директория относительно родительской
                     var fullTextSearch = {
-                        parentNodeRef:me.datagridMeta.nodeRef
+                        parentNodeRef:me.dataGrid.datagridMeta.nodeRef
                     };
                     var sConfig = me.currentSearchConfig;
                     if (!sConfig) {

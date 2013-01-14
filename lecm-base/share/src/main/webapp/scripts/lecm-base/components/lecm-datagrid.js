@@ -370,7 +370,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             desc: true,
             elTh: null,
             search: null, //Объект, отвечающий за заполнение датагрида
-            initialSearchConfig: {},
+            initialSearchConfig: null,
 
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
@@ -1211,14 +1211,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 // initialize Search
-                this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
+                this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                     showExtendSearchBlock:this.options.showExtendSearchBlock,
                     maxSearchResults: this.options.maxResults
                 });
                 var searchConfig = this.datagridMeta.searchConfig;
-                if (this.initialSearchConfig == null){
-                    this.initialSearchConfig = searchConfig;
-                }
 
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
@@ -1227,6 +1224,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
+                    //при первом поиске сохраняем настройки
+                    if (this.initialSearchConfig == null){
+                        this.initialSearchConfig = {};
+                        this.initialSearchConfig = YAHOO.lang.merge(this.initialSearchConfig, searchConfig);
+                    }
+
                     this.search.performSearch({
                         searchConfig:searchConfig,
                         searchShowInactive:this.options.searchShowInactive
