@@ -40,6 +40,7 @@ LogicECM.module = LogicECM.module || {};
 	YAHOO.extend(LogicECM.module.StatemachineEditor, Alfresco.component.Base, {
 		statemachineId: null,
 		packageNodeRef: null,
+		machineNodeRef: null,
 		layout: null,
 		startActionsMenu: null,
 		userActionsMenu: null,
@@ -64,6 +65,7 @@ LogicECM.module = LogicECM.module || {};
 					oResponse.argument.parent._hideSplash();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
+					oResponse.argument.parent.machineNodeRef = oResults.machineNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
 					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
 					sUrl = YAHOO.lang.substitute(sUrl, {
@@ -310,6 +312,7 @@ LogicECM.module = LogicECM.module || {};
 			var callback = {
 				success:function (oResponse) {
 					oResponse.argument.parent._hideSplash();
+					alert("Deployed!")
 				},
 				argument:{
 					parent: this
@@ -372,7 +375,7 @@ LogicECM.module = LogicECM.module || {};
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 				itemKind: "node",
-				itemId: this.packageNodeRef,
+				itemId: this.machineNodeRef,
 				mode: "edit",
 				submitType: "json",
 				formId: "statemachine-editor-edit-statemachine"

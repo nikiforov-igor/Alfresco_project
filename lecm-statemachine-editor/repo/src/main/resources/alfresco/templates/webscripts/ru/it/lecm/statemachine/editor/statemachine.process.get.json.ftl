@@ -1,6 +1,7 @@
 <#escape x as x?js_string>
 {
     packageNodeRef: "${packageNodeRef}",
+    machineNodeRef: "${machineNodeRef}",
     statuses: [
     <#list statuses as status>
         <@printStatus status />

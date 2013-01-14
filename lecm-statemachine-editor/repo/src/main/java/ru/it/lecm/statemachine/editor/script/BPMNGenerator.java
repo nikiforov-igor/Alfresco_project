@@ -60,12 +60,13 @@ public class BPMNGenerator {
 	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
 	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
 	private final static QName PROP_ARCHIVE_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "archiveFolder");
+	private final static QName PROP_CREATION_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "creationDocument");
 
 	private final static String VARIABLE = "VARIABLE";
 	private final static String VALUE = "VALUE";
 
 	private final static QName ASSOC_TRANSITION_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionStatus");
-	private final static QName ASSOC_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
+	private final static QName ASSOC_ROLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "role_assoc");
 
 	private final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflow");
 	private final static QName TYPE_OUTPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableData");
@@ -85,7 +86,7 @@ public class BPMNGenerator {
 
 	public InputStream generate() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		NodeRef nodeRef = new NodeRef(statemachineNodeRef);
+		NodeRef statusesRef = new NodeRef(statemachineNodeRef);
 		try {
 			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
 			dbfac.setNamespaceAware(true);
@@ -104,9 +105,11 @@ public class BPMNGenerator {
 
 			doc.appendChild(root);
 
+			NodeRef stateMachine = nodeService.getPrimaryParent(statusesRef).getParentRef();
+
 			//create process
 			Element process = doc.createElementNS(NAMESPACE_XLNS, "process");
-			String processId = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+			String processId = (String) nodeService.getProperty(stateMachine, ContentModel.PROP_NAME);
 			process.setAttributeNS(NAMESPACE_XSI, "id", processId);
 			root.appendChild(process);
 
@@ -116,7 +119,40 @@ public class BPMNGenerator {
 			startEvent.setAttribute("activiti:formKey", "lecm-statemachine:startTask");
 			process.appendChild(startEvent);
 
-			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(nodeRef);
+			NodeRef rolesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "roles");
+			List<ChildAssociationRef> roles = nodeService.getChildAssocs(rolesRef);
+
+			if (roles.size() > 0) {
+				Element extentionElements = doc.createElement("extensionElements");
+				startEvent.appendChild(extentionElements);
+
+				Element extention = doc.createElement("lecm:extension");
+				extentionElements.appendChild(extention);
+
+				Element take = doc.createElement("lecm:event");
+				take.setAttribute("on", "take");
+				extention.appendChild(take);
+
+				Element documentPermissionAction = doc.createElement("lecm:action");
+				documentPermissionAction.setAttribute("type", "DocumentPermissionAction");
+				for (ChildAssociationRef role : roles) {
+					boolean starter =  (Boolean) nodeService.getProperty(role.getChildRef(), PROP_CREATION_DOCUMENT);
+					if (starter) {
+						Element attribute = doc.createElement("lecm:attribute");
+						attribute.setAttribute("name", "role");
+						List<AssociationRef> roleAssoc = nodeService.getTargetAssocs(role.getChildRef(), ASSOC_ROLE);
+						NodeRef roleRef = roleAssoc.get(0).getTargetRef();
+						String roleName = (String) nodeService.getProperty(roleRef, ContentModel.PROP_NAME);
+						attribute.setAttribute("value", roleName);
+						documentPermissionAction.appendChild(attribute);
+					}
+				}
+
+				take.appendChild(documentPermissionAction);
+
+			}
+
+			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statusesRef);
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
@@ -143,7 +179,7 @@ public class BPMNGenerator {
 					archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
 					Element attribute = doc.createElement("lecm:attribute");
 					attribute.setAttribute("name", "archiveFolder");
-					String archiveFolder = (String) nodeService.getProperty(nodeRef, PROP_ARCHIVE_FOLDER);
+					String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
 					attribute.setAttribute("value", archiveFolder);
 					archiveDocumentAction.appendChild(attribute);
 

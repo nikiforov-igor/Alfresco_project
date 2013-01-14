@@ -212,18 +212,26 @@ public class StateMachineHelper {
 		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
 		if (task != null) {
 			Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+			String activityId = ((ExecutionEntity) execution).getActivityId();
 			ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-			ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService())
-					.getDeployedProcessDefinition(process.getProcessDefinitionId());
-			ActivityImpl activity = processDefinitionEntity.findActivity(((ExecutionEntity) execution).getActivityId());
-			List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-			for (ExecutionListener listener : listeners) {
-				if (listener instanceof StateMachineHandler) {
-					result = ((StateMachineHandler) listener).getEvents().get(onFire);
-				}
-			}
+			String processDefinitionId = process.getProcessDefinitionId();
+			result = getStateMachineActions(processDefinitionId, activityId, onFire);
 		}
 		return result;
+	}
+
+	/**
+	 * Выбирает список действий для старта процесса последней версии.
+	 * @param definitionKey - Id процесса в схеме BPMN
+	 * @return
+	 */
+	public List<StateMachineAction> getStartActions(String definitionKey) {
+		RepositoryServiceImpl repositoryService = (RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService();
+		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionKey(definitionKey).latestVersion().singleResult();
+		String processDefinitionId = processDefinitionEntity.getId();
+		String activityId = "start";
+		String onFire = "take";
+		return getStateMachineActions(processDefinitionId, activityId, onFire);
 	}
 
 	public List<StateMachineAction> getTaskActionsByName(String taskId, String actionType, String onFire) {
@@ -244,15 +252,7 @@ public class StateMachineHelper {
 		HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
 		if (task != null) {
 			ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-			ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService())
-					.getDeployedProcessDefinition(process.getProcessDefinitionId());
-			ActivityImpl activity = processDefinitionEntity.findActivity(task.getTaskDefinitionKey());
-			List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-			for (ExecutionListener listener : listeners) {
-				if (listener instanceof StateMachineHandler) {
-					result = ((StateMachineHandler) listener).getEvents().get(onFire);
-				}
-			}
+			result = getStateMachineActions(process.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
 		}
 		return result;
 	}
@@ -337,5 +337,19 @@ public class StateMachineHelper {
 			}
 		}
 	}
+
+	private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
+		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
+		ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
+		List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+		for (ExecutionListener listener : listeners) {
+			if (listener instanceof StateMachineHandler) {
+				result = ((StateMachineHandler) listener).getEvents().get(onFire);
+			}
+		}
+		return result;
+	}
+
 
 }

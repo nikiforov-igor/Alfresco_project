@@ -154,4 +154,11 @@
 		<property name="execution" value="end" />
 	</bean>
 
+	<bean id="documentPermissionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="DocumentPermissionAction"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.DocumentPermissionAction" />
+		<property name="type" value="system" />
+		<property name="execution" value="take" />
+	</bean>
+
 </beans>

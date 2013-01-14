@@ -7,7 +7,9 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
@@ -59,12 +61,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeService nodeService = serviceRegistry.getNodeService();
-
-		//Заглушка для показа в проводнике
-		ContentService contentService = serviceRegistry.getContentService();
-		ContentWriter writer = contentService.getWriter(childAssocRef.getChildRef(), ContentModel.PROP_CONTENT, true);
-		writer.setMimetype("text/plain");
-		writer.putContent("Text");
 
 		QName type = nodeService.getType(childAssocRef.getChildRef());
 		List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());

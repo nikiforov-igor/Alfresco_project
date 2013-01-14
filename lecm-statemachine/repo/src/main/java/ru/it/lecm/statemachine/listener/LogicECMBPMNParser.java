@@ -29,6 +29,7 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 
 	@Override
 	public void parseStartEvent(Element element, ScopeImpl scope, ActivityImpl activity) {
+		appendExtention(element, activity);
 	}
 
 	@Override

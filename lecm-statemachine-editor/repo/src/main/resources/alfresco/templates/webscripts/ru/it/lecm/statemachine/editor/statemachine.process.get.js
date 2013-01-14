@@ -23,25 +23,21 @@ if (statemachineId != null && statemachineId != '') {
 
 	if (machine == null) {
 		machine = machinesFolder.createNode(statemachineId, "lecm-stmeditor:statemachine", "cm:contains");
-		machine.properties["lecm-stmeditor:machineFolder"] = statemachineId;
-		var statemachineFolder = companyhome.childByNamePath("documents/" + statemachineId);
-		if (statemachineFolder == null) {
-			var machineDocumentsFolder = documentsFolder.createNode(statemachineId, "cm:folder", "cm:contains");
-			machine.properties["lecm-stmeditor:documentsFolder"] = machineDocumentsFolder;
-		}
+		var roles = machine.createNode("roles", "lecm-stmeditor:roles", "cm:contains")
+		machine.properties["lecm-stmeditor:rolesFolder"] = roles.nodeRef.toString();
 		machine.save();
 
-		var endStatus = machine.createNode("END", "lecm-stmeditor:status", "cm:contains")
+		var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
+		var endStatus = statuses.createNode("END", "lecm-stmeditor:status", "cm:contains");
 		endStatus.properties["lecm-stmeditor:endStatus"] = true;
 		endStatus.save();
 	}
 
-	var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-	var actionsBean = ctx.getBean("stateMachineActions");
+	var statuses = machine.childByNamePath("statuses");
+	model.machineNodeRef = machine.nodeRef.toString();
+	model.packageNodeRef = statuses.nodeRef.toString();
 
-	model.packageNodeRef = machine.nodeRef.toString();
-
-	var machineStatuses = machine.getChildren();
+	var machineStatuses = statuses.getChildren();
 	var statuses = [];
 	var endStatus = null;
 	for each (var status in machineStatuses) {
