@@ -87,6 +87,7 @@
                 <css src="/css/lecm-base/components/object-finder/lecm-object-finder.css" />
                 <js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
+                <js src="/scripts/lecm-base/components/lecm-association-cascading-selectone.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
                 <js src="/scripts/lecm-base/components/lecm-validation.js" />
                 <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />

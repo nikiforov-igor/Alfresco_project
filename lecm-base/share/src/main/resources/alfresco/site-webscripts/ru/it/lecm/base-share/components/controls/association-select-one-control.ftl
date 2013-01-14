@@ -1,6 +1,7 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 
 <#assign fieldValue=field.value!"">
+<#assign fieldId=field.id!"">
 
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
     <#if context.properties[field.control.params.defaultValueContextProperty]??>
@@ -39,7 +40,11 @@
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-                showCreateNewButton: ${showCreateNewButton?string}
+                showCreateNewButton: ${showCreateNewButton?string},
+	            <#if field.control.params.primaryCascading??>
+                    primaryCascading: ${field.control.params.primaryCascading},
+		        </#if>
+                fieldId: "${fieldId}"
             });
 })();
 //]]></script>

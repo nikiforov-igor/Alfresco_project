@@ -1,8 +1,8 @@
 /**
-* LogicECM root namespace.
-    *
-* @namespace LogicECM
-*/
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
 // Ensure LogicECM root object exists
 if (typeof LogicECM == "undefined" || !LogicECM) {
     var LogicECM = {};
@@ -18,26 +18,29 @@ LogicECM.module = LogicECM.module || {};
 
 (function()
 {
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        Bubbling = YAHOO.Bubbling;
 
     var $combine = Alfresco.util.combinePaths;
 
-    LogicECM.module.AssociationSelectOne = function LogicECM_module_AssociationSelectOne(fieldHtmlId)
+    LogicECM.module.AssociationCascadingSelectOne = function LogicECM_module_AssociationCascadingSelectOne(fieldHtmlId)
     {
-        LogicECM.module.AssociationSelectOne.superclass.constructor.call(this, "LogicECM.module.AssociationSelectOne", fieldHtmlId, [ "container", "resize", "datasource"]);
+        LogicECM.module.AssociationCascadingSelectOne.superclass.constructor.call(this, "LogicECM.module.AssociationCascadingSelectOne", fieldHtmlId, [ "container", "resize", "datasource"]);
         this.selectItemId = fieldHtmlId + "-added";
         this.removedItemId = fieldHtmlId + "-removed";
         this.controlId = fieldHtmlId;
         this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
+        Bubbling.on("changeDropDown", this.onChangeDropDown, this);
+
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.AssociationSelectOne, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.AssociationCascadingSelectOne, Alfresco.component.Base,
         {
             options:
             {
-                showCreateNewButton: true,
+                showCreateNewButton: false,
 
                 parentNodeRef: "",
 
@@ -47,7 +50,7 @@ LogicECM.module = LogicECM.module || {};
 
                 itemFamily: "node",
 
-	            mandatory: false,
+                mandatory: false,
 
                 selectedValueNodeRef: "",
 
@@ -59,7 +62,12 @@ LogicECM.module = LogicECM.module || {};
 
                 closeSubstituteSymbol: "}",
 
-                primaryCascading: false
+                dependentFieldName: null,
+
+                webScriptUrl: null,
+
+                htmlId: null
+
             },
 
             rootNode: null,
@@ -70,7 +78,7 @@ LogicECM.module = LogicECM.module || {};
 
             selectItemId: null,
 
-	        removedItemId: null,
+            removedItemId: null,
 
             currentDisplayValueId: null,
 
@@ -80,24 +88,24 @@ LogicECM.module = LogicECM.module || {};
 
             dataSource: null,
 
-            setOptions: function AssociationSelectOne_setOptions(obj)
+            setOptions: function AssociationCascadingSelectOne_setOptions(obj)
             {
-                LogicECM.module.AssociationSelectOne.superclass.setOptions.call(this, obj);
-				YAHOO.Bubbling.fire("afterOptionsSet",
-					{
-						eventGroup: this
-					});
+                LogicECM.module.AssociationCascadingSelectOne.superclass.setOptions.call(this, obj);
+                YAHOO.Bubbling.fire("afterOptionsSet",
+                    {
+                        eventGroup: this
+                    });
                 return this;
             },
 
-            onReady: function AssociationSelectOne_onReady()
+            onReady: function AssociationCascadingSelectOne_onReady()
             {
                 this._loadParentNode();
                 this.selectItem = Dom.get(this.selectItemId);
                 if (this.selectItem) {
                     this.populateSelect();
                 }
-	            YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+                YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
 
                 this.currentDisplayValueElement = Dom.get(this.currentDisplayValueId);
                 if (this.currentDisplayValueElement) {
@@ -112,25 +120,22 @@ LogicECM.module = LogicECM.module || {};
 
             },
 
-	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
-	            Dom.get(this.controlId).value = this.selectItem.value;
-
-		        if (this.options.mandatory) {
-			        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-		        }
-
-		        YAHOO.Bubbling.fire("formValueChanged",
-			        {
-				        eventGroup:this,
-				        addedItems:this.selectItem.value,
-				        removedItems:Dom.get(this.removedItemId).value,
-				        selectedItems:this.selectItem.value,
-				        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
-			        });
-                if (this.options.primaryCascading) {
-                        YAHOO.Bubbling.fire("changeDropDown",{bubblingLabel: this.options.fieldId});
+            onSelectChange: function AssociationTreeViewer_onSelectChange() {
+                Dom.get(this.controlId).value = this.selectItem.value;
+                console.log(this.options.selectedValueNodeRef);
+                if (this.options.mandatory) {
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                 }
-	        },
+
+                YAHOO.Bubbling.fire("formValueChanged",
+                    {
+                        eventGroup:this,
+                        addedItems:this.selectItem.value,
+                        removedItems:Dom.get(this.removedItemId).value,
+                        selectedItems:this.selectItem.value,
+                        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
+                    });
+            },
 
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
                 var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
@@ -184,11 +189,11 @@ LogicECM.module = LogicECM.module || {};
                                 var oResults = response.json;
                                 if (oResults != null) {
                                     this.rootNode = {
-                                            label:oResults.title,
-                                            nodeRef:oResults.nodeRef,
-                                            type:oResults.type,
-                                            isContainer: oResults.isContainer,
-                                            displayPath: oResults.displayPath
+                                        label:oResults.title,
+                                        nodeRef:oResults.nodeRef,
+                                        type:oResults.type,
+                                        isContainer: oResults.isContainer,
+                                        displayPath: oResults.displayPath
                                     };
                                     if (this.options.parentNodeRef === "") {
                                         this.options.parentNodeRef = oResults.nodeRef;
@@ -231,12 +236,12 @@ LogicECM.module = LogicECM.module || {};
                 return params;
             },
 
-            destroy: function AssociationSelectOne_destroy()
+            destroy: function AssociationCascadingSelectOne_destroy()
             {
                 LogicECM.module.AssociationSelectOne.superclass.destroy.call(this);
             },
 
-            populateSelect: function AssociationSelectOne_populateSelect() {
+            populateSelect: function AssociationCascadingSelectOne_populateSelect() {
                 this._createDataSource();
 
                 var successHandler = function (sRequest, oResponse, oPayload)
@@ -257,7 +262,7 @@ LogicECM.module = LogicECM.module || {};
                         this.selectItem.appendChild(opt);
                     }
 
-	                this.onSelectChange();
+                    this.onSelectChange();
                 }.bind(this);
 
                 var failureHandler = function (sRequest, oResponse)
@@ -283,13 +288,15 @@ LogicECM.module = LogicECM.module || {};
                     });
             },
 
-            populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {
+            populateCurrentValue: function AssociationCascadingSelectOne_populateCurrentValue() {
+                console.log(this.options.selectedValueNodeRef);
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
                         successCallback:
                         {
                             fn: function (response) {
+                                console.log(response);
                                 var properties = response.json.properties;
                                 var name = this.options.nameSubstituteString;
                                 for (var i = 0; i < properties.length; i++) {
@@ -315,7 +322,7 @@ LogicECM.module = LogicECM.module || {};
                     });
             },
 
-            _createDataSource: function AssociationSelectOne__createDataSource() {
+            _createDataSource: function AssociationCascadingSelectOne__createDataSource() {
                 var me = this;
 
                 var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/" + this.options.itemFamily;
@@ -371,12 +378,12 @@ LogicECM.module = LogicECM.module || {};
                 };
             },
 
-            _generateChildrenUrlPath: function AssociationSelectOne__generateChildrenUrlPath(nodeRef)
+            _generateChildrenUrlPath: function AssociationCascadingSelectOne__generateChildrenUrlPath(nodeRef)
             {
                 return $combine("/", nodeRef.replace("://", "/"), "children");
             },
 
-            _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
+            _generateChildrenUrlParams: function AssociationCascadingSelectOne__generateChildrenUrlParams(searchTerm)
             {
                 var params =  "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
@@ -422,6 +429,71 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
                 return params;
+            },
+            onChangeDropDown: function Change_Drop_Down(layer, args){
+                var param = args[1];
+                var success = false;
+                for (obj in  this.options.dependentFieldName){
+                    if (param.bubblingLabel.indexOf(this.options.dependentFieldName[obj]) != -1){
+                        success = true; break;
+                    }
+                }
+                if (success) {
+                    var url = "";
+                    this.selectItemId = this.options.htmlId + "_" + this.options.fieldId + "-added";
+                    for (obj in  this.options.dependentFieldName) {
+                        var value = "";
+                        // ищем элементы в диалоговом окне
+                        var elementId = this.options.htmlId + "_assoc_" + this.options.dependentFieldName[obj] + "-added";
+                        if (Dom.get(elementId) != null){
+                            value = Dom.get(elementId).value;
+                        }
+                        elementId = this.options.htmlId + "_prop_" + this.options.dependentFieldName[obj] + "-added";
+                        if (Dom.get(elementId) != null){
+                            value = Dom.get(elementId).value;
+                        }
+                        if (value != ""){
+                            url = url + this.options.dependentFieldName[obj] + "=" + value + "&";
+                        }
+
+                    }
+
+                    if (url != "") {
+                        Alfresco.util.Ajax.jsonGet(
+                            {
+                                url: Alfresco.constants.PROXY_URI + this.options.webScriptUrl + "?" + url,
+                                successCallback: {
+                                    fn: function (response) {
+                                        var elements = response.json;
+
+                                        // Получаем элемент
+                                        var selected = this.selectItem;
+                                        //Очищаем элементы списка
+                                        selected.options.length = 0;
+                                        if (elements.length > 0) {
+                                            for (var i = 0; i < elements.length; i++) {
+                                                var prop = elements[i];
+                                                selected.options[i] = new Option(prop.name, prop.nodeRef, false, (prop.nodeRef == this.options.selectedValueNodeRef));
+                                            }
+                                        } else {
+                                            selected.options[0] = new Option("Empty", "", false, true);
+                                        }
+                                    },
+                                    scope: this
+                                },
+                                failureCallback: {
+                                    fn: function (response) {
+                                        //todo show error message
+                                    },
+                                    scope: this
+                                }
+                            });
+                    } else {
+                        var selected = this.selectItem;
+                        selected.options.length = 0;
+                        selected.options[0] = new Option("Empty", "", false, true);
+                    }
+                }
             }
-         });
+        });
 })();
