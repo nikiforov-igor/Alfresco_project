@@ -1,11 +1,7 @@
 package ru.it.lecm.delegation.policies;
 
-import java.io.Serializable;
-import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnDeleteAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnUpdatePropertiesPolicy;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -24,7 +20,7 @@ import ru.it.lecm.delegation.IDelegation;
  * @since 27.12.2012 12:51:34
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public class ProcuracyPolicy implements OnUpdateNodePolicy, OnUpdatePropertiesPolicy, OnCreateAssociationPolicy, OnDeleteAssociationPolicy {
+public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssociationPolicy {
 
 	private final static Logger logger = LoggerFactory.getLogger (ProcuracyPolicy.class);
 
@@ -49,16 +45,10 @@ public class ProcuracyPolicy implements OnUpdateNodePolicy, OnUpdatePropertiesPo
 	public final void init () {
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
 		logger.info ("initializing ProcuracyPolicy...");
-		logger.info ("initializing OnUpdateNodePolicy");
-		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onUpdateNode"));
-		policyComponent.bindPropertyBehaviour (OnUpdateNodePolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onUpdateNode"));
-		policyComponent.bindAssociationBehaviour (OnUpdateNodePolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onUpdateNode"));
-		logger.info ("initializing OnUpdatePropertiesPolicy");
-		policyComponent.bindClassBehaviour (OnUpdatePropertiesPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onUpdateProperties"));
-		logger.info ("initializing OnCreateAssociationPolicy");
-		policyComponent.bindClassBehaviour (OnCreateAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onCreateAssociation"));
-		logger.info ("initializing OnDeleteAssociationPolicy");
-		policyComponent.bindClassBehaviour (OnDeleteAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
+		logger.info ("initializing onCreateAssociation");
+		policyComponent.bindAssociationBehaviour (OnCreateAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onCreateAssociation"));
+		logger.info ("initializing onDeleteAssociation");
+		policyComponent.bindAssociationBehaviour (OnDeleteAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
 	}
 
 	private void actualizeProcuracyActivity (final NodeRef nodeRef) {
@@ -73,17 +63,8 @@ public class ProcuracyPolicy implements OnUpdateNodePolicy, OnUpdatePropertiesPo
 	}
 
 	@Override
-	public void onUpdateNode (final NodeRef nodeRef) {
-		actualizeProcuracyActivity (nodeRef);
-	}
-
-	@Override
-	public void onUpdateProperties (NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		actualizeProcuracyActivity (nodeRef);
-	}
-
-	@Override
 	public void onCreateAssociation (AssociationRef nodeAssocRef) {
+		logger.info ("onCreateAssociation");
 		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
 		NodeRef targetRef = nodeAssocRef.getTargetRef ();
 		if (TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
@@ -95,6 +76,7 @@ public class ProcuracyPolicy implements OnUpdateNodePolicy, OnUpdatePropertiesPo
 
 	@Override
 	public void onDeleteAssociation (AssociationRef nodeAssocRef) {
+		logger.info ("onDeleteAssociation");
 		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
 		NodeRef targetRef = nodeAssocRef.getTargetRef ();
 		if (TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
