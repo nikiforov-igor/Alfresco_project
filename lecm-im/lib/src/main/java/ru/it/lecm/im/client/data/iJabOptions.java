@@ -45,7 +45,7 @@ import ru.it.lecm.im.client.utils.i18n;
 public class iJabOptions
 {
 	//options data section
-	private String statusText = i18n.msg("www.ijab.im");
+	private String statusText = i18n.msg("AlfrescoIM");
 	private static String OPTION_STATUS =  "statusText";
 	private boolean disableOnlineSoundNotification = true;
 	private static String OPTION_ONLINE_SOUND = "OnlineSoundDisable";

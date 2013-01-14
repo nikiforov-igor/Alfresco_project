@@ -11,8 +11,18 @@ function setCookie(c_name,value,exdays)
     document.cookie=c_name + "=" + c_value;
 }
 
-setCookie('JID', Alfresco.constants.USERNAME, new Date() + 1);
-setCookie('JIDPWD', Alfresco.constants.USERNAME, new Date() + 1);
+if (window.Alfresco && window.Alfresco.constants && window.Alfresco.constants.USERNAME ){
+    setCookie('JID', Alfresco.constants.USERNAME, new Date() + 1);
+    setCookie('JIDPWD', Alfresco.constants.USERNAME, new Date() + 1);
+}
+else
+{
+    // debug fallbak
+    setCookie('JID', 'q', new Date() + 1);
+    setCookie('JIDPWD', 'q', new Date() + 1);
+
+}
+
 
 var iBubblingSubscriber = function(callback)
 {
@@ -55,7 +65,6 @@ var updateMessagesCountSubscriber = function(callback){
 var iJabConf =
 {
     client_type:"xmpp",
-    app_type:"bar",
     theme:"standard",
     debug:false,
     avatar_url:"http://dummyimage.com/32x32/?text={username}",

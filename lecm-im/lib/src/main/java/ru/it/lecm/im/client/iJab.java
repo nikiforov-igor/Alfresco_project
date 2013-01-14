@@ -62,10 +62,11 @@ public class iJab implements EntryPoint {
 		}
 
 		theme = conf.getTheme();
-		ui = createUI();
-		client = createClient();
+		ui = new BarUI();
+		client = new XmppClient();
 		chageTheme(theme,"");
-		DeferredCommand.addCommand(new Command()
+
+        DeferredCommand.addCommand(new Command()
 		{
 			public void execute()
 			{
@@ -74,26 +75,6 @@ public class iJab implements EntryPoint {
 			}
 		});
 	}
-
-	private iJabUI createUI()
-	{
-		if(conf.getAppType().equals(iJabConf.AppType.bar))
-			return (new BarUI());
-		else
-			//return (new FullUI());
-            return null;
-	}
-
-	private Client createClient()
-	{
-		if(conf.getClientType().equals(iJabConf.ClientType.xmpp))
-			return new XmppClient();
-		else
-			//return new CometdClient();
-            return null;
-	}
-
-
 
 	private void chageTheme(final String newThem,final String oldThem)
 	{

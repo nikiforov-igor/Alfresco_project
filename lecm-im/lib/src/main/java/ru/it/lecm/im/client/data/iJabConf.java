@@ -26,12 +26,8 @@ import com.google.gwt.core.client.JsArray;
 public interface iJabConf
 {
 	public enum ClientType {xmpp,ijabcometd};
-	public enum AppType {bar,full};
-	ClientType getClientType();
-	AppType getAppType();
 	String getTheme();
 	String avatarUrl();
-	boolean enableDebug();
 	boolean isRosterManageEnabled();
 	boolean disableToolBox();
 	boolean disableOptionsSetting();

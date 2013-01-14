@@ -29,67 +29,6 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 	{
 		
 	}
-	
-	public final native boolean enableDebug() 
-	/*-{
-		try
-		{
-			return this.debug;
-		}
-		catch(e)
-		{
-			return false;
-		}
-	}-*/;
-
-	public final AppType getAppType() 
-	{
-		try
-		{
-			String strType = getAppTypeJSO();
-			return AppType.valueOf(strType);
-		}
-		catch(Exception e)
-		{
-			return AppType.bar;
-		}
-	}
-	
-	private final native String getAppTypeJSO()
-	/*-{
-		try
-		{
-			return this.app_type;
-		}
-		catch(e)
-		{
-			return "bar";
-		}
-	}-*/;
-
-	public final ClientType getClientType() {
-		try
-		{
-			String strType = getClientTypeJSO();
-			return ClientType.valueOf(strType);
-		}
-		catch(Exception e)
-		{
-			return ClientType.xmpp;
-		}
-	}
-	
-	private final native String getClientTypeJSO()
-	/*-{
-		try
-		{
-			return this.client_type;
-		}
-		catch(e)
-		{
-			return "xmpp";
-		}
-	}-*/;
 
 	public final native String getTheme() 
 	/*-{

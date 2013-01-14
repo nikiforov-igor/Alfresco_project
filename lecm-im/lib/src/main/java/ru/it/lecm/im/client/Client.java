@@ -21,19 +21,60 @@
 
 package ru.it.lecm.im.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ru.it.lecm.im.client.xmpp.JID;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
+import ru.it.lecm.im.client.xmpp.JID;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Client 
 {
 	protected final List<ClientListener> listeners = new ArrayList<ClientListener>();
-	
-	abstract void  run();
+
+    protected final List<VisibilityListener> visibilityListeners = new ArrayList<VisibilityListener>();
+
+    private boolean isVisible;
+    public boolean getIsVisible()
+    {
+        return isVisible;
+    }
+
+    public boolean toggleIsVisible()
+    {
+        if (this.isVisible)
+        {
+            this.fireOnHide();
+        }
+        else
+        {
+            this.fireOnShow();
+        }
+
+        this.isVisible = !this.isVisible;
+        return this.isVisible;
+    }
+
+    private void fireOnShow() {
+        for(VisibilityListener l:visibilityListeners)
+        {
+            l.onShow();
+        }
+    }
+
+    private void fireOnHide() {
+        for(VisibilityListener l:visibilityListeners)
+        {
+            l.onHide();
+        }
+    }
+
+    public void addVisibilityListener(VisibilityListener handler)
+    {
+        visibilityListeners.add(handler);
+    }
+
+    abstract void  run();
 	public abstract boolean suspend();
 	public abstract void resume(); 
 	public abstract void login(final String id,final String password);

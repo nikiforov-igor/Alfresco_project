@@ -66,20 +66,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//import anzsoft.iJab.client.data.XmppConf;
-//import anzsoft.iJab.client.data.iJabOptions;
-//import anzsoft.iJab.client.ui.ChatPanelBar;
-//import anzsoft.iJab.client.ui.ContactView;
-//import anzsoft.iJab.client.ui.ContactViewListener;
-//import anzsoft.iJab.client.ui.MUCPanelButton;
-//import anzsoft.iJab.client.utils.BrowserHelper;
-//import anzsoft.iJab.client.utils.IdleListener;
-//import anzsoft.iJab.client.utils.IdleTool;
-//import anzsoft.iJab.client.utils.SoundManager;
-//import anzsoft.iJab.client.utils.TextUtils;
-//import anzsoft.iJab.client.utils.XmppStatus;
-//import anzsoft.iJab.client.utils.i18n;
-
 public class XmppClient extends Client
 {
 	private final String RESOURCE_PREFIX = "ijab";
@@ -92,7 +78,8 @@ public class XmppClient extends Client
 	private int onlineContactCount = 0;
 	private int totalContactCount = 0;
 	final private XmppChatManager xmppChatManager;
-	//final private iJabOptions options; 
+
+
 	private int reconnect_count = conf.getMaxReconnet();
 	private Show weekShow = null;
 	private int talkToCount = 0;
@@ -101,7 +88,8 @@ public class XmppClient extends Client
 	{
 		session.setGetRosterDelay(conf.isGetRosterDelay());
 		session.setNoneRoster(iJabConfImpl.getConf().getXmppConf().isNoneRoster());
-		Window.addCloseHandler(new CloseHandler<Window>()
+
+        Window.addCloseHandler(new CloseHandler<Window>()
 		{
 
 			public void onClose(CloseEvent<Window> event) 
@@ -109,105 +97,10 @@ public class XmppClient extends Client
 				suspend();
 			}
 		});
-		
-		this.session.addListener(new SessionListener()
-		{
-			public void onBeforeLogin() 
-			{
-				fireOnBeforeLogin();
-			}
 
-			public void onEndLogin() 
-			{
-				fireOnEndLogin();
-				IdleTool.instance().start(new IdleListener()
-				{
+        setupSessionListener();
 
-					public void onIdle() 
-					{
-						Idle();
-					}
-
-					public void onWeek() 
-					{
-						Week();
-					}
-				});
-				activeBlackList();
-			}
-
-			public void onError(BoshErrorCondition boshErrorCondition,
-					String message) 
-			{
-				fireOnError(message);
-				IdleTool.instance().stop();
-				if(conf.isAutoLogin()&&reconnect_count>0)
-				{
-					Timer t = new Timer()
-					{
-						@Override
-						public void run() 
-						{
-							loginByCookieField();
-							reconnect_count--;
-						}
-					};
-					t.schedule(1000);
-				}
-				else
-				{
-					Timer t = new Timer()
-					{
-						@Override
-						public void run() 
-						{
-							loginAnonymous();
-						}
-					};
-					t.schedule(1000);
-				}
-			}
-
-			public void onLoginOut() 
-			{
-				fireOnLogout();
-				IdleTool.instance().stop();
-			}
-
-			public void onResumeFailed() 
-			{
-				IdleTool.instance().stop();
-				autoLogin();
-			}
-
-			public void onResumeSuccessed() 
-			{
-				isLogined = true;
-				fireOnResume();
-				IdleTool.instance().start(new IdleListener()
-				{
-
-					public void onIdle() 
-					{
-						Idle();
-					}
-
-					public void onWeek() 
-					{
-						Week();
-					}
-				});
-			}
-
-			public void onSelfVCard() 
-			{
-				//should cache the self nickname
-				XmppProfileManager.commitNewName(session.getUser().getStringBareJid(), session.getSelfVCard().getNickname());
-				saveNickToCache(session.getSelfVCard().getNickname());
-			}
-		});
-		
-		session.setServerType(conf.getServerType());
+        session.setServerType(conf.getServerType());
 		session.getConnector().setHost(conf.getHost());
 		session.getConnector().setHttpBase(conf.getHttpBind());
 		session.getConnector().setPort(conf.getPort());
@@ -223,8 +116,107 @@ public class XmppClient extends Client
 		addClientListener(iJab.ui);
 		addClientListener(xmppChatManager);
 	}
-	
-	public Session getSession()
+
+    private void setupSessionListener() {
+        this.session.addListener(new SessionListener()
+        {
+            public void onBeforeLogin()
+            {
+                fireOnBeforeLogin();
+            }
+
+            public void onEndLogin()
+            {
+                fireOnEndLogin();
+                IdleTool.instance().start(new IdleListener()
+                {
+
+                    public void onIdle()
+                    {
+                        Idle();
+                    }
+
+                    public void onWeek()
+                    {
+                        Week();
+                    }
+                });
+                activeBlackList();
+            }
+
+            public void onError(BoshErrorCondition boshErrorCondition,
+                    String message)
+            {
+                fireOnError(message);
+                IdleTool.instance().stop();
+                if(conf.isAutoLogin()&&reconnect_count>0)
+                {
+                    Timer t = new Timer()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            loginByCookieField();
+                            reconnect_count--;
+                        }
+                    };
+                    t.schedule(1000);
+                }
+                else
+                {
+                    Timer t = new Timer()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            loginAnonymous();
+                        }
+                    };
+                    t.schedule(1000);
+                }
+            }
+
+            public void onLoginOut()
+            {
+                fireOnLogout();
+                IdleTool.instance().stop();
+            }
+
+            public void onResumeFailed()
+            {
+                IdleTool.instance().stop();
+                autoLogin();
+            }
+
+            public void onResumeSuccessed()
+            {
+                isLogined = true;
+                fireOnResume();
+                IdleTool.instance().start(new IdleListener()
+                {
+
+                    public void onIdle()
+                    {
+                        Idle();
+                    }
+
+                    public void onWeek()
+                    {
+                        Week();
+                    }
+                });
+            }
+
+            public void onSelfVCard()
+            {
+                //should cache the self nickname
+                XmppProfileManager.commitNewName(session.getUser().getStringBareJid(), session.getSelfVCard().getNickname());
+                saveNickToCache(session.getSelfVCard().getNickname());
+            }
+        });
+    }
+
+    public Session getSession()
 	{
 		return session;
 	}
