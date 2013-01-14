@@ -7,6 +7,10 @@
 	<property name="lecm-dic:plane">true</property>
 	<property name="lecm-dic:active">true</property>
 	<items>
+		<item name="Технолог">
+			<property name="cm:name">Технолог</property>
+			<property name="lecm-orgstr:business-role-description">Бизнес роль технолога процесса делегирования</property>
+		</item>
 		<item name="Бизнес роль 1">
 			<property name="cm:name">Бизнес роль 1</property>
 			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 1</property>
