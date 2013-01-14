@@ -39,4 +39,11 @@
             <ref bean="substitudeService"/>
         </property>
     </bean>
+
+	<bean id="emptyContentPolicy"
+		  class="ru.it.lecm.base.policy.EmptyContentPolicy" init-method="init">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="policyComponent" ref="policyComponent"/>
+	</bean>
+
 </beans>
