@@ -1,5 +1,8 @@
 package ru.it.lecm.businessjournal.policies;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -8,6 +11,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -18,11 +22,23 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Time: 16:48
  */
 public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePolicy {
+	public static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
+
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 	private static OrgstructureBean orgstructureService;
 	private static BusinessJournalService businessJournalService;
 
+	private final Set<QName> AFFECTED_TYPES
+			= new HashSet<QName>() {{
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workGroup"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workforce"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staffPosition"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workRole"));
+		add(QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit"));
+	}};
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		BusinessEventsPolicy.businessJournalService = businessJournalService;
 	}
@@ -59,12 +75,14 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 			// получаем основной объект
 			NodeRef createdObj = childAssocRef.getChildRef();
 
-			// категория события
-			String eventCategory = "Создание";
-			// дефолтное описание события (если не будет найдено в справочнике)
-			String description = "Создан новый объект #mainobject";
+			if (AFFECTED_TYPES.contains(serviceRegistry.getNodeService().getType(createdObj))){
+				// категория события
+				String eventCategory = "Создание";
+				// дефолтное описание события (если не будет найдено в справочнике)
+				String description = "Создан новый объект #mainobject";
 
-			businessJournalService.fire(initiator, createdObj, eventCategory, description, null);
+				businessJournalService.fire(initiator, createdObj, eventCategory, description, null);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
