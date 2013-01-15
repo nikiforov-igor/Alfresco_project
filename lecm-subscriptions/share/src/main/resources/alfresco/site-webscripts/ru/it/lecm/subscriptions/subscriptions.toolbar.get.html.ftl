@@ -25,7 +25,7 @@ YAHOO.util.Event.onDOMReady(init);
 <div class="new-row">
         <span id="${id}-newRowButton" class="yui-button yui-push-button">
            <span class="first-child">
-              <button type="button" title="${msg("button.new-row")}">&nbsp;</button>
+              <button type="button" title="${msg("button.new-row")}">${msg("button.new-row")}</button>
            </span>
         </span>
 </div>

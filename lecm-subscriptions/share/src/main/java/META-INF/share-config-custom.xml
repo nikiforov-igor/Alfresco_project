@@ -30,7 +30,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
+							<control-param name="notSelectedOptionLabel">Все</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="primaryCascading">true</control-param>
 						</control>
@@ -43,7 +43,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
+							<control-param name="notSelectedOptionLabel">Все</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
@@ -78,7 +78,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
+							<control-param name="notSelectedOptionLabel">Все</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="primaryCascading">true</control-param>
 						</control>
@@ -89,7 +89,7 @@
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Категория_x0020_события</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
+							<control-param name="notSelectedOptionLabel">Все</control-param>
 							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
 							<control-param name="disabled">true</control-param>
