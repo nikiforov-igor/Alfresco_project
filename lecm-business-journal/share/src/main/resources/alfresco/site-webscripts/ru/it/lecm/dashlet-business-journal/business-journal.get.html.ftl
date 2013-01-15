@@ -5,12 +5,72 @@
     //<![CDATA[
     (function() {
         var OBJECT_TYPE = "Тип объекта";
+        var SELECT_DAYS = {
+            defaultIndex: 0,
+            options: [
+                {
+                    value: '',
+                    text: '${msg("label.select.all")}'
+                },
+                {
+                    value: '1',
+                    text: '${msg("label.select.days.today")}'
+                },
+                {
+                    value: '2',
+                    text: '${msg("label.select.days.2days")}'
+                },
+                {
+                    value: '5',
+                    text: '${msg("label.select.days.5days")}'
+                },
+                {
+                    value: '10',
+                    text: '${msg("label.select.days.10days")}'
+                }
+            ]
+        };
+        var SELECT_WHOSE = {
+            defaultIndex: 0,
+            options: [
+                {
+                    value: '',
+                    text: '${msg("label.select.all")}'
+                },
+                {
+                    value: 'my',
+                    text: '${msg("label.select.whose.my")}'
+                },
+                {
+                    value: 'department',
+                    text: '${msg("label.select.whose.department")}'
+                },
+                {
+                    value: 'control',
+                    text: '${msg("label.select.whose.control")}'
+                }
+            ]
+        };
         var Dom = YAHOO.util.Dom,
-            Event = YAHOO.util.Event;
-        var selects;
+            Event = YAHOO.util.Event,
+            Selector = YAHOO.util.Selector;
+        var container;
 
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
+            new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
+                actions: [
+                    {
+                        cssClass: "help",
+                        bubbleOnClick: {
+                            message: "${msg("dashlet.help")?js_string}"
+                        },
+                        tooltip: "${msg("dashlet.help.tooltip")?js_string}"
+                    }
+                ]
+            });
+
+            container = Dom.get('${id}_controls');
 
             //получить nodeRef справочника "Тип объекта"
             Alfresco.util.Ajax.jsonGet({
@@ -25,13 +85,24 @@
                                     var items = response.json;
 
                                     if (items) {
-                                        var typesSelect = Dom.get('${id}_types_select');
+                                        var SELECT_TYPES = {
+                                            defaultIndex: 0,
+                                            options: []
+                                        };
 
-                                        typesSelect.options.length = 0;
-                                        typesSelect.options[0] = new Option(OBJECT_TYPE, "");
+                                        SELECT_TYPES.options[0] = {
+                                            value: '',
+                                            text: '${msg("label.select.types.all")}'
+                                        };
                                         items.forEach(function(item, index) {
-                                            typesSelect.options[index + 1] = new Option(item.name, item.nodeRef);
+                                            SELECT_TYPES.options[index + 1] = {
+                                                value: item.nodeRef,
+                                                text: item.name
+                                            };
                                         });
+
+                                        makeSelect('${id}-types', SELECT_TYPES);
+                                        refreshResults();
                                     }
                                 },
                                 scope: this
@@ -50,18 +121,19 @@
                 }
             });
 
-            selects = Dom.get('${id}_controls').getElementsByTagName('select');
-            Event.addListener(selects, 'change', refreshResults);
+            makeSelect('${id}-days', SELECT_DAYS);
+            makeSelect('${id}-whose', SELECT_WHOSE);
             refreshResults();
         }
         function refreshResults() {
             var data = {};
+            var inputs = Selector.query('#${id}_controls input[type=hidden]');
 
-            for (var i = 0; i < selects.length; i++) {
-                var select = selects[i];
-                data[select.name] = select.value;
-            }
+            inputs.forEach(function(item, i) {
+                data[item.name] = item.value;
+            });
 
+//            console.log(data);
             console.log('refresh');
             return; //todo TEMP!
             Alfresco.util.Ajax.jsonPost({
@@ -91,6 +163,27 @@
                 }
             });
         }
+        function makeSelect(inputId, selectData) {
+            var options = selectData.options;
+            var defaultOption = options[selectData.defaultIndex];
+            var hidden = Dom.get(inputId + '-hidden');
+            var onOptionClick = function (p_sType, p_aArgs, p_oItem) {
+                selectButton.set("label", p_oItem.cfg.getProperty("text"));
+                hidden.value = p_oItem.value;
+                refreshResults();
+            };
+
+            options.forEach(function(o, i) {
+                o.onclick = {fn: onOptionClick};
+            });
+
+            var selectButton = new YAHOO.widget.Button(inputId, {
+                type: "menu",
+                label: defaultOption.text,
+                menu: options
+            });
+            hidden.value = defaultOption.value;
+        }
 
         Event.onDOMReady(init);
     })();
@@ -100,22 +193,13 @@
 <div class="dashlet business-journal">
     <div class="title">${msg("label.title")}</div>
     <div class="body scrollable">
-        <div id="${id}_controls" class="controls">
-            <form action="" method="post">
-                <select id="${id}_types_select" name="type"></select>
-                <select name="days">
-                    <option value="1">${msg("label.select.days.today")}</option>
-                    <option value="2">${msg("label.select.days.2days")}</option>
-                    <option value="5" selected="selected">${msg("label.select.days.5days")}</option>
-                    <option value="10">${msg("label.select.days.10days")}</option>
-                </select>
-                <select name="whose">
-                    <option value="my">${msg("label.select.whose.my")}</option>
-                    <option value="department">${msg("label.select.whose.department")}</option>
-                    <option value="control">${msg("label.select.whose.control")}</option>
-                    <option value="all" selected="selected">${msg("label.select.whose.all")}</option>
-                </select>
-            </form>
+        <div id="${id}_controls" class="controls flat-button">
+            <input type="button" id="${id}-types">
+            <input type="button" id="${id}-days">
+            <input type="button" id="${id}-whose">
+            <input type="hidden" id="${id}-types-hidden" name="type">
+            <input type="hidden" id="${id}-days-hidden" name="days">
+            <input type="hidden" id="${id}-whose-hidden" name="whose">
         </div>
         <div id="${id}_results" class="results">
             <div class="row">
