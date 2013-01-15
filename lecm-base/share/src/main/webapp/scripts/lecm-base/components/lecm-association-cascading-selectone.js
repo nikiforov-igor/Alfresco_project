@@ -40,7 +40,6 @@ LogicECM.module = LogicECM.module || {};
         {
             options:
             {
-                showCreateNewButton: false,
 
                 parentNodeRef: "",
 
@@ -95,6 +94,8 @@ LogicECM.module = LogicECM.module || {};
 
             defaultText: "Empty",
 
+            disabled: false,
+
             setOptions: function AssociationCascadingSelectOne_setOptions(obj)
             {
                 LogicECM.module.AssociationCascadingSelectOne.superclass.setOptions.call(this, obj);
@@ -113,6 +114,7 @@ LogicECM.module = LogicECM.module || {};
                     if(this.selectItem.options.length > 0){
                         this.defaultText = this.selectItem.options[0].text;
                     }
+                    this.disabled = this.selectItem.disabled;
                     this.populateSelect();
                 }
                 YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
@@ -417,6 +419,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     if (url != "") {
+                        this.selectItem.disabled = false;
                         Alfresco.util.Ajax.jsonGet(
                             {
                                 url: Alfresco.constants.PROXY_URI + this.options.webScriptUrl + "?" + url,
@@ -450,14 +453,17 @@ LogicECM.module = LogicECM.module || {};
                                 }
                             });
                     } else {
-                        var first = 0;
-                        if (this.options.showDefaultOptions){
+                        if (this.options.showDefaultOptions) {
                             var selected = this.selectItem;
                             selected.options.length = 0;
                             selected.options[0] = new Option(this.defaultText, "", false, true);
                         }
-                        if (this.options.defaultLoadData) {
-                            this.populateSelect();
+                        if (!this.disabled) {
+                            if (this.options.defaultLoadData) {
+                                this.populateSelect();
+                            }
+                        } else {
+                            this.selectItem.disabled = true;
                         }
                     }
                 }

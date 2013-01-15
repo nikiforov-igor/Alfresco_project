@@ -47,6 +47,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
+							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -91,6 +92,7 @@
 							<control-param name="notSelectedOptionLabel">Empty</control-param>
 							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
+							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -74,7 +74,8 @@
 		        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
 		        <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
 		        <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-		        <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
+		        <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"
+		        <#elseif field.control.params.disabled?? && field.control.params.disabled == "true">disabled="true"</#if>>
 			<#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "true">
                 <option value="">
 					<#if field.control.params.notSelectedOptionLabel??>
