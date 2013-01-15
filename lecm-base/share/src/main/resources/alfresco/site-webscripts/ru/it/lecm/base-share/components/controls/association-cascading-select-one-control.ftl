@@ -44,7 +44,13 @@
 						</#if>
                     },
                     webScriptUrl: "${field.control.params.webScriptUrl}",
-                    fieldId: "${fieldId}"
+                    fieldId: "${fieldId}",
+                    <#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "false">
+                        showDefaultOptions: false,
+					</#if>
+	                <#if field.control.params.defaultLoadData?? && field.control.params.defaultLoadData == "true">
+                        defaultLoadData: true
+	                </#if>
                 });
     });
 })();

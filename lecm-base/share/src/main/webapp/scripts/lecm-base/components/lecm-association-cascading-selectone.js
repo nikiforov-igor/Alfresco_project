@@ -66,8 +66,13 @@ LogicECM.module = LogicECM.module || {};
 
                 webScriptUrl: null,
 
-                htmlId: null
+                htmlId: null,
 
+                disableDropDown: false,
+
+                defaultLoadData: false,
+
+                showDefaultOptions: true
             },
 
             rootNode: null,
@@ -88,6 +93,8 @@ LogicECM.module = LogicECM.module || {};
 
             dataSource: null,
 
+            defaultText: "Empty",
+
             setOptions: function AssociationCascadingSelectOne_setOptions(obj)
             {
                 LogicECM.module.AssociationCascadingSelectOne.superclass.setOptions.call(this, obj);
@@ -103,6 +110,9 @@ LogicECM.module = LogicECM.module || {};
                 this._loadParentNode();
                 this.selectItem = Dom.get(this.selectItemId);
                 if (this.selectItem) {
+                    if(this.selectItem.options.length > 0){
+                        this.defaultText = this.selectItem.options[0].text;
+                    }
                     this.populateSelect();
                 }
                 YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
@@ -111,50 +121,11 @@ LogicECM.module = LogicECM.module || {};
                 if (this.currentDisplayValueElement) {
                     this.populateCurrentValue();
                 }
-                if (this.options.showCreateNewButton) {
-                    this.createNewButton =  new YAHOO.widget.Button(
-                        this.controlId + "-selectone-create-new-button",
-                        { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
-                    );
-                }
-
             },
 
             onSelectChange: function AssociationTreeViewer_onSelectChange() {
                 Dom.get(this.controlId).value = this.selectItem.value;
-                if (this.options.mandatory) {
-                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-                }
-
-                YAHOO.Bubbling.fire("formValueChanged",
-                    {
-                        eventGroup:this,
-                        addedItems:this.selectItem.value,
-                        removedItems:Dom.get(this.removedItemId).value,
-                        selectedItems:this.selectItem.value,
-                        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
-                    });
-            },
-
-            showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
-                var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
-
-                new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
-                    width:"40em",
-                    templateUrl:templateUrl,
-                    actionUrl:null,
-                    destroyOnHide:true,
-                    doBeforeDialogShow:{
-                        fn:this.setCreateNewFormDialogTitle
-                    },
-                    onSuccess:{
-                        fn:function (response) {
-                            this.options.selectedValueNodeRef = response.json.persistedObject;
-                            this.populateSelect();
-                        },
-                        scope:this
-                    }
-                }).show();
+                this.options.selectedValueNodeRef = this.selectItem.value;
             },
 
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {
@@ -162,18 +133,6 @@ LogicECM.module = LogicECM.module || {};
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", fileSpan]
                 );
-            },
-
-            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-                return YAHOO.lang.substitute(templateUrl, {
-                    itemKind: "type",
-                    itemId: itemType,
-                    destination: nodeRef,
-                    mode: "create",
-                    submitType: "json",
-                    formId: "association-create-new-node-form"
-                });
             },
 
             _loadParentNode: function AssociationTreeViewer__loadRootNode() {
@@ -241,6 +200,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             populateSelect: function AssociationCascadingSelectOne_populateSelect() {
+                if (this.options.defaultLoadData) {
                 this._createDataSource();
 
                 var successHandler = function (sRequest, oResponse, oPayload)
@@ -285,6 +245,7 @@ LogicECM.module = LogicECM.module || {};
                         failure: failureHandler,
                         scope: this
                     });
+                }
             },
 
             populateCurrentValue: function AssociationCascadingSelectOne_populateCurrentValue() {
@@ -467,13 +428,16 @@ LogicECM.module = LogicECM.module || {};
                                         var selected = this.selectItem;
                                         //Очищаем элементы списка
                                         selected.options.length = 0;
+                                        var first = 0;
+                                        if (this.options.showDefaultOptions) {
+                                            selected.options[0] = new Option(this.defaultText, "", false, true);
+                                            first = 1;
+                                        }
                                         if (elements.length > 0) {
                                             for (var i = 0; i < elements.length; i++) {
                                                 var prop = elements[i];
-                                                selected.options[i] = new Option(prop.name, prop.nodeRef, false, (prop.nodeRef == this.options.selectedValueNodeRef));
+                                                selected.options[i+first] = new Option(prop.name, prop.nodeRef, false, (prop.nodeRef == this.options.selectedValueNodeRef));
                                             }
-                                        } else {
-                                            selected.options[0] = new Option("Empty", "", false, true);
                                         }
                                     },
                                     scope: this
@@ -486,9 +450,15 @@ LogicECM.module = LogicECM.module || {};
                                 }
                             });
                     } else {
-                        var selected = this.selectItem;
-                        selected.options.length = 0;
-                        selected.options[0] = new Option("Empty", "", false, true);
+                        var first = 0;
+                        if (this.options.showDefaultOptions){
+                            var selected = this.selectItem;
+                            selected.options.length = 0;
+                            selected.options[0] = new Option(this.defaultText, "", false, true);
+                        }
+                        if (this.options.defaultLoadData) {
+                            this.populateSelect();
+                        }
                     }
                 }
             }
