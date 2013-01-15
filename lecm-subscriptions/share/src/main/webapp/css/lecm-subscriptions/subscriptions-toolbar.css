@@ -43,3 +43,6 @@
 	outline: none;
 	padding-right: 0;
 }
+.datalist-toolbar .delete-row button {
+	background: url(/share/res/components/images/delete-row-16.png) no-repeat 5px 5px;
+}

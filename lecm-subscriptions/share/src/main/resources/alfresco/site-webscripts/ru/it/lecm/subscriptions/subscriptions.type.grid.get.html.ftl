@@ -26,7 +26,7 @@
                                     label: "${msg("actions.delete-row")}"
                                 }
                             ],
-                            showCheckboxColumn: false
+                            showCheckboxColumn: true
                         }).setMessages(${messages});
             }
 

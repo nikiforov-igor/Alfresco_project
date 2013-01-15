@@ -53,6 +53,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
+        YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
     };
 
@@ -87,6 +88,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
              */
             toolbarButtons: null,
 
+            groupActions: {},
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
@@ -111,6 +114,11 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
                         disabled: disable
+                    });
+
+                this.groupActions.deleteButton = Alfresco.util.createYUIButton(this, "deleteButton", this.onDeleteRow,
+                    {
+                        disabled: true
                     });
 
                 var me = this;
@@ -359,6 +367,35 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                         });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                     this.checkShowClearSearch();
+                }
+            },
+            /**
+             * Удаление выбранного значения в dataGrid.
+             * Появляется диалоговое окно с потверждением на удаление
+             */
+            onDeleteRow:function Toolbar_onDeleteRow() {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
+                    // Get the function related to the clicked item
+                    var fn = "onActionDelete";
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+                    }
+                }
+            },
+            onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args)
+            {
+                if (this.modules.dataGrid)
+                {
+                    var items = this.modules.dataGrid.getSelectedItems();
+                    for (var index in this.groupActions)
+                    {
+                        if (this.groupActions.hasOwnProperty(index))
+                        {
+                            var action = this.groupActions[index];
+                            action.set("disabled", (items.length === 0));
+                        }
+                    }
                 }
             }
         }, true);
