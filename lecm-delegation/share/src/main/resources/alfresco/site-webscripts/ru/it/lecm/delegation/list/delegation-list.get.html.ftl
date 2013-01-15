@@ -10,6 +10,7 @@
 		usePagination:true,
 		showExtendSearchBlock:true,
 		showCheckboxColumn: false,
+		attributeForShow: "lecm-d8n:delegation-opts-owner-assoc",
 		actions: [
 			{
 				type: "action-link-delegation-list",

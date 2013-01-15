@@ -26,7 +26,7 @@ LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.Delegatio
      */
 	YAHOO.lang.augmentObject (LogicECM.module.Delegation.DelegationList.Grid.prototype, {
 
-		getCellFormatter: function DataGrid_getCellFormatter () {
+		/*getCellFormatter: function DataGrid_getCellFormatter () {
 			var scope = this;
 
 			return function DataGrid_renderCellDataType (elCell, oRecord, oColumn, oData) {
@@ -106,7 +106,7 @@ LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.Delegatio
 				}
 				elCell.innerHTML = html;
 			};
-		},
+		},*/
 
 		onActionEdit: function (item) {
 			var baseUrl = window.location.protocol + "//" + window.location.host;
