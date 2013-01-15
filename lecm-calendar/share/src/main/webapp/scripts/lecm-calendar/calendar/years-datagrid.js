@@ -157,9 +157,9 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 					this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
 				}
 			}
-			this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
-				showExtendSearchBlock:this.options.showExtendSearchBlock
-			});
+			this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+                    showExtendSearchBlock:this.options.showExtendSearchBlock
+                });
 
 			var searchConfig = this.datagridMeta.searchConfig;
 			if (searchConfig) { // Поиск через SOLR

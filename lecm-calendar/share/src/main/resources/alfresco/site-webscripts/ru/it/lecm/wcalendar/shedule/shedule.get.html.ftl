@@ -7,16 +7,16 @@
 var datagrid = new LogicECM.module.WCalendar.Shedule.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
-	showExtendSearchBlock:true,
+	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL,
 	actions: [
- <#--       {
+       {
 		type:"action-link-${bubblingLabel!"sheduleDatagrid"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"
-        } -->
+        }
 	] 
 });
 datagrid.setMessages(${messages});

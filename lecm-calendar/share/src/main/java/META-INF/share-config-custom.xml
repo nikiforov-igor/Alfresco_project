@@ -138,7 +138,7 @@
 							<control-param name="rootNode2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="pickerLabel1">label.form.picker.orgstructure</control-param>
 							<control-param name="pickerLabel2">label.form.picker.employees</control-param>
-							<control-param name="itemType1">lecm-orgstr:organization-element</control-param>
+							<control-param name="itemType1">lecm-orgstr:organization-unit</control-param>
 							<control-param name="itemType2">lecm-orgstr:employee</control-param>
 							<control-param name="endpointMandatory">false</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
