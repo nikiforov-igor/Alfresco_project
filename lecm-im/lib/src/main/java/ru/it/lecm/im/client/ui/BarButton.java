@@ -30,7 +30,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-import ru.it.lecm.im.client.bubling.IToggleWindow;
 import ru.it.lecm.im.client.utils.i18n;
 
 import java.util.ArrayList;

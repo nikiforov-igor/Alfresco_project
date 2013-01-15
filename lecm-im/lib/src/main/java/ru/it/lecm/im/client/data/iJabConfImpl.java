@@ -95,9 +95,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isRosterManageEnabled()
-	 */
+
 	public final native boolean isRosterManageEnabled() 
 	/*-{
 		try
@@ -110,9 +108,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#disableToolBox()
-	 */
+
 	public final native boolean disableToolBox() 
 	/*-{
 		try
@@ -125,9 +121,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#disableOptionsSetting()
-	 */
+
 	public final native boolean disableOptionsSetting() 
 	/*-{
 		try
@@ -140,9 +134,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isTitleNotifyDisabled()
-	 */
+
 	public final native boolean isTitleNotifyDisabled() 
 	/*-{
 		try
@@ -155,9 +147,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isHideOnlineGroup()
-	 */
+
 	public final native boolean isHideOnlineGroup() 
 	/*-{
 		try
@@ -170,9 +160,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isHidePowerBy()
-	 */
+
 	public final native boolean isHidePoweredBy() 
 	/*-{
 		try
@@ -185,9 +173,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isLoginDialogEnabled()
-	 */
+
 	public final native boolean isLoginDialogEnabled() 
 	/*-{
 		try
@@ -200,9 +186,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isBarExpandDefault()
-	 */
+
 	public final native boolean isBarExpandDefault()
 	/*-{
 		try
@@ -215,9 +199,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isEnableTalkToStranger()
-	 */
+
 	public final native boolean isEnableTalkToStranger() 
 	/*-{
 		try
@@ -230,9 +212,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#isEnableTalkToSpam()
-	 */
+
 	public final native boolean isEnableTalkToSpam() 
 	/*-{
 		try
@@ -247,9 +227,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#talkToSpamFunction()
-	 */
+
 	public final native JavaScriptObject talkToSpamFunction() 
 	/*-{
 		try
@@ -262,9 +240,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 		}
 	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.iJabConf#talkToSpamRepeatCount()
-	 */
+
 	public final native int talkToSpamRepeat() 
 	/*-{
 		try

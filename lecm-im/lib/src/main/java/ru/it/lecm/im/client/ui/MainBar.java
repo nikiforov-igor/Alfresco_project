@@ -25,24 +25,19 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Widget;
-import ru.it.lecm.im.client.bubling.BubblingHelper;
-import ru.it.lecm.im.client.bubling.IToggleWindow;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.ui.*;
 import ru.it.lecm.im.client.data.LinkItemImpl;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.ui.abstraction.BarMainWidgetAbstract;
-import ru.it.lecm.im.client.ui.abstraction.IBarMainWidget;
-import ru.it.lecm.im.client.ui.abstraction.IMainBar;
 import ru.it.lecm.im.client.utils.BrowserHelper;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.Session;
 
-public class MainBar extends Composite implements IMainBar {
+public class MainBar extends Composite implements  HasVisibility, EventListener, HasAttachHandlers, IsWidget, IsRenderable {
 
 	private static MainBarUiBinder uiBinder = GWT.create(MainBarUiBinder.class);
 
@@ -58,8 +53,6 @@ public class MainBar extends Composite implements IMainBar {
 	@UiField Element ijab_ui;
 	@UiField Element ijab_layout_r;
 	
-	boolean connected = false;
-	
 	@UiFactory ChatPanelBar makeChatPanelBar()
 	{
 		return new ChatPanelBar(this);
@@ -69,15 +62,20 @@ public class MainBar extends Composite implements IMainBar {
 	final private BarButton optionsButton;
 	//final private BarButton msgBoxButton;
 	final private BarButton buddysButton;
-	private BarButton mucButton;
+	final private BarButton mucButton;
 	final private BarButton toolButton;
 	final private ContactView contactView;
-	final private OptionWidget optionWidget;
-	final private BarMenu toolMenu;
-	final private BarMainWidgetAbstract mainWidget;
-	private MUCRoomWidget mucWidget;
-	
-	private BarButtonManager btnManager = new BarButtonManager();
+
+
+	final private MUCRoomWidget mucWidget;
+
+    final private BarMainWidget mainWidget = new BarMainWidget();
+    final private OptionWidget optionWidget = new OptionWidget();
+	final private BarButtonManager btnManager = new BarButtonManager();
+    final private BarMenu toolMenu = new BarMenu();
+
+    boolean connected = false;
+
 	private int onlineCount = 0;
 	//private int totalCount = 0;
 	private boolean getRostered = false;
@@ -108,115 +106,68 @@ public class MainBar extends Composite implements IMainBar {
 		buddysButton = btnManager.createCaptionButton(i18n.msg("Chat"), "ijab-icon-buddy", "ijab-buddy-window");
 		buddysButton.addButtonStyle("ijab-buddys-button");
 		if(iJab.conf.disableOptionsSetting())
-			buddysButton.setButtonWidthEm(19);
+        {
+            buddysButton.setButtonWidthEm(19);
+        }
 		//msgBoxButton = btnManager.createIconButton("Message Box", "ijab-icon-notification");
-		optionsButton = btnManager.createIconButton(i18n.msg("Options"), "ijab-icon-config");
-		appsBar.addWidget(buddysButton);
+        appsBar.addWidget(buddysButton);
 
-        //BubblingHelper.SubscribeToToggle(buddysButton);
-        //buddysButton.ToggleWindow();
 
-        BubblingHelper.Subscribe( new IToggleWindow() {
-            public void ToggleWindow(boolean result) {
-                buddysButton.ToggleWindow();
-            }
-        });
 
-//        JavaScriptObject obj = BubblingHelper.callbackFunc();
-//        BubblingHelper.on(obj);
-		
-		//create the muc button
-		if(iJab.conf.getXmppConf().isMUCEnabled())
+        //create the muc button
+        if(iJab.conf.getXmppConf().isMUCEnabled())
 		{
 			mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
-			//mucButton.addButtonStyle("ijab-muc-button");
 			appsBar.addWidget(mucButton);
 			mucWidget = new MUCRoomWidget(chatpanelBar);
 			mucButton.setButtonWindow(mucWidget);
 			mucButton.getButton().addClickHandler(new ClickHandler()
 			{
-				public void onClick(ClickEvent event) 
+				public void onClick(ClickEvent event)
 				{
 					mucWidget.loadRoomList();
 				}
-				
+
 			});
 		}
-		//end create the muc button
-		if(!iJab.conf.disableOptionsSetting())
-			appsBar.addWidget(optionsButton);
+        else
+        {
+            mucButton = null;
+            mucWidget = null;
+        }
 
-		
-		optionWidget = new OptionWidget();
-		optionsButton.setButtonWindow(optionWidget);
-		
-		mainWidget = new BarMainWidget();
+
+		if(!iJab.conf.disableOptionsSetting())
+        {
+            optionsButton = btnManager.createIconButton(i18n.msg("Options"), "ijab-icon-config");
+            appsBar.addWidget(optionsButton);
+            optionsButton.setButtonWindow(optionWidget);
+        }
+        else
+        {
+            optionsButton = null;
+        }
 
 		contactView = mainWidget.getContactView();
 		buddysButton.setButtonWindow(mainWidget);
-		if(!iJab.conf.isRosterManageEnabled())
-			mainWidget.removeToolBar();
-		else
-		{
-			mainWidget.setToolBarListener(new IBarMainWidget.IToolBarListener()
-			{
-				public void addButtonClicked() 
-				{
-					if(add_searchWnd == null)
-						add_searchWnd = new AddSearchWnd();
-					add_searchWnd.center();
-					add_searchWnd.show();
-				}
-				public void manageButtonClicked() {
-					
-				}
-			});
-		}
-		
-		toolButton = btnManager.createCaptionButton(i18n.msg("Tools"), "ijab-icon-home", "");
+
+        setupRosterManagement();
+
+        toolButton = btnManager.createCaptionButton(i18n.msg("Tools"), "ijab-icon-home", "");
 		toolButton.addButtonStyle("ijab-toolbox-button");
-		toolMenu = new BarMenu();
+
 		toolButton.setButtonWindow(toolMenu);
 		if(!iJab.conf.disableToolBox())
-			shortcutBar.addWidget(toolButton);
+        {
+            shortcutBar.addWidget(toolButton);
+        }
 		
 		mainWidget.getSearchWidget().addListener(contactView.getSearchListener());
-		
-		collapseButton.getWidget().addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				if(ijabLayout.getClassName().contains("ijab-webapi-max"))
-				{
-					setBarExpand(false);
-				}
-				else
-				{
-					setBarExpand(true);
-				}
-			}
-		});
-		
-		buddysButton.getButton().addClickHandler(new ClickHandler()
-		{
 
-			public void onClick(ClickEvent event) 
-			{
-				if(!iJab.conf.getXmppConf().isNoneRoster()&&iJab.client.isLogined()&&iJab.conf.getXmppConf().isGetRosterDelay()&&!getRostered)
-				{
-					Session.instance().getRosterPlugin().getRoster(null);
-					getRostered = true;
-				}
-				if(iJab.conf.getXmppConf().isAutoLogin()&&!connected)
-				{
-					iJab.client.resume();
-				}
-				else if(iJab.conf.isLoginDialogEnabled()&&!connected)
-					LoginDialog.instance().center();
-			}
-			
-		});
-		readShortItems();
+        addCollapseButtonClickHandler();
+        addBuddysButtonClickHandler();
+
+        readShortItems();
 		readTools();
 		disconnected();
 		
@@ -229,8 +180,68 @@ public class MainBar extends Composite implements IMainBar {
 
 		
 	}
-	
-	private void setBarExpand(boolean b)
+
+    private void setupRosterManagement() {
+        if(!iJab.conf.isRosterManageEnabled())
+			mainWidget.removeToolBar();
+		else
+		{
+			mainWidget.setToolBarListener(new BarMainWidget.IToolBarListener()
+			{
+				public void addButtonClicked()
+				{
+					if(add_searchWnd == null)
+						add_searchWnd = new AddSearchWnd();
+					add_searchWnd.center();
+					add_searchWnd.show();
+				}
+				public void manageButtonClicked() {
+
+				}
+			});
+		}
+    }
+
+    private void addCollapseButtonClickHandler() {
+        collapseButton.getWidget().addClickHandler(new ClickHandler()
+        {
+            public void onClick(ClickEvent event)
+            {
+                if(ijabLayout.getClassName().contains("ijab-webapi-max"))
+                {
+                    setBarExpand(false);
+                }
+                else
+                {
+                    setBarExpand(true);
+                }
+            }
+        });
+    }
+
+    private void addBuddysButtonClickHandler() {
+        buddysButton.getButton().addClickHandler(new ClickHandler()
+        {
+
+            public void onClick(ClickEvent event)
+            {
+                if(!iJab.conf.getXmppConf().isNoneRoster()&&iJab.client.isLogined()&&iJab.conf.getXmppConf().isGetRosterDelay()&&!getRostered)
+                {
+                    Session.instance().getRosterPlugin().getRoster(null);
+                    getRostered = true;
+                }
+                if(iJab.conf.getXmppConf().isAutoLogin()&&!connected)
+                {
+                    iJab.client.resume();
+                }
+                else if(iJab.conf.isLoginDialogEnabled()&&!connected)
+                    LoginDialog.instance().center();
+            }
+
+        });
+    }
+
+    private void setBarExpand(boolean b)
 	{
 		if(b)
 		{
@@ -266,78 +277,66 @@ public class MainBar extends Composite implements IMainBar {
 		}
 	}
 	
-	@Override
-    public void addShortcutItem(final String url, final String target, final String tipStr, final String icon)
+	public void addShortcutItem(final String url, final String target, final String tipStr, final String icon)
 	{
 		shortcutBar.addShortcutItem(url,target,tipStr,icon);
 	}
 	
-	@Override
-    public void addShortcutItem(final String url, final String tipStr, final String icon)
+	public void addShortcutItem(final String url, final String tipStr, final String icon)
 	{
 		shortcutBar.addShortcutItem(url,tipStr,icon);
 	}
 	
-	@Override
-    public ShortcutBar getShortcutBar()
+	public ShortcutBar getShortcutBar()
 	{
 		return shortcutBar;
 	}
 	
-	@Override
-    public AppsBar getAppsBar()
+	public AppsBar getAppsBar()
 	{
 		return appsBar;
 	}
 	
-	@Override
-    public ContactView getContactView()
+	public ContactView getContactView()
 	{
 		return contactView;
 	}
 	
-	@Override
-    public SearchBox getSearchWidget()
+	public SearchBox getSearchWidget()
 	{
 		return mainWidget.getSearchWidget();
 	}
 	
-	@Override
-    public UserIndicator getIndictorWidget()
+	public UserIndicator getIndictorWidget()
 	{
 		return mainWidget.getIndictorWidget();
 	}
 	
-	@Override
-    public OptionWidget getConfigWidget()
+	public OptionWidget getConfigWidget()
 	{
 		return optionWidget;
 	}
 	
-	@Override
-    public ChatPanelBar getChatPanel()
+	public ChatPanelBar getChatPanel()
 	{
 		return chatpanelBar;
 	}
 	
-	@Override
-    public void updateOnlineCount(int online)
+	public void updateOnlineCount(int online)
 	{
 		onlineCount = online;
 		if(connected)
 			buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");
 	}
 	
-	@Override
-    public void updateContactCount(int total)
+	public void updateContactCount(int total)
 	{
 		//totalCount = total;
 		if(connected)
 			buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");
 	}
 	
-	@Override
-    public void reset()
+	public void reset()
 	{
 		disconnected();
 		contactView.clear();
@@ -350,8 +349,7 @@ public class MainBar extends Composite implements IMainBar {
 		disconnected();
 	}
 	
-	@Override
-    public void connecting()
+	public void connecting()
 	{
 		connected = false;
 		buddysButton.removeIconStyle("ijab-icon-buddy");
@@ -361,8 +359,7 @@ public class MainBar extends Composite implements IMainBar {
 		mainWidget.setDisconnected(false);
 	}
 	
-	@Override
-    public void disconnected()
+	public void disconnected()
 	{
 		connected = false;
 		getRostered = false;
@@ -375,8 +372,7 @@ public class MainBar extends Composite implements IMainBar {
 			mucWidget.setConnected(false);
 	}
 	
-	@Override
-    public void connected()
+	public void connected()
 	{
 		connected = true;
 		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");

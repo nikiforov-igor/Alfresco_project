@@ -50,6 +50,7 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 	private final ChatPanelBar chatPanel;
 	private Map<String, Chat<XmppChat>> chats = new HashMap<String,Chat<XmppChat>>();
 	private boolean resumeing = false;
+
 	public XmppChatManager(ChatManager<XmppChat> manager,ChatPanelBar chatPanel)
 	{
 		this.manager = manager;

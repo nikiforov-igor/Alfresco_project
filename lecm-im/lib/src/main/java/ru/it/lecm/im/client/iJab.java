@@ -47,9 +47,9 @@ public class iJab implements EntryPoint {
 
 	static String theme = "standard";
 
-	public static iJabUI ui;
+	public static BarUI ui;
 	public static iJabConf conf ;
-	public static Client client;
+	public static XmppClient client;
 	@Override
 	public void onModuleLoad()
 	{
@@ -64,6 +64,7 @@ public class iJab implements EntryPoint {
 		theme = conf.getTheme();
 		ui = new BarUI();
 		client = new XmppClient();
+        client.addVisibilityListener(ui);
 		chageTheme(theme,"");
 
         DeferredCommand.addCommand(new Command()
@@ -161,38 +162,42 @@ public class iJab implements EntryPoint {
 		return gwtRef;
 	}
 
-	private native void defineBridgeMethod(Client client)
+	private native void defineBridgeMethod(XmppClient client)
 	/*-{
 		$wnd.iJab =
 		{
 			login:function(id,password)
 			{
-				client.@ru.it.lecm.im.client.Client::login(Ljava/lang/String;Ljava/lang/String;)(id,password);
+				client.@ru.it.lecm.im.client.XmppClient::login(Ljava/lang/String;Ljava/lang/String;)(id,password);
 			},
 
 			loginWithStatus:function(id,password,status)
 			{
-                client.@ru.it.lecm.im.client.Client::loginWithStatus(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(id,password,status);
+                client.@ru.it.lecm.im.client.XmppClient::loginWithStatus(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(id,password,status);
 			},
 
 			logout:function()
 			{
-                client.@ru.it.lecm.im.client.Client::logout()();
+                client.@ru.it.lecm.im.client.XmppClient::logout()();
 			},
 
+            toggleIsVisible : function()
+            {
+              client.@ru.it.lecm.im.client.XmppClient::toggleIsVisible()();
+            },
 			addListener:function(listener)
 			{
-                client.@ru.it.lecm.im.client.Client::addNativeListener(Lcom/google/gwt/core/client/JavaScriptObject;)(listener);
+                client.@ru.it.lecm.im.client.XmppClient::addNativeListener(Lcom/google/gwt/core/client/JavaScriptObject;)(listener);
 			},
 
 			talkTo:function(jid)
 			{
-                client.@ru.it.lecm.im.client.Client::talkTo(Ljava/lang/String;)(jid);
+                client.@ru.it.lecm.im.client.XmppClient::talkTo(Ljava/lang/String;)(jid);
 			},
 
 			isActive:function()
 			{
-				return client.@ru.it.lecm.im.client.Client::isConnected()();
+				return client.@ru.it.lecm.im.client.XmppClient::isConnected()();
 			},
 
 			version:function()
@@ -202,57 +207,57 @@ public class iJab implements EntryPoint {
 
 			getNickname:function()
 			{
-				return client.@ru.it.lecm.im.client.Client::getNickname()();
+				return client.@ru.it.lecm.im.client.XmppClient::getNickname()();
 			},
 
 			getStatusText:function()
 			{
-				return client.@ru.it.lecm.im.client.Client::getStatusText()();
+				return client.@ru.it.lecm.im.client.XmppClient::getStatusText()();
 			},
 
 			setStatusText:function(statusText)
 			{
-                client.@ru.it.lecm.im.client.Client::setStatusText(Ljava/lang/String;)(statusText);
+                client.@ru.it.lecm.im.client.XmppClient::setStatusText(Ljava/lang/String;)(statusText);
 			},
 
 			getStatus:function()
 			{
-				return client.@ru.it.lecm.im.client.Client::getStatus()();
+				return client.@ru.it.lecm.im.client.XmppClient::getStatus()();
 			},
 
 			setStatus:function(status)
 			{
-                client.@ru.it.lecm.im.client.Client::setStatus(Ljava/lang/String;)(status);
+                client.@ru.it.lecm.im.client.XmppClient::setStatus(Ljava/lang/String;)(status);
 			},
 
 			addRoster:function(users,group)
 			{
-                client.@ru.it.lecm.im.client.Client::addRoster(Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)(users,group);
+                client.@ru.it.lecm.im.client.XmppClient::addRoster(Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)(users,group);
 			},
 
 			removeRoster:function(users)
 			{
-                client.@ru.it.lecm.im.client.Client::removeRoster(Lcom/google/gwt/core/client/JsArrayString;)(users);
+                client.@ru.it.lecm.im.client.XmppClient::removeRoster(Lcom/google/gwt/core/client/JsArrayString;)(users);
 			},
 
 			joinMUC:function(room,nick)
 			{
-                client.@ru.it.lecm.im.client.Client::joinMUC(Ljava/lang/String;Ljava/lang/String;)(room,nick);
+                client.@ru.it.lecm.im.client.XmppClient::joinMUC(Ljava/lang/String;Ljava/lang/String;)(room,nick);
 			},
 
 			leaveMUC:function(room)
 			{
-                client.@ru.it.lecm.im.client.Client::leaveMUC(Ljava/lang/String;)(room);
+                client.@ru.it.lecm.im.client.XmppClient::leaveMUC(Ljava/lang/String;)(room);
 			},
 
 			addToBlackList:function(users)
 			{
-                client.@ru.it.lecm.im.client.Client::addUsersToBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
+                client.@ru.it.lecm.im.client.XmppClient::addUsersToBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
 			},
 
 			removeUsersFromBlacklist:function(users)
 			{
-                client.@ru.it.lecm.im.client.Client::removeUsersFromBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
+                client.@ru.it.lecm.im.client.XmppClient::removeUsersFromBlacklist(Lcom/google/gwt/core/client/JsArrayString;)(users);
 			}
 		};
 	  }-*/;

@@ -29,11 +29,11 @@ import ru.it.lecm.im.client.ui.SearchBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BarUI extends iJabUI
-{
-	private MainBar mainBar = new MainBar();
+public class BarUI implements ClientListener, VisibilityListener {
+	private final MainBar mainBar = new MainBar();
 	public BarUI()
 	{
+        mainBar.setVisible(false);
 	}
 	public List<Widget> getTopWidgets() 
 	{
@@ -89,27 +89,22 @@ public class BarUI extends iJabUI
 	{
 		//no need to do something
 	}
-	@Override
-	void connected() 
+	void connected()
 	{
 		mainBar.connected();
 	}
-	@Override
-	void connecting() 
+	void connecting()
 	{
 		mainBar.connecting();
 	}
-	@Override
-	void disconnected() 
+	void disconnected()
 	{
 		mainBar.disconnected();
 	}
-	@Override
-	public Widget getIndictorWidget() 
+	public Widget getIndictorWidget()
 	{
 		return mainBar.getIndictorWidget();
 	}
-	@Override
 	public SearchBox getSearchWidget()
 	{
 		return mainBar.getSearchWidget();
@@ -127,15 +122,13 @@ public class BarUI extends iJabUI
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.iJabUI#setStatusText(java.lang.String)
 	 */
-	@Override
-	void setStatusText(String status) {
+    void setStatusText(String status) {
 		mainBar.getIndictorWidget().setStatusText(status);
 	}
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.iJabUI#getStatusText()
 	 */
-	@Override
-	String getStatusText() {
+    String getStatusText() {
 		return mainBar.getIndictorWidget().getStatusText();
 	}
 	/* (non-Javadoc)
@@ -147,7 +140,6 @@ public class BarUI extends iJabUI
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.iJabUI#getChatPanelBar()
 	 */
-	@Override
 	public ChatPanelBar getChatPanelBar()
 	{
 		return mainBar.getChatPanel();
@@ -158,5 +150,18 @@ public class BarUI extends iJabUI
 	public void onMessageReceive(String jid, String message) {
 		
 	}
-	
+
+    @Override
+    public void onShow() {
+        Log.consoleLog("BarUI.onShow()");
+//        mainBar.removeStyleName(".hide");
+        mainBar.setVisible(true);
+
+    }
+
+    @Override
+    public void onHide() {
+        Log.consoleLog("BarUI.onHide()");
+        mainBar.setVisible(false);
+    }
 }

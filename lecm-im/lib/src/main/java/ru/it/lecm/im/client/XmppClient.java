@@ -20,6 +20,7 @@
  */
 package ru.it.lecm.im.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -66,9 +67,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class XmppClient extends Client
+public class XmppClient
 {
-	private final String RESOURCE_PREFIX = "ijab";
+	private final String RESOURCE_PREFIX = "AlfIM";
 	private final Session session = Session.instance();
 	private final XmppConf conf = iJabConfImpl.getConf().getXmppConf();
 	private int priority = 5;
@@ -84,7 +85,12 @@ public class XmppClient extends Client
 	private Show weekShow = null;
 	private int talkToCount = 0;
 	List<String> talkToList = new ArrayList<String>();
-	public XmppClient()
+    protected final List<ClientListener> listeners = new ArrayList<ClientListener>();
+    protected final List<VisibilityListener> visibilityListeners = new ArrayList<VisibilityListener>();
+    private boolean isVisible = false;
+    protected boolean isLogined = false;
+
+    public XmppClient()
 	{
 		session.setGetRosterDelay(conf.isGetRosterDelay());
 		session.setNoneRoster(iJabConfImpl.getConf().getXmppConf().isNoneRoster());
@@ -616,8 +622,7 @@ public class XmppClient extends Client
 		totalContactCount = 0;
 	}
 
-	@Override
-	void talkTo(String j) 
+	void talkTo(String j)
 	{
 		j = j==null?"":j;
 		if(j.length()==0)
@@ -685,8 +690,7 @@ public class XmppClient extends Client
 		session.getPresencePlugin().sendStatus(weekShow);
 	}
 
-	@Override
-	public boolean isConnected() 
+	public boolean isConnected()
 	{
 		return !session.isDisconnected();
 	}
@@ -709,8 +713,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#getGroups()
 	 */
-	@Override
-	public List<String> getGroups() 
+	public List<String> getGroups()
 	{
 		return iJab.ui.getContactView().getXmppGroups();
 	}
@@ -728,8 +731,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#loginWithStatus(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	@Override
-	public void loginWithStatus(String id, String password, String status) 
+	public void loginWithStatus(String id, String password, String status)
 	{
 		session.setInitPresence(XmppStatus.makePresence(status));
 		login(id,password);
@@ -738,8 +740,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#getNickname()
 	 */
-	@Override
-	public String getNickname() 
+	public String getNickname()
 	{
 		return XmppProfileManager.getName(session.getUser().getStringBareJid());
 	}
@@ -747,8 +748,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#getStatus()
 	 */
-	@Override
-	public String getStatusText() 
+	public String getStatusText()
 	{
 		return iJab.ui.getStatusText();
 	}
@@ -756,8 +756,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#setStatus(java.lang.String)
 	 */
-	@Override
-	public void setStatusText(String statusText) 
+	public void setStatusText(String statusText)
 	{
 		session.getPresencePlugin().sendStatusText(statusText);
 		iJab.ui.setStatusText(statusText);
@@ -766,8 +765,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#getStatus()
 	 */
-	@Override
-	public String getStatus() 
+	public String getStatus()
 	{
 		return XmppStatus.makeStatus(session.getPresencePlugin().getCurrentPresence()).name();
 	}
@@ -775,8 +773,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#setStatus(java.lang.String)
 	 */
-	@Override
-	public void setStatus(String status) 
+	public void setStatus(String status)
 	{
 		Presence presence = XmppStatus.makePresence(status);
 		session.getPresencePlugin().sendPresence(presence);
@@ -785,8 +782,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#addRoster(com.google.gwt.core.client.JsArrayString, java.lang.String)
 	 */
-	@Override
-	public void addRoster(JsArrayString users, String group) 
+	public void addRoster(JsArrayString users, String group)
 	{
 		for(int index=0;index<users.length();index++)
 		{
@@ -808,8 +804,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#removeRoster(com.google.gwt.core.client.JsArrayString)
 	 */
-	@Override
-	public void removeRoster(JsArrayString users) 
+	public void removeRoster(JsArrayString users)
 	{
 		for(int index=0;index<users.length();index++)
 		{
@@ -823,8 +818,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#joinMUC(java.lang.String, java.lang.String)
 	 */
-	@Override
-	public void joinMUC(String room, String nick) 
+	public void joinMUC(String room, String nick)
 	{
 		MultiUserChatPlugin plugin = Session.instance().getMucPlugin();
 		String roomJid = room+"@"+conf.getMUCServernode();
@@ -865,8 +859,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#leaveMUC(java.lang.String)
 	 */
-	@Override
-	public void leaveMUC(String room) 
+	public void leaveMUC(String room)
 	{
 		MultiUserChatPlugin plugin = Session.instance().getMucPlugin();
 		String roomJid = room+"@"+conf.getMUCServernode();
@@ -878,8 +871,7 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#addUsersToBlacklist(com.google.gwt.core.client.JsArrayString)
 	 */
-	@Override
-	public void addUsersToBlacklist(JsArrayString users) 
+	public void addUsersToBlacklist(JsArrayString users)
 	{
 		for(int index=0;index<users.length();index++)
 		{
@@ -891,9 +883,183 @@ public class XmppClient extends Client
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.Client#removeUsersFromBlacklist(com.google.gwt.core.client.JsArrayString)
 	 */
-	@Override
 	public void removeUsersFromBlacklist(JsArrayString users) {
 		this.removeFromBlacklist(users);
 	}
-	
+
+    public boolean getIsVisible()
+    {
+        return isVisible;
+    }
+
+    public void toggleIsVisible()
+    {
+        if (this.isVisible)
+        {
+            this.fireOnHide();
+        }
+        else
+        {
+            this.fireOnShow();
+        }
+
+        this.isVisible = !this.isVisible;
+
+    }
+
+    private void fireOnShow() {
+        for(VisibilityListener l:visibilityListeners)
+        {
+            l.onShow();
+        }
+    }
+
+    private void fireOnHide() {
+        for(VisibilityListener l:visibilityListeners)
+        {
+            l.onHide();
+        }
+    }
+
+    public void addVisibilityListener(VisibilityListener handler)
+    {
+        visibilityListeners.add(handler);
+    }
+
+    public void onAvatarClicked(int clientX,int clientY,final String bareJid)
+    {
+        fireOnAvatarClicked(clientX,clientY,JID.fromString(bareJid).getNode(),bareJid);
+    }
+
+    public void onAvatarMouseOver(int clientX,int clientY,final String bareJid)
+    {
+        fireOnAvatarMouseOver(clientX,clientY,JID.fromString(bareJid).getNode(),bareJid);
+    }
+
+    public void onAvatarMouseOut(int clientX,int clientY,final String bareJid)
+    {
+        fireOnAvatarMouseOut(clientX,clientY, JID.fromString(bareJid).getNode(),bareJid);
+    }
+
+    public void onStatusTextUpdate(final String text)
+    {
+        fireOnStatusTextUpdated(text);
+    }
+
+    public void onMessageReceive(final String jid,final String message)
+    {
+        fireOnMessageReceive(jid,message);
+    }
+
+    public void addNativeListener(JavaScriptObject jso)
+    {
+        addClientListener(new NativeClientListener(jso));
+    }
+
+    public void addClientListener(ClientListener handler)
+    {
+        listeners.add(handler);
+    }
+
+    public void removeClientListener(ClientListener handler)
+    {
+        listeners.remove(handler);
+    }
+
+    public boolean isLogined()
+    {
+        return isLogined;
+    }
+
+    protected void fireOnLogout()
+    {
+        isLogined = false;
+        for(ClientListener l:listeners)
+        {
+            l.onLogout();
+        }
+    }
+
+    protected void fireOnAvatarClicked(int clientX,int clientY,final String username,final String bareJid)
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onAvatarClicked(clientX,clientY,username,bareJid);
+        }
+    }
+
+    protected void fireOnAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid)
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onAvatarMouseOver(clientX,clientY,username,bareJid);
+        }
+    }
+
+    protected void fireOnAvatarMouseOut(int clientX,int clientY,final String username,final String bareJid)
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onAvatarMouseOut(clientX,clientY,username,bareJid);
+        }
+    }
+
+    protected void fireOnStatusTextUpdated(final String text)
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onStatusTextUpdated(text);
+        }
+    }
+
+    protected void fireOnError(final String error)
+    {
+        isLogined = false;
+        for(ClientListener l:listeners)
+        {
+            l.onError(error);
+        }
+    }
+
+    protected void fireOnBeforeLogin()
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onBeforeLogin();
+        }
+    }
+
+    protected void fireOnEndLogin()
+    {
+        isLogined = true;
+        for(ClientListener l:listeners)
+        {
+            l.onEndLogin();
+        }
+    }
+
+    protected void fireOnSuspend()
+    {
+        isLogined = false;
+        for(ClientListener l:listeners)
+        {
+            l.onSuspend();
+        }
+    }
+
+    protected void fireOnResume()
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onResume();
+        }
+    }
+
+    protected void fireOnMessageReceive(final String jid,final String message)
+    {
+        for(ClientListener l:listeners)
+        {
+            l.onMessageReceive(jid, message);
+        }
+    }
 }

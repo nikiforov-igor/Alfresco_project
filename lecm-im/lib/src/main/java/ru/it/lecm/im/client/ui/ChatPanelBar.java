@@ -24,7 +24,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import ru.it.lecm.im.client.data.iJabOptions;
-import ru.it.lecm.im.client.ui.abstraction.IMainBar;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -37,12 +36,12 @@ public class ChatPanelBar extends ChatPanelBarUI
 	
 	
 	private PanelButton activeButton = null;
-	private final IMainBar mainBar;
+	private final MainBar mainBar;
 	
 	private final Stack<PanelButton> leftStack = new Stack<PanelButton>();
 	private final Stack<PanelButton> rightStack = new Stack<PanelButton>();
 	private boolean onResume = false;
-	public ChatPanelBar(IMainBar mainBar)
+	public ChatPanelBar(MainBar mainBar)
 	{
 		super();
 		this.mainBar = mainBar;

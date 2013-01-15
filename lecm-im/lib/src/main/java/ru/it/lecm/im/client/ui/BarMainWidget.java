@@ -23,17 +23,16 @@ package ru.it.lecm.im.client.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.ui.*;
 import ru.it.lecm.im.client.data.GatewayItemImpl;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.ui.abstraction.BarMainWidgetAbstract;
 import ru.it.lecm.im.client.utils.i18n;
 
-public class BarMainWidget extends BarMainWidgetAbstract {
+public class BarMainWidget extends Composite implements HasVisibility, EventListener, HasAttachHandlers, IsWidget, IsRenderable {
 
     private static BarMainWidgetUiBinder uiBinder = GWT
 			.create(BarMainWidgetUiBinder.class);
@@ -88,8 +87,7 @@ public class BarMainWidget extends BarMainWidgetAbstract {
 //		});
 	}
 	
-	@Override
-    protected void popGateMenu()
+	protected void popGateMenu()
 	{
 
 //		if(gatewayMenu == null)
@@ -152,8 +150,7 @@ public class BarMainWidget extends BarMainWidgetAbstract {
 //		gatewayMenu.showRelativeTo(gatewayButton);
 	}
 	
-	@Override
-    protected String getGatewayName(String jid)
+	protected String getGatewayName(String jid)
 	{
 		JsArray<GatewayItemImpl> gateways = iJab.conf.getXmppConf().getGateways();
 		for(int index=0;index<gateways.length();index++)
@@ -165,26 +162,22 @@ public class BarMainWidget extends BarMainWidgetAbstract {
 		return jid;
 	}
 	
-	@Override
-    public ContactView getContactView()
+	public ContactView getContactView()
 	{
 		return contactView;
 	}
 	
-	@Override
-    public UserIndicator getIndictorWidget()
+	public UserIndicator getIndictorWidget()
 	{
 		return indicator;
 	}
 	
-	@Override
-    public SearchBox getSearchWidget()
+	public SearchBox getSearchWidget()
 	{
 		return searchBox;
 	}
 	
-	@Override
-    public void setDisconnected(boolean b)
+	public void setDisconnected(boolean b)
 	{
 		if(b)
 		{
@@ -206,17 +199,20 @@ public class BarMainWidget extends BarMainWidgetAbstract {
 		}
 	}
 	
-	@Override
-    public void removeToolBar()
+	public void removeToolBar()
 	{
 //		mainWidget.remove(toolBar);
 //		toolBar = null;
 	}
 	
-	@Override
-    public void setToolBarListener(IToolBarListener listener)
+	public void setToolBarListener(IToolBarListener listener)
 	{
 		this.listener = listener;
 	}
 
+    public interface IToolBarListener
+    {
+        void addButtonClicked();
+        void manageButtonClicked();
+    }
 }

@@ -1,7 +1,11 @@
+
+// Разговоры со спамом
 var spamCall = function(callback)
 {
     callback(true);
 };
+
+// Авторизация
 
 function setCookie(c_name,value,exdays)
 {
@@ -23,24 +27,19 @@ else
 
 }
 
-
-var iBubblingSubscriber = function(callback)
-{
-    YAHOO.Bubbling.on("ru.it.lecm.im.toggle-chat", function(layer, args) {
-        console.log("Before CallBack");
-        callback(true);
-        console.log(callback);
-    });
-};
+// Скрытие чата
 
 var toggleChat = function()
 {
-    YAHOO.Bubbling.fire("ru.it.lecm.im.toggle-chat",
-        {
-            message: "Hello World."
-        });
+    if (window.iJab)
+    {
+        window.iJab.toggleIsVisible();
+    }
 
 };
+
+
+// Счетчик сообщений
 
 var updateMessagesCount = function (c)
 {
@@ -58,9 +57,7 @@ var updateMessagesCountSubscriber = function(callback){
     });
 };
 
-
-
-
+// Конфигурация мессенджера
 
 var iJabConf =
 {
