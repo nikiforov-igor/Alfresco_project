@@ -54,13 +54,8 @@
             <artifactId>alfresco-data-model</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-	        <artifactId>com.springsource.org.json</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-remote-api</artifactId>
-            <version>4.0.e</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javacsv</groupId>

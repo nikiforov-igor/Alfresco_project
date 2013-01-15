@@ -117,6 +117,12 @@
                 <version>${alfresco.version}</version>
                 <scope>provided</scope>
             </dependency>
+	        <dependency>
+		        <groupId>org.alfresco</groupId>
+		        <artifactId>alfresco-remote-api</artifactId>
+		        <version>${alfresco.version}</version>
+		        <scope>provided</scope>
+	        </dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-repository</artifactId>
@@ -216,8 +222,8 @@
             </dependency>
 	        <dependency>
 		        <groupId>org.json</groupId>
-		        <artifactId>com.springsource.org.json</artifactId>
-		        <version>1.0.0</version>
+		        <artifactId>json</artifactId>
+		        <version>20090211</version>
 		        <scope>provided</scope>
 	        </dependency>
             <dependency>
