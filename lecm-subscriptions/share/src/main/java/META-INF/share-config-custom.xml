@@ -45,22 +45,8 @@
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel">Empty</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc,lecm-subscr:destination-work-group-assoc</control-param>
+							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
-						</control>
-					</field>
-					<field id="lecm-subscr:destination-work-group-assoc">
-						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы
-							</control-param>
-							<control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}
-							</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
-							<control-param name="slaveCascading">true</control-param>
-							<control-param name="primaryCascading">true</control-param>
-							<control-param name="showCreateNewButton">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -103,22 +89,8 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel">Empty</control-param>
-							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc,lecm-subscr:destination-work-group-assoc</control-param>
+							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
-						</control>
-					</field>
-					<field id="lecm-subscr:destination-work-group-assoc">
-						<control
-								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы
-							</control-param>
-							<control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}
-							</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Empty</control-param>
-							<control-param name="slaveCascading">true</control-param>
-							<control-param name="primaryCascading">true</control-param>
-							<control-param name="showCreateNewButton">true</control-param>
 						</control>
 					</field>
 				</appearance>

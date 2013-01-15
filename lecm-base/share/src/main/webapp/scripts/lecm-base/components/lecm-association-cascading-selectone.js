@@ -122,7 +122,6 @@ LogicECM.module = LogicECM.module || {};
 
             onSelectChange: function AssociationTreeViewer_onSelectChange() {
                 Dom.get(this.controlId).value = this.selectItem.value;
-                console.log(this.options.selectedValueNodeRef);
                 if (this.options.mandatory) {
                     YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                 }
@@ -289,14 +288,12 @@ LogicECM.module = LogicECM.module || {};
             },
 
             populateCurrentValue: function AssociationCascadingSelectOne_populateCurrentValue() {
-                console.log(this.options.selectedValueNodeRef);
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
                         successCallback:
                         {
                             fn: function (response) {
-                                console.log(response);
                                 var properties = response.json.properties;
                                 var name = this.options.nameSubstituteString;
                                 for (var i = 0; i < properties.length; i++) {
