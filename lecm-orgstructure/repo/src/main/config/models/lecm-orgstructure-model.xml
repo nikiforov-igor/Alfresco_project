@@ -571,6 +571,24 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-orgstr:business-role-identifier">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecm-orgstr:business-role-employee-assoc">
