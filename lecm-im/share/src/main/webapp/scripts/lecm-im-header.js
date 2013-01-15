@@ -94,14 +94,22 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         initButton : function(){
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
                 onclick: { fn: function(){
-                    var elem = YAHOO.util.Dom.get("ijab");
-                    if (elem.hasAttribute("hidden"))
+//                    var elem = YAHOO.util.Dom.get("ijab");
+//                    if (elem.hasAttribute("hidden"))
+//                    {
+//                        elem.removeAttribute("hidden");
+//                    }
+//                    else
+//                    {
+//                        elem.setAttribute("hidden","hidden");
+//                    }
+
+                    if (window.iJab)
                     {
-                        elem.removeAttribute("hidden");
+                        window.iJab.toggleIsVisible();
                     }
-                    else
-                    {
-                        elem.setAttribute("hidden","hidden");
+                    else{
+                        alert("Messanger not found!");
                     }
 
                 } }

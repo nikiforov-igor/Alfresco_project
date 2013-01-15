@@ -31,6 +31,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.*;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.data.LinkItemImpl;
 import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.utils.BrowserHelper;
@@ -338,6 +339,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void reset()
 	{
+        Log.consoleLog("MainBar.reset()");
 		disconnected();
 		contactView.clear();
 		updateOnlineCount(0);
@@ -351,7 +353,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void connecting()
 	{
-		connected = false;
+        Log.consoleLog("MainBar.connecting()");
+        connected = false;
 		buddysButton.removeIconStyle("ijab-icon-buddy");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.setIconStyle("ijab-icon-buddy-connecting");
@@ -361,7 +364,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void disconnected()
 	{
-		connected = false;
+        Log.consoleLog("MainBar.disconnected()");
+        connected = false;
 		getRostered = false;
 		buddysButton.setIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.removeIconStyle("ijab-icon-buddy");
@@ -374,6 +378,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void connected()
 	{
+        Log.consoleLog("MainBar.connected()");
 		connected = true;
 		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
@@ -382,5 +387,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		mainWidget.setDisconnected(false);
 		if(mucWidget!=null)
 			mucWidget.setConnected(true);
+
+        buddysButton.openWindow();
 	}
 }

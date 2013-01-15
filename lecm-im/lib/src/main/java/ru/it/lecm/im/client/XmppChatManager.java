@@ -26,7 +26,6 @@ import com.google.gwt.json.client.JSONString;
 import ru.it.lecm.im.client.bubling.MessageCountUpdater;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
 import ru.it.lecm.im.client.ui.ChatPanelButton;
-import ru.it.lecm.im.client.ui.ContactView;
 import ru.it.lecm.im.client.utils.WindowPrompt;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
@@ -40,7 +39,7 @@ import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 
 import java.util.*;
 
-public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
+public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 {
 	private final static String STORAGE_KEY = "XmppChatManager";
 	private final static String CHATS_KEY = "all_alive_chat";
@@ -66,16 +65,14 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 		xmppChat.process(message, firstMessage);
 		if(message.getBody()!=null&&message.getBody().length() > 0)
 		{
-            RefreshNewMessagesCount();
-            Integer messages = xmppChat.getButton().getOldMessageCount();
-            ContactView contactView = iJab.ui.getContactView();
-            //contactView.
 			String bareJid = chat.getJid().toStringBare();
 			iJab.client.onMessageReceive(bareJid, message.getBody());
 			String prompt = XmppProfileManager.getName(bareJid)+" Say:"+message.getBody();
 			WindowPrompt.prompt(prompt);
 
             chatPanel.ensureButtonInBar(xmppChat.getButton());
+
+            RefreshNewMessagesCount();
 		}
 	}
 
@@ -109,6 +106,19 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
         // iJab.ui.getContactView().
         // client.getChatManager().
 
+    }
+
+    public void OpenNextUnreadMessage()
+    {
+        Collection<Chat<XmppChat>> chatCollection = chats.values();
+        for (Chat<XmppChat> chat : chatCollection ) {
+            if (chat.getUserData().getButton().getOldMessageCount() > 0 )
+            {
+                chat.getUserData().openChat();
+                break;
+            }
+        }
+        this.RefreshNewMessagesCount();
     }
 
 	public void onNotifyReceive(Notify notify) 
@@ -286,12 +296,6 @@ public class XmppChatManager implements ChatListener<XmppChat>,ClientListener
 	public void onAvatarMouseOut(int clientX, int clientY, String usrname,
 			String bareJid) {
 		
-	}
-
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ClientListener#onMessageReceive(java.lang.String, java.lang.String)
-	 */
-	public void onMessageReceive(String jid, String message) {
 	}
 	
 

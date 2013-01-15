@@ -20,6 +20,7 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.Storage;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
@@ -453,7 +454,8 @@ public class BarChatWidget extends BarChatWidgetUI
 	
 	private void viewRangeArchive(ArchiveRange range)
 	{
-		cleanHistory();
+        Log.consoleLog("BarChatWidget.viewRangeArchive");
+        cleanHistory();
 		chatContent.add(createRangeSelectorWidget(range));
 		chatContent.add(createTopRangeWidget(range));
 		final FlowPanel archivePanel = new FlowPanel();

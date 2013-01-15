@@ -32,5 +32,6 @@ public interface ClientListener
 	void onAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid);
 	void onAvatarMouseOut(int clientX,int clientY,final String usrname,final String bareJid);
 	void onStatusTextUpdated(final String text);
-	void onMessageReceive(final String jid,final String message);
 }
+
+

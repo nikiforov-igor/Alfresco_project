@@ -22,7 +22,7 @@ package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class NativeClientListener implements ClientListener
+public class NativeClientListener implements ClientListener, MessageReceiveListener
 {
 
 	final JavaScriptObject delegate;

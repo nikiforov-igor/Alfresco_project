@@ -144,19 +144,14 @@ public class BarUI implements ClientListener, VisibilityListener {
 	{
 		return mainBar.getChatPanel();
 	}
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ClientListener#onMessageReceive(java.lang.String, java.lang.String)
-	 */
-	public void onMessageReceive(String jid, String message) {
-		
-	}
+
 
     @Override
     public void onShow() {
         Log.consoleLog("BarUI.onShow()");
 //        mainBar.removeStyleName(".hide");
         mainBar.setVisible(true);
-
+        iJab.client.getChatManager().OpenNextUnreadMessage();
     }
 
     @Override

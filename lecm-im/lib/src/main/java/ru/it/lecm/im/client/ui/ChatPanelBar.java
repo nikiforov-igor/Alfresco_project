@@ -23,7 +23,6 @@ package ru.it.lecm.im.client.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
-import ru.it.lecm.im.client.data.iJabOptions;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -254,11 +253,13 @@ public class ChatPanelBar extends ChatPanelBarUI
 				removeWidget(btn);
 				tryPopButton();
 				updateScrollButtons();
+
 				// It's seek
-				if(iJabOptions.instance()!=null&&iJabOptions.instance().isAutoClearHistory())
-				{
-					btn.clearHistory();
-				}
+                // Закоментил Я
+//				if(iJabOptions.instance()!=null&&iJabOptions.instance().isAutoClearHistory())
+//				{
+//					btn.clearHistory();
+//				}
 			}
 
 			public void onMax() {
@@ -359,9 +360,10 @@ public class ChatPanelBar extends ChatPanelBarUI
 		}
 
 		insertWidget(btn,0);
-		if(activeButton==null&&!onResume)
-			btn.openWindow();
-		tryPushButton();
+		// Закоментил я
+		//if(activeButton==null&&!onResume)
+		//	btn.openWindow();
+		//tryPushButton();
 		updateScrollButtons();
 	}
 	

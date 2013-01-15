@@ -20,16 +20,13 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.*;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
 import ru.it.lecm.im.client.xmpp.stanzas.Message.ChatState;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.message.Chat;
 import com.google.gwt.user.client.Timer;
-import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.XmppChat;
-import ru.it.lecm.im.client.XmppProfileListener;
-import ru.it.lecm.im.client.XmppProfileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +83,11 @@ public class ChatPanelButton extends PanelButton
 	
 	public void processMessage(String nick,Message message,boolean firstMessage)
 	{
-		
+        Log.consoleLog("ChatPanelButton.processMessage(nick="+nick+", firstMessage="+firstMessage+")");
 		String body = message.getBody();
 		if(!isActive()&&(body != null&&body.length()!=0))
 		{
-			if(!chatPanel.isButtonHide(this)&&!chatPanel.haveAcitveButton())
+			if(!chatPanel.isButtonHide(this)&&!chatPanel.haveAcitveButton()&&iJab.client.getIsVisible())
 			{
 				openWindow();
 			}

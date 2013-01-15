@@ -86,6 +86,7 @@ public class XmppClient
 	private int talkToCount = 0;
 	List<String> talkToList = new ArrayList<String>();
     protected final List<ClientListener> listeners = new ArrayList<ClientListener>();
+    protected final List<MessageReceiveListener> messageReceivelisteners = new ArrayList<MessageReceiveListener>();
     protected final List<VisibilityListener> visibilityListeners = new ArrayList<VisibilityListener>();
     private boolean isVisible = false;
     protected boolean isLogined = false;
@@ -961,9 +962,13 @@ public class XmppClient
         listeners.add(handler);
     }
 
-    public void removeClientListener(ClientListener handler)
+    public void addNativeMessageReceiveListener(JavaScriptObject jso)
     {
-        listeners.remove(handler);
+        this.addNativeMessageReceiveListener(new NativeClientListener(jso));
+    }
+
+    private void addNativeMessageReceiveListener(MessageReceiveListener messageReceiveListener) {
+        this.messageReceivelisteners.add(messageReceiveListener);
     }
 
     public boolean isLogined()
@@ -1057,7 +1062,7 @@ public class XmppClient
 
     protected void fireOnMessageReceive(final String jid,final String message)
     {
-        for(ClientListener l:listeners)
+        for(MessageReceiveListener l:messageReceivelisteners)
         {
             l.onMessageReceive(jid, message);
         }
