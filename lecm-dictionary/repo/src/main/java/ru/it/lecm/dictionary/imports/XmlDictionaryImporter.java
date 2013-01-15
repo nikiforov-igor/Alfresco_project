@@ -71,9 +71,9 @@ public class XmlDictionaryImporter {
 			}
 			xmlr.nextTag();
 			Map<QName, Serializable> dicProps = getProperties(xmlr);
-			String type = dicProps.get(ExportNamespace.PROP_TYPE).toString();
-			itemsType = QName.createQName(type, namespaceService);
 			parentNodeRef = createDictionary(dictionaryName, dicProps);
+			String type = nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString();
+			itemsType = QName.createQName(type, namespaceService);
 			readItems(xmlr, parentNodeRef);
 		}
 	}

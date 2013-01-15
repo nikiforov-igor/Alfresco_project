@@ -28,12 +28,18 @@ public class LecmDictionaryBootstrap {
 	Repository repositoryHelper;
 
 	private List<String> dictionaries;
+	private List<String> createOrUpdateDictionaries;
 	private TransactionService transactionService;
 	private NamespaceService namespaceService;
 
 	@SuppressWarnings("UnusedDeclaration")
 	public void setDictionaries(List<String> dictionaries) {
 		this.dictionaries = dictionaries;
+	}
+
+	@SuppressWarnings("UnusedDeclaration")
+	public void setCreateOrUpdateDictionaries(List<String> createOrUpdateDictionaries) {
+		this.createOrUpdateDictionaries = createOrUpdateDictionaries;
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -77,7 +83,32 @@ public class LecmDictionaryBootstrap {
 						});
 					}
 				}
-				return null;  //To change body of implemented methods use File | Settings | File Templates.
+				if (createOrUpdateDictionaries != null) {
+					for (final String dictionary : createOrUpdateDictionaries) {
+						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+							@Override
+							public Object execute() throws Throwable {
+								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
+								try {
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, repositoryHelper, nodeService, namespaceService);
+									importer.readDictionary(false);
+								} catch (XMLStreamException e) {
+									log.warn("Cann not create dictionary: " + dictionary);
+								} finally {
+									try {
+										if (inputStream != null) {
+											inputStream.close();
+										}
+									} catch (IOException ignored) {
+
+									}
+								}
+								return "ok";
+							}
+						});
+					}
+				}
+				return null;
 			}
 		};
 		AuthenticationUtil.runAsSystem(raw);
