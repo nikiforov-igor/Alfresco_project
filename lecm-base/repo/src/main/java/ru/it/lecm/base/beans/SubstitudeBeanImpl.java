@@ -1,10 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -13,6 +8,11 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author dbashmakov
@@ -127,7 +127,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 					for (Map.Entry<String, String> entry : expressions.entrySet()) {
 						Object currentPropertyValue =
 								nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-						if ((currentPropertyValue == null && !entry.getValue().equals("null"))
+						if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
 								|| !currentPropertyValue.toString().equals(entry.getValue())) {
 							expressionsFalse = true;
 							break;
