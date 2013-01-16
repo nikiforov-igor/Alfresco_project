@@ -441,11 +441,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 *
 	 * @return Scriptable
 	 */
-	private Scriptable createScriptable(Collection<NodeRef> refs) {
+	private Scriptable createScriptable(List<NodeRef> refs) {
 		Object[] results = new Object[refs.size()];
-		int i = 0;
-		for (NodeRef ref : refs) {
-			results[i++] = new ScriptNode(ref, services, getScope());
+		for (int i = 0; i < results.length; i++) {
+			results[i] = new ScriptNode(refs.get(i), services, getScope());
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
 	}
@@ -733,10 +732,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 * @param unitRef ссылка на подразделение
 	 * @return список сотрудников в подразделении или пустой список
 	 */
-	public Scriptable getEmployeesInUnit (final String unitRef) {
-		ParameterCheck.mandatory ("unitRef", unitRef);
-		return createScriptable (orgstructureService.getEmployeesInUnit (new NodeRef (unitRef)));
-	}
+//	public Scriptable getEmployeesInUnit (final String unitRef) {
+//		ParameterCheck.mandatory ("unitRef", unitRef);
+//		return createScriptable (orgstructureService.getEmployeesInUnit (new NodeRef (unitRef)));
+//	}
 
 	/**
 	 * получение списка подчиненных для указанного сотрудника

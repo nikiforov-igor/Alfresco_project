@@ -166,14 +166,14 @@ public interface OrgstructureBean {
 	 * @param bossUnitsOnly флаг показывающий что нас интересуют только те подразделения где сотрудник - босс
 	 * @return список подразделений или пустой список
 	 */
-	Collection<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly);
+	List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly);
 
 	/**
 	 * получение списка сотрудников в указанном подразделении
 	 * @param unitRef ссылка на подразделение
 	 * @return список сотрудников в подразделении или пустой список
 	 */
-	Collection<NodeRef> getEmployeesInUnit (final NodeRef unitRef);
+//	List<NodeRef> getEmployeesInUnit (final NodeRef unitRef);
 
 	/**
 	 * получение списка подчиненных для указанного сотрудника
@@ -181,5 +181,5 @@ public interface OrgstructureBean {
 	 * @return список подчиненных сотрудника по всем подразделениям.
 	 *         Если сотрудник не является боссом, то список пустой
 	 */
-	Collection<NodeRef> getBossSubordinate (final NodeRef employeeRef);
+	List<NodeRef> getBossSubordinate (final NodeRef employeeRef);
 }

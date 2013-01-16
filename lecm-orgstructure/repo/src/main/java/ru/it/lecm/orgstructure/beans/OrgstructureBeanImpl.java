@@ -1007,7 +1007,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
-	public Collection<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly) {
+	public List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly) {
 		//получаем список штатных расписаний сотрудника
 		List<NodeRef> staffs = getEmployeeStaffs (employeeRef);
 		List<NodeRef> units = new ArrayList<NodeRef> (staffs.size ());
@@ -1025,34 +1025,34 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return units;
 	}
 
-	@Override
-	public Collection<NodeRef> getEmployeesInUnit (final NodeRef unitRef) {
-		//получаем штатные расписания сотрудников в подразделении
-		List<NodeRef> staffs =  getUnitStaffLists (unitRef);
-		Set<NodeRef> employees = new HashSet<NodeRef> ();
-		for (NodeRef staffRef : staffs) {
-			//по штатному расписанию вытаскиваем сотрудника
-			employees.add (getEmployeeByPosition (staffRef));
-		}
-		return employees;
-	}
+//	@Override
+//	public List<NodeRef> getEmployeesInUnit (final NodeRef unitRef) {
+//		//получаем штатные расписания сотрудников в подразделении
+//		List<NodeRef> staffs =  getUnitStaffLists (unitRef);
+//		Set<NodeRef> employees = new HashSet<NodeRef> ();
+//		for (NodeRef staffRef : staffs) {
+//			//по штатному расписанию вытаскиваем сотрудника
+//			employees.add (getEmployeeByPosition (staffRef));
+//		}
+//		return employees;
+//	}
 
 	@Override
-	public Collection<NodeRef> getBossSubordinate (final NodeRef employeeRef) {
+	public List<NodeRef> getBossSubordinate (final NodeRef employeeRef) {
 		//получаем список подразделений где этот сотрудник является боссом
 		Collection<NodeRef> units = getEmployeeUnits (employeeRef, true);
 		Set<NodeRef> employees = new HashSet<NodeRef> ();
 		for (NodeRef unitRef : units) {
 			//берем сотрудников из непосредственно этого подразделения
-			employees.addAll (getEmployeesInUnit (unitRef));
+			employees.addAll (getOrganizationElementEmployees (unitRef));
 			//берем все дочерние подразделения и собираем сотрудников уже из них
 			List<NodeRef> subUnits = getSubUnits (unitRef, true, true);
 			for (NodeRef subUnitRef : subUnits) {
-				employees.addAll (getEmployeesInUnit (subUnitRef));
+				employees.addAll (getOrganizationElementEmployees (subUnitRef));
 			}
 		}
 		//начальника выгоняем из множества сотрудников
 		employees.remove (employeeRef);
-		return employees;
+		return new ArrayList<NodeRef> (employees);
 	}
 }
