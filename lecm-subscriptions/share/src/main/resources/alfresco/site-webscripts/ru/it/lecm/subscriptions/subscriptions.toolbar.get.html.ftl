@@ -29,6 +29,7 @@ YAHOO.util.Event.onDOMReady(init);
            </span>
         </span>
 </div>
+<div class="divider"></div>
 <div class="delete-row">
         <span id="${id}-deleteButton" class="yui-button yui-push-button">
            <span class="first-child">
