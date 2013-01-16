@@ -1,0 +1,1 @@
+model.success = subscription.unsubscribeType(args["nodeRef"]);

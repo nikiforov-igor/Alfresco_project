@@ -180,7 +180,25 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 		if (this.services.getNodeService().exists(subscriptionRef) &&
 				subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
 
-			subscriptionsService.unsubscribeObject(subscriptionRef);
+			subscriptionsService.unsubscribe(subscriptionRef);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Удаление подписки на тип
+	 *
+	 * @param nodeRef Ссылка на тип
+	 * @return true если удачно удалена подписка, иначе false
+	 */
+	public boolean unsubscribeType(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef subscriptionRef = new NodeRef(nodeRef);
+		if (this.services.getNodeService().exists(subscriptionRef) &&
+				subscriptionsService.isSubscriptionToType(subscriptionRef)) {
+
+			subscriptionsService.unsubscribe(subscriptionRef);
 			return true;
 		}
 		return false;

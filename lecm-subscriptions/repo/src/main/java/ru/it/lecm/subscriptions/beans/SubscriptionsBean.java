@@ -138,6 +138,15 @@ public class SubscriptionsBean extends BaseBean {
 	}
 
 	/**
+	 * проверяет что объект является подпиской на тип
+	 */
+	public boolean isSubscriptionToType(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_SUBSCRIPTION_TO_TYPE);
+		return isProperType(ref, types);
+	}
+
+	/**
 	 * Получение списка подписок сотрудника
 	 *
 	 * @param employeeRef Ссылка на сотрудника
@@ -244,11 +253,11 @@ public class SubscriptionsBean extends BaseBean {
 	}
 
 	/**
-	 * Удаление подписки на объект
+	 * Удаление подписки
 	 *
 	 * @param nodeRef Ссылка на подписку
 	 */
-	public void unsubscribeObject(NodeRef nodeRef) {
+	public void unsubscribe(NodeRef nodeRef) {
 		nodeService.deleteNode(nodeRef);
 	}
 }
