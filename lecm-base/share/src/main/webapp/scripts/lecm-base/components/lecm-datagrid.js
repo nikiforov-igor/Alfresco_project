@@ -2264,7 +2264,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", this.msg("label.edit-row.title") ]
+                        [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
                     );
                 };
 
