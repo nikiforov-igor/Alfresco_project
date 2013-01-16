@@ -449,7 +449,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			List<ChildAssociationRef> sls = nodeService.getChildAssocs(unitRef, staffs);
 			for (ChildAssociationRef sl : sls) {
                 if (!isArchive(sl.getChildRef())) {
-                    results.add(sl.getChildRef());    
+                    results.add(sl.getChildRef());
                 }
 			}
 		}
@@ -557,7 +557,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                     if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
                         NodeRef employee = getEmployeeByLink(empLinks.get(0).getChildRef());
                         results.add(employee);
-                    }    
+                    }
                 }
 			}
 		}
@@ -816,13 +816,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			if (links.size() > 0) {
                 NodeRef empRef = links.get(0).getChildRef();
                 if(!isArchive(empRef)){
-                    employeeLink = empRef;   
+                    employeeLink = empRef;
                 }
 			}
 		}
 		return employeeLink;
 	}
-    
+
 	/**
 	 * Получение полного перечня бизнес ролей
 	 */
@@ -1004,5 +1004,55 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getRoleByWorkForce(NodeRef workforce) {
 		return findNodeByAssociationRef(workforce, ASSOC_ELEMENT_MEMBER_POSITION, TYPE_WORK_ROLE, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public Collection<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly) {
+		//получаем список штатных расписаний сотрудника
+		List<NodeRef> staffs = getEmployeeStaffs (employeeRef);
+		List<NodeRef> units = new ArrayList<NodeRef> (staffs.size ());
+		for (NodeRef staffRef : staffs) {
+			//для каждого штатного расписания вытаскиваем подразделение
+			NodeRef unitRef = getUnitByStaff (staffRef);
+			//узнаем является ли указанный сотрудник боссом по своему штатному расписанию
+			Boolean isBoss = (Boolean) nodeService.getProperty(staffRef, PROP_STAFF_LIST_IS_BOSS);
+			if (bossUnitsOnly && isBoss) {
+				units.add (unitRef);
+			} else if (!bossUnitsOnly) {
+				units.add (unitRef);
+			}
+		}
+		return units;
+	}
+
+	@Override
+	public Collection<NodeRef> getEmployeesInUnit (final NodeRef unitRef) {
+		//получаем штатные расписания сотрудников в подразделении
+		List<NodeRef> staffs =  getUnitStaffLists (unitRef);
+		Set<NodeRef> employees = new HashSet<NodeRef> ();
+		for (NodeRef staffRef : staffs) {
+			//по штатному расписанию вытаскиваем сотрудника
+			employees.add (getEmployeeByPosition (staffRef));
+		}
+		return employees;
+	}
+
+	@Override
+	public Collection<NodeRef> getBossSubordinate (final NodeRef employeeRef) {
+		//получаем список подразделений где этот сотрудник является боссом
+		Collection<NodeRef> units = getEmployeeUnits (employeeRef, true);
+		Set<NodeRef> employees = new HashSet<NodeRef> ();
+		for (NodeRef unitRef : units) {
+			//берем сотрудников из непосредственно этого подразделения
+			employees.addAll (getEmployeesInUnit (unitRef));
+			//берем все дочерние подразделения и собираем сотрудников уже из них
+			List<NodeRef> subUnits = getSubUnits (unitRef, true, true);
+			for (NodeRef subUnitRef : subUnits) {
+				employees.addAll (getEmployeesInUnit (subUnitRef));
+			}
+		}
+		//начальника выгоняем из множества сотрудников
+		employees.remove (employeeRef);
+		return employees;
 	}
 }

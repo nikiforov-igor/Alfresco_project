@@ -42,7 +42,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
 	public static final String ELEMENT_FULL_NAME_PATTERN = "lecm-orgstr_element-full-name";
 
-	private static Log logger = LogFactory.getLog(OrgstructureWebScriptBean.class);
+	private static final Log logger = LogFactory.getLog(OrgstructureWebScriptBean.class);
 	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
 	public static final String PAGE_ORG_POSITIONS = "org-positions";
 	public static final String PAGE_ORG_ROLES = "org-roles";
@@ -166,7 +166,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 			nodes.put(root);
 		} catch (JSONException e) {
-			logger.error(e);
+			logger.error(e.getMessage (), e);
 		}
 
 		List<ChildAssociationRef> childs = nodeService.getChildAssocs(organizationRef);
@@ -206,7 +206,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					nodes.put(root);
 				}
 			} catch (JSONException e) {
-				logger.error(e);
+				logger.error(e.getMessage (), e);
 			}
 		}
 		return nodes.toString();
@@ -242,7 +242,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
 							nodes.add(unit);
 						} catch (JSONException e) {
-							logger.error(e);
+							logger.error(e.getMessage (), e);
 						}
 					}
 				}
@@ -295,7 +295,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					}
 					return 0;
 				} catch (JSONException e) {
-					e.printStackTrace();
+					logger.error (e.getMessage (), e);
 				}
 				return 0;
 			}
@@ -441,10 +441,11 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 *
 	 * @return Scriptable
 	 */
-	private Scriptable createScriptable(List<NodeRef> refs) {
+	private Scriptable createScriptable(Collection<NodeRef> refs) {
 		Object[] results = new Object[refs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(refs.get(i), services, getScope());
+		int i = 0;
+		for (NodeRef ref : refs) {
+			results[i++] = new ScriptNode(ref, services, getScope());
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
 	}
@@ -713,5 +714,38 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			return new ScriptNode(employeeRef, this.services, getScope());
 		}
 		return null;
+	}
+
+	/**
+	 * получить список подразделений в которые входит сотрудник согласно штатному расписанию
+	 * этот список будет содержать или все подразделения или только те, где сотрудник является боссом
+	 * @param employeeRef ссылка на фотрудника
+	 * @param bossUnitsOnly флаг показывающий что нас интересуют только те подразделения где сотрудник - босс
+	 * @return список подразделений или пустой список
+	 */
+	public Scriptable getEmployeeUnits (final String employeeRef, final boolean bossUnitsOnly) {
+		ParameterCheck.mandatory ("employeeRef", employeeRef);
+		return createScriptable (orgstructureService.getEmployeeUnits (new NodeRef (employeeRef), bossUnitsOnly));
+	}
+
+	/**
+	 * получение списка сотрудников в указанном подразделении
+	 * @param unitRef ссылка на подразделение
+	 * @return список сотрудников в подразделении или пустой список
+	 */
+	public Scriptable getEmployeesInUnit (final String unitRef) {
+		ParameterCheck.mandatory ("unitRef", unitRef);
+		return createScriptable (orgstructureService.getEmployeesInUnit (new NodeRef (unitRef)));
+	}
+
+	/**
+	 * получение списка подчиненных для указанного сотрудника
+	 * @param employeeRef сотрудник который является боссом
+	 * @return список подчиненных сотрудника по всем подразделениям.
+	 *         Если сотрудник не является боссом, то список пустой
+	 */
+	public Scriptable getBossSubordinate (final String employeeRef) {
+		ParameterCheck.mandatory ("employeeRef", employeeRef);
+		return createScriptable (orgstructureService.getBossSubordinate (new NodeRef (employeeRef)));
 	}
 }

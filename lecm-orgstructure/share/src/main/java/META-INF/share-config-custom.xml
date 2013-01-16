@@ -848,11 +848,17 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-orgstr:business-role-description"/>
+					<show id="lecm-orgstr:business-role-is-dynamic"/>
+				</field-visibility>
+			</form>
+			<form id="view-node-form">
+				<field-visibility>
 					<show id="lecm-orgstr:business-role-identifier"/>
 					<show id="cm:name"/>
 					<show id="lecm-orgstr:business-role-description"/>
 					<show id="lecm-orgstr:business-role-is-dynamic"/>
-					<show id="lecm-dic:active"/>
 				</field-visibility>
 			</form>
 			<form id="configureBusinessRole">
