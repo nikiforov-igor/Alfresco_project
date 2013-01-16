@@ -127,7 +127,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 					for (Map.Entry<String, String> entry : expressions.entrySet()) {
 						Object currentPropertyValue =
 								nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-						if (currentPropertyValue == null || !currentPropertyValue.toString().equals(entry.getValue())) {
+						if ((currentPropertyValue == null && !entry.getValue().equals("null"))
+								|| !currentPropertyValue.toString().equals(entry.getValue())) {
 							expressionsFalse = true;
 							break;
 						}
