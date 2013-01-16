@@ -3,6 +3,8 @@
 <#assign compactMode = field.control.params.compactMode!false>
 <#assign controlContainerId = controlId + "-container">
 <#assign controlPickerId = controlId + "-picker">
+<#assign controlPickerLabel = controlId + "-label">
+<#assign controlTimeField = controlId + "-time-field">
 
 <#if field.control.params.selectedValueContextProperty??>
 	<#if context.properties[field.control.params.selectedValueContextProperty]??>
@@ -71,10 +73,13 @@ LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(insta
 		<#if field.control.params.nameSubstituteString??>
 			nameSubstituteString: "${field.control.params.nameSubstituteString}",
 		</#if>
+		fireAction: {
+			ok: "${controlPickerLabel}"
+		},
 		itemFamily: "node",
 		displayMode: "${field.control.params.displayMode!"items"}",
 		itemType: "${field.endpointType}",
-		multipleSelectMode: ${field.endpointMany?string},
+		multipleSelectMode: "${field.control.params.multipleSelectMode}",
 		parentNodeRef: "alfresco://company/home",
 		selectActionLabel: "${field.control.params.selectActionLabel!msg("button.select")}",
 		minSearchTermLength: ${field.control.params.minSearchTermLength!'1'},
@@ -109,6 +114,53 @@ LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(insta
 		pickerNode.checked = 1;
 	}
 }
+
+LogicECM.module.WCalendar.Shedule.PickerOKPressed = function Shedule_PickerOKPressed(layer, args) {
+	var picker = args[1];
+	var selectedItems = picker.getSelectedItems();
+	var nodeRefObj = []
+	for (var i = 0; i < selectedItems.length; i++) {
+		nodeRefObj.push({nodeRef: selectedItems[i]})
+	}
+
+	Alfresco.util.Ajax.request({
+		method: "POST",
+		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/shedule/get/parentSheduleStdTime",
+		dataObj: nodeRefObj,
+		requestContentType: "application/json",
+		responseContentType: "application/json",
+		successCallback: {
+			fn: function (response) {
+				var results = response.json;
+				var htmlOutput = "";
+				if (results != null) {
+					for (var i = 0; i < results.length; i++) {
+						var result = results[i];
+						if (result) {
+							if (result.type == "COMMON") {
+								<#-- TODO: Сделать локализацию сообщений -->
+								htmlOutput += "C " + result.begin + " до " + result.end + "<br>";
+							} else if (result.type == "SPECIAL") {
+								htmlOutput += "Особый<br>";
+							} else {
+								htmlOutput += "Отсутствует<br>";
+							}
+						}
+
+					}
+					var htmlNode = Dom.get("${controlTimeField}");
+					if (htmlNode) {
+						htmlNode.innerHTML = "";
+						htmlNode.innerHTML = htmlOutput;
+					}
+				}
+			},
+			scope: this
+		}
+	});
+}
+
+YAHOO.Bubbling.on("${controlPickerLabel}", LogicECM.module.WCalendar.Shedule.PickerOKPressed, this);
 
 LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
 })();
@@ -182,6 +234,7 @@ LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
 				   </div>
 				</div>
 			</#if>
+			<div id="${controlTimeField}" class="form-field"> </div>
 		</div>
 	</#if>
 </#macro>

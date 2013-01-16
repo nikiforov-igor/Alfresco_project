@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Get Shedule NodeRef for Parent Node</shortname>
+	<description>Get Shedule for Parent</description>
+	<url>/lecm/wcalendar/shedule/get/parentShedule</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<!--<transaction>required</transaction>-->
+</webscript>

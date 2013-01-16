@@ -48,19 +48,24 @@
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-	<bean id="calendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="calendar"/>
+	<bean id="calendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="calendarBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="calendarService"/>
 	</bean>
-	<bean id="sheduleJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="shedule"/>
+	<bean id="sheduleBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="sheduleBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="sheduleService"/>
 	</bean>
-	<bean id="absenceJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="absence"/>
+	<bean id="absenceBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="absenceBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="absenceService"/>
+	</bean>
+	<bean id="sheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="shedule"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="sheduleService" ref="sheduleService"/>
 	</bean>
 </beans>

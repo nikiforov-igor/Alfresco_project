@@ -1,5 +1,5 @@
-var container = shedule.getWCalendarContainer();
-var itemType = shedule.getItemType();
+var container = sheduleBase.getWCalendarContainer();
+var itemType = sheduleBase.getItemType();
 
 model.nodeRef = container.nodeRef.toString ();
 model.itemType = itemType;
