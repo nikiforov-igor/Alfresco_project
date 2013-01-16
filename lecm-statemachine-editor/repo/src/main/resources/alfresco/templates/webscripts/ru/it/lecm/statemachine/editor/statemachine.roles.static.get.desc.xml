@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>User Static Roles for Status of Statemachine</shortname>
+	<description>User Static Roles for Status of Statemachine</description>
+	<url>/lecm/statemachine/editor/roles/static</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

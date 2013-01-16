@@ -9,7 +9,7 @@ if (nodeRef != null) {
 		var transition = search.findNode(nodeRef);
 		action = transition.getParent();
 	}
-	var status = action.getParent();
+	var status = action.getParent().getParent();
 	var stateMachine = status.getParent();
 	var statuses = [];
 	var children = stateMachine.getChildren();

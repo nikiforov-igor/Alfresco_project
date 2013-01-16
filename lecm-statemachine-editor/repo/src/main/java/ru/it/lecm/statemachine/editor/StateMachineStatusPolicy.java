@@ -28,12 +28,16 @@ import java.util.Map;
 public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
-	public final static QName TYPE_CONTENT = QName.createQName(STATEMACHINE_URI, "status");
+	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_URI, "status");
 	public final static QName ASSOC_STATUS_FOLDER = QName.createQName(STATEMACHINE_URI, "statusFolder");
 	public final static QName PROP_START_STATUS = QName.createQName(STATEMACHINE_URI, "startStatus");
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_URI, "actionExecution");
 	public final static QName PROP_STATUS_UUID = QName.createQName(STATEMACHINE_URI, "statusUUID");
+	public final static QName TYPE_ROLES = QName.createQName(STATEMACHINE_URI, "roles");
+	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_URI, "actions");
+	public final static QName PROP_STATIC_ROLES = QName.createQName(STATEMACHINE_URI, "staticRoles");
+	public final static QName PROP_DYNAMIC_ROLES = QName.createQName(STATEMACHINE_URI, "dynamicRoles");
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
@@ -57,9 +61,9 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 		PropertyCheck.mandatory(this, "stateMachineActions", stateMachineActions);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
+				TYPE_STATUS, new JavaBehaviour(this, "onUpdateProperties"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
+				TYPE_STATUS, new JavaBehaviour(this, "onCreateNode"));
 
 	}
 
@@ -95,13 +99,50 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 		String statusUUID = GUID.generate();
 		nodeService.setProperty(node, PROP_STATUS_UUID, statusUUID);
 
+		HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+		props.put(ContentModel.PROP_NAME, "actions");
+
+		NodeRef statusFolder = nodeService.createNode(
+				node,
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "actions"),
+				TYPE_ACTIONS,
+				props).getChildRef();
+
+		props.put(ContentModel.PROP_NAME, "roles");
+		NodeRef roles = nodeService.createNode(
+				node,
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "roles"),
+				TYPE_ROLES,
+				props).getChildRef();
+
+		props.put(ContentModel.PROP_NAME, "static");
+		NodeRef staticRoles = nodeService.createNode(
+				roles,
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "static"),
+				TYPE_ROLES,
+				props).getChildRef();
+
+		props.put(ContentModel.PROP_NAME, "dynamic");
+		NodeRef dynamicRoles = nodeService.createNode(
+				roles,
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "dynamic"),
+				TYPE_ROLES,
+				props).getChildRef();
+
+		nodeService.setProperty(node, PROP_STATIC_ROLES, staticRoles.toString());
+		nodeService.setProperty(node, PROP_DYNAMIC_ROLES, dynamicRoles.toString());
+
 		//Добавляем действия к статусу
 		List<String> actions = stateMachineActions.getActions("start");
-		createActions(node, actions, "start");
+		createActions(node, statusFolder, actions, "start");
 		actions = stateMachineActions.getActions("take");
-		createActions(node, actions, "take");
+		createActions(node, statusFolder, actions, "take");
 		actions = stateMachineActions.getActions("end");
-		createActions(node, actions, "end");
+		createActions(node, statusFolder, actions, "end");
 
 		if (nodeService.getProperty(node, PROP_START_STATUS) != null) {
 			setStartStatus(node, (Boolean) nodeService.getProperty(node, PROP_START_STATUS));
@@ -123,7 +164,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 	}
 
 
-	private void createActions(NodeRef status, List<String> actions, String execution) {
+	private void createActions(NodeRef status, NodeRef statusesFolder, List<String> actions, String execution) {
 		NodeService nodeService = serviceRegistry.getNodeService();
 
 		for (String action : actions) {
@@ -131,7 +172,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 			props.put(PROP_ACTION_ID, action);
 			props.put(PROP_ACTION_EXECUTION, execution);
 			ChildAssociationRef childAssocRef = nodeService.createNode(
-				status,
+				statusesFolder,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, action),
 				QName.createQName(STATEMACHINE_URI, action),

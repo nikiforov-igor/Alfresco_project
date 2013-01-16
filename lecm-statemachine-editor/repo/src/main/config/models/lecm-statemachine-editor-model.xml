@@ -21,6 +21,14 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="lecm-stmeditor:permissionType" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>READ</value>
+					<value>WRITE</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 
 	<types>
@@ -62,32 +70,49 @@
 
 		<!-- Роль для машины состояний -->
 		<type name="lecm-stmeditor:role">
-			<title>Logic ECM Base Role</title>
-			<parent>cm:cmobject</parent>
+			<title>Logic ECM Role</title>
+			<parent>cm:content</parent>
 			<properties>
 				<property name="lecm-stmeditor:creationDocument">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-			<associations>
-				<association name="lecm-stmeditor:role_assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-orgstr:business-role</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:business-role</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- статичная роль для статуса -->
+		<type name="lecm-stmeditor:static-role">
+			<title>Logic ECM Static Role</title>
+			<parent>cm:content</parent>
+
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:business-role</aspect>
+				<aspect>lecm-stmeditor:permissionTypeAspect</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- динамическая роль для статуса -->
+		<type name="lecm-stmeditor:dynamic-role">
+			<title>Logic ECM Dynamic Role</title>
+			<parent>cm:content</parent>
+			<mandatory-aspects>
+				<aspect>lecm-stmeditor:business-role</aspect>
+				<aspect>lecm-stmeditor:permissionTypeAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!-- Список статусов для машины состояний -->
 		<type name="lecm-stmeditor:statuses">
 			<title>Logic ECM Base Statuses</title>
+			<parent>cm:folder</parent>
+		</type>
+
+		<!-- Список действий для для статуса -->
+		<type name="lecm-stmeditor:actions">
+			<title>Logic ECM Base Actions</title>
 			<parent>cm:folder</parent>
 		</type>
 
@@ -154,6 +179,16 @@
 					<mandatory>false</mandatory>
 				</property>
 
+				<property name="lecm-stmeditor:staticRoles">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-stmeditor:dynamicRoles">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+
 			</properties>
 		</type>
 
@@ -176,7 +211,7 @@
 		<!-- Объект описывающий переход для действия -->
 		<type name="lecm-stmeditor:transition">
 			<title>Logic ECM Statemachine Transition Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 			<properties>
 				<property name="lecm-stmeditor:transitionExpression">
 					<type>d:text</type>
@@ -229,7 +264,7 @@
 
 		<type name="lecm-stmeditor:UserWorkflowEntity">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 			<properties>
 				<property name="lecm-stmeditor:workflowLabel">
 					<type>d:text</type>
@@ -251,7 +286,7 @@
 		<!-- User Transition -->
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
@@ -266,7 +301,7 @@
 
 		<type name="lecm-stmeditor:ScriptActionEntity">
 			<title>Logic ECM Statemachine Script Action Object</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 			<properties>
 				<property name="lecm-stmeditor:scriptLabel">
 					<type>d:text</type>
@@ -293,7 +328,7 @@
 		<!--          Workflow Variables         -->
 		<type name="lecm-stmeditor:workflowVariableData">
 			<title>Logic ECM Statemachine Workflow Variable</title>
-			<parent>cm:cmobject</parent>
+			<parent>cm:content</parent>
 		</type>
 
 		<type name="lecm-stmeditor:inputWorkflowVariableData">
@@ -390,6 +425,36 @@
                 </property>
             </properties>
         </aspect>
+
+		<aspect name="lecm-stmeditor:business-role">
+			<title>Business Role Association</title>
+			<associations>
+				<association name="lecm-stmeditor:role-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:business-role</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<aspect name="lecm-stmeditor:permissionTypeAspect">
+			<title>Business Role PermissionType</title>
+			<properties>
+				<property name="lecm-stmeditor:permissionTypeValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-stmeditor:permissionType" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
 
     </aspects>
 

@@ -35,14 +35,6 @@
 
 	</bean>
 
-	<bean id="statemachineFolderPolicy" class="ru.it.lecm.statemachine.editor.StateMachineFolderPolicy"
-		  init-method="init">
-		<property name="policyComponent">
-			<ref bean="policyComponent"/>
-		</property>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-	</bean>
-
 	<bean id="statemachineStatusPolicy" class="ru.it.lecm.statemachine.editor.StateMachineStatusPolicy"
 		  init-method="init">
 		<property name="policyComponent">

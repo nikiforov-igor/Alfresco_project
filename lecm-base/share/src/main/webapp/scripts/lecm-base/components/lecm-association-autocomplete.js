@@ -58,7 +58,9 @@ LogicECM.module = LogicECM.module || {};
 
                 nameSubstituteString:"{cm:name}",
 
-	            selectedItemsNameSubstituteString: null
+	            selectedItemsNameSubstituteString: null,
+
+				additionalFilter: ""
             },
 
             selectedItems: null,
@@ -294,7 +296,8 @@ LogicECM.module = LogicECM.module || {};
             {
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-	                "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString());
+	                "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
+					"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
                 {

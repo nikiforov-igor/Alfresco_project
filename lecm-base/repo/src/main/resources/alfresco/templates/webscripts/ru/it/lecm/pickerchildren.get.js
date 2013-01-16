@@ -3,6 +3,7 @@ function main()
    var argsFilterType = args['filterType'],
       argsSelectableType = args['selectableType'],
       argsSearchTerm = args['searchTerm'],
+      argsAdditionalFilter = args['additionalFilter'],
       argsMaxResults = args['size'],
       argsXPath = args['xpath'],
       argsRootNode = args['rootNode'],
@@ -118,7 +119,7 @@ function main()
             rootNode = resolveNode(argsRootNode) || companyhome;
         }
 
-        if (argsSearchTerm == null || argsSearchTerm == "")  {
+        if ((argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == ""))  {
             var ignoreTypes = null;
             if (argsFilterType != null)
             {
@@ -130,8 +131,8 @@ function main()
 
             childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, "cm:name", true, null).getPage();
         } else {
-            var filterParams = getFilterParams(argsSearchTerm, parent);
-            query = filterParams.query;
+            var query = getFilterParams(argsSearchTerm, parent);
+            query = addAdditionalFilter(query, argsAdditionalFilter);
 
             // Query the nodes - passing in default sort and result limit parameters
             if (query !== "")
@@ -139,14 +140,16 @@ function main()
                 childNodes = search.query(
                 {
                     query: query,
-                    language: filterParams.language,
+                    language: "lucene",
                     page:
                         {
-                        maxItems: (filterParams.limitResults ? parseInt(filterParams.limitResults, 10) : 0)
+                        maxItems: (argsMaxResults ? argsMaxResults : 1000)
                         },
-                     sort: filterParams.sort,
-                     templates: filterParams.templates,
-                     namespace: (filterParams.namespace ? filterParams.namespace : null)
+                     sort: [
+						 {
+							 column: "@cm:name",
+							 ascending: true
+						 }]
                  });
             }
          }
@@ -507,26 +510,12 @@ function createGroupResult(node)
 function getFilterParams(filterData, parentNode)
 {
     var xpath = parentNode.getQnamePath();
-    var filterParams =
-    {
-        query: " +PATH:\""+xpath + "//*\"",
-        limitResults: null,
-        sort: [
-            {
-                column: "@cm:name",
-                ascending: true
-            }],
-        language: "lucene",
-        templates: null
-    };
-    var columns = filterData.split('#');
+	var query = " +PATH:\"" + xpath + "//*\"";
+	var columns = [];
+	if (filterData !== "") {
+    	columns = filterData.split('#');
+	}
 
-    // Max returned results specified?
-    var argMax = args.max;
-    if ((argMax !== null) && !isNaN(argMax))
-    {
-        filterParams.limitResults = argMax;
-    }
     var params = "",
         or = " OR",
         ampersand = " @";
@@ -539,8 +528,17 @@ function getFilterParams(filterData, parentNode)
 
         params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '"*' +namespace[2] + '*"' + or;
     }
-    filterParams.query += " AND " + "(" + params + " )";
-    return filterParams;
+	if (params !== "") {
+		query += " AND " + "(" + params + " )";
+	}
+    return query;
+}
+
+function addAdditionalFilter(query, additionalPerameters) {
+	if (additionalPerameters !== "") {
+		query += " AND " + "(" + additionalPerameters + " )";
+	}
+	return query;
 }
 
 function checkDocType(item, docType) {

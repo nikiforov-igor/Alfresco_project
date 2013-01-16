@@ -66,7 +66,7 @@ public class BPMNGenerator {
 	private final static String VALUE = "VALUE";
 
 	private final static QName ASSOC_TRANSITION_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionStatus");
-	private final static QName ASSOC_ROLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "role_assoc");
+	private final static QName ASSOC_ROLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "role-assoc");
 
 	private final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflow");
 	private final static QName TYPE_OUTPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableData");
@@ -256,7 +256,8 @@ public class BPMNGenerator {
 				ArrayList<ChildAssociationRef> takeActions = new ArrayList<ChildAssociationRef>();
 				ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
 
-				List<ChildAssociationRef> actions = nodeService.getChildAssocs(status.getChildRef());
+				NodeRef actionsRef = nodeService.getChildByName(status.getChildRef(), ContentModel.ASSOC_CONTAINS, "actions");
+				List<ChildAssociationRef> actions = nodeService.getChildAssocs(actionsRef);
 				for (ChildAssociationRef action : actions) {
 					String execution = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_EXECUTION);
 					if (execution.equals("start")) {

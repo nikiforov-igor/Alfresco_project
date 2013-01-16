@@ -53,7 +53,8 @@
 	            <#if field.control.params.selectedItemsNameSubstituteString??>
 		            selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
 	            </#if>
-                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
+                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+                additionalFilter: "${field.control.params.additionalFilter!''}"
             });
 
 
@@ -85,7 +86,8 @@
             changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
             plane: true,
             currentValue: "${field.value!''}",
-            itemType: "${field.endpointType}"
+            itemType: "${field.endpointType}",
+            additionalFilter: "${field.control.params.additionalFilter!''}"
         }).setMessages( ${messages} );
 })();
 //]]></script>

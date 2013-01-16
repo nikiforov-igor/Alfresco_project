@@ -121,7 +121,9 @@ LogicECM.module = LogicECM.module || {};
                 cancel: null,
                 // кнопка поиска
                 find: null
-            }
+            },
+
+			additionalFilter: ""
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -436,6 +438,7 @@ LogicECM.module = LogicECM.module || {};
                     searchData = searchData.substring(0,(searchData.length)-1);
                 }
             }
+			if (this.option)
             this.isSearch = true;
             this._updateItems(nodeRef, searchData);
         },
@@ -977,7 +980,8 @@ LogicECM.module = LogicECM.module || {};
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString());
+	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
+				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
         },
 
         onSelectedItemAdded: function AssociationTreeViewer_onSelectedItemAdded(layer, args)
