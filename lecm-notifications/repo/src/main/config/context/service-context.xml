@@ -48,4 +48,11 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl" depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
 </beans>
