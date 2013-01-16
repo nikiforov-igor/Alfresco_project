@@ -11,6 +11,7 @@
 		showExtendSearchBlock:true,
 		showCheckboxColumn: false,
 		attributeForShow: "lecm-d8n:delegation-opts-owner-assoc",
+		dataSource: "lecm/delegation/list",
 		actions: [
 			{
 				type: "action-link-delegation-list",
