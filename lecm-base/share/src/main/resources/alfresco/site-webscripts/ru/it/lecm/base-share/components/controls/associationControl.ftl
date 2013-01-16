@@ -1,33 +1,10 @@
 <#include "picker.inc.ftl" />
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as view/>
 <#assign controlId = fieldHtmlId + "-cntrl">
 
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-<#--<#if field.control.params.numberOfHiddenLayers??>
-    // place a custom function before the execution of the onParentDetails-function
-    LogicECM.module.ObjectFinder.prototype.onParentDetailsOriginal = LogicECM.module.ObjectFinder.prototype.onParentDetails;
-    LogicECM.module.ObjectFinder.prototype.onParentDetails = function(layer, args)
-    {
-        // cut the last x parent elements
-        var counter = 0;
-        cut = function(node)
-        {
-            if (node.parent)
-            {
-                cut(node.parent);
-                if (counter < ${field.control.params.numberOfHiddenLayers})
-                {
-                    delete node.parent;
-                    counter = counter + 1;
-                }
-            }
-        }
-        cut(args[1]);
-        // call the original function with the modified args-parameter
-        this.onParentDetailsOriginal(layer, args);
-    };
-</#if>-->
 
 <@renderPickerJS field "picker" />
     picker.setOptions(
@@ -39,6 +16,9 @@
                 <#else>
                     targetLinkTemplate: "${url.context}/page/document-details?nodeRef={nodeRef}",
                 </#if>
+	            <#if field.control.params.viewOnLinkClick?? && form.mode == "view">
+                    viewOnLinkClick: ${field.control.params.viewOnLinkClick},
+	            </#if>
             </#if>
             <#if field.control.params.allowNavigationToContentChildren??>
                 allowNavigationToContentChildren: ${field.control.params.allowNavigationToContentChildren},
@@ -50,10 +30,13 @@
                 rootNode: "${field.control.params.rootNode}",
             </#if>
                 itemFamily: "node",
-                displayMode: "${field.control.params.displayMode!"items"}",
             <#if field.control.params.nameSubstituteString??>
                 nameSubstituteString: "${field.control.params.nameSubstituteString}",
             </#if>
+            <#if field.control.params.substituteParent?? && field.control.params.substituteParent == "true">
+                substituteParent:"${form.arguments.itemId!""}",
+            </#if>
+                displayMode: "${field.control.params.displayMode!"items"}"
             });
 })();
 //]]></script>
@@ -66,6 +49,19 @@
         </#if>
         <span class="viewmode-label">${field.label?html}:</span>
         <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
+    </div>
+    <div id="${controlId}-link" class="yui-panel" style="display: none">
+        <div id="${controlId}-link-head" class="hd">${msg("logicecm.view")}</div>
+        <div id="${controlId}-link-body" class="bd">
+            <div id="${controlId}-link-content"></div>
+            <div class="bdft">
+        <span id="${controlId}-link-cancel" class="yui-button yui-push-button">
+        <span class="first-child">
+        <button type="button" tabindex="0" onclick="_hideLinkAttributes()">${msg("button.close")}</button>
+        </span>
+        </span>
+            </div>
+        </div>
     </div>
 <#else>
     <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>

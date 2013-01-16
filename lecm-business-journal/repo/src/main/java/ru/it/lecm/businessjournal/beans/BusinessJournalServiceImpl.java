@@ -131,8 +131,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		String templateString = getTemplateString(getObjectType(mainObject), eventCategory, description);
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
+		// получаем текущего пользователя по логину
+		NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
 		// создаем записи
-		return createRecord(date, initiator, mainObject, eventCategory, objects, filled);
+		return createRecord(date, employee, mainObject, eventCategory, objects, filled);
 	}
 
     /**
@@ -232,7 +234,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
 				properties.put(PROP_BR_RECORD_DATE, date);
 				properties.put(PROP_BR_RECORD_DESC, description);
-				properties.put(PROP_BR_RECORD_INITIATOR, getInitiatorDescription(initiator));
+				if (initiator != null) {
+					properties.put(PROP_BR_RECORD_INITIATOR, getObjectDescription(initiator));
+				} else {
+					properties.put(PROP_BR_RECORD_INITIATOR, DEFAULT_SYSTEM_TEMPLATE);
+				}
 				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
@@ -246,8 +252,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				NodeRef result = associationRef.getChildRef();
 
 				// создаем ассоциации
-				// обязательные
-				nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
+				if (initiator != null) {
+					nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
+				}
+
 				nodeService.createAssociation(result, mainObject, ASSOC_BR_RECORD_MAIN_OBJ);
 
 				// необязательные

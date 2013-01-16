@@ -17,6 +17,55 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
+var linkViewDialog = null;
+var linkViewId = null;
+function _viewLinkAttributes(id, nodeRef){
+    linkViewDialog = Alfresco.util.createYUIPanel(id,
+        {
+            width: "600px"
+        });
+    linkViewId = id;
+    Alfresco.util.Ajax.request(
+        {
+            url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+            dataObj:{
+                htmlid:"NodeMetadata-" + nodeRef,
+                itemKind:"node",
+                itemId:nodeRef,
+                formId:id,
+                mode:"view"
+            },
+            successCallback:{
+                fn:function (response) {
+                    var formEl = Dom.get(linkViewId + "-content");
+                    formEl.innerHTML = response.serverResponse.responseText;
+                    YAHOO.Bubbling.on("hidePanel", _hideLinkAttributes);
+                    if (linkViewDialog != null) {
+                        Dom.setStyle(id, "display", "block");
+                        linkViewDialog.show();
+                    }
+                }
+            },
+            failureMessage:"message.failure",
+            execScripts:true
+        });
+    return false;
+}
+
+function _hideLinkAttributes(layer, args) {
+    var mayHide = false;
+    if (linkViewDialog != null) {
+        if (args == undefined || args == null) {
+            mayHide = true;
+        } else if (args[1] && args[1].panel && args[1].panel.id == linkViewDialog.id){
+            mayHide = true
+        }
+        if (mayHide){
+            linkViewDialog.hide();
+            Dom.setStyle(linkViewId, "display", "none");
+        }
+    }
+}
 /**
  * LogicECM root namespace.
  *
@@ -407,6 +456,10 @@ LogicECM.module = LogicECM.module || {};
          rootNode: null,
 
          nameSubstituteString: "{cm:name}",
+
+         substituteParent:"",
+
+         viewOnLinkClick:false,
 
          openSubstituteSymbol: "{",
 
@@ -1002,30 +1055,31 @@ LogicECM.module = LogicECM.module || {};
 
                      if (this.options.showLinkToTarget && this.options.targetLinkTemplate !== null)
                      {
-                        if (this.options.displayMode == "items")
-                        {
-                           link = null;
-                           if (YAHOO.lang.isFunction(this.options.targetLinkTemplate))
-                           {
-                              link = this.options.targetLinkTemplate.call(this, item);
-                           }
-                           else
-                           {
-                              //Discard template, build link from scratch
-                              var linkTemplate = (item.site) ? Alfresco.constants.URL_PAGECONTEXT + "site/{site}/document-details?nodeRef={nodeRef}" : Alfresco.constants.URL_PAGECONTEXT + "document-details?nodeRef={nodeRef}";
-                              link = YAHOO.lang.substitute(linkTemplate,
-                              {
-                                 nodeRef : item.nodeRef,
-                                 site : item.site
-                              });
-                           }
-                           displayValue += this.options.objectRenderer.renderItem(item, 16,
-                                 "<div>{icon} <a href='" + link + "'>{name}</a></div>");
-                        }
-                        else if (this.options.displayMode == "list")
-                        {
-                           this.widgets.currentValuesDataTable.addRow(item);
-                        }
+                         if (this.options.displayMode == "items") {
+                             link = null;
+                             if (YAHOO.lang.isFunction(this.options.targetLinkTemplate)) {
+                                 link = this.options.targetLinkTemplate.call(this, item);
+                             }
+                             else {
+                                 //Discard template, build link from scratch
+                                 var linkTemplate = (item.site) ? Alfresco.constants.URL_PAGECONTEXT + "site/{site}/document-details?nodeRef={nodeRef}" : Alfresco.constants.URL_PAGECONTEXT + "document-details?nodeRef={nodeRef}";
+                                 link = YAHOO.lang.substitute(linkTemplate,
+                                     {
+                                         nodeRef: item.nodeRef,
+                                         site: item.site
+                                     });
+                             }
+                             if (!this.options.viewOnLinkClick) {
+                                 displayValue += this.options.objectRenderer.renderItem(item, 16,
+                                     "<div>{icon} <a href='" + link + "'>{name}</a></div>");
+                             } else {
+                                 displayValue += this.options.objectRenderer.renderItem(item, 16,
+                                     "<div>{icon} <a href='javascript:void(0)'; onclick=\"_viewLinkAttributes(\'" + this.id + "-link\',\'" + item.nodeRef + "\')\">" + "{name}</a></div>");
+                             }
+                         }
+                         else if (this.options.displayMode == "list") {
+                             this.widgets.currentValuesDataTable.addRow(item);
+                         }
                      }
                      else
                      {
@@ -1555,6 +1609,7 @@ LogicECM.module = LogicECM.module || {};
                   items: arrItems.split(","),
                   itemValueType: this.options.valueType,
                   itemNameSubstituteString: this.options.nameSubstituteString,
+                  substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none",
                   itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
                   itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
                },
@@ -2326,6 +2381,10 @@ LogicECM.module = LogicECM.module || {};
          createNewItemIcon: "",
 
           nameSubstituteString: "{cm:name}",
+
+          substituteParent:"",
+
+          viewOnLinkClick:false,
 
           openSubstituteSymbol: "{",
 

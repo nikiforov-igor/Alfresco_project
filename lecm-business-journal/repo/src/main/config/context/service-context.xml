@@ -20,7 +20,7 @@
 <beans>
     <!-- Registration of Business Journal models -->
     <bean id="${groupId}.${artifactId}.businessJournalBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary">
+          depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-model.xml</value>

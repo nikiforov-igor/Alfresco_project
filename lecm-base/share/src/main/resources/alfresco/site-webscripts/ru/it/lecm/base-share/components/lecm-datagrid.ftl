@@ -37,12 +37,20 @@ viewFormId(необязательный) - по умолчанию равен vi
 		}
 	}
 
-	function hideViewDialog() {
-		if (viewDialog != null) {
-			viewDialog.hide();
-			Dom.setStyle("${viewFormId}", "display", "none");
-		}
-	}
+	function hideViewDialog(layer, args) {
+        var mayHide = false;
+        if (viewDialog != null) {
+            if (args == undefined || args == null) {
+                mayHide = true;
+            } else if (args[1] && args[1].panel && args[1].panel.id == viewDialog.id){
+                mayHide = true
+            }
+            if (mayHide){
+                viewDialog.hide();
+                Dom.setStyle("${viewFormId}", "display", "none");
+            }
+        }
+    }
 
 	function createDialog() {
 		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",

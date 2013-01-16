@@ -18,6 +18,7 @@ function main()
       itemValueType = "nodeRef",
       itemValueTypeHint = "",
       itemNameSubstituteString = "{cm:name}",
+      substituteParent = "none",
       selectedItemsNameSubstituteString = "{cm:name}",
       numItems = jsonItems.length(),
       item, result;
@@ -30,6 +31,9 @@ function main()
    if (json.has("itemNameSubstituteString")) {
        itemNameSubstituteString = json.get("itemNameSubstituteString");
    }
+    if (json.has("substituteParent")) {
+        substituteParent = "" + json.get("substituteParent");
+    }
 	if (json.has("selectedItemsNameSubstituteString")) {
 		selectedItemsNameSubstituteString = json.get("selectedItemsNameSubstituteString");
 	} else {
@@ -66,8 +70,8 @@ function main()
             results.push(
             {
                item: result,
-               visibleName: substitude.formatNodeTitle(result, ("" + itemNameSubstituteString)),
-               selectedVisibleName: substitude.formatNodeTitle(result, ("" + selectedItemsNameSubstituteString))
+               visibleName: substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result, ("" + itemNameSubstituteString)),
+               selectedVisibleName: substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result, ("" + selectedItemsNameSubstituteString))
             });
          }
       }
