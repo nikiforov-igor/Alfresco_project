@@ -464,7 +464,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var scope = this;
 
                 /**
-                 * Data Type custom formatter
+                 * Data Type formatter
                  *
                  * @method renderCellDataType
                  * @param elCell {object}
@@ -472,102 +472,109 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @param oColumn {object}
                  * @param oData {object|string}
                  */
-                return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData)
-                {
+                return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
                     var html = "";
-
-                    // Populate potentially missing parameters
-                    if (!oRecord)
-                    {
-                        oRecord = this.getRecord(elCell);
-                    }
-                    if (!oColumn)
-                    {
-                        oColumn = this.getColumn(elCell.parentNode.cellIndex);
-                    }
-
-                    if (oRecord && oColumn)
-                    {
-                        if (!oData)
-                        {
-                            oData = oRecord.getData("itemData")[oColumn.field];
+                    var htmlValue = scope.getCustomCellFormatter.call(this, scope, elCell, oRecord, oColumn, oData);
+                    if (htmlValue == null) { // используем стандартный форматтер
+                        // Populate potentially missing parameters
+                        if (!oRecord) {
+                            oRecord = this.getRecord(elCell);
+                        }
+                        if (!oColumn) {
+                            oColumn = this.getColumn(elCell.parentNode.cellIndex);
                         }
 
-                        if (oData)
-                        {
-                            var datalistColumn = scope.datagridColumns[oColumn.key];
-                            if (datalistColumn)
-                            {
-                                oData = YAHOO.lang.isArray(oData) ? oData : [oData];
-                                for (var i = 0, ii = oData.length, data; i < ii; i++)
-                                {
-                                    data = oData[i];
+                        if (oRecord && oColumn) {
+                            if (!oData) {
+                                oData = oRecord.getData("itemData")[oColumn.field];
+                            }
 
-	                                var columnContent = "";
-                                    switch (datalistColumn.dataType.toLowerCase())
-                                    {
-                                        case "lecm-orgstr:employee":
-	                                        columnContent += scope.getEmployeeView(data.value, data.displayValue);
-                                            break;
+                            if (oData) {
+                                var datalistColumn = scope.datagridColumns[oColumn.key];
+                                if (datalistColumn) {
+                                    oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                                    for (var i = 0, ii = oData.length, data; i < ii; i++) {
+                                        data = oData[i];
 
-	                                    case "lecm-orgstr:employee-link":
-		                                    columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
-                                            break;
+                                        var columnContent = "";
+                                        switch (datalistColumn.dataType.toLowerCase()) {
+                                            case "lecm-orgstr:employee":
+                                                columnContent += scope.getEmployeeView(data.value, data.displayValue);
+                                                break;
 
-	                                    case "cm:person":
-		                                    columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
-                                            break;
+                                            case "lecm-orgstr:employee-link":
+                                                columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
+                                                break;
 
-                                        case "datetime":
-	                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
-                                            break;
+                                            case "cm:person":
+                                                columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
+                                                break;
 
-                                        case "date":
-	                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
-                                            break;
+                                            case "datetime":
+                                                columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+                                                break;
 
-                                        case "text":
-	                                        columnContent += $links($html(data.displayValue));
-                                            break;
+                                            case "date":
+                                                columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+                                                break;
 
-                                        case "boolean":
-                                            if (data.value) {
-	                                            columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                            }
-                                            break;
+                                            case "text":
+                                                columnContent += $links($html(data.displayValue));
+                                                break;
 
-                                        default:
-                                            if (datalistColumn.type == "association") {
-	                                            columnContent += $html(data.displayValue);
-                                            } else {
-                                                if (data.displayValue != "false" && data.displayValue != "true") {
-	                                                columnContent += $html(data.displayValue);
+                                            case "boolean":
+                                                if (data.value) {
+                                                    columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                }
+                                                break;
+
+                                            default:
+                                                if (datalistColumn.type == "association") {
+                                                    columnContent += $html(data.displayValue);
                                                 } else {
-                                                    if (data.displayValue == "true") {
-	                                                    columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                    if (data.displayValue != "false" && data.displayValue != "true") {
+                                                        columnContent += $html(data.displayValue);
+                                                    } else {
+                                                        if (data.displayValue == "true") {
+                                                            columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            break;
-                                    }
+                                                break;
+                                        }
 
-	                                if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-		                                html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
-	                                } else {
-		                                html += columnContent;
-	                                }
+                                        if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
+                                            html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+                                        } else {
+                                            html += columnContent;
+                                        }
 
-                                    if (i < ii - 1)
-                                    {
-                                        html += "<br />";
+                                        if (i < ii - 1) {
+                                            html += "<br />";
+                                        }
                                     }
                                 }
                             }
                         }
+                    } else {
+                        html = htmlValue;
                     }
 
                     elCell.innerHTML = html;
                 };
+            },
+
+            /**
+             * Настраиваемый formatter. Следует при необходимости переопределять именно этот метод, а не getCellFormatter в дочерних гридах
+             *
+             * @method renderCellDataType
+             * @param elCell {object}
+             * @param oRecord {object}
+             * @param oColumn {object}
+             * @param oData {object|string}
+             */
+            getCustomCellFormatter: function DataGrid_customRenderCellDataType(grid,elCell,oRecord,oColumn,oData){
+                return null;
             },
 
 	        getEmployeeViewByLink: function DataGrid_getEmployeeViewByLink(employeeNodeRef, displayValue) {

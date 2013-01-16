@@ -4,6 +4,8 @@
 <@script type="text/javascript" src="${page.url.context}/res/components/form/number-range.js"></@script>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/search/search.css" />
 
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-business-journal/business-journal-datagrid.js"></@script>
+
 <!-- Historic Properties Viewer -->
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/versions.js"></@script>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/document-details/historic-properties-viewer.css" />

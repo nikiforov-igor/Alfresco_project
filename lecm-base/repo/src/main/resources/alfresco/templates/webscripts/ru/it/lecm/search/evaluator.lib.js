@@ -97,12 +97,16 @@ var Evaluator =
     * @param node {ScriptNode} The list item node for this field
     * @return {Boolean} false to prevent this field being added to the output stream.
     */
-   decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString)
+      decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString)
    {
       var value = objData.value,
          type = objData.type,
          obj;
-
+       var substituteNode = obj;
+       if(nameSubstituteString.indexOf("#parent") == 0) {
+           nameSubstituteString = nameSubstituteString.replace("#parent", "");
+           substituteNode = node;
+       }
       if (type == "cm:person") {
            obj = Evaluator.getPersonObject(value);
            if (obj == null) {
@@ -134,11 +138,11 @@ var Evaluator =
 	      if (nameSubstituteString == null) {
 		      objData.displayValue = obj.properties["cm:name"];
 	      } else {
-		      objData.displayValue = substitude.formatNodeTitle(obj, nameSubstituteString);
+		      objData.displayValue = substitude.formatNodeTitle(substituteNode, nameSubstituteString);
 	      }
           objData.metadata = obj.isContainer ? "container" : "document";
       } else if (nameSubstituteString != null) {
-	      objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
+	      objData.displayValue = substitude.formatNodeTitle(substituteNodenode, nameSubstituteString);
 	      objData.value = objData.displayValue;
       }
       return true;

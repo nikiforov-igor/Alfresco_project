@@ -220,11 +220,12 @@
                     <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
                     <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
                     <show id="lecm-busjournal:secondary-objects" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-busjournal:bjRecord-initiator-assoc" substituteString="{lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {lecm-orgstr:employee-last-name}"/>
+                    <field id="lecm-busjournal:bjRecord-mainObject-assoc" substituteString="#parent{lecm-busjournal:bjRecord-mainObject}"/>
+                    <field id="lecm-busjournal:bjRecord-initiator-assoc" substituteString="#parent{lecm-busjournal:bjRecord-initiator}"/>
                     <field id="lecm-busjournal:secondary-objects" substituteString="{lecm-busjournal:bjRecord-secondaryObj1}; {lecm-busjournal:bjRecord-secondaryObj2}; {lecm-busjournal:bjRecord-secondaryObj3}; {lecm-busjournal:bjRecord-secondaryObj4}; {lecm-busjournal:bjRecord-secondaryObj5}"/>
                 </appearance>
             </form>
