@@ -57,6 +57,8 @@ public interface OrgstructureBean {
 	public static final QName TYPE_PERSONAL_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "personal-data");
 	public static final QName TYPE_BUSINESS_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role");
 
+	public static final QName TYPE_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "position");
+
 	NodeRef getOrganizationRootRef();
 
 	NodeRef ensureOrganizationRootRef();
@@ -92,6 +94,8 @@ public interface OrgstructureBean {
 	boolean isStaffList(NodeRef ref);
 
 	boolean isWorkForce(NodeRef ref);
+
+	boolean isPosition(NodeRef ref);
 
 	NodeRef getUnitBoss(NodeRef unitRef);
 

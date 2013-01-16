@@ -55,4 +55,17 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
+
+	<bean id="notificationScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.scripts.NotificationsWebScriptBean"
+	      depends-on="notificationsService">
+		<property name="extensionName">
+			<value>notifications</value>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+		<property name="service">
+			<ref bean="notificationsService"/>
+		</property>
+	</bean>
 </beans>

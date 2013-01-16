@@ -361,6 +361,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		types.add(TYPE_WORKFORCE);
 		return isProperType(ref, types);
 	}
+	/**
+	 * проверяет что объект является должностью
+	 */
+	@Override
+	public boolean isPosition(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_POSITION);
+		return isProperType(ref, types);
+	}
 
 	/**
 	 * Получение руководителя подразделения
