@@ -12,13 +12,14 @@ import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -34,6 +35,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private OrgstructureBean orgstructureService;
 
 	private NodeRef notificationsRootRef;
+	private Map<NodeRef, NotificationChannelBeanBase> channels;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
@@ -86,6 +88,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			}
 		};
 		notificationsRootRef = AuthenticationUtil.runAsSystem(raw);
+
+		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
 	}
 
 	/**
@@ -96,7 +100,63 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public boolean sendNotification(Notification notification) {
 		if (checkNotification(notification)) {
 			NodeRef generalizedNotification = createGeneralizedNotification(notification);
-			return generalizedNotification != null;
+			if (generalizedNotification != null) {
+				Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
+				if (notificationUnits != null && notificationUnits.size() > 0) {
+					boolean success = true;
+					for (NotificationUnit notf: notificationUnits) {
+						boolean temp = sendNotification(notf);
+						if (success && !temp) {
+							success = false;
+						}
+					}
+					return success;
+				} else {
+					logger.warn("Атомарные уведомления не были сформированы");
+					return false;
+				}
+			} else {
+				logger.warn("Обобщённое уведомление не создано");
+				return false;
+			}
+		} else {
+			logger.warn("Уведомление не прошло проверки");
+			return false;
+		}
+	}
+
+	/**
+	 * Отправка атомарного уведомления
+	 *
+	 * @param notification атомарное уведомление
+	 */
+	public boolean sendNotification(NotificationUnit notification) {
+		if (notification != null) {
+			NotificationChannelBeanBase channelBean;
+			if (channels.containsKey(notification.getTypeRef())) {
+				channelBean = channels.get(notification.getTypeRef());
+			} else {
+				WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
+				String beanId = (String) nodeService.getProperty(notification.getTypeRef(), PROP_SPRING_BEAN_ID);
+				try {
+					channelBean = (NotificationChannelBeanBase) ctx.getBean(beanId);
+					channels.put(notification.getTypeRef(), channelBean);
+				} catch (NoSuchBeanDefinitionException ex) {
+					logger.error("Не найден канал для отправки уведомлений", ex);
+					channels.put(notification.getTypeRef(), null);
+					return false;
+				} catch (ClassCastException ex) {
+					logger.error("Канал уведомлений не реализует базовый интерфейс", ex);
+					channels.put(notification.getTypeRef(), null);
+					return false;
+				}
+			}
+
+			if (channelBean != null) {
+				return channelBean.sendNotification(notification);
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -138,6 +198,67 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if (notification.getRecipientPositionRefs() != null) {
 			for (NodeRef ref : notification.getRecipientPositionRefs()) {
 				nodeService.createAssociation(result, ref, ASSOC_RECIPIENT_POSITION);
+			}
+		}
+		return result;
+	}
+
+	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
+		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
+		if (generalizedNotification != null) {
+			for (NodeRef typeRef : generalizedNotification.getTypeRefs()) {
+				if (generalizedNotification.getRecipientEmployeeRefs() != null) {
+					for (NodeRef employeeRef : generalizedNotification.getRecipientEmployeeRefs()) {
+						if (orgstructureService.isEmployee(employeeRef)) {
+							NotificationUnit newNotificationUnit = new NotificationUnit();
+							newNotificationUnit.setAutor(generalizedNotification.getAutor());
+							newNotificationUnit.setDescription(generalizedNotification.getDescription());
+							newNotificationUnit.setTypeRef(typeRef);
+							newNotificationUnit.setRecipientRef(employeeRef);
+							result.add(newNotificationUnit);
+						}
+					}
+				}
+
+				if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
+					for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
+						if (orgstructureService.isUnit(organizationUnitRef)) {
+							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(organizationUnitRef);
+							for (NodeRef employeeRef: employeeRefs) {
+								NotificationUnit newNotificationUnit = new NotificationUnit();
+								newNotificationUnit.setAutor(generalizedNotification.getAutor());
+								newNotificationUnit.setDescription(generalizedNotification.getDescription());
+								newNotificationUnit.setTypeRef(typeRef);
+								newNotificationUnit.setRecipientRef(employeeRef);
+								result.add(newNotificationUnit);
+							}
+						}
+					}
+				}
+
+				if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
+					for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
+						if (orgstructureService.isWorkGroup(workGroupRef)) {
+							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(workGroupRef);
+							for (NodeRef employeeRef: employeeRefs) {
+								NotificationUnit newNotificationUnit = new NotificationUnit();
+								newNotificationUnit.setAutor(generalizedNotification.getAutor());
+								newNotificationUnit.setDescription(generalizedNotification.getDescription());
+								newNotificationUnit.setTypeRef(typeRef);
+								newNotificationUnit.setRecipientRef(employeeRef);
+								result.add(newNotificationUnit);
+							}
+						}
+					}
+				}
+
+				if (generalizedNotification.getRecipientPositionRefs() != null) {
+					for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
+						if (orgstructureService.isPosition(positionRef)) {
+							//todo Добавить логику формирования атомарных уведомлений для должности
+						}
+					}
+				}
 			}
 		}
 		return result;
