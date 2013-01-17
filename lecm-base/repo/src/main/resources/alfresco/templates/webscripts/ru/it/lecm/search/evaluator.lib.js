@@ -103,7 +103,7 @@ var Evaluator =
          type = objData.type,
          obj;
        var substituteNode = obj;
-       if(nameSubstituteString.indexOf("#parent") == 0) {
+       if(nameSubstituteString != null && nameSubstituteString.indexOf("#parent") == 0) {
            nameSubstituteString = nameSubstituteString.replace("#parent", "");
            substituteNode = node;
        }
