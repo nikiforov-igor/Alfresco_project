@@ -36,9 +36,10 @@
 		</property>
 	</bean>
 
-	<bean id="notificationEmailChannel" class="ru.it.lecm.notifications.email.beans.NotificationsEmailChannel" depends-on="ServiceRegistry, nodeService, notificationsService">
+	<bean id="notificationEmailChannel" init-method="init" class="ru.it.lecm.notifications.email.beans.NotificationsEmailChannel" depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
 	</bean>
 </beans>

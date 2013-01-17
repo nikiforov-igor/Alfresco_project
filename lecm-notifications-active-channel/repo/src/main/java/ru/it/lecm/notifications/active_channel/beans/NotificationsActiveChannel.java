@@ -83,7 +83,7 @@ public class NotificationsActiveChannel implements NotificationChannelBeanBase {
 				});
 			}
 		};
-		rootRef = AuthenticationUtil.runAsSystem(raw);
+		this.rootRef = AuthenticationUtil.runAsSystem(raw);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class NotificationsActiveChannel implements NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, new Date());
 
-		ChildAssociationRef associationRef = nodeService.createNode(rootRef, ContentModel.ASSOC_CONTAINS,
+		ChildAssociationRef associationRef = nodeService.createNode(this.rootRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),
 				TYPE_NOTIFICATION_ACTIVE_CHANNEL, properties);
 
