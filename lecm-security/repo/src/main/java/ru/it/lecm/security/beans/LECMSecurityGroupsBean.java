@@ -123,7 +123,7 @@ public class LECMSecurityGroupsBean
 	}
 
 	@Override
-	public String orgCreated(Types.SGPosition obj) {
+	public String orgNodeCreated(Types.SGPosition obj) {
 		// создание личной группы объекта
 		final String sgName = ensureAlfrescoGroupName( obj.getAlfrescoSuffix());
 
@@ -136,7 +136,7 @@ public class LECMSecurityGroupsBean
 	}
 
 	@Override
-	public void orgDeactivated(Types.SGPosition obj) {
+	public void orgNodeDeactivated(Types.SGPosition obj) {
 		// final String sgName = ensureAlfrescoGroupName(Types.getOrgUnitSuffix(nodeId, typeNode));
 		final String sgName = ensureAlfrescoGroupName( obj.getAlfrescoSuffix());
 		removeAlfrescoGroupName( sgName);
@@ -161,7 +161,7 @@ public class LECMSecurityGroupsBean
 	}
 
 	@Override
-	public void sgRemove( Types.SGPosition child, Types.SGPosition oldParent) {
+	public void sgExclude( Types.SGPosition child, Types.SGPosition oldParent) {
 		final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
 		final String sgParent = this.authorityService.getName(AuthorityType.GROUP, oldParent.getAlfrescoSuffix());
 		removeParent( sgItem, sgParent);
