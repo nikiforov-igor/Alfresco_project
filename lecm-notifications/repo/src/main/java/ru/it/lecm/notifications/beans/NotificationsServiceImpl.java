@@ -53,6 +53,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return orgstructureService;
 	}
 
+	@Override
 	public NodeRef getNotificationsRootRef() {
 		return notificationsRootRef;
 	}
@@ -96,11 +97,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
 	}
 
-	/**
-	 * Отправка уведомлений
-	 *
-	 * @param notification Обобщённое уведомление
-	 */
+	@Override
 	public boolean sendNotification(Notification notification) {
 		if (checkNotification(notification)) {
 			NodeRef generalizedNotification = createGeneralizedNotification(notification);
@@ -129,11 +126,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		}
 	}
 
-	/**
-	 * Отправка атомарного уведомления
-	 *
-	 * @param notification атомарное уведомление
-	 */
+	@Override
 	public boolean sendNotification(NotificationUnit notification) {
 		if (notification != null) {
 			NotificationChannelBeanBase channelBean;
@@ -166,6 +159,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		}
 	}
 
+	/**
+	 * Создание обобщённого уведомления
+	 *
+	 * @param notification Обобщённое уведомление
+	 * @return Ссылка на обобщённое уведомление
+	 */
 	private NodeRef createGeneralizedNotification(Notification notification) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 		properties.put(PROP_GENERAL_AUTOR, notification.getAutor());
@@ -207,6 +206,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return result;
 	}
 
+	/**
+	 * Разделение обобщённого уведомления на атомарные
+	 *
+	 * @param generalizedNotification Обобщённое уведомление
+	 * @return Множество атомарных уведомлений
+	 */
 	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 		if (generalizedNotification != null) {
@@ -268,6 +273,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return result;
 	}
 
+	/**
+	 * Проверка обобщённого уведомления
+	 * @param notification Обобщённое уведомление
+	 * @return false - если уведомление неверно заполнено, иначе true
+	 */
 	private boolean checkNotification(Notification notification) {
 		if (notification == null) {
 			logger.warn("Уведомление null");

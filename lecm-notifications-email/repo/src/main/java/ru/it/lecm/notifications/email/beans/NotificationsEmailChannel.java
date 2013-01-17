@@ -25,6 +25,8 @@ import java.util.Map;
  * User: AIvkin
  * Date: 17.01.13
  * Time: 11:19
+ *
+ * Сервис канала уведомлений для электронной почты
  */
 public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_EMAIL_ROOT_NAME = "Email";
@@ -57,6 +59,10 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 		this.notificationsService = notificationsService;
 	}
 
+	/**
+	 * Метод инициализвции сервиса
+	 * Создает рабочую директорию - если она еще не создана.
+	 */
 	public void init() {
 		final String rootName = NOTIFICATIONS_EMAIL_ROOT_NAME;
 		repositoryHelper.init();
@@ -99,6 +105,13 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 		}
 	}
 
+	/**
+	 * Создание уведомления для email
+	 *
+	 * @param notification Атомарное уведомление
+	 * @param email Адрес электронной почты
+	 * @return Ссылка на уведомление для email
+	 */
 	private NodeRef createNotification(NotificationUnit notification, String email) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
@@ -117,6 +130,13 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 		return result;
 	}
 
+	/**
+	 * Отправка письма с уведомлением на почту сотрудника
+	 *
+	 * @param notification Атомарное уведомление
+	 * @param email Адрес электронной почты
+	 * @return false - если при отправке письма произошла ошибка, иначе true
+	 */
 	private boolean sendEmail(NotificationUnit notification, String email) {
 		//todo сделадь отправку электронной почты
 		return false;

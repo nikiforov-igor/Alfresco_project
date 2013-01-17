@@ -24,6 +24,8 @@ import java.util.Map;
  * User: AIvkin
  * Date: 17.01.13
  * Time: 15:19
+ *
+ * Сервис канала уведомления для дашлета
  */
 public class NotificationsDashletChannel implements NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_DASHLET_ROOT_NAME = "Дашлет";
@@ -55,6 +57,10 @@ public class NotificationsDashletChannel implements NotificationChannelBeanBase 
 		this.notificationsService = notificationsService;
 	}
 
+	/**
+	 * Метод инициализвции сервиса
+	 * Создает рабочую директорию - если она еще не создана.
+	 */
 	public void init() {
 		final String rootName = NOTIFICATIONS_DASHLET_ROOT_NAME;
 		repositoryHelper.init();
@@ -91,6 +97,12 @@ public class NotificationsDashletChannel implements NotificationChannelBeanBase 
 		return createNotification(notification) != null;
 	}
 
+	/**
+	 * Создание уведомления для дашлета
+	 *
+	 * @param notification Атомарное уведомление
+	 * @return Ссылка на уведомление для дашлета
+	 */
 	private NodeRef createNotification(NotificationUnit notification) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());

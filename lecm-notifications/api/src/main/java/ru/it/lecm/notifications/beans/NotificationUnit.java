@@ -8,11 +8,29 @@ import java.util.Date;
  * User: AIvkin
  * Date: 16.01.13
  * Time: 16:28
+ *
+ * Атомарное уведомление. Используется как контейнер для свойст атомарного уведомления, при отправке.
  */
 public class NotificationUnit {
+	/**
+	 * Инициатор уведомления.
+	 * Берётся из бизнес журнала.
+	 */
 	private String autor;
+	/**
+	 * Текст уведомления.
+	 * Берётся из бизнес журнала.
+	 */
 	private String description;
+	/**
+	 * Список на тип доставки уведомления.
+	 * Берётся из подписки.
+	 */
 	private NodeRef typeRef;
+	/**
+	 * Список на получателя (сотрудник).
+	 * Берётся из подписки.
+	 */
 	private NodeRef recipientRef;
 
 	public NotificationUnit() {

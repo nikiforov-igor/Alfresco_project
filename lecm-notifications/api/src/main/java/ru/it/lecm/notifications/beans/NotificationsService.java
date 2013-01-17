@@ -7,6 +7,8 @@ import org.alfresco.service.namespace.QName;
  * User: AIvkin
  * Date: 10.01.13
  * Time: 17:51
+ *
+ * Сервис уведомлений
  */
 public interface NotificationsService {
 	public static final String NOTIFICATIONS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/1.0";
@@ -36,9 +38,26 @@ public interface NotificationsService {
 	public final QName PROP_FORMING_DATE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "forming-date");
 	public final QName ASSOC_RECIPIENT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-assoc");
 
+	/**
+	 * Отправка уведомлений
+	 *
+	 * @param notification Обобщённое уведомление
+	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
+	 */
 	public boolean sendNotification(Notification notification);
 
+	/**
+	 * Отправка атомарного уведомления
+	 *
+	 * @param notification Атомарное уведомление
+	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
+	 */
 	public boolean sendNotification(NotificationUnit notification);
 
+	/**
+	 * Получение корневой директории для уведомлений
+	 *
+	 * @return Ссылка на корневую директорию уведомлений
+	 */
 	public NodeRef getNotificationsRootRef();
 }
