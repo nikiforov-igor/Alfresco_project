@@ -13,7 +13,7 @@
 	<groupId>ru.it.lecm.security</groupId>
 	<artifactId>lecm-security</artifactId>
 	<packaging>pom</packaging>
-	<name>Logic ECM Delegation</name>
+	<name>Logic ECM Security</name>
 
 	<modules>
 		<module>repo</module>
