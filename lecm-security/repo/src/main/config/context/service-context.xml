@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Registration of Delegations models -->
+<!--
+	<bean id="${groupId}.${artifactId}.securityBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-security-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/security</value>
+			</list>
+		</property>
+	</bean>
+  -->
+
+	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="authorityService, nodeService, permissionService">
+		<property name="authorityService" ref="authorityService" />
+		<!--
+		<property name="serviceRegistry" ref="ServiceRegistry" />
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		  -->
+	</bean>
+
+	<bean id="lecmAclBuilderBean" class="ru.it.lecm.security.beans.LECMAclBuilderBean" depends-on="authorityService, nodeService, permissionService">
+		<property name="nodeService" ref="nodeService" />
+		<property name="permissionService" ref="permissionService" />
+		<property name="permissionAliases">
+			<map>
+				<!-- ключ = доступ = (noaccess | readonly | full)
+					значение = название PermissionGroup Alfresco (см permissionDefinitions.xml) 
+				  -->
+				<entry key="noaccess" value="deny" />
+				<entry key="readonly" value="Consumer" />
+				<entry key="full" value="Editor" />
+			</map>
+		</property>
+
+		<property name="status2BusinessRoleMapping">
+			<map>
+				<!-- 	ключ = название статуса; 
+						значения = список через ';' из 'роль:доступ'
+						где роль = название роли (мнемоника), 
+							доступ = (noaccess | readonly | full) 
+				  -->
+				<entry key="draft" value="INITIALIZER:full" />
+				<entry key="approv" value="INITIALIZER:read;APPROVER:full" />
+				<entry key="sign" value="INITIALIZER:read;APPROVER:read;SIGNER:full" />
+				<entry key="done" value="INITIALIZER:;APPROVER:read;SIGNER:read" />
+			</map>
+		</property>
+	</bean>
+</beans>
