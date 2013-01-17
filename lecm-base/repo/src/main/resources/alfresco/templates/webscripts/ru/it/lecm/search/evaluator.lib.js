@@ -102,7 +102,7 @@ var Evaluator =
       var value = objData.value,
          type = objData.type,
          obj;
-       var substituteNode = obj;
+       var substituteNode = null;
        if(nameSubstituteString != null && nameSubstituteString.indexOf("#parent") == 0) {
            nameSubstituteString = nameSubstituteString.replace("#parent", "");
            substituteNode = node;
@@ -135,6 +135,9 @@ var Evaluator =
 	      if (obj == null) {
 		      return false;
 	      }
+          if (substituteNode == null) {
+              substituteNode = obj;
+          }
 	      if (nameSubstituteString == null) {
 		      objData.displayValue = obj.properties["cm:name"];
 	      } else {
