@@ -142,7 +142,7 @@ var Evaluator =
 	      }
           objData.metadata = obj.isContainer ? "container" : "document";
       } else if (nameSubstituteString != null) {
-	      objData.displayValue = substitude.formatNodeTitle(substituteNodenode, nameSubstituteString);
+	      objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
 	      objData.value = objData.displayValue;
       }
       return true;
