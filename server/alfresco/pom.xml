@@ -219,6 +219,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications.channel.active</groupId>
+			<artifactId>notifications-active-channel-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo</artifactId>

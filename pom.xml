@@ -93,6 +93,7 @@
 		<module>lecm-notifications</module>
 		<module>lecm-notifications-email</module>
 		<module>lecm-notifications-dashlet</module>
+		<module>lecm-notifications-active-channel</module>
 		<module>lecm-business-journal</module>
 		<module>lecm-calendar</module>
 	</modules>

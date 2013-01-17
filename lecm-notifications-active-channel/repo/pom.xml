@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.it.lecm.notifications.dashlet</groupId>
-        <artifactId>notifications-dashlet</artifactId>
+        <groupId>ru.it.lecm.notifications.channel.active</groupId>
+        <artifactId>notifications-active-channel</artifactId>
         <version>0.1.0</version>
     </parent>
 
-    <artifactId>notifications-dashlet-repo</artifactId>
+    <artifactId>notifications-active-channel-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Notifications Dashlet</name>
-    <description>Logic ECM Notifications Dashlet project</description>
+    <name>Logic ECM Notifications Active Channel</name>
+    <description>Logic ECM Notifications Active Channel Project</description>
     <properties>
         <module.log.level>debug</module.log.level>
     </properties>
