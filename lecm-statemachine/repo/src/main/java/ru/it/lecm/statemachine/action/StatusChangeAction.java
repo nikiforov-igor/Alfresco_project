@@ -31,7 +31,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private NodeRef folder = null;
 	private String uuid = null;
 	private boolean startStatus = false;
-	private ArrayList<Permission> dynamicRoles = new ArrayList<Permission>();
+	private ArrayList<Permission> dynamicPermissions = new ArrayList<Permission>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -52,13 +52,14 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Инициализация ролей
+		ArrayList<Permission> staticPermissions = new ArrayList<Permission>();
 		Element roles = action.element("roles");
 		if (roles != null) {
 			Element staticRoleElement = roles.element("static-roles");
-			ArrayList<Permission> permissions = initPermissions(staticRoleElement);
+			staticPermissions = initPermissions(staticRoleElement);
 
 			Element dynamicRoleElement = roles.element("dynamic-roles");
-			dynamicRoles = initPermissions(dynamicRoleElement);
+			dynamicPermissions = initPermissions(dynamicRoleElement);
 		}
 
 		//Если начальный статус, то папки для него не требуется
