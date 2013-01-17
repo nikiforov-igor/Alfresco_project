@@ -29,7 +29,7 @@ function _viewLinkAttributes(id, nodeRef){
         {
             url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
             dataObj:{
-                htmlid:"NodeMetadata-" + nodeRef,
+                htmlid:"LinkMetadata-" + nodeRef,
                 itemKind:"node",
                 itemId:nodeRef,
                 formId:id,
