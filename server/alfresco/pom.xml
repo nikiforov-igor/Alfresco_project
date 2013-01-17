@@ -205,6 +205,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications.email</groupId>
+			<artifactId>notifications-email-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo</artifactId>

@@ -53,6 +53,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return orgstructureService;
 	}
 
+	public NodeRef getNotificationsRootRef() {
+		return notificationsRootRef;
+	}
+
 	/**
 	 * Метод инициализвции сервиса
 	 * Создает рабочую директорию - если она еще не создана.

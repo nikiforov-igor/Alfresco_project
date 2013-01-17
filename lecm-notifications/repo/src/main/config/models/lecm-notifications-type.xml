@@ -6,21 +6,4 @@
 	<property name="lecm-dic:show_control_in_separate_window">false</property>
 	<property name="lecm-dic:plane">true</property>
 	<property name="lecm-dic:description">Типы доставки уведомлений</property>
-	<items>
-		<item name="UI">
-			<property name="cm:name">Активный канал</property>
-			<property name="lecm-notf-type:code">1</property>
-			<property name="lecm-notf-type:spring-bean-id">notificationActiveChannel</property>
-		</item>
-		<item name="Dashlet">
-			<property name="cm:name">Дашлет</property>
-			<property name="lecm-notf-type:code">2</property>
-			<property name="lecm-notf-type:spring-bean-id">notificationDashletChannel</property>
-		</item>
-		<item name="Email">
-			<property name="cm:name">Электронная почта</property>
-			<property name="lecm-notf-type:code">3</property>
-			<property name="lecm-notf-type:spring-bean-id">notificationEmailChannel</property>
-		</item>
-	</items>
 </dictionary>
