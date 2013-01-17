@@ -28,7 +28,7 @@
 		</property>
 	</bean>
 
-	<bean id="calendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="lecmCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
@@ -51,7 +51,7 @@
 	<bean id="calendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendarBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="calendarService"/>
+		<property name="wCalService" ref="lecmCalendarService"/>
 	</bean>
 	<bean id="sheduleBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="sheduleBase"/>
