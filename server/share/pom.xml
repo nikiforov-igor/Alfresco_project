@@ -156,6 +156,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications.dashlet</groupId>
+			<artifactId>notifications-dashlet-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-share</artifactId>

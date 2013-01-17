@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Типы доставки уведомлений">
+	<items>
+		<item name="Dashlet">
+			<property name="cm:name">Дашлет</property>
+			<property name="lecm-notf-type:code">2</property>
+			<property name="lecm-notf-type:spring-bean-id">notificationDashletChannel</property>
+		</item>
+	</items>
+</dictionary>

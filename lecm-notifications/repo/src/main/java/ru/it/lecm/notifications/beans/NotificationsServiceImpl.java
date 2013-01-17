@@ -167,7 +167,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	}
 
 	private NodeRef createGeneralizedNotification(Notification notification) {
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 		properties.put(PROP_GENERAL_AUTOR, notification.getAutor());
 		properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
 		properties.put(PROP_GENERAL_FORMING_DATE, new Date());

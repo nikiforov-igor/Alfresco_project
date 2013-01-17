@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.it.lecm.notifications.email</groupId>
-        <artifactId>notifications-email</artifactId>
+        <groupId>ru.it.lecm.notifications.dashlet</groupId>
+        <artifactId>notifications-dashlet</artifactId>
         <version>0.1.0</version>
     </parent>
 
-    <artifactId>notifications-email-repo</artifactId>
+    <artifactId>notifications-dashlet-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Notifications Email Repo</name>
-    <description>Logic ECM Notifications Email Repo project</description>
+    <name>Logic ECM Notifications Email Dashlet</name>
+    <description>Logic ECM Notifications Email Dashlet project</description>
     <properties>
         <module.log.level>debug</module.log.level>
     </properties>
