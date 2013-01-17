@@ -101,33 +101,38 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception{
+	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
 			person = personService.getPerson(initiator, false);
 		}
-		return fire(date, person, mainObject, eventCategory, description, objects);
+		String evcategoryString = null;
+		if (eventCategory != null) {
+			evcategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
+		}
+		return fire(date, person, mainObject, evcategoryString, description, objects);
 	}
 	/**
 	 * Метод для создания записи бизнеса-журнала
+	 *
 	 * @param date - дата создания записи
 	 * @param initiator  - инициатор события (cm:person)
 	 * @param mainObject - основной объект
+	 * @param eventCategory  - категория события
+	 * @param description  - описание события
 	 * @param objects    - список дополнительных объектов
-	 * @param  eventCategory  - категория события
-	 * @param  description  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception{
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
 			new Exception("Инициатор события и основной объект должны быть заданы!");
 		}
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
 		// получаем шаблон описания
-		String templateString = getTemplateString(getObjectType(mainObject), eventCategory, description);
+		String templateString = getTemplateString(getObjectType(mainObject), getEventCategoryByName(eventCategory), description);
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
 		// получаем текущего пользователя по логину
@@ -148,7 +153,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      */
 	@Override
 	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, NodeRef[] objects) throws Exception{
-		return fire(date, initiator, mainObject, eventCategory, description, Arrays.asList(objects));
+		String evCategoryString = null;
+		if (eventCategory != null) {
+			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
+		}
+		return fire(date, initiator, mainObject, evCategoryString, description, Arrays.asList(objects));
 	}
 
     /**
@@ -177,7 +186,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	@Override
 	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
-		return fire(new Date(), initiator, mainObject, eventCategory, description, objects);
+		String evCategoryString = null;
+		if (eventCategory != null) {
+			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
+		}
+		return fire(new Date(), initiator, mainObject, evCategoryString, description, objects);
 	}
 
 	@Override
@@ -192,7 +205,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		if (personService.personExists(initiator)) {
 			person = personService.getPerson(initiator, false);
 		}
-		return fire(new Date(), person, mainObject, getEventCategoryByName(eventCategory), description, objects);
+		return fire(new Date(), person, mainObject, eventCategory, description, objects);
 	}
 
 	/**
@@ -214,21 +227,37 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     }
 
     private NodeRef getDicElementByName(String elName, String dictionaryName) {
-        final NodeRef companyHome = repositoryHelper.getCompanyHome();
-        NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
-        NodeRef dictionary = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, dictionaryName);
-        if (dictionary != null) {
-            return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, elName);
-        }
+	    if (elName != null && !elName.isEmpty()) {
+		    final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		    NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
+		    NodeRef dictionary = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, dictionaryName);
+		    if (dictionary != null) {
+			    return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, elName);
+		    }
+	    }
         return null;
     }
     
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<NodeRef> objects, final String description) {
+    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final List<NodeRef> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
+
 				final NodeRef objectType = getObjectType(mainObject);
-				final NodeRef saveDirectoryRef = getSaveFolder(date, objectType, eventCategory);
+				String type;
+				if (objectType != null) {
+					type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
+				} else {
+					type = nodeService.getType(mainObject).getPrefixString();
+				}
+				String category;
+				if (eventCategory != null && !eventCategory.isEmpty()) {
+					category = eventCategory;
+				} else {
+					category = "unknown";
+				}
+				final NodeRef saveDirectoryRef = getSaveFolder(type, category, date);
+
 				// создаем ноду
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
 				properties.put(PROP_BR_RECORD_DATE, date);
@@ -245,21 +274,23 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)), getObjectDescription(obj));
 					}
 				}
+
 				ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 						QName.createQName(BJ_NAMESPACE_URI, GUID.generate()), TYPE_BR_RECORD, properties);
-
 				NodeRef result = associationRef.getChildRef();
 
 				// создаем ассоциации
 				if (initiator != null) {
 					nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
 				}
-
 				nodeService.createAssociation(result, mainObject, ASSOC_BR_RECORD_MAIN_OBJ);
 
 				// необязательные
 				if (eventCategory != null) {
-					nodeService.createAssociation(result, eventCategory, ASSOC_BR_RECORD_EVENT_CAT);
+					NodeRef evCategoryRef = getEventCategoryByName(eventCategory);
+					if (evCategoryRef != null) {
+						nodeService.createAssociation(result, evCategoryRef, ASSOC_BR_RECORD_EVENT_CAT);
+					}
 				}
 				if (objectType != null) {
 					nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
@@ -556,63 +587,52 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Метод, возвращающий ссылку на директорию в директории "Бизнес Журнал" согласно заданным параметрам
 	 *
+	 *
 	 * @param date - текущая дата
 	 * @param type - тип объекта
 	 * @param  category - категория события
 	 * @return ссылка на директорию
 	 */
-    private NodeRef getSaveFolder(final Date date, final NodeRef type, final NodeRef category) {
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        // имя директории "Корень/Тип Объекта/Категория события/ГГГГ-ММ-ДД"
-                        NodeRef directoryRef;
-                        synchronized (lock) {
-                            NodeRef[] directoryPath = new NodeRef[2];
-                            directoryPath[0] = type;
-                            directoryPath[1] = category;
+	private NodeRef getSaveFolder(final String type, final String category, final Date date) {
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
+						NodeRef directoryRef;
+						synchronized (lock) {
+							String[] directoryPath = new String[5];
+							directoryPath[0] = type;
+							directoryPath[1] = category;
+							directoryPath[2] = FolderNameFormatYear.format(date);
+							directoryPath[3] = FolderNameFormatMonth.format(date);
+							directoryPath[4] = FolderNameFormatDay.format(date);
 
-                            NodeRef saveDir = getBusinessJournalDirectory();
-                            for (NodeRef path : directoryPath) {
-                                String pathString = "unknown";
-                                if (path != null) {
-                                    pathString = (String) nodeService.getProperty(path, ContentModel.PROP_NAME);
-                                }
-                                NodeRef pathDir = nodeService.getChildByName(saveDir, ContentModel.ASSOC_CONTAINS, pathString);
-                                if (pathDir == null) {
-                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                    QName assocQName = QName.createQName(BJ_NAMESPACE_URI, pathString);
-                                    QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                    properties.put(ContentModel.PROP_NAME, pathString);
-                                    ChildAssociationRef result = nodeService.createNode(saveDir, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                    saveDir = result.getChildRef();
-                                } else {
-                                    saveDir = pathDir;
-                                }
-                            }
-                            String saveFolderName = FolderNameFormat.format(date); // получаем строкое представление даты
-                            directoryRef = nodeService.getChildByName(saveDir, ContentModel.ASSOC_CONTAINS, saveFolderName);
-                            if (directoryRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(BJ_NAMESPACE_URI, saveFolderName);
-                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, saveFolderName);
-                                ChildAssociationRef result = nodeService.createNode(saveDir, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                directoryRef = result.getChildRef();
-                            }
-                        }
-                        return directoryRef;
-                    }
-                });
-            }
-        };
-        return AuthenticationUtil.runAsSystem(raw);
-    }
+							directoryRef = getBusinessJournalDirectory();
+							for (String pathString : directoryPath) {
+								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+								if (pathDir == null) {
+									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+									QName assocQName = QName.createQName(BJ_NAMESPACE_URI, pathString);
+									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+									properties.put(ContentModel.PROP_NAME, pathString);
+									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+									directoryRef = result.getChildRef();
+								} else {
+									directoryRef = pathDir;
+								}
+							}
+						}
+						return directoryRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
+	}
 
 	/**
 	 * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта

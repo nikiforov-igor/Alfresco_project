@@ -80,8 +80,9 @@ public interface BusinessJournalService {
 	public final String SYSTEM = "System";
 
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-	final DateFormat FolderNameFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
+	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
+	final DateFormat FolderNameFormatDay = new SimpleDateFormat("DD");
     /**
      * Метод для создания записи бизнеса-журнала
      * @param date - дата создания записи
@@ -96,15 +97,16 @@ public interface BusinessJournalService {
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
      * @param mainObject - основной объект
-     * @param objects    - список дополнительных объектов
      * @param  eventCategory  - категория события
      * @param  description  - описание события
+     * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -165,7 +167,7 @@ public interface BusinessJournalService {
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект
-	 * @return сформированное описание или null, если для типа не задан шаблон
+	 * @return сформированное описание
 	 */
 	public String getObjectDescription(NodeRef object);
 
