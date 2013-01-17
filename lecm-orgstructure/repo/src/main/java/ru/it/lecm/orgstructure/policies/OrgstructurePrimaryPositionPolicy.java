@@ -55,7 +55,7 @@ public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.On
 		ChildAssociationRef parent = nodeService.getPrimaryParent(emplyoeeLink);
 		if (orgstructureService.isStaffList(parent.getParentRef())) {
 			List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(emplyoee);
-			nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 0);
+			nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 1);
 		}
 	}
 }
