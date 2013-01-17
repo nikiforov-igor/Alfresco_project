@@ -26,16 +26,31 @@
                     <title>Code</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:objectType-class">
                     <title>Class</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:objectType-template">
                     <title>Template</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <mandatory-aspects>
@@ -52,6 +67,11 @@
                     <title>Code</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <mandatory-aspects>
@@ -68,11 +88,41 @@
                     <title>Template</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-busjournal:messageTemplate-code">
                     <title>Code</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-busjournal:messageTemplate-objType-assoc-ref">
+                    <title>Type Ref</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-busjournal:messageTemplate-evCategory-assoc-ref">
+                    <title>Category Ref</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
             </properties>
             <associations>

@@ -8,7 +8,6 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -421,20 +420,26 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	private NodeRef getMessageTemplate(NodeRef objectType, NodeRef eventCategory) {
 		if (objectType != null && eventCategory != null) {
-			List<AssociationRef> objTypeSAssocs = nodeService.getSourceAssocs(objectType, ASSOC_MESSAGE_TEMP_OBJ_TYPE);
-			List<NodeRef> types = new ArrayList<NodeRef>();
-			for (AssociationRef objTypeSAssoc : objTypeSAssocs) {
-				types.add(objTypeSAssoc.getSourceRef());
+			NodeRef record = null;
+			SearchParameters sp = new SearchParameters();
+			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+			sp.setQuery("TYPE:\"" + TYPE_MESSAGE_TEMPLATE.toString() +
+					"\" AND @lecm\\-busjournal\\:messageTemplate\\-objType\\-assoc\\-ref:\"" + objectType.toString() +
+					"\" AND @lecm\\-busjournal\\:messageTemplate\\-evCategory\\-assoc\\-ref:\"" + eventCategory.toString() + "\"");
+
+			ResultSet results = null;
+			try {
+				results = serviceRegistry.getSearchService().query(sp);
+				for (ResultSetRow row : results) {
+					record = row.getNodeRef();
+				}
+			} finally {
+				if (results != null) {
+					results.close();
+				}
 			}
-			List<AssociationRef> evCategorySAssocs = nodeService.getSourceAssocs(eventCategory, ASSOC_MESSAGE_TEMP_EVENT_CAT);
-			List<NodeRef> categories = new ArrayList<NodeRef>();
-			for (AssociationRef evCategorySAssoc : evCategorySAssocs) {
-				categories.add(evCategorySAssoc.getSourceRef());
-			}
-			types.retainAll(categories);
-			if (!types.isEmpty()) {
-				return types.get(types.size() - 1);
-			}
+			return record;
 		}
 		return null;
 	}

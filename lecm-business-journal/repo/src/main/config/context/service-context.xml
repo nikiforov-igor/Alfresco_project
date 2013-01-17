@@ -75,7 +75,7 @@
         </property>
     </bean>
 
-    <bean id="searchByAssocsPolicy" class="ru.it.lecm.businessjournal.policies.SearchByAssocsPolicies"
+    <bean id="searchByAssocsPolicy" class="ru.it.lecm.businessjournal.policies.SearchByAssocsPolicy"
           init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
