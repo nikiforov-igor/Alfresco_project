@@ -4,13 +4,15 @@
 	<#include "/org/alfresco/components/form/form.get.head.ftl">
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/utils/generate-custom-name.js"></@script>
-
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-orgstructure/orgstructure-work-groups.css" />
 
 <!-- Advanced Search -->
 	<@script type="text/javascript" src="${page.url.context}/res/components/form/date-range.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/res/components/form/number-range.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/search/search.css" />
+
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-orgstructure/workgroup-datagrid.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-orgstructure/workforce-datagrid.js"></@script>
 
 <!-- Historic Properties Viewer -->
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/versions.js"></@script>
