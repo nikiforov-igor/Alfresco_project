@@ -198,7 +198,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 }
             }
             // initialize Search
-            this.search = new LogicECM.AdvancedSearch(this.id, this.datagridMeta, this.widgets.dataTable, this.datagridColumns, this.widgets.dataSource, this.options.bubblingLabel).setOptions({
+            this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                 showExtendSearchBlock: this.options.showExtendSearchBlock
             });
 
