@@ -59,7 +59,9 @@ LogicECM.module = LogicECM.module || {};
 
                 closeSubstituteSymbol: "}",
 
-                primaryCascading: false
+                primaryCascading: false,
+
+                fieldId: null
             },
 
             rootNode: null,

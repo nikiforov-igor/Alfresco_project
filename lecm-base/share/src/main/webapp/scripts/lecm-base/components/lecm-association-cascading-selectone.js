@@ -71,7 +71,11 @@ LogicECM.module = LogicECM.module || {};
 
                 defaultLoadData: false,
 
-                showDefaultOptions: true
+                showDefaultOptions: true,
+
+                primaryCascading: false,
+
+                fieldId: null
             },
 
             rootNode: null,
@@ -128,6 +132,9 @@ LogicECM.module = LogicECM.module || {};
             onSelectChange: function AssociationTreeViewer_onSelectChange() {
                 Dom.get(this.controlId).value = this.selectItem.value;
                 this.options.selectedValueNodeRef = this.selectItem.value;
+                if (this.options.primaryCascading) {
+                    YAHOO.Bubbling.fire("changeDropDown",{bubblingLabel: this.options.fieldId});
+                }
             },
 
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {

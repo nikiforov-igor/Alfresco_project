@@ -49,7 +49,10 @@
                         showDefaultOptions: false,
 					</#if>
 	                <#if field.control.params.defaultLoadData?? && field.control.params.defaultLoadData == "true">
-                        defaultLoadData: true
+                        defaultLoadData: true,
+	                </#if>
+	                <#if field.control.params.primaryCascading??>
+	                    primaryCascading: ${field.control.params.primaryCascading}
 	                </#if>
                 });
     });
