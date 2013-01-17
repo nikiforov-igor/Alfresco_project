@@ -10,7 +10,7 @@
     white-space: nowrap;
 }
 .dashlet.business-journal .results {
-    margin: 5px;
+    margin: 10px 20px 10px 10px;
 }
 .dashlet.business-journal .results .row {
     line-height: 24px;

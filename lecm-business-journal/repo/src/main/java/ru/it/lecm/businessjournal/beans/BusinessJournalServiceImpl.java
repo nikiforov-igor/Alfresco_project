@@ -685,4 +685,71 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	public void setSubstituteService(SubstitudeBean substituteService) {
 		this.substituteService = substituteService;
 	}
+
+    /**
+     * Метод, возвращающий список ссылок на записи заданного типа,
+     * сформированные за заданный период с учетом инициатора
+     *
+     * @param objectType    - тип объекта
+     * @param begin         - начальная дата
+     * @param end           - конечная дата
+     * @param whoseKey      - дополнительная фильтрация по инициатору
+     * @return список ссылок
+     */
+    @Override
+    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey) {
+        List<NodeRef> records = new ArrayList<NodeRef>(10);
+        final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+        ResultSet results = null;
+        String query = "";
+        SearchParameters sp = new SearchParameters();
+
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        query = "TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "]";
+        if (whoseKey != null && !"".equals(whoseKey)) {           //todo
+            switch(WhoseEnum.valueOf(whoseKey.toUpperCase())) {
+                case MY : {
+
+                    break;
+                }
+                case DEPARTMENT: {
+
+                    break;
+                }
+                case CONTROL: {
+
+                    break;
+                }
+                case ALL: {
+
+                    break;
+                }
+                default: {
+
+                }
+            }
+        }
+        sp.setQuery(query);
+        try {
+            results = serviceRegistry.getSearchService().query(sp);
+            for (ResultSetRow row : results) {
+                NodeRef currentNodeRef = row.getNodeRef();
+                records.add(currentNodeRef);
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
+
+    private static enum WhoseEnum {
+        MY,
+        DEPARTMENT,
+        CONTROL,
+        ALL
+    }
 }

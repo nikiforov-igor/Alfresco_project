@@ -74,7 +74,7 @@
 
             //получить nodeRef справочника "Тип объекта"
             Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(OBJECT_TYPE),
+                url: Alfresco.constants.PROXY_URI + "lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(OBJECT_TYPE),
                 successCallback: {
                     fn: function(response){
                         //заполнить выпадающий список типов объектов
@@ -108,7 +108,7 @@
                                 scope: this
                             },
                             failureCallback: {
-                                fn: function() {alert("Failed to load Object types list.")},
+                                fn: function() {console.log("Failed to load Object types list.")},
                                 scope: this
                             }
                         });
@@ -116,7 +116,7 @@
                     scope: this
                 },
                 failureCallback: {
-                    fn: function() {alert("Failed to load nodeRef of Object type dictionary.")},
+                    fn: function() {console.log("Failed to load nodeRef of Object type dictionary.")},
                     scope: this
                 }
             });
@@ -126,39 +126,39 @@
             refreshResults();
         }
         function refreshResults() {
-            var data = {};
+            var data = "";
             var inputs = Selector.query('#${id}_controls input[type=hidden]');
 
             inputs.forEach(function(item, i) {
-                data[item.name] = item.value;
+                data += (i == 0 ? '' : '&') + item.name + '=' + item.value;
             });
 
-//            console.log(data);
-            console.log('refresh');
-            return; //todo TEMP!
-            Alfresco.util.Ajax.jsonPost({
-                url: Alfresco.constants.PROXY_URI + "", //todo
-                dataObj: data,
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/business-journal/api/search?" + data,
                 successCallback: {
                     fn: function(response){
                         var results = response.json;
 
                         if (results) {
                             var container = Dom.get('${id}_results');
-
                             container.innerHTML = '';
-                            results.forEach(function(item, i) {
-                                var div = document.createElement('div');
 
-                                div.innerHTML = item;
-                                container.appendChild(div);
-                            });
+                            if (results.length > 0) {
+                                results.forEach(function(item, i) {
+                                    var div = document.createElement('div');
+
+                                    div.innerHTML = item;
+                                    container.appendChild(div);
+                                });
+                            } else {
+                                container.innerHTML = '${msg("label.no.records")}';
+                            }
                         }
                     },
                     scope: this
                 },
                 failureCallback: {
-                    fn: function() {alert("Failed to load Business Journal rows.")},
+                    fn: function() {console.log("Failed to load Business Journal rows.")},
                     scope: this
                 }
             });
@@ -201,17 +201,6 @@
             <input type="hidden" id="${id}-days-hidden" name="days">
             <input type="hidden" id="${id}-whose-hidden" name="whose">
         </div>
-        <div id="${id}_results" class="results">
-            <div class="row">
-                <a>Иванов И.</a> создал документ № <a>01-28/15</a> 5 часов назад
-            </div>
-            <div class="row">
-                <a>Иванов И.</a> создал документ № <a>01-28/15</a> 5 часов назад
-            </div>
-            <div class="row">
-                <a>Иванов И.</a> создал документ № <a>01-28/15</a> 5 часов назад
-            </div>
-
-        </div>
+        <div id="${id}_results" class="results"></div>
     </div>
 </div>

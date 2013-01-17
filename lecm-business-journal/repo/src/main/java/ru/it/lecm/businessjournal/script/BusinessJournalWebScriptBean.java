@@ -2,6 +2,7 @@ package ru.it.lecm.businessjournal.script;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -55,18 +56,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	}
 
 	public Scriptable getRecordsByInterval(long start, long end) {
-		Calendar calendar1 = null;
-		if (start != -1) {
-			calendar1 = Calendar.getInstance();
-			calendar1.setTimeInMillis(start);
-		}
-		Calendar calendar2 = null;
-		if (end != -1) {
-			calendar2 = Calendar.getInstance();
-			calendar2.setTimeInMillis(end);
-		}
-
-		List<NodeRef> refs = service.getRecordsByInterval(calendar1 != null ? calendar1.getTime() : null, calendar2 != null ? calendar2.getTime(): null);
+		List<NodeRef> refs = service.getRecordsByInterval(getDateFromLong(start), getDateFromLong(end));
 		return createScriptable(refs);
 	}
 
@@ -78,6 +68,25 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала", e);
 		}
 	}
+
+    public Scriptable getRecordsByParams(String objectType, String daysCount, String whoseKey) {
+        Date now = new Date();
+        Date start = null;
+
+        if (daysCount != null &&  !"".equals(daysCount)) {
+            Integer days = Integer.parseInt(daysCount);
+
+            if (days > 0) {
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.setTime(now);
+                calendar.add(Calendar.DAY_OF_MONTH, (-1) * days);
+                start = calendar.getTime();
+            }
+        }
+        List<NodeRef> refs = service.getRecordsByParams(objectType, start, now, whoseKey);
+        return createScriptable(refs);
+    }
 
 	/**
 	 * Возвращает массив, пригодный для использования в веб-скриптах
@@ -100,4 +109,13 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
 		}
 	}
+
+    public Date getDateFromLong(long longDate) {
+        if (longDate != -1) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(longDate);
+            return calendar.getTime();
+        }
+        return null;
+    }
 }

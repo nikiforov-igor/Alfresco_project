@@ -192,4 +192,7 @@ public interface BusinessJournalService {
 	public List<NodeRef> getRecordsByInterval(Date begin, Date end);
 
 	public boolean isBJRecord(NodeRef ref);
+
+    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey);
+        
 }

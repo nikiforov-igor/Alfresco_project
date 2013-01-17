@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>BJ Records search</shortname>
+    <description>BJ Records search</description>
+    <url>/lecm/business-journal/api/search</url>
+    <authentication>user</authentication>
+    <format default="json">extension</format>
+</webscript>
