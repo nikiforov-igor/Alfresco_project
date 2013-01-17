@@ -18,9 +18,12 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface EmoticonsPanelListener 
+public interface BarButtonListener
 {
-	void emotSelect(String text);
+	void onMax();
+	void onClose();
+	void onWindowClose();
+	void onWindowOpen();
 }

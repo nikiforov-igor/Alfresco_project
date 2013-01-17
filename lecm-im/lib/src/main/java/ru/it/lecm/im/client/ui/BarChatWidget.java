@@ -548,8 +548,7 @@ public class BarChatWidget extends BarChatWidgetUI
 	
 	private Widget createTopRangeWidget(ArchiveRange range)
 	{
-		HTML panel = new HTML("<div class='ijab-archive-top ui-corner-all'><span>"+rangeString(range)+"</span></div>");
-		return panel;
+        return new HTML("<div class='ijab-archive-top ui-corner-all'><span>"+rangeString(range)+"</span></div>");
 	}
 	
 	private String rangeString(ArchiveRange range)

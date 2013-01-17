@@ -149,7 +149,7 @@ public abstract class ContactViewItemUI extends Composite {
 				{
 					String newName = nameEditor.getValue();
 					newName = newName==null?"":newName;
-					newName= newName==""?nameTextElement.getInnerText():newName;
+					newName= newName.equals("") ?nameTextElement.getInnerText():newName;
 					if(editListener !=null &&!newName.equals(nameTextElement.getInnerText()))
 					{
 						editListener.onNameChange(nameEditor.getValue());

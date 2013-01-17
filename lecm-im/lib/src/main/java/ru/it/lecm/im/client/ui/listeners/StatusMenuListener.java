@@ -18,23 +18,12 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-import java.util.ArrayList;
+import ru.it.lecm.im.client.utils.XmppStatus;
 
-public abstract class ButtonManagerBase {
-	protected ArrayList<BarButton> buttons = new ArrayList<BarButton>();
-	protected BarButton activeButton = null;
-	
-	protected BarButton createButton()
-	{
-		BarButton newBtn = new BarButton();
-		buttons.add(newBtn);
-		return newBtn;
-	}
-	
-	protected void removeButton(BarButton btn)
-	{
-		buttons.remove(btn);
-	}
+public interface StatusMenuListener
+{
+	//void onSetStatusText(final String statusText);
+	void onSetXmppStatus(XmppStatus.Status status);
 }

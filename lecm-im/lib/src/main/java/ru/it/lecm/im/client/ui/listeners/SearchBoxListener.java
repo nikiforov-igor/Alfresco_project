@@ -18,10 +18,13 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface ButtonPopupWindowListener {
-	void onClose();
-	void onMin();
-	void onMax();
+import java.util.List;
+
+public interface SearchBoxListener 
+{
+	void onSearch(List<String> results);
+	void onFinished();
+	void onCancel();
 }

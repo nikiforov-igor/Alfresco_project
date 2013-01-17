@@ -20,9 +20,17 @@
  */
 package ru.it.lecm.im.client.ui;
 
-public class BarButtonManager extends ButtonManagerBase
+import ru.it.lecm.im.client.ui.common.BarButton;
+import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
+
+import java.util.ArrayList;
+
+public class BarButtonManager
 {
-	public BarButtonManager()
+    protected ArrayList<BarButton> buttons = new ArrayList<BarButton>();
+    protected BarButton activeButton = null;
+
+    public BarButtonManager()
 	{
 		super();
 	}
@@ -81,4 +89,16 @@ public class BarButtonManager extends ButtonManagerBase
 			
 		});
 	}
+
+    protected BarButton createButton()
+    {
+        BarButton newBtn = new BarButton();
+        buttons.add(newBtn);
+        return newBtn;
+    }
+
+    protected void removeButton(BarButton btn)
+    {
+        buttons.remove(btn);
+    }
 }

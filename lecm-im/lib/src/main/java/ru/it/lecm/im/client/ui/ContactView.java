@@ -20,19 +20,6 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import ru.it.lecm.im.client.xmpp.ResponseHandler;
-import ru.it.lecm.im.client.xmpp.stanzas.IQ;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
-import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -44,11 +31,22 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.XmppClient;
-import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.iJab;
+import ru.it.lecm.im.client.ui.listeners.ContactViewListener;
+import ru.it.lecm.im.client.ui.listeners.ContextMenuItemListener;
+import ru.it.lecm.im.client.ui.listeners.SearchBoxListener;
 import ru.it.lecm.im.client.utils.PopupPrompt;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.JID;
+import ru.it.lecm.im.client.xmpp.ResponseHandler;
+import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.stanzas.IQ;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
+import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+
+import java.util.*;
 
 public class ContactView extends Composite {
 
@@ -114,9 +112,9 @@ public class ContactView extends Composite {
 				public void onSelected(Object data) 
 				{
 					ContactViewItem item = (ContactViewItem)data;
-					if(iJab.client instanceof XmppClient)
+					if(iJab.client != null)
 					{
-						XmppClient client = (XmppClient)iJab.client;
+						XmppClient client = iJab.client;
 						client.viewMessageArchive(JID.fromString(item.getRosterItem().getJid()));
 					}
 				}
@@ -193,9 +191,9 @@ public class ContactView extends Composite {
 				public void onSelected(Object data) 
 				{
 					ContactViewItem item = (ContactViewItem)data;
-					if(iJab.client instanceof XmppClient)
+					if(iJab.client != null)
 					{
-						((XmppClient)iJab.client).addToBlackList(item.getJid(),true);
+						iJab.client.addToBlackList(item.getJid(), true);
 						PopupPrompt.prompt(XmppProfileManager.getName(item.getJid()) + " " + i18n.msg("have been added to the blacklist!"));
 					}
 				}
@@ -226,8 +224,11 @@ public class ContactView extends Composite {
 		{
 			String groupName = getGroupNameByJid(jid);
 			groupName = groupName==null?"":groupName;
-			if(groupName.length()>0&&!visibleGroups.contains(groupName));
-				visibleGroups.add(groupName);
+			if(groupName.length()>0&&!visibleGroups.contains(groupName))
+            {
+                visibleGroups.add(groupName);
+            }
+
 			if(!iJab.conf.isHideOnlineGroup())
 			{
 				if(onlineGroup.contains(jid)&&!visibleGroups.contains(onlineGroupName))
@@ -478,7 +479,7 @@ public class ContactView extends Composite {
 			int count=0;
 			while(it.hasNext())
 			{
-				final String groupName = (String)it.next();
+				final String groupName = it.next();
 				if(isSpeicalGroup(groupName))
 					continue;
 				ContextMenuItem menuItem = new ContextMenuItem(contextMenu,groupName,true,new ContextMenuItemListener()

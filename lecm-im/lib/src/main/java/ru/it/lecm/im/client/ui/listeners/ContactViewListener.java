@@ -18,11 +18,13 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface OptionWidgetListener 
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+
+public interface ContactViewListener 
 {
-	void onOnlineSoundOptionChange(boolean b);
-	void onMessageSoundOptionChange(boolean b);
-	void onChatOptionChange(boolean b);
+	void onItemClick(final RosterItem item);
+	void onAvatarOver(final RosterItem item);
+	void onAvatarOut(final RosterItem item);
 }

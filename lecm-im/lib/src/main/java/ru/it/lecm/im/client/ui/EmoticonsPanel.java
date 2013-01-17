@@ -28,6 +28,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.ui.emoticons.Emoticon;
 import ru.it.lecm.im.client.ui.emoticons.Emoticons;
+import ru.it.lecm.im.client.ui.listeners.EmoticonPanelItemListener;
+import ru.it.lecm.im.client.ui.listeners.EmoticonsPanelListener;
 
 public class EmoticonsPanel extends Composite {
 
@@ -45,7 +47,7 @@ public class EmoticonsPanel extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		for(Emoticon emot: Emoticons.instance().emoticons)
 		{
-			content.add(new EmoticonPanelItem(emot, new EmoticonPanelItemListener() 
+			content.add(new EmoticonPanelItem(emot, new EmoticonPanelItemListener()
 			{
 				public void emotSelect(String text) 
 				{

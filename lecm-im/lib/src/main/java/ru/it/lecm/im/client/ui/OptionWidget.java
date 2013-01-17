@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.iJab;
+import ru.it.lecm.im.client.ui.listeners.OptionWidgetListener;
 import ru.it.lecm.im.client.utils.i18n;
 
 @SuppressWarnings("deprecation")
@@ -50,7 +51,7 @@ public class OptionWidget extends Composite
 	@UiField CheckBox clearChatClose;
 	@UiField Element poweredby;
 	
-	OptionWidgetListener listener = null; 
+	OptionWidgetListener listener = null;
 	
 	public OptionWidget() 
 	{

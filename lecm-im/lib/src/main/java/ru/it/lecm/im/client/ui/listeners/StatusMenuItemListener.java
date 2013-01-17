@@ -18,9 +18,9 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface EmoticonPanelItemListener 
+public interface StatusMenuItemListener 
 {
-	void emotSelect(String text);
+	void onSelect();
 }

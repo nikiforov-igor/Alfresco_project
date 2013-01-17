@@ -114,7 +114,7 @@ public class BlackListWnd extends DialogBox
 		vPanel.add(hPanel);
 		vPanel.setCellHorizontalAlignment(hPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		if(iJab.client instanceof XmppClient)
+		if(iJab.client != null)
 		{
 			privacyListsPlugin = Session.instance().getPrivacyListPlugin();
 			loadBlackList();

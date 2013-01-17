@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.*;
 import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.data.LinkItemImpl;
 import ru.it.lecm.im.client.iJab;
+import ru.it.lecm.im.client.ui.common.BarButton;
 import ru.it.lecm.im.client.utils.BrowserHelper;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.Session;
@@ -110,6 +111,9 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         {
             buddysButton.setButtonWidthEm(19);
         }
+
+
+
 		//msgBoxButton = btnManager.createIconButton("Message Box", "ijab-icon-notification");
         appsBar.addWidget(buddysButton);
 
@@ -152,15 +156,20 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		contactView = mainWidget.getContactView();
 		buddysButton.setButtonWindow(mainWidget);
 
+
         setupRosterManagement();
 
-        toolButton = btnManager.createCaptionButton(i18n.msg("Tools"), "ijab-icon-home", "");
-		toolButton.addButtonStyle("ijab-toolbox-button");
-
-		toolButton.setButtonWindow(toolMenu);
 		if(!iJab.conf.disableToolBox())
         {
+            toolButton = btnManager.createCaptionButton(i18n.msg("Tools"), "ijab-icon-home", "");
+            toolButton.addButtonStyle("ijab-toolbox-button");
+
+            toolButton.setButtonWindow(toolMenu);
             shortcutBar.addWidget(toolButton);
+        }
+        else
+        {
+            toolButton = null;
         }
 		
 		mainWidget.getSearchWidget().addListener(contactView.getSearchListener());

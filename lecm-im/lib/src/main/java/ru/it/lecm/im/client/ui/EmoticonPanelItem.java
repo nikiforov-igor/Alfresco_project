@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.ui.emoticons.Emoticon;
+import ru.it.lecm.im.client.ui.listeners.EmoticonPanelItemListener;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class EmoticonPanelItem extends Composite {

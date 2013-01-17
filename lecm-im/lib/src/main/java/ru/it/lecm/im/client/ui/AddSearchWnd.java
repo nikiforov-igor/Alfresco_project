@@ -199,14 +199,13 @@ public class AddSearchWnd extends DialogBox
 			{
 				filedsWidget.clear();
 				searchFields = fields;
-				int index=0;
+				int index;
 				for(index=0;index<searchFields.size();index++)
 				{
 					Field field = searchFields.get(index);
 					if(field.type.equals("text-single"))
 					{
-						TextBox widget = new TextBox();
-						field.widget = widget;
+                        field.widget = new TextBox();
 						filedsWidget.setWidget(index*2, 0, new HTML(i18n.msg(field.label)));
 						filedsWidget.setWidget(index*2+1, 0, field.widget);
 					}

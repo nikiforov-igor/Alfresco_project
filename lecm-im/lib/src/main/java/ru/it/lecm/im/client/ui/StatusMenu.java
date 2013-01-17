@@ -20,6 +20,8 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.ui.listeners.StatusMenuItemListener;
+import ru.it.lecm.im.client.ui.listeners.StatusMenuListener;
 import ru.it.lecm.im.client.xmpp.Session.ServerType;
 
 import com.google.gwt.core.client.GWT;

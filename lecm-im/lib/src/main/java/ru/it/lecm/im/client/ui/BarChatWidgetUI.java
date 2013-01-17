@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.ui.listeners.EmoticonsPanelListener;
 import ru.it.lecm.im.client.utils.i18n;
 
 public abstract class BarChatWidgetUI extends Composite {

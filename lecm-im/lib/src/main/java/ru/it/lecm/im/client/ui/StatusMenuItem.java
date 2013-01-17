@@ -32,6 +32,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.ui.listeners.StatusMenuItemListener;
 
 public class StatusMenuItem extends Composite {
 
@@ -46,7 +47,7 @@ public class StatusMenuItem extends Composite {
 	@UiField Element textElement;
 	@UiField LiHTMLPanel itemContent;
 	
-	public StatusMenuItem(final String img,final String text,final StatusMenuItemListener listener) 
+	public StatusMenuItem(final String img,final String text,final StatusMenuItemListener listener)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		

@@ -49,6 +49,7 @@ import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.google.gwt.user.client.ui.SuggestOracle.Response;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.ui.listeners.SearchBoxListener;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class SearchBox extends Composite {

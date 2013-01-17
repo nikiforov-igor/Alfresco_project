@@ -18,12 +18,12 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.listeners;
 
-import ru.it.lecm.im.client.utils.XmppStatus;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 
-public interface IndicatorListener
+public interface XmppProfileListener 
 {
-	void onStatusTextChange(final String statusText);
-	void onXmppStatusChange(final XmppStatus.Status status);
+	void onNameChange(final String name);
+	void onPresenceChange(final Presence item);
 }

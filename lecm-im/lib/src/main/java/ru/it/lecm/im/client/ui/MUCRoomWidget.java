@@ -20,27 +20,21 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import java.util.List;
-
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomItem;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomListener;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomPlugin;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomItem;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomListener;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.MucRoomPlugin;
+
+import java.util.List;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -101,7 +95,7 @@ public class MUCRoomWidget extends Composite {
 	public void setConnected(boolean b)
 	{
 		connected = b;
-		if(b == false)
+		if(!b)
 		{
 			//listWidget.setVisible(false);
 			//toolBar.setVisible(false);

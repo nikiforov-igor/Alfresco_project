@@ -21,8 +21,10 @@
 package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowResizeListener;
+import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -45,14 +47,21 @@ public class ChatPanelBar extends ChatPanelBarUI
 		super();
 		this.mainBar = mainBar;
 		//calcVisibleTabs();
-		Window.addWindowResizeListener(new WindowResizeListener()
-		{
-			public void onWindowResized(int width, int height) 
-			{
-				onWindowResize(width,height);
-			}
-		});		
-	}
+//		Window.addWindowResizeListener(new WindowResizeListener()
+//		{
+//			public void onWindowResized(int width, int height)
+//			{
+//				onWindowResize(width,height);
+//			}
+//		});
+
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                onWindowResize(event.getWidth(), event.getHeight());
+            }
+        });
+    }
 	
 	private void tryPushButton()
 	{

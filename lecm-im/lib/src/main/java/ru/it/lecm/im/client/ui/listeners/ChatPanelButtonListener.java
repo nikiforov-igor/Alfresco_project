@@ -18,12 +18,10 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface BarButtonListener 
+public interface ChatPanelButtonListener 
 {
-	void onMax();
-	void onClose();
-	void onWindowClose();
-	void onWindowOpen();
+	void onMessageSend(final String message);
+	void onAavatrClicked();
 }

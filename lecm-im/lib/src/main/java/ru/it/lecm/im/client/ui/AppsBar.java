@@ -31,7 +31,7 @@ public class AppsBar extends Composite {
 
 	private static AppsBarUiBinder uiBinder = GWT.create(AppsBarUiBinder.class);
 
-	interface AppsBarUiBinder extends UiBinder<Widget, AppsBar> {
+	private interface AppsBarUiBinder extends UiBinder<Widget, AppsBar> {
 	}
 
 	@UiField FlowPanel appsBar;

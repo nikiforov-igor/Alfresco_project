@@ -18,10 +18,11 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface ChatPanelButtonListener 
+public interface OptionWidgetListener 
 {
-	void onMessageSend(final String message);
-	void onAavatrClicked();
+	void onOnlineSoundOptionChange(boolean b);
+	void onMessageSoundOptionChange(boolean b);
+	void onChatOptionChange(boolean b);
 }

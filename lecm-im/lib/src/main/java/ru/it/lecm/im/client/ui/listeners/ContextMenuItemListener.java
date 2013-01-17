@@ -18,12 +18,9 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client;
+package ru.it.lecm.im.client.ui.listeners;
 
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
-
-public interface XmppProfileListener 
+public interface ContextMenuItemListener 
 {
-	void onNameChange(final String name);
-	void onPresenceChange(final Presence item);
+	void onSelected(Object data);
 }

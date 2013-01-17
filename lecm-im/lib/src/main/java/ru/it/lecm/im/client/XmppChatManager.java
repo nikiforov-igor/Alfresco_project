@@ -24,6 +24,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import ru.it.lecm.im.client.bubling.MessageCountUpdater;
+import ru.it.lecm.im.client.listeners.ClientListener;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
 import ru.it.lecm.im.client.ui.ChatPanelButton;
 import ru.it.lecm.im.client.utils.WindowPrompt;
@@ -41,11 +42,7 @@ import java.util.*;
 
 public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 {
-	private final static String STORAGE_KEY = "XmppChatManager";
-	private final static String CHATS_KEY = "all_alive_chat";
-	private final static String OPENCHAT_KEY = "current_open_chat";
-	
-	private final ChatManager<XmppChat> manager;
+    private final ChatManager<XmppChat> manager;
 	private final ChatPanelBar chatPanel;
 	private Map<String, Chat<XmppChat>> chats = new HashMap<String,Chat<XmppChat>>();
 	private boolean resumeing = false;
@@ -191,20 +188,20 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	private void clearCacheData()
 	{
 		final String prefix = Session.instance().getUser().getStorageID();
-		Storage storage = Storage.createStorage(STORAGE_KEY,prefix);
-		storage.set(STORAGE_KEY, "");
-		storage.remove(STORAGE_KEY);
-		storage.set(prefix+STORAGE_KEY,"");
-		storage.remove(prefix+STORAGE_KEY);
+		Storage storage = Storage.createStorage(XmppChatManagerConstants.STORAGE_KEY,prefix);
+		storage.set(XmppChatManagerConstants.STORAGE_KEY, "");
+		storage.remove(XmppChatManagerConstants.STORAGE_KEY);
+		storage.set(prefix+ XmppChatManagerConstants.STORAGE_KEY,"");
+		storage.remove(prefix+ XmppChatManagerConstants.STORAGE_KEY);
 	}
 
 	public void onResume() 
 	{
         Log.consoleLog("XmppChatManager.onResume()");
 		final String prefix = Session.instance().getUser().getStorageID();
-		Storage storage = Storage.createStorage(STORAGE_KEY, prefix);
+		Storage storage = Storage.createStorage(XmppChatManagerConstants.STORAGE_KEY, prefix);
 		//first ,get all button in bar 
-		final String data = storage.get(CHATS_KEY);
+		final String data = storage.get(XmppChatManagerConstants.CHATS_KEY);
 		JSONArray array = JSONParser.parse(data).isArray();
 		chatPanel.setOnResume(true);
 		resumeing = true;
@@ -224,15 +221,15 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 		resumeing = false;
 		chatPanel.setOnResume(false);
 		
-		final String activeButtonJid = storage.get(OPENCHAT_KEY);
+		final String activeButtonJid = storage.get(XmppChatManagerConstants.OPENCHAT_KEY);
 		if(activeButtonJid!=null&&activeButtonJid.length()>0)
 			openChat(activeButtonJid);
-		storage.set(OPENCHAT_KEY, "");
-		storage.remove(OPENCHAT_KEY);
-		storage.set(STORAGE_KEY, "");
-		storage.remove(STORAGE_KEY);
-		storage.set(prefix+STORAGE_KEY,"");
-		storage.remove(prefix+STORAGE_KEY);
+		storage.set(XmppChatManagerConstants.OPENCHAT_KEY, "");
+		storage.remove(XmppChatManagerConstants.OPENCHAT_KEY);
+		storage.set(XmppChatManagerConstants.STORAGE_KEY, "");
+		storage.remove(XmppChatManagerConstants.STORAGE_KEY);
+		storage.set(prefix+ XmppChatManagerConstants.STORAGE_KEY,"");
+		storage.remove(prefix+ XmppChatManagerConstants.STORAGE_KEY);
 	}
 
 	public void onSuspend() 
@@ -240,7 +237,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
         Log.consoleLog("XmppChatManager.onSuspend()");
 		//first get all button in the bar
 		final String prefix = Session.instance().getUser().getStorageID();
-		Storage storage = Storage.createStorage(STORAGE_KEY,prefix);
+		Storage storage = Storage.createStorage(XmppChatManagerConstants.STORAGE_KEY,prefix);
 		ArrayList<ChatPanelButton> buttons = chatPanel.getChatButtonsInBar();
 		JSONArray array = new JSONArray();
 		for(int index=0;index<buttons.size();index++)
@@ -249,18 +246,18 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 			array.set(index, new JSONString(button.getChatItem().getJid().toStringBare()));
 			button.doSuspend();
 		}
-		storage.set(CHATS_KEY, array.toString());
+		storage.set(XmppChatManagerConstants.CHATS_KEY, array.toString());
 		
 		ChatPanelButton activeButton = chatPanel.getActiveChatButton();
 		if(activeButton!=null)
 		{
 			String openJid = activeButton.getChatItem().getJid().toStringBare();
-			storage.set(OPENCHAT_KEY, openJid);
+			storage.set(XmppChatManagerConstants.OPENCHAT_KEY, openJid);
 		}
 		else
 		{
-			storage.set(OPENCHAT_KEY, "");
-			storage.remove(OPENCHAT_KEY);
+			storage.set(XmppChatManagerConstants.OPENCHAT_KEY, "");
+			storage.remove(XmppChatManagerConstants.OPENCHAT_KEY);
 		}
 	}
 

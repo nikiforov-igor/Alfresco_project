@@ -23,11 +23,12 @@ package ru.it.lecm.im.client.ui;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import ru.it.lecm.im.client.ui.listeners.ContextMenuItemListener;
 
 public class ContextMenuItem extends MenuItem
 {
 	final private ContextMenu menu;
-	public ContextMenuItem(final ContextMenu menu,String text, boolean asHTML,final ContextMenuItemListener listener) 
+	public ContextMenuItem(final ContextMenu menu,String text, boolean asHTML,final ContextMenuItemListener listener)
 	{
 		super(text, asHTML,new Command()
 		{

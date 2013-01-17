@@ -21,6 +21,7 @@
 package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.GWT;
+import ru.it.lecm.im.client.listeners.XmppProfileListener;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;

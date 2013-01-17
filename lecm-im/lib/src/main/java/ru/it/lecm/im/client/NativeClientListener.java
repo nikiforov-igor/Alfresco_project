@@ -21,6 +21,8 @@
 package ru.it.lecm.im.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import ru.it.lecm.im.client.listeners.ClientListener;
+import ru.it.lecm.im.client.listeners.MessageReceiveListener;
 
 public class NativeClientListener implements ClientListener, MessageReceiveListener
 {

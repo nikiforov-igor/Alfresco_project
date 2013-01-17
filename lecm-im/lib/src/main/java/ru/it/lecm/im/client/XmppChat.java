@@ -21,7 +21,7 @@
 package ru.it.lecm.im.client;
 
 import ru.it.lecm.im.client.ui.ChatPanelButton;
-import ru.it.lecm.im.client.ui.ChatPanelButtonListener;
+import ru.it.lecm.im.client.ui.listeners.ChatPanelButtonListener;
 import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;

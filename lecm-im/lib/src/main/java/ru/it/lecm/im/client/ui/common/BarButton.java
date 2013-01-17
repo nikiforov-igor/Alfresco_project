@@ -18,7 +18,7 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -30,6 +30,10 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
+import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
+import ru.it.lecm.im.client.ui.FocusHTMLPanel;
+import ru.it.lecm.im.client.ui.SimpleFocusWidget;
 import ru.it.lecm.im.client.utils.i18n;
 
 import java.util.ArrayList;
@@ -43,7 +47,8 @@ public class BarButton extends Composite {
 	}
 	
 	@UiField FlowPanel button;
-	@UiField FocusHTMLPanel buttonFocus;
+	@UiField
+    FocusHTMLPanel buttonFocus;
 	@UiField Element buttonStateElement;
 	@UiField Element tipDIVElement;
 	@UiField Element tipElement;
@@ -52,7 +57,8 @@ public class BarButton extends Composite {
 	@UiField Element countElement;
 	@UiField Element iconElement;
 	@UiField Element textElement;
-	@UiField ButtonPopupWindow window;
+	@UiField
+    ButtonPopupWindow window;
 	
 	//private SimpleFocusWidget button;
 	private SimpleFocusWidget closeButton;

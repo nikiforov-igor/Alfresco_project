@@ -18,13 +18,12 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.listeners;
 
-import java.util.List;
+import ru.it.lecm.im.client.utils.XmppStatus;
 
-public interface SearchBoxListener 
+public interface IndicatorListener
 {
-	void onSearch(List<String> results);
-	void onFinished();
-	void onCancel();
+	void onStatusTextChange(final String statusText);
+	void onXmppStatusChange(final XmppStatus.Status status);
 }

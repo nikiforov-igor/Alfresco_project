@@ -31,9 +31,12 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import ru.it.lecm.im.client.data.XmppConf;
 import ru.it.lecm.im.client.data.iJabConfImpl;
 import ru.it.lecm.im.client.data.iJabOptions;
+import ru.it.lecm.im.client.listeners.ClientListener;
+import ru.it.lecm.im.client.listeners.MessageReceiveListener;
+import ru.it.lecm.im.client.listeners.VisibilityListener;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
 import ru.it.lecm.im.client.ui.ContactView;
-import ru.it.lecm.im.client.ui.ContactViewListener;
+import ru.it.lecm.im.client.ui.listeners.ContactViewListener;
 import ru.it.lecm.im.client.ui.MUCPanelButton;
 import ru.it.lecm.im.client.utils.*;
 import ru.it.lecm.im.client.utils.TextUtils;
@@ -70,26 +73,33 @@ import java.util.Set;
 public class XmppClient
 {
 	private final String RESOURCE_PREFIX = "AlfIM";
-	private final Session session = Session.instance();
-	private final XmppConf conf = iJabConfImpl.getConf().getXmppConf();
-	private int priority = 5;
-	private static String SELF_NICK = "SELFNICK";
-	public static String BLACKLIST = "IJAB_BLACKLIST"; 
-	
+    private int priority = 5;
+    private static String SELF_NICK = "SELFNICK";
+
+    public static String BLACKLIST = "IJAB_BLACKLIST";
+    private final Session session = Session.instance();
+
+    private final XmppConf conf = iJabConfImpl.getConf().getXmppConf();
+
 	private int onlineContactCount = 0;
 	private int totalContactCount = 0;
-	final private XmppChatManager xmppChatManager;
+    private boolean isVisible = false;
+    protected boolean isLogined = false;
+    private int talkToCount = 0;
+
+
+	private final XmppChatManager xmppChatManager;
 
 
 	private int reconnect_count = conf.getMaxReconnet();
 	private Show weekShow = null;
-	private int talkToCount = 0;
-	List<String> talkToList = new ArrayList<String>();
-    protected final List<ClientListener> listeners = new ArrayList<ClientListener>();
-    protected final List<MessageReceiveListener> messageReceivelisteners = new ArrayList<MessageReceiveListener>();
+
+
+    protected final List<String> talkToList = new ArrayList<String>();
+    protected final List<ClientListener> clientListeners = new ArrayList<ClientListener>();
+    protected final List<MessageReceiveListener> messageReceiveListeners = new ArrayList<MessageReceiveListener>();
     protected final List<VisibilityListener> visibilityListeners = new ArrayList<VisibilityListener>();
-    private boolean isVisible = false;
-    protected boolean isLogined = false;
+
 
     public XmppClient()
 	{
@@ -959,7 +969,7 @@ public class XmppClient
 
     public void addClientListener(ClientListener handler)
     {
-        listeners.add(handler);
+        clientListeners.add(handler);
     }
 
     public void addNativeMessageReceiveListener(JavaScriptObject jso)
@@ -968,7 +978,7 @@ public class XmppClient
     }
 
     private void addNativeMessageReceiveListener(MessageReceiveListener messageReceiveListener) {
-        this.messageReceivelisteners.add(messageReceiveListener);
+        this.messageReceiveListeners.add(messageReceiveListener);
     }
 
     public boolean isLogined()
@@ -979,7 +989,7 @@ public class XmppClient
     protected void fireOnLogout()
     {
         isLogined = false;
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onLogout();
         }
@@ -987,7 +997,7 @@ public class XmppClient
 
     protected void fireOnAvatarClicked(int clientX,int clientY,final String username,final String bareJid)
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onAvatarClicked(clientX,clientY,username,bareJid);
         }
@@ -995,7 +1005,7 @@ public class XmppClient
 
     protected void fireOnAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid)
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onAvatarMouseOver(clientX,clientY,username,bareJid);
         }
@@ -1003,7 +1013,7 @@ public class XmppClient
 
     protected void fireOnAvatarMouseOut(int clientX,int clientY,final String username,final String bareJid)
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onAvatarMouseOut(clientX,clientY,username,bareJid);
         }
@@ -1011,7 +1021,7 @@ public class XmppClient
 
     protected void fireOnStatusTextUpdated(final String text)
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onStatusTextUpdated(text);
         }
@@ -1020,7 +1030,7 @@ public class XmppClient
     protected void fireOnError(final String error)
     {
         isLogined = false;
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onError(error);
         }
@@ -1028,7 +1038,7 @@ public class XmppClient
 
     protected void fireOnBeforeLogin()
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onBeforeLogin();
         }
@@ -1037,7 +1047,7 @@ public class XmppClient
     protected void fireOnEndLogin()
     {
         isLogined = true;
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onEndLogin();
         }
@@ -1046,7 +1056,7 @@ public class XmppClient
     protected void fireOnSuspend()
     {
         isLogined = false;
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onSuspend();
         }
@@ -1054,7 +1064,7 @@ public class XmppClient
 
     protected void fireOnResume()
     {
-        for(ClientListener l:listeners)
+        for(ClientListener l: clientListeners)
         {
             l.onResume();
         }
@@ -1062,7 +1072,7 @@ public class XmppClient
 
     protected void fireOnMessageReceive(final String jid,final String message)
     {
-        for(MessageReceiveListener l:messageReceivelisteners)
+        for(MessageReceiveListener l: messageReceiveListeners)
         {
             l.onMessageReceive(jid, message);
         }

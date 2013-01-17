@@ -20,17 +20,16 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import java.util.Date;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
-
+import ru.it.lecm.im.client.utils.ChatTextFormatter;
+import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.muc.GroupChat;
-import ru.it.lecm.im.client.utils.ChatTextFormatter;
-import ru.it.lecm.im.client.utils.i18n;
+
+import java.util.Date;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -54,11 +53,12 @@ public class MUCChatWidget extends BarChatWidgetUI
 	
 	public void processMessage(Message message)
 	{
-		if(message.getFrom().getResource() == null)
-			return;
-		if(message == null||message.getBody()==null)
-			return;
-		String nick = null;
+        if (message.getFrom().getResource() == null || message.getBody() == null)
+        {
+            return;
+        }
+
+        String nick = null;
 		String resrouceName = message.getFrom().getResource();
 		String gcNick = gc == null?"":gc.getNickname();
 		gcNick = gcNick==null?"":gcNick;

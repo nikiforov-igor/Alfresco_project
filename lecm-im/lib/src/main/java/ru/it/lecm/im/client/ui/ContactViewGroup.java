@@ -20,15 +20,14 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-
 import com.google.gwt.user.client.ui.FlowPanel;
 import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ContactViewGroup extends ContactViewGroupUI
 {
@@ -130,15 +129,13 @@ public class ContactViewGroup extends ContactViewGroupUI
 	{
 		int itemPos = groupBody.getWidgetIndex(item);
 		int oddChangePos = itemPos;
-		boolean oddChange = false;
-		if(newStatus == XmppStatus.Status.STATUS_OFFLINE)
+        if(newStatus == XmppStatus.Status.STATUS_OFFLINE)
 		{
 			onlineCount--;
 			updateGroupCount();
 			if(groupBody.getWidgetCount()<=1)
 				return;
-			oddChange = true;
-			groupBody.add(item);
+            groupBody.add(item);
 		}
 		else
 		{
@@ -149,8 +146,7 @@ public class ContactViewGroup extends ContactViewGroupUI
 			}
 			if(groupBody.getWidgetCount()<=1)
 				return;
-			oddChange = true;
-			int afterIndex = -1;
+            int afterIndex = -1;
 			int startPos = 0;
 			if(newStatus.ordinal()<oldStatus.ordinal())
 			{
@@ -175,11 +171,8 @@ public class ContactViewGroup extends ContactViewGroupUI
 			}
 			
 		}
-		if(oddChange)
-		{
-			updateItemOddStyle(oddChangePos);
-		}
-	}
+        updateItemOddStyle(oddChangePos);
+    }
 	
 	private String getViewItemId(final String bareJid)
 	{

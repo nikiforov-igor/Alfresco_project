@@ -18,7 +18,7 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client.ui;
+package ru.it.lecm.im.client.ui.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
+import ru.it.lecm.im.client.ui.SimpleFocusWidget;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class ButtonPopupWindow extends Composite {
@@ -265,4 +267,9 @@ public class ButtonPopupWindow extends Composite {
 	{
 		captionElement.setInnerText(caption);
 	}
+
+    public void ClearButtonPopupWindowListeners()
+    {
+        listeners.clear();
+    }
 }

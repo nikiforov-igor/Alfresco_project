@@ -1,4 +1,4 @@
-package ru.it.lecm.im.client;
+package ru.it.lecm.im.client.listeners;
 
 public interface MessageReceiveListener
 {

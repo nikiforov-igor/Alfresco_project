@@ -20,6 +20,8 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.ui.common.BarButton;
+
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
  *

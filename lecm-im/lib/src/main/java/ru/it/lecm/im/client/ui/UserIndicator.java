@@ -20,6 +20,8 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import ru.it.lecm.im.client.ui.listeners.IndicatorListener;
+import ru.it.lecm.im.client.ui.listeners.StatusMenuListener;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 
@@ -47,19 +49,19 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.XmppProfileListener;
+import ru.it.lecm.im.client.listeners.XmppProfileListener;
 import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class UserIndicator extends FlexTable
 {
-	private StatusSelector statusSelector;
+	private StatusSelector statusSelector = new StatusSelector();
 	//private Image statusImg;
-	private Image avatarImg;
-	private Label nickName;
-	private Label statusLabel;
-	private TextBox statusEditor;
+	private Image avatarImg = new Image(GWT.getModuleBaseURL()+"images/default_avatar.png");
+	private Label nickName = new Label("");
+	private Label statusLabel = new Label();
+	private TextBox statusEditor = new TextBox();
 	private String STATUS_TIP = i18n.msg("Writer your status text here.");
 	
 	private StatusMenu statusMenu;
@@ -75,9 +77,8 @@ public class UserIndicator extends FlexTable
 	    FlexCellFormatter formatter = getFlexCellFormatter();
 	    setTitleWidget(null);
 	    formatter.setStyleName(0, 0, "ijab-indicator-title");
-		
-		avatarImg = new Image(GWT.getModuleBaseURL()+"images/default_avatar.png");
-		avatarImg.setWidth("32px");
+
+        avatarImg.setWidth("32px");
 		avatarImg.setHeight("32px");
 		avatarImg.setStyleName("ijab-self-avatar");
 		avatarImg.addStyleName("ui-corner-all");
@@ -100,13 +101,11 @@ public class UserIndicator extends FlexTable
 				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
 			}
 		});
-		
-		nickName = new Label("");
-		nickName.setDirection(Direction.LTR);
+
+        nickName.setDirection(Direction.LTR);
 		nickName.setStyleName("ijab-self-nick");
-		
-		statusSelector = new StatusSelector();
-		statusSelector.setUrl(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_ONLINE));
+
+        statusSelector.setUrl(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_ONLINE));
 		
 		final ContextMenuUI menu = new ContextMenuUI();
 		statusMenu = new StatusMenu(menu);
@@ -135,9 +134,8 @@ public class UserIndicator extends FlexTable
 				menu.showRelativeTo(nickName);
 			}
 		});
-		 
-		statusLabel = new Label();
-		statusLabel.setStyleName("ijab-self-status");
+
+        statusLabel.setStyleName("ijab-self-status");
 		statusLabel.setStylePrimaryName("ijab-self-status");
 		statusLabel.addMouseOverHandler(new MouseOverHandler()
 		{
@@ -154,8 +152,7 @@ public class UserIndicator extends FlexTable
 			}
 		});
 
-		statusEditor = new TextBox();
-		statusEditor.setVisible(false);
+        statusEditor.setVisible(false);
 		statusEditor.setStyleName("ijab-self-status-editor");
 		
 		HorizontalPanel titlePanel = new HorizontalPanel();

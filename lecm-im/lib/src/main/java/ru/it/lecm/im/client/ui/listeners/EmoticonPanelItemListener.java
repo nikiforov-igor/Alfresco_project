@@ -18,20 +18,9 @@
  * Last modified by Fanglin Zhong<zhongfanglin@gmail.com>
  * Feb 2, 2010
  */
-package ru.it.lecm.im.client;
+package ru.it.lecm.im.client.ui.listeners;
 
-public interface ClientListener 
+public interface EmoticonPanelItemListener 
 {
-	void onSuspend();
-	void onResume();
-	void onLogout();
-	void onError(final String error);
-	void onBeforeLogin();
-	void onEndLogin();
-	void onAvatarClicked(int clientX,int clientY,final String username,final String bareJid);
-	void onAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid);
-	void onAvatarMouseOut(int clientX,int clientY,final String usrname,final String bareJid);
-	void onStatusTextUpdated(final String text);
+	void emotSelect(String text);
 }
-
-
