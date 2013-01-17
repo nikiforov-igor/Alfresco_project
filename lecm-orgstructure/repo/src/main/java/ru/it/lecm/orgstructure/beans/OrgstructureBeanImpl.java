@@ -53,10 +53,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		this.personService = personService;
 	}
 
-	/**
-	 * Получение директории Организация.
-	 * Если такой узел отсутствует - он НЕ создаётся.
-	 */
 	@Override
 	public NodeRef getOrganizationRootRef() {
 		repositoryHelper.init();
@@ -64,12 +60,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, ORGANIZATION_ROOT_NAME);
 	}
 
-	/**
-	 * Получение узла Организация, в котором хрянится информация об Организации.
-	 * Если такой узел отсутствует - он создаётся автоматически (внутри /CompanyHome).
-	 *
-	 * @return NodeRef
-	 */
 	@Override
 	public NodeRef ensureOrganizationRootRef() {
 		final String rootName = ORGANIZATION_ROOT_NAME;
@@ -133,11 +123,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	/**
-	 * Получение руководителя Организации
-	 *
-	 * @return NodeRef или NULL если руководитель не задан
-	 */
 	@Override
 	public NodeRef getOrganizationBoss() {
 		NodeRef bossRef = null;
@@ -151,11 +136,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return bossRef;
 	}
 
-	/**
-	 * Получение логотипа Организации
-	 *
-	 * @return NodeRef или NULL если логотип не задан
-	 */
 	@Override
 	public NodeRef getOrganizationLogo() {
 		NodeRef logoRef = null;
@@ -169,11 +149,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return logoRef;
 	}
 
-	/**
-	 * Получение Директории с Оргструктурой
-	 *
-	 * @return NodeRef или NULL
-	 */
 	@Override
 	public NodeRef getStructureDirectory() {
 		NodeRef structure = null;
@@ -184,11 +159,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return structure;
 	}
 
-	/**
-	 * Получение Директории с Сотрудниками
-	 *
-	 * @return NodeRef или NULL
-	 */
 	@Override
 	public NodeRef getEmployeesDirectory() {
 		NodeRef emp = null;
@@ -199,11 +169,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return emp;
 	}
 
-	/**
-	 * Получение Директории с Персональными данными
-	 *
-	 * @return NodeRef или NULL
-	 */
 	@Override
 	public NodeRef getPersonalDataDirectory() {
 		NodeRef pd = null;
@@ -214,9 +179,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return pd;
 	}
 
-	/**
-	 * Получение списка Рабочих групп для Организации
-	 */
 	@Override
 	public List<NodeRef> getWorkGroups(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -238,17 +200,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение списка дочерних подразделений
-	 */
 	@Override
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive) {
 		return getSubUnits(parent, onlyActive, false);
 	}
 
-	/**
-     * Получение списка дочерних подразделений
-     */
 	@Override
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -267,9 +223,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Проверка есть ли у подразделения дочерние элементы
-	 */
 	@Override
 	public boolean hasChild(NodeRef parent, boolean onlyActive) {
 		List<NodeRef> childs = getSubUnits(parent, onlyActive);
@@ -288,9 +241,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return hasChild;
 	}
 
-	/**
-	 * Получение родительского подразделения
-	 */
 	@Override
 	public NodeRef getParent(NodeRef unitRef) {
 		ChildAssociationRef parentRef = nodeService.getPrimaryParent(unitRef);
@@ -303,9 +253,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return null;
 	}
 
-	/**
-	 * проверяет что объект является подразделением
-	 */
 	@Override
 	public boolean isUnit(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -313,9 +260,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * проверяет что объект является рабочей группой
-	 */
 	@Override
 	public boolean isWorkGroup(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -323,9 +267,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * проверяет что объект является бизнес ролью
-	 */
 	@Override
 	public boolean isBusinessRole(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -333,9 +274,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * проверяет что объект является сотрудником
-	 */
 	@Override
 	public boolean isEmployee(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -343,27 +281,20 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * проверяет что объект является штатным расписанием
-	 */
 	@Override
 	public boolean isStaffList(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_STAFF_LIST);
 		return isProperType(ref, types);
 	}
-	/**
-	 * проверяет что объект является Участником рабочей группы
-	 */
+
 	@Override
 	public boolean isWorkForce(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_WORKFORCE);
 		return isProperType(ref, types);
 	}
-	/**
-	 * проверяет что объект является должностью
-	 */
+
 	@Override
 	public boolean isPosition(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -371,9 +302,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * Получение руководителя подразделения
-	 */
 	@Override
 	public NodeRef getUnitBoss(NodeRef unitRef) {
 		NodeRef bossLink = null;
@@ -398,9 +326,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return bossLink;
 	}
 
-	/**
-	 * Получение Штатного расписания, содержащего руководящую позицию
-	 */
 	@Override
 	public NodeRef getBossStaff(NodeRef unitRef) {
 		// Получаем список штатных расписаний
@@ -416,9 +341,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return bossStaff;
 	}
 
-	/**
-	 * Получение руководителя сотрудника
-	 */
 	@Override
 	public NodeRef findEmployeeBoss(NodeRef employeeRef) {
 		NodeRef bossRef = null;
@@ -445,9 +367,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return bossRef;
 	}
 
-	/**
-	 * Получение списка Штатных Расписаний для Подразделения
-	 */
 	@Override
 	public List<NodeRef> getUnitStaffLists(NodeRef unitRef) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -465,9 +384,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
-	 */
 	@Override
 	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
@@ -477,12 +393,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return null;
 	}
 
-	/**
-	 * Получение списка сотрудников, занимающих в указанном подразделении указанную должностную позицию
-	 * @param unit подразделение
-	 * @param position доложностная позиция
-	 * @return список ссылок на сотрудников
-	 */
 	@Override
 	public List<NodeRef> getEmployeesByPosition(NodeRef unit, NodeRef position) {
 		Set<NodeRef> result = new HashSet<NodeRef>();
@@ -502,9 +412,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return new ArrayList<NodeRef>(result);
 	}
 
-	/**
-	 * Получение ссылки на сотрудника из объекта (lecm-orgstr:employee-link)
-	 */
 	@Override
 	public NodeRef getEmployeeByLink(NodeRef linkRef) {
 		Set<QName> properTypes = new HashSet<QName>();
@@ -518,9 +425,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return null;
 	}
 
-	/**
-	 * Получение списка должностных позиций в системе
-	 */
 	@Override
 	public List<NodeRef> getStaffPositions(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -545,9 +449,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение перечня сотрудников, которые занимают должностную позицию
-	 */
 	@Override
 	public List<NodeRef> getPositionEmployees(NodeRef position) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -573,9 +474,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение перечня сотрудников, участвующих в рабочей группе
-	 */
 	@Override
 	public List<NodeRef> getWorkGroupEmployees(NodeRef workGroup) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -600,9 +498,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение перечня сотрудников подразделения либо рабочей группы
-	 */
 	@Override
 	public List<NodeRef> getOrganizationElementEmployees(NodeRef organizationElement) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
@@ -630,9 +525,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return new ArrayList<NodeRef>(results);
 	}
 
-	/**
-	 * Получение основной должностной позиции (штатного расписания) у сотрудника
-	 */
 	@Override
 	public NodeRef getEmployeePrimaryStaff(NodeRef employeeRef) {
 		NodeRef primaryStaff = null;
@@ -650,9 +542,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return primaryStaff;
 	}
 
-	/**
-	 * Получение штатного расписания или участника Рабочей группы по ссылке на сотрудника
-	 */
 	@Override
 	public NodeRef getPositionByEmployeeLink(NodeRef empLink) {
 		NodeRef staff = null;
@@ -671,9 +560,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return staff;
 	}
 
-	/**
-	 * Получение подразделения, к которому относится штатное расписание
-	 */
 	@Override
 	public NodeRef getUnitByStaff(NodeRef staffRef) {
 		NodeRef unitRef = null;
@@ -683,9 +569,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return unitRef;
 	}
 
-	/**
-	 * Получение фотографии сотрудника
-	 */
 	@Override
 	public NodeRef getEmployeePhoto(NodeRef employeeRef) {
 		NodeRef photoRef = null;
@@ -698,9 +581,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return photoRef;
 	}
 
-	/**
-	 * Получение персональных данных сотрудника
-	 */
 	@Override
 	public NodeRef getEmployeePersonalData(NodeRef employeeRef) {
 		NodeRef personRef = null;
@@ -713,9 +593,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return personRef;
 	}
 
-	/**
-	 * Получение списка должностных позиций сотрудника
-	 */
 	@Override
 	public List<NodeRef> getEmployeeStaffs(NodeRef employeeRef) {
 		Set<QName> types = new HashSet<QName>();
@@ -723,9 +600,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return getEmployeePositions(employeeRef, types);
 	}
 
-	/**
-	 * Получение списка Участников Рабочих Групп для сотрудника
-	 */
 	@Override
 	public List<NodeRef> getEmployeeWorkForces(NodeRef employeeRef) {
 		Set<QName> types = new HashSet<QName>();
@@ -749,9 +623,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return positions;
 	}
 
-	/**
-	 * Получение списка Рабочих Групп, в которых участвует сотрудник
-	 */
 	@Override
 	public List<NodeRef> getEmployeeWorkGroups(NodeRef employeeRef) {
 		List<NodeRef> wGroups = new ArrayList<NodeRef>();
@@ -768,9 +639,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return wGroups;
 	}
 
-	/**
-	 * Получение рабочей группы, к которому относится участник
-	 */
 	@Override
 	public NodeRef getWorkGroupByWorkForce(NodeRef workRef) {
 		NodeRef groupRef = null;
@@ -780,9 +648,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return groupRef;
 	}
 
-	/**
-	 * Получение списка ролей в рабочих группах
-	 */
 	@Override
 	public List<NodeRef> getWorkRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -807,9 +672,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение ссылки на сотрудника для Позиции (Штатного расписания или Участника Рабочей группы)
-	 */
 	@Override
 	public NodeRef getEmployeeLinkByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = null;
@@ -832,9 +694,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return employeeLink;
 	}
 
-	/**
-	 * Получение полного перечня бизнес ролей
-	 */
 	@Override
 	public List<NodeRef> getBusinesRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -859,9 +718,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	/**
-	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
-	 */
 	@Override
 	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
@@ -900,10 +756,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 
-	/**
-	 * Получение перечня организационных элементов (подразделений и рабочих групп),
-	 * исполняющих определенную Бизнес-роль (включая вложенные)
-	 */
 	@Override
 	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -921,9 +773,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 
-	/**
-	 * Получение ссылок на сотрудника
-	 */
 	@Override
 	public List<NodeRef> getEmployeeLinks(NodeRef employeeRef) {
 		List<NodeRef> links = new ArrayList<NodeRef>();
@@ -937,9 +786,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 		return links;
 	}
-	/**
-	 * Получение ссылок на сотрудника в Штатных расписаниях
-	 */
+
 	@Override
 	public List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef) {
 		List<NodeRef> links = new ArrayList<NodeRef>();
@@ -955,18 +802,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return links;
 	}
 
-	/**
-	 * Получение текущего сотрудника
-	 */
 	@Override
 	public NodeRef getCurrentEmployee() {
 		String username = authService.getCurrentUserName();
 		return getEmployeeByPerson(username);
 	}
 
-	/**
-	 * Получение текущего сотрудника по имени пользователя
-	 */
 	@Override
 	public NodeRef getEmployeeByPerson(String personName) {
 		if (personName != null) {
@@ -978,9 +819,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return null;
 	}
 
-	/**
-	 * Получение текущего сотрудника по NodeRef пользователя
-	 */
 	@Override
 	public NodeRef getEmployeeByPerson(NodeRef person) {
 		List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
@@ -992,9 +830,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return null;
 	}
 
-	/**
-	 * Получение пользователя сотрудника
-	 */
 	@Override
 	public NodeRef getPersonForEmployee(NodeRef employee) {
 		List<AssociationRef> persons = nodeService.getTargetAssocs(employee, ASSOC_EMPLOYEE_PERSON);
@@ -1034,18 +869,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return units;
 	}
 
-//	@Override
-//	public List<NodeRef> getEmployeesInUnit (final NodeRef unitRef) {
-//		//получаем штатные расписания сотрудников в подразделении
-//		List<NodeRef> staffs =  getUnitStaffLists (unitRef);
-//		Set<NodeRef> employees = new HashSet<NodeRef> ();
-//		for (NodeRef staffRef : staffs) {
-//			//по штатному расписанию вытаскиваем сотрудника
-//			employees.add (getEmployeeByPosition (staffRef));
-//		}
-//		return employees;
-//	}
-
 	@Override
 	public List<NodeRef> getBossSubordinate (final NodeRef employeeRef) {
 		//получаем список подразделений где этот сотрудник является боссом
@@ -1063,5 +886,78 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		//начальника выгоняем из множества сотрудников
 		employees.remove (employeeRef);
 		return new ArrayList<NodeRef> (employees);
+	}
+
+	/**
+	 * найти или создать связь между бизнес ролью и NodeRef-ой указанного типа
+	 * @param businesssRoleRef бизнес роль у которой привязываем NodeRef
+	 * @param targetRef привязываемый NodeRef
+	 * @param assocName имя типа ассоциации
+	 * @param typeName имя типа объекта
+	 * @return AssociationRef где source это бизнес роль, target это целевой NodeRef
+	 */
+	private AssociationRef getOrCreateBusinessRoleAssoc (NodeRef businesssRoleRef, NodeRef targetRef, QName assocName) {
+		List<AssociationRef> associationRefs = nodeService.getTargetAssocs (businesssRoleRef, assocName);
+		AssociationRef targetAssoc = null;
+		if (associationRefs != null) {
+			for (AssociationRef associationRef : associationRefs) {
+				if (associationRef.getTargetRef ().equals (targetRef)) {
+					targetAssoc = associationRef;
+					break;
+				}
+			}
+		}
+		if (targetAssoc == null) {
+			targetAssoc = nodeService.createAssociation (businesssRoleRef, targetRef, assocName);
+		}
+		return targetAssoc;
+	}
+
+	@Override
+	public AssociationRef includeEmployeeIntoBusinessRole (final NodeRef businesssRoleRef, final NodeRef employeeRef) {
+		return getOrCreateBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_EMPLOYEE);
+	}
+
+	@Override
+	public AssociationRef includeOrgElementIntoBusinessRole (final NodeRef businesssRoleRef, final NodeRef orgElementRef) {
+		return getOrCreateBusinessRoleAssoc (businesssRoleRef, orgElementRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
+	}
+
+	@Override
+	public AssociationRef includeOrgElementMemberIntoBusinessRole (final NodeRef businesssRoleRef, final NodeRef orgElementMemberRef) {
+		return getOrCreateBusinessRoleAssoc (businesssRoleRef, orgElementMemberRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+	}
+
+	/**
+	 * поиск и удаление у бизнес роли ассоциации указанного типа на конкретный NodeRef
+	 * @param businesssRoleRef бизнес роль у которой удаляем ассоциацию
+	 * @param targetRef целевой NodeRef на который указывает удаляемая ассоциация
+	 * @param assocName имя типа ассоциации
+	 */
+	private void findAndRemoveBusinessRoleAssoc (NodeRef businesssRoleRef, NodeRef targetRef, QName assocName) {
+		List<AssociationRef> associationRefs = nodeService.getTargetAssocs (businesssRoleRef, assocName);
+		if (associationRefs != null) {
+			for (AssociationRef associationRef : associationRefs) {
+				if (associationRef.getTargetRef ().equals (targetRef)) {
+					nodeService.removeAssociation (businesssRoleRef, targetRef, assocName);
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void excludeEmployeeFromBusinessRole (final NodeRef businesssRoleRef, final NodeRef employeeRef) {
+		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_EMPLOYEE);
+	}
+
+	@Override
+	public void excludeOrgElementFromBusinessRole (final NodeRef businesssRoleRef, final NodeRef employeeRef) {
+		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
+	}
+
+	@Override
+	public void excludeOrgElementMemberFromBusinesssRole (final NodeRef businesssRoleRef, final NodeRef employeeRef) {
+		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
 	}
 }

@@ -11,6 +11,28 @@ import org.json.JSONObject;
  */
 public interface IDelegation {
 
+	enum DELEGATION_OPTS_STATUS {
+		NEW,
+		ACTIVE,
+		REVOKED,
+		CLOSED,
+		NOT_SET;
+
+		public static DELEGATION_OPTS_STATUS get (String status) {
+			DELEGATION_OPTS_STATUS[] values = DELEGATION_OPTS_STATUS.values ();
+			for (int i = 0; i < values.length; ++i) {
+				if (values[i].equals (status)) {
+					return values[i];
+				}
+			}
+			throw new IllegalArgumentException (String.format ("Invalid delegation options status. Status \"%s\" not supported", status));
+		}
+
+		public final boolean equals (String other) {
+			return this.toString ().equals (other);
+		}
+	}
+
 	JSONObject test(JSONObject args);
 
 	/**
@@ -116,4 +138,18 @@ public interface IDelegation {
 	 * @param nodeRefs json массив нодов для удаления
 	 */
 	void deleteProcuracies (final JSONArray nodeRefs);
+
+	/**
+	 * установить статус DELEGATION_OPTS_STATUS.ACTIVE для сотрудника
+	 * @param employeeRef ссылка на сотрудника
+	 * @return предыдущий статус который был у параметров делегирования
+	 */
+	DELEGATION_OPTS_STATUS activateDelegationForEmployee (final NodeRef employeeRef);
+
+	/**
+	 * установить статус DELEGATION_OPTS_STATUS.CLOSED для сотрудника
+	 * @param employeeRef ссылка на сотрудника
+	 * @return предыдущий статус который был у параметров делегирования
+	 */
+	DELEGATION_OPTS_STATUS closeDelegationForEmployee (final NodeRef employeeRef);
 }

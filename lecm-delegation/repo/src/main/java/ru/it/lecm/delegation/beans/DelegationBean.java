@@ -945,18 +945,6 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	private final static QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
 	private final static QName ASSOC_DELEGATION_OPTS_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-trustee-assoc");
 
-	private static enum DELEGATION_OPTS_STATUS {
-		NEW,
-		ACTIVE,
-		REVOKED,
-		CLOSED,
-		NOT_SET;
-
-		public final boolean equals (String other) {
-			return this.toString ().equals (other);
-		}
-	}
-
 	/**
 	 * поиск значения проверти или ассоциации в JSON объекте который пришел с формы
 	 * @param options JSON объект по которому искать
@@ -1092,5 +1080,21 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 				}
 			}
 		}
+	}
+
+	@Override
+	public DELEGATION_OPTS_STATUS activateDelegationForEmployee (final NodeRef employeeRef) {
+		NodeRef delegationOptsRef = getDelegationOptsByEmployee (employeeRef);
+		Serializable oldStatus = nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS);
+		nodeService.setProperty (delegationOptsRef, PROP_STATUS, DELEGATION_OPTS_STATUS.ACTIVE.toString ());
+		return DELEGATION_OPTS_STATUS.get (oldStatus.toString ());
+	}
+
+	@Override
+	public DELEGATION_OPTS_STATUS closeDelegationForEmployee (final NodeRef employeeRef) {
+		NodeRef delegationOptsRef = getDelegationOptsByEmployee (employeeRef);
+		Serializable oldStatus = nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS);
+		nodeService.setProperty (delegationOptsRef, PROP_STATUS, DELEGATION_OPTS_STATUS.CLOSED.toString ());
+		return DELEGATION_OPTS_STATUS.get (oldStatus.toString ());
 	}
 }

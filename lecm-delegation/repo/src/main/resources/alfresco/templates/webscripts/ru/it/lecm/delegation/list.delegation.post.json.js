@@ -29,6 +29,9 @@ var def = {
 };
 var results = search.query(def);
 var brEngineerNodeRef = results[0].nodeRef;
+if (!brEngineerNodeRef) {
+	logger.log ("ERROR: there is no business role with identifier " + ENGINEER_ID);
+}
 
 //по этой бизнес роли находим всех сотрудников которые там есть
 var employees = orgstructure.getEmployeesByBusinessRole (brEngineerNodeRef);
@@ -47,11 +50,18 @@ if (!isEngineer) {
 	// если чувак не технолог, то получаем список его подчиненных.
 	// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
 	logger.log ("getBossSubordinate");
+	if (!currentEmployee.nodeRef) {
+		logger.log ("ERROR: there is no nodeRef for currentEmployee");
+	}
 	var employees = orgstructure.getBossSubordinate (currentEmployee.nodeRef);
 	//получаем delegation-opts по сотрудникам
 	var delegationOpts = [];
 	for (var i = 0; i < employees.length; ++i) {
-		delegationOpts.push (delegation.getDelegationOptsByEmployee (employees[i].nodeRef));
+		var employeeRef = employees[i].nodeRef;
+		if (!employeeRef) {
+			logger.log ("ERROR: there is no nodeRef for employee");
+		}
+		delegationOpts.push (delegation.getDelegationOptsByEmployee (employeeRef));
 	}
 	//бежим по model.data.items для каждого элемента проверяем его наличие в employees
 	//если его нет то удаляем его из model.data.items
@@ -68,32 +78,17 @@ if (!isEngineer) {
 	}
 	model.data.items = actualItems;
 	model.data.paging.totalRecords = actualItems.length;
-	//получаем все должностные позиции чувака и достаем оттуда руководящую позацию
-//	var staffs = orgstructure.getEmployeeStaffs (currentEmployee.nodeRef);
-//	var isBoss = false;
-//	var bossStaff = null;
-//	for (var i = 0; i < staffs.length; ++i) {
-//	  bossStaff = staffs[i];
-//	  isBoss = bossStaff.properties["lecm-orgstr:staff-list-is-boss"];
-//	  logger.log ("staff_" + i + " " + bossStaff.nodeRef + " is boss = " + isBoss);
-//	}
-//	if (isBoss) {
-//		//если сотрудник босс то получаем всех его подчиненных и фильтруем список параметров делегирования
-//	} else {
-//		//если сотрудник не босс то очищаем список
-//		model.data.paging.startIndex = 0;
-//		model.data.items = [];
-//	}
 } else {
 	//удалим себя из списка, к себе на страницу мы и так можем попасть
+	if (!currentEmployee.nodeRef) {
+		logger.log ("ERROR: there is no nodeRef for currentEmployee");
+	}
 	var delegationOpts = delegation.getDelegationOptsByEmployee (currentEmployee.nodeRef);
 	logger.log (delegationOpts.name);
 
 	var items = model.data.items;
 	for (var i = 0; i < items.length; ++i) {
 		var prop = items[i].node;
-//		logger.log ("delegationOpts.equals (prop) = " + delegationOpts.equals (prop));
-//		logger.log ("delegationOpts.nodeRef.equals (prop.nodeRef) = " + delegationOpts.nodeRef.equals (prop.nodeRef));
 		if (delegationOpts.equals (prop)) {
 			logger.log (prop.name + "found and must be removed from search result");
 			items.splice (i, 1);
