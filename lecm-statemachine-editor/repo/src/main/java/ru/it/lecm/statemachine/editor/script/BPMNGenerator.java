@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -61,6 +62,7 @@ public class BPMNGenerator {
 	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
 	private final static QName PROP_ARCHIVE_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "archiveFolder");
 	private final static QName PROP_CREATION_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "creationDocument");
+	private final static QName PROP_PERMISSION_TYPE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "permissionTypeValue");
 
 	private final static String VARIABLE = "VARIABLE";
 	private final static String VALUE = "VALUE";
@@ -229,6 +231,25 @@ public class BPMNGenerator {
 				attribute.setAttribute("name", "status");
 				attribute.setAttribute("value", statusName);
 				setStatusAction.appendChild(attribute);
+
+				//Roles for status
+				NodeRef statusRoles = nodeService.getChildByName(status.getChildRef(), ContentModel.ASSOC_CONTAINS, "roles");
+				Element statusRolesElement = doc.createElement("roles");
+				setStatusAction.appendChild(statusRolesElement);
+
+				NodeRef staticRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "static");
+				Element staticRoleElement = doc.createElement("static-roles");
+				statusRolesElement.appendChild(staticRoleElement);
+
+				List<ChildAssociationRef> permissions = nodeService.getChildAssocs(staticRoles);
+				createRoleElement(staticRoleElement, permissions);
+
+				NodeRef dynamicRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "dynamic");
+				Element dynamicRoleElement = doc.createElement("dynamic-roles");
+				statusRolesElement.appendChild(dynamicRoleElement);
+
+				permissions = nodeService.getChildAssocs(dynamicRoles);
+				createRoleElement(dynamicRoleElement, permissions);
 
 				String statusUUID = (String) nodeService.getProperty(status.getChildRef(), PROP_STATUS_UUID);
 				attribute = doc.createElement("lecm:attribute");
@@ -626,6 +647,24 @@ public class BPMNGenerator {
 		}
 		return flow;
 	}
+
+	/**
+	 * Создает список ролей
+	 * @param rolesElement основной элемент
+	 * @param permissions - список ролей с правами доступа
+	 */
+	private void createRoleElement(Element rolesElement, List<ChildAssociationRef> permissions) {
+		for (ChildAssociationRef permission : permissions) {
+			AssociationRef role = nodeService.getTargetAssocs(permission.getChildRef(), ASSOC_ROLE).get(0);
+			String roleName = (String) nodeService.getProperty(role.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+			String permissionTypeValue = (String) nodeService.getProperty(permission.getChildRef(), PROP_PERMISSION_TYPE_VALUE);
+			Element roleElement = doc.createElement("role");
+			roleElement.setAttribute("name", roleName);
+			roleElement.setAttribute("permission", permissionTypeValue);
+			rolesElement.appendChild(roleElement);
+		}
+	}
+
 
 	private class Flow {
 

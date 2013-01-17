@@ -15,6 +15,7 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private NodeRef folder = null;
 	private String uuid = null;
 	private boolean startStatus = false;
+	private ArrayList<Permission> dynamicRoles = new ArrayList<Permission>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -47,6 +49,16 @@ public class StatusChangeAction extends StateMachineAction {
 			} else if ("startStatus".equalsIgnoreCase(name)) {
 				startStatus = Boolean.parseBoolean(value);
 			}
+		}
+
+		//Инициализация ролей
+		Element roles = action.element("roles");
+		if (roles != null) {
+			Element staticRoleElement = roles.element("static-roles");
+			ArrayList<Permission> permissions = initPermissions(staticRoleElement);
+
+			Element dynamicRoleElement = roles.element("dynamic-roles");
+			dynamicRoles = initPermissions(dynamicRoleElement);
 		}
 
 		//Если начальный статус, то папки для него не требуется
@@ -95,6 +107,8 @@ public class StatusChangeAction extends StateMachineAction {
 			createFolder(processFolder, status, uuid);
 		}
 
+		//Установка статических прав на папку статуса
+
 	}
 
 	@Override
@@ -115,6 +129,8 @@ public class StatusChangeAction extends StateMachineAction {
 			String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
 			nodeService.moveNode(child.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 		}
+
+		//Установка динамических ролей для файла
 	}
 
 
@@ -128,6 +144,44 @@ public class StatusChangeAction extends StateMachineAction {
 				logger.error("Set Status Exception", e);
 				throw new AlfrescoRuntimeException("Set Status Exception", e);
 			}
+		}
+	}
+
+	/**
+	 * Инициализирует список роле из элемента role
+	 * @param rolesElement
+	 * @return Список прав доступа для ролей
+	 */
+	private ArrayList<Permission> initPermissions(Element rolesElement) {
+		ArrayList<Permission> permissions = new ArrayList<Permission>();
+		if (rolesElement != null) {
+			List<Element> roleElements = rolesElement.elements("role");
+			for (Element roleElement : roleElements) {
+				String role = roleElement.attribute("name");
+				String permission = roleElement.attribute("permission");
+				permissions.add(new Permission(role, permission));
+			}
+		}
+		return permissions;
+	}
+
+
+	private class Permission {
+
+		private String role;
+		private String value;
+
+		private Permission(String role, String value) {
+			this.role = role;
+			this.value = value;
+		}
+
+		public String getRole() {
+			return role;
+		}
+
+		public String getValue() {
+			return value;
 		}
 	}
 
