@@ -747,4 +747,16 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		ParameterCheck.mandatory ("employeeRef", employeeRef);
 		return createScriptable (orgstructureService.getBossSubordinate (new NodeRef (employeeRef)));
 	}
+
+	/**
+	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
+	 * @return ScriptNode на бизнес роль "Технолог" или null если таковой бизнес роли нет
+	 */
+	public ScriptNode getBusinessRoleEngineer () {
+		NodeRef engineerRef = orgstructureService.getBusinessRoleEngineer ();
+		if (engineerRef != null) {
+			return new ScriptNode (engineerRef, services, getScope ());
+		}
+		return null;
+	}
 }

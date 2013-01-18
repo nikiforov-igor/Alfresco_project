@@ -17,6 +17,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 /**
  * @author dbashmakov
@@ -30,6 +31,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	private TransactionService transactionService;
 	private AuthenticationService authService;
 	private PersonService personService;
+	private DictionaryBean dictionaryService;
 
 	private final Object lock = new Object();
 
@@ -51,6 +53,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
+	}
+
+	public void setDictionaryService (DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	@Override
@@ -959,5 +965,20 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public void excludeOrgElementMemberFromBusinesssRole (final NodeRef businesssRoleRef, final NodeRef employeeRef) {
 		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+	}
+
+	@Override
+	public NodeRef getBusinessRoleEngineer () {
+		NodeRef businessRolesDictionaryRef = dictionaryService.getDictionaryByName (BUSINESS_ROLES_DICTIONARY_NAME);
+		List<NodeRef> children = dictionaryService.getChildren (businessRolesDictionaryRef);
+		NodeRef engineerRef = null;
+		for (NodeRef child : children) {
+			Serializable id = nodeService.getProperty (child, PROP_BUSINESS_ROLE_IDENTIFIER);
+			if (BUSINESS_ROLE_ENGINEER_ID.equals (id.toString ())) {
+				engineerRef = child;
+				break;
+			}
+		}
+		return engineerRef;
 	}
 }

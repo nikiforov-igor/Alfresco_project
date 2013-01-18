@@ -29,6 +29,10 @@ public interface OrgstructureBean {
 	String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
 	String ROLES_DICTIONARY_NAME = "Роли для рабочих групп";
 	String BUSINESS_ROLES_DICTIONARY_NAME = "Бизнес роли";
+	/**
+	 * идентификатор бизнес роли "Технолог"
+	 */
+	String BUSINESS_ROLE_ENGINEER_ID = "BR_ENGINEER";
 	QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
 	QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
 	QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
@@ -44,7 +48,7 @@ public interface OrgstructureBean {
 	QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");
 	QName PROP_BUSINESS_ROLE_IDENTIFIER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-identifier");
 	QName PROP_BUSINESS_ROLE_IS_DYNAMIC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-is-dynamic");
-	public static final QName PROP_EMPLOYEE_EMAIL = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-email");
+	QName PROP_EMPLOYEE_EMAIL = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-email");
 
 	QName TYPE_ORGANIZATION_UNIT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit");
 	QName TYPE_STRUCTURE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "structure");
@@ -393,4 +397,10 @@ public interface OrgstructureBean {
 	 * @param orgElementMemberRef ссылка на участника рабочей группы или штатное расписание
 	 */
 	void excludeOrgElementMemberFromBusinesssRole (final NodeRef businesssRoleRef, final NodeRef employeeRef);
+
+	/**
+	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
+	 * @return NodeRef на бизнес роль "Технолог" или null если таковой бизнес роли нет
+	 */
+	NodeRef getBusinessRoleEngineer ();
 }

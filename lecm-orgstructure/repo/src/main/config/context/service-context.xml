@@ -81,6 +81,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="personService" ref="personService"/>
         <property name="authService" ref="authenticationService"/>
+		<property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 
 	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"

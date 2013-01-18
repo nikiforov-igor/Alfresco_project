@@ -21,20 +21,13 @@ if (currentEmployee) {
 	logger.log ("current employee is null!!!!!!!!!!");
 }
 //ищем бизнес роль технолога
-const ENGINEER_ID = "BR_ENGINEER";
-var def = {
-	query: "TYPE:\"lecm\\-orgstr:business\\-role\" AND (@lecm\\-orgstr:business\\-role\\-identifier:\"" + ENGINEER_ID + "\")",
-	language: "fts-alfresco",
-	namespace: "lecm-orgstr"
-};
-var results = search.query(def);
-var brEngineerNodeRef = results[0].nodeRef;
-if (!brEngineerNodeRef) {
-	logger.log ("ERROR: there is no business role with identifier " + ENGINEER_ID);
+var brEngineer = orgstructure.getBusinessRoleEngineer ();
+if (!brEngineer) {
+	logger.log ("ERROR: there is no engineer business role!");
 }
 
 //по этой бизнес роли находим всех сотрудников которые там есть
-var employees = orgstructure.getEmployeesByBusinessRole (brEngineerNodeRef);
+var employees = orgstructure.getEmployeesByBusinessRole (brEngineer.nodeRef);
 
 //среди них ищем нашего текущего сотрудника
 var isEngineer = false;
