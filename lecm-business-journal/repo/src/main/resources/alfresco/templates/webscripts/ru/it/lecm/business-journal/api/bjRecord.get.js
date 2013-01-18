@@ -1,0 +1,1 @@
+model.record = businessJournal.getRecord(args["recordRef"]);

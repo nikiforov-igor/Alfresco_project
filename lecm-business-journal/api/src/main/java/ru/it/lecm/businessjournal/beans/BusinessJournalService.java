@@ -22,13 +22,12 @@ public interface BusinessJournalService {
 	 * Корневой узел Business Journal
 	 */
 	public final String BJ_ROOT_NAME = "Business Journal";
+	public final String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
 	public final String BR_ASSOC_QNAME = "businessJournal";
 	public final String DICTIONARIES_ROOT_NAME = "Dictionary";
 	public final String DICTIONARY_OBJECT_TYPE = "Тип объекта";
 	public final String DICTIONARY_EVENT_CATEGORY = "Категория события";
 	public final String DICTIONARY_MESSAGE_TEMPLATE = "Шаблон сообщения";
-
-	public final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
 	public final QName TYPE_OBJECT_TYPE = QName.createQName(BJ_NAMESPACE_URI, "objectType");
 	public final QName TYPE_EVENT_CATEGORY = QName.createQName(BJ_NAMESPACE_URI, "eventCategory");
@@ -178,6 +177,10 @@ public interface BusinessJournalService {
 	 */
 	public String getTemplateByType(NodeRef type);
 
+	/**
+	 * Метод, возвращающий корневую директорию
+	 * @return ссылка
+	 */
 	public NodeRef getBusinessJournalDirectory();
 
 	public JSONObject getRecordJSON(NodeRef recordRef) throws Exception;
@@ -191,8 +194,34 @@ public interface BusinessJournalService {
 	 */
 	public List<NodeRef> getRecordsByInterval(Date begin, Date end);
 
+	/**
+	 * Метод, проверяющий что заданная нода является записью бизнес-журнала
+	 *
+	 * @return true/false
+	 */
 	public boolean isBJRecord(NodeRef ref);
 
+	/**
+	 * Метод, возвращающий список ссылок на записи заданного типа,
+	 * сформированные за заданный период с учетом инициатора
+	 *
+	 * @param objectType    - тип объекта
+	 * @param begin         - начальная дата
+	 * @param end           - конечная дата
+	 * @param whoseKey      - дополнительная фильтрация по инициатору
+	 * @return список ссылок
+	 */
     public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey);
-        
+
+	/**
+	 * Метод, возвращающий директорию c архивными записями
+	 * @return ссылка
+	 */
+	public NodeRef getBusinessJournalArchiveDirectory();
+
+	/**
+	 * Метод, перемещающий заданную запись в архив
+	 * @return boolean результат выполнения операции
+	 */
+	public boolean moveRecordToArchive(NodeRef record);
 }

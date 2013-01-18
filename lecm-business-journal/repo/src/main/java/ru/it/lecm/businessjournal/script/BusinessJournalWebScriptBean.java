@@ -11,7 +11,6 @@ import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
-import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -60,13 +59,12 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		return createScriptable(refs);
 	}
 
-	public JSONObject getRecord(String recordRef) {
+	public ScriptNode getRecord(String recordRef) {
 		NodeRef ref = new NodeRef(recordRef);
-		try {
-			return service.getRecordJSON(ref);
-		} catch (Exception e) {
-			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала", e);
+		if (!service.isBJRecord(ref)) {
+			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала");
 		}
+		return new ScriptNode(ref, service.getServiceRegistry(), getScope());
 	}
 
     public Scriptable getRecordsByParams(String objectType, String daysCount, String whoseKey) {
@@ -122,5 +120,23 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	public String getObjectDescription(String objectRef) {
 		NodeRef ref = new NodeRef(objectRef);
 		return service.getObjectDescription(ref);
+	}
+
+	public boolean archiveRecord(String recordRef) {
+		boolean result = false;
+		NodeRef ref = new NodeRef(recordRef);
+		if (service.isBJRecord(ref)) {
+			result = service.moveRecordToArchive(ref);
+		}
+		return result;
+	}
+
+	public ScriptNode getArchiveDirectory() {
+		try {
+			NodeRef ref = service.getBusinessJournalArchiveDirectory();
+			return new ScriptNode(ref, service.getServiceRegistry(), getScope());
+		} catch (Exception e) {
+			throw new ScriptException("Не удалось получить директорию с архивными записями", e);
+		}
 	}
 }

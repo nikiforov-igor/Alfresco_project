@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>BJ Record Move To Archive</shortname>
+	<description>BJ Record Move To Archive</description>
+	<url>/lecm/business-journal/api/record/archive</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

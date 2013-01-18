@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>BJ Record</shortname>
+	<description>BJ Record</description>
+	<url>/lecm/business-journal/api/record</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

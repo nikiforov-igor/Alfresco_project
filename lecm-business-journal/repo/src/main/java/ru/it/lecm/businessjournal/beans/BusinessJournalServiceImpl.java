@@ -248,7 +248,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				if (objectType != null) {
 					type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
 				} else {
-					type = nodeService.getType(mainObject).getPrefixString();
+					type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
 				}
 				String category;
 				if (eventCategory != null && !eventCategory.isEmpty()) {
@@ -490,13 +490,37 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return template;
 	}
 
-	/**
-	 * Метод, возвращающий корневую директорию
-	 * @return ссылка
-	 */
     @Override
 	public NodeRef getBusinessJournalDirectory() {
 		return bjRootRef;
+	}
+
+	@Override
+	public NodeRef getBusinessJournalArchiveDirectory() {
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						NodeRef bjRef = getBusinessJournalDirectory();
+						NodeRef archiveRef = nodeService.getChildByName(bjRef, ContentModel.ASSOC_CONTAINS, BJ_ARCHIVE_ROOT_NAME);
+						if (archiveRef == null) {
+							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+							QName assocQName = QName.createQName(BJ_NAMESPACE_URI, BR_ASSOC_QNAME);
+							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+							properties.put(ContentModel.PROP_NAME, archiveRef);
+							ChildAssociationRef associationRef = nodeService.createNode(bjRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+							archiveRef = associationRef.getChildRef();
+						}
+						return archiveRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
 	}
 
 	@Override
@@ -588,6 +612,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return records;
 	}
 
+	private NodeRef getSaveFolder(final String type, final String category, final Date date) {
+		return getFolder(getBusinessJournalDirectory(), type, category, date, false);
+	}
+
+	private NodeRef getArchiveFolder(final Date date) {
+		return getFolder(getBusinessJournalArchiveDirectory(), null, null, date, true);
+	}
+
 	/**
 	 * Метод, возвращающий ссылку на директорию в директории "Бизнес Журнал" согласно заданным параметрам
 	 *
@@ -595,9 +627,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @param date - текущая дата
 	 * @param type - тип объекта
 	 * @param  category - категория события
+	 * @param root - корень, относительно которого строится путь
 	 * @return ссылка на директорию
 	 */
-	private NodeRef getSaveFolder(final String type, final String category, final Date date) {
+	private NodeRef getFolder(final NodeRef root, final String type, final String category, final Date date, final boolean onlyDatesInPath) {
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -607,15 +640,17 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
 						NodeRef directoryRef;
 						synchronized (lock) {
-							String[] directoryPath = new String[5];
-							directoryPath[0] = type;
-							directoryPath[1] = category;
-							directoryPath[2] = FolderNameFormatYear.format(date);
-							directoryPath[3] = FolderNameFormatMonth.format(date);
-							directoryPath[4] = FolderNameFormatDay.format(date);
+							List<String> directoryPaths = new ArrayList<String>(3);
+							if (!onlyDatesInPath) {
+								directoryPaths.add(type);
+								directoryPaths.add(category);
+							}
+							directoryPaths.add(FolderNameFormatYear.format(date));
+							directoryPaths.add(FolderNameFormatMonth.format(date));
+							directoryPaths.add(FolderNameFormatDay.format(date));
 
-							directoryRef = getBusinessJournalDirectory();
-							for (String pathString : directoryPath) {
+							directoryRef = root;
+							for (String pathString : directoryPaths) {
 								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
 								if (pathDir == null) {
 									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
@@ -637,7 +672,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		};
 		return AuthenticationUtil.runAsSystem(raw);
 	}
-
 	/**
 	 * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
 	 *
@@ -692,16 +726,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		this.substituteService = substituteService;
 	}
 
-    /**
-     * Метод, возвращающий список ссылок на записи заданного типа,
-     * сформированные за заданный период с учетом инициатора
-     *
-     * @param objectType    - тип объекта
-     * @param begin         - начальная дата
-     * @param end           - конечная дата
-     * @param whoseKey      - дополнительная фильтрация по инициатору
-     * @return список ссылок
-     */
     @Override
     public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey) {
         List<NodeRef> records = new ArrayList<NodeRef>(10);
@@ -752,6 +776,23 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return records;
     }
 
+	public boolean moveRecordToArchive(final NodeRef record) {
+		AuthenticationUtil.RunAsWork<Boolean> raw = new AuthenticationUtil.RunAsWork<Boolean>() {
+			@Override
+			public Boolean doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+					@Override
+					public Boolean execute() throws Throwable {
+						NodeRef archiveRef = getArchiveFolder(new Date());
+						nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
+						ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
+						return newRef != null;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
+	}
     private static enum WhoseEnum {
         MY,
         DEPARTMENT,
