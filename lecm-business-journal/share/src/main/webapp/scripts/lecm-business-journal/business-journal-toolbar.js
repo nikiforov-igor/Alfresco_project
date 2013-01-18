@@ -51,6 +51,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
+        YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
     };
 
@@ -81,6 +82,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
              */
             toolbarButtons: null,
 
+            groupActions: {},
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
@@ -99,6 +102,15 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     });
 
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
+                    {
+                        disabled: true
+                    });
+
+                this.groupActions.deleteButton = Alfresco.util.createYUIButton(this, "deleteButton", this.onDeleteRows,
+                    {
+                        disabled: true
+                    });
+                this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportCSV,
                     {
                         disabled: true
                     });
@@ -278,6 +290,76 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                     this.checkShowClearSearch();
                 }
+            },
+
+            /**
+             * Удаление выбранного значения в dataGrid.
+             * Появляется диалоговое окно с потверждением на удаление
+             */
+            onDeleteRows:function Toolbar_onDeleteRow() {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
+                    // Get the function related to the clicked item
+                    var fn = "onActionDelete";
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+                    }
+                }
+            },
+
+            onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args)
+            {
+                if (this.modules.dataGrid)
+                {
+                    var items = this.modules.dataGrid.getSelectedItems();
+                    for (var index in this.groupActions)
+                    {
+                        if (this.groupActions.hasOwnProperty(index))
+                        {
+                            var action = this.groupActions[index];
+                            action.set("disabled", (items.length === 0));
+                        }
+                    }
+                }
+            },
+
+            onExportCSV: function(){
+                var datagridMeta = this.modules.dataGrid.datagridMeta;
+                var selectItems = this.modules.dataGrid.selectedItems;
+                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(datagridMeta.itemType) + "&formId=export-fields";
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: sUrl,
+                        successCallback:
+                        {
+                            fn: function(response){
+                                var datagridColumns = response.json.columns;
+                                var fields = "";
+                                var items = "";
+                                var columns = "";
+                                for (var nodeIndex in datagridColumns) {
+                                    fields += (fields.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].name);
+                                    columns += (columns.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].label);
+                                }
+                                for (var item in selectItems) {
+                                    if (selectItems[item]) {
+                                        items += (items.length > 0 ? "," : "") + encodeURIComponent(item);
+                                    }
+                                }
+                                document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
+                                    + "?fields=" + fields
+                                    + "&datagridColumns=" + columns
+                                    + "&selectedItems=" + items
+                                    + "&fileName=business-journal";
+                            },
+                            scope: this
+                        },
+                        failureCallback:
+                        {
+                            fn: function() {alert("Failed to load webscript export CSV.")},
+                            scope: this
+                        }
+                    });
             }
         }, true);
 })();

@@ -331,30 +331,31 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             onExportCSV: function(){
                 var datagridMeta = this.modules.dataGrid.datagridMeta;
                 var selectItems = this.modules.dataGrid.selectedItems;
-                var datagridColumns = this.modules.dataGrid.datagridColumns;
-                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(datagridMeta.itemType);
-                var fields = "";
-                var items = "";
-                var columns = "";
+                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(datagridMeta.itemType) + "&formId=export-fields";
                 Alfresco.util.Ajax.jsonGet(
                     {
                         url: sUrl,
                         successCallback:
                         {
                             fn: function(response){
-                                var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                for (var nodeIndex in oResults) {
-                                    fields += "field=" + encodeURIComponent(oResults[nodeIndex].fild) + "&";
-                                    columns += "datagridColumns=" + encodeURIComponent(datagridColumns[nodeIndex].label) + "&";
+                                var datagridColumns = response.json.columns;
+                                var fields = "";
+                                var items = "";
+                                var columns = "";
+                                for (var nodeIndex in datagridColumns) {
+                                    fields += (fields.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].name);
+                                    columns += (columns.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].label);
                                 }
                                 for (var item in selectItems) {
-	                                if (selectItems[item]) {
-                                        items += "selectedItems=" + encodeURIComponent(item) + "&";
-	                                }
+                                    if (selectItems[item]) {
+                                        items += (items.length > 0 ? "," : "") + encodeURIComponent(item);
+                                    }
                                 }
                                 document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
-                                                     + "?" + fields
-                                                     + items + columns;
+                                    + "?fields=" + fields
+                                    + "&datagridColumns=" + columns
+                                    + "&selectedItems=" + items
+                                    + "&fileName=dictionary";
                             },
                             scope: this
                         },

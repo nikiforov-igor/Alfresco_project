@@ -30,11 +30,19 @@ YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
 <@comp.baseToolbar id buttons true true>
-	<#--<div class="new-row">
-        <span id="${id}-newRecordButton" class="yui-button yui-push-button">
-           <span class="first-child">
-              <button type="button">${msg(newRowButtonLabel)}</button>
-           </span>
+<div class="delete-row">
+	<span id="${id}-deleteButton" class="yui-button yui-push-button">
+       <span class="first-child">
+          <button type="button" title="${msg("button.delete")}">&nbsp;</button>
+       </span>
+    </span>
+</div>
+<div class="divider"></div>
+<div class="exportcsv">
+    <span id="${id}-exportCsvButton" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button" title="${msg('button.export-csv')}">&nbsp;</button>
         </span>
-	</div>-->
+    </span>
+</div>
 </@comp.baseToolbar>

@@ -247,6 +247,19 @@
                     </field>
                 </appearance>
             </form>
+            <form id="export-fields">
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                    <show id="lecm-busjournal:bjRecord-initiator"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 </alfresco-config>

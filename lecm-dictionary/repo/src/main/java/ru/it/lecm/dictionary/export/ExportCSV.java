@@ -1,5 +1,12 @@
 package ru.it.lecm.dictionary.export;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
 import com.csvreader.CsvWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -9,13 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * User: mShafeev
@@ -38,14 +38,15 @@ public class ExportCSV extends AbstractWebScript {
 		OutputStream resOutputStream = null;
 		try {
 			ArrayList<String> namespace = new ArrayList<String>();
-			String[] fields = req.getParameterValues("field");
-			String[] selectItems = req.getParameterValues("selectedItems");
-			String[] columnsName = req.getParameterValues("datagridColumns");
+			String[] fields = req.getParameter("fields").split(",");
+			String[] selectItems = req.getParameter("selectedItems").split(",");
+			String[] columnsName = req.getParameter("datagridColumns").split(",");
+			String fileName = req.getParameter("fileName");
 			NodeRef nodeRef;
 
 			res.setContentEncoding("UTF-8");
 			res.setContentType("text/csv");
-			res.addHeader("Content-Disposition", "attachment; filename=dictionary.csv");
+			res.addHeader("Content-Disposition", "attachment; filename=" + ((fileName != null && !fileName.isEmpty()) ? fileName : "dictionary") + ".csv");
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 

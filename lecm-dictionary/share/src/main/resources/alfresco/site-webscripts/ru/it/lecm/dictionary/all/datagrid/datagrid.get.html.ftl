@@ -150,15 +150,15 @@ LogicECM.module.Base.DataGrid.prototype.onActionExportXML = function (item) {
 					fn:function (response) {
 						var oResults = eval("(" + response.serverResponse.responseText + ")");
 						var itemType = oResults["itemType"];
-						var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/dictionary/columns?itemType=" + encodeURIComponent(itemType);
+                        var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(itemType) + "&formId=export-fields";
 						Alfresco.util.Ajax.jsonGet(
 								{
 									url:sUrl,
 									successCallback:{
 										fn:function (response) {
-											var oResults = eval("(" + response.serverResponse.responseText + ")");
-											for (var nodeIndex in oResults) {
-												fields += "field=" + oResults[nodeIndex].fild + "&";
+                                            var datagridColumns = response.json.columns;
+											for (var nodeIndex in datagridColumns) {
+												fields += "field=" + datagridColumns[nodeIndex].name + "&";
 											}
 											document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export"
 													+ "?" + fields
