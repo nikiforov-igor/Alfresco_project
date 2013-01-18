@@ -12,14 +12,14 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name"/>
-					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:event-category-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
 					<show id="lecm-subscr:destination-position-assoc"/>
 					<show id="lecm-subscr:destination-organization-unit-assoc"/>
-					<show id="lecm-subscr:object-type-assoc"/>
-					<show id="lecm-subscr:event-category-assoc"/>
-					<show id="lecm-subscr:description"/>
 					<show id="lecm-subscr:destination-work-group-assoc"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-subscr:object-type-assoc">
@@ -60,14 +60,14 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name"/>
-					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:object-type-assoc"/>
+					<show id="lecm-subscr:event-category-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
 					<show id="lecm-subscr:destination-position-assoc"/>
 					<show id="lecm-subscr:destination-organization-unit-assoc"/>
-					<show id="lecm-subscr:object-type-assoc"/>
-					<show id="lecm-subscr:event-category-assoc"/>
-					<show id="lecm-subscr:description"/>
 					<show id="lecm-subscr:destination-work-group-assoc"/>
+					<show id="lecm-subscr:notification-type-assoc"/>
+					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-subscr:object-type-assoc">

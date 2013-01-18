@@ -7,7 +7,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.subscriptions</title>
+                <title>page.subscriptions-to-type</title>
                 <filteredLabel>page.subscriptions.filter.label</filteredLabel>
             </properties>
         </component>
