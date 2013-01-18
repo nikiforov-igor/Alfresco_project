@@ -1,6 +1,56 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dictionary name="Категория события">
     <items>
+        <item name="Создание">
+            <property name="cm:name">Создание</property>
+            <property name="lecm-busjournal:eventCategory-code">1</property>
+        </item>
+        <item name="Редактирование">
+            <property name="cm:name">Редактирование</property>
+            <property name="lecm-busjournal:eventCategory-code">2</property>
+        </item>
+        <item name="Удаление">
+            <property name="cm:name">Удаление</property>
+            <property name="lecm-busjournal:eventCategory-code">3</property>
+        </item>
+        <item name="Создание новой версии">
+            <property name="cm:name">Создание новой версии</property>
+            <property name="lecm-busjournal:eventCategory-code">4</property>
+        </item>
+        <item name="Назначение на должность">
+            <property name="cm:name">Назначение на должность</property>
+            <property name="lecm-busjournal:eventCategory-code">5</property>
+        </item>
+        <item name="Снятие с должности">
+            <property name="cm:name">Снятие с должности</property>
+            <property name="lecm-busjournal:eventCategory-code">6</property>
+        </item>
+        <item name="Включение в рабочую группу">
+            <property name="cm:name">Включение в рабочую группу</property>
+            <property name="lecm-busjournal:eventCategory-code">7</property>
+        </item>
+        <item name="Исключение из рабочей группы">
+            <property name="cm:name">Исключение из рабочей группы</property>
+            <property name="lecm-busjournal:eventCategory-code">8</property>
+        </item>
+        <item name="Передача полномочий">
+            <property name="cm:name">Передача полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">9</property>
+        </item>
+        <item name="Отмена передачи полномочий">
+            <property name="cm:name">Отмена передачи полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">10</property>
+        </item>
+        <items>
+            <item name="Сделать руководящей">
+                <property name="cm:name">Сделать руководящей</property>
+                <property name="lecm-busjournal:eventCategory-code">11</property>
+            </item>
+            <item name="Сделать основной">
+                <property name="cm:name">Сделать основной</property>
+                <property name="lecm-busjournal:eventCategory-code">12</property>
+            </item>
+        </items>
         <item name="Сделать руководящей">
             <property name="cm:name">Сделать руководящей</property>
             <property name="lecm-busjournal:eventCategory-code">11</property>
