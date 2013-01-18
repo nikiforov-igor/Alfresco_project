@@ -67,9 +67,6 @@
             <ref bean="policyComponent"/>
         </property>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
         <property name="businessJournalService">
             <ref bean="businessJournalService"/>
         </property>
@@ -81,8 +78,5 @@
             <ref bean="policyComponent"/>
         </property>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
     </bean>
 </beans>
