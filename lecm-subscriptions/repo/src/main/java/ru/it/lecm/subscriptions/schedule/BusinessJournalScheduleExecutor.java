@@ -40,8 +40,6 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	private NotificationsService notificationsService;
 
-	private BusinessJournalService businessJournalService;
-
 	private SubscriptionsBean subscriptionsService;
 
 	/**
@@ -60,10 +58,6 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
-	}
-
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		this.businessJournalService = businessJournalService;
 	}
 
 	public void setSubscriptionsService(SubscriptionsBean subscriptionsService) {
@@ -89,8 +83,8 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		if (categories.size() == 1) {
 			byCategory = categories.get(0).getTargetRef();
 		}
-		NodeRef subscribtionsRoot = subscriptionsService.getSubscriptionRootRef();
-		String path = nodeService.getPath(subscribtionsRoot).toPrefixString(namespaceService);
+		NodeRef subscriptionsRoot = subscriptionsService.getSubscriptionRootRef();
+		String path = nodeService.getPath(subscriptionsRoot).toPrefixString(namespaceService);
 		String type = SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE.toPrefixString(namespaceService);
 
 		String subscriptionType = SubscriptionsBean.ASSOC_OBJECT_TYPE.toPrefixString(namespaceService) + "-ref";
@@ -100,11 +94,9 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		String categoryAttribute = "@" + subscriptionCategory.replace(":", "\\:");
 
 		String query =  " +PATH:\"" + path + "//*\" AND TYPE:\"" + type +"\" ";
-		if (byType == null) {
-			query += "AND (ISNULL:\"" + subscriptionType + "\" OR " + typeAttribute +":\"\")";
-		} else if (byCategory == null) {
+		if (byType != null && byCategory == null) {
 			query += "AND " + typeAttribute +":\"" + byType.toString() + "\"";
-		} else {
+		} else if (byType != null) {
 			query += "AND " + typeAttribute +":\"" + byType.toString() + "\" AND (" + categoryAttribute +":\"" + byCategory.toString() + "\" OR ISNULL:\"" + subscriptionCategory + "\" OR " + categoryAttribute +":\"\")";
 		}
 
@@ -112,7 +104,6 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.setQuery(query);
-		ArrayList<NodeRef> result = new ArrayList<NodeRef>();
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);

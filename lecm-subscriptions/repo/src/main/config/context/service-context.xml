@@ -121,9 +121,6 @@
 			<ref bean="subscriptionsService"/>
 		</property>
 		<property name="namespaceService" ref="namespaceService"/>
-		<property name="businessJournalService">
-			<ref bean="businessJournalService"/>
-		</property>
 		<property name="notificationsService">
 			<ref bean="notificationsService"/>
 		</property>
