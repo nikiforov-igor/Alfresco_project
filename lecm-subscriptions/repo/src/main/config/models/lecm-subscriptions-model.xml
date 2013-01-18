@@ -36,16 +36,6 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<property name="lecm-subscr:object-type-assoc-ref">
-					<title>Description</title>
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-				</property>
-				<property name="lecm-subscr:event-category-assoc-ref">
-					<title>Description</title>
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-				</property>
 			</properties>
 			<associations>
 				<!-- Ссылка на тип доставки-->
@@ -79,6 +69,18 @@
 		<type name="lecm-subscr:subscription-to-type">
 			<title>Subscription To Type</title>
 			<parent>lecm-subscr:subscription-base</parent>
+			<properties>
+				<property name="lecm-subscr:object-type-assoc-ref">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-subscr:event-category-assoc-ref">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
 			<associations>
 				<!-- Ссылка на адресата "должностная позиция" -->
 				<association name="lecm-subscr:destination-position-assoc">
