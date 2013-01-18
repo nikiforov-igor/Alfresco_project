@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Категория события">
+    <items>
+        <item name="Сделать руководящей">
+            <property name="cm:name">Сделать руководящей</property>
+            <property name="lecm-busjournal:eventCategory-code">11</property>
+        </item>
+        <item name="Сделать основной">
+            <property name="cm:name">Сделать основной</property>
+            <property name="lecm-busjournal:eventCategory-code">12</property>
+        </item>
+    </items>
+</dictionary>

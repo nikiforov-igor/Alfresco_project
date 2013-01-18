@@ -463,7 +463,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			try {
 				results = serviceRegistry.getSearchService().query(sp);
 				for (ResultSetRow row : results) {
-					record = row.getNodeRef();
+					if (!isArchive(row.getNodeRef())) {
+						record = row.getNodeRef();
+					}
 				}
 			} finally {
 				if (results != null) {
@@ -574,7 +576,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			results = serviceRegistry.getSearchService().query(sp);
 			for (ResultSetRow row : results) {
 				NodeRef currentNodeRef = row.getNodeRef();
-				records.add(currentNodeRef);
+				if (!isArchive(currentNodeRef)){
+					records.add(currentNodeRef);
+				}
 			}
 		} finally {
 			if (results != null) {
@@ -665,7 +669,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		try {
 			results = serviceRegistry.getSearchService().query(sp);
 			for (ResultSetRow row : results) {
-				objType = row.getNodeRef();
+				if (!isArchive(row.getNodeRef())) {
+					objType = row.getNodeRef();
+				}
 			}
 		} finally {
 			if (results != null) {
