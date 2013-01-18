@@ -282,6 +282,12 @@
 				<artifactId>jgraphx</artifactId>
 				<version>1.10.3.2</version>
 			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>1.8.3-alfresco-patched</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

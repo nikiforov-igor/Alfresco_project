@@ -54,6 +54,20 @@
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications</groupId>
+			<artifactId>notifications-repo-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
     <!--

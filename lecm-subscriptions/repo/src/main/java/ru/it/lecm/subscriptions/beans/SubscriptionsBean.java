@@ -33,18 +33,23 @@ public class SubscriptionsBean extends BaseBean {
 	public static final String DICTIONARY_ROOT_NAME_TYPE_OBJECT = "Тип объекта";
 	public static final String DICTIONARY_ROOT_NAME_TYPE_TEMPLATE_MESSAGE = "Шаблон сообщения";
 	public static final String SUBSCRIPTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/subscriptions/1.0";
-	QName TYPE_SUBSCRIPTION_TO_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-object");
-	QName TYPE_SUBSCRIPTION_TO_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-type");
-	QName ASSOC_NOTIFICATION_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "notification-type-assoc");
-	QName ASSOC_DESTINATION_EMPLOYEE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-employee-assoc");
-	QName ASSOC_SUBSCRIPTION_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-object-assoc");
-	QName ASSOC_DESTINATION_POSITION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-position-assoc");
-	QName ASSOC_DESTINATION_ORGANIZATION_UNIT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-organization-unit-assoc");
-	QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
-	QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
-	QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
+
+	public static final QName TYPE_SUBSCRIPTION_TO_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-object");
+	public static final QName TYPE_SUBSCRIPTION_TO_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-type");
+
+	public static final QName ASSOC_NOTIFICATION_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "notification-type-assoc");
+	public static final QName ASSOC_DESTINATION_EMPLOYEE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-employee-assoc");
+	public static final QName ASSOC_SUBSCRIPTION_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-object-assoc");
+	public static final QName ASSOC_DESTINATION_POSITION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-position-assoc");
+	public static final QName ASSOC_DESTINATION_ORGANIZATION_UNIT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-organization-unit-assoc");
+	public static final QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
+	public static final QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
+	public static final QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
+
 	public static final String BUSJOURNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
 	public static final String TYPE_SUBSCRIPTION = "subscription";
+
+	public static final QName ASPECT_SUBSCRIBED = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscribedAspect");
 
 	QName ASSOC_BUSJOURNAL_LINK_EMPLOYEE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "lecm-busjournal");
 	QName ASSOC_BUSJOURNAL_EVENT_CATEGORY = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-evCategory-assoc");

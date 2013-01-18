@@ -44,7 +44,7 @@
 
 	<bean id="subscriptionScript" parent="baseJavaScriptExtension"
 	      class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
-	      depends-on="serviceSubscriptions">
+	      depends-on="subscriptionsService">
 		<property name="extensionName">
 			<value>subscription</value>
 		</property>
@@ -55,15 +55,93 @@
 			<ref bean="repositoryHelper"/>
 		</property>
 		<property name="subscriptionsService">
-			<ref bean="serviceSubscriptions"/>
+			<ref bean="subscriptionsService"/>
 		</property>
 	</bean>
 
-	<bean id="serviceSubscriptions" class="ru.it.lecm.subscriptions.beans.SubscriptionsBean">
+	<bean id="subscriptionsService" class="ru.it.lecm.subscriptions.beans.SubscriptionsBean">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
+
+	<bean id="businessJournalSchedule" class="ru.it.lecm.subscriptions.schedule.BusinessJournalSchedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="searchService">
+			<ref bean="SearchService"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+		<property name="jobName">
+			<value>receive-journal</value>
+		</property>
+		<property name="jobGroup">
+			<value>subscribe</value>
+		</property>
+		<property name="triggerName">
+			<value>receive-journal-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>subscribe-trigger</value>
+		</property>
+		<property name="scheduler">
+			<ref bean="schedulerFactory"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+		<property name="transactionService">
+			<ref bean="TransactionService"/>
+		</property>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
+
+	<bean id="businessJournalScheduleExecutor" class="ru.it.lecm.subscriptions.schedule.BusinessJournalScheduleExecutor" parent="action-executer">
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+		<property name="subscriptionsService">
+			<ref bean="subscriptionsService"/>
+		</property>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+		<property name="notificationsService">
+			<ref bean="notificationsService"/>
+		</property>
+		<property name="searchService">
+			<ref bean="SearchService"/>
+		</property>
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean id="subscribeTypeCategoryPolicy" class="ru.it.lecm.subscriptions.policy.TypeCategoryPolicy"
+		  init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+
 </beans>
