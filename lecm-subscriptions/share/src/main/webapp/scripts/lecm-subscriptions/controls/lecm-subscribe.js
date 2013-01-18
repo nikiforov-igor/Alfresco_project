@@ -42,7 +42,9 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 	YAHOO.extend(LogicECM.module.Subscriptions.SubscribeControl, Alfresco.component.Base,
 		{
 			options: {
-				objectNodeRef: null
+				objectNodeRef: null,
+
+				objectDescription: null
 			},
 
 			id: null,
@@ -62,6 +64,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 			onReady: function()
 			{
 				this.loadSubscriptionsRoot();
+				this.loadObjectDescription();
 				this.loadCurrentEmployee();
 				this.subscribeButton =  new YAHOO.widget.Button(
 					this.controlId + "-subscribe-button",
@@ -95,6 +98,25 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						if (oResults && oResults.nodeRef) {
 							me.currentEmployee = oResults;
 							me.loadSubscriptionForEmployee();
+						} else {
+							YAHOO.log("Failed to process XHR transaction.", "info", "example");
+						}
+					},
+					failure:function (oResponse) {
+						YAHOO.log("Failed to process XHR transaction.", "info", "example");
+					}
+				};
+				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+			},
+
+			loadObjectDescription: function() {
+				var me = this;
+				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/business-journal/api/objectDescription?objectRef=" + this.options.objectNodeRef;
+				var callback = {
+					success:function (oResponse) {
+						var oResults = eval("(" + oResponse.responseText + ")");
+						if (oResults && oResults.objectDescription) {
+							me.options.objectDescription = oResults.objectDescription;
 						} else {
 							YAHOO.log("Failed to process XHR transaction.", "info", "example");
 						}
@@ -224,6 +246,17 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									if (employeeAddedInput != null) {
 										employeeAddedInput.value = this.currentEmployee.nodeRef;
 									}
+								}
+
+								var name = form['prop_cm_name'];
+								if (name != null) {
+									var subscriptionName = this.options.objectDescription;
+									if (this.currentEmployee != null && this.currentEmployee.name != null) {
+										subscriptionName += " " + this.currentEmployee.name;
+									}
+									var date = new Date();
+									subscriptionName += " " + Alfresco.util.formatDate(date, "yyyy-mm-dd HH-MM-ss");;
+									name.value = subscriptionName;
 								}
 							},
 							scope:this

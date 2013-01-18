@@ -118,4 +118,9 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
         }
         return null;
     }
+
+	public String getObjectDescription(String objectRef) {
+		NodeRef ref = new NodeRef(objectRef);
+		return service.getObjectDescription(ref);
+	}
 }
