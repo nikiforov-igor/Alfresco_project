@@ -57,7 +57,11 @@ LogicECM.module = LogicECM.module || {};
 
 				maxSearchResults: 1000,
 
-				nameSubstituteString: "{cm:name}"
+				nameSubstituteString: "{cm:name}",
+
+				defaultSelectProperty: null,
+
+				mode: null
 			},
 
 			rootNode: null,
@@ -146,10 +150,16 @@ LogicECM.module = LogicECM.module || {};
 					for (var i = 0; i < results.length; i++) {
 						var node = results[i];
 						if (node.selectable) {
+							var select = "false";
+							if (node[this.options.defaultSelectProperty] != null) {
+								select = node[this.options.defaultSelectProperty];
+							}
+
 							this.dataArray.push({
 								name: node.name,
 								nodeRef: node.nodeRef,
-								inputId: "assoc-chbx-" + node.nodeRef
+								inputId: "assoc-chbx-" + node.nodeRef,
+								defaultSelect: select
 							});
 						}
 					}
@@ -186,7 +196,7 @@ LogicECM.module = LogicECM.module || {};
 						content += '<li><input id="' + this.dataArray[i].inputId + '" type="checkbox" value="'
 							+ this.dataArray[i].nodeRef + '"';
 
-						if (this.selectedItems.hasOwnProperty(this.dataArray[i].nodeRef)) {
+						if (this.selectedItems.hasOwnProperty(this.dataArray[i].nodeRef) || (this.dataArray[i].defaultSelect == "true" && this.options.mode == "create")) {
 							content += 'checked="checked"';
 						}
 						if (this.options.disabled) {
@@ -323,6 +333,9 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 
+				if (this.options.defaultSelectProperty != null) {
+					params += "&additionalProperties=" + this.options.defaultSelectProperty;
+				}
 				return params;
 			},
 

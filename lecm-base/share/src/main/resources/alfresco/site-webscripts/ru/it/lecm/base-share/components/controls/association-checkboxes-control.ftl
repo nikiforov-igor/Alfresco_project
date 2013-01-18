@@ -24,9 +24,13 @@
 					mandatory: ${field.endpointMandatory?string},
 				</#if>
 
+				mode: "${form.mode}",
 				itemType: "${field.endpointType}",
 				maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
 				currentValue: "${field.value!''}",
+				<#if field.control.params.defaultSelectProperty??>
+					defaultSelectProperty: "${field.control.params.defaultSelectProperty}",
+				</#if>
 				nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
 			});
 })();

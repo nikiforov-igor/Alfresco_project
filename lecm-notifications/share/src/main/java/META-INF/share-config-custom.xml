@@ -18,6 +18,7 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-notf-type:code"/>
 					<show id="lecm-notf-type:spring-bean-id"/>
+					<show id="lecm-notf-type:default-select"/>
 				</field-visibility>
 			</form>
 
@@ -26,6 +27,7 @@
 					<show id="cm:name" />
 					<show id="lecm-notf-type:code"/>
 					<show id="lecm-notf-type:spring-bean-id"/>
+					<show id="lecm-notf-type:default-select"/>
 				</field-visibility>
 			</form>
 		</forms>

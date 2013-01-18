@@ -20,7 +20,11 @@ function main()
       argsXPathRoot = args['xPathRoot'],
       showNotSelectable = args['showNotSelectableItems'],
       showFolders = args['showFolders'],
-      docType = args['docType'];
+      docType = args['docType'],
+      additionalProperties = args['additionalProperties'];
+	if (additionalProperties != null) {
+		additionalProperties = additionalProperties.split(',');
+	}
 
    if (logger.isLoggingEnabled())
    {
@@ -278,6 +282,7 @@ function main()
    model.parent = parent;
    model.rootNode = rootNode;
    model.results = results;
+   model.additionalProperties = additionalProperties;
 }
 
 function isItemSelectable(node, selectableType)

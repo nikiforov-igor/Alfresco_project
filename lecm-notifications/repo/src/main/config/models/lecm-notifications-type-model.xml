@@ -37,6 +37,12 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
+				<property name="lecm-notf-type:default-select">
+					<title>Default select</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+				</property>
 			</properties>
 		</type>
 	</types>
