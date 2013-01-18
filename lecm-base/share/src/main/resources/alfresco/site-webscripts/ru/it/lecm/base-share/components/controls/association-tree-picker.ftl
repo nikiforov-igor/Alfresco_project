@@ -32,8 +32,10 @@
 	<#assign showSearch = true>
 </#if>
 
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+
 <div class="form-field">
-    <#if form.mode == "view">
+    <#if disabled>
         <div id="${controlId}" class="viewmode-field">
             <#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
@@ -87,7 +89,7 @@
 
 
     new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
-        <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+        <#if disabled>
             disabled: true,
         </#if>
         <#if field.control.params.rootLocation??>

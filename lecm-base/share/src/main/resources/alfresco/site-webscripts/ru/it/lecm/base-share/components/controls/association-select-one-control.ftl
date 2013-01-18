@@ -17,6 +17,8 @@
     <#assign showCreateNewButton = true>
 </#if>
 
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -50,7 +52,7 @@
 //]]></script>
 
 <div class="form-field">
-    <#if form.mode == "view">
+    <#if disabled>
         <div class="viewmode-field">
             <#if field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>

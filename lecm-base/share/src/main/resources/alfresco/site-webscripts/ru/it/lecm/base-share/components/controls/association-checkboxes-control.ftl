@@ -3,13 +3,15 @@
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
 
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
 	var control = new LogicECM.module.AssociationCheckboxes("${fieldHtmlId}").setMessages(${messages});
 	control.setOptions(
 			{
-				<#if form.mode == "view" || field.disabled>
+				<#if disabled>
 					disabled: true,
 				</#if>
 				<#if field.control.params.parentNodeRef??>
@@ -37,7 +39,7 @@
 //]]></script>
 
 <div class="form-field">
-	<#if form.mode == "view">
+	<#if disabled>
 		<div class="viewmode-field">
 			<#if field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
 				<span class="incomplete-warning">
