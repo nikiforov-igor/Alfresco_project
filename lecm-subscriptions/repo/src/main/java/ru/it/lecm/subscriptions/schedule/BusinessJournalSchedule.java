@@ -15,6 +15,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
 
@@ -28,6 +30,8 @@ import java.util.List;
  * Time: 11:09
  */
 public class BusinessJournalSchedule extends AbstractScheduledAction {
+
+	private final static Logger logger = LoggerFactory.getLogger(BusinessJournalSchedule.class);
 	/*
 	 * The search service.
 	 */
@@ -147,6 +151,11 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 	/* (non-Javadoc)
 	 * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getNodes()
 	 */
+
+	/**
+	 * Выборка записей из бизнес журнала записей по которым еще не проводилась рассылка оповещенний
+	 * @return
+	 */
 	@Override
 	public List<NodeRef> getNodes() {
 		NodeRef businessJournalRoot = businessJournalService.getBusinessJournalDirectory();
@@ -169,9 +178,8 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 				}
 			}
 		} catch (LuceneQueryParserException e) {
-			e.printStackTrace();
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error("Error while getting business journal's records without sending notification for subscribe", e1);
 		} finally {
 			if (resultSet != null) {
 				resultSet.close();

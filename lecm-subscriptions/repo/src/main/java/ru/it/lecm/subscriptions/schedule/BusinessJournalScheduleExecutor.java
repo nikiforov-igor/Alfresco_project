@@ -14,6 +14,8 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -28,6 +30,8 @@ import java.util.List;
  * Time: 11:09
  */
 public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase {
+
+	private final static Logger logger = LoggerFactory.getLogger(BusinessJournalScheduleExecutor.class);
 
 	/**
 	 * The node service
@@ -127,9 +131,8 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 				nodeService.addAspect(nodeRef, SubscriptionsBean.ASPECT_SUBSCRIBED, null);
 			}
 		} catch (LuceneQueryParserException e) {
-			e.printStackTrace();
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error("Error while send notification for business journal's record " + nodeRef.toString(), e1);
 		} finally {
 			if (resultSet != null) {
 				resultSet.close();
