@@ -40,8 +40,8 @@
         </property>
     </bean>
 
-	<bean id="emptyContentPolicy"
-		  class="ru.it.lecm.base.policy.EmptyContentPolicy" init-method="init">
+	<bean id="LogicECMContentPolicy"
+		  class="ru.it.lecm.base.policy.LogicECMContentPolicy" init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
 	</bean>
