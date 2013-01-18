@@ -17,14 +17,9 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
  *         Date: 17.01.13
  *         Time: 10:01
  */
-public class SearchByAssocsPolicy implements  NodeServicePolicies.OnCreateAssociationPolicy {
+public class SearchByAssocsPolicy implements  NodeServicePolicies.OnCreateAssociationPolicy{
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
-	private static BusinessJournalService businessJournalService;
-
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		SearchByAssocsPolicy.businessJournalService = businessJournalService;
-	}
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		SearchByAssocsPolicy.serviceRegistry = serviceRegistry;
@@ -38,44 +33,14 @@ public class SearchByAssocsPolicy implements  NodeServicePolicies.OnCreateAssoci
 	public final void init() {
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 
 		// BRRecord
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_MAIN_OBJ,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_EVENT_CAT,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_OBJ_TYPE,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_INITIATOR,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_SEC_OBJ1,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_SEC_OBJ2,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_SEC_OBJ3,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_SEC_OBJ4,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_BR_RECORD, BusinessJournalService.ASSOC_BR_RECORD_SEC_OBJ5,
-				new JavaBehaviour(this, "onCreateAssociation"));
+				BusinessJournalService.TYPE_BR_RECORD, new JavaBehaviour(this, "onCreateAssociation"));
 
 		//Message Template
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_MESSAGE_TEMPLATE, BusinessJournalService.ASSOC_MESSAGE_TEMP_OBJ_TYPE,
-				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				BusinessJournalService.TYPE_MESSAGE_TEMPLATE, BusinessJournalService.ASSOC_MESSAGE_TEMP_EVENT_CAT,
-				new JavaBehaviour(this, "onCreateAssociation"));
+				BusinessJournalService.TYPE_MESSAGE_TEMPLATE, new JavaBehaviour(this, "onCreateAssociation"));
 	}
 
 	@Override

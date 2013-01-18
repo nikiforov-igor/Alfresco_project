@@ -14,7 +14,6 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * @author dbashmakov
@@ -26,7 +25,6 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
-	private static OrgstructureBean orgstructureService;
 	private static BusinessJournalService businessJournalService;
 
 	private final Set<QName> AFFECTED_TYPES
@@ -51,14 +49,9 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 		BusinessEventsPolicy.policyComponent = policyComponent;
 	}
 
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		BusinessEventsPolicy.orgstructureService = orgstructureService;
-	}
-
 	public final void init() {
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
