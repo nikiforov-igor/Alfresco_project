@@ -40,13 +40,13 @@ public class XmppChat
 		chatItem.setUserData(this);
 		button.addListener(new ChatPanelButtonListener()
 		{
-			public void onAavatrClicked() 
+			public void onAvatarClicked()
 			{
 			}
 
 			public void onMessageSend(String message) 
 			{
-                Log.consoleLog("XmppChat.ChatPanelButtonListener.onMessageSend()");
+                Log.log("XmppChat.ChatPanelButtonListener.onMessageSend()");
                 chatItem.send(message);
 			}
 		});
@@ -54,14 +54,14 @@ public class XmppChat
 	
 	public void openChat()
 	{
-        Log.consoleLog("XmppChat.openChat()");
+        Log.log("XmppChat.openChat()");
 		offlineTip();
 		button.openWindow();
 	}
 	
 	public void process(Message message,boolean firstMessage)
 	{
-        Log.consoleLog("XmppChat.process()");
+        Log.log("XmppChat.process()");
 		if(firstMessage)
 			offlineTip();
 		
@@ -70,7 +70,7 @@ public class XmppChat
 	
 	public void processSyncSend(Message message,boolean firstMessage)
 	{
-        Log.consoleLog("XmppChat.processSyncSend()");
+        Log.log("XmppChat.processSyncSend()");
 		if(firstMessage)
 			offlineTip();
 		button.processSyncSend(message, firstMessage);
@@ -78,7 +78,7 @@ public class XmppChat
 	
 	public ChatPanelButton getButton()
 	{
-        Log.consoleLog("XmppChat.getButton()");
+        Log.log("XmppChat.getButton()");
 		return button;
 	}
 	

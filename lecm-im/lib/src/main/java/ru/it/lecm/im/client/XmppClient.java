@@ -103,6 +103,7 @@ public class XmppClient
 
     public XmppClient()
 	{
+        Log.log("new XmppClient()");
 		session.setGetRosterDelay(conf.isGetRosterDelay());
 		session.setNoneRoster(iJabConfImpl.getConf().getXmppConf().isNoneRoster());
 
@@ -139,11 +140,13 @@ public class XmppClient
         {
             public void onBeforeLogin()
             {
+                Log.log("SessionListener.onBeforeLogin()");
                 fireOnBeforeLogin();
             }
 
             public void onEndLogin()
             {
+                Log.log("SessionListener.onEndLogin()");
                 fireOnEndLogin();
                 IdleTool.instance().start(new IdleListener()
                 {
@@ -164,6 +167,7 @@ public class XmppClient
             public void onError(BoshErrorCondition boshErrorCondition,
                     String message)
             {
+                Log.log("SessionListener.onError()");
                 fireOnError(message);
                 IdleTool.instance().stop();
                 if(conf.isAutoLogin()&&reconnect_count>0)
@@ -195,18 +199,21 @@ public class XmppClient
 
             public void onLoginOut()
             {
+                Log.log("SessionListener.onLoginOut()");
                 fireOnLogout();
                 IdleTool.instance().stop();
             }
 
             public void onResumeFailed()
             {
+                Log.log("SessionListener.onResumeFailed()");
                 IdleTool.instance().stop();
                 autoLogin();
             }
 
             public void onResumeSuccessed()
             {
+                Log.log("SessionListener.onResumeSuccessed()");
                 isLogined = true;
                 fireOnResume();
                 IdleTool.instance().start(new IdleListener()
@@ -214,11 +221,13 @@ public class XmppClient
 
                     public void onIdle()
                     {
+                        Log.log("IdleListener.onIdle()");
                         Idle();
                     }
 
                     public void onWeek()
                     {
+                        Log.log("IdleListener.onWeek()");
                         Week();
                     }
                 });
@@ -240,7 +249,8 @@ public class XmppClient
 	
 	public void autoLogin()
 	{
-		if(conf.isAutoLogin())
+        Log.log("XmmpClient.autoLogin()");
+        if(conf.isAutoLogin())
 		{
 			Timer t = new Timer()
 			{
@@ -268,6 +278,7 @@ public class XmppClient
 	
 	public void login(String id, String password) 
 	{
+        Log.log("XmppClient.login()");
 		if(session.isActive())
 			return;
 		else
@@ -276,7 +287,7 @@ public class XmppClient
 	
 	public void resume() 
 	{
-        Log.consoleLog("XmppClient.resume()");
+        Log.log("XmppClient.resume()");
         reset();
 		XmppProfileManager.reset();
 		BrowserHelper.init();
@@ -290,21 +301,22 @@ public class XmppClient
 
 	public void run() 
 	{
-        Log.consoleLog("XmppClient.run()");
+        Log.log("XmppClient.run()");
 		resume();
 	}
 
 	public boolean suspend() 
 	{
-        Log.consoleLog("XmppClient.suspend()");
+        Log.log("XmppClient.suspend()");
 		session.suspend();
 		fireOnSuspend();
 		return true;
 	}
 
 	public void logout() 
-	{		
-		reset();
+	{
+        Log.log("XmppClient.logout()");
+        reset();
 		session.logout();
 		Storage storage = Storage.createStorage(SELF_NICK, "");
 		storage.set(SELF_NICK, "");
@@ -434,7 +446,8 @@ public class XmppClient
 	
 	private void loginByCookieField()
 	{
-		String userName = Cookies.getCookie(conf.getUserCookieField());
+        Log.log("XmmpClient.loginByCookieField()");
+        String userName = Cookies.getCookie(conf.getUserCookieField());
 		userName = userName==null?"":userName;
 		String pwd = Cookies.getCookie(conf.getPasswordCookieField());
 		pwd = pwd==null?"":pwd;
@@ -448,7 +461,8 @@ public class XmppClient
 	
 	private void loginAnonymous()
 	{
-		if(conf.getAnonymousPrefix().length() == 0)
+        Log.log("XmppClient.loginAnonymous()");
+        if(conf.getAnonymousPrefix().length() == 0)
 			return;
 		String userName = conf.getAnonymousPrefix() + TextUtils.genUniqueId();
 		connect(userName,userName);
@@ -458,7 +472,7 @@ public class XmppClient
 	
 	private void connect(final String id,final String password)
 	{
-        Log.consoleLog("XmppClient.connect()");
+        Log.log("XmppClient.connect()");
         reset();
 		session.reset();
 		User user = session.getUser();
@@ -473,7 +487,7 @@ public class XmppClient
 	
 	private void connectRosterEvents()
 	{
-        Log.consoleLog("XmppClient.connectRosterEvents()");
+        Log.log("XmppClient.connectRosterEvents()");
 		final ContactView contactView = iJab.ui.getContactView();
 		RosterListener listener = new RosterListener()
 		{
@@ -484,7 +498,7 @@ public class XmppClient
 
 			public void onAddItem(RosterItem item) 
 			{
-                Log.consoleLog("XmppClient.RosterListener.onAddItem()");
+                Log.log("XmppClient.RosterListener.onAddItem()");
                 if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
@@ -495,7 +509,7 @@ public class XmppClient
 
 			public void onEndRosterUpdating() 
 			{
-                Log.consoleLog("XmppClient.RosterListener.onEndRosterUpdating()");
+                Log.log("XmppClient.RosterListener.onEndRosterUpdating()");
                 MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
 				oracle.addAll(XmppProfileManager.names.keySet());
 				oracle.addAll(XmppProfileManager.names.values());
@@ -511,7 +525,7 @@ public class XmppClient
 
 			public void onStartRosterUpdating() 
 			{
-                Log.consoleLog("XmppClient.RosterListener.onStartRosterUpdating()");
+                Log.log("XmppClient.RosterListener.onStartRosterUpdating()");
 				//onlineContactCount = 0;
 				totalContactCount = 0;
 				if(!iJab.conf.getXmppConf().isGetRosterDelay())
@@ -524,6 +538,7 @@ public class XmppClient
 
 			public void onUpdateItem(RosterItem item) 
 			{
+                Log.log("XmppClient.RosterListener.onUpdateItem()");
                 if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
@@ -543,7 +558,7 @@ public class XmppClient
 
 			public void onContactAvailable(Presence presenceItem) 
 			{
-                Log.consoleLog("XmppClient.PresenceListener.onContactAvailable()");
+                Log.log("XmppClient.PresenceListener.onContactAvailable()");
                 if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				final String bareJid = presenceItem.getFrom().toStringBare();
@@ -556,7 +571,7 @@ public class XmppClient
 			}
 
 			public void onContactUnavailable(Presence presenceItem) {
-                Log.consoleLog("XmppClient.PresenceListener.onContactUnavailable()");
+                Log.log("XmppClient.PresenceListener.onContactUnavailable()");
                 if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				SoundManager.playOffline();
@@ -567,7 +582,7 @@ public class XmppClient
 
 			public void onPresenceChange(Presence presenceItem) 
 			{
-                Log.consoleLog("XmppClient.PresenceListener.onPresenceChange()");
+                Log.log("XmppClient.PresenceListener.onPresenceChange()");
                 if(!presenceItem.getFrom().toString().contains("@"))
 					return;
 				final String bareJid = presenceItem.getFrom().toStringBare();
@@ -588,7 +603,7 @@ public class XmppClient
 
 			public void onItemClick(RosterItem item) 
 			{
-                Log.consoleLog("XmppClient.ContactViewListener.onItemClick()");
+                Log.log("XmppClient.ContactViewListener.onItemClick()");
                 xmppChatManager.openChat(item.getJid());
 			}
 
@@ -602,7 +617,8 @@ public class XmppClient
 		{
 			public void handleEvent(PresenceEvent event) 
 			{
-				Presence presence = event.getPresence();
+                Log.log("XmppClient.Listener<PresenceEvent>.handleEvent()");
+                Presence presence = event.getPresence();
 				JID jid = presence.getFrom();
 				// is a transport subscribe?
 				if(!jid.getDomain().equals(session.getUser().getDomainname())||!jid.toString().contains("@"))
@@ -629,12 +645,14 @@ public class XmppClient
 	
 	private void reset()
 	{
+        Log.log("XmmpClient.reset()");
 		onlineContactCount = 0;
 		totalContactCount = 0;
 	}
 
 	void talkTo(String j)
 	{
+        Log.log("XmmpClient.talkTo(" + j + ")");
 		j = j==null?"":j;
 		if(j.length()==0)
 			return;
@@ -673,7 +691,8 @@ public class XmppClient
 	
 	void talkToDirect(String jid)
 	{
-		if(!iJabConfImpl.getConf().isEnableTalkToStranger()&&!session.getRosterPlugin().isContactExists(JID.fromString(jid)))
+        Log.log("XmppClient.talkToDirect()");
+        if(!iJabConfImpl.getConf().isEnableTalkToStranger()&&!session.getRosterPlugin().isContactExists(JID.fromString(jid)))
 			return;
 		try
 		{
@@ -686,7 +705,7 @@ public class XmppClient
 	
 	private void Idle()
 	{
-        Log.consoleLog("XmppClient.Idle()");
+        Log.log("XmppClient.Idle()");
         if(session.isDisconnected())
 			return;
 		weekShow = session.getPresencePlugin().getCurrentShow();
@@ -695,7 +714,7 @@ public class XmppClient
 	
 	private void Week()
 	{
-        Log.consoleLog("XmppClient.Week()");
+        Log.log("XmppClient.Week()");
 		if(session.isDisconnected())
 			return;
 		session.getPresencePlugin().sendStatus(weekShow);
@@ -708,12 +727,14 @@ public class XmppClient
 	
 	private void saveNickToCache(String nick)
 	{
-		Storage storage = Storage.createStorage(SELF_NICK, "");
+        Log.log("XmppClient.saveNickToCache()");
+        Storage storage = Storage.createStorage(SELF_NICK, "");
 		storage.set(SELF_NICK, nick);
 	}
 	
 	private void readNickFromCache()
 	{
+        Log.log("XmppClient.readNickFromCache()");
 		Storage storage = Storage.createStorage(SELF_NICK, "");
 		String nick = storage.get(SELF_NICK);
 		if(nick == null||nick.length()==0)
@@ -744,7 +765,8 @@ public class XmppClient
 	 */
 	public void loginWithStatus(String id, String password, String status)
 	{
-		session.setInitPresence(XmppStatus.makePresence(status));
+        Log.log("XmppClient.loginWithStatus()");
+        session.setInitPresence(XmppStatus.makePresence(status));
 		login(id,password);
 	}
 
@@ -786,7 +808,8 @@ public class XmppClient
 	 */
 	public void setStatus(String status)
 	{
-		Presence presence = XmppStatus.makePresence(status);
+        Log.log("XmppClient.setStatus()");
+        Presence presence = XmppStatus.makePresence(status);
 		session.getPresencePlugin().sendPresence(presence);
 	}
 
@@ -795,7 +818,8 @@ public class XmppClient
 	 */
 	public void addRoster(JsArrayString users, String group)
 	{
-		for(int index=0;index<users.length();index++)
+        Log.log("XmppClient.addRoster()");
+        for(int index=0;index<users.length();index++)
 		{
 			String j = users.get(index);
 			if(!j.contains("@"))
@@ -817,7 +841,8 @@ public class XmppClient
 	 */
 	public void removeRoster(JsArrayString users)
 	{
-		for(int index=0;index<users.length();index++)
+        Log.log("XmppClient.removeRoster()");
+        for(int index=0;index<users.length();index++)
 		{
 			String j = users.get(index);
 			if(!j.contains("@"))
@@ -905,6 +930,7 @@ public class XmppClient
 
     public void toggleIsVisible()
     {
+        Log.log("XmppClient.toggleIsVisible()");
         if (this.isVisible)
         {
             this.fireOnHide();
@@ -919,6 +945,7 @@ public class XmppClient
     }
 
     private void fireOnShow() {
+        Log.log("XmppClient.fireOnShow()");
         for(VisibilityListener l:visibilityListeners)
         {
             l.onShow();
@@ -926,6 +953,7 @@ public class XmppClient
     }
 
     private void fireOnHide() {
+        Log.log("XmppClient.fireOnHide()");
         for(VisibilityListener l:visibilityListeners)
         {
             l.onHide();

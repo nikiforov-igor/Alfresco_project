@@ -30,6 +30,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
 import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
 import ru.it.lecm.im.client.ui.FocusHTMLPanel;
@@ -192,7 +193,8 @@ public class BarButton extends Composite {
 	
 	public void openWindow()
 	{
-		button.removeStyleName("ijab-window-minimize");
+        Log.log("BarButton.openWindow()");
+        button.removeStyleName("ijab-window-minimize");
 		button.addStyleName("ijab-window-normal");
 		button.addStyleName("ijab-window-active");
 		buttonStateElement.addClassName("ui-state-active");
@@ -223,8 +225,9 @@ public class BarButton extends Composite {
 		buttonFocus.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) 
-			{				
-				mouseClick();
+			{
+                Log.log("BarButton.ClickHandler.onClick()");
+                mouseClick();
 			}
 		});
 		

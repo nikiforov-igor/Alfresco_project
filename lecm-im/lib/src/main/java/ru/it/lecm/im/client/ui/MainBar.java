@@ -179,7 +179,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 
         readShortItems();
 		readTools();
-		disconnected();
+
+        disconnected();
 		
 		if(iJab.conf.isBarExpandDefault())
 		{
@@ -348,7 +349,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void reset()
 	{
-        Log.consoleLog("MainBar.reset()");
+        Log.log("MainBar.reset()");
 		disconnected();
 		contactView.clear();
 		updateOnlineCount(0);
@@ -362,7 +363,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void connecting()
 	{
-        Log.consoleLog("MainBar.connecting()");
+        Log.log("MainBar.connecting()");
         connected = false;
 		buddysButton.removeIconStyle("ijab-icon-buddy");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
@@ -373,7 +374,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void disconnected()
 	{
-        Log.consoleLog("MainBar.disconnected()");
+        Log.log("MainBar.disconnected()");
         connected = false;
 		getRostered = false;
 		buddysButton.setIconStyle("ijab-icon-buddy-disconnected");
@@ -387,7 +388,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public void connected()
 	{
-        Log.consoleLog("MainBar.connected()");
+        Log.log("MainBar.connected()");
 		connected = true;
 		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");

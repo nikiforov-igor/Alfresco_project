@@ -25,6 +25,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Cookies;
+import ru.it.lecm.im.client.Log;
 
 public class User {
 	
@@ -57,7 +58,8 @@ public class User {
 	 */
 	public User(String username, String domainname, String password, String resource, int priority) {
 		super();
-		this.username = username;
+        Log.log("new User()");
+        this.username = username;
 		this.domainname = domainname;
 		this.password = password;
 		this.resource = resource;
@@ -101,7 +103,8 @@ public class User {
 
 	public void reset() 
 	{
-		Cookies.removeCookie(COOKIENAME);
+        Log.log("User.reset()");
+        Cookies.removeCookie(COOKIENAME);
 		password = "";
 		priority = 0;
 		domainname = "";
@@ -151,7 +154,8 @@ public class User {
 	
 	public boolean suspend()
 	{
-		JSONObject jUser = new JSONObject();
+        Log.log("User.suspend()");
+        JSONObject jUser = new JSONObject();
 		if(domainname == null||username == null)
 			return false;
 
@@ -171,6 +175,7 @@ public class User {
 	
 	public boolean resume()
 	{
+        Log.log("User.resume()");
 		//String cookie = Cookies.getCookie(COOKIENAME);
 		Storage storage = Storage.createStorage(COOKIENAME, "");
 		String cookie = storage.get(COOKIENAME);

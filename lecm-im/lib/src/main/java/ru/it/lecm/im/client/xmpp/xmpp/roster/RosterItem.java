@@ -33,7 +33,7 @@ public class RosterItem {
      // +События
 
     public void fireOldMessagesCount(int oldMessagesCount) {
-        Log.consoleLog( "RosterItem.fireOldMessagesCount() " + jid   + " " + oldMessagesCount     );
+        Log.log("RosterItem.fireOldMessagesCount() " + jid + " " + oldMessagesCount);
         for (RosterItemListener l : this.itemListeners) {
             l.onNewMessage(oldMessagesCount);
         }

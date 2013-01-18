@@ -150,7 +150,7 @@ public class BarUI implements ClientListener, VisibilityListener {
 
     @Override
     public void onShow() {
-        Log.consoleLog("BarUI.onShow()");
+        Log.log("BarUI.onShow()");
 //        mainBar.removeStyleName(".hide");
         mainBar.setVisible(true);
         iJab.client.getChatManager().OpenNextUnreadMessage();
@@ -158,7 +158,7 @@ public class BarUI implements ClientListener, VisibilityListener {
 
     @Override
     public void onHide() {
-        Log.consoleLog("BarUI.onHide()");
+        Log.log("BarUI.onHide()");
         mainBar.setVisible(false);
     }
 }

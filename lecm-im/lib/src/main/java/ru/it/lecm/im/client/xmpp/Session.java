@@ -21,11 +21,11 @@
  */
 package ru.it.lecm.im.client.xmpp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.Connector.BoshErrorCondition;
 import ru.it.lecm.im.client.xmpp.ResponseHandler.ErrorType;
 import ru.it.lecm.im.client.xmpp.events.Event;
@@ -36,8 +36,8 @@ import ru.it.lecm.im.client.xmpp.gateway.GatewayPlugin;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ.Type;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
 import ru.it.lecm.im.client.xmpp.xmpp.ImSessionPlugin;
 import ru.it.lecm.im.client.xmpp.xmpp.ResourceBindPlugin;
@@ -59,10 +59,10 @@ import ru.it.lecm.im.client.xmpp.xmpp.xeps.vcard.VCardPlugin;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.vcard.VCardResponseHandler;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.xmppPing.PingPlugin;
 
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class Session implements Responsemanager 
@@ -747,6 +747,7 @@ public class Session implements Responsemanager
 	
 	public void resume()
 	{
+        Log.log("Session.resume()");
 		//TODO: resume all the plugin state before the call the resume of con
 		if(!user.resume())
 		{

@@ -70,7 +70,7 @@ public class ContactViewItem extends ContactViewItemUI
         item.addListener(new RosterItemListener() {
             @Override
             public void onNewMessage(int oldMessages) {
-                Log.consoleLog(XmppProfileManager.getName("RosterItemListener.onNewMessage(): " + item.getJid()) + " " + oldMessages);
+                Log.log(XmppProfileManager.getName("RosterItemListener.onNewMessage(): " + item.getJid()) + " " + oldMessages);
                 if (oldMessages > 0)
                 {
                     nameElement.addClassName("has-unread-messages");

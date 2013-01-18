@@ -57,7 +57,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	public void onMessageReceived(Chat<XmppChat> chat, Message message,
 			boolean firstMessage) 
 	{
-        Log.consoleLog("XmppChatManager.onMessageReceived()");
+        Log.log("XmppChatManager.onMessageReceived()");
 		XmppChat xmppChat = chat.getUserData();
 		xmppChat.process(message, firstMessage);
 		if(message.getBody()!=null&&message.getBody().length() > 0)
@@ -94,10 +94,10 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
             }
         }
 
-        Log.consoleLog("oldMessagesCount: " + oldMessagesCount);
-        Log.consoleLog("MessageCountUpdater.Update()");
+        Log.log("oldMessagesCount: " + oldMessagesCount);
+        Log.log("MessageCountUpdater.Update()");
         MessageCountUpdater.Update(oldMessagesCount);
-        Log.consoleLog("MessageCountUpdater.Update() - Complete!");
+        Log.log("MessageCountUpdater.Update() - Complete!");
 
         // XmppClient client = (XmppClient) iJab.client;
         // iJab.ui.getContactView().
@@ -124,7 +124,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 
 	public void onStartNewChat(Chat<XmppChat> chat) 
 	{
-        Log.consoleLog("XmppChatManager.onStartNewChat()");
+        Log.log("XmppChatManager.onStartNewChat()");
 		if(chat.getUserData() == null)
 		{
 			String nick = Session.instance().getRosterPlugin().getNameByJid(chat.getJid());
@@ -158,7 +158,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	
 	public ChatPanelButton openChat(JID jid)
 	{
-        Log.consoleLog("XmppChatManager.openChat()");
+        Log.log("XmppChatManager.openChat()");
 		Chat<XmppChat> chat = chats.get(jid.toStringBare());
 		if(chat != null&&chat.getUserData() != null)
 		{
@@ -181,7 +181,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	
 	public ChatPanelButton openChat(String jid)
 	{
-        Log.consoleLog("XmppChatManager.openChat()");
+        Log.log("XmppChatManager.openChat()");
 		return openChat(JID.fromString(jid));
 	}
 	
@@ -197,7 +197,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 
 	public void onResume() 
 	{
-        Log.consoleLog("XmppChatManager.onResume()");
+        Log.log("XmppChatManager.onResume()");
 		final String prefix = Session.instance().getUser().getStorageID();
 		Storage storage = Storage.createStorage(XmppChatManagerConstants.STORAGE_KEY, prefix);
 		//first ,get all button in bar 
@@ -234,7 +234,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 
 	public void onSuspend() 
 	{
-        Log.consoleLog("XmppChatManager.onSuspend()");
+        Log.log("XmppChatManager.onSuspend()");
 		//first get all button in the bar
 		final String prefix = Session.instance().getUser().getStorageID();
 		Storage storage = Storage.createStorage(XmppChatManagerConstants.STORAGE_KEY,prefix);

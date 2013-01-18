@@ -454,7 +454,7 @@ public class BarChatWidget extends BarChatWidgetUI
 	
 	private void viewRangeArchive(ArchiveRange range)
 	{
-        Log.consoleLog("BarChatWidget.viewRangeArchive");
+        Log.log("BarChatWidget.viewRangeArchive");
         cleanHistory();
 		chatContent.add(createRangeSelectorWidget(range));
 		chatContent.add(createTopRangeWidget(range));
