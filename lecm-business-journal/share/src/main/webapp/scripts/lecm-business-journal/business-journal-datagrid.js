@@ -67,6 +67,9 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                                     columnContent += grid.getDicValueView(data.value, data.displayValue);
                                     break;
 
+                                case "datetime":
+                                    columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), "dd mmm yyyy HH:MM:ss");
+                                    break;
                                 case "lecm-orgstr:employee":
                                     columnContent += grid.getEmployeeView(data.value, data.displayValue);
                                     break;
