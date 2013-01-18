@@ -738,22 +738,41 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
         query = "TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "]";
-        if (whoseKey != null && !"".equals(whoseKey)) {           //todo
+
+        if (objectType != null && !"".equals(objectType)) {
+            query += " AND @lecm\\-busjournal\\:bjRecord\\-objType\\-assoc\\-ref:\"" + objectType + "\"";
+        }
+
+        if (whoseKey != null && !"".equals(whoseKey)) {
             switch(WhoseEnum.valueOf(whoseKey.toUpperCase())) {
                 case MY : {
+                    NodeRef employee = orgstructureService.getCurrentEmployee();
 
+                    if (employee != null) {
+                        query += " AND @lecm\\-busjournal\\:bjRecord\\-initiator\\-assoc\\-ref:\"" + employee.toString() + "\"";
+                    }
                     break;
                 }
                 case DEPARTMENT: {
+                    NodeRef boss = orgstructureService.getCurrentEmployee();
 
+                    if (boss != null) {
+                        String employeesList = "";
+                        List<NodeRef> employees = orgstructureService.getBossSubordinate(boss);
+
+                        employees.add(boss);
+                        for (NodeRef employee : employees) {
+                            if (employee != null) {
+                                employeesList += ("".equals(employeesList) ? "(" : " ") + "\"" + employee.toString() + "\"";
+                            }
+                        }
+                        employeesList += ")";
+                        query += " AND @lecm\\-busjournal\\:bjRecord\\-initiator\\-assoc\\-ref:" + employeesList + "";
+                    }
                     break;
                 }
                 case CONTROL: {
-
-                    break;
-                }
-                case ALL: {
-
+                    //todo
                     break;
                 }
                 default: {

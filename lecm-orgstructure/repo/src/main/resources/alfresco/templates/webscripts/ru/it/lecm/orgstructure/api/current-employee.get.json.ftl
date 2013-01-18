@@ -9,7 +9,8 @@
 	"number": "${employee.properties["lecm-orgstr:employee-number"]!''}",
 	"fio-g": "${employee.properties["lecm-orgstr:employee-fio-g"]!''}",
 	"fio-d": "${employee.properties["lecm-orgstr:employee-fio-d"]!''}",
-	"name": "${employee.getName()}",
+    "is-boss": "${isboss!''}",
+    "name": "${employee.getName()}",
 	"nodeRef": "${employee.getNodeRef().toString()}"
 	</#if>
 }

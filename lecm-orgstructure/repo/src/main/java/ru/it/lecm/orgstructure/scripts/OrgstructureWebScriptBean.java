@@ -715,6 +715,13 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		return null;
 	}
 
+    /**
+	 * Является ли текущий сотрудник руководителем
+	 */
+	public String isCurrentBoss() {
+        return Boolean.toString(orgstructureService.isCurrentBoss());
+	}
+
 	/**
 	 * получить список подразделений в которые входит сотрудник согласно штатному расписанию
 	 * этот список будет содержать или все подразделения или только те, где сотрудник является боссом

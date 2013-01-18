@@ -308,6 +308,26 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
+    @Override
+    public boolean isCurrentBoss() {
+        NodeRef employeeRef = getCurrentEmployee();
+
+        if (nodeService.exists(employeeRef)) {
+            if (isEmployee(employeeRef)) {
+                // получаем основную должностную позицию
+                NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
+                if (primaryStaff != null) {
+                    // получаем подразделение для штатного расписания
+                    NodeRef unit = getUnitByStaff(primaryStaff);
+                    // получаем руководителя для подразделения
+                    NodeRef bossRef = getUnitBoss(unit);
+                    return employeeRef.equals(bossRef);
+                }
+            }
+        }
+        return false;
+    }
+
 	@Override
 	public NodeRef getUnitBoss(NodeRef unitRef) {
 		NodeRef bossLink = null;
@@ -899,7 +919,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	 * @param businesssRoleRef бизнес роль у которой привязываем NodeRef
 	 * @param targetRef привязываемый NodeRef
 	 * @param assocName имя типа ассоциации
-	 * @param typeName имя типа объекта
 	 * @return AssociationRef где source это бизнес роль, target это целевой NodeRef
 	 */
 	private AssociationRef getOrCreateBusinessRoleAssoc (NodeRef businesssRoleRef, NodeRef targetRef, QName assocName) {

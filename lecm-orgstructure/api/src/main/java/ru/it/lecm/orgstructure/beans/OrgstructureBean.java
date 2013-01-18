@@ -173,7 +173,12 @@ public interface OrgstructureBean {
 	 */
 	boolean isPosition(NodeRef ref);
 
-	/**
+    /**
+     * Проверяет, является ли текущий сотрудник руководителем
+     */
+    boolean isCurrentBoss();
+
+    /**
 	 * Получение руководителя подразделения
 	 */
 	NodeRef getUnitBoss(NodeRef unitRef);

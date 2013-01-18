@@ -42,14 +42,14 @@
                     text: '${msg("label.select.whose.my")}'
                 },
                 {
-                    value: 'department',
-                    text: '${msg("label.select.whose.department")}'
-                },
-                {
                     value: 'control',
                     text: '${msg("label.select.whose.control")}'
                 }
             ]
+        };
+        var DEPARTMENT_OPTION = {
+            value: 'department',
+            text: '${msg("label.select.whose.department")}'
         };
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event,
@@ -102,7 +102,6 @@
                                         });
 
                                         makeSelect('${id}-types', SELECT_TYPES);
-                                        refreshResults();
                                     }
                                 },
                                 scope: this
@@ -122,8 +121,7 @@
             });
 
             makeSelect('${id}-days', SELECT_DAYS);
-            makeSelect('${id}-whose', SELECT_WHOSE);
-            refreshResults();
+            makeWhoseSelect();
         }
         function refreshResults() {
             var data = "";
@@ -183,6 +181,30 @@
                 menu: options
             });
             hidden.value = defaultOption.value;
+            refreshResults();
+        }
+        function makeWhoseSelect() {
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+                successCallback: {
+                    fn: function(response){
+                        var employee = response.json;
+
+                        if (employee && employee["is-boss"] == "true") {
+                             SELECT_WHOSE.options.splice(2, 0, DEPARTMENT_OPTION);
+                        }
+                        makeSelect('${id}-whose', SELECT_WHOSE);
+                    },
+                    scope: this
+                },
+                failureCallback: {
+                    fn: function() {
+                        console.log("Failed to load current Employee.");
+                        makeSelect('${id}-whose', SELECT_WHOSE);
+                    },
+                    scope: this
+                }
+            });
         }
 
         Event.onDOMReady(init);
