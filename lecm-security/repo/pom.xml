@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>lecm-security-repo</artifactId>
-	<packaging>jar</packaging>
+	<packaging>amp</packaging>
 
 	<name>Logic ECM Security Repo</name>
 	<description>this is security repo module</description>
