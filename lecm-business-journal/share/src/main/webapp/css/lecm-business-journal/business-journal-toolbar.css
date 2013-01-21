@@ -32,6 +32,10 @@
     background: url(/share/res/components/images/delete-row-16.png) no-repeat 5px 5px;
 }
 
+.datalist-toolbar .archive-row button {
+    background: url(/share/res/components/images/delete-row-16.png) no-repeat 5px 5px;
+}
+
 .datalist-toolbar .clear-search span {
     background: url("/share/res/components/images/delete-disabled-16.png") no-repeat scroll 0 0 transparent;
     padding-right: 16px;

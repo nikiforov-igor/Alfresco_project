@@ -48,6 +48,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
     LogicECM.module.BusinessJournal.Toolbar = function (htmlId) {
         LogicECM.module.BusinessJournal.Toolbar.superclass.constructor.call(this, "LogicECM.module.BusinessJournal.Toolbar", htmlId, ["button", "container"]);
         this.toolbarButtons ={};
+        this.archivePanel = null;
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
@@ -84,18 +85,14 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
             groupActions: {},
 
+            archivePanel: null,
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
              * @method onReady
              */
             onReady:function() {
-                /*this.toolbarButtons.newRecordButton = Alfresco.util.createYUIButton(this, "newRecordButton", this.onNewRow,
-                    {
-                        disabled:true,
-                        value:"create"
-                    });*/
-
                 this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
                         disabled: true
@@ -106,10 +103,16 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         disabled: true
                     });
 
-                this.groupActions.deleteButton = Alfresco.util.createYUIButton(this, "deleteButton", this.onDeleteRows,
+                this.toolbarButtons.deleteButton = Alfresco.util.createYUIButton(this, "archiveByDateButton", this.onArchiveRowsDialog,
                     {
                         disabled: true
                     });
+
+                this.groupActions.archiveButton = Alfresco.util.createYUIButton(this, "archiveButton", this.onArchiveRows,
+                    {
+                        disabled: true
+                    });
+
                 this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportCSV,
                     {
                         disabled: true
@@ -132,20 +135,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         correctScope: true
                     }, "keydown").enable();
 
-
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
-            },
-
-            /**
-             * New Row button click handler
-             */
-            onNewRow:function() {
-                var metadata = this.modules.dataGrid.datagridMeta,
-                    destination = metadata.nodeRef,
-                    itemType = metadata.itemType,
-                    namePattern = metadata.custom != null ? metadata.custom.namePattern : null;
-                this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, null, namePattern);
             },
 
             onUserAccess:function(layer, args) {
@@ -198,6 +189,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 var datagrid = args[1].datagrid;
                 if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel){
                     this.modules.dataGrid = datagrid;
+                    this.archivePanel = new LogicECM.module.BusinessJournal.ArchivePanel("toolbar-archivePanel", datagrid);
                 }
             },
 
@@ -296,15 +288,13 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
              * Удаление выбранного значения в dataGrid.
              * Появляется диалоговое окно с потверждением на удаление
              */
-            onDeleteRows:function Toolbar_onDeleteRow() {
-                var dataGrid = this.modules.dataGrid;
-                if (dataGrid) {
-                    // Get the function related to the clicked item
-                    var fn = "onActionDelete";
-                    if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+            onArchiveRowsDialog:function Toolbar_onDeleteRow() {
+                    if (this.archivePanel && this.archivePanel.panel) {
+                        Dom.setStyle(this.archivePanel.id, "display", "block");
+                        this.archivePanel.panel.show();
+                    } else {
+                        alert("Не удалось найти панель!");
                     }
-                }
             },
 
             onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args)
@@ -360,6 +350,150 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             scope: this
                         }
                     });
+            },
+
+            onArchiveRows:function Toolbar_onDeleteRow() {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
+                    // Get the function related to the clicked item
+                    var fn = "onActionDelete";
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+                    }
+                }
+            },
+        }, true);
+})();
+
+(function () {
+    var $html = Alfresco.util.encodeHTML;
+
+    LogicECM.module.BusinessJournal.ArchivePanel = function (id, datagrid) {
+        LogicECM.module.BusinessJournal.ArchivePanel.superclass.constructor.call(this, "LogicECM.module.BusinessJournal.ArchivePanel", id, ["button", "container", "json"]);
+        this.panel = null;
+        this.panelButtons = {};
+        this.dataGrid = datagrid;
+
+        YAHOO.Bubbling.on("hidePanel", this.onCancel, this);
+        return this;
+    };
+
+    YAHOO.extend(LogicECM.module.BusinessJournal.ArchivePanel, Alfresco.component.Base);
+
+    YAHOO.lang.augmentObject(LogicECM.module.BusinessJournal.ArchivePanel.prototype,
+        {
+            panel: null,
+            dataGrid: null,
+            panelButtons: null,
+            isReady: false,
+
+            onReady: function () {
+                this.panel = Alfresco.util.createYUIPanel(this.id,
+                    {
+                        width: "500px"
+                    });
+                this.panelButtons.archiveButton = Alfresco.util.createYUIButton(this, "archiveButton", this.onArchive, {});
+                this.panelButtons.cancelButton = Alfresco.util.createYUIButton(this, "cancelButton", this.onCancel, {});
+            },
+            onArchive: function () {
+                var dateValue = Dom.get("archiveDate").value;
+                if (!isNaN(dateValue)) {
+                    var timerShowLoadingMessage = null;
+                    var loadingMessage = null;
+                    var me = this;
+
+                    var fnShowLoadingMessage = function nShowLoadingMessage() {
+                        if (timerShowLoadingMessage) {
+                            loadingMessage = Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    displayTime:0,
+                                    text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
+                                    noEscape:true
+                                });
+
+                            if (YAHOO.env.ua.ie > 0) {
+                                this.loadingMessageShowing = true;
+                            }
+                            else {
+                                loadingMessage.showEvent.subscribe(function () {
+                                    this.loadingMessageShowing = true;
+                                }, this, true);
+                            }
+                        }
+                    };
+
+                    // Slow data webscript message
+                    this.loadingMessageShowing = false;
+                    timerShowLoadingMessage = YAHOO.lang.later(500, this, fnShowLoadingMessage);
+
+                    var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
+                        if (timerShowLoadingMessage) {
+                            // Stop the "slow loading" timed function
+                            timerShowLoadingMessage.cancel();
+                            timerShowLoadingMessage = null;
+                        }
+                        if (loadingMessage) {
+                            if (this.loadingMessageShowing) {
+                                // Safe to destroy
+                                loadingMessage.destroy();
+                                loadingMessage = null;
+                            }
+                            else {
+                                // Wait and try again later. Scope doesn't get set correctly with "this"
+                                YAHOO.lang.later(100, me, destroyLoaderMessage);
+                            }
+                        }
+                    };
+
+                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/business-journal/api/record/archive";
+                    Alfresco.util.Ajax.jsonPost(
+                        {
+                            url: sUrl,
+                            dataObj: {
+                                nodeRefs: [],
+                                archiveOTDays:dateValue
+                            },
+                            successCallback: {
+                                fn: function (response) {
+                                    destroyLoaderMessage();
+                                    this.onCancel();
+                                    YAHOO.Bubbling.fire("dataItemsDeleted",{
+                                        items:response.json.results,
+                                        bubblingLabel:this.options.bubblingLabel
+                                    });
+                                    /*this.dataGrid.search.performSearch({
+                                        searchConfig:this.dataGrid.initialSearchConfig,
+                                        searchShowInactive:this.dataGrid.options.searchShowInactive
+                                    });*/
+                                },
+                                scope: this
+                            },
+                            failureCallback: {
+                                fn: function (response) {
+                                    destroyLoaderMessage();
+                                    alert("Failed to load webscript")
+                                },
+                                scope: this
+                            }
+                        });
+                } else {
+                    alert("Введите дату");
+                }
+            },
+            onCancel: function (layer, args) {
+                var mayHide = false;
+                if (this.panel != null) {
+                    if (args == undefined || args == null) {
+                        mayHide = true;
+                    } else if (args[1] && args[1].panel && args[1].panel.id == this.panel.id){
+                        mayHide = true
+                    }
+                    if (mayHide){
+                        this.panel.hide();
+                        Dom.setStyle(this.id, "display", "none");
+                    }
+                }
             }
+
         }, true);
 })();

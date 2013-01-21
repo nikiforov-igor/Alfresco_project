@@ -20,9 +20,12 @@
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",
                                     evaluator: function (rowData) {
-                                        var itemData = rowData.itemData;
-                                        return itemData["prop_lecm-dic_active"] == undefined ||
-                                                itemData["prop_lecm-dic_active"].value == true;
+	                                    if (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["prop_lecm-dic_active"] == undefined ||
+                                                    itemData["prop_lecm-dic_active"].value == true;
+	                                    }
+                                        return false;
                                     }
 								}
 							],

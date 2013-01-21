@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.json.JSONObject;
 
 /**
  * @author dbashmakov
@@ -24,6 +23,7 @@ public interface BusinessJournalService {
 	public final String BJ_ROOT_NAME = "Business Journal";
 	public final String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
 	public final String BR_ASSOC_QNAME = "businessJournal";
+	public final String BR_ARCHIVE_ASSOC_QNAME = "archive";
 	public final String DICTIONARIES_ROOT_NAME = "Dictionary";
 	public final String DICTIONARY_OBJECT_TYPE = "Тип объекта";
 	public final String DICTIONARY_EVENT_CATEGORY = "Категория события";
@@ -54,7 +54,7 @@ public interface BusinessJournalService {
 	public final QName PROP_MESSAGE_TEMP_CODE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-code");
 
 	public final QName PROP_BR_RECORD_DATE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-date");
-	public final QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-description");
+	public final QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-defaultDescription");
 	public final QName PROP_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator");
 	public final QName PROP_BR_RECORD_MAIN_OBJECT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject");
 	public final QName PROP_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1");
@@ -89,10 +89,10 @@ public interface BusinessJournalService {
      * @param mainObject - основной объект
      * @param objects    - список дополнительных объектов
      * @param  eventCategory  - категория события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -101,11 +101,11 @@ public interface BusinessJournalService {
      * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
      * @param mainObject - основной объект
      * @param  eventCategory  - категория события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -114,10 +114,10 @@ public interface BusinessJournalService {
      * @param mainObject - основной объект
      * @param objects    - массив дополнительных объектов
      * @param  eventCategory  - категория события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, NodeRef[] objects) throws Exception;
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -126,10 +126,10 @@ public interface BusinessJournalService {
      * @param mainObject - имя основного объекта
      * @param objects    - список дополнительных объектов
      * @param  eventCategory  - название категории события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -137,10 +137,10 @@ public interface BusinessJournalService {
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
-	 * @param  description  - описание события
+	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -148,10 +148,10 @@ public interface BusinessJournalService {
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
-	 * @param  description  - описание события
+	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -159,10 +159,10 @@ public interface BusinessJournalService {
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
-	 * @param  description  - описание события
+	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception;
+	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект
@@ -171,19 +171,10 @@ public interface BusinessJournalService {
 	public String getObjectDescription(NodeRef object);
 
 	/**
-	 * Метод для получения шаблонной строки для заданного типа
-	 * @param type - ссылка на объект справочника "Тип Объекта"
-	 * @return шаблонную строку или null, если не удалось найти соответствие
-	 */
-	public String getTemplateByType(NodeRef type);
-
-	/**
 	 * Метод, возвращающий корневую директорию
 	 * @return ссылка
 	 */
 	public NodeRef getBusinessJournalDirectory();
-
-	public JSONObject getRecordJSON(NodeRef recordRef) throws Exception;
 
 	/**
 	 * Метод, возвращающий список ссылок на записи бизнес-журнала, сформированные за заданный период
@@ -204,14 +195,13 @@ public interface BusinessJournalService {
 	/**
 	 * Метод, возвращающий список ссылок на записи заданного типа,
 	 * сформированные за заданный период с учетом инициатора
-	 *
-	 * @param objectType    - тип объекта
+	 * @param objectTypeRef    - тип объекта
 	 * @param begin         - начальная дата
 	 * @param end           - конечная дата
-	 * @param whoseKey      - дополнительная фильтрация по инициатору
+	 * @param whoseKey      - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
 	 * @return список ссылок
 	 */
-    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey);
+    public List<NodeRef> getRecordsByParams(String objectTypeRef, Date begin, Date end, String whoseKey);
 
 	/**
 	 * Метод, возвращающий директорию c архивными записями
@@ -224,4 +214,10 @@ public interface BusinessJournalService {
 	 * @return boolean результат выполнения операции
 	 */
 	public boolean moveRecordToArchive(NodeRef record);
+
+	/**
+	 * Метод, возвращающий список ссылок на записи старше заданного числа дней (дата создания меньше или равна текущая дата - число дней)
+	 * @return список ссылок на записи бизнес-журнала
+	 */
+	public List<NodeRef> getOldRecords(int numberOfDays);
 }

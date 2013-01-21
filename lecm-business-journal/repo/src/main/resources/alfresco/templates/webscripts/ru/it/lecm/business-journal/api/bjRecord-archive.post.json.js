@@ -1,25 +1,75 @@
 function main() {
     var items = getMultipleInputValues("nodeRefs");
+    var results = [];
     if (typeof items != "string") {
-        for (item in items) {
-            nodeRef = items[item];
-            result =
-            {
-                nodeRef: nodeRef,
-                action: "archiveRecord",
-                success: false
-            };
+        if (items.length > 0) {
+            for (item in items) {
+                nodeRef = items[item];
+                result =
+                {
+                    nodeRef: nodeRef,
+                    action: "archiveRecord",
+                    success: false
+                };
 
-            try {
-                result.success = businessJournal.archiveRecord(nodeRef);
-            }
-            catch (e) {
-                result.success = false;
-            }
+                try {
+                    result.success = businessJournal.archiveRecord(nodeRef);
+                }
+                catch (e) {
+                    result.success = false;
+                }
 
-            results.push(result);
+                results.push(result);
+            }
+        } else {
+            var archiveDate = json.has("archiveOTDays") ? json.get("archiveOTDays") : null;
+            if (archiveDate != null) {
+                items = businessJournal.findOldRecords(archiveDate);
+                for (item in items) {
+                    nodeRef = items[item].getNodeRef().toString();
+                    result =
+                    {
+                        nodeRef: nodeRef,
+                        action: "archiveRecord",
+                        success: false
+                    };
+
+                    try {
+                        result.success = businessJournal.archiveRecord(nodeRef);
+                    }
+                    catch (e) {
+                        result.success = false;
+                    }
+
+                    results.push(result);
+                }
+            }
         }
-        model.results = results;
+        if (results) {
+            if (typeof results == "string") {
+                status.setCode(status.STATUS_INTERNAL_SERVER_ERROR, results);
+            }
+            else if (typeof results.status == "object") {
+                status.redirect = true;
+                for (var s in results.status) {
+                    status[s] = results.status[s];
+                }
+            }
+            else {
+                var overallSuccess = true,
+                    successCount = 0,
+                    failureCount = 0;
+
+                for (var i = 0, j = results.length; i < j; i++) {
+                    overallSuccess = overallSuccess && results[i].success;
+                    results[i].success ? ++successCount : ++failureCount;
+                }
+                model.overallSuccess = overallSuccess;
+                model.successCount = successCount;
+                model.failureCount = failureCount;
+                model.results = results;
+            }
+        }
     }
 }
 

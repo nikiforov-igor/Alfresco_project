@@ -30,14 +30,42 @@ YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
 <@comp.baseToolbar id buttons true true>
-<div class="delete-row">
-	<span id="${id}-deleteButton" class="yui-button yui-push-button">
+<div id="toolbar-archivePanel" class="yui-panel" style="display: none">
+    <div id="toolbar-archivePanel-head" class="hd">${msg("business-journal.archive")}</div>
+    <div id="toolbar-archivePanel-body" class="bd">
+        <div id="toolbar-archivePanel-content" style="padding:20 px; margin:10 px">
+            <label for="archiveDate">${msg("archive.date")}</label>
+            <input type="text" name="-" id="archiveDate" value="20" maxlength="3"/>
+        </div>
+        <div class="bdft">
+	    <span id="toolbar-archivePanel-archiveButton" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button" tabindex="0">${msg("button.archive")}</button>
+        </span>
+        </span>
+        <span id="toolbar-archivePanel-cancelButton" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button" tabindex="1">${msg("button.close")}</button>
+        </span>
+        </span>
+        </div>
+    </div>
+</div>
+<div class="archive-row">
+	<span id="${id}-archiveByDateButton" class="yui-button yui-push-button">
        <span class="first-child">
-          <button type="button" title="${msg("button.delete")}">&nbsp;</button>
+          <button type="button" title="${msg("button.archive")}">&nbsp;</button>
        </span>
     </span>
 </div>
 <div class="divider"></div>
+<div class="archive-row">
+	<span id="${id}-archiveButton" class="yui-button yui-push-button">
+       <span class="first-child">
+          <button type="button" title="${msg("button.archive")}">&nbsp;</button>
+       </span>
+    </span>
+</div>
 <div class="exportcsv">
     <span id="${id}-exportCsvButton" class="yui-button yui-push-button">
         <span class="first-child">

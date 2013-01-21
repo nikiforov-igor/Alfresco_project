@@ -101,7 +101,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
+	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -111,7 +111,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		if (eventCategory != null) {
 			evcategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(date, person, mainObject, evcategoryString, description, objects);
+		return fire(date, person, mainObject, evcategoryString, defaultDescription, objects);
 	}
 	/**
 	 * Метод для создания записи бизнеса-журнала
@@ -120,19 +120,19 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @param initiator  - инициатор события (cm:person)
 	 * @param mainObject - основной объект
 	 * @param eventCategory  - категория события
-	 * @param description  - описание события
+	 * @param defaultDescription  - описание события
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception{
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
 			new Exception("Инициатор события и основной объект должны быть заданы!");
 		}
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
 		// получаем шаблон описания
-		String templateString = getTemplateString(getObjectType(mainObject), getEventCategoryByName(eventCategory), description);
+		String templateString = getTemplateString(getObjectType(mainObject), getEventCategoryByName(eventCategory), defaultDescription);
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
 		// получаем текущего пользователя по логину
@@ -148,16 +148,16 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      * @param mainObject - основной объект
      * @param objects    - массив дополнительных объектов
      * @param  eventCategory  - категория события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
 	@Override
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, NodeRef[] objects) throws Exception{
+	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception{
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(date, initiator, mainObject, evCategoryString, description, Arrays.asList(objects));
+		return fire(date, initiator, mainObject, evCategoryString, defaultDescription, Arrays.asList(objects));
 	}
 
     /**
@@ -167,12 +167,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      * @param mainObject - имя основного объекта
      * @param objects    - список дополнительных объектов
      * @param  eventCategory  - название категории события
-     * @param  description  - описание события
+     * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
     @Override
-    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
-        return fire(date, initiator, mainObject, getEventCategoryByName(eventCategory), description, objects);
+    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+        return fire(date, initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
     }
 
 	/**
@@ -181,31 +181,31 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
-	 * @param  description  - описание события
+	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String description, List<NodeRef> objects) throws Exception {
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(new Date(), initiator, mainObject, evCategoryString, description, objects);
+		return fire(new Date(), initiator, mainObject, evCategoryString, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
-		return fire(initiator, mainObject,getEventCategoryByName(eventCategory), description, objects);
+	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+		return fire(initiator, mainObject,getEventCategoryByName(eventCategory), defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String description, List<NodeRef> objects) throws Exception {
+	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
 			person = personService.getPerson(initiator, false);
 		}
-		return fire(new Date(), person, mainObject, eventCategory, description, objects);
+		return fire(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	/**
@@ -396,7 +396,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @param type - ссылка на объект справочника "Тип Объекта"
 	 * @return шаблонную строку или DEFAULT_OBJECT_TYPE_TEMPLATE, если не удалось найти соответствие
 	 */
-	@Override
 	public String getTemplateByType(NodeRef type) {
 		if (type != null) {
 			Object template = nodeService.getProperty(type, PROP_OBJ_TYPE_TEMPLATE);
@@ -423,10 +422,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			// получаем шаблон сообщение
 			template = getMessageTemplateByTemplate(messageTemplate);
 		} else {
-			// если не удалось - получаем из параметра  description
+			// если не удалось - получаем из параметра  defaultDescription
 			if (defaultDescription != null && !defaultDescription.isEmpty()) {
 				template = defaultDescription;
-			} else { // если параметр description пустой - берем значение по умолчанию
+			} else { // если параметр defaultDescription пустой - берем значение по умолчанию
 				template = DEFAULT_MESSAGE_TEMPLATE;
 			}
 		}
@@ -511,7 +510,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, archiveRef);
+							properties.put(ContentModel.PROP_NAME, BJ_ARCHIVE_ROOT_NAME);
 							ChildAssociationRef associationRef = nodeService.createNode(bjRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 							archiveRef = associationRef.getChildRef();
 						}
@@ -523,7 +522,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	@Override
 	public JSONObject getRecordJSON(NodeRef recordRef) throws Exception{
 		JSONObject record = new JSONObject();
 		if (!isBJRecord(recordRef)) {
@@ -613,11 +611,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	private NodeRef getSaveFolder(final String type, final String category, final Date date) {
-		return getFolder(getBusinessJournalDirectory(), type, category, date, false);
+		return getFolder(getBusinessJournalDirectory(), type, category, date);
 	}
 
 	private NodeRef getArchiveFolder(final Date date) {
-		return getFolder(getBusinessJournalArchiveDirectory(), null, null, date, true);
+		return getFolder(getBusinessJournalArchiveDirectory(), null, null, date);
 	}
 
 	/**
@@ -630,7 +628,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @param root - корень, относительно которого строится путь
 	 * @return ссылка на директорию
 	 */
-	private NodeRef getFolder(final NodeRef root, final String type, final String category, final Date date, final boolean onlyDatesInPath) {
+	private NodeRef getFolder(final NodeRef root, final String type, final String category, final Date date) {
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -641,8 +639,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 						NodeRef directoryRef;
 						synchronized (lock) {
 							List<String> directoryPaths = new ArrayList<String>(3);
-							if (!onlyDatesInPath) {
+							if (type != null) {
 								directoryPaths.add(type);
+							}
+							if (category != null) {
 								directoryPaths.add(category);
 							}
 							directoryPaths.add(FolderNameFormatYear.format(date));
@@ -812,7 +812,15 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		};
 		return AuthenticationUtil.runAsSystem(raw);
 	}
-    private static enum WhoseEnum {
+
+	@Override
+	public List<NodeRef> getOldRecords(int numberOfDays) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -numberOfDays);
+		return getRecordsByInterval(null, calendar.getTime());
+	}
+
+	private static enum WhoseEnum {
         MY,
         DEPARTMENT,
         CONTROL,

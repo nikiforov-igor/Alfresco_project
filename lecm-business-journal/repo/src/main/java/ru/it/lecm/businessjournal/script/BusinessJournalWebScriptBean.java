@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 
 /**
@@ -60,6 +61,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	}
 
 	public ScriptNode getRecord(String recordRef) {
+		ParameterCheck.mandatory("recordRef", recordRef);
 		NodeRef ref = new NodeRef(recordRef);
 		if (!service.isBJRecord(ref)) {
 			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала");
@@ -138,5 +140,10 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось получить директорию с архивными записями", e);
 		}
+	}
+
+	public Scriptable findOldRecords(int numberOfDays) {
+		List<NodeRef> refs = service.getOldRecords(numberOfDays);
+		return createScriptable(refs);
 	}
 }

@@ -117,6 +117,126 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 return "Система";
             }
             return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+        },
+
+        onActionDelete: function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+            var timerShowLoadingMessage = null;
+            var loadingMessage = null;
+            var me = this,
+                items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+
+            var itemNames = [];
+            for (var k = 0; k < items.length; k++) {
+                if (items[k] && items[k].itemData && items[k].itemData["lecm-busjournal:bjRecord-description"]) {
+                    itemNames.push("'" + items[k].itemData["lecm-busjournal:bjRecord-description"].displayValue + "'");
+                }
+            }
+
+            var itemsString = itemNames.join(", ");
+            var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(items) {
+                var nodeRefs = [];
+                for (var i = 0, ii = items.length; i < ii; i++) {
+                    nodeRefs.push(items[i].nodeRef);
+                }
+                var fnShowLoadingMessage = function nShowLoadingMessage() {
+                    if (timerShowLoadingMessage) {
+                        loadingMessage = Alfresco.util.PopupManager.displayMessage(
+                            {
+                                displayTime: 0,
+                                text: '<span class="wait">' + Alfresco.util.encodeHTML(this.msg("label.loading")) + '</span>',
+                                noEscape: true
+                            });
+
+                        if (YAHOO.env.ua.ie > 0) {
+                            this.loadingMessageShowing = true;
+                        }
+                        else {
+                            loadingMessage.showEvent.subscribe(function () {
+                                this.loadingMessageShowing = true;
+                            }, this, true);
+                        }
+                    }
+                };
+
+                // Slow data webscript message
+                this.loadingMessageShowing = false;
+                timerShowLoadingMessage = YAHOO.lang.later(500, this, fnShowLoadingMessage);
+
+                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
+                    if (timerShowLoadingMessage) {
+                        // Stop the "slow loading" timed function
+                        timerShowLoadingMessage.cancel();
+                        timerShowLoadingMessage = null;
+                    }
+                    if (loadingMessage) {
+                        if (this.loadingMessageShowing) {
+                            // Safe to destroy
+                            loadingMessage.destroy();
+                            loadingMessage = null;
+                        }
+                        else {
+                            // Wait and try again later. Scope doesn't get set correctly with "this"
+                            YAHOO.lang.later(100, me, destroyLoaderMessage);
+                        }
+                    }
+                };
+
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/business-journal/api/record/archive";
+                Alfresco.util.Ajax.jsonPost(
+                    {
+                        url: sUrl,
+                        dataObj: {
+                            nodeRefs: nodeRefs
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                destroyLoaderMessage();
+                                YAHOO.Bubbling.fire("dataItemsDeleted", {
+                                    items: response.json.results,
+                                    bubblingLabel: this.options.bubblingLabel
+                                });
+                                /*this.search.performSearch({
+                                 searchConfig: this.initialSearchConfig,
+                                 searchShowInactive: this.options.searchShowInactive
+                                 });*/
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function (response) {
+                                destroyLoaderMessage();
+                                alert("Failed to load webscript")
+                            },
+                            scope: this
+                        }
+                    });
+            };
+
+            var fnPrompt = function onDelete_Prompt(fnAfterPrompt) {
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: this.msg("message.confirm.delete.title", items.length),
+                        text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
+                        buttons: [
+                            {
+                                text: this.msg("button.delete"),
+                                handler: function DataGridActions__onActionDelete_delete() {
+                                    this.destroy();
+                                    me.selectItems("selectNone");
+                                    fnAfterPrompt.call(me, items);
+                                }
+                            },
+                            {
+                                text: this.msg("button.cancel"),
+                                handler: function DataGridActions__onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }
+                        ]
+                    });
+            }
+            fnPrompt.call(this, fnActionDeleteConfirm);
         }
     }, true);
 })();
