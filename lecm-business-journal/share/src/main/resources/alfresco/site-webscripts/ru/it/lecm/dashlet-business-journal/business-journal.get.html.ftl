@@ -94,13 +94,14 @@
                                             value: '',
                                             text: '${msg("label.select.types.all")}'
                                         };
-                                        items.forEach(function(item, index) {
-                                            SELECT_TYPES.options[index + 1] = {
+                                        for (var i = 0; i < items.length; i++) { // [].forEach() не работает в IE
+                                            var item = items[i];
+
+                                            SELECT_TYPES.options[i + 1] = {
                                                 value: item.nodeRef,
                                                 text: item.name
                                             };
-                                        });
-
+                                        }
                                         makeSelect('${id}-types', SELECT_TYPES);
                                     }
                                 },
@@ -127,9 +128,11 @@
             var data = "";
             var inputs = Selector.query('#${id}_controls input[type=hidden]');
 
-            inputs.forEach(function(item, i) {
+            for (var i = 0; i < inputs.length; i++) { // [].forEach() не работает в IE
+                var item = inputs[i];
+
                 data += (i == 0 ? '' : '&') + item.name + '=' + item.value;
-            });
+            }
 
             Alfresco.util.Ajax.jsonGet({
                 url: Alfresco.constants.PROXY_URI + "lecm/business-journal/api/search?" + data,
@@ -142,12 +145,16 @@
                             container.innerHTML = '';
 
                             if (results.length > 0) {
-                                results.forEach(function(item, i) {
+                                for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
+                                    var item = results[i];
                                     var div = document.createElement('div');
+                                    var a = document.createElement('a');
 
-                                    div.innerHTML = item;
+                                    a.innerHTML = item.date + ' ' + item.record;
+                                    div.appendChild(a);
+                                    div.setAttribute('class', 'row');
                                     container.appendChild(div);
-                                });
+                                }
                             } else {
                                 container.innerHTML = '${msg("label.no.records")}';
                             }
@@ -171,9 +178,9 @@
                 refreshResults();
             };
 
-            options.forEach(function(o, i) {
-                o.onclick = {fn: onOptionClick};
-            });
+            for (var i = 0; i < options.length; i++) { // [].forEach() не работает в IE
+                options[i].onclick = {fn: onOptionClick};
+            }
 
             var selectButton = new YAHOO.widget.Button(inputId, {
                 type: "menu",

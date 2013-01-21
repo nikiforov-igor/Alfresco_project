@@ -3,6 +3,9 @@
 .dashlet.business-journal a:visited {
     color: #0600cc;
 }
+.dashlet.business-journal.yui-resize .yui-resize-handle {
+    z-index: 0;
+}
 .dashlet.business-journal .controls {
     padding: 10px 5px;
 }
@@ -14,4 +17,12 @@
 }
 .dashlet.business-journal .results .row {
     line-height: 24px;
+}                                                                                                                       `
+.dashlet.business-journal .results .row a {
+    color: #333;
+    text-decoration: underline;
+}
+.dashlet.business-journal .results .row a:hover {
+    color: #333;
+    text-decoration: none;
 }
