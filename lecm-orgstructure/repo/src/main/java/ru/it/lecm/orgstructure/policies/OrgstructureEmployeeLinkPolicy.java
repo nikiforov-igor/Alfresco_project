@@ -10,11 +10,11 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -126,6 +126,13 @@ public class OrgstructureEmployeeLinkPolicy
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
+		// создаем ассоциацию
+		NodeService nodeService = serviceRegistry.getNodeService();
+
+		NodeRef employeeLink = childAssocRef.getChildRef();
+		NodeRef parent = childAssocRef.getParentRef();
+
+		nodeService.createAssociation(parent, employeeLink, OrgstructureBean.ASSOC_ELEMENT_MEMBER_EMPLOYEE);
 	}
 
 	@Override
