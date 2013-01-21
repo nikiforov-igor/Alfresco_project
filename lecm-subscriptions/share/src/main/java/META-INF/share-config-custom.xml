@@ -3,6 +3,7 @@
 		<forms>
 			<dependencies>
 				<js src="/scripts/lecm-subscriptions/controls/lecm-subscribe.js"/>
+				<css src="/css/lecm-subscriptions/controls/style-form.css"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -10,6 +11,7 @@
 	<config evaluator="node-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
+				<edit-form template="/ru/it/lecm/subscriptions/controls/form-border.ftl" />
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:object-type-assoc"/>
@@ -22,7 +24,12 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-subscr:object-type-assoc">
+					<set id="drop-down" appearance="" label-id="info.drop-down-info" />
+					<set id="input-text" appearance="" label-id="info.input-text-info" />
+					<set id="table" appearance="" label-id="info.table-info" />
+					<set id="description" appearance="" label-id="info.description-info" />
+
+					<field id="lecm-subscr:object-type-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -35,7 +42,7 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:event-category-assoc">
+					<field id="lecm-subscr:event-category-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -50,7 +57,8 @@
 							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-position-assoc">
+					<field id="lecm-subscr:destination-employee-assoc" set="input-text"/>
+					<field id="lecm-subscr:destination-position-assoc" set="input-text">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
@@ -59,6 +67,10 @@
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
+					<field id="lecm-subscr:destination-organization-unit-assoc" set="input-text"/>
+					<field id="lecm-subscr:destination-work-group-assoc" set="input-text"/>
+					<field id="lecm-subscr:notification-type-assoc" set="table"/>
+					<field id="lecm-subscr:description" set="description"/>
 				</appearance>
 			</form>
 		</forms>
@@ -67,6 +79,7 @@
 	<config evaluator="model-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
+				<create-form template="/ru/it/lecm/subscriptions/controls/form-border.ftl" />
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:object-type-assoc"/>
@@ -79,7 +92,12 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-subscr:object-type-assoc">
+					<set id="drop-down" appearance=""  />
+					<set id="input-text" appearance="" label-id="info.input-text-info" />
+					<set id="table" appearance="" label-id="info.table-info" />
+					<set id="description" appearance="" />
+
+					<field id="lecm-subscr:object-type-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -92,19 +110,23 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:event-category-assoc">
+					<field id="lecm-subscr:event-category-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Категория_x0020_события</control-param>
+							<control-param name="startLocation">
+								/app:company_home/lecm-dic:Dictionary/lecm-dic:Категория_x0020_события
+							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel">Все</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="dependentFieldName">lecm-subscr:object-type-assoc</control-param>
 							<control-param name="webScriptUrl">lecm/subscriptions/event-category</control-param>
 							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-position-assoc">
+					<field id="lecm-subscr:destination-employee-assoc" set="input-text"/>
+					<field id="lecm-subscr:destination-position-assoc" set="input-text">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
@@ -113,6 +135,10 @@
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
+					<field id="lecm-subscr:destination-organization-unit-assoc" set="input-text"/>
+					<field id="lecm-subscr:destination-work-group-assoc" set="input-text"/>
+					<field id="lecm-subscr:notification-type-assoc" set="table"/>
+					<field id="lecm-subscr:description" set="description"/>
 				</appearance>
 			</form>
 			<form id="datagrid">
