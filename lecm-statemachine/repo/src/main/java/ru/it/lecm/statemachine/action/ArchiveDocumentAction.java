@@ -10,10 +10,10 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: PMelnikov
@@ -23,22 +23,15 @@ import java.util.StringTokenizer;
 public class ArchiveDocumentAction extends StateMachineAction {
 
 	private String archiveFolderPath = "/Archive";
-	private NodeRef archiveFolder = null;
 
 	@Override
 	public void execute(DelegateExecution execution) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-d");
-		String dateFolder = format.format(new Date());
 		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, dateFolder);
-		if (folder == null) {
-			folder = createFolder(archiveFolder, dateFolder);
-		}
-
 		NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
 		for (ChildAssociationRef document : documents) {
 			String name = (String) nodeService.getProperty(document.getChildRef(), ContentModel.PROP_NAME);
+			NodeRef folder = createArchivePath(document.getChildRef());
 			nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 		}
 
@@ -54,11 +47,24 @@ public class ArchiveDocumentAction extends StateMachineAction {
 				archiveFolderPath = value;
 			}
 		}
+	}
 
+	private NodeRef createArchivePath(NodeRef node) {
 		//Проверяем структуру
+		Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
+		Matcher matcher = pattern.matcher(archiveFolderPath);
+		String path = archiveFolderPath;
+		while (matcher.find()) {
+			String prefix = matcher.group(1);
+			String attributeName = matcher.group(2);
+			QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
+			String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
+			path = path.replace("{" + prefix + ":" + attributeName + "}", value);
+		}
+
 		NodeService nodeService = getServiceRegistry().getNodeService();
-		archiveFolder = getCompanyHome();
-		StringTokenizer tokenizer = new StringTokenizer(archiveFolderPath, "/");
+		NodeRef archiveFolder = getCompanyHome();
+		StringTokenizer tokenizer = new StringTokenizer(path, "/");
 		while (tokenizer.hasMoreTokens()) {
 			String folderName = tokenizer.nextToken();
 			if (!"".equals(folderName)) {
@@ -69,7 +75,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
 				archiveFolder = folder;
 			}
 		}
-
+		return archiveFolder;
 	}
 
 }
