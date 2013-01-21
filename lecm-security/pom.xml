@@ -17,7 +17,8 @@
 
 	<modules>
 		<module>repo</module>
-		<!-- 
+		<module>api</module>
+		<!--
 		<module>share</module>
 		  -->
 	</modules>
