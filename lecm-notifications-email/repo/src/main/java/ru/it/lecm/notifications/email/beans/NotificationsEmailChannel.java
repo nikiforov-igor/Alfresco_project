@@ -1,16 +1,20 @@
 package ru.it.lecm.notifications.email.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.action.Action;
+import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -41,6 +45,7 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
+	private ActionService actionService;
 	private NodeRef rootRef;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -57,6 +62,10 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
+	}
+
+	public void setActionService(ActionService actionService) {
+		this.actionService = actionService;
 	}
 
 	/**
@@ -99,7 +108,8 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 		String email = (String) nodeService.getProperty(notification.getRecipientRef(), OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 		if (email != null) {
 			createNotification(notification, email);
-			return sendEmail(notification, email);
+			sendEmail(notification, email);
+			return true;
 		} else {
 			return false;
 		}
@@ -137,8 +147,13 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	 * @param email Адрес электронной почты
 	 * @return false - если при отправке письма произошла ошибка, иначе true
 	 */
-	private boolean sendEmail(NotificationUnit notification, String email) {
-		//todo сделадь отправку электронной почты
-		return false;
+	private void sendEmail(NotificationUnit notification, String email) {
+		Action mail = actionService.createAction(MailActionExecuter.NAME);
+
+		mail.setParameterValue(MailActionExecuter.PARAM_TO, email);
+		String message = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
+		mail.setParameterValue(MailActionExecuter.PARAM_SUBJECT, message != null ? message : "New notification");
+		mail.setParameterValue(MailActionExecuter.PARAM_TEXT, notification.getDescription());
+		actionService.executeAction(mail, null);
 	}
 }
