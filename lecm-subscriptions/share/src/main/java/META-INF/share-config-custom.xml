@@ -23,9 +23,9 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<set id="drop-down" appearance="" label="" />
-					<set id="input-text" appearance="panel" label-id="info.input-text-info" />
-					<set id="table" appearance="panel" label-id="info.table-info" label=""/>
+					<set id="type-events" appearance="" label="" />
+					<set id="destination" appearance="panel" label-id="info.destination" />
+					<set id="notification" appearance="panel" label-id="info.notification" label=""/>
 					<set id="description" appearance="" label=""/>
 
 					<field id="cm:name" label-id="Наименование"/>
@@ -91,9 +91,9 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<set id="drop-down" appearance="" label="" />
-					<set id="input-text" appearance="panel" label-id="info.input-text-info" />
-					<set id="table" appearance="panel" label-id="info.table-info" label=""/>
+					<set id="type-events" appearance="" label="" />
+					<set id="destination" appearance="panel" label-id="info.destination" />
+					<set id="notification" appearance="panel" label-id="info.notification" label=""/>
 					<set id="description" appearance="" label=""/>
 
 					<field id="cm:name" label-id="Наименование"/>
