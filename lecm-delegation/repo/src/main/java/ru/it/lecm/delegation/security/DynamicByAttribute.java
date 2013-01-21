@@ -12,6 +12,7 @@ import org.alfresco.repo.security.permissions.PermissionReference;
 import org.alfresco.repo.security.permissions.impl.ModelDAO;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
 import ru.it.lecm.utils.DurationLogger;
+import ru.it.lecm.utils.StrUtils;
 import ru.it.lecm.utils.cache.Cache;
 import ru.it.lecm.utils.cache.CacheEx;
 import ru.it.lecm.utils.cache.CacheableBase;
@@ -45,6 +47,7 @@ public class DynamicByAttribute
 	private ModelDAO modelDAO;
 	// private CheckOutCheckInService checkOutCheckInService;
 	private NodeService nodeService;
+	private PermissionService permissionService;
 
 	// ex: "ROLE_OWNER:
 	private String authority;
@@ -159,6 +162,7 @@ public class DynamicByAttribute
 
 	public void setCacheSize(int value) {
 		cache.setCapacity(value);
+		logger.info("set cache size: "+ (this.enableCache ? "Enabled" : "Disabled"));
 	}
 
 	public int getCacheIntervalMsec() {
@@ -167,6 +171,7 @@ public class DynamicByAttribute
 
 	public void setCacheIntervalMsec(int value) {
 		this.cacheInterval_ms = value;
+		logger.info("set cache interval, ms: "+ (this.enableCache ? "Enabled" : "Disabled"));
 	}
 
 	public boolean getEnableCache() {
@@ -192,14 +197,17 @@ public class DynamicByAttribute
 		final ApplicationContext ctx = super.getApplicationContext(); // org.springframework.context.ApplicationContext;
 		// checkOutCheckInService = (CheckOutCheckInService) ctx.getBean("checkOutCheckInService");
 		if (modelDAO == null)
-			modelDAO = (ModelDAO) ctx.getBean("modelDAO");
+			modelDAO = (ModelDAO) ctx.getBean("modelDAO"); // ctx.getBean(ModelDAO.class);
 		if (nodeService == null)
-			nodeService = (NodeService) ctx.getBean("nodeService");
+			nodeService = (NodeService) ctx.getBean("nodeService"); // ctx.getBean(NodeService.class); -> error: expected single bean but found 10: versionNodeService,NodeService,nodeService,mlAwareNodeService,mtAwareNodeService,avmNodeService,dbNodeService,avmLockingAwareNodeService,mlAwareLockingAwareNodeService,org_alfresco_module_wcmquickstart_nodeService
+		if (permissionService == null)
+			permissionService = (PermissionService) ctx.getBean("permissionService"); // ctx.getBean(PermissionService.class); -> error: expected single bean but found 3: permissionService,permissionServiceImpl,PermissionService
 
 		// PropertyCheck.mandatory(this, "lockService", lockService);
 		// PropertyCheck.mandatory(this, "checkOutCheckInService", checkOutCheckInService);
 		PropertyCheck.mandatory(this, "modelDAO", modelDAO);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "permissionService", permissionService);
 
 		// Build the permission set
 		if(requiredFor != null)
@@ -244,7 +252,7 @@ public class DynamicByAttribute
 
 	public void setCheckStyle(String value) {
 		this.checkStyle = (value != null && value.length() > 0) ? EnumCheckStyle.valueOf(value) : DEFAULT_CHECKSTYLE;
-		logger.info( String.format( "current SecurityStyle is <%s>", this.checkStyle));
+		logger.info( String.format( "set SecurityStyle: <%s>", this.checkStyle));
 	}
 
 	/**
@@ -280,6 +288,14 @@ public class DynamicByAttribute
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public PermissionService getPermissionService() {
+		return permissionService;
+	}
+
+	public void setPermissionService(PermissionService value) {
+		this.permissionService = value;
 	}
 
 	public void setModelDAO(ModelDAO modelDAO)
@@ -324,6 +340,7 @@ public class DynamicByAttribute
 	public void setRequiredFor(List<String> requiredFor)
 	{
 		this.requiredFor = requiredFor;
+		logger.info("set required as: "+ StrUtils.coalesce(this.requiredFor, "NULL"));
 	}
 
 	/**
@@ -352,6 +369,7 @@ public class DynamicByAttribute
 		if (value <= 0)
 			value = DEFAULT_INTERVAL_MS;
 		this.infoInterval_ms = value;
+		logger.info("set cache info interval, ms: "+ this.infoInterval_ms);
 
 		// выполнить немедленное дампирование и потом ждать ...
 		this.infoTime =  System.currentTimeMillis() - 2; // "прошлое", чтобы гарантировать дамп
@@ -399,11 +417,11 @@ public class DynamicByAttribute
 	 */
 	@Override
 	public boolean hasAuthority(final NodeRef nodeRef, final String userName) {
+		if (logger.isDebugEnabled())
+			logger.debug( String.format(
+				"hasAuthority performing for user '%s' for nodeRef %s\n\t authorities: %S "
+				, userName, nodeRef, permissionService.getAuthorisations() ));
 
-		// logger.debug( String.format( "hasAuthority performing: user '%s', nodeRef %s ", userName, nodeRef));
-
-		// net.sf.acegisecurity.vote.RoleVoter
-		
 		final DurationLogger d = new DurationLogger();
 		try {
 			// достаём глобальный флаг стиля проверки: всегда true/false или "честная" ...

@@ -58,4 +58,32 @@ public interface IBusinessRoleManager {
 	 * @param allow true включить в бизнес роль, false исключить.
 	 */
 	void regroupUser(Employee employee, BusinessRole groupRole, boolean allow);
+
+
+	/**
+	 * Выдать пользователю на документ права, относящиеся к указанной бизнес роли
+	 * @param nodeRef документ
+	 * @param user пользователь
+	 * @param businessRole название бизнес-роли (динамической, т.к. для 
+	 * статической ничего делать не потребуется)
+	 */
+	void grantBusinessRole(NodeRef nodeRef, String user, String businessRole);
+
+	/**
+	 * Отобрать у пользователя права на документ, относящиеся к некоторой бизнес-роли
+	 * @param nodeRef
+	 * @param user
+	 * @param businessRole динамическая роль, статические роли игнорируются 
+	 */
+	void revokeBusinessRole(NodeRef nodeRef, String user, String businessRole);
+
+	/**
+	 * Выдать права динамических ролей, согласно текщему статусу документа.
+	 * При этом, поднимаются все имеющиеся в документе на данный момент динамические
+	 * роли и для них выполнятся "пересчёт". 
+	 * @param nodeRef документ
+	 */
+	void renewBusinessRoles(NodeRef nodeRef);
+	
+	
 }

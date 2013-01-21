@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -56,7 +55,7 @@ public class BusinessRoleManagerImpl
 		}
 	}
 
-	// NOTE: (?) Создать прямо тутпри отсутствии
+	// NOTE: (?) Создать прямо тут при отсутствии
 	public void checkEmployee(Employee employee) throws SecurityException {
 		/* Проверить наличие соот-щего пользователя Alfresco */
 		final PersonService persons = this.serviceRegistry.getPersonService();
@@ -196,6 +195,23 @@ public class BusinessRoleManagerImpl
 			когда нет system-user) 
 		 */
 		// TODO:
+	}
+
+	@Override
+	public void grantBusinessRole(NodeRef nodeRef, String user,
+			String businessRole) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void revokeBusinessRole(NodeRef nodeRef, String user,
+			String businessRole) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void renewBusinessRoles(NodeRef nodeRef) {
+		// TODO Auto-generated method stub
 	}
 
 

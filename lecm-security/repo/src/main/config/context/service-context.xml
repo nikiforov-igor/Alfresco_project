@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- Registration of Delegations models -->
 <!--
@@ -19,8 +22,9 @@
 	</bean>
   -->
 
-	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="authorityService, nodeService, permissionService">
+	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="authorityService">
 		<property name="authorityService" ref="authorityService" />
+		<property name="safeMode" value="true" />
 		<!--
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="repositoryHelper" ref="repositoryHelper"/>
@@ -43,16 +47,25 @@
 
 		<property name="status2BusinessRoleMapping">
 			<map>
-				<!-- 	ключ = название статуса; 
-						значения = список через ';' из 'роль:доступ'
-						где роль = название роли (мнемоника), 
-							доступ = (noaccess | readonly | full) 
+				<!-- 	ключ = id lifeCycle; 
+						значения = распределение прав по ролям для статуса
 				  -->
-				<entry key="draft" value="INITIALIZER:full" />
-				<entry key="approv" value="INITIALIZER:read;APPROVER:full" />
-				<entry key="sign" value="INITIALIZER:read;APPROVER:read;SIGNER:full" />
-				<entry key="done" value="INITIALIZER:;APPROVER:read;SIGNER:read" />
+				<entry key="doctype1" value-ref="mapLifeCycle_Doctype1" />
+				<!--  <entry key="doctype2" value-ref="mapLifeCycle_Simple"/> -->
 			</map>
 		</property>
 	</bean>
+
+	<util:map id="mapLifeCycle_Doctype1" map-class="java.util.HashMap">
+			<!-- 	ключ = название статуса; 
+					значения = список через ';' из 'роль:доступ'
+					где роль = название роли (мнемоника), 
+						доступ = (noaccess | readonly | full) 
+			  -->
+			<entry key="draft" value="INITIALIZER:full" />
+			<entry key="approv" value="INITIALIZER:read;APPROVER:full" />
+			<entry key="sign" value="INITIALIZER:read;APPROVER:read;SIGNER:full" />
+			<entry key="done" value="INITIALIZER:;APPROVER:read;SIGNER:read" />
+	</util:map>
+
 </beans>

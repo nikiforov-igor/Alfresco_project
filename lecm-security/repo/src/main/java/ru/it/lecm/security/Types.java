@@ -44,48 +44,6 @@ public final class Types {
 	final static public String SFX_BRME = "$BRME-";   // by id user & id role
 
 
-//	/**
-//	 * Получить название (суффикс) для группы, соот-щей указанному узлу
-//	 * @return
-//	 */
-//	public static final String getOrgUnitSuffix(String nodeId, OrgStructureNodeKind orgTypeNode) {
-//		final String suffix = (orgTypeNode==OrgStructureNodeKind.Employee) ? SFX_USR // Сотрудник
-//				: (orgTypeNode==OrgStructureNodeKind.DeputyPosition) ? SFX_DP // Должность
-//				: SFX_OU; // Подразделение
-//		return String.format( "%s%s%s", PFX_LECM, suffix, nodeId);
-//	}
-
-
-//	/**
-//	 * Для сопровождения объектов Орг-Штатной структуры
-//	 */
-//	public enum OrgStructureNodeKind {
-//		  Employee( "USER", "Сотрудник")
-//		, DeputyPosition( "DP", "Должностная позиция")
-//		, OrgUnit( "OU", "Подраздедение")
-//		;
-//
-//		final private String abbriv, displayName;
-//
-//		private OrgStructureNodeKind(String abbriv, String displayName) {
-//			this.abbriv = abbriv;
-//			this.displayName = displayName;
-//		}
-//
-//		public String getAbbriviation() {
-//			return abbriv;
-//		}
-//
-//		public String getDisplayName() {
-//			return displayName;
-//		}
-//
-//		@Override
-//		public String toString() {
-//			return "OrgObjType( '" + abbriv + "' "+ displayName + ")";
-//		}
-//	}
-
 	/**
 	 * Вернуть TRUE, если authority относится к динамическим бизнес-ролям
 	 * @param authority
@@ -147,15 +105,14 @@ public final class Types {
 
 		/**
 		 * Получить объект security-позиции, соот-щий this.
-		 * (!) Для получения объекта личной бизнес-роли нао использовать метод getSGPos2 или getSGBusinessRolePos.
+		 * (!) Для получения объекта личной бизнес-роли надо использовать getSGBusinessRolePos, 
+		 * для Должностной Позиции getSGDeputyPosition.
 		 * @param objId
 		 * @return
 		 */
 		public SGPosition getSGPos(String objId) {
 			if (this == SG_ME)
 				return new SGPrivateMeOfUser(objId);
-			if (this == SG_DP)
-				return new SGDeputyPosition(objId);
 			if (this == SG_OU)
 				return new SGOrgUnit(objId);
 			if (this == SG_SV)
@@ -166,24 +123,16 @@ public final class Types {
 			throw new RuntimeException( String.format("Cannot create simple locate descriptor for sg-enum %s", this));
 		}
 
-		/**
-		 * Получить объект security-позиции, соот-щий this.
-		 * @param objId id объекта
-		 * @param broleCode используется только для SG_BRME - id бизнес роли. 
-		 * @return
-		 */
-		public SGPosition getSGPos2(String objId, String broleCode) {
-			if (this == SGKind.SG_BRME)
-				return getSGBusinessRolePos(objId, broleCode);
-			return getSGPos(objId); 
-		}
-
 		public String getAlfrescoSuffix(String objId) {
 			return getSGPos(objId).getAlfrescoSuffix();
 		}
 
 		public static SGPrivateBusinessRole getSGBusinessRolePos(String userId, String broleCode) {
 			return new SGPrivateBusinessRole(userId, broleCode);
+		}
+
+		public static SGDeputyPosition getSGDeputyPosition(String dpId, String userId) {
+			return new SGDeputyPosition(dpId, userId);
 		}
 	}
 
@@ -236,12 +185,24 @@ public final class Types {
 	}
 
 	public static class SGDeputyPosition extends SGPosition {
-		private SGDeputyPosition(String dpId) {
+		final String userId; 
+		/**
+		 * 
+		 * @param dpId id Должностной Позиции
+		 * @param userId id Пользователя, который назначен на DP. Здесь можно передавать
+		 * либо id-employee, либо Login пользователя, который соот-ет employee.
+		 */
+		private SGDeputyPosition(String dpId, String userId) {
 			super( SGKind.SG_DP, dpId);
+			this.userId = userId;
 		}
 
 		public String getDPId() {
 			return super.getId();
+		}
+
+		public String getUserId() {
+			return this.userId;
 		}
 	}
 
@@ -303,6 +264,12 @@ public final class Types {
 		public String getAlfrescoSuffix() {
 			return super.getAlfrescoSuffix() + "-" + this.businessRoleId;
 		}
+		@Override
+
+		public String toString() {
+			return getSgKind() + "(" + getUserId() + ", role=" + getBusinessRoleId()+ ")";
+		}
+
 	}
 
 }

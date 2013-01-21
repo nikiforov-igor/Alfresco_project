@@ -79,19 +79,25 @@
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.business-journal</groupId>
-            <artifactId>business-journal-repo-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.dictionary</groupId>
-            <artifactId>dictionary-repo-api</artifactId>
-            <version>${project.version}</version>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${project.version}</version>
 			<scope>provided</scope>
-        </dependency>
-        <!-- Don't add here amp dependencies as it will break amp packaging -->
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.dictionary</groupId>
+			<artifactId>dictionary-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.security</groupId>
+			<artifactId>lecm-security-repo</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

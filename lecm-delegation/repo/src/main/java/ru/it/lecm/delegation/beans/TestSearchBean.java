@@ -23,14 +23,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
 import ru.it.lecm.delegation.ITestSearch;
+import ru.it.lecm.security.Types.SGKind;
+import ru.it.lecm.security.Types.SGPosition;
+import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import ru.it.lecm.security.impl.OrgStrucureAfterInvocationProvider;
 import ru.it.lecm.utils.DurationLogger;
 import ru.it.lecm.utils.alfresco.SearchHelper;
 import ru.it.lecm.utils.alfresco.Utils;
 
-public class TestSearchBean implements ITestSearch
+public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch 
 {
 
 	private static final String NAMESPACE = "http://www.it.ru/lecm/model/blanks/1.0";
@@ -58,6 +64,16 @@ public class TestSearchBean implements ITestSearch
 	private AuthorityService authorityService;
 
 	private JSONObject args;
+
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		logger.info("started up ");
+	}
+
+	@Override
+	protected void onShutdown(ApplicationEvent event) {
+		logger.info("shutdown");
+	}
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -101,7 +117,7 @@ public class TestSearchBean implements ITestSearch
 
 	@Override
 	public void setConfig(JSONObject config) throws JSONException {
-		this.args = config;
+		this.args = config; 
 	}
 
 	/**
@@ -112,26 +128,82 @@ public class TestSearchBean implements ITestSearch
 	 */
 	@Override
 	public JSONObject runTest(int testnum) throws JSONException {
-		final JSONObject result;
-		// org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor;
-		final boolean needPermChk = (args != null && args.optBoolean("secure", false));
-		switch (testnum) {
+		JSONObject result;
+		try {
+			// org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor;
+			final boolean needPermChk = (args != null && args.optBoolean("secure", false));
+			switch (testnum) {
 			case 1:	result = doSearchTest( "New", false, needPermChk); break;
 			case 2: result = doSearchTest( "New", true, needPermChk); break;
 			case 3: result = doSearchTest( "Active", false, needPermChk); break;
 			case 4: result = doSearchTest( "Active", true, needPermChk); break;
 			case 5: result = doCreateSGTest(); break;
 			case 6: result = doCreateNestedSGTest(); break;
+			case 7: result = doOrgStrucNotifyTest(); break;
+			case 8: result = doCheckACLTest(); break;
 			default:
 				result = new JSONObject();
 				result.put( "error", "invalid test number: "+ testnum);
 				logger.error("skipping unknown test number: "+ testnum);
+			}
+		} catch (Throwable t) { 
+			logger.error("exception "+ t.getMessage(), t);
+			result = new JSONObject();
+			result.put("exception", t.getMessage());
 		}
 		if (result != null)
 			result.put("testNum", testnum);
 		return result;
 	}
 
+
+	/**
+	 * Получение указанного аргумента из this.args
+	 * @param argName название аргумента
+	 * @param argDefault значение по-умолчанию
+	 * @param echoObj (необ) объект, в который выдать найденное значение, 
+	 * если echoObj == null, то не используется
+	 * @return значение аргумента без незначащих пробелов
+	 * @throws JSONException
+	 */
+	String echoGetArg( String argName, String argDefault, JSONObject echoObj
+		) throws JSONException {
+		final String found = this.args.optString(argName, argDefault);
+		if (echoObj != null)
+			echoObj.put("called_"+ argName, found);
+		return found != null ? found.trim() : null;
+	}
+
+	/**
+	 * Получение из this.args именованного аргумента типа SGPosition, как вложенного json под-объекта
+	 * @param argName
+	 * @param echoObj
+	 * @return
+	 * @throws JSONException
+	 */
+	SGPosition echoGetArgSGPosition(String argName, JSONObject echoObj) throws JSONException {
+		final JSONObject jdata = this.args.optJSONObject(argName);
+		if (jdata == null)
+			return null;
+		final SGKind kind = SGKind.valueOf(jdata.optString("sgKind", "no sgKind").toUpperCase());
+		final SGPosition result;
+		switch(kind) {
+			case SG_DP:
+				result = SGKind.getSGDeputyPosition( jdata.optString("id", null), jdata.optString("userId", null));
+				break;
+			case SG_BRME: 
+				result = SGKind.getSGBusinessRolePos( jdata.optString("id", null), jdata.optString("roleCode", null));
+				break;
+			default: result = kind.getSGPos( jdata.optString("id", null));
+		}
+		if (echoObj != null)
+			echoObj.put("called_"+ argName, result);
+		return result;
+	}
+
+	public static NodeRef makeFullRef(String procuracyid) {
+		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, procuracyid);
+	}
 
 	/**
 	 * param: см также this.args
@@ -202,7 +274,6 @@ public class TestSearchBean implements ITestSearch
 
 					if (logger.isDebugEnabled()) {
 						final Set<AccessPermission> permsAll = serviceRegistry.getPermissionService().getAllSetPermissions(nr);
-
 						sb.append( String.format("\t[%s]\t%s\n\t%s\n\t%s\n", i_total, nr.getId(), perms, permsAll));
 					}
 
@@ -264,13 +335,19 @@ public class TestSearchBean implements ITestSearch
 	private final static String ARG_SG_LEVELS = "sg.levels";
 
 
+	/**
+	 * Проверить существование авторизации с названием shortName
+	 * @param shortName
+	 * @param parentName родитель, внутри которого искать, может быть Null
+	 * @return
+	 */
 	private boolean hasAuth(String shortName, String parentName) {
-		// есть авторизация? ...
-		final Set<String> found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
-		return (found != null && found.size() > 0);
-		/*
+		// есть user-авторизация? ...
+		Set<String> found = this.authorityService.findAuthorities(AuthorityType.USER, parentName, true, shortName, null);
+		if (found != null && found.size() > 0)
+			return true;
 		// есть групповая авторизация? ...
-		Set<String> found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
+		found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
 		if (found != null && found.size() > 0)
 			return true;
 		// есть не группа? ...
@@ -278,17 +355,16 @@ public class TestSearchBean implements ITestSearch
 		if (found != null && found.size() > 0)
 			return true;
 		return false; // NOT FOUND
-		 */
 	}
 
 	/**
 	 * Выполняется создание SG-групп вида (см параметры this.args):
 	 * 		args['sg.rootName'] + "_" + (args['sg.n0'] + i)
-	 * , где i принимает значения от 0 до args['sg.n']
+	 * , где i принимает значения от 0 до args['sg.n'] 
 	 * @return
 	 * @throws JSONException
 	 */
-	private JSONObject doCreateSGTest() throws JSONException
+	private JSONObject doCreateSGTest() throws JSONException 
 	{
 		final JSONObject result = new JSONObject();
 
@@ -327,7 +403,7 @@ public class TestSearchBean implements ITestSearch
 		} catch (Throwable ex) {
 			logger.error("SG test problem:", ex);
 			result.put("exception", ex.toString());
-		}
+		} 
 		finally {
 			final String info = d.fmtDuration("SecurityGroup test time is {t}, msec");
 			logger.info( "processTime "+ info);
@@ -335,17 +411,17 @@ public class TestSearchBean implements ITestSearch
 		}
 
 		return result;
-	}
+	} 
 
 	/**
 	 * Выполняется создание SG-групп вида (см параметры this.args):
 	 * 		args['sg.rootName'] + "_" + (args['sg.n0'] + i)
 	 * , где i принимает значения от 0 до args['sg.n']
-	 * и для них создаются вложенные до уровня sg.level
+	 * и для них создаются вложенные до уровня sg.level 
 	 * @return
 	 * @throws JSONException
 	 */
-	private JSONObject doCreateNestedSGTest() throws JSONException
+	private JSONObject doCreateNestedSGTest() throws JSONException 
 	{
 		final JSONObject result = new JSONObject();
 
@@ -391,11 +467,192 @@ public class TestSearchBean implements ITestSearch
 		} catch (Throwable ex) {
 			logger.error("SG test problem:", ex);
 			result.put("exception", ex.toString());
-		}
+		} 
 		finally {
 			final String info = d.fmtDuration("SecurityGroup test time is {t}, msec");
 			logger.info( "processTime "+ info);
 			result.put("processTime", info);
+		}
+
+		return result;
+	}
+
+	final static String ORGOPER_NODECREATED = "orgNodeCreated";
+	final static String ORGOPER_NODEDEACTIVATED = "orgNodeDeactivated";
+	final static String ORGOPER_EMPLOYEETIE = "orgEmployeeTie";
+
+	final static String ORGOPER_SGINCLUDE = "sgInclude";
+	final static String ORGOPER_SGEXCLUDE = "sgExclude";
+
+	final static String ORGOPER_BRASSIGNED = "orgBRAssigned";
+	final static String ORGOPER_BRREMOVED = "orgBRRemoved";
+
+	/**
+	 * json-параметры теста орг-штатки:
+	 *   "oper" = ( см ORGOPER_XXX = 7 операций)
+	 *   Остальные параметры зависят от самих операции:
+	 *     1-2) "oper"= orgNodeCreated или orgNodeDeactivated:
+	 *     		objPos: типа "sgPosition" с парой атрибутов
+	 *     			"objPos"::"sgKind" = enum SGKind = (
+	 *     				SG_ME		личная группа Сотрудника-пользователя
+	 *     				SG_DP		группа Должностной позиции
+	 *     				SG_OU		группа Подразделения
+	 *     				SG_SV		группа Руководящая (связана с Подразделением и Должностью)
+	 *     				SG_BR		группа бизнес-роли
+	 *     				SG_BRME		личная группа Сотрудника-пользователя для конкретной бизнес-роли
+	 *     			)
+	 *      		"objPos"::"id" id объекта орг-штатки
+	 *      		"objPos"::"roleCode" (используется при sgKind=SG_BRME) код бизнес роли
+	 *    3) "oper"= orgEmployeeTie:
+	 *     		"employeeId": id Сотрудника
+	 *     		"alfrescoUserLogin": login user of alfresco
+	 *    4) oper=sgInclude:
+	 *     		"child": тип "sgPosition" (т.е. "child"::"sgKind" и "child"::"objId")
+	 *     		"parent": тип "sgPosition" 
+	 *    5) oper=sgExclude:
+	 *     		"child": тип "sgPosition"
+	 *     		"oldParent": тип "sgPosition"
+	 *    6-7) oper=orgBRAssigned и orgBRRemoved:
+	 *     		"broleCode": код роли для операции
+	 *     		"obj": тип "sgPosition"
+	 * @return
+	 * @throws JSONException
+	 */
+	private JSONObject doOrgStrucNotifyTest() throws JSONException {
+		final JSONObject result = new JSONObject(); 
+
+		// получение бина
+		final IOrgStructureNotifiers noti = (IOrgStructureNotifiers) getApplicationContext().getBean("lecmSecurityGroupsBean"); // getApplicationContext().getBean(IOrgStructureNotifiers.class);
+		logger.info("bean found class "+ noti.getClass().getName());
+
+		// выполнение Операции
+		final String oper = echoGetArg("oper", "", result);
+
+		if (ORGOPER_NODECREATED.equalsIgnoreCase(oper)) {
+			final SGPosition obj = echoGetArgSGPosition( "obj", result);
+			final String res = noti.orgNodeCreated(obj);
+			logger.info( String.format("%s return '%s'", oper, res));
+			result.put("return", res);
+		} 
+		else if (ORGOPER_NODEDEACTIVATED.equalsIgnoreCase(oper)) {
+			final SGPosition obj = echoGetArgSGPosition( "obj", result);
+			noti.orgNodeDeactivated(obj);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else if (ORGOPER_EMPLOYEETIE.equalsIgnoreCase(oper)) {
+			final String employeeId = echoGetArg( "employeeId", null, result);
+			final String userLogin = echoGetArg( "alfrescoUserLogin", null, result);
+			noti.orgEmployeeTie(employeeId, userLogin);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else if (ORGOPER_SGINCLUDE.equalsIgnoreCase(oper)) {
+			final SGPosition child = echoGetArgSGPosition( "child", result);
+			final SGPosition parent= echoGetArgSGPosition( "parent", result);
+			noti.sgInclude(child, parent);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else if (ORGOPER_SGEXCLUDE.equalsIgnoreCase(oper)) {
+			final SGPosition child = echoGetArgSGPosition( "child", result);
+			final SGPosition oldParent= echoGetArgSGPosition( "oldParent", result);
+			noti.sgInclude(child, oldParent);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else if (ORGOPER_BRASSIGNED.equalsIgnoreCase(oper)) {
+			final String roleCode = echoGetArg( "roleCode", null, result);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result);
+			noti.orgBRAssigned(roleCode, obj);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else if (ORGOPER_BRREMOVED.equalsIgnoreCase(oper)) {
+			final String roleCode = echoGetArg( "roleCode", null, result);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result);
+			noti.orgBRRemoved(roleCode, obj);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		} 
+		else { // UNKNOWN OPER
+			result.put("called_oper", "skipped unknown oper "+ oper);
+			logger.warn( String.format("Skipping unsupported operation '%s'", oper));
+		}
+
+		return result;
+	}
+
+	final static String ACLOPER_REBUILD = "rebuild";
+	final static String ACLOPER_REBUILDYNAMIC = "rebuildDynamic";
+	final static String ACLOPER_REBUILDSTATIC = "rebuildStatic";
+
+	final static String ACLOPER_GRANT_DYNAROLE = "grantDynaRole";
+	final static String ACLOPER_REVOKE_DYNAROLE = "revokeDynaRole";
+
+	final private static String OPER_MIXED = ACLOPER_REBUILD
+			+ "\t"+ ACLOPER_REBUILDYNAMIC
+			+ "\t"+ ACLOPER_REBUILDSTATIC
+
+			+ "\t"+ ACLOPER_GRANT_DYNAROLE
+			+ "\t"+ ACLOPER_REVOKE_DYNAROLE
+			;
+
+	/**
+	 * json-параметры ACL test:
+	 *   1) "id": id документа
+	 *   2) "oper" = ( rebuild, grantDynaRole, revokeDynaRole)
+	 *   Остальные параметры зависят от операции:
+	 *     "oper"=rebuild:
+	 *     		"status": текущий статус документа - для него будет выполнена нарезка прав
+	 *     "oper"= grantDynaRole | revokeDynaRole
+	 *     		"roleCode": код роли
+	 *     		"userId": id Сотрудника (или логин)
+	 * @return
+	 * @throws JSONException
+	 */
+	private JSONObject doCheckACLTest() throws JSONException {
+		final JSONObject result = new JSONObject(); 
+
+		// получение бина
+		final INodeACLBuilder builder = (INodeACLBuilder) getApplicationContext().getBean("lecmAclBuilderBean");
+		logger.info("bean found class "+ builder.getClass().getName());
+
+		// выполнение Операции
+		final String oper = echoGetArg("oper", ACLOPER_REBUILD, result);
+
+		if (!(OPER_MIXED.toLowerCase().contains(oper.toLowerCase())) ) {
+			result.put("called_oper", "skipped unknown oper "+ oper);
+			logger.warn( String.format("Skipping unsupported operation '%s'", oper));
+		} else {
+			final String id = echoGetArg( "id", null, result); // TODO: (?) передавать сразу nodeRef
+			if (id != null) {
+				final NodeRef ref = makeFullRef(id);
+				result.put("using_nodeRef", ref);
+
+				if ( 	ACLOPER_REBUILD.equalsIgnoreCase(oper)
+						|| ACLOPER_REBUILDYNAMIC.equalsIgnoreCase(oper)
+						|| ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper)
+					) {
+					final String status = echoGetArg( "status", null, result);
+					final String lifeCycle = echoGetArg( "lifeCycle", null, result);
+					logger.info( String.format( "<RebuildACL> for node id %s at status <%s>", id, status));
+					if (ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper))
+						builder.rebuildStaticACL( ref, lifeCycle, status);
+					else
+						builder.rebuildACL( ref, lifeCycle, status);
+				} else if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper) || ACLOPER_REVOKE_DYNAROLE.equalsIgnoreCase(oper)) {
+					final String roleCode = echoGetArg( "roleCode", null, result);
+					final String userId = echoGetArg( "userId", null, result);
+					logger.info( String.format( "<%s> for node id %s, user <%s>, role <%s>", oper, id, userId, roleCode));
+
+					if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper))
+						builder.grantDynamicRole(roleCode, ref, userId);
+					else
+						builder.revokeDynamicRole(roleCode, ref, userId);
+				} else { logger.warn("Unsupported operation "+ oper); }
+			}
+			logger.info( String.format( "done test oper <%s> for node id %s", oper, id));
 		}
 
 		return result;

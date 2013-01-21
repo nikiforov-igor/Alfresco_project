@@ -54,7 +54,7 @@ public class DataMapper<TModel extends Serializable> {
 	 */
 	private boolean enSkipUnmapedProps = true;
 
-	protected DataMapper() {
+	public DataMapper() {
 	}
 
 	/**
@@ -94,10 +94,11 @@ public class DataMapper<TModel extends Serializable> {
 	}
 
 	/**
-	 * Из указанных properties получить словарь преобразования
+	 * Из указанных properties получить словарь преобразования, возможно 
+	 * использование коротких синонимов типов - префиксов
 	 * @param props список вида {имя атрибута alfresco}={название pojo-поля}
 	 */
-	void setAlfrescoKeyMap(Properties props) {
+	public void setAlfrescoKeyMap(Properties props) {
 		this.mapPropsIntoPojo = new HashMap<String, String>();
 		if (props == null)
 			return;
@@ -209,7 +210,7 @@ public class DataMapper<TModel extends Serializable> {
 		}
 	}
  * */
-	
+
 	public static <TModel extends Serializable> DataMapper<TModel> getMapper(Class<TModel> modelClass
 			) throws MapException 
 	{

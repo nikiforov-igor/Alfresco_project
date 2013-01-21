@@ -147,10 +147,10 @@ public class OrgStrucureAfterInvocationProvider
 
 	@Override
 	@SuppressWarnings("rawtypes")
-	public Object decide(Authentication authentication, Object object,
+	public Object decide(Authentication authentication, Object hookObject,
 			ConfigAttributeDefinition config, Object returnedObject)
 					throws AccessDeniedException {
-		final MethodInvocation mi = (MethodInvocation) object;
+		final MethodInvocation mi = (MethodInvocation) hookObject;
 
 		final StringBuilder sb = new StringBuilder();
 		try {
@@ -175,35 +175,35 @@ public class OrgStrucureAfterInvocationProvider
 			if (PermissionCheckedValue.class.isAssignableFrom(returnedObject
 					.getClass())) {
 				// The security provider was not already present
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(PermissionCheckedValue) returnedObject);
 			}
 
 			if (PermissionCheckValue.class.isAssignableFrom(returnedObject
 					.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(PermissionCheckValue) returnedObject);
 			}
 
 			if (StoreRef.class.isAssignableFrom(returnedObject.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						nodeService.getRootNode((StoreRef) returnedObject))
 						.getStoreRef();
 			}
 
 			if (NodeRef.class.isAssignableFrom(returnedObject.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(NodeRef) returnedObject);
 			}
 
 			if (Pair.class.isAssignableFrom(returnedObject.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(Pair) returnedObject);
 			}
 
 			if (ChildAssociationRef.class.isAssignableFrom(returnedObject
 					.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(ChildAssociationRef) returnedObject);
 			}
 
@@ -220,34 +220,34 @@ public class OrgStrucureAfterInvocationProvider
 
 			if (PagingLuceneResultSet.class.isAssignableFrom(returnedObject
 					.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(PagingLuceneResultSet) returnedObject);
 			}
 
 			if (ResultSet.class.isAssignableFrom(returnedObject.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(ResultSet) returnedObject);
 			}
 
 			if (QueryEngineResults.class.isAssignableFrom(returnedObject
 					.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(QueryEngineResults) returnedObject);
 			}
 
 			if (Collection.class.isAssignableFrom(returnedObject.getClass())) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(Collection) returnedObject);
 			}
 
 			if (returnedObject.getClass().isArray()) {
-				return decide(authentication, object, config,
+				return decide(authentication, hookObject, config,
 						(Object[]) returnedObject);
 			}
 
 			if (log.isDebugEnabled())
 				sb.append("Uncontrolled object - access allowed for "
-						+ object.getClass().getName());
+						+ hookObject.getClass().getName());
 			return returnedObject;
 		} catch (AccessDeniedException ade) {
 			if (log.isDebugEnabled())

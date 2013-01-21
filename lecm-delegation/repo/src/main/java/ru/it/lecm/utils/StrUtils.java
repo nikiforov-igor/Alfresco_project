@@ -25,8 +25,26 @@ public class StrUtils {
 	 */
 	public static String nvl( Object obj, String defIfEmpty)
 	{
-		final String val = (obj != null) ? obj.toString() : null;
-		return isStringEmpty(val) ? defIfEmpty : val;
+		return coalesce( obj, defIfEmpty);
+	}
+
+	/**
+	 * Вернуть первое непустое строковое представление элементов списка.
+	 * @param values
+	 * @return не-null строку, если в списке values нашёлся объект такой что
+	 * .toString() != null и null если таких объектов нет.
+	 */
+	public static String coalesce( Object ... values)
+	{
+		if (values != null)
+			for(final Object obj: values) {
+				if (obj != null) { 
+					final String val = obj.toString();
+					if (val != null) 
+						return val; // FOUND NON-NULL value
+				}
+			}
+		return null; // all vales are null
 	}
 
 	/**

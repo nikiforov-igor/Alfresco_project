@@ -350,10 +350,10 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 					logger.error("", ex);
 				}
 			}
-			org.alfresco.repo.security.permissions.impl.PermissionServiceImpl impl;
-			org.alfresco.repo.security.permissions.impl.acegi.ACLEntryVoter aclVoter;
-			net.sf.acegisecurity.vote.RoleVoter grpVoter;
-			org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor metinter;
+//			org.alfresco.repo.security.permissions.impl.PermissionServiceImpl impl;
+//			org.alfresco.repo.security.permissions.impl.acegi.ACLEntryVoter aclVoter;
+//			net.sf.acegisecurity.vote.RoleVoter grpVoter;
+//			org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor metinter;
 
 			/*
 			 * нужен воутер, чтобы убирать права (sec-группу) при доступе к
@@ -481,18 +481,18 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 	final private static String ARG_TESTNAME = "testName";
 
-	private enum TestAction {
-		  test1
-		, test2
-		, test3
-		, test4
-		, test5
-		, test6
-		;
-
-		public boolean eq(Object s) {
-			return (s != null) && this.name().equalsIgnoreCase(s.toString());
+	final private static String PREFIX_TEST = "test";
+	public static Integer findTestNum(String s) {
+		if (s != null) {
+			try {
+				// final String[] sN = s.toLowerCase().split(PREFIX_TEST);
+				if (s.toLowerCase().startsWith(PREFIX_TEST))
+					return Integer.parseInt( s.substring(PREFIX_TEST.length()));
+			} catch (NumberFormatException ex) {
+				logger.info("test '"+ s + "' is not numbered test -> skipped");
+			}
 		}
+		return null; // not a number
 	}
 
 	@Override
@@ -506,7 +506,7 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 				return result;
 			}
 
-			final Object testName = (args.has(ARG_TESTNAME)) ? args.get(ARG_TESTNAME) : null;
+			final String testName = args.optString(ARG_TESTNAME, null);
 			if (testName == null) {
 				result.put("message", "Argument '"+ ARG_TESTNAME+ "' not specified");
 				return result;
@@ -514,20 +514,10 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 
 			logger.info( "performing test '"+ testName+ "'");
 			tester.setConfig(args);
-			if (TestAction.test1.eq(testName)) {
-				copyJson( result, tester.runTest(1));
-			} else if (TestAction.test2.eq(testName)) {
-				copyJson( result, tester.runTest(2));
-			} else if (TestAction.test3.eq(testName)) {
-				copyJson( result, tester.runTest(3));
-			} else if (TestAction.test4.eq(testName)) {
-				copyJson( result, tester.runTest(4));
-			} else if (TestAction.test5.eq(testName)) {
-				copyJson( result, tester.runTest(5));
-			} else if (TestAction.test6.eq(testName)) {
-				copyJson( result, tester.runTest(6));
-			}
-			else
+			final Integer n = findTestNum(testName);
+			if (n != null) {
+				copyJson( result, tester.runTest(n.intValue()));
+			} else
 				result.put("message", "Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
 
 		} catch(Throwable ex) {
