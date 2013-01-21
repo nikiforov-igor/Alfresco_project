@@ -11,7 +11,6 @@
 	<config evaluator="node-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
-				<edit-form template="/ru/it/lecm/subscriptions/controls/form-border.ftl" />
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:object-type-assoc"/>
@@ -24,11 +23,12 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<set id="drop-down" appearance="" label-id="info.drop-down-info" />
-					<set id="input-text" appearance="" label-id="info.input-text-info" />
-					<set id="table" appearance="" label-id="info.table-info" />
-					<set id="description" appearance="" label-id="info.description-info" />
+					<set id="drop-down" appearance="" label="" />
+					<set id="input-text" appearance="panel" label-id="info.input-text-info" />
+					<set id="table" appearance="panel" label-id="info.table-info" label=""/>
+					<set id="description" appearance="" label=""/>
 
+					<field id="cm:name" label-id="Наименование"/>
 					<field id="lecm-subscr:object-type-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
@@ -79,7 +79,6 @@
 	<config evaluator="model-type" condition="lecm-subscr:subscription-to-type">
 		<forms>
 			<form>
-				<create-form template="/ru/it/lecm/subscriptions/controls/form-border.ftl" />
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-subscr:object-type-assoc"/>
@@ -92,11 +91,12 @@
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
 				<appearance>
-					<set id="drop-down" appearance=""  />
-					<set id="input-text" appearance="" label-id="info.input-text-info" />
-					<set id="table" appearance="" label-id="info.table-info" />
-					<set id="description" appearance="" />
+					<set id="drop-down" appearance="" label="" />
+					<set id="input-text" appearance="panel" label-id="info.input-text-info" />
+					<set id="table" appearance="panel" label-id="info.table-info" label=""/>
+					<set id="description" appearance="" label=""/>
 
+					<field id="cm:name" label-id="Наименование"/>
 					<field id="lecm-subscr:object-type-assoc" set="drop-down">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
