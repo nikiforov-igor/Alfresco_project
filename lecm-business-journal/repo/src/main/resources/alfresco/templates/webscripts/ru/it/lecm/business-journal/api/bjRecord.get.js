@@ -1,1 +1,1 @@
-model.record = businessJournal.getRecord(args["recordRef"]);
+model.record = businessJournal.getRecord(args["nodeRef"]);

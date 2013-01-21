@@ -1,7 +1,7 @@
 <webscript>
 	<shortname>BJ Record</shortname>
 	<description>BJ Record</description>
-	<url>/lecm/business-journal/api/record</url>
+	<url>/lecm/business-journal/api/record?nodeRef={nodeRef}</url>
     <authentication>user</authentication>
     <format default="json"/>
     <transaction>required</transaction>
