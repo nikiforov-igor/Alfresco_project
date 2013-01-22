@@ -58,8 +58,7 @@ public class BarButton extends Composite {
 	@UiField Element countElement;
 	@UiField Element iconElement;
 	@UiField Element textElement;
-	@UiField
-    ButtonPopupWindow window;
+	@UiField ButtonPopupWindow window;
 	
 	//private SimpleFocusWidget button;
 	private SimpleFocusWidget closeButton;

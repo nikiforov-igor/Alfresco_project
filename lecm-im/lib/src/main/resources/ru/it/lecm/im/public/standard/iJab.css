@@ -1,3 +1,17 @@
+#ijab {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 400px;
+    height: 500px;
+/*    background-color: red;*/
+}
+
+.ijab-mainwidget{
+    width: 25%;
+    display: inline-block;
+}
+
 .has-unread-messages{
     font-weight: bold;
 }
@@ -738,7 +752,9 @@ background: url(about:blank);
 }
 
 .ijab-panels {
-    float: left;
+    display: inline-block;
+    overflow: hidden;
+    width: 75%;
 }
 
 .ijab-webapi .ijab-window {

@@ -57,7 +57,7 @@ public class BarUI implements ClientListener, VisibilityListener {
 	{
 		return mainBar.getChatPanel();
 	}
-	public Widget getOptionWidget() 
+	public Widget getOptionWidget()
 	{
 		return mainBar.getConfigWidget();
 	}

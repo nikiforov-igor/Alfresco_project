@@ -35,7 +35,6 @@ import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.ui.common.BarButton;
 import ru.it.lecm.im.client.utils.BrowserHelper;
 import ru.it.lecm.im.client.utils.i18n;
-import ru.it.lecm.im.client.xmpp.Session;
 
 public class MainBar extends Composite implements  HasVisibility, EventListener, HasAttachHandlers, IsWidget, IsRenderable {
 
@@ -44,14 +43,16 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	interface MainBarUiBinder extends UiBinder<Widget, MainBar> {
 	}
 
-	@UiField HTMLPanel ijab;
+	// основная панель в которой и разворачивается всё действие
+    @UiField HTMLPanel ijab;
 
 	//buttons
 	final private BarButton optionsButton;
-	final private BarButton buddysButton;
 	final private BarButton mucButton;
 	final private BarButton toolButton;
 	final private ContactView contactView;
+
+    final private ChatPanelBar chatpanelBar = new ChatPanelBar();
 
 
 	final private MUCRoomWidget mucWidget;
@@ -63,53 +64,25 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 
     boolean connected = false;
 
-	private int onlineCount = 0;
-	//private int totalCount = 0;
-	private boolean getRostered = false;
-	
 	private AddSearchWnd add_searchWnd = null;
 	public MainBar() 
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		ijab.getElement().setId("ijab");
-		//do css hack
-		BrowserHelper.init();
-		if(BrowserHelper.isIE)
-		{
-			String cssMark = "";
-			cssMark += "ijab-ie ";
-			if(BrowserHelper.isIE6)
-				cssMark +="ijab-ie6";
-			else if(BrowserHelper.isIE7)
-				cssMark += "ijab-ie7";
-			else if(BrowserHelper.isIE8)
-				cssMark += "ijab-ie8";
-			ijab.addStyleName(cssMark);
-		}
 
-		
-		
-		buddysButton = btnManager.createCaptionButton(i18n.msg("Chat"), "ijab-icon-buddy", "ijab-buddy-window");
-		buddysButton.addButtonStyle("ijab-buddys-button");
-		if(iJab.conf.disableOptionsSetting())
-        {
-            buddysButton.setButtonWidthEm(19);
-        }
+        ijab.getElement().setId("ijab");
 
-        ijab.add(buddysButton.asWidget());
+        this.DoCssHack();
 
+        this.AddWidgets();
 
-		//msgBoxButton = btnManager.createIconButton("Message Box", "ijab-icon-notification");
-        //appsBar.addWidget(buddysButton);
-
-
+        contactView = mainWidget.getContactView();
 
         //create the muc button
         if(iJab.conf.getXmppConf().isMUCEnabled())
 		{
 			mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
 			//appsBar.addWidget(mucButton);
-			mucWidget = new MUCRoomWidget(this.mainWidget.getChatpanelBar());
+			mucWidget = new MUCRoomWidget(this.getChatPanel());
 			mucButton.setButtonWindow(mucWidget);
 			mucButton.getButton().addClickHandler(new ClickHandler()
 			{
@@ -130,7 +103,6 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		if(!iJab.conf.disableOptionsSetting())
         {
             optionsButton = btnManager.createIconButton(i18n.msg("Options"), "ijab-icon-config");
-            //appsBar.addWidget(optionsButton);
             optionsButton.setButtonWindow(optionWidget);
         }
         else
@@ -138,8 +110,6 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
             optionsButton = null;
         }
 
-		contactView = mainWidget.getContactView();
-		buddysButton.setButtonWindow(mainWidget);
 
 
         setupRosterManagement();
@@ -166,6 +136,27 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 
 	}
 
+    private void AddWidgets() {
+        ijab.add(mainWidget);
+        ijab.add(chatpanelBar);
+    }
+
+    private void DoCssHack() {
+        BrowserHelper.init();
+        if(BrowserHelper.isIE)
+        {
+            String cssMark = "";
+            cssMark += "ijab-ie ";
+            if(BrowserHelper.isIE6)
+                cssMark +="ijab-ie6";
+            else if(BrowserHelper.isIE7)
+                cssMark += "ijab-ie7";
+            else if(BrowserHelper.isIE8)
+                cssMark += "ijab-ie8";
+            ijab.addStyleName(cssMark);
+        }
+    }
+
     private void setupRosterManagement() {
         if(!iJab.conf.isRosterManageEnabled())
 			mainWidget.removeToolBar();
@@ -190,7 +181,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 
 
     private void addBuddysButtonClickHandler() {
-        buddysButton.getButton().addClickHandler(new ClickHandler()
+        // Это надо куда-то перенести   например в Плашку "Дисконектед"
+       /* buddysButton.getButton().addClickHandler(new ClickHandler()
         {
 
             public void onClick(ClickEvent event)
@@ -207,8 +199,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
                 else if(iJab.conf.isLoginDialogEnabled()&&!connected)
                     LoginDialog.instance().center();
             }
-
-        });
+        });*/
     }
 
 
@@ -236,29 +227,23 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	{
 		return mainWidget.getIndictorWidget();
 	}
-	
+
 	public OptionWidget getConfigWidget()
 	{
 		return optionWidget;
 	}
-	
+
 	public ChatPanelBar getChatPanel()
 	{
-		return mainWidget.getChatpanelBar();
+		return chatpanelBar;
 	}
 	
 	public void updateOnlineCount(int online)
 	{
-		onlineCount = online;
-		if(connected)
-			buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");
 	}
 	
 	public void updateContactCount(int total)
 	{
-		//totalCount = total;
-		if(connected)
-			buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");
 	}
 	
 	public void reset()
@@ -268,7 +253,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		contactView.clear();
 		updateOnlineCount(0);
 		updateContactCount(0);
-		this.mainWidget.getChatpanelBar().reset();
+		this.getChatPanel().reset();
 		optionWidget.reset();
 		if(mucWidget!=null)
 			mucWidget.setConnected(false);
@@ -279,23 +264,27 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	{
         Log.log("MainBar.connecting()");
         connected = false;
-		buddysButton.removeIconStyle("ijab-icon-buddy");
+
+		// Перенести это в плашку Дисконектед
+		/*buddysButton.removeIconStyle("ijab-icon-buddy");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.setIconStyle("ijab-icon-buddy-connecting");
-		buddysButton.setButtonText(i18n.msg("Loading..."));
-		mainWidget.setDisconnected(false);
+		buddysButton.setButtonText(i18n.msg("Loading..."));*/
+
+        mainWidget.setDisconnected(false);
 	}
 	
 	public void disconnected()
 	{
         Log.log("MainBar.disconnected()");
         connected = false;
-		getRostered = false;
-		buddysButton.setIconStyle("ijab-icon-buddy-disconnected");
+
+		/*buddysButton.setIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.removeIconStyle("ijab-icon-buddy");
 		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
-		buddysButton.setButtonText(i18n.msg("Chat"));
-		mainWidget.setDisconnected(true);
+		buddysButton.setButtonText(i18n.msg("Chat"));*/
+
+        mainWidget.setDisconnected(true);
 		if(mucWidget!=null)
 			mucWidget.setConnected(false);
 	}
@@ -304,14 +293,15 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	{
         Log.log("MainBar.connected()");
 		connected = true;
-		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
+	/*	buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.setIconStyle("ijab-icon-buddy");
-		buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");
-		mainWidget.setDisconnected(false);
+		buddysButton.setButtonText(i18n.msg("Chat")+"("+onlineCount+")");*/
+
+        mainWidget.setDisconnected(false);
 		if(mucWidget!=null)
 			mucWidget.setConnected(true);
 
-        buddysButton.openWindow();
+
 	}
 }

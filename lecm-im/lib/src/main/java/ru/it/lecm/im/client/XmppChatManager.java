@@ -51,7 +51,9 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	{
 		this.manager = manager;
 		this.chatPanel = chatPanel;
-		this.manager.addListener(this);
+
+        // Подписываемся на события от нижележащего слоя ChatManager<XmppChat>
+        this.manager.addListener(this);
 	}
 	
 	public void onMessageReceived(Chat<XmppChat> chat, Message message,
@@ -99,10 +101,6 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
         MessageCountUpdater.Update(oldMessagesCount);
         Log.log("MessageCountUpdater.Update() - Complete!");
 
-        // XmppClient client = (XmppClient) iJab.client;
-        // iJab.ui.getContactView().
-        // client.getChatManager().
-
     }
 
     public void OpenNextUnreadMessage()
@@ -134,7 +132,6 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 			ChatPanelButton button = chatPanel.createChatButton();
 			new XmppChat(chat,button);
 			chats.put(chat.getJid().toStringBare(), chat);
-			//button.openWindow();
 		}
 	}
 

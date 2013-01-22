@@ -21,15 +21,12 @@
 package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.*;
-import ru.it.lecm.im.client.data.GatewayItemImpl;
-import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class BarMainWidget extends Composite implements HasVisibility, EventListener, HasAttachHandlers, IsWidget, IsRenderable {
@@ -46,127 +43,11 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 	@UiField SearchBox searchBox;
 	@UiField Element disText;
 	@UiField FlowPanel mainWidget;
-    @UiField ChatPanelBar chatpanelBar;
 
-
-//	@UiField FlowPanel toolBar;
-//	@UiField Anchor addButton;
-//	@UiField Anchor gatewayButton;
-//	@UiField Element addButtonText;
-//	@UiField Element gatewayButtonText;
-	
-	//private ContextMenu gatewayMenu = null;
-	
-	private IToolBarListener listener = null;
 	public BarMainWidget() 
 	{
 		initWidget(BarMainWidget.uiBinder.createAndBindUi(this));
 		disText.setInnerText(i18n.msg("Disconnected"));
-//        addButton.setTitle(i18n.msg("Search/Add Friend"));
-//        addButtonText.setInnerText(i18n.msg("Search/Add"));
-//        gatewayButton.setTitle(i18n.msg("Manage gateway"));
-//        gatewayButtonText.setInnerText(i18n.msg("Gateway"));
-//
-//		addButton.addClickHandler(new ClickHandler()
-//		{
-//			public void onClick(ClickEvent event)
-//			{
-//				if(listener!=null)
-//					listener.addButtonClicked();
-//			}
-//		});
-//
-//		gatewayButton.addClickHandler(new ClickHandler()
-//		{
-//			public void onClick(ClickEvent event)
-//			{
-//				if(iJab.client instanceof XmppClient)
-//				{
-//					if(iJab.conf.getXmppConf().getGateways().length()>0) {
-//                        popGateMenu();
-//                    }
-//				}
-//			}
-//		});
-	}
-
-    public ChatPanelBar getChatpanelBar() {
-        return this.chatpanelBar;
-    }
-	
-	protected void popGateMenu()
-	{
-
-//		if(gatewayMenu == null)
-//		{
-//			gatewayMenu = new ContextMenu();
-//		}
-//
-//		gatewayMenu.clear();
-//		MenuBar gatewaysMenu = new MenuBar(true);
-//		gatewaysMenu.setStylePrimaryName("ijab-contextmenu-body");
-//		gatewaysMenu.setAutoOpen(true);
-//		JsArray<GatewayItemImpl> gateways = iJab.conf.getXmppConf().getGateways();
-//		for(int index=0;index<gateways.length();index++)
-//		{
-//			final GatewayPlugin gatePlugin = Session.instance().getGatewayPlugin();
-//			final GatewayItemImpl gateway = gateways.get(index);
-//			ContextMenuItem menuItem = new ContextMenuItem(gatewayMenu,gateway.name(),true,new ContextMenuItemListener()
-//			{
-//				public void onSelected(Object data)
-//				{
-//					gatePlugin.getInfo(gateway.servernode(), new ResponseHandler()
-//					{
-//						public void onError(IQ iq, ErrorType errorType,
-//								ErrorCondition errorCondition, String text) {
-//						}
-//
-//						public void onResult(IQ iq)
-//						{
-//							GatewayDialog dialog = new GatewayDialog(iq);
-//							dialog.center();
-//						}
-//
-//					});
-//				}
-//			});
-//			gatewaysMenu.addItem(menuItem);
-//		}
-//		gatewayMenu.addItem(i18n.msg("Gateways"), gatewaysMenu);
-//		MenuBar registeredMenuBar = new MenuBar(true);
-//		registeredMenuBar.setStylePrimaryName("ijab-contextmenu-body");
-//		registeredMenuBar.setAutoOpen(true);
-//		List<String> services = new ArrayList<String>();
-//		services.addAll(Session.instance().getRosterPlugin().getTransports());
-//		for(final String service:services)
-//		{
-//			if(service.equals(Session.instance().getDomainName()))
-//				continue;
-//			ContextMenuItem menuItem = new ContextMenuItem(gatewayMenu,i18n.msg("Remove")+" "+getGatewayName(service),true,new ContextMenuItemListener()
-//			{
-//
-//				public void onSelected(Object data)
-//				{
-//					Session.instance().getRosterPlugin().removeRosterItem(JID.fromString(service));
-//				}
-//
-//			});
-//			registeredMenuBar.addItem(menuItem);
-//		}
-//		gatewayMenu.addItem(i18n.msg("Registered"), registeredMenuBar);
-//		gatewayMenu.showRelativeTo(gatewayButton);
-	}
-	
-	protected String getGatewayName(String jid)
-	{
-		JsArray<GatewayItemImpl> gateways = iJab.conf.getXmppConf().getGateways();
-		for(int index=0;index<gateways.length();index++)
-		{
-			final GatewayItemImpl gateway = gateways.get(index);
-			if(gateway.servernode().equalsIgnoreCase(jid))
-				return gateway.servernode();
-		}
-		return jid;
 	}
 	
 	public ContactView getContactView()
@@ -192,8 +73,6 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 			contactView.setVisible(false);
 			indicator.setVisible(false);
 			searchBox.setVisible(false);
-//			if(toolBar!=null)
-//				toolBar.setVisible(false);
 		}
 		else
 		{
@@ -201,20 +80,17 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 			contactView.setVisible(true);
 			indicator.setVisible(true);
 			searchBox.setVisible(true);
-//			if(toolBar!=null)
-//				toolBar.setVisible(true);
 		}
 	}
 	
 	public void removeToolBar()
 	{
-//		mainWidget.remove(toolBar);
-//		toolBar = null;
+
 	}
 	
 	public void setToolBarListener(IToolBarListener listener)
 	{
-		this.listener = listener;
+
 	}
 
     public interface IToolBarListener

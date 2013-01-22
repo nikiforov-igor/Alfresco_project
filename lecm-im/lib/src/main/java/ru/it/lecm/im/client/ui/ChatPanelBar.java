@@ -33,7 +33,7 @@ import java.util.Stack;
 public class ChatPanelBar extends ChatPanelBarUI
 {
 	private static int buttonWidth = 136;
-	private int maxVisibleButton = 0;
+	private int maxVisibleButton = 1;
 	
 	
 	private PanelButton activeButton = null;
@@ -46,14 +46,7 @@ public class ChatPanelBar extends ChatPanelBarUI
 	{
 		super();
 		//this.mainBar = mainBar;
-		//calcVisibleTabs();
-//		Window.addWindowResizeListener(new WindowResizeListener()
-//		{
-//			public void onWindowResized(int width, int height)
-//			{
-//				onWindowResize(width,height);
-//			}
-//		});
+		calcVisibleTabs();
 
         Window.addResizeHandler(new ResizeHandler() {
             @Override
