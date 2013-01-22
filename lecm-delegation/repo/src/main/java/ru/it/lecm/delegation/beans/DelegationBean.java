@@ -735,6 +735,43 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 	}
 
 	@Override
+	public boolean isEngineer (NodeRef employeeRef) {
+		NodeRef brEngineer = orgstructureService.getBusinessRoleEngineer ();
+		if (brEngineer == null) {
+			logger.error ("there is no engineer business role!");
+		}
+		List<NodeRef> employees = orgstructureService.getEmployeesByBusinessRole (brEngineer);
+		return employees.contains (employeeRef);
+	}
+
+	@Override
+	public boolean isBoss (NodeRef employeeRef) {
+		boolean isBoss = false;
+		if (nodeService.exists (employeeRef) && orgstructureService.isEmployee (employeeRef)) {
+			// получаем основную должностную позицию
+			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff (employeeRef);
+			if (primaryStaff != null) {
+				// получаем подразделение для штатного расписания
+				NodeRef unit = orgstructureService.getUnitByStaff (primaryStaff);
+				// получаем руководителя для подразделения
+				NodeRef bossRef = orgstructureService.getUnitBoss (unit);
+				isBoss = employeeRef.equals (bossRef);
+			}
+		}
+		return isBoss;
+	}
+
+	@Override
+	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
+		boolean hasSubordinate = bossRef.equals (subordinateRef);
+		if (!hasSubordinate) {
+			List<NodeRef> subordinates = orgstructureService.getBossSubordinate (bossRef);
+			hasSubordinate = subordinates.contains (subordinateRef);
+		}
+		return hasSubordinate;
+	}
+
+	@Override
 	public IDelegationDescriptor getDelegationDescriptor () {
 		return this;
 	}

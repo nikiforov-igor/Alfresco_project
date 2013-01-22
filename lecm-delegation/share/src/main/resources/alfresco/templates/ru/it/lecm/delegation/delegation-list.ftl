@@ -3,7 +3,13 @@
 <@templateHeader>
 <script type="text/javascript">//<![CDATA[
 
-var delegationContainer = ${delegationContainer};
+var delegationDescription = ${delegationDescription};
+
+/*
+<#list props as prop>
+${prop}
+</#list>
+*/
 
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	var LogicECM = {};
@@ -13,7 +19,10 @@ LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
-LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER || delegationContainer;
+LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER || {
+	"nodeRef": delegationDescription.nodeRef,
+	"itemType": delegationDescription.itemType
+};
 //]]>
 </script>
 
@@ -30,5 +39,9 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	<@region id="delegation-list" scope="template"/>
+	<#if nativeObject.isEngineer || nativeObject.isBoss>
+		<@region id="delegation-list" scope="template"/>
+	<#else/>
+		<div>не умеешь правов таких покажи лицензию!</div>
+	</#if>
 </@bpage.basePage>

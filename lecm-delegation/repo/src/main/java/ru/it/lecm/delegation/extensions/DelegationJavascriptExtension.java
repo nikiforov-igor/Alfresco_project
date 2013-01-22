@@ -10,7 +10,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -55,6 +54,18 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 			return itemType.toPrefixString (namespacePrefixResolver);
 		}
 		return null;
+	}
+
+	public boolean isEngineer (final String employeeRef) {
+		return delegationService.getDelegationDescriptor ().isEngineer (new NodeRef (employeeRef));
+	}
+
+	public boolean isBoss (final String employeeRef) {
+		return delegationService.getDelegationDescriptor ().isBoss (new NodeRef (employeeRef));
+	}
+
+	public boolean hasSubordinate (final String bossRef, final String subordinateRef) {
+		return delegationService.getDelegationDescriptor ().hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
 	}
 
 	public ScriptNode getDelegationOptsByPerson (final String personRef) {
