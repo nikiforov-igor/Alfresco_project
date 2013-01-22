@@ -15,6 +15,9 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -33,13 +36,14 @@ public class OrgstructureEmployeeLinkPolicy
 		, NodeServicePolicies.OnCreateAssociationPolicy
 		, NodeServicePolicies.OnDeleteAssociationPolicy
 {
+	final static protected Logger logger = LoggerFactory.getLogger (OrgstructureEmployeeLinkPolicy.class);
+
 	private ServiceRegistry serviceRegistry;
 	private PolicyComponent policyComponent;
 	private OrgstructureBean orgstructureService;
 
 	private BusinessJournalService businessJournalService;
 	private IOrgStructureNotifiers sgNotifier;
-	// private static NodeService nodeService;
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
@@ -70,6 +74,8 @@ public class OrgstructureEmployeeLinkPolicy
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "sgNotifier", sgNotifier);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -127,7 +133,7 @@ public class OrgstructureEmployeeLinkPolicy
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		// создаем ассоциацию
-		NodeService nodeService = serviceRegistry.getNodeService();
+		final NodeService nodeService = super.nodeService; // serviceRegistry.getNodeService();
 
 		NodeRef employeeLink = childAssocRef.getChildRef();
 		NodeRef parent = childAssocRef.getParentRef();
@@ -187,17 +193,26 @@ public class OrgstructureEmployeeLinkPolicy
 	// название должностной позиции
 	public static final QName PROP_DP_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "lecm-orgstr:staffPosition-code");
 
+	String getEmployeeLogin(NodeRef employee) {
+		if (employee == null) return null;
+		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
+		if (person == null) {
+			logger.warn( String.format( "Employee '%s' is not linked to system user", employee.toString() ));
+			return null;
+		}
+		final String loginName = ""+ nodeService.getProperty( person, PROP_USER_NAME);
+		return loginName;
+	}
+
 	/**
 	 * Назначение БР для Сотрудника.
 	 * @param employee
 	 * @param brole
 	 */
 	private void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		final String loginName = ""+ nodeService.getProperty(person, PROP_USER_NAME);
-
+		final String loginName = getEmployeeLogin(employee);
+		if (loginName == null) return;
 		final String broleCode = ""+ nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-
 		this.sgNotifier.orgBRAssigned( broleCode, Types.SGKind.SG_ME.getSGPos(loginName)); 
 	}
 
@@ -207,8 +222,8 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param brole
 	 */
 	private void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		final Object loginName = nodeService.getProperty(person, PROP_USER_NAME);
+		final String loginName = getEmployeeLogin(employee);
+		if (loginName == null) return;
 
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
 		final Object broleCode = nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
@@ -223,8 +238,8 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param dpid узел типа "lecm-orgstr:position"
 	 */
 	private void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		final String loginName = ""+ nodeService.getProperty( person, PROP_USER_NAME);
+		final String loginName = getEmployeeLogin(employee);
+		if (loginName == null) return;
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
 		final String dpIdName = ""+ nodeService.getProperty( dpid, PROP_DP_NAME);
@@ -238,8 +253,8 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param brole
 	 */
 	private void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		final String loginName = ""+ nodeService.getProperty( person, PROP_USER_NAME);
+		final String loginName = getEmployeeLogin(employee);
+		if (loginName == null) return;
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
 		final String dpIdName = ""+ nodeService.getProperty( dpid, PROP_DP_NAME);
