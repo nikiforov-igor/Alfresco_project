@@ -46,6 +46,9 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 	@UiField SearchBox searchBox;
 	@UiField Element disText;
 	@UiField FlowPanel mainWidget;
+    @UiField ChatPanelBar chatpanelBar;
+
+
 //	@UiField FlowPanel toolBar;
 //	@UiField Anchor addButton;
 //	@UiField Anchor gatewayButton;
@@ -86,6 +89,10 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 //			}
 //		});
 	}
+
+    public ChatPanelBar getChatpanelBar() {
+        return this.chatpanelBar;
+    }
 	
 	protected void popGateMenu()
 	{

@@ -4,17 +4,6 @@
     xmlns:iJab="urn:import:ru.it.lecm.im.client.ui">
 	<ui:style>
 	</ui:style>
-	<g:HTMLPanel styleName="ijab " ui:field="ijab">
-		<div class="ijab-layout ijab-webapi ui-toolbar" ui:field="ijabLayout">
-			<iJab:ShortcutBar ui:field="shortcutBar" />
-			<div class="ijab-ui ui-helper-clearfix ijab-left" ui:field="ijab_ui">
-				<div class="ijab-layout-r" ui:field="ijab_layout_r">
-					<iJab:ChatPanelBar ui:field="chatpanelBar" />
-					<!-- разворачивалку спрятал я -->
-                    <iJab:CollapseButton ui:field="collapseButton" styleName="ui-helper-hidden"></iJab:CollapseButton>
-					<iJab:AppsBar ui:field="appsBar"></iJab:AppsBar>
-				</div>
-			</div>
-		</div>
+	<g:HTMLPanel styleName="ijab" ui:field="ijab">
 	</g:HTMLPanel>
 </ui:UiBinder> 

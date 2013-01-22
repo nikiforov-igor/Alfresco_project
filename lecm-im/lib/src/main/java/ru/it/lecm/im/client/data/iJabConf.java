@@ -44,5 +44,4 @@ public interface iJabConf
 	//
 	XmppConf getXmppConf();
 	JsArray<LinkItemImpl> getTools();
-	JsArray<LinkItemImpl> getShortcuts();
 }

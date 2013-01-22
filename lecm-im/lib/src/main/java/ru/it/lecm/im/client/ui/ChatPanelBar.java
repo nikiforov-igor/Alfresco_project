@@ -37,15 +37,15 @@ public class ChatPanelBar extends ChatPanelBarUI
 	
 	
 	private PanelButton activeButton = null;
-	private final MainBar mainBar;
+	//private final MainBar mainBar;
 	
 	private final Stack<PanelButton> leftStack = new Stack<PanelButton>();
 	private final Stack<PanelButton> rightStack = new Stack<PanelButton>();
 	private boolean onResume = false;
-	public ChatPanelBar(MainBar mainBar)
+	public ChatPanelBar()
 	{
 		super();
-		this.mainBar = mainBar;
+		//this.mainBar = mainBar;
 		//calcVisibleTabs();
 //		Window.addWindowResizeListener(new WindowResizeListener()
 //		{
@@ -244,7 +244,7 @@ public class ChatPanelBar extends ChatPanelBarUI
 	
 	private void calcVisibleTabs()
 	{
-		int panelMaxWidth = (Window.getClientWidth() - 45)-mainBar.getShortcutBar().getOffsetWidth()-mainBar.getAppsBar().getOffsetWidth()-70;
+		//int panelMaxWidth = (Window.getClientWidth() - 45)-mainBar.getShortcutBar().getOffsetWidth()-mainBar.getAppsBar().getOffsetWidth()-70;
 		maxVisibleButton = 1;//panelMaxWidth/buttonWidth;
 	}
 	

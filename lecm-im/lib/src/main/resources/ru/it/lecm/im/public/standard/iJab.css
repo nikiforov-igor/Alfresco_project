@@ -661,7 +661,8 @@ background: url(about:blank);
 }
 
 .ijab-history h4 span {
-    float: right; padding .1em 0;
+    float: right;
+    padding: .1em 0;
     font-size: .8em;
 }
 
@@ -1235,7 +1236,7 @@ margin: .3em .5em .3em;
 }
 
 * html {
-    background: url(blank) fixed;
+    background: url(about:blank) fixed;
 }
 
 * html .ijab-webapi {
@@ -1644,7 +1645,7 @@ html>body .ijab-contextmenu
 }
 
 .gwt-DecoratedPopupPanel table tbody {
-    border 0;
+    border: 0;
 }
 
 .gwt-DecoratedPopupPanel table td,
@@ -1972,7 +1973,7 @@ html>body .gwt-MenuBarPopup {
 }
 
 .gwt-DecoratedTabBar .tabMiddleCenter {
-    padding: 0px 4px 2px 4px;
+    padding: 0 4px 2px 4px;
     cursor: pointer;
     cursor: hand;
     color: black;

@@ -9,6 +9,7 @@
 		<iJab:UserIndicator ui:field="indicator"></iJab:UserIndicator>
 		<iJab:SearchBox ui:field="searchBox"></iJab:SearchBox>
 		<iJab:ContactView ui:field="contactView"></iJab:ContactView>
+        <iJab:ChatPanelBar styleName="ijab-barmainwidget-chatpanelbar" ui:field="chatpanelBar" />
 		<!-- Закоментарил Я -->
         <!--<g:FlowPanel ui:field="toolBar" styleName="ijab-mainwidget-toolbar">-->
 			<!--<g:Anchor ui:field="gatewayButton" styleName="ijab-toolbutton" title="Gateways">-->

@@ -22,12 +22,10 @@ package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.*;
@@ -46,23 +44,10 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	interface MainBarUiBinder extends UiBinder<Widget, MainBar> {
 	}
 
-	@UiField ShortcutBar shortcutBar;
-	@UiField ChatPanelBar chatpanelBar;
-	@UiField AppsBar appsBar;
 	@UiField HTMLPanel ijab;
-	@UiField Element ijabLayout;
-	@UiField CollapseButton collapseButton;
-	@UiField Element ijab_ui;
-	@UiField Element ijab_layout_r;
-	
-	@UiFactory ChatPanelBar makeChatPanelBar()
-	{
-		return new ChatPanelBar(this);
-	}
-	
+
 	//buttons
 	final private BarButton optionsButton;
-	//final private BarButton msgBoxButton;
 	final private BarButton buddysButton;
 	final private BarButton mucButton;
 	final private BarButton toolButton;
@@ -101,8 +86,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 				cssMark += "ijab-ie8";
 			ijab.addStyleName(cssMark);
 		}
-		
-		ijabLayout.setId("ijab-layout");
+
 		
 		
 		buddysButton = btnManager.createCaptionButton(i18n.msg("Chat"), "ijab-icon-buddy", "ijab-buddy-window");
@@ -112,10 +96,11 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
             buddysButton.setButtonWidthEm(19);
         }
 
+        ijab.add(buddysButton.asWidget());
 
 
 		//msgBoxButton = btnManager.createIconButton("Message Box", "ijab-icon-notification");
-        appsBar.addWidget(buddysButton);
+        //appsBar.addWidget(buddysButton);
 
 
 
@@ -123,8 +108,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         if(iJab.conf.getXmppConf().isMUCEnabled())
 		{
 			mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
-			appsBar.addWidget(mucButton);
-			mucWidget = new MUCRoomWidget(chatpanelBar);
+			//appsBar.addWidget(mucButton);
+			mucWidget = new MUCRoomWidget(this.mainWidget.getChatpanelBar());
 			mucButton.setButtonWindow(mucWidget);
 			mucButton.getButton().addClickHandler(new ClickHandler()
 			{
@@ -145,7 +130,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		if(!iJab.conf.disableOptionsSetting())
         {
             optionsButton = btnManager.createIconButton(i18n.msg("Options"), "ijab-icon-config");
-            appsBar.addWidget(optionsButton);
+            //appsBar.addWidget(optionsButton);
             optionsButton.setButtonWindow(optionWidget);
         }
         else
@@ -165,7 +150,6 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
             toolButton.addButtonStyle("ijab-toolbox-button");
 
             toolButton.setButtonWindow(toolMenu);
-            shortcutBar.addWidget(toolButton);
         }
         else
         {
@@ -174,22 +158,12 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		
 		mainWidget.getSearchWidget().addListener(contactView.getSearchListener());
 
-        addCollapseButtonClickHandler();
         addBuddysButtonClickHandler();
 
-        readShortItems();
 		readTools();
 
         disconnected();
-		
-		if(iJab.conf.isBarExpandDefault())
-		{
-			setBarExpand(true);
-			collapseButton.setExpand(true);
-		}
 
-
-		
 	}
 
     private void setupRosterManagement() {
@@ -213,22 +187,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		}
     }
 
-    private void addCollapseButtonClickHandler() {
-        collapseButton.getWidget().addClickHandler(new ClickHandler()
-        {
-            public void onClick(ClickEvent event)
-            {
-                if(ijabLayout.getClassName().contains("ijab-webapi-max"))
-                {
-                    setBarExpand(false);
-                }
-                else
-                {
-                    setBarExpand(true);
-                }
-            }
-        });
-    }
+
 
     private void addBuddysButtonClickHandler() {
         buddysButton.getButton().addClickHandler(new ClickHandler()
@@ -252,32 +211,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         });
     }
 
-    private void setBarExpand(boolean b)
-	{
-		if(b)
-		{
-			ijab_ui.removeClassName("ijab-left");
-			ijabLayout.addClassName("ijab-webapi-max");
-			ijab_layout_r.addClassName("ijab-right");
-		}
-		else
-		{
-			ijabLayout.removeClassName("ijab-webapi-max");
-			ijab_ui.addClassName("ijab-left");
-			ijab_layout_r.removeClassName("ijab-right");
-		}
-	}
-	
-	private void readShortItems()
-	{
-		JsArray<LinkItemImpl> array = iJab.conf.getShortcuts();
-		for(int index=0;index<array.length();index++)
-		{
-			LinkItemImpl item = array.get(index);
-			addShortcutItem(item.href(),item.target(),item.text(),item.img());
-		}
-	}
-	
+
 	private void readTools()
 	{
 		JsArray<LinkItemImpl> array = iJab.conf.getTools();
@@ -287,27 +221,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 			toolMenu.addItem(item.href(),item.target(),item.img(),item.text());
 		}
 	}
-	
-	public void addShortcutItem(final String url, final String target, final String tipStr, final String icon)
-	{
-		shortcutBar.addShortcutItem(url,target,tipStr,icon);
-	}
-	
-	public void addShortcutItem(final String url, final String tipStr, final String icon)
-	{
-		shortcutBar.addShortcutItem(url,tipStr,icon);
-	}
-	
-	public ShortcutBar getShortcutBar()
-	{
-		return shortcutBar;
-	}
-	
-	public AppsBar getAppsBar()
-	{
-		return appsBar;
-	}
-	
+
 	public ContactView getContactView()
 	{
 		return contactView;
@@ -330,7 +244,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	
 	public ChatPanelBar getChatPanel()
 	{
-		return chatpanelBar;
+		return mainWidget.getChatpanelBar();
 	}
 	
 	public void updateOnlineCount(int online)
@@ -354,7 +268,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		contactView.clear();
 		updateOnlineCount(0);
 		updateContactCount(0);
-		chatpanelBar.reset();
+		this.mainWidget.getChatpanelBar().reset();
 		optionWidget.reset();
 		if(mucWidget!=null)
 			mucWidget.setConnected(false);
