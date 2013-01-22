@@ -14,9 +14,11 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.security.events.INodeACLBuilder;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -28,15 +30,16 @@ import java.util.List;
 public class StatusChangeAction extends StateMachineAction {
 
 	private String status = "UNKNOWN";
+	private String processId = null;
 	private NodeRef folder = null;
 	private String uuid = null;
 	private boolean startStatus = false;
-	private ArrayList<Permission> dynamicPermissions = new ArrayList<Permission>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
 	@Override
 	public void init(Element action, String processId) {
+		this.processId = processId;
 		List<Element> attributes = action.elements("attribute");
 		for (Element attribute : attributes) {
 			String name = attribute.attribute("name");
@@ -52,18 +55,20 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Инициализация ролей
-		ArrayList<Permission> staticPermissions = new ArrayList<Permission>();
+		Map<String, INodeACLBuilder.StdPermission> permissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 		Element roles = action.element("roles");
 		if (roles != null) {
 			Element staticRoleElement = roles.element("static-roles");
-			staticPermissions = initPermissions(staticRoleElement);
+			permissions.putAll(initPermissions(staticRoleElement));
 
 			Element dynamicRoleElement = roles.element("dynamic-roles");
-			dynamicPermissions = initPermissions(dynamicRoleElement);
+			permissions.putAll(initPermissions(dynamicRoleElement));
 		}
 
 		//Если начальный статус, то папки для него не требуется
 		if (startStatus) return;
+
+		getLecmAclBuilderBean().regAccessMatrix(processId, status, permissions);
 
 		//Проверяем существует ли папка для этого статуса
 		NodeService nodeService = getServiceRegistry().getNodeService();
@@ -109,7 +114,7 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-
+		getLecmAclBuilderBean().rebuildStaticACL(folder, processId, status);
 	}
 
 	@Override
@@ -132,6 +137,11 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка динамических ролей для файла
+		children = nodeService.getChildAssocs(nodeRef);
+		for (ChildAssociationRef child : children) {
+			getLecmAclBuilderBean().rebuildACL(child.getChildRef(), processId, status);
+		}
+
 	}
 
 
@@ -149,41 +159,22 @@ public class StatusChangeAction extends StateMachineAction {
 	}
 
 	/**
-	 * Инициализирует список роле из элемента role
-	 * @param rolesElement
+	 * Инициализирует список ролей из элемента role
+	 * @param rolesElement                      INodeACLBuilder.StdPermission.valueOf(value)
 	 * @return Список прав доступа для ролей
 	 */
-	private ArrayList<Permission> initPermissions(Element rolesElement) {
-		ArrayList<Permission> permissions = new ArrayList<Permission>();
+	private Map<String, INodeACLBuilder.StdPermission> initPermissions(Element rolesElement) {
+		Map<String, INodeACLBuilder.StdPermission> permissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 		if (rolesElement != null) {
 			List<Element> roleElements = rolesElement.elements("role");
 			for (Element roleElement : roleElements) {
 				String role = roleElement.attribute("name");
-				String permission = roleElement.attribute("permission");
-				permissions.add(new Permission(role, permission));
+				INodeACLBuilder.StdPermission permission = INodeACLBuilder.StdPermission.valueOf(roleElement.attribute("permission"));
+				permissions.put(role, permission);
 			}
 		}
 		return permissions;
 	}
 
-
-	private class Permission {
-
-		private String role;
-		private String value;
-
-		private Permission(String role, String value) {
-			this.role = role;
-			this.value = value;
-		}
-
-		public String getRole() {
-			return role;
-		}
-
-		public String getValue() {
-			return value;
-		}
-	}
 
 }

@@ -61,6 +61,7 @@
 	<bean id="stateMachineHandler" class="ru.it.lecm.statemachine.listener.StateMachineHandler">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper" />
+		<property name="lecmAclBuilderBean" ref="lecmAclBuilderBean" />
 	</bean>
 
 	<bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"

@@ -348,22 +348,8 @@ LogicECM.module = LogicECM.module || {};
 				},
 				onSuccess:{
 					fn:function (response) {
-						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";
-						sUrl = YAHOO.lang.substitute(sUrl, {
-							nodeRef: nodeRef
-						});
-						this._showSplash();
-						var callback = {
-							success:function (oResponse) {
-								oResponse.argument.parent._hideSplash();
-								oResponse.argument.parent.draw();
-							},
-							argument:{
-								parent: this
-							},
-							timeout: 20000
-						};
-						YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
+						this._hideSplash();
+						this.draw();
 					},
 					scope:this
 				}

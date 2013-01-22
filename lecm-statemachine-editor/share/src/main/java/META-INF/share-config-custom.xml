@@ -336,7 +336,7 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
-						<control template="/ru/it/lecm/base-share/components/datagrid-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:outputWorkflowVariableData</control-param>
                             <control-param name="height">100</control-param>
 						</control>

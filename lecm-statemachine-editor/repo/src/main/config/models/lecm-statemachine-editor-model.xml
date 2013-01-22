@@ -24,8 +24,9 @@
 		<constraint name="lecm-stmeditor:permissionType" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>READ</value>
-					<value>WRITE</value>
+					<value>noaccess</value>
+					<value>readonly</value>
+					<value>full</value>
 				</list>
 			</parameter>
 		</constraint>

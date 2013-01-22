@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.security.beans.LECMAclBuilderBean;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ abstract public class StateMachineAction {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
+	private LECMAclBuilderBean lecmAclBuilderBean;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -35,6 +37,14 @@ abstract public class StateMachineAction {
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
+	}
+
+	public void setLecmAclBuilderBean(LECMAclBuilderBean lecmAclBuilderBean) {
+		this.lecmAclBuilderBean = lecmAclBuilderBean;
+	}
+
+	public LECMAclBuilderBean getLecmAclBuilderBean() {
+		return lecmAclBuilderBean;
 	}
 
 	abstract public void execute(DelegateExecution execution);
