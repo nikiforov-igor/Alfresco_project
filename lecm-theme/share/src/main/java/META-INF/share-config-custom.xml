@@ -30,7 +30,7 @@
                 <item type="link" id="delegation">/delegation-list</item>
                 <item type="link" id="dictionary">/allDictionary</item>
                 <item type="link" id="wcalendar">/wcalendar</item>
-                <item type="js" id="jsButton">LogicECM.module.Header.JsButton</item>
+                <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
                 <item type="js" id="sites">Alfresco.module.Sites</item>
 
                 <item type="container" id="more">
@@ -76,7 +76,7 @@
                 <css src="/modules/header/sites.css" />
                 <js src="/modules/create-site.js" />
                 <js src="/modules/header/sites.js" />
-                <js src="/scripts/jsButton.js" />
+                <js src="/scripts/notifications.js" />
                 <js src="/yui/event-simulate/event-simulate-min.js" />
                 <js src="/scripts/ijab_config.js" />
                 <js src="/scripts/LecmIM/LecmIM.nocache.js" />

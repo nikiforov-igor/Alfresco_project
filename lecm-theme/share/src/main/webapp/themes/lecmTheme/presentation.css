@@ -131,11 +131,11 @@ ol, ol li {
 }
 /* Utils: end */
 
-#myElem {
+#notificationsCounter {
     position: absolute;
     float: left;
     top: 15px;
-    left: 300px;
+    left: 453px;
     color: yellow;
     width: 20px;
     height : 20px;

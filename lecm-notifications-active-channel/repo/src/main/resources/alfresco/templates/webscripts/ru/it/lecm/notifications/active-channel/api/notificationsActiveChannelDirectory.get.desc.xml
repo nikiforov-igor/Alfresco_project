@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Notifications Active Channel Directory</shortname>
+	<description>Notifications Active Channel Directory</description>
+	<url>/lecm/notifications/active-channel/api/directory</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>
