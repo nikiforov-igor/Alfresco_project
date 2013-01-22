@@ -97,12 +97,22 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		String typeAttribute = "@" + subscriptionType.replace(":", "\\:");
 		String categoryAttribute = "@" + subscriptionCategory.replace(":", "\\:");
 
-		String query =  " +PATH:\"" + path + "//*\" AND TYPE:\"" + type +"\" ";
-		if (byType != null && byCategory == null) {
-			query += "AND " + typeAttribute +":\"" + byType.toString() + "\"";
-		} else if (byType != null) {
-			query += "AND " + typeAttribute +":\"" + byType.toString() + "\" AND (" + categoryAttribute +":\"" + byCategory.toString() + "\" OR ISNULL:\"" + subscriptionCategory + "\" OR " + categoryAttribute +":\"\")";
+		String query =  " +PATH:\"" + path + "//*\" AND TYPE:\"" + type +"\"";
+
+		query += " AND (ISNULL:" + subscriptionType.replace(":", "\\:") + " OR "
+				+ typeAttribute + ":\"\"";
+
+		if (byType != null) {
+			query += " OR (" + typeAttribute + ":\"" + byType.toString() + "\"";
+			query += " AND (ISNULL:" + subscriptionCategory.replace(":", "\\:")
+					+ " OR " + categoryAttribute + ":\"\"";
+			if (byCategory != null) {
+				query += " OR " + categoryAttribute + ":\"" + byCategory.toString() + "\"";
+			}
+			query += "))";
 		}
+
+		query += ")";
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
