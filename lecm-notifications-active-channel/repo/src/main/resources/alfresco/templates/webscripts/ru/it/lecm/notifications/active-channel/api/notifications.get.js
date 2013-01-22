@@ -1,0 +1,1 @@
+model.notifications = notificationsActiveChannel.getNotifications();

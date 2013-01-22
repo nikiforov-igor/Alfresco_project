@@ -158,4 +158,19 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 		}
 		return result;
 	}
+
+	public List<NodeRef> getNotifications() {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
+		if (currentEmloyeeNodeRef != null) {
+			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
+			for (AssociationRef ref: lRefs) {
+				if (isActiveChannelNotification(ref.getSourceRef()) && !isArchive(ref.getSourceRef())) {
+					result.add(ref.getSourceRef());
+					nodeService.setProperty(ref.getSourceRef(), PROP_READ_DATE, new Date());
+				}
+			}
+		}
+		return result;
+	}
 }

@@ -11,8 +11,8 @@
 
     <artifactId>notifications-active-channel-repo</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Notifications Active Channel</name>
-    <description>Logic ECM Notifications Active Channel Project</description>
+    <name>Logic ECM Notifications Active Channel Repo</name>
+    <description>Logic ECM Notifications Active Channel Repo Project</description>
     <properties>
         <module.log.level>debug</module.log.level>
     </properties>

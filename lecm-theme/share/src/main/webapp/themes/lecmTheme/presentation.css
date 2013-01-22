@@ -1952,6 +1952,13 @@ span.person a
 	width: auto;
 }
 
+.notification-row {
+	border-bottom: solid 1px #808080;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
+}
+
 .archive-record, .archive-record span a {
     color:red;
 }
