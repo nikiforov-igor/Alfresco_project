@@ -40,11 +40,11 @@
                 {
                     value: 'my',
                     text: '${msg("label.select.whose.my")}'
-                },
-                {
-                    value: 'control',
-                    text: '${msg("label.select.whose.control")}'
                 }
+                <#--{-->
+                    <#--value: 'control',-->
+                    <#--text: '${msg("label.select.whose.control")}'-->
+                <#--}-->
             ]
         };
         var DEPARTMENT_OPTION = {
@@ -148,10 +148,8 @@
                                 for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
                                     var item = results[i];
                                     var div = document.createElement('div');
-                                    var a = document.createElement('a');
 
-                                    a.innerHTML = item.date + ' ' + item.record;
-                                    div.appendChild(a);
+                                    div.innerHTML = item.date + ' ' + item.record;
                                     div.setAttribute('class', 'row');
                                     container.appendChild(div);
                                 }

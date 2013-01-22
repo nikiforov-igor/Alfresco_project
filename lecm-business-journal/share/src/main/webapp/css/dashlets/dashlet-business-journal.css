@@ -18,11 +18,3 @@
 .dashlet.business-journal .results .row {
     line-height: 24px;
 }                                                                                                                       `
-.dashlet.business-journal .results .row a {
-    color: #333;
-    text-decoration: underline;
-}
-.dashlet.business-journal .results .row a:hover {
-    color: #333;
-    text-decoration: none;
-}

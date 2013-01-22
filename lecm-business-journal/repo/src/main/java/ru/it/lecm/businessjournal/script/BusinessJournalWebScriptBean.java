@@ -80,7 +80,13 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
                 Calendar calendar = Calendar.getInstance();
 
                 calendar.setTime(now);
-                calendar.add(Calendar.DAY_OF_MONTH, (-1) * days);
+                if (days == 1) {  // "За сегодня"
+                    calendar.set(Calendar.HOUR_OF_DAY, 0);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.SECOND, 0);
+                } else {
+                    calendar.add(Calendar.DAY_OF_MONTH, (-1) * days);
+                }
                 start = calendar.getTime();
             }
         }
