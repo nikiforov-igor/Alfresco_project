@@ -29,7 +29,7 @@
 					<set id="description" appearance="" label=""/>
 
 					<field id="cm:name" label-id="Наименование"/>
-					<field id="lecm-subscr:object-type-assoc" set="drop-down">
+					<field id="lecm-subscr:object-type-assoc" set="type-events">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -42,7 +42,7 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:event-category-assoc" set="drop-down">
+					<field id="lecm-subscr:event-category-assoc" set="type-events">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -57,8 +57,8 @@
 							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-employee-assoc" set="input-text"/>
-					<field id="lecm-subscr:destination-position-assoc" set="input-text">
+					<field id="lecm-subscr:destination-employee-assoc" set="destination"/>
+					<field id="lecm-subscr:destination-position-assoc" set="destination">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
@@ -67,9 +67,9 @@
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-organization-unit-assoc" set="input-text"/>
-					<field id="lecm-subscr:destination-work-group-assoc" set="input-text"/>
-					<field id="lecm-subscr:notification-type-assoc" set="table"/>
+					<field id="lecm-subscr:destination-organization-unit-assoc" set="destination"/>
+					<field id="lecm-subscr:destination-work-group-assoc" set="destination"/>
+					<field id="lecm-subscr:notification-type-assoc" set="notification"/>
 					<field id="lecm-subscr:description" set="description"/>
 				</appearance>
 			</form>
@@ -97,7 +97,7 @@
 					<set id="description" appearance="" label=""/>
 
 					<field id="cm:name" label-id="Наименование"/>
-					<field id="lecm-subscr:object-type-assoc" set="drop-down">
+					<field id="lecm-subscr:object-type-assoc" set="type-events">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -110,7 +110,7 @@
 							<control-param name="primaryCascading">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:event-category-assoc" set="drop-down">
+					<field id="lecm-subscr:event-category-assoc" set="type-events">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-cascading-select-one-control.ftl">
 							<control-param name="startLocation">
@@ -125,8 +125,8 @@
 							<control-param name="disabled">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-employee-assoc" set="input-text"/>
-					<field id="lecm-subscr:destination-position-assoc" set="input-text">
+					<field id="lecm-subscr:destination-employee-assoc" set="destination"/>
+					<field id="lecm-subscr:destination-position-assoc" set="destination">
 						<control
 								template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Должностные_x0020_позиции</control-param>
@@ -135,9 +135,9 @@
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
-					<field id="lecm-subscr:destination-organization-unit-assoc" set="input-text"/>
-					<field id="lecm-subscr:destination-work-group-assoc" set="input-text"/>
-					<field id="lecm-subscr:notification-type-assoc" set="table"/>
+					<field id="lecm-subscr:destination-organization-unit-assoc" set="destination"/>
+					<field id="lecm-subscr:destination-work-group-assoc" set="destination"/>
+					<field id="lecm-subscr:notification-type-assoc" set="notification"/>
 					<field id="lecm-subscr:description" set="description"/>
 				</appearance>
 			</form>
