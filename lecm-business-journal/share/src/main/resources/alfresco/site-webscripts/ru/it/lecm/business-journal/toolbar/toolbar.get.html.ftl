@@ -51,10 +51,10 @@ YAHOO.util.Event.onDOMReady(init);
         </div>
     </div>
 </div>
-<div class="archive-row">
+<div class="archive-rows">
 	<span id="${id}-archiveByDateButton" class="yui-button yui-push-button">
        <span class="first-child">
-          <button type="button" title="${msg("button.archive")}">&nbsp;</button>
+          <button type="button" title="${msg("button.archive")}">${msg("button.archive")}</button>
        </span>
     </span>
 </div>

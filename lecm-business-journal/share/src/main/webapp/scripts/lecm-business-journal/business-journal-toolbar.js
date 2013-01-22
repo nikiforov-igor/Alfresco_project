@@ -284,10 +284,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 }
             },
 
-            /**
-             * Удаление выбранного значения в dataGrid.
-             * Появляется диалоговое окно с потверждением на удаление
-             */
             onArchiveRowsDialog:function Toolbar_onDeleteRow() {
                     if (this.archivePanel && this.archivePanel.panel) {
                         Dom.setStyle(this.archivePanel.id, "display", "block");
@@ -481,19 +477,10 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 }
             },
             onCancel: function (layer, args) {
-                var mayHide = false;
                 if (this.panel != null) {
-                    if (args == undefined || args == null) {
-                        mayHide = true;
-                    } else if (args[1] && args[1].panel && args[1].panel.id == this.panel.id){
-                        mayHide = true
-                    }
-                    if (mayHide){
-                        this.panel.hide();
-                        Dom.setStyle(this.id, "display", "none");
-                    }
+                    this.panel.hide();
+                    Dom.setStyle(this.id, "display", "none");
                 }
             }
-
         }, true);
 })();

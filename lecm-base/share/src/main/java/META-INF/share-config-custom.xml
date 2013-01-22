@@ -96,6 +96,7 @@
                 <js src="/yui/resize/resize-min.js" />
                 <js src="/yui/tabview/tabview-min.js" />
 	            <js src="/scripts/lecm-base/components/lecm-association-checkboxes.js" />
+                <css src="/css/lecm-base/components/textfield-decoded-html.css" />
             </dependencies>
 
             <constraint-handlers>

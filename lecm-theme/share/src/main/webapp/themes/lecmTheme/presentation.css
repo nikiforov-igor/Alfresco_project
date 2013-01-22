@@ -1951,3 +1951,7 @@ span.person a
 {
 	width: auto;
 }
+
+.archive-record, .archive-record span a {
+    color:red;
+}

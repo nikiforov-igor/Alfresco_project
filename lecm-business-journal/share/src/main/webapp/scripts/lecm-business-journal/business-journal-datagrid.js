@@ -86,6 +86,9 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                                         columnContent += "(нет)";
                                     }
                                     break;
+                                case "lecm-busjournal:bjrecord-description":
+                                    columnContent += data.displayValue;
+                                    break;
                                 default:
                                     break;
                             }

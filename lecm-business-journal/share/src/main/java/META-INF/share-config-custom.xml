@@ -147,7 +147,9 @@
                     <field id="lecm-busjournal:bjRecord-objType-assoc" set="common"/>
                     <field id="lecm-busjournal:bjRecord-evCategory-assoc" set="common"/>
 
-                    <field id="lecm-busjournal:bjRecord-description" set="common"/>
+                    <field id="lecm-busjournal:bjRecord-description" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield-decoded-html.ftl"/>
+                    </field>
 
                     <field id="lecm-busjournal:bjRecord-secondaryObj1-assoc" set="secondary">
                         <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
@@ -225,12 +227,11 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
-                    <show id="lecm-busjournal:bjRecord-description"/>
-                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
                     <show id="lecm-busjournal:bjRecord-objType-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
                     <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
                     <show id="lecm-busjournal:secondary-objects" force="true"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-busjournal:bjRecord-mainObject-assoc" substituteString="#parent{lecm-busjournal:bjRecord-mainObject}"/>
@@ -255,6 +256,7 @@
                     <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
+                    <show id="lecm-dic:active"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-busjournal:bjRecord-date">

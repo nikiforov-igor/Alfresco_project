@@ -36,7 +36,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	 */
 	@Override
 	public String formatNodeTitle(NodeRef node, String formatString) {
-		if (node == null || isArchive(node)) {
+		if (node == null) {
 			return "";
 		}
 		String result = formatString;

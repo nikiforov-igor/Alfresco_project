@@ -34,6 +34,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Time: 10:18
  */
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
+
+	public static final String LINK_URL = "/share/page/edit-metadata";
+
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
@@ -317,17 +320,22 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	private Map<String, String> fillHolders(NodeRef initiator, NodeRef mainObject, List<NodeRef> objects) {
 		Map<String, String> holders = new HashMap<String, String>();
-		holders.put(BASE_USER_HOLDER, getInitiatorDescription(initiator));
-		holders.put(MAIN_OBJECT_HOLDER, getObjectDescription(mainObject));
+		holders.put(BASE_USER_HOLDER, wrapAsLink(initiator, true));
+		holders.put(MAIN_OBJECT_HOLDER, wrapAsLink(mainObject, false));
 		if (objects != null && objects.size() > 0) {
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-				holders.put(OBJECT_HOLDER + (i + 1), getObjectDescription(objects.get(i)));
+				holders.put(OBJECT_HOLDER + (i + 1), wrapAsLink(objects.get(i), false));
 			}
 		}
 		return holders;
 	}
 
-    /**
+	private String wrapAsLink(NodeRef link, boolean isInititator) {
+		return "<a href=\"" + LINK_URL + "?nodeRef=" + link.toString() + "\" target=\"_blank\">"
+				+ (isInititator ? getInitiatorDescription(link) :  getObjectDescription(link)) + "</a>";
+	}
+
+	/**
      * Метод возвращающий правильный тип для инициатора
      * Подразумеваем, что инициировать событие может только сотрудник или Система
      * @param initiator - инициатор события (cm:person)
@@ -786,7 +794,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             results = serviceRegistry.getSearchService().query(sp);
             for (ResultSetRow row : results) {
                 NodeRef currentNodeRef = row.getNodeRef();
-                records.add(currentNodeRef);
+	            if (!isArchive(currentNodeRef)){
+		            records.add(currentNodeRef);
+	            }
             }
         } finally {
             if (results != null) {
