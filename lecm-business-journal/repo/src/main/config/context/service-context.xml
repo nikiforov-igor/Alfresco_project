@@ -49,6 +49,15 @@
         </property>
     </bean>
 
+    <!-- Registration of Business Journal aspects model -->
+    <bean id="${groupId}.${artifactId}.businessJournalAspectBootstrap" parent="dictionaryModelBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-aspects-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>

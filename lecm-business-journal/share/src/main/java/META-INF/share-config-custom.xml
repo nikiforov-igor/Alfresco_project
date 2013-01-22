@@ -1,4 +1,13 @@
 <alfresco-config>
+
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-business-journal/business-journal-datagrid.js"/>
+            </dependencies>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-busjournal:objectType">
         <forms>
             <form>
@@ -229,6 +238,12 @@
                     <field id="lecm-busjournal:secondary-objects" substituteString="{lecm-busjournal:bjRecord-secondaryObj1}; {lecm-busjournal:bjRecord-secondaryObj2}; {lecm-busjournal:bjRecord-secondaryObj3}; {lecm-busjournal:bjRecord-secondaryObj4}; {lecm-busjournal:bjRecord-secondaryObj5}"/>
                 </appearance>
             </form>
+            <form id="bjHistory">
+                <field-visibility>
+                    <show id="lecm-busjournal:bjRecord-date"/>
+                    <show id="lecm-busjournal:bjRecord-description"/>
+                </field-visibility>
+            </form>
             <form id="search">
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
@@ -262,4 +277,26 @@
             </form>
         </forms>
     </config>
+
+    <!-- Custom Aspects forms-->
+    <config evaluator="aspect" condition="lecm-busjournal-aspects:history">
+        <forms>
+
+            <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
+                <field-visibility>
+                    <show id="lecm-busjournal-aspects:history-list"/>
+                </field-visibility>
+                <appearance>
+                    <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
+                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
+                        <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+
+        </forms>
+    </config>
+
 </alfresco-config>

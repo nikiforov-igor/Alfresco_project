@@ -8,6 +8,7 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -820,7 +821,57 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return getRecordsByInterval(null, calendar.getTime());
 	}
 
-	private static enum WhoseEnum {
+    @Override
+    public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
+        List<NodeRef> result = getHistory(nodeRef);
+
+        final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
+        if (sortFieldQName == null) {
+            return result;
+        }
+
+        class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
+            @Override
+            public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
+                T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
+                T obj2 = (T) nodeService.getProperty(nodeRef2, sortFieldQName);
+
+                return sortAscending ? obj1.compareTo(obj2) : obj2.compareTo(obj1);
+            }
+        }
+
+        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DATE.getLocalName())) {
+            Collections.sort(result, new NodeRefComparator<Date>());
+        }
+
+        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DESC.getLocalName())) {
+            Collections.sort(result, new NodeRefComparator<String>());
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<NodeRef> getHistory(NodeRef nodeRef) {
+        if (nodeRef == null) {
+            return new ArrayList<NodeRef>();
+        }
+
+        List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
+
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        for (AssociationRef sourceAssoc : sourceAssocs) {
+            NodeRef bjRecordRef = sourceAssoc.getSourceRef();
+
+            if (!isArchive(bjRecordRef)) {
+                result.add(bjRecordRef);
+            }
+        }
+
+        return result;
+    }
+
+    private static enum WhoseEnum {
         MY,
         DEPARTMENT,
         CONTROL,

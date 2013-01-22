@@ -1079,7 +1079,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             me.sort = null;
                             this.search.performSearch({
                                 searchConfig:searchConfig,
-                                searchShowInactive:me.options.searchShowInactive
+                                searchShowInactive:me.options.searchShowInactive,
+                                parent:datagridMeta.nodeRef
                             });
                         }
                     }

@@ -13,6 +13,11 @@
 	<#assign showActions = field.control.params.showActions/>
 </#if>
 
+<#assign usePagination = false/>
+<#if field.control.params.usePagination??>
+	<#assign usePagination = field.control.params.usePagination/>
+</#if>
+
 <div class="form-field with-grid" id="${controlId}">
     <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
         <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
@@ -21,7 +26,7 @@
             (function () {
                 YAHOO.util.Event.onDOMReady(function (){
                     var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
-                        usePagination: false,
+                        usePagination: ${usePagination?string},
                         showExtendSearchBlock: false,
                         actions: [{
                                         type: "action-link-${containerId}",

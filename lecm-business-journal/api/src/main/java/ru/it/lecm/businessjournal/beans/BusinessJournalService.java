@@ -220,4 +220,8 @@ public interface BusinessJournalService {
 	 * @return список ссылок на записи бизнес-журнала
 	 */
 	public List<NodeRef> getOldRecords(int numberOfDays);
+
+    List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnName, boolean ascending);
+
+    List<NodeRef> getHistory(NodeRef nodeRef);
 }

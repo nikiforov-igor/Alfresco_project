@@ -10,6 +10,7 @@
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
         <import uri="http://www.it.ru/lecm/org/structure/docTypes/1.0" prefix="lecm-orgstr-docType"/>
         <import uri="http://www.it.ru/lecm/subscriptions/aspects/1.0" prefix="lecm-subscr-aspects"/>
+        <import uri="http://www.it.ru/logicECM/business-journal/aspects/1.0" prefix="lecm-busjournal-aspects"/>
     </imports>
 
     <namespaces>
@@ -478,6 +479,7 @@
                 <aspect>lecm-dic:aspect_active</aspect>
                 <aspect>cm:versionable</aspect>
                 <aspect>lecm-subscr-aspects:subscribed</aspect>
+                <aspect>lecm-busjournal-aspects:history</aspect>
             </mandatory-aspects>
         </type>
 
