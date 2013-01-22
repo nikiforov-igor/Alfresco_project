@@ -901,7 +901,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
                         });
 
-                    this.widgets.paginator.subscribe("changeRequest", handlePagination, this);
+                    this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
 
                     // Display the bottom paginator bar
                     Dom.setStyle(this.id + "-datagridBarBottom", "display", "block");
