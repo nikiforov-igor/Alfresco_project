@@ -14,6 +14,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
@@ -33,6 +35,7 @@ import java.util.Map;
  * Сервис канала уведомлений для электронной почты
  */
 public class NotificationsEmailChannel implements NotificationChannelBeanBase {
+	private static final transient Logger logger = LoggerFactory.getLogger(NotificationsEmailChannel.class);
 	public static final String NOTIFICATIONS_EMAIL_ROOT_NAME = "Email";
 	public static final String NOTIFICATIONS_EMAIL_ASSOC_QNAME = "email";
 
@@ -145,15 +148,16 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	 *
 	 * @param notification Атомарное уведомление
 	 * @param email Адрес электронной почты
-	 * @return false - если при отправке письма произошла ошибка, иначе true
 	 */
 	private void sendEmail(NotificationUnit notification, String email) {
+		logger.debug("Sending email to: {}", email);
 		Action mail = actionService.createAction(MailActionExecuter.NAME);
 
 		mail.setParameterValue(MailActionExecuter.PARAM_TO, email);
 		String message = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
 		mail.setParameterValue(MailActionExecuter.PARAM_SUBJECT, message != null ? message : "New notification");
-		mail.setParameterValue(MailActionExecuter.PARAM_TEXT, notification.getDescription());
+		mail.setParameterValue(MailActionExecuter.PARAM_HTML, notification.getDescription());
+		mail.setExecuteAsynchronously(true);
 		actionService.executeAction(mail, null);
 	}
 }
