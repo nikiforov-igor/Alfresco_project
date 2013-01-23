@@ -1000,4 +1000,127 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 		return engineerRef;
 	}
+
+	@Override
+	public void fireEmployee (final NodeRef employeeRef) {
+		if (isEmployee (employeeRef)) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+				@Override
+				public Void execute () throws Throwable {
+					nodeService.setProperty (employeeRef, IS_ACTIVE, false);
+					return null;
+				}
+			});
+		}
+	}
+
+	@Override
+	public void restoreEmployee (final NodeRef employeeRef) {
+		if (isEmployee (employeeRef)) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+				@Override
+				public Void execute () throws Throwable {
+					nodeService.setProperty (employeeRef, IS_ACTIVE, true);
+					return null;
+				}
+			});
+		}
+	}
+
+	@Override
+	public void makeStaffBossOrEmployee (final NodeRef orgElementMemberRef, final boolean isBoss) {
+		//флаг руководящей позиции актуален ТОЛЬКО для штатных расписаний
+		if (isStaffList (orgElementMemberRef)) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+				@Override
+				public Void execute () throws Throwable {
+					//получим отдел в котором есть это штатное расписание
+					NodeRef unitRef = getUnitByStaff (orgElementMemberRef);
+					//в этом отделе пытаемся найти руководящую позицию
+					NodeRef bossStaffRef = getBossStaff (unitRef);
+					//если руководящей позиции нет, или ее надо снять
+					if (bossStaffRef == null || !isBoss) {
+						nodeService.setProperty (orgElementMemberRef, PROP_STAFF_LIST_IS_BOSS, isBoss);
+					}
+					return null;
+				}
+			});
+		}
+	}
+
+	@Override
+	public NodeRef createStaff (final NodeRef orgElement, final NodeRef staffPosition) {
+		//если переданные параметры это подразделение и должность то заводим штатное расписание
+		NodeRef staffRef = null;
+		if (isUnit (orgElement) && isPosition (orgElement)) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			staffRef = transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef> () {
+				@Override
+				public NodeRef execute () throws Throwable {
+					QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID ().toString ());
+					ChildAssociationRef childAssociationRef = nodeService.createNode (orgElement, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_STAFF_LIST);
+					nodeService.createAssociation (childAssociationRef.getChildRef (), staffPosition, ASSOC_ELEMENT_MEMBER_POSITION);
+					return childAssociationRef.getChildRef ();
+				}
+			});
+		}
+		return staffRef;
+	}
+
+	@Override
+	public void includeEmployeeIntoStaff (final NodeRef employeeRef, final NodeRef orgElementMemberRef, final boolean isPrimary) {
+		if (isEmployee (employeeRef) && isStaffList (orgElementMemberRef) && getEmployeeByPosition (orgElementMemberRef) == null) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+				@Override
+				public Void execute () throws Throwable {
+					QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID ().toString ());
+					HashMap<QName, Serializable> props = new HashMap<QName, Serializable> ();
+					props.put (PROP_EMP_LINK_IS_PRIMARY, isPrimary);
+					NodeRef employeeLinkRef = nodeService.createNode (orgElementMemberRef, ASSOC_ELEMENT_MEMBER_EMPLOYEE, assocQName, TYPE_EMPLOYEE_LINK, props).getChildRef ();
+					nodeService.createAssociation (employeeLinkRef, employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
+					return null;
+				}
+			});
+		}
+	}
+
+	@Override
+	public void excludeEmployeeFromStaff (final NodeRef orgElementMemberRef) {
+		if (isStaffList (orgElementMemberRef)) {
+			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+				@Override
+				public Void execute () throws Throwable {
+					NodeRef employeeLinkRef = getEmployeeLinkByPosition (orgElementMemberRef);
+					nodeService.removeAssociation (orgElementMemberRef, employeeLinkRef, ASSOC_ELEMENT_MEMBER_EMPLOYEE);
+					nodeService.deleteNode (employeeLinkRef);
+					return null;
+				}
+			});
+		}
+	}
+
+	@Override
+	public ChildAssociationRef moveOrgElement (final NodeRef unitRef, final NodeRef parentUnitRef) {
+		//если родитель null то переместить в корень надо
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+		return transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef> () {
+			@Override
+			public ChildAssociationRef execute () throws Throwable {
+				NodeRef parentRef;
+				if (parentUnitRef == null) {
+					parentRef = getStructureDirectory ();
+				} else {
+					parentRef = parentUnitRef;
+				}
+				String name = nodeService.getProperty (unitRef, ContentModel.PROP_NAME).toString ();
+				QName assocQname = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, name);
+				return nodeService.moveNode (unitRef, parentRef, ContentModel.ASSOC_CONTAINS, assocQname);
+			}
+		});
+	}
 }

@@ -5,6 +5,7 @@ import org.alfresco.service.namespace.QName;
 
 import java.util.List;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
 /**
  * User: PMelnikov
@@ -408,4 +409,56 @@ public interface OrgstructureBean {
 	 * @return NodeRef на бизнес роль "Технолог" или null если таковой бизнес роли нет
 	 */
 	NodeRef getBusinessRoleEngineer ();
+
+	/**
+	 * уволить сотрудника (деактивировать)
+	 * меняет active true -> false
+	 * @param employeeRef ссылка на сотрудника
+	 */
+	void fireEmployee (final NodeRef employeeRef);
+
+	/**
+	 * восстановить сотрудника (активировать)
+	 * меняет active false -> true
+	 * @param employeeRef ссылка на сотрудника
+	 */
+	void restoreEmployee (final NodeRef employeeRef);
+
+	/**
+	 * для указанной позиции в штатном расписании проставить или снять флаг "руководящая позиция"
+	 * Если в отделе уже есть руководящая позиция то флаг проставлен не будет
+	 * @param orgElementMemberRef ссылка на штатное расписание
+	 * @param isBoss true - мы хотим сделать позицию руководящей, false - мы хотим снять этот флаг
+	 */
+	void makeStaffBossOrEmployee (final NodeRef orgElementMemberRef, final boolean isBoss);
+
+	/**
+	 * создать в подразделении штатное расписание с указанной должностью
+	 * @param orgElement орг единица - подразделение
+	 * @param staffPosition позиция - должностная позиция
+	 * @return штатное расписание или null если мы передали что-то другое что не является подразделением и должностной позицией
+	 */
+	NodeRef createStaff (final NodeRef orgElement, final NodeRef staffPosition);
+	/**
+	 * назначить сотрудника на штатное расписание
+	 * @param employeeRef ссылка на сотрудника
+	 * @param orgElementMemberRef ссылка на штатное расписание
+	 * @param isPrimary флаг "является основной"
+	 */
+	void includeEmployeeIntoStaff (final NodeRef employeeRef, final NodeRef orgElementMemberRef, final boolean isPrimary);
+
+	/**
+	 * снять сотрудника с должности
+	 * @param orgElementMemberRef ссылка на штатное расписание
+	 */
+	void excludeEmployeeFromStaff (final NodeRef orgElementMemberRef);
+
+	/**
+	 * переместить подразделение unitRef в подразделение parentUnitRef
+	 * если parentUnitRef == null то тогда двигаем в корень
+	 * @param unitRef подразделение которое двигаем
+	 * @param parentUnitRef куда будем двигать, новое родительское подразделение
+	 * @return ChildAssociationRef указывающий на родителя и детишку после перемещения
+	 */
+	ChildAssociationRef moveOrgElement (final NodeRef unitRef, final NodeRef parentUnitRef);
 }
