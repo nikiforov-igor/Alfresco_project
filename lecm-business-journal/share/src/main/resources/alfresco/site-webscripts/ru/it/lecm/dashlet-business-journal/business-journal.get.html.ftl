@@ -220,7 +220,7 @@
 <div class="dashlet business-journal">
     <div class="title">${msg("label.title")}</div>
     <div class="body scrollable">
-        <div id="${id}_controls" class="controls flat-button">
+        <div id="${id}_controls" class="toolbar flat-button">
             <input type="button" id="${id}-types">
             <input type="button" id="${id}-days">
             <input type="button" id="${id}-whose">
