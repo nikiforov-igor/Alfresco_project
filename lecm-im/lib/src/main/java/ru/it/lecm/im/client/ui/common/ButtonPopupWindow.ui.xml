@@ -5,19 +5,13 @@
 		
 	</ui:style>
 	<g:FlowPanel styleName="ijab-window-window" >
-		<g:HTMLPanel styleName="ijab-window-header ui-widget-header ui-corner-top">
-			<span class="ijab-window-actions">
-				<a class="ijab-window-minimize" ui:field="minElement" title="Minimize">
-				<em class="ui-icon ui-icon-minus" ui:field="minPicElement">Minimize</em>
-				</a>
-				<a class="ijab-window-maximize" ui:field="maxElement" title="Maximize">
-				<em class="ui-icon ui-icon-plus" ui:field="maxPicElement">Maximize</em>
-				</a>
-				<a class="ijab-window-close" ui:field="closeElement" title="Close">
-				<em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>
-				</a>
-			</span>
+		<g:HTMLPanel styleName="ijab-window-header ui-widget-header">
 			<h4 ui:field="captionElement"></h4>
+            <span class="ijab-window-actions">
+                <a class="ijab-window-close" ui:field="closeElement" title="Close">
+                    <em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>
+                </a>
+            </span>
 		</g:HTMLPanel>
 		<g:FlowPanel styleName="ijab-window-content ui-widget-content" ui:field="contentWrap">
 		</g:FlowPanel>

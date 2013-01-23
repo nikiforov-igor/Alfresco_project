@@ -47,19 +47,12 @@ public class ButtonPopupWindow extends Composite {
 
 	interface ButtonPopWindowUiBinder extends UiBinder<Widget, ButtonPopupWindow> {
 	}
-	
-	@UiField Element minElement;
-	@UiField Element maxElement;
+
 	@UiField Element closeElement;
-	@UiField Element minPicElement;
-	@UiField Element maxPicElement;
 	@UiField Element closePicElement;
 	@UiField Element captionElement;
 	@UiField FlowPanel contentWrap;
-	
-	
-	private SimpleFocusWidget minButton;
-	private SimpleFocusWidget maxButton;
+
 	private SimpleFocusWidget closeButton;
 	
 	private Widget contentWidget;
@@ -69,51 +62,7 @@ public class ButtonPopupWindow extends Composite {
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		minButton = new SimpleFocusWidget(minElement);
-		minButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				clickMin();
-			}
-		});
-		minButton.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				overMin();
-			}
-		});
-		minButton.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event) 
-			{
-				outMin();
-			}
-		});
-		
-		maxButton = new SimpleFocusWidget(maxElement);
-		maxButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				clickMax();
-			}
-		});
-		maxButton.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				overMax();
-			}
-		});
-		maxButton.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event) 
-			{
-				outMax();
-			}
-		});
+
 		
 		closeButton = new SimpleFocusWidget(closeElement);
 		closeButton.addClickHandler(new ClickHandler()
@@ -138,12 +87,7 @@ public class ButtonPopupWindow extends Composite {
 			}
 		});		
 		
-		//for i18n
-		minPicElement.setInnerText(i18n.msg("Minimize"));
-		minElement.setAttribute("title", i18n.msg("Minimize"));
-		
-		maxPicElement.setInnerText(i18n.msg("Maximize"));
-		maxElement.setAttribute("title", i18n.msg("Maximize"));
+
 		
 		closePicElement.setInnerText(i18n.msg("Close"));
 		closeElement.setAttribute("title", i18n.msg("Close"));
@@ -157,51 +101,9 @@ public class ButtonPopupWindow extends Composite {
 		}
 	}
 	
-	private void fireOnMin()
-	{
-		for(ButtonPopupWindowListener l:listeners)
-		{
-			l.onMin();
-		}
-	}
+
 	
-	private void fireOnMax()
-	{
-		for(ButtonPopupWindowListener l:listeners)
-		{
-			l.onMax();
-		}
-	}
-	
-	private void clickMin()
-	{
-		fireOnMin();
-	}
-	
-	private void overMin()
-	{
-		minPicElement.addClassName("ijab-actions-hover");
-	}
-	
-	private void outMin()
-	{
-		minPicElement.removeClassName("ijab-actions-hover");
-	}
-	
-	private void clickMax()
-	{
-		fireOnMax();
-	}
-	
-	private void overMax()
-	{
-		maxPicElement.addClassName("ijab-actions-hover");
-	}
-	
-	private void outMax()
-	{
-		maxPicElement.removeClassName("ijab-actions-hover");
-	}
+
 	
 	private void clickClose()
 	{
@@ -220,18 +122,12 @@ public class ButtonPopupWindow extends Composite {
 	
 	public void setMaximizable(boolean maximizable)
 	{
-		if(maximizable)
-			maxButton.setVisible(true);
-		else
-			maxButton.setVisible(false);
+
 	}
 	
 	public void setMinimizable(boolean minimizable)
 	{
-		if(minimizable)
-			minButton.setVisible(true);
-		else
-			minButton.setVisible(false);
+
 	}
 	
 	public void setClosable(boolean closable) 

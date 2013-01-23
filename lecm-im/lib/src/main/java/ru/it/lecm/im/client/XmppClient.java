@@ -35,9 +35,8 @@ import ru.it.lecm.im.client.listeners.ClientListener;
 import ru.it.lecm.im.client.listeners.MessageReceiveListener;
 import ru.it.lecm.im.client.listeners.VisibilityListener;
 import ru.it.lecm.im.client.ui.ChatPanelBar;
-import ru.it.lecm.im.client.ui.ContactView;
-import ru.it.lecm.im.client.ui.listeners.ContactViewListener;
 import ru.it.lecm.im.client.ui.MUCPanelButton;
+import ru.it.lecm.im.client.ui.listeners.ContactViewListener;
 import ru.it.lecm.im.client.utils.*;
 import ru.it.lecm.im.client.utils.TextUtils;
 import ru.it.lecm.im.client.xmpp.Connector.BoshErrorCondition;
@@ -109,7 +108,6 @@ public class XmppClient
 
         Window.addCloseHandler(new CloseHandler<Window>()
 		{
-
 			public void onClose(CloseEvent<Window> event) 
 			{
 				suspend();
@@ -124,7 +122,7 @@ public class XmppClient
 		session.getConnector().setPort(conf.getPort());
 		
 		//connect ui and client events
-		connectRosterEvents();
+		connectListeners();
 		
 		ChatManager<XmppChat> chatManager = new ChatManager<XmppChat>(session.getChatPlugin());
 		xmppChatManager = new XmppChatManager(chatManager,(ChatPanelBar)iJab.ui.getChatManagerWidget());
@@ -485,29 +483,39 @@ public class XmppClient
 		session.login();
 	}
 	
-	private void connectRosterEvents()
+	private void connectListeners()
 	{
-        Log.log("XmppClient.connectRosterEvents()");
-		final ContactView contactView = iJab.ui.getContactView();
-		RosterListener listener = new RosterListener()
+        Log.log("XmppClient.connectListeners()");
+
+        connectRosterListener();
+
+        connectPresenceListener();
+
+        connectContactviewListener();
+
+        connectPresenceEventListener();
+	}
+
+    private void connectRosterListener() {
+        RosterListener listener = new RosterListener()
 		{
 			public void beforeAddItem(JID jid, String name,
-					List<String> groupsNames) 
-			{				
+					List<String> groupsNames)
+			{
 			}
 
-			public void onAddItem(RosterItem item) 
+			public void onAddItem(RosterItem item)
 			{
                 Log.log("XmppClient.RosterListener.onAddItem()");
                 if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
-				contactView.addRosterItem(item);
+				iJab.ui.getContactView().addRosterItem(item);
 				totalContactCount++;
 				iJab.ui.updateTotalCount(totalContactCount);
 			}
 
-			public void onEndRosterUpdating() 
+			public void onEndRosterUpdating()
 			{
                 Log.log("XmppClient.RosterListener.onEndRosterUpdating()");
                 MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
@@ -516,134 +524,134 @@ public class XmppClient
 				readNickFromCache();
 			}
 
-			public void onRemoveItem(RosterItem item) 
+			public void onRemoveItem(RosterItem item)
 			{
-				contactView.removeRosterItem(item);
+				iJab.ui.getContactView().removeRosterItem(item);
 				totalContactCount--;
 				iJab.ui.updateTotalCount(totalContactCount);
 			}
 
-			public void onStartRosterUpdating() 
+			public void onStartRosterUpdating()
 			{
                 Log.log("XmppClient.RosterListener.onStartRosterUpdating()");
 				//onlineContactCount = 0;
 				totalContactCount = 0;
 				if(!iJab.conf.getXmppConf().isGetRosterDelay())
 				{
-					contactView.clear();
+					iJab.ui.getContactView().clear();
 					iJab.ui.updateOnlineCount(0);
 				}
 				iJab.ui.updateTotalCount(0);
 			}
 
-			public void onUpdateItem(RosterItem item) 
+			public void onUpdateItem(RosterItem item)
 			{
                 Log.log("XmppClient.RosterListener.onUpdateItem()");
                 if(!item.getJid().toString().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
-				contactView.updateRosterItem(item);
-			}		
-		};
-		session.getRosterPlugin().addRosterListener(listener);
-		
-		PresenceListener presenceListener = new PresenceListener()
-		{
-
-			public void beforeSendInitialPresence(Presence presence) {				
-			}
-
-			public void onBigPresenceChanged() {				
-			}
-
-			public void onContactAvailable(Presence presenceItem) 
-			{
-                Log.log("XmppClient.PresenceListener.onContactAvailable()");
-                if(!presenceItem.getFrom().toString().contains("@"))
-					return;
-				final String bareJid = presenceItem.getFrom().toStringBare();
-				XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
-				
-				SoundManager.playOnline();
-				contactView.addOnlineGroupItem(presenceItem, session.getRosterPlugin().getRosterItem(presenceItem.getFrom()));
-				onlineContactCount++;
-				iJab.ui.updateOnlineCount(onlineContactCount);
-			}
-
-			public void onContactUnavailable(Presence presenceItem) {
-                Log.log("XmppClient.PresenceListener.onContactUnavailable()");
-                if(!presenceItem.getFrom().toString().contains("@"))
-					return;
-				SoundManager.playOffline();
-				contactView.removeOnlineGroupItem(presenceItem, session.getRosterPlugin().getRosterItem(presenceItem.getFrom()));
-				onlineContactCount--;
-				iJab.ui.updateOnlineCount(onlineContactCount);
-			}
-
-			public void onPresenceChange(Presence presenceItem) 
-			{
-                Log.log("XmppClient.PresenceListener.onPresenceChange()");
-                if(!presenceItem.getFrom().toString().contains("@"))
-					return;
-				final String bareJid = presenceItem.getFrom().toStringBare();
-				XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
-				if(presenceItem.getType() == Type.unavailable&&session.getPresencePlugin().isAvailableByBareJid(bareJid))
-					return;
-				XmppProfileManager.commitNewPresence(bareJid, presenceItem);
+				iJab.ui.getContactView().updateRosterItem(item);
 			}
 		};
-		session.getPresencePlugin().addPresenceListener(presenceListener);
-		
-		ContactViewListener l = new ContactViewListener()
-		{
+        session.getRosterPlugin().addRosterListener(listener);
+    }
 
-			public void onAvatarOver(RosterItem item) 
-			{
-			}
-
-			public void onItemClick(RosterItem item) 
-			{
-                Log.log("XmppClient.ContactViewListener.onItemClick()");
-                xmppChatManager.openChat(item.getJid());
-			}
-
-			public void onAvatarOut(RosterItem item) {
-				
-			}
-		};
-		contactView.addListener(l);
-		
-		session.getEventsManager().addListener(Events.subscribe, new Listener<PresenceEvent>()
-		{
-			public void handleEvent(PresenceEvent event) 
-			{
+    private void connectPresenceEventListener() {
+        final Listener<PresenceEvent> listener1 = new Listener<PresenceEvent>() {
+            public void handleEvent(PresenceEvent event) {
                 Log.log("XmppClient.Listener<PresenceEvent>.handleEvent()");
                 Presence presence = event.getPresence();
-				JID jid = presence.getFrom();
-				// is a transport subscribe?
-				if(!jid.getDomain().equals(session.getUser().getDomainname())||!jid.toString().contains("@"))
-				{
-					session.getPresencePlugin().subscribed(jid);
-				}
-				else
-				{
-					String nick = presence.getName();
-					nick = nick==null?"":nick;
-					nick = nick.length()==0?StringUtil.jid2name(jid.toStringBare()):nick;
-					nick = nick+"("+jid.toStringBare()+")";
-					if(Window.confirm(nick+" "+ i18n.msg("request that you add as a friend. Do you accept?")))
-					{
-						session.getPresencePlugin().subscribed(jid);
-						session.getPresencePlugin().subscribe(jid);
-					}
-					else
-						session.getPresencePlugin().unsubscribed(jid);
-				}
-			}
-		});
-	}
-	
-	private void reset()
+                JID jid = presence.getFrom();
+                // is a transport subscribe?
+                if (!jid.getDomain().equals(session.getUser().getDomainname()) || !jid.toString().contains("@")) {
+                    session.getPresencePlugin().subscribed(jid);
+                } else {
+                    String nick = presence.getName();
+                    nick = nick == null ? "" : nick;
+                    nick = nick.length() == 0 ? StringUtil.jid2name(jid.toStringBare()) : nick;
+                    nick = nick + "(" + jid.toStringBare() + ")";
+                    if (Window.confirm(nick + " " + i18n.msg("request that you add as a friend. Do you accept?"))) {
+                        session.getPresencePlugin().subscribed(jid);
+                        session.getPresencePlugin().subscribe(jid);
+                    } else
+                        session.getPresencePlugin().unsubscribed(jid);
+                }
+            }
+        };
+        session.getEventsManager().addListener(Events.subscribe, listener1);
+    }
+
+    private void connectContactviewListener() {
+        ContactViewListener l = new ContactViewListener()
+        {
+
+            public void onAvatarOver(RosterItem item)
+            {
+            }
+
+            public void onItemClick(RosterItem item)
+            {
+Log.log("XmppClient.ContactViewListener.onItemClick()");
+xmppChatManager.openChat(item.getJid());
+            }
+
+            public void onAvatarOut(RosterItem item) {
+
+            }
+        };
+        iJab.ui.getContactView().addListener(l);
+    }
+
+    private void connectPresenceListener() {
+        PresenceListener presenceListener = new PresenceListener()
+        {
+
+            public void beforeSendInitialPresence(Presence presence) {
+            }
+
+            public void onBigPresenceChanged() {
+            }
+
+            public void onContactAvailable(Presence presenceItem)
+            {
+Log.log("XmppClient.PresenceListener.onContactAvailable()");
+if(!presenceItem.getFrom().toString().contains("@"))
+                    return;
+                final String bareJid = presenceItem.getFrom().toStringBare();
+                XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
+
+                SoundManager.playOnline();
+                iJab.ui.getContactView().addOnlineGroupItem(presenceItem, session.getRosterPlugin().getRosterItem(presenceItem.getFrom()));
+                onlineContactCount++;
+                iJab.ui.updateOnlineCount(onlineContactCount);
+            }
+
+            public void onContactUnavailable(Presence presenceItem) {
+Log.log("XmppClient.PresenceListener.onContactUnavailable()");
+if(!presenceItem.getFrom().toString().contains("@"))
+                    return;
+                SoundManager.playOffline();
+                iJab.ui.getContactView().removeOnlineGroupItem(presenceItem, session.getRosterPlugin().getRosterItem(presenceItem.getFrom()));
+                onlineContactCount--;
+                iJab.ui.updateOnlineCount(onlineContactCount);
+            }
+
+            public void onPresenceChange(Presence presenceItem)
+            {
+Log.log("XmppClient.PresenceListener.onPresenceChange()");
+if(!presenceItem.getFrom().toString().contains("@"))
+                    return;
+                final String bareJid = presenceItem.getFrom().toStringBare();
+                XmppProfileManager.commitNewName(bareJid, presenceItem.getExtNick());
+                if(presenceItem.getType() == Type.unavailable&&session.getPresencePlugin().isAvailableByBareJid(bareJid))
+                    return;
+                XmppProfileManager.commitNewPresence(bareJid, presenceItem);
+            }
+        };
+        session.getPresencePlugin().addPresenceListener(presenceListener);
+    }
+
+    private void reset()
 	{
         Log.log("XmmpClient.reset()");
 		onlineContactCount = 0;

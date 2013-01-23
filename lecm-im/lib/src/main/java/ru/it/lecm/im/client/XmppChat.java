@@ -32,7 +32,7 @@ public class XmppChat
 	final private Chat<XmppChat> chatItem;
 	final private ChatPanelButton button;
 	
-	public XmppChat(final Chat<XmppChat> chatItem,ChatPanelButton button)
+	public XmppChat(final Chat<XmppChat> chatItem, ChatPanelButton button)
 	{
 		this.chatItem = chatItem;
 		this.button = button;

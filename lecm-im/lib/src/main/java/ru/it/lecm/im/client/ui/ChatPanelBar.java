@@ -32,12 +32,10 @@ import java.util.Stack;
 @SuppressWarnings("deprecation")
 public class ChatPanelBar extends ChatPanelBarUI
 {
-	private static int buttonWidth = 136;
 	private int maxVisibleButton = 1;
 	
-	
 	private PanelButton activeButton = null;
-	//private final MainBar mainBar;
+
 	
 	private final Stack<PanelButton> leftStack = new Stack<PanelButton>();
 	private final Stack<PanelButton> rightStack = new Stack<PanelButton>();

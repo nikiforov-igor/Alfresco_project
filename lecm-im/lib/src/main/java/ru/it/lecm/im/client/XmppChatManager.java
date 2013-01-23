@@ -155,7 +155,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	
 	public ChatPanelButton openChat(JID jid)
 	{
-        Log.log("XmppChatManager.openChat()");
+        Log.log("XmppChatManager.openChat(JID)");
 		Chat<XmppChat> chat = chats.get(jid.toStringBare());
 		if(chat != null&&chat.getUserData() != null)
 		{
@@ -178,7 +178,7 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 	
 	public ChatPanelButton openChat(String jid)
 	{
-        Log.log("XmppChatManager.openChat()");
+        Log.log("XmppChatManager.openChat(String)");
 		return openChat(JID.fromString(jid));
 	}
 	
@@ -192,7 +192,8 @@ public class XmppChatManager implements ChatListener<XmppChat>, ClientListener
 		storage.remove(prefix+ XmppChatManagerConstants.STORAGE_KEY);
 	}
 
-	public void onResume() 
+	// Восстанавливает открытые окна после перегрузки
+    public void onResume()
 	{
         Log.log("XmppChatManager.onResume()");
 		final String prefix = Session.instance().getUser().getStorageID();

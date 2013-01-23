@@ -2,14 +2,26 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 400px;
+    width: 600px;
     height: 500px;
-/*    background-color: red;*/
+    z-index: 50000;
+    background-color: #e9e9e9;
 }
 
 .ijab-mainwidget{
-    width: 25%;
+    width: 240px;
+    height: 100%;
     display: inline-block;
+    float: left;
+    background-color: #e0e0e0;
+}
+
+.ijab-panels {
+    display: inline-block;
+    overflow: hidden;
+    width: 360px;
+    height: 100%;
+    float: right;
 }
 
 .has-unread-messages{
@@ -356,7 +368,7 @@ display: inline-block;
     border: none;
     background: none;
     padding: .2em;
-    width: 100%;
+    width: 95%;
 }
 
 .ijab-buddy-search .ui-icon-search {
@@ -686,7 +698,6 @@ background: url(about:blank);
 
 .ijab-history *
 {
-    background: url(about:blank);
     word-spacing:normal;
     word-wrap:break-word;
 }
@@ -751,11 +762,7 @@ background: url(about:blank);
     position: relative;
 }
 
-.ijab-panels {
-    display: inline-block;
-    overflow: hidden;
-    width: 75%;
-}
+
 
 .ijab-webapi .ijab-window {
     float: left;
@@ -824,14 +831,16 @@ margin: .3em .5em .3em;
     border-top-width: 0;
 }
 
-.ijab-webapi .ijab-window-header {
+.ijab-window-header {
     cursor: pointer;
     text-align: center;
     padding: .2em .5em;
 }
 
-.ijab-webapi .ijab-window-actions {
-    float: right;
+.ijab-window-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .ijab-webapi .ijab-window-actions a {
@@ -842,7 +851,6 @@ margin: .3em .5em .3em;
 .ijab-webapi .ijab-window-header h4 {
     margin: 0;
     font-weight: normal;
-    background: url(about:blank);
 }
 
 .ijab-webapi .ijab-window-minimize .ijab-window-window {
@@ -1012,7 +1020,6 @@ margin: .3em .5em .3em;
 
 .ijab-contactview
 {
-    height:300px;
     overflow-x:hidden;
     overflow-y:auto;
 }
@@ -1210,7 +1217,6 @@ margin: .3em .5em .3em;
     border-right: 1px solid #999;
     border-bottom: 1px solid #999;
     cursor: pointer;
-    cursor: hand;
 }
 
 .ijab-vcardsearchlist-header
@@ -1252,7 +1258,7 @@ margin: .3em .5em .3em;
 }
 
 * html {
-    background: url(about:blank) fixed;
+
 }
 
 * html .ijab-webapi {
@@ -1576,7 +1582,6 @@ html>body .ijab-contextmenu
 
 .ijab-roomlist-widget
 {
-    height:300px;
     overflow-x:hidden;
     overflow-y:auto;
 }
@@ -1991,7 +1996,6 @@ html>body .gwt-MenuBarPopup {
 .gwt-DecoratedTabBar .tabMiddleCenter {
     padding: 0 4px 2px 4px;
     cursor: pointer;
-    cursor: hand;
     color: black;
     font-weight: bold;
     text-align: center;
