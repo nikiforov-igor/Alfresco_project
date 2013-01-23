@@ -1,0 +1,1 @@
+notificationsActiveChannel.setReadNotifications(json);

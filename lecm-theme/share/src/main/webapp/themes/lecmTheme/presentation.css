@@ -1958,12 +1958,26 @@ span.person a
 }
 
 .notification-row {
-    border-bottom: solid 1px #808080;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
+	border-bottom: solid 1px #C5C7C6;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
 }
 
-.archive-record, .archive-record span a, .archive-record a {
+#notificationsWindow a {
+	text-decoration: underline;
+}
+
+#notificationsWindow-content {
+	height: 300px;
+	overflow-y: auto;
+	border-bottom: 1px solid #C5C7C6;
+}
+
+#notificationsWindow-next {
+	text-align: center;
+}
+
+.archive-record, .archive-record span a {
     color:red;
 }

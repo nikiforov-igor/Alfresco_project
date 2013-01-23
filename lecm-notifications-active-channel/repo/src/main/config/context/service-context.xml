@@ -37,12 +37,14 @@
 	</bean>
 
 	<bean id="notificationActiveChannel" init-method="init" class="ru.it.lecm.notifications.active_channel.beans.NotificationsActiveChannel"
-	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, serviceOrgstructure">
+	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, serviceOrgstructure, SearchService, namespaceService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="notificationActiveChannelScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.active_channel.scripts.NotificationsActiveChannelWebScriptBean"

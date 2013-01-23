@@ -1,8 +1,8 @@
 <webscript>
 	<shortname>Notifications Active Channel</shortname>
 	<description>Notifications Active Channel</description>
-	<url>/lecm/notifications/active-channel/api/records</url>
+	<url>/lecm/notifications/active-channel/api/records?skipItemsCount={skipItemsCount}&amp;loadItemsCount={loadItemsCount}</url>
 	<authentication>user</authentication>
-	<format default="html"/>
+	<format default="json"/>
 	<transaction>required</transaction>
 </webscript>

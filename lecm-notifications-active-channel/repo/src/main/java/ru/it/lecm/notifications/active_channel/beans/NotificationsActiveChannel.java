@@ -2,16 +2,21 @@ package ru.it.lecm.notifications.active_channel.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
@@ -25,7 +30,7 @@ import java.util.*;
  * User: AIvkin
  * Date: 17.01.13
  * Time: 15:19
- *
+ * <p/>
  * Сервис активного канала уведомлений
  */
 public class NotificationsActiveChannel extends BaseBean implements NotificationChannelBeanBase {
@@ -36,11 +41,15 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 	public static final QName TYPE_NOTIFICATION_ACTIVE_CHANNEL = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "notification");
 	public final QName PROP_READ_DATE = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "read-date");
 
+	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannel.class);
+
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
 	private OrgstructureBean orgstructureService;
+	private SearchService searchService;
+	private NamespaceService namespaceService;
 	private NodeRef rootRef;
 
 	private final Object lock = new Object();
@@ -55,6 +64,14 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
+	}
+
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
 	}
 
 	public ServiceRegistry getServiceRegistry() {
@@ -136,53 +153,12 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 		return result;
 	}
 
-	public boolean isActiveChannelNotification(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_NOTIFICATION_ACTIVE_CHANNEL);
-		return isProperType(ref, types);
-	}
-
-	public boolean isNewNotification(NodeRef ref) {
-		return ref != null && isActiveChannelNotification(ref) && !isArchive(ref) &&
-				nodeService.getProperty(ref, PROP_READ_DATE) == null;
-	}
-
-	public int getNewNotificationsCount() {
-		int result = 0;
-		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
-		if (currentEmloyeeNodeRef != null) {
-			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
-			for (AssociationRef ref: lRefs) {
-				if (isNewNotification(ref.getSourceRef())) {
-					result++;
-				}
-			}
-		}
-		return result;
-	}
-
-	public List<NodeRef> getNotifications() {
-		List<NodeRef> result = new ArrayList<NodeRef>();
-		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
-		if (currentEmloyeeNodeRef != null) {
-			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
-			for (AssociationRef ref: lRefs) {
-				if (isActiveChannelNotification(ref.getSourceRef()) && !isArchive(ref.getSourceRef())) {
-					result.add(ref.getSourceRef());
-					nodeService.setProperty(ref.getSourceRef(), PROP_READ_DATE, new Date());
-				}
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Метод, возвращающий ссылку на директорию в директории "Уведомления/Активный канал" согласно заданным параметрам
 	 *
-	 *
-	 * @param date - текущая дата
+	 * @param date         - текущая дата
 	 * @param employeeName - имя сотрудника
-	 * @param root - корень, относительно которого строится путь
+	 * @param root         - корень, относительно которого строится путь
 	 * @return ссылка на директорию
 	 */
 	private NodeRef getFolder(final NodeRef root, final String employeeName, final Date date) {
@@ -192,7 +168,6 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 					@Override
 					public NodeRef execute() throws Throwable {
-						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
 						NodeRef directoryRef;
 						synchronized (lock) {
 							List<String> directoryPaths = new ArrayList<String>(3);
@@ -225,5 +200,91 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 			}
 		};
 		return AuthenticationUtil.runAsSystem(raw);
+	}
+
+	/**
+	 * Метод, возвращающий ссылку на директорию пользователя в директории "Уведомления/Активный канал" согласно заданным параметрам
+	 * Если такой директории нет, то она НЕ создаётся
+	 *
+	 * @return ссылка на директорию
+	 */
+	private NodeRef getCurrentEmployeeFolder() {
+		NodeRef currentEmployeeNodeRef = orgstructureService.getCurrentEmployee();
+		if (currentEmployeeNodeRef != null) {
+			String employeeName = (String) nodeService.getProperty(currentEmployeeNodeRef, ContentModel.PROP_NAME);
+			if (employeeName != null) {
+				return nodeService.getChildByName(this.rootRef, ContentModel.ASSOC_CONTAINS, employeeName);
+			}
+		}
+		return null;
+
+	}
+
+	public boolean isActiveChannelNotification(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_NOTIFICATION_ACTIVE_CHANNEL);
+		return isProperType(ref, types);
+	}
+
+	public boolean isNewNotification(NodeRef ref) {
+		return ref != null && isActiveChannelNotification(ref) && !isArchive(ref) &&
+				nodeService.getProperty(ref, PROP_READ_DATE) == null;
+	}
+
+	public int getNewNotificationsCount() {
+		int result = 0;
+		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
+		if (currentEmloyeeNodeRef != null) {
+			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
+			for (AssociationRef ref : lRefs) {
+				if (isNewNotification(ref.getSourceRef())) {
+					result++;
+				}
+			}
+		}
+		return result;
+	}
+
+	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+
+		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder();
+		if (employeeDirectoryRef != null) {
+			String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
+			String type = TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
+
+			SearchParameters parameters = new SearchParameters();
+			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
+			parameters.setSkipCount(skipCount);
+			parameters.setMaxItems(maxItems);
+			ResultSet resultSet = null;
+			try {
+				resultSet = searchService.query(parameters);
+				for (ResultSetRow row : resultSet) {
+					NodeRef node = row.getNodeRef();
+					result.add(node);
+				}
+			} catch (LuceneQueryParserException e) {
+			} catch (Exception e) {
+				logger.error("Error while getting notifications records", e);
+			} finally {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public void setReadNotifications(List<NodeRef> nodeRefs) {
+		if (nodeRefs != null) {
+			for (NodeRef ref: nodeRefs) {
+				nodeService.setProperty(ref, PROP_READ_DATE, new Date());
+			}
+		}
 	}
 }
