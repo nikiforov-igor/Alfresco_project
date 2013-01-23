@@ -560,11 +560,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         html = htmlValue;
                     }
 
-                    /*if (oRecord && oRecord.getData("itemData")){
+                    if (oRecord && oRecord.getData("itemData")){
                         if (oRecord.getData("itemData")["prop_lecm-dic_active"] && oRecord.getData("itemData")["prop_lecm-dic_active"].value == false) {
                             elCell.className += " archive-record";
                         }
-                    }*/
+                    }
                     elCell.innerHTML = html;
                 };
             },
