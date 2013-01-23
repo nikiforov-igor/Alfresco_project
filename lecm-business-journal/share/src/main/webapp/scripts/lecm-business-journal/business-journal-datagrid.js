@@ -84,6 +84,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                                     // если нет доп объектов (строка '; ; ; ; ') - выводим пустую строку
                                     if (data.displayValue && data.displayValue.length <= 8) {
                                         columnContent += "(нет)";
+                                    } else {
+                                        columnContent = data.displayValue;
                                     }
                                     break;
                                 case "lecm-busjournal:bjrecord-description":

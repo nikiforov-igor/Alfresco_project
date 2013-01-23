@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -275,7 +276,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
 						NodeRef obj = objects.get(i);
-						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)), getObjectDescription(obj));
+						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)), wrapAsLink(obj, false));
 					}
 				}
 
@@ -331,7 +332,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	private String wrapAsLink(NodeRef link, boolean isInititator) {
-		return "<a href=\"" + LINK_URL + "?nodeRef=" + link.toString() + "\" target=\"_blank\">"
+		SysAdminParams params = serviceRegistry.getSysAdminParams();
+		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":"  +  params.getSharePort();
+		return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\" target=\"_blank\">"
 				+ (isInititator ? getInitiatorDescription(link) :  getObjectDescription(link)) + "</a>";
 	}
 

@@ -2524,9 +2524,9 @@ LogicECM.module = LogicECM.module || {};
          {
             if (p_key.toLowerCase() == "icon")
             {
-               return '<img src="' + me.getIconURL(item, iconSize) + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(item.name) + '" />'; 
+               return '<img src="' + me.getIconURL(item, iconSize) + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(me._deactivateLinks(item.name)) + '" />';
             }
-            return $html(p_value);
+            return $html(me._deactivateLinks(p_value));
          };
          
          return YAHOO.lang.substitute(template, item, renderHelper);
@@ -3220,6 +3220,14 @@ LogicECM.module = LogicECM.module || {};
          }
          
          return params;
-      }
+      },
+
+       _deactivateLinks: function (stringWithLinks) {
+           var re = new RegExp(/(<a[\s\w="]+(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&:\/~\+#]*[\w\-\@?\^=%&\/~\+#][\s\w=">]+)?)/g);
+           stringWithLinks = stringWithLinks.replace(re, "");
+           re = new RegExp(/(<\/a>)/g);
+           stringWithLinks = stringWithLinks.replace(re, "");
+           return stringWithLinks;
+       }
    });
 })();
