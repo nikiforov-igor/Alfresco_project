@@ -312,7 +312,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     public boolean isCurrentBoss() {
         NodeRef employeeRef = getCurrentEmployee();
 
-        if (nodeService.exists(employeeRef)) {
+        if (employeeRef != null && nodeService.exists(employeeRef)) {
             if (isEmployee(employeeRef)) {
                 // получаем основную должностную позицию
                 NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
