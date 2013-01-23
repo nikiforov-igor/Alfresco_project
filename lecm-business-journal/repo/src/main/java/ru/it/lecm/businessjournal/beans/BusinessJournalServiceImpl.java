@@ -789,6 +789,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
                 }
             }
         }
+        sp.addSort("@" + PROP_BR_RECORD_DATE.toString(), false);
         sp.setQuery(query);
         try {
             results = serviceRegistry.getSearchService().query(sp);
