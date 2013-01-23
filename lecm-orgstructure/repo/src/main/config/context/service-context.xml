@@ -113,6 +113,8 @@
         <property name="orgstructureService">
             <ref bean="serviceOrgstructure"/>
         </property>
+        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+        <property name="nodeService" ref="nodeService" />
     </bean>
     <bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
           init-method="init" depends-on="lecmSecurityGroupsBean">

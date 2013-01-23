@@ -64,7 +64,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
-			<artifactId>lecm-security-repo-api</artifactId>
+			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

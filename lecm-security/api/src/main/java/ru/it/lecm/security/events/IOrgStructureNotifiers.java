@@ -34,13 +34,20 @@ public interface IOrgStructureNotifiers {
 	 * @param child родительская SG-позиция
 	 * @param parent родительская SG-позиция, значение NULL не допускается
 	 * Например,  
-	 * 1) при задании нового родительского Департамента "АРод" для Департамента "БДоч" выполняется:
+	 * 1) при задании нового родительского Департамента "АРод" для Департамента "БДоч" надо выполнить:
 	 *		// SG_OU(БДоч) -> SG_OU(АРод)
-	 * 		sgSetParent( Types.SGKind.SG_SV.getSGPos(БДоч.id), Types.SGKind.SG_SV.getSGPos(АРод.id));
+	 * 		sgInclude( Types.SGKind.SG_SV.getSGPos(БДоч.id), Types.SGKind.SG_SV.getSGPos(АРод.id));
+	 * 
 	 *		// SG_SV(АРод) -> SG_SV(БДоч)
-	 * 		sgSetParent( Types.SGKind.SG_SV.getSGPos(АРод.id), Types.SGKind.SG_SV.getSGPos(БДоч.id));
+	 * 		sgInclude( Types.SGKind.SG_SV.getSGPos(АРод.id), Types.SGKind.SG_SV.getSGPos(БДоч.id));
+	 * 
 	 * 		// + привязка БР из родительского подразделения к каждому Сотруднику БДоч ...
-	 * 2) при задании Сотруднику новой Должностной позиции выполняется:
+	 * 
+	 * 2) Актививрование по Доверенностям:
+	 * 		// найти список всех доверенностей, подлежащих активации, и для каждой
+	 * 		// включить личную БР доверенного лица (кому) в БР доверяющего (от кого):
+	 * 		sgInclude( Types.SGKind.SGPrivateBusinessRole(Кому.id, БР), Types.SGKind.SGPrivateBusinessRole(ОтКого.id, БР) );
+	 * 		// и всё =)
 	 */
 	void sgInclude( Types.SGPosition child, Types.SGPosition parent);
 
@@ -59,6 +66,15 @@ public interface IOrgStructureNotifiers {
 	 * явно для каждого отдельного объекта.
 	 * @param broleCode id бизнес-роли
 	 * @param obj id и тип узла объекта орг-штатки
+	 * Пример:
+	 * 		// присвоение БР roleCode для Сотрудника employeeId 
+	 * 		orgBRAssigned( roleCode, Types.SGKind.SG_ME.getSGPos(employeeId));
+	 * 
+	 * 		// присвоение БР roleCode для Должностной позиции dpId на которую назначен Сотрудник employeeId
+	 * 		orgBRAssigned( roleCode, Types.SGKind.getDeputyPosition(dpId, employeeId));
+
+	 * 		// присвоение БР roleCode для Подразделения орг-штатки orgUnitId
+	 * 		orgBRAssigned( roleCode, Types.SGKind.SG_OU.getSGPos(orgUnitId));
 	 */
 	void orgBRAssigned(String broleCode, Types.SGPosition obj);
 

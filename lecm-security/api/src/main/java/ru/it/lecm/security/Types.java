@@ -2,6 +2,8 @@ package ru.it.lecm.security;
 
 import org.alfresco.util.Pair;
 
+import ru.it.lecm.security.Types.SGKind;
+
 
 /**
  * Типы и описания подсистемы безопасности.
@@ -84,33 +86,56 @@ public final class Types {
 	 * @author rabdullin
 	 */
 	public enum SGKind {
-		  SG_ME(SFX_USR)		// личная группа Сотрудника-пользователя
-		, SG_DP(SFX_DP)			// группа Должностной позиции
-		, SG_OU(SFX_OU)			// группа Подразделения
+		  SG_ME(SFX_USR, "Private User Point")		// личная группа Сотрудника-пользователя
+		, SG_DP(SFX_DP, "Deputy Position")			// группа Должностной позиции
+		, SG_OU(SFX_OU, "Org Unit")					// группа Подразделения
 
-		, SG_SV(SFX_SV)			// группа Руководящая (связана с Подразделением и Должностью)
-		, SG_BR(SFX_BR)			// группа бизнес-роли
-		, SG_BRME(SFX_BRME)		// личная группа Сотрудника-пользователя для конкретной бизнес-роли
+		, SG_SV(SFX_SV, "Boss Position")			// группа Руководящая (связана с Подразделением и Должностью)
+		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
+		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
 		;
 
 		final private String suffix;
+		final private String humanTag;
 
-		private SGKind(String suffix) {
+		private SGKind(String suffix, String humanTag) {
 			this.suffix = suffix;
+			this.humanTag = humanTag;
 		}
 
 		public String getSuffix() {
 			return suffix;
 		}
 
+		public String getHumanInfo() {
+			return this.humanTag;
+		}
+
+		@Override
+		public String toString() {
+			return String.format( "%s-%s(%s, %s)", this.getClass().getSimpleName(), this.name(), this.suffix, this.humanTag);
+		}
+
 		/**
 		 * Получить объект security-позиции, соот-щий this.
-		 * (!) Для получения объекта личной бизнес-роли надо использовать getSGBusinessRolePos, 
-		 * для Должностной Позиции getSGDeputyPosition.
+		 * (!) Для получения объекта личной бизнес-роли надо использовать 
+		 * getSGBusinessRolePos, для Должностной Позиции getSGDeputyPosition.
 		 * @param objId
 		 * @return
 		 */
 		public SGPosition getSGPos(String objId) {
+			return getSGPos(objId, null);
+		}
+
+		/**
+		 * Получить объект security-позиции, соот-щий this.
+		 * (!) Для получения объекта личной бизнес-роли надо использовать 
+		 * getSGBusinessRolePos, для Должностной Позиции getSGDeputyPosition.
+		 * @param objId Id объекта
+		 * @param displayName название объекта для удобного чтения
+		 * @return
+		 */
+		public SGPosition getSGPos(String objId, String displayName) {
 			if (this == SG_ME)
 				return new SGPrivateMeOfUser(objId);
 			if (this == SG_OU)
@@ -127,28 +152,49 @@ public final class Types {
 			return getSGPos(objId).getAlfrescoSuffix();
 		}
 
-		public static SGPrivateBusinessRole getSGBusinessRolePos(String userId, String broleCode) {
-			return new SGPrivateBusinessRole(userId, broleCode);
+		public static SGPrivateBusinessRole getSGBusinessRolePos(String employeerId, String userLogin, String broleCode) {
+			return new SGPrivateBusinessRole(employeerId, userLogin, broleCode);
 		}
 
-		public static SGDeputyPosition getSGDeputyPosition(String dpId, String userId) {
-			return new SGDeputyPosition(dpId, userId);
+		public static SGPrivateBusinessRole getSGBusinessRolePos(String employeerId, String broleCode) {
+			return new SGPrivateBusinessRole(employeerId, broleCode);
+		}
+
+
+		public static SGDeputyPosition getSGDeputyPosition(String dpId, String dpName, String userLogin, String employeerId) {
+			return new SGDeputyPosition(dpId, dpName, employeerId, userLogin);
+		}
+
+		public static SGDeputyPosition getSGDeputyPosition(String dpId, String employeerId, String userLogin) {
+			return getSGDeputyPosition(dpId, null, userLogin, employeerId);
+		}
+
+		public static SGDeputyPosition getSGDeputyPosition(String dpId, String employeerId) {
+			return getSGDeputyPosition(dpId, employeerId, null);
 		}
 	}
 
 
 	/**
 	 * Непосредственная SG-группа конкретного объекта.
-	 * "Фабрика" для создания подобных объектво - см. {@link SGKind.getSGPos/getSGPos2}
+	 * "Фабрика" для создания подобных объектво - см. {@link SGKind.getSGXXX}
 	 */
 	public abstract static class SGPosition {
 		final private SGKind sgKind;
-		final private String id; // в зависимости от sgKind это Id Сотрудника, Должности или Подразделения.
+		private String id; // в зависимости от sgKind это Id Должности или Подразделения, login Сотрудника.
+		private String displayInfo;   // название объекта (мнемоническое или просто "ориентированное на чтение"
 
 		private SGPosition(SGKind sgKind, String id) {
 			super();
 			this.sgKind = sgKind;
 			this.id = id;
+		}
+
+		private SGPosition(SGKind sgKind, String id, String displayInfo) {
+			super();
+			this.sgKind = sgKind;
+			this.id = id;
+			this.displayInfo = displayInfo;
 		}
 
 		public SGKind getSgKind() {
@@ -159,9 +205,21 @@ public final class Types {
 			return id;
 		}
 
+		public void setId(String anId) {
+			this.id = anId;
+		}
+
+		public String getDisplayInfo() {
+			return displayInfo;
+		}
+
+		public void setDisplayInfo(String displayInfo) {
+			this.displayInfo = displayInfo;
+		}
+
 		@Override
 		public String toString() {
-			return sgKind + "(" + id + ")";
+			return String.format( "SGPOS(%s, %s %s)", sgKind, id, (displayInfo == null ? "" : displayInfo));
 		}
 
 		/**
@@ -174,85 +232,85 @@ public final class Types {
 		}
 	}
 
+	/**
+	 * Индикатор личной группы безопасности для Пользователя-Сотрудника
+	 * [1] Сейчас в качестве super.id используется employee.id, что не явлеятся "human-oriented", 
+	 * но зато позволяет легко привязывать (или изменять) пользователя Альфреско 
+	 * к Сотрудникам на любом этапе. 
+	 * [2] В принципе можно использовать login пользователя в качестве super.id. Но
+	 * тогда при привзяке user к employee, надо будет фактически заново выполнять
+	 * связывания security-group по полной программе т.е. и для Сотрудника в орг-штатке,
+	 * и для всех доступных Сотруднику бизнес-ролей (выданных на Сотрудника, должность,
+	 * и все подразделения до верхнего уровня). 
+	 * В перспективе стоит подумать на этим в сторону более читабельного второго варианта,
+	 * но при условии упрощения доп действий.
+	 */
 	public static class SGPrivateMeOfUser extends SGPosition {
+
 		private SGPrivateMeOfUser(String userId) {
 			super( SGKind.SG_ME, userId);
 		}
 
-		public String getUserId() {
-			return super.getId();
-		}
-	}
-
-	public static class SGDeputyPosition extends SGPosition {
-		final String userId; 
-		/**
-		 * 
-		 * @param dpId id Должностной Позиции
-		 * @param userId id Пользователя, который назначен на DP. Здесь можно передавать
-		 * либо id-employee, либо Login пользователя, который соот-ет employee.
-		 */
-		private SGDeputyPosition(String dpId, String userId) {
-			super( SGKind.SG_DP, dpId);
-			this.userId = userId;
+		private SGPrivateMeOfUser(String userId, String userDisplayOrLogin) {
+			super( SGKind.SG_ME, userId, userDisplayOrLogin);
 		}
 
-		public String getDPId() {
-			return super.getId();
-		}
-
-		public String getUserId() {
-			return this.userId;
-		}
-	}
-
-	public static class SGOrgUnit extends SGPosition {
-		private SGOrgUnit(String orgUnitId) {
-			super( SGKind.SG_OU, orgUnitId);
-		}
-		public String getOUId() {
-			return super.getId();
-		}
-	}
-
-	public static class SGSuperVisor extends SGPosition {
-		private SGSuperVisor(String orgUnitId) {
-			super( SGKind.SG_SV, orgUnitId);
-		}
-		public String getOUId() {
-			return super.getId();
-		}
-	}
-
-	public static class SGBusinessRole extends SGPosition {
-		private SGBusinessRole(String businessRoleId) {
-			super( SGKind.SG_BR, businessRoleId);
-		}
-
-		public String getBusinessRoleId() {
+//		public String getUserLogin() {
+//			return super.getId();
+//		}
+		public String getEmployeeId() {
 			return super.getId();
 		}
 	}
 
 	/**
-	 * Личная группа Сотрудника для некоторой Бизнес Роли
-	 * @author rabdullin
-	 *
+	 * Индикатор позиции, связанной с пользователем (например, DP или BR_ME).
 	 */
-	public static class SGPrivateBusinessRole extends SGPosition {
-		final private String businessRoleId;
+	private abstract static class SGPositionWithUser extends SGPosition {
 
-		private SGPrivateBusinessRole(String userId, String businessRoleId) {
-			super(SGKind.SG_BRME, userId);
-			this.businessRoleId = businessRoleId;
+		private String userId;
+		private String userLogin; 
+
+		private SGPositionWithUser(SGKind sgKind, String id, String displayInfo
+				, String userId, String userLogin) 
+		{
+			super( sgKind, id, displayInfo);
+			this.userId = userId;
+			this.userLogin = userLogin;
+		}
+
+		private SGPositionWithUser(SGKind sgKind, String id, String displayInfo
+				, String userId) {
+			this(sgKind, id, displayInfo, userId, null);
+		}
+
+		private SGPositionWithUser(SGKind sgKind, String id, String displayInfo) {
+			this(sgKind, id, displayInfo, null, null);
+		}
+
+		private SGPositionWithUser(SGKind sgKind, String id) {
+			this(sgKind, id, null, null, null);
 		}
 
 		public String getUserId() {
-			return super.getId();
+			return this.userId;
 		}
 
-		public String getBusinessRoleId() {
-			return this.businessRoleId;
+		public void setUserId(String value) {
+			this.userId = value;
+		}
+
+		public String getUserLogin() {
+			return this.userLogin;
+		}
+
+		public void setUserLogin(String value) {
+			this.userLogin = value;
+		}
+
+		@Override
+		public String toString() {
+			return super.toString() + String.format( "user '%s', userId %s", (userLogin == null ? "" : userLogin), userId);
 		}
 
 		/**
@@ -262,12 +320,119 @@ public final class Types {
 		 */
 		@Override
 		public String getAlfrescoSuffix() {
-			return super.getAlfrescoSuffix() + "-" + this.businessRoleId;
+			return super.getAlfrescoSuffix() + "-" + this.getUserId();
 		}
-		@Override
 
-		public String toString() {
-			return getSgKind() + "(" + getUserId() + ", role=" + getBusinessRoleId()+ ")";
+	}
+
+	/**
+	 * Индикатор Должностной Позиции.
+	 * название ДП можно использовать как super.id, но с ограничениями аналогичны как и для id в п 2.
+	 */
+	public static class SGDeputyPosition extends SGPositionWithUser {
+
+		/**
+		 * @param dpId id Должностной Позиции
+		 * @param dpName название Должностной Позиции
+		 * @param userId id Пользователя, который назначен на DP. Здесь можно передавать
+		 * либо id-employee, либо id пользователя, который соот-ет employee.
+		 * @param userLogin имя входа Пользователя для Сотрудника
+		 */
+		private SGDeputyPosition(String id, String dpName, String userId, String userLogin) 
+		{
+			super( SGKind.SG_DP, id, dpName, userId, userLogin);
+		}
+
+		private SGDeputyPosition(String id, String dpName, String userId) {
+			this(id, dpName, userId, null);
+		}
+
+		private SGDeputyPosition(String id, String dpName) {
+			this(id, dpName, null, null);
+		}
+
+		public String getDPId() {
+			return super.getId();
+		}
+
+		public String getDPName() {
+			return super.getDisplayInfo();
+		}
+
+		public void setDPName(String value) {
+			super.setDisplayInfo(value);
+		}
+
+	}
+
+	/**
+	 * Индикатор орг-штатной единицы.
+	 * название или Id объекта Альфреско можно использовать как super.id 
+	 */
+	public static class SGOrgUnit extends SGPosition {
+		private SGOrgUnit(String orgUnitId) {
+			super( SGKind.SG_OU, orgUnitId);
+		}
+		public String getOUId() {
+			return super.getId();
+		}
+
+		public void setOUId(String value) {
+			super.setId(value);
+		}
+
+	}
+
+	/**
+	 * Индикатор Руководящей Позиции
+	 * название или Id соот-щей орг-штатной единицы можно использовать как id 
+	 */
+	public static class SGSuperVisor extends SGPosition {
+		private SGSuperVisor(String orgUnitId) {
+			super( SGKind.SG_SV, orgUnitId);
+		}
+		public String getOUId() {
+			return super.getId();
+		}
+	}
+
+	/**
+	 * Индикатор бизнес-роли (Статической или Динамической)
+	 */
+	public static class SGBusinessRole extends SGPosition {
+		private SGBusinessRole(String businessRoleId) {
+			super( SGKind.SG_BR, businessRoleId);
+		}
+
+		public String getBusinessRoleId() {
+			return super.getId();
+		}
+
+		public void setBusinessRoleId(String roleID) {
+			super.setId( roleID);
+		}
+	}
+
+	/**
+	 * Личная группа Сотрудника для некоторой Бизнес Роли
+	 */
+	public static class SGPrivateBusinessRole extends SGPositionWithUser {
+
+		// super хранит данные по сотруднику
+		private SGPrivateBusinessRole(String userId, String userLogin, String businessRole) {
+			super(SGKind.SG_BRME, businessRole, "role", userId, userLogin);
+		}
+
+		private SGPrivateBusinessRole(String userId, String businessRoleId) {
+			this(userId, null, businessRoleId);
+		}
+
+		public String getBusinessRole() {
+			return super.getId();
+		}
+
+		public void setBusinessRole(String value) {
+			super.setId(value);
 		}
 
 	}

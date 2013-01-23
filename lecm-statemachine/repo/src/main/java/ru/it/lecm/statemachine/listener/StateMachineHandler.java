@@ -7,7 +7,7 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import ru.it.lecm.security.beans.LECMAclBuilderBean;
+import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
@@ -28,7 +28,7 @@ public class StateMachineHandler implements ExecutionListener {
 
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
-	private static LECMAclBuilderBean lecmAclBuilderBean;
+	private static INodeACLBuilder lecmAclBuilderBean;
 	private static Repository repositoryHelper;
 	private static Log logger = LogFactory.getLog(StateMachineHandler.class);
 
@@ -78,7 +78,7 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.repositoryHelper = repositoryHelper;
 	}
 
-	public void setLecmAclBuilderBean(LECMAclBuilderBean lecmAclBuilderBean) {
+	public void setLecmAclBuilderBean(INodeACLBuilder lecmAclBuilderBean) {
 		StateMachineHandler.lecmAclBuilderBean = lecmAclBuilderBean;
 	}
 

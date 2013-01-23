@@ -47,6 +47,9 @@ public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.On
 				new JavaBehaviour(this, "onCreateAssociation"));
 	}
 
+	/**
+	 * Назначение Сотрудника на Должность  
+	 */
 	@Override
 	public void onCreateAssociation(AssociationRef associationRef) {
 		NodeRef emplyoeeLink = associationRef.getSourceRef();
@@ -58,4 +61,5 @@ public class OrgstructurePrimaryPositionPolicy implements NodeServicePolicies.On
 			nodeService.setProperty(emplyoeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY, staffs.size() == 1);
 		}
 	}
+
 }

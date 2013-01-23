@@ -12,8 +12,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,13 +184,6 @@ public class OrgstructureEmployeeLinkPolicy
 		}
 	}
 
-	// имя (логин) пользователя (cm:person)
-	public static final QName PROP_USER_NAME = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "userName");
-
-	// lecm-orgstr:staffPosition
-	// название должностной позиции
-	public static final QName PROP_DP_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "lecm-orgstr:staffPosition-code");
-
 	String getEmployeeLogin(NodeRef employee) {
 		if (employee == null) return null;
 		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
@@ -200,7 +191,7 @@ public class OrgstructureEmployeeLinkPolicy
 			logger.warn( String.format( "Employee '%s' is not linked to system user", employee.toString() ));
 			return null;
 		}
-		final String loginName = ""+ nodeService.getProperty( person, PROP_USER_NAME);
+		final String loginName = ""+ nodeService.getProperty( person, PolicyUtils.PROP_USER_NAME);
 		return loginName;
 	}
 
@@ -211,9 +202,8 @@ public class OrgstructureEmployeeLinkPolicy
 	 */
 	private void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
 		final String loginName = getEmployeeLogin(employee);
-		if (loginName == null) return;
 		final String broleCode = ""+ nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-		this.sgNotifier.orgBRAssigned( broleCode, Types.SGKind.SG_ME.getSGPos(loginName)); 
+		this.sgNotifier.orgBRAssigned( broleCode, Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName)); 
 	}
 
 	/**
@@ -223,12 +213,10 @@ public class OrgstructureEmployeeLinkPolicy
 	 */
 	private void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
 		final String loginName = getEmployeeLogin(employee);
-		if (loginName == null) return;
-
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
 		final Object broleCode = nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 
-		this.sgNotifier.orgBRRemoved( broleCode.toString(), Types.SGKind.SG_ME.getSGPos(loginName.toString())); 
+		this.sgNotifier.orgBRRemoved( broleCode.toString(), Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 	}
 
 
@@ -239,12 +227,11 @@ public class OrgstructureEmployeeLinkPolicy
 	 */
 	private void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
 		final String loginName = getEmployeeLogin(employee);
-		if (loginName == null) return;
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = ""+ nodeService.getProperty( dpid, PROP_DP_NAME);
+		final String dpIdName = ""+ nodeService.getProperty( dpid, PolicyUtils.PROP_DP_NAME);
 
-		this.sgNotifier.sgInclude( Types.SGKind.SG_ME.getSGPos(loginName), Types.SGKind.getSGDeputyPosition( dpIdName, loginName));
+		this.sgNotifier.sgInclude( Types.SGKind.SG_ME.getSGPos(employee.getId(), loginName), Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), loginName));
 	}
 
 	/**
@@ -254,12 +241,11 @@ public class OrgstructureEmployeeLinkPolicy
 	 */
 	private void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
 		final String loginName = getEmployeeLogin(employee);
-		if (loginName == null) return;
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = ""+ nodeService.getProperty( dpid, PROP_DP_NAME);
+		final String dpIdName = ""+ nodeService.getProperty( dpid, PolicyUtils.PROP_DP_NAME);
 
-		this.sgNotifier.sgExclude( Types.SGKind.SG_ME.getSGPos(loginName), Types.SGKind.getSGDeputyPosition( dpIdName, loginName));
+		this.sgNotifier.sgExclude( Types.SGKind.SG_ME.getSGPos(employee.getId(), loginName), Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), loginName));
 	}
 
 }

@@ -16,9 +16,9 @@
 	<name>Logic ECM Security</name>
 
 	<modules>
-		<module>repo</module>
 		<module>api</module>
-		<!--
+		<module>repo</module>
+		<!-- 
 		<module>share</module>
 		  -->
 	</modules>
