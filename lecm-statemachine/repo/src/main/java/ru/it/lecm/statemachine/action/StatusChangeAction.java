@@ -68,7 +68,8 @@ public class StatusChangeAction extends StateMachineAction {
 		//Если начальный статус, то папки для него не требуется
 		if (startStatus) return;
 
-		getLecmAclBuilderBean().regAccessMatrix(processId, status, permissions);
+		// NOTE: теперь этот метод не нужно вызывать, т.к. права задаются во время смены статуса
+		// getLecmAclBuilderBean().regAccessMatrix(processId, status, permissions);
 
 		//Проверяем существует ли папка для этого статуса
 		NodeService nodeService = getServiceRegistry().getNodeService();
@@ -114,7 +115,7 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-		getLecmAclBuilderBean().rebuildStaticACL(folder, processId, status);
+		getLecmAclBuilderBean().rebuildStaticACL(folder, permissions);
 	}
 
 	@Override
@@ -139,7 +140,8 @@ public class StatusChangeAction extends StateMachineAction {
 		//Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
 		for (ChildAssociationRef child : children) {
-			getLecmAclBuilderBean().rebuildACL(child.getChildRef(), processId, status);
+			// TODO: надо иметь список прав согласно текущему статусу документа status и ЖЦ processId
+			// getLecmAclBuilderBean().rebuildACL(child.getChildRef(), permissions);
 		}
 
 	}

@@ -1,6 +1,5 @@
 package ru.it.lecm.security.beans;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,14 +32,6 @@ public class LECMAclBuilderBean
 	 * (названия ACCPERM_EMPTY должны быть введены в permissionDefinitions.xml)
 	 */
 	final private Map<StdPermission, String> permNames = new HashMap<StdPermission, String>();
-
-	/**
-	 * Список по статусам:
-	 * lifeCycle -> набор(статус -> набор(Бизнес Роль -> Доступ))
-	 * Может задаваться при загрузке бина и затем отслеживает изменения состава БР 
-	 */
-	final private Map< String, Map<String, Map<String, StdPermission>>> roleByLFAndStatus
-		= new HashMap<String, Map<String, Map<String,StdPermission>>>();
 
 	final public static String ACCPERM_EMPTY = "deny"; // "LECM_NO_ACCESS";
 	final public static String ACCPERM_READ  = "Consumer"; // "LECM_READ_ACCESS";
@@ -92,94 +83,32 @@ public class LECMAclBuilderBean
 		logger.info(sb.toString());
 	}
 
-	static String getMapInfo( Map< String, Map<String, Map<String, StdPermission>>> map) {
+	static String getMapInfo( Map<String, StdPermission> map) {
 		final StringBuilder sb = new StringBuilder();
 		if (map == null || map.isEmpty()) {
 			sb.append("\t EMPTY \n");
 		} else {
+			sb.append( " ===========================");
+			sb.append( "\n [NN] role\t\t Access\n");
+			sb.append( " ===========================");
 			int i = 0;
-			for (Map.Entry< String, Map<String, Map<String, StdPermission>>> item1: map.entrySet()) {
-				sb.append( String.format( "\n [%d] lifeCycleId='%s': \n", (++i), item1.getKey()));
-				if (item1.getValue() == null || item1.getValue().isEmpty())
-					sb.append("\t empty \n");
-				else {
-					int j = 0;
-					for (Map.Entry< String, Map<String, StdPermission>> item2: item1.getValue().entrySet()) {
-						sb.append( String.format( "\t [%d] status='%s': \n", (++j), item2.getKey()));
-						if (item2.getValue() == null || item2.getValue().isEmpty())
-							sb.append("\t\t empty \n");
-						else {
-							int k = 0;
-							for (Map.Entry<String, StdPermission> item3: item2.getValue().entrySet()) {
-								sb.append( String.format( "\t\t\t [%d] %s \t\t %s \n", (++k), item3.getKey(), item3.getValue()));
-							}
-						}
-					}
-				}
+			for (Map.Entry< String, StdPermission> item: map.entrySet()) {
+				sb.append( String.format( " [%d] '%s'\t %s\n", (++i), item.getKey()
+						, ((item.getValue() == null) ? "NULL" : item.getValue().toString()) 
+				));
 			}
+			sb.append( " ===========================");
 		}
 		return sb.toString();
 	}
 
 
-	public void setRoleByLifeCycleAndStatus(
-			 Map< String, Map<String, Map<String, StdPermission>>> map)
-	{
-		roleByLFAndStatus.clear();
-
-		if (map != null)
-			roleByLFAndStatus.putAll(map);
-		logger.info("Business role access map by (status,lifeCycle): "+ getMapInfo(roleByLFAndStatus));
-	}
-
 	/**
-	 * Задать права для бизнес ролей солгасно статусам:
-	 * @param accessMap = ( 
-	 *  	ключ = название ЖЦ;
-	 *  	значение = (
-	 *  		ключ = название статуса;
-	 *  		значения = список через ';' из 'роль:доступ'
-	 *  			где роль = название роли (мнемоника),
-	 *  				доступ = (noaccess | readonly | full)
-	 *  	) 
-	 *  )
-	 */
-	public void setStatus2BusinessRoleMapping(Map< String, Map<String, String>> accessMap) 
-	{
-		roleByLFAndStatus.clear();
-
-		if (accessMap == null || accessMap.isEmpty()) {
-			logger.info("Business role mapping set EMPTY");
-			return;
-		}
-
-		for (Map.Entry<String, Map<String, String>> e: accessMap.entrySet()) {
-			final String lifeCycleId = e.getKey();
-			final Map<String, Map<String, StdPermission>> mapByStatus = makeStatusBRoleMapping(e.getValue());
-			this.roleByLFAndStatus.put( lifeCycleId, mapByStatus);
-		}
-		// logger.info(sb.toString());
-		logger.info("Business role access map by (status,lifeCycle): "+ getMapInfo(roleByLFAndStatus));
-	}
-
-	private static Map<String, Map<String, StdPermission>> makeStatusBRoleMapping(
-			Map<String, String> mapByStatus) 
-	{
-		final Map<String, Map<String, StdPermission>> result = new HashMap<String, Map<String, StdPermission>>();
-		if (mapByStatus != null) {
-			for (Map.Entry<String, String> e: mapByStatus.entrySet()) {
-				final String status = e.getKey();
-				final Map<String, StdPermission> map = makeBRoleMapping( e.getValue());
-				result.put( status, map);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Сформировать карту "БР-Доступ" согласно заданному в виде строки списку.
-	 * @param value список в виде "бизнес-роль:доступ;..."
-	 * если доступ опущен, принимается за пустой
+	 * Сформировать карту "БР-Доступ" согласно списку, заданному в виде строки.
+	 * @param value список через ';' из записей "бизнес-роль:доступ;..."
+	 *  	где роль = название роли (мнемоника),
+	 *  		доступ = (noaccess | readonly | full)
+	 * 			если доступ опущен, принимается за пустой
 	 * @return
 	 */
 	final static Map<String, StdPermission> makeBRoleMapping(String value) {
@@ -266,35 +195,15 @@ public class LECMAclBuilderBean
 	}
 
 	@Override
-	public void clearAccessMatrix() {
-		this.roleByLFAndStatus.clear();
-	}
-
-	@Override
-	public void regAccessMatrix(String lifeCycleId, String status,
-			Map<String, StdPermission> map) 
+	public void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap) 
 	{
-		Map<String, Map<String, StdPermission>> byStatus = this.roleByLFAndStatus.get(lifeCycleId);
-		if (byStatus == null) {
-			byStatus = new HashMap<String, Map<String, StdPermission>>();
-			this.roleByLFAndStatus.put( lifeCycleId, byStatus);
-		}
-		byStatus.put( status, map);
-	}
-
-	@Override
-	public void rebuildStaticACL(NodeRef nodeRef, String lifeCycleId, String statusId) 
-	{
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles at status <%s>/lifeCycle<%s> for folder/node %s\n", statusId, lifeCycleId, nodeRef));
-
-		// получить желаемый ACL (ДБР, доступ)...
-		final Map<String, StdPermission> aclStatusMap = findPermissionsByStatus(lifeCycleId, statusId);
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node %s by accessor %s \n", nodeRef, getMapInfo(accessMap)));
 
 		// получить полный текущий ACL ...
 		final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
 		logger.debug("current doc ACL list is "+ current);
 
-		if (aclStatusMap == null || aclStatusMap.isEmpty()) {
+		if (accessMap == null || accessMap.isEmpty()) {
 			permissionService.deletePermissions(nodeRef);
 			sb.append("\t Permission list cleared for node "+ nodeRef);
 		} else {
@@ -304,7 +213,7 @@ public class LECMAclBuilderBean
 			 */
 
 			// замена на корректный доступ в текущем статусе
-			for(Map.Entry<String, StdPermission> entry: aclStatusMap.entrySet()) {
+			for(Map.Entry<String, StdPermission> entry: accessMap.entrySet()) {
 
 				final String brole = entry.getKey(); 
 
@@ -314,7 +223,7 @@ public class LECMAclBuilderBean
 				permissionService.clearPermission(nodeRef, authority);
 
 				// выдаём новый доступ по Статической БР ...
-				final StdPermission perm = aclStatusMap.get(brole);
+				final StdPermission perm = accessMap.get(brole);
 				final String rawPerm = getPermName( perm, StdPermission.noaccess);
 				final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
 				if (allowed) { // ALLOW
@@ -330,12 +239,9 @@ public class LECMAclBuilderBean
 
 
 	@Override
-	public void rebuildACL(NodeRef nodeRef, String lifeCycleId, String statusId)
+	public void rebuildACL(NodeRef nodeRef, Map<String, StdPermission> accessMap)
 	{
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles at status <%s>/lifeCycle<%s> for node %s\n", statusId, lifeCycleId, nodeRef));
-
-		// получить желаемый ACL (ДБР, доступ)...
-		final Map<String, StdPermission> aclStatusMap = findPermissionsByStatus(lifeCycleId, statusId);
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node %s by accessor %s \n", nodeRef, getMapInfo(accessMap)));
 
 		// получить полный текущий ACL ...
 		final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
@@ -363,7 +269,7 @@ public class LECMAclBuilderBean
 			permissionService.clearPermission(nodeRef, authority);
 
 			// выдаём новый доступ по ДБР для Пользователя ...
-			final StdPermission perm = aclStatusMap.get(brole);
+			final StdPermission perm = accessMap.get(brole);
 			final String rawPerm = getPermName( perm, StdPermission.noaccess);
 			final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
 
@@ -381,25 +287,6 @@ public class LECMAclBuilderBean
 
 		if (logger.isInfoEnabled())
 			logger.info( sb.toString());
-	}
-
-	/**
-	 * Получить карту доступа, которая соответствует некоторому статусу и ЖЦ
-	 * в виде (id БизнесРоли -> Разрешение)
-	 * @param lifeCycleId
-	 * @param statusId
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Map<String, StdPermission> findPermissionsByStatus(
-			String lifeCycleId, String statusId) 
-	{
-		final Map<String, Map<String, StdPermission>> statusMap = this.roleByLFAndStatus.get(lifeCycleId);
-		if (statusMap == null)
-			return Collections.EMPTY_MAP;
-
-		final Map<String, StdPermission> result = statusMap.get(statusId);
-		return (result != null) ? result : Collections.EMPTY_MAP;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package ru.it.lecm.delegation.beans;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import ru.it.lecm.security.impl.OrgStrucureAfterInvocationProvider;
 import ru.it.lecm.utils.DurationLogger;
@@ -583,6 +585,34 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		return result;
 	}
 
+	/**
+	 * Сформировать карту "БР-Доступ" согласно списку, заданному в виде строки.
+	 * @param value список через ';' из записей "бизнес-роль:доступ;..."
+	 *  	где роль = название роли (мнемоника),
+	 *  		доступ = (noaccess | readonly | full)
+	 * 			если доступ опущен, принимается за пустой
+	 * @return
+	 */
+	final static Map<String, StdPermission> makeBRoleMapping(String value) {
+		final Map<String, StdPermission> result = new HashMap<String, StdPermission>();
+		final String[] parts = value.split(";");
+		if (parts != null) {
+			for(String broleAccess: parts) {
+				try {
+					final String[] roleAcc = broleAccess.split(":");
+					if (roleAcc.length == 0) continue;
+					final String brole = roleAcc[0].trim();
+					final StdPermission access = (roleAcc.length > 1) ? StdPermission.findPermission(roleAcc[1].trim()) : null;
+					result.put( brole, (access != null) ? access : StdPermission.noaccess);
+				} catch(Throwable t) {
+					logger.error( String.format("Check invalid map point '%s',\n\t expected to be 'BRole:access'\n\t\t, where access is (noaccess | readonly | full),\n\t\t BRole = mnemonic of business role"
+							, broleAccess), t);
+				}
+			}
+		}
+		return result;
+	}
+
 	final static String ACLOPER_REBUILD = "rebuild";
 	final static String ACLOPER_REBUILDYNAMIC = "rebuildDynamic";
 	final static String ACLOPER_REBUILDSTATIC = "rebuildStatic";
@@ -634,13 +664,16 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 						|| ACLOPER_REBUILDYNAMIC.equalsIgnoreCase(oper)
 						|| ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper)
 					) {
-					final String status = echoGetArg( "status", null, result);
-					final String lifeCycle = echoGetArg( "lifeCycle", null, result);
-					logger.info( String.format( "<RebuildACL> for node id %s at status <%s>", id, status));
+					// final String status = echoGetArg( "status", null, result);
+					// final String lifeCycle = echoGetArg( "lifeCycle", null, result);
+					final String roleAccessMap = echoGetArg( "roleAccessMap", null, result);
+					logger.info( String.format( "<RebuildACL> for node id %s as %s", id, roleAccessMap));
+
+					final Map<String, StdPermission> accessMap = makeBRoleMapping(roleAccessMap); 
 					if (ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper))
-						builder.rebuildStaticACL( ref, lifeCycle, status);
+						builder.rebuildStaticACL( ref, accessMap);
 					else
-						builder.rebuildACL( ref, lifeCycle, status);
+						builder.rebuildACL( ref, accessMap);
 				} else if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper) || ACLOPER_REVOKE_DYNAROLE.equalsIgnoreCase(oper)) {
 					final String roleCode = echoGetArg( "roleCode", null, result);
 					final String userId = echoGetArg( "userId", null, result);

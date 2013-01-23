@@ -40,35 +40,22 @@ public interface INodeACLBuilder {
 
 	/**
 	 * Перестроить ACL-список Динамических прав для указанного документа/папки
-	 * согласно указанному статусу
-	 * @param nodeRef документа или папки
-	 * @param lifeCycleId  уникальный id (код) жизненного цикла
-	 * @param statusId новый статус документа
+	 * согласно указанным правам доступа для бизнес-ролей
+	 * @param nodeRef ref-документа или папки
+	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической 
+	 * Бизнес Роли (динамической групповой, например, "Инициаторы" или "Читатели"),
+	 * значение - права доступа на документ для своей Динамической БР.
 	 */
-	void rebuildACL(NodeRef nodeRef, String lifeCycleId, String statusId );
+	void rebuildACL(NodeRef nodeRef, Map<String, StdPermission> accessMap);
 
 	/**
 	 * Прописать Статические Роли на папку (документ).
 	 * @param nodeRef id статусной-папки
-	 * @param lifeCycleId  уникальный id (код) жизненного цикла, который соот-ет папке
-	 * @param statusId стаус, которому соот-ет nodeRef
+	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической 
+	 * Бизнес Роли (динамической групповой, например, "Инициаторы" или "Читатели"),
+	 * значение - права доступа на документ для своей Динамической БР.
 	 */
-	void rebuildStaticACL(NodeRef nodeRef, String lifeCycleId, String statusId);
-
-
-	/**
-	 * Выполнить очистку матрицы прав статических ролей
-	 */
-	void clearAccessMatrix();
-
-	/**
-	 * Задать матрицу прав для указанного ЖЦ и статуса. 
-	 * @param lifeCycleId  уникальный id (код) жизненного цикла
-	 * @param status код статуса
-	 * @param map карта нарезки прав ключ=код роли, значение=доступ
-	 */
-	void regAccessMatrix( String lifeCycleId, String status, Map<String, StdPermission> map);
-
+	void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap);
 
 	/**
 	 * Виды доступа к данным
