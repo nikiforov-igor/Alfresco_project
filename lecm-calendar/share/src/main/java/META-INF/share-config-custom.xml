@@ -110,20 +110,21 @@
 			</form>
 			<form id="createNewCommonSheduleForm">
 				<field-visibility>
+					<show id="lecm-shed:shed-employee-link-assoc"/>
 					<show id="lecm-shed:std-begin"/>
 					<show id="lecm-shed:std-end"/>
-					<show id="lecm-shed:shed-employee-link-assoc"/>
 					<show id="lecm-shed:type"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-shed:std-begin" mandatory="true">
+					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.work-time" />
+					<field id="lecm-shed:std-begin" mandatory="true" set="time">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
 										event="keyup" message-id="message.time-format.error" />
 						</constraint-handlers>
 					</field>
-					<field id="lecm-shed:std-end" mandatory="true">
+					<field id="lecm-shed:std-end" mandatory="true" set="time">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
@@ -136,11 +137,11 @@
 							<control-param name="startLocation2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="rootNode1">/app:company_home/cm:Организация/cm:Структура</control-param>
 							<control-param name="rootNode2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="pickerLabel1">label.form.picker.orgstructure</control-param>
-							<control-param name="pickerLabel2">label.form.picker.employees</control-param>
+							<control-param name="pickerLabel1">label.shedule.form.picker.orgstructure</control-param>
+							<control-param name="pickerLabel2">label.shedule.form.picker.employee</control-param>
 							<control-param name="itemType1">lecm-orgstr:organization-unit</control-param>
 							<control-param name="itemType2">lecm-orgstr:employee</control-param>
-							<control-param name="endpointMandatory">false</control-param>
+							<control-param name="endpointMandatory">true</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="multipleSelectMode">false</control-param>
@@ -151,6 +152,69 @@
 							<control-param name="value">COMMON</control-param>
 						</control>
 					</field>
+				</appearance>
+			</form>
+			<form id="createNewSpecialSheduleForm">
+				<create-form template="/ru/it/lecm/wcalendar/shedule/shedule.special.form.get.html.ftl" />
+				<field-visibility>
+					<show id="lecm-shed:shed-employee-link-assoc"/>
+					<show id="lecm-shed:time-limit-start"/>
+					<show id="lecm-shed:time-limit-end"/>
+					<show id="lecm-shed:std-begin"/>
+					<show id="lecm-shed:std-end"/>
+					<show id="lecm-shed:type"/>
+				</field-visibility>
+				<appearance>
+					<set id="time-limit" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.date-interval" />
+					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.work-time" />
+					<field id="lecm-shed:shed-employee-link-assoc" mandatory="true">
+						<control template="/ru/it/lecm/wcalendar/controls/double-picker-control.ftl">
+							<control-param name="startLocation1">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="startLocation2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="rootNode1">/app:company_home/cm:Организация/cm:Структура</control-param>
+							<control-param name="rootNode2">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="pickerLabel1">label.shedule.form.picker.orgstructure</control-param>
+							<control-param name="pickerLabel2">label.shedule.form.picker.employee</control-param>
+							<control-param name="itemType1">lecm-orgstr:organization-unit</control-param>
+							<control-param name="itemType2">lecm-orgstr:employee</control-param>
+							<control-param name="endpointMandatory">true</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="multipleSelectMode">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-shed:std-begin" mandatory="true" set="time">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
+										event="keyup" message-id="message.time-format.error" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-shed:std-end" mandatory="true" set="time">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.timeValidation"
+										event="keyup" message-id="message.time-format.error" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-shed:type">
+						<control template="/ru/it/lecm/wcalendar/controls/hidden-patiently-value.ftl">
+							<control-param name="value">SPECIAL</control-param>
+						</control>
+					</field>
+					<!-- TODO: добавить проверку на стороне клиента, что окончание дествия расписания ПОЗЖЕ его начала. -->
+					<field id="lecm-shed:time-limit-start" label-id="label.shedule.form.set.date-interval.begin" mandatory="true" set="time-limit"/>
+<!--						<control template="/org/alfresco/components/form/controls/date.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Utils.mandatory" event="keyup" />
+						</constraint-handlers>
+					</field>-->
+					<field id="lecm-shed:time-limit-end" label-id="label.shedule.form.set.date-interval.end" mandatory="true" set="time-limit"/>
+<!--						<control template="/org/alfresco/components/form/controls/date.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Utils.mandatory" event="keyup" />
+						</constraint-handlers>
+					</field>-->
 				</appearance>
 			</form>
 

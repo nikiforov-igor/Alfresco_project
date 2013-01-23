@@ -1,5 +1,6 @@
 package ru.it.lecm.wcalendar.shedule.extensions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -12,7 +13,9 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.wcalendar.shedule.beans.SheduleBean;
+import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
 
 /**
  * Реализация JavaScript root-object для получения информации о контейнерах для
@@ -41,12 +44,12 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 			sheduleList = SheduleService.getParentShedule(new NodeRef(node.getString("nodeRef")));
 		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
-			return null;
+			throw new WebScriptException(ex.getMessage(), ex);
 		}
 		if (sheduleList != null) {
 			return new ScriptNode(sheduleList, serviceRegistry);
 		} else {
-			return null;
+			throw new WebScriptException("Error parsing JSON params!");
 		}
 	}
 
@@ -56,10 +59,89 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 			Map<String, String> JSONMap = SheduleService.getParentSheduleStdTime(new NodeRef(node.getString("nodeRef")));
 			result = new JSONObject(JSONMap);
 		} catch (JSONException ex) {
-			logger.error(ex.getMessage(), ex);
-			return null;
+			throw new WebScriptException(ex.getMessage(), ex);
 		}
 		return result;
+	}
+
+	public boolean isSheduleAssociated(NodeRef node) {
+		return SheduleService.isSheduleAssociated(node);
+
+	}
+
+	public ScriptNode createNewSpecialShedule(JSONObject json) {
+		String assocShedEmployeeStr, sheduleDestinationStr, reiterationType, timeBegin, timeEnd, timeLimitStart, timeLimitEnd;
+		NodeRef assocShedEmployeeNode, sheduleDestinationNode;
+		SpecialSheduleRawBean rawSheduleData = new SpecialSheduleRawBean();
+
+		try {
+			assocShedEmployeeStr = json.getString("assoc_lecm-shed_shed-employee-link-assoc_added");
+			sheduleDestinationStr = json.getString("alf_destination");
+			timeLimitStart = json.getString("prop_lecm-shed_time-limit-start");
+			timeLimitEnd = json.getString("prop_lecm-shed_time-limit-end");
+			reiterationType = json.getString("reiteration-type");
+			timeBegin = json.getString("prop_lecm-shed_std-begin");
+			timeEnd = json.getString("prop_lecm-shed_std-end");
+		} catch (JSONException ex) {
+			throw new WebScriptException(ex.getMessage(), ex);
+		}
+
+		rawSheduleData.setTimeWorkBegins(timeBegin);
+		rawSheduleData.setTimeWorkEnds(timeEnd);
+		rawSheduleData.setTimeLimitStart(timeLimitStart);
+		rawSheduleData.setTimeLimitEnd(timeLimitEnd);
+
+		if (reiterationType.equalsIgnoreCase("week-days")) { // по определенным дням недели
+			List<Boolean> weekDaysMask = new ArrayList<Boolean>();
+			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.WEEK_DAYS);
+			for (int i = 1; i <= 7; i++) {
+				try {
+					boolean wDay = json.getBoolean("w" + i);
+					weekDaysMask.add(wDay);
+				} catch (JSONException ex) {
+					weekDaysMask.add(false);
+					logger.debug(ex.getMessage());
+				}
+			}
+			rawSheduleData.setWeekDays(weekDaysMask);
+		} else if (reiterationType.equalsIgnoreCase("month-days")) { // по определенным числам месяца
+			String mDaysStr;
+			List<Integer> mDaysList = new ArrayList<Integer>();
+			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.MONTH_DAYS);
+			try {
+				mDaysStr = json.getString("month-days");
+			} catch (JSONException ex) {
+				logger.error(ex.getMessage(), ex);
+				throw new WebScriptException(ex.getMessage(), ex);
+			}
+			String[] mDaysArr = mDaysStr.split(",");
+			for (int i = 0; i < mDaysArr.length; i++) {
+				mDaysList.add(Integer.parseInt(mDaysArr[i]));
+			}
+			rawSheduleData.setMonthDays(mDaysList);
+		} else if (reiterationType.equalsIgnoreCase("shift-work")) { // сменный график
+			int workingDaysAmount;
+			int workingDaysInterval;
+			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.SHIFT);
+			try {
+				workingDaysAmount = json.getInt("working-days-amount");
+				workingDaysInterval = json.getInt("working-days-interval");
+			} catch (JSONException ex) {
+				throw new WebScriptException(ex.getMessage(), ex);
+			}
+			rawSheduleData.setWorkingDaysAmount(workingDaysAmount);
+			rawSheduleData.setWorkingDaysInterval(workingDaysInterval);
+		}
+		assocShedEmployeeNode = new NodeRef(assocShedEmployeeStr);
+		sheduleDestinationNode = new NodeRef(sheduleDestinationStr);
+
+		NodeRef createdNode = SheduleService.createNewSpecialShedule(rawSheduleData, assocShedEmployeeNode, sheduleDestinationNode);
+		
+		if (createdNode == null) {
+			throw new WebScriptException("Something has gone wrong: response is empty!");
+		} else {
+			return new ScriptNode(createdNode, serviceRegistry);
+		}
 	}
 
 	/**

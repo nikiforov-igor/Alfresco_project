@@ -13,15 +13,27 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 <#-- Custom calendar stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-calendar/wcalendar-shedule.css" />
+<#-- Custom toolbar stylesheet -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
 
 <#-- Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-datagrid.js"/>
+<#-- Custom Toolbar javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-toolbar.js"/>
 <#-- Advanced search -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/advsearch.js"/>
 <#-- Служебные функции -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
-
+<#-- Валидатор времени -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/time-validation.js" />
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/mandatory-validation.js" />
+<#-- Side menu javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
+
 
 <script type="text/javascript">//<![CDATA[
 

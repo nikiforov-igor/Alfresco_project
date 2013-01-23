@@ -36,36 +36,36 @@
 		<!--На сколько лет вперед сгенерировать календари-->
 		<property name="yearsAmountToCreate" value="3"/>
 	</bean>
-	<bean id="sheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="lecmSheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-	<bean id="absenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="lecmAbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
-	<bean id="calendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="lecmCalendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendarBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="lecmCalendarService"/>
 	</bean>
-	<bean id="sheduleBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="lecmSheduleBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="sheduleBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="sheduleService"/>
+		<property name="wCalService" ref="lecmSheduleService"/>
 	</bean>
-	<bean id="absenceBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="lecmAbsenceBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absenceBase"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="absenceService"/>
+		<property name="wCalService" ref="lecmAbsenceService"/>
 	</bean>
-	<bean id="sheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="lecmSheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="sheduleService" ref="sheduleService"/>
+		<property name="sheduleService" ref="lecmSheduleService"/>
 	</bean>
 </beans>

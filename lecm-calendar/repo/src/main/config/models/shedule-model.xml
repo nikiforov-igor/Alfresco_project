@@ -60,6 +60,15 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!-- Срок действия для особого расписания. -->
+				<property name="lecm-shed:time-limit-start">
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-shed:time-limit-end">
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<!-- Сотрудник/подразделение, работающий по данному графику. -->
@@ -127,7 +136,7 @@
 			<parent>cm:cmobject</parent>
 			<properties>
 				<property name="lecm-shed:begin">
-					<type>d:datetime</type>
+					<type>d:date</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -136,7 +145,7 @@
 					</index>
 				</property>
 				<property name="lecm-shed:end">
-					<type>d:datetime</type>
+					<type>d:date</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>

@@ -19,7 +19,6 @@
 
 <script type="text/javascript">//<![CDATA[
 
-(function() {
 var picker;
 var htmlNode;
 
@@ -27,7 +26,7 @@ var markupToDraw = '<@compress single_line=true>
 	<@htmlMarkup field/>
 </@compress>';
 
-LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(instance) {
+function Shedule_DrawPicker(instance) {
 	picker = new LogicECM.module.ObjectFinder("${controlId}", "${fieldHtmlId}").setOptions({
 		<#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
 		field: "${field.name}",
@@ -79,7 +78,7 @@ LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(insta
 		itemFamily: "node",
 		displayMode: "${field.control.params.displayMode!"items"}",
 		itemType: "${field.endpointType}",
-		multipleSelectMode: "${field.control.params.multipleSelectMode}",
+		multipleSelectMode: ${field.control.params.multipleSelectMode},
 		parentNodeRef: "alfresco://company/home",
 		selectActionLabel: "${field.control.params.selectActionLabel!msg("button.select")}",
 		minSearchTermLength: ${field.control.params.minSearchTermLength!'1'},
@@ -115,7 +114,8 @@ LogicECM.module.WCalendar.Shedule.DrawPicker = function Shedule_DrawPicker(insta
 	}
 }
 
-LogicECM.module.WCalendar.Shedule.PickerOKPressed = function Shedule_PickerOKPressed(layer, args) {
+function Shedule_PickerOKPressed(layer, args) {
+	var scope = this;
 	var picker = args[1];
 	var selectedItems = picker.getSelectedItems();
 	var nodeRefObj = []
@@ -132,18 +132,18 @@ LogicECM.module.WCalendar.Shedule.PickerOKPressed = function Shedule_PickerOKPre
 		successCallback: {
 			fn: function (response) {
 				var results = response.json;
-				var htmlOutput = "";
+				var htmlOutput = "${msg("label.shedule.picker.parent-shedule")}:<br>";
 				if (results != null) {
 					for (var i = 0; i < results.length; i++) {
 						var result = results[i];
 						if (result) {
 							if (result.type == "COMMON") {
 								<#-- TODO: Сделать локализацию сообщений -->
-								htmlOutput += "C " + result.begin + " до " + result.end + "<br>";
+								htmlOutput += "c " + result.begin + " до " + result.end + "<br>";
 							} else if (result.type == "SPECIAL") {
-								htmlOutput += "Особый<br>";
+								htmlOutput += "особый<br>";
 							} else {
-								htmlOutput += "Отсутствует<br>";
+								htmlOutput += "отсутствует<br>";
 							}
 						}
 
@@ -160,10 +160,10 @@ LogicECM.module.WCalendar.Shedule.PickerOKPressed = function Shedule_PickerOKPre
 	});
 }
 
-YAHOO.Bubbling.on("${controlPickerLabel}", LogicECM.module.WCalendar.Shedule.PickerOKPressed, this);
+YAHOO.Bubbling.on("${controlPickerLabel}", Shedule_PickerOKPressed, this);
 
-LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
-})();
+Shedule_DrawPicker({ value: '1'});
+
 
 //]]></script>
 
@@ -187,8 +187,8 @@ LogicECM.module.WCalendar.Shedule.DrawPicker({ value: '1'});
 		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 		<div id="${controlId}" class="object-finder">
 			<div>
-				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="LogicECM.module.WCalendar.Shedule.DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
-				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="LogicECM.module.WCalendar.Shedule.DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
+				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Shedule_DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
+				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Shedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
 			</div>
 			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 

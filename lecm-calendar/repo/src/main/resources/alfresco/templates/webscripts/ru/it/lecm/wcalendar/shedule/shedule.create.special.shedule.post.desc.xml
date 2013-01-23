@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Create new special shedule</shortname>
+	<description>Create new special shedule and it's elements</description>
+	<url>/lecm/wcalendar/shedule/set/createSpecialShedule</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

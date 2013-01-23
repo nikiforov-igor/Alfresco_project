@@ -9,6 +9,12 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 <#-- Custom calendar stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-calendar/wcalendar-calendar.css" />
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
 
 <#-- Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
@@ -18,6 +24,16 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
 <#-- Скрипт для валидации формы. Определяет, нет ли уже в списке дня, который пытаются добавить -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
+<#-- Custom Data Grid javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/non-working-days-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/working-days-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/years-datagrid.js"/>
+<#-- Custom Toolbar javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/special-days-toolbar.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/years-toolbar.js"/>
+<#-- Side menu javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
+
 
 <script type="text/javascript">//<![CDATA[
       function init() {
