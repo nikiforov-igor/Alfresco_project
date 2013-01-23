@@ -43,6 +43,8 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 	private OrgstructureBean orgstructureService;
 	private NodeRef rootRef;
 
+	private final Object lock = new Object();
+
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
 	}
@@ -61,10 +63,6 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
-	}
-
-	public NodeService getNodeService() {
-		return nodeService;
 	}
 
 	public NodeRef getRootRef() {
@@ -119,11 +117,15 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 	 */
 	private NodeRef createNotification(NotificationUnit notification) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
+		String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
+		Date formingDate = new Date();
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
-		properties.put(NotificationsService.PROP_FORMING_DATE, new Date());
+		properties.put(NotificationsService.PROP_FORMING_DATE, formingDate);
 
-		ChildAssociationRef associationRef = nodeService.createNode(this.rootRef, ContentModel.ASSOC_CONTAINS,
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, formingDate);
+
+		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),
 				TYPE_NOTIFICATION_ACTIVE_CHANNEL, properties);
 
@@ -172,5 +174,56 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Метод, возвращающий ссылку на директорию в директории "Уведомления/Активный канал" согласно заданным параметрам
+	 *
+	 *
+	 * @param date - текущая дата
+	 * @param employeeName - имя сотрудника
+	 * @param root - корень, относительно которого строится путь
+	 * @return ссылка на директорию
+	 */
+	private NodeRef getFolder(final NodeRef root, final String employeeName, final Date date) {
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
+						NodeRef directoryRef;
+						synchronized (lock) {
+							List<String> directoryPaths = new ArrayList<String>(3);
+							if (employeeName != null) {
+								directoryPaths.add(employeeName);
+							}
+							directoryPaths.add(FolderNameFormatYear.format(date));
+							directoryPaths.add(FolderNameFormatMonth.format(date));
+							directoryPaths.add(FolderNameFormatDay.format(date));
+
+							directoryRef = root;
+							for (String pathString : directoryPaths) {
+								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+								if (pathDir == null) {
+									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+									QName assocQName = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, pathString);
+									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+									properties.put(ContentModel.PROP_NAME, pathString);
+									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+									directoryRef = result.getChildRef();
+								} else {
+									directoryRef = pathDir;
+								}
+							}
+						}
+						return directoryRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
 	}
 }
