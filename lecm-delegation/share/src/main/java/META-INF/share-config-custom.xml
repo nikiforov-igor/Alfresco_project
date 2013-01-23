@@ -39,7 +39,7 @@
 			<form id="delegation-opts-part1"> <!--submission-url="url"-->
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
-					<field id="lecm-d8n:delegation-opts-owner-assoc"> <!-- read-only="true" -->
+					<field id="lecm-d8n:delegation-opts-owner-assoc" read-only="true"> <!-- read-only="true" -->
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -82,7 +82,7 @@
 		<forms>
 			<form id="editProcuracy">
 				<appearance>
-					<field id="lecm-d8n:procuracy-business-role-assoc"> <!-- read-only="true" -->
+					<field id="lecm-d8n:procuracy-business-role-assoc" read-only="true"> <!-- read-only="true" -->
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>

@@ -1952,6 +1952,11 @@ span.person a
 	width: auto;
 }
 
+.yui-skin-lecmTheme .yui-panel div.form-field label.radio {
+    line-height: 25px;
+    float: none;
+}
+
 .notification-row {
     border-bottom: solid 1px #808080;
     padding-left: 10px;

@@ -11,8 +11,8 @@
 //]]>
 </script>
 
-<div id="${id}" style="width: 500px;">
-	<div id="${id}-content-part1"></div>
+<div id="${id}" style="width: 640px;">
+	<div id="${id}-content-part1" class="yui-panel"></div>
 <#--
 	<div id="${id}-content-part1-footer" style="text-align: right;">
 		<div id="${id}-btnSaveDelegationOpts"></div>
