@@ -10,7 +10,7 @@
             options: [
                 {
                     value: '',
-                    text: '${msg("label.select.all")}'
+                    text: '${msg("label.select.days.all")}'
                 },
                 {
                     value: '1',
