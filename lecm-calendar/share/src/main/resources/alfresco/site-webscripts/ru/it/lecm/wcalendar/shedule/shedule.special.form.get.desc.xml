@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-shedule-special-form</shortname>
-	<description>Work Calendar: Form for special type shedule</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/shedule/shedule-special-form</url>
-	<authentication>user</authentication>
-</webscript>

@@ -155,17 +155,18 @@
 				</appearance>
 			</form>
 			<form id="createNewSpecialSheduleForm">
-				<create-form template="/ru/it/lecm/wcalendar/shedule/shedule.special.form.get.html.ftl" />
 				<field-visibility>
 					<show id="lecm-shed:shed-employee-link-assoc"/>
 					<show id="lecm-shed:time-limit-start"/>
 					<show id="lecm-shed:time-limit-end"/>
+					<show id="reiteration-rules"/>
 					<show id="lecm-shed:std-begin"/>
 					<show id="lecm-shed:std-end"/>
 					<show id="lecm-shed:type"/>
 				</field-visibility>
 				<appearance>
 					<set id="time-limit" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.date-interval" />
+					<set id="reiteration-rules"  appearance="title" label-id="label.shedule.form.reiteration-rules" />
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.work-time" />
 					<field id="lecm-shed:shed-employee-link-assoc" mandatory="true">
 						<control template="/ru/it/lecm/wcalendar/controls/double-picker-control.ftl">
@@ -202,19 +203,13 @@
 							<control-param name="value">SPECIAL</control-param>
 						</control>
 					</field>
-					<!-- TODO: добавить проверку на стороне клиента, что окончание дествия расписания ПОЗЖЕ его начала. -->
+					<!-- TODO: добавить валидатор, проверяющий, что окончание срока действия расписания ПОЗЖЕ его начала. -->
 					<field id="lecm-shed:time-limit-start" label-id="label.shedule.form.set.date-interval.begin" mandatory="true" set="time-limit"/>
-<!--						<control template="/org/alfresco/components/form/controls/date.ftl" />
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Utils.mandatory" event="keyup" />
-						</constraint-handlers>
-					</field>-->
 					<field id="lecm-shed:time-limit-end" label-id="label.shedule.form.set.date-interval.end" mandatory="true" set="time-limit"/>
-<!--						<control template="/org/alfresco/components/form/controls/date.ftl" />
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Utils.mandatory" event="keyup" />
-						</constraint-handlers>
-					</field>-->
+					<!-- TODO: в сам контрол добавить проверку на обязательные поля -->
+					<field id="reiteration-rules" label-id="label.shedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
+						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 

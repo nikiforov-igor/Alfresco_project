@@ -11,13 +11,12 @@
 
 <#-- Data Grid stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
-<#-- Custom calendar stylesheet -->
-<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-calendar/wcalendar-shedule.css" />
 <#-- Custom toolbar stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/reiteration-control.css"/>
 
 <#-- Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
