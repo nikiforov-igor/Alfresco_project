@@ -1,7 +1,6 @@
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
-
 <#-- подключить все скрипты необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
@@ -25,6 +24,13 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/advsearch.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/opts/procuracy-grid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/opts/delegation-opts.js"/>
+
+<script type="text/javascript">//<![CDATA[
+
+initDelegationConst ();
+
+//]]>
+</script>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

@@ -1,15 +1,6 @@
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
-<script type="text/javascript">//<![CDATA[
-
-LogicECM.module.Delegation.Const.nodeRef = "${nativeObject.nodeRef}";
-LogicECM.module.Delegation.Const.itemType = "${nativeObject.itemType}";
-LogicECM.module.Delegation.Const.isBoss = ${nativeObject.isBoss?string};
-LogicECM.module.Delegation.Const.isEngineer = ${nativeObject.isEngineer?string};
-//]]>
-</script>
-
 <#-- подключить все скрипты необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
@@ -39,6 +30,18 @@ LogicECM.module.Delegation.Const.isEngineer = ${nativeObject.isEngineer?string};
 <#-- DelegationList Data Grid javascript -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list.js"/>
 
+<script type="text/javascript">//<![CDATA[
+
+var response = ${response};
+
+initDelegationConst ();
+
+LogicECM.module.Delegation.Const.nodeRef = response.nodeRef;
+LogicECM.module.Delegation.Const.itemType = response.itemType;
+LogicECM.module.Delegation.Const.isBoss = response.isBoss;
+LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
+//]]>
+</script>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

@@ -8,4 +8,5 @@ if (200 == result.status) {
 		model.props.push (prop + "|" + nativeObject[prop] + "|" + typeof (nativeObject[prop]));
 	}
 	model.nativeObject = nativeObject;
+	model.response = response;
 }
