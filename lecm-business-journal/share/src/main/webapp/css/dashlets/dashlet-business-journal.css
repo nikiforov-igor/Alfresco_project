@@ -6,10 +6,7 @@
 .dashlet.business-journal.yui-resize .yui-resize-handle {
     z-index: 0;
 }
-.dashlet.business-journal .controls {
-    padding: 2px 5px;
-}
-.dashlet.business-journal .controls form {
+.dashlet.business-journal .toolbar {
     white-space: nowrap;
 }
 .dashlet.business-journal .results {
