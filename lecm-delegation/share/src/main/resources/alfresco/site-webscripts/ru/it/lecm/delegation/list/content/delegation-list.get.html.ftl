@@ -27,8 +27,8 @@
 	YAHOO.util.Event.onContentReady ('${id}', function () {
 		YAHOO.Bubbling.fire ("activeGridChanged", {
 			datagridMeta:{
-				itemType: LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER.itemType,
-				nodeRef: LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER.nodeRef,
+				itemType: LogicECM.module.Delegation.Const.itemType,
+				nodeRef: LogicECM.module.Delegation.Const.nodeRef,
 				searchConfig: {
 					filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
 				}

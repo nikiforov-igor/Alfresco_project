@@ -3,18 +3,10 @@
 <@templateHeader>
 <script type="text/javascript">//<![CDATA[
 
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
-LogicECM.module = LogicECM.module || {};
-
-LogicECM.module.Delegation = LogicECM.module.Delegation || {};
-
-LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER || {
-	"nodeRef": ${nativeObject.nodeRef},
-	"itemType": ${nativeObject.itemType}
-};
+LogicECM.module.Delegation.Const.nodeRef = "${nativeObject.nodeRef}";
+LogicECM.module.Delegation.Const.itemType = "${nativeObject.itemType}";
+LogicECM.module.Delegation.Const.isBoss = ${nativeObject.isBoss?string};
+LogicECM.module.Delegation.Const.isEngineer = ${nativeObject.isEngineer?string};
 //]]>
 </script>
 
@@ -34,8 +26,10 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 <#-- Data Grid stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 
+<#-- скрипт с константами -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
 <#-- скрипты меню -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/menu/delegation-menu.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-menu.js"/>
 <#-- скрипты тулбара для страницы delegation-list -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list-toolbar.js"/>
 <#-- Data Grid javascript-->

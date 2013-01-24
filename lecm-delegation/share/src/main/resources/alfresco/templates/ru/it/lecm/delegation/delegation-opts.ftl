@@ -15,8 +15,10 @@
 <#-- Data Grid stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 
+<#-- скрипт с константами -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
 <#-- скрипты меню -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/menu/delegation-menu.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-menu.js"/>
 <#-- Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
 <#-- Advanced search -->
