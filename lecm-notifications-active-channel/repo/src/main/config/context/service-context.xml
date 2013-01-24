@@ -57,4 +57,63 @@
 			<ref bean="notificationActiveChannel"/>
 		</property>
 	</bean>
+
+	<bean id="notificationsActiveChannelDeleteSchedule" class="ru.it.lecm.notifications.channel.active.schedule.NotificationsActiveChannelDeleteSchedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="cronExpression">
+			<value>0 15 3 * * ?</value>
+		</property>
+		<property name="jobName">
+			<value>notificationa-active-channel-cleaner</value>
+		</property>
+		<property name="jobGroup">
+			<value>notifications-active-channel</value>
+		</property>
+		<property name="triggerName">
+			<value>notifications-active-channel-delete-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>notifications-active-channel-trigger</value>
+		</property>
+		<property name="scheduler">
+			<ref bean="schedulerFactory"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="searchService">
+			<ref bean="SearchService"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="transactionService">
+			<ref bean="TransactionService"/>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+		<property name="notificationsActiveChannel">
+			<ref bean="notificationActiveChannel"/>
+		</property>
+	</bean>
+
+	<bean id="notificationsActiveChannelDeleteScheduleExecutor"
+	      class="ru.it.lecm.notifications.channel.active.schedule.NotificationsActiveChannelDeleteScheduleExecutor"
+	      parent="action-executer">
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+	</bean>
 </beans>
