@@ -76,7 +76,7 @@
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
-					<show id="lecm-dic:active"/> <!-- временно чтобы следить активна доверенность или нет -->
+					<!--<show id="lecm-dic:active"/>  временно чтобы следить активна доверенность или нет -->
 				</field-visibility>
 			</form>
 		</forms>

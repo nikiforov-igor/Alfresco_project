@@ -3,8 +3,6 @@
 <@templateHeader>
 <script type="text/javascript">//<![CDATA[
 
-var delegationDescription = ${delegationDescription};
-
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	var LogicECM = {};
 }
@@ -14,8 +12,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER || {
-	"nodeRef": delegationDescription.nodeRef,
-	"itemType": delegationDescription.itemType
+	"nodeRef": ${nativeObject.nodeRef},
+	"itemType": ${nativeObject.itemType}
 };
 //]]>
 </script>
