@@ -1,26 +1,36 @@
 package ru.it.lecm.base.beans;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
+import org.alfresco.service.transaction.TransactionService;
 
 /**
- * Created with IntelliJ IDEA.
  * User: AIvkin
  * Date: 27.12.12
  * Time: 15:12
- * To change this template use File | Settings | File Templates.
- */
+  */
 public abstract class BaseBean {
 	protected QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
+	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
+	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
+	final DateFormat FolderNameFormatDay = new SimpleDateFormat("DD");
+
 	protected NodeService nodeService;
+
+	private final Object lock = new Object();
 
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -152,5 +162,56 @@ public abstract class BaseBean {
 			}
 		}
 		return foundNodeRefs;
+	}
+
+	public List<String> getDateFolderPath(Date date) {
+		List<String> result = new ArrayList<String>();
+		result.add(FolderNameFormatYear.format(date));
+		result.add(FolderNameFormatMonth.format(date));
+		result.add(FolderNameFormatDay.format(date));
+		return result;
+	}
+
+	/**
+	 * Метод, возвращающий ссылку на директорию согласно заданным параметрам
+	 *
+	 * @param transactionService - TransactionService
+	 * @param nameSpace          - name space для сохранения
+	 * @param root               - корень, относительно которого строится путь
+	 * @param directoryPaths     - список папок
+	 * @return ссылка на директорию
+	 */
+	public NodeRef getFolder(final TransactionService transactionService, final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
+						NodeRef directoryRef;
+						synchronized (lock) {
+							directoryRef = root;
+							for (String pathString : directoryPaths) {
+								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+								if (pathDir == null) {
+									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+									QName assocQName = QName.createQName(nameSpace, pathString);
+									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+									properties.put(ContentModel.PROP_NAME, pathString);
+									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+									directoryRef = result.getChildRef();
+								} else {
+									directoryRef = pathDir;
+								}
+							}
+						}
+						return directoryRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
 	}
 }

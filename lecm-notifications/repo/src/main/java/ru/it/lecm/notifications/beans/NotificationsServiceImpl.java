@@ -35,6 +35,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private OrgstructureBean orgstructureService;
 
 	private NodeRef notificationsRootRef;
+	private NodeRef notificationsGenaralizetionRootRef;
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -49,10 +50,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		this.orgstructureService = orgstructureService;
 	}
 
-	public OrgstructureBean getOrgstructureService() {
-		return orgstructureService;
-	}
-
 	@Override
 	public NodeRef getNotificationsRootRef() {
 		return notificationsRootRef;
@@ -65,6 +62,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	 */
 	public void init() {
 		final String rootName = NOTIFICATIONS_ROOT_NAME;
+		final String generalizationRootName = NOTIFICATIONS_GENERALIZATION_ROOT_NAME;
 		repositoryHelper.init();
 		nodeService = serviceRegistry.getNodeService();
 		transactionService = serviceRegistry.getTransactionService();
@@ -93,6 +91,31 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			}
 		};
 		notificationsRootRef = AuthenticationUtil.runAsSystem(raw);
+
+		AuthenticationUtil.RunAsWork<NodeRef> generalizationRaw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						NodeRef rootRef = nodeService.getChildByName(notificationsRootRef, ContentModel.ASSOC_CONTAINS, generalizationRootName);
+						if (rootRef == null) {
+							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+							QName assocQName = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, NOTIFICATIONS_GENERALIZATION_ASSOC_QNAME);
+
+							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+							properties.put(ContentModel.PROP_NAME, generalizationRootName);
+							ChildAssociationRef associationRef = nodeService.createNode(notificationsRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+
+							rootRef = associationRef.getChildRef();
+						}
+						return rootRef;
+					}
+				});
+			}
+		};
+		notificationsGenaralizetionRootRef = AuthenticationUtil.runAsSystem(generalizationRaw);
 
 		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
 	}
@@ -149,11 +172,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				}
 			}
 
-			if (channelBean != null) {
-				return channelBean.sendNotification(notification);
-			} else {
-				return false;
-			}
+			return channelBean != null && channelBean.sendNotification(notification);
 		} else {
 			return false;
 		}
@@ -171,7 +190,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
 		properties.put(PROP_GENERAL_FORMING_DATE, notification.getFormingDate());
 
-		ChildAssociationRef associationRef = nodeService.createNode(this.notificationsRootRef, ContentModel.ASSOC_CONTAINS,
+		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_NAMESPACE_URI, this.notificationsGenaralizetionRootRef, getDateFolderPath(notification.getFormingDate()));
+
+		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_NAMESPACE_URI, GUID.generate()), TYPE_GENERALIZED_NOTIFICATION, properties);
 
 		NodeRef result = associationRef.getChildRef();

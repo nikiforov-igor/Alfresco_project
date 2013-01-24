@@ -7,7 +7,6 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
@@ -25,7 +24,7 @@ import java.util.*;
  *
  * Сервис канала уведомления для дашлета
  */
-public class NotificationsDashletChannel implements NotificationChannelBeanBase {
+public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_DASHLET_ROOT_NAME = "Дашлет";
 	public static final String NOTIFICATIONS_DASHLET_ASSOC_QNAME = "dashlet";
 
@@ -33,20 +32,13 @@ public class NotificationsDashletChannel implements NotificationChannelBeanBase 
 	public final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
 
 	private ServiceRegistry serviceRegistry;
-	protected NodeService nodeService;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
 	private NodeRef rootRef;
 
-    private final Object lock = new Object();
-
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
 	}
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
@@ -104,17 +96,16 @@ public class NotificationsDashletChannel implements NotificationChannelBeanBase 
 	 * @return Ссылка на уведомление для дашлета
 	 */
 	private NodeRef createNotification(NotificationUnit notification) {
-        Date date = new Date();
         String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 
         properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
-		properties.put(NotificationsService.PROP_FORMING_DATE, date);
+		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 
-        final NodeRef directoryRef = getFolder(this.rootRef, employeeName, date);
+		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_DASHLET_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
 
-        ChildAssociationRef associationRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS,
+        ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, GUID.generate()),
 				TYPE_NOTIFICATION_DASHLET, properties);
 
@@ -124,54 +115,4 @@ public class NotificationsDashletChannel implements NotificationChannelBeanBase 
 		nodeService.createAssociation(result, notification.getRecipientRef(), NotificationsService.ASSOC_RECIPIENT);
 		return result;
 	}
-
-    /**
-     * Метод, возвращающий ссылку на директорию в директории "Уведомления" согласно заданным параметрам
-     *
-     * @param date - текущая дата
-     * @param employeeName - имя сотрудника
-     * @param root - корень, относительно которого строится путь
-     * @return ссылка на директорию
-     */
-    private NodeRef getFolder(final NodeRef root, final String employeeName, final Date date) {
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                    // имя директории "Корень/Имя пользователя/ГГГГ/ММ/ДД"
-                        NodeRef directoryRef;
-                        synchronized (lock) {
-                            List<String> directoryPaths = new ArrayList<String>(3);
-                            if (employeeName != null) {
-                                directoryPaths.add(employeeName);
-                            }
-                            directoryPaths.add(FolderNameFormatYear.format(date));
-                            directoryPaths.add(FolderNameFormatMonth.format(date));
-                            directoryPaths.add(FolderNameFormatDay.format(date));
-
-                            directoryRef = root;
-                            for (String pathString : directoryPaths) {
-                                NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-                                if (pathDir == null) {
-                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                    QName assocQName = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, pathString);
-                                    QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                    properties.put(ContentModel.PROP_NAME, pathString);
-                                    ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                    directoryRef = result.getChildRef();
-                                } else {
-                                    directoryRef = pathDir;
-                                }
-                            }
-                        }
-                        return directoryRef;
-                    }
-                });
-            }
-        };
-        return AuthenticationUtil.runAsSystem(raw);
-    }
 }

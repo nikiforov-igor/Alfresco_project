@@ -10,7 +10,6 @@ import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
@@ -23,7 +22,6 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +32,7 @@ import java.util.Map;
  *
  * Сервис канала уведомлений для электронной почты
  */
-public class NotificationsEmailChannel implements NotificationChannelBeanBase {
+public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	private static final transient Logger logger = LoggerFactory.getLogger(NotificationsEmailChannel.class);
 	public static final String NOTIFICATIONS_EMAIL_ROOT_NAME = "Email";
 	public static final String NOTIFICATIONS_EMAIL_ASSOC_QNAME = "email";
@@ -44,7 +42,6 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	public final QName PROP_EMAIL = QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, "email");
 
 	private ServiceRegistry serviceRegistry;
-	protected NodeService nodeService;
 	private Repository repositoryHelper;
 	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
@@ -53,10 +50,6 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
 	}
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
@@ -126,13 +119,16 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 	 * @return Ссылка на уведомление для email
 	 */
 	private NodeRef createNotification(NotificationUnit notification, String email) {
+		String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 		properties.put(PROP_EMAIL, email);
 
-		ChildAssociationRef associationRef = nodeService.createNode(this.rootRef, ContentModel.ASSOC_CONTAINS,
+		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_EMAIL_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
+
+		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, GUID.generate()),
 				TYPE_NOTIFICATION_EMAIL, properties);
 

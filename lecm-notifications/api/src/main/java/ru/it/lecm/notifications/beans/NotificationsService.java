@@ -16,6 +16,8 @@ public interface NotificationsService {
 
 	public static final String NOTIFICATIONS_ROOT_NAME = "Уведомления";
 	public static final String NOTIFICATIONS_ASSOC_QNAME = "notifications";
+	public static final String NOTIFICATIONS_GENERALIZATION_ROOT_NAME = "Обобщённые уведомления";
+	public static final String NOTIFICATIONS_GENERALIZATION_ASSOC_QNAME = "generalization";
 
 	public final QName TYPE_GENERALIZED_NOTIFICATION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "generalized-notification");
 

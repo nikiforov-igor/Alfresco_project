@@ -79,9 +79,7 @@ public interface BusinessJournalService {
 	public final String SYSTEM = "System";
 
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
-	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
-	final DateFormat FolderNameFormatDay = new SimpleDateFormat("DD");
+
     /**
      * Метод для создания записи бизнеса-журнала
      * @param date - дата создания записи

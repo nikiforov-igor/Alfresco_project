@@ -30,6 +30,10 @@ public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcess
 		this.service = service;
 	}
 
+	/**
+	 * Получение корневой папки уведомлений активного канала
+	 * @return
+	 */
 	public ScriptNode getDirectory() {
 		try {
 			NodeRef ref = this.service.getRootRef();
@@ -39,10 +43,20 @@ public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcess
 		}
 	}
 
+	/**
+	 * Получение количества новых уведомлений
+	 * @return количество новых уведомлений
+	 */
 	public int getNewNotificationsCount() {
 		return this.service.getNewNotificationsCount();
 	}
 
+	/**
+	 * Получение уведомлений
+	 * @param skipItemsCount количество пропущенных записей
+	 * @param loadItemsCount максимальное количество возвращаемых элементов
+	 * @return               список уведомлений
+	 */
 	public Scriptable getNotifications(String skipItemsCount, String loadItemsCount) {
 		ParameterCheck.mandatory("skipItemsCount", skipItemsCount);
 		ParameterCheck.mandatory("loadItemsCount", loadItemsCount);
@@ -63,6 +77,10 @@ public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcess
 		return Context.getCurrentContext().newArray(getScope(), results);
 	}
 
+	/**
+	 * Выставление времени прочтения уведомления
+	 * @param nodeRefs json со списком ссылок на уведомления
+	 */
 	public void setReadNotifications(final JSONArray nodeRefs) {
 		List<NodeRef> nodeRefsList = new ArrayList<NodeRef>();
 		for (int i = 0; i < nodeRefs.length(); ++i) {

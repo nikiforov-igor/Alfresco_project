@@ -17,7 +17,6 @@ import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
@@ -33,7 +32,7 @@ import java.util.*;
  * <p/>
  * Сервис активного канала уведомлений
  */
-public class NotificationsActiveChannel extends BaseBean implements NotificationChannelBeanBase {
+public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_NAME = "Активный канал";
 	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_ASSOC_QNAME = "active_channel";
 
@@ -51,8 +50,6 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private NodeRef rootRef;
-
-	private final Object lock = new Object();
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
@@ -135,12 +132,11 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 	private NodeRef createNotification(NotificationUnit notification) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 		String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
-		Date formingDate = new Date();
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
-		properties.put(NotificationsService.PROP_FORMING_DATE, formingDate);
+		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 
-		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, formingDate);
+		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),
@@ -151,55 +147,6 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 		// создаем ассоциации
 		nodeService.createAssociation(result, notification.getRecipientRef(), NotificationsService.ASSOC_RECIPIENT);
 		return result;
-	}
-
-	/**
-	 * Метод, возвращающий ссылку на директорию в директории "Уведомления/Активный канал" согласно заданным параметрам
-	 *
-	 * @param date         - текущая дата
-	 * @param employeeName - имя сотрудника
-	 * @param root         - корень, относительно которого строится путь
-	 * @return ссылка на директорию
-	 */
-	private NodeRef getFolder(final NodeRef root, final String employeeName, final Date date) {
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef directoryRef;
-						synchronized (lock) {
-							List<String> directoryPaths = new ArrayList<String>(3);
-							if (employeeName != null) {
-								directoryPaths.add(employeeName);
-							}
-							directoryPaths.add(FolderNameFormatYear.format(date));
-							directoryPaths.add(FolderNameFormatMonth.format(date));
-							directoryPaths.add(FolderNameFormatDay.format(date));
-
-							directoryRef = root;
-							for (String pathString : directoryPaths) {
-								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-								if (pathDir == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, pathString);
-									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, pathString);
-									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-									directoryRef = result.getChildRef();
-								} else {
-									directoryRef = pathDir;
-								}
-							}
-						}
-						return directoryRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
 	}
 
 	/**
@@ -220,17 +167,31 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 
 	}
 
+	/**
+	 * Проверяет, что NodeRef является ссылкой на уведомление активного канала
+	 * @param ref ссылка на элемент
+	 * @return    true если NodeRef является ссылкой на уведомление активного канала иначе false
+	 */
 	public boolean isActiveChannelNotification(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_NOTIFICATION_ACTIVE_CHANNEL);
 		return isProperType(ref, types);
 	}
 
+	/**
+	 * Проверка, что уведомление является новым
+	 * @param ref ссылка на уведомление
+	 * @return    true если дата прочтения равна null иначе false
+	 */
 	public boolean isNewNotification(NodeRef ref) {
 		return ref != null && isActiveChannelNotification(ref) && !isArchive(ref) &&
 				nodeService.getProperty(ref, PROP_READ_DATE) == null;
 	}
 
+	/**
+	 * Получение количества новых уведомлений
+	 * @return количество новых уведомлений
+	 */
 	public int getNewNotificationsCount() {
 		int result = 0;
 		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
@@ -245,6 +206,12 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 		return result;
 	}
 
+	/**
+	 * Получение уведомлений
+	 * @param skipCount количество пропущенных записей
+	 * @param maxItems  максимальное количество возвращаемых элементов
+	 * @return          список ссылок на уведомления
+	 */
 	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
@@ -268,6 +235,7 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 					result.add(node);
 				}
 			} catch (LuceneQueryParserException e) {
+				logger.error("Error while getting notifications records", e);
 			} catch (Exception e) {
 				logger.error("Error while getting notifications records", e);
 			} finally {
@@ -280,6 +248,10 @@ public class NotificationsActiveChannel extends BaseBean implements Notification
 		return result;
 	}
 
+	/**
+	 * Выставление времени прочтения уведомления
+	 * @param nodeRefs список ссылок на уведомления
+	 */
 	public void setReadNotifications(List<NodeRef> nodeRefs) {
 		if (nodeRefs != null) {
 			for (NodeRef ref: nodeRefs) {

@@ -641,48 +641,15 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на директорию
 	 */
 	private NodeRef getFolder(final NodeRef root, final String type, final String category, final Date date) {
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
-						NodeRef directoryRef;
-						synchronized (lock) {
-							List<String> directoryPaths = new ArrayList<String>(3);
-							if (type != null) {
-								directoryPaths.add(type);
-							}
-							if (category != null) {
-								directoryPaths.add(category);
-							}
-							directoryPaths.add(FolderNameFormatYear.format(date));
-							directoryPaths.add(FolderNameFormatMonth.format(date));
-							directoryPaths.add(FolderNameFormatDay.format(date));
-
-							directoryRef = root;
-							for (String pathString : directoryPaths) {
-								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-								if (pathDir == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(BJ_NAMESPACE_URI, pathString);
-									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, pathString);
-									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-									directoryRef = result.getChildRef();
-								} else {
-									directoryRef = pathDir;
-								}
-							}
-						}
-						return directoryRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
+		List<String> directoryPaths = new ArrayList<String>(3);
+		if (type != null) {
+			directoryPaths.add(type);
+		}
+		if (category != null) {
+			directoryPaths.add(category);
+		}
+		directoryPaths.addAll(getDateFolderPath(date));
+		return getFolder(transactionService, BJ_NAMESPACE_URI, root, directoryPaths);
 	}
 	/**
 	 * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
