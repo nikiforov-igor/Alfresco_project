@@ -1,16 +1,14 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
+<#if "list" == page>
 	"nodeRef": "${nodeRef}",
 	"itemType": "${itemType}",
-<#if isEngineer>
-	"isEngineer": true,
-<#else/>
-	"isEngineer": false,
-</#if>
-<#if isBoss>
-	"isBoss": true
-<#else/>
-	"isBoss": false
+	"isEngineer": ${isEngineer?string},
+	"isBoss": ${isBoss?string}
+<#elseif "opts" == page>
+	"isEngineer": ${isEngineer?string},
+	"isBoss": ${isBoss?string},
+	"hasSubordinate": false
 </#if>
 }
 </#escape>

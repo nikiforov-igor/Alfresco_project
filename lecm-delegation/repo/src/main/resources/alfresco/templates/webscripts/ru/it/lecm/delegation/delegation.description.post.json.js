@@ -1,4 +1,5 @@
 var page = url.templateArgs.page;
+model.page = page;
 
 function getDescriptionList () {
 	var container = delegation.getDelegationOptsContainer ();
@@ -17,7 +18,7 @@ function getDescriptionList () {
 }
 
 function getDescriptionOpts () {
-
+	model.hasSubordinate = false;
 }
 
 switch (page) {
