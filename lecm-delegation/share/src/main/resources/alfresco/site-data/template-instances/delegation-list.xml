@@ -20,9 +20,6 @@
 		<component>
 			<region-id>menu</region-id>
 			<url>/lecm/delegation/list/menu</url>
-			<properties>
-				<selected>delegationList</selected>
-			</properties>
 		</component>
 		<!-- Grid region -->
 		<component>

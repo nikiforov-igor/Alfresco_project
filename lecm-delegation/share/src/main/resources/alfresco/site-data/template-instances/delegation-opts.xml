@@ -16,7 +16,7 @@
 			<region-id>menu</region-id>
 			<url>/lecm/delegation/opts/menu</url>
 			<properties>
-				<selected>delegationOpts</selected>
+				<selected>delegationList</selected>
 			</properties>
 		</component>
 		<component>
