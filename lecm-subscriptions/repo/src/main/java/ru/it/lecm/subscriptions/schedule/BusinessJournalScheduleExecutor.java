@@ -19,11 +19,10 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -44,6 +43,8 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 	private NamespaceService namespaceService;
 
 	private NotificationsService notificationsService;
+
+	private OrgstructureBean orgstructureService;
 
 	private SubscriptionsBean subscriptionsService;
 
@@ -73,19 +74,88 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		this.searchService = searchService;
 	}
 
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
+
 	@Override
-	protected void executeImpl(Action action, NodeRef nodeRef) {
-		String author = (String) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_INITIATOR);
-		String description = (String) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_DESC);
-		Date date = (Date) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_DATE);
-		NodeRef mainObject = nodeService.getTargetAssocs(nodeRef, BusinessJournalService.ASSOC_BR_RECORD_MAIN_OBJ).get(0).getTargetRef();
+	protected void executeImpl(Action action, NodeRef bjRecordRef) {
+		String author = (String) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_INITIATOR);
+		List<AssociationRef> initiatorAssocs = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_INITIATOR);
+		NodeRef initiator = null;
+		if (initiatorAssocs != null && !initiatorAssocs.isEmpty()) {
+			initiator = initiatorAssocs.get(0).getTargetRef();
+		}
+		String description = (String) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_DESC);
+		Date date = (Date) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_DATE);
+		NodeRef mainObject = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_MAIN_OBJ).get(0).getTargetRef();
+		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+		subscriptions.addAll(findSubscriptionsToType(bjRecordRef));
+		subscriptions.addAll(findSubscriptionsToInitiator(initiator));
+		//добавляем подписки на объект
+		subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
+		sendNotificationsBySubscriptions(subscriptions, author, description, mainObject, date);
+		nodeService.addAspect(bjRecordRef, SubscriptionsBean.ASPECT_SUBSCRIBED, null);
+	}
+
+	//обработка подписок на действия сотрудника/группы/подразделения
+	private Set<NodeRef> findSubscriptionsToInitiator(NodeRef initiator) {
+		if (initiator == null || !nodeService.exists(initiator)) {
+			return null;
+		}
+		//заполнение списка возможных объектов подписки по инициатору
+		Set<NodeRef> initiators = new HashSet<NodeRef>();
+		initiators.add(initiator);
+		//рабочие группы, в которые входит инициатор
+		List<NodeRef> workGroups = orgstructureService.getEmployeeWorkGroups(initiator);
+		initiators.addAll(workGroups);
+		//подразделения, в которые входит инициатор (включая родительские)
+		List<NodeRef> units = orgstructureService.getEmployeeUnits(initiator, false);
+		for (NodeRef unit : units) {
+			initiators.add(unit);
+			while ((unit = orgstructureService.getParent(unit)) != null) {
+				if (!initiators.add(unit)) {
+					break;
+				}
+			}
+		}
+
+		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+		for (NodeRef initRef : initiators) {
+			subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(initRef));
+		}
+		return subscriptions;
+	}
+
+	private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, String description, NodeRef mainObject, Date date) {
+		for (NodeRef subscription : subscriptions) {
+			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsBean.ASSOC_NOTIFICATION_TYPE);
+			List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_EMPLOYEE);
+			List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_POSITION);
+			List<NodeRef> units = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_ORGANIZATION_UNIT);
+			List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_WORK_GROUP);
+			Notification notification = new Notification();
+			notification.setObjectRef(mainObject);
+			notification.setAutor(author);
+			notification.setDescription(description);
+			notification.setFormingDate(date);
+			notification.setTypeRefs(notificationTypes);
+			notification.setRecipientEmployeeRefs(employees);
+			notification.setRecipientPositionRefs(positions);
+			notification.setRecipientOrganizationUnitRefs(units);
+			notification.setRecipientWorkGroupRefs(workgroups);
+			notificationsService.sendNotification(notification);
+		}
+	}
+
+	private Set<NodeRef> findSubscriptionsToType(NodeRef bjRecordRef) {
 		NodeRef byType = null;
-		List<AssociationRef> types = nodeService.getTargetAssocs(nodeRef, BusinessJournalService.ASSOC_BR_RECORD_OBJ_TYPE);
+		List<AssociationRef> types = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_OBJ_TYPE);
 		if (types.size() == 1) {
 			byType = types.get(0).getTargetRef();
 		}
 		NodeRef byCategory = null;
-		List<AssociationRef> categories = nodeService.getTargetAssocs(nodeRef, BusinessJournalService.ASSOC_BR_RECORD_EVENT_CAT);
+		List<AssociationRef> categories = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_EVENT_CAT);
 		if (categories.size() == 1) {
 			byCategory = categories.get(0).getTargetRef();
 		}
@@ -99,7 +169,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		String typeAttribute = "@" + subscriptionType.replace(":", "\\:");
 		String categoryAttribute = "@" + subscriptionCategory.replace(":", "\\:");
 
-		String query =  " +PATH:\"" + path + "//*\" AND TYPE:\"" + type +"\"";
+		String query = " +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"";
 
 		query += " AND (ISNULL:" + subscriptionType.replace(":", "\\:") + " OR "
 				+ typeAttribute + ":\"\"";
@@ -121,36 +191,21 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.setQuery(query);
 		ResultSet resultSet = null;
+		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
 		try {
 			resultSet = searchService.query(parameters);
 			for (ResultSetRow row : resultSet) {
-				NodeRef subscription = row.getNodeRef();
-				List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsBean.ASSOC_NOTIFICATION_TYPE);
-				List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_EMPLOYEE);
-				List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_POSITION);
-				List<NodeRef> units = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_ORGANIZATION_UNIT);
-				List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_WORK_GROUP);
-				Notification notification = new Notification();
-				notification.setObjectRef(mainObject);
-				notification.setAutor(author);
-				notification.setDescription(description);
-				notification.setFormingDate(date);
-				notification.setTypeRefs(notificationTypes);
-				notification.setRecipientEmployeeRefs(employees);
-				notification.setRecipientPositionRefs(positions);
-				notification.setRecipientOrganizationUnitRefs(units);
-				notification.setRecipientWorkGroupRefs(workgroups);
-				notificationsService.sendNotification(notification);
-				nodeService.addAspect(nodeRef, SubscriptionsBean.ASPECT_SUBSCRIBED, null);
+				subscriptions.add(row.getNodeRef());
 			}
-		} catch (LuceneQueryParserException e) {
+		} catch (LuceneQueryParserException ignored) {
 		} catch (Exception e1) {
-			logger.error("Error while send notification for business journal's record " + nodeRef.toString(), e1);
+			logger.error("Error while send notification for business journal's record " + bjRecordRef.toString(), e1);
 		} finally {
 			if (resultSet != null) {
 				resultSet.close();
 			}
 		}
+		return subscriptions;
 	}
 
 	@Override

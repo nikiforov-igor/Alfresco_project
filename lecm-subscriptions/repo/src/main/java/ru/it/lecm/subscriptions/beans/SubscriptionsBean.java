@@ -10,7 +10,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -160,6 +159,23 @@ public class SubscriptionsBean extends BaseBean {
 				if (!isArchive(lRef.getSourceRef())) {
 					subscriptions.add(lRef.getSourceRef());
 				}
+			}
+		}
+		return subscriptions;
+	}
+
+	/**
+	 * Получение списка подписок на объект
+	 *
+	 * @param objectRef Ссылка на объек
+	 * @return Список ссылок на подписки
+	 */
+	public List<NodeRef> getSubscriptionsToObject(NodeRef objectRef) {
+		List<NodeRef> subscriptions = new ArrayList<NodeRef>();
+		List<AssociationRef> lRefs = nodeService.getSourceAssocs(objectRef, ASSOC_SUBSCRIPTION_OBJECT);
+		for (AssociationRef lRef : lRefs) {
+			if (!isArchive(lRef.getSourceRef())) {
+				subscriptions.add(lRef.getSourceRef());
 			}
 		}
 		return subscriptions;

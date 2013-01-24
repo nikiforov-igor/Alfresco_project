@@ -127,6 +127,9 @@
 		<property name="searchService">
 			<ref bean="SearchService"/>
 		</property>
+		<property name="orgstructureService">
+			<ref bean="serviceOrgstructure"/>
+		</property>
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
