@@ -19,7 +19,7 @@
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>
-			<url>/lecm/delegation/list/menu</url>
+			<url>/lecm/delegation/menu</url>
 		</component>
 		<!-- Grid region -->
 		<component>

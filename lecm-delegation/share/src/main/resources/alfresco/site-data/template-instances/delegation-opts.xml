@@ -14,10 +14,7 @@
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>
-			<url>/lecm/delegation/opts/menu</url>
-			<properties>
-				<selected>delegationList</selected>
-			</properties>
+			<url>/lecm/delegation/menu</url>
 		</component>
 		<component>
 			<region-id>content</region-id>

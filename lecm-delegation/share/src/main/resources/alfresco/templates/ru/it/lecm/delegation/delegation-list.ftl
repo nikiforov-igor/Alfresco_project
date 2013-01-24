@@ -36,8 +36,8 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 <#-- Data Grid stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 
-<#-- скрипты меню для страницы delegation-list -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list-menu.js"/>
+<#-- скрипты меню -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/menu/delegation-menu.js"/>
 <#-- скрипты тулбара для страницы delegation-list -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list-toolbar.js"/>
 <#-- Data Grid javascript-->

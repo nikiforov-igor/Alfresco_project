@@ -7,18 +7,20 @@ LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
-LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
-
 (function () {
-	LogicECM.module.Delegation.List.Menu = function (containerId) {
-		return LogicECM.module.Delegation.List.Menu.superclass.constructor.call(
+	LogicECM.module.Delegation.Menu = function (containerId) {
+		return LogicECM.module.Delegation.Menu.superclass.constructor.call(
 			this,
-			"LogicECM.module.Delegation.List.Menu",
+			"LogicECM.module.Delegation.Menu",
 			containerId,
 			["button"]);
 	};
 
-	YAHOO.lang.extend(LogicECM.module.Delegation.List.Menu, Alfresco.component.Base, {
+	YAHOO.lang.extend(LogicECM.module.Delegation.Menu, Alfresco.component.Base, {
+
+		options: {
+			pageId: null
+		},
 
 		_reloadPage: function (type) {
 			var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
@@ -34,8 +36,19 @@ LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
 
 		_onMenuReady: function () {
 
+			var disable;
+			switch (this.options.pageId) {
+				case "delegation-list":
+					disable = true;
+					break;
+				case "delegation-opts":
+					//она будет выключена тогда и только тогда, когда прав нету
+					disable = false;
+					break;
+			}
+
 			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {
-                disabled: true
+                disabled: disable
             });
 		},
 

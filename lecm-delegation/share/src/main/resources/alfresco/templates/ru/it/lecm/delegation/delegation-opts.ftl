@@ -15,8 +15,8 @@
 <#-- Data Grid stylesheet -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
 
-<#-- скрипты меню для страницы delegation-list -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/opts/delegation-opts-menu.js"/>
+<#-- скрипты меню -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/menu/delegation-menu.js"/>
 <#-- Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
 <#-- Advanced search -->
