@@ -2,6 +2,7 @@ package ru.it.lecm.notifications.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,11 @@ public class Notification {
 	 * Берётся из бизнес журнала.
 	 */
 	private NodeRef objectRef;
+	/**
+	 * Дата формирования уведомления.
+	 * Если ничего не передано, будет подставлена текущая дата.
+	 */
+	private Date formingDate;
 	/**
 	 * Список ссылок на тип доставки уведомлений.
 	 * Берётся из подписки.
@@ -86,6 +92,18 @@ public class Notification {
 
 	public void setTypeRefs(List<NodeRef> typeRefs) {
 		this.typeRefs = typeRefs;
+	}
+
+	public Date getFormingDate() {
+		if (formingDate != null) {
+			return formingDate;
+		} else {
+			return new Date();
+		}
+	}
+
+	public void setFormingDate(Date formingDate) {
+		this.formingDate = formingDate;
 	}
 
 	public List<NodeRef> getRecipientEmployeeRefs() {

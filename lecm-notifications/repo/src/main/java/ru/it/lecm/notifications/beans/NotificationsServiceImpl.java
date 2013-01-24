@@ -169,7 +169,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
 		properties.put(PROP_GENERAL_AUTOR, notification.getAutor());
 		properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
-		properties.put(PROP_GENERAL_FORMING_DATE, new Date());
+		properties.put(PROP_GENERAL_FORMING_DATE, notification.getFormingDate());
 
 		ChildAssociationRef associationRef = nodeService.createNode(this.notificationsRootRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_NAMESPACE_URI, GUID.generate()), TYPE_GENERALIZED_NOTIFICATION, properties);
@@ -222,6 +222,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 							NotificationUnit newNotificationUnit = new NotificationUnit();
 							newNotificationUnit.setAutor(generalizedNotification.getAutor());
 							newNotificationUnit.setDescription(generalizedNotification.getDescription());
+							newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
 							newNotificationUnit.setTypeRef(typeRef);
 							newNotificationUnit.setRecipientRef(employeeRef);
 							result.add(newNotificationUnit);
@@ -237,6 +238,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 								NotificationUnit newNotificationUnit = new NotificationUnit();
 								newNotificationUnit.setAutor(generalizedNotification.getAutor());
 								newNotificationUnit.setDescription(generalizedNotification.getDescription());
+								newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
 								newNotificationUnit.setTypeRef(typeRef);
 								newNotificationUnit.setRecipientRef(employeeRef);
 								result.add(newNotificationUnit);
@@ -253,6 +255,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 								NotificationUnit newNotificationUnit = new NotificationUnit();
 								newNotificationUnit.setAutor(generalizedNotification.getAutor());
 								newNotificationUnit.setDescription(generalizedNotification.getDescription());
+								newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
 								newNotificationUnit.setTypeRef(typeRef);
 								newNotificationUnit.setRecipientRef(employeeRef);
 								result.add(newNotificationUnit);

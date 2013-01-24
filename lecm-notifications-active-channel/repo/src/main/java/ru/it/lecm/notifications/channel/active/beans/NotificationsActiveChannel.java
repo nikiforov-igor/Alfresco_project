@@ -1,4 +1,4 @@
-package ru.it.lecm.notifications.active_channel.beans;
+package ru.it.lecm.notifications.channel.active.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;

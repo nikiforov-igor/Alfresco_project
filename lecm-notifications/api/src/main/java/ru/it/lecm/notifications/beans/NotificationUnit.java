@@ -23,6 +23,11 @@ public class NotificationUnit {
 	 */
 	private String description;
 	/**
+	 * Дата формирования уведомления.
+	 * Если ничего не передано, будет подставлена текущая дата.
+	 */
+	private Date formingDate;
+	/**
 	 * Список на тип доставки уведомления.
 	 * Берётся из подписки.
 	 */
@@ -52,6 +57,18 @@ public class NotificationUnit {
 		this.description = description;
 	}
 
+	public Date getFormingDate() {
+		if (formingDate != null) {
+			return formingDate;
+		} else {
+			return new Date();
+		}
+	}
+
+	public void setFormingDate(Date formingDate) {
+		this.formingDate = formingDate;
+	}
+
 	public NodeRef getRecipientRef() {
 		return recipientRef;
 	}
@@ -77,6 +94,7 @@ public class NotificationUnit {
 
 		if (autor != null ? !autor.equals(that.autor) : that.autor != null) return false;
 		if (description != null ? !description.equals(that.description) : that.description != null) return false;
+		if (formingDate != null ? !formingDate.equals(that.formingDate) : that.formingDate != null) return false;
 		if (recipientRef != null ? !recipientRef.equals(that.recipientRef) : that.recipientRef != null) return false;
 		if (typeRef != null ? !typeRef.equals(that.typeRef) : that.typeRef != null) return false;
 
@@ -87,6 +105,7 @@ public class NotificationUnit {
 	public int hashCode() {
 		int result = autor != null ? autor.hashCode() : 0;
 		result = 31 * result + (description != null ? description.hashCode() : 0);
+		result = 31 * result + (formingDate != null ? formingDate.hashCode() : 0);
 		result = 31 * result + (typeRef != null ? typeRef.hashCode() : 0);
 		result = 31 * result + (recipientRef != null ? recipientRef.hashCode() : 0);
 		return result;

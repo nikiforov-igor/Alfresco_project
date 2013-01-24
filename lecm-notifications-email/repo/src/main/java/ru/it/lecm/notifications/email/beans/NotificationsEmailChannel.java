@@ -129,7 +129,7 @@ public class NotificationsEmailChannel implements NotificationChannelBeanBase {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
-		properties.put(NotificationsService.PROP_FORMING_DATE, new Date());
+		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 		properties.put(PROP_EMAIL, email);
 
 		ChildAssociationRef associationRef = nodeService.createNode(this.rootRef, ContentModel.ASSOC_CONTAINS,

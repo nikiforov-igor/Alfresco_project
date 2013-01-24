@@ -1,4 +1,4 @@
-package ru.it.lecm.notifications.active_channel.scripts;
+package ru.it.lecm.notifications.channel.active.scripts;
 
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -11,7 +11,7 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
-import ru.it.lecm.notifications.active_channel.beans.NotificationsActiveChannel;
+import ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel;
 
 import java.util.ArrayList;
 import java.util.List;

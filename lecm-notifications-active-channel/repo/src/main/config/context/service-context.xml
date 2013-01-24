@@ -36,7 +36,7 @@
 		</property>
 	</bean>
 
-	<bean id="notificationActiveChannel" init-method="init" class="ru.it.lecm.notifications.active_channel.beans.NotificationsActiveChannel"
+	<bean id="notificationActiveChannel" init-method="init" class="ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel"
 	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, serviceOrgstructure, SearchService, namespaceService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
@@ -47,7 +47,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-	<bean id="notificationActiveChannelScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.active_channel.scripts.NotificationsActiveChannelWebScriptBean"
+	<bean id="notificationActiveChannelScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.channel.active.scripts.NotificationsActiveChannelWebScriptBean"
 	      depends-on="notificationActiveChannel">
 		<property name="extensionName">
 			<value>notificationsActiveChannel</value>

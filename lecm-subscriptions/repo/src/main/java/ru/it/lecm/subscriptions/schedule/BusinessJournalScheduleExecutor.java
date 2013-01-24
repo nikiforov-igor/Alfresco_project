@@ -22,6 +22,7 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,6 +77,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 	protected void executeImpl(Action action, NodeRef nodeRef) {
 		String author = (String) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_INITIATOR);
 		String description = (String) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_DESC);
+		Date date = (Date) nodeService.getProperty(nodeRef, BusinessJournalService.PROP_BR_RECORD_DATE);
 		NodeRef mainObject = nodeService.getTargetAssocs(nodeRef, BusinessJournalService.ASSOC_BR_RECORD_MAIN_OBJ).get(0).getTargetRef();
 		NodeRef byType = null;
 		List<AssociationRef> types = nodeService.getTargetAssocs(nodeRef, BusinessJournalService.ASSOC_BR_RECORD_OBJ_TYPE);
@@ -132,6 +134,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 				notification.setObjectRef(mainObject);
 				notification.setAutor(author);
 				notification.setDescription(description);
+				notification.setFormingDate(date);
 				notification.setTypeRefs(notificationTypes);
 				notification.setRecipientEmployeeRefs(employees);
 				notification.setRecipientPositionRefs(positions);
