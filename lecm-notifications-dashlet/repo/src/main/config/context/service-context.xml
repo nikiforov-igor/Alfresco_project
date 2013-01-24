@@ -37,11 +37,23 @@
 	</bean>
 
 	<bean id="notificationDashletChannel" init-method="init" class="ru.it.lecm.notifications.dashlet.beans.NotificationsDashletChannel"
-	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, transactionService">
+          depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, serviceOrgstructure, namespaceService, transactionService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
-		<property name="transactionService" ref="transactionService"/>
-	</bean>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="transactionService" ref="transactionService"/>
+    </bean>
+
+    <bean id="notificationsDashletScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.dashlet.scripts.NotificationDashletWebScriptBean"
+          depends-on="notificationDashletChannel">
+        <property name="extensionName">
+            <value>notificationDashlet</value>
+        </property>
+        <property name="service">
+            <ref bean="notificationDashletChannel"/>
+        </property>
+    </bean>
 </beans>

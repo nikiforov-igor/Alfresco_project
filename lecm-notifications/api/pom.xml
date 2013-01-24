@@ -80,8 +80,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>ru.it.lecm.base</groupId>
-            <artifactId>base-repo-api</artifactId>
+            <groupId>ru.it.lecm.orgstructure</groupId>
+            <artifactId>orgstructure-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->

@@ -1,0 +1,18 @@
+.dashlet.notifications a,
+.dashlet.notifications a:hover,
+.dashlet.notifications a:visited {
+    color: #0600cc;
+}
+.dashlet.notifications.yui-resize .yui-resize-handle {
+    z-index: 0;
+}
+.dashlet.notifications .toolbar {
+    white-space: nowrap;
+}
+.dashlet.notifications .results {
+    margin: 10px 20px 10px 10px;
+}
+.dashlet.notifications .results .row {
+    line-height: 16px;
+    margin: 10px 0;
+}

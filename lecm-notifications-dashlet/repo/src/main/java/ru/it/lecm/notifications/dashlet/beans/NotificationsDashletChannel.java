@@ -7,13 +7,23 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -24,28 +34,42 @@ import java.util.*;
  * Сервис канала уведомления для дашлета
  */
 public class NotificationsDashletChannel extends NotificationChannelBeanBase {
-	public static final String NOTIFICATIONS_DASHLET_ROOT_NAME = "Дашлет";
+
+    final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+
+    public static final String NOTIFICATIONS_DASHLET_ROOT_NAME = "Дашлет";
 	public static final String NOTIFICATIONS_DASHLET_ASSOC_QNAME = "dashlet";
 
 	public static final String NOTIFICATIONS_DASHLET_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/dashlet/1.0";
 	public final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
 
-	private ServiceRegistry serviceRegistry;
+    private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletChannel.class);
+
+    private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	protected NotificationsService notificationsService;
-	private NodeRef rootRef;
+    private NamespaceService namespaceService;
+    private NodeRef rootRef;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
 	}
 
-	public void setRepositoryHelper(Repository repositoryHelper) {
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
 	}
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
 	}
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 
 	/**
 	 * Метод инициализвции сервиса
@@ -110,4 +134,48 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 		nodeService.createAssociation(result, notification.getRecipientRef(), NotificationsService.ASSOC_RECIPIENT);
 		return result;
 	}
+
+    /**
+     * Метод, возвращающий список ссылок на уведомления, сформированные за заданный период
+     *
+     * @param begin - начальная дата
+     * @param end   - конечная дата
+     * @return список ссылок
+     */
+    public List<NodeRef> getRecordsByInterval(Date begin, Date end) {
+        List<NodeRef> records = new ArrayList<NodeRef>(10);
+        NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
+
+        if (employeeDirectoryRef != null) {
+            String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
+            String type = TYPE_NOTIFICATION_DASHLET.toPrefixString(namespaceService);
+            final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+            final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+            ResultSet results = null;
+            String query;
+            SearchParameters sp = new SearchParameters();
+
+            sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+            sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+            query = " +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND @lecm\\-notf\\:forming\\-date:[" + MIN + " TO " + MAX + "]";
+            sp.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+            sp.setQuery(query);
+            try {
+                results = serviceRegistry.getSearchService().query(sp);
+                for (ResultSetRow row : results) {
+                    NodeRef currentNodeRef = row.getNodeRef();
+                    if (!isArchive(currentNodeRef)){
+                        records.add(currentNodeRef);
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Error while getting notifications records", e);
+            } finally {
+                if (results != null) {
+                    results.close();
+                }
+            }
+        }
+        return records;
+    }
 }

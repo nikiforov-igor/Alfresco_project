@@ -1,7 +1,9 @@
 package ru.it.lecm.notifications.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +18,13 @@ import java.util.List;
  */
 public abstract class NotificationChannelBeanBase extends BaseBean {
 
-	/**
+    protected OrgstructureBean orgstructureService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    /**
 	 * Отправка атомарного уведомления
 	 *
 	 * @param notification Атомарное уведомление
@@ -55,4 +63,23 @@ public abstract class NotificationChannelBeanBase extends BaseBean {
 		}
 		return getFolder(root, directoryPaths);
 	}
+
+    /**
+     * Метод, возвращающий ссылку на директорию пользователя в директории "Уведомления/*root*" согласно заданным параметрам
+     * Если такой директории нет, то она НЕ создаётся
+     *
+     * @param rootRef - корень
+     * @return ссылка на директорию
+     */
+    protected NodeRef getCurrentEmployeeFolder(NodeRef rootRef) {
+        NodeRef currentEmployeeNodeRef = orgstructureService.getCurrentEmployee();
+        if (currentEmployeeNodeRef != null) {
+            String employeeName = (String) nodeService.getProperty(currentEmployeeNodeRef, ContentModel.PROP_NAME);
+            if (employeeName != null) {
+                return nodeService.getChildByName(rootRef, ContentModel.ASSOC_CONTAINS, employeeName);
+            }
+        }
+        return null;
+    }
+
 }

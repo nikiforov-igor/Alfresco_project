@@ -6,7 +6,10 @@ import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -19,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -45,7 +47,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	protected NotificationsService notificationsService;
-	private OrgstructureBean orgstructureService;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private NodeRef rootRef;
@@ -72,10 +73,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
-	}
-
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
 	}
 
 	public NodeRef getRootRef() {
@@ -147,24 +144,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	}
 
 	/**
-	 * Метод, возвращающий ссылку на директорию пользователя в директории "Уведомления/Активный канал" согласно заданным параметрам
-	 * Если такой директории нет, то она НЕ создаётся
-	 *
-	 * @return ссылка на директорию
-	 */
-	private NodeRef getCurrentEmployeeFolder() {
-		NodeRef currentEmployeeNodeRef = orgstructureService.getCurrentEmployee();
-		if (currentEmployeeNodeRef != null) {
-			String employeeName = (String) nodeService.getProperty(currentEmployeeNodeRef, ContentModel.PROP_NAME);
-			if (employeeName != null) {
-				return nodeService.getChildByName(this.rootRef, ContentModel.ASSOC_CONTAINS, employeeName);
-			}
-		}
-		return null;
-
-	}
-
-	/**
 	 * Проверяет, что NodeRef является ссылкой на уведомление активного канала
 	 * @param ref ссылка на элемент
 	 * @return    true если NodeRef является ссылкой на уведомление активного канала иначе false
@@ -212,7 +191,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
-		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder();
+		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
 		if (employeeDirectoryRef != null) {
 			String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
 			String type = TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
