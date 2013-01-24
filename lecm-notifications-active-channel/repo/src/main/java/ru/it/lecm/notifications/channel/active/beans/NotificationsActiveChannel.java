@@ -38,6 +38,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/channel/active/1.0";
 	public static final QName TYPE_NOTIFICATION_ACTIVE_CHANNEL = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "notification");
 	public final QName PROP_READ_DATE = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "read-date");
+	public final QName PROP_IS_READ = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "is_read");
 
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannel.class);
 
@@ -130,6 +131,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
+		properties.put(PROP_IS_READ, false);
 
 		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
 
@@ -180,7 +182,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	 */
 	public boolean isNewNotification(NodeRef ref) {
 		return ref != null && isActiveChannelNotification(ref) && !isArchive(ref) &&
-				nodeService.getProperty(ref, PROP_READ_DATE) == null;
+				!((Boolean) nodeService.getProperty(ref, PROP_IS_READ));
 	}
 
 	/**
@@ -218,6 +220,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 			SearchParameters parameters = new SearchParameters();
 			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			parameters.addSort("@" + PROP_IS_READ, true);
 			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
 			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
 			parameters.setSkipCount(skipCount);
@@ -251,6 +254,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 		if (nodeRefs != null) {
 			for (NodeRef ref: nodeRefs) {
 				nodeService.setProperty(ref, PROP_READ_DATE, new Date());
+				nodeService.setProperty(ref, PROP_IS_READ, true);
 			}
 		}
 	}

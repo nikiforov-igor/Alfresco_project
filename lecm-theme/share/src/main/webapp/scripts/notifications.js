@@ -198,12 +198,12 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 						var readNotifications = [];
 						for (var i = 0; i < items.length; i++) {
 							str += '<div class="notification-row">';
-							if (items[i].readDate == null) {
+							if (items[i].isRead == "false") {
 								str += '<b>';
 								readNotifications.push(items[i]);
 							}
 							str += items[i].formingDate + ": " + items[i].description;
-							if (items[i].readDate == null) {
+							if (items[i].isRead == "false") {
 								str += '</b>';
 							}
 							str += '</div>';

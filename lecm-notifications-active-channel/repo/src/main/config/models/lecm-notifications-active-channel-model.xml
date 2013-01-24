@@ -31,6 +31,17 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-notf-active-channel:is_read">
+					<title>Is read</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 		</type>
 	</types>
