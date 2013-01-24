@@ -55,6 +55,6 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 	<#if nativeObject.isEngineer || nativeObject.isBoss>
 		<@region id="content" scope="template"/>
 	<#else/>
-		<div>не умеешь правов таких покажи лицензию!</div>
+		<@region id="forbidden" scope="template"/>
 	</#if>
 </@bpage.basePage>

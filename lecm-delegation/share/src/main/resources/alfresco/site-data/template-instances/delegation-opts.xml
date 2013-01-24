@@ -20,5 +20,9 @@
 			<region-id>content</region-id>
 			<url>/lecm/delegation/opts/content</url>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/delegation/forbidden</url>
+		</component>
 	</components>
 </template-instance>

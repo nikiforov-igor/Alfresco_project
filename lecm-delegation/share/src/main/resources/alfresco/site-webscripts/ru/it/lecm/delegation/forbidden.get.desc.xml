@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>forbidden</shortname>
+    <description>forbidden page for delegation module</description>
+	<url>/lecm/delegation/forbidden</url>
+	<format default="html"/>
+    <authentication>user</authentication>
+</webscript>
