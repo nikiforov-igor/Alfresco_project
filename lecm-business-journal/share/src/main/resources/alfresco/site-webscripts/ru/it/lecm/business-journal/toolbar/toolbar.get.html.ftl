@@ -29,7 +29,7 @@ function init() {
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
-<@comp.baseToolbar id buttons true true>
+<@comp.baseToolbar id buttons searchBlock exSearch>
 <div id="toolbar-archivePanel" class="yui-panel" style="display: none">
     <div id="toolbar-archivePanel-head" class="hd">${msg("business-journal.archive")}</div>
     <div id="toolbar-archivePanel-body" class="bd">

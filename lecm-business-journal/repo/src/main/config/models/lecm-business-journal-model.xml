@@ -436,5 +436,22 @@
                 <aspect>lecm-dic:aspect_active</aspect>
             </mandatory-aspects>
         </type>
+
+        <type name="lecm-busjournal:archiverSettings">
+            <title>Archiver Settings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <property name="lecm-busjournal:archiver-deep">
+                    <title>Archive Deep</title>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-busjournal:archiver-period">
+                    <title>Period</title>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
     </types>
 </model>

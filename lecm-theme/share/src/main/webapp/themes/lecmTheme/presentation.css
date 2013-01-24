@@ -1978,6 +1978,6 @@ span.person a
 	text-align: center;
 }
 
-.archive-record, .archive-record span a {
+.archive-record, .archive-record span a, .archive-record a {
     color:red;
 }

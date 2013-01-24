@@ -43,7 +43,17 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
     YAHOO.extend(LogicECM.module.BusinessJournal.Menu, Alfresco.component.Base, {
         onReady: function () {
-            //TODO пока что в данном модуле нет меню. это файл заглушка
+            var onRecordsClick = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "business-journal";
+            };
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-summaryBtn", onRecordsClick, {});
+
+            var onSettingsClick = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "business-journal-settings";
+            };
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-settingsBtn", onSettingsClick, {});
         }
     });
 })();

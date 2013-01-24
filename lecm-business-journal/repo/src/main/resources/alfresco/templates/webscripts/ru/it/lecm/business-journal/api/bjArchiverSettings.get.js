@@ -1,0 +1,1 @@
+model.settings = businessJournal.getArchSettings();

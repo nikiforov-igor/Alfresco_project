@@ -76,6 +76,9 @@
         <property name="service">
             <ref bean="businessJournalService"/>
         </property>
+        <property name="archiverSettings">
+            <ref bean="businessJournalArchiverSettings"/>
+        </property>
     </bean>
 
     <bean id="createObjectsEventPolicy" class="ru.it.lecm.businessjournal.policies.BusinessEventsPolicy"
@@ -86,6 +89,83 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="businessJournalService">
             <ref bean="businessJournalService"/>
+        </property>
+    </bean>
+
+    <bean id="businessJournalArchiveSchedule" class="ru.it.lecm.businessjournal.schedule.BusinessJournalArchiveSchedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="jobName">
+            <value>archive-journal</value>
+        </property>
+        <property name="jobGroup">
+            <value>business-journal</value>
+        </property>
+        <property name="triggerName">
+            <value>archive-journal-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>business-journal-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="archiverSettings">
+            <ref bean="businessJournalArchiverSettings"/>
+        </property>
+    </bean>
+
+    <bean id="businessJournalArchiveScheduleExecutor" class="ru.it.lecm.businessjournal.schedule.BusinessJournalArchiveScheduleExecutor" parent="action-executer">
+        <property name="ignoreLock">
+            <value>false</value>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+    </bean>
+
+    <bean id="businessJournalArchiverSettings" class="ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings" init-method="init">
+        <property name="period">
+            <value>${lecm.business-journal.archive.period}</value>
+        </property>
+        <property name="deep">
+            <value>${lecm.business-journal.archive.deep}</value>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="transactionService"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+    </bean>
+
+    <bean id="updateArchiveSettingsPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalSettingsUpdatePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="archiveSchedule">
+            <ref bean="businessJournalArchiveSchedule"/>
         </property>
     </bean>
 </beans>

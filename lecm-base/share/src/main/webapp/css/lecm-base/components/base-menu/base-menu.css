@@ -43,3 +43,10 @@
 #lecm-menu #menu-buttons #menu-buttons-dictionariesBtn span.first-child {
     background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
+
+#lecm-menu #menu-buttons #menu-buttons-bj-summaryBtn span.first-child {
+    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons #menu-buttons-bj-settingsBtn span.first-child {
+    background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
+}

@@ -301,4 +301,29 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-busjournal:archiverSettings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-busjournal:archiver-deep"/>
+                    <show id="lecm-busjournal:archiver-period"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-busjournal:archiver-deep" help-id="lecm-busjournal-archiver-deep-help-id"/>
+                    <field id="lecm-busjournal:archiver-period" help-id="lecm-busjournal-archiver-archiver-period-help-id"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-busjournal:archiverSettings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-busjournal:archiver-deep"/>
+                    <show id="lecm-busjournal:archiver-period"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

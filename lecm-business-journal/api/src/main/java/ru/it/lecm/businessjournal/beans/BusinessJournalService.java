@@ -20,52 +20,58 @@ public interface BusinessJournalService {
 	/**
 	 * Корневой узел Business Journal
 	 */
-	public final String BJ_ROOT_NAME = "Business Journal";
-	public final String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
-	public final String BR_ASSOC_QNAME = "businessJournal";
-	public final String BR_ARCHIVE_ASSOC_QNAME = "archive";
-	public final String DICTIONARIES_ROOT_NAME = "Dictionary";
-	public final String DICTIONARY_OBJECT_TYPE = "Тип объекта";
-	public final String DICTIONARY_EVENT_CATEGORY = "Категория события";
-	public final String DICTIONARY_MESSAGE_TEMPLATE = "Шаблон сообщения";
+	public static final String BJ_ROOT_NAME = "Business Journal";
+	public static final String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
+	public static final String BJ_ARCHIVER_SETTINGS_NAME = "Настройки автоматического архивирования";
+	public static final String BR_ASSOC_QNAME = "businessJournal";
+	public static final String BR_ARCHIVE_ASSOC_QNAME = "archive";
+	public static final String BR_ARCHIVE_SETTINGS_ASSOC_QNAME = "archiveSettings";
+	public static final String DICTIONARIES_ROOT_NAME = "Dictionary";
+	public static final String DICTIONARY_OBJECT_TYPE = "Тип объекта";
+	public static final String DICTIONARY_EVENT_CATEGORY = "Категория события";
+	public static final String DICTIONARY_MESSAGE_TEMPLATE = "Шаблон сообщения";
 
-	public final QName TYPE_OBJECT_TYPE = QName.createQName(BJ_NAMESPACE_URI, "objectType");
-	public final QName TYPE_EVENT_CATEGORY = QName.createQName(BJ_NAMESPACE_URI, "eventCategory");
-	public final QName TYPE_MESSAGE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate");
-	public final QName TYPE_BR_RECORD = QName.createQName(BJ_NAMESPACE_URI, "bjRecord");
+	public static final QName TYPE_OBJECT_TYPE = QName.createQName(BJ_NAMESPACE_URI, "objectType");
+	public static final QName TYPE_EVENT_CATEGORY = QName.createQName(BJ_NAMESPACE_URI, "eventCategory");
+	public static final QName TYPE_MESSAGE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate");
+	public static final QName TYPE_BR_RECORD = QName.createQName(BJ_NAMESPACE_URI, "bjRecord");
+	public static final QName TYPE_ARCHIVER_SETTINGS = QName.createQName(BJ_NAMESPACE_URI, "archiverSettings");
 
-	public final QName ASSOC_MESSAGE_TEMP_OBJ_TYPE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-objType-assoc");
-	public final QName ASSOC_MESSAGE_TEMP_EVENT_CAT = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-evCategory-assoc");
-	public final QName ASSOC_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator-assoc");
-	public final QName ASSOC_BR_RECORD_MAIN_OBJ = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc");
-	public final QName ASSOC_BR_RECORD_EVENT_CAT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc");
-	public final QName ASSOC_BR_RECORD_OBJ_TYPE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-objType-assoc");
-	public final QName ASSOC_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1-assoc");
-	public final QName ASSOC_BR_RECORD_SEC_OBJ2 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj2-assoc");
-	public final QName ASSOC_BR_RECORD_SEC_OBJ3 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj3-assoc");
-	public final QName ASSOC_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4-assoc");
-	public final QName ASSOC_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5-assoc");
+	public static final QName ASSOC_MESSAGE_TEMP_OBJ_TYPE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-objType-assoc");
+	public static final QName ASSOC_MESSAGE_TEMP_EVENT_CAT = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-evCategory-assoc");
+	public static final QName ASSOC_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator-assoc");
+	public static final QName ASSOC_BR_RECORD_MAIN_OBJ = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc");
+	public static final QName ASSOC_BR_RECORD_EVENT_CAT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc");
+	public static final QName ASSOC_BR_RECORD_OBJ_TYPE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-objType-assoc");
+	public static final QName ASSOC_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1-assoc");
+	public static final QName ASSOC_BR_RECORD_SEC_OBJ2 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj2-assoc");
+	public static final QName ASSOC_BR_RECORD_SEC_OBJ3 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj3-assoc");
+	public static final QName ASSOC_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4-assoc");
+	public static final QName ASSOC_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5-assoc");
 
-	public final QName PROP_OBJ_TYPE_CODE = QName.createQName(BJ_NAMESPACE_URI, "objectType-code");
-	public final QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
-	public final QName PROP_OBJ_TYPE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-template");
-	public final QName PROP_EVENT_CAT_CODE = QName.createQName(BJ_NAMESPACE_URI, "eventCategory-code");
-	public final QName PROP_MESSAGE_TEMP_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-template");
-	public final QName PROP_MESSAGE_TEMP_CODE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-code");
+	public static final QName PROP_OBJ_TYPE_CODE = QName.createQName(BJ_NAMESPACE_URI, "objectType-code");
+	public static final QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
+	public static final QName PROP_OBJ_TYPE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-template");
+	public static final QName PROP_EVENT_CAT_CODE = QName.createQName(BJ_NAMESPACE_URI, "eventCategory-code");
+	public static final QName PROP_MESSAGE_TEMP_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-template");
+	public static final QName PROP_MESSAGE_TEMP_CODE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-code");
 
-	public final QName PROP_BR_RECORD_DATE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-date");
-	public final QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-description");
-	public final QName PROP_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator");
-	public final QName PROP_BR_RECORD_MAIN_OBJECT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject");
-	public final QName PROP_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1");
-	public final QName PROP_BR_RECORD_SEC_OBJ2 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj2");
-	public final QName PROP_BR_RECORD_SEC_OBJ3 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj3");
-	public final QName PROP_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4");
-	public final QName PROP_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5");
+	public static final QName PROP_BR_RECORD_DATE = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-date");
+	public static final QName PROP_BR_RECORD_DESC = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-description");
+	public static final QName PROP_BR_RECORD_INITIATOR = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-initiator");
+	public static final QName PROP_BR_RECORD_MAIN_OBJECT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-mainObject");
+	public static final QName PROP_BR_RECORD_SEC_OBJ1 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj1");
+	public static final QName PROP_BR_RECORD_SEC_OBJ2 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj2");
+	public static final QName PROP_BR_RECORD_SEC_OBJ3 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj3");
+	public static final QName PROP_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4");
+	public static final QName PROP_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5");
 
-	public final String BASE_USER_HOLDER = "#baseuser";
-	public final String MAIN_OBJECT_HOLDER = "#mainobject";
-	public final String OBJECT_HOLDER = "#object";
+	public static final QName PROP_ARCHIVER_DEEP = QName.createQName(BJ_NAMESPACE_URI, "archiver-deep");
+	public static final QName PROP_ARCHIVER_PERIOD= QName.createQName(BJ_NAMESPACE_URI, "archiver-period");
+
+	public static final String BASE_USER_HOLDER = "#baseuser";
+	public static final String MAIN_OBJECT_HOLDER = "#mainobject";
+	public static final String OBJECT_HOLDER = "#object";
 
 	public final String DEFAULT_MESSAGE_TEMPLATE =
 			"Запись журнала, не имеющая шаблонов описания. Основной объект: " + MAIN_OBJECT_HOLDER +

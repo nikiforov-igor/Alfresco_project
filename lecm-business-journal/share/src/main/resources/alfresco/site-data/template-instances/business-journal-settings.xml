@@ -1,23 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/business-journal/business-journal</template-type>
+    <template-type>ru/it/lecm/business-journal/business-journal-settings</template-type>
     <components>
         <component>
-            <region-id>records-grid</region-id>
-            <url>/lecm/business-journal/datagrid</url>
-            <properties>
-                <pagination>true</pagination>
-                <bubblingLabel>bj-records</bubblingLabel>
-            </properties>
+            <region-id>business-journal-settings</region-id>
+            <url>/lecm/business-journal/archiver-settings</url>
         </component>
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/business-journal/toolbar</url>
             <properties>
-                <bubblingLabel>bj-records</bubblingLabel>
-                <showSearchBlock>true</showSearchBlock>
-                <showExSearchBtn>true</showExSearchBtn>
+                <showSearchBlock>false</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
+                <showButtons>false</showButtons>
             </properties>
         </component>
         <!-- Title -->
@@ -25,7 +21,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.business-journal</title>
+                <title>page.business-journal-settings</title>
                 <filteredLabel>page.business-journal.filter.label</filteredLabel>
             </properties>
         </component>
@@ -34,7 +30,7 @@
             <region-id>menu</region-id>
             <url>/lecm/business-journal/menu</url>
             <properties>
-                <selected>bj-summary</selected>
+                <selected>bj-settings</selected>
             </properties>
         </component>
     </components>

@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -43,6 +44,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
 	private SubstitudeBean substituteService;
+	private BusinessJournalArchiverSettings archiverSettings;
 
 	final private static Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
 

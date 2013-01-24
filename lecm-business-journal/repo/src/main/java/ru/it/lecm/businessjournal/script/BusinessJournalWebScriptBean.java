@@ -16,6 +16,7 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
+import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
 /**
  * @author dbashmakov
@@ -25,6 +26,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension {
 
 	private BusinessJournalServiceImpl service;
+	private BusinessJournalArchiverSettings archiverSettings;
 
 	public void setService(BusinessJournalServiceImpl service) {
 		this.service = service;
@@ -161,4 +163,16 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
         return createScriptable(records);
     }
 
+	public BusinessJournalArchiverSettings getArchiverSettings(){
+		return this.archiverSettings;
+	}
+
+	public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
+		this.archiverSettings = archiverSettings;
+	}
+
+	public ScriptNode getArchSettings(){
+		NodeRef settings = archiverSettings.getArchiveSettingsRef();
+		return new ScriptNode(settings, service.getServiceRegistry(), getScope());
+	}
 }

@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>BJ Archiver Settings</shortname>
+	<description>BJ Archiver Settings</description>
+	<url>/lecm/business-journal/api/getArchiverSettings</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>
