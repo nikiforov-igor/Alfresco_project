@@ -2,14 +2,13 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var delegationMenu = new LogicECM.module.Delegation.Menu ("menu-buttons");
+		var delegationMenu = new LogicECM.module.Delegation.List.Menu ("menu-buttons");
 		delegationMenu.setMessages(${messages});
 	})();
 //]]>
 </script>
 
 <@comp.baseMenu>
-	<#-- TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник) -->
 	<@comp.baseMenuButton "delegationList" "перечень делегирования" args.selected/>
 </@comp.baseMenu>
 

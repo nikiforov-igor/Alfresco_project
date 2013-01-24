@@ -5,12 +5,6 @@
 
 var delegationDescription = ${delegationDescription};
 
-/*
-<#list props as prop>
-${prop}
-</#list>
-*/
-
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	var LogicECM = {};
 }
@@ -33,6 +27,25 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
 
 <#-- Далее перечисляются самописные скрипты LogicECM  -->
+<#-- Стили меню для страницы delegation-list -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-delegation/delegation-menu.css"/>
+<#-- Стили тулбара для страницы delegation-list -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-delegation/delegation-toolbar.css"/>
+<#-- Data Grid stylesheet -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/datagrid.css"/>
+
+<#-- скрипты меню для страницы delegation-list -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list-menu.js"/>
+<#-- скрипты тулбара для страницы delegation-list -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list-toolbar.js"/>
+<#-- Data Grid javascript-->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
+<#-- Advanced search -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-base/components/advsearch.js"/>
+<#-- DelegationList Data Grid javascript -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list.js"/>
 
 </@>
 
@@ -40,7 +53,7 @@ LogicECM.module.Delegation.DELEGATION_OPTIONS_CONTAINER = LogicECM.module.Delega
 
 <@bpage.basePage>
 	<#if nativeObject.isEngineer || nativeObject.isBoss>
-		<@region id="delegation-list" scope="template"/>
+		<@region id="content" scope="template"/>
 	<#else/>
 		<div>не умеешь правов таких покажи лицензию!</div>
 	</#if>

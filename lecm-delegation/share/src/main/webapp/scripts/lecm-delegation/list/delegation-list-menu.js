@@ -7,20 +7,18 @@ LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
+LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
+
 (function () {
-	LogicECM.module.Delegation.Menu = function (containerId) {
-		return LogicECM.module.Delegation.Menu.superclass.constructor.call(
+	LogicECM.module.Delegation.List.Menu = function (containerId) {
+		return LogicECM.module.Delegation.List.Menu.superclass.constructor.call(
 			this,
-			"LogicECM.module.Delegation.Menu",
+			"LogicECM.module.Delegation.List.Menu",
 			containerId,
-			["button", "container", "connection", "json", "selector"]);
+			["button"]);
 	};
 
-	YAHOO.lang.extend(LogicECM.module.Delegation.Menu, Alfresco.component.Base, {
-
-		options: {
-			pageId: null
-		},
+	YAHOO.lang.extend(LogicECM.module.Delegation.List.Menu, Alfresco.component.Base, {
 
 		_reloadPage: function (type) {
 			var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
@@ -36,13 +34,14 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 		_onMenuReady: function () {
 
-			//TODO: перечень делегирования показывается только тогда, когда есть права (технолог или начальник)
-			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {});
+			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {
+                disabled: true
+            });
 		},
 
 		onReady: function () {
 
-			Alfresco.logger.info ("A new LogicECM.module.Delegation.Menu has been created");
+			Alfresco.logger.info ("New LogicECM.module.Delegation.List.Menu has been created");
 
 			this._onMenuReady ();
 

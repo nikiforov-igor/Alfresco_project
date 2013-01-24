@@ -14,20 +14,20 @@
 		<!-- Toolbar -->
 		<component>
 			<region-id>toolbar</region-id>
-			<url>/ru/it/lecm/delegation/toolbar</url>
+			<url>/lecm/delegation/list/toolbar</url>
 		</component>
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>
-			<url>/ru/it/lecm/delegation/menu</url>
+			<url>/lecm/delegation/list/menu</url>
 			<properties>
 				<selected>delegationList</selected>
 			</properties>
 		</component>
 		<!-- Grid region -->
 		<component>
-			<region-id>delegation-list</region-id>
-			<url>/ru/it/lecm/delegation/delegation-list</url>
+			<region-id>content</region-id>
+			<url>/lecm/delegation/list/content</url>
 		</component>
 	</components>
 </template-instance>

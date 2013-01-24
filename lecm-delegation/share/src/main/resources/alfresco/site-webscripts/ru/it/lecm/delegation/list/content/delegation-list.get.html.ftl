@@ -7,6 +7,7 @@
 
 	var datagrid = new LogicECM.module.Delegation.DelegationList.Grid('${id}');
 	datagrid.setOptions({
+		bubblingLabel: "delegation-list-datagrid",
 		usePagination:true,
 		showExtendSearchBlock:true,
 		showCheckboxColumn: false,
