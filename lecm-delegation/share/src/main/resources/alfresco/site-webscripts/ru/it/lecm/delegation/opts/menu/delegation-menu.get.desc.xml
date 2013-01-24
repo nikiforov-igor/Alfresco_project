@@ -2,7 +2,7 @@
 <webscript>
     <shortname>menu</shortname>
     <description>Returns menu region content</description>
-	<url>/ru/it/lecm/delegation/menu</url>
+	<url>/lecm/delegation/opts/menu</url>
 	<format default="html"/>
     <authentication>user</authentication>
 </webscript>

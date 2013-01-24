@@ -14,18 +14,14 @@
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>
-			<url>/ru/it/lecm/delegation/menu</url>
+			<url>/lecm/delegation/opts/menu</url>
 			<properties>
 				<selected>delegationOpts</selected>
 			</properties>
 		</component>
 		<component>
-			<region-id>delegation-opts</region-id>
-			<url>/ru/it/lecm/delegation/delegation-opts</url>
-		</component>
-		<component>
-			<region-id>delegation-opts-form</region-id>
-			<url>/ru/it/lecm/delegation/delegation-opts/form</url>
+			<region-id>content</region-id>
+			<url>/lecm/delegation/opts/content</url>
 		</component>
 	</components>
 </template-instance>

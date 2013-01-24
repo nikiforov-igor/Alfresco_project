@@ -2,7 +2,7 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var delegationMenu = new LogicECM.module.Delegation.Menu ("menu-buttons");
+		var delegationMenu = new LogicECM.module.Delegation.Opts.Menu ("menu-buttons");
 		delegationMenu.setMessages(${messages});
 	})();
 //]]>
