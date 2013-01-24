@@ -21,7 +21,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
  */
 public class BusinessJournalArchiverSettings {
 
-	private final String cronExpression = "0 %s * * * ?";//"0 0 0 */%s * ?";
+	private final String cronExpression = "0 0 0 */%s * ?";
 	private String deep = "20"; // lecm.business-journal.archive.deep, default: 20 дней
 	private String period = "5"; //lecm.business-journal.archive.period  - default: раз в 5 дней
 	private NodeRef archiveSettingsRef;
@@ -30,7 +30,7 @@ public class BusinessJournalArchiverSettings {
 	private NodeService nodeService;
 
 	public String getCronExpression() {
-		return String.format("0 */%s * * * ?", period);
+		return String.format(cronExpression, period);
 	}
 
 	public void setDeep(String archiveDeep) {
