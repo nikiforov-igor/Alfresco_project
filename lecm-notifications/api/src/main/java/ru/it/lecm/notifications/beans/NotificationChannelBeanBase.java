@@ -1,11 +1,8 @@
 package ru.it.lecm.notifications.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.BaseBean;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,21 +27,18 @@ public abstract class NotificationChannelBeanBase extends BaseBean {
 	/**
 	 * Метод, возвращающий ссылку на директорию в директории "Уведомления" согласно заданным параметрам
 	 *
-	 * @param transactionService - TransactionService
-	 * @param nameSpace          - name space для сохранения
-	 * @param date               - текущая дата
 	 * @param date               - текущая дата
 	 * @param employeeName       - имя сотрудника
 	 * @param root               - корень, относительно которого строится путь
 	 * @return ссылка на директорию
 	 */
-	public NodeRef getFolder(final TransactionService transactionService, final String nameSpace, final NodeRef root, final String employeeName, final Date date) {
+	public NodeRef getFolder(final NodeRef root, final String employeeName, final Date date) {
 		List<String> directoryPaths = new ArrayList<String>(3);
 		if (employeeName != null) {
 			directoryPaths.add(employeeName);
 		}
 		directoryPaths.addAll(getDateFolderPath(date));
-		return getFolder(transactionService, nameSpace, root, directoryPaths);
+		return getFolder(root, directoryPaths);
 	}
 
 }

@@ -19,7 +19,6 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +39,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	private SearchService searchService;
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
@@ -649,7 +647,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			directoryPaths.add(category);
 		}
 		directoryPaths.addAll(getDateFolderPath(date));
-		return getFolder(transactionService, BJ_NAMESPACE_URI, root, directoryPaths);
+		return getFolder(root, directoryPaths);
 	}
 	/**
 	 * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта

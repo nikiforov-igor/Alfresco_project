@@ -13,7 +13,6 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
 	private OrgstructureBean orgstructureService;
 	private SearchService searchService;
@@ -90,9 +88,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public void init() {
 		final String rootName = NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_NAME;
 		repositoryHelper.init();
-		nodeService = serviceRegistry.getNodeService();
-		transactionService = serviceRegistry.getTransactionService();
-
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -136,7 +131,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 
-		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),

@@ -190,7 +190,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
 		properties.put(PROP_GENERAL_FORMING_DATE, notification.getFormingDate());
 
-		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_NAMESPACE_URI, this.notificationsGenaralizetionRootRef, getDateFolderPath(notification.getFormingDate()));
+		final NodeRef saveDirectoryRef = getFolder(this.notificationsGenaralizetionRootRef, getDateFolderPath(notification.getFormingDate()));
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_NAMESPACE_URI, GUID.generate()), TYPE_GENERALIZED_NOTIFICATION, properties);

@@ -57,7 +57,6 @@ public class SubscriptionsBean extends BaseBean {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	private OrgstructureBean orgstructureService;
 
 
@@ -68,10 +67,6 @@ public class SubscriptionsBean extends BaseBean {
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
-	}
-
-	public void setTransactionService(TransactionService transactionService) {
-		this.transactionService = transactionService;
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {

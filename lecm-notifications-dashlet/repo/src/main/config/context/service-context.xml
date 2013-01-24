@@ -36,10 +36,12 @@
 		</property>
 	</bean>
 
-	<bean id="notificationDashletChannel" init-method="init" class="ru.it.lecm.notifications.dashlet.beans.NotificationsDashletChannel" depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService">
+	<bean id="notificationDashletChannel" init-method="init" class="ru.it.lecm.notifications.dashlet.beans.NotificationsDashletChannel"
+	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, transactionService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 </beans>

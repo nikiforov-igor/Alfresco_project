@@ -11,7 +11,6 @@ import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,6 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
 	private ActionService actionService;
 	private NodeRef rootRef;
@@ -71,9 +69,6 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	public void init() {
 		final String rootName = NOTIFICATIONS_EMAIL_ROOT_NAME;
 		repositoryHelper.init();
-		nodeService = serviceRegistry.getNodeService();
-		transactionService = serviceRegistry.getTransactionService();
-
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -126,7 +121,7 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 		properties.put(PROP_EMAIL, email);
 
-		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_EMAIL_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, GUID.generate()),

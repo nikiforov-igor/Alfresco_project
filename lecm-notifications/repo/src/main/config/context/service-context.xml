@@ -49,11 +49,13 @@
 		</property>
 	</bean>
 
-	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl" depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService">
+	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl"
+	      depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean id="notificationScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.scripts.NotificationsWebScriptBean"

@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.transaction.TransactionService;
@@ -29,6 +30,7 @@ public abstract class BaseBean {
 	final DateFormat FolderNameFormatDay = new SimpleDateFormat("DD");
 
 	protected NodeService nodeService;
+	protected TransactionService transactionService;
 
 	private final Object lock = new Object();
 
@@ -39,6 +41,10 @@ public abstract class BaseBean {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
 	}
 
 	/**
@@ -172,16 +178,19 @@ public abstract class BaseBean {
 		return result;
 	}
 
+	public NodeRef getFolder(final NodeRef root, final List<String> directoryPaths) {
+	 	return getFolder(NamespaceService.CONTENT_MODEL_1_0_URI, root, directoryPaths);
+	}
+
 	/**
 	 * Метод, возвращающий ссылку на директорию согласно заданным параметрам
 	 *
-	 * @param transactionService - TransactionService
 	 * @param nameSpace          - name space для сохранения
 	 * @param root               - корень, относительно которого строится путь
 	 * @param directoryPaths     - список папок
 	 * @return ссылка на директорию
 	 */
-	public NodeRef getFolder(final TransactionService transactionService, final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
+	public NodeRef getFolder(final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {

@@ -8,7 +8,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
@@ -33,7 +32,6 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	protected NotificationsService notificationsService;
 	private NodeRef rootRef;
 
@@ -56,9 +54,6 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 	public void init() {
 		final String rootName = NOTIFICATIONS_DASHLET_ROOT_NAME;
 		repositoryHelper.init();
-		nodeService = serviceRegistry.getNodeService();
-		transactionService = serviceRegistry.getTransactionService();
-
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -103,7 +98,7 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 
-		final NodeRef saveDirectoryRef = getFolder(transactionService, NOTIFICATIONS_DASHLET_NAMESPACE_URI, this.rootRef, employeeName, notification.getFormingDate());
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
 
         ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, GUID.generate()),

@@ -15,7 +15,6 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
@@ -28,7 +27,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
-	private TransactionService transactionService;
 	private AuthenticationService authService;
 	private PersonService personService;
 	private DictionaryBean dictionaryService;
@@ -41,10 +39,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
-	}
-
-	public void setTransactionService(TransactionService transactionService) {
-		this.transactionService = transactionService;
 	}
 
 	public void setAuthService(AuthenticationService authService) {
