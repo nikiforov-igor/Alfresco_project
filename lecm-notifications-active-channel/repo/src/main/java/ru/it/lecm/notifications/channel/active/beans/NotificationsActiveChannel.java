@@ -133,7 +133,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 		properties.put(PROP_IS_READ, false);
 
-		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName);
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),

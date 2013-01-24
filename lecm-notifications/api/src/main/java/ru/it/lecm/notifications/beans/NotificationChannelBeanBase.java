@@ -41,4 +41,18 @@ public abstract class NotificationChannelBeanBase extends BaseBean {
 		return getFolder(root, directoryPaths);
 	}
 
+	/**
+	 * Метод, возвращающий ссылку на директорию в директории "Уведомления" согласно заданным параметрам
+	 *
+	 * @param employeeName       - имя сотрудника
+	 * @param root               - корень, относительно которого строится путь
+	 * @return ссылка на директорию
+	 */
+	public NodeRef getFolder(final NodeRef root, final String employeeName) {
+		List<String> directoryPaths = new ArrayList<String>(3);
+		if (employeeName != null) {
+			directoryPaths.add(employeeName);
+		}
+		return getFolder(root, directoryPaths);
+	}
 }

@@ -98,7 +98,7 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 
-		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
+		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName);
 
         ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, GUID.generate()),
