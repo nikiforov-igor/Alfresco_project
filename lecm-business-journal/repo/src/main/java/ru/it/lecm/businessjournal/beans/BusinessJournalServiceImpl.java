@@ -20,13 +20,8 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -36,7 +31,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  */
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
 
-	public static final String LINK_URL = "/share/page/edit-metadata";
+	public final String LINK_URL = "/share/page/edit-metadata";
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -44,11 +39,13 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
 	private SubstitudeBean substituteService;
-	private BusinessJournalArchiverSettings archiverSettings;
 
-	final private static Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
-
-	private final Object lock = new Object();
+	private static enum WhoseEnum {
+		MY,
+		DEPARTMENT,
+		CONTROL,
+		ALL
+	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -77,7 +74,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		nodeService = serviceRegistry.getNodeService();
 		searchService = serviceRegistry.getSearchService();
 		transactionService = serviceRegistry.getTransactionService();
-		searchService = serviceRegistry.getSearchService();
 
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -220,15 +216,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
     private NodeRef getEventCategoryByName(String eventCategory) {
         return getDicElementByName(eventCategory, DICTIONARY_EVENT_CATEGORY);
-    }
-
-	/**
-	 * Получение ссылки на Тип Объекта по имени типа
-	 * @param  objectType  - название типа объекта
-	 * @return ссылка на ноду
-	 */
-    private NodeRef getObjectTypeByName(String objectType) {
-        return getDicElementByName(objectType, DICTIONARY_OBJECT_TYPE);
     }
 
     private NodeRef getDicElementByName(String elName, String dictionaryName) {
@@ -391,19 +378,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	/**
-	 * Метод формирующий описание заданного объекта
-	 * @param object - текущий объект
-	 * @param  type - Тип по которому берется описание
-	 * @return сформированное описание или null, если для типа не задан шаблон
-	 */
-	private String getObjectDescription(NodeRef object, String type) {
-		NodeRef objectType = getObjectTypeByClass(type);
-		// получаем шаблон описания
-		String templateString = getTemplateStringByType(objectType);
-		// формируем описание
-		return substinateDescription(object, templateString);
-	}
-	/**
 	 * Метод для получения шаблонной строки для заданного типа
 	 * @param type - ссылка на объект справочника "Тип Объекта"
 	 * @return шаблонную строку или DEFAULT_OBJECT_TYPE_TEMPLATE, если не удалось найти соответствие
@@ -472,7 +446,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 			ResultSet results = null;
 			try {
-				results = serviceRegistry.getSearchService().query(sp);
+				results = searchService.query(sp);
 				for (ResultSetRow row : results) {
 					if (!isArchive(row.getNodeRef())) {
 						record = row.getNodeRef();
@@ -534,53 +508,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	public JSONObject getRecordJSON(NodeRef recordRef) throws Exception{
-		JSONObject record = new JSONObject();
-		if (!isBJRecord(recordRef)) {
-			throw new Exception("Объект [" + recordRef  +"] не является записью бизнес-журнала!");
-		}
-		final Map<QName, Serializable> props = nodeService.getProperties(recordRef);
-		if (!props.isEmpty()) {
-			try {
-				record.put(PROP_BR_RECORD_DATE.getLocalName(), DateFormatISO8601.format((Date) props.get(PROP_BR_RECORD_DATE)));
-				record.put(PROP_BR_RECORD_DESC.getLocalName(), props.get(PROP_BR_RECORD_DESC) != null ? props.get(PROP_BR_RECORD_DESC) : "");
-				for (int i = 0; i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-					QName key = QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i));
-					if (props.get(key) != null) {
-						record.put(key.getLocalName(), props.get(key));
-					}
-				}
-
-				record.put(PROP_BR_RECORD_INITIATOR.getLocalName(), props.get(PROP_BR_RECORD_INITIATOR));
-				record.put(PROP_BR_RECORD_MAIN_OBJECT.getLocalName(), props.get(PROP_BR_RECORD_MAIN_OBJECT));
-
-				record.put(ASSOC_BR_RECORD_INITIATOR.getLocalName(), findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_INITIATOR, null, ASSOCIATION_TYPE.TARGET));
-				record.put(ASSOC_BR_RECORD_MAIN_OBJ.getLocalName(), findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET));
-
-				NodeRef eventCategory = findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_EVENT_CAT, null, ASSOCIATION_TYPE.TARGET);
-				if (eventCategory != null) {
-					record.put(ASSOC_BR_RECORD_EVENT_CAT.getLocalName(), eventCategory.toString());
-				}
-				NodeRef objectType = findNodeByAssociationRef(recordRef, ASSOC_BR_RECORD_OBJ_TYPE, null, ASSOCIATION_TYPE.TARGET);
-				if (objectType != null) {
-					record.put(ASSOC_BR_RECORD_OBJ_TYPE.getLocalName(), objectType.toString());
-				}
-
-				for (int j = 0; j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-					String name = getSeconObjAssocName(j);
-					NodeRef objRef = findNodeByAssociationRef(recordRef, QName.createQName(BJ_NAMESPACE_URI, name), null, ASSOCIATION_TYPE.TARGET);
-					if (objRef != null) {
-						record.put(name, objRef.toString());
-					}
-				}
-			} catch (JSONException e) {
-				logger.error("", e);
-			}
-
-		}
-		return record;
-	}
-
 	private String getSeconObjAssocName(int j) {
 		return "bjRecord-secondaryObj" + (j + 1) + "-assoc";
 	}
@@ -607,7 +534,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		sp.setQuery("TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "]");
 		ResultSet results = null;
 		try {
-			results = serviceRegistry.getSearchService().query(sp);
+			results = searchService.query(sp);
 			for (ResultSetRow row : results) {
 				NodeRef currentNodeRef = row.getNodeRef();
 				if (!isArchive(currentNodeRef)){
@@ -680,7 +607,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		ResultSet results = null;
 		NodeRef objType = null;
 		try {
-			results = serviceRegistry.getSearchService().query(sp);
+			results = searchService.query(sp);
 			for (ResultSetRow row : results) {
 				if (!isArchive(row.getNodeRef())) {
 					objType = row.getNodeRef();
@@ -711,7 +638,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
         final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
         ResultSet results = null;
-        String query = "";
+        String query;
         SearchParameters sp = new SearchParameters();
 
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -762,7 +689,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         sp.addSort("@" + PROP_BR_RECORD_DATE.toString(), false);
         sp.setQuery(query);
         try {
-            results = serviceRegistry.getSearchService().query(sp);
+            results = searchService.query(sp);
             for (ResultSetRow row : results) {
                 NodeRef currentNodeRef = row.getNodeRef();
 	            if (!isArchive(currentNodeRef)){
@@ -784,10 +711,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
 					@Override
 					public Boolean execute() throws Throwable {
-						NodeRef archiveRef = getArchiveFolder(new Date());
-						nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
-						ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
-						return newRef != null;
+						if (!isArchive(record)) {
+							NodeRef archiveRef = getArchiveFolder(new Date());
+							nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
+							ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
+							return newRef != null;
+						} else {
+							return true;
+						}
 					}
 				});
 			}
@@ -850,12 +781,5 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         }
 
         return result;
-    }
-
-    private static enum WhoseEnum {
-        MY,
-        DEPARTMENT,
-        CONTROL,
-        ALL
     }
 }
