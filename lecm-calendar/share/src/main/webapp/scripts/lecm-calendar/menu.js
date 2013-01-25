@@ -30,21 +30,21 @@ LogicECM.module.WCalendar.Calendar = LogicECM.module.WCalendar.Calendar || {};
 		_wcalendarCalendarBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				scope._reloadPage ("wcalendar");
+				scope._reloadPage ("wcalendar-calendar");
 			}
 		},
 
 		_wcalendarSheduleBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				scope._reloadPage ("shedule");
+				scope._reloadPage ("wcalendar-shedule");
 			}
 		},
 
 		_wcalendarAbsenceBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
-				scope._reloadPage ("absence");
+				scope._reloadPage ("wcalendar-absence");
 			}
 		},
 
