@@ -135,9 +135,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             },
 
             onUserAccess:function(layer, args) {
-//                alert(this.modules.dataGrid.widgets.paginator.getPageRecords());
-//                alert(this.modules.dataGrid.totalRecords);
-
                 var obj = args[1];
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
