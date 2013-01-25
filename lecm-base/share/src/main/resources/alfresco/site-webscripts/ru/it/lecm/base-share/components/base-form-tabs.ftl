@@ -9,7 +9,7 @@
     <ul class="yui-nav">
         <#list form.structure as item>
             <#if item.kind == "set">
-                <li <#if item_index == 0 || item.id?ends_with("_d")>class="selected"</#if>>
+                <li <#if item_index == 0 || (args.setId?? && item.id == args.setId)>class="selected"</#if>>
                     <a href="#tab${item_index + 1}">
                         <em>${item.label}</em>
                     </a>

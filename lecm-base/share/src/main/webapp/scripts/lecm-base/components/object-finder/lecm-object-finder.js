@@ -19,7 +19,7 @@
 
 var linkViewDialog = null;
 var linkViewId = null;
-function _viewLinkAttributes(id, nodeRef){
+function _viewLinkAttributes(id, nodeRef, setId){
     linkViewDialog = Alfresco.util.createYUIPanel(id,
         {
             width: "600px"
@@ -33,7 +33,8 @@ function _viewLinkAttributes(id, nodeRef){
                 itemKind:"node",
                 itemId:nodeRef,
                 formId:id,
-                mode:"view"
+                mode:"view",
+                setId: (setId != undefined && setId != null) ? setId : "common"
             },
             successCallback:{
                 fn:function (response) {

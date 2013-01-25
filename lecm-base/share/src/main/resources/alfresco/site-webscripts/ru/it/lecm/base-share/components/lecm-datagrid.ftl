@@ -8,7 +8,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 <script type="text/javascript">//<![CDATA[
 	var viewDialog = null;
 
-	function viewAttributes(nodeRef) {
+	function viewAttributes(nodeRef, setId) {
 		Alfresco.util.Ajax.request(
 				{
 					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
@@ -17,7 +17,8 @@ viewFormId(необязательный) - по умолчанию равен vi
 						itemKind:"node",
 						itemId:nodeRef,
 						formId:"${viewFormId}",
-						mode:"view"
+						mode:"view",
+						setId: (setId != undefined && setId != null) ? setId : "common"
 					},
 					successCallback:{
 						fn:showViewDialog
