@@ -1043,6 +1043,7 @@ margin: .3em .5em .3em;
 {
     overflow-x:hidden;
     overflow-y:auto;
+    max-height: 325px;
 }
 
 .ijab-contactview-grouphead
