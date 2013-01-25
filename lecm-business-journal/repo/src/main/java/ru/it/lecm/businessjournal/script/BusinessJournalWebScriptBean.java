@@ -1,5 +1,7 @@
 package ru.it.lecm.businessjournal.script;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -150,9 +152,19 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		}
 	}
 
-	public Scriptable findOldRecords(int numberOfDays) {
-		List<NodeRef> refs = service.getOldRecords(numberOfDays);
-		return createScriptable(refs);
+	public Scriptable findOldRecords(String dateArchiveTo) {
+        try {
+            String dateOnly = dateArchiveTo.substring(0, 10);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateOnly);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, 1);
+
+            List<NodeRef> refs = service.getRecordsByInterval(null, calendar.getTime());
+            return createScriptable(refs);
+        } catch (ParseException e) {
+            throw new ScriptException("Неверный формат даты!", e);
+        }
 	}
 
     public Scriptable getHistory(String nodeRef, String sortColumnName, boolean ascending) {

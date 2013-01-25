@@ -30,13 +30,38 @@ YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
 <@comp.baseToolbar id buttons searchBlock exSearch>
-<div id="toolbar-archivePanel" class="yui-panel" style="display: none">
+<div id="toolbar-archivePanel" class="yui-panel form-container" style="display: none">
     <div id="toolbar-archivePanel-head" class="hd">${msg("business-journal.archive")}</div>
     <div id="toolbar-archivePanel-body" class="bd">
-        <div id="toolbar-archivePanel-content" style="padding:20 px; margin:10 px">
-            <label for="archiveDate">${msg("archive.date")}</label>
-            <input type="text" name="-" id="archiveDate" value="20" maxlength="3"/>
+        <div id="toolbar-archivePanel-content" class="form-fields">
+
+            <#--date calendar control-->
+            <#assign dateFieldId = "archiveDate">
+            <#assign controlId = dateFieldId + "-cntrl">
+
+            <script type="text/javascript">//<![CDATA[
+            (function () {
+                new Alfresco.DatePicker("${controlId}", "${dateFieldId}").setOptions(
+                        {
+                            currentValue:"",
+                            showTime: false,
+                            mandatory: true
+                        }).setMessages(
+                ${messages}
+                );
+            })();
+            //]]></script>
+
+            <input id="${dateFieldId}" type="hidden" name="-" value="" />
+
+            <label for="${controlId}-date" style="display:inline">${msg("archive.date")}:</label>
+            <input id="${controlId}-date" name="-" type="text" class="date-entry" tabindex="0"/>
+
+            <a id="${controlId}-icon"><img src="${url.context}/res/components/form/images/calendar.png" class="datepicker-icon" tabindex="0"/></a>
+
+            <div id="${controlId}" class="datepicker" style="display: none;"></div>
         </div>
+
         <div class="bdft">
 	    <span id="toolbar-archivePanel-archiveButton" class="yui-button yui-push-button">
         <span class="first-child">
@@ -51,6 +76,7 @@ YAHOO.util.Event.onDOMReady(init);
         </div>
     </div>
 </div>
+
 <div class="archive-rows">
 	<span id="${id}-archiveByDateButton" class="yui-button yui-push-button">
        <span class="first-child">
@@ -59,13 +85,6 @@ YAHOO.util.Event.onDOMReady(init);
     </span>
 </div>
 <div class="divider"></div>
-<div class="archive-row">
-	<span id="${id}-archiveButton" class="yui-button yui-push-button">
-       <span class="first-child">
-          <button type="button" title="${msg("button.archive")}">&nbsp;</button>
-       </span>
-    </span>
-</div>
 <div class="exportcsv">
     <span id="${id}-exportCsvButton" class="yui-button yui-push-button">
         <span class="first-child">

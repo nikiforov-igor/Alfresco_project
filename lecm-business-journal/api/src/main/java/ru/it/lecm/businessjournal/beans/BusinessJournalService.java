@@ -219,13 +219,8 @@ public interface BusinessJournalService {
 	 */
 	public boolean moveRecordToArchive(NodeRef record);
 
-	/**
-	 * Метод, возвращающий список ссылок на записи старше заданного числа дней (дата создания меньше или равна текущая дата - число дней)
-	 * @return список ссылок на записи бизнес-журнала
-	 */
-	public List<NodeRef> getOldRecords(int numberOfDays);
-
     List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnName, boolean ascending);
 
     List<NodeRef> getHistory(NodeRef nodeRef);
+
 }

@@ -22,9 +22,9 @@ function main() {
                 results.push(result);
             }
         } else {
-            var archiveDate = json.has("archiveOTDays") ? json.get("archiveOTDays") : null;
-            if (archiveDate != null) {
-                items = businessJournal.findOldRecords(archiveDate);
+            var dateArchiveTo = json.has("dateArchiveTo") ? json.get("dateArchiveTo") : null;
+            if (dateArchiveTo != null) {
+                items = businessJournal.findOldRecords(dateArchiveTo);
                 for (item in items) {
                     nodeRef = items[item].getNodeRef().toString();
                     result =

@@ -108,11 +108,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         disabled: true
                     });
 
-                this.groupActions.archiveButton = Alfresco.util.createYUIButton(this, "archiveButton", this.onArchiveRows,
-                    {
-                        disabled: true
-                    });
-
                 this.groupActions.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportCSV,
                     {
                         disabled: true
@@ -140,6 +135,9 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             },
 
             onUserAccess:function(layer, args) {
+//                alert(this.modules.dataGrid.widgets.paginator.getPageRecords());
+//                alert(this.modules.dataGrid.totalRecords);
+
                 var obj = args[1];
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
@@ -285,12 +283,31 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             },
 
             onArchiveRowsDialog:function Toolbar_onDeleteRow() {
+                if (this.modules.dataGrid.totalRecords == 0) {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: this.msg("message.alert.no-elements")
+                        });
+                }
+
+                var items = this.modules.dataGrid.getSelectedItems();
+                if (items.length == 0) {
                     if (this.archivePanel && this.archivePanel.panel) {
                         Dom.setStyle(this.archivePanel.id, "display", "block");
                         this.archivePanel.panel.show();
                     } else {
                         alert("Не удалось найти панель!");
                     }
+                } else {
+                    var dataGrid = this.modules.dataGrid;
+                    if (dataGrid) {
+                        // Get the function related to the clicked item
+                        var fn = "onActionDelete";
+                        if (fn && (typeof dataGrid[fn] == "function")) {
+                            dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+                        }
+                    }
+                }
             },
 
             onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args)
@@ -346,18 +363,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             scope: this
                         }
                     });
-            },
+            }
 
-            onArchiveRows:function Toolbar_onDeleteRow() {
-                var dataGrid = this.modules.dataGrid;
-                if (dataGrid) {
-                    // Get the function related to the clicked item
-                    var fn = "onActionDelete";
-                    if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
-                    }
-                }
-            },
         }, true);
 })();
 
@@ -393,7 +400,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             },
             onArchive: function () {
                 var dateValue = Dom.get("archiveDate").value;
-                if (!isNaN(dateValue)) {
+                if (this.isValidDateArchiveTo(dateValue)) {
                     var timerShowLoadingMessage = null;
                     var loadingMessage = null;
                     var me = this;
@@ -447,7 +454,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             url: sUrl,
                             dataObj: {
                                 nodeRefs: [],
-                                archiveOTDays:dateValue
+                                dateArchiveTo:dateValue
                             },
                             successCallback: {
                                 fn: function (response) {
@@ -473,8 +480,14 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             }
                         });
                 } else {
-                    alert("Введите дату");
+                    var message = this.dataGrid.msg("message.alert.incorrect-date-format");
+                    Alfresco.util.PopupManager.displayMessage({
+                            text: message
+                        }, Dom.get("toolbar-archivePanel"));
                 }
+            },
+            isValidDateArchiveTo: function (dateArchiveTo) {
+                return (dateArchiveTo.length > 0) && (!Dom.hasClass("archiveDate-cntrl-date", "invalid"));
             },
             onCancel: function (layer, args) {
                 if (this.panel != null) {

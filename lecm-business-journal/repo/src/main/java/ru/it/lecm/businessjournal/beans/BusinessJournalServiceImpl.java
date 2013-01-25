@@ -726,13 +726,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	@Override
-	public List<NodeRef> getOldRecords(int numberOfDays) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, -numberOfDays);
-		return getRecordsByInterval(null, calendar.getTime());
-	}
-
     @Override
     public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
         List<NodeRef> result = getHistory(nodeRef);
