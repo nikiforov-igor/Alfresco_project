@@ -74,7 +74,7 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 				// дефолтное описание события (если не будет найдено в справочнике)
 				String description = "Создан новый объект #mainobject";
 
-				businessJournalService.fire(initiator, createdObj, eventCategory, description, null);
+				businessJournalService.log(initiator, createdObj, eventCategory, description, null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -19,7 +19,7 @@ function main() {
     if (makePrimaryCount > 0) {
         var node = search.findNode(linkRef);
         var desc = "Должностная позиция #mainobject помечена как основная в подразделении #object1";
-        businessJournal.fire(null, node.getParent().getNodeRef(), "Сделать основной", desc, [node.getParent().getParent().getNodeRef()]);
+        businessJournal.log(null, node.getParent().getNodeRef(), "Сделать основной", desc, [node.getParent().getParent().getNodeRef()]);
     }
 	model.makePrimaryCount = makePrimaryCount;
 	model.makeNotPrimaryCount = makeNotPrimaryCount;

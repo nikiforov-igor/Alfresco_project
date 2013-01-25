@@ -19,7 +19,7 @@ function main() {
 	}
     if (makeBossCount > 0) {
         var desc = "Должностная позиция #mainobject помечена как руководящая в подразделении #object1";
-        businessJournal.fire(null, nodeRef, "Сделать руководящей", desc, [node.getParent().getNodeRef()]);
+        businessJournal.log(null, nodeRef, "Сделать руководящей", desc, [node.getParent().getNodeRef()]);
     }
 	model.makeBossCount = makeBossCount;
 	model.makeNotBossCount = makeNotBossCount;

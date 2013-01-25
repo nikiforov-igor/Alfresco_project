@@ -122,7 +122,7 @@ public class OrgstructureEmployeeLinkPolicy
 			List<NodeRef> objects = new ArrayList<NodeRef>(2);
 			objects.add(object1);
 			objects.add(object2);
-			businessJournalService.fire(initiator, employee, eventCategory, description, objects);
+			businessJournalService.log(initiator, employee, eventCategory, description, objects);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -178,7 +178,7 @@ public class OrgstructureEmployeeLinkPolicy
 			List<NodeRef> objects = new ArrayList<NodeRef>(2);
 			objects.add(object1);
 			objects.add(object2);
-			businessJournalService.fire(initiator, employee, eventCategory, description, objects);
+			businessJournalService.log(initiator, employee, eventCategory, description, objects);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -34,7 +34,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		this.service = service;
 	}
 
-	public ScriptNode fire(String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
+	public ScriptNode log(String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
 		NodeRef record = null;
 		Object[] objs = Context.getCurrentContext().getElements(objects);
 		List<NodeRef> refs = new ArrayList<NodeRef>();
@@ -52,7 +52,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			}
 		}
 		try {
-			record = service.fire(new NodeRef(initiator), new NodeRef(mainObject), eventCategory, description, refs);
+			record = service.log(new NodeRef(initiator), new NodeRef(mainObject), eventCategory, description, refs);
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось создать запись бизнес-журнала", e);
 		}

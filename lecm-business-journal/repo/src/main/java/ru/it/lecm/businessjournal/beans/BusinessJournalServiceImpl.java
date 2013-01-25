@@ -102,7 +102,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -112,7 +112,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		if (eventCategory != null) {
 			evcategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(date, person, mainObject, evcategoryString, defaultDescription, objects);
+		return log(date, person, mainObject, evcategoryString, defaultDescription, objects);
 	}
 	/**
 	 * Метод для создания записи бизнеса-журнала
@@ -126,7 +126,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception{
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
 			new Exception("Инициатор события и основной объект должны быть заданы!");
 		}
@@ -153,12 +153,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      * @return ссылка на ноду записи в бизнес журнале
      */
 	@Override
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception{
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception{
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(date, initiator, mainObject, evCategoryString, defaultDescription, Arrays.asList(objects));
+		return log(date, initiator, mainObject, evCategoryString, defaultDescription, Arrays.asList(objects));
 	}
 
     /**
@@ -172,8 +172,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
      * @return ссылка на ноду записи в бизнес журнале
      */
     @Override
-    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
-        return fire(date, initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+        return log(date, initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
     }
 
 	/**
@@ -186,27 +186,27 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 		}
-		return fire(new Date(), initiator, mainObject, evCategoryString, defaultDescription, objects);
+		return log(new Date(), initiator, mainObject, evCategoryString, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
-		return fire(initiator, mainObject,getEventCategoryByName(eventCategory), defaultDescription, objects);
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+		return log(initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
 			person = personService.getPerson(initiator, false);
 		}
-		return fire(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
+		return log(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	/**

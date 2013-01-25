@@ -12,5 +12,5 @@ if (typeof json !== "undefined") {
             objects.push(jsonFields.get(count));
         }
     }
-    model.record = businessJournal.fire(initiator, mainObject, category, description, objects);
+    model.record = businessJournal.log(initiator, mainObject, category, description, objects);
 }

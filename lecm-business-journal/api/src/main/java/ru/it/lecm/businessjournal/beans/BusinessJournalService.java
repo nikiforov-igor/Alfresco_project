@@ -96,7 +96,7 @@ public interface BusinessJournalService {
      * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -109,7 +109,7 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -121,7 +121,7 @@ public interface BusinessJournalService {
      * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef fire(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception;
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -133,7 +133,7 @@ public interface BusinessJournalService {
      * @param  defaultDescription  - описание события
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public NodeRef fire(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -144,7 +144,7 @@ public interface BusinessJournalService {
 	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -155,7 +155,7 @@ public interface BusinessJournalService {
 	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -166,7 +166,7 @@ public interface BusinessJournalService {
 	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef fire(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект
