@@ -1,4 +1,4 @@
-package ru.it.lecm.notifications.channel.active.schedule;
+package ru.it.lecm.notifications.dashlet.schedule;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
@@ -21,7 +21,7 @@ import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel;
+import ru.it.lecm.notifications.dashlet.beans.NotificationsDashletChannel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,13 +29,13 @@ import java.util.*;
 
 /**
  * User: AIvkin
- * Date: 24.01.13
- * Time: 15:01
+ * Date: 25.01.13
+ * Time: 9:22
  */
-public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledAction {
-	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannelDeleteSchedule.class);
+public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction {
+	private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletDeleteSchedule.class);
 
-	private static final int MAX_COUNT_RECORDS = 50;
+	private static final int MAX_COUNT_RECORDS = 500;
 
 	/*
  * The cron expression
@@ -45,22 +45,22 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	/*
 	 * The name of the job
 	 */
-	private String jobName = "notificationa-active-channel-cleaner";
+	private String jobName = "notificationa-dashlet-cleaner";
 
 	/*
 	 * The job group
 	 */
-	private String jobGroup = "notifications-active-channel";
+	private String jobGroup = "notifications-dashlet";
 
 	/*
 	 * The name of the trigger
 	 */
-	private String triggerName = "notifications-active-channel-delete-trigger";
+	private String triggerName = "notifications-dashlet-delete-trigger";
 
 	/*
 	 * The name of the trigger group
 	 */
-	private String triggerGroup = "notifications-active-channel-trigger";
+	private String triggerGroup = "notifications-dashlet-trigger";
 
 	/*
 	 * The scheduler
@@ -70,9 +70,9 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	private SearchService searchService;
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
-	private NotificationsActiveChannel notificationsActiveChannel;
+	private NotificationsDashletChannel notificationsDashletChannel;
 
-	public NotificationsActiveChannelDeleteSchedule() {
+	public NotificationsDashletDeleteSchedule() {
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -81,10 +81,6 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
-	}
-
-	public void setNotificationsActiveChannel(NotificationsActiveChannel notificationsActiveChannel) {
-		this.notificationsActiveChannel = notificationsActiveChannel;
 	}
 
 	public void setNamespaceService(NamespaceService namespaceService) {
@@ -103,6 +99,9 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		this.cronExpression = cronExpression;
 	}
 
+	public void setNotificationsDashletChannel(NotificationsDashletChannel notificationsDashletChannel) {
+		this.notificationsDashletChannel = notificationsDashletChannel;
+	}
 
 	public String getCronExpression() {
 		return cronExpression;
@@ -157,7 +156,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	}
 
 	/**
-	 * Выборка уведомлений активного канала, которые нужно удалить
+	 * Выборка уведомлений дашлета, которые нужно удалить
 	 * @return список ссылок на элементы для удаления
 	 */
 	@Override
@@ -167,7 +166,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 
 		Set<QName> typeSet = new HashSet<QName>();
 		typeSet.add(ContentModel.TYPE_FOLDER);
-		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsActiveChannel.getRootRef(), typeSet);
+		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsDashletChannel.getRootRef(), typeSet);
 		if (employeeFolders != null) {
 			for (ChildAssociationRef folderAssocRef: employeeFolders) {
 				NodeRef folderRef = folderAssocRef.getChildRef();
@@ -184,9 +183,8 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 */
 	public List<NodeRef> getOldNotifications() {
 		List<NodeRef> result = new ArrayList<NodeRef>();
-		String path = nodeService.getPath(notificationsActiveChannel.getRootRef()).toPrefixString(namespaceService);
-		String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
-		String isReadField = "@" + NotificationsActiveChannel.PROP_IS_READ.toPrefixString(namespaceService).replace(":", "\\:");
+		String path = nodeService.getPath(notificationsDashletChannel.getRootRef()).toPrefixString(namespaceService);
+		String type = NotificationsDashletChannel.TYPE_NOTIFICATION_DASHLET.toPrefixString(namespaceService);
 		String formingDateField = "@" + NotificationsService.PROP_FORMING_DATE.toPrefixString(namespaceService).replace(":", "\\:");
 
 		Calendar cal = Calendar.getInstance();
@@ -197,8 +195,8 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true" +
-				" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
+		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " +
+				formingDateField + ":[MIN TO " + maxDate + "]");
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
@@ -227,14 +225,13 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	public List<NodeRef> getGreaterMaxNotifications(NodeRef folderRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		String path = nodeService.getPath(folderRef).toPrefixString(namespaceService);
-		String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
-		String isReadField = "@" + NotificationsActiveChannel.PROP_IS_READ.toPrefixString(namespaceService).replace(":", "\\:");
+		String type = NotificationsDashletChannel.TYPE_NOTIFICATION_DASHLET.toPrefixString(namespaceService);
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true");
+		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
 		parameters.setSkipCount(MAX_COUNT_RECORDS);
 		parameters.setMaxItems(10000);
 		ResultSet resultSet = null;

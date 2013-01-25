@@ -41,7 +41,7 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_DASHLET_ASSOC_QNAME = "dashlet";
 
 	public static final String NOTIFICATIONS_DASHLET_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/dashlet/1.0";
-	public final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
+	public static final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
 
     private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletChannel.class);
 
@@ -65,6 +65,10 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
+	}
+
+	public NodeRef getRootRef() {
+		return rootRef;
 	}
 
     public void setNamespaceService(NamespaceService namespaceService) {

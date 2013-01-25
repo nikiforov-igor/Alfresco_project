@@ -105,15 +105,4 @@
 			<ref bean="notificationActiveChannel"/>
 		</property>
 	</bean>
-
-	<bean id="notificationsActiveChannelDeleteScheduleExecutor"
-	      class="ru.it.lecm.notifications.channel.active.schedule.NotificationsActiveChannelDeleteScheduleExecutor"
-	      parent="action-executer">
-		<property name="nodeService">
-			<ref bean="NodeService" />
-		</property>
-		<property name="ignoreLock">
-			<value>false</value>
-		</property>
-	</bean>
 </beans>

@@ -46,4 +46,15 @@
 		<property name="policyComponent" ref="policyComponent"/>
 	</bean>
 
+	<bean id="deleteAction"
+	      class="ru.it.lecm.base.schedule.DeleteActionExecuter"
+	      parent="action-executer">
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+	</bean>
+
 </beans>

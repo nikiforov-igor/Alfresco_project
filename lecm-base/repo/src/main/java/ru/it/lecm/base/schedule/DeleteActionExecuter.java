@@ -1,23 +1,18 @@
-package ru.it.lecm.notifications.channel.active.schedule;
+package ru.it.lecm.base.schedule;
 
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 /**
  * User: AIvkin
  * Date: 24.01.13
- * Time: 15:02
+ * Time: 17:43
  */
-public class NotificationsActiveChannelDeleteScheduleExecutor extends ActionExecuterAbstractBase {
-	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannelDeleteScheduleExecutor.class);
-
+public class DeleteActionExecuter extends ActionExecuterAbstractBase {
 	private NodeService nodeService;
 
 	public void setNodeService(NodeService nodeService)
