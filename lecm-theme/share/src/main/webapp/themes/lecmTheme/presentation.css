@@ -1957,6 +1957,11 @@ span.person a
     float: none;
 }
 
+.yui-skin-lecmTheme .yui-panel div.form-field input[type='radio'] {
+    vertical-align: middle;
+    margin: auto 0;
+}
+
 .notification-row {
 	border-bottom: solid 1px #C5C7C6;
 	padding-left: 10px;

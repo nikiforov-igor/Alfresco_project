@@ -1124,4 +1124,19 @@ public class DelegationBean extends BaseProcessorExtension implements IDelegatio
 		nodeService.setProperty (delegationOptsRef, PROP_STATUS, DELEGATION_OPTS_STATUS.CLOSED.toString ());
 		return DELEGATION_OPTS_STATUS.get (oldStatus.toString ());
 	}
+
+	@Override
+	public boolean hasSubordinate (final NodeRef delegationOptsNodeRef) {
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee ();
+		NodeRef subordinateEmployee = findNodeAssociationRef (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		List<NodeRef> employees = orgstructureService.getBossSubordinate (currentEmployee);
+		boolean hasSubordinate = false;
+		for (NodeRef employee : employees) {
+			if (employee.equals (subordinateEmployee)) {
+				hasSubordinate = true;
+				break;
+			}
+		}
+		return hasSubordinate;
+	}
 }

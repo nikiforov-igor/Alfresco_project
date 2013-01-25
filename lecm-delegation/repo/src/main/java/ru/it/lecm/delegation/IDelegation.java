@@ -152,4 +152,11 @@ public interface IDelegation {
 	 * @return предыдущий статус который был у параметров делегирования
 	 */
 	DELEGATION_OPTS_STATUS closeDelegationForEmployee (final NodeRef employeeRef);
+
+	/**
+	 * по указанным параметрам делегирования находит сотрудника и проверяет является ли он подчиненным
+	 * @param delegationOptsNodeRef параметры делегирования потенциального подчиненного
+	 * @return true/false
+	 */
+	boolean hasSubordinate (final NodeRef delegationOptsNodeRef);
 }

@@ -8,7 +8,7 @@
 <#elseif "opts" == page>
 	"isEngineer": ${isEngineer?string},
 	"isBoss": ${isBoss?string},
-	"hasSubordinate": false
+	"hasSubordinate": ${hasSubordinate?string}
 </#if>
 }
 </#escape>

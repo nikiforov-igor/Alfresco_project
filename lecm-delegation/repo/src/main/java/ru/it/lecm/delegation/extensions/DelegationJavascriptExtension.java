@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -174,5 +175,23 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 
 	public void deleteProcuracies (final JSONArray nodeRefs) {
 		delegationService.deleteProcuracies (nodeRefs);
+	}
+
+	public boolean hasSubordinate (final JSONObject options) {
+		boolean result = false;
+		try {
+			String subject = options.getString ("subject");
+			String nodeRef = options.getString ("nodeRef");
+			if ("delegator".equals (subject)) {
+				if ("current".equals (nodeRef)) {
+					result = true; //считаем самого себя своим подчиненным если ничего нам не прислали
+				} else {
+					result = delegationService.hasSubordinate (new NodeRef (nodeRef));
+				}
+			}
+		} catch (JSONException ex) {
+			logger.error (ex.getMessage (), ex);
+		}
+		return result;
 	}
 }
