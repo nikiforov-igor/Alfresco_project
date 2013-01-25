@@ -63,6 +63,10 @@
 				<bubblingLabel>wcalendarToolbar</bubblingLabel>
 			</properties>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/ru/it/lecm/wcalendar/forbidden</url>
+		</component>
 	</components>
 </template-instance>
 

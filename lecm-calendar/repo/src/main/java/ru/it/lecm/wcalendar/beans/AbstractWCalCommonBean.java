@@ -2,6 +2,7 @@ package ru.it.lecm.wcalendar.beans;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
@@ -14,6 +15,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalCommon;
 
 /**
@@ -30,6 +32,7 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 	protected Repository repository;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
+	protected OrgstructureBean orgstructureService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalCommonBean.class);
 
@@ -61,6 +64,10 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 	 */
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	@Override
@@ -109,5 +116,32 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 			});
 		}
 		return container;
+	}
+
+	@Override
+	public boolean isEngineer(NodeRef employeeRef) {
+		NodeRef brEngineer = orgstructureService.getBusinessRoleCalendarEngineer();
+		if (brEngineer == null) {
+			logger.error("there is no engineer business role!");
+		}
+		List<NodeRef> employees = orgstructureService.getEmployeesByBusinessRole(brEngineer);
+		return employees.contains(employeeRef);
+	}
+
+	@Override
+	public boolean isBoss(NodeRef employeeRef) {
+		boolean isBoss = false;
+		if (nodeService.exists(employeeRef) && orgstructureService.isEmployee(employeeRef)) {
+			// получаем основную должностную позицию
+			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(employeeRef);
+			if (primaryStaff != null) {
+				// получаем подразделение для штатного расписания
+				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+				// получаем руководителя для подразделения
+				NodeRef bossRef = orgstructureService.getUnitBoss(unit);
+				isBoss = employeeRef.equals(bossRef);
+			}
+		}
+		return isBoss;
 	}
 }

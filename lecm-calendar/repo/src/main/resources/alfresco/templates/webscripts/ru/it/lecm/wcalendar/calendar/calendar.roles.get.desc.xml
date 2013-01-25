@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Get Calendar roles</shortname>
+	<description>Get Engineer or Boss roles for Calendar module</description>
+	<url>/lecm/wcalendar/calendar/get/roles</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+</webscript>

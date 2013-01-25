@@ -32,4 +32,8 @@ public interface IWCalCommon {
 	 * @return qualified name типа данных с namespace-ом
 	 */
 	QName getWCalendarItemType();
+
+	public boolean isBoss(NodeRef nodeRef);
+
+	public boolean isEngineer(NodeRef nodeRef);
 }

@@ -4,19 +4,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
-LogicECM.module.WCalendar.Calendar = LogicECM.module.WCalendar.Calendar || {};
 
 
 (function () {
-	LogicECM.module.WCalendar.Calendar.Menu = function (containerId) {
-		return LogicECM.module.WCalendar.Calendar.Menu.superclass.constructor.call(
+	LogicECM.module.WCalendar.Menu = function (containerId) {
+		return LogicECM.module.WCalendar.Menu.superclass.constructor.call(
 			this,
-			"LogicECM.module.WCalendar.Calendar.Menu",
+			"LogicECM.module.WCalendar.Menu",
 			containerId,
 			["button", "container", "connection", "json", "selector"]);
 	};
 
-	YAHOO.lang.extend(LogicECM.module.WCalendar.Calendar.Menu, Alfresco.component.Base, {
+	YAHOO.lang.extend(LogicECM.module.WCalendar.Menu, Alfresco.component.Base, {
 
 		options: {
 			pageId: null
@@ -49,15 +48,43 @@ LogicECM.module.WCalendar.Calendar = LogicECM.module.WCalendar.Calendar || {};
 		},
 
 		_onMenuReady: function () {
-			//TODO: скрывать некоторые кнопки, если нет прав
-			Alfresco.util.createYUIButton(this, "wcalendarCalendarBtn", this._wcalendarCalendarBtnClick (), {});
-			Alfresco.util.createYUIButton(this, "wcalendarSheduleBtn", this._wcalendarSheduleBtnClick (), {});
-			Alfresco.util.createYUIButton(this, "wcalendarAbsenceBtn", this._wcalendarAbsenceBtnClick (), {});
+			var canUseCalendar = LogicECM.module.WCalendar.Const.ROLES.isEngineer;
+			var canUseSheduleAbsence = LogicECM.module.WCalendar.Const.ROLES.isEngineer || LogicECM.module.WCalendar.Const.ROLES.isBoss;
+
+			Alfresco.util.createYUIButton(this, "wcalendarCalendarBtn", this._wcalendarCalendarBtnClick (), {
+				disabled: !canUseCalendar
+			});
+
+			Alfresco.util.createYUIButton(this, "wcalendarSheduleBtn", this._wcalendarSheduleBtnClick (), {
+				disabled: !canUseSheduleAbsence
+			});
+
+			Alfresco.util.createYUIButton(this, "wcalendarAbsenceBtn", this._wcalendarAbsenceBtnClick (), {
+				disabled: !canUseSheduleAbsence
+			});
+			
+			switch (this.options.pageId) {
+				case "wcalendar-calendar":
+					if (canUseCalendar) {
+						YAHOO.util.Dom.addClass ("menu-buttons-wcalendarCalendarBtn", "selected");
+					}
+					break;
+				case "wcalendar-shedule":
+					if (canUseSheduleAbsence) {
+						YAHOO.util.Dom.addClass ("menu-buttons-wcalendarSheduleBtn", "selected");
+					}
+					break;
+				case "wcalendar-absence":
+					if (canUseSheduleAbsence) {
+						YAHOO.util.Dom.addClass ("menu-buttons-wcalendarAbsenceBtn", "selected");
+					}
+					break;
+			}
 		},
 
 		onReady: function () {
 
-			Alfresco.logger.info ("A new LogicECM.module.WCalendar.Calendar.Menu has been created");
+			Alfresco.logger.info ("A new LogicECM.module.WCalendar.Menu has been created");
 
 			this._onMenuReady ();
 

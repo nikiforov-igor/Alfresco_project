@@ -34,6 +34,10 @@ public interface OrgstructureBean {
 	 * идентификатор бизнес роли "Технолог"
 	 */
 	String BUSINESS_ROLE_ENGINEER_ID = "BR_ENGINEER";
+	/**
+	 * идентификатор бизнес роли "Технолог календарей"
+	 */
+	String BUSINESS_ROLE_CALENDAR_ENGINEER_ID = "BR_CALENDAR_ENGINEER";
 	QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
 	QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
 	QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
@@ -409,6 +413,12 @@ public interface OrgstructureBean {
 	 * @return NodeRef на бизнес роль "Технолог" или null если таковой бизнес роли нет
 	 */
 	NodeRef getBusinessRoleEngineer ();
+	
+	/**
+	 * получить бизнес роль "Технолог календарей" из общего справочника бизнес ролей
+	 * @return NodeRef на бизнес роль "Технолог календарей" или null если таковой бизнес роли нет
+	 */
+	NodeRef getBusinessRoleCalendarEngineer();
 
 	/**
 	 * уволить сотрудника (деактивировать)

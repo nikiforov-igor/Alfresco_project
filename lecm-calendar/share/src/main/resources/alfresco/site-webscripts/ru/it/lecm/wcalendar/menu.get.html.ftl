@@ -1,17 +1,21 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
+<#assign pageId = page.id/>
+
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var calendarMenu = new LogicECM.module.WCalendar.Calendar.Menu("menu-buttons");
-		calendarMenu.setMessages(${messages});
+		var wCalendarMenu = new LogicECM.module.WCalendar.Menu("menu-buttons");
+		wCalendarMenu.setMessages(${messages});
+		wCalendarMenu.setOptions ({
+			pageId: "${pageId}"
+		});
 	})();
 //]]>
 </script>
 
 <@comp.baseMenu>
-    <#-- TODO: скрывать некоторые кнопки, если нет прав -->
-	<@comp.baseMenuButton "wcalendarCalendar" "Производственный календарь" args.selected/>
-	<@comp.baseMenuButton "wcalendarShedule" "График работы" args.selected/>
-    <@comp.baseMenuButton "wcalendarAbsence" "Отсутствие" args.selected/>
+	<@comp.baseMenuButton "wcalendarCalendar" "Производственный календарь"/>
+	<@comp.baseMenuButton "wcalendarShedule" "График работы"/>
+    <@comp.baseMenuButton "wcalendarAbsence" "Отсутствие"/>
 </@comp.baseMenu>
 

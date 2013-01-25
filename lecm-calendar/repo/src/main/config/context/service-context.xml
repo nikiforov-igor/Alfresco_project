@@ -35,18 +35,21 @@
 		<property name="transactionService" ref="transactionService"/>
 		<!--На сколько лет вперед сгенерировать календари-->
 		<property name="yearsAmountToCreate" value="3"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 	<bean id="lecmSheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 	<bean id="lecmAbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<!--<property name="namespaceService" ref="namespaceService"/>-->
 		<property name="transactionService" ref="transactionService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 	<bean id="lecmCalendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendarBase"/>

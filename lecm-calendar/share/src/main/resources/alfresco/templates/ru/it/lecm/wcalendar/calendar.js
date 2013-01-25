@@ -1,5 +1,9 @@
 //скрипт для получения корневой (корневых) папок
-var jsonStr = remote.connect("alfresco").get("/lecm/wcalendar/calendar/get/container");
-//var obj = jsonUtils.toObject (jsonStr);
+var calendarContainer = remote.connect("alfresco").get("/lecm/wcalendar/calendar/get/container");
+var roles = remote.connect("alfresco").get("/lecm/wcalendar/calendar/get/roles");
 
-model.calendarContainer = jsonStr;
+var nativeObject = eval("(" + roles + ")");
+
+model.calendarContainer = calendarContainer;
+model.calendarRoles = roles;
+model.isEngineer = nativeObject.isEngineer;

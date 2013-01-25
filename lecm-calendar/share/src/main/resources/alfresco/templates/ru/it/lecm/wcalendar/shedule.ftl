@@ -37,6 +37,7 @@
 <script type="text/javascript">//<![CDATA[
 
 var sheduleContainer = ${sheduleContainer};
+var sheduleRoles = ${calendarRoles};
 
 if (typeof LogicECM == "undefined" || !LogicECM) {
 	var LogicECM = {};
@@ -45,6 +46,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
+LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
+
+LogicECM.module.WCalendar.Const.ROLES = LogicECM.module.WCalendar.Const.ROLES || sheduleRoles;
 
 LogicECM.module.WCalendar.Shedule.SHEDULE_CONTAINER = LogicECM.module.WCalendar.Shedule.SHEDULE_CONTAINER || sheduleContainer;
 LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL = LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL || "sheduleDatagrid";
@@ -53,7 +57,13 @@ LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL = LogicECM.module.WCalendar.Shed
 
 </@>
 
+<#assign showContent = isEngineer || isBoss>
+
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<@bpage.basePage>
-    <@region id="shedule" scope="template"/>
+<@bpage.basePage showToolbar=showContent>
+	<#if showContent>
+		<@region id="shedule" scope="template"/>
+	<#else/>
+		<@region id="forbidden" scope="template"/>
+	</#if>
 </@bpage.basePage>
