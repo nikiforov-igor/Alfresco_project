@@ -1,10 +1,13 @@
 package ru.it.lecm.businessjournal.policies;
 
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
@@ -55,7 +58,7 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				ContentModel.TYPE_CMOBJECT, new JavaBehaviour(this, "onCreateNode"));
+				ContentModel.TYPE_CMOBJECT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -66,8 +69,8 @@ public class BusinessEventsPolicy implements  NodeServicePolicies.OnCreateNodePo
 			String initiator = authService.getCurrentUserName();
 
 			// получаем основной объект
-			NodeRef createdObj = childAssocRef.getChildRef();
-
+			final NodeRef createdObj = childAssocRef.getChildRef();
+			Map<QName,Serializable> props = serviceRegistry.getNodeService().getProperties(createdObj);
 			if (AFFECTED_TYPES.contains(serviceRegistry.getNodeService().getType(createdObj))){
 				// категория события
 				String eventCategory = "Создание";
