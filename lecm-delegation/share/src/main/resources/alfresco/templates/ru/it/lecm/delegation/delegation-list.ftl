@@ -46,8 +46,10 @@ LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
-	<#if nativeObject.isEngineer || nativeObject.isBoss>
+<#assign showContent = nativeObject.isEngineer || nativeObject.isBoss/>
+
+<@bpage.basePage showToolbar=showContent>
+	<#if showContent>
 		<@region id="content" scope="template"/>
 	<#else/>
 		<@region id="forbidden" scope="template"/>
