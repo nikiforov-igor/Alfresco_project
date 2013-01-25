@@ -22,8 +22,6 @@ package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -33,6 +31,7 @@ import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.data.LinkItemImpl;
 import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.ui.common.BarButton;
+import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
 import ru.it.lecm.im.client.utils.BrowserHelper;
 import ru.it.lecm.im.client.utils.i18n;
 
@@ -80,18 +79,28 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         //create the muc button
         if(iJab.conf.getXmppConf().isMUCEnabled())
 		{
-			mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
-			//appsBar.addWidget(mucButton);
-			mucWidget = new MUCRoomWidget(this.getChatPanel());
-			mucButton.setButtonWindow(mucWidget);
-			mucButton.getButton().addClickHandler(new ClickHandler()
-			{
-				public void onClick(ClickEvent event)
-				{
-					mucWidget.loadRoomList();
-				}
+            mucWidget = new MUCRoomWidget(this.getChatPanel());
 
-			});
+            mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
+			mucButton.setButtonWindow(mucWidget);
+            mucButton.addWidgetListener(new BarButtonListener() {
+                @Override
+                public void onMax() {
+                }
+
+                @Override
+                public void onClose() {
+                }
+
+                @Override
+                public void onWindowClose() {
+                }
+
+                @Override
+                public void onWindowOpen() {
+                    mucWidget.loadRoomList();
+                }
+            });
 		}
         else
         {

@@ -36,6 +36,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
 import ru.it.lecm.im.client.ui.SimpleFocusWidget;
 import ru.it.lecm.im.client.utils.i18n;
@@ -69,7 +70,8 @@ public class ButtonPopupWindow extends Composite {
 		{
 			public void onClick(ClickEvent event) 
 			{
-				clickClose();
+                iJab.client.toggleIsVisible();
+                //clickClose();
 			}
 		});
 		closeButton.addMouseOverHandler(new MouseOverHandler()

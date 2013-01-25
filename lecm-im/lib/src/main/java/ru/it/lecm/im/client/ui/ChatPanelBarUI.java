@@ -21,10 +21,6 @@
 package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -40,108 +36,11 @@ public abstract class ChatPanelBarUI extends Composite
 	interface ChatPanelUiBinder extends UiBinder<Widget, ChatPanelBarUI> {
 	}
 
-	
-	@UiField Element nextElement;
-	@UiField Element nextMsgCountElement;
-	@UiField Element nextClickElement;
-	@UiField Element nextChatCountElement;
-	
 	@UiField FlowPanel chatsContent;
-	
-	@UiField Element prevElement;
-	@UiField Element prevMsgCountElement;
-	@UiField Element prevClickElement;
-	@UiField Element prevChatCountElement;
-	
-	private SimpleFocusWidget nextClickButton;
-	private SimpleFocusWidget prevClickButton;
-	
+
 	public ChatPanelBarUI() 
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		
-		nextClickButton = new SimpleFocusWidget(nextClickElement);
-		nextClickButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{	
-				if(nextElement.getClassName().contains("ui-state-disabled"))
-					return;
-				nextClicked();
-			}
-		});
-		
-		prevClickButton = new SimpleFocusWidget(prevClickElement);
-		prevClickButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				if(prevElement.getClassName().contains("ui-state-disabled"))
-					return;
-				prevClicked();
-			}
-			
-		});
-	}
-	
-	protected void setNextMsgCount(int count)
-	{
-		if(count>0)
-		{
-			nextMsgCountElement.getStyle().setDisplay(Display.BLOCK);
-			nextMsgCountElement.setInnerText(""+count);
-		}
-		else
-		{
-			nextMsgCountElement.getStyle().setDisplay(Display.NONE);
-			nextMsgCountElement.setInnerText(""+count);
-		}
-	}
-	
-	protected void setPrevMsgCount(int count)
-	{
-		if(count>0)
-		{
-			prevMsgCountElement.getStyle().setDisplay(Display.BLOCK);
-			prevMsgCountElement.setInnerText(""+count);
-		}
-		else
-		{
-			prevMsgCountElement.getStyle().setDisplay(Display.NONE);
-			prevMsgCountElement.setInnerText(""+count);
-		}
-	}
-	
-	protected void setNextChatCount(int count)
-	{
-		if(count>0)
-			nextElement.removeClassName("ui-state-disabled");
-		else
-			nextElement.addClassName("ui-state-disabled");
-		nextChatCountElement.setInnerText(""+count);
-	}
-	
-	protected void setPrevChatCount(int count)
-	{
-		if(count>0)
-			prevElement.removeClassName("ui-state-disabled");
-		else
-			prevElement.addClassName("ui-state-disabled");
-		prevChatCountElement.setInnerText(""+count);
-	}
-	
-	protected void setScrollVisible(boolean b)
-	{
-		if(b)
-		{
-			nextElement.getStyle().setDisplay(Display.BLOCK);
-			prevElement.getStyle().setDisplay(Display.BLOCK);
-		}
-		else
-		{
-			nextElement.getStyle().setDisplay(Display.NONE);
-			prevElement.getStyle().setDisplay(Display.NONE);
-		}
 	}
 	
 	protected int getWidgetCount()
@@ -178,8 +77,5 @@ public abstract class ChatPanelBarUI extends Composite
 	{
 		chatsContent.clear();
 	}
-	
-	protected abstract void nextClicked();
-	protected abstract void prevClicked();
 
 }

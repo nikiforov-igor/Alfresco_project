@@ -7,25 +7,7 @@
 
 	</ui:style>
 	<g:HTMLPanel styleName="ijab-panels">
-		<div class="ijab-window-tab-wrap ui-widget ijab-panels-next-wrap">
-			<div class="ijab-window-tab ijab-panels-next ui-state-default ui-state-disabled" style="display:none;" ui:field="nextElement">
-				<div class="ijab-window-tab-count" style="display:none;" ui:field="nextMsgCountElement">0</div>
-				<em class="ui-icon ui-icon-triangle-1-w" ui:field="nextClickElement"/>
-				<span ui:field="nextChatCountElement">0</span>
-			</div>
-		</div>
-			
-		<div class="ijab-panels-tab-wrap" style="overflow: visible;">
-			<g:FlowPanel styleName="ijab-panels-tab" ui:field="chatsContent">
-			</g:FlowPanel>
-		</div>
-			
-		<div class="ijab-window-tab-wrap ui-widget ijab-panels-prev-wrap">
-			<div class="ijab-window-tab ijab-panels-prev ui-state-default ui-state-disabled" style="display:none;" ui:field="prevElement">
-				<div class="ijab-window-tab-count" style="display:none;" ui:field="prevMsgCountElement">0</div>
-				<span ui:field="prevChatCountElement">0</span>
-				<em class="ui-icon ui-icon-triangle-1-e" ui:field="prevClickElement"/>
-			</div>
-		</div>
+        <g:FlowPanel styleName="ijab-panels-tab" ui:field="chatsContent">
+        </g:FlowPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -6,7 +6,7 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:FlowPanel styleName="ijab-window ui-widget ijab-window-minimize" ui:field="button">
+	<g:FlowPanel styleName="ijab-window ui-widget ijab-window-minimize" ui:field="button" >
 		<iJab:FocusHTMLPanel styleName="ijab-window-tab-wrap" ui:field="buttonFocus">
 			<div class="ijab-window-tab ui-state-default" ui:field="buttonStateElement">
 				<div class="ijab-window-tab-inner">

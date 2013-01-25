@@ -27,6 +27,7 @@ import com.google.gwt.user.client.Window;
 import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @SuppressWarnings("deprecation")
@@ -36,15 +37,14 @@ public class ChatPanelBar extends ChatPanelBarUI
 	
 	private PanelButton activeButton = null;
 
-	
+    private final List<PanelButton> buttons = new ArrayList<PanelButton>();
+
 	private final Stack<PanelButton> leftStack = new Stack<PanelButton>();
 	private final Stack<PanelButton> rightStack = new Stack<PanelButton>();
 	private boolean onResume = false;
 	public ChatPanelBar()
 	{
 		super();
-		//this.mainBar = mainBar;
-		calcVisibleTabs();
 
         Window.addResizeHandler(new ResizeHandler() {
             @Override
@@ -133,7 +133,6 @@ public class ChatPanelBar extends ChatPanelBarUI
 	{
 		try
 		{
-
 			PanelButton pushRightButton = (PanelButton)getWidget(getWidgetCount()-1);
 			PanelButton popLeftButton = leftStack.pop();
 			removeWidget(pushRightButton);
@@ -142,7 +141,6 @@ public class ChatPanelBar extends ChatPanelBarUI
 			insertWidget(popLeftButton,0);
 			if(pushRightButton.getOldMessageCount()>0||popLeftButton.getOldMessageCount()>0)
 				updateMessageCount();
-			updateScrollButtons();
 
 		}
 		catch(Exception e)
@@ -167,8 +165,6 @@ public class ChatPanelBar extends ChatPanelBarUI
 			addWidget(popRightButton);
 			if(pushLeftButton.getOldMessageCount()>0||popRightButton.getOldMessageCount()>0)
 				updateMessageCount();
-			updateScrollButtons();
-
 
 		}
 		catch(Exception e)
@@ -179,180 +175,71 @@ public class ChatPanelBar extends ChatPanelBarUI
 		}
 	}
 	
-	private void updateScrollButtons()
-	{
-		try
-		{
-
-			setNextChatCount(leftStack.size());
-			setPrevChatCount(rightStack.size());
-			setScrollVisible(!(leftStack.isEmpty()&&rightStack.isEmpty()));
-
-		}
-		catch(Exception e)
-		{
-			GWT.log("error updateScrollButtons",null);
-			GWT.log(e.toString(),null);
-			GWT.log(e.getStackTrace().toString(),null);
-		}
-	}
-	
 	protected void onWindowResize(int width, int height) 
 	{
-		calcVisibleTabs();
-		try
-		{
-			if(getWidgetCount()>maxVisibleButton)
-			{
-				tryPushButton();
-				updateScrollButtons();
-			}
-			else if(getWidgetCount()<maxVisibleButton)
-			{
-				tryPopButton();
-				updateScrollButtons();
-			}
-		}
-		catch(Exception e)
-		{
-			/*
-			Window.alert("error onWindowSize");
-			Window.alert(e.toString());
-			Window.alert(e.getStackTrace().toString());
-			*/
-		}
-	}
-	
-	@Override
-	protected void nextClicked() {
-		scrollLeft();
-	}
-
-	@Override
-	protected void prevClicked() {
-		scrollRight();
-	}
-	
-	private void calcVisibleTabs()
-	{
-		//int panelMaxWidth = (Window.getClientWidth() - 45)-mainBar.getShortcutBar().getOffsetWidth()-mainBar.getAppsBar().getOffsetWidth()-70;
-		maxVisibleButton = 1;//panelMaxWidth/buttonWidth;
 	}
 	
 	
 	public ChatPanelButton createChatButton()
 	{
-		if(maxVisibleButton == 0)
-			calcVisibleTabs();
 		final ChatPanelButton btn = new ChatPanelButton(this);
-		btn.addWidgetListener(new BarButtonListener()
-		{
-			public void onClose() 
-			{
-				btn.closeWindow();
-				removeWidget(btn);
-				tryPopButton();
-				updateScrollButtons();
-
-				// It's seek
-                // Закоментил Я
-//				if(iJabOptions.instance()!=null&&iJabOptions.instance().isAutoClearHistory())
-//				{
-//					btn.clearHistory();
-//				}
-			}
-
-			public void onMax() {
-			}
-
-			public void onWindowClose() 
-			{
-				if(activeButton == btn)
-					activeButton = null;
-			}
-
-			public void onWindowOpen() 
-			{
-                /* my close
-                ArrayList<ChatPanelButton> buttons = getChatButtonsInBar();
-                for(ChatPanelButton button:buttons)
-                {
-                    button.closeWindow();
-                }
-                     my */
-
-				if(activeButton !=null&&activeButton!=btn)
-					activeButton.closeWindow();
-				activeButton = btn;
-
-
-                while(leftStack.contains(activeButton))
-				{
-					scrollLeft();
-				}
-				while(rightStack.contains(activeButton))
-				{
-					scrollRight();
-				}
-
-			}
-			
-		});
-		
-		addButton(btn);
+        addBarButtonListener(btn);
+        addButton(btn);
 		return btn;
 	}
-	
-	public MUCPanelButton createMUCButton()
-	{
-		if(maxVisibleButton == 0)
-			calcVisibleTabs();
-		final MUCPanelButton btn = new MUCPanelButton(this);
-		btn.addWidgetListener(new BarButtonListener()
-		{
-			public void onClose() 
-			{
-				btn.closeWindow();
-				removeWidget(btn);
-				tryPopButton();
-				updateScrollButtons();
-			}
 
-			public void onMax() {
-			}
+    private void addBarButtonListener(final PanelButton btn) {
+        btn.addWidgetListener(new BarButtonListener()
+        {
+            public void onClose()
+            {
+                btn.closeWindow();
+                removeWidget(btn);
+                tryPopButton();
+            }
 
-			public void onWindowClose() 
-			{
-				if(activeButton == btn)
-					activeButton = null;
-			}
+            public void onMax() {
+            }
 
-			public void onWindowOpen() 
-			{
-				if(activeButton !=null&&activeButton!=btn)
-					activeButton.closeWindow();
-				activeButton = btn;
+            public void onWindowClose()
+            {
+                if(activeButton == btn)
+                    activeButton = null;
+            }
+
+            public void onWindowOpen()
+            {
+
+                if(activeButton !=null&&activeButton!=btn)
+                    activeButton.closeWindow();
+                activeButton = btn;
 
 
                 while(leftStack.contains(activeButton))
-				{
-					scrollLeft();
-				}
-				while(rightStack.contains(activeButton))
-				{
-					scrollRight();
-				}
+                {
+                    scrollLeft();
+                }
+                while(rightStack.contains(activeButton))
+                {
+                    scrollRight();
+                }
 
-			}
-			
-		});
-		
+            }
+
+        });
+    }
+
+    public MUCPanelButton createMUCButton()
+	{
+		final MUCPanelButton btn = new MUCPanelButton(this);
+        addBarButtonListener(btn);
 		addButton(btn);
 		return btn;
 	}
 	
 	public void addButton(PanelButton btn)
 	{
+        this.buttons.add(btn);
 
         while(!leftStack.isEmpty())
 		{
@@ -360,17 +247,10 @@ public class ChatPanelBar extends ChatPanelBarUI
 		}
 
 		insertWidget(btn,0);
-		// Закоментил я
-		//if(activeButton==null&&!onResume)
-		//	btn.openWindow();
-		//tryPushButton();
-		updateScrollButtons();
 	}
 	
 	public boolean isButtonHide(PanelButton button)
 	{
-
-
 		return leftStack.contains(button)||rightStack.contains(button);
 
 	}
@@ -382,23 +262,18 @@ public class ChatPanelBar extends ChatPanelBarUI
 	
 	public void updateMessageCount()
 	{
-		int leftCount = 0;
+		int count = 0;
 
         for(PanelButton button:leftStack)
 		{
-			leftCount += button.getOldMessageCount();
+			count += button.getOldMessageCount();
 		}
-
-		setNextMsgCount(leftCount);
-		
-		int rightCount = 0;
 
 		for(PanelButton button:rightStack)
 		{
-			rightCount += button.getOldMessageCount();
+			count += button.getOldMessageCount();
 		}
 
-		setPrevMsgCount(rightCount);
 	}
 	
 	public void ensureButtonInBar(PanelButton button)
@@ -419,8 +294,7 @@ public class ChatPanelBar extends ChatPanelBarUI
 
         leftStack.clear();
 		rightStack.clear();
-
-		updateScrollButtons();
+        buttons.clear();
 	}
 
 	public ArrayList<ChatPanelButton> getChatButtonsInBar()

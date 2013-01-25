@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.Log;
+import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.ui.listeners.BarButtonListener;
 import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
 import ru.it.lecm.im.client.ui.FocusHTMLPanel;
@@ -48,8 +49,7 @@ public class BarButton extends Composite {
 	}
 	
 	@UiField FlowPanel button;
-	@UiField
-    FocusHTMLPanel buttonFocus;
+	@UiField FocusHTMLPanel buttonFocus;
 	@UiField Element buttonStateElement;
 	@UiField Element tipDIVElement;
 	@UiField Element tipElement;
@@ -268,7 +268,8 @@ public class BarButton extends Composite {
 		closeButton.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) {
-				fireOnClose();				
+                iJab.client.toggleIsVisible();
+				//fireOnClose();
 			}
 		});
 		closeButton.addMouseOverHandler(new MouseOverHandler()
@@ -293,10 +294,11 @@ public class BarButton extends Composite {
     }
 
     public void ToggleWindow() {
-        if(!button.getStyleName().contains("ijab-window-minimize"))
-            closeWindow();
-        else
-            openWindow();
+        iJab.client.toggleIsVisible();
+//        if(!button.getStyleName().contains("ijab-window-minimize"))
+//            closeWindow();
+//        else
+//            openWindow();
     }
 
     private void mouseOver()
