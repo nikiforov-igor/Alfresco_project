@@ -1,6 +1,5 @@
 package ru.it.lecm.wcalendar.extensions;
 
-import java.util.List;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.ServiceRegistry;
@@ -64,13 +63,23 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 		return null;
 	}
 
-	public boolean isEngineer (final String employeeRef) {
-		return wCalendarService.getWCalendarDescriptor().isEngineer(new NodeRef (employeeRef));
+	/**
+	 * Проверка, занимает ли сотрудник руководящую позицию.
+	 *
+	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
+	 * @return true если сотрудник занимает где-либо руководящую позицию.
+	 */
+	public boolean isEngineer(final String employeeRef) {
+		return wCalendarService.getWCalendarDescriptor().isEngineer(new NodeRef(employeeRef));
 	}
 
-	public boolean isBoss (final String employeeRef) {
-		return wCalendarService.getWCalendarDescriptor().isBoss(new NodeRef (employeeRef));
+	/**
+	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
+	 *
+	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
+	 * @return true если сотрудник имеет роль "Технолог календарей".
+	 */
+	public boolean isBoss(final String employeeRef) {
+		return wCalendarService.getWCalendarDescriptor().isBoss(new NodeRef(employeeRef));
 	}
-	
-
 }

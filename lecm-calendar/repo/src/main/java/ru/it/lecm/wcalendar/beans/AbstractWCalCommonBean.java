@@ -66,6 +66,12 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 		this.transactionService = transactionService;
 	}
 
+	/**
+	 * Получить экземпляр OrgstructureBean от Spring-а для работы с
+	 * оргструктурой.
+	 *
+	 * @param orgstructureService передается Spring-ом
+	 */
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
