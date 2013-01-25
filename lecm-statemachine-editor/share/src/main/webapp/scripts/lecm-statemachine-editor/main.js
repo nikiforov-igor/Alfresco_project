@@ -160,17 +160,17 @@ LogicECM.module = LogicECM.module || {};
 			td.className = "lecm_tbl_td_" + parity;
 			td.style.textAlign = "center";
 
-			if (model.editable) {
-				var me = this;
-				var edit = document.createElement("a");
-				edit.className = "lecm_tbl_action_edit";
-				edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-				td.appendChild(edit);
+			var me = this;
+			var edit = document.createElement("a");
+			edit.className = "lecm_tbl_action_edit";
+			edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+			td.appendChild(edit);
 
-				YAHOO.util.Event.addListener(edit, "click", function() {
-					me._editStatus(model.nodeRef);
-				});
+			YAHOO.util.Event.addListener(edit, "click", function() {
+				me._editStatus(model.nodeRef, model.forDraft, model.isStarted);
+			});
 
+			if (!model.isStarted) {
 				var span = document.createElement("span");
 				span.innerHTML = "&nbsp;&nbsp;";
 				td.appendChild(span);
@@ -322,14 +322,20 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 		},
 
-		_editStatus: function(nodeRef) {
+		_editStatus: function(nodeRef, forDraft, isStarted) {
+			var formId = "";
+			if (isStarted && forDraft) {
+				formId = "forDraftFormTrue";
+			} else if (isStarted) {
+				formId = "forDraftFormFalse";
+			}
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 				itemKind:"node",
 				itemId: nodeRef,
 				mode:"edit",
 				submitType:"json",
-				formId:"statemachine-editor-edit-status"
+				formId: formId
 			});
 
 			this._showSplash();

@@ -5,8 +5,8 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
@@ -26,11 +26,12 @@ import java.util.Map;
 
 public class StateMachineHandler implements ExecutionListener {
 
+	private final static Logger logger = LoggerFactory.getLogger(StateMachineHandler.class);
+
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
 	private static INodeACLBuilder lecmAclBuilderBean;
 	private static Repository repositoryHelper;
-	private static Log logger = LogFactory.getLog(StateMachineHandler.class);
 
 	private String processId = "";
 
@@ -59,10 +60,15 @@ public class StateMachineHandler implements ExecutionListener {
 
 	@Override
 	public void notify(DelegateExecution execution) throws Exception {
-		String eventName = execution.getEventName();
-		List<StateMachineAction> actions = events.get(eventName);
-		for (StateMachineAction action : actions) {
-			action.execute(execution);
+		try {
+			String eventName = execution.getEventName();
+			List<StateMachineAction> actions = events.get(eventName);
+			for (StateMachineAction action : actions) {
+				action.execute(execution);
+			}
+		} catch (Exception e) {
+			logger.error("Error while action execution", e);
+			throw e;
 		}
 	}
 
@@ -96,7 +102,12 @@ public class StateMachineHandler implements ExecutionListener {
 			action.setServiceRegistry(serviceRegistry);
 			action.setRepositoryHelper(repositoryHelper);
 			action.setLecmAclBuilderBean(lecmAclBuilderBean);
-			action.init(actionElement, processId);
+			try {
+				action.init(actionElement, processId);
+			} catch (Exception e) {
+				logger.error("Error while init action", e);
+				throw new IllegalStateException(e);
+			}
 		}
 		return action;
 	}

@@ -14,10 +14,12 @@ if (nodeRef != null) {
 	var statuses = [];
 	var children = stateMachine.getChildren();
 	for each (var status in children) {
-		statuses.push({
-			nodeRef: status.nodeRef.toString(),
-			name: status.properties["lecm-stmeditor:endStatus"] ? "Завершено" : status.properties["cm:name"]
-		});
+		if (!status.properties["lecm-stmeditor:startStatus"]) {
+			statuses.push({
+				nodeRef: status.nodeRef.toString(),
+				name: status.properties["cm:name"]
+			});
+		}
 
 	}
 	model.statuses = statuses;

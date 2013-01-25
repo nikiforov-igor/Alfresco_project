@@ -14,7 +14,8 @@
 {
     name: "${status.name}",
     nodeRef: "${status.nodeRef}",
-    editable: ${status.editable},
+    isStarted: ${status.isStarted},
+    forDraft: ${status.forDraft},
     transitions: [
         <#list status.transitions as transition>
             <@printTransition transition />

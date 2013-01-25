@@ -15,6 +15,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 import org.w3c.dom.Document;
@@ -38,6 +40,8 @@ import java.util.List;
  * Time: 11:51
  */
 public class LecmWorkflowDeployer extends AbstractLifecycleBean {
+
+	private final static Logger logger = LoggerFactory.getLogger(LecmWorkflowDeployer.class);
 
 	private WorkflowService workflowService;
 	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
@@ -84,7 +88,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 				String fileName = (String) nodeService.getProperty(workflow.getChildRef(), ContentModel.PROP_NAME);
 				InputStream is = reader.getContentInputStream();
 				byte[] buf = new byte[1 << 8];
-				int c = -1;
+				int c;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				while ((c = is.read(buf)) != -1) {
 					baos.write(buf, 0, c);
@@ -106,6 +110,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 				} else {
 					deploy(ENGINE_ID, MIMETYPE, new ByteArrayInputStream(bytes), fileName);
 				}
+				logger.info("Statemachine " + fileName + "deployed successfully");
 			}
 			userTransaction.commit();
 		} catch (Exception e) {

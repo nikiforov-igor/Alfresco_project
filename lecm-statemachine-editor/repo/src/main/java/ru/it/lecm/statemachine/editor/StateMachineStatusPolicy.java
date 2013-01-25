@@ -18,19 +18,16 @@ import ru.it.lecm.statemachine.bean.StateMachineActions;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: PMelnikov
  * Date: 16.11.12
  * Time: 14:45
  */
-public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
+public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
 	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_URI, "status");
-	public final static QName ASSOC_STATUS_FOLDER = QName.createQName(STATEMACHINE_URI, "statusFolder");
-	public final static QName PROP_START_STATUS = QName.createQName(STATEMACHINE_URI, "startStatus");
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_URI, "actionExecution");
 	public final static QName PROP_STATUS_UUID = QName.createQName(STATEMACHINE_URI, "statusUUID");
@@ -60,41 +57,15 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "stateMachineActions", stateMachineActions);
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				TYPE_STATUS, new JavaBehaviour(this, "onUpdateProperties"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				TYPE_STATUS, new JavaBehaviour(this, "onCreateNode"));
 
 	}
 
 	@Override
-	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		NodeService nodeService = serviceRegistry.getNodeService();
-		String prevValue = (String) before.get(ContentModel.PROP_NAME);
-		String curValue = (String) after.get(ContentModel.PROP_NAME);
-		if (curValue != null && !curValue.equals(prevValue)) {
-			NodeRef folder = (NodeRef) after.get(ASSOC_STATUS_FOLDER);
-			if (folder != null) {
-				nodeService.setProperty(folder, ContentModel.PROP_NAME, curValue);
-			}
-		}
-
-		if (after.get(PROP_START_STATUS) != null) {
-			setStartStatus(nodeRef, (Boolean) after.get(PROP_START_STATUS));
-		}
-	}
-
-	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef node = childAssocRef.getChildRef();
-		NodeRef parent = childAssocRef.getParentRef();
 		NodeService nodeService = serviceRegistry.getNodeService();
-
-		//Проставляем начальный статус, если этот статус первый
-		List<ChildAssociationRef> children = nodeService.getChildAssocs(parent);
-		if (children.size() == 2) {
-			nodeService.setProperty(node, PROP_START_STATUS, true);
-		}
 
 		String statusUUID = GUID.generate();
 		nodeService.setProperty(node, PROP_STATUS_UUID, statusUUID);
@@ -143,26 +114,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnUpdatePro
 		createActions(node, statusFolder, actions, "take");
 		actions = stateMachineActions.getActions("end");
 		createActions(node, statusFolder, actions, "end");
-
-		if (nodeService.getProperty(node, PROP_START_STATUS) != null) {
-			setStartStatus(node, (Boolean) nodeService.getProperty(node, PROP_START_STATUS));
-		}
-
 	}
-
-	private void setStartStatus(NodeRef statusRef, boolean isStart) {
-		if (!isStart) {
-			return;
-		}
-		NodeService nodeService = serviceRegistry.getNodeService();
-		ChildAssociationRef statemachineRef = nodeService.getPrimaryParent(statusRef);
-		List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statemachineRef.getParentRef());
-		for (ChildAssociationRef status : statuses) {
-			nodeService.setProperty(status.getChildRef(), PROP_START_STATUS, false);
-		}
-		nodeService.setProperty(statusRef, PROP_START_STATUS, true);
-	}
-
 
 	private void createActions(NodeRef status, NodeRef statusesFolder, List<String> actions, String execution) {
 		NodeService nodeService = serviceRegistry.getNodeService();

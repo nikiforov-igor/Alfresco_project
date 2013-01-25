@@ -28,9 +28,10 @@ if (statemachineId != null && statemachineId != '') {
 		machine.save();
 
 		var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
-		var endStatus = statuses.createNode("END", "lecm-stmeditor:status", "cm:contains");
-		endStatus.properties["lecm-stmeditor:endStatus"] = true;
-		endStatus.save();
+		var startStatus = statuses.createNode("Start", "lecm-stmeditor:status", "cm:contains");
+		startStatus.properties["lecm-stmeditor:forDraft"] = true;
+		startStatus.properties["lecm-stmeditor:startStatus"] = true;
+		startStatus.save();
 	}
 
 	var statuses = machine.childByNamePath("statuses");
@@ -41,10 +42,6 @@ if (statemachineId != null && statemachineId != '') {
 	var statuses = [];
 	var endStatus = null;
 	for each (var status in machineStatuses) {
-		if (status.properties["lecm-stmeditor:endStatus"]) {
-			endStatus = status;
-			continue;
-		}
 		var actionsNodes = status.getChildren();
 		var transitions = [];
 		for each (var action in actionsNodes) {
@@ -78,7 +75,8 @@ if (statemachineId != null && statemachineId != '') {
 			name: status.properties["cm:name"] + (status.properties["lecm-stmeditor:startStatus"] ? " (S)" : ""),
 			nodeRef: status.nodeRef.toString(),
 			transitions: transitions,
-			editable: "true"
+			isStarted: status.properties["lecm-stmeditor:startStatus"] ? "true" : "false",
+			forDraft: status.properties["lecm-stmeditor:forDraft"] ? "true" : "false"
 		});
 	}
 
@@ -87,7 +85,8 @@ if (statemachineId != null && statemachineId != '') {
 			name: "Завершено",
 			nodeRef: endStatus.nodeRef.toString(),
 			transitions: [],
-			editable: "false"
+			isStarted: "false",
+			forDraft: "false"
 		});
 	}
 

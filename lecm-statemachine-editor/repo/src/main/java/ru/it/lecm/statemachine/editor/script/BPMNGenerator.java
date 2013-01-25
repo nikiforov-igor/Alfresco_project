@@ -48,6 +48,7 @@ public class BPMNGenerator {
 	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
 	private final static QName PROP_STATUS_UUID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusUUID");
 	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
+	private final static QName PROP_FOR_DRAFT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "useDraft");
 	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
 	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
@@ -258,16 +259,11 @@ public class BPMNGenerator {
 				setStatusAction.appendChild(attribute);
 				start.appendChild(setStatusAction);
 
-				if (startStatus != null && startStatus) {
+				Boolean forDraft = (Boolean) nodeService.getProperty(status.getChildRef(), PROP_FOR_DRAFT);
+				if (forDraft != null) {
 					attribute = doc.createElement("lecm:attribute");
-					attribute.setAttribute("name", "startStatus");
-					attribute.setAttribute("value", "true");
-					setStatusAction.appendChild(attribute);
-					start.appendChild(setStatusAction);
-				} else {
-					attribute = doc.createElement("lecm:attribute");
-					attribute.setAttribute("name", "startStatus");
-					attribute.setAttribute("value", "false");
+					attribute.setAttribute("name", "forDraft");
+					attribute.setAttribute("value", forDraft.toString());
 					setStatusAction.appendChild(attribute);
 					start.appendChild(setStatusAction);
 				}

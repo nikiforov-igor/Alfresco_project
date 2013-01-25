@@ -124,9 +124,9 @@
 			<properties>
 				<property name="lecm-stmeditor:startStatus">
 					<type>d:boolean</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 				</property>
-				<property name="lecm-stmeditor:endStatus">
+				<property name="lecm-stmeditor:forDraft">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>

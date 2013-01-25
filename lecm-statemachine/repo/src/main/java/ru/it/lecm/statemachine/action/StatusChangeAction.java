@@ -2,10 +2,9 @@ package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
-import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -33,7 +32,8 @@ public class StatusChangeAction extends StateMachineAction {
 	private String processId = null;
 	private NodeRef folder = null;
 	private String uuid = null;
-	private boolean startStatus = false;
+	private boolean forDraft = false;
+	private Map<String,INodeACLBuilder.StdPermission> dynamicPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -49,24 +49,24 @@ public class StatusChangeAction extends StateMachineAction {
 			} else if ("uuid".equalsIgnoreCase(name)) {
 				uuid = value;
 				folder = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, uuid);
-			} else if ("startStatus".equalsIgnoreCase(name)) {
-				startStatus = Boolean.parseBoolean(value);
+			} else if ("forDraft".equalsIgnoreCase(name)) {
+				forDraft = Boolean.parseBoolean(value);
 			}
 		}
 
 		//Инициализация ролей
-		Map<String, INodeACLBuilder.StdPermission> permissions = new HashMap<String, INodeACLBuilder.StdPermission>();
+		Map<String, INodeACLBuilder.StdPermission> staticPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 		Element roles = action.element("roles");
 		if (roles != null) {
 			Element staticRoleElement = roles.element("static-roles");
-			permissions.putAll(initPermissions(staticRoleElement));
+			staticPermissions = initPermissions(staticRoleElement);
 
 			Element dynamicRoleElement = roles.element("dynamic-roles");
-			permissions.putAll(initPermissions(dynamicRoleElement));
+			dynamicPermissions = initPermissions(dynamicRoleElement);
 		}
 
 		//Если начальный статус, то папки для него не требуется
-		if (startStatus) return;
+		if (forDraft) return;
 
 		// NOTE: теперь этот метод не нужно вызывать, т.к. права задаются во время смены статуса
 		// getLecmAclBuilderBean().regAccessMatrix(processId, status, permissions);
@@ -84,8 +84,8 @@ public class StatusChangeAction extends StateMachineAction {
 				//Переименовываем
 				try {
 					getServiceRegistry().getFileFolderService().rename(folder, status);
-				} catch (FileNotFoundException e) {
-					logger.error("Set Status Exception", e);
+				} catch (Exception e) {
+					//logger.error("Set Status Exception", e);
 				}
 			}
 		} else {
@@ -115,7 +115,15 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-		getLecmAclBuilderBean().rebuildStaticACL(folder, permissions);
+		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+		final Map<String, INodeACLBuilder.StdPermission> permissions = staticPermissions;
+		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+			@Override
+			public Object execute() throws Throwable {
+				permissionsBuilder.rebuildStaticACL(folder, permissions);
+				return null;
+			}
+		}, false, true);
 	}
 
 	@Override
@@ -129,7 +137,7 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Если стартовый статус, то ничего никуда не перемещаем
-		if (startStatus) return;
+		if (forDraft) return;
 
 		//Перемещаем в нужную папку
 		for (ChildAssociationRef child : children) {
@@ -140,8 +148,7 @@ public class StatusChangeAction extends StateMachineAction {
 		//Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
 		for (ChildAssociationRef child : children) {
-			// TODO: надо иметь список прав согласно текущему статусу документа status и ЖЦ processId
-			// getLecmAclBuilderBean().rebuildACL(child.getChildRef(), permissions);
+			getLecmAclBuilderBean().rebuildACL(child.getChildRef(), dynamicPermissions);
 		}
 
 	}
@@ -153,9 +160,9 @@ public class StatusChangeAction extends StateMachineAction {
 		if (existsFolder != null && !existsFolder.equals(folder)) {
 			try {
 				getServiceRegistry().getFileFolderService().rename(existsFolder, existsFolder.getId());
-			} catch (FileNotFoundException e) {
-				logger.error("Set Status Exception", e);
-				throw new AlfrescoRuntimeException("Set Status Exception", e);
+			} catch (Exception e) {
+				//logger.error("Set Status Exception", e);
+				//throw new AlfrescoRuntimeException("Set Status Exception", e);
 			}
 		}
 	}
@@ -171,7 +178,12 @@ public class StatusChangeAction extends StateMachineAction {
 			List<Element> roleElements = rolesElement.elements("role");
 			for (Element roleElement : roleElements) {
 				String role = roleElement.attribute("name");
-				INodeACLBuilder.StdPermission permission = INodeACLBuilder.StdPermission.valueOf(roleElement.attribute("permission"));
+				INodeACLBuilder.StdPermission permission;
+				try {
+					permission = INodeACLBuilder.StdPermission.valueOf(roleElement.attribute("permission"));
+				} catch (IllegalArgumentException e) {
+					permission = INodeACLBuilder.StdPermission.noaccess;
+				}
 				permissions.put(role, permission);
 			}
 		}

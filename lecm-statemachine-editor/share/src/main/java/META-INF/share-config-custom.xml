@@ -6,7 +6,6 @@
 				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-					<show id="lecm-stmeditor:startStatus" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
 					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
@@ -26,7 +25,6 @@
 					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
 					<set id="permissions" appearance="" label-id="statemachine.editor.form.permissions" />
 					<field id="cm:name" set="info" />
-					<field id="lecm-stmeditor:startStatus" set="info"/>
 
 					<!-- behavior Set -->
 					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
@@ -130,6 +128,243 @@
 						</control>
 					</field>
 
+				</appearance>
+			</form>
+			<form id="forDraftFormTrue">
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-stmeditor:forDraft" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
+					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
+					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
+					<show id="lecm-stmeditor:startScriptAction" force="true"/>
+					<show id="lecm-stmeditor:startStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endScriptAction" force="true"/>
+					<show id="lecm-stmeditor:endStartWorkflow" force="true"/>
+				</field-visibility>
+				<appearance>
+					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
+					<set id="behavior" appearance="" label-id="statemachine.editor.form.behavior" />
+					<set id="actions" appearance="" label-id="statemachine.editor.form.actions" />
+					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
+					<field id="cm:name" set="info" />
+					<field id="lecm-stmeditor:forDraft" set="info"/>
+
+					<!-- behavior Set -->
+					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endTransitionAction" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<!-- Action Set -->
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionUser" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<!-- Events Set -->
+					<field id="lecm-stmeditor:startStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:startScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="forDraftFormFalse">
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-stmeditor:forDraft" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
+					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
+					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
+					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
+					<show id="lecm-stmeditor:startScriptAction" force="true"/>
+					<show id="lecm-stmeditor:startStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:endScriptAction" force="true"/>
+					<show id="lecm-stmeditor:endStartWorkflow" force="true"/>
+					<show id="lecm-stmeditor:staticRoles" force="true"/>
+					<show id="lecm-stmeditor:dynamicRoles" force="true"/>
+				</field-visibility>
+				<appearance>
+					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
+					<set id="behavior" appearance="" label-id="statemachine.editor.form.behavior" />
+					<set id="actions" appearance="" label-id="statemachine.editor.form.actions" />
+					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
+					<set id="permissions" appearance="" label-id="statemachine.editor.form.permissions" />
+					<field id="cm:name" set="info" />
+					<field id="lecm-stmeditor:forDraft" set="info"/>
+
+					<!-- behavior Set -->
+					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endTransitionAction" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<!-- Action Set -->
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionUser" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transitionWorkflow</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<!-- Events Set -->
+					<field id="lecm-stmeditor:startStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:startScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endStartWorkflow" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:StartWorkflowEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:endScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:staticRoles" set="permissions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:static-role</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-stmeditor:dynamicRoles" set="permissions">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:dynamic-role</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
