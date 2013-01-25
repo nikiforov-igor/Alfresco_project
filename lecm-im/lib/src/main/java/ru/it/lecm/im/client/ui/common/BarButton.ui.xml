@@ -7,22 +7,22 @@
 		
 	</ui:style>
 	<g:FlowPanel styleName="ijab-window ui-widget ijab-window-minimize" ui:field="button" >
-		<iJab:FocusHTMLPanel styleName="ijab-window-tab-wrap" ui:field="buttonFocus">
-			<div class="ijab-window-tab ui-state-default" ui:field="buttonStateElement">
-				<div class="ijab-window-tab-inner">
-					<div class="ijab-window-tab-tip" style="display:none;" ui:field="tipDIVElement">
-						<strong ui:field="tipElement"></strong>
-					</div>
-					<a class="ijab-window-close" style="display:none;" ui:field="closeElement" title="Close">
-						<em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>
-					</a>
-					<div class="ijab-window-tab-count" style="display:none;" ui:field="countElement">
-					</div>
-					<em class="ijab-icon" ui:field="iconElement"></em>
-					<h4 style="display:none;" ui:field="textElement"></h4>
-				</div>
-			</div>
-		</iJab:FocusHTMLPanel>
+		<!--<iJab:FocusHTMLPanel styleName="ijab-window-tab-wrap" ui:field="buttonFocus">-->
+			<!--<div class="ijab-window-tab ui-state-default" ui:field="buttonStateElement">-->
+				<!--<div class="ijab-window-tab-inner">-->
+					<!--<div class="ijab-window-tab-tip" style="display:none;" ui:field="tipDIVElement">-->
+						<!--<strong ui:field="tipElement"></strong>-->
+					<!--</div>-->
+					<!--<a class="ijab-window-close" style="display:none;" ui:field="closeElement" title="Close">-->
+						<!--<em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>-->
+					<!--</a>-->
+					<!--<div class="ijab-window-tab-count" style="display:none;" ui:field="countElement">-->
+					<!--</div>-->
+					<!--<em class="ijab-icon" ui:field="iconElement"></em>-->
+					<!--<h4 style="display:none;" ui:field="textElement"></h4>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</iJab:FocusHTMLPanel>-->
 		<iJabCommon:ButtonPopupWindow ui:field="window"></iJabCommon:ButtonPopupWindow>
 	</g:FlowPanel>
 </ui:UiBinder> 

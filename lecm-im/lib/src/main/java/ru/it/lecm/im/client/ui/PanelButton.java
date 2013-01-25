@@ -38,8 +38,9 @@ public class PanelButton extends BarButton
 		setTipEnabled(false);
 		setButtonWindowMaxEnabled(false);
 		setCloseEnabled(true);
-		setButtonWidth(134);
+		//setButtonWidth(134);
 		this.addButtonStyle("ijab-chat-button");
+        this.addButtonStyle("height-flood");
 	}
 	
 	public int getOldMessageCount()

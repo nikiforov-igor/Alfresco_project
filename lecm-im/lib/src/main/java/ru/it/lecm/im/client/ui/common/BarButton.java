@@ -49,15 +49,15 @@ public class BarButton extends Composite {
 	}
 	
 	@UiField FlowPanel button;
-	@UiField FocusHTMLPanel buttonFocus;
-	@UiField Element buttonStateElement;
-	@UiField Element tipDIVElement;
-	@UiField Element tipElement;
-	@UiField Element closeElement;
-	@UiField Element closePicElement;
-	@UiField Element countElement;
-	@UiField Element iconElement;
-	@UiField Element textElement;
+	//@UiField FocusHTMLPanel buttonFocus;
+	//@UiField Element buttonStateElement;
+	//@UiField Element tipDIVElement;
+	//@UiField Element tipElement;
+//	@UiField Element closeElement;
+//	@UiField Element closePicElement;
+//	@UiField Element countElement;
+//	@UiField Element iconElement;
+//	@UiField Element textElement;
 	@UiField ButtonPopupWindow window;
 	
 	//private SimpleFocusWidget button;
@@ -69,8 +69,8 @@ public class BarButton extends Composite {
 	public BarButton() 
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		closeElement.setAttribute("title", i18n.msg("Close"));
-		closeButton = new SimpleFocusWidget(closeElement);
+		//closeElement.setAttribute("title", i18n.msg("Close"));
+		//closeButton = new SimpleFocusWidget(closeElement);
 		initButton();
 	}
 	
@@ -81,60 +81,60 @@ public class BarButton extends Composite {
 	
 	public void setCloseEnabled(boolean closeEnabled)
 	{
-		closeButton.setVisible(closeEnabled);
+		//closeButton.setVisible(closeEnabled);
 		setButtonWindowCloseEnabled(closeEnabled);
 	}
 	
 	public void setTip(final String tip)
 	{
-		tipElement.setInnerText(tip);
+		//tipElement.setInnerText(tip);
 	}
 	
 	public void setCountEnabled(boolean countEnabled)
 	{
-		if(countEnabled)
-			countElement.getStyle().setDisplay(Display.BLOCK);
-		else
-			countElement.getStyle().setDisplay(Display.NONE);
+//		if(countEnabled)
+//			countElement.getStyle().setDisplay(Display.BLOCK);
+//		else
+//			countElement.getStyle().setDisplay(Display.NONE);
 	}
 	
 	public void setCount(int count)
 	{
-		countElement.setInnerText(""+count);
+//		countElement.setInnerText(""+count);
 	}
 	
 	public void setButtonTextEnabled(boolean textEnabled)
 	{
-		if(textEnabled)
-			textElement.getStyle().setDisplay(Display.INLINE);
-		else
-			textElement.getStyle().setDisplay(Display.NONE);
+//		if(textEnabled)
+//			textElement.getStyle().setDisplay(Display.INLINE);
+//		else
+//			textElement.getStyle().setDisplay(Display.NONE);
 	}
 	
 	public void setButtonText(final String text)
 	{
-		textElement.setInnerText(text);
+//		textElement.setInnerText(text);
 		window.setCaption(text);
 	}
 	
-	public void setButtonWidth(int width)
-	{
-		buttonStateElement.getStyle().setWidth(width, Unit.PX);
-	}
-	
-	public void setButtonWidthEm(int width)
-	{
-		buttonStateElement.getStyle().setWidth(width, Unit.EM);
-	}
+//	public void setButtonWidth(int width)
+//	{
+//		buttonStateElement.getStyle().setWidth(width, Unit.PX);
+//	}
+//
+//	public void setButtonWidthEm(int width)
+//	{
+//		buttonStateElement.getStyle().setWidth(width, Unit.EM);
+//	}
 	
 	public void setIconStyle(final String style)
 	{
-		iconElement.addClassName(style);
+//		iconElement.addClassName(style);
 	}
 	
 	public void removeIconStyle(final String style)
 	{
-		iconElement.removeClassName(style);
+//		iconElement.removeClassName(style);
 	}
 	
 	public void setButtonWindowCaption(final String caption)
@@ -186,7 +186,7 @@ public class BarButton extends Composite {
 		button.removeStyleName("ijab-window-normal");
 		button.removeStyleName("ijab-window-active");
 		button.addStyleName("ijab-window-minimize");
-		buttonStateElement.removeClassName("ui-state-active");
+		//buttonStateElement.removeClassName("ui-state-active");
 		fireOnWindowClose();
 	}
 	
@@ -196,7 +196,7 @@ public class BarButton extends Composite {
         button.removeStyleName("ijab-window-minimize");
 		button.addStyleName("ijab-window-normal");
 		button.addStyleName("ijab-window-active");
-		buttonStateElement.addClassName("ui-state-active");
+		//buttonStateElement.addClassName("ui-state-active");
 		fireOnWindowOpen();
 	}
 	
@@ -212,39 +212,39 @@ public class BarButton extends Composite {
 	
 	public void setHighlight(boolean b)
 	{
-		if(b)
-			buttonStateElement.addClassName("ui-state-highlight");
-		else
-			buttonStateElement.removeClassName("ui-state-highlight");
+//		if(b)
+//			buttonStateElement.addClassName("ui-state-highlight");
+//		else
+//			buttonStateElement.removeClassName("ui-state-highlight");
 	}
 	
 	// local function
 	private void initButton()
 	{
-		buttonFocus.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-                Log.log("BarButton.ClickHandler.onClick()");
-                mouseClick();
-			}
-		});
-		
-		buttonFocus.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event) 
-			{
-				mouseOut();
-			}
-		});
-		
-		buttonFocus.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				mouseOver();
-			}
-		});
+//		buttonFocus.addClickHandler(new ClickHandler()
+//		{
+//			public void onClick(ClickEvent event)
+//			{
+//                Log.log("BarButton.ClickHandler.onClick()");
+//                mouseClick();
+//			}
+//		});
+//
+//		buttonFocus.addMouseOutHandler(new MouseOutHandler()
+//		{
+//			public void onMouseOut(MouseOutEvent event)
+//			{
+//				mouseOut();
+//			}
+//		});
+//
+//		buttonFocus.addMouseOverHandler(new MouseOverHandler()
+//		{
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				mouseOver();
+//			}
+//		});
 		
 		window.addListener(new ButtonPopupWindowListener()
 		{
@@ -265,27 +265,27 @@ public class BarButton extends Composite {
 			}
 		});
 		
-		closeButton.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) {
-                iJab.client.toggleIsVisible();
-				//fireOnClose();
-			}
-		});
-		closeButton.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				closePicElement.addClassName("ijab-actions-prompt");
-			}
-		});
-		closeButton.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event) 
-			{
-				closePicElement.removeClassName("ijab-actions-prompt");
-			}
-		});
+//		closeButton.addClickHandler(new ClickHandler()
+//		{
+//			public void onClick(ClickEvent event) {
+//                iJab.client.toggleIsVisible();
+//				//fireOnClose();
+//			}
+//		});
+//		closeButton.addMouseOverHandler(new MouseOverHandler()
+//		{
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				closePicElement.addClassName("ijab-actions-prompt");
+//			}
+//		});
+//		closeButton.addMouseOutHandler(new MouseOutHandler()
+//		{
+//			public void onMouseOut(MouseOutEvent event)
+//			{
+//				closePicElement.removeClassName("ijab-actions-prompt");
+//			}
+//		});
 	}
 	
 	private void mouseClick()
@@ -303,16 +303,16 @@ public class BarButton extends Composite {
 
     private void mouseOver()
 	{
-		buttonStateElement.addClassName("ui-state-hover");
-		if(tipEnabled)
-			tipDIVElement.getStyle().setDisplay(Display.BLOCK);
+//		buttonStateElement.addClassName("ui-state-hover");
+//		if(tipEnabled)
+//			tipDIVElement.getStyle().setDisplay(Display.BLOCK);
 	}
 	
 	private void mouseOut()
 	{
-		buttonStateElement.removeClassName("ui-state-hover");
-		if(tipEnabled)
-			tipDIVElement.getStyle().setDisplay(Display.NONE);
+//		buttonStateElement.removeClassName("ui-state-hover");
+//		if(tipEnabled)
+//			tipDIVElement.getStyle().setDisplay(Display.NONE);
 	}
 	
 	private void fireOnMax()
@@ -364,8 +364,8 @@ public class BarButton extends Composite {
 		
 	}
 	
-	public FocusHTMLPanel getButton()
-	{
-		return this.buttonFocus;
-	}
+//	public FocusHTMLPanel getButton()
+//	{
+//		return this.buttonFocus;
+//	}
 }

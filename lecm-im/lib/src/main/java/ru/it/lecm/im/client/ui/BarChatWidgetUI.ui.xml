@@ -23,7 +23,7 @@
 			</g:FlowPanel>
 		</g:FlowPanel>
 		
-		<g:HTMLPanel styleName="ijab-chat-actions">
+		<g:HTMLPanel styleName="ijab-chat-actions pull-down">
 			<div class="ijab-chat-tool-content">
 				<iJab:EmoticonsPanel ui:field="emotionsPanel"></iJab:EmoticonsPanel>
 			</div>

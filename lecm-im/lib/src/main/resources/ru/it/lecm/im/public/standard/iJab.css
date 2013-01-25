@@ -24,6 +24,27 @@
     float: right;
 }
 
+.height-flood {
+    height: 100%;
+}
+
+.height-flood > .ijab-window-content{
+    height: 100%;
+}
+
+.height-flood > .ijab-chat{
+    height: 100%;
+}
+
+.height-flood  .ijab-chat-content{
+    height: 100%;
+}
+
+.ijab-chat-actions.pull-down{
+    position: absolute;
+    bottom: 0;
+}
+
 .has-unread-messages{
     font-weight: bold;
 }
@@ -853,7 +874,7 @@ margin: .3em .5em .3em;
     font-weight: normal;
 }
 
-.ijab-webapi .ijab-window-minimize .ijab-window-window {
+.ijab-window-minimize.ijab-window{
     display: none;
 }
 
