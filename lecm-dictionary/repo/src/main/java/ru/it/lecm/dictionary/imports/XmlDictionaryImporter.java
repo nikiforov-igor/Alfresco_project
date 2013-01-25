@@ -66,15 +66,15 @@ public class XmlDictionaryImporter {
 		}
 		if (str.equals(ExportNamespace.TAG_DICTIONARY)) {
 			String dictionaryName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
-			if (dictionaryName == null || (doNotUpdateIfExist && nodeService.getChildByName(getDictionariesRoot(), ContentModel.ASSOC_CONTAINS, dictionaryName) != null)) {
+			if (dictionaryName == null) {
 				return;
 			}
 			xmlr.nextTag();
 			Map<QName, Serializable> dicProps = getProperties(xmlr);
-			parentNodeRef = createDictionary(dictionaryName, dicProps);
+			parentNodeRef = createDictionary(dictionaryName, dicProps, doNotUpdateIfExist);
 			String type = nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString();
 			itemsType = QName.createQName(type, namespaceService);
-			readItems(xmlr, parentNodeRef);
+			readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
 		}
 	}
 
@@ -82,18 +82,19 @@ public class XmlDictionaryImporter {
 	 *
 	 * @param xmlr XML Reader
 	 * @param parent ссылка на родительский элемент
+	 * @param doNotUpdateIfExist не обновлять существующие записи
 	 * @return true если элементы были создан
 	 * @throws XMLStreamException
 	 */
 
-	private boolean readItems(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
+	private boolean readItems(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
 		if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
 				&& xmlr.getLocalName().equals(ExportNamespace.TAG_ITEMS))) {
 			return false;
 		}
 		xmlr.nextTag();//входим в <items>
 		try {
-			while (readItem(xmlr, parent)) {
+			while (readItem(xmlr, parent, doNotUpdateIfExist)) {
 			}
 			xmlr.nextTag();//выходим из </items>
 		} catch (XMLStreamException e) {
@@ -106,10 +107,11 @@ public class XmlDictionaryImporter {
 	 *
 	 * @param xmlr XML Reader
 	 * @param parent ссылка на родительский элемент
+	 * @param doNotUpdateIfExist не обновлять существующие записи
 	 * @return true если элемент был создан
 	 * @throws XMLStreamException
 	 */
-	private boolean readItem(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
+	private boolean readItem(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
 		if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
 				&& xmlr.getLocalName().equals(ExportNamespace.TAG_ITEM))) {
 			return false;
@@ -119,8 +121,8 @@ public class XmlDictionaryImporter {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, itemName);
 		properties.putAll(getProperties(xmlr));
-		NodeRef current = createItem(parent, properties);
-		readItems(xmlr, current);
+		NodeRef current = createItem(parent, properties, doNotUpdateIfExist);
+		readItems(xmlr, current, doNotUpdateIfExist);
 		xmlr.nextTag();//выходим из </item>
 		return true;
 	}
@@ -129,9 +131,10 @@ public class XmlDictionaryImporter {
 	 *
 	 * @param dictionaryName имя справочника
 	 * @param dicProps свойства
+	 * @param doNotUpdateIfExist не обновлять существующие записи
 	 * @return ссылка на справочник
 	 */
-	private NodeRef createDictionary(String dictionaryName, Map<QName, Serializable> dicProps) {
+	private NodeRef createDictionary(String dictionaryName, Map<QName, Serializable> dicProps, boolean doNotUpdateIfExist) {
 		final NodeRef root = getDictionariesRoot();
 		NodeRef dictionary = nodeService.getChildByName(root, ContentModel.ASSOC_CONTAINS, dictionaryName);
 		if (dictionary == null) {
@@ -143,7 +146,7 @@ public class XmlDictionaryImporter {
 					QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, dictionaryName),
 					ExportNamespace.DICTIONARY,
 					properties).getChildRef();
-		} else {
+		} else if (!doNotUpdateIfExist) {
 			nodeService.addProperties(dictionary, dicProps);
 		}
 		return dictionary;
@@ -153,9 +156,10 @@ public class XmlDictionaryImporter {
 	 *
 	 * @param parentNodeRef родительский элемент/справочник
 	 * @param properties свойства
+	 * @param doNotUpdateIfExist не обновлять существующие записи
 	 * @return ссылка на элемент
 	 */
-	private NodeRef createItem(NodeRef parentNodeRef, Map<QName, Serializable> properties) {
+	private NodeRef createItem(NodeRef parentNodeRef, Map<QName, Serializable> properties, boolean doNotUpdateIfExist) {
 		String name = properties.get(ContentModel.PROP_NAME).toString();
 		NodeRef node = nodeService.getChildByName(parentNodeRef, ContentModel.ASSOC_CONTAINS, name);
 		if (node == null) {
@@ -163,7 +167,7 @@ public class XmlDictionaryImporter {
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
 				itemsType,
 				properties).getChildRef();
-		} else {
+		} else if (!doNotUpdateIfExist) {
 			nodeService.addProperties(node, properties);
 		}
 		return node;
