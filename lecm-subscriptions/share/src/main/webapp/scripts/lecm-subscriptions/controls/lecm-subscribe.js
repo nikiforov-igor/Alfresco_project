@@ -66,26 +66,10 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 				this.loadSubscriptionsRoot();
 				this.loadObjectDescription();
 				this.loadCurrentEmployee();
-				this.subscribeButton =  new YAHOO.widget.Button(
-					this.controlId + "-subscribe-button",
-					{
-						onclick: {
-							fn: this.onSubscribe,
-							obj: null,
-							scope: this
-						}
-					}
-				);
-				this.unsubscribeButton =  new YAHOO.widget.Button(
-					this.controlId + "-unsubscribe-button",
-					{
-						onclick: {
-							fn: this.onUnsubscribe,
-							obj: null,
-							scope: this
-						}
-					}
-				);
+
+				this.subscribeButton = Alfresco.util.createYUIButton(this, this.controlId + "-subscribe-button", this.onSubscribe.bind(this), {}, Dom.get(this.controlId + "-subscribe-button"));
+				this.unsubscribeButton = Alfresco.util.createYUIButton(this, this.controlId + "-unsubscribe-button", this.onUnsubscribe.bind(this), {}, Dom.get(this.controlId + "-unsubscribe-button"));
+
 				this.updateFormButtons();
 			},
 
@@ -207,7 +191,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 				var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
 				createDetails.setOptions(
 					{
-						width:"50em",
+						width:"20em",
 						templateUrl:templateUrl,
 						actionUrl:null,
 						destroyOnHide:true,

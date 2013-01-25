@@ -4,6 +4,7 @@
 			<dependencies>
 				<js src="/scripts/lecm-subscriptions/controls/lecm-subscribe.js"/>
 				<css src="/css/lecm-subscriptions/controls/style-form.css"/>
+				<css src="/css/lecm-subscriptions/subscription-control.css"/>
 			</dependencies>
 		</forms>
 	</config>
