@@ -43,13 +43,16 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 					break;
 				case "delegation-opts":
 					//она будет выключена тогда и только тогда, когда прав нету
-					disable = false;
+					disable = !LogicECM.module.Delegation.Const.isBoss && !LogicECM.module.Delegation.Const.isEngineer;
 					break;
 			}
 
 			Alfresco.util.createYUIButton(this, "delegationListBtn", this._delegationListBtnClick (), {
                 disabled: disable
             });
+			if (!disable) {
+				YAHOO.util.Dom.addClass ("menu-buttons-delegationListBtn", "selected");
+			}
 		},
 
 		onReady: function () {

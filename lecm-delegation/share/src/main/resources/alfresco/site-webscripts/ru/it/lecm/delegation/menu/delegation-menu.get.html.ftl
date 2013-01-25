@@ -15,11 +15,6 @@
 </script>
 
 <@comp.baseMenu>
-	<#if "delegation-list" == pageId>
-		<@comp.baseMenuButton "delegationList" "перечень делегирования"/>
-	<#elseif "delegation-opts" == pageId>
-		<#-- selected передается тогда и только тогда когда есть права -->
-		<@comp.baseMenuButton "delegationList" "перечень делегирования" selected/>
-	</#if>
+	<@comp.baseMenuButton "delegationList" "перечень делегирования"/>
 </@comp.baseMenu>
 
