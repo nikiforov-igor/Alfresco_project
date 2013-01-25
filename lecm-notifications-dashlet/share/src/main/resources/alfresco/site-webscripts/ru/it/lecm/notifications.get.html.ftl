@@ -95,8 +95,12 @@
                                 for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
                                     var item = results[i];
                                     var div = document.createElement('div');
+                                    var detail = document.createElement('span');
 
-                                    div.innerHTML = item.date + ' ' + item.record;
+                                    detail.innerHTML = item.record;
+                                    detail.setAttribute('class', 'detail');
+                                    div.appendChild(detail);
+                                    div.innerHTML = div.innerHTML + '<br />' + Alfresco.util.relativeTime(new Date(item.date));
                                     div.setAttribute('class', 'row');
                                     container.appendChild(div);
                                 }

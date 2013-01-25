@@ -1,5 +1,5 @@
 <webscript>
-    <shortname>Business Journal</shortname>
+    <shortname>Бизнес-журнал</shortname>
     <description>Dashlet for Business Journal</description>
     <family>dashlet</family>
     <url>/components/dashlets/business-journal</url>

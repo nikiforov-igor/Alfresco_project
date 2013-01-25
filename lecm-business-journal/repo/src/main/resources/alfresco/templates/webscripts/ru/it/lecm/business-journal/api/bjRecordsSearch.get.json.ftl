@@ -2,7 +2,7 @@
 [
     <#list records as record>
         {
-            "date": "${record.properties["lecm-busjournal:bjRecord-date"]?date?string.short}",
+            "date": "${record.properties["lecm-busjournal:bjRecord-date"]?datetime?string("MM/dd/yyyy HH:mm:ss")}",
             "record": "${record.properties["lecm-busjournal:bjRecord-description"]}"
         }
         <#if record_has_next>,</#if>
