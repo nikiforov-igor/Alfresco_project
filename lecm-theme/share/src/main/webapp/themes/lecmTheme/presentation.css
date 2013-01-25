@@ -9,6 +9,14 @@ ol, ol li {
     padding: 0;
 }
 
+a, a:hover, a:visited {
+    color: #0600cc;
+    text-decoration: underline;
+}
+a:hover {
+    text-decoration: none;
+}
+
 #alf-hd > div:first-child {
     margin: 0 -10px;
 }
@@ -198,19 +206,6 @@ ol, ol li {
    color: #333333;
 }
 
-.sticky-wrapper a,
-.sticky-wrapper a:visited,
-.sticky-wrapper a:hover,
-.sticky-footer a,
-.sticky-footer a:visited,
-.sticky-footer a:hover,
-.yui-panel-container a,
-.yui-panel-container a:visited,
-.yui-panel-container a:hover
-{
-   color: #333333;
-   text-decoration: none;
-}
 .sticky-wrapper .grid a,
 .sticky-wrapper .grid a:visited,
 .yui-panel-container .grid a,
@@ -219,14 +214,12 @@ ol, ol li {
 .sticky-wrapper .person a:visited,
 .yui-panel-container .person a,
 .yui-panel-container .person a:visited{
-   text-decoration: underline;
+    color: #333333;
 }
-
-.sticky-wrapper a:hover,
-.sticky-footer a:hover,
-.yui-panel-container a:hover
-{
-   text-decoration: none;
+.grid .dashlet .body a,
+.grid .dashlet .body a:visited,
+.grid .dashlet .body a:hover {
+    color: #0600cc;
 }
 
 .sticky-wrapper h1,
