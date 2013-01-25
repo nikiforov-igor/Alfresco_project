@@ -59,14 +59,14 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
                             var columnContent = "";
                             switch (datalistColumn.dataType.toLowerCase()) { //  меняем отрисовку для конкретных типов
-                                case "lecm-busjournal:eventcategory":
+                                /*case "lecm-busjournal:eventcategory":
                                     columnContent += grid.getDicValueView(data.value, data.displayValue);
                                     break;
 
                                 case "lecm-busjournal:objecttype":
                                     columnContent += grid.getDicValueView(data.value, data.displayValue);
                                     break;
-
+*/
                                 case "datetime":
                                     columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), "dd mmm yyyy HH:MM:ss");
                                     break;
@@ -85,6 +85,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                                     if (data.displayValue && data.displayValue.length <= 8) {
                                         columnContent += "(нет)";
                                     } else {
+                                        var re = new RegExp(/(;\s)/g);
+                                        data.displayValue = data.displayValue.replace(re, "&nbsp;");
                                         columnContent = data.displayValue;
                                     }
                                     break;

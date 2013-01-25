@@ -334,7 +334,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private String wrapAsLink(NodeRef link, boolean isInititator) {
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
 		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":"  +  params.getSharePort();
-		return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\" target=\"_blank\">"
+		return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\">"
 				+ (isInititator ? getInitiatorDescription(link) :  getObjectDescription(link)) + "</a>";
 	}
 
