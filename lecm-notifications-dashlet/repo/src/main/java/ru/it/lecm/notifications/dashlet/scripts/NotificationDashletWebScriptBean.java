@@ -34,13 +34,10 @@ public class NotificationDashletWebScriptBean extends BaseScopableProcessorExten
                 Calendar calendar = Calendar.getInstance();
 
                 calendar.setTime(now);
-                if (days == 1) {  // "За сегодня"
-                    calendar.set(Calendar.HOUR_OF_DAY, 0);
-                    calendar.set(Calendar.MINUTE, 0);
-                    calendar.set(Calendar.SECOND, 0);
-                } else {
-                    calendar.add(Calendar.DAY_OF_MONTH, (-1) * days);
-                }
+                calendar.add(Calendar.DAY_OF_MONTH, (-1) * (days - 1));
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
                 start = calendar.getTime();
             }
         }
