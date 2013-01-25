@@ -839,7 +839,6 @@
 					<show id="cm:name"/>
 					<show id="lecm-orgstr:business-role-description"/>
 					<show id="lecm-orgstr:business-role-is-dynamic"/>
-					<show id="lecm-dic:active"/>
 				</field-visibility>
 			</form>
 		</forms>
