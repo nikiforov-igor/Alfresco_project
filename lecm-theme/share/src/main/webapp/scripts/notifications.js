@@ -221,6 +221,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 						if (readNotifications.length > 0) {
 							me.setReadNotifications(readNotifications);
 						}
+						container.scrollTop = container.scrollHeight;
 						me.showNotificationsWindow();
 					} else {
 						YAHOO.log("Failed to process XHR transaction.", "info", "example");
