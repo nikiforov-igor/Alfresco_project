@@ -196,8 +196,11 @@ LogicECM.module = LogicECM.module || {};
 						content += '<li><input id="' + this.dataArray[i].inputId + '" type="checkbox" value="'
 							+ this.dataArray[i].nodeRef + '"';
 
-						if (this.selectedItems.hasOwnProperty(this.dataArray[i].nodeRef) || (this.dataArray[i].defaultSelect == "true" && this.options.mode == "create")) {
+						if (this.selectedItems.hasOwnProperty(this.dataArray[i].nodeRef)) {
 							content += 'checked="checked"';
+						} else if (this.dataArray[i].defaultSelect == "true" && this.options.mode == "create") {
+							content += 'checked="checked"';
+							this.selectedItems[this.dataArray[i].nodeRef] = this.dataArray[i];
 						}
 						if (this.options.disabled) {
 							content += 'disabled="disabled"';
@@ -205,6 +208,7 @@ LogicECM.module = LogicECM.module || {};
 						content += '>';
 						content += '<label class="checkbox" for="' + this.dataArray[i].inputId + '">' + this.dataArray[i].name + '</label></li>';
 						YAHOO.util.Event.onAvailable(this.dataArray[i].inputId, this.attachCheckboxClickListener, this.dataArray[i], this);
+						this.updateFormFields();
 					}
 					Dom.get(this.checkboxesContainerId).innerHTML = content;
 				}
