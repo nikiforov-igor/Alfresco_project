@@ -41,6 +41,11 @@ public interface NotificationsService {
 	public final QName ASSOC_RECIPIENT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-assoc");
 
 	/**
+	 * проверяет что объект является типом доставки уведомлений
+	 */
+	public boolean isNotificationType(NodeRef ref);
+
+	/**
 	 * Отправка уведомлений
 	 *
 	 * @param notification Обобщённое уведомление

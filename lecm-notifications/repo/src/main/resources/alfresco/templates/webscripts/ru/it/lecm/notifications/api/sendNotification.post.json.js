@@ -1,0 +1,1 @@
+model.success = notifications.sendNotification(json);

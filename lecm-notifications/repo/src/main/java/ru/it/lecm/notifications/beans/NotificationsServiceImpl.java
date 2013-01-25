@@ -50,6 +50,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		this.orgstructureService = orgstructureService;
 	}
 
+	public OrgstructureBean getOrgstructureService() {
+		return orgstructureService;
+	}
+
 	@Override
 	public NodeRef getNotificationsRootRef() {
 		return notificationsRootRef;
@@ -118,6 +122,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		notificationsGenaralizetionRootRef = AuthenticationUtil.runAsSystem(generalizationRaw);
 
 		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
+	}
+
+	@Override
+	public boolean isNotificationType(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_NOTIFICATION_TYPE);
+		return isProperType(ref, types);
 	}
 
 	@Override
