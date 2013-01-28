@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign pageId = page.id/>
+<#assign selected = args.selected/>
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
@@ -15,6 +16,6 @@
 
 <@comp.baseMenu>
     <@comp.baseMenuButton "userProfileAbsence" msg('label.user-profile.menu.absence.btn') selected/>
-	<@comp.baseMenuButton "userProfileDelegation" msg('label.user-profile.menu.delegation.btn')/>
+	<@comp.baseMenuButton "userProfileDelegation" msg('label.user-profile.menu.delegation.btn') selected/>
 </@comp.baseMenu>
 
