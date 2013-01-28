@@ -184,6 +184,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.user-profile</groupId>
+			<artifactId>lecm-user-profile-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

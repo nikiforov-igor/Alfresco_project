@@ -96,6 +96,7 @@
 		<module>lecm-notifications-active-channel</module>
 		<module>lecm-business-journal</module>
 		<module>lecm-calendar</module>
+		<module>lecm-user-profile</module>
 	</modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

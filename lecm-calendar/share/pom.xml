@@ -12,7 +12,7 @@
 
 	<artifactId>lecm-calendar-share</artifactId>
 	<packaging>amp</packaging>
-	<name>${project.artifactId}-${project.version}</name>
+	<name>Logic ECM Calendar Share</name>
 	<description>Calendar share module</description>
 
 	<properties>

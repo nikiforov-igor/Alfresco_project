@@ -14,8 +14,8 @@
 </script>
 
 <@comp.baseMenu>
-	<@comp.baseMenuButton "wcalendarCalendar" "Производственный календарь"/>
-	<@comp.baseMenuButton "wcalendarShedule" "График работы"/>
-    <@comp.baseMenuButton "wcalendarAbsence" "Отсутствие"/>
+	<@comp.baseMenuButton "wcalendarCalendar"  msg('label.wcalendar.menu.calendar.btn') />
+	<@comp.baseMenuButton "wcalendarShedule" msg('label.wcalendar.menu.shedule.btn') />
+    <@comp.baseMenuButton "wcalendarAbsence" msg('label.wcalendar.menu.absence.btn') />
 </@comp.baseMenu>
 
