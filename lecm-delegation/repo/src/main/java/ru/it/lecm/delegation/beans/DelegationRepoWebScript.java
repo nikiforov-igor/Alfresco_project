@@ -14,7 +14,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.ITestSearch;
 
 import ru.it.lecm.delegation.IWebScriptDelegation;
 
@@ -24,10 +24,7 @@ import ru.it.lecm.delegation.IWebScriptDelegation;
  * @since 18.10.2012 14:41:08
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public class DelegationRepoWebScript
-		extends DeclarativeWebScript
-		implements IWebScriptDelegation
-{
+public class DelegationRepoWebScript extends DeclarativeWebScript implements IWebScriptDelegation {
 
 	private final static Logger logger = LoggerFactory.getLogger (DelegationRepoWebScript.class);
 
@@ -50,14 +47,10 @@ public class DelegationRepoWebScript
 		return new WebScriptException (info, t);
 	}
 
-	private IDelegation delegationService;
+	private ITestSearch tester;
 
-	public IDelegation getDelegationService () {
-		return delegationService;
-	}
-
-	public void setDelegationService (IDelegation delegationService) {
-		this.delegationService = delegationService;
+	public void setTester(ITestSearch tester) {
+		this.tester = tester;
 	}
 
 	@Override
@@ -65,7 +58,7 @@ public class DelegationRepoWebScript
 	public String test(String /*JSONObject*/ args) {
 		try {
 			final JSONObject jargs = new JSONObject(args);
-			final JSONObject result = delegationService.test( jargs);
+			final JSONObject result = tester.test( jargs);
 			return result.toString();
 		} catch (JSONException ex) {
 			throw createAndRegException( ex, "error processing test with args:\n"+ args);

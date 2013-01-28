@@ -2,6 +2,7 @@ package ru.it.lecm.delegation;
 
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,6 +11,17 @@ import org.json.JSONObject;
  * @author rabdullin
  */
 public interface IDelegation {
+
+	String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
+	String CONTAINER = "DelegationOptionsContainer";
+	QName TYPE_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-container");
+	QName TYPE_DELEGATION_OPTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+	QName TYPE_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "procuracy");
+	QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
+	QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
+	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
+	QName ASSOC_PROCURACY_BUSINESS_ROLE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-business-role-assoc");
+	QName ASSOC_PROCURACY_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-trustee-assoc");
 
 	enum DELEGATION_OPTS_STATUS {
 		NEW,
@@ -32,8 +44,6 @@ public interface IDelegation {
 			return this.toString ().equals (other);
 		}
 	}
-
-	JSONObject test(JSONObject args);
 
 	/**
 	 * получение начальной информации от модуля делегирования

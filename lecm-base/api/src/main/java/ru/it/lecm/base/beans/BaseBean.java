@@ -3,7 +3,12 @@ package ru.it.lecm.base.beans;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -12,6 +17,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
@@ -65,7 +71,7 @@ public abstract class BaseBean {
 	 * @return true - если элемент архивный, иначе false
 	 */
 	public boolean isArchive(NodeRef ref){
-		boolean isArchive = ref.getStoreRef().getProtocol().equals("archive");
+		boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
 		Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
 		return isArchive || (isActive != null && !isActive);
 	}
