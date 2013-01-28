@@ -4,8 +4,8 @@ model.page = page;
 function getDescriptionList () {
 	var container = delegation.getDelegationOptsContainer ();
 	var itemType = delegation.getItemType ();
-	var isEngineer = delegation.isEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
-	var isBoss = delegation.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var isEngineer = orgstructure.isDelegationEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var isBoss = orgstructure.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
 
 	model.nodeRef = container.nodeRef.toString ();
 	logger.log ("model.nodeRef = " + model.nodeRef);
@@ -18,8 +18,8 @@ function getDescriptionList () {
 }
 
 function getDescriptionOpts () {
-	var isEngineer = delegation.isEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
-	var isBoss = delegation.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var isEngineer = orgstructure.isDelegationEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var isBoss = orgstructure.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
 	model.isEngineer = isEngineer;
 	logger.log ("model.isEngineer = " + model.isEngineer);
 	model.isBoss = isBoss;

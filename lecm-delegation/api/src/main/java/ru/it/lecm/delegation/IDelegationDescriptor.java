@@ -21,26 +21,4 @@ public interface IDelegationDescriptor {
 	 * @return
 	 */
 	QName getDelegationOptsItemType ();
-
-	/**
-	 * является ли указанный пользователь Технологом
-	 * @param employeeRef ссылка на сотрудника
-	 * @return true/false
-	 */
-	boolean isEngineer (NodeRef employeeRef);
-
-	/**
-	 * занимает ли указанный пользователь руководящую должность
-	 * @param employeeRef ссылка на сотрудника
-	 * @return true/false
-	 */
-	boolean isBoss (NodeRef employeeRef);
-
-	/**
-	 * имееет ли текущий пользователь у себя в подчинении другого пользователя
-	 * @param bossRef employee который является боссом
-	 * @param subordinateRef employee который является подчиненным
-	 * @return true/false Если bossRef == subordinateRef то возвращается true
-	 */
-	boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef);
 }

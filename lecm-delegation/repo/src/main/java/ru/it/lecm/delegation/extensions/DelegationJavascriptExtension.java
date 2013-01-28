@@ -57,18 +57,6 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		return null;
 	}
 
-	public boolean isEngineer (final String employeeRef) {
-		return delegationService.getDelegationDescriptor ().isEngineer (new NodeRef (employeeRef));
-	}
-
-	public boolean isBoss (final String employeeRef) {
-		return delegationService.getDelegationDescriptor ().isBoss (new NodeRef (employeeRef));
-	}
-
-	public boolean hasSubordinate (final String bossRef, final String subordinateRef) {
-		return delegationService.getDelegationDescriptor ().hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
-	}
-
 	public ScriptNode getDelegationOptsByPerson (final String personRef) {
 		NodeRef nodeRef = delegationService.getDelegationOptsByPerson (new NodeRef (personRef));
 		if (nodeRef != null) {

@@ -412,8 +412,8 @@ public interface OrgstructureBean {
 	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
 	 * @return NodeRef на бизнес роль "Технолог" или null если таковой бизнес роли нет
 	 */
-	NodeRef getBusinessRoleEngineer ();
-	
+	NodeRef getBusinessRoleDelegationEngineer ();
+
 	/**
 	 * получить бизнес роль "Технолог календарей" из общего справочника бизнес ролей
 	 * @return NodeRef на бизнес роль "Технолог календарей" или null если таковой бизнес роли нет
@@ -478,7 +478,7 @@ public interface OrgstructureBean {
 	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник занимает где-либо руководящую позицию.
 	 */
-	public boolean isBoss(final NodeRef nodeRef);
+	boolean isBoss(final NodeRef nodeRef);
 
 	/**
 	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
@@ -486,5 +486,21 @@ public interface OrgstructureBean {
 	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник имеет роль "Технолог календарей".
 	 */
-	public boolean isCalendarEngineer(final NodeRef nodeRef);
+	boolean isCalendarEngineer(final NodeRef nodeRef);
+
+	/**
+	 * является ли указанный пользователь Технологом делегирования
+	 * @param employeeRef ссылка на сотрудника
+	 * @return true/false
+	 */
+	boolean isDelegationEngineer (NodeRef employeeRef);
+
+	/**
+	 * имеет ли текущий пользователь у себя в подчинении другого пользователя
+	 * @param bossRef employee который является боссом
+	 * @param subordinateRef employee который является подчиненным
+	 * @return true/false Если bossRef == subordinateRef то возвращается true
+	 */
+	boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef);
+
 }

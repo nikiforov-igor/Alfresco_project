@@ -103,43 +103,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public boolean isEngineer (NodeRef employeeRef) {
-		NodeRef brEngineer = orgstructureService.getBusinessRoleEngineer ();
-		if (brEngineer == null) {
-			logger.error ("there is no engineer business role!");
-		}
-		List<NodeRef> employees = orgstructureService.getEmployeesByBusinessRole (brEngineer);
-		return employees.contains (employeeRef);
-	}
-
-	@Override
-	public boolean isBoss (NodeRef employeeRef) {
-		boolean isBoss = false;
-		if (nodeService.exists (employeeRef) && orgstructureService.isEmployee (employeeRef)) {
-			// получаем основную должностную позицию
-			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff (employeeRef);
-			if (primaryStaff != null) {
-				// получаем подразделение для штатного расписания
-				NodeRef unit = orgstructureService.getUnitByStaff (primaryStaff);
-				// получаем руководителя для подразделения
-				NodeRef bossRef = orgstructureService.getUnitBoss (unit);
-				isBoss = employeeRef.equals (bossRef);
-			}
-		}
-		return isBoss;
-	}
-
-	@Override
-	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
-		boolean hasSubordinate = bossRef.equals (subordinateRef);
-		if (!hasSubordinate) {
-			List<NodeRef> subordinates = orgstructureService.getBossSubordinate (bossRef);
-			hasSubordinate = subordinates.contains (subordinateRef);
-		}
-		return hasSubordinate;
-	}
-
-	@Override
 	public IDelegationDescriptor getDelegationDescriptor () {
 		return this;
 	}
@@ -448,14 +411,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public boolean hasSubordinate (final NodeRef delegationOptsNodeRef) {
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee ();
 		NodeRef subordinateEmployee = findNodeByAssociationRef (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-		List<NodeRef> employees = orgstructureService.getBossSubordinate (currentEmployee);
-		boolean hasSubordinate = false;
-		for (NodeRef employee : employees) {
-			if (employee.equals (subordinateEmployee)) {
-				hasSubordinate = true;
-				break;
-			}
-		}
-		return hasSubordinate;
+		return orgstructureService.hasSubordinate (currentEmployee, subordinateEmployee);
 	}
 }

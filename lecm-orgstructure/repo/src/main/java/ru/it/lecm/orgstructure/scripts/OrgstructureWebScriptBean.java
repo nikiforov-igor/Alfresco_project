@@ -12,13 +12,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -42,7 +42,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
 	public static final String ELEMENT_FULL_NAME_PATTERN = "lecm-orgstr_element-full-name";
 
-	private static final Log logger = LogFactory.getLog(OrgstructureWebScriptBean.class);
+	private static final Logger logger = LoggerFactory.getLogger (OrgstructureWebScriptBean.class);
 	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
 	public static final String PAGE_ORG_POSITIONS = "org-positions";
 	public static final String PAGE_ORG_ROLES = "org-roles";
@@ -262,7 +262,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 								structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
 						nodes.add(root);
 					} catch (JSONException e) {
-						logger.error(e);
+						logger.error(e.getMessage (), e);
 					}
 				}
 			}
@@ -353,7 +353,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive);
 		return createScriptable(units);
 	}
-	
+
 	/**
 	 * Получение перечня дочерних подразделений
 	 */
@@ -767,14 +767,14 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
 	 * @return ScriptNode на бизнес роль "Технолог" или null если таковой бизнес роли нет
 	 */
-	public ScriptNode getBusinessRoleEngineer () {
-		NodeRef engineerRef = orgstructureService.getBusinessRoleEngineer ();
+	public ScriptNode getBusinessRoleDelegationEngineer () {
+		NodeRef engineerRef = orgstructureService.getBusinessRoleDelegationEngineer ();
 		if (engineerRef != null) {
 			return new ScriptNode (engineerRef, services, getScope ());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * получить бизнес роль "Технолог календарей" из общего справочника бизнес ролей
 	 * @return ScriptNode на бизнес роль "Технолог календарей" или null если таковой бизнес роли нет
@@ -802,8 +802,17 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 *
 	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник занимает где-либо руководящую позицию.
-	 */	
+	 */
 	public boolean isBoss(final String employeeRef) {
 		return orgstructureService.isBoss(new NodeRef(employeeRef));
 	}
+
+	public boolean isDelegationEngineer (final String employeeRef) {
+		return orgstructureService.isDelegationEngineer (new NodeRef (employeeRef));
+	}
+
+	public boolean hasSubordinate (final String bossRef, final String subordinateRef) {
+		return orgstructureService.hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
+	}
+
 }

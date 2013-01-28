@@ -993,12 +993,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 		return engineerRef;
 	}
-	
+
 	@Override
-	public NodeRef getBusinessRoleEngineer () {
+	public NodeRef getBusinessRoleDelegationEngineer () {
 		return getEngineer(BUSINESS_ROLE_ENGINEER_ID);
 	}
-	
+
 	@Override
 	public NodeRef getBusinessRoleCalendarEngineer() {
 		return getEngineer(BUSINESS_ROLE_CALENDAR_ENGINEER_ID);
@@ -1126,8 +1126,8 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		});
 	}
-	
-	
+
+
 	@Override
 	public boolean isCalendarEngineer(final NodeRef employeeRef) {
 		NodeRef brEngineer = getBusinessRoleCalendarEngineer();
@@ -1153,5 +1153,25 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		}
 		return isBoss;
+	}
+
+	@Override
+	public boolean isDelegationEngineer (NodeRef employeeRef) {
+		NodeRef brEngineer = getBusinessRoleDelegationEngineer ();
+		if (brEngineer == null) {
+			return false;
+		}
+		List<NodeRef> employees = getEmployeesByBusinessRole (brEngineer);
+		return employees.contains (employeeRef);
+	}
+
+	@Override
+	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
+		boolean hasSubordinate = bossRef.equals (subordinateRef);
+		if (!hasSubordinate) {
+			List<NodeRef> subordinates = getBossSubordinate (bossRef);
+			hasSubordinate = subordinates.contains (subordinateRef);
+		}
+		return hasSubordinate;
 	}
 }
