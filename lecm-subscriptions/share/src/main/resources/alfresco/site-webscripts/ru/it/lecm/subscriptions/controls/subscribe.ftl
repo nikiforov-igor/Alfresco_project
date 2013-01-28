@@ -1,5 +1,5 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
-
+<script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></script>
 <script type="text/javascript">//<![CDATA[
 (function()
 {
