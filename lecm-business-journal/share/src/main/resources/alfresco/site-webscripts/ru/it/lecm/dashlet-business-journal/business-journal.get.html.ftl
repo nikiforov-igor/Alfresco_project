@@ -147,18 +147,17 @@
                             if (results.length > 0) {
                                 for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
                                     var item = results[i];
-                                    var div = document.createElement('div');
+                                    var div = createRow();
                                     var detail = document.createElement('span');
 
                                     detail.innerHTML = item.record;
                                     detail.setAttribute('class', 'detail');
                                     div.appendChild(detail);
                                     div.innerHTML = div.innerHTML + '<br />' + Alfresco.util.relativeTime(new Date(item.date));
-                                    div.setAttribute('class', 'row');
                                     container.appendChild(div);
                                 }
                             } else {
-                                container.innerHTML = '${msg("label.no.records")}';
+                                container.appendChild(createRow('${msg("label.no.records")}'));
                             }
                         }
                     },
@@ -215,6 +214,15 @@
                 }
             });
         }
+        function createRow(innerHtml) {
+            var div = document.createElement('div');
+
+            div.setAttribute('class', 'row');
+            if (innerHtml) {
+                div.innerHTML = innerHtml;
+            }
+            return div;
+        }
 
         Event.onDOMReady(init);
     })();
@@ -223,15 +231,13 @@
 
 <div class="dashlet business-journal">
     <div class="title">${msg("label.title")}</div>
-    <div class="body scrollable">
-        <div id="${id}_controls" class="toolbar flat-button">
-            <input type="button" id="${id}-types">
-            <input type="button" id="${id}-days">
-            <input type="button" id="${id}-whose">
-            <input type="hidden" id="${id}-types-hidden" name="type">
-            <input type="hidden" id="${id}-days-hidden" name="days">
-            <input type="hidden" id="${id}-whose-hidden" name="whose">
-        </div>
-        <div id="${id}_results" class="results"></div>
+    <div id="${id}_controls" class="toolbar flat-button">
+        <input type="button" id="${id}-types">
+        <input type="button" id="${id}-days">
+        <input type="button" id="${id}-whose">
+        <input type="hidden" id="${id}-types-hidden" name="type">
+        <input type="hidden" id="${id}-days-hidden" name="days">
+        <input type="hidden" id="${id}-whose-hidden" name="whose">
     </div>
+    <div class="body scrollableList" id="${id}_results"></div>
 </div>

@@ -9,10 +9,7 @@
 .dashlet.notifications .toolbar {
     white-space: nowrap;
 }
-.dashlet.notifications .results {
-    margin: 10px 20px 10px 10px;
-}
-.dashlet.notifications .results .row {
+.dashlet.notifications .body .row {
     line-height: 16px;
-    margin: 10px 0;
+    margin: 10px;
 }
