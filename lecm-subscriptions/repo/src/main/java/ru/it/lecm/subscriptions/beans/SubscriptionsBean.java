@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -44,6 +45,7 @@ public class SubscriptionsBean extends BaseBean {
 	public static final QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
 	public static final QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
 	public static final QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
+	public static final QName PROP_DESCRIPTION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "description");
 
 	public static final String BUSJOURNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
 	public static final String TYPE_SUBSCRIPTION = "subscription";
@@ -203,46 +205,124 @@ public class SubscriptionsBean extends BaseBean {
 	}
 
 	/**
-	 * Получение директории справочника "Категории событий".
+	 * Создание асоциации
+	 * @param sourceRef узел в котором создается ассоциация
+	 * @param list список ссылок на узел
+	 * @param assocTypeQName тип ассоциации
 	 */
-	public NodeRef getDictionaryEventCategory() {
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
-				DICTIONARY_ROOT_NAME);
-		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS,
-				DICTIONARY_ROOT_NAME_EVENT_CATEGORY);
+	private void createAssociation(NodeRef sourceRef, List<NodeRef> list, QName assocTypeQName){
+		if ((list != null) && (list.size() > 0)) {
+			for (NodeRef targetRef  : list) {
+				nodeService.createAssociation(sourceRef, targetRef, assocTypeQName);
+			}
+		}
 	}
 
 	/**
-	 * Получение директории справочника "Тип объекта".
+	 * Создание подписки на объект
+	 * @param objectRef Ссылка на объект
+	 * @param description описание
+	 * @param notificationType тип доставки
+	 * @param employee сотрудники
+	 * @return Подписка
 	 */
-	public NodeRef getDictionaryTypeObject() {
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
-				DICTIONARY_ROOT_NAME);
-		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, DICTIONARY_ROOT_NAME_TYPE_OBJECT);
+	public NodeRef createSubscriptionToObject(String name, NodeRef objectRef, String description,
+	                                          List<NodeRef> notificationType,
+	                                          List<NodeRef> employee) {
+		NodeRef subscriptionRootRef = getSubscriptionRootRef();
+		// Если директория, где хранятся подписки не создана создаем ее
+		if (subscriptionRootRef == null) {
+			ensureSubscriptionsRootRef();
+			subscriptionRootRef = getSubscriptionRootRef();
+		}
+
+		String subscribeName;
+		if ((name == null) || name.equals("")) {
+			subscribeName = GUID.generate();
+		} else {
+			subscribeName = name;
+		}
+
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(0);
+		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+		QName assocQName = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, subscribeName);
+
+		if (description != null && description.equals("")) {
+			properties.put(PROP_DESCRIPTION, description);
+		}
+		ChildAssociationRef subscriptionsRef = nodeService.createNode(subscriptionRootRef, assocTypeQName, assocQName,
+				TYPE_SUBSCRIPTION_TO_OBJECT, properties);
+
+		// Создаем ассоциацию подписки на объект
+		nodeService.createAssociation(subscriptionsRef.getChildRef(), objectRef, ASSOC_SUBSCRIPTION_OBJECT);
+		// Создаем ассоциацию подписки на тип доставки
+		createAssociation(subscriptionsRef.getChildRef(), notificationType, ASSOC_NOTIFICATION_TYPE);
+		// Создаем ассоциацию подписки на сотрудников
+		createAssociation(subscriptionsRef.getChildRef(), employee, ASSOC_DESTINATION_EMPLOYEE);
+
+		return subscriptionsRef.getChildRef();
 	}
 
 	/**
-	 * Получение директории справочника "Тип объекта".
+	 * Создание подписки на тип
+	 * @param description описание
+	 * @param objectType тип объекта
+	 * @param eventCategory категория события
+	 * @param notificationType тип доставки
+	 * @param employee сотрудники
+	 * @param workGroup рабочие группы
+	 * @param organizationUnit подразделения
+	 * @param position должностная позиция
+	 * @return Подписка
 	 */
-	public NodeRef getDictionaryTypeObject(NodeRef nodeRefChild) {
-		return nodeService.getPrimaryParent(nodeRefChild).getParentRef();
-	}
+	public NodeRef createSubscriptionToType(String name, String description, NodeRef objectType,
+	                                        NodeRef eventCategory, List<NodeRef> notificationType,
+	                                        List<NodeRef> employee, List<NodeRef> workGroup,
+	                                        List<NodeRef> organizationUnit, List<NodeRef> position) {
 
-	/**
-	 * Получение директории справочника "Шаблон сообщения".
-	 */
-	public NodeRef getDictionaryTemplateMessage() {
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		final NodeRef dictionary = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,
-				DICTIONARY_ROOT_NAME);
-		return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, DICTIONARY_ROOT_NAME_TYPE_TEMPLATE_MESSAGE);
-	}
+		NodeRef subscriptionRootRef = getSubscriptionRootRef();
+		// Если директория, где хранятся подписки не создана создаем ее
+		if (subscriptionRootRef == null) {
+			ensureSubscriptionsRootRef();
+			subscriptionRootRef = getSubscriptionRootRef();
+		}
 
+		String subscribeName;
+		if ((name == null) || name.equals("")) {
+			subscribeName = GUID.generate();
+		} else {
+			subscribeName = name;
+		}
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(0);
+		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+		QName assocQName = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, subscribeName);
+
+		if (description != null && description.equals("")) {
+			properties.put(PROP_DESCRIPTION, description);
+		}
+		ChildAssociationRef subscriptionsRef = nodeService.createNode(subscriptionRootRef, assocTypeQName, assocQName,
+				TYPE_SUBSCRIPTION_TO_TYPE, properties);
+		// Создаем ассоциацию подписки на тип объекта
+		if (objectType != null){
+			nodeService.createAssociation(subscriptionsRef.getChildRef(), objectType, ASSOC_OBJECT_TYPE);
+		}
+		// Создаем ассоциацию подписки на категорию события
+		if (eventCategory != null){
+			nodeService.createAssociation(subscriptionsRef.getChildRef(), eventCategory, ASSOC_EVENT_CATEGORY);
+		}
+		// Создаем ассоциацию подписки на тип доставки
+		createAssociation(subscriptionsRef.getChildRef(), notificationType, ASSOC_NOTIFICATION_TYPE);
+		// Создаем ассоциацию подписки на сотрудников
+		createAssociation(subscriptionsRef.getChildRef(), employee, ASSOC_DESTINATION_EMPLOYEE);
+		// Создаем ассоциацию подписки на рабочие группы
+		createAssociation(subscriptionsRef.getChildRef(), workGroup, ASSOC_DESTINATION_WORK_GROUP);
+		// Создаем ассоциацию подписки на подразделения
+		createAssociation(subscriptionsRef.getChildRef(), organizationUnit, ASSOC_DESTINATION_ORGANIZATION_UNIT);
+		// Создаем ассоциацию подписки на должностные позиции
+		createAssociation(subscriptionsRef.getChildRef(), position, ASSOC_DESTINATION_POSITION);
+
+		return subscriptionsRef.getChildRef();
+	}
 
 	/**
 	 * Получение списка категорий событий по выбранному типу объекта в сравочнике "Шаблон сообщения"
