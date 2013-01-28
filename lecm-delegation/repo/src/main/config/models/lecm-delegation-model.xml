@@ -54,6 +54,18 @@
 		-->
 		<type name="lecm-d8n:procuracy">
 			<parent>cm:content</parent> <!-- тут вообще можно cm:cmobject заюзать я думаю -->
+			<properties>
+				<!-- передавать права на документы подчиненных -->
+				<property name="lecm-d8n:procuracy-can-transfer-rights">
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<associations>
 				<!-- бизнес роль -->
 				<association name="lecm-d8n:procuracy-business-role-assoc">

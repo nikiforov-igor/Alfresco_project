@@ -26,6 +26,9 @@
 	<@grid.datagrid args.datagridId/>
 </div>
 <div class="form-field">
+	<hr style="margin-top: 1.5em;">
+</div>
+<div class="form-field">
 	<input id="radioDelegateAllFunc"
 		class="formsRadio"
 		type="radio"

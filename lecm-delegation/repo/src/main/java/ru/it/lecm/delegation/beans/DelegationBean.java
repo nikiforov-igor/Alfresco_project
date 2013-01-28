@@ -248,12 +248,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		});
 	}
 
-	//проперти и ассоциации которые будут использоваться при сохранении
-	private final static QName PROP_DELEGATION_OPTS_STATUS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-status");
-	private final static QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
-	private final static QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
-	private final static QName ASSOC_DELEGATION_OPTS_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-trustee-assoc");
-
 	/**
 	 * поиск значения проверти или ассоциации в JSON объекте который пришел с формы
 	 * @param options JSON объект по которому искать
@@ -301,12 +295,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		if (DELEGATION_OPTS_STATUS.NOT_SET.equals (status.toString ())) {
 			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_STATUS, DELEGATION_OPTS_STATUS.NEW.toString ());
 		}
-		//передавать права на документы подчиненных
-		String propCanTransfer = PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS.getLocalName ();
-		Boolean canTransfer = findInOptions (options, propCanTransfer, "Boolean");
-		if (canTransfer != null) {
-			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS, canTransfer);
-		}
 		//делегировать все функции
 		String propCanDelegate = PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL.getLocalName ();
 		Boolean canDelegate = findInOptions (options, propCanDelegate, "Boolean");
@@ -315,6 +303,12 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 		//ссылка на доверенное лицо
 		if (canDelegate != null && canDelegate) {
+			//передавать права на документы подчиненных
+			String propCanTransfer = PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS.getLocalName ();
+			Boolean canTransfer = findInOptions (options, propCanTransfer, "Boolean");
+			if (canTransfer != null) {
+				nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS, canTransfer);
+			}
 			//получаем ссылку на доверенное лицо из options
 			String propTrustee = ASSOC_DELEGATION_OPTS_TRUSTEE.getLocalName ();
 			String trusteeRef = findInOptions (options, propTrustee + "_added", "String");

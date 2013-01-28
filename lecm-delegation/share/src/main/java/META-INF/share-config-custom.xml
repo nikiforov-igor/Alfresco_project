@@ -77,6 +77,7 @@
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
 					<!--<show id="lecm-dic:active"/>  временно чтобы следить активна доверенность или нет -->
+					<show id="lecm-d8n:procuracy-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -104,6 +105,7 @@
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
+					<show id="lecm-d8n:procuracy-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 		</forms>

@@ -11,17 +11,77 @@ import org.json.JSONObject;
  * @author rabdullin
  */
 public interface IDelegation {
-
-	String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
 	String CONTAINER = "DelegationOptionsContainer";
+
+	/**
+	 * &lt;namespace uri="http://www.it.ru/logicECM/model/delegation/1.0" prefix="lecm-d8n"/&gt;
+	 */
+	String DELEGATION_NAMESPACE = "http://www.it.ru/logicECM/model/delegation/1.0";
+
+	/**
+	 * &lt;type name="lecm-d8n:delegation-opts-container"&gt;
+	 */
 	QName TYPE_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-container");
-	QName TYPE_DELEGATION_OPTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+
+	/**
+	 * &lt;type name="lecm-d8n:procuracy"&gt;
+	 */
 	QName TYPE_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "procuracy");
-	QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
+
+	/**
+	 * &lt;type name="lecm-d8n:delegation-opts"&gt;
+	 */
+	QName TYPE_DELEGATION_OPTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts");
+
+	/**
+	 * &lt;property name="lecm-d8n:procuracy-can-transfer-rights"&gt;
+	 */
+	QName PROP_PROCURACY_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "procuracy-can-transfer-rights");
+
+	/**
+	 * &lt;property name="lecm-d8n:delegation-opts-can-transfer-rights"&gt;
+	 */
+	QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
+
+	/**
+	 * &lt;property name="lecm-d8n:delegation-opts-can-delegate-all"&gt;
+	 */
+	QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
+
+	/**
+	 * &lt;property name="lecm-d8n:delegation-opts-status"&gt;
+	 */
+	QName PROP_DELEGATION_OPTS_STATUS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-status");
+
+	/**
+	 * &lt;child-association name="lecm-d8n:container-delegation-opts-assoc"&gt;
+	 */
 	QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
-	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
+
+	/**
+	 * &lt;association name="lecm-d8n:procuracy-business-role-assoc"&gt;
+	 */
 	QName ASSOC_PROCURACY_BUSINESS_ROLE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-business-role-assoc");
+
+	/**
+	 * &lt;association name="lecm-d8n:procuracy-trustee-assoc"&gt;
+	 */
 	QName ASSOC_PROCURACY_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "procuracy-trustee-assoc");
+
+	/**
+	 * &lt;association name="lecm-d8n:delegation-opts-owner-assoc"&gt;
+	 */
+	QName ASSOC_DELEGATION_OPTS_OWNER = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-owner-assoc");
+
+	/**
+	 * &lt;association name="lecm-d8n:delegation-opts-trustee-assoc"&gt;
+	 */
+	QName ASSOC_DELEGATION_OPTS_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-trustee-assoc");
+
+	/**
+	 * &lt;child-association name="lecm-d8n:delegation-opts-procuracy-assoc"&gt;
+	 */
+	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
 
 	enum DELEGATION_OPTS_STATUS {
 		NEW,
