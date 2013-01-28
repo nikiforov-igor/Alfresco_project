@@ -347,10 +347,18 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Получение перечня подчиненных подразделений
+	 * Получение перечня дочерних подразделений
 	 */
 	public Scriptable getSubUnits(String parent, boolean onlyActive) {
 		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive);
+		return createScriptable(units);
+	}
+	
+	/**
+	 * Получение перечня дочерних подразделений
+	 */
+	public Scriptable getSubUnits(String parent, boolean onlyActive,  boolean includeSubunits) {
+		List<NodeRef> units = orgstructureService.getSubUnits(new NodeRef(parent), onlyActive, includeSubunits);
 		return createScriptable(units);
 	}
 
@@ -763,6 +771,18 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef engineerRef = orgstructureService.getBusinessRoleEngineer ();
 		if (engineerRef != null) {
 			return new ScriptNode (engineerRef, services, getScope ());
+		}
+		return null;
+	}
+	
+	/**
+	 * получить бизнес роль "Технолог календарей" из общего справочника бизнес ролей
+	 * @return ScriptNode на бизнес роль "Технолог календарей" или null если таковой бизнес роли нет
+	 */
+	public ScriptNode getBusinessRoleCalendarEngineer () {
+		NodeRef engineerRef = orgstructureService.getBusinessRoleCalendarEngineer ();
+		if (engineerRef != null) {
+			return new ScriptNode(engineerRef, services, getScope ());
 		}
 		return null;
 	}

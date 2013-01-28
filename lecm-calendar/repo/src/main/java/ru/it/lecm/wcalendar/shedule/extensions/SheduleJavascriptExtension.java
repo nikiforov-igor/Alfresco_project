@@ -38,7 +38,18 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 		this.SheduleService = SheduleService;
 	}
 
-	public ScriptNode getParentSheduleNodeRef(JSONObject node) {
+	/**
+	 * Если node - сотрудник, то возвращает ссылку на расписание подразделения,
+	 * в котором сотрудник занимает основную позицию (или вышестоящего
+	 * подразделения). Если node - подразделение, то возвращает ссылку на
+	 * расписание вышестоящего подразделения. Если расписание к node не
+	 * привязано, то возвращает null.
+	 *
+	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * сотрудника или орг. единицу.
+	 * @return ScriptNode расписания.
+	 */
+	public ScriptNode getParentSheduleNodeRef(final JSONObject node) {
 		NodeRef sheduleList = null;
 		try {
 			sheduleList = SheduleService.getParentShedule(new NodeRef(node.getString("nodeRef")));
@@ -53,7 +64,16 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 		}
 	}
 
-	public JSONObject getParentSheduleStdTime(JSONObject node) {
+	/**
+	 * Возвращает время работы и тип родительского расписания (см.
+	 * getParentShedule).
+	 *
+	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * сотрудника или орг. единицу.
+	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
+	 * работы, "end" - время конца работы.
+	 */
+	public JSONObject getParentSheduleStdTime(final JSONObject node) {
 		JSONObject result = null;
 		try {
 			Map<String, String> JSONMap = SheduleService.getParentSheduleStdTime(new NodeRef(node.getString("nodeRef")));
@@ -64,12 +84,58 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 		return result;
 	}
 
+	/**
+	 * Получить расписание, привзянное к сотруднику или орг. единице.
+	 *
+	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * сотрудника или орг. единицу.
+	 * @return NodeRef расписания, привязанного к node. Если таковое
+	 * отсутствует, то null.
+	 */
+	public ScriptNode getSheduleByOrgSubject(final JSONObject node) {
+		try {
+			return getSheduleByOrgSubject(node.getString("nodeRef"));
+		} catch (JSONException ex) {
+			throw new WebScriptException(ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * Получить расписание, привзянное к сотруднику или орг. единице.
+	 *
+	 * @param node - строка с NodeRef на сотрудника или орг. единицу.
+	 * @return NodeRef расписания, привязанного к node. Если таковое
+	 * отсутствует, то null.
+	 */
+	public ScriptNode getSheduleByOrgSubject(final String employeeRef) {
+		NodeRef nodeRef = SheduleService.getSheduleByOrgSubject(new NodeRef(employeeRef));
+		if (nodeRef != null) {
+			return new ScriptNode(nodeRef, serviceRegistry);
+		}
+		return null;
+	}
+
+	/**
+	 * Проверяет, привязано ли какое-нибудь расписание к node.
+	 *
+	 * @param node - NodeRef на сотрудника или орг. единицу.
+	 * @return true - привязано, false - не привязано.
+	 */
 	public boolean isSheduleAssociated(NodeRef node) {
 		return SheduleService.isSheduleAssociated(node);
 
 	}
 
-	public ScriptNode createNewSpecialShedule(JSONObject json) {
+	/**
+	 * Создает новое особое расписание. Опрабатывает данные из формы, складывает
+	 * их в обект SpecialSheduleRawBean и передает дальше.
+	 *
+	 * @param json - данные от формы создания нового особого расписания
+	 * (specialSheduleForm).
+	 * @return ScriptNode созданного расписания. Если не получлось создать, то
+	 * генерирует исключение WebScriptException.
+	 */
+	public ScriptNode createNewSpecialShedule(final JSONObject json) {
 		String assocShedEmployeeStr, sheduleDestinationStr, reiterationType, timeBegin, timeEnd, timeLimitStart, timeLimitEnd;
 		NodeRef assocShedEmployeeNode, sheduleDestinationNode;
 		SpecialSheduleRawBean rawSheduleData = new SpecialSheduleRawBean();
@@ -136,7 +202,7 @@ public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
 		sheduleDestinationNode = new NodeRef(sheduleDestinationStr);
 
 		NodeRef createdNode = SheduleService.createNewSpecialShedule(rawSheduleData, assocShedEmployeeNode, sheduleDestinationNode);
-		
+
 		if (createdNode == null) {
 			throw new WebScriptException("Something has gone wrong: response is empty!");
 		} else {

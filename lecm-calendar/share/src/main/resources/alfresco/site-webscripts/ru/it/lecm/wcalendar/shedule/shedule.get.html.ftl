@@ -10,6 +10,7 @@ datagrid.setOptions({
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL,
+	dataSource: "/lecm/wcalendar/shedule/get/list",
 	actions: [
        {
 		type:"action-link-${bubblingLabel!"sheduleDatagrid"}",
@@ -17,7 +18,7 @@ datagrid.setOptions({
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"
         }
-	] 
+	]
 });
 datagrid.setMessages(${messages});
 YAHOO.util.Event.onContentReady('${id}', function () {

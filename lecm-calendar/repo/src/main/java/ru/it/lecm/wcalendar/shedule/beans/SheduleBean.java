@@ -392,6 +392,22 @@ public class SheduleBean extends AbstractWCalCommonBean {
 		}
 	}
 
+	/**
+	 * Получить расписание, привзянное к сотруднику или орг. единице.
+	 *
+	 * @param node - NodeRef сотрудника/орг. единицы.
+	 * @return NodeRef расписания, привязанного к node. Если таковое
+	 * отсутствует, то null.
+	 */
+	public NodeRef getSheduleByOrgSubject(NodeRef node) {
+		if (!isSheduleAssociated(node)) {
+			return null;
+		}
+		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_SHEDULE_EMPLOYEE_LINK);
+		AssociationRef sourceAssoc = sourceAssocs.get(0);
+		return sourceAssoc.getSourceRef();
+	}
+
 	// класс для представления элементов графика: первый и последний рабочий день в серии
 	private class SheduleElemetObject {
 
