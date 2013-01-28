@@ -18,7 +18,7 @@ import ru.it.lecm.wcalendar.IWCalCommon;
  */
 public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension {
 
-	private ServiceRegistry serviceRegistry;
+	protected ServiceRegistry serviceRegistry;
 	private IWCalCommon wCalendarService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(WCalendarJavascriptExtension.class);
@@ -61,25 +61,5 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 			return itemType.toPrefixString(namespacePrefixResolver);
 		}
 		return null;
-	}
-
-	/**
-	 * Проверка, занимает ли сотрудник руководящую позицию.
-	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
-	 * @return true если сотрудник занимает где-либо руководящую позицию.
-	 */
-	public boolean isEngineer(final String employeeRef) {
-		return wCalendarService.getWCalendarDescriptor().isEngineer(new NodeRef(employeeRef));
-	}
-
-	/**
-	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
-	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
-	 * @return true если сотрудник имеет роль "Технолог календарей".
-	 */
-	public boolean isBoss(final String employeeRef) {
-		return wCalendarService.getWCalendarDescriptor().isBoss(new NodeRef(employeeRef));
 	}
 }

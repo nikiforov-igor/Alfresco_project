@@ -11,7 +11,7 @@ if (currentEmployee) {
 	logger.log("ERROR: current employee is null!");
 }
 
-var isEngineer = sheduleBase.isEngineer(currentEmployee.nodeRef.toString());
+var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
 
 if (!isEngineer) {
 	// если чувак не технолог, то получаем список его подчиненных.

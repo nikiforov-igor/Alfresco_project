@@ -786,4 +786,24 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		}
 		return null;
 	}
+
+/**
+	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
+	 *
+	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
+	 * @return true если сотрудник имеет роль "Технолог календарей".
+	 */
+	public boolean isCalendarEngineer(final String employeeRef) {
+		return orgstructureService.isCalendarEngineer(new NodeRef(employeeRef));
+	}
+
+	/**
+	 * Проверка, занимает ли сотрудник руководящую позицию.
+	 *
+	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
+	 * @return true если сотрудник занимает где-либо руководящую позицию.
+	 */	
+	public boolean isBoss(final String employeeRef) {
+		return orgstructureService.isBoss(new NodeRef(employeeRef));
+	}
 }

@@ -123,31 +123,4 @@ public abstract class AbstractWCalCommonBean implements IWCalCommon, Authenticat
 		}
 		return container;
 	}
-
-	@Override
-	public boolean isEngineer(NodeRef employeeRef) {
-		NodeRef brEngineer = orgstructureService.getBusinessRoleCalendarEngineer();
-		if (brEngineer == null) {
-			logger.error("there is no engineer business role!");
-		}
-		List<NodeRef> employees = orgstructureService.getEmployeesByBusinessRole(brEngineer);
-		return employees.contains(employeeRef);
-	}
-
-	@Override
-	public boolean isBoss(NodeRef employeeRef) {
-		boolean isBoss = false;
-		if (nodeService.exists(employeeRef) && orgstructureService.isEmployee(employeeRef)) {
-			// получаем основную должностную позицию
-			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(employeeRef);
-			if (primaryStaff != null) {
-				// получаем подразделение для штатного расписания
-				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
-				// получаем руководителя для подразделения
-				NodeRef bossRef = orgstructureService.getUnitBoss(unit);
-				isBoss = employeeRef.equals(bossRef);
-			}
-		}
-		return isBoss;
-	}
 }

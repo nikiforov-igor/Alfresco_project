@@ -33,19 +33,4 @@ public interface IWCalCommon {
 	 */
 	QName getWCalendarItemType();
 
-	/**
-	 * Проверка, занимает ли сотрудник руководящую позицию.
-	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
-	 * @return true если сотрудник занимает где-либо руководящую позицию.
-	 */
-	public boolean isBoss(NodeRef nodeRef);
-
-	/**
-	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
-	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
-	 * @return true если сотрудник имеет роль "Технолог календарей".
-	 */
-	public boolean isEngineer(NodeRef nodeRef);
 }

@@ -51,18 +51,13 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
-	<bean id="lecmCalendarBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="calendarBase"/>
+	<bean id="lecmCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="lecmCalendarService"/>
 	</bean>
-	<bean id="lecmSheduleBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="sheduleBase"/>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="lecmSheduleService"/>
-	</bean>
-	<bean id="lecmAbsenceBaseJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="absenceBase"/>
+	<bean id="lecmAbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalService" ref="lecmAbsenceService"/>
 	</bean>
@@ -70,5 +65,6 @@
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="sheduleService" ref="lecmSheduleService"/>
+		<property name="wCalService" ref="lecmSheduleService"/>
 	</bean>
 </beans>

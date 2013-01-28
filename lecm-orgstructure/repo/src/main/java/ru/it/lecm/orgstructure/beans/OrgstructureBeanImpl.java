@@ -1126,4 +1126,32 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		});
 	}
+	
+	
+	@Override
+	public boolean isCalendarEngineer(final NodeRef employeeRef) {
+		NodeRef brEngineer = getBusinessRoleCalendarEngineer();
+		if (brEngineer == null) {
+			return false;
+		}
+		List<NodeRef> employees = getEmployeesByBusinessRole(brEngineer);
+		return employees.contains(employeeRef);
+	}
+
+	@Override
+	public boolean isBoss(final NodeRef employeeRef) {
+		boolean isBoss = false;
+		if (nodeService.exists(employeeRef) && isEmployee(employeeRef)) {
+			// получаем основную должностную позицию
+			NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
+			if (primaryStaff != null) {
+				// получаем подразделение для штатного расписания
+				NodeRef unit = getUnitByStaff(primaryStaff);
+				// получаем руководителя для подразделения
+				NodeRef bossRef = getUnitBoss(unit);
+				isBoss = employeeRef.equals(bossRef);
+			}
+		}
+		return isBoss;
+	}
 }

@@ -3,9 +3,7 @@ package ru.it.lecm.wcalendar.shedule.extensions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +12,10 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
 import ru.it.lecm.wcalendar.shedule.beans.SheduleBean;
 import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
+
 
 /**
  * Реализация JavaScript root-object для получения информации о контейнерах для
@@ -23,16 +23,12 @@ import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
  *
  * @author vlevin
  */
-public class SheduleJavascriptExtension extends BaseScopableProcessorExtension {
+public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 
 	private SheduleBean SheduleService;
-	private ServiceRegistry serviceRegistry;
+
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(SheduleJavascriptExtension.class);
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
 
 	public void setSheduleService(SheduleBean SheduleService) {
 		this.SheduleService = SheduleService;
