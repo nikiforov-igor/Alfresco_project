@@ -21,3 +21,7 @@
 .datagrid .onActionMakePrimary a {
     background-image: url("../../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
 }
+.datagrid input.formsCheckBox,
+.datagrid input.formsCheckBox + label.checkbox {
+    vertical-align: middle;
+}

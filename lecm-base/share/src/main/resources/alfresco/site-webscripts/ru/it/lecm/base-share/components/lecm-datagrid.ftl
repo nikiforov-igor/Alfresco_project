@@ -143,7 +143,7 @@ viewFormId(необязательный) - по умолчанию равен vi
          </span>
     </div>
 	<#if showArchiveCheckBox>
-        <div align="right" style="padding-top: 0.5em;">
+        <div align="right" style="padding: 0.5em;">
             <input type="checkbox" class="formsCheckBox" id="${id}-cbShowArchive" onChange="YAHOO.Bubbling.fire('archiveCheckBoxClicked', null)">
             <label class="checkbox" for="${id}-cbShowArchive">Отображать архивные</label>
         </div>

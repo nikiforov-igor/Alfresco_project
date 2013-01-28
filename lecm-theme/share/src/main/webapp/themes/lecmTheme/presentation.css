@@ -1979,3 +1979,27 @@ span.person a
 .archive-record, .archive-record span a, .archive-record a {
     color:red;
 }
+
+/* date-range control */
+/* контрол альфресковский, в нем нигде не прописан класс, поэтому приходится обращаться по части ид-шника:
+div[id$=date-cntrl] - селектор для всех div с id, заканчивающимися на "date-cntrl" */
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u,
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u.first {
+    padding: 0;
+    text-align: left;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div {
+    position: relative;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div > input {
+    float: none;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div > a {
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .search .form-field div[id$=date-cntrl] {
+    width: 460px !important;
+}
+
