@@ -21,7 +21,7 @@ if (currentEmployee) {
 	logger.log ("current employee is null!!!!!!!!!!");
 }
 //ищем бизнес роль технолога
-var brEngineer = orgstructure.getBusinessRoleEngineer ();
+var brEngineer = orgstructure.getBusinessRoleDelegationEngineer ();
 if (!brEngineer) {
 	logger.log ("ERROR: there is no engineer business role!");
 }
