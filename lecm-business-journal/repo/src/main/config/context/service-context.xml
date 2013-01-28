@@ -168,4 +168,13 @@
             <ref bean="businessJournalArchiveSchedule"/>
         </property>
     </bean>
+
+    <bean id="businessJournalAddHistoryToMainObjectPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalAddHistoryToMainObjectPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
 </beans>

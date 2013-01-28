@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.QName;
 public interface BusinessJournalService {
 
 	public static final String BJ_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
+	public static final String BJ_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/aspects/1.0";
 
 	/**
 	 * Корневой узел Business Journal
@@ -69,7 +70,10 @@ public interface BusinessJournalService {
 	public static final QName PROP_ARCHIVER_DEEP = QName.createQName(BJ_NAMESPACE_URI, "archiver-deep");
 	public static final QName PROP_ARCHIVER_PERIOD= QName.createQName(BJ_NAMESPACE_URI, "archiver-period");
 
-	public static final String BASE_USER_HOLDER = "#baseuser";
+    public static final QName TYPE_HISTORY = QName.createQName(BJ_ASPECTS_NAMESPACE_URI, "history");
+    public static final QName PROP_HISTORY_LIST = QName.createQName(BusinessJournalService.BJ_ASPECTS_NAMESPACE_URI, "history-list");
+
+    public static final String BASE_USER_HOLDER = "#baseuser";
 	public static final String MAIN_OBJECT_HOLDER = "#mainobject";
 	public static final String OBJECT_HOLDER = "#object";
 

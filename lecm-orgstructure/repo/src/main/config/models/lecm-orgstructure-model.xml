@@ -479,7 +479,6 @@
                 <aspect>lecm-dic:aspect_active</aspect>
                 <aspect>cm:versionable</aspect>
                 <aspect>lecm-subscr-aspects:subscribed</aspect>
-                <aspect>lecm-busjournal-aspects:history</aspect>
             </mandatory-aspects>
         </type>
 
