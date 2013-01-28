@@ -41,12 +41,11 @@ YAHOO.util.Event.onDOMReady(init);
 
             <script type="text/javascript">//<![CDATA[
             (function () {
-                new Alfresco.DatePicker("${controlId}", "${dateFieldId}").setOptions(
-                        {
-                            currentValue:"",
-                            showTime: false,
-                            mandatory: true
-                        }).setMessages(
+                new Alfresco.DatePicker("${controlId}", "${dateFieldId}").setOptions({
+                        currentValue:"${defaultArchiveToDate!''}",
+                        showTime: false,
+                        mandatory: true
+                    }).setMessages(
                 ${messages}
                 );
             })();
