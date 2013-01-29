@@ -1221,13 +1221,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var me = this;
                 if (!this.widgets.dataTable) {
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                    // initialize Search
+                    this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+                        showExtendSearchBlock:this.options.showExtendSearchBlock,
+                        maxSearchResults: this.options.maxResults
+                    });
                 }
 
-                // initialize Search
-                this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
-                    showExtendSearchBlock:this.options.showExtendSearchBlock,
-                    maxSearchResults: this.options.maxResults
-                });
                 var searchConfig = this.datagridMeta.searchConfig;
 
                 if (searchConfig) { // Поиск через SOLR
