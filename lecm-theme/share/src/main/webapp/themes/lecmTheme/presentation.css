@@ -1,6 +1,7 @@
 /* My Styles */
 
-input, textarea, a {
+input, textarea, a,
+input:focus, textarea:focus, a:focus {
     outline: none;
 }
 ul, ul li,
@@ -10,7 +11,7 @@ ol, ol li {
 }
 
 a, a:hover, a:visited {
-    color: #0600cc;
+    color: #6ca5ce;
     text-decoration: underline;
 }
 a:hover {
@@ -216,11 +217,6 @@ a:hover {
 .yui-panel-container .person a:visited{
     color: #333333;
 }
-.grid .dashlet .body a,
-.grid .dashlet .body a:visited,
-.grid .dashlet .body a:hover {
-    color: #0600cc;
-}
 
 .sticky-wrapper h1,
 .yui-panel-container h1
@@ -385,9 +381,11 @@ h4 .lighter
 
 .dashlet .welcome-body a,
 .dashlet .welcome-body a:visited,
-.dashlet .welcome-body a:hover
-{
-   color: #0600cc;
+.dashlet .welcome-body a:hover,
+.grid .dashlet .body a,
+.grid .dashlet .body a:visited,
+.grid .dashlet .body a:hover {
+    color: #6ca5ce;
 }
 
 .dashlet .detail-list-item
@@ -677,7 +675,7 @@ span.navigation-item-alt
 span.navigation-item a,
 span.navigation-item a:visited
 {
-   color: #0600cc;
+   color: #6ca5ce;
    text-decoration: underline;
 }
 
@@ -691,7 +689,7 @@ span.navigation-item a:hover
 
 span.navigation-item a:hover
 {
-   color: #0600cc;
+   color: #6ca5ce;
    text-decoration: underline;
    font-weight: normal;
 
@@ -936,7 +934,7 @@ span.mce_alfresco-linklibrary
 .yui-skin-lecmTheme .yui-pg-container a.yui-pg-last
 {
    border-color: #CBCBCB;
-   color: #0600CC;
+   color: #6ca5ce;
    text-decoration: none;
 }
 
@@ -1034,7 +1032,7 @@ body.yui-skin-lecmTheme .yuimenu .bd ul li.yuimenuitem .yuimenuitemlabel a,
 body.yui-skin-lecmTheme .yuimenu .bd ul li.yuimenuitem-selected div .yuimenuitemlabel,
 body.yui-skin-lecmTheme .yuimenu .bd ul li.yuimenuitem-selected div .yuimenuitemlabel a
 {
-   color: #0600cc;
+   color: #6ca5ce;
 }
 
 body.yui-skin-lecmTheme .yuimenu .bd ul li.yuimenuitem-selected .yuimenuitemlabel,
@@ -1290,7 +1288,7 @@ body.yui-skin-lecmTheme .yui-columnbrowser .yui-carousel-content li.yui-columnbr
 .yui-skin-lecmTheme a.nextEvents,
 .yui-skin-default div.channels a
 {
-   color: #0600cc;
+   color: #6ca5ce;
 }
 
 .yui-skin-lecmTheme .detail .tag a,
@@ -1585,7 +1583,7 @@ a.theme-color-1,
 a.theme-color-1:visited,
 a.theme-color-1:hover
 {
-   color: #0600cc;
+   color: #6ca5ce;
 }
 
 .theme-color-2,
@@ -1956,10 +1954,11 @@ span.person a
 }
 
 .notification-row {
-	border-bottom: solid 1px #C5C7C6;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 10px;
+    line-height: 16px;
+    margin: 10px;
+}
+.notification-row.bold {
+    font-weight: bold;
 }
 
 #notificationsWindow a {

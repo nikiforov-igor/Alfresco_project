@@ -32,8 +32,11 @@ LogicECM.module.Header = LogicECM.module.Header || {};
  * @class LogicECM.module.Header.Notifications
  */
 (function () {
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Connect = YAHOO.util.Connect;
 
-	LogicECM.module.Header.Notifications = function (htmlId) {
+    LogicECM.module.Header.Notifications = function (htmlId) {
 		return LogicECM.module.Header.Notifications.superclass.constructor.call(
 			this,
 			"LogicECM.module.Header.Notifications",
@@ -68,7 +71,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		/// Добавление счетчика
 		createNotifyer: function(){
-			var btn = YAHOO.util.Dom.get(this.id);
+			var btn = Dom.get(this.id);
 			var div=document.createElement("div");
 			div.innerHTML='<div id="' + this.notificationsCounterId + '">0</div>';
 			this.createWindow(div);
@@ -78,11 +81,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 		},
 
 		checkVisibleCounter: function(count) {
-			if (count > 0) {
-				YAHOO.util.Dom.setStyle(this.notificationsCounterId, "display", "block");
-			} else {
-				YAHOO.util.Dom.setStyle(this.notificationsCounterId, "display", "none");
-			}
+            Dom.setStyle(this.notificationsCounterId, "display", count > 0 ? "block" : "none");
 		},
 
 		createWindow: function(div) {
@@ -102,12 +101,11 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 				content += '</div>';
 			div.innerHTML += content;
 
-			YAHOO.util.Event.onAvailable(this.notificationsWindowId, this.createDialog, this, true);
+			Event.onAvailable(this.notificationsWindowId, this.createDialog, this, true);
 		},
 
 		createDialog: function() {
-			this.notificationsWindow = Alfresco.util.createYUIPanel(this.notificationsWindowId,
-				{
+			this.notificationsWindow = Alfresco.util.createYUIPanel(this.notificationsWindowId, {
 					width: "600px"
 				});
 
@@ -118,9 +116,9 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 				}
 			});
 
-			var moreContainer = YAHOO.util.Dom.get(this.notificationsWindowId + "-next");
+			var moreContainer = Dom.get(this.notificationsWindowId + "-next");
 			moreContainer.innerHTML = '<a id="' + this.notificationsWindowId + '-next-link" href="javascript:void(0);">' + this.msg("notifications.link.more") + '</a>';
-			YAHOO.util.Event.on(this.notificationsWindowId + "-next-link", "click", this.showMoreNotifications, null, this);
+			Event.on(this.notificationsWindowId + "-next-link", "click", this.showMoreNotifications, null, this);
 		},
 
 		showNotificationsWindow: function() {
@@ -146,7 +144,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 				success:function (oResponse) {
 					var oResults = eval("(" + oResponse.responseText + ")");
 					if (oResults && oResults.newCount) {
-						var elem = YAHOO.util.Dom.get(me.notificationsCounterId);
+						var elem = Dom.get(me.notificationsCounterId);
 						if (elem != null) {
 							elem.innerHTML = oResults.newCount;
 							me.checkVisibleCounter(oResults.newCount);
@@ -159,7 +157,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					YAHOO.log("Failed to process XHR transaction.", "info", "example");
 				}
 			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+			Connect.asyncRequest('GET', sUrl, callback);
 		},
 
 		setReadNotifications: function(p_items) {
@@ -194,30 +192,29 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					if (oResults && oResults.items) {
 						var items = oResults.items;
 						me.skipItemsCount += items.length;
-						var str = "";
 						var readNotifications = [];
-						for (var i = 0; i < items.length; i++) {
-							str += '<div class="notification-row">';
-							if (items[i].isRead == "false") {
-								str += '<b>';
-								readNotifications.push(items[i]);
-							}
-							str += items[i].formingDate + ": " + items[i].description;
-							if (items[i].isRead == "false") {
-								str += '</b>';
-							}
-							str += '</div>';
+                        var container = Dom.get(me.notificationsWindowId + "-content");
+
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            var div = document.createElement('div');
+                            var detail = document.createElement('span');
+
+                            div.setAttribute('class', 'notification-row');
+                            if (item.isRead == "false") {
+                                readNotifications.push(item);
+                                div.classList.add('bold');
+                            }
+
+                            detail.innerHTML = item.description;
+                            detail.setAttribute('class', 'detail');
+                            div.appendChild(detail);
+                            div.innerHTML += '<br />' + Alfresco.util.relativeTime(new Date(item.formingDate));
+                            container.appendChild(div);
 						}
 
-						if (oResults.hasNext == "true") {
-							YAHOO.util.Dom.setStyle(me.notificationsWindowId + "-next-link", "display", "block");
-						} else {
-							YAHOO.util.Dom.setStyle(me.notificationsWindowId + "-next-link", "display", "none");
-						}
-
-						var container = YAHOO.util.Dom.get(me.notificationsWindowId + "-content");
-						container.innerHTML += str;
-
+                        Dom.setStyle(me.notificationsWindowId + "-next-link", "display",
+                            oResults.hasNext == "true" ? "block" : "none");
 						if (readNotifications.length > 0) {
 							me.setReadNotifications(readNotifications);
 						}
@@ -231,7 +228,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					YAHOO.log("Failed to process XHR transaction.", "info", "example");
 				}
 			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+			Connect.asyncRequest('GET', sUrl, callback);
 		},
 
 		/// Инициализатор счетчика-обманки
@@ -250,7 +247,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 		},
 
 		initNotifications : function(){
-			var container = YAHOO.util.Dom.get(this.notificationsWindowId + "-content");
+			var container = Dom.get(this.notificationsWindowId + "-content");
 			container.innerHTML = "";
 			this.skipItemsCount = 0;
 			this.loadNotifications();
