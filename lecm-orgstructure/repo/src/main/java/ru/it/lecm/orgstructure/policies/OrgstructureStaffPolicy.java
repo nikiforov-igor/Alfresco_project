@@ -75,11 +75,11 @@ public class OrgstructureStaffPolicy implements NodeServicePolicies.OnUpdateProp
 			String defaultDescription;
 			if (curPrimary) {
 				defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
-				category = "Назначение руководителем подразделения";
+				category = BusinessJournalService.EventCategories.TAKE_BOSS_POSITION.toString();
 
 			} else {
 				defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
-				category = "Снятие с назначения руководителем подразделения";
+				category = BusinessJournalService.EventCategories.RELEASE_BOSS_POSITION.toString();
 			}
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(unit.toString());

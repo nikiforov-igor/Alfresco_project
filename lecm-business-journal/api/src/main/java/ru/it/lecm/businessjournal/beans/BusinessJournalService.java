@@ -1,12 +1,12 @@
 package ru.it.lecm.businessjournal.beans;
 
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 
 /**
  * @author dbashmakov
@@ -73,7 +73,7 @@ public interface BusinessJournalService {
     public static final QName TYPE_HISTORY = QName.createQName(BJ_ASPECTS_NAMESPACE_URI, "history");
     public static final QName PROP_HISTORY_LIST = QName.createQName(BusinessJournalService.BJ_ASPECTS_NAMESPACE_URI, "history-list");
 
-    public static final String BASE_USER_HOLDER = "#baseuser";
+    public static final String BASE_USER_HOLDER = "#initiator";
 	public static final String MAIN_OBJECT_HOLDER = "#mainobject";
 	public static final String OBJECT_HOLDER = "#object";
 
@@ -90,6 +90,33 @@ public interface BusinessJournalService {
 
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 	public static final String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
+
+	static enum EventCategories {
+		ADD("Добавление"),
+		EDIT("Редактирование"),
+		DELETE("Удаление"),
+		ADD_NEW_VERSION("Загрузка новой версии"),
+		TAKE_JOB_POSITION("Занятие должностной позиции"),
+		RELEASE_JOB_POSITION("Снятие с должностной позиции"),
+		ACCEPT_DELEGATION("Передача полномочий"),
+		CANCEL_DELEGATION("Отмена передачи полномочий"),
+		TAKE_BOSS_POSITION("Назначение руководителем подразделения"),
+		RELEASE_BOSS_POSITION("Снятие с назначения руководителем подразделения"),
+		MAKE_POSITION_PRIMARY("Сделать основной"),
+		START_ABSENCE_ON_WORK("Начало отсутствия на работе"),
+		FINISH_ABSENCE_ON_WORK("Конец отсутствия на работе"),
+		CHANGE_DOCUMENT_STATUS("Переход документа в новый статус");
+
+		private final String category;
+
+		EventCategories(String category) {
+			this.category = category;
+		}
+		@Override
+		public String toString () {
+			return category;
+		}
+	}
 
 	/**
      * Метод для создания записи бизнеса-журнала

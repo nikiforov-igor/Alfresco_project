@@ -98,7 +98,7 @@ public class OrgstructureEmployeePolicy
 
 		try {
 			businessJournalService.log(serviceRegistry.getAuthenticationService().getCurrentUserName(),
-					node, "Добавление", "Добавлен новый сотрудник #mainobject", null);
+					node, BusinessJournalService.EventCategories.ADD.toString(), "Добавлен новый сотрудник #mainobject", null);
 		} catch (Exception e) {
 			logger.error("Не удалось создать запись бизнес-журнала", e);
 		}

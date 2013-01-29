@@ -71,7 +71,11 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-
+        <dependency>
+            <groupId>ru.it.lecm.business-journal</groupId>
+            <artifactId>business-journal-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

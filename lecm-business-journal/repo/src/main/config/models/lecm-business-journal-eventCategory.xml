@@ -19,10 +19,6 @@
             <property name="cm:name">Удаление</property>
             <property name="lecm-busjournal:eventCategory-code">3</property>
         </item>
-        <item name="Создание новой версии">
-            <property name="cm:name">Создание новой версии</property>
-            <property name="lecm-busjournal:eventCategory-code">4</property>
-        </item>
         <item name="Занятие должностной позиции">
             <property name="cm:name">Занятие должностной позиции</property>
             <property name="lecm-busjournal:eventCategory-code">5</property>

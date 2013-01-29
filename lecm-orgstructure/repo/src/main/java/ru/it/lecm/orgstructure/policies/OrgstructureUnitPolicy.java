@@ -73,7 +73,7 @@ public class OrgstructureUnitPolicy implements NodeServicePolicies.OnCreateNodeP
 		AuthenticationService authService = serviceRegistry.getAuthenticationService();
 		String initiator = authService.getCurrentUserName();
 		try {
-			businessJournalService.log(initiator, unit, "Добавление", "Созданo новое подразделение #mainobject в подразделении #object1", objects);
+			businessJournalService.log(initiator, unit, BusinessJournalService.EventCategories.ADD.toString(), "Созданo новое подразделение #mainobject в подразделении #object1", objects);
 		} catch (Exception e) {
 			logger.error("Не удалось создать запись бизнес-журнала", e);
 		}
@@ -101,7 +101,7 @@ public class OrgstructureUnitPolicy implements NodeServicePolicies.OnCreateNodeP
 			AuthenticationService authService = serviceRegistry.getAuthenticationService();
 			String initiator = authService.getCurrentUserName();
 			try {
-				businessJournalService.log(initiator, nodeRef, "Удаление", "Подразделение \"#mainobject\" в подразделении #object1 расформировано", objects);
+				businessJournalService.log(initiator, nodeRef, BusinessJournalService.EventCategories.DELETE.toString(), "Подразделение \"#mainobject\" в подразделении #object1 расформировано", objects);
 			} catch (Exception e) {
 				logger.error("Не удалось создать запись бизнес-журнала", e);
 			}

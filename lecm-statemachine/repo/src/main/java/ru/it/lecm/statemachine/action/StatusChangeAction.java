@@ -1,5 +1,10 @@
 package ru.it.lecm.statemachine.action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -13,11 +18,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -134,6 +136,23 @@ public class StatusChangeAction extends StateMachineAction {
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
 		for (ChildAssociationRef child : children) {
 			nodeService.setProperty(child.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
+			//запись в БЖ
+			try {
+				String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+				List<String> objects = new ArrayList<String>(1);
+				objects.add(status);
+				if (forDraft) { // если стартовый статус - генерируем событие о создании в начальном статусе
+					getBusinessJournalService().log(initiator, child.getChildRef(),
+							BusinessJournalService.EventCategories.ADD.toString(),
+							"Создан новый документ документ \"#mainobject\" в статусе \"#object1\"", objects);
+				} else { // о переводе в другой статус
+					getBusinessJournalService().log(initiator, child.getChildRef(),
+							BusinessJournalService.EventCategories.CHANGE_DOCUMENT_STATUS.toString(),
+							"Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\"", objects);
+				}
+			} catch (Exception e) {
+				logger.error("Не удалось создать запись бизнес-журнала", e);
+			}
 		}
 
 		//Если стартовый статус, то ничего никуда не перемещаем

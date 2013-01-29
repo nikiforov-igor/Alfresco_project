@@ -101,14 +101,14 @@ public class OrgstructureEmployeeLinkPolicy
 				List<String> objects = new ArrayList<String>(2);
 				objects.add(position != null ? position.toString() : "");
 				objects.add(unit != null ? unit.toString() : "");
-				businessJournalService.log(initiator, employee, "Занятие должностной позиции", defaultDescription, objects);
+				businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.TAKE_JOB_POSITION.toString(), defaultDescription, objects);
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
 					defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
-					businessJournalService.log(initiator, employee, "Назначение руководителем подразделения", defaultDescription, objects);
+					businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.TAKE_BOSS_POSITION.toString(), defaultDescription, objects);
 				}
 				//назначение
 				notifyEmploeeSetDP(employee, position);
@@ -149,14 +149,14 @@ public class OrgstructureEmployeeLinkPolicy
 				objects.add(position != null ? position.toString() : "");
 				objects.add(unit != null ? unit.toString() : "");
 
-				businessJournalService.log(initiator, employee, "Снятие с должностной позиции", defaultDescription, objects);
+				businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.RELEASE_JOB_POSITION.toString(), defaultDescription, objects);
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
 					defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
-					businessJournalService.log(initiator, employee, "Снятие с назначения руководителем подразделения", defaultDescription, objects);
+					businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.RELEASE_BOSS_POSITION.toString(), defaultDescription, objects);
 				}
 				notifyEmploeeRemoveDP(employee, position);
 			} else if (orgstructureService.isWorkForce(parent)) {

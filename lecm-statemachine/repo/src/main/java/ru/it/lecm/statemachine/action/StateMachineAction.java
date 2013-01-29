@@ -1,5 +1,8 @@
 package ru.it.lecm.statemachine.action;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -11,11 +14,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
-
-import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -27,6 +28,7 @@ abstract public class StateMachineAction {
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private INodeACLBuilder lecmAclBuilderBean;
+	private BusinessJournalService businessJournalService;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -46,6 +48,14 @@ abstract public class StateMachineAction {
 
 	public INodeACLBuilder getLecmAclBuilderBean() {
 		return lecmAclBuilderBean;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
+
+	public BusinessJournalService getBusinessJournalService() {
+		return businessJournalService;
 	}
 
 	abstract public void execute(DelegateExecution execution);
