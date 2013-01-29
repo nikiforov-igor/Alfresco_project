@@ -45,6 +45,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 //			});
 			var datagrid = new LogicECM.module.Delegation.Procuracy.Grid(this.id);
 			datagrid.setOptions({
+				bubblingLabel: "procuracy-datagrid",
 				usePagination:false,
 				showExtendSearchBlock:false,
 				showCheckboxColumn: false,
@@ -53,13 +54,13 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				editForm: "editProcuracy",
 				actions: [
 					{
-						type: "action-link-procuracy",
+						type: "action-link-procuracy-datagrid",
 						id: "onActionEdit",
 						permission: "edit",
 						label: "редактировать доверенность"
 					},
 					{
-						type: "action-link-procuracy",
+						type: "action-link-procuracy-datagrid",
 						id: "onActionDelete",
 						permission: "delete",
 						label: "удалить доверенность"

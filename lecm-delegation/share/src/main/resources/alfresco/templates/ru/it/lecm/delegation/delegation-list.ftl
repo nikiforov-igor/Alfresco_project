@@ -34,8 +34,6 @@
 
 var response = ${response};
 
-initDelegationConst ();
-
 LogicECM.module.Delegation.Const.nodeRef = response.nodeRef;
 LogicECM.module.Delegation.Const.itemType = response.itemType;
 LogicECM.module.Delegation.Const.isBoss = response.isBoss;

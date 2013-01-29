@@ -1,8 +1,12 @@
-function initDelegationConst () {
-	LogicECM.module = LogicECM.module || {};
+if (typeof LogicECM == "undefined" || !LogicECM) {
+	var LogicECM = {};
+}
 
-	LogicECM.module.Delegation = LogicECM.module.Delegation || {};
+LogicECM.module = LogicECM.module || {};
 
+LogicECM.module.Delegation = LogicECM.module.Delegation || {};
+
+(function () {
 	LogicECM.module.Delegation.Const = LogicECM.module.Delegation.Const || {
 		"nodeRef": "", //nodeRef папки в которой хранятся данные с перечнем делегирования
 		"itemType": "", //тип данных который отображается в таблице с перечнем делегирования
@@ -10,4 +14,4 @@ function initDelegationConst () {
 		"isEngineer": false, //является ли текущий пользователь технологом
 		"hasSubordinate": false //есть ли в пользователя подчиненный (используется только на странице delegation-opts)
 	};
-}
+})();

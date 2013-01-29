@@ -16,6 +16,8 @@
 
 <#-- скрипт с константами -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>
+<#-- валидаторы -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-validator.js"/>
 <#-- скрипты меню -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-menu.js"/>
 <#-- Data Grid javascript-->
@@ -28,8 +30,6 @@
 <script type="text/javascript">//<![CDATA[
 
 var response = ${response};
-
-initDelegationConst ();
 
 LogicECM.module.Delegation.Const.isBoss = response.isBoss;
 LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
