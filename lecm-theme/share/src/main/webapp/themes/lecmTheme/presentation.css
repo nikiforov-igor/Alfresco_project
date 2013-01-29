@@ -141,18 +141,21 @@ a:hover {
 /* Utils: end */
 
 #notificationsCounter {
+    width: 22px;
+    height : 22px;
+    line-height: 22px;
     position: absolute;
-    float: left;
-    top: 15px;
-    left: 453px;
-    color: yellow;
-    width: 20px;
-    height : 20px;
-    background-color : green;
+    top: 50%;
+    left: 50%;
+    margin: -11px 0 0 -11px;
+    border-radius: 9px;
     text-align: center;
-    border-radius: 8px;
+    vertical-align: middle;
     font-size: 16px;
-    font-weight: bold
+    font-weight: bold;
+    background-color: green;
+    color: yellow;
+    cursor: pointer;
 }
 
 /*

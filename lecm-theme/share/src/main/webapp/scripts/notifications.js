@@ -69,13 +69,14 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			this.initButton();
 		},
 
-		/// Добавление счетчика
+		// Добавление счетчика
 		createNotifyer: function(){
 			var btn = Dom.get(this.id);
-			var div=document.createElement("div");
-			div.innerHTML='<div id="' + this.notificationsCounterId + '">0</div>';
+			var div = document.createElement("div");
+			div.innerHTML = '<div id="' + this.notificationsCounterId + '">0</div>';
 			this.createWindow(div);
 			btn.appendChild(div);
+            Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления"
 
 			this.checkVisibleCounter(0);
 		},
@@ -203,7 +204,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
                             div.setAttribute('class', 'notification-row');
                             if (item.isRead == "false") {
                                 readNotifications.push(item);
-                                div.classList.add('bold');
+                                Dom.addClass(div, 'bold');
                             }
 
                             detail.innerHTML = item.description;
@@ -231,10 +232,14 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			Connect.asyncRequest('GET', sUrl, callback);
 		},
 
-		/// Инициализатор счетчика-обманки
-		startLoadNewNotifications : function(){
+		// Инициализатор счетчика-обманки
+		startLoadNewNotifications : function() {
 			this.loadNewNotificationsCount();
-			setInterval(this.loadNewNotificationsCount.bind(this), this.refreshCountTime);
+            var self = this;
+
+			setInterval(function() { // bind() не работает в IE
+                self.loadNewNotificationsCount();
+            }, this.refreshCountTime);
 		},
 
 		initButton : function(){
