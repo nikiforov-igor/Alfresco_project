@@ -148,15 +148,12 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		}
 	}
 
-	public Scriptable findOldRecords(String dateArchiveTo) {
+	public Scriptable findOldRecords(String dateISO) {
         try {
-            String dateOnly = dateArchiveTo.substring(0, 10);
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateOnly);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(Calendar.DATE, 1);
+            String dateYYYYMMDD = dateISO.substring(0, 10);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateYYYYMMDD);
 
-            List<NodeRef> refs = service.getRecordsByInterval(null, calendar.getTime());
+            List<NodeRef> refs = service.getRecordsByInterval(null, date);
             return createScriptable(refs);
         } catch (ParseException e) {
             throw new ScriptException("Неверный формат даты!", e);
