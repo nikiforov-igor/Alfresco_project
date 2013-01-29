@@ -68,7 +68,12 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             };
             this.widgets.employeesButton = Alfresco.util.createYUIButton(this, "new-status", onButtonClick1, {});
 
-            var onButtonClick2 = function (e) {
+			var onButtonClick4 = function (e) {
+				this.editor._createEndEvent();
+			};
+			this.widgets.staffButton = Alfresco.util.createYUIButton(this, "new-end-event", onButtonClick4, {});
+
+			var onButtonClick2 = function (e) {
 				this.editor._editStatemachine();
 			};
             this.widgets.staffButton = Alfresco.util.createYUIButton(this, "machine-properties", onButtonClick2, {});

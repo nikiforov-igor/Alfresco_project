@@ -245,10 +245,18 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_createStatus: function() {
+			this._createTask("lecm-stmeditor:taskStatus");
+		},
+
+		_createEndEvent: function() {
+			this._createTask("lecm-stmeditor:endEvent");
+		},
+
+		_createTask: function(itemId) {
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 					itemKind:"type",
-					itemId: "lecm-stmeditor:status",
+					itemId: itemId,
 					destination: this.packageNodeRef,
 					mode:"create",
 					submitType:"json",

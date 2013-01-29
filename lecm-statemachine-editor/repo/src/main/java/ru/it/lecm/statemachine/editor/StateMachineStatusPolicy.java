@@ -27,7 +27,7 @@ import java.util.List;
 public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
 	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
-	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_URI, "status");
+	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_URI, "taskStatus");
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_URI, "actionExecution");
 	public final static QName PROP_STATUS_UUID = QName.createQName(STATEMACHINE_URI, "statusUUID");

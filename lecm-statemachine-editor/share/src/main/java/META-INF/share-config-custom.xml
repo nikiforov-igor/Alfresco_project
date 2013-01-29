@@ -1,6 +1,6 @@
 <alfresco-config>
 
-	<config evaluator="node-type" condition="lecm-stmeditor:status">
+	<config evaluator="node-type" condition="lecm-stmeditor:taskStatus">
 		<forms>
 			<form>
 				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
@@ -370,7 +370,46 @@
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-stmeditor:status">
+	<config evaluator="model-type" condition="lecm-stmeditor:taskStatus">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-stmeditor:taskStatus">
+		<forms>
+			<form>
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-stmeditor:endEventScriptAction" force="true"/>
+				</field-visibility>
+				<appearance>
+					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
+					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
+					<field id="cm:name" set="info" />
+
+					<field id="lecm-stmeditor:endEventScriptAction" set="events">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:ScriptActionEntity</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-stmeditor:endEvent">
 		<forms>
 			<form>
 				<field-visibility>

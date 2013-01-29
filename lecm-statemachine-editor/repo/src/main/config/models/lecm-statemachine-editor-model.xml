@@ -117,10 +117,15 @@
 			<parent>cm:folder</parent>
 		</type>
 
-		<!-- Объект Статус -->
 		<type name="lecm-stmeditor:status">
-			<title>Logic ECM Base Document</title>
+			<title>Logic ECM Base Status</title>
 			<parent>cm:folder</parent>
+		</type>
+
+		<!-- Объект Статус -->
+		<type name="lecm-stmeditor:taskStatus">
+			<title>Logic ECM Base Document</title>
+			<parent>lecm-stmeditor:status</parent>
 			<properties>
 				<property name="lecm-stmeditor:startStatus">
 					<type>d:boolean</type>
@@ -190,6 +195,19 @@
 					<mandatory>false</mandatory>
 				</property>
 
+			</properties>
+		</type>
+
+		<!-- Объект Статус -->
+		<type name="lecm-stmeditor:endEvent">
+			<title>Logic ECM End Event</title>
+			<parent>lecm-stmeditor:status</parent>
+			<properties>
+				<!-- Ссылки на действия -->
+				<property name="lecm-stmeditor:endEventScriptAction">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 		</type>
 

@@ -66,7 +66,12 @@ public class BPMNGraphGenerator {
 				if ("startEvent".equals(elementName)) {
 					vertex = graph.insertVertex(parent, null, "", 20, 20, 35, 35, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/start.png;");
 				} else if ("endEvent".equals(elementName)) {
-					vertex = graph.insertVertex(parent, null, "", 20, 20, 35, 35, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/end.png;");
+					String title = element.getAttributes().getNamedItem("name").getNodeValue();
+					double width = 6.5 * title.length();
+					if (width < 35) {
+						width = 35;
+					}
+					vertex = graph.insertVertex(parent, null, title, 20, 20, width, 35, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/end.png;");
 				} else if ("exclusiveGateway".equals(elementName)) {
 					vertex = graph.insertVertex(parent, null, "", 20, 20, 39, 39, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/gateway.png;");
 				} else if ("userTask".equals(elementName)) {
@@ -106,39 +111,5 @@ public class BPMNGraphGenerator {
 		}
 
 		return new ByteArrayInputStream(baos.toByteArray());
-
-		/*DeploymentEntity deployment = new DeploymentEntity();
-		deployment.setId("preview");
-
-		Context.setProcessEngineConfiguration(configuration);
-		BpmnParser bpmnParser = new BpmnParser(configuration.getExpressionManager());
-		BpmnParse bpmnParse = bpmnParser
-				.createParse()
-				.deployment(deployment)
-				.sourceInputStream(new ByteArrayInputStream(baos.toByteArray()));
-
-		bpmnParse.execute();
-
-		ProcessDefinitionEntity processDefinition = bpmnParse.getProcessDefinitions().get(0);
-		if (processDefinition != null) {
-			return ProcessDiagramGenerator.generatePngDiagram(processDefinition);
-		} else {
-			return null;
-		}*/
-	}
-   /*
-	private Element drawShape(Document doc, Shape shape) {
-		Element shapeElement = doc.createElement("bpmndi:BPMNShape");
-		shapeElement.setAttribute("bpmnElement", shape.getId());
-		shapeElement.setAttribute("id", "BPMNShape_" + shape.getId());
-
-		Element bounds = doc.createElement("omgdc:Bounds");
-		bounds.setAttribute("height", "" + shape.getHeight());
-		bounds.setAttribute("width", "" + shape.getWidth());
-		bounds.setAttribute("x", "" + shape.getX());
-		bounds.setAttribute("y", "" + shape.getY());
-		shapeElement.appendChild(bounds);
-		return shapeElement;
-	}  */
-
+    }
 }

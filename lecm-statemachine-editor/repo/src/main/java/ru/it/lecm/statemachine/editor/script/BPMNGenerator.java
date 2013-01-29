@@ -44,6 +44,9 @@ public class BPMNGenerator {
 	private final static String NAMESPACE_OMGDI = "http://www.omg.org/spec/DD/20100524/DI";
 	private final static String NAMESPACE_LECM = "http://www.it.ru/LogicECM/bpmn/1.0";
 
+	private final static QName TYPE_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "taskStatus");
+	private final static QName TYPE_END_EVENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "endEvent");
+
 	private final static QName PROP_ACTION_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionId");
 	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
 	private final static QName PROP_STATUS_UUID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusUUID");
@@ -159,174 +162,12 @@ public class BPMNGenerator {
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
-				if (statusName.equals("END")) {
-					//create end event
-					Element endEvent = doc.createElementNS(NAMESPACE_XLNS, "endEvent");
-					endEvent.setAttributeNS(NAMESPACE_XLNS, "id", statusVar);
-					process.appendChild(endEvent);
 
-					//create extention
-					Element extentionElements = doc.createElement("extensionElements");
-					endEvent.appendChild(extentionElements);
-
-					Element extention = doc.createElement("lecm:extension");
-					extentionElements.appendChild(extention);
-
-					//statemachine end event
-					Element end = doc.createElement("lecm:event");
-					end.setAttribute("on", "end");
-					extention.appendChild(end);
-
-					//install ArchiveDocumentAction
-					Element archiveDocumentAction = doc.createElement("lecm:action");
-					archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
-					Element attribute = doc.createElement("lecm:attribute");
-					attribute.setAttribute("name", "archiveFolder");
-					String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
-					attribute.setAttribute("value", archiveFolder);
-					archiveDocumentAction.appendChild(attribute);
-
-					end.appendChild(archiveDocumentAction);
-					continue;
-				}
-				//create status
-				Element statusTask = doc.createElement("userTask");
-				statusTask.setAttribute("id", statusVar);
-				statusTask.setAttribute("activiti:assignee", "${bpm_assignee.properties.userName}");
-				statusTask.setAttribute("name", statusName);
-				process.appendChild(statusTask);
-
-				//create extention
-				Element extentionElements = doc.createElement("extensionElements");
-				statusTask.appendChild(extentionElements);
-
-				Element extention = doc.createElement("lecm:extension");
-				extentionElements.appendChild(extention);
-
-				//statemachine start event
-				Element start = doc.createElement("lecm:event");
-				start.setAttribute("on", "start");
-				extention.appendChild(start);
-
-				//statemachine take event
-				Element take = doc.createElement("lecm:event");
-				take.setAttribute("on", "take");
-				extention.appendChild(take);
-
-				//statemachine end event
-				Element end = doc.createElement("lecm:event");
-				end.setAttribute("on", "end");
-				extention.appendChild(end);
-
-				//setup start transition
-				Boolean startStatus = (Boolean) nodeService.getProperty(status.getChildRef(), PROP_START_STATUS);
-				if (startStatus != null && startStatus) {
-					Element startFlow = createFlow("start", statusVar);
-					process.appendChild(startFlow);
-				}
-
-				//install setStatusAction
-				Element setStatusAction = doc.createElement("lecm:action");
-				setStatusAction.setAttribute("type", "StatusChange");
-				Element attribute = doc.createElement("lecm:attribute");
-				attribute.setAttribute("name", "status");
-				attribute.setAttribute("value", statusName);
-				setStatusAction.appendChild(attribute);
-
-				//Roles for status
-				NodeRef statusRoles = nodeService.getChildByName(status.getChildRef(), ContentModel.ASSOC_CONTAINS, "roles");
-				Element statusRolesElement = doc.createElement("roles");
-				setStatusAction.appendChild(statusRolesElement);
-
-				NodeRef staticRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "static");
-				Element staticRoleElement = doc.createElement("static-roles");
-				statusRolesElement.appendChild(staticRoleElement);
-
-				List<ChildAssociationRef> permissions = nodeService.getChildAssocs(staticRoles);
-				createRoleElement(staticRoleElement, permissions);
-
-				NodeRef dynamicRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "dynamic");
-				Element dynamicRoleElement = doc.createElement("dynamic-roles");
-				statusRolesElement.appendChild(dynamicRoleElement);
-
-				permissions = nodeService.getChildAssocs(dynamicRoles);
-				createRoleElement(dynamicRoleElement, permissions);
-
-				String statusUUID = (String) nodeService.getProperty(status.getChildRef(), PROP_STATUS_UUID);
-				attribute = doc.createElement("lecm:attribute");
-				attribute.setAttribute("name", "uuid");
-				attribute.setAttribute("value", statusUUID);
-				setStatusAction.appendChild(attribute);
-				start.appendChild(setStatusAction);
-
-				Boolean forDraft = (Boolean) nodeService.getProperty(status.getChildRef(), PROP_FOR_DRAFT);
-				if (forDraft != null) {
-					attribute = doc.createElement("lecm:attribute");
-					attribute.setAttribute("name", "forDraft");
-					attribute.setAttribute("value", forDraft.toString());
-					setStatusAction.appendChild(attribute);
-					start.appendChild(setStatusAction);
-				}
-
-				//Sorting actions by execution type
-				ArrayList<ChildAssociationRef> startActions = new ArrayList<ChildAssociationRef>();
-				ArrayList<ChildAssociationRef> takeActions = new ArrayList<ChildAssociationRef>();
-				ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
-
-				NodeRef actionsRef = nodeService.getChildByName(status.getChildRef(), ContentModel.ASSOC_CONTAINS, "actions");
-				List<ChildAssociationRef> actions = nodeService.getChildAssocs(actionsRef);
-				for (ChildAssociationRef action : actions) {
-					String execution = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_EXECUTION);
-					if (execution.equals("start")) {
-						startActions.add(action);
-					} else if (execution.equals("take")) {
-						takeActions.add(action);
-					} else if (execution.equals("end")) {
-						endActions.add(action);
-					}
-				}
-
-				List<Flow> flows = new ArrayList<Flow>();
-
-				//install start actions
-				for (ChildAssociationRef action : startActions) {
-					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(extentionElements, start, statusVar, action, actionId, actionVar));
-				}
-
-				//install take actions
-				for (ChildAssociationRef action : takeActions) {
-					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(extentionElements, take, statusVar, action, actionId, actionVar));
-
-				}
-
-				//install end actions
-				for (ChildAssociationRef action : endActions) {
-					String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
-					String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-					flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
-				}
-
-				if (flows.size() == 1) {
-					Flow flow = flows.get(0);
-					Element flowElement = createFlow(flow.getSourceRef(), flow.getTargetRef(), flow.getContent());
-					process.appendChild(flowElement);
-				} else if (flows.size() > 1) {
-					Element exclusiveGateway = doc.createElement("exclusiveGateway");
-					exclusiveGateway.setAttribute("id", statusVar + "_gateway");
-					process.appendChild(exclusiveGateway);
-
-					Element gatewayFlow = createFlow(statusVar, statusVar + "_gateway");
-					process.appendChild(gatewayFlow);
-
-					for (Flow flow : flows) {
-						Element flowElement = createFlow(flow.getSourceRef() + "_gateway", flow.getTargetRef(), flow.getContent());
-						process.appendChild(flowElement);
-					}
-
+				QName type = nodeService.getType(status.getChildRef());
+				if (type.equals(TYPE_END_EVENT)) {
+					createEndEvent(process, status.getChildRef(), statusName, statusVar, stateMachine);
+				} else if (type.equals(TYPE_STATUS)) {
+					createStateTask(process, status.getChildRef(), statusName, statusVar);
 				}
 			}
 
@@ -341,6 +182,214 @@ public class BPMNGenerator {
 			e.printStackTrace();
 		}
 		return new ByteArrayInputStream(baos.toByteArray());
+	}
+
+	private void createStateTask(Element process, NodeRef status, String statusName, String statusVar) {
+		//create status
+		Element statusTask = doc.createElement("userTask");
+		statusTask.setAttribute("id", statusVar);
+		statusTask.setAttribute("activiti:assignee", "${bpm_assignee.properties.userName}");
+		statusTask.setAttribute("name", statusName);
+		process.appendChild(statusTask);
+
+		//create extention
+		Element extentionElements = doc.createElement("extensionElements");
+		statusTask.appendChild(extentionElements);
+
+		Element extention = doc.createElement("lecm:extension");
+		extentionElements.appendChild(extention);
+
+		//statemachine start event
+		Element start = doc.createElement("lecm:event");
+		start.setAttribute("on", "start");
+		extention.appendChild(start);
+
+		//statemachine take event
+		Element take = doc.createElement("lecm:event");
+		take.setAttribute("on", "take");
+		extention.appendChild(take);
+
+		//statemachine end event
+		Element end = doc.createElement("lecm:event");
+		end.setAttribute("on", "end");
+		extention.appendChild(end);
+
+		//setup start transition
+		Boolean startStatus = (Boolean) nodeService.getProperty(status, PROP_START_STATUS);
+		if (startStatus != null && startStatus) {
+			Element startFlow = createFlow("start", statusVar);
+			process.appendChild(startFlow);
+		}
+
+		//install setStatusAction
+		Element setStatusAction = doc.createElement("lecm:action");
+		setStatusAction.setAttribute("type", "StatusChange");
+		Element attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "status");
+		attribute.setAttribute("value", statusName);
+		setStatusAction.appendChild(attribute);
+
+		//Roles for status
+		NodeRef statusRoles = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "roles");
+		Element statusRolesElement = doc.createElement("roles");
+		setStatusAction.appendChild(statusRolesElement);
+
+		NodeRef staticRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "static");
+		Element staticRoleElement = doc.createElement("static-roles");
+		statusRolesElement.appendChild(staticRoleElement);
+
+		List<ChildAssociationRef> permissions = nodeService.getChildAssocs(staticRoles);
+		createRoleElement(staticRoleElement, permissions);
+
+		NodeRef dynamicRoles = nodeService.getChildByName(statusRoles, ContentModel.ASSOC_CONTAINS, "dynamic");
+		Element dynamicRoleElement = doc.createElement("dynamic-roles");
+		statusRolesElement.appendChild(dynamicRoleElement);
+
+		permissions = nodeService.getChildAssocs(dynamicRoles);
+		createRoleElement(dynamicRoleElement, permissions);
+
+		String statusUUID = (String) nodeService.getProperty(status, PROP_STATUS_UUID);
+		attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "uuid");
+		attribute.setAttribute("value", statusUUID);
+		setStatusAction.appendChild(attribute);
+		start.appendChild(setStatusAction);
+
+		Boolean forDraft = (Boolean) nodeService.getProperty(status, PROP_FOR_DRAFT);
+		if (forDraft != null) {
+			attribute = doc.createElement("lecm:attribute");
+			attribute.setAttribute("name", "forDraft");
+			attribute.setAttribute("value", forDraft.toString());
+			setStatusAction.appendChild(attribute);
+			start.appendChild(setStatusAction);
+		}
+
+		//Sorting actions by execution type
+		ArrayList<ChildAssociationRef> startActions = new ArrayList<ChildAssociationRef>();
+		ArrayList<ChildAssociationRef> takeActions = new ArrayList<ChildAssociationRef>();
+		ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
+
+		prepareActions(status, startActions, takeActions, endActions);
+
+		List<Flow> flows = new ArrayList<Flow>();
+
+		//install start actions
+		for (ChildAssociationRef action : startActions) {
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
+			flows.addAll(createEvent(extentionElements, start, statusVar, action, actionId, actionVar));
+		}
+
+		//install take actions
+		for (ChildAssociationRef action : takeActions) {
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
+			flows.addAll(createEvent(extentionElements, take, statusVar, action, actionId, actionVar));
+
+		}
+
+		//install end actions
+		for (ChildAssociationRef action : endActions) {
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
+			flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
+		}
+
+		if (flows.size() == 1) {
+			Flow flow = flows.get(0);
+			Element flowElement = createFlow(flow.getSourceRef(), flow.getTargetRef(), flow.getContent());
+			process.appendChild(flowElement);
+		} else if (flows.size() > 1) {
+			Element exclusiveGateway = doc.createElement("exclusiveGateway");
+			exclusiveGateway.setAttribute("id", statusVar + "_gateway");
+			process.appendChild(exclusiveGateway);
+
+			Element gatewayFlow = createFlow(statusVar, statusVar + "_gateway");
+			process.appendChild(gatewayFlow);
+
+			for (Flow flow : flows) {
+				Element flowElement = createFlow(flow.getSourceRef() + "_gateway", flow.getTargetRef(), flow.getContent());
+				process.appendChild(flowElement);
+			}
+
+		}
+	}
+
+	private void prepareActions(NodeRef status, ArrayList<ChildAssociationRef> startActions, ArrayList<ChildAssociationRef> takeActions, ArrayList<ChildAssociationRef> endActions) {
+		NodeRef actionsRef = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "actions");
+		List<ChildAssociationRef> actions = nodeService.getChildAssocs(actionsRef);
+		for (ChildAssociationRef action : actions) {
+			String execution = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_EXECUTION);
+			if (execution.equals("start")) {
+				startActions.add(action);
+			} else if (execution.equals("take")) {
+				takeActions.add(action);
+			} else if (execution.equals("end")) {
+				endActions.add(action);
+			}
+		}
+	}
+
+	/**
+	 * Создание элемента EndEvent
+	 * @param process
+	 * @param statusVar
+	 * @param stateMachine
+	 */
+	private void createEndEvent(Element process, NodeRef status, String statusName, String statusVar, NodeRef stateMachine) {
+		//create end event
+		Element endEvent = doc.createElementNS(NAMESPACE_XLNS, "endEvent");
+		endEvent.setAttribute("id", statusVar);
+		endEvent.setAttribute("name", statusName);
+		process.appendChild(endEvent);
+
+		//create extention
+		Element extentionElements = doc.createElement("extensionElements");
+		endEvent.appendChild(extentionElements);
+
+		Element extention = doc.createElement("lecm:extension");
+		extentionElements.appendChild(extention);
+
+		//statemachine start event
+		Element start = doc.createElement("lecm:event");
+		start.setAttribute("on", "start");
+		extention.appendChild(start);
+
+		//install setStatusAction
+		Element setStatusAction = doc.createElement("lecm:action");
+		setStatusAction.setAttribute("type", "StatusChange");
+		Element attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "status");
+		attribute.setAttribute("value", statusName);
+		setStatusAction.appendChild(attribute);
+
+		//statemachine end event
+		Element end = doc.createElement("lecm:event");
+		end.setAttribute("on", "end");
+		extention.appendChild(end);
+
+		//install ArchiveDocumentAction
+		Element archiveDocumentAction = doc.createElement("lecm:action");
+		archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
+		attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "archiveFolder");
+		String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
+		attribute.setAttribute("value", archiveFolder);
+		archiveDocumentAction.appendChild(attribute);
+
+		end.appendChild(archiveDocumentAction);
+
+		NodeRef actionsRef = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "actions");
+		ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
+		prepareActions(status, null, null, endActions);
+
+		//install end actions
+		for (ChildAssociationRef action : endActions) {
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
+			createEvent(extentionElements, end, statusVar, action, actionId, actionVar);
+		}
+
 	}
 
 	/**

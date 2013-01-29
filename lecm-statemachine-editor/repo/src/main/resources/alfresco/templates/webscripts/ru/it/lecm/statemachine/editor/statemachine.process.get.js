@@ -28,7 +28,7 @@ if (statemachineId != null && statemachineId != '') {
 		machine.save();
 
 		var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
-		var startStatus = statuses.createNode("Start", "lecm-stmeditor:status", "cm:contains");
+		var startStatus = statuses.createNode("Start", "lecm-stmeditor:taskStatus", "cm:contains");
 		startStatus.properties["lecm-stmeditor:forDraft"] = true;
 		startStatus.properties["lecm-stmeditor:startStatus"] = true;
 		startStatus.save();
@@ -42,7 +42,7 @@ if (statemachineId != null && statemachineId != '') {
 	var statuses = [];
 	var endStatus = null;
 	for each (var status in machineStatuses) {
-		var actionsNodes = status.getChildren();
+		var actionsNodes = status.childByNamePath("actions").getChildren();
 		var transitions = [];
 		for each (var action in actionsNodes) {
 			var actionId = action.properties["lecm-stmeditor:actionId"];
