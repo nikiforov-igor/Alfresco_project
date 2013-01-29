@@ -1,8 +1,5 @@
 package ru.it.lecm.businessjournal.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
@@ -23,6 +20,9 @@ import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -712,6 +712,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     }
 
 	public boolean moveRecordToArchive(final NodeRef record) {
+		if (!orgstructureService.isCurrentUserTheSystemUser() && !isBJEngineer()) {
+			return false;
+		}
 		AuthenticationUtil.RunAsWork<Boolean> raw = new AuthenticationUtil.RunAsWork<Boolean>() {
 			@Override
 			public Boolean doWork() throws Exception {
@@ -733,7 +736,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-    @Override
+	private boolean isBJEngineer() {
+		return orgstructureService.isCurrentEmployeeHasBusinessRole(BusinessJournalService.BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER);
+	}
+
+	@Override
     public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
         List<NodeRef> result = getHistory(nodeRef);
 

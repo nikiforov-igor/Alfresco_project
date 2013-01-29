@@ -1,12 +1,11 @@
 package ru.it.lecm.orgstructure.beans;
 
-import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
 /**
  * User: PMelnikov
@@ -505,5 +504,25 @@ public interface OrgstructureBean {
 	 */
 	boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef);
 
+	/**
+	 * имеет ли текущий сотрудник указанную бизнес-роль
+	 * @param businessRoleIdentifier идентификатор бизнес-роли
+	 * @return true если сотрудник имеет роль
+	 */
+	boolean isCurrentEmployeeHasBusinessRole(String businessRoleIdentifier);
+
+	/**
+	 * имеет ли сотрудник указанную бизнес-роль
+	 * @param employeeRef ссылка на сотрудника
+	 * @param businessRoleIdentifier идентификатор бизнес-роли
+	 * @return true если сотрудник имеет роль
+	 */
+	boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier);
+
+	/**
+	 *
+	 * @return true если вызов произошел от имени системы
+	 */
+	boolean isCurrentUserTheSystemUser();
 	String getEmployeeLogin(NodeRef employee);
 }

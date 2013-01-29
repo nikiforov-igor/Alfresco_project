@@ -1,8 +1,5 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -19,6 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -833,6 +833,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
+	public boolean isCurrentUserTheSystemUser() {
+		return authService.isCurrentUserTheSystemUser();
+	}
+
+	@Override
 	public NodeRef getEmployeeByPerson(String personName) {
 		if (personName != null) {
 			NodeRef personNodeRef = personService.getPerson(personName, false);
@@ -984,28 +989,28 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
 	}
 
-	private NodeRef getEngineer (final String engineerIdentifier) {
+	private NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier) {
 		NodeRef businessRolesDictionaryRef = dictionaryService.getDictionaryByName (BUSINESS_ROLES_DICTIONARY_NAME);
 		List<NodeRef> children = dictionaryService.getChildren (businessRolesDictionaryRef);
-		NodeRef engineerRef = null;
+		NodeRef brRef = null;
 		for (NodeRef child : children) {
 			Serializable id = nodeService.getProperty (child, PROP_BUSINESS_ROLE_IDENTIFIER);
-			if (engineerIdentifier.equals (id.toString ())) {
-				engineerRef = child;
+			if (businessRoleIdentifier.equals (id.toString ())) {
+				brRef = child;
 				break;
 			}
 		}
-		return engineerRef;
+		return brRef;
 	}
 
 	@Override
 	public NodeRef getBusinessRoleDelegationEngineer () {
-		return getEngineer(BUSINESS_ROLE_ENGINEER_ID);
+		return getBusinessRoleByIdentifier(BUSINESS_ROLE_ENGINEER_ID);
 	}
 
 	@Override
 	public NodeRef getBusinessRoleCalendarEngineer() {
-		return getEngineer(BUSINESS_ROLE_CALENDAR_ENGINEER_ID);
+		return getBusinessRoleByIdentifier(BUSINESS_ROLE_CALENDAR_ENGINEER_ID);
 	}
 
 	@Override
@@ -1171,12 +1176,29 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
-		boolean hasSubordinate = bossRef.equals (subordinateRef);
+		boolean hasSubordinate = bossRef.equals(subordinateRef);
 		if (!hasSubordinate) {
 			List<NodeRef> subordinates = getBossSubordinate (bossRef);
 			hasSubordinate = subordinates.contains (subordinateRef);
 		}
 		return hasSubordinate;
+	}
+
+	@Override
+	public boolean isCurrentEmployeeHasBusinessRole(final String businessRoleIdentifier) {
+		return isEmployeeHasBusinessRole(getCurrentEmployee(), businessRoleIdentifier);
+	}
+
+	@Override
+	public boolean isEmployeeHasBusinessRole(NodeRef employeeRef, final String businessRoleIdentifier) {
+		if (employeeRef != null) {
+			NodeRef businessRoleByIdentifier = getBusinessRoleByIdentifier(businessRoleIdentifier);
+			if (businessRoleByIdentifier != null) {
+				List<NodeRef> employeesByBusinessRole = getEmployeesByBusinessRole(businessRoleByIdentifier);
+				return employeesByBusinessRole.contains(employeeRef);
+			}
+		}
+		return false;
 	}
 
 	@Override

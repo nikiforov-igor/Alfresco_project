@@ -1,12 +1,12 @@
 package ru.it.lecm.businessjournal.beans;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 
 /**
  * @author dbashmakov
@@ -89,8 +89,9 @@ public interface BusinessJournalService {
 	public final String SYSTEM = "System";
 
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+	public static final String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
 
-    /**
+	/**
      * Метод для создания записи бизнеса-журнала
      *
      * @param date - дата создания записи

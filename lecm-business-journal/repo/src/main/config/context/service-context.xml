@@ -39,6 +39,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-messageTemplate.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-business-roles.xml</value>
             </list>
         </property>
     </bean>
