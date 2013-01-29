@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
 
-	public final String LINK_URL = "/share/page/edit-metadata";
+	public final String LINK_URL = "/share/page/view-metadata";
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
