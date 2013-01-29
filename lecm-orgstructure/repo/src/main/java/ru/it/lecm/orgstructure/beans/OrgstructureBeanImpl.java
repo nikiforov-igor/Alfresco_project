@@ -15,6 +15,8 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
@@ -24,6 +26,8 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
  *         Time: 17:08
  */
 public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
+
+	final static protected Logger logger = LoggerFactory.getLogger(OrgstructureBeanImpl.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -1173,5 +1177,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			hasSubordinate = subordinates.contains (subordinateRef);
 		}
 		return hasSubordinate;
+	}
+
+	@Override
+	public String getEmployeeLogin(NodeRef employee) {
+		if (employee == null || !isEmployee(employee)) return null;
+		final NodeRef person = getPersonForEmployee(employee);
+		if (person == null) {
+			logger.warn(String.format("Employee '%s' is not linked to system user", employee.toString()));
+			return null;
+		}
+		return (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
 	}
 }

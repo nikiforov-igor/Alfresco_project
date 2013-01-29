@@ -10,12 +10,10 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -59,10 +57,6 @@ public class OrgstructureEmployeeLinkPolicy
 		this.orgstructureService = orgstructureService;
 	}
 
-	public IOrgStructureNotifiers getSgNotifier() {
-		return sgNotifier;
-	}
-
 	public void setSgNotifier(IOrgStructureNotifiers sgNotifier) {
 		this.sgNotifier = sgNotifier;
 	}
@@ -81,17 +75,17 @@ public class OrgstructureEmployeeLinkPolicy
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
 				new JavaBehaviour(this, "onCreateAssociation"));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
+				new JavaBehaviour(this, "onDeleteAssociation"));
 	}
 
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		try {
-			// NodeService nodeService = serviceRegistry.getNodeService();
-
 			NodeRef employeeLink = nodeAssocRef.getSourceRef();
-			NodeRef parent = nodeService.getPrimaryParent(employeeLink).getParentRef();
+			NodeRef staff = nodeService.getPrimaryParent(employeeLink).getParentRef();
 
-			// генерируем запись в БЖ
 			// получаем инициатора
 			AuthenticationService authService = serviceRegistry.getAuthenticationService();
 			String initiator = authService.getCurrentUserName();
@@ -99,40 +93,36 @@ public class OrgstructureEmployeeLinkPolicy
 			// получаем основной объект - сотрудник
 			NodeRef employee = nodeAssocRef.getTargetRef();
 
-			// категория события
-			String eventCategory = null;
-			// дефолтное описание события (если не будет найдено в справочнике)
-			String description = null;
-			// дополнительные объекты - 1. должность/роль 2. подразделение/рабочая группа
-			NodeRef object1 = null;
-			NodeRef object2 = null;
-			if (orgstructureService.isStaffList(parent)) {
-				eventCategory = "Назначение на должность";
-				description = "Сотрудник #mainobject назначен на должность #object1 в подразделении #object2";
-				object1 = orgstructureService.getPositionByStaff(parent);
-				object2 = orgstructureService.getUnitByStaff(parent);
-				notifyEmploeeSetDP(employee, /*DP*/ object1);
-			} else if (orgstructureService.isWorkForce(parent)) {
-				eventCategory = "Назначение на роль";
-				description = "Сотрудник #mainobject назначен на роль #object1 в рабочей группе #object2";
-				object1 = orgstructureService.getRoleByWorkForce(parent);
-				object2 = orgstructureService.getWorkGroupByWorkForce(parent);
-				notifyEmploeeSetBR(employee, /*brole*/object1);
+			if (orgstructureService.isStaffList(staff)) {
+				// Назначение на должность
+				String defaultDescription = "Сотрудник #mainobject назначен на должность \"#object1\" в подразделении #object2";
+				NodeRef position = orgstructureService.getPositionByStaff(staff);
+				NodeRef unit = orgstructureService.getUnitByStaff(staff);
+				List<String> objects = new ArrayList<String>(2);
+				objects.add(position != null ? position.toString() : "");
+				objects.add(unit != null ? unit.toString() : "");
+				businessJournalService.log(initiator, employee, "Занятие должностной позиции", defaultDescription, objects);
+
+				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
+					// Назначение на должность
+					defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
+					objects = new ArrayList<String>(1);
+					objects.add(unit != null ? unit.toString() : "");
+					businessJournalService.log(initiator, employee, "Назначение руководителем подразделения", defaultDescription, objects);
+				}
+				//назначение
+				notifyEmploeeSetDP(employee, position);
+			} else {
+				NodeRef role = orgstructureService.getRoleByWorkForce(staff);
+				notifyEmploeeSetBR(employee, role);
 			}
-			List<NodeRef> objects = new ArrayList<NodeRef>(2);
-			objects.add(object1);
-			objects.add(object2);
-			businessJournalService.log(initiator, employee, eventCategory, description, objects);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("", e);
 		}
 	}
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		// создаем ассоциацию
-		final NodeService nodeService = super.nodeService; // serviceRegistry.getNodeService();
-
 		NodeRef employeeLink = childAssocRef.getChildRef();
 		NodeRef parent = childAssocRef.getParentRef();
 
@@ -142,57 +132,40 @@ public class OrgstructureEmployeeLinkPolicy
 	@Override
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		try {
-			// NodeService nodeService = serviceRegistry.getNodeService();
-
-			// генерируем запись в БЖ
-			// получаем инициатора
-			AuthenticationService authService = serviceRegistry.getAuthenticationService();
-			String initiator = authService.getCurrentUserName();
-
 			final NodeRef employeeLink = nodeAssocRef.getSourceRef();
 			final NodeRef parent = nodeService.getPrimaryParent(employeeLink).getParentRef();
-
-			// получаем основной объект - сотрудник
+			final NodeRef staff = nodeService.getPrimaryParent(employeeLink).getParentRef();
 			final NodeRef employee = nodeAssocRef.getTargetRef();
 
-			// категория события
-			String eventCategory = null;
-			// дефолтное описание события (если не будет найдено в справочнике)
-			String description = null;
-			// дополнительные объекты - 1. должность/роль 2. подразделение/рабочая группа
-			NodeRef object1 = null;
-			NodeRef object2 = null;
-			if (orgstructureService.isStaffList(parent)) {
-				eventCategory = "Снятие с должности";
-				description = "Сотрудник #mainobject снят с должности #object1 в подразделении #object2";
-				object1 = orgstructureService.getPositionByStaff(parent);
-				object2 = orgstructureService.getUnitByStaff(parent);
-				notifyEmploeeRemoveDP(employee, /*dpId*/ object1);
-			} else if (orgstructureService.isWorkForce(parent)) {
-				eventCategory = "Отбирание роли";
-				description = "Сотрудник #mainobject более не обладает ролью  #object1 в рабочей группе #object2";
-				object1 = orgstructureService.getRoleByWorkForce(parent);
-				object2 = orgstructureService.getWorkGroupByWorkForce(parent);
-				notifyEmploeeRemoveBR(employee, object1);
-			}
-			List<NodeRef> objects = new ArrayList<NodeRef>(2);
-			objects.add(object1);
-			objects.add(object2);
-			businessJournalService.log(initiator, employee, eventCategory, description, objects);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+			if (orgstructureService.isStaffList(parent)) { // -> запись в БЖ
+				// получаем инициатора
+				AuthenticationService authService = serviceRegistry.getAuthenticationService();
+				String initiator = authService.getCurrentUserName();
 
-	String getEmployeeLogin(NodeRef employee) {
-		if (employee == null) return null;
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		if (person == null) {
-			logger.warn( String.format( "Employee '%s' is not linked to system user", employee.toString() ));
-			return null;
+				String defaultDescription = "Сотрудник #mainobject освобожден от должности \"#object1\" в подразделении #object2";
+				NodeRef position = orgstructureService.getPositionByStaff(parent);
+				NodeRef unit = orgstructureService.getUnitByStaff(parent);
+				List<String> objects = new ArrayList<String>(2);
+				objects.add(position != null ? position.toString() : "");
+				objects.add(unit != null ? unit.toString() : "");
+
+				businessJournalService.log(initiator, employee, "Снятие с должностной позиции", defaultDescription, objects);
+
+				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
+					// Назначение на должность
+					defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
+					objects = new ArrayList<String>(1);
+					objects.add(unit != null ? unit.toString() : "");
+					businessJournalService.log(initiator, employee, "Снятие с назначения руководителем подразделения", defaultDescription, objects);
+				}
+				notifyEmploeeRemoveDP(employee, position);
+			} else if (orgstructureService.isWorkForce(parent)) {
+				NodeRef role = orgstructureService.getRoleByWorkForce(parent);
+				notifyEmploeeRemoveBR(employee, role);
+			}
+		} catch (Exception e) {
+			logger.error("", e);
 		}
-		final String loginName = ""+ nodeService.getProperty( person, PolicyUtils.PROP_USER_NAME);
-		return loginName;
 	}
 
 	/**
@@ -201,8 +174,8 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param brole
 	 */
 	private void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
-		final String loginName = getEmployeeLogin(employee);
-		final String broleCode = ""+ nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
+		final String broleCode = (String) nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 		this.sgNotifier.orgBRAssigned( broleCode, Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName)); 
 	}
 
@@ -212,7 +185,7 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param brole
 	 */
 	private void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
-		final String loginName = getEmployeeLogin(employee);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
 		final Object broleCode = nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 
@@ -226,10 +199,10 @@ public class OrgstructureEmployeeLinkPolicy
 	 * @param dpid узел типа "lecm-orgstr:position"
 	 */
 	private void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
-		final String loginName = getEmployeeLogin(employee);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = ""+ nodeService.getProperty( dpid, PolicyUtils.PROP_DP_NAME);
+		final String dpIdName = (String) nodeService.getProperty( dpid, OrgstructureBean.PROP_STAFF_POSITION_CODE);
 
 		this.sgNotifier.sgInclude( Types.SGKind.SG_ME.getSGPos(employee.getId(), loginName), Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), loginName));
 	}
@@ -237,13 +210,12 @@ public class OrgstructureEmployeeLinkPolicy
 	/**
 	 * Убрать БР у Сотрудника
 	 * @param employee
-	 * @param brole
 	 */
 	private void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
-		final String loginName = getEmployeeLogin(employee);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
 
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = ""+ nodeService.getProperty( dpid, PolicyUtils.PROP_DP_NAME);
+		final String dpIdName = (String) nodeService.getProperty( dpid, OrgstructureBean.PROP_STAFF_POSITION_CODE);
 
 		this.sgNotifier.sgExclude( Types.SGKind.SG_ME.getSGPos(employee.getId(), loginName), Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), loginName));
 	}

@@ -41,12 +41,6 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType.xml</value>
             </list>
         </property>
-        <property name="createOrUpdateDictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
-            </list>
-        </property>
     </bean>
 
     <!-- Registration of Business Journal aspects model -->
@@ -78,17 +72,6 @@
         </property>
         <property name="archiverSettings">
             <ref bean="businessJournalArchiverSettings"/>
-        </property>
-    </bean>
-
-    <bean id="createObjectsEventPolicy" class="ru.it.lecm.businessjournal.policies.BusinessEventsPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
         </property>
     </bean>
 

@@ -102,7 +102,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -117,6 +117,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Метод для создания записи бизнеса-журнала
 	 *
+	 *
 	 * @param date - дата создания записи
 	 * @param initiator  - инициатор события (cm:person)
 	 * @param mainObject - основной объект
@@ -126,7 +127,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception{
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
 			new Exception("Инициатор события и основной объект должны быть заданы!");
 		}
@@ -144,16 +145,17 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
      * @param mainObject - основной объект
-     * @param objects    - массив дополнительных объектов
      * @param  eventCategory  - категория события
      * @param  defaultDescription  - описание события
+     * @param objects    - массив дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
 	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception{
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, String[] objects) throws Exception{
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
@@ -163,30 +165,32 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (логин пользователя)
      * @param mainObject - имя основного объекта
-     * @param objects    - список дополнительных объектов
      * @param  eventCategory  - название категории события
      * @param  defaultDescription  - описание события
+     * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
     @Override
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
         return log(date, initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
     }
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 *
 	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
 	 * @param mainObject - основной объект
-	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
 	 * @param  defaultDescription  - описание события
+	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		String evCategoryString = null;
 		if (eventCategory != null) {
 			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
@@ -195,12 +199,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		return log(initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception {
+	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -230,7 +234,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return null;
     }
     
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final List<NodeRef> objects, final String description) {
+    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final List<String> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
@@ -262,8 +266,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-						NodeRef obj = objects.get(i);
-						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)), wrapAsLink(obj, false));
+						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)),
+								(isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)),false) : objects.get(i)));
 					}
 				}
 
@@ -290,7 +294,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 				if (objects != null && objects.size() > 0) {
 					for (int j = 0; j < objects.size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-						nodeService.createAssociation(result, objects.get(j), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j)));
+						if (isNodeRef(objects.get(j))) {
+							nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j)));
+						}
 					}
 				}
 				return result;
@@ -301,18 +307,19 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Метод заполняет карту плейсхолдеров значениями на основании типов объектов
 	 *
+	 *
 	 * @param initiator  - инициатор события (cm:person)
 	 * @param mainObject - основной объект
 	 * @param objects    - список дополнительных объектов
 	 * @return заполненная карта
 	 */
-	private Map<String, String> fillHolders(NodeRef initiator, NodeRef mainObject, List<NodeRef> objects) {
+	private Map<String, String> fillHolders(NodeRef initiator, NodeRef mainObject, List<String> objects) {
 		Map<String, String> holders = new HashMap<String, String>();
 		holders.put(BASE_USER_HOLDER, wrapAsLink(initiator, true));
 		holders.put(MAIN_OBJECT_HOLDER, wrapAsLink(mainObject, false));
 		if (objects != null && objects.size() > 0) {
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-				holders.put(OBJECT_HOLDER + (i + 1), wrapAsLink(objects.get(i), false));
+				holders.put(OBJECT_HOLDER + (i + 1), isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)), false) : objects.get(i));
 			}
 		}
 		return holders;

@@ -2,10 +2,10 @@ package ru.it.lecm.orgstructure.policies;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
@@ -19,8 +19,8 @@ import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
@@ -33,7 +33,6 @@ import ru.it.lecm.security.events.IOrgStructureNotifiers;
 public class OrgstructureEmployeePolicy
 	extends BaseBean
 	implements NodeServicePolicies.OnCreateNodePolicy
-				// , NodeServicePolicies.OnDeleteNodePolicy
 				, NodeServicePolicies.OnCreateAssociationPolicy
 				, NodeServicePolicies.OnDeleteAssociationPolicy
 {
@@ -44,6 +43,11 @@ public class OrgstructureEmployeePolicy
 
 	private OrgstructureBean orgstructureService;
 	private IOrgStructureNotifiers sgNotifier;
+	private BusinessJournalService businessJournalService;
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
@@ -70,30 +74,37 @@ public class OrgstructureEmployeePolicy
 		PropertyCheck.mandatory(this, "sgNotifier", sgNotifier);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode"));
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				OrgstructureBean.ASSOC_EMPLOYEE_PERSON, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
+				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
 				new JavaBehaviour(this, "onCreateAssociation"));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
+				new JavaBehaviour(this, "onDeleteAssociation"));
 	}
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef node = childAssocRef.getChildRef();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		// Получаем папку где сохраняются персональныен данные
 		NodeRef personalDirectoryRef = orgstructureService.getPersonalDataDirectory();
 		// Создаем пустые персональные данные
 		ChildAssociationRef personalDataRef = nodeService.createNode(personalDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-				OrgstructureBean.TYPE_PERSONAL_DATA,
-				properties);
+				OrgstructureBean.TYPE_PERSONAL_DATA, new HashMap<QName, Serializable>());
 		// Создаем ассоциацию сотруднику на персональные данные
 		nodeService.createAssociation(node, personalDataRef.getChildRef(), OrgstructureBean.ASSOC_EMPLOYEE_PERSON_DATA);
 
+		try {
+			businessJournalService.log(serviceRegistry.getAuthenticationService().getCurrentUserName(),
+					node, "Добавление", "Добавлен новый сотрудник #mainobject", null);
+		} catch (Exception e) {
+			logger.error("Не удалось создать запись бизнес-журнала", e);
+		}
+
 		// сообщить 1) создание Сотрудника 2) связывание Сотрудника с Person/User.
-		final NodeRef employee = node;
-		notifyEmploeeTie( employee);
+		notifyEmploeeTie(node);
 	}
 
 	@Override
@@ -102,31 +113,12 @@ public class OrgstructureEmployeePolicy
 		notifyEmploeeTie(employee);
 	}
 
-	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-		final NodeRef employee = nodeAssocRef.getSourceRef();
-		notifyEmploeeDown(employee);
-	}
-
-	String getEmployeeLogin(NodeRef employee) {
-		if (employee == null) return null;
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		if (person == null) {
-			logger.warn( String.format( "Employee '%s' is not linked to system user", employee.toString() ));
-			return null;
-		}
-		final String loginName = ""+ nodeService.getProperty( person, PolicyUtils.PROP_USER_NAME);
-		return loginName;
-	}
-
 	/**
 	 * Нотификация о связывании Сотрудника и пользователя Альфреско.
 	 * @param employee
-	 * @param userLogin
 	 */
 	private void notifyEmploeeTie(NodeRef employee) {
-		// ASSOC_EMPLOYEE_PERSON: "lecm-orgstr:employee-person-assoc"
-		final String loginName = getEmployeeLogin(employee);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
 		sgNotifier.orgNodeCreated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 		sgNotifier.orgEmployeeTie( employee.getId(), loginName);
 	}
@@ -134,11 +126,15 @@ public class OrgstructureEmployeePolicy
 	/**
 	 * Нотификация об отвязывании Сотрудника и пользователя Альфреско.
 	 * @param employee
-	 * @param userLogin
 	 */
 	private void notifyEmploeeDown(NodeRef employee) {
-		final String loginName = getEmployeeLogin(employee);
+		final String loginName = orgstructureService.getEmployeeLogin(employee);
 		sgNotifier.orgNodeDeactivated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 	}
 
+	@Override
+	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+		final NodeRef employee = nodeAssocRef.getSourceRef();
+		notifyEmploeeDown(employee);
+	}
 }

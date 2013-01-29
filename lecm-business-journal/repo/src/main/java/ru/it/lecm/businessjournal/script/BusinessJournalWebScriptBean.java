@@ -14,7 +14,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
@@ -37,10 +36,10 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	public ScriptNode log(String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
 		NodeRef record = null;
 		Object[] objs = Context.getCurrentContext().getElements(objects);
-		List<NodeRef> refs = new ArrayList<NodeRef>();
+		List<String> refs = new ArrayList<String>();
 		for (Object obj : objs) {
-			NativeJavaObject ref = (NativeJavaObject) obj;
-			refs.add((NodeRef) ref.unwrap());
+			String ref = (String) obj;
+			refs.add(ref);
 		}
 		if (initiator == null) {
 			// получаем инициатора
@@ -171,10 +170,6 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 
         return createScriptable(records);
     }
-
-	public BusinessJournalArchiverSettings getArchiverSettings(){
-		return this.archiverSettings;
-	}
 
 	public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
 		this.archiverSettings = archiverSettings;

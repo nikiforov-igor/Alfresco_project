@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -29,7 +31,7 @@ import org.alfresco.service.transaction.TransactionService;
  * Time: 15:12
   */
 public abstract class BaseBean {
-	protected QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
+	public static  final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
 	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
 	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
@@ -228,5 +230,16 @@ public abstract class BaseBean {
 			}
 		};
 		return AuthenticationUtil.runAsSystem(raw);
+	}
+
+	/**
+	 * Проверка строки на то, что она является ссылкой
+	 * @param ref
+	 * @return true - если является ссылкой
+	 */
+	public boolean isNodeRef(String ref){
+		Pattern pattern = Pattern.compile("^[^\\:^ ]+\\:\\/\\/[^\\:^ ]+\\/[^ ]+$");
+		Matcher matcher = pattern.matcher(ref);
+		return matcher.find();
 	}
 }

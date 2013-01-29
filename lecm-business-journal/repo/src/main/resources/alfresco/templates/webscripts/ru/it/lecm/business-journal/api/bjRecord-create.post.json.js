@@ -9,7 +9,7 @@ if (typeof json !== "undefined") {
             numFields = jsonFields.length();
 
         for (count = 0; count < numFields; count++) {
-            objects.push(jsonFields.get(count));
+            objects.push("" + jsonFields.get(count));
         }
     }
     model.record = businessJournal.log(initiator, mainObject, category, description, objects);

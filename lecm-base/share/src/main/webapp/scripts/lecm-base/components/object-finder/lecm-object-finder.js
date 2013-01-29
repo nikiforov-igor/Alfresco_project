@@ -3224,7 +3224,7 @@ LogicECM.module = LogicECM.module || {};
       },
 
        _deactivateLinks: function (stringWithLinks) {
-           var re = new RegExp(/(<a[\s\w="]+(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&:\/~\+#]*[\w\-\@?\^=%&\/~\+#][\s\w=">]+)?)/g);
+           var re = new RegExp(/(<a[\s\w="]+(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)*([\w\-\.,@?\^=%&:\/~\+#]*[\w\-\@?\^=%&\/~\+#][\s\w="]>+)?)/g);
            stringWithLinks = stringWithLinks.replace(re, "");
            re = new RegExp(/(<\/a>)/g);
            stringWithLinks = stringWithLinks.replace(re, "");

@@ -94,6 +94,7 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
+
 	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
 	      init-method="init">
 		<property name="policyComponent">
@@ -104,6 +105,7 @@
 			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
+
     <bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
           init-method="init">
         <property name="policyComponent">
@@ -115,7 +117,11 @@
         </property>
         <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
         <property name="nodeService" ref="nodeService" />
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
     </bean>
+
     <bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
           init-method="init" depends-on="lecmSecurityGroupsBean">
         <property name="policyComponent">
@@ -130,5 +136,33 @@
         </property>
         <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
         <property name="nodeService" ref="nodeService" />
+    </bean>
+
+    <bean id="OrgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+    </bean>
+
+    <bean id="updateStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 </beans>

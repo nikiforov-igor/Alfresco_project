@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
@@ -14,7 +15,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
  */
 public interface OrgstructureBean {
 
-	String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
+	static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	String TYPE_ORGANIZATION = "organization";
 	String TYPE_DIRECTORY_EMPLOYEES = "employees";
 	String TYPE_DIRECTORY_STRUCTURE = "structure";
@@ -54,6 +55,7 @@ public interface OrgstructureBean {
 	QName PROP_BUSINESS_ROLE_IDENTIFIER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-identifier");
 	QName PROP_BUSINESS_ROLE_IS_DYNAMIC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-is-dynamic");
 	QName PROP_EMPLOYEE_EMAIL = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-email");
+	QName PROP_STAFF_POSITION_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "lecm-orgstr:staffPosition-code");
 
 	QName TYPE_ORGANIZATION_UNIT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit");
 	QName TYPE_STRUCTURE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "structure");
@@ -503,4 +505,5 @@ public interface OrgstructureBean {
 	 */
 	boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef);
 
+	String getEmployeeLogin(NodeRef employee);
 }

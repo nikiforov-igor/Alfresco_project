@@ -6,4 +6,66 @@
     <property name="lecm-dic:show_control_in_separate_window">false</property>
     <property name="lecm-dic:plane">true</property>
     <property name="lecm-dic:active">true</property>
+    <items>
+        <item name="Добавление">
+            <property name="cm:name">Добавление</property>
+            <property name="lecm-busjournal:eventCategory-code">1</property>
+        </item>
+        <item name="Редактирование">
+            <property name="cm:name">Редактирование</property>
+            <property name="lecm-busjournal:eventCategory-code">2</property>
+        </item>
+        <item name="Удаление">
+            <property name="cm:name">Удаление</property>
+            <property name="lecm-busjournal:eventCategory-code">3</property>
+        </item>
+        <item name="Создание новой версии">
+            <property name="cm:name">Создание новой версии</property>
+            <property name="lecm-busjournal:eventCategory-code">4</property>
+        </item>
+        <item name="Занятие должностной позиции">
+            <property name="cm:name">Занятие должностной позиции</property>
+            <property name="lecm-busjournal:eventCategory-code">5</property>
+        </item>
+        <item name="Снятие с должностной позиции">
+            <property name="cm:name">Снятие с должностной позиции</property>
+            <property name="lecm-busjournal:eventCategory-code">6</property>
+        </item>
+        <item name="Передача полномочий">
+            <property name="cm:name">Передача полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">9</property>
+        </item>
+        <item name="Отмена передачи полномочий">
+            <property name="cm:name">Отмена передачи полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">10</property>
+        </item>
+        <item name="Назначение руководителем подразделения">
+            <property name="cm:name">Назначение руководителем подразделения</property>
+            <property name="lecm-busjournal:eventCategory-code">11</property>
+        </item>
+        <item name="Снятие с назначения руководителем подразделения">
+            <property name="cm:name">Снятие с назначения руководителем подразделения</property>
+            <property name="lecm-busjournal:eventCategory-code">12</property>
+        </item>
+        <item name="Сделать основной">
+            <property name="cm:name">Сделать основной</property>
+            <property name="lecm-busjournal:eventCategory-code">13</property>
+        </item>
+        <item name="Начало отсутствия на работе">
+            <property name="cm:name">Начало отсутствия на работе</property>
+            <property name="lecm-busjournal:eventCategory-code">14</property>
+        </item>
+        <item name="Конец отсутствия на работе">
+            <property name="cm:name">Конец отсутствия на работе</property>
+            <property name="lecm-busjournal:eventCategory-code">15</property>
+        </item>
+        <item name="Загрузка новой версии">
+            <property name="cm:name">Загрузка новой версии</property>
+            <property name="lecm-busjournal:eventCategory-code">16</property>
+        </item>
+        <item name="Переход документа в новый статус">
+            <property name="cm:name">Переход документа в новый статус</property>
+            <property name="lecm-busjournal:eventCategory-code">17</property>
+        </item>
+    </items>
 </dictionary>

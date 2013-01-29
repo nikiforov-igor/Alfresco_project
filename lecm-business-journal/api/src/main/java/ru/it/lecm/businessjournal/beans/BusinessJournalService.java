@@ -92,18 +92,20 @@ public interface BusinessJournalService {
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (логин пользователя)
      * @param mainObject - основной объект
-     * @param objects    - список дополнительных объектов
      * @param  eventCategory  - категория события
      * @param  defaultDescription  - описание события
+     * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
@@ -113,64 +115,69 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
      * @param mainObject - основной объект
-     * @param objects    - массив дополнительных объектов
      * @param  eventCategory  - категория события
      * @param  defaultDescription  - описание события
+     * @param objects    - массив дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, NodeRef[] objects) throws Exception;
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, String[] objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
+     *
      * @param date - дата создания записи
      * @param initiator  - инициатор события (логин пользователя)
      * @param mainObject - имя основного объекта
-     * @param objects    - список дополнительных объектов
      * @param  eventCategory  - название категории события
      * @param  defaultDescription  - описание события
+     * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 *
 	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
 	 * @param mainObject - основной объект
-	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
 	 * @param  defaultDescription  - описание события
+	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 *
 	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
 	 * @param mainObject - основной объект
-	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
 	 * @param  defaultDescription  - описание события
+	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 *
 	 * @param initiator  - инициатор события
 	 * @param mainObject - основной объект
-	 * @param objects    - список дополнительных объектов
 	 * @param  eventCategory  - категория события
 	 * @param  defaultDescription  - описание события
+	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<NodeRef> objects) throws Exception;
+	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект

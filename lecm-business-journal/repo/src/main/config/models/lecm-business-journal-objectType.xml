@@ -6,4 +6,72 @@
     <property name="lecm-dic:show_control_in_separate_window">false</property>
     <property name="lecm-dic:plane">true</property>
     <property name="lecm-dic:active">true</property>
+    <items>
+        <item name="Справочник">
+            <property name="cm:name">Справочник</property>
+            <property name="lecm-busjournal:objectType-code">Справочник</property>
+            <property name="lecm-busjournal:objectType-class">lecm-dic:dictionary</property>
+            <property name="lecm-busjournal:objectType-template">{сm:name}</property>
+        </item>
+        <item name="Подразделение">
+            <property name="cm:name">Подразделение</property>
+            <property name="lecm-busjournal:objectType-code">Подразделение</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:organization-unit</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-short-name}</property>
+        </item>
+        <item name="Делегирование">
+            <property name="cm:name">Делегирование</property>
+            <property name="lecm-busjournal:objectType-code">Делегирование</property>
+            <property name="lecm-busjournal:objectType-class">lecm-d8n:procuracy</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+        </item>
+        <item name="Документ">
+            <property name="cm:name">Документ</property>
+            <property name="lecm-busjournal:objectType-code">Документ</property>
+            <property name="lecm-busjournal:objectType-class">lecm-document:base</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+        </item>
+        <item name="Сотрудник">
+            <property name="cm:name">Сотрудник</property>
+            <property name="lecm-busjournal:objectType-code">Сотрудник</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:employee</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</property>
+        </item>
+        <item name="Должностная позиция">
+            <property name="cm:name">Должностная позиция</property>
+            <property name="lecm-busjournal:objectType-code">Должностная позиция</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:staff-list</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-member-position-assoc/cm:name}</property>
+        </item>
+        <item name="Рабочая группа">
+            <property name="cm:name">Рабочая группа</property>
+            <property name="lecm-busjournal:objectType-code">Рабочая группа</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:workGroup</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-short-name}</property>
+        </item>
+        <item name="Участник рабочей группы">
+            <property name="cm:name">Участник рабочей группы</property>
+            <property name="lecm-busjournal:objectType-code">Участник рабочей группы</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:workforce</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-member-position-assoc/cm:name}</property>
+        </item>
+        <item name="Должность">
+            <property name="cm:name">Должность</property>
+            <property name="lecm-busjournal:objectType-code">Должность</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:staffPosition</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+        </item>
+        <item name="Роль в рабочей группе">
+            <property name="cm:name">Роль в рабочей группе</property>
+            <property name="lecm-busjournal:objectType-code">Роль в рабочей группе</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:workRole</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+        </item>
+        <item name="Организация">
+            <property name="cm:name">Организация</property>
+            <property name="lecm-busjournal:objectType-code">Организация</property>
+            <property name="lecm-busjournal:objectType-class">lecm-orgstr:organization</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-orgstr:element-short-name}</property>
+        </item>
+    </items>
 </dictionary>
