@@ -38,7 +38,7 @@
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
                             itemType: "lecm-busjournal:bjRecord",
-	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER.nodeRef,
+	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
                             searchConfig: {
                                 filter: '+PATH:"/app:company_home/lecm-busjournal:businessJournal//*"',
                                 sort:"lecm-busjournal:bjRecord-date|desc"

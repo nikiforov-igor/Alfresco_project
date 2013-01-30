@@ -61,7 +61,7 @@ public class OrgstructureUnitPolicy implements NodeServicePolicies.OnCreateNodeP
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef unit = childAssocRef.getChildRef();
-		NodeRef parent = orgstructureService.getParent(unit);
+		NodeRef parent = orgstructureService.getParentUnit(unit);
 
 		List<String> objects = new ArrayList<String>(1);
 		if (parent != null) {
@@ -89,7 +89,7 @@ public class OrgstructureUnitPolicy implements NodeServicePolicies.OnCreateNodeP
 		Boolean curActive = (Boolean) after.get(OrgstructureBeanImpl.IS_ACTIVE);
 
 		if ((prevActive == null && curActive != null && !curActive) || prevActive != null && !prevActive.equals(curActive) && !curActive) {
-			NodeRef parent = orgstructureService.getParent(nodeRef);
+			NodeRef parent = orgstructureService.getParentUnit(nodeRef);
 
 			List<String> objects = new ArrayList<String>(1);
 			if (parent != null) {

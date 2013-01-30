@@ -374,7 +374,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 * Получение вышестоящего подразделения
 	 */
 	public ScriptNode getParent(String nodeRef) {
-		NodeRef parent = orgstructureService.getParent(new NodeRef(nodeRef));
+		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(nodeRef));
 		if (parent != null) {
 			return new ScriptNode(parent, services, getScope());
 		}
@@ -815,4 +815,12 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		return orgstructureService.hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
 	}
 
+	/**
+	 * Получение информации о ролях текущего сотруднике
+	 */
+	public Scriptable getCurrentEmployeeRoles() {
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		List<NodeRef> employeeRoles = orgstructureService.getEmployeeRoles(employeeRef);
+		return createScriptable(employeeRoles);
+	}
 }

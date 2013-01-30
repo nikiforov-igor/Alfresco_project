@@ -113,7 +113,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		List<NodeRef> units = orgstructureService.getEmployeeUnits(initiator, false);
 		for (NodeRef unit : units) {
 			initiators.add(unit);
-			while ((unit = orgstructureService.getParent(unit)) != null) {
+			while ((unit = orgstructureService.getParentUnit(unit)) != null) {
 				if (!initiators.add(unit)) {
 					break;
 				}

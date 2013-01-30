@@ -47,13 +47,17 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "business-journal";
             };
-            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-summaryBtn", onRecordsClick, {});
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-summaryBtn", onRecordsClick, {
+                disabled: !LogicECM.module.BusinessJournal.IS_ENGINEER
+            });
 
             var onSettingsClick = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "business-journal-settings";
             };
-            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-settingsBtn", onSettingsClick, {});
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-settingsBtn", onSettingsClick, {
+                disabled: !LogicECM.module.BusinessJournal.IS_ENGINEER
+            });
         }
     });
 })();

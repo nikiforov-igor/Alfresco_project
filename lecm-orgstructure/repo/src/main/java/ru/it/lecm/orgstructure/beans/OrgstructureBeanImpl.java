@@ -1,5 +1,8 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -16,9 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author dbashmakov
@@ -246,7 +246,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
-	public NodeRef getParent(NodeRef unitRef) {
+	public NodeRef getParentUnit(NodeRef unitRef) {
 		ChildAssociationRef parentRef = nodeService.getPrimaryParent(unitRef);
 		if (parentRef != null) {
 			NodeRef parent = parentRef.getParentRef();
@@ -337,7 +337,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 			if (bossLink == null) {
 				// если не нашли руководителя в текущем подразделении, пробуем найти в вышестоящем
-				NodeRef parent = getParent(unitRef);
+				NodeRef parent = getParentUnit(unitRef);
 				if (parent != null) {
 					bossLink = getUnitBoss(parent);
 				} else {
@@ -378,7 +378,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 					// получаем руководителя для подразделения
 					bossRef = getUnitBoss(unit);
 					//сотрудник не может быть руководителем у себя (кроме случая, если он руководитель организации)
-					while (bossRef.equals(employeeRef) && ((unit = getParent(unit)) != null)) {
+					while (bossRef.equals(employeeRef) && ((unit = getParentUnit(unit)) != null)) {
 						bossRef = getUnitBoss(unit);
 					}
 				}
@@ -588,7 +588,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	public NodeRef getUnitByStaff(NodeRef staffRef) {
 		NodeRef unitRef = null;
 		if (isStaffList(staffRef)) {
-			unitRef = getParent(staffRef);
+			unitRef = nodeService.getPrimaryParent(staffRef).getParentRef();
 		}
 		return unitRef;
 	}
@@ -650,13 +650,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public List<NodeRef> getEmployeeWorkGroups(NodeRef employeeRef) {
 		List<NodeRef> wGroups = new ArrayList<NodeRef>();
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_WORKFORCE);
 		// получаем список объектов Участник рабочей группы
-		List<NodeRef> workForces = getEmployeePositions(employeeRef, types);
+		List<NodeRef> workForces = getEmployeeWorkForces(employeeRef);
 		for (NodeRef workForce : workForces) {
 			NodeRef group = getWorkGroupByWorkForce(workForce);
-			if (group != null) {
+			if (group != null && !isArchive(group)) {
 				wGroups.add(group);
 			}
 		}
@@ -881,18 +879,25 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly) {
+		return getEmployeeUnits(employeeRef, bossUnitsOnly, false);
+	}
+
+	private List<NodeRef> getEmployeeUnits(final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean allParents) {
 		//получаем список штатных расписаний сотрудника
-		List<NodeRef> staffs = getEmployeeStaffs (employeeRef);
-		List<NodeRef> units = new ArrayList<NodeRef> (staffs.size ());
+		List<NodeRef> staffs = getEmployeeStaffs(employeeRef);
+		List<NodeRef> units = new ArrayList<NodeRef>(staffs.size());
 		for (NodeRef staffRef : staffs) {
 			//для каждого штатного расписания вытаскиваем подразделение
-			NodeRef unitRef = getUnitByStaff (staffRef);
+			NodeRef unitRef = getUnitByStaff(staffRef);
 			//узнаем является ли указанный сотрудник боссом по своему штатному расписанию
 			Boolean isBoss = (Boolean) nodeService.getProperty(staffRef, PROP_STAFF_LIST_IS_BOSS);
 			if (bossUnitsOnly && isBoss) {
-				units.add (unitRef);
+				units.add(unitRef);
 			} else if (!bossUnitsOnly) {
-				units.add (unitRef);
+				units.add(unitRef);
+			}
+			if (allParents){
+				units.addAll(getHigherUnits(unitRef));
 			}
 		}
 		return units;
@@ -1210,5 +1215,63 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			return null;
 		}
 		return (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef) {
+		Set<NodeRef> results = new HashSet<NodeRef>();
+		if (isEmployee(employeeRef)){
+			// роли непосредственно имеющиеся у сотрудника
+			List<AssociationRef> employeeRoles = nodeService.getSourceAssocs(employeeRef, ASSOC_BUSINESS_ROLE_EMPLOYEE);
+			for (AssociationRef empRolesChildRef : employeeRoles) {
+				if (!isArchive(empRolesChildRef.getSourceRef())){
+					results.add(empRolesChildRef.getSourceRef());
+				}
+			}
+			// роли для подразделений сотрудника
+			List<NodeRef> employeeUnits = getEmployeeUnits(employeeRef, false, true);
+			for (NodeRef employeeUnit : employeeUnits) {
+				List<AssociationRef> unitRoles = nodeService.getSourceAssocs(employeeUnit, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
+				for (AssociationRef unitRoleChildRef : unitRoles) {
+					if (!isArchive(unitRoleChildRef.getSourceRef())){
+						results.add(unitRoleChildRef.getSourceRef());
+					}
+				}
+			}
+			// роли для РГ сотрудника
+			List<NodeRef> employeeGroups = getEmployeeWorkGroups(employeeRef);
+			for (NodeRef employeeGroup : employeeGroups) {
+				List<AssociationRef> groupRoles = nodeService.getSourceAssocs(employeeGroup, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
+				for (AssociationRef groupRoleChildRef : groupRoles) {
+					if (!isArchive(groupRoleChildRef.getSourceRef())){
+						results.add(groupRoleChildRef.getSourceRef());
+					}
+				}
+			}
+			// роли для позиций сотрудника
+			Set<QName> types = new HashSet<QName>();
+			types.add(TYPE_STAFF_LIST);
+			types.add(TYPE_WORKFORCE);
+			List<NodeRef> positionsRefs = getEmployeePositions(employeeRef, types);
+			for (NodeRef positionRef : positionsRefs) {
+				List<AssociationRef> positionRoles = nodeService.getSourceAssocs(positionRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+				for (AssociationRef positionRoleChildRef : positionRoles) {
+					if (!isArchive(positionRoleChildRef.getSourceRef())){
+						results.add(positionRoleChildRef.getSourceRef());
+					}
+				}
+			}
+		}
+		return new ArrayList<NodeRef>(results);
+	}
+
+	private List<NodeRef> getHigherUnits(NodeRef unitRef) {
+		List<NodeRef> units = new ArrayList<NodeRef>();
+		NodeRef parent = getParentUnit(unitRef);
+		if (parent != null) {
+			units.add(parent);
+			units.addAll(getHigherUnits(parent));
+		}
+		return units;
 	}
 }

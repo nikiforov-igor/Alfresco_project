@@ -142,7 +142,7 @@ public interface OrgstructureBean {
 	/**
 	 * Получение родительского подразделения
 	 */
-	NodeRef getParent(NodeRef unitRef);
+	NodeRef getParentUnit(NodeRef unitRef);
 
 	/**
 	 * проверяет что объект является подразделением
@@ -525,4 +525,6 @@ public interface OrgstructureBean {
 	 */
 	boolean isCurrentUserTheSystemUser();
 	String getEmployeeLogin(NodeRef employee);
+
+	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
 }
