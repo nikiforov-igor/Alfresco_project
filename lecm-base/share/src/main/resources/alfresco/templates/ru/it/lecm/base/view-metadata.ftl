@@ -8,9 +8,8 @@
     <@region id="navigation" scope="template" />
 </div>
 <div id="bd">
-    <div class="share-form">
-		<@region id="edit-metadata-mgr" scope="template" />
-         <@region id="edit-metadata" scope="template" />
+    <div class="share-form view-metadata">
+        <@region id="edit-metadata" scope="template" />
     </div>
 </div>
 </@>

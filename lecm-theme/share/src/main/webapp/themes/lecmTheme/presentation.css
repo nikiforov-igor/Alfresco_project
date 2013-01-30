@@ -767,10 +767,22 @@ span.navigation-separator-alt
 
 /* Share forms */
 
-.share-form .form-container .form-fields
-{
-   border: 1px solid #c2c2c2 !important;
-   background-color: #eff3fa;
+.share-form .form-container .form-fields {
+    border: 1px solid #c2c2c2 !important;
+    background-color: #eff3fa;
+}
+.share-form.view-metadata .form-container {
+    padding: 5px;
+}
+.share-form.view-metadata .form-container .form-fields {
+    width: auto;
+}
+/* для табов: */
+.share-form.view-metadata .form-container .form-fields > .yui-navset {
+    margin-bottom: 1em;
+}
+.share-form.view-metadata .form-container .form-fields > .yui-navset .yui-content {
+    min-height: 300px;
 }
 
 .yui-skin-lecmTheme .yui-navset .yui-content
