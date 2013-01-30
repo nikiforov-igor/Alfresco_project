@@ -60,7 +60,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
 			String fileName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME) + ".bpmn20.xml";
 			NodeRef companyHome = repositoryHelper.getCompanyHome();
-			NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflow");
+			NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflowStore");
 			NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
 			if (file == null) {
 				HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
