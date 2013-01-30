@@ -9,6 +9,8 @@
 		LogicECM.module = LogicECM.module || {};
 		LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 		LogicECM.module.BusinessJournal.ARCHIVER_SETTINGS_REF = LogicECM.module.BusinessJournal.ARCHIVER_SETTINGS_REF || bjSettings.nodeRef;
+
+        LogicECM.module.BusinessJournal.IS_ENGINEER = ${isEngineer?string};
 		//]]>
 	</script>
 	<#include "/org/alfresco/components/form/form.get.head.ftl">
@@ -16,7 +18,11 @@
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-
+<#assign hasPermission = isEngineer/>
 <@bpage.basePage>
-	<@region id="business-journal-settings" scope="template" />
+	<#if hasPermission>
+		<@region id="business-journal-settings" scope="template" />
+	<#else>
+		<@region id="forbidden" scope="template"/>
+	</#if>
 </@bpage.basePage>
