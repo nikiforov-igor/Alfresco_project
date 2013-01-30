@@ -1,12 +1,5 @@
 package ru.it.lecm.businessjournal.script;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
@@ -18,6 +11,13 @@ import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author dbashmakov
@@ -174,5 +174,9 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	public ScriptNode getArchSettings(){
 		NodeRef settings = archiverSettings.getArchiveSettingsRef();
 		return new ScriptNode(settings, service.getServiceRegistry(), getScope());
+	}
+
+	public boolean isBJEngeneer() {
+		return service.isBJEngineer();
 	}
 }

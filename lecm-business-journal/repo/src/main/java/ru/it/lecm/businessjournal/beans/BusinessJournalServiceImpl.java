@@ -17,6 +17,8 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -32,6 +34,8 @@ import java.util.*;
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
 
 	public final String LINK_URL = "/share/page/view-metadata";
+
+	private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -713,6 +717,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	public boolean moveRecordToArchive(final NodeRef record) {
 		if (!orgstructureService.isCurrentUserTheSystemUser() && !isBJEngineer()) {
+			logger.warn("Current employee is not business journal engeneer");
 			return false;
 		}
 		AuthenticationUtil.RunAsWork<Boolean> raw = new AuthenticationUtil.RunAsWork<Boolean>() {
@@ -736,7 +741,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	private boolean isBJEngineer() {
+	@Override
+	public boolean isBJEngineer() {
 		return orgstructureService.isCurrentEmployeeHasBusinessRole(BusinessJournalService.BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER);
 	}
 

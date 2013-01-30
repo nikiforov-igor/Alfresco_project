@@ -1,12 +1,12 @@
 package ru.it.lecm.businessjournal.beans;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 
 /**
  * @author dbashmakov
@@ -262,4 +262,9 @@ public interface BusinessJournalService {
 
     List<NodeRef> getHistory(NodeRef nodeRef);
 
+	/**
+	 * Является ли текущий пользователь технологом бизнес-журнала
+	 * @return true если является
+	 */
+	boolean isBJEngineer();
 }
