@@ -38,6 +38,29 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
 			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
 			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
+			var form = new Alfresco.forms.Form ("delegation-opts-part1-form");
+			form.setAJAXSubmit (true, {
+				successCallback: {
+					fn: function () {
+						Alfresco.util.PopupManager.displayMessage ({
+							text:"Данные обновлены"
+						});
+					},
+					scope: this
+				},
+				failureCallback: {
+					fn: function () {
+						Alfresco.util.PopupManager.displayMessage ({
+							text:"Не удалось обновить данные"
+						});
+					},
+					scope: this
+				}
+			});
+			form.setSubmitAsJSON (true);
+			form.setShowSubmitStateDynamically (true, false);
+			// Initialise the form
+			form.init ();
 		},
 
 		onReady: function () {
