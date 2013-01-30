@@ -524,7 +524,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                             case "boolean":
                                                 if (data.value) {
+													columnContent += '<div style="text-align: center;">'
                                                     columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+													columnContent += '</div>'
                                                 }
                                                 break;
 
