@@ -37,19 +37,17 @@
 					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>
 			</form>
-			<form id="delegation-opts-part1"> <!--submission-url="url"-->
+			<form id="delegation-opts-part1">
+				<edit-form template="/ru/it/lecm/delegation/opts/form/delegation-opts-form.ftl"/>
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
-					<field id="lecm-d8n:delegation-opts-owner-assoc" read-only="true"> <!-- read-only="true" -->
+					<field id="lecm-d8n:delegation-opts-owner-assoc" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
-					</field>
-					<field id="lecm-d8n:delegation-opts-can-delegate-all">
-						<control template="/ru/it/lecm/delegation/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-d8n:delegation-opts-trustee-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -76,7 +74,6 @@
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
-					<!--<show id="lecm-dic:active"/>  временно чтобы следить активна доверенность или нет -->
 					<show id="lecm-d8n:procuracy-can-transfer-rights"/>
 				</field-visibility>
 			</form>
@@ -86,7 +83,7 @@
 		<forms>
 			<form id="editProcuracy">
 				<appearance>
-					<field id="lecm-d8n:procuracy-business-role-assoc" read-only="true"> <!-- read-only="true" -->
+					<field id="lecm-d8n:procuracy-business-role-assoc" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
