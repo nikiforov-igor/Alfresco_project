@@ -57,6 +57,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		String type = req.getParameter("type");
 		if (statemachineNodeRef != null && "deploy".equals(type)) {
 			NodeRef statemachine = new NodeRef(statemachineNodeRef);
+			statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
 			String fileName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME) + ".bpmn20.xml";
 			NodeRef companyHome = repositoryHelper.getCompanyHome();
 			NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflow");

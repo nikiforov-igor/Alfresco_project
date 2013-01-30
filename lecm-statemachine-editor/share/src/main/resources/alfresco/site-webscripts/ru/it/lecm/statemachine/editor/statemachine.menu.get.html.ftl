@@ -11,7 +11,7 @@
 <div class="statemachine-menu">
     <span id="menu-buttons-new-end-event" class="yui-button yui-push-button">
         <span class="first-child">
-            <button type="button" title="Добавить финальный обнинск">&nbsp;</button>
+            <button type="button" title="Добавить финальный статус">&nbsp;</button>
         </span>
     </span>
 </div>

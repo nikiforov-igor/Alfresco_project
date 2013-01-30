@@ -379,7 +379,6 @@ public class BPMNGenerator {
 
 		end.appendChild(archiveDocumentAction);
 
-		NodeRef actionsRef = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "actions");
 		ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
 		prepareActions(status, null, null, endActions);
 

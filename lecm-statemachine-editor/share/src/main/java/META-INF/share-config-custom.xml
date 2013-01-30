@@ -383,7 +383,7 @@
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-stmeditor:taskStatus">
+	<config evaluator="node-type" condition="lecm-stmeditor:endEvent">
 		<forms>
 			<form>
 				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
