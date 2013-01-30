@@ -30,6 +30,19 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 				var datagridMeta = dataGrid.datagridMeta;
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
+				var headerLabel;
+
+				if (wantedBubblingLabel.toString() == LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL.toString())	{
+					headerLabel = "label.calendar.create-new-working.title";
+				} else if (wantedBubblingLabel.toString() == LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL.toString()) {
+					headerLabel = "label.calendar.create-new-non-working.title";
+				}
+
+				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+					Alfresco.util.populateHTML(
+						[ p_dialog.id + "-form-container_h", this.msg(headerLabel) ]
+						);
+				};
 
 				var url = "components/form"
 				+ "?itemKind={itemKind}"
@@ -55,6 +68,10 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
+					doBeforeDialogShow:{
+						fn:doBeforeDialogShow,
+						scope:this
+					},
 					onSuccess: {
 						fn: function DataListToolbar_onNewRow_success (response) {
 							YAHOO.Bubbling.fire ("dataItemCreated", {

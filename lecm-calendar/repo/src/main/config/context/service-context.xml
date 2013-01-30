@@ -26,6 +26,11 @@
 				<value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
 			</list>
 		</property>
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/absence-reason-dictionary-items.xml</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="lecmCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">

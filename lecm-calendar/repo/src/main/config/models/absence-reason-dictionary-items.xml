@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary name="Причины отсутствия">
+	<items>
+		<item name="Болезнь">
+			<property name="cm:name">Болезнь</property>
+			<property name="lecm-absence:code">1</property>
+			<property name="lecm-absence:color">#FF0000</property>
+		</item>
+		<item name="Отгул">
+			<property name="cm:name">Отгул</property>
+			<property name="lecm-absence:code">2</property>
+			<property name="lecm-absence:color">#0000FF</property>
+		</item>
+		<item name="Отпуск">
+			<property name="cm:name">Отпуск</property>
+			<property name="lecm-absence:code">3</property>
+			<property name="lecm-absence:color">#00FF00</property>
+		</item>
+		<item name="Командировка">
+			<property name="cm:name">Командировка</property>
+			<property name="lecm-absence:code">4</property>
+			<property name="lecm-absence:color">#70FF94</property>
+		</item>
+		<item name="Другое">
+			<property name="cm:name">Другое</property>
+			<property name="lecm-absence:code">0</property>
+			<property name="lecm-absence:color">#B22EFF</property>
+		</item>
+	</items>
+</dictionary>

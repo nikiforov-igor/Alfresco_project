@@ -31,6 +31,12 @@ LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
 
+				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+					Alfresco.util.populateHTML(
+						[ p_dialog.id + "-form-container_h", this.msg("label.shedule.create-new-common.title") ]
+						);
+				};
+
 				var url = "components/form"
 				+ "?itemKind={itemKind}"
 				+ "&itemId={itemId}"
@@ -55,6 +61,10 @@ LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
+					doBeforeDialogShow:{
+						fn:doBeforeDialogShow,
+						scope:this
+					},
 					onSuccess: {
 						fn: function DataListToolbar_onNewRow_success(response) {
 							YAHOO.Bubbling.fire("dataItemCreated", {
@@ -89,6 +99,12 @@ LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
 
+				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+					Alfresco.util.populateHTML(
+						[ p_dialog.id + "-form-container_h", this.msg("label.shedule.create-new-special.title") ]
+						);
+				};
+
 				var url = "components/form"
 				+ "?itemKind={itemKind}"
 				+ "&itemId={itemId}"
@@ -114,16 +130,20 @@ LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
+					doBeforeDialogShow:{
+						fn:doBeforeDialogShow,
+						scope:this
+					},
 					doBeforeFormSubmit: {
 						fn: function() {
-								htmlNodeStart = Dom.get(scope.id + "-specialSheduleForm_prop_lecm-shed_time-limit-start-cntrl-date");
-								if (htmlNodeStart) {
-									htmlNodeStart.name = "prop_lecm-shed_time-limit-start";
-								}
-								htmlNodeEnd = Dom.get(scope.id + "-specialSheduleForm_prop_lecm-shed_time-limit-end-cntrl-date");
-								if (htmlNodeStart) {
-									htmlNodeEnd.name = "prop_lecm-shed_time-limit-end";
-								}
+							htmlNodeStart = YAHOO.util.Dom.get(scope.id + "-specialSheduleForm_prop_lecm-shed_time-limit-start-cntrl-date");
+							if (htmlNodeStart) {
+								htmlNodeStart.name = "prop_lecm-shed_time-limit-start";
+							}
+							htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-specialSheduleForm_prop_lecm-shed_time-limit-end-cntrl-date");
+							if (htmlNodeStart) {
+								htmlNodeEnd.name = "prop_lecm-shed_time-limit-end";
+							}
 						},
 						scope: this
 					},

@@ -16,6 +16,11 @@
 
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
 
+<#-- Служебные функции -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-profile-toolbar.js"/>
+
 <script type="text/javascript">//<![CDATA[
 
 var absenceContainer = ${absenceContainer};
@@ -30,7 +35,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
 
 LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER || absenceContainer;
-LogicECM.module.WCalendar.Absence.ABSENCE_LABEL = LogicECM.module.WCalendar.Absence.ABSENCE_LABEL || "absenceProfileDatagrid";
+LogicECM.module.WCalendar.Absence.ABSENCE_PROFILE_LABEL = LogicECM.module.WCalendar.Absence.ABSENCE_PROFILE_LABEL || "absenceProfileDatagrid";
 
 //]]></script>
 

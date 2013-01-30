@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
 	<shortname>wcalendar-absence-profile</shortname>
-	<description>Work Calendar: Absence for User Profile</description>
+	<description>Work Calendar: Absence for user profile</description>
 	<format default="html"/>
 	<url>/ru/it/lecm/wcalendar/absence/absence-profile</url>
 	<authentication>user</authentication>

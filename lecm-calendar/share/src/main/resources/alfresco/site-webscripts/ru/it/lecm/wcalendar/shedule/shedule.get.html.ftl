@@ -38,7 +38,5 @@ YAHOO.util.Event.onContentReady('${id}', function () {
 
 <#-- Скрипт для всплывающего по клику окна -->
 <@grid.viewForm/>
-
-
-<@grid.datagrid id false>
+	<@grid.datagrid id false>
 </@grid.datagrid>

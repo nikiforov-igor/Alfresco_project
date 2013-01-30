@@ -16,6 +16,11 @@
 
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
 
+<#-- Служебные функции -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-toolbar.js"/>
+
 <script type="text/javascript">//<![CDATA[
 
 var absenceContainer = ${absenceContainer};

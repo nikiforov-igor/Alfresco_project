@@ -97,7 +97,6 @@
 		</forms>
 	</config>
 
-
 	<config evaluator="model-type" condition="lecm-shed:shedule">
 		<forms>
 			<form id="datagrid">
@@ -212,7 +211,161 @@
 					</field>
 				</appearance>
 			</form>
-
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-absence:absence">
+		<forms>
+			<form id="absenceProfileDatagrid">
+				<field-visibility>
+					<show id="lecm-absence:begin"/>
+					<show id="lecm-absence:end"/>
+					<show id="lecm-absence:unlimited"/>
+					<show id="lecm-absence:comment"/>
+					<show id="lecm-absence:abscence-reason-assoc"/>
+				</field-visibility>
+			</form>
+			<form id="absenceAdminDatagrid">
+				<field-visibility>
+					<show id="lecm-absence:abscent-employee-assoc"/>
+					<show id="lecm-absence:begin"/>
+					<show id="lecm-absence:end"/>
+					<show id="lecm-absence:unlimited"/>
+					<show id="lecm-absence:comment"/>
+					<show id="lecm-absence:abscence-reason-assoc"/>					
+				</field-visibility>
+			</form>
+			<form id="createNewEmployeeAbsenceForm">
+				<field-visibility>
+					<show id="lecm-absence:abscent-employee-assoc"/>
+					<show id="lecm-absence:begin"/>
+					<show id="lecm-absence:end"/>
+					<show id="lecm-absence:unlimited"/>
+					<show id="lecm-absence:comment"/>
+					<show id="lecm-absence:abscence-reason-assoc"/>
+				</field-visibility>
+				<appearance>
+					<set id="dates" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
+					<set id="unlimited"/>
+					<set id="abscence-reason"/>
+					<set id="comment"/>
+					<field id="lecm-absence:abscent-employee-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:begin" set="dates">
+						<control template="/org/alfresco/components/form/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:end" set="dates">
+						<control template="/org/alfresco/components/form/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:unlimited" set="unlimited">
+						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
+					</field>
+					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Причины_x0020_отсутствия</control-param>
+							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:comment" set="comment"/>
+				</appearance>
+			</form>
+			<form id="createNewMyAbsenceForm">
+				<field-visibility>
+					<show id="lecm-absence:abscent-employee-assoc"/>
+					<show id="lecm-absence:begin"/>
+					<show id="lecm-absence:end"/>
+					<show id="lecm-absence:unlimited"/>
+					<show id="lecm-absence:comment"/>
+					<show id="lecm-absence:abscence-reason-assoc"/>
+				</field-visibility>
+				<appearance>
+					<set id="dates" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
+					<set id="unlimited"/>
+					<set id="abscence-reason"/>
+					<set id="comment"/>
+					<field id="lecm-absence:abscent-employee-assoc" >
+						<control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
+					</field>
+					<field id="lecm-absence:begin" set="dates">
+						<control template="/org/alfresco/components/form/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:end" set="dates">
+						<control template="/org/alfresco/components/form/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:unlimited" set="unlimited">
+						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
+					</field>
+					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Причины_x0020_отсутствия</control-param>
+							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-absence:comment" set="comment"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-absence:reason">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-absence:code"/>
+					<show id="lecm-absence:color"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-absence:color">
+						<control template="/ru/it/lecm/wcalendar/controls/color-picker.ftl">
+							<control-param name="styleClass">color</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-absence:code"/>
+					<show id="lecm-absence:color"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-absence:reason">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-absence:code"/>
+					<show id="lecm-absence:color"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-absence:color">
+						<control template="/ru/it/lecm/wcalendar/controls/color-picker.ftl">
+							<control-param name="styleClass">color</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>

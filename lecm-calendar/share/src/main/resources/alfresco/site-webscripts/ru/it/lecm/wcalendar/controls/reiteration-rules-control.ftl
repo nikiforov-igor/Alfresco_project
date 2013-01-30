@@ -1,4 +1,4 @@
-<script> 
+<script type="text/javascript">//<![CDATA[
 	if(!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function(needle) {
 			for(var i = 0; i < this.length; i++) {
@@ -50,7 +50,7 @@
 	}
 	function onDateClicked() {
 		var td = new YAHOO.util.Element(this);
-		var monthDaysInput = Dom.get("month-days-input");
+		var monthDaysInput = YAHOO.util.Dom.get("month-days-input");
 
 
 
@@ -79,7 +79,8 @@
 			this.setAttribute("class", "selected-date");
 		}
 	}
-</script>
+//]]></script>
+
 <div class="control-container">
 	<#-- TODO: добавить локализацию для дней недели -->
 	<div class="rule-body" id="week-days-mode" style="display:block">

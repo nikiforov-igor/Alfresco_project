@@ -15,7 +15,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation =
 		// ID элемента, куда выплевывать сообщение об ошибке
 		form.setErrorContainer("error-message-container");
 		// Каждый раз очищать <div>, чтобы не было здоровенной простыни из ошибок
-		var htmlNode = Dom.get(form.errorContainer);
+		var htmlNode = YAHOO.util.Dom.get(form.errorContainer);
 		htmlNode.innerHTML = "";
 
 		// Привести даты к одному простому формату
@@ -29,7 +29,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation =
 			var tableRows = [];
 			tableRows = dataGrids[i].widgets.dataTable.getRecordSet().getRecords();
 			// Перебираем все строки датагрида
-			for (var j = 0; j < tableRows.length; j++) {			
+			for (var j = 0; j < tableRows.length; j++) {
 				var tableRow = tableRows[j].getData("itemData");
 				var value = tableRow["prop_lecm-cal_day"].value;
 				var shortDateInValue = Alfresco.util.formatDate(Alfresco.util.fromISO8601(value), "d/m");
