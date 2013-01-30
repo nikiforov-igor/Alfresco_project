@@ -262,6 +262,7 @@
                     <field id="lecm-busjournal:bjRecord-date">
                         <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
                     </field>
+	                <field id="lecm-dic:active" label-id="info.search.archive"/>
                 </appearance>
             </form>
             <form id="export-fields">
