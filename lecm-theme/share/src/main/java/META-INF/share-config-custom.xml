@@ -31,9 +31,9 @@
                 <item type="link" id="dictionary">/allDictionary</item>
                 <item type="link" id="wcalendar">/wcalendar-calendar</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
-                <item type="js" id="sites">Alfresco.module.Sites</item>
+                <item type="js" id="sites" icon="lecm-sites.png">Alfresco.module.Sites</item>
 
-                <item type="container" id="more">
+                <item type="container" id="more" icon="lecm-more.png">
                      <container-group id="alfrescos" label="Standard">
                          <item type="link" id="my-dashboard">{userdashboardpage}</item>
                          <item type="link" id="people">/people-finder</item>
