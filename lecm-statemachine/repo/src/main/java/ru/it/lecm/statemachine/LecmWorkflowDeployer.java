@@ -54,7 +54,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 
 	private static final String ENGINE_ID = "activiti";
 	private static final String MIMETYPE = "text/xml";
-	private static final String WORKFLOW_FOLDER = "workflow";
+	private static final String WORKFLOW_FOLDER = "workflowStore";
 
 	public void init() {
 		redeploy();
