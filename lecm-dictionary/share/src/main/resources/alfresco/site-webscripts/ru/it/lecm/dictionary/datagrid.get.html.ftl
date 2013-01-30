@@ -58,7 +58,21 @@ function createDatagrid(attributeForShow) {
 									break;
 
 								case "text":
-									var content = $html(data.displayValue);
+									var content;
+									var hexColorPattern = /^#?[0-9a-f]{6}/i;
+									if (hexColorPattern.test(data.displayValue)) {
+										var sharpPatten = /^#/i;
+										var colorValue;
+										if (sharpPatten.test(data.displayValue)) {
+											colorValue = data.displayValue;
+										} else {
+											colorValue = '#' + data.displayValue;
+										}
+										content = data.displayValue + '<div style="background-color: ' + colorValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>';
+									} else {
+										content = $html(data.displayValue);
+									}
+
 									if (datalistColumn.name == attributeForShow) {
 										html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
 									} else {
