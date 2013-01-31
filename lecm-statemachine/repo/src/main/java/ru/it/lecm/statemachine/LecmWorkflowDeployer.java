@@ -41,6 +41,8 @@ import java.util.List;
  */
 public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 
+	public static final String WORKFLOW_FOLDER = "workflowStore";
+
 	private final static Logger logger = LoggerFactory.getLogger(LecmWorkflowDeployer.class);
 
 	private WorkflowService workflowService;
@@ -54,7 +56,6 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 
 	private static final String ENGINE_ID = "activiti";
 	private static final String MIMETYPE = "text/xml";
-	private static final String WORKFLOW_FOLDER = "workflowStore";
 
 	public void init() {
 		redeploy();

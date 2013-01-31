@@ -81,7 +81,7 @@ public class StateMachineEndEventPolicy implements NodeServicePolicies.OnCreateN
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, actionName),
 				QName.createQName(STATEMACHINE_URI, actionName),
-				props);
+				actionProps);
 		nodeService.setProperty(node, QName.createQName(STATEMACHINE_URI, "endEvent" + actionName), childAssocRef.getChildRef().toString());
 	}
 

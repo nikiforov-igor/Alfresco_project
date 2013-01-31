@@ -1,15 +1,15 @@
 #lecm-menu .statemachine-menu #menu-buttons-new-status span.first-child {
-    background: url('../../images/lecm-orgstructure/alf_orgstucture_podrazdel_32.png') no-repeat 4px 4px;
+    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-new-end-event span.first-child {
-	background: url('../../images/lecm-orgstructure/alf_orgstucture_podrazdel_32.png') no-repeat 4px 4px;
+	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-properties span.first-child {
-    background: url('../../images/lecm-orgstructure/alf_orgstucture_podrazdel_32.png') no-repeat 4px 4px;
+    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-deploy span.first-child {
-	background: url('../../images/lecm-orgstructure/alf_orgstucture_podrazdel_32.png') no-repeat 4px 4px;
+	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
