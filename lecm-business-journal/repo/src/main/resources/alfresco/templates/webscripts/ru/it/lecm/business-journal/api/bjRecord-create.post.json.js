@@ -1,5 +1,4 @@
 if (typeof json !== "undefined") {
-    var initiator = json.get("initiator");
     var mainObject = json.get("mainObject");
     var category = json.has("category") ? json.get("category") : null;
     var description = json.has("description") ? json.get("description") : null;
@@ -12,5 +11,5 @@ if (typeof json !== "undefined") {
             objects.push("" + jsonFields.get(count));
         }
     }
-    model.record = businessJournal.log(initiator, mainObject, category, description, objects);
+    model.record = businessJournal.log(mainObject, category, description, objects);
 }

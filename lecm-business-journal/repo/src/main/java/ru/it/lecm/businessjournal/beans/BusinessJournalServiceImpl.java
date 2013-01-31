@@ -1,5 +1,8 @@
 package ru.it.lecm.businessjournal.beans;
 
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
@@ -14,6 +17,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
@@ -22,9 +26,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author dbashmakov
@@ -42,6 +43,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private SearchService searchService;
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
+	private NodeRef bjArchiveRef;
 	private SubstitudeBean substituteService;
 
 	private static enum WhoseEnum {
@@ -103,33 +105,33 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			}
 		};
 		bjRootRef = AuthenticationUtil.runAsSystem(raw);
+
+		AuthenticationUtil.RunAsWork<NodeRef> raw2 = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						NodeRef bjRef = getBusinessJournalDirectory();
+						NodeRef archiveRef = nodeService.getChildByName(bjRef, ContentModel.ASSOC_CONTAINS, BJ_ARCHIVE_ROOT_NAME);
+						if (archiveRef == null) {
+							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+							QName assocQName = QName.createQName(BJ_NAMESPACE_URI, BR_ARCHIVE_ASSOC_QNAME);
+							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+							properties.put(ContentModel.PROP_NAME, BJ_ARCHIVE_ROOT_NAME);
+							ChildAssociationRef associationRef = nodeService.createNode(bjRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+							archiveRef = associationRef.getChildRef();
+						}
+						return archiveRef;
+					}
+				});
+			}
+		};
+		bjArchiveRef =  AuthenticationUtil.runAsSystem(raw2);
 	}
 
-	@Override
-	public NodeRef log(Date date, String initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception {
-		PersonService personService = serviceRegistry.getPersonService();
-		NodeRef person = null;
-		if (personService.personExists(initiator)) {
-			person = personService.getPerson(initiator, false);
-		}
-		String evcategoryString = null;
-		if (eventCategory != null) {
-			evcategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
-		}
-		return log(date, person, mainObject, evcategoryString, defaultDescription, objects);
-	}
-	/**
-	 * Метод для создания записи бизнеса-журнала
-	 *
-	 *
-	 * @param date - дата создания записи
-	 * @param initiator  - инициатор события (cm:person)
-	 * @param mainObject - основной объект
-	 * @param eventCategory  - категория события
-	 * @param defaultDescription  - описание события
-	 * @param objects    - список дополнительных объектов
-	 * @return ссылка на ноду записи в бизнес журнале
-	 */
 	@Override
 	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
@@ -147,64 +149,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return createRecord(date, employee, mainObject, eventCategory, objects, filled);
 	}
 
-    /**
-     * Метод для создания записи бизнеса-журнала
-     *
-     * @param date - дата создания записи
-     * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
-     * @param mainObject - основной объект
-     * @param  eventCategory  - категория события
-     * @param  defaultDescription  - описание события
-     * @param objects    - массив дополнительных объектов
-     * @return ссылка на ноду записи в бизнес журнале
-     */
-	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, String[] objects) throws Exception{
-		String evCategoryString = null;
-		if (eventCategory != null) {
-			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
-		}
-		return log(date, initiator, mainObject, evCategoryString, defaultDescription, Arrays.asList(objects));
-	}
-
-    /**
-     * Метод для создания записи бизнеса-журнала
-     *
-     * @param date - дата создания записи
-     * @param initiator  - инициатор события (логин пользователя)
-     * @param mainObject - имя основного объекта
-     * @param  eventCategory  - название категории события
-     * @param  defaultDescription  - описание события
-     * @param objects    - список дополнительных объектов
-     * @return ссылка на ноду записи в бизнес журнале
-     */
     @Override
     public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
-        return log(date, initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
+        return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
     }
-
-	/**
-	 * Метод для создания записи бизнеса-журнала с текущей датой
-	 *
-	 * @param initiator  - инициатор события (ссылка на пользователя системы или сотрудника)
-	 * @param mainObject - основной объект
-	 * @param  eventCategory  - категория события
-	 * @param  defaultDescription  - описание события
-	 * @param objects    - список дополнительных объектов
-	 * @return ссылка на ноду записи в бизнес журнале
-	 */
-	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, NodeRef eventCategory, String defaultDescription, List<String> objects) throws Exception {
-		String evCategoryString = null;
-		if (eventCategory != null) {
-			evCategoryString = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
-		}
-		return log(new Date(), initiator, mainObject, evCategoryString, defaultDescription, objects);
-	}
 
 	@Override
 	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
-		return log(initiator, mainObject, getEventCategoryByName(eventCategory), defaultDescription, objects);
+		return log(initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
@@ -215,6 +167,18 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			person = personService.getPerson(initiator, false);
 		}
 		return log(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
+	}
+
+	@Override
+	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
+		return log(new Date(), mainObject, eventCategory, defaultDescription, objects);
+	}
+
+	@Override
+	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
+		AuthenticationService authService = serviceRegistry.getAuthenticationService();
+		String initiator = authService.getCurrentUserName();
+		return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	/**
@@ -493,30 +457,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	@Override
 	public NodeRef getBusinessJournalArchiveDirectory() {
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef bjRef = getBusinessJournalDirectory();
-						NodeRef archiveRef = nodeService.getChildByName(bjRef, ContentModel.ASSOC_CONTAINS, BJ_ARCHIVE_ROOT_NAME);
-						if (archiveRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(BJ_NAMESPACE_URI, BR_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, BJ_ARCHIVE_ROOT_NAME);
-							ChildAssociationRef associationRef = nodeService.createNode(bjRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-							archiveRef = associationRef.getChildRef();
-						}
-						return archiveRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
+		return bjArchiveRef;
 	}
 
 	private String getSeconObjAssocName(int j) {
@@ -564,8 +505,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return getFolder(getBusinessJournalDirectory(), type, category, date);
 	}
 
-	private NodeRef getArchiveFolder(final Date date) {
-		return getFolder(getBusinessJournalArchiveDirectory(), null, null, date);
+	private NodeRef getArchiveFolder(final Date date, String type, String category) {
+		return getFolder(getBusinessJournalArchiveDirectory(), type, category, date);
 	}
 
 	/**
@@ -727,7 +668,22 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 					@Override
 					public Boolean execute() throws Throwable {
 						if (!isArchive(record)) {
-							NodeRef archiveRef = getArchiveFolder(new Date());
+							NodeRef objectType = findNodeByAssociationRef(record, ASSOC_BR_RECORD_OBJ_TYPE, null, ASSOCIATION_TYPE.TARGET);
+							String type;
+							if (objectType != null) {
+								type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
+							} else {
+								NodeRef mainObject = findNodeByAssociationRef(record, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET);
+								type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
+							}
+							String category;
+							NodeRef eventCategory = findNodeByAssociationRef(record, ASSOC_BR_RECORD_EVENT_CAT, null, ASSOCIATION_TYPE.TARGET);
+							if (eventCategory != null) {
+								category = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
+							} else {
+								category = "unknown";
+							}
+							NodeRef archiveRef = getArchiveFolder(new Date(), type, category);
 							nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
 							ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
 							return newRef != null;

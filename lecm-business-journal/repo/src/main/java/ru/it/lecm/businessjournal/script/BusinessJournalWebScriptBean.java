@@ -1,5 +1,12 @@
 package ru.it.lecm.businessjournal.script;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
@@ -11,13 +18,6 @@ import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author dbashmakov
@@ -33,22 +33,21 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		this.service = service;
 	}
 
-	public ScriptNode log(String initiator, String mainObject, String eventCategory, String description, Scriptable objects) {
-		NodeRef record = null;
+	public ScriptNode log(String mainObject, String eventCategory, String description, Scriptable objects) {
+		NodeRef record;
 		Object[] objs = Context.getCurrentContext().getElements(objects);
 		List<String> refs = new ArrayList<String>();
 		for (Object obj : objs) {
 			String ref = (String) obj;
 			refs.add(ref);
 		}
-		if (initiator == null) {
-			// получаем инициатора
-			AuthenticationService authService = service.getServiceRegistry().getAuthenticationService();
-			String init = authService.getCurrentUserName();
-			PersonService personService = service.getServiceRegistry().getPersonService();
-			if (personService.personExists(init)){
-				initiator = personService.getPerson(init, false).toString();
-			}
+		// получаем инициатора
+		String initiator = null;
+		AuthenticationService authService = service.getServiceRegistry().getAuthenticationService();
+		String init = authService.getCurrentUserName();
+		PersonService personService = service.getServiceRegistry().getPersonService();
+		if (personService.personExists(init)) {
+			initiator = personService.getPerson(init, false).toString();
 		}
 		try {
 			record = service.log(new NodeRef(initiator), new NodeRef(mainObject), eventCategory, description, refs);
@@ -116,7 +115,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		}
 	}
 
-    public Date getDateFromLong(long longDate) {
+    private Date getDateFromLong(long longDate) {
         if (longDate != -1) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(longDate);

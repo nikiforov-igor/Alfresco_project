@@ -8,7 +8,6 @@ import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -28,21 +27,15 @@ public class BusinessJournalSettingsUpdatePolicy implements NodeServicePolicies.
 
 	private final static Logger logger = LoggerFactory.getLogger(BusinessJournalSettingsUpdatePolicy.class);
 
-	private ServiceRegistry serviceRegistry;
 	private PolicyComponent policyComponent;
 	private BusinessJournalArchiveSchedule archiveSchedule;
 
 	public final void init() {
-		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "archiveSchedule", archiveSchedule);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				BusinessJournalService.TYPE_ARCHIVER_SETTINGS, new JavaBehaviour(this, "onUpdateProperties"));
-	}
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {

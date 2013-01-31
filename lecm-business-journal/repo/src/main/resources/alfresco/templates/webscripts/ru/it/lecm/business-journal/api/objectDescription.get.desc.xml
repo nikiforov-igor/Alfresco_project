@@ -4,5 +4,6 @@
 	<url>/lecm/business-journal/api/objectDescription?objectRef={objectRef}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
+    <lifecycle>internal</lifecycle>
 	<transaction>required</transaction>
 </webscript>
