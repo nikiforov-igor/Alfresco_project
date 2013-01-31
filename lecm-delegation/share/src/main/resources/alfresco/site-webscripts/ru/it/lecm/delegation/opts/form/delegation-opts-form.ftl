@@ -10,13 +10,27 @@
 </#if>
 <#assign htmlIdCanDelegateAll = args.htmlid?js_string + "_" + fieldCanDelegateAll.id/>
 
-<div>hello from custom form</div>
 <#if formUI == "true">
 	<@formLib.renderFormsRuntime formId=formId />
 </#if>
 <@formLib.renderFormContainer formId=formId>
 	<#-- статус -->
-	<@formLib.renderField field=form.fields["prop_lecm-d8n_delegation-opts-status"] />
+	<#assign fieldActive = form.fields["prop_lecm-dic_active"]/>
+	<#assign isActive = false/>
+	<#if fieldActive.value??>
+		<#if fieldActive.value?is_boolean>
+			<#assign isActive = fieldActive.value/>
+		<#elseif fieldActive.value?is_string && fieldActive.value == "true">
+			<#assign isActive = true/>
+		</#if>
+	</#if>
+	<div class="form-field">
+	<#if isActive>
+		 <span style="color: #7F0000; font-weight: bold;">Делегирование вступило в силу. Редактирование невозможно</span>
+	<#else>
+		 <span style="color: #007F00; font-weight: bold;">Делегирование еще неактивно.</span>
+	</#if>
+	</div>
 	<#-- делегирующее лицо -->
 	<@formLib.renderField field=form.fields["assoc_lecm-d8n_delegation-opts-owner-assoc"] />
 	<#-- делегировать по бизнес функциям -->
@@ -36,32 +50,30 @@
 	<fieldset id="fieldset-delegate-by-func" form="${formId}" style="border: 0; margin-bottom: 0; padding: 0px 0px 0px 1px;" <#if isTrue>disabled="disabled"</#if>>
 		<div class="form-field with-grid">
 			<script type="text/javascript">//<![CDATA[
-				var datagridEl = new YAHOO.util.Element("${args.datagridId}-body");
-				datagridEl.on('contentReady', function () {
-					new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
-						bubblingLabel: "procuracy-datagrid",
-						usePagination:false,
-						showExtendSearchBlock:false,
-						showCheckboxColumn: false,
-						dataSource: "lecm/delegation/get/procuracies",
-						searchShowInactive: true,
-						editForm: "editProcuracy",
-						actions: [
-							{
-								type: "action-link-procuracy-datagrid",
-								id: "onActionEdit",
-								permission: "edit",
-								label: "редактировать доверенность"
-							},
-							{
-								type: "action-link-procuracy-datagrid",
-								id: "onActionDelete",
-								permission: "delete",
-								label: "удалить доверенность"
-							}
-						]
-					});
-
+				var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
+					bubblingLabel: "procuracy-datagrid",
+					usePagination:false,
+					showExtendSearchBlock:false,
+					showCheckboxColumn: false,
+					dataSource: "lecm/delegation/get/procuracies",
+					searchShowInactive: true,
+					editForm: "editProcuracy",
+					actions: [
+						{
+							type: "action-link-procuracy-datagrid",
+							id: "onActionEdit",
+							permission: "edit",
+							label: "редактировать доверенность"
+						},
+						{
+							type: "action-link-procuracy-datagrid",
+							id: "onActionDelete",
+							permission: "delete",
+							label: "удалить доверенность"
+						}
+					]
+				});
+				YAHOO.util.Event.onContentReady (datagrid.id, function () {
 					YAHOO.Bubbling.fire ("activeGridChanged", {
 						datagridMeta:{
 							itemType: "lecm-d8n:procuracy",

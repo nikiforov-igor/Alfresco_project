@@ -8,7 +8,6 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +22,6 @@ import ru.it.lecm.delegation.IDelegation;
 public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssociationPolicy {
 
 	private final static Logger logger = LoggerFactory.getLogger (ProcuracyPolicy.class);
-
-	private final static QName TYPE_PROCURACY = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", "procuracy");
 
 	private PolicyComponent policyComponent;
 	private IDelegation delegationService;
@@ -46,9 +43,9 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
 		logger.info ("initializing ProcuracyPolicy...");
 		logger.info ("initializing onCreateAssociation");
-		policyComponent.bindAssociationBehaviour (OnCreateAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onCreateAssociation"));
+		policyComponent.bindAssociationBehaviour (OnCreateAssociationPolicy.QNAME, IDelegation.TYPE_PROCURACY, new JavaBehaviour (this, "onCreateAssociation"));
 		logger.info ("initializing onDeleteAssociation");
-		policyComponent.bindAssociationBehaviour (OnDeleteAssociationPolicy.QNAME, TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
+		policyComponent.bindAssociationBehaviour (OnDeleteAssociationPolicy.QNAME, IDelegation.TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
 	}
 
 	private void actualizeProcuracyActivity (final NodeRef nodeRef) {
@@ -67,9 +64,9 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 		logger.info ("onCreateAssociation");
 		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
 		NodeRef targetRef = nodeAssocRef.getTargetRef ();
-		if (TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
+		if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
 			actualizeProcuracyActivity (sourceRef);
-		} else if (TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
+		} else if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
 			actualizeProcuracyActivity (targetRef);
 		}
 	}
@@ -79,9 +76,9 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 		logger.info ("onDeleteAssociation");
 		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
 		NodeRef targetRef = nodeAssocRef.getTargetRef ();
-		if (TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
+		if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
 			actualizeProcuracyActivity (sourceRef);
-		} else if (TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
+		} else if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
 			actualizeProcuracyActivity (targetRef);
 		}
 	}

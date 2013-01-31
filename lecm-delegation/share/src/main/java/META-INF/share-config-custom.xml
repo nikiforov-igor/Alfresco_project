@@ -6,7 +6,6 @@
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
-					<show id="lecm-d8n:delegation-opts-status"/>
 				</field-visibility>
 			</form>
 			<form id="search">
@@ -22,7 +21,6 @@
 				</appearance>
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-status"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -32,7 +30,6 @@
 			<form id="view-node-form">
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-status"/>
 					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>
@@ -40,7 +37,6 @@
 			<form id="delegation-opts-part1">
 				<edit-form template="/ru/it/lecm/delegation/opts/form/delegation-opts-form.ftl"/>
 				<appearance>
-					<field id="lecm-d8n:delegation-opts-status" read-only="true"/>
 					<field id="lecm-d8n:delegation-opts-owner-assoc" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Организация/cm:Сотрудники</control-param>
@@ -59,7 +55,7 @@
 					</field>
 				</appearance>
 				<field-visibility>
-					<show id="lecm-d8n:delegation-opts-status"/>
+					<show id="lecm-dic:active"/>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 					<show id="lecm-d8n:delegation-opts-trustee-assoc"/>

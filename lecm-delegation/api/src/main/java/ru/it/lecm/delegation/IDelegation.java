@@ -49,11 +49,6 @@ public interface IDelegation {
 	QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
 
 	/**
-	 * &lt;property name="lecm-d8n:delegation-opts-status"&gt;
-	 */
-	QName PROP_DELEGATION_OPTS_STATUS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-status");
-
-	/**
 	 * &lt;child-association name="lecm-d8n:container-delegation-opts-assoc"&gt;
 	 */
 	QName ASSOC_DELEGATION_OPTS_CONTAINER = QName.createQName (DELEGATION_NAMESPACE, "container-delegation-opts-assoc");
@@ -82,28 +77,6 @@ public interface IDelegation {
 	 * &lt;child-association name="lecm-d8n:delegation-opts-procuracy-assoc"&gt;
 	 */
 	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
-
-	enum DELEGATION_OPTS_STATUS {
-		NEW,
-		ACTIVE,
-		REVOKED,
-		CLOSED,
-		NOT_SET;
-
-		public static DELEGATION_OPTS_STATUS get (String status) {
-			DELEGATION_OPTS_STATUS[] values = DELEGATION_OPTS_STATUS.values ();
-			for (int i = 0; i < values.length; ++i) {
-				if (values[i].equals (status)) {
-					return values[i];
-				}
-			}
-			throw new IllegalArgumentException (String.format ("Invalid delegation options status. Status \"%s\" not supported", status));
-		}
-
-		public final boolean equals (String other) {
-			return this.toString ().equals (other);
-		}
-	}
 
 	/**
 	 * получение начальной информации от модуля делегирования
@@ -210,18 +183,16 @@ public interface IDelegation {
 	void deleteProcuracies (final JSONArray nodeRefs);
 
 	/**
-	 * установить статус DELEGATION_OPTS_STATUS.ACTIVE для сотрудника
+	 * установить is_active=true для параметров делегирования у сотрудника
 	 * @param employeeRef ссылка на сотрудника
-	 * @return предыдущий статус который был у параметров делегирования
 	 */
-	DELEGATION_OPTS_STATUS activateDelegationForEmployee (final NodeRef employeeRef);
+	void activateDelegationForEmployee (final NodeRef employeeRef);
 
 	/**
-	 * установить статус DELEGATION_OPTS_STATUS.CLOSED для сотрудника
+	 * установить is_active=false для параметров делегирования у сотрудника
 	 * @param employeeRef ссылка на сотрудника
-	 * @return предыдущий статус который был у параметров делегирования
 	 */
-	DELEGATION_OPTS_STATUS closeDelegationForEmployee (final NodeRef employeeRef);
+	void deactivateDelegationForEmployee (final NodeRef employeeRef);
 
 	/**
 	 * по указанным параметрам делегирования находит сотрудника и проверяет является ли он подчиненным

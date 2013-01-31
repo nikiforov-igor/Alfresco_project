@@ -129,6 +129,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		QName nodeTypeQName = TYPE_DELEGATION_OPTS; //a reference to the node type
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable> (); //optional map of properties to keyed by their qualified names
 		properties.put (ContentModel.PROP_NAME, delegationOptsName);
+		properties.put (IS_ACTIVE, false);//параметры делегирования по умолчанию создаем неактивными
 		NodeRef delegationOptsNodeRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef ();
 		nodeService.createAssociation (delegationOptsNodeRef, employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
 		return delegationOptsNodeRef;
@@ -290,11 +291,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options) {
 		//получаем все properties
 		Map<QName, Serializable> properties = nodeService.getProperties (delegationOptsNodeRef);
-		//если статус "не настроено" то меняет его на "новое"
-		Serializable status = properties.get (PROP_DELEGATION_OPTS_STATUS);
-		if (DELEGATION_OPTS_STATUS.NOT_SET.equals (status.toString ())) {
-			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_STATUS, DELEGATION_OPTS_STATUS.NEW.toString ());
-		}
 		//делегировать все функции
 		String propCanDelegate = PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL.getLocalName ();
 		Boolean canDelegate = findInOptions (options, propCanDelegate, "Boolean");
@@ -385,20 +381,23 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 	}
 
-	@Override
-	public DELEGATION_OPTS_STATUS activateDelegationForEmployee (final NodeRef employeeRef) {
+	private void setDelegationOptsActivity (final NodeRef employeeRef, boolean active) {
 		NodeRef delegationOptsRef = getDelegationOptsByEmployee (employeeRef);
-		Serializable oldStatus = nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS);
-		nodeService.setProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS, DELEGATION_OPTS_STATUS.ACTIVE.toString ());
-		return DELEGATION_OPTS_STATUS.get (oldStatus.toString ());
+		Boolean isActive = (Boolean) nodeService.getProperty (delegationOptsRef, IS_ACTIVE);
+		//если значения разные то изменяем значение проперти
+		if (!isActive.equals (active)) {
+			nodeService.setProperty (employeeRef, IS_ACTIVE, active);
+		}
 	}
 
 	@Override
-	public DELEGATION_OPTS_STATUS closeDelegationForEmployee (final NodeRef employeeRef) {
-		NodeRef delegationOptsRef = getDelegationOptsByEmployee (employeeRef);
-		Serializable oldStatus = nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS);
-		nodeService.setProperty (delegationOptsRef, PROP_DELEGATION_OPTS_STATUS, DELEGATION_OPTS_STATUS.CLOSED.toString ());
-		return DELEGATION_OPTS_STATUS.get (oldStatus.toString ());
+	public void activateDelegationForEmployee (final NodeRef employeeRef) {
+		setDelegationOptsActivity (employeeRef, true);
+	}
+
+	@Override
+	public void deactivateDelegationForEmployee (final NodeRef employeeRef) {
+		setDelegationOptsActivity (employeeRef, false);
 	}
 
 	@Override

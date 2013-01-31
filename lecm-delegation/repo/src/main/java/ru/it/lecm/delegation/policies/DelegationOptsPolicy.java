@@ -5,11 +5,11 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * Policy которая обеспечивает автоматическое создание параметров делегирования для сотрудников
@@ -20,8 +20,6 @@ import ru.it.lecm.delegation.IDelegation;
 //BeforeDeleteNodePolicy OnRestoreNodePolicy пока не буду реализовывать, потому что непонятно а надо ли
 public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
-	private final static QName TYPE_EMPLOYEE = QName.createQName ("http://www.it.ru/lecm/org/structure/1.0", "employee");
-
 	private final static Logger logger = LoggerFactory.getLogger (DelegationOptsPolicy.class);
 
 	private PolicyComponent policyComponent;
@@ -30,7 +28,7 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 	public final void init () {
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
 
-		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, TYPE_EMPLOYEE, new JavaBehaviour (this, "onUpdateNode"));
+		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour (this, "onUpdateNode"));
 	}
 
 	public void setPolicyComponent (PolicyComponent policyComponent) {

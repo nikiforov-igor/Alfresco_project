@@ -122,30 +122,6 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!-- статус параметров делегирования -->
-				<property name="lecm-d8n:delegation-opts-status">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-					<default>NOT_SET</default>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-					<constraints>
-						<constraint name="lecm-d8n:delegation-opts-status-constraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>NEW</value> <!-- новое, свежесозданное делегирование -->
-									<value>ACTIVE</value> <!-- действующее делегирование -->
-									<value>REVOKED</value> <!-- аннулированное делегирование -->
-									<value>CLOSED</value> <!-- завершенное, закрытое делегирование  -->
-									<value>NOT_SET</value> <!-- ненастроенное делегирование  -->
-								</list>
-							</parameter>
-						</constraint>
-					</constraints>
-				</property>
 			</properties>
 			<associations>
 				<!-- делегирующее лицо. Тот человек, чьи бизнес роли и права будут переданы -->
