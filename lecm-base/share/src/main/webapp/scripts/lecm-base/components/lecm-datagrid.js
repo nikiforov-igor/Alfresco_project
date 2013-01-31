@@ -1236,6 +1236,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;
+				var searchShowInactive;
+				//если в datagridMeta существует searchShowInactive
+				if (this.datagridMeta.hasOwnProperty ("searchShowInactive")) {
+					searchShowInactive = this.datagridMeta.searchShowInactive;
+				} else {
+					searchShowInactive = this.options.searchShowInactive;
+				}
 
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.sort == null || searchConfig.sort.length == 0) {
@@ -1252,13 +1259,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                     this.search.performSearch({
                         searchConfig:searchConfig,
-                        searchShowInactive:this.options.searchShowInactive
+                        searchShowInactive: searchShowInactive
                     });
                 } else { // Поиск без использования SOLR
                     this.search.performSearch({
-                        parent:this.datagridMeta.nodeRef,
-                        itemType:this.datagridMeta.itemType,
-                        searchShowInactive:this.options.searchShowInactive
+                        parent: this.datagridMeta.nodeRef,
+                        itemType: this.datagridMeta.itemType,
+                        searchShowInactive: searchShowInactive
                     });
                 }
             },
