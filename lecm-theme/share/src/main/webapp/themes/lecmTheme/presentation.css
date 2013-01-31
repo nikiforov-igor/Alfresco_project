@@ -1,7 +1,9 @@
 /* My Styles */
 
-input, textarea, a,
-input:focus, textarea:focus, a:focus {
+input, input:focus,
+textarea, textarea:focus,
+a, a:focus,
+button, button:focus {
     outline: none;
 }
 ul, ul li,
@@ -91,8 +93,11 @@ a:hover {
 #bd #lecm-content-main {
     width: 100%;
     float: left;
-    margin: 0 5px;
+    margin: 0;
     padding-bottom: 30px;
+}
+#bd #lecm-content-main > div {
+    margin: 0 5px;
 }
 #bd #lecm-content-ft {
     width: 100%;
