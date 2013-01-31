@@ -21,7 +21,6 @@ import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.subscriptions.beans.SubscriptionsService;
-import ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl;
 
 import java.util.*;
 
@@ -47,7 +46,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	private OrgstructureBean orgstructureService;
 
-	private SubscriptionsServiceImpl subscriptionsService;
+	private SubscriptionsService subscriptionsService;
 
 	/**
 	 * Set the node service
@@ -67,7 +66,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		this.notificationsService = notificationsService;
 	}
 
-	public void setSubscriptionsService(SubscriptionsServiceImpl subscriptionsService) {
+	public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
 		this.subscriptionsService = subscriptionsService;
 	}
 
@@ -130,7 +129,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, String description, NodeRef mainObject, Date date) {
 		for (NodeRef subscription : subscriptions) {
-			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsServiceImpl.ASSOC_NOTIFICATION_TYPE);
+			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsService.ASSOC_NOTIFICATION_TYPE);
 			List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_EMPLOYEE);
 			List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_POSITION);
 			List<NodeRef> units = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_ORGANIZATION_UNIT);

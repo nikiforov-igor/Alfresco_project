@@ -48,10 +48,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 	private final Object lock = new Object();
 
-	/**
-	 * Получение директории подписки.
-	 * Если такой узел отсутствует - он НЕ создаётся.
-	 */
+	@Override
 	public NodeRef getSubscriptionRootRef() {
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
@@ -97,30 +94,21 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
-	/**
-	 * проверяет что объект является подпиской на объект
-	 */
+	@Override
 	public boolean isSubscriptionToObject(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_SUBSCRIPTION_TO_OBJECT);
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * проверяет что объект является подпиской на тип
-	 */
+	@Override
 	public boolean isSubscriptionToType(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_SUBSCRIPTION_TO_TYPE);
 		return isProperType(ref, types);
 	}
 
-	/**
-	 * Получение списка подписок сотрудника
-	 *
-	 * @param employeeRef Ссылка на сотрудника
-	 * @return Список ссылок на подписки
-	 */
+	@Override
 	public List<NodeRef> getEmployeeSubscriptionsToObject(NodeRef employeeRef) {
 		List<NodeRef> subscriptions = new ArrayList<NodeRef>();
 		if (orgstructureService.isEmployee(employeeRef)) {
@@ -134,12 +122,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		return subscriptions;
 	}
 
-	/**
-	 * Получение списка подписок на объект
-	 *
-	 * @param objectRef Ссылка на объек
-	 * @return Список ссылок на подписки
-	 */
+	@Override
 	public List<NodeRef> getSubscriptionsToObject(NodeRef objectRef) {
 		List<NodeRef> subscriptions = new ArrayList<NodeRef>();
 		List<AssociationRef> lRefs = nodeService.getSourceAssocs(objectRef, ASSOC_SUBSCRIPTION_OBJECT);
@@ -151,13 +134,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		return subscriptions;
 	}
 
-	/**
-	 * Получения подписки сотрудника на объект
-	 *
-	 * @param employeeRef Ссылка на сотрудника
-	 * @param objectNodeRef Ссылка на объект
-	 * @return Ссылка на подписку
-	 */
+	@Override
 	public NodeRef getEmployeeSubscriptionToObject(NodeRef employeeRef, NodeRef objectNodeRef) {
 		NodeRef result = null;
 		List<NodeRef> subscriptions = getEmployeeSubscriptionsToObject(employeeRef);
@@ -186,14 +163,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		}
 	}
 
-	/**
-	 * Создание подписки на объект
-	 * @param objectRef Ссылка на объект
-	 * @param description описание
-	 * @param notificationType тип доставки
-	 * @param employee сотрудники
-	 * @return Подписка
-	 */
+	@Override
 	public NodeRef createSubscriptionToObject(String name, NodeRef objectRef, String description,
 	                                          List<NodeRef> notificationType,
 	                                          List<NodeRef> employee) {
@@ -226,18 +196,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		return subscriptionsRef.getChildRef();
 	}
 
-	/**
-	 * Создание подписки на тип
-	 * @param description описание
-	 * @param objectType тип объекта
-	 * @param eventCategory категория события
-	 * @param notificationType тип доставки
-	 * @param employee сотрудники
-	 * @param workGroup рабочие группы
-	 * @param organizationUnit подразделения
-	 * @param position должностная позиция
-	 * @return Подписка
-	 */
+	@Override
 	public NodeRef createSubscriptionToType(String name, String description, NodeRef objectType,
 	                                        NodeRef eventCategory, List<NodeRef> notificationType,
 	                                        List<NodeRef> employee, List<NodeRef> workGroup,
@@ -306,11 +265,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		return result;
 	}
 
-	/**
-	 * Удаление подписки
-	 *
-	 * @param nodeRef Ссылка на подписку
-	 */
+	@Override
 	public void unsubscribe(NodeRef nodeRef) {
 		nodeService.deleteNode(nodeRef);
 	}

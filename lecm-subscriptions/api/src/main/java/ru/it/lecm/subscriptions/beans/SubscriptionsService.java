@@ -111,4 +111,9 @@ public interface SubscriptionsService {
 	 */
 	public void unsubscribe(NodeRef nodeRef);
 
+	/**
+	 * Получение директории подписки.
+	 * Если такой узел отсутствует - он НЕ создаётся.
+	 */
+	NodeRef getSubscriptionRootRef();
 }
