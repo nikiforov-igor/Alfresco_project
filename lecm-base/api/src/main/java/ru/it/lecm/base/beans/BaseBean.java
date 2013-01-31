@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +49,10 @@ public abstract class BaseBean {
 		TARGET
 	}
 
+	public NodeService getNodeService() {
+		return this.nodeService;
+	}
+
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
@@ -60,11 +66,18 @@ public abstract class BaseBean {
 	 */
 	public boolean isProperType(NodeRef ref, Set<QName> types) {
 		if (ref != null) {
-			QName type = nodeService.getType(ref);
+			final QName type = nodeService.getType(ref);
 			return types.contains(type);
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	public boolean isProperType(NodeRef ref, QName ... types) {
+		if (ref == null || types == null || types.length == 0)
+			return false;
+		final Set<QName> typeSet = new HashSet<QName>();
+		Collections.addAll(typeSet, types);
+		return isProperType(ref, typeSet);
 	}
 
 	/**

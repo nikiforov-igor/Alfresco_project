@@ -10,7 +10,13 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.Types;
+import ru.it.lecm.security.Types.SGPosition;
+import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,40 +25,28 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  * Time: 15:19
  * To change this template use File | Settings | File Templates.
  */
-public class OrgstructureBossPolicy implements NodeServicePolicies.OnCreateNodePolicy {
-	private static ServiceRegistry serviceRegistry;
-	private static PolicyComponent policyComponent;
-	private static OrgstructureBean orgstructureService;
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		OrgstructureBossPolicy.serviceRegistry = serviceRegistry;
-	}
-
-	public void setPolicyComponent(PolicyComponent policyComponent) {
-		OrgstructureBossPolicy.policyComponent = policyComponent;
-	}
-
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		OrgstructureBossPolicy.orgstructureService = orgstructureService;
-	}
-
-	public final void init() {
-		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
-		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-
+public class OrgstructureBossPolicy
+		extends SecurityNotificationsPolicyBase
+		implements NodeServicePolicies.OnCreateNodePolicy
+				// , NodeServicePolicies.OnUpdateNodePolicy
+{
+	@Override
+	public void init() {
+		super.init();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateNode"));
-
 	}
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeRef node = childAssocRef.getChildRef();
-		NodeRef parent = childAssocRef.getParentRef();
-		NodeService nodeService = serviceRegistry.getNodeService();
+		NodeRef nodeDP = childAssocRef.getChildRef();
+		NodeRef orgUnit = childAssocRef.getParentRef();
+		List<NodeRef> staffList = orgstructureService.getUnitStaffLists(orgUnit);
+		final boolean isBoss = staffList.size() >= 1 && staffList.get(0).equals(nodeDP);
+		nodeService.setProperty(nodeDP, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, isBoss);
 
-		List<NodeRef> staffList = orgstructureService.getUnitStaffLists(parent);
-		nodeService.setProperty(node, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, staffList.size() == 1 && staffList.get(0).equals(node));
+		// оповещение securityService по Должностной Позиции ...
+		notifyChangeDP( nodeDP, isBoss, orgUnit);
 	}
+
 }

@@ -18,151 +18,126 @@
 
 -->
 <beans>
-    <!-- Registration of orgStructure models -->
-    <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgDictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalAspectBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-model.xml</value>
-            </list>
-        </property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${artifactId}/messages/orgstructure</value>
-            </list>
-        </property>
-    </bean>
+	<!-- Registration of orgStructure models -->
+	<bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.orgstructure.orgstructure-repo.orgDictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalAspectBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/orgstructure</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="${groupId}.${artifactId}.orgDictionaryBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="${groupId}.${artifactId}.orgDictionaryBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap">
-        <property name="dictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-positions.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles.xml</value>
-            </list>
-        </property>
+	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-positions.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles.xml</value>
+			</list>
+		</property>
 		<property name="createOrUpdateDictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles-items.xml</value>
 			</list>
 		</property>
-    </bean>
+	</bean>
 
-    <bean id="orgstructureScript" parent="baseJavaScriptExtension" class="ru.it.lecm.orgstructure.scripts.OrgstructureWebScriptBean"
-          depends-on="serviceOrgstructure">
-        <property name="extensionName">
-            <value>orgstructure</value>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
-        </property>
-        <property name="repositoryHelper">
-            <ref bean="repositoryHelper"/>
-        </property>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
-    </bean>
-
-    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init">
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
-        <property name="transactionService" ref="transactionService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="personService" ref="personService"/>
-        <property name="authService" ref="authenticationService"/>
-		<property name="dictionaryService" ref="serviceDictionary"/>
-    </bean>
-
-	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"
-	      init-method="init">
-		<property name="policyComponent">
-			<ref bean="policyComponent"/>
+	<bean id="orgstructureScript" parent="baseJavaScriptExtension" class="ru.it.lecm.orgstructure.scripts.OrgstructureWebScriptBean"
+		  depends-on="serviceOrgstructure">
+		<property name="extensionName">
+			<value>orgstructure</value>
 		</property>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+		<property name="repositoryHelper">
+			<ref bean="repositoryHelper"/>
+		</property>
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
+	</bean>
+
+    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="personService" ref="personService"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="dictionaryService" ref="serviceDictionary"/>
+	</bean>
+
+	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
 	</bean>
 
 	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
-	      init-method="init">
-		<property name="policyComponent">
-			<ref bean="policyComponent"/>
-		</property>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="orgstructureService">
-			<ref bean="serviceOrgstructure"/>
-		</property>
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<!-- <property name="sgNotifier" ref="lecmSecurityGroupsBean" /> -->
 	</bean>
 
-    <bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
-        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-        <property name="nodeService" ref="nodeService" />
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
-    </bean>
+	<bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="businessJournalService" ref="businessJournalService"/>
+	</bean>
 
-    <bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
-          init-method="init" depends-on="lecmSecurityGroupsBean">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
-        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-        <property name="nodeService" ref="nodeService" />
-    </bean>
+	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
+		  init-method="init" depends-on="lecmSecurityGroupsBean">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
+	</bean>
 
-    <bean id="OrgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
-    </bean>
 
-    <bean id="updateStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
-        <property name="orgstructureService">
-            <ref bean="serviceOrgstructure"/>
-        </property>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-    </bean>
+	<bean id="OrgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
+	</bean>
+
+	<bean id="updateStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPolicy"
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
+	</bean>
+
 </beans>

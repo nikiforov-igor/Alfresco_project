@@ -94,7 +94,7 @@ public class LECMAclBuilderBean
 			int i = 0;
 			for (Map.Entry< String, StdPermission> item: map.entrySet()) {
 				sb.append( String.format( " [%d] '%s'\t %s\n", (++i), item.getKey()
-						, ((item.getValue() == null) ? "NULL" : item.getValue().toString()) 
+						, ((item.getValue() == null) ? "NULL" : item.getValue().toString())
 				));
 			}
 			sb.append( " ===========================");
@@ -162,19 +162,19 @@ public class LECMAclBuilderBean
 	}
 
 	String makeFullBRMEAuthName(String userId, String roleCode) {
-		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx) 
-		return "GROUP_" + Types.SGKind.getSGBusinessRolePos(userId, roleCode).getAlfrescoSuffix(); 
+		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
+		return "GROUP_" + Types.SGKind.getSGMyRolePos(userId, roleCode).getAlfrescoSuffix();
 	}
 
 	/**
-	 * Сформировать ПОЛНОЕ название security-группы Альфреско, которую надо 
+	 * Сформировать ПОЛНОЕ название security-группы Альфреско, которую надо
 	 * сопоставлять указанному модельному объекту
 	 * @param kind тип модельного объекта
 	 * @param objId Id объекта
 	 * @return
 	 */
 	String makeFullSGName(Types.SGKind kind, String objId) {
-		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx) 
+		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
 		return "GROUP_" + kind.getSGPos(objId).getAlfrescoSuffix();
 	}
 
@@ -182,7 +182,7 @@ public class LECMAclBuilderBean
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId) {
 		final String authority = makeFullBRMEAuthName(userId, roleCode);
-		final String permission = getPermName(StdPermission.readonly); // выдать право на чтение - при смене статуса должно будет выполниться перегенерирование ... 
+		final String permission = getPermName(StdPermission.readonly); // выдать право на чтение - при смене статуса должно будет выполниться перегенерирование ...
 		permissionService.setPermission( nodeRef, authority, permission, true);
 		logger.warn(String.format("Dynamic role '%s' for user '%s' granted for document '%s' by security group <%s>", roleCode, userId, nodeRef, authority));
 	}
@@ -195,7 +195,7 @@ public class LECMAclBuilderBean
 	}
 
 	@Override
-	public void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap) 
+	public void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap)
 	{
 		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node %s by accessor %s \n", nodeRef, getMapInfo(accessMap)));
 
@@ -215,7 +215,7 @@ public class LECMAclBuilderBean
 			// замена на корректный доступ в текущем статусе
 			for(Map.Entry<String, StdPermission> entry: accessMap.entrySet()) {
 
-				final String brole = entry.getKey(); 
+				final String brole = entry.getKey();
 
 				final String authority = makeFullSGName( Types.SGKind.SG_BR, brole);
 
@@ -259,10 +259,10 @@ public class LECMAclBuilderBean
 		// замена на корректный доступ в текущем статусе
 		for(Pair<String, String> item: pairs) {
 
-			final String userId = item.getFirst(); 
+			final String userId = item.getFirst();
 			final String brole = item.getSecond();
 
-			// TODO: возможно стоит сделать обращение через authorityService.getName(xxx) 
+			// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
 			final String authority = makeFullBRMEAuthName(userId, brole);
 
 			// удаление прежней ДР пользователя ...
@@ -279,7 +279,7 @@ public class LECMAclBuilderBean
 			 */
 			if (allowed) { // ALLOW
 				permissionService.setPermission(nodeRef, authority, rawPerm, true);
-			} else { // DENY 
+			} else { // DENY
 				permissionService.setPermission(nodeRef, authority, "Read", false);
 			}
 			sb.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
@@ -295,7 +295,7 @@ public class LECMAclBuilderBean
 	 * @return уникальные пары пользователь - выданная ему роль
 	 */
 	private Set<Pair<String, String>> filterByDynamicRoles(
-			Set<AccessPermission> acl) 
+			Set<AccessPermission> acl)
 	{
 		final Set<Pair<String, String>> result = new HashSet<Pair<String,String>>();
 		for(Iterator<AccessPermission> iter = acl.iterator(); iter.hasNext(); ) {
@@ -303,7 +303,7 @@ public class LECMAclBuilderBean
 			if (Types.isDynamicRole(ap.getAuthority())) {
 				// iter.remove();
 				result.add( Types.getUserRolePair(ap.getAuthority()));
-			} 
+			}
 		}
 		return result;
 	}

@@ -741,6 +741,14 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		return found != null ? found.trim() : null;
 	}
 
+	boolean echoGetArgBool( String argName, boolean argDefault, JSONObject echoObj
+		) throws JSONException {
+		final boolean found = this.args.optBoolean(argName, argDefault);
+		if (echoObj != null)
+			echoObj.put("called_"+ argName, found);
+		return found;
+	}
+
 	/**
 	 * Получение из this.args именованного аргумента типа SGPosition, как вложенного json под-объекта
 	 * @param argName
@@ -759,7 +767,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				result = SGKind.getSGDeputyPosition( jdata.optString("id", null), jdata.optString("userId", null));
 				break;
 			case SG_BRME:
-				result = SGKind.getSGBusinessRolePos( jdata.optString("id", null), jdata.optString("roleCode", null));
+				result = SGKind.getSGMyRolePos( jdata.optString("id", null), jdata.optString("roleCode", null));
 				break;
 			default: result = kind.getSGPos( jdata.optString("id", null));
 		}
@@ -1106,7 +1114,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		else if (ORGOPER_EMPLOYEETIE.equalsIgnoreCase(oper)) {
 			final String employeeId = echoGetArg( "employeeId", null, result);
 			final String userLogin = echoGetArg( "alfrescoUserLogin", null, result);
-			noti.orgEmployeeTie(employeeId, userLogin);
+			final boolean isActive = echoGetArgBool( "isActive", true, result);
+			noti.orgEmployeeTie(employeeId, userLogin, isActive);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}

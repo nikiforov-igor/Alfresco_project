@@ -23,26 +23,27 @@ public interface IOrgStructureNotifiers {
 	void orgNodeDeactivated(Types.SGPosition obj);
 
 	/**
-	 * Связать Сотрудника с системным пользователем
+	 * Связать Сотрудника с системным пользователем или наоборот отвязать
 	 * @param employeeId id Сотрудника
 	 * @param alfrescoUserLogin login пользователя Альфреско
+	 * @param tie true для привязки пользователя, false иначе
 	 */
-	void orgEmployeeTie(String employeeId, String alfrescoUserLogin);
+	void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie);
 
 	/**
 	 * Включить security-группу child в parent.
 	 * @param child родительская SG-позиция
 	 * @param parent родительская SG-позиция, значение NULL не допускается
-	 * Например,  
+	 * Например,
 	 * 1) при задании нового родительского Департамента "АРод" для Департамента "БДоч" надо выполнить:
 	 *		// SG_OU(БДоч) -> SG_OU(АРод)
 	 * 		sgInclude( Types.SGKind.SG_SV.getSGPos(БДоч.id), Types.SGKind.SG_SV.getSGPos(АРод.id));
-	 * 
+	 *
 	 *		// SG_SV(АРод) -> SG_SV(БДоч)
 	 * 		sgInclude( Types.SGKind.SG_SV.getSGPos(АРод.id), Types.SGKind.SG_SV.getSGPos(БДоч.id));
-	 * 
+	 *
 	 * 		// + привязка БР из родительского подразделения к каждому Сотруднику БДоч ...
-	 * 
+	 *
 	 * 2) Актививрование по Доверенностям:
 	 * 		// найти список всех доверенностей, подлежащих активации, и для каждой
 	 * 		// включить личную БР доверенного лица (кому) в БР доверяющего (от кого):
@@ -61,15 +62,15 @@ public interface IOrgStructureNotifiers {
 
 	/**
 	 * Оповещение о присвоении бизнес-роли объекту орг-штатки
-	 * (!) Здесь выполняется непосредственное присвоение только для указанного 
-	 * объекта, так что все нужные рекурсивные и др доп присвоения надо выполнить 
+	 * (!) Здесь выполняется непосредственное присвоение только для указанного
+	 * объекта, так что все нужные рекурсивные и др доп присвоения надо выполнить
 	 * явно для каждого отдельного объекта.
 	 * @param broleCode id бизнес-роли
 	 * @param obj id и тип узла объекта орг-штатки
 	 * Пример:
-	 * 		// присвоение БР roleCode для Сотрудника employeeId 
+	 * 		// присвоение БР roleCode для Сотрудника employeeId
 	 * 		orgBRAssigned( roleCode, Types.SGKind.SG_ME.getSGPos(employeeId));
-	 * 
+	 *
 	 * 		// присвоение БР roleCode для Должностной позиции dpId на которую назначен Сотрудник employeeId
 	 * 		orgBRAssigned( roleCode, Types.SGKind.getDeputyPosition(dpId, employeeId));
 

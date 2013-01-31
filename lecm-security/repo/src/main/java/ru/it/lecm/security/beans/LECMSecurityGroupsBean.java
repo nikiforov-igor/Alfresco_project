@@ -33,7 +33,7 @@ public class LECMSecurityGroupsBean
 	/**
 	 * В "безопасном режиме" при работе методов sgInclude, orgBRAssigned, orgEmployeeTie
 	 * автоматически вызывается создание личных security-групп для участвующих объектов,
-	 * если они ещё не были созданы к моменту вызова. Иначе, при отсутствии личных 
+	 * если они ещё не были созданы к моменту вызова. Иначе, при отсутствии личных
 	 * групп будет подниматься исключение.
 	 * По-умолчанию отключено.
 	 * @return true = если "безопасный режим" включен
@@ -45,7 +45,7 @@ public class LECMSecurityGroupsBean
 	/**
 	 * В "безопасном режиме" при работе методов sgInclude, orgBRAssigned, orgEmployeeTie
 	 * автоматически вызывается создание личных security-групп для участвующих объектов,
-	 * если они ещё не были созданы к моменту вызова. Иначе, при отсутствии личных 
+	 * если они ещё не были созданы к моменту вызова. Иначе, при отсутствии личных
 	 * групп будет подниматься исключение.
 	 * По-умолчанию отключено.
 	 * @param safeModeFlag true = чтобы включить "безопасный режим"
@@ -121,13 +121,13 @@ public class LECMSecurityGroupsBean
 			logger.info(String.format("Alfresco security-group '%s' already exists for object '%s'", sgFullName, simpleName));
 		} else {
 			sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName, details, null);
-			logger.warn(String.format("Alfresco security-group '%s' created object '%s'", sgFullName, simpleName));
+			logger.warn(String.format("Alfresco security-group '%s' created for object '%s'", sgFullName, simpleName));
 		}
 		return sgFullName;
 	}
 
 	/**
-	 * Удаление security-группы Альфреско 
+	 * Удаление security-группы Альфреско
 	 * @param simpleName
 	 */
 	void removeAlfrescoGroupName(String simpleName) {
@@ -168,7 +168,7 @@ public class LECMSecurityGroupsBean
 		final String sgName = ensureAlfrescoGroupName( obj.getAlfrescoSuffix(), obj.getDisplayInfo());
 
 		// дополнительные действия зависят от типа
-		if (obj.getSgKind() ==  SGKind.SG_OU) 
+		if (obj.getSgKind() ==  SGKind.SG_OU)
 			// создание SG_SV для Департамента (OU) ...
 			ensureAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()), obj.getDisplayInfo());
 
@@ -176,18 +176,21 @@ public class LECMSecurityGroupsBean
 	}
 
 	@Override
-	public void orgEmployeeTie(String employeeId, String alfrescoUserLogin) {
+	public void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie) {
 		final String emplSuffix = SGKind.SG_ME.getAlfrescoSuffix(employeeId);
 
 		// safe-действия
-		if (safeMode) { // гарантировать создание группы Сотрудника (SG_ME) 
+		if (safeMode) { // гарантировать создание группы Сотрудника (SG_ME)
 			ensureAlfrescoGroupName( emplSuffix, alfrescoUserLogin);
 		}
 
 		if (alfrescoUserLogin != null) {
 			final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
 			final String sg_me_group = this.authorityService.getName(AuthorityType.GROUP, emplSuffix);
-			ensureParent( sg_user_name, sg_me_group);
+			if (tie) // привязать ...
+				ensureParent( sg_user_name, sg_me_group);
+			else // отвязать ...
+				removeParent( sg_user_name, sg_me_group);
 		}
 	}
 
@@ -196,27 +199,38 @@ public class LECMSecurityGroupsBean
 		final String sgName = this.authorityService.getName(AuthorityType.GROUP, obj.getAlfrescoSuffix());
 		removeAlfrescoGroupName( sgName);
 		// дополнительные действия зависят от типа
-		if (obj.getSgKind() ==  SGKind.SG_OU) 
+		if (obj.getSgKind() ==  SGKind.SG_OU)
 			removeAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()));
 	}
 
 	@Override
-	public void sgInclude( Types.SGPosition child, Types.SGPosition parent) 
+	public void sgInclude( Types.SGPosition child, Types.SGPosition parent)
 	{
-		// safe-действия
-		if (safeMode) {
+		/*
+		 * include/exclude всегда safe-операции - в основном по причине упрощения
+		 * работы с лиными группами Бизнес-Ролей - чтобы не выносить отдельно
+		 * методы создания личных групп БР (SG_MyRole)
+		 */
+		// if (safeMode)
+		{
 			orgNodeCreated( child);
 			orgNodeCreated( parent);
 		}
 
 		// основные действия
-		final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
+		final String sgItem = this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
 		final String sgParent = this.authorityService.getName(AuthorityType.GROUP, parent.getAlfrescoSuffix());
 		ensureParent(sgItem, sgParent);
 	}
 
 	@Override
 	public void sgExclude( Types.SGPosition child, Types.SGPosition oldParent) {
+		// (!) safe-действие
+		// if (safeMode)
+		{
+			orgNodeCreated( child);
+			orgNodeCreated( oldParent);
+		}
 		final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
 		final String sgParent = this.authorityService.getName(AuthorityType.GROUP, oldParent.getAlfrescoSuffix());
 		removeParent( sgItem, sgParent);
@@ -240,11 +254,12 @@ public class LECMSecurityGroupsBean
 			/*
 			 * Для сотрудника выполнятся «Активация относительно БР»:
 			 *   - создается его личная SG-MyRole группа бизнес роли «A» (если ещё нет такой)
-			 *   - в неё включается SG_Me 
+			 *   - в неё включается SG_Me
 			 *   - и эта группа включается в SG_BR бизнес роли.
 			 */
-			final String myBRole = SGKind.getSGBusinessRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
+			final String myBRole = SGKind.getSGMyRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
 			final String sgMyRole = ensureAlfrescoGroupName(myBRole, broleId + " for user "+ obj.getId() + " "+ obj.getDisplayInfo());
+
 
 			// SG_Me -> SG_MyRole
 			ensureParent( sgObj, sgMyRole);
@@ -255,10 +270,10 @@ public class LECMSecurityGroupsBean
 		else if (SGKind.SG_DP.equals(obj.getSgKind())) {
 			/*
 			 * Полный список операций при назначении БР для Должности:
-			 *    (а) прописать SG_DP в SG_BR, 
+			 *    (а) прописать SG_DP в SG_BR,
 			 *    (б) выполнить «Активацию» для Сотрудника, занимающего DP, включив его личную SG_MyRole в SG_DP должностной позиции.
 			 *
-			 * (!) если здесь в obj не задан Сотрудник для должности, тогда второе 
+			 * (!) если здесь в obj не задан Сотрудник для должности, тогда второе
 			 * действие (б) надо вызвать явно в обработчике включения DP:
 			 *     // obj это фактически SGKind.SG_DP.getSGPos( DP.id)
 			 *     sgInclude( SGKind.getSGBusinessRolePos( DP.getUserId(), broleId), obj);
@@ -268,9 +283,9 @@ public class LECMSecurityGroupsBean
 			// SG_DP -> SG_Role
 			ensureParent( sgObj, sgBRole);
 
-			// SG_MyBRole -> SG_DP 
+			// SG_MyBRole -> SG_DP
 			if ( dp.getUserId() != null) {
-				sgInclude( SGKind.getSGBusinessRolePos( dp.getUserId(), broleId), dp);
+				sgInclude( SGKind.getSGMyRolePos( dp.getUserId(), broleId), dp);
 			}
 		}
 		else if (SGKind.SG_OU.equals(obj.getSgKind())) {
@@ -290,18 +305,17 @@ public class LECMSecurityGroupsBean
 		final String sgBRole = this.authorityService.getName(AuthorityType.GROUP, SGKind.SG_BR.getAlfrescoSuffix(broleId));
 		final String sgObj = this.authorityService.getName(AuthorityType.GROUP, obj.getAlfrescoSuffix());
 		if (SGKind.SG_ME.equals(obj.getSgKind())) {
-			final String myBRole = SGKind.getSGBusinessRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
+			final String myBRole = SGKind.getSGMyRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
 			final String sgMyRole = this.authorityService.getName(AuthorityType.GROUP, myBRole);
 
 			// (!) SG_Me <out of> SG_MyRole не выполнять, т.к. Бизнес роль может быть выдана сотруднику неявно через Подразделение или Должность ...
 			// removeParent( sgObj, sgMyRole);
 
 			// SG_MyRole <out of> SG_Role
-			ensureParent(sgMyRole, sgBRole);
+			removeParent(sgMyRole, sgBRole);
 		} else {
 			removeParent(sgObj, sgBRole);
 		}
 	}
 
 }
-
