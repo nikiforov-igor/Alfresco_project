@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 
 /**
  * User: PMelnikov
@@ -117,9 +118,15 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
+		execBuildInTransact(folder, staticPermissions);
+	}
+
+	private void execBuildInTransact( NodeRef node
+			, final Map<String, INodeACLBuilder.StdPermission> permissions)
+	{
 		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
-		final Map<String, INodeACLBuilder.StdPermission> permissions = staticPermissions;
-		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 			@Override
 			public Object execute() throws Throwable {
 				permissionsBuilder.rebuildStaticACL(folder, permissions);
@@ -128,9 +135,25 @@ public class StatusChangeAction extends StateMachineAction {
 		}, false, true);
 	}
 
+	private void execBuildInTransact( final List<ChildAssociationRef> children
+			, final Map<String, StdPermission> permissions)
+	{
+		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+			@Override
+			public Object execute() throws Throwable {
+				for (ChildAssociationRef child: children) {
+					permissionsBuilder.rebuildStaticACL(child.getChildRef(), permissions);
+				}
+				return null;
+			}
+		}, false, true);
+	}
+
 	@Override
 	public void execute(DelegateExecution execution) {
-		NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		NodeService nodeService = getServiceRegistry().getNodeService();
 		//Выставляем статус
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
@@ -164,12 +187,9 @@ public class StatusChangeAction extends StateMachineAction {
 			nodeService.moveNode(child.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 		}
 
-		//Установка динамических ролей для файла
+		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
-		for (ChildAssociationRef child : children) {
-			getLecmAclBuilderBean().rebuildACL(child.getChildRef(), dynamicPermissions);
-		}
-
+		execBuildInTransact(children, dynamicPermissions);
 	}
 
 
@@ -208,6 +228,5 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 		return permissions;
 	}
-
 
 }
