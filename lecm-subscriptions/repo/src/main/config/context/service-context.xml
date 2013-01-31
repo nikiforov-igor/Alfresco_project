@@ -59,7 +59,8 @@
 		</property>
 	</bean>
 
-	<bean id="subscriptionsService" class="ru.it.lecm.subscriptions.beans.SubscriptionsBean">
+	<bean id="subscriptionsService" init-method="init" class="ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl"
+	      depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService, serviceOrgstructure">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>

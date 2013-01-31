@@ -20,7 +20,8 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
+import ru.it.lecm.subscriptions.beans.SubscriptionsService;
+import ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl;
 
 import java.util.*;
 
@@ -46,7 +47,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	private OrgstructureBean orgstructureService;
 
-	private SubscriptionsBean subscriptionsService;
+	private SubscriptionsServiceImpl subscriptionsService;
 
 	/**
 	 * Set the node service
@@ -66,7 +67,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		this.notificationsService = notificationsService;
 	}
 
-	public void setSubscriptionsService(SubscriptionsBean subscriptionsService) {
+	public void setSubscriptionsService(SubscriptionsServiceImpl subscriptionsService) {
 		this.subscriptionsService = subscriptionsService;
 	}
 
@@ -95,7 +96,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		//добавляем подписки на объект
 		subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
 		sendNotificationsBySubscriptions(subscriptions, author, description, mainObject, date);
-		nodeService.addAspect(bjRecordRef, SubscriptionsBean.ASPECT_SUBSCRIBED, null);
+		nodeService.addAspect(bjRecordRef, SubscriptionsService.ASPECT_SUBSCRIBED, null);
 	}
 
 	//обработка подписок на действия сотрудника/группы/подразделения
@@ -129,11 +130,11 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, String description, NodeRef mainObject, Date date) {
 		for (NodeRef subscription : subscriptions) {
-			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsBean.ASSOC_NOTIFICATION_TYPE);
-			List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_EMPLOYEE);
-			List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_POSITION);
-			List<NodeRef> units = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_ORGANIZATION_UNIT);
-			List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsBean.ASSOC_DESTINATION_WORK_GROUP);
+			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsServiceImpl.ASSOC_NOTIFICATION_TYPE);
+			List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_EMPLOYEE);
+			List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_POSITION);
+			List<NodeRef> units = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_ORGANIZATION_UNIT);
+			List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_WORK_GROUP);
 			Notification notification = new Notification();
 			notification.setObjectRef(mainObject);
 			notification.setAutor(author);
@@ -161,10 +162,10 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		}
 		NodeRef subscriptionsRoot = subscriptionsService.getSubscriptionRootRef();
 		String path = nodeService.getPath(subscriptionsRoot).toPrefixString(namespaceService);
-		String type = SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE.toPrefixString(namespaceService);
+		String type = SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE.toPrefixString(namespaceService);
 
-		String subscriptionType = SubscriptionsBean.ASSOC_OBJECT_TYPE.toPrefixString(namespaceService) + "-ref";
-		String subscriptionCategory = SubscriptionsBean.ASSOC_EVENT_CATEGORY.toPrefixString(namespaceService) + "-ref";
+		String subscriptionType = SubscriptionsService.ASSOC_OBJECT_TYPE.toPrefixString(namespaceService) + "-ref";
+		String subscriptionCategory = SubscriptionsService.ASSOC_EVENT_CATEGORY.toPrefixString(namespaceService) + "-ref";
 
 		String typeAttribute = "@" + subscriptionType.replace(":", "\\:");
 		String categoryAttribute = "@" + subscriptionCategory.replace(":", "\\:");

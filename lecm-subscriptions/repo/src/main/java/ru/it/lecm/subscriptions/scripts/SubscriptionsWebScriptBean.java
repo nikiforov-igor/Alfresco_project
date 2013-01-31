@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
-import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
+import ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	protected Repository repository;
 
-	private SubscriptionsBean subscriptionsService;
+	private SubscriptionsServiceImpl subscriptionsService;
 
 	/**
 	 * Set the service registry
@@ -72,19 +72,10 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 		this.repository = repository;
 	}
 
-	public void setSubscriptionsService(SubscriptionsBean subscriptionsService) {
+	public void setSubscriptionsService(SubscriptionsServiceImpl subscriptionsService) {
 		this.subscriptionsService = subscriptionsService;
 	}
 
-	/**
-	 * Возвращает корневой узел подписчиков
-	 *
-	 * @return Созданный корневой узел подписчиков или Null, если произошла ошибка
-	 */
-	public ScriptNode getSubscriptions() {
-		NodeRef subscribtions = subscriptionsService.ensureSubscriptionsRootRef();
-		return new ScriptNode(subscribtions, services, getScope());
-	}
 
 	/**
 	 * Получаем список "корневых" объектов для меню в подписках

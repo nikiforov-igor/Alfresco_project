@@ -10,7 +10,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
+import ru.it.lecm.subscriptions.beans.SubscriptionsService;
 
 /**
  * User: PMelnikov
@@ -36,17 +36,17 @@ public class TypeCategoryPolicy  implements  NodeServicePolicies.OnCreateAssocia
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsBean.ASSOC_OBJECT_TYPE,
+				SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsService.ASSOC_OBJECT_TYPE,
 				new JavaBehaviour(this, "onDeleteAssociation"));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsBean.ASSOC_EVENT_CATEGORY,
+				SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsService.ASSOC_EVENT_CATEGORY,
 				new JavaBehaviour(this, "onDeleteAssociation"));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsBean.ASSOC_OBJECT_TYPE,
+				SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsService.ASSOC_OBJECT_TYPE,
 				new JavaBehaviour(this, "onCreateAssociation"));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				SubscriptionsBean.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsBean.ASSOC_EVENT_CATEGORY,
+				SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE, SubscriptionsService.ASSOC_EVENT_CATEGORY,
 				new JavaBehaviour(this, "onCreateAssociation"));
 	}
 

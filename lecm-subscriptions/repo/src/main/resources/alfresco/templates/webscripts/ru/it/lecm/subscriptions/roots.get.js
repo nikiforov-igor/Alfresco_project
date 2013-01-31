@@ -1,4 +1,3 @@
-var root = subscription.getSubscriptions();
 var roots = [];
 var nodes = subscription.getRoots();
 //process response

@@ -18,7 +18,7 @@ import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.subscriptions.beans.SubscriptionsBean;
+import ru.it.lecm.subscriptions.beans.SubscriptionsService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -161,7 +161,7 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 		NodeRef businessJournalRoot = businessJournalService.getBusinessJournalDirectory();
 		String path = nodeService.getPath(businessJournalRoot).toPrefixString(namespaceService);
 		String type = BusinessJournalService.TYPE_BR_RECORD.toPrefixString(namespaceService);
-		String aspect = SubscriptionsBean.ASPECT_SUBSCRIBED.toPrefixString(namespaceService);
+		String aspect = SubscriptionsService.ASPECT_SUBSCRIBED.toPrefixString(namespaceService);
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
@@ -173,7 +173,7 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 			resultSet = searchService.query(parameters);
 			for (ResultSetRow row : resultSet) {
 				NodeRef node = row.getNodeRef();
-				if (!nodeService.hasAspect(node, SubscriptionsBean.ASPECT_SUBSCRIBED)) {
+				if (!nodeService.hasAspect(node, SubscriptionsService.ASPECT_SUBSCRIBED)) {
 					result.add(node);
 				}
 			}

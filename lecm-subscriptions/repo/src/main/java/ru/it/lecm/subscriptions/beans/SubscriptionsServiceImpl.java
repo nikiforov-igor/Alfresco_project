@@ -22,39 +22,7 @@ import java.util.*;
  * Date: 24.12.12
  * Time: 17:09
  */
-public class SubscriptionsBean extends BaseBean {
-
-	/**
-	 *
-	 */
-	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписки";
-	public static final String DICTIONARY_ROOT_NAME = "Dictionary";
-	public static final String DICTIONARY_ROOT_NAME_EVENT_CATEGORY = "Категория события";
-	public static final String DICTIONARY_ROOT_NAME_TYPE_OBJECT = "Тип объекта";
-	public static final String DICTIONARY_ROOT_NAME_TYPE_TEMPLATE_MESSAGE = "Шаблон сообщения";
-	public static final String SUBSCRIPTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/subscriptions/1.0";
-
-	public static final QName TYPE_SUBSCRIPTION_TO_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-object");
-	public static final QName TYPE_SUBSCRIPTION_TO_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-to-type");
-
-	public static final QName ASSOC_NOTIFICATION_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "notification-type-assoc");
-	public static final QName ASSOC_DESTINATION_EMPLOYEE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-employee-assoc");
-	public static final QName ASSOC_SUBSCRIPTION_OBJECT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscription-object-assoc");
-	public static final QName ASSOC_DESTINATION_POSITION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-position-assoc");
-	public static final QName ASSOC_DESTINATION_ORGANIZATION_UNIT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-organization-unit-assoc");
-	public static final QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
-	public static final QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
-	public static final QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
-	public static final QName PROP_DESCRIPTION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "description");
-
-	public static final String BUSJOURNAL_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
-	public static final String TYPE_SUBSCRIPTION = "subscription";
-
-	public static final QName ASPECT_SUBSCRIBED = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscribedAspect");
-
-	QName ASSOC_BUSJOURNAL_LINK_EMPLOYEE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "lecm-busjournal");
-	QName ASSOC_BUSJOURNAL_EVENT_CATEGORY = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-evCategory-assoc");
-	QName ASSOC_BUSJOURNAL_OBJECT_TYPE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-objType-assoc");
+public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsService {
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
@@ -95,7 +63,7 @@ public class SubscriptionsBean extends BaseBean {
 	 * Если такой узел отсутствует - он создаётся автоматически (внутри /CompanyHome)
 	 * @return
 	 */
-	public NodeRef ensureSubscriptionsRootRef() {
+	public NodeRef init() {
 		final String rootName = SUBSCRIPTIONS_ROOT_NAME;
 		repositoryHelper.init();
 		final NodeRef companyHome = repositoryHelper.getCompanyHome();
@@ -230,11 +198,6 @@ public class SubscriptionsBean extends BaseBean {
 	                                          List<NodeRef> notificationType,
 	                                          List<NodeRef> employee) {
 		NodeRef subscriptionRootRef = getSubscriptionRootRef();
-		// Если директория, где хранятся подписки не создана создаем ее
-		if (subscriptionRootRef == null) {
-			ensureSubscriptionsRootRef();
-			subscriptionRootRef = getSubscriptionRootRef();
-		}
 
 		String subscribeName;
 		if ((name == null) || name.equals("")) {
@@ -281,11 +244,6 @@ public class SubscriptionsBean extends BaseBean {
 	                                        List<NodeRef> organizationUnit, List<NodeRef> position) {
 
 		NodeRef subscriptionRootRef = getSubscriptionRootRef();
-		// Если директория, где хранятся подписки не создана создаем ее
-		if (subscriptionRootRef == null) {
-			ensureSubscriptionsRootRef();
-			subscriptionRootRef = getSubscriptionRootRef();
-		}
 
 		String subscribeName;
 		if ((name == null) || name.equals("")) {
