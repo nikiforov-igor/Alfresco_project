@@ -100,7 +100,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает ноду Организация или создает дерево директорий Организации
+	 * Возвращает ноду Организация
 	 * /**
 	 * Структура директорий
 	 * Организация
@@ -108,10 +108,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 * ---Сотрудники
 	 * ---Персональные данные
 	 *
-	 * @return Созданную ноду Организация или Null, если произошла ошибка
+	 * @return  ноду Организация
 	 */
 	public ScriptNode getOrganization() {
-		NodeRef organization = orgstructureService.ensureOrganizationRootRef();
+		NodeRef organization = orgstructureService.getOrganizationRootRef();
 		return new ScriptNode(organization, services, getScope());
 	}
 

@@ -74,7 +74,7 @@
         </property>
     </bean>
 
-    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl">
+    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="transactionService" ref="transactionService"/>

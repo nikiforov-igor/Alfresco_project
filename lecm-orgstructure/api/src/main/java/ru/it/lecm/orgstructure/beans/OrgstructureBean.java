@@ -77,14 +77,6 @@ public interface OrgstructureBean {
 	NodeRef getOrganizationRootRef();
 
 	/**
-	 * Получение узла Организация, в котором хрянится информация об Организации.
-	 * Если такой узел отсутствует - он создаётся автоматически (внутри /CompanyHome).
-	 *
-	 * @return NodeRef
-	 */
-	NodeRef ensureOrganizationRootRef();
-
-	/**
 	 * Получение руководителя Организации
 	 *
 	 * @return NodeRef или NULL если руководитель не задан
