@@ -7,6 +7,7 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
@@ -32,6 +33,7 @@ public class StateMachineHandler implements ExecutionListener {
 	private static ServiceRegistry serviceRegistry;
 	private static INodeACLBuilder lecmAclBuilderBean;
 	private static Repository repositoryHelper;
+	private static BusinessJournalService businessJournalService;
 
 	private String processId = "";
 
@@ -88,6 +90,10 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.lecmAclBuilderBean = lecmAclBuilderBean;
 	}
 
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		StateMachineHandler.businessJournalService = businessJournalService;
+	}
+
 	private StateMachineAction getStateMachineAction(Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
@@ -102,6 +108,7 @@ public class StateMachineHandler implements ExecutionListener {
 			action.setServiceRegistry(serviceRegistry);
 			action.setRepositoryHelper(repositoryHelper);
 			action.setLecmAclBuilderBean(lecmAclBuilderBean);
+			action.setBusinessJournalService(businessJournalService);
 			try {
 				action.init(actionElement, processId);
 			} catch (Exception e) {

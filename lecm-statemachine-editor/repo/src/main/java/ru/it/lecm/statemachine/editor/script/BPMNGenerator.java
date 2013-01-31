@@ -350,36 +350,16 @@ public class BPMNGenerator {
 		endEvent.appendChild(extentionElements);
 
 		Element extention = doc.createElement("lecm:extension");
-		extentionElements.appendChild(extention);
 
 		//statemachine start event
 		Element start = doc.createElement("lecm:event");
 		start.setAttribute("on", "start");
 		extention.appendChild(start);
 
-		//install setStatusAction
-		Element setStatusAction = doc.createElement("lecm:action");
-		setStatusAction.setAttribute("type", "StatusChange");
-		Element attribute = doc.createElement("lecm:attribute");
-		attribute.setAttribute("name", "status");
-		attribute.setAttribute("value", statusName);
-		setStatusAction.appendChild(attribute);
-
 		//statemachine end event
 		Element end = doc.createElement("lecm:event");
 		end.setAttribute("on", "end");
 		extention.appendChild(end);
-
-		//install ArchiveDocumentAction
-		Element archiveDocumentAction = doc.createElement("lecm:action");
-		archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
-		attribute = doc.createElement("lecm:attribute");
-		attribute.setAttribute("name", "archiveFolder");
-		String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
-		attribute.setAttribute("value", archiveFolder);
-		archiveDocumentAction.appendChild(attribute);
-
-		end.appendChild(archiveDocumentAction);
 
 		ArrayList<ChildAssociationRef> endActions = new ArrayList<ChildAssociationRef>();
 		prepareActions(status, null, null, endActions);
@@ -391,6 +371,22 @@ public class BPMNGenerator {
 			createEvent(extentionElements, end, statusVar, action, actionId, actionVar);
 		}
 
+		//install ArchiveDocumentAction
+		Element archiveDocumentAction = doc.createElement("lecm:action");
+		archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
+		Element attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "archiveFolder");
+		String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
+		attribute.setAttribute("value", archiveFolder);
+		archiveDocumentAction.appendChild(attribute);
+
+		attribute = doc.createElement("lecm:attribute");
+		attribute.setAttribute("name", "status");
+		attribute.setAttribute("value", statusName);
+		archiveDocumentAction.appendChild(attribute);
+
+		end.appendChild(archiveDocumentAction);
+		extentionElements.appendChild(extention);
 	}
 
 	/**
@@ -650,6 +646,7 @@ public class BPMNGenerator {
             extensions.appendChild(extension);
 
             Element activitiField = doc.createElement("activiti:field");
+			activitiField.setAttribute("name", "script");
             Element activitiString = doc.createElement("activiti:string");
             String data = (String) nodeService.getProperty(script.getChildRef(),PROP_ACTION_SCRIPT);
             CDATASection cdata = doc.createCDATASection(data);

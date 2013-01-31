@@ -25,7 +25,6 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 
 	@Override
 	public void parseProcess(Element element, ProcessDefinitionEntity processDefinitionEntity) {
-		System.out.println("start");
 	}
 
 	@Override

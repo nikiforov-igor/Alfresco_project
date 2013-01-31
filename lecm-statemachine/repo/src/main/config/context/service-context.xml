@@ -62,6 +62,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper" />
 		<property name="lecmAclBuilderBean" ref="lecmAclBuilderBean" />
+		<property name="businessJournalService" ref="businessJournalService" />
 	</bean>
 
 	<bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"

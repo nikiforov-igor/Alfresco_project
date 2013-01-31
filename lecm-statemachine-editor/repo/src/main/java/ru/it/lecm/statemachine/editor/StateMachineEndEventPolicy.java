@@ -74,8 +74,8 @@ public class StateMachineEndEventPolicy implements NodeServicePolicies.OnCreateN
 		//Добавляем действия к завершающему событию
 		String actionName = "ScriptAction";
 		HashMap<QName, Serializable> actionProps = new HashMap<QName, Serializable>(1, 1.0f);
-		props.put(PROP_ACTION_ID, actionName);
-		props.put(PROP_ACTION_EXECUTION, "end");
+		actionProps.put(PROP_ACTION_ID, actionName);
+		actionProps.put(PROP_ACTION_EXECUTION, "end");
 		childAssocRef = nodeService.createNode(
 				actionsFolder,
 				ContentModel.ASSOC_CONTAINS,

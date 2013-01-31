@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 public class ArchiveDocumentAction extends StateMachineAction {
 
 	private String archiveFolderPath = "/Archive";
+	private String status = "UNKNOWN";
 
 	@Override
 	public void execute(DelegateExecution execution) {
@@ -33,6 +34,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
 			String name = (String) nodeService.getProperty(document.getChildRef(), ContentModel.PROP_NAME);
 			NodeRef folder = createArchivePath(document.getChildRef());
 			nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+			nodeService.setProperty(document.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
 		}
 
 	}
@@ -45,6 +47,8 @@ public class ArchiveDocumentAction extends StateMachineAction {
 			String value = attribute.attribute("value");
 			if ("archiveFolder".equalsIgnoreCase(name)) {
 				archiveFolderPath = value;
+			} else if ("status".equalsIgnoreCase(name)) {
+				status = value;
 			}
 		}
 	}
