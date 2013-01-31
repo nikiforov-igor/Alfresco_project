@@ -125,8 +125,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 if (this.searchDialog != null) {
 	                                if (isClearSearch) {
                                         //сбрасываем на значение по умолчанию
-                                        this.dataGrid.datagridMeta.searchConfig = YAHOO.lang.merge({}, this.dataGrid.initialSearchConfig);
-                                        this.searchDialog.hide();
+                                        if (this.dataGrid.initialSearchConfig != null) {
+                                            this.dataGrid.datagridMeta.searchConfig = YAHOO.lang.merge({}, this.dataGrid.initialSearchConfig);
+                                        } else {
+                                            this.dataGrid.datagridMeta.searchConfig = null;
+                                        }
+                                        //this.searchDialog.hide();
                                         this.performSearch({
                                             parent:this.dataGrid.datagridMeta.nodeRef,
                                             itemType:this.dataGrid.datagridMeta.itemType,
