@@ -519,16 +519,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                 break;
 
                                             case "text":
-												var hexColorPattern = /^#?[0-9a-f]{6}/i;
+												var hexColorPattern = /^#[0-9a-f]{6}$/i;
 												if (hexColorPattern.test(data.displayValue)) {
-													var sharpPatten = /^#/i;
-													var colorValue;
-													if (sharpPatten.test(data.displayValue)) {
-														colorValue = data.displayValue;
-													} else {
-														colorValue = '#' + data.displayValue;
-													}
-													columnContent += $links(data.displayValue + '<div style="background-color: ' + colorValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
+													columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
 												} else {
 													columnContent += $links($html(data.displayValue));
 												}
