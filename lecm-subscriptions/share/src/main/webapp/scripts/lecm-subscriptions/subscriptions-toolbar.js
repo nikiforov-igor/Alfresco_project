@@ -379,7 +379,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                     // Get the function related to the clicked item
                     var fn = "onActionDelete";
                     if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems());
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(),null,{fullDelete:true});
                     }
                 }
             },
