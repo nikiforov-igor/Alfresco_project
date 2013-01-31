@@ -6,7 +6,11 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-notf-type:code"/>
 					<show id="lecm-notf-type:spring-bean-id"/>
+					<show id="lecm-notf-type:default-select"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-notf-type:spring-bean-id" read-only="true"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>
