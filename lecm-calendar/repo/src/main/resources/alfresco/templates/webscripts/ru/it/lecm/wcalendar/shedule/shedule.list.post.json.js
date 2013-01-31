@@ -1,19 +1,18 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.post.json.js">
-//пробегаемся по результирующему списку параметров делегирования и фильтруем их
+//пробегаемся по результирующему списку графиков работы и фильтруем их
 //если сотрудник технолог, то исходный список не трогаем
 //если сотрудник не технолог, но является руководителем, то получаем список всех его подчиненных и фильтруем список по подчиненным
 //во всех остальных случаях список будет пустой
 //получаем текущего сотрудника который залез на эту страницу
-var currentEmployee = orgstructure.getCurrentEmployee ();
-if (currentEmployee) {
-	logger.log("current employee is " + currentEmployee.name + " " + currentEmployee.nodeRef);
-} else {
+var currentEmployee = orgstructure.getCurrentEmployee();
+if (!currentEmployee) {
 	logger.log("ERROR: current employee is null!");
 }
 
 var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
+var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString());
 
-if (!isEngineer) {
+if (!isEngineer && isBoss) {
 	// если чувак не технолог, то получаем список его подчиненных.
 	// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
 	logger.log ("getBossSubordinate");
@@ -75,12 +74,20 @@ if (!isEngineer) {
 	for (i = 0; i < items.length; i++) {
 		var item = items[i];
 		for (j = 0; j < shedules.length; j++) {
-			if (item.node.equals (shedules[j])) {
-				actualItems.push (item);
+			if (item.node.equals(shedules[j])) {
+				actualItems.push(item);
 				break;
 			}
 		}
 	}
 	model.data.items = actualItems;
 	model.data.paging.totalRecords = actualItems.length;
+} else if (isEngineer) {
+	// не делаем ничего. все показываем
+}  else {
+	// вы кто такие? я вас не звал!
+	items = model.data.items;
+	itemsLength = items.length;
+	items.splice(0, itemsLength);
+	model.data.paging.totalRecords = 0;
 }

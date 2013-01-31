@@ -10,7 +10,7 @@ datagrid.setOptions({
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_PROFILE_LABEL,
-	//dataSource: "/lecm/wcalendar/absence/get/list/profile",
+	dataSource: "/lecm/wcalendar/absence/get/list/profile",
 	actions: [
        {
 		type:"action-link-${bubblingLabel!"absenceProfileDatagrid"}",

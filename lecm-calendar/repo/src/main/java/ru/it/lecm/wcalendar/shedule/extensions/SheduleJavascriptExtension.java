@@ -7,8 +7,6 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -117,9 +115,8 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * @param node - NodeRef на сотрудника или орг. единицу.
 	 * @return true - привязано, false - не привязано.
 	 */
-	public boolean isSheduleAssociated(NodeRef node) {
-		return SheduleService.isSheduleAssociated(node);
-
+	public boolean isSheduleAssociated(final String nodeRef) {
+		return SheduleService.isSheduleAssociated(new NodeRef(nodeRef));
 	}
 
 	/**
@@ -204,21 +201,5 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 		} else {
 			return new ScriptNode(createdNode, serviceRegistry);
 		}
-	}
-
-	/**
-	 * обернуть список NodeRef-ов в объект типа Scriptable
-	 *
-	 * @param nodeRefs список NodeRef-ов
-	 * @return специальный объект доступный для работы из JS
-	 */
-	private Scriptable getAsScriptable(List<NodeRef> nodeRefs) {
-		Scriptable scope = getScope();
-		int size = nodeRefs.size();
-		Object[] nodes = new Object[size];
-		for (int i = 0; i < size; ++i) {
-			nodes[i] = new ScriptNode(nodeRefs.get(i), serviceRegistry, scope);
-		}
-		return Context.getCurrentContext().newArray(scope, nodes);
 	}
 }

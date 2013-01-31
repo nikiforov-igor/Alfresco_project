@@ -1,8 +1,12 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -16,9 +20,11 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
  */
 public class AbsenceBean extends AbstractWCalCommonBean {
 
-	private final static QName TYPE_ABSENCE = QName.createQName(ABSENCE_NAMESPACE, "absence");
-	private final static String CONTAINER_NAME = "AbsenceContainer";
-	private final static QName TYPE_ABSENCE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "absence-container");
+	public final static QName TYPE_ABSENCE = QName.createQName(ABSENCE_NAMESPACE, "absence");
+	public final static String CONTAINER_NAME = "AbsenceContainer";
+	public final static QName TYPE_ABSENCE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "absence-container");
+	public final static QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(ABSENCE_NAMESPACE, "abscent-employee-assoc");
+	
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
@@ -53,5 +59,26 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 		params.put("CONTAINER_TYPE", TYPE_ABSENCE_CONTAINER);
 
 		return params;
+	}
+
+	public List<NodeRef> getAbsenceByEmployee(NodeRef node) {
+		if (!isAbsenceAssociated(node)) {
+			return null;
+		}
+		List<NodeRef> absences = new ArrayList<NodeRef>();
+		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
+		for (AssociationRef sourceAssoc : sourceAssocs) {
+			absences.add(sourceAssoc.getSourceRef());
+		}
+		return absences;
+	}
+
+	public boolean isAbsenceAssociated(NodeRef node) {
+		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
+		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

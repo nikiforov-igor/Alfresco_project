@@ -1,11 +1,14 @@
 package ru.it.lecm.wcalendar.extensions;
 
+import java.util.List;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.wcalendar.IWCalCommon;
@@ -61,5 +64,21 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 			return itemType.toPrefixString(namespacePrefixResolver);
 		}
 		return null;
+	}
+
+	/**
+	 * обернуть список NodeRef-ов в объект типа Scriptable
+	 *
+	 * @param nodeRefs список NodeRef-ов
+	 * @return специальный объект доступный для работы из JS
+	 */
+	protected Scriptable getAsScriptable(List<NodeRef> nodeRefs) {
+		Scriptable scope = getScope();
+		int size = nodeRefs.size();
+		Object[] nodes = new Object[size];
+		for (int i = 0; i < size; ++i) {
+			nodes[i] = new ScriptNode(nodeRefs.get(i), serviceRegistry, scope);
+		}
+		return Context.getCurrentContext().newArray(scope, nodes);
 	}
 }
