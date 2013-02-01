@@ -85,7 +85,13 @@ public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdateProper
 		PropertyDefinition propertyDefinition = dictionary.getProperty(propertyQName);
 
 		if (propertyDefinition != null) {
-			nodeService.setProperty(record, propertyQName, nodeAssocRef.getTargetRef().toString());
+			Serializable oldValue = nodeService.getProperty(record, propertyQName);
+			String strOldValue = oldValue != null ? oldValue.toString() : "";
+			String refValue = nodeAssocRef.getTargetRef().toString();
+			if (!strOldValue.contains(refValue)) {
+				strOldValue += refValue + ";";
+			}
+			nodeService.setProperty(record, propertyQName, strOldValue);
 		}
 	}
 
@@ -106,7 +112,12 @@ public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdateProper
 		PropertyDefinition propertyDefinition = dictionary.getProperty(propertyQName);
 
 		if (propertyDefinition != null) {
-			nodeService.setProperty(record, propertyQName, "");
+			Serializable oldValue = nodeService.getProperty(record, propertyQName);
+			String strOldValue = oldValue != null ? oldValue.toString() : "";
+			String refValue = nodeAssocRef.getTargetRef().toString();
+			strOldValue = strOldValue.replace(refValue + ";", "");
+			strOldValue = strOldValue.replace(refValue, "");
+			nodeService.setProperty(record, propertyQName, strOldValue);
 		}
 	}
 }
