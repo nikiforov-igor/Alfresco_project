@@ -6,20 +6,16 @@
 <#-- подключить все скрипты необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
-<#-- Далее перечисляются стандартные скрипты из Alfresco -->
-<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"/>
-
 <#-- Далее перечисляются самописные скрипты LogicECM  -->
-
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-user-profile/user-profile-menu.css"/>
 
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
-
 <#-- Служебные функции -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-profile-toolbar.js"/>
+<#--<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/date-interval-validation.js"/>-->
 
 <script type="text/javascript">//<![CDATA[
 
