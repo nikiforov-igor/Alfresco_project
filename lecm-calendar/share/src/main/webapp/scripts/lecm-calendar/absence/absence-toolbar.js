@@ -33,7 +33,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
 					Alfresco.util.populateHTML(
-						[ p_dialog.id + "-form-container_h", this.msg("label.absence.create-my-absence.title") ]
+						[ p_dialog.id + "-form-container_h", this.msg("label.absence.create-employee-absence.title") ]
 						);
 				};
 
@@ -69,9 +69,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						fn: function() {
 							htmlNode = YAHOO.util.Dom.get(scope.id + "-createNewEmployeeAbsenceForm_prop_lecm-absence_end");
 							var endDate = Alfresco.util.fromISO8601(htmlNode.value);
-							endDate.addHours(23);
-							endDate.addMinutes(59);
-							endDate.addSeconds(59);
+							day.setHours(23, 59, 59, 0);
 							Alfresco.util.toISO8601(endDate);
 							htmlNode.value = Alfresco.util.toISO8601(endDate)
 						},

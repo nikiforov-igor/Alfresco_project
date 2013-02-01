@@ -85,7 +85,7 @@ if (!isEngineer && isBoss) {
 } else if (isEngineer) {
 	// не делаем ничего. все показываем
 }  else {
-	// вы кто такие? я вас не звал!
+	// непонятно, как сюда пришел. не показываем ничего.
 	items = model.data.items;
 	itemsLength = items.length;
 	items.splice(0, itemsLength);
