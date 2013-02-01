@@ -15,7 +15,7 @@
     <properties>
         <!--<alfresco.version>4.0.e</alfresco.version>-->
         <!--<platform.version>0.1.0</platform.version>-->
-        <share.script.cient.debug>false</share.script.cient.debug>
+        <share.script.cient.debug>true</share.script.cient.debug>
     </properties>
 
     <modules>

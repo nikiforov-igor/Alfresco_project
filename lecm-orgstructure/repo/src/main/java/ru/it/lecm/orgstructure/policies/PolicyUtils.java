@@ -95,6 +95,11 @@ public class PolicyUtils {
 		return roleCode;
 	}
 
+
+	public static String getDPIdCode(NodeRef deputyPoint, NodeService nodeService) {
+		return (deputyPoint == null) ? null : deputyPoint.getId();
+	}
+
 	/**
 	 * Получить id/название Департамента (OU)
 	 * @param orgUnit
@@ -104,8 +109,9 @@ public class PolicyUtils {
 	public static String getOrgUnitIdCode(NodeRef orgUnit, NodeService nodeService) {
 		if (orgUnit == null)
 			return null;
-		final String unitCode = ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_CODE); // PROP_ORGUNIT_NAME
-		return unitCode;
+		// final String unitIdCode = ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_CODE); // PROP_ORGUNIT_NAME
+		final String unitIdCode = orgUnit.getId();
+		return unitIdCode;
 	}
 
 	/**
@@ -160,10 +166,12 @@ public class PolicyUtils {
 			, OrgstructureBean orgstructureService
 			, Logger logger
 	) {
+		final String dpIdCode = getDPIdCode( deputyPoint, nodeService);
 		final String dpName = ""+ nodeService.getProperty( deputyPoint, PROP_DP_NAME);
 		final String userLogin = getEmployeeLogin( employee, nodeService, orgstructureService, logger);
-		return Types.SGKind.getSGDeputyPosition( deputyPoint.getId(), dpName, userLogin, employee.getId() );
+		return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, employee.getId() );
 	}
+
 
 	/**
 	 * Получить дексриптор Организации, который используется в методах IOrgStructureNotifiers.

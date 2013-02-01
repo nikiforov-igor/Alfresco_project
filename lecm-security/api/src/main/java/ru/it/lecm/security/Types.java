@@ -158,7 +158,6 @@ public final class Types {
 			return new SGPrivateBusinessRole(employeerId, broleCode);
 		}
 
-
 		public static SGDeputyPosition getSGDeputyPosition(String dpId, String dpName, String userLogin, String employeerId) {
 			return new SGDeputyPosition(dpId, dpName, employeerId, userLogin);
 		}
@@ -308,7 +307,7 @@ public final class Types {
 
 		@Override
 		public String toString() {
-			return super.toString() + String.format( "user '%s', userId %s", (userLogin == null ? "" : userLogin), userId);
+			return super.toString() + String.format( "  user '%s', userId %s", (userLogin == null ? "" : userLogin), userId);
 		}
 
 		/**
@@ -318,7 +317,10 @@ public final class Types {
 		 */
 		@Override
 		public String getAlfrescoSuffix() {
-			return super.getAlfrescoSuffix() + "-" + this.getUserId();
+			// не подвязываемся на userId, т.к. оно может быть NULL, в то же время 
+			// в качестве Id для this будет уникальное значение и его будет
+			// вполне достаточно для уникальности security-группы
+			return super.getAlfrescoSuffix() + "-PRIV4USER"; // "-" + this.getUserId();
 		}
 
 	}
