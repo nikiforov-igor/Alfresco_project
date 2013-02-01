@@ -316,15 +316,4 @@
             </form>
         </forms>
     </config>
-
-    <config evaluator="model-type" condition="lecm-busjournal:archiverSettings">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-busjournal:archiver-deep"/>
-                    <show id="lecm-busjournal:archiver-period"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
 </alfresco-config>
