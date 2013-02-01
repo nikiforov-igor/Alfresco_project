@@ -31,7 +31,7 @@
                         showActionColumn: false,
                         showCheckboxColumn: false,
                         bubblingLabel: "${bubblingLabel!"bj-records"}",
-                        attributeForShow:"lecm-busjournal:bjRecord-description"
+                        attributeForShow:"lecm-busjournal:bjRecord-date"
                     }).setMessages(${messages});
 
                     datagrid.draw();
