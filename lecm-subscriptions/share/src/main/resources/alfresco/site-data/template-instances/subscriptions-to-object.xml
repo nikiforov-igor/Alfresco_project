@@ -16,9 +16,10 @@
 			<region-id>toolbar</region-id>
 			<url>/lecm/subscriptions/toolbar</url>
 			<properties>
-				<showButtons>false</showButtons>
+				<showButtons>true</showButtons>
 				<showSearchBlock>true</showSearchBlock>
 				<showExSearchBtn>true</showExSearchBtn>
+				<showButtonsCreate>false</showButtonsCreate>
 			</properties>
 		</component>
 		<!-- Menu -->

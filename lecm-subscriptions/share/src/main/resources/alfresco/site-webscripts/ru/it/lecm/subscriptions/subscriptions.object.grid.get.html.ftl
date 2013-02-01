@@ -28,7 +28,7 @@
 								}
 							],
 							bubblingLabel: "${bubblingLabel!"subscription-to-object"}",
-							showCheckboxColumn: false,
+							showCheckboxColumn: true,
 							attributeForShow:"cm:name"
 						}).setMessages(${messages});
 			}
