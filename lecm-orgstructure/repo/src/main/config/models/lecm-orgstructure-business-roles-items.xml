@@ -3,7 +3,7 @@
 	<items>
 		<item name="Технолог делегирования">
 			<property name="lecm-orgstr:business-role-identifier">BR_ENGINEER</property>
-			<property name="cm:name">Технолог</property>
+			<property name="cm:name">Технолог делегирования</property>
 			<property name="lecm-orgstr:business-role-description">Бизнес роль технолога процесса делегирования</property>
 			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 		</item>
@@ -12,6 +12,18 @@
 			<property name="cm:name">Технолог календарей</property>
 			<property name="lecm-orgstr:business-role-description">Бизнес роль технолога для управления календарями и расписаниями рабочего времени</property>
 			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+		</item>
+		<item name="Инициатор">
+			<property name="lecm-orgstr:business-role-identifier">BR_INITIATOR</property>
+			<property name="cm:name">Инициатор</property>
+			<property name="lecm-orgstr:business-role-description">Динамическая бизнес роль инициатора бизнес процесса</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+		</item>
+		<item name="Участник">
+			<property name="lecm-orgstr:business-role-identifier">BR_MEMBER</property>
+			<property name="cm:name">Участник</property>
+			<property name="lecm-orgstr:business-role-description">Динамическая бизнес роль участника бизнес процесса</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">true</property>
 		</item>
 		<item name="Бизнес роль 1">
 			<property name="lecm-orgstr:business-role-identifier">BR_01</property>
