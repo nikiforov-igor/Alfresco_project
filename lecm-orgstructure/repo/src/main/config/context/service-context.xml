@@ -107,6 +107,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
+        <property name="authService" ref="authenticationService"/>
 	</bean>
 
 	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
