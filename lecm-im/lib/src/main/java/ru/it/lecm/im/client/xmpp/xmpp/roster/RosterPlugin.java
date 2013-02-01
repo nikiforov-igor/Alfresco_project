@@ -21,24 +21,11 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.roster;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.IncrementalCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.*;
-import ru.it.lecm.im.client.xmpp.Plugin;
-import ru.it.lecm.im.client.xmpp.ResponseHandler;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.Storage;
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.PluginState;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
@@ -46,6 +33,8 @@ import ru.it.lecm.im.client.xmpp.stanzas.IQ;
 import ru.it.lecm.im.client.xmpp.util.StringUtil;
 import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem.Subscription;
+
+import java.util.*;
 
 public class RosterPlugin implements Plugin {
 
@@ -204,6 +193,7 @@ public class RosterPlugin implements Plugin {
 
 	public void getRoster(final AsyncCallback<?> callback) 
 	{
+        Log.log("RosterPlugin.getRoster");
 		stage = PluginState.IN_PROGRESS;
 		IQ iq = new IQ(IQ.Type.get);
 		iq.setAttribute("id", INIT_ID);
@@ -221,7 +211,7 @@ public class RosterPlugin implements Plugin {
 			}
 			public void onResult(IQ iq) 
 			{
-				GWT.log("process roster at function getRoster call back!", null);
+				Log.log("process roster at function getRoster call back!");
 				stage = PluginState.SUCCESS;
 				rosterReceived = true;
 				processRoster(iq);

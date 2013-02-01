@@ -55,7 +55,7 @@ public class StatusMenu extends Composite {
 	public StatusMenu(final ContextMenuUI menuWidget) 
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		availableItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_ONLINE), i18n.msg("Available"),new StatusMenuItemListener()
+		availableItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_ONLINE), i18n.msg("В сети"),new StatusMenuItemListener()
 		{
 			public void onSelect() 
 			{
@@ -68,7 +68,7 @@ public class StatusMenu extends Composite {
 				listener.onSetXmppStatus(XmppStatus.Status.STATUS_ONLINE);
 			}
 		});
-		chatItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_CHAT), i18n.msg("Free for chat"),new StatusMenuItemListener()
+		chatItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_CHAT), i18n.msg("Доступен для переписки"),new StatusMenuItemListener()
 		{
 			public void onSelect() 
 			{
@@ -81,7 +81,7 @@ public class StatusMenu extends Composite {
 				listener.onSetXmppStatus(XmppStatus.Status.STATUS_CHAT);
 			}
 		});
-		xaItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_XA), i18n.msg("Not available"),new StatusMenuItemListener()
+		xaItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_XA), i18n.msg("Недоступен"),new StatusMenuItemListener()
 		{
 			public void onSelect() 
 			{
@@ -94,7 +94,7 @@ public class StatusMenu extends Composite {
 				listener.onSetXmppStatus(XmppStatus.Status.STATUS_XA);
 			}
 		});
-		awayItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_AWAY), i18n.msg("Away"),new StatusMenuItemListener()
+		awayItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_AWAY), i18n.msg("Отсутствую"),new StatusMenuItemListener()
 		{
 			public void onSelect() 
 			{
@@ -107,7 +107,7 @@ public class StatusMenu extends Composite {
 				listener.onSetXmppStatus(XmppStatus.Status.STATUS_AWAY);
 			}
 		});
-		busyItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_DND), i18n.msg("Busy"),new StatusMenuItemListener()
+		busyItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_DND), i18n.msg("Занят"),new StatusMenuItemListener()
 		{
 			public void onSelect() 
 			{
@@ -120,7 +120,7 @@ public class StatusMenu extends Composite {
 				listener.onSetXmppStatus(XmppStatus.Status.STATUS_DND);
 			}
 		});
-		invisibleItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_INVISIBLE), i18n.msg("Invisible"),new StatusMenuItemListener()
+		invisibleItem = new StatusMenuItem(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_INVISIBLE), i18n.msg("Невидимый"),new StatusMenuItemListener()
 		{
 			public void onSelect() {
 				menuWidget.hide();

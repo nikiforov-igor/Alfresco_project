@@ -21,29 +21,24 @@
 package ru.it.lecm.im.client.ui;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.Field;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import ru.it.lecm.im.client.utils.PopupPrompt;
 import ru.it.lecm.im.client.utils.i18n;
+import ru.it.lecm.im.client.xmpp.JID;
+import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.Field;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -69,9 +64,9 @@ public class VCardSearchList extends Composite {
 	private Map<String,Integer> varToIndex = new HashMap<String,Integer>();
 	public VCardSearchList() {
 		initWidget(uiBinder.createAndBindUi(this));
-		addButton.setText(i18n.msg("Add"));
+		addButton.setText(i18n.msg("Добавить"));
 		buttonOuter.getElement().setAttribute("align", "right");
-		header.setText(0, 0, i18n.msg("Search result"));
+		header.setText(0, 0, i18n.msg("Результат поиска"));
 		addButton.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) 
@@ -81,7 +76,7 @@ public class VCardSearchList extends Composite {
 				int jidCol = varToIndex.get("jid");
 				String jid = table.getText(selectedRow, jidCol);
 				addFriend(jid);
-				PopupPrompt.prompt(i18n.msg("Friend added!"));
+				PopupPrompt.prompt(i18n.msg("Собеседник добавлен!"));
 			}
 			
 		});

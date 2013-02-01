@@ -20,16 +20,6 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.ResponseHandler;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.packet.Packet;
-import ru.it.lecm.im.client.xmpp.stanzas.IQ;
-import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.Field;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.JabberSearchPlugin;
-import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.JabberSearchResponseHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -43,6 +33,13 @@ import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.ResponseHandler;
 import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.packet.Packet;
+import ru.it.lecm.im.client.xmpp.stanzas.IQ;
+import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.Field;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.JabberSearchPlugin;
+import ru.it.lecm.im.client.xmpp.xmpp.xeps.jabberSearch.JabberSearchResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +70,7 @@ public class AddSearchWnd extends DialogBox
 	private FlexTable filedsWidget;
 	public AddSearchWnd()
 	{
-		setText(i18n.msg("Add/Search Friends"));
+		setText(i18n.msg("Добавить/Искать контакты"));
 		setGlassEnabled(false);
 		setAnimationEnabled(true);
 		this.addStyleName("ijab-searchwnd");
@@ -87,12 +84,12 @@ public class AddSearchWnd extends DialogBox
 	    vPanel.add(tabPanel);
 	    
 	    //init tab panel
-	    tabPanel.add(buildAddWidget(), i18n.msg("Add Friend"));
-	    tabPanel.add(createVCardSearchWidget(), i18n.msg("VCard Search"));
+	    tabPanel.add(buildAddWidget(), i18n.msg("Добавить контакт"));
+	    tabPanel.add(createVCardSearchWidget(), i18n.msg("Поиск по VCard"));
 	    
 	    tabPanel.selectTab(0);
 	    
-	    Button closeButton = new Button(i18n.msg("Close"));
+	    Button closeButton = new Button(i18n.msg("Закрыть"));
 	    closeButton.addClickHandler(new ClickHandler()
 	    {
 			public void onClick(ClickEvent event) 
@@ -151,7 +148,7 @@ public class AddSearchWnd extends DialogBox
 				jid = jid==null?"":jid;
 				if(jid.length()==0)
 				{
-					Window.alert(i18n.msg("JID can not be empty!"));
+					Window.alert(i18n.msg("JID не может быть пустым!"));
 					return;
 				}
 				String nick = nickTextBox.getValue();
@@ -160,7 +157,7 @@ public class AddSearchWnd extends DialogBox
 				if(groupListBox.getSelectedIndex() != 0)
 					group = groupListBox.getValue(groupListBox.getSelectedIndex());
 				addFriend(jid,nick,group);
-				PopupPrompt.prompt(i18n.msg("Friend added!"));
+				PopupPrompt.prompt(i18n.msg("Контакт добавлен!"));
 				jabberIDTextBox.setText("");
 				nickTextBox.setText("");
 			}
@@ -225,7 +222,7 @@ public class AddSearchWnd extends DialogBox
 		HorizontalPanel hPanel = new HorizontalPanel();
 		filedsWidget = new FlexTable();
 		filedsWidget.setCellSpacing(6);
-		searchButton = new Button(i18n.msg("Search"));
+		searchButton = new Button(i18n.msg("Искать"));
 		
 		
 		hPanel.add(filedsWidget);
@@ -248,7 +245,7 @@ public class AddSearchWnd extends DialogBox
 		VerticalPanel vPanel = new VerticalPanel();
 		// service list box
 		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.add(new HTML(i18n.msg("Service")+":&nbsp"));
+		hPanel.add(new HTML(i18n.msg("Сервис")+":&nbsp"));
 		
 		//build services list
 		services = new ArrayList<String>();
@@ -279,13 +276,13 @@ public class AddSearchWnd extends DialogBox
 		for(String groupName:iJab.client.getGroups())
 			groupListBox.addItem(groupName);
 		
-		addButton = new Button(i18n.msg("Add"));
+		addButton = new Button(i18n.msg("Добавить"));
 		
 		layout.setWidget(0, 0, new HTML("Jabber ID:"));
 		layout.setWidget(0, 1, jabberIDTextBox);
-		layout.setWidget(1,0,new HTML(i18n.msg("Nickname(optional):")));
+		layout.setWidget(1,0,new HTML(i18n.msg("Отображаемое имя(опционально):")));
 		layout.setWidget(1,1,nickTextBox);
-		layout.setWidget(2, 0, new HTML(i18n.msg("Group")));
+		layout.setWidget(2, 0, new HTML(i18n.msg("Группа")));
 		layout.setWidget(2, 1, groupListBox);
 		layout.setWidget(3, 1, addButton);
 		
@@ -303,7 +300,7 @@ public class AddSearchWnd extends DialogBox
 	    layout.setCellSpacing(6);
 	    
 	    translationTextBox = new TextBox();
-	    translationButton = new Button(i18n.msg("Get Jabber ID"));
+	    translationButton = new Button(i18n.msg("Получить Jabber ID"));
 	    layout.setWidget(0, 0, translationTextBox);
 	    layout.setWidget(0, 1, translationButton);
 	    DecoratorPanel decPanel = new DecoratorPanel();

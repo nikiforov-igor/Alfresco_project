@@ -118,7 +118,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		{
 			DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
 			String dateTime = fmt.format(new Date());
-			addMessage(createMessageWidget(i18n.msg("Me"),body,dateTime));
+			addMessage(createMessageWidget(i18n.msg("Я"),body,dateTime));
 		}
 	}
 	
@@ -139,7 +139,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		lastNick = nick;
 		
 		String nickStyle = "ijab-local-message";
-		if(!nick.equals(i18n.msg("Me")))
+		if(!nick.equals(i18n.msg("Я")))
 			nickStyle = "ijab-other-message";
 		String html;
 		if(isConsecutiveMessage)
@@ -175,7 +175,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		
 		DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
 		final String dateTime = fmt.format(new Date());
-		addMessage(createMessageWidget(i18n.msg("Me"),msg,dateTime));
+		addMessage(createMessageWidget(i18n.msg("Я"),msg,dateTime));
 		resetComposing();
 	}
 
@@ -364,7 +364,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		contactChatState = state;
 		if (state == ChatState.gone) 
 		{
-			setChatStatusText(i18n.msg("Chat closed"));
+			setChatStatusText(i18n.msg("Чат закрыт"));
 		}
 		else
 		{
@@ -379,9 +379,9 @@ public class BarChatWidget extends BarChatWidgetUI
 	private void updateChatStatusText()
 	{
 		if(contactChatState == ChatState.composing)
-			setChatStatusText(i18n.msg("Typeing..."));
+			setChatStatusText(i18n.msg("Пишет..."));
 		else if(contactChatState == ChatState.inactive)
-			setChatStatusText(i18n.msg("Inactive"));
+			setChatStatusText(i18n.msg("Неактивен"));
 		else
 			setChatStatusText("");
 		button.setChatState(contactChatState);
@@ -470,7 +470,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			{
 				if(res==null||res.getCollections().size() == 0)
 				{
-					archivePanel.add(new HTML("<div align='center'><span>"+i18n.msg("No message hsitory")+"</span></div>"));
+					archivePanel.add(new HTML("<div align='center'><span>"+i18n.msg("История переписки отсутствует")+"</span></div>"));
 				}
 				else
 				{
@@ -510,7 +510,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		final String dateTime = fmt.format(item.getDate());
 		String nick;
 		if(item.getType().equals(Item.Type.TO))
-			nick = i18n.msg("Me");
+			nick = i18n.msg("Я");
 		else
 			nick = XmppProfileManager.getName(button.getChatItem().getJid().toStringBare());
 		return createArchiveMessageWidget(nick,item.getBody(),dateTime);
@@ -593,7 +593,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		lastNick = nick;
 		
 		String nickStyle = "ijab-local-message";
-		if(!nick.equals(i18n.msg("Me")))
+		if(!nick.equals(i18n.msg("Я")))
 			nickStyle = "ijab-other-message";
 		String html;
 		if(isConsecutiveMessage)

@@ -182,10 +182,16 @@ public class User {
 		storage.set(COOKIENAME, "");
 		storage.remove(COOKIENAME);
 		if(cookie == null || cookie.length()==0)
-			return false;
+        {
+            Log.log("User.resume() (cookie == null || cookie.length()==0)");
+            return false;
+        }
 		JSONObject jUser = JSONParser.parse(cookie).isObject();
 		if(jUser == null)
-			return false;
+        {
+            Log.log("User.resume() jUser == null");
+            return false;
+        }
 		
 		this.username = jUser.get(STORAGE_USERNAME).isString().stringValue();
 		this.domainname = jUser.get(STORAGE_DOMAIN).isString().stringValue();
@@ -195,7 +201,11 @@ public class User {
 		this.priority = Integer.parseInt( jUser.get(STORAGE_PRIORITY).isString().stringValue());
 		//Cookies.removeCookie(COOKIENAME);
 		if(username.length()==0||domainname.length()==0)
-			return false;
+        {
+            Log.log("User.resume() (username.length()==0||domainname.length()==0)");
+            return false;
+        }
+
 		return true;
 	}
 	

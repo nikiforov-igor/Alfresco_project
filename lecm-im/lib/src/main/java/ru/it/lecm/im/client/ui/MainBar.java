@@ -288,6 +288,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         Log.log("MainBar.disconnected()");
         connected = false;
 
+        ijab.getElement().addClassName("disconnected");
+
 		/*buddysButton.setIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.removeIconStyle("ijab-icon-buddy");
 		buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
@@ -302,6 +304,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 	{
         Log.log("MainBar.connected()");
 		connected = true;
+        ijab.getElement().removeClassName("disconnected");
 	/*	buddysButton.removeIconStyle("ijab-icon-buddy-connecting");
 		buddysButton.removeIconStyle("ijab-icon-buddy-disconnected");
 		buddysButton.setIconStyle("ijab-icon-buddy");

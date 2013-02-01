@@ -92,6 +92,7 @@ public final class PalladiumLogic {
 	// Reply to POST requests
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
+            logger.debug("Palladium.doPost");
 			long rid = 0;
 			try {
 				// Parse the request
@@ -112,8 +113,7 @@ public final class PalladiumLogic {
 					
 					if (attribs.getNamedItem("sid") != null) {
 						// This session exists?
-						Session sess = Session.getSession(attribs.getNamedItem(
-								"sid").getNodeValue());
+						Session sess = Session.getSession(attribs.getNamedItem("sid").getNodeValue());
 						
 						if (sess != null) {
 							logger.debug("incoming request for " + sess.getSID());
@@ -201,8 +201,9 @@ public final class PalladiumLogic {
 									}
 
                                     logger.debug("handling response " + rid);
-									
+
 									// Check the key
+                                    logger.debug("Check the key");
 									String key = sess.getKey();
 									
 									if (key != null) {
@@ -224,7 +225,10 @@ public final class PalladiumLogic {
 											sess.setKey(attribs.getNamedItem("key").getNodeValue());
 
                                         logger.debug("key valid for " + rid);
-									}
+									}else
+                                    {
+                                        logger.debug("Session key is null");
+                                    }
 									
 									if (attribs.getNamedItem("xmpp:restart") != null) {
                                         logger.debug("XMPP RESTART");
@@ -232,10 +236,14 @@ public final class PalladiumLogic {
 									}
 									
 									// Check we have got to forward something to the XMPP server
+                                    logger.debug("Check we have got to forward something to the XMPP server");
 									if (rootNode.hasChildNodes())
-										sess.sendNodes(rootNode.getChildNodes());
-									
+                                    {
+                                        logger.debug("sess.sendNodes");
+                                        sess.sendNodes(rootNode.getChildNodes());
+                                    }
 									else {
+                                        logger.debug("Too many empty requests? (DoS?)");
 										// Too many empty requests? (DoS?)
 										long now = System.currentTimeMillis();
 										
@@ -246,6 +254,7 @@ public final class PalladiumLogic {
 											response.sendError(HttpServletResponse.SC_FORBIDDEN);
 											
 											// Kick it!
+                                            logger.debug("Kick it!");
 											sess.terminate();
 											
 											return;
@@ -256,10 +265,12 @@ public final class PalladiumLogic {
 									}
 									
 									// Send the reply
-									
+									logger.debug("Send the reply");
 									// Request to end the session?
+                                    logger.debug("Request to end the session?");
 									if (attribs.getNamedItem("type") != null) {
-										String rType = attribs.getNamedItem("type").getNodeValue();
+										logger.debug("attribs.getNamedItem(\"type\") != null");
+                                        String rType = attribs.getNamedItem("type").getNodeValue();
 										
 										if (rType.equals("terminate")) {
 											sess.terminate();
@@ -267,9 +278,13 @@ public final class PalladiumLogic {
 											
 											return;
 										}
-									}
+									}else
+                                    {
+                                        logger.debug("attribs.getNamedItem(\"type\") == null");
+                                    }
 									
 									// Check incoming queue
+                                    logger.debug("Check incoming queue");
 									NodeList nl = sess.checkInQ(rid);
 									
 									// Add items to response
@@ -312,14 +327,16 @@ public final class PalladiumLogic {
 								jresp.send(response);
 							}
 						}
-						
-						else
-							// Session not found!
-							response.sendError(HttpServletResponse.SC_NOT_FOUND);
+						else // Session not found!
+                        {
+                            logger.debug("Session not found!");
+                            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                        }
 					}
 					
 					else {
 						// Request to create a new session
+                        logger.debug("Request to create a new session.");
 						if (attribs.getNamedItem("rid") == null) {
 							response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 							

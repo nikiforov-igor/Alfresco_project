@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketGwtImpl;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
@@ -133,6 +134,7 @@ public class Bosh2Connector implements Connector {
 				final String lastSendedBody = activeRequests.remove(request);
 				if (exception instanceof RequestTimeoutException) 
 				{
+                    Log.log("Request too old. Trying again.");
 					GWT.log("Request too old. Trying again.", null);
 					DeferredCommand.addCommand(new Command() {
 						public void execute() 
@@ -146,6 +148,7 @@ public class Bosh2Connector implements Connector {
 				} 
 				else if (exception.getMessage().startsWith("Unable to read XmlHttpRequest.status;")) 
 				{
+                    Log.log("Lost request. Ignored. Resend.");
 					GWT.log("Lost request. Ignored. Resend.", null);
 					if (lastSendedBody != null) {
 						DeferredCommand.addCommand(new Command() 
@@ -163,7 +166,8 @@ public class Bosh2Connector implements Connector {
 				else
 				{
 					state = State.disconnected;
-					GWT.log("Connection error", exception);
+                    Log.log("Connection error: " + exception.toString());
+                    GWT.log("Connection error", exception);
 					exception.printStackTrace();
 					fireEventError(BoshErrorCondition.remote_connection_failed, null, "Response error: " + exception.getMessage());
 				}
@@ -219,8 +223,9 @@ public class Bosh2Connector implements Connector {
 						fireOnResumeFailed();
 						return;
 					}
-					
-					GWT.log("ERROR (" + httpStatusCode + "): " + httpResponse, null);
+
+                    Log.log("ERROR (" + httpStatusCode + "): " + httpResponse);
+                    GWT.log("ERROR (" + httpStatusCode + "): " + httpResponse, null);
 					ErrorCondition condition = body == null ? ErrorCondition.bad_request : ErrorCondition.undefined_condition;
 					String msg = null;
 					Packet error = body == null ? null : body.getFirstChild("error");
@@ -253,7 +258,8 @@ public class Bosh2Connector implements Connector {
 					} 
 					else if (type != null && "terminate".equals(type)) 
 					{
-						GWT.log("Disconnected by server", null);
+                        Log.log("Disconnected by server");
+                        GWT.log("Disconnected by server", null);
 						state = State.disconnected;
 						fireDisconnectByServer(boshCondition, condition, msg);
 					}
@@ -315,7 +321,7 @@ public class Bosh2Connector implements Connector {
 					return;
 				}
 				state = State.disconnected;
-				GWT.log("Connection error", null);
+				Log.log("Connection error");
 				fireEventError(BoshErrorCondition.remote_connection_failed, null, "Response error: request timeout or 404!");
 			}
 
@@ -364,7 +370,7 @@ public class Bosh2Connector implements Connector {
 						fireOnResumeFailed();
 						return;
 					}
-					GWT.log("ERROR : " + httpResponse, null);
+					Log.log("ERROR : " + httpResponse);
 					ErrorCondition condition = body == null ? ErrorCondition.bad_request : ErrorCondition.undefined_condition;
 					String msg = null;
 					Packet error = body == null ? null : body.getFirstChild("error");
@@ -445,7 +451,8 @@ public class Bosh2Connector implements Connector {
 
 	public void connect() 
 	{
-		makeNewRequestBuilder(defaultTimeout + 7);
+        Log.log("Bosh2Connector.connect");
+        makeNewRequestBuilder(defaultTimeout + 7);
 		this.rid = (long) (Math.random() * 10000000);
 
 		Packet e = new PacketImp("body");
@@ -579,6 +586,7 @@ public class Bosh2Connector implements Connector {
 	
 	private void fireOnResumeSuccessed()
 	{
+        Log.log("Bosh2Connector.fireOnResumeSuccessed");
 		for(ConnectorListener l:listeners)
 		{
 			l.onResumeSuccessed();
@@ -587,7 +595,8 @@ public class Bosh2Connector implements Connector {
 	
 	private void fireOnResumeFailed()
 	{
-		for(ConnectorListener l:listeners)
+        Log.log("Bosh2Connector.fireOnResumeFailed");
+        for(ConnectorListener l:listeners)
 		{
 			l.onResumeFailed();
 		}
@@ -653,7 +662,8 @@ public class Bosh2Connector implements Connector {
 
 	public void reset() 
 	{
-		state = State.disconnected;
+		Log.log("Bosh2Connector.reset");
+        state = State.disconnected;
 		Cookies.removeCookie(user.getResource()+"sid");
 		Cookies.removeCookie(user.getResource()+"rid");
 		this.errorCounter = 0;
@@ -700,7 +710,7 @@ public class Bosh2Connector implements Connector {
 	//adde by zhongfanglin@antapp.com
 	private void send(String body,RequestClientCallback callback)
 	{
-		System.out.println("OUT (" + this.sid + "): " + body);
+		Log.log("OUT (" + this.sid + "): " + body);
 		try 
 		{
 			// ++activeConnections;
@@ -717,7 +727,7 @@ public class Bosh2Connector implements Connector {
 	{
 		// System.out.println("OUT (" + this.sid + ", " + connected + ", " +
 		// activeConnections + "): " + body);
-		System.out.println("OUT (" + this.sid + "): " + body);
+		Log.log("OUT (" + this.sid + "): " + body);
 		try
 		{
 			// ++activeConnections;
@@ -846,6 +856,7 @@ public class Bosh2Connector implements Connector {
 
 	public boolean resume() 
 	{
+        Log.log("Bosh2Connector.resume");
 		makeNewRequestBuilder(defaultTimeout + 7);
 		this.sid = Cookies.getCookie(user.getResource()+"sid");
 		try 

@@ -83,10 +83,10 @@ public abstract class BarChatWidgetUI extends Composite {
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		emotElement.setAttribute("title", i18n.msg("Emotions"));
-		cleanElement.setAttribute("title", i18n.msg("Clean"));
-		historyElement.setAttribute("title", i18n.msg("History"));
-		inputPrompt = i18n.msg("Input message here and press Enter to send");
+		emotElement.setAttribute("title", i18n.msg("Смайлы"));
+		cleanElement.setAttribute("title", i18n.msg("Очистить"));
+		historyElement.setAttribute("title", i18n.msg("История"));
+		inputPrompt = i18n.msg("Наберите сообщение и нажмите Enter для отправки");
 		msgInput.setText(inputPrompt);
 		
 		emotButton = new SimpleFocusWidget(emotElement);

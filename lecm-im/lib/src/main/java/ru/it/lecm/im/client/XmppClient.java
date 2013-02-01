@@ -554,6 +554,7 @@ public class XmppClient
 			}
 		};
         session.getRosterPlugin().addRosterListener(listener);
+
     }
 
     private void connectPresenceEventListener() {
@@ -570,7 +571,7 @@ public class XmppClient
                     nick = nick == null ? "" : nick;
                     nick = nick.length() == 0 ? StringUtil.jid2name(jid.toStringBare()) : nick;
                     nick = nick + "(" + jid.toStringBare() + ")";
-                    if (Window.confirm(nick + " " + i18n.msg("request that you add as a friend. Do you accept?"))) {
+                    if (Window.confirm(nick + " " + i18n.msg("добавить в список контактов?"))) {
                         session.getPresencePlugin().subscribed(jid);
                         session.getPresencePlugin().subscribe(jid);
                     } else

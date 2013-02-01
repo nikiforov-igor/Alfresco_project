@@ -64,7 +64,7 @@ public class MUCChatWidget extends BarChatWidgetUI
 		gcNick = gcNick==null?"":gcNick;
 		if(resrouceName!=null&&resrouceName.equals(gcNick))
 		{
-			nick = i18n.msg("Me");
+			nick = i18n.msg("Я");
 		}
 		else
 		{
@@ -100,7 +100,7 @@ public class MUCChatWidget extends BarChatWidgetUI
 		lastNick = nick;
 		
 		String nickStyle = "ijab-local-message";
-		if(!nick.equals(i18n.msg("Me")))
+		if(!nick.equals(i18n.msg("Я")))
 			nickStyle = "ijab-other-message";
 		String html;
 		if(isConsecutiveMessage)

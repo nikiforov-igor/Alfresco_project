@@ -86,7 +86,7 @@ public class XmppChat
 	{
 		if(!Session.instance().getPresencePlugin().isAvailableByBareJid(chatItem.getJid().toStringBare()))
 		{
-			button.setChatWidgetTip(chatItem.getUserNickname()+ i18n.msg(" is offline. ")+ chatItem.getUserNickname()+i18n.msg(" will receive your message in next login."));
+			button.setChatWidgetTip(chatItem.getUserNickname()+ i18n.msg(" не в сети. ")+ chatItem.getUserNickname()+i18n.msg(" получит ваши сообщения после следующего входа."));
 		}
 	}
 }

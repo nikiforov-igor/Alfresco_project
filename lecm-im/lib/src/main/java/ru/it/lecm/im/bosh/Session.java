@@ -127,7 +127,8 @@ public class Session {
 	
 	// Create a new session and connect to the XMPP server
 	public Session(String to, String route, String xmllang) throws UnknownHostException, IOException {
-		this.to = to;
+		logger.debug("Create a new session and connect to the XMPP server");
+        this.to = to;
 		this.xmllang = xmllang;
 		
 		int port = SessionConstants.DEFAULT_XMPPPORT;
@@ -136,10 +137,13 @@ public class Session {
 		this.setLastActive();
 		
 		try {
-			this.db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            logger.debug("Session: DocumentBuilderFactory.newInstance().newDocumentBuilder()");
+            this.db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		}
 		
-		catch (Exception e) { }
+		catch (Exception e) {
+            logger.error("Session: DocumentBuilderFactory.newInstance().newDocumentBuilder()", e);
+        }
 		
 		// First, try connecting throught the 'route' attribute.
 		if (route != null && !route.equals("")) {
@@ -179,6 +183,7 @@ public class Session {
 		
 		// If no socket has been opened, try connecting trough the 'to' attribute
 		if (this.sock == null || !this.sock.isConnected()) {
+            logger.debug("no socket has been opened, try connecting trough the 'to' attribute");
 			this.sock = new Socket();
             logger.debug("Trying to use 'to' attribute to open a socket...");
 			
@@ -204,12 +209,13 @@ public class Session {
 		// At this point, we either have a socket, or an exception has already been thrown
 		try {
 			if (this.sock.isConnected())
+            {
                 logger.debug("Succesfully connected to " + to);
+            }
 			
 			this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
 			
-			this.osw = new OutputStreamWriter(this.sock.getOutputStream(),
-					"UTF-8");
+			this.osw = new OutputStreamWriter(this.sock.getOutputStream(), "UTF-8");
 			
 			this.osw.write("<stream:stream to='" + this.to + "'"
 					+ appendXMLLang(this.xmllang)
@@ -230,7 +236,7 @@ public class Session {
 			sessions.put(this.sid, this);
 			
 			// Create list of responses
-			responses = new TreeMap();
+			this.responses = new TreeMap();
 			
 			this.br = new BufferedReader(new InputStreamReader(this.sock.getInputStream(), "UTF-8"));
 			
@@ -244,6 +250,7 @@ public class Session {
 		}
 		
 		catch (IOException ioe) {
+            logger.error("Error while creating session", ioe);
 			throw ioe;
 		}
 	}
@@ -265,10 +272,12 @@ public class Session {
 
 	private NodeList checkInQ(long rid, long depth) throws IOException {
 		NodeList nl = null;
-		
-		inQueue += this.readFromSocket(rid);
 
-        logger.debug("inQueue: " + inQueue);
+		logger.debug("checkInQ: readFromSocket");
+        inQueue += this.readFromSocket(rid);
+        logger.debug("checkInQ: readFromSocket DONE!");
+
+        logger.debug("inQueue: " + inQueue.toString());
 
         logger.debug("Session id " + this.sid + " inQueue depth:" + depth);
 
@@ -281,7 +290,7 @@ public class Session {
 				if (m.matches()) {
 					this.authid = m.group(1);
 					inQueue = m.group(2);
-                    logger.debug("inQueue: " + inQueue);
+                    logger.debug("inQueue: " + inQueue.toString());
 					streamFeatures = inQueue.length() > 0;
 				}
 				
@@ -297,6 +306,7 @@ public class Session {
                     }
 					
 					// Retry
+                    logger.debug("inQueue: we need to go deeper!");
 					return this.checkInQ(rid, depth + 1);
 				}
 			}
@@ -604,10 +614,15 @@ public class Session {
 		while (!this.sock.isClosed() && !this.isStatus(SessionConstants.SESS_TERM)) {
 			this.setLastActive();
 			try {
+                logger.debug("this.br.ready()");
 				if (this.br.ready()) {
-					while (this.br.ready() && (c = this.br.read(buf, 0, buf.length)) >= 0)
-						retval += new String(buf, 0, c);
-						break;
+                    logger.debug("this.br.ready() == true");
+					while (this.br.ready() && (c = this.br.read(buf, 0, buf.length)) >= 0) {
+                        retval += new String(buf, 0, c);
+                        logger.debug("readFromSocket inner While end");
+                    }
+
+                    break;
 				}
 				
 				else {
@@ -616,26 +631,22 @@ public class Session {
 						break;
 					}
 					
-					try {
-						// Wait for incoming packets
-						Thread.sleep(SessionConstants.READ_TIMEOUT);
-					}
-					
-					catch (InterruptedException ie) {
-						System.err.println(ie.toString());
-					}
+                    // Wait for incoming packets
+                    logger.debug("Wait for incoming packets");
+                    Thread.sleep(SessionConstants.READ_TIMEOUT);
+
 				}
-			}
-			
-			catch (IOException e) {
-				System.err.println("Can't read from socket");
-				
+			} catch (IOException e) {
+				logger.error("Can't read from socket", e);
 				this.terminate();
-			}
-		}
+			} catch (InterruptedException ie) {
+                logger.error(ie.getMessage(), ie);
+            }
+        }
 		
 		if (this.sock.isClosed()) {
-			throw new IOException();
+			logger.error("Socket is closed!");
+            throw new IOException("Socket is closed!");
 		}
 		
 		return retval;

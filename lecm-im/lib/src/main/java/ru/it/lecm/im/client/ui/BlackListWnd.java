@@ -53,14 +53,14 @@ public class BlackListWnd extends DialogBox
 	private FlowPanel prompt;
 	public BlackListWnd()
 	{
-		setText(i18n.msg("Blacklist Manager"));
+		setText(i18n.msg("Управление чёрным списком"));
 		setGlassEnabled(false);
 		setAnimationEnabled(true);
 		setModal(false);
 		
 		prompt = new FlowPanel();
 		prompt.setStyleName("ijab-blacklistwnd-prompt");
-		HTML promptText = new HTML(i18n.msg("Loading blacklist,please wait!"));
+		HTML promptText = new HTML(i18n.msg("Загружается чёрный список, пожалуйста ожидайте..."));
 		prompt.add(promptText);
 		
 		
@@ -81,7 +81,7 @@ public class BlackListWnd extends DialogBox
 		hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 	    hPanel.setSpacing(5);
 	    
-	    Button cancelButton = new Button(i18n.msg("Cancel"));
+	    Button cancelButton = new Button(i18n.msg("Отмена"));
 	    cancelButton.addClickHandler(new ClickHandler()
 	    {
 			public void onClick(ClickEvent event) 

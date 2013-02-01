@@ -71,9 +71,11 @@ public class Session implements Responsemanager
 	private final static ResponseHandler EMPTY_HANDLER = new ResponseHandler() {
 
 		public void onError(IQ iq, ErrorType errorType, ErrorCondition errorCondition, String text) {
+            Log.log("EMPTY_HANDLER.ResponseHandler.onError()");
 		}
 
 		public void onResult(IQ iq) {
+            Log.log("EMPTY_HANDLER.ResponseHandler.onResult()");
 		}
 	};
 
@@ -85,7 +87,8 @@ public class Session implements Responsemanager
 
 	private static void callErrorOnResponseHandler(final IQ iq, final ResponseHandler handler) 
 	{
-		final Packet error = iq.getFirstChild("error");
+        Log.log("Session.callErrorOnResponseHandler()");
+        final Packet error = iq.getFirstChild("error");
 		String text = null;
 		ErrorCondition condition = null;
 		ResponseHandler.ErrorType errorType = null;
@@ -196,7 +199,8 @@ public class Session implements Responsemanager
 
 	private Session(User user) 
 	{
-		this.con = new Bosh2Connector(user);
+        Log.log("new Session()");
+        this.con = new Bosh2Connector(user);
 		this.user = user;
 		this.boshListener = new ConnectorListener() 
 		{
@@ -211,13 +215,15 @@ public class Session implements Responsemanager
 
 			public void onBoshError(ErrorCondition errorCondition, BoshErrorCondition boshErrorCondition, String message) 
 			{
-				fireOnError(boshErrorCondition,message);
+                Log.log("Session.onBoshError()");
+                fireOnError(boshErrorCondition,message);
 				con.disconnect(null);
 				reset();
 			}
 
 			public void onBoshTerminate(Connector con, BoshErrorCondition boshErrorCondition) 
 			{
+                Log.log("Session.onBoshError()");
 				fireOnError(boshErrorCondition,null);
 				con.disconnect(null);
 				reset();
@@ -225,6 +231,7 @@ public class Session implements Responsemanager
 
 			public void onConnect(Connector con) 
 			{
+                Log.log("Session.onBoshError()");
 			}
 
 			public void onStanzaReceived(List<? extends Packet> nodes) 
@@ -263,7 +270,8 @@ public class Session implements Responsemanager
 					}
 					if (!handled) 
 					{
-						System.out.println("NOT HANDLED!!!");
+                        Log.log("Session.onStanzaReceived() NOT HANDLED!!!");
+                        System.out.println("NOT HANDLED!!!");
 						PacketImp errorStanza = new PacketImp(node.getName(), node.getAtribute("xmlns"));
 
 						final String id = node.getAtribute("id");
@@ -332,10 +340,12 @@ public class Session implements Responsemanager
 				{
 					if (rosterPlugin.getStatus() == PluginState.NONE ) 
 					{
-						rosterPlugin.getRoster(null);
+						Log.log("Session.ConnectorListener.onStanzaReceived rosterPlugin.getStatus() == PluginState.NONE rosterPlugin.getRoster(null) ");
+                        rosterPlugin.getRoster(null);
 					} 
 					else if (rosterPlugin.getStatus() == PluginState.SUCCESS && !presencePlugin.isInitialPresenceSended()) 
 					{
+                        Log.log("Session.ConnectorListener.onStanzaReceived if (rosterPlugin.getStatus() == PluginState.SUCCESS && !presencePlugin.isInitialPresenceSended())");
 						presencePlugin.sendInitialPresence(Session.this.user.getPriority());
 						JID j = new JID (Session.this.user.getUsername(),Session.this.user.getDomainname(), "ijab");
 						vCardPlugin.vCardRequest(j, new VCardResponseHandler()
@@ -364,16 +374,20 @@ public class Session implements Responsemanager
 
 			public void onResumeSuccessed() 
 			{
+                Log.log("Session.ConnectorListener.onResumeSuccessed()");
 				if(!noneRoster&&!getRosterDelay)
 				{
-					rosterPlugin.getRoster(new AsyncCallback<Object>()
+                    Log.log("Session.ConnectorListener.onResumeSuccessed() !noneRoster&&!getRosterDelay = true");
+                    rosterPlugin.getRoster(new AsyncCallback<Object>()
 					{
 						public void onFailure(Throwable caught) 
 						{
-							fireOnResumeFailed();
+                            Log.log("Session.ConnectorListener.onResumeSuccessed.getRoster.onFailure()");
+                            fireOnResumeFailed();
 						}
 						public void onSuccess(Object result) 
 						{
+                            Log.log("Session.ConnectorListener.onResumeSuccessed.getRoster.onSuccess()");
 							presencePlugin.resume();
 							fireOnResumeSuccessed();
 						}
@@ -381,6 +395,7 @@ public class Session implements Responsemanager
 				}
 				else
 				{
+                    Log.log("Session.ConnectorListener.onResumeSuccessed() !noneRoster&&!getRosterDelay = false");
 					presencePlugin.resume();
 					fireOnResumeSuccessed();
 				}
@@ -685,6 +700,7 @@ public class Session implements Responsemanager
 	
 	private void fireOnEndLogin()
 	{
+        Log.log("Session.fireOnEndLogin");
 		for(int i = 0;i<listeners.size();i++)
 		{
 			SessionListener l = listeners.get(i);
@@ -694,6 +710,7 @@ public class Session implements Responsemanager
 	
 	private void fireOnLoginOut()
 	{
+        Log.log("Session.fireOnLoginOut");
 		for(int i = 0;i<listeners.size();i++)
 		{
 			SessionListener l = listeners.get(i);
@@ -703,6 +720,7 @@ public class Session implements Responsemanager
 	
 	private void fireOnError(BoshErrorCondition boshErrorCondition,String message)
 	{
+        Log.log("Session.fireOnError");
 		for(int i = 0;i<listeners.size();i++)
 		{
 			SessionListener l = listeners.get(i);
@@ -712,12 +730,14 @@ public class Session implements Responsemanager
 	
 	private void fireOnResumeSuccessed()
 	{
-		for(SessionListener l:listeners)
+        Log.log("Session.fireOnResumeSuccessed()");
+        for(SessionListener l:listeners)
 			l.onResumeSuccessed();
 	}
 	
 	private void fireOnResumeFailed()
 	{
+        Log.log("Session.fireOnResumeFailed()");
 		for(SessionListener l:listeners)
 			l.onResumeFailed();
 	}
@@ -735,6 +755,7 @@ public class Session implements Responsemanager
 	
 	public boolean suspend()
 	{
+        Log.log("Session.suspend");
 		//rosterPlugin.suspend();
 		presencePlugin.suspend();
 		if(!user.suspend())

@@ -47,7 +47,7 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 	public BarMainWidget() 
 	{
 		initWidget(BarMainWidget.uiBinder.createAndBindUi(this));
-		disText.setInnerText(i18n.msg("Disconnected"));
+		disText.setInnerText(i18n.msg("Отключен"));
 	}
 	
 	public ContactView getContactView()

@@ -3,19 +3,24 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:iJab="urn:import:ru.it.lecm.im.client.ui">
 	<ui:style>
+
 		
 	</ui:style>
 	<g:FlowPanel styleName="ijab-mainwidget" ui:field="mainWidget">
+
+        <g:HTMLPanel styleName="mainBarHeader ui-widget-header" >
+            <!--Плашка показывающая что мы в офф-лайне-->
+            <g:HTMLPanel ui:field="disconnected">
+                <span ui:field="disText">Disconnected</span>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
 
         <!--Блок видимый когда мы в онлайне-->
         <iJab:UserIndicator ui:field="indicator"></iJab:UserIndicator>
 		<iJab:SearchBox ui:field="searchBox"></iJab:SearchBox>
 		<iJab:ContactView ui:field="contactView"></iJab:ContactView>
 
-        <!--Плашка показывающая что мы в офф-лайне-->
-        <g:HTMLPanel ui:field="disconnected">
-            <span ui:field="disText">Disconnected</span>
-        </g:HTMLPanel>
+
 
 	</g:FlowPanel>
 </ui:UiBinder> 

@@ -68,8 +68,8 @@ public class ChatPopupWindow extends Composite {
             }
         });
 
-        closePicElement.setInnerText(i18n.msg("Close"));
-        closeElement.setAttribute("title", i18n.msg("Close"));
+        closePicElement.setInnerText(i18n.msg("Закрыть"));
+        closeElement.setAttribute("title", i18n.msg("Закрыть"));
     }
 
     private void fireOnClose()

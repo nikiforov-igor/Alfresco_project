@@ -63,7 +63,7 @@ public class SearchBox extends Composite {
 	@UiField EmFocusWidget closeWidget;
 	@UiField TextBox textBox;
 	
-	private String SEARCH_TIP = i18n.msg("Search contact...");
+	private String SEARCH_TIP = i18n.msg("Поиск контакта...");
 	private SuggestOracle oracle;
 	private String currentText = null;
 	private static int limit = 1000;

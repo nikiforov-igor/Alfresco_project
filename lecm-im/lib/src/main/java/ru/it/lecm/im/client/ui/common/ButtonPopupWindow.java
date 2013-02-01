@@ -20,26 +20,21 @@
  */
 package ru.it.lecm.im.client.ui.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
 import ru.it.lecm.im.client.ui.SimpleFocusWidget;
+import ru.it.lecm.im.client.ui.listeners.ButtonPopupWindowListener;
 import ru.it.lecm.im.client.utils.i18n;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ButtonPopupWindow extends Composite {
 
@@ -91,8 +86,8 @@ public class ButtonPopupWindow extends Composite {
 		
 
 		
-		closePicElement.setInnerText(i18n.msg("Close"));
-		closeElement.setAttribute("title", i18n.msg("Close"));
+		closePicElement.setInnerText(i18n.msg("Закрыть"));
+		closeElement.setAttribute("title", i18n.msg("Закрыть"));
 	}
 	
 	private void fireOnClose()

@@ -63,7 +63,7 @@ public class ContactView extends Composite {
 	private List<ContactViewListener> listeners = new ArrayList<ContactViewListener>();
 	private final SearchBoxListener searchListener;
 	private ContextMenu contextMenu;
-	private String onlineGroupName = i18n.msg("Online");
+	private String onlineGroupName = i18n.msg("В сети");
 	
 	private ContextMenuItem addToBlackListItem = null;
 	private ContextMenuItem manageBlackListItem = null;
@@ -99,7 +99,7 @@ public class ContactView extends Composite {
 		if(iJab.conf.isRosterManageEnabled())
 		{
 			contextMenu = new ContextMenu();
-			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Send Message"),true,new ContextMenuItemListener()
+			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Отправить сообщение"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
@@ -107,7 +107,7 @@ public class ContactView extends Composite {
 					fireOnItemClick(item.getRosterItem());
 				}
 			}));
-			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("View Message History"),true,new ContextMenuItemListener()
+			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Показать историю переписки"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
@@ -121,7 +121,7 @@ public class ContactView extends Composite {
 			}));
 			
 			contextMenu.addSeparator();
-			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Rename"),true,new ContextMenuItemListener()
+			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Переименовать"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
@@ -156,7 +156,7 @@ public class ContactView extends Composite {
 			groupSubMenu.setFocusOnHoverEnabled(true);
 			groupSubMenu.setStylePrimaryName("ijab-contextmenu-body");
 			groupSubMenu.setAutoOpen(true);
-			contextMenu.addItem(i18n.msg("Group"),groupSubMenu);
+			contextMenu.addItem(i18n.msg("Группа"),groupSubMenu);
 			
 			/*
 			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Rerequest Authorization"),true,new ContextMenuItemListener()
@@ -169,12 +169,12 @@ public class ContactView extends Composite {
 			}));
 			*/
 			
-			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Delete Contact"),true,new ContextMenuItemListener()
+			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Удалить контакт"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
 					ContactViewItem item = (ContactViewItem)data;
-					if(Window.confirm(i18n.msg("Are you sure to remove contact ")+XmppProfileManager.getName(item.getRosterItem().getJid())))
+					if(Window.confirm(i18n.msg("Вы уверены, что хотите удалить контакт ")+XmppProfileManager.getName(item.getRosterItem().getJid())))
 					{
 						Session.instance().getRosterPlugin().removeRosterItem(JID.fromString(item.getRosterItem().getJid()));
 						for(ContactViewGroup group:groups.values())
@@ -186,7 +186,7 @@ public class ContactView extends Composite {
 				}
 			}));
 			contextMenu.addSeparator();
-			addToBlackListItem = new ContextMenuItem(contextMenu,i18n.msg("Add To Blacklist"),true,new ContextMenuItemListener()
+			addToBlackListItem = new ContextMenuItem(contextMenu,i18n.msg("Занести в черный список"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
@@ -194,12 +194,12 @@ public class ContactView extends Composite {
 					if(iJab.client != null)
 					{
 						iJab.client.addToBlackList(item.getJid(), true);
-						PopupPrompt.prompt(XmppProfileManager.getName(item.getJid()) + " " + i18n.msg("have been added to the blacklist!"));
+						PopupPrompt.prompt(XmppProfileManager.getName(item.getJid()) + " " + i18n.msg("был занесён в чёрный список!"));
 					}
 				}
 			});
 			contextMenu.addItem(addToBlackListItem);
-			manageBlackListItem = new ContextMenuItem(contextMenu,i18n.msg("Manage Blacklist"),true,new ContextMenuItemListener()
+			manageBlackListItem = new ContextMenuItem(contextMenu,i18n.msg("Управление черным списком"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
@@ -371,7 +371,7 @@ public class ContactView extends Composite {
 		if(item.getGroups().length == 0||item.getGroups()[0] == null)//||item.getGroups()[0].length()==0)
 		{
 			if(noGroup == null)
-				noGroup = ensureGroup(i18n.msg("Friends"));
+				noGroup = ensureGroup(i18n.msg("Собеседники"));
 			noGroup.addRosterItem(item);
 		}
 		else
@@ -499,15 +499,15 @@ public class ContactView extends Composite {
 			}
 			if(count>0)
 				groupSubMenu.addSeparator();
-			ContextMenuItem newGroupItem = new ContextMenuItem(contextMenu,i18n.msg("Create new group"),true,new ContextMenuItemListener()
+			ContextMenuItem newGroupItem = new ContextMenuItem(contextMenu,i18n.msg("Добавить группу"),true,new ContextMenuItemListener()
 			{
 				public void onSelected(Object data) 
 				{
-					String newGroupName = Window.prompt(i18n.msg("Enter new group name."), "");
+					String newGroupName = Window.prompt(i18n.msg("Введити имя новой группы."), "");
 					if(newGroupName==null||newGroupName.length()==0)
 						return;
 					if(groups.containsKey(newGroupName))
-						Window.alert(i18n.msg("Group exists!"));
+						Window.alert(i18n.msg("Группа уже существует!"));
 					changeGroup(item,finalGroupName,newGroupName);
 				}
 			});
@@ -555,7 +555,7 @@ public class ContactView extends Composite {
 		List<String> ret = new ArrayList<String>();
 		for(String groupName:this.groups.keySet())
 		{
-			if(!groupName.equals(onlineGroupName)&&!groupName.equals(i18n.msg("Friends")))
+			if(!groupName.equals(onlineGroupName)&&!groupName.equals(i18n.msg("Собеседники")))
 				ret.add(groupName);
 		}
 		return ret;

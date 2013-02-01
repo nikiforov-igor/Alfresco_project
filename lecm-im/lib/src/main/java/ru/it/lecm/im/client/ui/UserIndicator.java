@@ -62,7 +62,7 @@ public class UserIndicator extends FlexTable
 	private Label nickName = new Label("");
 	private Label statusLabel = new Label();
 	private TextBox statusEditor = new TextBox();
-	private String STATUS_TIP = i18n.msg("Writer your status text here.");
+	private String STATUS_TIP = i18n.msg("Введите здесь свой статус.");
 	
 	private StatusMenu statusMenu;
 	private IndicatorListener listener;
@@ -259,7 +259,10 @@ public class UserIndicator extends FlexTable
 	}
 	public void setNickName(final String nick)
 	{
-		nickName.setText(nick);
+        if (nick != null)
+        {
+            nickName.setText(nick);
+        }
 	}
 	
 	public void setListener(IndicatorListener l)

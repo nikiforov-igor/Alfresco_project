@@ -4,6 +4,6 @@
     xmlns:iJab="urn:import:ru.it.lecm.im.client.ui">
 	<ui:style>
 	</ui:style>
-	<g:HTMLPanel styleName="ijab" ui:field="ijab">
+	<g:HTMLPanel styleName="ijab disconnected" ui:field="ijab">
 	</g:HTMLPanel>
 </ui:UiBinder> 

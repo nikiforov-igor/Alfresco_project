@@ -94,13 +94,13 @@ public class CollapseButton extends Composite {
 		{
 			widgetIcon.addClassName("ui-icon-circle-arrow-e");
 			widgetIcon.removeClassName("ui-icon-circle-arrow-w");
-			setTip(i18n.msg("Collapse"));
+			setTip(i18n.msg("Свернуть"));
 		}
 		else
 		{
 			widgetIcon.addClassName("ui-icon-circle-arrow-w");
 			widgetIcon.removeClassName("ui-icon-circle-arrow-e");
-			setTip(i18n.msg("Expand"));
+			setTip(i18n.msg("Развернуть"));
 		}
 	}
 	
