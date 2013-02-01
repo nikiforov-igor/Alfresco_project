@@ -137,15 +137,16 @@ public abstract class SecurityNotificationsPolicyBase
 		final String dpName = ""+ nodeService.getProperty(nodeDP, PolicyUtils.PROP_DP_NAME);
 		final NodeRef employee = orgstructureService.getEmployeeLinkByPosition(nodeDP);
 		final String loginName = getEmployeeLogin(employee);
+		final String emplId = (employee != null) ? employee.getId() : null;
 
 		// ensure SG_DP
-		final Types.SGPosition sgDP = Types.SGKind.getSGDeputyPosition(nodeDP.getId(), dpName, loginName, employee.getId());
+		final Types.SGPosition sgDP = Types.SGKind.getSGDeputyPosition(nodeDP.getId(), dpName, loginName, emplId);
 		sgNotifier.orgNodeCreated( sgDP);
 
 		// прописать Сотрудника в свою Должность ...
 		// SG_Me -> SG_DP
 		if (employee != null) {
-			final Types.SGPosition sgMe = Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName);
+			final Types.SGPosition sgMe = Types.SGKind.SG_ME.getSGPos( emplId, loginName);
 			sgNotifier.sgInclude( sgMe, sgDP);
 		}
 
