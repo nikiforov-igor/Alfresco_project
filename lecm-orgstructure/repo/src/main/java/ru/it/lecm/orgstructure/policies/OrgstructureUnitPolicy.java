@@ -74,7 +74,7 @@ public class OrgstructureUnitPolicy
 
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
-		if (changed) { // бьыли изменения во флаге
+		if (changed && !curActive) { // бьыли изменения во флаге
 			final NodeRef parent = orgstructureService.getParentUnit(nodeRef);
 
 			final List<String> objects = new ArrayList<String>(1);
