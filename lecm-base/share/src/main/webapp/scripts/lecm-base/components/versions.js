@@ -211,7 +211,7 @@
 
             // Create the panel from the HTML returned in the server reponse
             this.widgets.panel = Alfresco.util.createYUIPanel(dialogDiv, {
-                width: "600px"
+                width: "50em"
             });
 
             // Create menu button:

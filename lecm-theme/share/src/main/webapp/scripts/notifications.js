@@ -107,7 +107,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		createDialog: function() {
 			this.notificationsWindow = Alfresco.util.createYUIPanel(this.notificationsWindowId, {
-					width: "600px"
+					width: "50em"
 				});
 
 			this.widgets.notificationsCloseWindowButton = new YAHOO.widget.Button(this.notificationsWindowId + "-cancel", {

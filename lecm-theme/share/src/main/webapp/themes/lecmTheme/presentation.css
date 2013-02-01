@@ -473,7 +473,8 @@ h4 .lighter
     margin-bottom: 10px;
     float: left;
 }
-.yui-skin-lecmTheme .yui-panel div.form-field label {
+.yui-skin-lecmTheme .yui-panel div.form-field label,
+.yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label {
     max-width: 110px;
     float: left;
     clear: none;

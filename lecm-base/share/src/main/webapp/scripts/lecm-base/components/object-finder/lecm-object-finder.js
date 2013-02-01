@@ -22,7 +22,7 @@ var linkViewId = null;
 function _viewLinkAttributes(id, nodeRef, setId){
     linkViewDialog = Alfresco.util.createYUIPanel(id,
         {
-            width: "600px"
+            width: "50em"
         });
     linkViewId = id;
     Alfresco.util.Ajax.request(
