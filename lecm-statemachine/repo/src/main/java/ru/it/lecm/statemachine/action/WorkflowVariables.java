@@ -12,6 +12,24 @@ import java.util.List;
  */
 public class WorkflowVariables {
 
+	/**
+	 * Типы передаваемых значений для переменных процессов
+	 */
+	public enum Type {
+		/**
+		 * Тип передачи поле документа
+		 */
+		FIELD,
+		/**
+		 * Тип передачи переменная процесса
+		 */
+		VARIABLE,
+		/**
+		 * Тип передачи значение
+		 */
+		VALUE
+	}
+
 	private List<WorkflowVariable> input = new ArrayList<WorkflowVariable>();
 	private List<WorkflowVariable> output = new ArrayList<WorkflowVariable>();
 
@@ -35,34 +53,41 @@ public class WorkflowVariables {
 	}
 
 	private WorkflowVariable pack(Element workflowVariableElement) {
-		String from = workflowVariableElement.attribute("from");
-		String to = workflowVariableElement.attribute("to");
-		String value = workflowVariableElement.attribute("value");
-		return new WorkflowVariable(from, to, value);
+		Type fromType = Type.valueOf(workflowVariableElement.attribute("fromType"));		String fromField = workflowVariableElement.attribute("fromField");
+		String fromValue = workflowVariableElement.attribute("fromValue");
+		Type toType = Type.valueOf(workflowVariableElement.attribute("toType"));
+		String toValue = workflowVariableElement.attribute("toValue");
+		return new WorkflowVariable(fromType, fromValue, toType, toValue);
 	}
 
 	public class WorkflowVariable {
 
-		private String from = null;
-		private String to = null;
-		private String value = null;
+		private Type fromType = null;
+		private String fromValue = null;
+		private Type toType = null;
+		private String toValue = null;
 
-		public WorkflowVariable(String from, String to, String value) {
-			this.from = from;
-			this.to = to;
-			this.value = value;
+		public WorkflowVariable(Type fromType, String fromValue, Type toType, String toValue) {
+			this.fromType = fromType;
+			this.fromValue = fromValue;
+			this.toType = toType;
+			this.toValue = toValue;
 		}
 
-		public String getFrom() {
-			return from;
+		public Type getFromType() {
+			return fromType;
 		}
 
-		public String getTo() {
-			return to;
+		public String getFromValue() {
+			return fromValue;
 		}
 
-		public String getValue() {
-			return value;
+		public Type getToType() {
+			return toType;
+		}
+
+		public String getToValue() {
+			return toValue;
 		}
 	}
 

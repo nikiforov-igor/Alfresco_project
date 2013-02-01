@@ -55,12 +55,17 @@ public class BPMNGenerator {
 	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
 	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
-	private final static QName PROP_INPUT_WORKFLOW_TO_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowToVariable");
-	private final static QName PROP_INPUT_WORKFLOW_VARIABLE_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableType");
-	private final static QName PROP_INPUT_WORKFLOW_VARIABLE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableValue");
-	private final static QName PROP_OUTPUT_WORKFLOW_TO_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowToVariable");
-	private final static QName PROP_OUTPUT_WORKFLOW_VARIABLE_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableType");
-	private final static QName PROP_OUTPUT_WORKFLOW_VARIABLE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableValue");
+
+	private final static QName PROP_INPUT_TO_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToType");
+	private final static QName PROP_INPUT_TO_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToValue");
+	private final static QName PROP_INPUT_FROM_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputFromType");
+	private final static QName PROP_INPUT_FROM_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputFromValue");
+
+	private final static QName PROP_OUTPUT_TO_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputToType");
+	private final static QName PROP_OUTPUT_TO_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputToValue");
+	private final static QName PROP_OUTPUT_FROM_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputFromType");
+	private final static QName PROP_OUTPUT_FROM_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputFromValue");
+
 	private final static QName PROP_TRANSITION_EXPRESSION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionExpression");
 	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
 	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
@@ -75,8 +80,8 @@ public class BPMNGenerator {
 	private final static QName ASSOC_ROLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "role-assoc");
 
 	private final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflow");
-	private final static QName TYPE_OUTPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputWorkflowVariableData");
-	private final static QName TYPE_INPUT_WORKFLOW_VARIABLE_DATA = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputWorkflowVariableData");
+	private final static QName TYPE_OUTPUT_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputVariable");
+	private final static QName TYPE_INPUT_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputVariable");
 
 	private final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
 	private final static String ACTION_SCRIPT_ACTION = "ScriptAction";
@@ -483,7 +488,8 @@ public class BPMNGenerator {
 				expressionElement.setAttribute("outputValue", target);
 
 				expressionsElement.appendChild(expressionElement);
-				flows.add(new Flow(statusVar, target, "${var" + actionVar + " == '" + target + "'}"));
+				String var = "var" + actionVar;
+				flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
 			}
 		}
 		return flows;
@@ -571,7 +577,8 @@ public class BPMNGenerator {
 
 			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
-			flows.add(new Flow(statusVar, target, "${var" + actionVar + " == '" + variableValue + "'}"));
+			String var = "var" + actionVar;
+			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
 
 			if (TYPE_WORKFLOW_TRANSITION.equals(type)) {
 				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_ID);
@@ -579,52 +586,50 @@ public class BPMNGenerator {
 				parameter.setAttribute("name", "workflowId");
 				parameter.setAttribute("value", workflowId);
 				attribute.appendChild(parameter);
-				List<ChildAssociationRef> variables = nodeService.getChildAssocs(transition.getChildRef());
-				if (variables.size() > 0) {
-					Element workflowVariables = doc.createElement("lecm:workflowVariables");
-					attribute.appendChild(workflowVariables);
-					for (ChildAssociationRef variable : variables) {
-						QName variableType = nodeService.getType(variable.getChildRef());
-
-						if (TYPE_OUTPUT_WORKFLOW_VARIABLE_DATA.equals(variableType)) {
-							String toVariable = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_WORKFLOW_TO_VARIABLE);
-							String variableOutputType = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_WORKFLOW_VARIABLE_TYPE);
-							String value = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_WORKFLOW_VARIABLE_VALUE);
-							if (VARIABLE.equals(variableOutputType)) {
-								Element variableElement = doc.createElement("lecm:output");
-								variableElement.setAttribute("from", toVariable);
-								variableElement.setAttribute("to", value);
-								workflowVariables.appendChild(variableElement);
-							} else if (VALUE.equals(variableOutputType)) {
-								Element variableElement = doc.createElement("lecm:output");
-								variableElement.setAttribute("to", toVariable);
-								variableElement.setAttribute("value", value);
-								workflowVariables.appendChild(variableElement);
-							}
-						} else if (TYPE_INPUT_WORKFLOW_VARIABLE_DATA.equals(variableType)) {
-							String toVariable = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_WORKFLOW_TO_VARIABLE);
-							String variableInputType = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_WORKFLOW_VARIABLE_TYPE);
-							String value = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_WORKFLOW_VARIABLE_VALUE);
-							if (VARIABLE.equals(variableInputType)) {
-								Element variableElement = doc.createElement("lecm:input");
-								variableElement.setAttribute("from", toVariable);
-								variableElement.setAttribute("to", value);
-								workflowVariables.appendChild(variableElement);
-							} else if (VALUE.equals(variableInputType)) {
-								Element variableElement = doc.createElement("lecm:input");
-								variableElement.setAttribute("to", toVariable);
-								variableElement.setAttribute("value", value);
-								workflowVariables.appendChild(variableElement);
-							}
-						}
-					}
-				}
+				appendWorkflowVariables(attribute, transition.getChildRef());
 			}
 		}
 		return flows;
 	}
 
-    /**
+	private void appendWorkflowVariables(Element attribute, NodeRef transition) {
+		List<ChildAssociationRef> variables = nodeService.getChildAssocs(transition);
+		if (variables.size() > 0) {
+			Element workflowVariables = doc.createElement("lecm:workflowVariables");
+			attribute.appendChild(workflowVariables);
+			for (ChildAssociationRef variable : variables) {
+				QName variableType = nodeService.getType(variable.getChildRef());
+
+				if (TYPE_OUTPUT_VARIABLE.equals(variableType)) {
+					String toType = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_TO_TYPE);
+					String toValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_TO_VALUE);
+					String fromType = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_FROM_TYPE);
+					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_FROM_VALUE);
+
+					Element variableElement = doc.createElement("lecm:output");
+					variableElement.setAttribute("toType", toType);
+					variableElement.setAttribute("toValue", toValue);
+					variableElement.setAttribute("fromType", fromType);
+					variableElement.setAttribute("fromValue", fromValue);
+					workflowVariables.appendChild(variableElement);
+				} else if (TYPE_INPUT_VARIABLE.equals(variableType)) {
+					String toType = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_TO_TYPE);
+					String toValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_TO_VALUE);
+					String fromType = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_FROM_TYPE);
+					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_FROM_VALUE);
+
+					Element variableElement = doc.createElement("lecm:input");
+					variableElement.setAttribute("toType", toType);
+					variableElement.setAttribute("toValue", toValue);
+					variableElement.setAttribute("fromType", fromType);
+					variableElement.setAttribute("fromValue", fromValue);
+					workflowVariables.appendChild(variableElement);
+				}
+			}
+		}
+	}
+
+	/**
      * Метод добавляет расширение Activiti BPM для Alfresco для выполнения произвольного скрипта
      * @param extensions
      * @param eventElement

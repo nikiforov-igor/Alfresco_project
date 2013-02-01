@@ -13,9 +13,18 @@
 	</namespaces>
 
 	<constraints>
-		<constraint name="lecm-stmeditor:variableSettingType" type="LIST">
+		<constraint name="lecm-stmeditor:toTypeList" type="LIST">
 			<parameter name="allowedValues">
 				<list>
+					<value>FIELD</value>
+					<value>VARIABLE</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-stmeditor:fromTypeList" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>FIELD</value>
 					<value>VARIABLE</value>
 					<value>VALUE</value>
 				</list>
@@ -350,43 +359,57 @@
 			<parent>cm:content</parent>
 		</type>
 
-		<type name="lecm-stmeditor:inputWorkflowVariableData">
+		<type name="lecm-stmeditor:inputVariable">
 			<title>Logic ECM Statemachine Input Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
 			<properties>
-				<property name="lecm-stmeditor:inputWorkflowToVariable">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-				<property name="lecm-stmeditor:inputWorkflowVariableType">
+				<property name="lecm-stmeditor:inputToType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
-						<constraint ref="lecm-stmeditor:variableSettingType" />
+						<constraint ref="lecm-stmeditor:toTypeList" />
 					</constraints>
 				</property>
-				<property name="lecm-stmeditor:inputWorkflowVariableValue">
+				<property name="lecm-stmeditor:inputToValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:inputFromType">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-stmeditor:fromTypeList" />
+					</constraints>
+				</property>
+				<property name="lecm-stmeditor:inputFromValue">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
 		</type>
-		<type name="lecm-stmeditor:outputWorkflowVariableData">
+		<type name="lecm-stmeditor:outputVariable">
 			<title>Logic ECM Statemachine Output Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
 			<properties>
-				<property name="lecm-stmeditor:outputWorkflowToVariable">
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-				<property name="lecm-stmeditor:outputWorkflowVariableType">
+				<property name="lecm-stmeditor:outputToType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
-						<constraint ref="lecm-stmeditor:variableSettingType" />
+						<constraint ref="lecm-stmeditor:toTypeList" />
 					</constraints>
 				</property>
-				<property name="lecm-stmeditor:outputWorkflowVariableValue">
+				<property name="lecm-stmeditor:outputToValue">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:outputFromType">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecm-stmeditor:fromTypeList" />
+					</constraints>
+				</property>
+				<property name="lecm-stmeditor:outputFromValue">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>

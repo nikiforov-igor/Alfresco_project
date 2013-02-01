@@ -85,7 +85,7 @@ LogicECM.module = LogicECM.module || {};
 			var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
 			url = YAHOO.lang.substitute(url, {
 				taskId:taskId,
-				formResponse:encodeURI(formResponse),
+				formResponse: encodeURIComponent(formResponse),
 				actionId:actionId
 			});
 			callback = {

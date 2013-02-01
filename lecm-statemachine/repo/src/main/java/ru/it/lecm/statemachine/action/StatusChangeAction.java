@@ -1,10 +1,5 @@
 package ru.it.lecm.statemachine.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -21,6 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -121,36 +121,6 @@ public class StatusChangeAction extends StateMachineAction {
 		execBuildInTransact(folder, staticPermissions);
 	}
 
-	private void execBuildInTransact( NodeRef node
-			, final Map<String, INodeACLBuilder.StdPermission> permissions)
-	{
-		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
-		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
-				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				permissionsBuilder.rebuildStaticACL(folder, permissions);
-				return null;
-			}
-		}, false, true);
-	}
-
-	private void execBuildInTransact( final List<ChildAssociationRef> children
-			, final Map<String, StdPermission> permissions)
-	{
-		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
-		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
-				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-			@Override
-			public Object execute() throws Throwable {
-				for (ChildAssociationRef child: children) {
-					permissionsBuilder.rebuildStaticACL(child.getChildRef(), permissions);
-				}
-				return null;
-			}
-		}, false, true);
-	}
-
 	@Override
 	public void execute(DelegateExecution execution) {
 		final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
@@ -167,7 +137,7 @@ public class StatusChangeAction extends StateMachineAction {
 				if (forDraft) { // если стартовый статус - генерируем событие о создании в начальном статусе
 					getBusinessJournalService().log(initiator, child.getChildRef(),
 							BusinessJournalService.EventCategories.ADD.toString(),
-							"Создан новый документ документ \"#mainobject\" в статусе \"#object1\"", objects);
+							"Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
 				} else { // о переводе в другой статус
 					getBusinessJournalService().log(initiator, child.getChildRef(),
 							BusinessJournalService.EventCategories.CHANGE_DOCUMENT_STATUS.toString(),
@@ -227,6 +197,34 @@ public class StatusChangeAction extends StateMachineAction {
 			}
 		}
 		return permissions;
+	}
+
+	private void execBuildInTransact(NodeRef node
+			, final Map<String, INodeACLBuilder.StdPermission> permissions) {
+		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public Object execute() throws Throwable {
+						permissionsBuilder.rebuildStaticACL(folder, permissions);
+						return null;
+					}
+				}, false, true);
+	}
+
+	private void execBuildInTransact(final List<ChildAssociationRef> children
+			, final Map<String, StdPermission> permissions) {
+		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public Object execute() throws Throwable {
+						for (ChildAssociationRef child : children) {
+							permissionsBuilder.rebuildStaticACL(child.getChildRef(), permissions);
+						}
+						return null;
+					}
+				}, false, true);
 	}
 
 }

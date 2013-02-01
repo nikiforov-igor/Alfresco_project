@@ -17,6 +17,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -251,8 +252,7 @@ public class StateMachineHelper {
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
 		if (task != null) {
-			ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-			result = getStateMachineActions(process.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
+			result = getStateMachineActions(task.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
 		}
 		return result;
 	}
@@ -291,9 +291,9 @@ public class StateMachineHelper {
 		}
 	}
 
-	public void nextTransition(String taskId) {
+	public String nextTransition(String taskId) {
 		WorkflowService workflowService = serviceRegistry.getWorkflowService();
-		workflowService.endTask(taskId, null);
+		return workflowService.endTask(taskId, null).getId();
 	}
 
 	public String getCurrentTaskId(String executionId) {
@@ -317,11 +317,35 @@ public class StateMachineHelper {
 	public void setInputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		for (WorkflowVariables.WorkflowVariable variable : variables) {
-			if (variable.getFrom() == null) {
-				runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), variable.getValue());
-			} else {
-				Object value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFrom());
-				runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), value);
+			String value = "";
+			if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
+				value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+			} else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
+				NodeService nodeService = serviceRegistry.getNodeService();
+
+				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+				if (documents.size() > 0) {
+					NodeRef document = documents.get(0).getChildRef();
+					QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+					value = nodeService.getProperty(document, propertyName).toString();
+				}
+			} else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+				value = variable.getFromValue();
+			}
+
+			if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
+				runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+			} else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
+				NodeService nodeService = serviceRegistry.getNodeService();
+
+				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+				if (documents.size() > 0) {
+					NodeRef document = documents.get(0).getChildRef();
+					QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
+					nodeService.setProperty(document, propertyName, value);
+				}
 			}
 		}
 	}
@@ -329,11 +353,35 @@ public class StateMachineHelper {
 	public void getOutputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		for (WorkflowVariables.WorkflowVariable variable : variables) {
-			if (variable.getFrom() == null) {
-				runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), variable.getValue());
-			} else {
-				Object value = runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFrom());
-				runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getTo(), value);
+			String value = "";
+			if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
+				value = runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+			} else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
+				NodeService nodeService = serviceRegistry.getNodeService();
+
+				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+				if (documents.size() > 0) {
+					NodeRef document = documents.get(0).getChildRef();
+					QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+					value = nodeService.getProperty(document, propertyName).toString();
+				}
+			} else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+				value = variable.getFromValue();
+			}
+
+			if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
+				runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+			} else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
+				NodeService nodeService = serviceRegistry.getNodeService();
+
+				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+				if (documents.size() > 0) {
+					NodeRef document = documents.get(0).getChildRef();
+					QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
+					nodeService.setProperty(document, propertyName, value);
+				}
 			}
 		}
 	}
