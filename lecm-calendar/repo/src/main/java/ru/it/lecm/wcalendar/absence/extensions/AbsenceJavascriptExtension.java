@@ -28,6 +28,13 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 		this.AbsenceService = AbsenceService;
 	}
 
+	/**
+	 * Получить список отсутствий по NodeRef-у сотрудника.
+	 *
+	 * @param nodeRefStr - NodeRef на объект типа employee в виде строки
+	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
+	 * привязаны отсутствия, возвращает null
+	 */
 	public Scriptable getAbsenceByEmployee(final String nodeRefStr) {
 		List<NodeRef> absenceList = AbsenceService.getAbsenceByEmployee(new NodeRef(nodeRefStr));
 		if (absenceList != null) {
@@ -37,6 +44,14 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 		}
 	}
 
+	/**
+	 * Получить список отсутствий по NodeRef-у сотрудника.
+	 *
+	 * @param nodeRefStr - NodeRef на объект типа employee в виде JSONObject
+	 * ({"nodeRef" : "NodeRef_на_employee"})
+	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
+	 * привязаны отсутствия, возвращает null
+	 */
 	public Scriptable getAbsenceByEmployee(final JSONObject node) {
 		try {
 			return getAbsenceByEmployee(node.getString("nodeRef"));
@@ -45,10 +60,28 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 		}
 	}
 
+	/**
+	 * Проверить, привязаны ли к сотруднику отсутствия.
+	 *
+	 * @param nodeRefStr - NodeRef на объект типа employee в виде строки
+	 * @return Расписания привязаны - true. Нет - false.
+	 */
 	public boolean isAbsenceAssociated(final String nodeRefStr) {
 		return AbsenceService.isAbsenceAssociated(new NodeRef(nodeRefStr));
 	}
 
+	/**
+	 * Проверить, можно ли создать отсутствие для указанного сотрудника в
+	 * указанном промежутке времени. В одном промежутке времени не может быть
+	 * два отсутствия, так что перед созданием нового отсутствия нужно
+	 * проверить, не запланировал ли сотрудник отлучиться на это время
+	 *
+	 * @param json JSON вида: {"nodeRef": "NodeRef_на_employee",
+	 * "begin":"время_начала_промежутка_(напр._2013-02-01T00:00:00.000)",
+	 * "end":"время_конца_промежутка_(напр._2013-02-02T23:59:59.000)", }
+	 * @return true - промежуток свободен, создать отсутствие можно, false - на
+	 * данный промежуток отсутствие уже запланировано.
+	 */
 	public boolean isIntervalSuitableForAbsence(final JSONObject json) {
 		String beginStr, endStr, employeeRefStr;
 		Date begin, end;

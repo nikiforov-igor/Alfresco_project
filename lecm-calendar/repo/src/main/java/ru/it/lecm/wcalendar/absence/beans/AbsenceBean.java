@@ -64,6 +64,13 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 		return params;
 	}
 
+	/**
+	 * Получить список отсутствий по NodeRef-у сотрудника.
+	 *
+	 * @param nodeRefStr - NodeRef на объект типа employee
+	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
+	 * привязаны отсутствия, возвращает null
+	 */
 	public List<NodeRef> getAbsenceByEmployee(NodeRef node) {
 		if (!isAbsenceAssociated(node)) {
 			return null;
@@ -76,6 +83,12 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 		return absences;
 	}
 
+	/**
+	 * Проверить, привязаны ли к сотруднику отсутствия.
+	 *
+	 * @param nodeRefStr - NodeRef на объект типа employee
+	 * @return Расписания привязаны - true. Нет - false.
+	 */
 	public boolean isAbsenceAssociated(NodeRef node) {
 		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
 		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
@@ -85,6 +98,18 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 		}
 	}
 
+	/**
+	 * Проверить, можно ли создать отсутствие для указанного сотрудника в
+	 * указанном промежутке времени. В одном промежутке времени не может быть
+	 * два отсутствия, так что перед созданием нового отсутствия нужно
+	 * проверить, не запланировал ли сотрудник отлучиться на это время
+	 *
+	 * @param nodeRef - NodeRef сотрудника
+	 * @param begin - дата (и время) начала искомого промежутка
+	 * @param end - дата (и время) окончания искомого промежутка
+	 * @return true - промежуток свободен, создать отсутствие можно, false - на
+	 * данный промежуток отсутствие уже запланировано.
+	 */
 	public boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end) {
 		boolean suitable = true;
 
