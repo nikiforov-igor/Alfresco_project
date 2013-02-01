@@ -11,12 +11,11 @@ import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.security.PersonService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
 /**
@@ -41,16 +40,9 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			String ref = (String) obj;
 			refs.add(ref);
 		}
-		// получаем инициатора
-		String initiator = null;
-		AuthenticationService authService = service.getServiceRegistry().getAuthenticationService();
-		String init = authService.getCurrentUserName();
-		PersonService personService = service.getServiceRegistry().getPersonService();
-		if (personService.personExists(init)) {
-			initiator = personService.getPerson(init, false).toString();
-		}
 		try {
-			record = service.log(new NodeRef(initiator), new NodeRef(mainObject), eventCategory, description, refs);
+			EventCategory category = eventCategory != null ? EventCategory.valueOf(eventCategory.toUpperCase()) : null;
+			record = service.log(new NodeRef(mainObject), category, description, refs);
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось создать запись бизнес-журнала", e);
 		}

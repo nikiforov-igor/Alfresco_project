@@ -9,8 +9,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
-
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -61,14 +60,14 @@ public class OrgstructureEmployeeLinkPolicy
 				List<String> objects = new ArrayList<String>(2);
 				objects.add(position != null ? position.toString() : "");
 				objects.add(unit != null ? unit.toString() : "");
-				businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.TAKE_JOB_POSITION.toString(), defaultDescription, objects);
+				businessJournalService.log(initiator, employee, EventCategory.TAKE_JOB_POSITION, defaultDescription, objects);
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
 					defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
-					businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.TAKE_BOSS_POSITION.toString(), defaultDescription, objects);
+					businessJournalService.log(initiator, employee, EventCategory.TAKE_BOSS_POSITION, defaultDescription, objects);
 				}
 				// назначение СОтрудника на должность
 				notifyEmploeeSetDP(employee, position);
@@ -108,14 +107,14 @@ public class OrgstructureEmployeeLinkPolicy
 				objects.add(position != null ? position.toString() : "");
 				objects.add(unit != null ? unit.toString() : "");
 
-				businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.RELEASE_JOB_POSITION.toString(), defaultDescription, objects);
+				businessJournalService.log(initiator, employee, EventCategory.RELEASE_JOB_POSITION, defaultDescription, objects);
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
 					defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
-					businessJournalService.log(initiator, employee, BusinessJournalService.EventCategories.RELEASE_BOSS_POSITION.toString(), defaultDescription, objects);
+					businessJournalService.log(initiator, employee, EventCategory.RELEASE_BOSS_POSITION, defaultDescription, objects);
 				}
 				notifyEmploeeRemoveDP(employee, position);
 			} else if (orgstructureService.isWorkForce(parent)) {

@@ -14,8 +14,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -64,7 +63,7 @@ public class OrgstructureEmployeePolicy
 
 		try {
 			businessJournalService.log(getAuthService().getCurrentUserName(),
-					node, BusinessJournalService.EventCategories.ADD.toString(), "Добавлен новый сотрудник #mainobject", null);
+					node, EventCategory.ADD, "Добавлен новый сотрудник #mainobject", null);
 		} catch (Exception e) {
 			logger.error("Не удалось создать запись бизнес-журнала", e);
 		}

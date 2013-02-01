@@ -1,5 +1,10 @@
 package ru.it.lecm.statemachine.action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -13,14 +18,9 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -136,11 +136,11 @@ public class StatusChangeAction extends StateMachineAction {
 				objects.add(status);
 				if (forDraft) { // если стартовый статус - генерируем событие о создании в начальном статусе
 					getBusinessJournalService().log(initiator, child.getChildRef(),
-							BusinessJournalService.EventCategories.ADD.toString(),
+							EventCategory.ADD,
 							"Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
 				} else { // о переводе в другой статус
 					getBusinessJournalService().log(initiator, child.getChildRef(),
-							BusinessJournalService.EventCategories.CHANGE_DOCUMENT_STATUS.toString(),
+							EventCategory.CHANGE_DOCUMENT_STATUS,
 							"Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\"", objects);
 				}
 			} catch (Exception e) {

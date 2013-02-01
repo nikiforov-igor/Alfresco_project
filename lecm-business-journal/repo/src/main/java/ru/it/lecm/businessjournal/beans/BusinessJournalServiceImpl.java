@@ -133,34 +133,41 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception{
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception{
 		if (initiator == null || mainObject == null) {
 			new Exception("Инициатор события и основной объект должны быть заданы!");
 		}
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
+		// пытаемся получить объект Категория события по ключу
+		NodeRef category = getEventCategoryByCode(eventCategory);
 		// получаем шаблон описания
-		String templateString = getTemplateString(getObjectType(mainObject), getEventCategoryByName(eventCategory), defaultDescription);
+		String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
 		// получаем текущего пользователя по логину
 		NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
 		// создаем записи
-		return createRecord(date, employee, mainObject, eventCategory, objects, filled);
+		return createRecord(date, employee, mainObject, category, objects, filled);
 	}
 
     @Override
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
-        return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	    PersonService personService = serviceRegistry.getPersonService();
+	    NodeRef person = null;
+	    if (personService.personExists(initiator)) {
+		    person = personService.getPerson(initiator, false);
+	    }
+	    return log(date, person, mainObject, eventCategory, defaultDescription, objects);
     }
 
 	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
-		return log(initiator, mainObject, eventCategory, defaultDescription, objects);
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+		return log(new Date(), initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -170,12 +177,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		return log(new Date(), mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(Date date, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
 		AuthenticationService authService = serviceRegistry.getAuthenticationService();
 		String initiator = authService.getCurrentUserName();
 		return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
@@ -184,42 +191,53 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	/**
 	 * Получение ссылки на Категорию События по имени категории
 	 * @param  eventCategory  - название категории события
-	 * @return ссылка на ноду
+	 * @return ссылка на ноду или null
 	 */
-    private NodeRef getEventCategoryByName(String eventCategory) {
-        return getDicElementByName(eventCategory, DICTIONARY_EVENT_CATEGORY);
-    }
-
-    private NodeRef getDicElementByName(String elName, String dictionaryName) {
-	    if (elName != null && !elName.isEmpty()) {
-		    final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		    NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DICTIONARIES_ROOT_NAME);
-		    NodeRef dictionary = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, dictionaryName);
-		    if (dictionary != null) {
-			    return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, elName);
-		    }
-	    }
-        return null;
-    }
+	private NodeRef getEventCategoryByCode(EventCategory eventCategory) {
+		NodeRef objType = null;
+		if (eventCategory != null) {
+			// получаем объект "Тип объекта"
+			SearchParameters sp = new SearchParameters();
+			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+			sp.setQuery("TYPE:\"" + TYPE_EVENT_CATEGORY.toString() + "\" AND =@lecm\\-busjournal\\:eventCategory\\-code:\"" + eventCategory.name() + "\"");
+			ResultSet results = null;
+			try {
+				results = searchService.query(sp);
+				for (ResultSetRow row : results) {
+					if (!isArchive(row.getNodeRef())) {
+						objType = row.getNodeRef();
+					}
+				}
+			} finally {
+				if (results != null) {
+					results.close();
+				}
+			}
+		}
+		return objType;
+	}
     
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final List<String> objects, final String description) {
+    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<String> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
-
 				final NodeRef objectType = getObjectType(mainObject);
+
 				String type;
 				if (objectType != null) {
 					type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
 				} else {
 					type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
 				}
+
 				String category;
-				if (eventCategory != null && !eventCategory.isEmpty()) {
-					category = eventCategory;
+				if (eventCategory != null) {
+					category = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
 				} else {
 					category = "unknown";
 				}
+
 				final NodeRef saveDirectoryRef = getSaveFolder(type, category, date);
 
 				// создаем ноду
@@ -251,10 +269,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 				// необязательные
 				if (eventCategory != null) {
-					NodeRef evCategoryRef = getEventCategoryByName(eventCategory);
-					if (evCategoryRef != null) {
-						nodeService.createAssociation(result, evCategoryRef, ASSOC_BR_RECORD_EVENT_CAT);
-					}
+					nodeService.createAssociation(result, eventCategory, ASSOC_BR_RECORD_EVENT_CAT);
+
 				}
 				if (objectType != null) {
 					nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);

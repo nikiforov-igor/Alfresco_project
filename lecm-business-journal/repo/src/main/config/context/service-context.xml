@@ -43,6 +43,11 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-business-roles.xml</value>
             </list>
         </property>
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+            </list>
+        </property>
     </bean>
 
     <!-- Registration of Business Journal aspects model -->

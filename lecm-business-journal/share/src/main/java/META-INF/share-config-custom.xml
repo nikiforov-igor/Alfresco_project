@@ -45,7 +45,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-busjournal:eventCategory-code"/>
+                    <!--<show id="lecm-busjournal:eventCategory-code"/>-->
                 </field-visibility>
             </form>
         </forms>

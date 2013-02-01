@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Категория события">
+    <items>
+        <item name="Добавление">
+            <property name="cm:name">Добавление</property>
+            <property name="lecm-busjournal:eventCategory-code">ADD</property>
+        </item>
+        <item name="Редактирование">
+            <property name="cm:name">Редактирование</property>
+            <property name="lecm-busjournal:eventCategory-code">EDIT</property>
+        </item>
+        <item name="Удаление">
+            <property name="cm:name">Удаление</property>
+            <property name="lecm-busjournal:eventCategory-code">DELETE</property>
+        </item>
+        <item name="Занятие должностной позиции">
+            <property name="cm:name">Занятие должностной позиции</property>
+            <property name="lecm-busjournal:eventCategory-code">TAKE_JOB_POSITION</property>
+        </item>
+        <item name="Снятие с должностной позиции">
+            <property name="cm:name">Снятие с должностной позиции</property>
+            <property name="lecm-busjournal:eventCategory-code">RELEASE_JOB_POSITION</property>
+        </item>
+        <item name="Передача полномочий">
+            <property name="cm:name">Передача полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">ACCEPT_DELEGATION</property>
+        </item>
+        <item name="Отмена передачи полномочий">
+            <property name="cm:name">Отмена передачи полномочий</property>
+            <property name="lecm-busjournal:eventCategory-code">CANCEL_DELEGATION</property>
+        </item>
+        <item name="Назначение руководителем подразделения">
+            <property name="cm:name">Назначение руководителем подразделения</property>
+            <property name="lecm-busjournal:eventCategory-code">TAKE_BOSS_POSITION</property>
+        </item>
+        <item name="Снятие с назначения руководителем подразделения">
+            <property name="cm:name">Снятие с назначения руководителем подразделения</property>
+            <property name="lecm-busjournal:eventCategory-code">RELEASE_BOSS_POSITION</property>
+        </item>
+        <item name="Сделать основной">
+            <property name="cm:name">Сделать основной</property>
+            <property name="lecm-busjournal:eventCategory-code">MAKE_POSITION_PRIMARY</property>
+        </item>
+        <item name="Начало отсутствия на работе">
+            <property name="cm:name">Начало отсутствия на работе</property>
+            <property name="lecm-busjournal:eventCategory-code">START_ABSENCE_ON_WORK</property>
+        </item>
+        <item name="Конец отсутствия на работе">
+            <property name="cm:name">Конец отсутствия на работе</property>
+            <property name="lecm-busjournal:eventCategory-code">FINISH_ABSENCE_ON_WORK</property>
+        </item>
+        <item name="Загрузка новой версии">
+            <property name="cm:name">Загрузка новой версии</property>
+            <property name="lecm-busjournal:eventCategory-code">ADD_NEW_VERSION</property>
+        </item>
+        <item name="Переход документа в новый статус">
+            <property name="cm:name">Переход документа в новый статус</property>
+            <property name="lecm-busjournal:eventCategory-code">CHANGE_DOCUMENT_STATUS</property>
+        </item>
+    </items>
+</dictionary>

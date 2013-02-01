@@ -80,7 +80,7 @@ public interface BusinessJournalService {
 	public final String DEFAULT_MESSAGE_TEMPLATE =
 			"Запись журнала, не имеющая шаблонов описания. Основной объект: " + MAIN_OBJECT_HOLDER +
 					", Пользователь: " + BASE_USER_HOLDER +
-					", дополнительные объекты: " + OBJECT_HOLDER + "1 ," + OBJECT_HOLDER + "2 ," + OBJECT_HOLDER + "3 ," + OBJECT_HOLDER + "4 ," + OBJECT_HOLDER + "5";
+					", дополнительные объекты: " + OBJECT_HOLDER + "1, " + OBJECT_HOLDER + "2, " + OBJECT_HOLDER + "3, " + OBJECT_HOLDER + "4, " + OBJECT_HOLDER + "5";
 	public final int MAX_SECONDARY_OBJECTS_COUNT = 5;
 
 	public final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
@@ -90,33 +90,6 @@ public interface BusinessJournalService {
 
 	final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 	public static final String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
-
-	static enum EventCategories {
-		ADD("Добавление"),
-		EDIT("Редактирование"),
-		DELETE("Удаление"),
-		ADD_NEW_VERSION("Загрузка новой версии"),
-		TAKE_JOB_POSITION("Занятие должностной позиции"),
-		RELEASE_JOB_POSITION("Снятие с должностной позиции"),
-		ACCEPT_DELEGATION("Передача полномочий"),
-		CANCEL_DELEGATION("Отмена передачи полномочий"),
-		TAKE_BOSS_POSITION("Назначение руководителем подразделения"),
-		RELEASE_BOSS_POSITION("Снятие с назначения руководителем подразделения"),
-		MAKE_POSITION_PRIMARY("Сделать основной"),
-		START_ABSENCE_ON_WORK("Начало отсутствия на работе"),
-		FINISH_ABSENCE_ON_WORK("Конец отсутствия на работе"),
-		CHANGE_DOCUMENT_STATUS("Переход документа в новый статус");
-
-		private final String category;
-
-		EventCategories(String category) {
-			this.category = category;
-		}
-		@Override
-		public String toString () {
-			return category;
-		}
-	}
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -130,7 +103,7 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -143,7 +116,7 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -155,7 +128,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -167,7 +140,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+	public NodeRef log(String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -178,7 +151,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+	public NodeRef log(NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала
@@ -191,7 +164,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) throws Exception;
+	public NodeRef log(Date date, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception;
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект

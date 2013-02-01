@@ -11,8 +11,8 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -50,15 +50,15 @@ public class OrgstructureStaffPolicy
 
 			String initiator = authService.getCurrentUserName();
 
-			String category;
+			EventCategory category;
 			String defaultDescription;
 			if (curPrimary) {
 				defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
-				category = BusinessJournalService.EventCategories.TAKE_BOSS_POSITION.toString();
+				category = EventCategory.TAKE_BOSS_POSITION;
 
 			} else {
 				defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
-				category = BusinessJournalService.EventCategories.RELEASE_BOSS_POSITION.toString();
+				category = EventCategory.RELEASE_BOSS_POSITION;
 			}
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(unit.toString());
