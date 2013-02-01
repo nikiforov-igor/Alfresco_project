@@ -240,6 +240,26 @@ function getSearchResults(params) {
                             formQuery += (first ? '' : ' AND ') + 'cm:content.' + propName + ':"' + propValue + '"';
                             first = false;
                         }
+                    } else if (p.indexOf("assoc_") == 0 && p.lastIndexOf("_added") == p.length - 6) {
+	                    //поиск по ассоциациям
+	                    var assocName = p.substring(6);
+	                    assocName = assocName.substring(0, assocName.lastIndexOf("_added"));
+	                    if (assocName.indexOf("_") !== -1) {
+		                    assocName = assocName.replace("_", ":") + "-ref"; //выведение имя свойства, в котором искать
+		                    formQuery += (first ? '(' : ' AND (');
+		                    var assocValues = propValue.split(",");
+		                    var firstAssoc = true;
+		                    for (var k = 0; k < assocValues.length; k++) {
+			                    var assocValue = assocValues[k];
+			                    if (!firstAssoc) {
+				                    formQuery += " OR ";    //ищем по "или"
+			                    }
+			                    formQuery += escapeQName(assocName) + ':"' + assocValue + '"';
+			                    firstAssoc = false;
+		                    }
+		                    formQuery += ") ";
+		                    first = false;
+	                    }
                     }
                 }
             }
