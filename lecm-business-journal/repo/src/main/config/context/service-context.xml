@@ -33,7 +33,8 @@
         </property>
     </bean>
 
-    <bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap">
+    <bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory.xml</value>
