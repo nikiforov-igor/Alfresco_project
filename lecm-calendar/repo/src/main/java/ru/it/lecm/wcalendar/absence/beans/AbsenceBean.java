@@ -1,6 +1,8 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,8 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 	public final static String CONTAINER_NAME = "AbsenceContainer";
 	public final static QName TYPE_ABSENCE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "absence-container");
 	public final static QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(ABSENCE_NAMESPACE, "abscent-employee-assoc");
-	
+	public final static QName PROP_ABSENCE_BEGIN = QName.createQName(ABSENCE_NAMESPACE, "begin");
+	public final static QName PROP_ABSENCE_END = QName.createQName(ABSENCE_NAMESPACE, "end");
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
@@ -80,5 +83,22 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 		} else {
 			return true;
 		}
+	}
+
+	public boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end) {
+		boolean suitable = true;
+
+		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
+		if (employeeAbsence != null || !employeeAbsence.isEmpty()) {
+			for (NodeRef absence : employeeAbsence) {
+				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
+				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				if (absenceBegin.before(end) && begin.before(absenceEnd)) {
+					suitable = false;
+					break;
+				}
+			}
+		}
+		return suitable;
 	}
 }

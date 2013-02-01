@@ -1,0 +1,3 @@
+{
+	"isSuitable": ${isSuitable?string}
+}

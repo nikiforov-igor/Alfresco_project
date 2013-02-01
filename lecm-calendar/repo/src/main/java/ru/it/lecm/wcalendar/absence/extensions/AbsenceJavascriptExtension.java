@@ -1,5 +1,9 @@
 package ru.it.lecm.wcalendar.absence.extensions;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
@@ -43,5 +47,32 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 
 	public boolean isAbsenceAssociated(final String nodeRefStr) {
 		return AbsenceService.isAbsenceAssociated(new NodeRef(nodeRefStr));
+	}
+
+	public boolean isIntervalSuitableForAbsence(final JSONObject json) {
+		String beginStr, endStr, employeeRefStr;
+		Date begin, end;
+		DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+		try {
+			beginStr = json.getString("begin");
+			endStr = json.getString("end");
+			employeeRefStr = json.getString("nodeRef");
+		} catch (JSONException ex) {
+			throw new WebScriptException(ex.getMessage(), ex);
+		}
+		try {
+			begin = dateParser.parse(beginStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + beginStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		try {
+			end = dateParser.parse(endStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return AbsenceService.isIntervalSuitableForAbsence(new NodeRef(employeeRefStr), begin, end);
 	}
 }

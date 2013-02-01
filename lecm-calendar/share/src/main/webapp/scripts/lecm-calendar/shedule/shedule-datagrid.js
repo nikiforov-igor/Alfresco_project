@@ -8,7 +8,7 @@ LogicECM.module.WCalendar.Shedule = LogicECM.module.WCalendar.Shedule || {};
 
 (function () {
 
-	var attributeForShow = "lecm-shed:shed-employee-link-assoc";
+	var attributeForShow = "";
 
 	LogicECM.module.WCalendar.Shedule.DataGrid = function (containerId) {
 		return LogicECM.module.WCalendar.Shedule.DataGrid.superclass.constructor.call(this, containerId);

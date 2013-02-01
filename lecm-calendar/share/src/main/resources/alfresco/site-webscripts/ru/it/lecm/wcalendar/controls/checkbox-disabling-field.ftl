@@ -17,33 +17,33 @@ function Absence_CheckboxChanged() {
 
 	var IDElements = myID.split("_");
 	IDElements.splice(-1, 1);
-	var commontID = IDElements.join("_");
+	var commonID = IDElements.join("_");
 
-	var endInputDate = YAHOO.util.Dom.get(commontID + "_end-cntrl-date");
-	//var endInputTime = YAHOO.util.Dom.get(commontID + "_end-cntrl-time");
-	var endInputIcon = YAHOO.util.Dom.get(commontID + "_end-cntrl-icon");
-	var endInputHidden = YAHOO.util.Dom.get(commontID + "_end");
+	var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
+	//var endInputTime = YAHOO.util.Dom.get(commonID + "_end-cntrl-time");
+	var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
+	var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
 
 	if (unlimitedCheckbox.checked) {
+		var today = new Date();
+		today.setHours(23, 59, 59, 0);
+
 		endInputDate.setAttribute("readonly", true);
-		endInputDate.setAttribute("value", "31/12/2099");
-		//endInputTime.setAttribute("readonly", true);
-		//endInputTime.setAttribute("value", "23:59");
-		endInputHidden.setAttribute("value", "2099-12-31T23:59:59.999+00:00");
+		endInputDate.removeAttribute("value");
+		endInputHidden.setAttribute("value", Alfresco.util.toISO8601(today));
 		endInputIcon.style.display = "none";
 
 		YAHOO.util.UserAction.keyup(endInputHidden);
 	} else {
 		endInputDate.removeAttribute("readonly");
-		endInputDate.setAttribute("value", "");
-		//endInputTime.removeAttribute("readonly");
-		//endInputTime.setAttribute("value", "");
-		endInputHidden.setAttribute("value", "");
+		endInputDate.removeAttribute("value");
+		endInputHidden.removeAttribute("value");
 		endInputIcon.style.display = "block";
-		endInputHidden.setAttribute("value", "");
 
 		YAHOO.util.UserAction.keyup(endInputHidden);
 	}
+
+	YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 }
 //]]></script>
 

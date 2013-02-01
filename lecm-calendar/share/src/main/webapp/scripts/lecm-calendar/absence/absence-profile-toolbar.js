@@ -68,13 +68,18 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					},
 					doBeforeFormSubmit: {
 						fn: function() {
-							htmlNode = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_end");
-							var endDate = Alfresco.util.fromISO8601(htmlNode.value);
-							endDate.addHours(23);
-							endDate.addMinutes(59);
-							endDate.addSeconds(59);
-							Alfresco.util.toISO8601(endDate);
-							htmlNode.value = Alfresco.util.toISO8601(endDate)
+							var htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_end");
+							var htmlNodeUnlimited = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_unlimited");
+							var endDate;
+							if (htmlNodeUnlimited.checked) {
+								var htmlNodeBegin = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_begin");
+								var beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value);
+								endDate = new Date(beginDate);
+							} else {
+								endDate = Alfresco.util.fromISO8601(htmlNodeEnd.value);
+							}
+							endDate.setHours(23, 59, 59, 0);
+							htmlNodeEnd.value = Alfresco.util.toISO8601(endDate);
 						},
 						scope: this
 					},

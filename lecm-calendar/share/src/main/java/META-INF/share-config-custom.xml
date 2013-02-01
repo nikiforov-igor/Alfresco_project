@@ -43,8 +43,8 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"
-										event="onblur" message-id="message.new-date.error" />
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"	
+										event="blur" message-id="message.new-date.error" />
 						</constraint-handlers>
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl"/>
 					</field>
@@ -79,7 +79,7 @@
 					<field id="lecm-cal:day"  mandatory="true">
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"
-										event="onblur" message-id="message.new-date.error" />
+										event="blur" message-id="message.new-date.error" />
 						</constraint-handlers>
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl"/>
 					</field>
@@ -244,7 +244,7 @@
 					<show id="lecm-absence:abscence-reason-assoc"/>
 				</field-visibility>
 				<appearance>
-					<set id="dates" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
+					<set id="dates" template="/ru/it/lecm/wcalendar/controls/2-column-set-augmented.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
 					<set id="unlimited"/>
 					<set id="abscence-reason"/>
 					<set id="comment"/>
@@ -256,15 +256,22 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
-					<field id="lecm-absence:begin" set="dates">
+					<field id="lecm-absence:begin" mandatory="true" set="dates">
 						<control template="/org/alfresco/components/form/controls/date.ftl">
 							<control-param name="showTime">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur" />
+						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:end" set="dates">
+					<field id="lecm-absence:end" mandatory="true" set="dates">
 						<control template="/org/alfresco/components/form/controls/date.ftl">
 							<control-param name="showTime">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur" />
+							<!--<constraint type="MANDATORY" validation-handler="function (field, args,  event, form, silent, message) {alert(field.value); return true;}" event="change"/>-->
+						</constraint-handlers>
 					</field>
 					<field id="lecm-absence:unlimited" set="unlimited">
 						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
@@ -291,7 +298,7 @@
 					<show id="lecm-absence:abscence-reason-assoc"/>
 				</field-visibility>
 				<appearance>
-					<set id="dates" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
+					<set id="dates" template="/ru/it/lecm/wcalendar/controls/2-column-set-augmented.ftl" appearance="title" label-id="label.absence.form.set.date-interval" />
 					<set id="unlimited"/>
 					<set id="abscence-reason"/>
 					<set id="comment"/>
@@ -302,13 +309,19 @@
 						<control template="/org/alfresco/components/form/controls/date.ftl">
 							<control-param name="showTime">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur"/>
+						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:end" set="dates">
+					<field id="lecm-absence:end" mandatory="true" set="dates">
 						<control template="/org/alfresco/components/form/controls/date.ftl">
 							<control-param name="showTime">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur"/>
+						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:unlimited" set="unlimited">
+					<field id="lecm-absence:unlimited" mandatory="true" set="unlimited">
 						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl"/>
 					</field>
 					<field id="lecm-absence:abscence-reason-assoc" set="abscence-reason">
