@@ -1233,6 +1233,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         showExtendSearchBlock:this.options.showExtendSearchBlock,
                         maxSearchResults: this.options.maxResults
                     });
+
+	                Bubbling.fire("initDatagridSearch",
+		                {
+			                datagrid:this
+		                });
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;

@@ -95,7 +95,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param form {Object} Form descriptor to render template for
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
-            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
+            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, doShow, e, obj) {
 	            if (isClearSearch == undefined) {
 		            isClearSearch = false;
 	            }
@@ -137,7 +137,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                             searchConfig:this.dataGrid.datagridMeta.searchConfig,
                                             searchShowInactive:this.dataGrid.options.searchShowInactive
                                         });
-	                                } else {
+	                                } else if (doShow) {
+
 		                                this.searchDialog.show();
 	                                }
                                 }
@@ -369,7 +370,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             /**
              * метод для вывода диалога с аттриюбутивным поиском
              */
-            showDialog: function ADVSearch_showDialog(metaData) {
+            showDialog: function ADVSearch_showDialog(metaData, doShow) {
+	            if (doShow == undefined) {
+		            doShow = true;
+	            }
+
                 var defaultForm = new Object();
                 defaultForm.id = "search";
                 defaultForm.type = metaData.itemType;
@@ -388,7 +393,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
                         // создаем форму
-                        this.renderFormTemplate(defaultForm);
+                        this.renderFormTemplate(defaultForm, false, doShow);
                     } else {
                         if (this.searchDialog != null) {
                             this.searchDialog.show();

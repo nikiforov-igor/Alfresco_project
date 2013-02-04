@@ -52,6 +52,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
+        YAHOO.Bubbling.on("initDatagridSearch", this.onInitDataGridSearch, this);
         YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
@@ -214,6 +215,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                     this.modules.dataGrid = datagrid;
                 }
             },
+
+	        //инициализация поиска datagrid
+	        onInitDataGridSearch: function (layer, args) {
+		        var grid = this.modules.dataGrid;
+		        var advSearch = grid.search;
+
+		        advSearch.showDialog(grid.datagridMeta, false);
+	        },
 
             // по нажатию на кнопку Поиск
             onSearchClick:function () {
