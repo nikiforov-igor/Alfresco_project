@@ -26,7 +26,9 @@
                                     label: "${msg("actions.delete-row")}"
                                 }
                             ],
-                            showCheckboxColumn: true
+	                        bubblingLabel: "${bubblingLabel!''}",
+                            showCheckboxColumn: true,
+	                        attributeForShow:"cm:name"
                         }).setMessages(${messages});
             }
 

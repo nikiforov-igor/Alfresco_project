@@ -91,6 +91,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
             groupActions: {},
 
+	        search: null,
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
@@ -218,10 +220,11 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 	        //инициализация поиска datagrid
 	        onInitDataGridSearch: function (layer, args) {
-		        var grid = this.modules.dataGrid;
-		        var advSearch = grid.search;
-
-		        advSearch.showDialog(grid.datagridMeta, false);
+		        if (this.search == null && this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
+			        var grid = this.modules.dataGrid;
+			        this.search = grid.search;
+			        this.search.showDialog(grid.datagridMeta, false);
+		        }
 	        },
 
             // по нажатию на кнопку Поиск
@@ -258,14 +261,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
-                    this.modules.dataGrid.search.performSearch({
+	                this.search.performSearch({
                         searchConfig:datagridMeta.searchConfig,
                         searchShowInactive:false
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     datagridMeta.searchConfig = null;
-                    this.modules.dataGrid.search.performSearch({
+	                this.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
                         searchConfig:null,
@@ -278,9 +281,9 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             // клик на Атрибутивном Поиске
             onExSearchClick:function () {
                 var grid = this.modules.dataGrid;
-                var advSearch = grid.search;
-
-                advSearch.showDialog(grid.datagridMeta);
+	            if (this.search != null) {
+		            this.search.showDialog(grid.datagridMeta);
+	            }
             },
 
             // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар

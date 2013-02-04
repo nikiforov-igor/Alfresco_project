@@ -23,7 +23,9 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-    new LogicECM.module.Subscriptions.Toolbar("${id}").setMessages(${messages}).setOptions({});
+    new LogicECM.module.Subscriptions.Toolbar("${id}").setMessages(${messages}).setOptions({
+	    bubblingLabel: "${bubblingLabel!''}"
+    });
 }
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>

@@ -20,6 +20,7 @@
 				<showSearchBlock>true</showSearchBlock>
 				<showExSearchBtn>true</showExSearchBtn>
 				<showButtonsCreate>false</showButtonsCreate>
+				<bubblingLabel>subscription-to-object</bubblingLabel>
 			</properties>
 		</component>
 		<!-- Menu -->

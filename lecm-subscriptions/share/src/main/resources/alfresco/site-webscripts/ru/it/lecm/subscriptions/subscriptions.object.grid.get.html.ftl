@@ -15,19 +15,19 @@
 							showExtendSearchBlock:true,
 							actions: [
 								{
-									type:"action-link-${bubblingLabel!"subscription-to-object"}",
+									type:"action-link-${bubblingLabel!''}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-${bubblingLabel!"subscription-to-object"}",
+									type:"action-link-${bubblingLabel!''}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							bubblingLabel: "${bubblingLabel!"subscription-to-object"}",
+							bubblingLabel: "${bubblingLabel!''}",
 							showCheckboxColumn: true,
 							attributeForShow:"cm:name"
 						}).setMessages(${messages});

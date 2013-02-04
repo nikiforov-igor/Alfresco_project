@@ -4,6 +4,7 @@ function main()
     var showExSearchBtn = args["showExSearchBtn"];
     var showButtons = args["showButtons"];
     var showButtonsCreate = args["showButtonsCreate"];
+	model.bubblingLabel = args["bubblingLabel"];
 
     if (showSearchBlock) {
         model.showSearchBlock = (showSearchBlock == 'true');

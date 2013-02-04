@@ -19,6 +19,7 @@
                 <showButtons>true</showButtons>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
+	            <bubblingLabel>subscription-to-type</bubblingLabel>
             </properties>
         </component>
         <!-- Menu -->
@@ -33,6 +34,10 @@
         <component>
             <region-id>type-grid</region-id>
             <url>/lecm/subscriptions/subscriptions-type-datagrid</url>
+	        <properties>
+		        <pagination>true</pagination>
+		        <bubblingLabel>subscription-to-type</bubblingLabel>
+	        </properties>
         </component>
     </components>
 </template-instance>
