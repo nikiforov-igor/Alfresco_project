@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -18,10 +19,12 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
+import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 /**
@@ -114,6 +117,22 @@ public abstract class SecurityNotificationsPolicyBase
 		// TODO: возможно надо пройтись вниз по орг-штатке и собрать всех вложенных Сотрудников
 		final Set<NodeRef> employees = new HashSet<NodeRef>( this.orgstructureService.getOrganizationElementEmployees(nodeOU));
 		return employees;
+	}
+
+//	private void safeExec(Runnable todo) {
+//		try {
+//			todo.run();
+//		} catch (Throwable t) {
+//			logger.error( "exception "+ t.getMessage(), t);
+//		}
+//	}
+
+	protected void notifyNodeCreated(SGPosition pos) {
+		sgNotifier.orgNodeCreated( pos);
+	}
+
+	protected void notifyNodeDeactivated(SGPosition pos) {
+		sgNotifier.orgNodeDeactivated( pos);
 	}
 
 	/**

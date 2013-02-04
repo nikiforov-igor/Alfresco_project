@@ -5,6 +5,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /*
@@ -47,7 +48,7 @@ public class OrgstructureBusinessRolePolicy
 		// final NodeRef parent = childAssocRef.getParentRef(); // supposed to be null or the main BR folder
 
 		// оповещение securityService по БР ...
-		sgNotifier.orgNodeCreated( PolicyUtils.makeBRPos(nodeBR, nodeService));
+		notifyNodeCreated( PolicyUtils.makeBRPos(nodeBR, nodeService) );
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class OrgstructureBusinessRolePolicy
 		final NodeRef nodeBR = childAssocRef.getChildRef();
 
 		// оповещение securityService по БР ...
-		sgNotifier.orgNodeDeactivated( PolicyUtils.makeBRPos(nodeBR, nodeService));
+		notifyNodeDeactivated( PolicyUtils.makeBRPos(nodeBR, nodeService));
 	}
 
 	@Override
