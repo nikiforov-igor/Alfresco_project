@@ -15,7 +15,7 @@ public class SessionConstants {
     // Default XMPP port to connect
     public static final int DEFAULT_XMPPPORT = 5222;
     // Sleep time
-	static final int READ_TIMEOUT = 100;
+	static final int READ_TIMEOUT = 1000;
     // Socket timeout
 	static final int SOCKET_TIMEOUT = 6000;
     // Session starting
