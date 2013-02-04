@@ -1,6 +1,5 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,26 +12,20 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.wcalendar.IWCalCommon;
-import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
+import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.absence.IAbsence;
+import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
 
 /**
  *
  * @author vlevin
  */
-public class AbsenceBean extends AbstractWCalCommonBean {
-
-	public final static QName TYPE_ABSENCE = QName.createQName(ABSENCE_NAMESPACE, "absence");
-	public final static String CONTAINER_NAME = "AbsenceContainer";
-	public final static QName TYPE_ABSENCE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "absence-container");
-	public final static QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(ABSENCE_NAMESPACE, "abscent-employee-assoc");
-	public final static QName PROP_ABSENCE_BEGIN = QName.createQName(ABSENCE_NAMESPACE, "begin");
-	public final static QName PROP_ABSENCE_END = QName.createQName(ABSENCE_NAMESPACE, "end");
+public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
 	@Override
-	public IWCalCommon getWCalendarDescriptor() {
+	public IWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 
@@ -48,8 +41,8 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 	public final void bootstrap() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
@@ -71,6 +64,7 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
 	 * привязаны отсутствия, возвращает null
 	 */
+	@Override
 	public List<NodeRef> getAbsenceByEmployee(NodeRef node) {
 		if (!isAbsenceAssociated(node)) {
 			return null;
@@ -89,6 +83,7 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 	 * @param nodeRefStr - NodeRef на объект типа employee
 	 * @return Расписания привязаны - true. Нет - false.
 	 */
+	@Override
 	public boolean isAbsenceAssociated(NodeRef node) {
 		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
 		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
@@ -110,11 +105,12 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 	 * @return true - промежуток свободен, создать отсутствие можно, false - на
 	 * данный промежуток отсутствие уже запланировано.
 	 */
+	@Override
 	public boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end) {
 		boolean suitable = true;
 
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
-		if (employeeAbsence != null || !employeeAbsence.isEmpty()) {
+		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
 			for (NodeRef absence : employeeAbsence) {
 				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
 				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
@@ -124,6 +120,11 @@ public class AbsenceBean extends AbstractWCalCommonBean {
 				}
 			}
 		}
-		return suitable;
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException ex) {
+//			logger.error("", ex);
+//		}
+ 		return suitable;
 	}
 }

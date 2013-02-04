@@ -21,33 +21,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWCalCommon;
-import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
+import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
+import ru.it.lecm.wcalendar.shedule.IShedule;
+import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
 
 /**
  *
  * @author vlevin
  */
-public class SheduleBean extends AbstractWCalCommonBean {
-
-	public final static String CONTAINER_NAME = "SheduleContainer";
-	public final static QName TYPE_SHEDULE = QName.createQName(SHEDULE_NAMESPACE, "shedule");
-	public final static QName TYPE_SHEDULE_ELEMENT = QName.createQName(SHEDULE_NAMESPACE, "special-shed-element");
-	public final static QName TYPE_SHEDULE_CONTAINER = QName.createQName(WCAL_NAMESPACE, "shedule-container");
-	public final static QName ASSOC_SHEDULE_EMPLOYEE_LINK = QName.createQName(SHEDULE_NAMESPACE, "shed-employee-link-assoc");
-	public final static QName PROP_SHEDULE_STD_BEGIN = QName.createQName(SHEDULE_NAMESPACE, "std-begin");
-	public final static QName PROP_SHEDULE_STD_END = QName.createQName(SHEDULE_NAMESPACE, "std-end");
-	public final static QName PROP_SHEDULE_TYPE = QName.createQName(SHEDULE_NAMESPACE, "type");
-	public final static QName PROP_SHEDULE_TIME_LIMIT_START = QName.createQName(SHEDULE_NAMESPACE, "time-limit-start");
-	public final static QName PROP_SHEDULE_TIME_LIMIT_END = QName.createQName(SHEDULE_NAMESPACE, "time-limit-end");
-	public final static QName PROP_SHEDULE_ELEMENT_BEGIN = QName.createQName(SHEDULE_NAMESPACE, "begin");
-	public final static QName PROP_SHEDULE_ELEMENT_END = QName.createQName(SHEDULE_NAMESPACE, "end");
-	public final static QName PROP_SHEDULE_ELEMENT_COMMENT = QName.createQName(SHEDULE_NAMESPACE, "comment");
+public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(SheduleBean.class);
 
 	@Override
-	public IWCalCommon getWCalendarDescriptor() {
+	public IWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 
@@ -63,8 +51,8 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	public final void bootstrap() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory (this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
@@ -107,6 +95,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	 * @param node - NodeRef на сотрудника или орг. единицу.
 	 * @return NodeRef на расписание.
 	 */
+	@Override
 	public NodeRef getParentShedule(NodeRef node) {
 		NodeRef primaryOU = null;
 		QName nodeType = nodeService.getType(node);
@@ -168,6 +157,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	 * @return Ключи map'а: "type" - тип расписания, "begin" - время начала
 	 * работы, "end" - время конца работы.
 	 */
+	@Override
 	public Map<String, String> getParentSheduleStdTime(NodeRef node) {
 		HashMap<String, String> result = new HashMap<String, String>();
 		String sheduleStdBegin, sheduleStdEnd, sheduleType;
@@ -196,6 +186,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	 * @param node - NodeRef на сотрудника или орг. единицу.
 	 * @return true - привязано, false - не привязано.
 	 */
+	@Override
 	public boolean isSheduleAssociated(NodeRef node) {
 		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_SHEDULE_EMPLOYEE_LINK);
 		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
@@ -215,7 +206,8 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	 * расписание.
 	 * @return - NodeRef на созданное расписание.
 	 */
-	public NodeRef createNewSpecialShedule(final SpecialSheduleRawBean sheduleRawData, final NodeRef sheduleEmployeeAssoc, final NodeRef sheduleContainer) {
+	@Override
+	public NodeRef createNewSpecialShedule(final ISpecialSheduleRaw sheduleRawData, final NodeRef sheduleEmployeeAssoc, final NodeRef sheduleContainer) {
 		NodeRef createdSheduleNode;
 		// Транзакция. Все хорошие мальчики ковыряются в хранилище только в транзакции.
 		createdSheduleNode = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
@@ -270,7 +262,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	}
 
 	// жуткий трэш, который генерирует интервалы рабочих дней в зависимости от настроек расписания
-	private List<SheduleElemetObject> generateSheduleElements(SpecialSheduleRawBean sheduleRawData) {
+	private List<SheduleElemetObject> generateSheduleElements(ISpecialSheduleRaw sheduleRawData) {
 		List<SheduleElemetObject> sheduleElements = new ArrayList<SheduleElemetObject>();
 
 		Calendar calendar = Calendar.getInstance();
@@ -283,8 +275,8 @@ public class SheduleBean extends AbstractWCalCommonBean {
 		calendarEnd.set(Calendar.HOUR_OF_DAY, 0);
 		calendarEnd.set(Calendar.MINUTE, 0);
 
-		if (sheduleRawData.getReiterationType() == SpecialSheduleRawBean.ReiterationType.MONTH_DAYS
-				|| sheduleRawData.getReiterationType() == SpecialSheduleRawBean.ReiterationType.WEEK_DAYS) {
+		if (sheduleRawData.getReiterationType() == ISpecialSheduleRaw.ReiterationType.MONTH_DAYS
+				|| sheduleRawData.getReiterationType() == ISpecialSheduleRaw.ReiterationType.WEEK_DAYS) {
 
 			while (!calendar.after(calendarEnd)) {
 				if (ifDayToBeAdded(sheduleRawData, calendar)) {
@@ -341,7 +333,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
 			}
-		} else if (sheduleRawData.getReiterationType() == SpecialSheduleRawBean.ReiterationType.SHIFT) {
+		} else if (sheduleRawData.getReiterationType() == ISpecialSheduleRaw.ReiterationType.SHIFT) {
 			while (calendar.before(calendarEnd)) {
 				SheduleElemetObject sheduleElement = new SheduleElemetObject();
 				sheduleElement.setBegin(calendar.getTime());
@@ -356,12 +348,12 @@ public class SheduleBean extends AbstractWCalCommonBean {
 
 	// проверяет, подходит ли день под правила повторяемости для расписаний по дням месяца и недели
 	// используется только в generateSheduleElements
-	private boolean ifDayToBeAdded(SpecialSheduleRawBean sheduleRawData, Calendar calendar) {
+	private boolean ifDayToBeAdded(ISpecialSheduleRaw sheduleRawData, Calendar calendar) {
 		boolean result;
-		if (sheduleRawData.getReiterationType() == SpecialSheduleRawBean.ReiterationType.MONTH_DAYS) {
+		if (sheduleRawData.getReiterationType() == ISpecialSheduleRaw.ReiterationType.MONTH_DAYS) {
 			List<Integer> monthDays = sheduleRawData.getMonthDays();
 			result = monthDays.contains(calendar.get(Calendar.DAY_OF_MONTH));
-		} else if (sheduleRawData.getReiterationType() == SpecialSheduleRawBean.ReiterationType.WEEK_DAYS) {
+		} else if (sheduleRawData.getReiterationType() == ISpecialSheduleRaw.ReiterationType.WEEK_DAYS) {
 			Map<Integer, Boolean> weekDays = sheduleRawData.getWeekDays();
 			result = weekDays.get(calendar.get(Calendar.DAY_OF_WEEK));
 		} else {
@@ -399,6 +391,7 @@ public class SheduleBean extends AbstractWCalCommonBean {
 	 * @return NodeRef расписания, привязанного к node. Если таковое
 	 * отсутствует, то null.
 	 */
+	@Override
 	public NodeRef getSheduleByOrgSubject(NodeRef node) {
 		if (!isSheduleAssociated(node)) {
 			return null;

@@ -1,5 +1,6 @@
 package ru.it.lecm.wcalendar.calendar.beans;
 
+import ru.it.lecm.wcalendar.calendar.ICalendar;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,26 +22,21 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.wcalendar.IWCalCommon;
-import ru.it.lecm.wcalendar.beans.AbstractWCalCommonBean;
+import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
 
 /**
  *
  * @author vlevin
  */
-public class CalendarBean extends AbstractWCalCommonBean {
+public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 
-	private final static String CONTAINER_NAME = "WCalContainer";
-	private final static QName TYPE_WCAL_CONTAINER = QName.createQName(WCAL_NAMESPACE, "wcal-container");
-	private final static QName TYPE_CALENDAR = QName.createQName(CALENDAR_NAMESPACE, "calendar");
-	private final static QName ASSOC_CALENDAR_CONTAINER = QName.createQName(WCAL_NAMESPACE, "container-calendar-assoc");
-	private final static QName PROP_YEAR = QName.createQName(CALENDAR_NAMESPACE, "year");
 	private int yearsAmountToCreate = 0;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private Logger logger = LoggerFactory.getLogger(CalendarBean.class);
 
 	@Override
-	public IWCalCommon getWCalendarDescriptor() {
+	public IWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 
@@ -65,8 +61,8 @@ public class CalendarBean extends AbstractWCalCommonBean {
 	public final void bootstrap() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
@@ -135,7 +131,7 @@ public class CalendarBean extends AbstractWCalCommonBean {
 				QName assocQName = QName.createQName(WCAL_NAMESPACE, yearNodeName);
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(); //optional map of properties to keyed by their qualified names
 				properties.put(ContentModel.PROP_NAME, yearNodeName);
-				properties.put(PROP_YEAR, yearToAddFormatted);
+				properties.put(PROP_CALENDAR_YEAR, yearToAddFormatted);
 				try {
 					nodeService.createNode(parentNodeRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 				} catch (InvalidNodeRefException e) {
@@ -153,6 +149,20 @@ public class CalendarBean extends AbstractWCalCommonBean {
 
 	/**
 	 * Проверка календаря на существование. Игнорирует lecm-dic:active. Если
+	 * календарь выключен, он считается существующим. Поиск происходит в
+	 * контейнере для календарей по умолчанию.
+	 *
+	 * @param yearToExamine год, существование календаря на который нужно
+	 * проверить.
+	 * @return true, если календарь существует. false в противном случае.
+	 */
+	@Override
+	public boolean isCalendarExists(int yearToExamine) {
+		return isCalendarExists(this.getWCalendarContainer(), yearToExamine);
+	}
+
+	/**
+	 * Проверка календаря на существование. Игнорирует lecm-dic:active. Если
 	 * календарь выключен, он считается существующим.
 	 *
 	 * @param parentNodeRef nodeRef контейнера, в котором лежат календари.
@@ -160,7 +170,8 @@ public class CalendarBean extends AbstractWCalCommonBean {
 	 * проверить.
 	 * @return true, если календарь существует. false в противном случае.
 	 */
-	private boolean isCalendarExists(NodeRef parentNodeRef, int yearToExamine) {
+	@Override
+	public boolean isCalendarExists(NodeRef parentNodeRef, int yearToExamine) {
 		boolean exists = false;
 		int yearProp;
 		SimpleDateFormat dateParser = new SimpleDateFormat("yyyy");
@@ -168,7 +179,7 @@ public class CalendarBean extends AbstractWCalCommonBean {
 		if (childAssociationRefs != null) {
 			for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
 				NodeRef calendarNodeRef = childAssociationRef.getChildRef();
-				Serializable year = nodeService.getProperty(calendarNodeRef, PROP_YEAR);
+				Serializable year = nodeService.getProperty(calendarNodeRef, PROP_CALENDAR_YEAR);
 				yearProp = Integer.valueOf(dateParser.format(year));
 				// Игнорирует lecm-dic:active. Если календарь существует, но выключен, он его добавлять не будет.
 				if (yearToExamine == yearProp) {

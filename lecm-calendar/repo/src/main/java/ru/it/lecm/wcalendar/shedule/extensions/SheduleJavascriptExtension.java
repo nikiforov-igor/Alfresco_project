@@ -11,25 +11,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
-import ru.it.lecm.wcalendar.shedule.beans.SheduleBean;
+import ru.it.lecm.wcalendar.shedule.IShedule;
+import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
 import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
 
-
 /**
- * Реализация JavaScript root-object для получения информации о контейнерах для
- * календарей, графиков и отсутсвий и их типов данных.
+ * JavaScript root-object под названием "shedule". Предоставляет доступ к
+ * методам интерфейса IShedule из web-script'ов.
  *
  * @author vlevin
  */
 public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 
-	private SheduleBean SheduleService;
-
+	private IShedule sheduleService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(SheduleJavascriptExtension.class);
 
-	public void setSheduleService(SheduleBean SheduleService) {
-		this.SheduleService = SheduleService;
+	public void setSheduleService(IShedule sheduleService) {
+		this.sheduleService = sheduleService;
 	}
 
 	/**
@@ -46,7 +45,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	public ScriptNode getParentSheduleNodeRef(final JSONObject node) {
 		NodeRef sheduleList = null;
 		try {
-			sheduleList = SheduleService.getParentShedule(new NodeRef(node.getString("nodeRef")));
+			sheduleList = sheduleService.getParentShedule(new NodeRef(node.getString("nodeRef")));
 		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 			throw new WebScriptException(ex.getMessage(), ex);
@@ -70,7 +69,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	public JSONObject getParentSheduleStdTime(final JSONObject node) {
 		JSONObject result = null;
 		try {
-			Map<String, String> JSONMap = SheduleService.getParentSheduleStdTime(new NodeRef(node.getString("nodeRef")));
+			Map<String, String> JSONMap = sheduleService.getParentSheduleStdTime(new NodeRef(node.getString("nodeRef")));
 			result = new JSONObject(JSONMap);
 		} catch (JSONException ex) {
 			throw new WebScriptException(ex.getMessage(), ex);
@@ -102,7 +101,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * отсутствует, то null.
 	 */
 	public ScriptNode getSheduleByOrgSubject(final String employeeRef) {
-		NodeRef nodeRef = SheduleService.getSheduleByOrgSubject(new NodeRef(employeeRef));
+		NodeRef nodeRef = sheduleService.getSheduleByOrgSubject(new NodeRef(employeeRef));
 		if (nodeRef != null) {
 			return new ScriptNode(nodeRef, serviceRegistry);
 		}
@@ -116,7 +115,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * @return true - привязано, false - не привязано.
 	 */
 	public boolean isSheduleAssociated(final String nodeRef) {
-		return SheduleService.isSheduleAssociated(new NodeRef(nodeRef));
+		return sheduleService.isSheduleAssociated(new NodeRef(nodeRef));
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	public ScriptNode createNewSpecialShedule(final JSONObject json) {
 		String assocShedEmployeeStr, sheduleDestinationStr, reiterationType, timeBegin, timeEnd, timeLimitStart, timeLimitEnd;
 		NodeRef assocShedEmployeeNode, sheduleDestinationNode;
-		SpecialSheduleRawBean rawSheduleData = new SpecialSheduleRawBean();
+		ISpecialSheduleRaw rawSheduleData = new SpecialSheduleRawBean();
 
 		try {
 			assocShedEmployeeStr = json.getString("assoc_lecm-shed_shed-employee-link-assoc_added");
@@ -152,7 +151,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 
 		if (reiterationType.equalsIgnoreCase("week-days")) { // по определенным дням недели
 			List<Boolean> weekDaysMask = new ArrayList<Boolean>();
-			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.WEEK_DAYS);
+			rawSheduleData.setReiterationType(ISpecialSheduleRaw.ReiterationType.WEEK_DAYS);
 			for (int i = 1; i <= 7; i++) {
 				try {
 					boolean wDay = json.getBoolean("w" + i);
@@ -166,7 +165,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 		} else if (reiterationType.equalsIgnoreCase("month-days")) { // по определенным числам месяца
 			String mDaysStr;
 			List<Integer> mDaysList = new ArrayList<Integer>();
-			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.MONTH_DAYS);
+			rawSheduleData.setReiterationType(ISpecialSheduleRaw.ReiterationType.MONTH_DAYS);
 			try {
 				mDaysStr = json.getString("month-days");
 			} catch (JSONException ex) {
@@ -181,7 +180,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 		} else if (reiterationType.equalsIgnoreCase("shift-work")) { // сменный график
 			int workingDaysAmount;
 			int workingDaysInterval;
-			rawSheduleData.setReiterationType(SpecialSheduleRawBean.ReiterationType.SHIFT);
+			rawSheduleData.setReiterationType(ISpecialSheduleRaw.ReiterationType.SHIFT);
 			try {
 				workingDaysAmount = json.getInt("working-days-amount");
 				workingDaysInterval = json.getInt("working-days-interval");
@@ -194,7 +193,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 		assocShedEmployeeNode = new NodeRef(assocShedEmployeeStr);
 		sheduleDestinationNode = new NodeRef(sheduleDestinationStr);
 
-		NodeRef createdNode = SheduleService.createNewSpecialShedule(rawSheduleData, assocShedEmployeeNode, sheduleDestinationNode);
+		NodeRef createdNode = sheduleService.createNewSpecialShedule(rawSheduleData, assocShedEmployeeNode, sheduleDestinationNode);
 
 		if (createdNode == null) {
 			throw new WebScriptException("Something has gone wrong: response is empty!");

@@ -2,7 +2,6 @@ package ru.it.lecm.wcalendar.beans;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
@@ -16,25 +15,19 @@ import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWCalCommon;
+import ru.it.lecm.wcalendar.IWCalendar;
 
 /**
  *
  * @author vlevin
  */
-public abstract class AbstractWCalCommonBean implements IWCalCommon, AuthenticationUtil.RunAsWork<NodeRef> {
-
-	// Статически задаем namespace-ы из моделей данных
-	protected final static String WCAL_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/1.0";
-	protected final static String SHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/shedule/1.0";
-	protected final static String ABSENCE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/absence/1.0";
-	protected final static String CALENDAR_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/calendar/1.0";
+public abstract class AbstractWCalendarBean implements IWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
 	protected Repository repository;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
 	protected OrgstructureBean orgstructureService;
 	// Получить логгер, чтобы писать, что с нами происходит.
-	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalCommonBean.class);
+	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalendarBean.class);
 
 	/**
 	 * Получить экземпляр NodeService от Spring-а для последующей работы с

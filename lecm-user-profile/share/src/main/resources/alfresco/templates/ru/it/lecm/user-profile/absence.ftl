@@ -16,6 +16,7 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/absence-profile-toolbar.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/date-interval-validation.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/jquery/jquery-1.6.2.js"/>
 
 <script type="text/javascript">//<![CDATA[
 

@@ -15,10 +15,6 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 		var errorContainer = YAHOO.util.Dom.get(form.errorContainer);
 		errorContainer.innerHTML = "";
 
-		if (this.formIsValid) {
-			this.formIsValid = false;
-			return true;
-		}
 		var valid = true;
 
 		var myID = field.id;
@@ -89,36 +85,40 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 					nodeRef: assocEmployeeRef
 				};
 
-				Alfresco.util.Ajax.request({
-					method: "POST",
+				// Yahoo UI не умеет синхронных (блокирующий) AJAX. Придется использовать jQuery
+				jQuery.ajax({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/isIntervalSuitableForAbsence",
-					dataObj: optsObj,
-					requestContentType: "application/json",
-					responseContentType: "application/json",
-					successCallback: {
-						fn: function (response) {
-							var result = response.json;
-
-							if (result != null && !result.isSuitable) {
-								errorMessage += "На выбранную дату ужа запланировано отсутствие. <br>";
-								errorContainer.innerHTML = "";
-								form.addError(errorMessage, field);
-							} else {
-								this.formIsValid = true;
-								YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-							}
-						},
-						scope: this
-					}
+					type: "POST",
+					timeout: 30000, // 30 секунд таймаута хватит всем!
+					async: false, // ничего не делаем, пока не отработал запром
+					dataType: "json",
+					contentType: "application/json",
+					data: YAHOO.lang.JSON.stringify(optsObj), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
+					processData: false, // данные не трогать, не кодировать вообще
+					success: function (result, textStatus, jqXHR) {
+						if (result != null && !result.isSuitable) {
+							errorMessage += "На выбранную дату ужа запланировано отсутствие. <br>";
+							valid = false;
+						} else {
+							valid = true;
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "ERROR: can not perform field validation"
+						});
+						valid = false;
+					}	
 				});
+
 			}
 		}
 
-		//Ругнуться, что дата неправильная
+		//Ругнуться, что даты неправильные
 		if (!valid) {
 			errorContainer.innerHTML = "";
 			form.addError(errorMessage, field);
 		}
 
-		return false;
+		return valid;
 	};

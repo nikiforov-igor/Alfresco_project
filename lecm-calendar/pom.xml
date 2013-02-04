@@ -17,7 +17,8 @@
 	<description>Calendar module</description>
 
 	<modules>
+		<module>api</module>
 		<module>repo</module>
-		 <module>share</module>
+		<module>share</module>
 	</modules>
 </project>

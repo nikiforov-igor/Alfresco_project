@@ -11,7 +11,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.wcalendar.IWCalCommon;
+import ru.it.lecm.wcalendar.IWCalendar;
 
 /**
  * Реализация JavaScript root-object для получения информации о контейнерах для
@@ -22,7 +22,7 @@ import ru.it.lecm.wcalendar.IWCalCommon;
 public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension {
 
 	protected ServiceRegistry serviceRegistry;
-	private IWCalCommon wCalendarService;
+	protected IWCalendar wCalendarService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private final static Logger logger = LoggerFactory.getLogger(WCalendarJavascriptExtension.class);
 
@@ -35,7 +35,7 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 	 *
 	 * @param wCalendarService передается Spring-ом
 	 */
-	public void setWCalService(IWCalCommon wCalendarService) {
+	public void setWCalService(IWCalendar wCalendarService) {
 		this.wCalendarService = wCalendarService;
 	}
 

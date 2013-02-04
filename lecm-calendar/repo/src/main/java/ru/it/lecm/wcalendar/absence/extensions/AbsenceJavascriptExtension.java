@@ -12,20 +12,22 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.wcalendar.absence.beans.AbsenceBean;
+import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
 
 /**
+ * JavaScript root-object под названием "absence". Предоставляет доступ к
+ * методам интерфейса IAbsence из web-script'ов.
  *
  * @author vlevin
  */
 public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 
-	private AbsenceBean AbsenceService;
+	private IAbsence absenceService;
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceJavascriptExtension.class);
 
-	public void setAbsenceService(AbsenceBean AbsenceService) {
-		this.AbsenceService = AbsenceService;
+	public void setAbsenceService(IAbsence absenceService) {
+		this.absenceService = absenceService;
 	}
 
 	/**
@@ -36,7 +38,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	 * привязаны отсутствия, возвращает null
 	 */
 	public Scriptable getAbsenceByEmployee(final String nodeRefStr) {
-		List<NodeRef> absenceList = AbsenceService.getAbsenceByEmployee(new NodeRef(nodeRefStr));
+		List<NodeRef> absenceList = absenceService.getAbsenceByEmployee(new NodeRef(nodeRefStr));
 		if (absenceList != null) {
 			return getAsScriptable(absenceList);
 		} else {
@@ -67,7 +69,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	 * @return Расписания привязаны - true. Нет - false.
 	 */
 	public boolean isAbsenceAssociated(final String nodeRefStr) {
-		return AbsenceService.isAbsenceAssociated(new NodeRef(nodeRefStr));
+		return absenceService.isAbsenceAssociated(new NodeRef(nodeRefStr));
 	}
 
 	/**
@@ -106,6 +108,6 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		return AbsenceService.isIntervalSuitableForAbsence(new NodeRef(employeeRefStr), begin, end);
+		return absenceService.isIntervalSuitableForAbsence(new NodeRef(employeeRefStr), begin, end);
 	}
 }

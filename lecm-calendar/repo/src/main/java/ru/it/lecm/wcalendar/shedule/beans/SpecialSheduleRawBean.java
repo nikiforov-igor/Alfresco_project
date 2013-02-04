@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
 
-public class SpecialSheduleRawBean {
+public class SpecialSheduleRawBean implements ISpecialSheduleRaw {
 
 	private Date timeWorkBegins;
 	private Date timeWorkEnds;
@@ -27,11 +28,6 @@ public class SpecialSheduleRawBean {
 	private DateFormat dateParser2 = new SimpleDateFormat("d/M/yyyy"); // 30/9/2013
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SpecialSheduleRawBean.class);
 
-	public static enum ReiterationType {
-
-		SHIFT, WEEK_DAYS, MONTH_DAYS;
-	}
-
 	public void SpecialSheduleRaw() {
 		this.weekDays.put(Calendar.MONDAY, Boolean.FALSE);
 		this.weekDays.put(Calendar.TUESDAY, Boolean.FALSE);
@@ -42,10 +38,12 @@ public class SpecialSheduleRawBean {
 		this.weekDays.put(Calendar.SUNDAY, Boolean.FALSE);
 	}
 
+	@Override
 	public Date getTimeLimitStart() {
 		return timeLimitStart;
 	}
 
+	@Override
 	public void setTimeLimitStart(String timeLimitStart) {
 		try {
 			setTimeLimitStart(dateParser1.parse(timeLimitStart));
@@ -58,14 +56,17 @@ public class SpecialSheduleRawBean {
 		}
 	}
 
+	@Override
 	public void setTimeLimitStart(Date timeLimitStart) {
 		this.timeLimitStart = timeLimitStart;
 	}
 
+	@Override
 	public Date getTimeLimitEnd() {
 		return timeLimitEnd;
 	}
 
+	@Override
 	public void setTimeLimitEnd(String timeLimitEnd) {
 		try {
 			setTimeLimitEnd(dateParser1.parse(timeLimitEnd));
@@ -78,10 +79,12 @@ public class SpecialSheduleRawBean {
 		}
 	}
 
+	@Override
 	public void setTimeLimitEnd(Date timeLimitEnd) {
 		this.timeLimitEnd = timeLimitEnd;
 	}
 
+	@Override
 	public void setTimeWorkBegins(String timeBeginStr) {
 		try {
 			setTimeWorkBegins(timeParser.parse(timeBeginStr));
@@ -90,14 +93,17 @@ public class SpecialSheduleRawBean {
 		}
 	}
 
+	@Override
 	public void setTimeWorkBegins(Date timeWorkBegins) {
 		this.timeWorkBegins = timeWorkBegins;
 	}
 
+	@Override
 	public Date getTimeWorkBegins() {
 		return this.timeWorkBegins;
 	}
 
+	@Override
 	public void setTimeWorkEnds(String timeEndStr) {
 		try {
 			setTimeWorkEnds(timeParser.parse(timeEndStr));
@@ -106,22 +112,27 @@ public class SpecialSheduleRawBean {
 		}
 	}
 
+	@Override
 	public void setTimeWorkEnds(Date timeWorkEnds) {
 		this.timeWorkEnds = timeWorkEnds;
 	}
 
+	@Override
 	public Date getTimeWorkEnds() {
 		return this.timeWorkEnds;
 	}
 
+	@Override
 	public void setMonthDays(List<Integer> monthDays) {
 		this.monthDays = monthDays;
 	}
 
+	@Override
 	public List<Integer> getMonthDays() {
 		return this.monthDays;
 	}
 
+	@Override
 	public void setWeekDays(List<Boolean> weekDaysList) {
 		this.weekDays.put(Calendar.MONDAY, weekDaysList.get(0));
 		this.weekDays.put(Calendar.TUESDAY, weekDaysList.get(1));
@@ -132,34 +143,42 @@ public class SpecialSheduleRawBean {
 		this.weekDays.put(Calendar.SUNDAY, weekDaysList.get(6));
 	}
 
+	@Override
 	public void setWeekDays(Map<Integer, Boolean> weekDays) {
 		this.weekDays = weekDays;
 	}
 
+	@Override
 	public Map<Integer, Boolean> getWeekDays() {
 		return this.weekDays;
 	}
 
+	@Override
 	public void setReiterationType(ReiterationType rType) {
 		this.reiterationType = rType;
 	}
 
+	@Override
 	public ReiterationType getReiterationType() {
 		return this.reiterationType;
 	}
 
+	@Override
 	public int getWorkingDaysAmount() {
 		return this.workingDaysAmount;
 	}
 
+	@Override
 	public void setWorkingDaysAmount(int workingDaysAmount) {
 		this.workingDaysAmount = workingDaysAmount;
 	}
 
+	@Override
 	public int getWorkingDaysInterval() {
 		return this.workingDaysInterval;
 	}
 
+	@Override
 	public void setWorkingDaysInterval(int workingDaysInterval) {
 		this.workingDaysInterval = workingDaysInterval;
 	}

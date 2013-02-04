@@ -7,7 +7,25 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vlevin
  */
-public interface IWCalCommon {
+public interface IWCalendar {
+	// Задаем namespace-ы из моделей данных
+
+	/**
+	 * Namespace: lecm-absence, absence-model.xml
+	 */
+	String ABSENCE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/absence/1.0";
+	/**
+	 * Namespace: lecm-cal, calendar-model.xml
+	 */
+	String CALENDAR_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/calendar/1.0";
+	/**
+	 * Namespace: lecm-shed, shedule-model.xml
+	 */
+	String SHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/shedule/1.0";
+	/**
+	 * Namespace: lecm-wcal, wcal-common.xml
+	 */
+	String WCAL_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/1.0";
 
 	/**
 	 * Получение ссылки на корневые каталоги для календарей, графиков работы и
@@ -23,7 +41,7 @@ public interface IWCalCommon {
 	 *
 	 * @return объект CalendarBean, AbsenceBean или SheduleBean
 	 */
-	IWCalCommon getWCalendarDescriptor();
+	IWCalendar getWCalendarDescriptor();
 
 	/**
 	 * Получение правильно оформленного типа данных для календаря, графика
@@ -32,5 +50,4 @@ public interface IWCalCommon {
 	 * @return qualified name типа данных с namespace-ом
 	 */
 	QName getWCalendarItemType();
-
 }
