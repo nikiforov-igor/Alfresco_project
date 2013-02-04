@@ -11,4 +11,15 @@
 //]]>
 </script>
 
-<div id="${id}-content-part1" class="yui-panel" style="width: 640px; border: 0;"></div>
+<style>
+	.delegation-content {
+		width: 640px;
+		border: 0 !important;
+	}
+
+	.delegation-content .form-buttons {
+		border-bottom: 0 !important;
+	}
+</style>
+
+<div id="${id}-content-part1" class="yui-panel delegation-content"></div>
