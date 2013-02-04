@@ -205,7 +205,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         * @param obj {object} Object passed back from addListener method
 	         */
 	        onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
-		        this.renderFormTemplate(this.currentForm, true, e, obj);
+		        this.renderFormTemplate(this.currentForm, true, false, e, obj);
 		        YAHOO.Bubbling.fire("hideFilteredLabel");
 	        },
 

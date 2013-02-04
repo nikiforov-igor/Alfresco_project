@@ -138,6 +138,7 @@ LogicECM.module = LogicECM.module || {};
 		{
 			this.options.controlId = this.id + '-cntrl';
 			this.options.pickerId = this.id + '-cntrl-picker';
+			Dom.setStyle(this.options.pickerId, "display", "block");
 
             // Create button if control is enabled
             if(!this.options.disabled)
