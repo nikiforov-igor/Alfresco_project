@@ -561,12 +561,14 @@ public class BPMNGenerator {
 			elementCount++;
 			actionElement.appendChild(attribute);
 
-			String variableValue = "id" + transition.getChildRef().getId().replace("-", "");
 			elementCount++;
+
+			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
+			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 
 			Element parameter = doc.createElement("lecm:parameter");
 			parameter.setAttribute("name", "variableValue");
-			parameter.setAttribute("value", variableValue);
+			parameter.setAttribute("value", target);
 			attribute.appendChild(parameter);
 
 			String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_TRANSITION_LABEL);
@@ -575,8 +577,6 @@ public class BPMNGenerator {
 			parameter.setAttribute("value", labelId);
 			attribute.appendChild(parameter);
 
-			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
-			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 			String var = "var" + actionVar;
 			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
 
