@@ -139,9 +139,9 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		}
 	}
 
-	public Scriptable findOldRecords(String dateISO8601) {
+	public Scriptable findOldRecords(String dateStr) {
         try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(dateISO8601);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
 
             List<NodeRef> refs = service.getRecordsByInterval(null, date);
             return createScriptable(refs);

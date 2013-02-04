@@ -451,7 +451,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             url: sUrl,
                             dataObj: {
                                 nodeRefs: [],
-                                dateArchiveTo:dateValue
+                                dateArchiveTo: Alfresco.util.formatDate(Alfresco.util.fromISO8601(dateValue), "yyyy-mm-dd")
                             },
                             successCallback: {
                                 fn: function (response) {
