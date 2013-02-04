@@ -1,11 +1,5 @@
 <#macro renderTreePickerDialogHTML controlId plane showSearch>
 <#assign pickerId = controlId + "-picker">
-<script type="text/javascript">//<![CDATA[
-var element = Dom.get("${pickerId}");
-if (element != null) {
-	element.parentNode.parentNode.removeChild(element.parentNode);
-}
-//]]></script>
 <div id="${pickerId}" class="picker yui-panel" style="display: none;">
 
     <style type="text/css" media="screen">
