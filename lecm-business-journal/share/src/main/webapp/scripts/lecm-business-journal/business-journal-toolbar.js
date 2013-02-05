@@ -52,7 +52,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("initDatagridSearch", this.onInitDataGridSearch, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
     };
@@ -88,7 +87,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
             archivePanel: null,
 
-            search: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -191,14 +189,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 }
             },
 
-            //инициализация поиска datagrid
-            onInitDataGridSearch: function (layer, args) {
-                if (this.search == null && this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
-                    var grid = this.modules.dataGrid;
-                    this.search = grid.search;
-                    this.search.showDialog(grid.datagridMeta, false);
-                }
-            },
 
             // по нажатию на кнопку Поиск
             onSearchClick:function() {
@@ -232,7 +222,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
-                    this.search.performSearch({
+                    this.modules.dataGrid.search.performSearch({
                         searchConfig:datagridMeta.searchConfig,
                         searchShowInactive:dataGrid.options.searchShowInactive
                     });
@@ -240,7 +230,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 } else {
                     //сбрасываем на значение по умолчанию
                     datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
-                    this.search.performSearch({
+                    this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
                         searchConfig:datagridMeta.searchConfig,
@@ -253,9 +243,9 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             // клик на Атрибутивном Поиске
             onExSearchClick:function() {
                 var grid = this.modules.dataGrid;
-                if (this.search != null) {
-                    this.search.showDialog(grid.datagridMeta);
-                }
+                var advSearch = grid.search;
+
+                advSearch.showDialog(grid.datagridMeta);
             },
 
             /**
