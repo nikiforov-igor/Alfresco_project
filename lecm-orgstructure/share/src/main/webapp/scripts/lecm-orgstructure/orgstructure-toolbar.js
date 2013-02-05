@@ -254,15 +254,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 if (searchTerm.length > 0) {
                     var columns = dataGrid.datagridColumns;
 
-                    var fields = "";
-                    for (var i = 0; i < columns.length; i++) {
-                        if (columns[i].dataType == "text") {
-                            fields += columns[i].name + ",";
-                        }
-                    }
-                    if (fields.length > 1) {
-                        fields = fields.substring(0, fields.length - 1);
-                    }
+                    var fields = dataGrid.getFields();
                     var fullTextSearch = {
                         parentNodeRef:datagridMeta.nodeRef,
                         fields:fields,

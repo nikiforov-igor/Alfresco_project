@@ -1,19 +1,19 @@
 package ru.it.lecm.base.policy;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-
-import java.io.Serializable;
-import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * Политика объектов типа cm:object и его наследников для обеспечения работы Logic ECM Бизнес-платформа
  */
-public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy {
+public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy{
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
@@ -41,13 +41,6 @@ public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdateProper
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
-
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onDeleteAssociation"));
-
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateAssociation"));
-
 	}
 
 	/**
@@ -65,59 +58,6 @@ public class LogicECMContentPolicy implements NodeServicePolicies.OnUpdateProper
 			ContentWriter writer = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
 			writer.setMimetype("text/plain");
 			writer.putContent("");
-		}
-	}
-
-	/**
-	 * Метод добавляет значение ассоциации в поле объекта с именем 'assoc'-ref, если оно существует
-	 * @param nodeAssocRef
-	 */
-	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		NamespaceService nameService = serviceRegistry.getNamespaceService();
-		NodeService nodeService = serviceRegistry.getNodeService();
-
-		NodeRef record = nodeAssocRef.getSourceRef();
-		String assocQName = nodeAssocRef.getTypeQName().toPrefixString(nameService);
-		QName propertyQName = QName.createQName(assocQName + "-ref", nameService);
-
-		DictionaryService dictionary = serviceRegistry.getDictionaryService();
-		PropertyDefinition propertyDefinition = dictionary.getProperty(propertyQName);
-
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			String refValue = nodeAssocRef.getTargetRef().toString();
-			if (!strOldValue.contains(refValue)) {
-				strOldValue += refValue + ";";
-			}
-			nodeService.setProperty(record, propertyQName, strOldValue);
-		}
-	}
-
-	/**
-	 * Метод сбрасывает значение ассоциации в поле объекта с именем 'assoc'-ref, если оно существует
-	 * @param nodeAssocRef
-	 */
-	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-		NamespaceService nameService = serviceRegistry.getNamespaceService();
-		NodeService nodeService = serviceRegistry.getNodeService();
-
-		NodeRef record = nodeAssocRef.getSourceRef();
-		String assocQName = nodeAssocRef.getTypeQName().toPrefixString(nameService);
-		QName propertyQName = QName.createQName(assocQName + "-ref", nameService);
-
-		DictionaryService dictionary = serviceRegistry.getDictionaryService();
-		PropertyDefinition propertyDefinition = dictionary.getProperty(propertyQName);
-
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			String refValue = nodeAssocRef.getTargetRef().toString();
-			strOldValue = strOldValue.replace(refValue + ";", "");
-			strOldValue = strOldValue.replace(refValue, "");
-			nodeService.setProperty(record, propertyQName, strOldValue);
 		}
 	}
 }

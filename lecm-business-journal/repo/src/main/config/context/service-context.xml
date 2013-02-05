@@ -188,4 +188,23 @@
             <ref bean="namespaceService"/>
         </property>
     </bean>
+
+    <bean id="businessJournalOnCreateAssocsPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalOnCreateAssocsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+    </bean>
 </beans>

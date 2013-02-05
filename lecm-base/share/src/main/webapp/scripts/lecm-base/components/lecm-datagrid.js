@@ -2293,6 +2293,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }).show();
             },
 
+            getTextFields: function () {
+                var columns = this.datagridColumns;
+                var fields = "";
+                for (var i = 0; i < columns.length; i++) {
+                    if (columns[i].dataType == "text") {
+                        fields += columns[i].name + ",";
+                    } else if (columns[i].type == "association") {
+                        fields += columns[i].name + "-text-content" + ",";
+                    }
+                }
+                if (fields.length > 1) {
+                    fields = fields.substring(0, fields.length - 1);
+                }
+                return fields;
+            },
+
             createDialogShow:function (meta, callback, pattern, successMessage) {
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
