@@ -1,12 +1,5 @@
 package ru.it.lecm.dictionary.export;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-
 import com.csvreader.CsvWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -16,6 +9,12 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: mShafeev
@@ -28,8 +27,30 @@ public class ExportCSV extends AbstractWebScript {
 
 	protected NodeService nodeService;
 
+	/**
+	 * Russian locale
+	 */
+	private static final Locale LOCALE_RU = new Locale("RU");
+
+	/**
+	 * Russian locale
+	 */
+	private static final Locale LOCALE_EN = new Locale("EN");
+	/**
+	 * Формат даты
+	 */
+	private String dateFormat = "EEE MMM dd HH:mm:ss z";
+
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
 	}
 
 	@Override
@@ -75,6 +96,10 @@ public class ExportCSV extends AbstractWebScript {
 							QName key = (QName) m.getKey();
 							String value = m.getValue().toString();
 							if (key.getLocalName().equals(aNamespace)) {
+								if (m.getValue() instanceof Date) {
+									Date date = (Date)m.getValue();
+									value = new SimpleDateFormat(dateFormat, LOCALE_RU).format(date);
+								}
 								wr.write(value);
 								noProperties = false;
 							}

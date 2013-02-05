@@ -207,4 +207,10 @@
             <ref bean="businessJournalService"/>
         </property>
     </bean>
+
+	<bean id="dictionaryExportCsv" class="ru.it.lecm.dictionary.export.ExportCSV">
+		<property name="dateFormat">
+			<value>EEE MMM dd HH:mm:ss</value>
+		</property>
+	</bean>
 </beans>
