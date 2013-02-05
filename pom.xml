@@ -445,4 +445,13 @@
         </pluginManagement>
     </build>
 
+    <profiles>
+        <profile>
+            <id>lecmIM</id>
+            <modules>
+                <module>lecm-im</module>
+            </modules>
+        </profile>
+    </profiles>
+
 </project>

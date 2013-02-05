@@ -141,7 +141,7 @@
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency>        
 		<dependency>
 			<groupId>ru.it.lecm.subscriptions</groupId>
 			<artifactId>subscriptions-share</artifactId>
@@ -292,4 +292,17 @@
 
 	<!-- Custom behaviors -->
 
+	<profiles>
+        <profile>
+            <id>lecmIM</id>
+			<dependency>
+				<groupId>ru.it.lecm.lecm-im</groupId>
+				<artifactId>lecm-im-share</artifactId>
+				<version>${platform.version}</version>
+				<type>amp</type>
+				<scope>runtime</scope>
+			</dependency>
+		</profile>
+    </profiles>
+    
 </project>
