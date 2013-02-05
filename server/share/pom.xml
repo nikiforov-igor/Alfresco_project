@@ -295,13 +295,15 @@
 	<profiles>
         <profile>
             <id>lecmIM</id>
-			<dependency>
-				<groupId>ru.it.lecm.lecm-im</groupId>
-				<artifactId>lecm-im-share</artifactId>
-				<version>${platform.version}</version>
-				<type>amp</type>
-				<scope>runtime</scope>
-			</dependency>
+	        <dependencies>
+		        <dependency>
+			        <groupId>ru.it.lecm.lecm-im</groupId>
+			        <artifactId>lecm-im-share</artifactId>
+			        <version>${platform.version}</version>
+			        <type>amp</type>
+			        <scope>runtime</scope>
+		        </dependency>
+	        </dependencies>
 		</profile>
     </profiles>
     
