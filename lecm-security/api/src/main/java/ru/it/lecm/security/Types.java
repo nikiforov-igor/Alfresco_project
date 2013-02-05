@@ -216,7 +216,7 @@ public final class Types {
 
 		@Override
 		public String toString() {
-			return String.format( "SGPOS(%s, %s %s)", sgKind, id, (displayInfo == null ? "" : displayInfo));
+			return String.format( "SGPOS(%s '%s', %s)", sgKind, id, (displayInfo == null ? "" : displayInfo));
 		}
 
 		/**

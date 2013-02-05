@@ -1,10 +1,14 @@
 package ru.it.lecm.orgstructure.policies;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -15,13 +19,19 @@ public class OrgstructureBusinessRolePolicy
 		extends SecurityNotificationsPolicyBase
 		implements NodeServicePolicies.OnCreateNodePolicy
 				, NodeServicePolicies.OnDeleteNodePolicy
+				, NodeServicePolicies.OnUpdatePropertiesPolicy
 
-				, NodeServicePolicies.OnCreateAssociationPolicy
-				, NodeServicePolicies.OnDeleteAssociationPolicy
 {
+	// обработчики связанных ссылок на Подразделения, Должности и Сотрудников ...
+	final private PolicyBRLinkNotifier policyOU = new PolicyBRLinkNotifier( "OrgUnit");
+	final private PolicyBRLinkNotifier policyDP = new PolicyBRLinkNotifier( "DP");
+	final private PolicyBRLinkNotifier policyEmployee = new PolicyBRLinkNotifier("Employee");
+
 	@Override
 	public void init() {
 		// PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
+		logger.info("Business Role policy hook activated");
+
 		super.init();
 
 		// TYPE_ORGANIZATION_UNIT : "lecm-orgstr:organization-unit"
@@ -31,15 +41,41 @@ public class OrgstructureBusinessRolePolicy
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "onDeleteNode"));
 
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "onUpdateProperties"));
+
+		/* ссылки на Подразделения ... */
 		policyComponent.bindAssociationBehaviour(
 				NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT,
-				new JavaBehaviour(this, "onCreateAssociation"));
+				new JavaBehaviour(this.policyOU, "onCreateAssociation"));
 
 		policyComponent.bindAssociationBehaviour(
-				NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT,
-				new JavaBehaviour(this, "onDeleteAssociation"));
+				new JavaBehaviour(this.policyOU, "onDeleteAssociation"));
+
+		/* ссылки на Должностные Позиции ... */
+		policyComponent.bindAssociationBehaviour(
+				NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER,
+				new JavaBehaviour(this.policyDP, "onCreateAssociation"));
+
+		policyComponent.bindAssociationBehaviour(
+				NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER,
+				new JavaBehaviour(this.policyDP, "onDeleteAssociation"));
+
+		/* ссылки на Сотрудников ... */
+		policyComponent.bindAssociationBehaviour(
+				NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_EMPLOYEE,
+				new JavaBehaviour(this.policyEmployee, "onCreateAssociation"));
+
+		policyComponent.bindAssociationBehaviour(
+				NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, OrgstructureBean.ASSOC_BUSINESS_ROLE_EMPLOYEE,
+				new JavaBehaviour(this.policyEmployee, "onDeleteAssociation"));
 	}
 
 	@Override
@@ -54,19 +90,52 @@ public class OrgstructureBusinessRolePolicy
 	@Override
 	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
 		final NodeRef nodeBR = childAssocRef.getChildRef();
+		logger.debug("deleting business role "+ nodeBR);
 
 		// оповещение securityService по БР ...
 		notifyNodeDeactivated( PolicyUtils.makeBRPos(nodeBR, nodeService));
 	}
 
 	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		notifyBRAssociationChanged(nodeAssocRef, true);
-	}
+	public void onUpdateProperties(NodeRef nodeBR,
+			Map<QName, Serializable> before, Map<QName, Serializable> after) 
+	{
+		final Object oldDetails = before.get( OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		final Object newDetails = after.get( OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		final boolean changed = ! PolicyUtils.safeEquals( newDetails, oldDetails);
+		if (changed) {
+			logger.debug( String.format( "updating details for business role '%s'\n\t from '%s'\n\t to '%s'", nodeBR, oldDetails, newDetails));
+			notifyNodeCreated( PolicyUtils.makeBRPos(nodeBR, nodeService) );
+		}
+	} 
 
-	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-		notifyBRAssociationChanged(nodeAssocRef, false);
+	public class PolicyBRLinkNotifier
+			implements NodeServicePolicies.OnCreateAssociationPolicy
+					, NodeServicePolicies.OnDeleteAssociationPolicy 
+	{
+		final String tag;
+
+		public PolicyBRLinkNotifier(String info) {
+			this.tag = info;
+		}
+
+		@Override
+		public void onCreateAssociation(AssociationRef nodeAssocRef) {
+			logger.debug("creating business role link to "+ tag+ ": "+ nodeAssocRef);
+			notifyBRAssociationChanged(nodeAssocRef, true);
+		}
+
+		@Override
+		public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+			logger.debug("deleting business role link to "+ tag+ ": "+ nodeAssocRef);
+			notifyBRAssociationChanged(nodeAssocRef, false);
+		}
+
+		@Override
+		public String toString() {
+			return "PolicyBRLinkNotifier("+ tag + ")";
+		}
+
 	}
 
 }

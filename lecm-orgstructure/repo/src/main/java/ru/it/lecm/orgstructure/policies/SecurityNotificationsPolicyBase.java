@@ -119,13 +119,19 @@ public abstract class SecurityNotificationsPolicyBase
 		return employees;
 	}
 
-//	private void safeExec(Runnable todo) {
-//		try {
-//			todo.run();
-//		} catch (Throwable t) {
-//			logger.error( "exception "+ t.getMessage(), t);
-//		}
-//	}
+	/**
+	 * Безопасное выполнение кода с журналированием ошибок.
+	 * (!) Все местные исключения отсаются тут и наружу не просачиваются.
+	 * @param todo выполняемый код
+	 * @param runInfo пояснения о выполняемом коде для журналирования ошибок
+	 */
+	protected void safeExec(Runnable todo, String runInfo) {
+		try {
+			todo.run();
+		} catch (Throwable t) {
+			logger.error( String.format( "exception in %s %s", runInfo, t.getMessage()), t);
+		}
+	}
 
 	protected void notifyNodeCreated(SGPosition pos) {
 		sgNotifier.orgNodeCreated( pos);
@@ -396,7 +402,7 @@ public abstract class SecurityNotificationsPolicyBase
 		boolean isOrgUnitAssoc = false;
 		if (orgstructureService.isEmployee(destObj)) { // присвоение БР для Сотрудника
 			assocPos = PolicyUtils.makeEmploeePos(destObj, nodeService, orgstructureService, logger);
-		} if (orgstructureService.isStaffList(destObj)) { // присвоение БР для Должностной Позиции
+		} else if (orgstructureService.isStaffList(destObj)) { // присвоение БР для Должностной Позиции
 			assocPos = PolicyUtils.makeDeputyPos(destObj, nodeService, orgstructureService, logger);
 		} else if (orgstructureService.isUnit(destObj)) { // присвоение БР для Подразделения
 			assocPos = PolicyUtils.makeOrgUnitPos(destObj, nodeService);

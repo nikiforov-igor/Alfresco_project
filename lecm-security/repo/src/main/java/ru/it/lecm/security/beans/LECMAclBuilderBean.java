@@ -88,16 +88,16 @@ public class LECMAclBuilderBean
 		if (map == null || map.isEmpty()) {
 			sb.append("\t EMPTY \n");
 		} else {
-			sb.append( " ===========================");
-			sb.append( "\n [NN] role\t\t Access\n");
-			sb.append( " ===========================");
+			sb.append( " \n ==================================== \n");
+			sb.append( " [NN] role\t\t Access\n");
+			sb.append( " ==================================== \n");
 			int i = 0;
 			for (Map.Entry< String, StdPermission> item: map.entrySet()) {
 				sb.append( String.format( " [%d] '%s'\t %s\n", (++i), item.getKey()
 						, ((item.getValue() == null) ? "NULL" : item.getValue().toString())
 				));
 			}
-			sb.append( " ===========================");
+			sb.append( " ==================================== \n");
 		}
 		return sb.toString();
 	}
@@ -197,7 +197,7 @@ public class LECMAclBuilderBean
 	@Override
 	public void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap)
 	{
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node %s by accessor %s \n", nodeRef, getMapInfo(accessMap)));
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node %s by accessor %s \r\n", nodeRef, getMapInfo(accessMap)));
 
 		// получить полный текущий ACL ...
 		final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);

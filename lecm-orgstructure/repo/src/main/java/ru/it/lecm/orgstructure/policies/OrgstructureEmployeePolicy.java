@@ -26,7 +26,7 @@ public class OrgstructureEmployeePolicy
 	extends SecurityJournalizedPolicyBase
 	implements NodeServicePolicies.OnCreateNodePolicy
 				, NodeServicePolicies.OnUpdatePropertiesPolicy
-				// , NodeServicePolicies.OnDeleteNodePolicy
+				, NodeServicePolicies.OnDeleteNodePolicy
 				, NodeServicePolicies.OnCreateAssociationPolicy
 				, NodeServicePolicies.OnDeleteAssociationPolicy
 {
@@ -35,16 +35,18 @@ public class OrgstructureEmployeePolicy
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode")); // , Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onDeleteNode")); // , Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
 				new JavaBehaviour(this, "onCreateAssociation"));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				OrgstructureBean.ASSOC_EMPLOYEE_PERSON, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
+				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
 				new JavaBehaviour(this, "onDeleteAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.ASSOC_EMPLOYEE_PERSON, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
-				new JavaBehaviour(this, "onUpdateProperties"));
 	}
 
 	@Override
@@ -92,6 +94,12 @@ public class OrgstructureEmployeePolicy
 		final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
 		if (changed) // произошло переключение активности -> отработать ...
 			notifyEmploeeTie(nodeRef, nowActive);
+	}
+
+	@Override
+	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+		final NodeRef employee = childAssocRef.getChildRef();
+		notifyEmploeeDown(employee);
 	}
 
 }

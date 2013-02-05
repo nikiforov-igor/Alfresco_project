@@ -89,10 +89,10 @@ public class PolicyUtils {
 	 * @return
 	 */
 	public static String getBRoleIdCode(NodeRef brole, NodeService nodeService) {
-		if (brole == null)
-			return null;
-		final String roleCode = ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-		return roleCode;
+		// if (brole == null) return null;
+		// final String roleCode = ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		// return roleCode;
+		return (brole == null) ? null : brole.getId();
 	}
 
 
@@ -198,7 +198,7 @@ public class PolicyUtils {
 	 */
 	public static Types.SGBusinessRole makeBRPos(NodeRef brole, NodeService nodeService) {
 		final String brolIdCode = getBRoleIdCode( brole, nodeService);
-		final String orgDetails= ""+ nodeService.getProperty( brole, PROP_ORGUNIT_NAME);
+		final String orgDetails= ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 		return (Types.SGBusinessRole) Types.SGKind.SG_BR.getSGPos( brolIdCode, orgDetails);
 	}
 
