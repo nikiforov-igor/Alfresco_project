@@ -36,7 +36,7 @@
 	</bean>
 
     <bean id="${groupId}.${artifactId}.lecmDictionaryBootstrap"
-          parent="lecmDictionaryBootstrap">
+          parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-dictionary-address.xml</value>

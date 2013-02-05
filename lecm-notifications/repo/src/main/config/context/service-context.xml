@@ -41,7 +41,8 @@
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap">
+	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type.xml</value>

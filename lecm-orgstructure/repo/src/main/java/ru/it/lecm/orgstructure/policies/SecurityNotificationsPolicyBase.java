@@ -250,7 +250,7 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param employee
 	 */
 	protected void notifyEmploeeTie(NodeRef employee) {
-		final Boolean isActive = (Boolean) nodeService.getProperty(employee, DictionaryBean.IS_ACTIVE);
+		final Boolean isActive = (Boolean) nodeService.getProperty(employee, IS_ACTIVE);
 		notifyEmploeeTie(employee, isActive);
 	}
 

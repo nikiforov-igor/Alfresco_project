@@ -34,7 +34,7 @@
     </bean>
 
     <bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap"
-          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory.xml</value>
@@ -46,6 +46,7 @@
         <property name="createOrUpdateDictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
             </list>
         </property>
     </bean>
@@ -60,13 +61,14 @@
     </bean>
 
     <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl"
-          depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService">
+          depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="substituteService" ref="substitudeService"/>
         <property name="nodeService" ref="nodeService"/>
 	    <property name="transactionService" ref="transactionService"/>
+        <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 
     <bean id="businessJournalScript" parent="baseJavaScriptExtension" class="ru.it.lecm.businessjournal.script.BusinessJournalWebScriptBean"
@@ -171,4 +173,19 @@
         </property>
     </bean>
 
+    <bean id="businessJournalLogEventsPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalLogEventsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+    </bean>
 </beans>

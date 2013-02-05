@@ -75,6 +75,7 @@
     <bean id="serviceDictionary" class="ru.it.lecm.dictionary.beans.DictionaryBeanImpl">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 
     <bean id="dictionaryScript" parent="baseJavaScriptExtension" class="ru.it.lecm.dictionary.scripts.DictionaryWebScriptBean"

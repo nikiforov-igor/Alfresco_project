@@ -20,7 +20,7 @@
 		</property>
 	</bean>
 	<bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
-		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap,businessJournalLogEventsPolicy" >
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>

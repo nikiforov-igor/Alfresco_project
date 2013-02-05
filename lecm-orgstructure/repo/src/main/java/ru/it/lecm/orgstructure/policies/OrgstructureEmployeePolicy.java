@@ -14,8 +14,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -61,13 +59,6 @@ public class OrgstructureEmployeePolicy
 		// Создаем ассоциацию сотруднику на персональные данные
 		nodeService.createAssociation(node, personalDataRef.getChildRef(), OrgstructureBean.ASSOC_EMPLOYEE_PERSON_DATA);
 
-		try {
-			businessJournalService.log(getAuthService().getCurrentUserName(),
-					node, EventCategory.ADD, "Добавлен новый сотрудник #mainobject", null);
-		} catch (Exception e) {
-			logger.error("Не удалось создать запись бизнес-журнала", e);
-		}
-
 		// сообщить 1) создание Сотрудника 2) связывание Сотрудника с Person/User.
 		{
 			final NodeRef employee = node;
@@ -89,8 +80,8 @@ public class OrgstructureEmployeePolicy
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		final Boolean nowActive = (Boolean) after.get( DictionaryBean.IS_ACTIVE);
-		final Boolean oldActive = (Boolean) before.get( DictionaryBean.IS_ACTIVE);
+		final Boolean nowActive = (Boolean) after.get(IS_ACTIVE);
+		final Boolean oldActive = (Boolean) before.get(IS_ACTIVE);
 		final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
 		if (changed) // произошло переключение активности -> отработать ...
 			notifyEmploeeTie(nodeRef, nowActive);

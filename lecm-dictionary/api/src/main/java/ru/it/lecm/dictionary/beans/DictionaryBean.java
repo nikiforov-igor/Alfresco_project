@@ -1,9 +1,10 @@
 package ru.it.lecm.dictionary.beans;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-
-import java.util.List;
 
 /**
  * User: ORakovskaya
@@ -12,9 +13,9 @@ import java.util.List;
 public interface DictionaryBean {
 
     String DICTIONARIES_ROOT_NAME = "Dictionary";
-    QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
     NodeRef getDictionaryByName(String name);
     List<NodeRef> getChildren(NodeRef nodeRef);
-
+	List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
+	NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
 }

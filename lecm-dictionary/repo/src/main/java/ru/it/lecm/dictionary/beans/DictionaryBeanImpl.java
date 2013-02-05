@@ -1,20 +1,22 @@
 package ru.it.lecm.dictionary.beans;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.BaseBean;
 
 /**
  * User: ORakovskaya
  * Date: 27.12.12
  */
-public class DictionaryBeanImpl implements DictionaryBean {
+public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
     /**
      * Service registry
@@ -46,7 +48,6 @@ public class DictionaryBeanImpl implements DictionaryBean {
 
     @Override
     public NodeRef getDictionaryByName(String name) {
-        NodeService nodeService = services.getNodeService();
         repository.init();
 
         final NodeRef companyHome = repository.getCompanyHome();
@@ -60,17 +61,13 @@ public class DictionaryBeanImpl implements DictionaryBean {
         List<NodeRef> activeChildren = new ArrayList<NodeRef>();
 
         if (nodeRef != null) {
-            NodeService nodeService = services.getNodeService();
             List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
 
             if (children != null && !children.isEmpty()) {
 
                 for (ChildAssociationRef child : children) {
                     NodeRef childRef = child.getChildRef();
-                    Boolean isActive = (Boolean) nodeService.getProperty(childRef, IS_ACTIVE);
-                    isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
-
-                    if (isActive) {
+                    if (!isArchive(childRef)) {
                         activeChildren.add(childRef);
                     }
                 }
@@ -79,4 +76,34 @@ public class DictionaryBeanImpl implements DictionaryBean {
 
         return activeChildren;
     }
+
+	@Override
+	public List<NodeRef> getRecordsByParamValue(String dictionaryName, QName parameter, Serializable value) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		NodeRef obTypeDictionary = getDictionaryByName(dictionaryName);
+		if (obTypeDictionary != null && value != null && parameter != null) {
+			List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(obTypeDictionary);
+			for (ChildAssociationRef dicValue : dicValues) {
+				NodeRef record = dicValue.getChildRef();
+				if (!isArchive(record)) {
+					Serializable recordClass = nodeService.getProperty(record, parameter);
+					if (recordClass.equals(value)) {
+						results.add(record);
+					}
+				}
+
+			}
+		}
+		return results;
+	}
+
+	@Override
+	public NodeRef getRecordByParamValue(String dictionaryName, QName parameter, Serializable value) {
+		NodeRef result = null;
+		List<NodeRef> results = getRecordsByParamValue(dictionaryName, parameter, value);
+		if (results.size() > 0) {
+			result = results.get(results.size() - 1);
+		}
+		return result;
+	}
 }

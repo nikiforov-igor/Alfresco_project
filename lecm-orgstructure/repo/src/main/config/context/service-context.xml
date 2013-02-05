@@ -42,7 +42,7 @@
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap">
+	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>

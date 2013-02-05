@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -45,6 +46,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private NodeRef bjRootRef;
 	private NodeRef bjArchiveRef;
 	private SubstitudeBean substituteService;
+	private DictionaryBean dictionaryService;
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
 	private static enum WhoseEnum {
 		MY,
@@ -134,8 +140,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	@Override
 	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception{
-		if (initiator == null || mainObject == null) {
-			new Exception("Инициатор события и основной объект должны быть заданы!");
+		if (mainObject == null) {
+			throw new Exception("Основной объект должен быть заданы!");
 		}
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
@@ -146,7 +152,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		// заполняем шаблон данными
 		String filled = fillTemplateString(templateString, holdersMap);
 		// получаем текущего пользователя по логину
-		NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
+		NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
 		// создаем записи
 		return createRecord(date, employee, mainObject, category, objects, filled);
 	}
@@ -194,31 +200,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на ноду или null
 	 */
 	private NodeRef getEventCategoryByCode(EventCategory eventCategory) {
-		NodeRef objType = null;
+		NodeRef evCategory = null;
 		if (eventCategory != null) {
-			// получаем объект "Тип объекта"
-			SearchParameters sp = new SearchParameters();
-			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-			sp.setQuery("TYPE:\"" + TYPE_EVENT_CATEGORY.toString() + "\" AND =@lecm\\-busjournal\\:eventCategory\\-code:\"" + eventCategory.name() + "\"");
-			ResultSet results = null;
-			try {
-				results = searchService.query(sp);
-				for (ResultSetRow row : results) {
-					if (!isArchive(row.getNodeRef())) {
-						objType = row.getNodeRef();
-					}
-				}
-			} finally {
-				if (results != null) {
-					results.close();
-				}
-			}
+			evCategory = dictionaryService.getRecordByParamValue("Категория события", PROP_EVENT_CAT_CODE, eventCategory.name());
 		}
-		return objType;
+		return evCategory;
 	}
-    
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<String> objects, final String description) {
+
+	private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<String> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
@@ -311,9 +300,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 	private String wrapAsLink(NodeRef link, boolean isInititator) {
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
-		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":"  +  params.getSharePort();
-		return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\">"
-				+ (isInititator ? getInitiatorDescription(link) :  getObjectDescription(link)) + "</a>";
+		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+		String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
+		if (link != null) {
+			return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\">"
+					+ description + "</a>";
+		} else {
+			return description;
+		}
 	}
 
 	/**
@@ -355,7 +349,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	private String getInitiatorDescription(NodeRef initiator) {
-		String initiatorType = resolveInitiatorType(initiator);
+		String initiatorType = initiator != null ? resolveInitiatorType(initiator) : SYSTEM;
 		return initiatorType.equals(SYSTEM) ? DEFAULT_SYSTEM_TEMPLATE : getObjectDescription(orgstructureService.getEmployeeByPerson(initiator));
 	}
 
@@ -427,28 +421,20 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	private NodeRef getMessageTemplate(NodeRef objectType, NodeRef eventCategory) {
 		if (objectType != null && eventCategory != null) {
-			NodeRef record = null;
-			SearchParameters sp = new SearchParameters();
-			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-			sp.setQuery("TYPE:\"" + TYPE_MESSAGE_TEMPLATE.toString() +
-					"\" AND @lecm\\-busjournal\\:messageTemplate\\-objType\\-assoc\\-ref:\"" + objectType.toString() +
-					"\" AND @lecm\\-busjournal\\:messageTemplate\\-evCategory\\-assoc\\-ref:\"" + eventCategory.toString() + "\"");
-
-			ResultSet results = null;
-			try {
-				results = searchService.query(sp);
-				for (ResultSetRow row : results) {
-					if (!isArchive(row.getNodeRef())) {
-						record = row.getNodeRef();
-					}
-				}
-			} finally {
-				if (results != null) {
-					results.close();
-				}
+			List<AssociationRef> objTypeSAssocs = nodeService.getSourceAssocs(objectType, ASSOC_MESSAGE_TEMP_OBJ_TYPE);
+			List<NodeRef> types = new ArrayList<NodeRef>();
+			for (AssociationRef objTypeSAssoc : objTypeSAssocs) {
+				types.add(objTypeSAssoc.getSourceRef());
 			}
-			return record;
+			List<AssociationRef> evCategorySAssocs = nodeService.getSourceAssocs(eventCategory, ASSOC_MESSAGE_TEMP_EVENT_CAT);
+			List<NodeRef> categories = new ArrayList<NodeRef>();
+			for (AssociationRef evCategorySAssoc : evCategorySAssocs) {
+				categories.add(evCategorySAssoc.getSourceRef());
+			}
+			types.retainAll(categories);
+			if (!types.isEmpty()) {
+				return types.get(types.size() - 1);
+			}
 		}
 		return null;
 	}
@@ -567,26 +553,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * @return ссылка на объект справочника или NULL
 	 */
 	private NodeRef getObjectTypeByClass(String type) {
-		// получаем объект "Тип объекта"
-		SearchParameters sp = new SearchParameters();
-		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-		sp.setQuery("TYPE:\"" + TYPE_OBJECT_TYPE.toString() + "\" AND @lecm\\-busjournal\\:objectType\\-class:\"" + type + "\"");
-		ResultSet results = null;
-		NodeRef objType = null;
-		try {
-			results = searchService.query(sp);
-			for (ResultSetRow row : results) {
-				if (!isArchive(row.getNodeRef())) {
-					objType = row.getNodeRef();
-				}
-			}
-		} finally {
-			if (results != null) {
-				results.close();
-			}
-		}
-		return objType;
+		return dictionaryService.getRecordByParamValue("Тип объекта", PROP_OBJ_TYPE_CLASS, type);
 	}
 
 	@Override
