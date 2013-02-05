@@ -31,7 +31,8 @@
 							],
 							bubblingLabel: "${bubblingLabel!"bj-records"}",
 							showCheckboxColumn: true,
-							attributeForShow:"lecm-busjournal:bjRecord-date"
+							attributeForShow:"lecm-busjournal:bjRecord-date",
+                            advSearchFormId: "busjournal-search"
 						}).setMessages(${messages});
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
