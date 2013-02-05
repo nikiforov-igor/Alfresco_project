@@ -38,6 +38,7 @@
 			<properties>
 				<pagination>true</pagination>
 				<bubblingLabel>subscription-to-object</bubblingLabel>
+				<advSearchFormId>subscription-to-object-search</advSearchFormId>
 			</properties>
 		</component>
 	</components>

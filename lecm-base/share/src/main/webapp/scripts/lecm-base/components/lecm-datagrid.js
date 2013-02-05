@@ -245,7 +245,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				 * идентификатор формы редактирования из share-config-custom
 				 * по-умолчанию он не задан и при редактировании записи таблицы будет использоваться форма по-умолчанию
 				 */
-				editForm: null
+				editForm: null,
+
+	            /**
+	             * идентификатор формы расширенного поиска
+	             */
+	            advSearchFormId: "searchBlock-forms"
             },
 
             /**
@@ -1231,13 +1236,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     // initialize Search
                     this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                         showExtendSearchBlock:this.options.showExtendSearchBlock,
-                        maxSearchResults: this.options.maxResults
+                        maxSearchResults: this.options.maxResults,
+	                    searchFormId: this.options.advSearchFormId
                     });
-
-	                Bubbling.fire("initDatagridSearch",
-		                {
-			                datagrid:this
-		                });
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;

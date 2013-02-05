@@ -37,6 +37,7 @@
 	        <properties>
 		        <pagination>true</pagination>
 		        <bubblingLabel>subscription-to-type</bubblingLabel>
+		        <advSearchFormId>subscription-to-type-search</advSearchFormId>
 	        </properties>
         </component>
 	    <component>

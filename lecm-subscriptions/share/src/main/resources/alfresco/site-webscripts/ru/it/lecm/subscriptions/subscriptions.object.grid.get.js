@@ -30,6 +30,7 @@ function main()
     // config override can force repository search on/off
     model.searchRepo = (repoconfig != "none");
 	model.bubblingLabel = args["bubblingLabel"];
+	model.advSearchFormId = args["advSearchFormId"];
 }
 
 main();

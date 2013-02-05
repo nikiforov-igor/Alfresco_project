@@ -78,7 +78,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             options:{
                 maxSearchResults:1000,
-                showExtendSearchBlock: false  // По умолчанию аттрибутивный поиск скрыт
+                showExtendSearchBlock: false,  // По умолчанию аттрибутивный поиск скрыт
+                searchFormId: "searchBlock-forms"
             },
 
             /**
@@ -95,7 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param form {Object} Form descriptor to render template for
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
-            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, doShow, e, obj) {
+            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
 	            if (isClearSearch == undefined) {
 		            isClearSearch = false;
 	            }
@@ -103,7 +104,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.currentForm = form;
 
                 var formDiv = Dom.get("searchBlock-forms"); // элемент в который будет отрисовываться форма
-                form.htmlid = "searchBlock-forms";
+                form.htmlid = this.options.searchFormId;
 
                 // load the form component for the appropriate type
                 var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
@@ -137,8 +138,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                             searchConfig:this.dataGrid.datagridMeta.searchConfig,
                                             searchShowInactive:this.dataGrid.options.searchShowInactive
                                         });
-	                                } else if (doShow) {
-
+	                                } else {
 		                                this.searchDialog.show();
 	                                }
                                 }
@@ -205,7 +205,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         * @param obj {object} Object passed back from addListener method
 	         */
 	        onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
-		        this.renderFormTemplate(this.currentForm, true, false, e, obj);
+		        this.renderFormTemplate(this.currentForm, true, e, obj);
 		        YAHOO.Bubbling.fire("hideFilteredLabel");
 	        },
 
@@ -362,7 +362,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
-                if (this.currentForm) {
+                if (this.currentForm && args[1].runtime.formId == (this.options.searchFormId + "-form")) {
                     this.currentForm.runtime = args[1].runtime;
                 }
             },
@@ -370,11 +370,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             /**
              * метод для вывода диалога с аттриюбутивным поиском
              */
-            showDialog: function ADVSearch_showDialog(metaData, doShow) {
-	            if (doShow == undefined) {
-		            doShow = true;
-	            }
-
+            showDialog: function ADVSearch_showDialog(metaData) {
                 var defaultForm = new Object();
                 defaultForm.id = "search";
                 defaultForm.type = metaData.itemType;
@@ -393,7 +389,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
                         // создаем форму
-                        this.renderFormTemplate(defaultForm, false, doShow);
+                        this.renderFormTemplate(defaultForm);
                     } else {
                         if (this.searchDialog != null) {
                             this.searchDialog.show();

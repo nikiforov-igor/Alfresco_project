@@ -52,7 +52,6 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
         // Decoupled event listeners
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("initDatagridSearch", this.onInitDataGridSearch, this);
         YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
@@ -90,8 +89,6 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             toolbarButtons: null,
 
             groupActions: {},
-
-	        search: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -218,15 +215,6 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                 }
             },
 
-	        //инициализация поиска datagrid
-	        onInitDataGridSearch: function (layer, args) {
-		        if (this.search == null && this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
-			        var grid = this.modules.dataGrid;
-			        this.search = grid.search;
-			        this.search.showDialog(grid.datagridMeta, false);
-		        }
-	        },
-
             // по нажатию на кнопку Поиск
             onSearchClick:function () {
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
@@ -261,14 +249,14 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
-	                this.search.performSearch({
+                    this.modules.dataGrid.search.performSearch({
                         searchConfig:datagridMeta.searchConfig,
                         searchShowInactive:false
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     datagridMeta.searchConfig = null;
-	                this.search.performSearch({
+                    this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
                         searchConfig:null,
@@ -281,9 +269,9 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             // клик на Атрибутивном Поиске
             onExSearchClick:function () {
                 var grid = this.modules.dataGrid;
-	            if (this.search != null) {
-		            this.search.showDialog(grid.datagridMeta);
-	            }
+                var advSearch = grid.search;
+
+                advSearch.showDialog(grid.datagridMeta);
             },
 
             // функция, возвращающая грид, имеющий тот же bubblingLabel, что и тулбар

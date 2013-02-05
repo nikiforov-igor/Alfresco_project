@@ -28,7 +28,8 @@
                             ],
 	                        bubblingLabel: "${bubblingLabel!''}",
                             showCheckboxColumn: true,
-	                        attributeForShow:"cm:name"
+	                        attributeForShow:"cm:name",
+	                        advSearchFormId: "${advSearchFormId!''}"
                         }).setMessages(${messages});
             }
 
