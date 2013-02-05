@@ -70,7 +70,7 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 	 * обернуть список NodeRef-ов в объект типа Scriptable
 	 *
 	 * @param nodeRefs список NodeRef-ов
-	 * @return специальный объект доступный для работы из JS
+	 * @return специальный объект, доступный для работы из JS
 	 */
 	protected Scriptable getAsScriptable(List<NodeRef> nodeRefs) {
 		Scriptable scope = getScope();

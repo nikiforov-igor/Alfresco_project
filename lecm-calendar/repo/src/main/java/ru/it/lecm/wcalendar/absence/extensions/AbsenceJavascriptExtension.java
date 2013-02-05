@@ -33,7 +33,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Получить список отсутствий по NodeRef-у сотрудника.
 	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee в виде строки
+	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
 	 * привязаны отсутствия, возвращает null
 	 */
@@ -49,7 +49,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Получить список отсутствий по NodeRef-у сотрудника.
 	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee в виде JSONObject
+	 * @param node NodeRef на объект типа employee в виде JSONObject
 	 * ({"nodeRef" : "NodeRef_на_employee"})
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
 	 * привязаны отсутствия, возвращает null
@@ -65,7 +65,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Проверить, привязаны ли к сотруднику отсутствия.
 	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee в виде строки
+	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
 	 * @return Расписания привязаны - true. Нет - false.
 	 */
 	public boolean isAbsenceAssociated(final String nodeRefStr) {

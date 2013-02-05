@@ -38,7 +38,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * расписание вышестоящего подразделения. Если расписание к node не
 	 * привязано, то возвращает null.
 	 *
-	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * @param node JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
 	 * сотрудника или орг. единицу.
 	 * @return ScriptNode расписания.
 	 */
@@ -61,7 +61,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * Возвращает время работы и тип родительского расписания (см.
 	 * getParentShedule).
 	 *
-	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * @param node JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
 	 * сотрудника или орг. единицу.
 	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
 	 * работы, "end" - время конца работы.
@@ -80,7 +80,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.
 	 *
-	 * @param node - JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
+	 * @param node JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
 	 * сотрудника или орг. единицу.
 	 * @return NodeRef расписания, привязанного к node. Если таковое
 	 * отсутствует, то null.
@@ -96,7 +96,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.
 	 *
-	 * @param node - строка с NodeRef на сотрудника или орг. единицу.
+	 * @param employeeRef строка с NodeRef на сотрудника или орг. единицу.
 	 * @return NodeRef расписания, привязанного к node. Если таковое
 	 * отсутствует, то null.
 	 */
@@ -111,7 +111,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	/**
 	 * Проверяет, привязано ли какое-нибудь расписание к node.
 	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
+	 * @param nodeRef NodeRef на сотрудника или орг. единицу.
 	 * @return true - привязано, false - не привязано.
 	 */
 	public boolean isSheduleAssociated(final String nodeRef) {
@@ -122,7 +122,7 @@ public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
 	 * Создает новое особое расписание. Опрабатывает данные из формы, складывает
 	 * их в обект SpecialSheduleRawBean и передает дальше.
 	 *
-	 * @param json - данные от формы создания нового особого расписания
+	 * @param json данные от формы создания нового особого расписания
 	 * (specialSheduleForm).
 	 * @return ScriptNode созданного расписания. Если не получлось создать, то
 	 * генерирует исключение WebScriptException.

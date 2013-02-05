@@ -120,11 +120,6 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 				}
 			}
 		}
-//		try {
-//			Thread.sleep(10000);
-//		} catch (InterruptedException ex) {
-//			logger.error("", ex);
-//		}
  		return suitable;
 	}
 }

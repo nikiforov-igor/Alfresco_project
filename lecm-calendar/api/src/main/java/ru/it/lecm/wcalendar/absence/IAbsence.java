@@ -41,7 +41,7 @@ public interface IAbsence {
 	/**
 	 * Получить список отсутствий по NodeRef-у сотрудника.
 	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
 	 * привязаны отсутствия, возвращает null
 	 */
@@ -50,7 +50,7 @@ public interface IAbsence {
 	/**
 	 * Проверить, привязаны ли к сотруднику отсутствия.
 	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @return Расписания привязаны - true. Нет - false.
 	 */
 	boolean isAbsenceAssociated(NodeRef node);
@@ -61,9 +61,9 @@ public interface IAbsence {
 	 * два отсутствия, так что перед созданием нового отсутствия нужно
 	 * проверить, не запланировал ли сотрудник отлучиться на это время
 	 *
-	 * @param nodeRef - NodeRef сотрудника
-	 * @param begin - дата (и время) начала искомого промежутка
-	 * @param end - дата (и время) окончания искомого промежутка
+	 * @param nodeRef NodeRef сотрудника
+	 * @param begin дата (и время) начала искомого промежутка
+	 * @param end дата (и время) окончания искомого промежутка
 	 * @return true - промежуток свободен, создать отсутствие можно, false - на
 	 * данный промежуток отсутствие уже запланировано.
 	 */

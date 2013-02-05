@@ -69,10 +69,10 @@ public interface IShedule {
 	/**
 	 * Создает новое особое расписание.
 	 *
-	 * @param sheduleRawData - объект с правилами повторения расписания.
-	 * @param sheduleEmployeeAssoc - NodeRef на сотрудника или орг. единицу, к
+	 * @param sheduleRawData объект с правилами повторения расписания.
+	 * @param sheduleEmployeeAssoc NodeRef на сотрудника или орг. единицу, к
 	 * которому надо привязать расписание.
-	 * @param sheduleContainer - NodeRef на каталог, в котором будет создано
+	 * @param sheduleContainer NodeRef на каталог, в котором будет создано
 	 * расписание.
 	 * @return - NodeRef на созданное расписание.
 	 */
@@ -85,7 +85,7 @@ public interface IShedule {
 	 * расписание вышестоящего подразделения. Если расписание к node не
 	 * привязано, то возвращает null.
 	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
+	 * @param node NodeRef на сотрудника или орг. единицу.
 	 * @return NodeRef на расписание.
 	 */
 	NodeRef getParentShedule(NodeRef node);
@@ -94,7 +94,7 @@ public interface IShedule {
 	 * Возвращает время работы и тип родительского расписания (см.
 	 * getParentShedule).
 	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
+	 * @param node NodeRef на сотрудника или орг. единицу.
 	 * @return Ключи map'а: "type" - тип расписания, "begin" - время начала
 	 * работы, "end" - время конца работы.
 	 */
@@ -103,7 +103,7 @@ public interface IShedule {
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.
 	 *
-	 * @param node - NodeRef сотрудника/орг. единицы.
+	 * @param node NodeRef сотрудника/орг. единицы.
 	 * @return NodeRef расписания, привязанного к node. Если таковое
 	 * отсутствует, то null.
 	 */
@@ -112,7 +112,7 @@ public interface IShedule {
 	/**
 	 * Проверяет, привязано ли какое-нибудь расписание к node.
 	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
+	 * @param node NodeRef на сотрудника или орг. единицу.
 	 * @return true - привязано, false - не привязано.
 	 */
 	boolean isSheduleAssociated(NodeRef node);
