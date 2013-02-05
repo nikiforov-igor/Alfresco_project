@@ -37,7 +37,7 @@ public abstract class BaseBean {
 
 	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
 	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
-	final DateFormat FolderNameFormatDay = new SimpleDateFormat("DD");
+	final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
 	protected NodeService nodeService;
 	protected TransactionService transactionService;

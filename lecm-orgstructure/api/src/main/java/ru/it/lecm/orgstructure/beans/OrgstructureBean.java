@@ -210,6 +210,13 @@ public interface OrgstructureBean {
 	List<NodeRef> getEmployeesByPosition(NodeRef unit, NodeRef position);
 
 	/**
+	 * Получение списка сотрудников, занимающих указанную должностную позицию
+	 * @param position доложностная позиция
+	 * @return список ссылок на сотрудников
+	 */
+	List<NodeRef> getEmployeesByPosition(NodeRef position);
+
+	/**
 	 * Получение ссылки на сотрудника из объекта (lecm-orgstr:employee-link)
 	 */
 	NodeRef getEmployeeByLink(NodeRef linkRef);

@@ -300,7 +300,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public boolean isPosition(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_POSITION);
+		types.add(TYPE_STAFF_POSITION);
 		return isProperType(ref, types);
 	}
 
@@ -432,6 +432,22 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		}
 		return new ArrayList<NodeRef>(result);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeesByPosition(NodeRef position) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+
+		List<AssociationRef> staffListAssocList = nodeService.getSourceAssocs(position, ASSOC_ELEMENT_MEMBER_POSITION);
+		for (AssociationRef staffListAssoc : staffListAssocList) {
+			NodeRef staffList = staffListAssoc.getSourceRef();
+			NodeRef employee = getEmployeeByPosition(staffList);
+			if (employee != null) {
+				result.add(employee);
+			}
+		}
+
+		return result;
 	}
 
 	@Override

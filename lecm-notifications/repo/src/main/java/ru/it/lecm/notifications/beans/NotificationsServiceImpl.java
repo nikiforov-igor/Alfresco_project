@@ -249,32 +249,15 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if (generalizedNotification != null) {
 			for (NodeRef typeRef : generalizedNotification.getTypeRefs()) {
 				if (generalizedNotification.getRecipientEmployeeRefs() != null) {
-					for (NodeRef employeeRef : generalizedNotification.getRecipientEmployeeRefs()) {
-						if (orgstructureService.isEmployee(employeeRef)) {
-							NotificationUnit newNotificationUnit = new NotificationUnit();
-							newNotificationUnit.setAutor(generalizedNotification.getAutor());
-							newNotificationUnit.setDescription(generalizedNotification.getDescription());
-							newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
-							newNotificationUnit.setTypeRef(typeRef);
-							newNotificationUnit.setRecipientRef(employeeRef);
-							result.add(newNotificationUnit);
-						}
-					}
+					List<NodeRef> employeeRefs = generalizedNotification.getRecipientEmployeeRefs();
+					addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
 				}
 
 				if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
 					for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
 						if (orgstructureService.isUnit(organizationUnitRef)) {
 							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(organizationUnitRef);
-							for (NodeRef employeeRef: employeeRefs) {
-								NotificationUnit newNotificationUnit = new NotificationUnit();
-								newNotificationUnit.setAutor(generalizedNotification.getAutor());
-								newNotificationUnit.setDescription(generalizedNotification.getDescription());
-								newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
-								newNotificationUnit.setTypeRef(typeRef);
-								newNotificationUnit.setRecipientRef(employeeRef);
-								result.add(newNotificationUnit);
-							}
+							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
 						}
 					}
 				}
@@ -283,15 +266,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 					for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
 						if (orgstructureService.isWorkGroup(workGroupRef)) {
 							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(workGroupRef);
-							for (NodeRef employeeRef: employeeRefs) {
-								NotificationUnit newNotificationUnit = new NotificationUnit();
-								newNotificationUnit.setAutor(generalizedNotification.getAutor());
-								newNotificationUnit.setDescription(generalizedNotification.getDescription());
-								newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
-								newNotificationUnit.setTypeRef(typeRef);
-								newNotificationUnit.setRecipientRef(employeeRef);
-								result.add(newNotificationUnit);
-							}
+							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
 						}
 					}
 				}
@@ -299,13 +274,30 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				if (generalizedNotification.getRecipientPositionRefs() != null) {
 					for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
 						if (orgstructureService.isPosition(positionRef)) {
-							//todo Добавить логику формирования атомарных уведомлений для должности
+							List<NodeRef> employeeRefs = orgstructureService.getEmployeesByPosition(positionRef);
+							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
 						}
 					}
 				}
 			}
 		}
 		return result;
+	}
+
+	private void addNotificationUnits(Notification generalizedNotification, List<NodeRef> employeeRefs,
+	                                  NodeRef typeRef, Set<NotificationUnit> resultSet) {
+
+		for (NodeRef employeeRef: employeeRefs) {
+			if (orgstructureService.isEmployee(employeeRef)) {
+				NotificationUnit newNotificationUnit = new NotificationUnit();
+				newNotificationUnit.setAutor(generalizedNotification.getAutor());
+				newNotificationUnit.setDescription(generalizedNotification.getDescription());
+				newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
+				newNotificationUnit.setTypeRef(typeRef);
+				newNotificationUnit.setRecipientRef(employeeRef);
+				resultSet.add(newNotificationUnit);
+			}
+		}
 	}
 
 	/**
