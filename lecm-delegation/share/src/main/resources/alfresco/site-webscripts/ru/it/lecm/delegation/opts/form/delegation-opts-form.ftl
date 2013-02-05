@@ -93,7 +93,7 @@
 		</div>
 	</fieldset>
 	<#-- "царапина" -->
-	<hr style="margin-top: 1.5em; background-color: #333333;">
+	<hr style="margin-top: 1.5em; background-color: #C5C7C6;">
 	<#-- делегировать все функции -->
 	<div class="form-field">
 		<input id="radio-delegate-all-func"
