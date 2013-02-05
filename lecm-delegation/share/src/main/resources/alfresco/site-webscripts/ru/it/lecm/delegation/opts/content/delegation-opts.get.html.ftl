@@ -6,7 +6,8 @@
 	var delegationOpts = new LogicECM.module.Delegation.DelegationOpts('${id}');
 	delegationOpts.setMessages (${messages});
 	delegationOpts.setOptions ({
-		delegator: "${delegator}"
+		delegator: "${delegator}",
+		isActive: ${isActive?string}
 	});
 //]]>
 </script>

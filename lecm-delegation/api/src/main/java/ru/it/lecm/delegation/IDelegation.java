@@ -200,4 +200,11 @@ public interface IDelegation {
 	 * @return true/false
 	 */
 	boolean hasSubordinate (final NodeRef delegationOptsNodeRef);
+
+	/**
+	 * проверить является ли делегирование активным
+	 * @param delegationOptsNodeRef параметры делегирования которые проверяются на активность
+	 * @return true - делегирование активно, false в противном случае
+	 */
+	public boolean isDelegationActive (NodeRef delegationOptsNodeRef);
 }

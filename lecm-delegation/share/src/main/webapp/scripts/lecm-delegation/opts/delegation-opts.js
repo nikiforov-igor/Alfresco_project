@@ -29,38 +29,42 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 	YAHOO.lang.augmentObject (LogicECM.module.Delegation.DelegationOpts.prototype, {
 
 		options: {
-			delegator: null //nodeRef на делегирующее лицо
+			delegator: null, //nodeRef на делегирующее лицо
+			isActive: false //флаг показывающий активно ли делегирование
 		},
 
 		onDelegationOptsPart1: function (result) {
-			var formEl = YAHOO.util.Dom.get(this.id + "-content-part1");
-			formEl.innerHTML = result.serverResponse.responseText;
+			var contentEl = YAHOO.util.Dom.get(this.id + "-content-part1");
+			contentEl.innerHTML = result.serverResponse.responseText;
 			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
 			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
 			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
-			var form = new Alfresco.forms.Form ("delegation-opts-part1-form");
-			form.setAJAXSubmit (true, {
-				successCallback: {
-					fn: function () {
-						Alfresco.util.PopupManager.displayMessage ({
-							text:"Данные обновлены"
-						});
+			var formEl = YAHOO.util.Dom.get ("delegation-opts-part1-form");
+			if (formEl) {
+				var form = new Alfresco.forms.Form ("delegation-opts-part1-form");
+				form.setAJAXSubmit (true, {
+					successCallback: {
+						fn: function () {
+							Alfresco.util.PopupManager.displayMessage ({
+								text:"Данные обновлены"
+							});
+						},
+						scope: this
 					},
-					scope: this
-				},
-				failureCallback: {
-					fn: function () {
-						Alfresco.util.PopupManager.displayMessage ({
-							text:"Не удалось обновить данные"
-						});
-					},
-					scope: this
-				}
-			});
-			form.setSubmitAsJSON (true);
-			form.setShowSubmitStateDynamically (true, false);
-			// Initialise the form
-			form.init ();
+					failureCallback: {
+						fn: function () {
+							Alfresco.util.PopupManager.displayMessage ({
+								text:"Не удалось обновить данные"
+							});
+						},
+						scope: this
+					}
+				});
+				form.setSubmitAsJSON (true);
+				form.setShowSubmitStateDynamically (true, false);
+				// Initialise the form
+				form.init ();
+			}
 		},
 
 		onReady: function () {
@@ -69,13 +73,15 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 
 			if (this.options.delegator) {
 
+				var mode = (this.options.isActive) ? "view" : "edit";
+
 				var argsPart1 = {
 					htmlid: "delegation-opts-part1",
 					datagridId: this.id,
 					itemKind: "node",
 					itemId: this.options.delegator,
 					formId: "delegation-opts-part1",
-					mode: "edit",
+					mode: mode,
 					submitType: "json",
 					showCancelButton: false,
 					showResetButton: false,

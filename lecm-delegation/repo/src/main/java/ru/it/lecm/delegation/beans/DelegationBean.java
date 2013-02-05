@@ -406,4 +406,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		NodeRef subordinateEmployee = findNodeByAssociationRef (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		return orgstructureService.hasSubordinate (currentEmployee, subordinateEmployee);
 	}
+
+	@Override
+	public boolean isDelegationActive (NodeRef delegationOptsNodeRef) {
+		return (Boolean) nodeService.getProperty (delegationOptsNodeRef, IS_ACTIVE);
+	}
 }

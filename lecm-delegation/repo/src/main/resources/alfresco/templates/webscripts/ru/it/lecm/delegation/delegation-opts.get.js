@@ -38,8 +38,11 @@ if (isSubjectValid) {
 	//если субъект адекватен то формируем ftl-ку
 	//в противном случае она по идее не должна сформироваться
 	if (delegationOpts) {
+		logger.log (jsonUtils.toJSONString (delegationOpts));
 		model.delegationOpts = delegationOpts.nodeRef.toString();
+		model.isActive = delegationOpts.properties["lecm-dic:active"];
 	} else {
 		model.delegationOpts = null;
+		model.isActive = null;
 	}
 }

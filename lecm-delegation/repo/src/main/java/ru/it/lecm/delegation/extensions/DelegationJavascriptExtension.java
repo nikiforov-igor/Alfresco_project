@@ -182,4 +182,8 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		}
 		return result;
 	}
+
+	public boolean isDelegationActive (final String delegationOptsRef) {
+		return delegationService.isDelegationActive (new NodeRef (delegationOptsRef));
+	}
 }

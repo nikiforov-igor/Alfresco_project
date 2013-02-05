@@ -43,6 +43,7 @@
 			value="delegate-by"
 			onchange='javascript:var radioDelegateByFunc = YAHOO.util.Dom.get("radio-delegate-by-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = !radioDelegateByFunc.checked; fieldsetDelegateByFunc.disabled = !radioDelegateByFunc.checked; fieldsetDelegateAllFunc.disabled = radioDelegateByFunc.checked;'
 			<#if !isTrue>checked="checked"</#if>
+			<#if "view" == form.mode>disabled="disabled"</#if>
 		>
 		<label for="radio-delegate-by-func" class="radio">делегировать по бизнес функциям</label>
 	</div>
@@ -58,6 +59,8 @@
 					dataSource: "lecm/delegation/get/procuracies",
 					searchShowInactive: true,
 					editForm: "editProcuracy",
+				<#if "view" != form.mode>
+					showActionColumn: true,
 					actions: [
 						{
 							type: "action-link-procuracy-datagrid",
@@ -72,6 +75,9 @@
 							label: "удалить доверенность"
 						}
 					]
+				<#else/>
+					showActionColumn: false
+				</#if>
 				});
 				YAHOO.util.Event.onContentReady (datagrid.id, function () {
 					YAHOO.Bubbling.fire ("activeGridChanged", {
@@ -87,7 +93,7 @@
 		</div>
 	</fieldset>
 	<#-- "царапина" -->
-	<hr style="margin-top: 1.5em; background-color: #AAAAAA;">
+	<hr style="margin-top: 1.5em; background-color: #333333;">
 	<#-- делегировать все функции -->
 	<div class="form-field">
 		<input id="radio-delegate-all-func"
@@ -97,6 +103,7 @@
 			value="delegate-all"
 			onchange='javascript: var radioDelegateAllFunc = YAHOO.util.Dom.get("radio-delegate-all-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = radioDelegateAllFunc.checked; fieldsetDelegateByFunc.disabled = radioDelegateAllFunc.checked; fieldsetDelegateAllFunc.disabled = !radioDelegateAllFunc.checked;'
 			<#if isTrue>checked="checked"</#if>
+			<#if "view" == form.mode>disabled="disabled"</#if>
 		>
 		<label for="radio-delegate-all-func" class="radio">делегировать все функции</label>
 	</div>

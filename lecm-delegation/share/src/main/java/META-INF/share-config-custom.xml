@@ -35,6 +35,7 @@
 				</field-visibility>
 			</form>
 			<form id="delegation-opts-part1">
+				<view-form template="/ru/it/lecm/delegation/opts/form/delegation-opts-form.ftl"/>
 				<edit-form template="/ru/it/lecm/delegation/opts/form/delegation-opts-form.ftl"/>
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-owner-assoc" read-only="true">
