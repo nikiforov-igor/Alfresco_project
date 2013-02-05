@@ -269,4 +269,8 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 	public void unsubscribe(NodeRef nodeRef) {
 		nodeService.deleteNode(nodeRef);
 	}
+
+	private boolean isBJEngineer() {
+		return orgstructureService.isCurrentEmployeeHasBusinessRole(SubscriptionsService.BUSINESS_ROLE_SUBSCRIPTIONS_ENGINEER);
+	}
 }

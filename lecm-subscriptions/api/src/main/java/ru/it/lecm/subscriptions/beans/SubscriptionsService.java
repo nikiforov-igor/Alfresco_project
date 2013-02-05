@@ -40,6 +40,7 @@ public interface SubscriptionsService {
 	QName ASSOC_BUSJOURNAL_EVENT_CATEGORY = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-evCategory-assoc");
 	QName ASSOC_BUSJOURNAL_OBJECT_TYPE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-objType-assoc");
 
+	public static final String BUSINESS_ROLE_SUBSCRIPTIONS_ENGINEER = "BR_SUBSCRIPTIONS_ENGINEER";
 	/**
 	 * проверяет что объект является подпиской на объект
 	 */
