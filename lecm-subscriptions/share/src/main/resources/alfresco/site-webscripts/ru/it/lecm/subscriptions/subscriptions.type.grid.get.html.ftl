@@ -14,13 +14,13 @@
                             usePagination: true,
                             actions: [
                                 {
-                                    type: "action-link-${id}",
+                                    type: "action-link-${bubblingLabel!''}",
                                     id: "onActionEdit",
                                     permission: "edit",
                                     label: "${msg("actions.edit")}"
                                 },
                                 {
-                                    type: "action-link-${id}",
+                                    type: "action-link-${bubblingLabel!''}",
                                     id: "onActionDelete",
                                     permission: "delete",
                                     label: "${msg("actions.delete-row")}"
