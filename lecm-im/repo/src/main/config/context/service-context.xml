@@ -29,6 +29,14 @@
     </bean>
 -->
 
+
+    <bean id="createIMUserPolicy" class="ru.it.lecm.im.repo.policy.CreateIMUserPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <!--<property name="webFrameworkServiceRegistry" ref="webframework.service.registry"/>-->
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
     <bean id="webscript.ru.it.lecm.im.bosh.post" class="ru.it.lecm.im.bosh.BoshWebScript" parent="webscript">
         <property name="logic" ref="palladiumLogic"/>
     </bean>

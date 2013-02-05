@@ -29,7 +29,7 @@ public class Janitor implements Runnable {
 				// Stop inactive sessions
 				if (System.currentTimeMillis() - sess.getLastActive() > SessionConstants.MAX_INACTIVITY * 1000) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Session timed out: " + sess.getSID());
+                        logger.trace("Session timed out: " + sess.getSID());
                     }
 					sess.terminate();
 				}

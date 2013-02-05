@@ -104,13 +104,13 @@ public class Response {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 			
-			logger.info("sending response ["+this.getRID()+"]: "+strResult.getWriter().toString(),2);
+			logger.trace("sending response ["+this.getRID()+"]: "+strResult.getWriter().toString());
 			response.getWriter().println(strResult.getWriter().toString());
-            logger.info("sent response for "+this.getRID(),3);
+            logger.trace("sent response for "+this.getRID());
 		}
 		
 		catch (Exception e) {
-            logger.error("XML.toString(Document): " + e);
+            logger.error("XML.toString(Document): ", e);
 		}
 		
 		setStatus(STATUS_DONE);
@@ -123,7 +123,7 @@ public class Response {
 	
 	// Status to set
 	public synchronized void setStatus(String status) {
-        logger.debug("response status "+status+" for "+this.getRID());
+        logger.trace("response status "+status+" for "+this.getRID());
 		this.status = status;
 	}
 	

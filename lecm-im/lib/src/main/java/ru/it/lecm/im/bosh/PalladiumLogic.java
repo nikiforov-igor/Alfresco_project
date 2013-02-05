@@ -92,7 +92,7 @@ public final class PalladiumLogic {
 	// Reply to POST requests
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
-            logger.debug("Palladium.doPost");
+            logger.trace("Palladium.doPost");
 			long rid = 0;
 			try {
 				// Parse the request
@@ -116,12 +116,12 @@ public final class PalladiumLogic {
 						Session sess = Session.getSession(attribs.getNamedItem("sid").getNodeValue());
 						
 						if (sess != null) {
-							logger.debug("incoming request for " + sess.getSID());
+							logger.trace("incoming request for " + sess.getSID());
 							
 							// Check the validity of the request
 							if (attribs.getNamedItem("rid") == null) {
 								// RID missing
-                                logger.debug("rid missing");
+                                logger.trace("rid missing");
 								response.sendError(HttpServletResponse.SC_NOT_FOUND);
 								sess.terminate();
 							}
@@ -132,7 +132,7 @@ public final class PalladiumLogic {
 								}
 								
 								catch (NumberFormatException e) {
-                                    logger.debug("rid not a number");
+                                    logger.error("rid not a number", e);
 									response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 									return;
 								}
@@ -141,25 +141,25 @@ public final class PalladiumLogic {
 								
 								// Re-send
 								if (r != null) {
-                                    logger.debug("resend rid " + rid);
+                                    logger.trace("resend rid " + rid);
 									r.setAborted(true);
 									r.send(response);
 									return;
 								}	
 							
 								if (!sess.checkValidRID(rid)) {
-                                    logger.debug("invalid rid " + rid);
+                                    logger.trace("invalid rid " + rid);
 									response.sendError(HttpServletResponse.SC_NOT_FOUND);
 									sess.terminate();
 									return;
 								}
 							}
 
-                            logger.debug("found valid rid " + rid);
+                            logger.trace("found valid rid " + rid);
 							
 							// Too many simultaneous requests
 							if (sess.numPendingRequests() >= SessionConstants.MAX_REQUESTS) {
-                                logger.debug("too many simultaneous requests: " + sess.numPendingRequests());
+                                logger.trace("too many simultaneous requests: " + sess.numPendingRequests());
 								response.sendError(HttpServletResponse.SC_FORBIDDEN);
 								
 								// Kick it!
@@ -179,7 +179,7 @@ public final class PalladiumLogic {
 									long lastrid = sess.getLastDoneRID();
 									while (rid != lastrid + 1) {
 										if (sess.isStatus(SessionConstants.SESS_TERM)) {
-                                            logger.debug("session terminated for " + rid);
+                                            logger.trace("session terminated for " + rid);
 											
 											response.sendError(HttpServletResponse.SC_NOT_FOUND);
 											sess.sock.notifyAll();
@@ -188,11 +188,11 @@ public final class PalladiumLogic {
 										}
 										
 										try {
-                                            logger.debug(rid + " waiting for " + (lastrid + 1));
+                                            logger.trace(rid + " waiting for " + (lastrid + 1));
 											
 											sess.sock.wait();
 
-                                            logger.debug("bell for " + rid);
+                                            logger.trace("bell for " + rid);
 											
 											lastrid = sess.getLastDoneRID();
 										}
@@ -200,17 +200,17 @@ public final class PalladiumLogic {
 										catch (InterruptedException e) { }
 									}
 
-                                    logger.debug("handling response " + rid);
+                                    logger.trace("handling response " + rid);
 
 									// Check the key
-                                    logger.debug("Check the key");
+                                    logger.trace("Check the key");
 									String key = sess.getKey();
 									
 									if (key != null) {
-                                        logger.debug("checking keys for " + rid);
+                                        logger.trace("checking keys for " + rid);
 										
 										if (attribs.getNamedItem("key") == null || !sha1(attribs.getNamedItem("key").getNodeValue()).equals(key)) {
-                                            logger.debug("Key sequence error");
+                                            logger.trace("Key sequence error");
 											
 											response.sendError(HttpServletResponse.SC_NOT_FOUND);
 											
@@ -224,37 +224,37 @@ public final class PalladiumLogic {
 										else
 											sess.setKey(attribs.getNamedItem("key").getNodeValue());
 
-                                        logger.debug("key valid for " + rid);
+                                        logger.trace("key valid for " + rid);
 									}else
                                     {
-                                        logger.debug("Session key is null");
+                                        logger.trace("Session key is null");
                                     }
 									
 									if (attribs.getNamedItem("xmpp:restart") != null) {
-                                        logger.debug("XMPP RESTART");
+                                        logger.trace("XMPP RESTART");
 										sess.setReinit(true);
 									}
 									
 									// Check we have got to forward something to the XMPP server
-                                    logger.debug("Check we have got to forward something to the XMPP server");
+                                    logger.trace("Check we have got to forward something to the XMPP server");
 									if (rootNode.hasChildNodes())
                                     {
-                                        logger.debug("sess.sendNodes");
+                                        logger.trace("sess.sendNodes");
                                         sess.sendNodes(rootNode.getChildNodes());
                                     }
 									else {
-                                        logger.debug("Too many empty requests? (DoS?)");
+                                        logger.trace("Too many empty requests? (DoS?)");
 										// Too many empty requests? (DoS?)
 										long now = System.currentTimeMillis();
 										
 										if (sess.getHold() == 0 && 
 												now - sess.getLastPoll() < SessionConstants.MIN_POLLING * 1000) {
-                                            logger.debug("polling too frequently! [now:" + now + ", last:" + sess.getLastPoll() + "(" + (now - sess.getLastPoll()) + ")]");
+                                            logger.trace("polling too frequently! [now:" + now + ", last:" + sess.getLastPoll() + "(" + (now - sess.getLastPoll()) + ")]");
 											
 											response.sendError(HttpServletResponse.SC_FORBIDDEN);
 											
 											// Kick it!
-                                            logger.debug("Kick it!");
+                                            logger.trace("Kick it!");
 											sess.terminate();
 											
 											return;
@@ -265,11 +265,11 @@ public final class PalladiumLogic {
 									}
 									
 									// Send the reply
-									logger.debug("Send the reply");
+									logger.trace("Send the reply");
 									// Request to end the session?
-                                    logger.debug("Request to end the session?");
+                                    logger.trace("Request to end the session?");
 									if (attribs.getNamedItem("type") != null) {
-										logger.debug("attribs.getNamedItem(\"type\") != null");
+										logger.trace("attribs.getNamedItem(\"type\") != null");
                                         String rType = attribs.getNamedItem("type").getNodeValue();
 										
 										if (rType.equals("terminate")) {
@@ -280,11 +280,11 @@ public final class PalladiumLogic {
 										}
 									}else
                                     {
-                                        logger.debug("attribs.getNamedItem(\"type\") == null");
+                                        logger.trace("attribs.getNamedItem(\"type\") == null");
                                     }
 									
 									// Check incoming queue
-                                    logger.debug("Check incoming queue");
+                                    logger.trace("Check incoming queue");
 									NodeList nl = sess.checkInQ(rid);
 									
 									// Add items to response
@@ -329,14 +329,14 @@ public final class PalladiumLogic {
 						}
 						else // Session not found!
                         {
-                            logger.debug("Session not found!");
+                            logger.trace("Session not found!");
                             response.sendError(HttpServletResponse.SC_NOT_FOUND);
                         }
 					}
 					
 					else {
 						// Request to create a new session
-                        logger.debug("Request to create a new session.");
+                        logger.trace("Request to create a new session.");
 						if (attribs.getNamedItem("rid") == null) {
 							response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 							
@@ -491,7 +491,7 @@ public final class PalladiumLogic {
 			
 			catch (SAXException se) {
 				// Error: Parser error
-                logger.debug(se.toString());
+                logger.error("Parse error", se);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
 			

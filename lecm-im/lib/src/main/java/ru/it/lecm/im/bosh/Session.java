@@ -51,7 +51,7 @@ public class Session {
 		for (int i = 0; i < len; i++)
 			str += charlist.charAt(rand.nextInt(charlist.length()));
 
-        logger.debug("New session id created: " + str);
+        logger.trace("New session id created: " + str);
 
 		return str;
 	}
@@ -127,7 +127,7 @@ public class Session {
 	
 	// Create a new session and connect to the XMPP server
 	public Session(String to, String route, String xmllang) throws UnknownHostException, IOException {
-		logger.debug("Create a new session and connect to the XMPP server");
+		logger.trace("Create a new session and connect to the XMPP server");
         this.to = to;
 		this.xmllang = xmllang;
 		
@@ -137,7 +137,7 @@ public class Session {
 		this.setLastActive();
 		
 		try {
-            logger.debug("Session: DocumentBuilderFactory.newInstance().newDocumentBuilder()");
+            logger.trace("Session: DocumentBuilderFactory.newInstance().newDocumentBuilder()");
             this.db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		}
 		
@@ -147,7 +147,7 @@ public class Session {
 		
 		// First, try connecting throught the 'route' attribute.
 		if (route != null && !route.equals("")) {
-			logger.debug("Trying to use 'route' attribute to open a socket...");
+			logger.trace("Trying to use 'route' attribute to open a socket...");
 			
 			if (route.startsWith("xmpp:"))
 				route = route.substring("xmpp:".length());
@@ -161,7 +161,7 @@ public class Session {
 					
 					if (p >= 0 && p <= 65535) {
 						port = p;
-                        logger.debug("...route attribute holds a valid port (" + port + ").");
+                        logger.trace("...route attribute holds a valid port (" + port + ").");
 					}
 				}
 				
@@ -170,38 +170,38 @@ public class Session {
 				route = route.substring(0, i);
 			}
 
-            logger.debug("Trying to open a socket to '" + route + "', using port " + port + ".");
+            logger.trace("Trying to open a socket to '" + route + "', using port " + port + ".");
 			
 			try {
 				this.sock.connect(new InetSocketAddress(route, port), SessionConstants.SOCKET_TIMEOUT);
 			}
 			
 			catch (Exception e) {
-                logger.debug("Failed to open a socket using the 'route' attribute");
+                logger.error("Failed to open a socket using the 'route' attribute", e);
 			}
 		}
 		
 		// If no socket has been opened, try connecting trough the 'to' attribute
 		if (this.sock == null || !this.sock.isConnected()) {
-            logger.debug("no socket has been opened, try connecting trough the 'to' attribute");
+            logger.trace("no socket has been opened, try connecting trough the 'to' attribute");
 			this.sock = new Socket();
-            logger.debug("Trying to use 'to' attribute to open a socket...");
+            logger.trace("Trying to use 'to' attribute to open a socket...");
 			
 			host = DNSUtil.resolveXMPPServerDomain(to, SessionConstants.DEFAULT_XMPPPORT);
 			
 			try {
-                logger.debug("Trying to open a socket to '" + host.getHost() + "', using port " + host.getPort() + ".");
+                logger.trace("Trying to open a socket to '" + host.getHost() + "', using port " + host.getPort() + ".");
 				this.sock.connect(new InetSocketAddress(host.getHost(), host.getPort()), SessionConstants.SOCKET_TIMEOUT);
 			}
 			
 			catch (UnknownHostException uhe) {
-                logger.debug("Failed to open a socket using the 'to' attribute: " + uhe.toString());
+                logger.error("Failed to open a socket using the 'to' attribute: ",  uhe);
 				throw uhe;
 			
 			}
 			
 			catch (IOException ioe) {
-                logger.debug("Failed to open a socket using the 'to' attribute: " + ioe.toString());
+                logger.error("Failed to open a socket using the 'to' attribute: ", ioe);
 				throw ioe;
 			}
 		}
@@ -210,7 +210,7 @@ public class Session {
 		try {
 			if (this.sock.isConnected())
             {
-                logger.debug("Succesfully connected to " + to);
+                logger.trace("Succesfully connected to " + to);
             }
 			
 			this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
@@ -227,10 +227,10 @@ public class Session {
 			
 			// Create unique session id
 			while (sessions.get(this.sid = createSessionID(24)) != null){
-                logger.debug("Created invalid session id");
+                logger.trace("Created invalid session id");
             }
 
-            logger.debug("creating session with id " + this.sid);
+            logger.trace("creating session with id " + this.sid);
 			
 			// Register session
 			sessions.put(this.sid, this);
@@ -273,13 +273,13 @@ public class Session {
 	private NodeList checkInQ(long rid, long depth) throws IOException {
 		NodeList nl = null;
 
-		logger.debug("checkInQ: readFromSocket");
+		logger.trace("checkInQ: readFromSocket");
         inQueue += this.readFromSocket(rid);
-        logger.debug("checkInQ: readFromSocket DONE!");
+        logger.trace("checkInQ: readFromSocket DONE!");
 
-        logger.debug("inQueue: " + inQueue.toString());
+        logger.trace("inQueue: " + inQueue.toString());
 
-        logger.debug("Session id " + this.sid + " inQueue depth:" + depth);
+        logger.trace("Session id " + this.sid + " inQueue depth:" + depth);
 
 		if (init_retry < 1000 && (this.authid == null || this.isReinit()) && inQueue.length() > 0) {
 			init_retry++;
@@ -290,23 +290,23 @@ public class Session {
 				if (m.matches()) {
 					this.authid = m.group(1);
 					inQueue = m.group(2);
-                    logger.debug("inQueue: " + inQueue.toString());
+                    logger.trace("inQueue: " + inQueue.toString());
 					streamFeatures = inQueue.length() > 0;
 				}
 				
 				else {
-                    logger.debug("failed to get stream features");
+                    logger.trace("failed to get stream features");
 					
 					try {
 						Thread.sleep(5);
 					}
 					
 					catch (InterruptedException ie) {
-                        logger.debug("Session interrpted", ie);
+                        logger.error("Session interrpted", ie);
                     }
 					
 					// Retry
-                    logger.debug("inQueue: we need to go deeper!");
+                    logger.trace("inQueue: we need to go deeper!");
 					return this.checkInQ(rid, depth + 1);
 				}
 			}
@@ -319,7 +319,7 @@ public class Session {
 					this.authid = m.group(1);
 				
 				else {
-                    logger.debug("failed to get authid");
+                    logger.trace("failed to get authid");
 					
 					try {
 						Thread.sleep(5);
@@ -367,12 +367,12 @@ public class Session {
 					for (int i = 0; i < nl.item(0).getChildNodes().getLength(); i++) {
 						if (nl.item(0).getChildNodes().item(i).getNodeName().equals("starttls")) {
 							if (!this.isReinit()) {
-                                logger.debug("starttls present, trying to use it");
+                                logger.trace("starttls present, trying to use it");
 								this.osw.write("<starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>");
 								this.osw.flush();
 								
 								String response = this.readFromSocket(rid);
-                                logger.debug(response);
+                                logger.trace(response);
 								
 								TrustManager[] trustAllCerts = new TrustManager[] {
 									new X509TrustManager() {
@@ -399,20 +399,20 @@ public class Session {
 									
 									this.pauseForHandshake = true;
 
-                                    logger.debug("initiating handshake");
+                                    logger.trace("initiating handshake");
 									
 									tls.startHandshake();
 									
 									try {
 										while (this.pauseForHandshake) {
-                                            logger.debug(".");
+                                            logger.trace(".");
 											Thread.sleep(5);
 										}
 									}
 									
 									catch (InterruptedException ire) { }
 
-                                    logger.debug("TLS Handshake complete");
+                                    logger.trace("TLS Handshake complete");
 									
 									this.sock = tls;
 									this.sock.setSoTimeout(SessionConstants.SOCKET_TIMEOUT);
@@ -431,25 +431,25 @@ public class Session {
 								}
 								
 								catch (Exception ssle) {
-                                    logger.debug("STARTTLS failed: " + ssle.toString());
+                                    logger.error("STARTTLS failed: ", ssle);
 									
 									this.setReinit(false);
 									
 									if (this.isSecure()) {
 										if (!this.sock.getInetAddress().getHostName().equals("localhost") && !this.getResponse(rid).getReq().getServerName().equals(this.sock.getInetAddress().getHostName())) {
-                                            logger.debug("secure connection requested but failed");
+                                            logger.trace("secure connection requested but failed");
 											throw new IOException();
 										}
 										
 										else
-                                            logger.debug("secure requested and we're local");
+                                            logger.trace("secure requested and we're local");
 									}
 									
 									else
-                                        logger.debug("tls failed but we don't need to be secure");
+                                        logger.trace("tls failed but we don't need to be secure");
 									
 									if (this.sock.isClosed()) {
-                                        logger.debug("socket closed");
+                                        logger.trace("socket closed");
 										
 										// Reconnect
 										Socket s = new Socket();
@@ -484,7 +484,7 @@ public class Session {
 			
 			catch (SAXException sex3) {
 				this.setReinit(false);
-                logger.debug("failed to parse inQueue: " + inQueue + "\n" + sex3.toString());
+                logger.error("failed to parse inQueue: " + inQueue , sex3);
 				
 				return null;
 			}
@@ -503,7 +503,7 @@ public class Session {
 		}
 		
 		public void handshakeCompleted(javax.net.ssl.HandshakeCompletedEvent event) {
-            logger.debug("startTLS: Handshake is complete");
+            logger.trace("startTLS: Handshake is complete");
 			
 			this.sess.pauseForHandshake = false;
 			return;
@@ -517,7 +517,7 @@ public class Session {
 				return true;
 			
 			else {
-                logger.debug("invalid request id: " + rid + " (last: " + ((Long) this.responses.lastKey()).longValue() + ")");
+                logger.trace("invalid request id: " + rid + " (last: " + ((Long) this.responses.lastKey()).longValue() + ")");
 				
 				return false;
 			}
@@ -614,12 +614,12 @@ public class Session {
 		while (!this.sock.isClosed() && !this.isStatus(SessionConstants.SESS_TERM)) {
 			this.setLastActive();
 			try {
-                logger.debug("this.br.ready()");
+                logger.trace("this.br.ready()");
 				if (this.br.ready()) {
-                    logger.debug("this.br.ready() == true");
+                    logger.trace("this.br.ready() == true");
 					while (this.br.ready() && (c = this.br.read(buf, 0, buf.length)) >= 0) {
                         retval += new String(buf, 0, c);
-                        logger.debug("readFromSocket inner While end");
+                        logger.trace("readFromSocket inner While end");
                     }
 
                     break;
@@ -627,12 +627,12 @@ public class Session {
 				
 				else {
 					if ((this.hold == 0 && r != null && System.currentTimeMillis() - r.getCDate() > 200) || (this.hold > 0 && ((r != null && System.currentTimeMillis() - r.getCDate() >= this.getWait() * 1000) || this.numPendingRequests() > this.getHold() || !retval.equals(""))) || r.isAborted()) {
-                        logger.debug("readFromSocket done for " + rid);
+                        logger.trace("readFromSocket done for " + rid);
 						break;
 					}
 					
                     // Wait for incoming packets
-                    logger.debug("Wait for incoming packets");
+                    logger.trace("Wait for incoming packets");
                     Thread.sleep(SessionConstants.READ_TIMEOUT);
 
 				}
@@ -672,12 +672,12 @@ public class Session {
 		}
 		
 		catch (Exception e) {
-            logger.debug("XML.toString(Document): " + e);
+            logger.error("XML.toString(Document): " ,e);
 		}
 		
 		try {
 			if (this.isReinit()) {
-                logger.debug("Reinitializing Stream!");
+                logger.trace("Reinitializing Stream!");
 				this.osw.write("<stream:stream to='" + this.to + "'" + appendXMLLang(this.getXMLLang()) + " xmlns='jabber:client' " + " xmlns:stream='http://etherx.jabber.org/streams'" + " version='1.0'" + ">");
 			}
 			
@@ -686,7 +686,7 @@ public class Session {
 		}
 		
 		catch (IOException ioe) {
-            logger.debug(this.sid + " failed to write to stream");
+            logger.error(this.sid + " failed to write to stream", ioe);
 		}
 		
 		return this;
@@ -761,7 +761,7 @@ public class Session {
 	
 	// Kill this session
 	public void terminate() {
-        logger.debug("terminating session " + this.getSID());
+        logger.trace("terminating session " + this.getSID());
 		this.setStatus(SessionConstants.SESS_TERM);
 		synchronized (this.sock) {
 			if (!this.sock.isClosed()) {

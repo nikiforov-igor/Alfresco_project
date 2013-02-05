@@ -29,19 +29,19 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
  * LecmIM module.
  *
  * @namespace LogicECM.module
- * @class LogicECM.module.LecmIM.JsButton
+ * @class LogicECM.module.LecmIM.Messenger
  */
 (function () {
 
-    LogicECM.module.LecmIM.JsButton = function (htmlId) {
-        return LogicECM.module.LecmIM.JsButton.superclass.constructor.call(
+    LogicECM.module.LecmIM.Messenger = function (htmlId) {
+        return LogicECM.module.LecmIM.Messenger.superclass.constructor.call(
             this,
-            "LogicECM.module.LecmIM.JsButton",
+            "LogicECM.module.LecmIM.Messenger",
             htmlId,
             ["button", "menu", "container", "connection", "json", "selector"]);
     };
 
-    YAHOO.lang.extend(LogicECM.module.LecmIM.JsButton, Alfresco.component.Base, {
+    YAHOO.lang.extend(LogicECM.module.LecmIM.Messenger, Alfresco.component.Base, {
 
         // обманка для history.js
         location: {href:"#"},
@@ -49,7 +49,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         // функция вызываемая при окончании инициализации базового модуля
         onReady: function () {
 
-            Alfresco.logger.info ("A new LogicECM.module.LecmIM.JsButton has been created");
+            Alfresco.logger.info ("A new LogicECM.module.LecmIM.Messenger has been created");
 
             this.createNotifyer();
             this.subscribeToNewMessages();
