@@ -78,7 +78,8 @@ var iJabConf =
     talkto_spam_function:spamCall,
     talkto_spam_repeat:2,
     xmpp:{
-        domain:"akatamanov-pc",
+        //domain:"akatamanov-pc",
+        domain:"alfresco.dmz2.it.ru",
         //http_bind:"http://akatamanov-pc:8080/palladium/",
         http_bind:"/share/proxy/alfresco/bosh",
         host:"",
