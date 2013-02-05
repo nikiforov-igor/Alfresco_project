@@ -19,6 +19,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
@@ -39,6 +41,8 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	private Repository repository;
 	private OrgstructureBean orgstructureService;
+	private PersonService personService;
+	private BusinessJournalService businessJournalService;
 
 	public void setRepositoryHelper (Repository repository) {
 		this.repository = repository;
@@ -46,6 +50,14 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	public void setOrgstructureService (OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setPersonService (PersonService personService) {
+		this.personService = personService;
+	}
+
+	public void setBusinessJournalService (BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	public final void bootstrap () {
@@ -381,23 +393,58 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 	}
 
-	private void setDelegationOptsActivity (final NodeRef employeeRef, boolean active) {
-		NodeRef delegationOptsRef = getDelegationOptsByEmployee (employeeRef);
-		Boolean isActive = (Boolean) nodeService.getProperty (delegationOptsRef, IS_ACTIVE);
-		//если значения разные то изменяем значение проперти
-		if (!isActive.equals (active)) {
-			nodeService.setProperty (employeeRef, IS_ACTIVE, active);
+	@Override
+	public void startDelegation (final String delegator) {
+		if (personService.personExists (delegator)) {
+			startDelegation (personService.getPerson (delegator, false));
+		} else {
+			logger.warn (String.format ("there is no any person with specified login '%s'", delegator));
 		}
 	}
 
 	@Override
-	public void activateDelegationForEmployee (final NodeRef employeeRef) {
-		setDelegationOptsActivity (employeeRef, true);
+	public void startDelegation (final NodeRef delegator) {
+		NodeRef delegationOptsRef = null;
+		if (isProperType (delegator, ContentModel.TYPE_PERSON)) {
+			delegationOptsRef = getDelegationOptsByPerson (delegator);
+		} else if (orgstructureService.isEmployee (delegator)) {
+			delegationOptsRef = getDelegationOptsByEmployee (delegator);
+		} else if (isDelegationOpts (delegator)) {
+			delegationOptsRef = delegator;
+		}
+		if (delegationOptsRef != null) {
+			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, true);
+			//нарезка прав согласно сервису Руслана
+		} else {
+			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
+		}
 	}
 
 	@Override
-	public void deactivateDelegationForEmployee (final NodeRef employeeRef) {
-		setDelegationOptsActivity (employeeRef, false);
+	public void stopDelegation (final String delegator) {
+		if (personService.personExists (delegator)) {
+			stopDelegation (personService.getPerson (delegator, false));
+		} else {
+			logger.warn (String.format ("there is no any person with specified login '%s'", delegator));
+		}
+	}
+
+	@Override
+	public void stopDelegation (final NodeRef delegator) {
+		NodeRef delegationOptsRef = null;
+		if (isProperType (delegator, ContentModel.TYPE_PERSON)) {
+			delegationOptsRef = getDelegationOptsByPerson (delegator);
+		} else if (orgstructureService.isEmployee (delegator)) {
+			delegationOptsRef = getDelegationOptsByEmployee (delegator);
+		} else if (isDelegationOpts (delegator)) {
+			delegationOptsRef = delegator;
+		}
+		if (delegationOptsRef != null) {
+			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
+			//отбирание ранее нарезанных прав согласно сервису Руслана
+		} else {
+			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
+		}
 	}
 
 	@Override
@@ -408,7 +455,17 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public boolean isDelegationActive (NodeRef delegationOptsNodeRef) {
+	public boolean isDelegationActive (final NodeRef delegationOptsNodeRef) {
 		return (Boolean) nodeService.getProperty (delegationOptsNodeRef, IS_ACTIVE);
+	}
+
+	@Override
+	public boolean isDelegationOpts (final NodeRef objectNodeRef) {
+		return isProperType (objectNodeRef, TYPE_DELEGATION_OPTS);
+	}
+
+	@Override
+	public boolean isProcuracy (final NodeRef objectNodeRef) {
+		return isProperType (objectNodeRef, TYPE_PROCURACY);
 	}
 }

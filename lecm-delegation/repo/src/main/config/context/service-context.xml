@@ -31,6 +31,8 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="personService" ref="personService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 

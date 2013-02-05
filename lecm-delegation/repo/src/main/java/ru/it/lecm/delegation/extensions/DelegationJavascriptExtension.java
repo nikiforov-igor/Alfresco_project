@@ -186,4 +186,40 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 	public boolean isDelegationActive (final String delegationOptsRef) {
 		return delegationService.isDelegationActive (new NodeRef (delegationOptsRef));
 	}
+
+	/**
+	 * запустить процесс делегирования для указанного объекта
+	 * @param delegator объект для которого запускается делегирование.
+	 * Валидными объектами являются: логин пользователя, nodeRef person, nodeRef employee, nodeRef delegation-opts
+	 */
+	public void startDelegation (final String delegator) {
+		/*
+		 * проверим что delegator это nodeRef,
+		 * а дальше delegationService сам разберется что он получил на вход
+		 * и запустит процесс делегирования
+		 */
+		if (NodeRef.isNodeRef (delegator)) {
+			delegationService.startDelegation (new NodeRef (delegator));
+		} else {
+			delegationService.startDelegation (delegator);
+		}
+	}
+
+	/**
+	 * завершить делегирование для указанного объекта
+	 * @param delegator объект для которого запускается делегирование.
+	 * Валидными объектами являются: логин пользователя, nodeRef person, nodeRef employee, nodeRef delegation-opts
+	 */
+	public void stopDelegation (final String delegator) {
+		/*
+		 * проверим что delegator это nodeRef,
+		 * а дальше delegationService сам разберется что он получил на вход
+		 * и завершит процесс делегирования
+		 */
+		if (NodeRef.isNodeRef (delegator)) {
+			delegationService.stopDelegation (new NodeRef (delegator));
+		} else {
+			delegationService.stopDelegation (delegator);
+		}
+	}
 }

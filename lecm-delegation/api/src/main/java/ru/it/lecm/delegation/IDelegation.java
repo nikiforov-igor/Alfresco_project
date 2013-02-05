@@ -183,16 +183,28 @@ public interface IDelegation {
 	void deleteProcuracies (final JSONArray nodeRefs);
 
 	/**
-	 * установить is_active=true для параметров делегирования у сотрудника
-	 * @param employeeRef ссылка на сотрудника
+	 * активировать делегирование для указанного делегирующего лица
+	 * @param delegator логин пользователя системы
 	 */
-	void activateDelegationForEmployee (final NodeRef employeeRef);
+	void startDelegation (final String delegator);
 
 	/**
-	 * установить is_active=false для параметров делегирования у сотрудника
-	 * @param employeeRef ссылка на сотрудника
+	 * активировать делегирование для указанного делегирующего лица
+	 * @param delegator nodeRef указывающая на employee, person или delegation-opts
 	 */
-	void deactivateDelegationForEmployee (final NodeRef employeeRef);
+	void startDelegation (final NodeRef delegator);
+
+	/**
+	 * деактивировать делегирование для указанного делегирующего лица
+	 * @param delegator логин пользователя системы
+	 */
+	void stopDelegation (final String delegator);
+
+	/**
+	 * деактивировать делегирование для указанного делегирующего лица
+	 * @param delegator nodeRef указывающая на employee, person или delegation-opts
+	 */
+	void stopDelegation (final NodeRef delegator);
 
 	/**
 	 * по указанным параметрам делегирования находит сотрудника и проверяет является ли он подчиненным
@@ -206,5 +218,19 @@ public interface IDelegation {
 	 * @param delegationOptsNodeRef параметры делегирования которые проверяются на активность
 	 * @return true - делегирование активно, false в противном случае
 	 */
-	public boolean isDelegationActive (NodeRef delegationOptsNodeRef);
+	boolean isDelegationActive (final NodeRef delegationOptsNodeRef);
+
+	/**
+	 * проверяет что объект является параметрами делегирования
+	 * @param objectNodeRef объект проверяемый на параметры делегирования
+	 * @return true является, false не является
+	 */
+	boolean isDelegationOpts (final NodeRef objectNodeRef);
+
+	/**
+	 * проверяет что объект является доверенностью
+	 * @param objectNodeRef объект проверяемый на доверенность
+	 * @return true является, false не является
+	 */
+	boolean isProcuracy (final NodeRef objectNodeRef);
 }
