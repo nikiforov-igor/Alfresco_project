@@ -1,4 +1,3 @@
-<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlets/dashlet-business-journal.css" />
 <#assign id = args.htmlid>
 
 <script type="text/javascript">
