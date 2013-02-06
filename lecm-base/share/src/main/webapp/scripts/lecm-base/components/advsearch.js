@@ -186,7 +186,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.performSearch(
                         {
                             searchConfig:sConfig,
-                            searchShowInactive:true
+                            searchShowInactive: me.dataGrid.options.searchShowInactive
                         });
 
 	                if (showFilteredLabel) {
