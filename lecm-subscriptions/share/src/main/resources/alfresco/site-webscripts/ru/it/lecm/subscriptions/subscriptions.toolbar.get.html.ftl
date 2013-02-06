@@ -24,7 +24,8 @@
 <script type="text/javascript">//<![CDATA[
 function init() {
     new LogicECM.module.Subscriptions.Toolbar("${id}").setMessages(${messages}).setOptions({
-	    bubblingLabel: "${bubblingLabel!''}"
+	    bubblingLabel: "${bubblingLabel!''}",
+        searchActive: true
     });
 }
 YAHOO.util.Event.onDOMReady(init);

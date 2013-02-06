@@ -85,20 +85,26 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             var onButtonClick1 = function (e) {
                 reloadPage("subscriptions-to-type");
             };
-            this.widgets.subscrTypeButton = Alfresco.util.createYUIButton(this, "typeBtn", onButtonClick1, {});
+            this.widgets.subscrTypeButton = Alfresco.util.createYUIButton(this, "typeBtn", onButtonClick1, {
+                disabled: !LogicECM.module.Subscriptions.IS_ENGINEER
+            });
 
             var onButtonClick2 = function (e) {
                 reloadPage("subscriptions-to-object");
             };
-            this.widgets.subscrObjectButton = Alfresco.util.createYUIButton(this, "objectBtn", onButtonClick2, {});
+            this.widgets.subscrObjectButton = Alfresco.util.createYUIButton(this, "objectBtn", onButtonClick2, {
+                disabled: !LogicECM.module.Subscriptions.IS_ENGINEER
+            });
 
             // начальлная загрузка Грида (на основании текущей странички)
-            var type = getPageName();
-            if (type == null || type == '') {
-                type = subscriptions;
+            if (LogicECM.module.Subscriptions.IS_ENGINEER){
+                var type = getPageName();
+                if (type == null || type == '') {
+                    type = subscriptions;
+                }
+                var root = context.roots[type];
+                bubbleTable(root);
             }
-            var root = context.roots[type];
-            bubbleTable(root);
         },
 
         draw:function draw() {

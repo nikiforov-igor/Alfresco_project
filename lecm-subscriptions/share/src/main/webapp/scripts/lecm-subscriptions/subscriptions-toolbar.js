@@ -96,24 +96,20 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
              * @method onReady
              */
             onReady:function DataListToolbar_onReady() {
-                var disable = false;
-                if (this.options.searchActive == "false"){
-                    disable = true;
-                }
-                this.widgets.newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
+                this.toolbarButtons.newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
                     {
-                        disabled:false,
+                        disabled:true,
                         value:"create"
                     });
 
                 this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
-                        disabled: disable
+                        disabled: true
                     });
 
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
-                        disabled: disable
+                        disabled: true
                     });
 
                 this.groupActions.deleteButton = Alfresco.util.createYUIButton(this, "deleteButton", this.onDeleteRow,
@@ -166,9 +162,9 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
                 var obj = args[1];
                 if (obj && obj.userAccess) {
                     var widget, widgetPermissions, index, orPermissions, orMatch;
-                    for (index in this.widgets) {
-                        if (this.widgets.hasOwnProperty(index)) {
-                            widget = this.widgets[index];
+                    for (index in this.toolbarButtons) {
+                        if (this.toolbarButtons.hasOwnProperty(index)) {
+                            widget = this.toolbarButtons[index];
                             if (widget != null) {
                                 // Skip if this action specifies "no-access-check"
                                 if (widget.get("srcelement").className != "no-access-check") {
