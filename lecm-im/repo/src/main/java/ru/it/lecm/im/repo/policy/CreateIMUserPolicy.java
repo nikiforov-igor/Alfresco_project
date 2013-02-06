@@ -52,9 +52,15 @@ public class CreateIMUserPolicy implements OnUpdateNodePolicy {
     private NodeService nodeService;
 
     public final void init () {
-        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-
-        policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateNode"));
+        try
+        {
+            PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+            policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateNode"));
+        }
+        catch (Exception e)
+        {
+            logger.error("CreateIMUserPolicy.init error!", e);
+        }
     }
 
     public void setPolicyComponent (PolicyComponent policyComponent) {
@@ -71,139 +77,176 @@ public class CreateIMUserPolicy implements OnUpdateNodePolicy {
     
     @Override
     public void onUpdateNode(NodeRef nodeRef) {
-        
-        if (!hasPerson(nodeRef)) {
-            logger.warn ("there is no any person associated with " + nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
-            return;
-        }
-        
-        String name = this.getName(nodeRef);
-        if (name == null || name.length() == 0)
+        try
         {
-            logger.debug("Name is null or empty");
-            return;
-        }
+            if (!hasPerson(nodeRef)) {
+                logger.warn ("there is no any person associated with " + nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
+                return;
+            }
 
-        String password = this.getPassword(nodeRef);
-        if (password == null || password.length() == 0)
+            String name = this.getName(nodeRef);
+            if (name == null || name.length() == 0)
+            {
+                logger.debug("Name is null or empty");
+                return;
+            }
+
+            String password = this.getPassword(nodeRef);
+            if (password == null || password.length() == 0)
+            {
+                logger.debug("password is null or empty");
+                return;
+            }
+
+            String login = this.getLogin(nodeRef);
+            if (login == null || login.length() == 0)
+            {
+                logger.debug("login is null or empty");
+                return;
+            }
+
+            String url = "http://localhost:9090/plugins/userService/userservice";
+            String secret = "qwe123";
+
+            AddOrUpdate(url, secret, "add", name, password, login);
+            AddOrUpdate(url, secret, "update", name, password, login);
+
+            boolean active = isActive(nodeRef);
+
+            String action = active? "enable" : "disable";
+            logger.trace("User is: " + action);
+
+            DisableOrEnable(url, secret, action, login);
+        }
+        catch (Exception e)
         {
-            logger.debug("password is null or empty");
-            return;
+            logger.error("CreateIMPolicy error!", e);
         }
-
-        String login = this.getLogin(nodeRef);
-        if (login == null || login.length() == 0)
-        {
-            logger.debug("login is null or empty");
-            return;
-        }
-
-        String url = "http://localhost:9090/plugins/userService/userservice";
-        String secret = "qwe123";
-
-        AddOrUpdate(url, secret, "add", name, password, login);
-        AddOrUpdate(url, secret, "update", name, password, login);
-
-        boolean active = isActive(nodeRef);
-
-        String action = active? "enable" : "disable";
-        logger.trace("User is: " + action);
-
-        DisableOrEnable(url, secret, action, login);
 
     }
 
     private Boolean isActive(NodeRef nodeRef) {
-        return (Boolean) nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE);
+        try
+        {
+            return (Boolean) nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE);
+        }
+        catch (Exception e)
+        {
+            logger.error("isActive error!", e);
+            return false;
+        }
     }
 
     private void AddOrUpdate(String url, String secret, String action, String name, String password, String login) {
-        logger.trace("trying to create jabber login...");
-        String params = String.format("?type=%s&secret=%s&username=%s&password=%s&name=%s", action, secret, login, password, name);
+        try
+        {
+            logger.trace("trying to create jabber login...");
+            String params = String.format("?type=%s&secret=%s&username=%s&password=%s&name=%s", action, secret, login, password, name);
 
-        logger.trace(params);
+            logger.trace(params);
 
-        HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient();
 
-        // Create a method instance.
-        GetMethod method = new GetMethod(url+params);
+            // Create a method instance.
+            GetMethod method = new GetMethod(url+params);
 
-        // Provide custom retry handler is necessary
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
+            // Provide custom retry handler is necessary
+            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                    new DefaultHttpMethodRetryHandler(3, false));
 
-        try {
-            // Execute the method.
-            int statusCode = client.executeMethod(method);
+            try {
+                // Execute the method.
+                int statusCode = client.executeMethod(method);
 
-            if (statusCode != HttpStatus.SC_OK) {
-                logger.trace("Method failed: " + method.getStatusLine());
+                if (statusCode != HttpStatus.SC_OK) {
+                    logger.trace("Method failed: " + method.getStatusLine());
+                }
+
+                // Read the response body.
+                byte[] responseBody = method.getResponseBody();
+
+                // Deal with the response.
+                // Use caution: ensure correct character encoding and is not binary data
+                logger.trace(new String(responseBody));
+
+            } catch (HttpException e) {
+                logger.error("Fatal protocol violation: ", e);
+            } catch (IOException e) {
+                logger.error("Fatal transport error: ", e);
+
+            } finally {
+                // Release the connection.
+                method.releaseConnection();
             }
 
-            // Read the response body.
-            byte[] responseBody = method.getResponseBody();
-
-            // Deal with the response.
-            // Use caution: ensure correct character encoding and is not binary data
-            logger.trace(new String(responseBody));
-
-        } catch (HttpException e) {
-            logger.error("Fatal protocol violation: ", e);
-        } catch (IOException e) {
-            logger.error("Fatal transport error: ", e);
-
-        } finally {
-            // Release the connection.
-            method.releaseConnection();
+        }catch (Exception e)
+        {
+            logger.error("AddOrUpdate error!!!", e);
         }
     }
 
     private void DisableOrEnable(String url, String secret, String action, String login) {
-        logger.trace("trying to change users state...");
+        try
+        {
+            logger.trace("trying to change users state...");
 
-        String params = String.format("?type=%s&secret=%s&username=%s", action, secret, login);
+            String params = String.format("?type=%s&secret=%s&username=%s", action, secret, login);
 
-        logger.trace(params);
+            logger.trace(params);
 
-        HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient();
 
-        // Create a method instance.
-        GetMethod method = new GetMethod(url+params);
+            // Create a method instance.
+            GetMethod method = new GetMethod(url+params);
 
-        // Provide custom retry handler is necessary
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
+            // Provide custom retry handler is necessary
+            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                    new DefaultHttpMethodRetryHandler(3, false));
 
-        try {
-            // Execute the method.
-            int statusCode = client.executeMethod(method);
+            try {
+                // Execute the method.
+                int statusCode = client.executeMethod(method);
 
-            if (statusCode != HttpStatus.SC_OK) {
-                logger.trace("Method failed: " + method.getStatusLine());
+                if (statusCode != HttpStatus.SC_OK) {
+                    logger.trace("Method failed: " + method.getStatusLine());
+                }
+
+                // Read the response body.
+                byte[] responseBody = method.getResponseBody();
+
+                // Deal with the response.
+                // Use caution: ensure correct character encoding and is not binary data
+                logger.trace(new String(responseBody));
+
+            } catch (HttpException e) {
+                logger.error("Fatal protocol violation: ", e);
+            } catch (IOException e) {
+                logger.error("Fatal transport error: ", e);
+
+            } finally {
+                // Release the connection.
+                method.releaseConnection();
             }
 
-            // Read the response body.
-            byte[] responseBody = method.getResponseBody();
-
-            // Deal with the response.
-            // Use caution: ensure correct character encoding and is not binary data
-            logger.trace(new String(responseBody));
-
-        } catch (HttpException e) {
-            logger.error("Fatal protocol violation: ", e);
-        } catch (IOException e) {
-            logger.error("Fatal transport error: ", e);
-
-        } finally {
-            // Release the connection.
-            method.releaseConnection();
+        }
+        catch (Exception e)
+        {
+            logger.error("DisableOrEnable error!!!", e);
         }
     }
 
     private String getLogin(NodeRef nodeRef) {
-        NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
-        Serializable userName = nodeService.getProperty(personRef, ContentModel.PROP_USERNAME);
-        return userName.toString();
+        try
+        {
+            NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
+            Serializable userName = nodeService.getProperty(personRef, ContentModel.PROP_USERNAME);
+            return userName.toString();
+        }
+        catch (Exception e)
+        {
+            logger.error("getLogin error!", e);
+            return null;
+        }
     }
 
     private String getPassword(NodeRef nodeRef) {
@@ -211,13 +254,29 @@ public class CreateIMUserPolicy implements OnUpdateNodePolicy {
     }
 
     private String getName(NodeRef nodeRef) {
-        NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
-        Serializable firstName = nodeService.getProperty(personRef, ContentModel.PROP_FIRSTNAME);
-        Serializable lastName = nodeService.getProperty(personRef, ContentModel.PROP_LASTNAME);
-        return firstName.toString() + "%20" + lastName.toString();
+        try
+        {
+            NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
+            Serializable firstName = nodeService.getProperty(personRef, ContentModel.PROP_FIRSTNAME);
+            Serializable lastName = nodeService.getProperty(personRef, ContentModel.PROP_LASTNAME);
+            return firstName.toString() + "%20" + lastName.toString();
+        }
+        catch (Exception e)
+        {
+            logger.error("getName error!", e);
+            return null;
+        }
     }
     
     private boolean hasPerson (NodeRef nodeRef) {
-        return orgstructureBean.getPersonForEmployee(nodeRef) != null;
+        try
+        {
+            return orgstructureBean.getPersonForEmployee(nodeRef) != null;
+        }
+        catch (Exception e)
+        {
+            logger.error("hasPerson error!!!", e);
+            return false;
+        }
     }
 }
