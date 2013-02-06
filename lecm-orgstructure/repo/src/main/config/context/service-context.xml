@@ -129,7 +129,7 @@
 	</bean>
 
 
-	<bean id="OrgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
+	<bean id="orgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
@@ -140,7 +140,7 @@
 		<property name="authService" ref="authenticationService"/>
 	</bean>
 
-	<bean id="updateStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPolicy"
+	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
@@ -150,7 +150,13 @@
 		<property name="authService" ref="authenticationService"/>
 	</bean>
 
-    <bean id="OrganizationUpdatePolicy" class="ru.it.lecm.orgstructure.policies.OrganizationUpdatePolicy" init-method="init">
+    <bean id="orgstructureOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOrganizationPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+    </bean>
+
+    <bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy"
+          init-method="init">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="businessJournalService" ref="businessJournalService"/>
     </bean>

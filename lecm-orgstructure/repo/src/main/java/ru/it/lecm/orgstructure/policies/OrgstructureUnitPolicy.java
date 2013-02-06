@@ -57,7 +57,7 @@ public class OrgstructureUnitPolicy
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения об подразделении", null);
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения об подразделении #mainobject", null);
 		}
 
 		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное

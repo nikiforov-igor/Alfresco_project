@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.alfresco.repo.node.NodeServicePolicies;
-import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -19,7 +18,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Date: 06.02.13
  *         Time: 11:29
  */
-public class OrganizationUpdatePolicy {
+public class OrgstructureOrganizationPolicy {
 
 	private PolicyComponent policyComponent;
 	private BusinessJournalService businessJournalService;
@@ -36,7 +35,7 @@ public class OrganizationUpdatePolicy {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION, new JavaBehaviour(this, "onUpdatePropertiesLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_ORGANIZATION, new JavaBehaviour(this, "onUpdatePropertiesLog"));
 	}
 
 	public void onUpdatePropertiesLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {

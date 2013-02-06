@@ -57,5 +57,13 @@
             <property name="cm:name">Переход документа в новый статус</property>
             <property name="lecm-busjournal:eventCategory-code">CHANGE_DOCUMENT_STATUS</property>
         </item>
+        <item name="Добавление должности">
+            <property name="cm:name">Добавление должности</property>
+            <property name="lecm-busjournal:eventCategory-code">ADD_STAFF_POSITION</property>
+        </item>
+        <item name="Исключение должности">
+            <property name="cm:name">Исключение должности</property>
+            <property name="lecm-busjournal:eventCategory-code">REMOVE_STAFF_POSITION</property>
+        </item>
     </items>
 </dictionary>
