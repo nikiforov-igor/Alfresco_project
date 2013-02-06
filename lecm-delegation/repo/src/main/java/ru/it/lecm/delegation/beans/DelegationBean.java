@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.delegation.DelegationEventCategory;
 
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
@@ -299,10 +300,15 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		return (T) result;
 	}
 
+	private void logSaveDelegationOpts (final NodeRef delegationOptsRef) {
+		final NodeRef initiator = orgstructureService.getPersonForEmployee (orgstructureService.getCurrentEmployee ());
+		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		String template = "Сотрудник #mainobject изменил параметры делегирования";
+		businessJournalService.log (initiator, mainObject, DelegationEventCategory.CHANGE_DELEGATION_OPTS, template, null);
+	}
+
 	@Override
 	public String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options) {
-		//получаем все properties
-		Map<QName, Serializable> properties = nodeService.getProperties (delegationOptsNodeRef);
 		//делегировать все функции
 		String propCanDelegate = PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL.getLocalName ();
 		Boolean canDelegate = findInOptions (options, propCanDelegate, "Boolean");
@@ -360,6 +366,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				}
 			}
 		}
+		logSaveDelegationOpts (delegationOptsNodeRef);
 		return "";
 	}
 
@@ -393,6 +400,41 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 	}
 
+	private void logStartDelegation (final NodeRef delegationOptsRef) {
+		final NodeRef initiator = null; //инициатор события это система
+		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
+		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		if (canDelegateAll) {
+//			Boolean canTransferRights = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS);
+			NodeRef trusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			List<String> objects = new ArrayList<String> ();
+			objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
+			String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
+			businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
+			//а логгировать ли что были переданы права руководителя???
+		} else {
+			String template  = "Сотруднику #object1 делегированы полномочия сотрудника #mainobject в рамках бизнес роли #object2";
+			//получить список активных доверенностей и для каждой залоггировать
+			List<NodeRef> procuracyRefs = getProcuraciesByDelegationOpts (delegationOptsRef, true);
+			for (NodeRef procuracyRef : procuracyRefs) {
+				List<String> objects = new ArrayList<String> ();
+				NodeRef trusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				NodeRef businessRoleRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+				objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
+				objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
+				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
+				//а логгировать ли что были переданы права руководителя?
+			}
+		}
+	}
+
+	private void logStopDelegation (final NodeRef delegationOptsRef) {
+		final NodeRef initiator = null; //инициатор события это система
+		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		String template = "Делегирование полномочий сотрудника #mainobject прекращено";
+		businessJournalService.log (initiator, mainObject, DelegationEventCategory.STOP_DELEGATE, template, null);
+	}
+
 	@Override
 	public void startDelegation (final String delegator) {
 		if (personService.personExists (delegator)) {
@@ -414,6 +456,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 		if (delegationOptsRef != null) {
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, true);
+			logStartDelegation (delegationOptsRef);
 			//нарезка прав согласно сервису Руслана
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
@@ -441,6 +484,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 		if (delegationOptsRef != null) {
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
+			logStopDelegation (delegationOptsRef);
 			//отбирание ранее нарезанных прав согласно сервису Руслана
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
