@@ -32,6 +32,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
  * @class LogicECM.module.LecmIM.Messenger
  */
 (function () {
+    var Dom = YAHOO.util.Dom;
 
     LogicECM.module.LecmIM.Messenger = function (htmlId) {
         return LogicECM.module.LecmIM.Messenger.superclass.constructor.call(
@@ -59,60 +60,46 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
 
         /// Добавление счетчика
         createNotifyer: function(){
-            var btn = YAHOO.util.Dom.get(this.id);
-            var div=document.createElement("div");
-            div.innerHTML='<div id="myElem" hidden>0</div>';
+            var btn = Dom.get(this.id);
+            var div = document.createElement("div");
+            div.innerHTML = '<div id="myElem" class="hidden">0</div>';
             btn.appendChild(div);
         },
 
         /// Инициализатор счетчика в заголовке
-        subscribeToNewMessages : function(){
-
+        subscribeToNewMessages: function() {
             YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
+                var count = args[1].count;
+                var elem = Dom.get("myElem");
 
-                    var count = args[1].count;
-                    var elem = YAHOO.util.Dom.get("myElem");
-                    elem.innerHTML = count;
-                    if (count > 0)
-                    {
-                        elem.removeAttribute("hidden");
-
-                    }
-                    else
-                    {
-                        elem.setAttribute("hidden","hidden");
-                    }
-
+                elem.innerHTML = count;
+                if (count > 0) {
+                    Dom.removeClass(elem, "hidden");
+                } else {
+                    Dom.addClass(elem, "hidden");
                 }
-            );
-
+            });
         },
-
-
 
         // Создание обработчика нажатия на кнопку
         initButton : function(){
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
-                onclick: { fn: function(){
-//                    var elem = YAHOO.util.Dom.get("ijab");
-//                    if (elem.hasAttribute("hidden"))
-//                    {
-//                        elem.removeAttribute("hidden");
-//                    }
-//                    else
-//                    {
-//                        elem.setAttribute("hidden","hidden");
-//                    }
+                onclick: {
+                    fn: function() {
+//                        var elem = Dom.get("ijab");
+//                        if (Dom.hasClass(elem, "hidden")) {
+//                            Dom.removeClass(elem, "hidden");
+//                        } else {
+//                            Dom.addClass(elem, "hidden");
+//                        }
 
-                    if (window.iJab)
-                    {
-                        window.iJab.toggleIsVisible();
+                        if (window.iJab) {
+                            window.iJab.toggleIsVisible();
+                        } else {
+                            alert("Messanger not found!");
+                        }
                     }
-                    else{
-                        alert("Messanger not found!");
-                    }
-
-                } }
+                }
             });
 
 
