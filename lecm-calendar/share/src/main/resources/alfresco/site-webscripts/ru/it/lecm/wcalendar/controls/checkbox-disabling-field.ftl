@@ -1,14 +1,22 @@
 <#assign isTrue=false>
 <#if field.value??>
- <#if field.value?is_boolean>
-    <#assign isTrue=field.value>
- <#elseif field.value?is_string && field.value == "true">
-    <#assign isTrue=true>
- </#if>
+	<#if field.value?is_boolean>
+		<#assign isTrue=field.value>
+	<#elseif field.value?is_string && field.value == "true">
+		<#assign isTrue=true>
+	</#if>
+</#if>
+
+<#if field.control.params.isTrue??>
+	<#if field.control.params.isTrue?is_boolean>
+		<#assign isTrue=field.control.params.isTrue>
+	<#elseif field.control.params.isTrue?is_string && field.control.params.isTrue == "true">
+		<#assign isTrue=true>
+	</#if>
 </#if>
 
 <script type="text/javascript">//<![CDATA[
-function Absence_CheckboxChanged() {
+function Absence_CheckboxChanged(skipFiring) {
 
 	var myID = "${fieldHtmlId}";
 
@@ -20,7 +28,6 @@ function Absence_CheckboxChanged() {
 	var commonID = IDElements.join("_");
 
 	var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
-	//var endInputTime = YAHOO.util.Dom.get(commonID + "_end-cntrl-time");
 	var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
 	var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
 
@@ -42,9 +49,21 @@ function Absence_CheckboxChanged() {
 
 		YAHOO.util.UserAction.keyup(endInputHidden);
 	}
-
-	YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+	
+	if (!skipFiring) {
+		YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+	}
 }
+<#if isTrue>
+(function() {
+	var myID = "${fieldHtmlId}";
+	var IDElements = myID.split("_");
+	IDElements.splice(-3, 3);
+	var commonID = IDElements.join("_");
+	var formID = commonID + "-form"
+	YAHOO.util.Event.onContentReady(formID, Absence_CheckboxChanged, true);
+})();
+</#if>
 //]]></script>
 
 <div class="form-field">

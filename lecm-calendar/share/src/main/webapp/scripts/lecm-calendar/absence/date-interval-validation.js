@@ -64,14 +64,14 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 
 			if (beginDate < today) {
 				valid = false;
-				errorMessage += "Начало отсутствия раньше сегодняшней даты. <br>";
+				errorMessage += Alfresco.component.Base.prototype.msg("message.error.absence.date-interval-validation.early-begin") + "<br>";
 			}
 
 			if (!isUnlimited) {
 				endDate = new Date(endValue);
 				if (beginDate > endDate) {
 					valid = false;
-					errorMessage += "Конец отсутствия раньше начала. <br>";
+					errorMessage += Alfresco.component.Base.prototype.msg("message.error.absence.date-interval-validation.early-end") + "<br>";
 				}
 			} else {
 				endDate = new Date(beginDate);
@@ -97,7 +97,7 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 					processData: false, // данные не трогать, не кодировать вообще
 					success: function (result, textStatus, jqXHR) {
 						if (result != null && !result.isSuitable) {
-							errorMessage += "На выбранную дату ужа запланировано отсутствие. <br>";
+							errorMessage += Alfresco.component.Base.prototype.msg("message.error.absence.date-interval-validation.already-planned") + "<br>";
 							valid = false;
 						} else {
 							valid = true;
