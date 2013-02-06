@@ -50,7 +50,7 @@ public class OrgstructureStaffPolicy
 
 			String initiator = authService.getCurrentUserName();
 
-			EventCategory category;
+			String category;
 			String defaultDescription;
 			if (curPrimary) {
 				defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
@@ -62,11 +62,7 @@ public class OrgstructureStaffPolicy
 			}
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(unit.toString());
-			try {
-				businessJournalService.log(initiator, employee, category, defaultDescription, objects);
-			} catch (Exception e) {
-				logger.error("Не удалось создать запись бизнес-журнала", e);
-			}
+			businessJournalService.log(initiator, employee, category, defaultDescription, objects);
 		}
 	}
 }

@@ -61,7 +61,7 @@ public class BusinessJournalLogEventsPolicy implements NodeServicePolicies.OnUpd
 
 		/*policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				ContentModel.TYPE_CMOBJECT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
+                                                                                             ;
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				ContentModel.TYPE_CMOBJECT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));*/
 	}
@@ -72,11 +72,7 @@ public class BusinessJournalLogEventsPolicy implements NodeServicePolicies.OnUpd
 		QName typeQName = nodeService.getType(nodeRef);
 		String type = typeQName.toPrefixString(namespaceService);
 		if (type.startsWith(LECM) && !NOT_AFFECTED_TYPES.contains(typeQName)) {
-			try {
-				businessJournalService.log(nodeRef, EventCategory.ADD, "Создан новый объект #mainobject", null);
-			} catch (Exception e) {
-				logger.error("Could not create the record business-journal", e);
-			}
+			businessJournalService.log(nodeRef, EventCategory.ADD, "Создан новый объект #mainobject", null);
 		}
 	}
 
@@ -85,11 +81,7 @@ public class BusinessJournalLogEventsPolicy implements NodeServicePolicies.OnUpd
 		QName typeQName = nodeService.getType(nodeRef);
 		String type = typeQName.toPrefixString(namespaceService);
 		if (type.startsWith(LECM) && !NOT_AFFECTED_TYPES.contains(typeQName) && before.size() == after.size()) {
-			try {
-				businessJournalService.log(nodeRef, EventCategory.EDIT, "Объект #mainobject изменен", null);
-			} catch (Exception e) {
-				logger.error("Could not create the record business-journal", e);
-			}
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "Объект #mainobject изменен", null);
 		}
 	}
 }

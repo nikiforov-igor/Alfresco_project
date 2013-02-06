@@ -56,11 +56,7 @@ public class OrgstructureUnitPolicy
 		}
 
 		final String initiator = authService.getCurrentUserName();
-		try {
-			businessJournalService.log(initiator, unit, EventCategory.ADD, "Созданo новое подразделение #mainobject в подразделении #object1", objects);
-		} catch (Exception e) {
-			logger.error("Не удалось создать запись бизнес-журнала", e);
-		}
+		businessJournalService.log(initiator, unit, EventCategory.ADD, "Созданo новое подразделение #mainobject в подразделении #object1", objects);
 
 		// оповещение securityService по Должностной Позиции ...
 		notifyChangedOU( unit, parent);
@@ -84,11 +80,7 @@ public class OrgstructureUnitPolicy
 			}
 
 			final String initiator = authService.getCurrentUserName();
-			try {
-				businessJournalService.log(initiator, nodeRef, EventCategory.DELETE, "Подразделение \"#mainobject\" в подразделении #object1 расформировано", objects);
-			} catch (Exception e) {
-				logger.error("Не удалось создать запись бизнес-журнала", e);
-			}
+			businessJournalService.log(initiator, nodeRef, EventCategory.DELETE, "Подразделение \"#mainobject\" в подразделении #object1 расформировано", objects);
 		}
 	}
 

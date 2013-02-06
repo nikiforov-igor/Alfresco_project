@@ -69,6 +69,9 @@
         <property name="nodeService" ref="nodeService"/>
 	    <property name="transactionService" ref="transactionService"/>
         <property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="searchService" ref="searchService"/>
+        <property name="personService" ref="personService"/>
+        <property name="authService" ref="authenticationService"/>
     </bean>
 
     <bean id="businessJournalScript" parent="baseJavaScriptExtension" class="ru.it.lecm.businessjournal.script.BusinessJournalWebScriptBean"

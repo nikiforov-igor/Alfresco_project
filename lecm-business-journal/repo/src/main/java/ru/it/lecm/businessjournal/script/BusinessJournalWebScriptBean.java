@@ -15,7 +15,6 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
 /**
@@ -40,12 +39,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			String ref = (String) obj;
 			refs.add(ref);
 		}
-		try {
-			EventCategory category = eventCategory != null ? EventCategory.valueOf(eventCategory.toUpperCase()) : null;
-			record = service.log(new NodeRef(mainObject), category, description, refs);
-		} catch (Exception e) {
-			throw new ScriptException("Не удалось создать запись бизнес-журнала", e);
-		}
+		record = service.log(new NodeRef(mainObject), eventCategory, description, refs);
 		return new ScriptNode(record, service.getServiceRegistry(), getScope());
 	}
 
