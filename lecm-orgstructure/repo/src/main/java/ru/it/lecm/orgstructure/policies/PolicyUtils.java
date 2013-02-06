@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -86,13 +87,15 @@ public class PolicyUtils {
 	 * Получить id/название Бизнес Роли
 	 * @param brole
 	 * @param nodeService
-	 * @return
+	 * @return значение атрибута "business-role-identifier" или NULL, если он не задан или пуст
 	 */
 	public static String getBRoleIdCode(NodeRef brole, NodeService nodeService) {
-		// if (brole == null) return null;
-		// final String roleCode = ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-		// return roleCode;
-		return (brole == null) ? null : brole.getId();
+		// return (brole == null) ? null : brole.getId();
+		if (brole == null) return null;
+		final Object roleCode = nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		if (roleCode == null) return null;
+		final String result = roleCode.toString().trim();
+		return (result.length() > 0) ? roleCode.toString() : null;
 	}
 
 
@@ -199,6 +202,12 @@ public class PolicyUtils {
 	public static Types.SGBusinessRole makeBRPos(NodeRef brole, NodeService nodeService) {
 		final String brolIdCode = getBRoleIdCode( brole, nodeService);
 		final String orgDetails= ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		// brole.name / brole.id
+		final Object roleCode = String.format( "'%s'/'%s'"
+				, brolIdCode
+				, nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER)
+				);
+
 		return (Types.SGBusinessRole) Types.SGKind.SG_BR.getSGPos( brolIdCode, orgDetails);
 	}
 

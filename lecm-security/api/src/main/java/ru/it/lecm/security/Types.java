@@ -450,6 +450,11 @@ public final class Types {
 			super.setId(value);
 		}
 
+		@Override
+		public String getAlfrescoSuffix() {
+			// для личной бизнес-роли надо ввести id Сотрудника ...
+			return super.getAlfrescoSuffix() + "-" + this.getUserId();
+		}
 	}
 
 }

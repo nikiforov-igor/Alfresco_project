@@ -1,7 +1,5 @@
 package ru.it.lecm.security.beans;
 
-import java.util.Set;
-
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.util.PropertyCheck;
@@ -11,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGKind;
+import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 public class LECMSecurityGroupsBean
@@ -21,6 +20,7 @@ public class LECMSecurityGroupsBean
 
 	private AuthorityService authorityService;
 	private boolean safeMode = false;
+	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
 	public AuthorityService getAuthorityService() {
 		return authorityService;
@@ -28,6 +28,7 @@ public class LECMSecurityGroupsBean
 
 	public void setAuthorityService(AuthorityService authorityService) {
 		this.authorityService = authorityService;
+		this.sgnm.setAuthorityService(authorityService);
 	}
 
 	/**
@@ -62,70 +63,6 @@ public class LECMSecurityGroupsBean
 		logger.info("initialized");
 	}
 
-	/**
-	 * Проверить существование авторизации с названием shortName
-	 * @param shortName
-	 * @return
-	 */
-	private boolean hasAuth(String shortName) {
-		final String sgName = this.authorityService.getName(AuthorityType.GROUP, shortName);
-		if (this.authorityService.authorityExists(sgName))
-			return true; // has group
-		// check as user name
-		return this.authorityService.authorityExists(shortName);
-	}
-
-/*
-	private boolean hasAuth(String shortName, String parentName) {
-
-		// есть user-авторизация? ...
-		Set<String> found = null;
-		try {
-			found = this.authorityService.findAuthorities(AuthorityType.USER, parentName, true, shortName, null);
-			if (found != null && found.size() > 0)
-				return true;
-		} catch (Throwable t) {
-			logger.error( t.getMessage());
-		}
-
-		// есть групповая авторизация? ...
-		try {
-			this.authorityService.authorityExists(name);
-			found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
-			if (found != null && found.size() > 0)
-				return true;
-		} catch (Throwable t) {
-			logger.error( t.getMessage());
-		}
-
-//		// есть не группа? ...
-//		found = this.authorityService.findAuthorities(AuthorityType.ROLE, parentName, true, shortName, null);
-//		if (found != null && found.size() > 0)
-//			return true;
-
-		return false; // NOT FOUND
-	}
- */
-
-
-//	private boolean hasFullAuth(String fullChildName, String fullParentName) {
-//		final Set<String> found = this.authorityService.findAuthorities(null, fullParentName, true, fullChildName, null);
-//		return (found != null && found.size() > 0);
-//	}
-
-	private boolean hasFullAuth(String fullName) {
-		return (this.authorityService.authorityExists(fullName));
-	}
-
-	private boolean hasFullAuthGrp(String childFullName, String parentFullName) {
-		return hasFullAuthEx( childFullName, parentFullName, AuthorityType.GROUP);
-	}
-
-	private boolean hasFullAuthEx(String childFullName, String parentFullName, AuthorityType childType) {
-		// if (!hasFullAuth(childFullName)) return false;
-		final Set<String> curChildren = this.authorityService.getContainedAuthorities(childType, parentFullName, true);
-		return (curChildren != null) && curChildren.contains(childFullName);
-	}
 
 	/**
 	 * Проверить наличие и сохдать при отсутствии security-группу Альфреско
@@ -136,7 +73,7 @@ public class LECMSecurityGroupsBean
 	String ensureAlfrescoGroupName(String simpleName, String details) {
 		final String sgFullName;
 
-		if (hasAuth(simpleName)) {
+		if (sgnm.hasAuth(simpleName)) {
 			sgFullName = this.authorityService.getName(AuthorityType.GROUP, simpleName);
 			// пропишем human-oriented данные, если они имеются
 			if (details != null)
@@ -161,20 +98,18 @@ public class LECMSecurityGroupsBean
 	 * @param simpleName
 	 */
 	void removeAlfrescoGroupName(String simpleName) {
-		final String sgFullName;
-
-		if (!hasAuth(simpleName)) {
-			sgFullName = this.authorityService.getName(AuthorityType.GROUP, simpleName);
+		final String sgFullName = this.sgnm.makeSGName(simpleName);
+;
+		if (!sgnm.hasAuth(simpleName)) {
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' NOT exists or already removed", sgFullName, simpleName));
 		} else {
-			sgFullName = this.authorityService.getName( AuthorityType.GROUP, simpleName);
 			this.authorityService.removeAuthority( null, sgFullName);
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' removed", sgFullName, simpleName));
 		}
 	}
 
 	private void ensureParentEx(String sgItemFullName, String sgParentFullName, AuthorityType childType) {
-		if (hasFullAuthEx(sgItemFullName, sgParentFullName, childType)) {
+		if (sgnm.hasFullAuthEx(sgItemFullName, sgParentFullName, childType)) {
 			logger.info(String.format("Security item '%s' is already inside security-group '%s'", sgItemFullName, sgParentFullName));
 		} else {
 			// добавление одного security-объекта в другой: sgItem -> sgParent
@@ -192,8 +127,8 @@ public class LECMSecurityGroupsBean
 	}
 
 	private void removeParentEx(String sgFullItemName, String sgParentFullName, AuthorityType childType) {
-		if (!hasFullAuthEx(sgFullItemName, sgParentFullName, childType)) {
-			logger.info(String.format("Security item '%s' is already outside security-group '%s'", sgFullItemName, sgParentFullName));
+		if (!sgnm.hasFullAuthEx(sgFullItemName, sgParentFullName, childType)) {
+			logger.info(String.format("Security item '%s' is not inside security-group '%s'", sgFullItemName, sgParentFullName));
 		} else {
 			this.authorityService.removeAuthority(sgParentFullName, sgFullItemName);
 			logger.warn(String.format("Security item '%s' put out of security-group '%s'", sgFullItemName, sgParentFullName));
@@ -232,7 +167,7 @@ public class LECMSecurityGroupsBean
 
 		if (alfrescoUserLogin != null) {
 			final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
-			final String sg_me_group = this.authorityService.getName(AuthorityType.GROUP, emplSuffix);
+			final String sg_me_group = this.sgnm.makeSGName(emplSuffix);
 			if (tie) // привязать ...
 				ensureUserParent( sg_user_name, sg_me_group);
 			else // отвязать ...
@@ -242,16 +177,14 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgNodeDeactivated(Types.SGPosition obj) {
-		final String sgName = this.authorityService.getName(AuthorityType.GROUP, obj.getAlfrescoSuffix());
+		final String sgName = this.sgnm.makeSGName( obj);
 		removeAlfrescoGroupName( sgName);
 		// дополнительные действия зависят от типа
 		if (obj.getSgKind() ==  SGKind.SG_OU)
 			removeAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()));
 	}
 
-	@Override
-	public void sgInclude( Types.SGPosition child, Types.SGPosition parent)
-	{
+	private void sgSetParent( Types.SGPosition child, Types.SGPosition parent, boolean include) {
 		/*
 		 * include/exclude всегда safe-операции - в основном по причине упрощения
 		 * работы с лиными группами Бизнес-Ролей - чтобы не выносить отдельно
@@ -264,22 +197,23 @@ public class LECMSecurityGroupsBean
 		}
 
 		// основные действия
-		final String sgItem = this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
-		final String sgParent = this.authorityService.getName(AuthorityType.GROUP, parent.getAlfrescoSuffix());
-		ensureParent(sgItem, sgParent);
+		// final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
+		final String sgItem =  this.sgnm.makeSGName(child);
+		final String sgParent = this.sgnm.makeSGName(parent);
+		if (include)
+			ensureParent(sgItem, sgParent);
+		else
+			removeParent( sgItem, sgParent);
+	}
+
+	@Override
+	public void sgInclude( Types.SGPosition child, Types.SGPosition parent) {
+		sgSetParent(child, parent, true);
 	}
 
 	@Override
 	public void sgExclude( Types.SGPosition child, Types.SGPosition oldParent) {
-		// (!) safe-действие
-		// if (safeMode)
-		{
-			orgNodeCreated( child);
-			orgNodeCreated( oldParent);
-		}
-		final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
-		final String sgParent = this.authorityService.getName(AuthorityType.GROUP, oldParent.getAlfrescoSuffix());
-		removeParent( sgItem, sgParent);
+		sgSetParent(child, oldParent, false);
 	}
 
 
@@ -293,8 +227,8 @@ public class LECMSecurityGroupsBean
 			orgNodeCreated( obj);
 		}
 
-		final String sgBRole = this.authorityService.getName(AuthorityType.GROUP, broleSuffix);
-		final String sgObj = this.authorityService.getName(AuthorityType.GROUP, obj.getAlfrescoSuffix());
+		final String sgBRole = this.sgnm.makeSGName(broleSuffix);
+		final String sgObj = this.sgnm.makeSGName(obj);
 
 		if (SGKind.SG_ME.equals(obj.getSgKind())) {
 			/*
@@ -348,11 +282,11 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgBRRemoved(String broleId, Types.SGPosition obj) {
-		final String sgBRole = this.authorityService.getName(AuthorityType.GROUP, SGKind.SG_BR.getAlfrescoSuffix(broleId));
-		final String sgObj = this.authorityService.getName(AuthorityType.GROUP, obj.getAlfrescoSuffix());
+		final String sgBRole = this.sgnm.makeSGName(SGKind.SG_BR.getAlfrescoSuffix(broleId));
+		final String sgObj = this.sgnm.makeSGName(obj.getAlfrescoSuffix());
 		if (SGKind.SG_ME.equals(obj.getSgKind())) {
-			final String myBRole = SGKind.getSGMyRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
-			final String sgMyRole = this.authorityService.getName(AuthorityType.GROUP, myBRole);
+			final SGPrivateBusinessRole myBRolePos = SGKind.getSGMyRolePos(obj.getId(), broleId); // личная группа для БР
+			final String sgMyRole = this.sgnm.makeSGName(myBRolePos);
 
 			// (!) SG_Me <out of> SG_MyRole не выполнять, т.к. Бизнес роль может быть выдана сотруднику неявно через Подразделение или Должность ...
 			// removeParent( sgObj, sgMyRole);

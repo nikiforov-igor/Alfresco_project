@@ -6,9 +6,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.AuthenticationException;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
@@ -26,6 +29,9 @@ public class LECMAclBuilderBean
 
 	private NodeService nodeService;
 	private PermissionService permissionService;
+	private AuthorityService authorityService;
+
+	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
 	/**
 	 * Соответствия внутрипрограммных разрешений и тех, которые имеются в Альфреско (см const ACCPERM_EMPTY)
@@ -57,6 +63,15 @@ public class LECMAclBuilderBean
 
 	public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
+	}
+
+	public AuthorityService getAuthorityService() {
+		return authorityService;
+	}
+
+	public void setAuthorityService(AuthorityService authorityService) {
+		this.authorityService = authorityService;
+		this.sgnm.setAuthorityService(authorityService);
 	}
 
 	/**
@@ -161,27 +176,9 @@ public class LECMAclBuilderBean
 		logger.info("initialized");
 	}
 
-	String makeFullBRMEAuthName(String userId, String roleCode) {
-		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
-		return "GROUP_" + Types.SGKind.getSGMyRolePos(userId, roleCode).getAlfrescoSuffix();
-	}
-
-	/**
-	 * Сформировать ПОЛНОЕ название security-группы Альфреско, которую надо
-	 * сопоставлять указанному модельному объекту
-	 * @param kind тип модельного объекта
-	 * @param objId Id объекта
-	 * @return
-	 */
-	String makeFullSGName(Types.SGKind kind, String objId) {
-		// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
-		return "GROUP_" + kind.getSGPos(objId).getAlfrescoSuffix();
-	}
-
-
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId) {
-		final String authority = makeFullBRMEAuthName(userId, roleCode);
+		final String authority = sgnm.makeFullBRMEAuthName(userId, roleCode);
 		final String permission = getPermName(StdPermission.readonly); // выдать право на чтение - при смене статуса должно будет выполниться перегенерирование ...
 		permissionService.setPermission( nodeRef, authority, permission, true);
 		logger.warn(String.format("Dynamic role '%s' for user '%s' granted for document '%s' by security group <%s>", roleCode, userId, nodeRef, authority));
@@ -189,104 +186,135 @@ public class LECMAclBuilderBean
 
 	@Override
 	public void revokeDynamicRole(String roleCode, NodeRef nodeRef, String userId) {
-		final String authority = makeFullBRMEAuthName(userId, roleCode);
+		final String authority = sgnm.makeFullBRMEAuthName(userId, roleCode);
 		permissionService.clearPermission( nodeRef, authority);
 		logger.warn(String.format("Dynamic role '%s' for user '%s' revoked from document '%s'", roleCode, userId, nodeRef));
 	}
 
 	@Override
 	public void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap)
-	{
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node %s by accessor %s \r\n", nodeRef, getMapInfo(accessMap)));
+	{	
+//		logger.info( "rebuildStaticACL for node "+ nodeRef);
+//		return;
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node '%s' by access table: %s \r\n", nodeRef, getMapInfo(accessMap)));
+		try {
 
-		// получить полный текущий ACL ...
-		final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
-		logger.debug("current doc ACL list is "+ current);
+			// получить полный текущий ACL ...
+			final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
+			logger.debug("current doc ACL list is "+ current);
 
-		if (accessMap == null || accessMap.isEmpty()) {
-			permissionService.deletePermissions(nodeRef);
-			sb.append("\t Permission list cleared for node "+ nodeRef);
-		} else {
-			/* TODO: для правильной работы в ситациях, когда пользователь имеет несколько бизнес ролей в одном документе
-			 * надо сортировать его ACE-права в ACL так, чтобы пишущие шли раньше читающих (!)
-			 * т.е. надо получить список всех БР пользователя, сгенерировать для них ACE, отсортировать по важности и потом вывести в ACL.
-			 */
+			if (accessMap == null || accessMap.isEmpty()) {
+				permissionService.deletePermissions(nodeRef);
+				sb.append("\t Permission list cleared for node "+ nodeRef);
+			} else {
+				/* TODO: для правильной работы в ситуациях, когда пользователь имеет несколько бизнес ролей в одном документе
+				 * возможно стоит отсортировать все ACE-права в ACL так, чтобы пишущие шли раньше читающих (!)
+				 * т.е. надо получить список всех БР пользователя, сгенерировать для них ACE, отсортировать по важности и потом вывести в ACL.
+				 */
+				sb.append( "\t SG-assigned list is: \n");
+				// замена на корректный доступ в текущем статусе
+				for(Map.Entry<String, StdPermission> entry: accessMap.entrySet()) {
+					final String brole = entry.getKey();
+					final String authority = sgnm.makeFullSGName( Types.SGKind.SG_BR, brole);
 
-			// замена на корректный доступ в текущем статусе
-			for(Map.Entry<String, StdPermission> entry: accessMap.entrySet()) {
-
-				final String brole = entry.getKey();
-
-				final String authority = makeFullSGName( Types.SGKind.SG_BR, brole);
-
-				// удаление прежней ДР пользователя ...
-				permissionService.clearPermission(nodeRef, authority);
-
-				// выдаём новый доступ по Статической БР ...
-				final StdPermission perm = accessMap.get(brole);
-				final String rawPerm = getPermName( perm, StdPermission.noaccess);
-				final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
-				if (allowed) { // ALLOW
-					permissionService.setPermission(nodeRef, authority, rawPerm, true);
+					// выдаём новый доступ по Статической БР для Пользователя ...
+					setACE(nodeRef, authority, accessMap.get(brole), sb);
 				}
-				sb.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
 			}
+		} catch(Throwable t) {
+			sb.append( "\n\t (!) exception "+ t.getMessage());
+			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
+		} finally {
+			if (logger.isInfoEnabled())
+				logger.info( sb.toString());
 		}
-
-		if (logger.isInfoEnabled())
-			logger.info( sb.toString());
 	}
 
 
 	@Override
 	public void rebuildACL(NodeRef nodeRef, Map<String, StdPermission> accessMap)
-	{
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node %s by accessor %s \n", nodeRef, getMapInfo(accessMap)));
+	{	
+//		logger.info( "rebuildStaticACL for node "+ nodeRef);
+//		return;
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node '%s' by access table: %s \n", nodeRef, getMapInfo(accessMap)));
+		try {
 
-		// получить полный текущий ACL ...
-		final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
-		logger.debug("current doc ACL list is "+ current);
+			// получить полный текущий ACL ...
+			final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
+			logger.debug("current doc ACL list is "+ current);
 
-		// вычленить id пользователей с динамическими ролями ...
-		// (пользователь, ДБР)
-		final Set< Pair<String, String> > pairs = filterByDynamicRoles(current);
+			// вычленить id пользователей с динамическими ролями ...
+			// (пользователь, ДБР)
+			final Set< Pair<String, String> > pairs = filterByDynamicRoles(current);
 
-		/* TODO: для правильной работы в ситациях, когда пользователь имеет несколько бизнес ролей в одном документе
-		 * надо сортировать его ACE-права в ACL так, чтобы пишущие шли раньше читающих (!)
-		 * т.е. надо получить список всех БР пользователя, сгенерировать для них ACE, отсортировать по важности и потом вывести в ACL.
-		 */
-
-		// замена на корректный доступ в текущем статусе
-		for(Pair<String, String> item: pairs) {
-
-			final String userId = item.getFirst();
-			final String brole = item.getSecond();
-
-			// TODO: возможно стоит сделать обращение через authorityService.getName(xxx)
-			final String authority = makeFullBRMEAuthName(userId, brole);
-
-			// удаление прежней ДР пользователя ...
-			permissionService.clearPermission(nodeRef, authority);
-
-			// выдаём новый доступ по ДБР для Пользователя ...
-			final StdPermission perm = accessMap.get(brole);
-			final String rawPerm = getPermName( perm, StdPermission.noaccess);
-			final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
-
-			/*
-			 *  @NOTE: (!) здесь может быть rawPerm = "deny", allowed = false, но прав с названием deny не существует
-			 *  permissionService.setPermission(nodeRef, authority, rawPerm, allowed); - не проходит для deny
+			/* TODO: для правильной работы в ситациях, когда пользователь имеет несколько бизнес ролей в одном документе
+			 * надо сортировать его ACE-права в ACL так, чтобы пишущие шли раньше читающих (!)
+			 * т.е. надо получить список всех БР пользователя, сгенерировать для них ACE, отсортировать по важности и потом вывести в ACL.
 			 */
-			if (allowed) { // ALLOW
-				permissionService.setPermission(nodeRef, authority, rawPerm, true);
-			} else { // DENY
-				permissionService.setPermission(nodeRef, authority, "Read", false);
+			sb.append( "\t SG-assigned list is: \n");
+			// замена на корректный доступ в текущем статусе
+			for(Pair<String, String> item: pairs) {
+				final String userId = item.getFirst();
+				final String brole = item.getSecond();
+				final String authority = sgnm.makeFullBRMEAuthName(userId, brole);
+				// выдаём новый доступ по ДБР для Пользователя ...
+				setACE(nodeRef, authority, accessMap.get(brole), sb);
 			}
-			sb.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
+		} catch(Throwable t) {
+			sb.append( "\n\t (!) exception "+ t.getMessage());
+			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
+		} finally {
+			if (logger.isInfoEnabled())
+				logger.info( sb.toString());
 		}
+	}
 
-		if (logger.isInfoEnabled())
-			logger.info( sb.toString());
+	/**
+	 * Выполнить формирование ACE для списка доступа ACL указанного узла
+	 * @param nodeRef
+	 * @param authority
+	 * @param perm
+	 * @param destBuf для формирования журнальных сообщений, м.б. Null
+	 * @throws AuthenticationException 
+	 */
+	
+	void setACE(
+			final NodeRef nodeRef
+			, final String authority
+			, final StdPermission perm
+			, final StringBuilder destBuf
+			) throws AuthenticationException 
+	{
+		// удаление прежней auth-записи ...
+		permissionService.clearPermission(nodeRef, authority);
+
+		final String rawPerm = getPermName( perm, StdPermission.noaccess);
+		final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
+
+		logger.debug( String.format("calling setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s) ...", nodeRef, authority, rawPerm, allowed));
+
+		if (!this.authorityService.authorityExists(authority))
+			throw new AuthenticationException( String.format( "Security group not exists '%s': node '%s'", authority, nodeRef));
+
+		/*
+		 *  @NOTE: (!) здесь может быть rawPerm = "deny", allowed = false, но прав с названием deny не существует
+		 *  permissionService.setPermission(nodeRef, authority, rawPerm, allowed); - не проходит для deny
+		 */
+		if (allowed) // ALLOW
+			permissionService.setPermission(nodeRef, authority, rawPerm, true);
+		else // DENY
+			permissionService.setPermission(nodeRef, authority, "Read", false);
+
+		logger.debug( String.format("... called OK setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s)", nodeRef, authority, rawPerm, allowed));
+
+		if (destBuf != null)
+			destBuf.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
+	}
+
+	void setACE( final NodeRef nodeRef, final String authority, final StdPermission perm)
+			throws AuthenticationException
+	{
+		setACE(nodeRef, authority, perm, null);
 	}
 
 	/**

@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
@@ -134,6 +133,13 @@ public abstract class SecurityNotificationsPolicyBase
 	}
 
 	protected void notifyNodeCreated(SGPosition pos) {
+		if (pos == null)
+			return;
+		if (pos.getId() == null) {
+			logger.warn( String.format( "SG Group '"+ pos.getAlfrescoSuffix()+"' is skipping due to id is NULL"));
+			return;
+		}
+
 		sgNotifier.orgNodeCreated( pos);
 	}
 
@@ -195,10 +201,13 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param employee
 	 * @param brole
 	 */
-	protected  void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
+	protected void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-		final String broleCode = ""+ nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-		this.sgNotifier.orgBRAssigned( broleCode, emplPos);
+		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
+		if (broleCode != null)
+			this.sgNotifier.orgBRAssigned( broleCode, emplPos);
+		else
+			logger.warn( String.format("Business role '%s' has no mnemonic -> not assigned to employee '%s'", brole, employee));
 	}
 
 	/**
@@ -206,11 +215,14 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param employee
 	 * @param brole
 	 */
-	protected  void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
+	protected void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
 		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
-		this.sgNotifier.orgBRRemoved( broleCode, emplPos);
+		if (broleCode != null)
+			this.sgNotifier.orgBRRemoved( broleCode, emplPos);
+		else
+			logger.warn( String.format("Business role '%s' has no mnemonic -> not removed from employee '%s'", brole, employee));
 	}
 
 	/**
@@ -218,7 +230,7 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param employee узел типа "lecm-orgstr:employee-link"
 	 * @param dpid узел типа "lecm-orgstr:position"
 	 */
-	protected  void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
+	protected void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
 		final String dpIdName = PolicyUtils.getDpName(dpid, nodeService);
