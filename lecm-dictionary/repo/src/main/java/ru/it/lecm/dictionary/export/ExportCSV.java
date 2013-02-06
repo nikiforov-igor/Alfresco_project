@@ -35,7 +35,7 @@ public class ExportCSV extends AbstractWebScript {
 	/**
 	 * Формат даты
 	 */
-	private static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss";
+	private static final String DATE_FORMAT = "dd MMM yyyy HH:mm:ss";
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
