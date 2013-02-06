@@ -40,12 +40,12 @@ public class OrgstructureStaffPositionPolicy {
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_POSITION, new JavaBehaviour(this, "onCreateStaffPosLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_STAFF_POSITION, new JavaBehaviour(this, "onUpdateStaffPosLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_STAFF_POSITION, new JavaBehaviour(this, "onUpdateStaffPosLog"));
 	}
 
 	public void onCreateStaffPosLog(ChildAssociationRef childAssocRef) {
 		NodeRef staffPos = childAssocRef.getChildRef();
-		businessJournalService.log(staffPos, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент в справочник «Должностные позиции» -  #mainobject", null);
+		businessJournalService.log(staffPos, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент в справочник «Должностные позиции» -  #mainobject");
 	}
 
 	public void onUpdateStaffPosLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -54,11 +54,11 @@ public class OrgstructureStaffPositionPolicy {
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о должностной позиции #mainobject", null);
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о должностной позиции #mainobject");
 		}
 
 		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
-			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о должностной позиции #mainobject", null);
+			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о должностной позиции #mainobject");
 		}
 	}
 }

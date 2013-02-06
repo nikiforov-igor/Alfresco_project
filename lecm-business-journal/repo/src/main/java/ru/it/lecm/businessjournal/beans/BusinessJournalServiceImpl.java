@@ -207,6 +207,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
+	@Override
+	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription) {
+		return log (mainObject, eventCategory, defaultDescription, null);
+	}
+
 	/**
 	 * Получение ссылки на Категорию События по имени категории
 	 * @param  eventCategory  - название категории события

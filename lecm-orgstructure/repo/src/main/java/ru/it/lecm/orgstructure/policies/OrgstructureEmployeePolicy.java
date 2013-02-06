@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -35,11 +36,15 @@ public class OrgstructureEmployeePolicy
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode")); // , Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateEmployeeLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onDeleteNode")); // , Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onDeleteNode"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateProperties"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateEmployeeLog"));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
@@ -62,8 +67,6 @@ public class OrgstructureEmployeePolicy
 		// Создаем ассоциацию сотруднику на персональные данные
 		nodeService.createAssociation(node, personalDataRef.getChildRef(), OrgstructureBean.ASSOC_EMPLOYEE_PERSON_DATA);
 
-		businessJournalService.log(getAuthService().getCurrentUserName(),
-					node, EventCategory.ADD, "Добавлен новый сотрудник #mainobject", null);
 		// сообщить 1) создание Сотрудника 2) связывание Сотрудника с Person/User.
 		{
 			final NodeRef employee = node;
@@ -96,6 +99,25 @@ public class OrgstructureEmployeePolicy
 	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
 		final NodeRef employee = childAssocRef.getChildRef();
 		notifyEmploeeDown(employee);
+	}
+
+	public void onCreateEmployeeLog(ChildAssociationRef childAssocRef) {
+		NodeRef node = childAssocRef.getChildRef();
+		businessJournalService.log(node, EventCategory.ADD, "Сотрудник #initiator добавил нового сотрудника - #mainobject");
+	}
+
+	public void onUpdateEmployeeLog (NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
+
+		if (before.size() == after.size() && !changed) {
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о сотруднике #mainobject");
+		}
+
+		if (changed && !curActive) {
+			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о сотруднике #mainobject");
+		}
 	}
 
 }

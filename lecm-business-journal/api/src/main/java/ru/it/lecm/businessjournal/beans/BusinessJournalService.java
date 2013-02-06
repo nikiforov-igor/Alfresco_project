@@ -165,6 +165,16 @@ public interface BusinessJournalService {
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
 	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) ;
+
+	/**
+	 * Метод для создания записи бизнеса-журнала с текущей датой
+	 *
+	 * @param mainObject - основной объект
+	 * @param  eventCategory  - категория события
+	 * @param  defaultDescription  - описание события
+	 * @return ссылка на ноду записи в бизнес журнале
+	 */
+	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription);
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект

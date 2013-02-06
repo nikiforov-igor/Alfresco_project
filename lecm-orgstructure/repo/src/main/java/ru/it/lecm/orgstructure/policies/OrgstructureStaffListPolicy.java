@@ -36,9 +36,9 @@ public class OrgstructureStaffListPolicy
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onUpdateStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onUpdateStaffListLog"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onDeleteStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onDeleteStaffListLog"));
 	}
 
 	public void onDeleteStaffListLog(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
@@ -72,21 +72,19 @@ public class OrgstructureStaffListPolicy
 		if (changed && employee != null) {
 			NodeRef unit = nodeService.getPrimaryParent(nodeRef).getParentRef();
 
-			String initiator = authService.getCurrentUserName();
-
 			String category;
 			String defaultDescription;
 			if (curPrimary) {
-				defaultDescription = "Сотрудник #mainobject назначен руководителем в подразделении #object1";
+				defaultDescription = "Сотрудник #inititator внес сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
 				category = EventCategory.TAKE_BOSS_POSITION;
 
 			} else {
-				defaultDescription = "Сотрудник #mainobject снят с руководящей позиции в подразделении #object1";
+				defaultDescription = "Сотрудник #inititator внес сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
 				category = EventCategory.RELEASE_BOSS_POSITION;
 			}
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(unit.toString());
-			businessJournalService.log(initiator, employee, category, defaultDescription, objects);
+			businessJournalService.log(employee, category, defaultDescription, objects);
 		}
 	}
 }
