@@ -57,7 +57,7 @@
 }
 
 .height-flood > .ijab-chat{
-    height: 100%;
+    height: 360px !important;
 }
 
 .height-flood  .ijab-chat-content{
