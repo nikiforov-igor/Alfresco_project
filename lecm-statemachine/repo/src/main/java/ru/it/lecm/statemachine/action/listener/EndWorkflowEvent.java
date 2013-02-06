@@ -54,6 +54,9 @@ public class EndWorkflowEvent implements ExecutionListener {
 						}
 					}
 				}
+				if (variables != null) {
+					helper.getOutputVariables(statemachineId, executionId, variables);
+				}
 				String taskId = helper.getCurrentTaskId(statemachineId);
 				helper.nextTransition(taskId);
 			} else if (actionName.equals(StateMachineActions.getActionName(UserWorkflow.class))) {
