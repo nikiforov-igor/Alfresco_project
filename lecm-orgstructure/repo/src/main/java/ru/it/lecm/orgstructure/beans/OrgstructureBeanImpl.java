@@ -75,12 +75,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 						organizationRef = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, rootName);
 						if (organizationRef == null) {
 							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
-							QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_ORGANIZATION);
+							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);;
 
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
 							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(companyHome, assocTypeQName, assocQName, nodeTypeQName, properties);
+							ChildAssociationRef associationRef = nodeService.createNode(companyHome, assocTypeQName, assocQName, TYPE_ORGANIZATION, properties);
 
 							/**
 							 Структура директорий
@@ -93,7 +92,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 							// Структура
 							assocTypeQName = ContentModel.ASSOC_CONTAINS;
 							assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, STRUCTURE_ROOT_NAME);
-							nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_STRUCTURE);
+							QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_STRUCTURE);
 							properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
 							properties.put(ContentModel.PROP_NAME, STRUCTURE_ROOT_NAME);
 							nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, properties);

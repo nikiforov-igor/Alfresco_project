@@ -150,4 +150,8 @@
 		<property name="authService" ref="authenticationService"/>
 	</bean>
 
+    <bean id="OrganizationUpdatePolicy" class="ru.it.lecm.orgstructure.policies.OrganizationUpdatePolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+    </bean>
 </beans>

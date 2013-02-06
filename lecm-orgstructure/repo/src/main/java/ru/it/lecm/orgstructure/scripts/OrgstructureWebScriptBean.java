@@ -64,7 +64,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String TYPE_POSITION = "staffPosition";
 	public static final String TYPE_ROLE = "workRole";
 	public static final String TYPE_BUSINESS_ROLE = "business-role";
-
+	public static final String TYPE_ORGANIZATION = "organization";
 	/**
 	 * Service registry
 	 */
@@ -247,7 +247,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 					}
 				}
 				sort(nodes,LABEL,true);
-			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION)) { //Вывести директорию "Структура"
+			} else if (type.equalsIgnoreCase(TYPE_ORGANIZATION)) { //Вывести директорию "Структура"
 				NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, OrgstructureBean.STRUCTURE_ROOT_NAME);
 				if (structure != null) {
 					JSONObject root = new JSONObject();

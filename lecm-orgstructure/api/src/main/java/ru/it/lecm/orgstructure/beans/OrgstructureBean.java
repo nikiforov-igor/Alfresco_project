@@ -1,11 +1,11 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.util.List;
+
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-
-import java.util.List;
 
 /**
  * User: PMelnikov
@@ -15,7 +15,6 @@ import java.util.List;
 public interface OrgstructureBean {
 
 	static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
-	String TYPE_ORGANIZATION = "organization";
 	String TYPE_DIRECTORY_EMPLOYEES = "employees";
 	String TYPE_DIRECTORY_STRUCTURE = "structure";
 	String TYPE_DIRECTORY_PERSONAL_DATA = "personal-data-container";
@@ -69,7 +68,7 @@ public interface OrgstructureBean {
 	QName TYPE_BUSINESS_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role");
 
 	QName TYPE_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "position");
-
+	QName TYPE_ORGANIZATION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization");
 	/**
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.
@@ -374,7 +373,6 @@ public interface OrgstructureBean {
 	/**
 	 * включить организационную единицу (подразделение или рабочую группу) в бизнес роль
 	 * @param businesssRoleRef ссылка на бизнес роль
-	 * @param employeeRef ссылка на подразделение или рабочую группу
 	 * @return установленная ассоциация между сотрудников и орг единицей
 	 */
 	AssociationRef includeOrgElementIntoBusinessRole (final NodeRef businesssRoleRef, final NodeRef orgElementRef);
@@ -404,7 +402,6 @@ public interface OrgstructureBean {
 	/**
 	 * исключить позицию в структуре предприятия (участник рабочей группы, штатное расписание) из бизнес роли
 	 * @param businesssRoleRef ссылка на бизнес роль
-	 * @param orgElementMemberRef ссылка на участника рабочей группы или штатное расписание
 	 */
 	void excludeOrgElementMemberFromBusinesssRole (final NodeRef businesssRoleRef, final NodeRef employeeRef);
 
