@@ -20,6 +20,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URLEncoder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -240,7 +241,7 @@ public class CreateIMUserPolicy implements OnUpdateNodePolicy {
         {
             NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
             Serializable userName = nodeService.getProperty(personRef, ContentModel.PROP_USERNAME);
-            return userName.toString();
+            return URLEncoder.encode(userName.toString(), "UTF-8");
         }
         catch (Exception e)
         {
@@ -259,7 +260,11 @@ public class CreateIMUserPolicy implements OnUpdateNodePolicy {
             NodeRef personRef = orgstructureBean.getPersonForEmployee(nodeRef);
             Serializable firstName = nodeService.getProperty(personRef, ContentModel.PROP_FIRSTNAME);
             Serializable lastName = nodeService.getProperty(personRef, ContentModel.PROP_LASTNAME);
-            return firstName.toString() + "%20" + lastName.toString();
+
+            String result = firstName + " " + lastName;
+            logger.trace("Name : "+result);
+            String encodedName = URLEncoder.encode(result, "UTF-8");
+            return encodedName;
         }
         catch (Exception e)
         {
