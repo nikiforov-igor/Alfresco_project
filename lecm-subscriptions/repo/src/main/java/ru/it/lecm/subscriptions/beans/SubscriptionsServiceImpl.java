@@ -187,11 +187,12 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(0);
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-		QName assocQName = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, subscribeName);
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, subscribeName);
 
-		if (description != null && description.equals("")) {
+		if (description != null) {
 			properties.put(PROP_DESCRIPTION, description);
 		}
+		properties.put(ContentModel.PROP_NAME, subscribeName);
 		ChildAssociationRef subscriptionsRef = nodeService.createNode(subscriptionRootRef, assocTypeQName, assocQName,
 				TYPE_SUBSCRIPTION_TO_OBJECT, properties);
 
@@ -211,6 +212,10 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 	                                        List<NodeRef> employee, List<NodeRef> workGroup,
 	                                        List<NodeRef> organizationUnit, List<NodeRef> position) {
 
+		if (!orgstructureService.isCurrentUserTheSystemUser() && !isBJEngineer()) {
+			logger.warn("Do not create subscription type current employee is not subscription engineer");
+			return null;
+		}
 		NodeRef subscriptionRootRef = getSubscriptionRootRef();
 
 		String subscribeName;
@@ -221,11 +226,12 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 		}
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(0);
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-		QName assocQName = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, subscribeName);
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, subscribeName);
 
-		if (description != null && description.equals("")) {
+		if (description != null) {
 			properties.put(PROP_DESCRIPTION, description);
 		}
+		properties.put(ContentModel.PROP_NAME, subscribeName);
 		ChildAssociationRef subscriptionsRef = nodeService.createNode(subscriptionRootRef, assocTypeQName, assocQName,
 				TYPE_SUBSCRIPTION_TO_TYPE, properties);
 		// Создаем ассоциацию подписки на тип объекта
