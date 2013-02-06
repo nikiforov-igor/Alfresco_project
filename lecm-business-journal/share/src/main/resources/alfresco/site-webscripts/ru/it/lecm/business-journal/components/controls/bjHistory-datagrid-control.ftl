@@ -13,7 +13,7 @@
                     var datagrid = new LogicECM.module.BusinessJournal.DataGrid('${containerId}').setOptions({
                         usePagination: true,
                         pageSize: 10,
-                        showExtendSearchBlock: false,
+                        showExtendSearchBlock: true,
                         datagridMeta: {
                                 itemType: "lecm-busjournal:bjRecord",
                                 datagridFormId: "bjHistory",
@@ -30,7 +30,7 @@
                         allowCreate: false,
                         showActionColumn: false,
                         showCheckboxColumn: false,
-                        bubblingLabel: "${bubblingLabel!"bj-records"}",
+                        bubblingLabel: "${bubblingLabel!"bj-history-records"}",
                         attributeForShow:"lecm-busjournal:bjRecord-date"
                     }).setMessages(${messages});
 

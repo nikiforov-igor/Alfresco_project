@@ -32,7 +32,7 @@
 							bubblingLabel: "${bubblingLabel!"bj-records"}",
 							showCheckboxColumn: true,
 							attributeForShow:"lecm-busjournal:bjRecord-date",
-                            advSearchFormId: "busjournal-search"
+                            advSearchFormId: "busjournal-search-form"
 						}).setMessages(${messages});
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
@@ -45,7 +45,8 @@
                                 sort:"lecm-busjournal:bjRecord-date|desc"
                             }
                         },
-                        bubblingLabel: "bj-records"
+                        bubblingLabel: "bj-records",
+                        advSearchFormId: "busjournal-search-form"
                     });
                 });
 			}
