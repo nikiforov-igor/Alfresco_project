@@ -251,6 +251,8 @@
                     <show id="lecm-busjournal:bjRecord-description"/>
                     <show id="lecm-busjournal:bjRecord-initiator"/>
                     <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-evCategory-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-objType-assoc-text-content"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
                     <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
