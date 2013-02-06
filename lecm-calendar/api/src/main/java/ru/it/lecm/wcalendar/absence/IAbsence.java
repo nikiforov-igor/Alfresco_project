@@ -30,6 +30,10 @@ public interface IAbsence {
 	 */
 	QName PROP_ABSENCE_END = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "end");
 	/**
+	 * Флаг, обозначающий, что отсутствие бессрочное, lecm-absence:unlimited
+	 */
+	QName PROP_ABSENCE_UNLIMITED = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "unlimited");
+	/**
 	 * Тип объекта для Отсутствий, lecm-absence:absence
 	 */
 	QName TYPE_ABSENCE = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "absence");
@@ -68,4 +72,58 @@ public interface IAbsence {
 	 * данный промежуток отсутствие уже запланировано.
 	 */
 	boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end);
+
+	/**
+	 * Проверить, отсутствует ли указанный сотрудника указанный день.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param date интересующая нас дата отсутствия
+	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
+	 * не планировал отсутствия.
+	 */
+	boolean isEmployeeAbscent(NodeRef nodeRef, Date date);
+
+	/**
+	 * Проверить, отсутствует ли сегодня указанный сотрудник.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @return true - сотрудник сегодня отсутствует
+	 */
+	boolean isEmployeeAbscentToday(NodeRef nodeRef);
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * указанную дату.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param date дата, на которую надо получить экземпляр отсутствия.
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим на указанную дату. Если такового нет, то null
+	 */
+	NodeRef getActiveAbsence(NodeRef nodeRef, Date date);
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * сегодня.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим сегодня.
+	 */
+	NodeRef getActiveAbsence(NodeRef nodeRef);
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в определенное значение.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence
+	 * @param date дата, в которую необходимо установить параметр "end"
+	 */
+	void setAbsenceEnd(NodeRef nodeRef, Date date);
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в текущую дату и время.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence
+	 */
+	void setAbsenceEnd(NodeRef nodeRef);
 }

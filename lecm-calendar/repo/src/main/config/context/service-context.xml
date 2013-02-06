@@ -70,4 +70,8 @@
 		<property name="sheduleService" ref="lecmSheduleService"/>
 		<property name="wCalService" ref="lecmSheduleService"/>
 	</bean>
+	<bean id="webscript.ru.it.lecm.wcalendar.absence.AbsenceCancelShowDialogWebScript.get" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceCancelShowDialogWebScript" parent="webscript">
+		<property name="absenceService" ref="lecmAbsenceService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
 </beans>

@@ -67,6 +67,7 @@
                         <item type="link" id="my-profile">{userprofilepage}</item>
 						<item type="link" id="user-profile">/my-absence</item>
 						<item type="link" id="instant-absence">/instant-absence</item>
+						<item type="link" id="cancel-absence">/cancel-absence</item>
                         <item type="link" id="change-password" condition="user.capabilities.isMutable">/user/change-password</item>
                         <item type="external-link" id="help">{share-help}</item>
                         <item type="link" id="logout" condition="!context.externalAuthentication">/dologout</item>

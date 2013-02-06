@@ -22,6 +22,7 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
  */
 public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	// Получить логгер, чтобы писать, что с нами происходит.
+
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
 	@Override
@@ -120,6 +121,61 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 				}
 			}
 		}
- 		return suitable;
+		return suitable;
+	}
+
+	@Override
+	public boolean isEmployeeAbscent(NodeRef nodeRef, Date date) {
+		boolean result = false;
+		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
+		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
+			for (NodeRef absence : employeeAbsence) {
+				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
+				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				if (date.after(absenceBegin) && date.before(absenceEnd)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public boolean isEmployeeAbscentToday(NodeRef nodeRef) {
+		return isEmployeeAbscent(nodeRef, new Date());
+	}
+
+	@Override
+	public NodeRef getActiveAbsence(NodeRef nodeRef, Date date) {
+		NodeRef result = null;
+		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
+		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
+			for (NodeRef absence : employeeAbsence) {
+				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
+				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				if (date.after(absenceBegin) && date.before(absenceEnd)) {
+					result = absence;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getActiveAbsence(NodeRef nodeRef) {
+		return getActiveAbsence(nodeRef, new Date());
+	}
+
+	@Override
+	public void setAbsenceEnd(NodeRef nodeRef, Date date) {
+		nodeService.setProperty(nodeRef, PROP_ABSENCE_END, date);
+		nodeService.setProperty(nodeRef, PROP_ABSENCE_UNLIMITED, false);
+	}
+
+	@Override
+	public void setAbsenceEnd(NodeRef nodeRef) {
+		setAbsenceEnd(nodeRef, new Date());
 	}
 }

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>If current employee abscent today</shortname>
+	<description>Check if current employee has planned abscense for today</description>
+	<url>/lecm/wcalendar/absence/get/isCurrentEmployeeAbscentToday</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>
