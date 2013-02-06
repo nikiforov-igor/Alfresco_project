@@ -1926,20 +1926,24 @@ div.orgchart-picker-menu .search-input {
     padding: 0;
 }
 
-span.person
-{
+span.person {
 	background: url(../../components/images/filetypes/generic-user-16.png) no-repeat;
 }
 
-span.person a
-{
+span.person a {
 	display: inline-block;
 	margin-left: 20px;
 }
 
-.datagrid span.person a
-{
-	margin-left: 0;
+.yui-skin-lecmTheme .datagrid span.person,
+.yui-skin-lecmTheme .datagrid span.container,
+.yui-skin-lecmTheme .datagrid span.document {
+    padding-left: 0;
+}
+.yui-skin-lecmTheme .datagrid span.person a,
+.yui-skin-lecmTheme .datagrid span.container a,
+.yui-skin-lecmTheme .datagrid span.document a {
+	margin-left: 20px;
 }
 
 #searchBlock .right {
