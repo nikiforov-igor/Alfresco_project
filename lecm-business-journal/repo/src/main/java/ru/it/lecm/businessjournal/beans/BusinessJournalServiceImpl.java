@@ -21,6 +21,7 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.alfresco.util.ParameterCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -139,10 +140,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception{
-		if (mainObject == null) {
-			throw new Exception("Основной объект должен быть заданы!");
-		}
+	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
+		ParameterCheck.mandatory ("mainObject", mainObject);
+
 		// заполняем карту плейсхолдеров
 		Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
 		// пытаемся получить объект Категория события по ключу
@@ -158,7 +158,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
     @Override
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+    public NodeRef log(Date date, String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
 	    PersonService personService = serviceRegistry.getPersonService();
 	    NodeRef person = null;
 	    if (personService.personExists(initiator)) {
@@ -168,12 +168,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     }
 
 	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(NodeRef initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
 		return log(new Date(), initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(String initiator, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
 		PersonService personService = serviceRegistry.getPersonService();
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
@@ -183,12 +183,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
 		return log(new Date(), mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(Date date, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) throws Exception {
+	public NodeRef log(Date date, NodeRef mainObject, EventCategory eventCategory, String defaultDescription, List<String> objects) {
 		AuthenticationService authService = serviceRegistry.getAuthenticationService();
 		String initiator = authService.getCurrentUserName();
 		return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
@@ -639,6 +639,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return records;
     }
 
+	@Override
 	public boolean moveRecordToArchive(final NodeRef record) {
 		if (!orgstructureService.isCurrentUserTheSystemUser() && !isBJEngineer()) {
 			logger.warn("Current employee is not business journal engeneer");
