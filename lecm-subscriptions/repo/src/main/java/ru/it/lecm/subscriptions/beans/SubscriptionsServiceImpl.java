@@ -11,7 +11,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -23,11 +27,12 @@ import java.util.*;
  * Time: 17:09
  */
 public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsService {
+	final protected Logger logger = LoggerFactory.getLogger(SubscriptionsServiceImpl.class);
 
 	private ServiceRegistry serviceRegistry;
 	private Repository repositoryHelper;
 	private OrgstructureBean orgstructureService;
-
+	private static BusinessJournalService businessJournalService;
 
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -40,6 +45,10 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	public OrgstructureBean getOrgstructureService() {
@@ -267,6 +276,28 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 	@Override
 	public void unsubscribe(NodeRef nodeRef) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(SubscriptionsService.ASSOC_SUBSCRIPTION_OBJECT);
+		NodeRef objectRef = null;
+		List<String> objectsList = new ArrayList<String>();
+		AssociationRef objectAssocRef = nodeService.getTargetAssocs(nodeRef, SubscriptionsService.ASSOC_SUBSCRIPTION_OBJECT).get(0);
+		if (objectAssocRef != null)  {
+			objectRef = objectAssocRef.getTargetRef();
+			objectsList.add(objectRef.toString());
+
+			try {
+				if (orgstructureService.isEmployee(objectRef)) {
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на действия сотрудника  #object1", objectsList);
+				} else if (orgstructureService.isWorkGroup(objectRef)) {
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на действия рабочей группы  #object1", objectsList);
+				} else {
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на #object1", objectsList);
+				}
+			} catch (Exception e) {
+				logger.error("Could not create the record business-journal", e);
+			}
+		}
+
 		nodeService.deleteNode(nodeRef);
 	}
 

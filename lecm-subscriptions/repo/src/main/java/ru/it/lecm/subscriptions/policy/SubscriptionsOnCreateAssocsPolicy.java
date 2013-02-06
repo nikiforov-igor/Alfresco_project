@@ -10,7 +10,7 @@ import ru.it.lecm.subscriptions.beans.SubscriptionsService;
  * Date: 05.02.13
  * Time: 17:18
  */
-public class SubscriptionsToTypeOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
+public class SubscriptionsOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
 	@Override
 	public final void init() {
 		super.init();

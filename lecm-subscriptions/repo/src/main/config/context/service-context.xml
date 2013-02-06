@@ -69,12 +69,13 @@
 	</bean>
 
 	<bean id="subscriptionsService" init-method="init" class="ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl"
-	      depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService, serviceOrgstructure">
+	      depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService, serviceOrgstructure, businessJournalService">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
 	<bean id="businessJournalSchedule" class="ru.it.lecm.subscriptions.schedule.BusinessJournalSchedule">
@@ -145,7 +146,7 @@
 		</property>
 	</bean>
 
-	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeOnCreateAssocsPolicy"
+	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsOnCreateAssocsPolicy"
 	      init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
@@ -158,6 +159,19 @@
 		</property>
 		<property name="dictionaryService">
 			<ref bean="dictionaryService"/>
+		</property>
+	</bean>
+
+	<bean id="subscriptionsToObjectLogEventsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToObjectLogEventsPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+		<property name="orgstructureService">
+			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
 
