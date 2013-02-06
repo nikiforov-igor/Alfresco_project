@@ -145,6 +145,22 @@
 		</property>
 	</bean>
 
+	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeOnCreateAssocsPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
+		</property>
+	</bean>
+
 <!--
 	<bean id="subscribeTypeCategoryPolicy" class="ru.it.lecm.subscriptions.policy.TypeCategoryPolicy"
 		  init-method="init">

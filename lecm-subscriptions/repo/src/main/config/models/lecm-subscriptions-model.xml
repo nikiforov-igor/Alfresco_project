@@ -44,6 +44,24 @@
 					<title>Текстовая ссылка на сотрудника (для поиска)</title>
 					<type>d:text</type>
 				</property>
+				<property name="lecm-subscr:notification-type-assoc-text-content">
+					<title>Notification types</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-subscr:destination-employee-assoc-text-content">
+					<title>Employees</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<!-- Ссылка на тип доставки-->
@@ -102,6 +120,51 @@
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-subscr:destination-position-assoc-text-content">
+					<title>Positions</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-subscr:destination-organization-unit-assoc-text-content">
+					<title>Organization units</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-subscr:destination-work-group-assoc-text-content">
+					<title>Work groups</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-subscr:object-type-assoc-text-content">
+					<title>Object type</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-subscr:event-category-assoc-text-content">
+					<title>Event category</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
 				</property>
 			</properties>
 			<associations>
@@ -172,6 +235,17 @@
 		<type name="lecm-subscr:subscription-to-object">
 			<title>Subscription To Object</title>
 			<parent>lecm-subscr:subscription-base</parent>
+			<properties>
+				<property name="lecm-subscr:subscription-object-assoc-text-content">
+					<title>Subscription object</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<associations>
 				<!-- Ссылка на объект подписки -->
 				<association name="lecm-subscr:subscription-object-assoc">
