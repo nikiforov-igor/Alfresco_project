@@ -6,10 +6,12 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract:regnum" force="true"/>
+					<show id="lecm-document:sys_workflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
 					<field id="lecm-contract:regnum"/>
+					<field id="lecm-document:sys_workflows"/>
 				</appearance>
 			</form>
 		</forms>

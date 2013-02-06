@@ -15,6 +15,11 @@
 		<type name="lecm-document:base">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-document:sys_workflows">
+					<type>d:text</type>
+				</property>
+			</properties>
 		</type>
 	</types>
 

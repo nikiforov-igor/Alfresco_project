@@ -75,79 +75,59 @@ public class StateMachineHelper {
 		StateMachineHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
 	}
 
-	public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
-		startUserWorkflowProcessing(taskId, workflowId, assignee, false);
-	}
-
-	public void startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee, final boolean async) {
-		Timer timer = new Timer();
+	public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
 		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+		WorkflowService workflowService = serviceRegistry.getWorkflowService();
+		WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
 
-					@Override
-					public Object doWork() throws Exception {
-						// код
-						WorkflowService workflowService = serviceRegistry.getWorkflowService();
-						WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
+		Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+		NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
 
-						Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
-						NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+		NodeService nodeService = serviceRegistry.getNodeService();
+		List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
 
-						NodeService nodeService = serviceRegistry.getNodeService();
-						List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
-
-						NodeRef subprocessPackage = workflowService.createPackage(null);
-						for (ChildAssociationRef document : documents) {
-							nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
-						}
-						workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
-						//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
-						AssignExecution assignExecution = new AssignExecution();
-						assignExecution.execute(assignee);
-						NodeRef person = assignExecution.getNodeRefResult();
-						if (person == null) return null;
-						workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
+		NodeRef subprocessPackage = workflowService.createPackage(null);
+		for (ChildAssociationRef document : documents) {
+			nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
+		}
+		workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
+		//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
+		AssignExecution assignExecution = new AssignExecution();
+		assignExecution.execute(assignee);
+		NodeRef person = assignExecution.getNodeRefResult();
+		if (person == null) return null;
+		workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
 
 /*
-						List<NodeRef> assignees = Arrays.asList(personManager.get(USER2), personManager.get(USER3));
-						params.put(WorkflowModel.ASSOC_ASSIGNEES, (Serializable) assignees);
+		List<NodeRef> assignees = Arrays.asList(personManager.get(USER2), personManager.get(USER3));
+		params.put(WorkflowModel.ASSOC_ASSIGNEES, (Serializable) assignees);
 */
 
-						/*Set<NodeRef> persons = assignExecution.getRealPersons(assignee);
-						if (persons.size() > 1) {
-							//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEES, persons);
-						} else if (persons.size() > 0) {
-							for (NodeRef person : persons) {
-								workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
-							};
-						}*/
+		/*Set<NodeRef> persons = assignExecution.getRealPersons(assignee);
+		if (persons.size() > 1) {
+			//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEES, persons);
+		} else if (persons.size() > 0) {
+			for (NodeRef person : persons) {
+				workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
+			};
+		}*/
 
-						if (!async) {
-							workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
-						}
-						// get the moderated workflow
-						WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
-						if (wfDefinition == null) {
-							throw new IllegalStateException("noworkflow: " + workflowId);
-						}
+		//if (!async) {
+		//	workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
+		//}
+		// get the moderated workflow
+		WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
+		if (wfDefinition == null) {
+			throw new IllegalStateException("noworkflow: " + workflowId);
+		}
 
-						// start the workflow
-						WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-						String instnaceId = path.getInstance().getId();
-						WorkflowTask startTask = workflowService.getStartTask(instnaceId);
-						workflowService.endTask(startTask.getId(), null);
-						//workflowService.endTask(task.getId(), null);
-						return null;
-					}
-				}, user);
+		// start the workflow
+		WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+		String instanceId = path.getInstance().getId();
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+		workflowService.endTask(startTask.getId(), null);
+		return instanceId;
 
-			}
-		};
-
-		timer.schedule(task, 1000);
 	}
 
 	public void stopUserWorkflowProcessing(DelegateExecution delegateExecution) {
@@ -386,6 +366,12 @@ public class StateMachineHelper {
 		}
 	}
 
+	public NodeRef getStatemachineDocument(String executionId) {
+		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+		NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+		return serviceRegistry.getNodeService().getChildAssocs(nodeRef).get(0).getChildRef();
+	}
+
 	private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
 		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
 		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
@@ -398,6 +384,5 @@ public class StateMachineHelper {
 		}
 		return result;
 	}
-
 
 }

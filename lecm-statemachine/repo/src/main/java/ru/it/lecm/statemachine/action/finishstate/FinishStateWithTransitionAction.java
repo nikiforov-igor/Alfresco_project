@@ -49,11 +49,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					variableValue = value;
 				}
 			}
-			WorkflowVariables variables = null;
-			Element workflowVariablesElement = attribute.element("workflowVariables");
-			if (workflowVariablesElement != null) {
-				variables = new WorkflowVariables(workflowVariablesElement);
-			}
+			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
 			NextState nextState = new NextState(actionId, label, workflowId, outputVariable, variableValue, variables);
 			states.add(nextState);
 		}

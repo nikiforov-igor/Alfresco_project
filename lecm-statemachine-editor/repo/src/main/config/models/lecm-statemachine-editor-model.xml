@@ -292,7 +292,7 @@
 
 		<type name="lecm-stmeditor:UserWorkflowEntity">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
-			<parent>cm:content</parent>
+			<parent>lecm-stmeditor:action</parent>
 			<properties>
 				<property name="lecm-stmeditor:workflowLabel">
 					<type>d:text</type>

@@ -16,12 +16,12 @@
 			<td>${document.taskId}</td>
 			<td>
 				<#list document.states as state>
-					<button onclick="workflowForm.show('${document.nodeRef}', '${state.workflowId}', '${document.taskId}', '${state.actionId}')">${state.label}</button>
+					<button onclick="workflowForm.show('trans', '${document.nodeRef}', '${state.workflowId}', '${document.taskId}', '${state.actionId}')">${state.label}</button>
 				</#list>
 			</td>
             <td>
                 <#list document.workflows as workflow>
-                    <button onclick="workflowForm.show('${document.nodeRef}', '${workflow.workflowId}', '${document.taskId}', null, '<#list workflow.assignees as assignee>${assignee}<#if assignee_has_next>,</#if></#list>')">${workflow.label}</button>
+                    <button onclick="workflowForm.show('user','${document.nodeRef}', '${workflow.workflowId}', '${document.taskId}', '${workflow.id}', '<#list workflow.assignees as assignee>${assignee}<#if assignee_has_next>,</#if></#list>')">${workflow.label}</button>
                 </#list>
             </td>
 		</tr>

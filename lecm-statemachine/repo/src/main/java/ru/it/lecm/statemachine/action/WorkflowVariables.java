@@ -34,6 +34,8 @@ public class WorkflowVariables {
 	private List<WorkflowVariable> output = new ArrayList<WorkflowVariable>();
 
 	public WorkflowVariables(Element workflowVariablesElement) {
+		if (workflowVariablesElement == null) return;
+
 		List<Element> variables = workflowVariablesElement.elements("input");
 		for (Element variable : variables) {
 			input.add(pack(variable));

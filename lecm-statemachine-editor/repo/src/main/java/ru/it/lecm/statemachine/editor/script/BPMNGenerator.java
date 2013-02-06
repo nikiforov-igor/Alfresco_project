@@ -433,14 +433,17 @@ public class BPMNGenerator {
 			for (ChildAssociationRef workflow : workflows) {
 				Element attribute;
 				actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
+				String id = "id" + workflow.getChildRef().getId().replace("-", "");
 				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
 				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
 				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
 				attribute = doc.createElement("lecm:attribute");
+				attribute.setAttribute("id", id);
 				attribute.setAttribute("label", workflowLabel);
 				attribute.setAttribute("workflowId", workflowId);
 				attribute.setAttribute("assignee", assignee);
 				actionElement.appendChild(attribute);
+				appendWorkflowVariables(attribute, workflow.getChildRef());
 			}
 			eventElement.appendChild(actionElement);
 		}
@@ -511,6 +514,10 @@ public class BPMNGenerator {
 			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
 			String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
 			attribute = doc.createElement("lecm:attribute");
+			attribute.setAttribute("name", "id");
+			attribute.setAttribute("value", "id" + workflow.getChildRef().getId().replace("-", ""));
+			actionElement.appendChild(attribute);
+			attribute = doc.createElement("lecm:attribute");
 			attribute.setAttribute("name", "workflowId");
 			attribute.setAttribute("value", workflowId);
 			actionElement.appendChild(attribute);
@@ -519,6 +526,7 @@ public class BPMNGenerator {
 			attribute.setAttribute("value", assignee);
 			actionElement.appendChild(attribute);
 			eventElement.appendChild(actionElement);
+			appendWorkflowVariables(actionElement, workflow.getChildRef());
 		}
 		return Collections.EMPTY_LIST;
 	}
@@ -592,8 +600,8 @@ public class BPMNGenerator {
 		return flows;
 	}
 
-	private void appendWorkflowVariables(Element attribute, NodeRef transition) {
-		List<ChildAssociationRef> variables = nodeService.getChildAssocs(transition);
+	private void appendWorkflowVariables(Element attribute, NodeRef workflow) {
+		List<ChildAssociationRef> variables = nodeService.getChildAssocs(workflow);
 		if (variables.size() > 0) {
 			Element workflowVariables = doc.createElement("lecm:workflowVariables");
 			attribute.appendChild(workflowVariables);

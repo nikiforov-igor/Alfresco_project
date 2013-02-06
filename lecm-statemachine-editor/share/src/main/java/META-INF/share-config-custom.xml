@@ -428,6 +428,8 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowId">
@@ -436,7 +438,21 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:assignee" />
+					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+							<control-param name="height">100</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:outputVariable</control-param>
+							<control-param name="height">100</control-param>
+						</control>
+					</field>
 				</appearance>
+
 			</form>
 		</forms>
 	</config>
@@ -488,6 +504,8 @@
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
+					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
+					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
@@ -495,6 +513,19 @@
 						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
 							<control-param name="withEmpty">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:assignee" />
+					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+							<control-param name="height">100</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:outputVariable</control-param>
+							<control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>

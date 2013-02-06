@@ -89,6 +89,7 @@ public class DocumentListScript extends DeclarativeWebScript {
 										AssignExecution assignExecution = new AssignExecution();
                                         for (UserWorkflow.UserWorkflowEntity entity : entities) {
                                             HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                            workflow.put("id", entity.getId());
                                             workflow.put("label", entity.getLabel());
                                             workflow.put("workflowId", entity.getWorkflowId());
 											assignExecution.execute(entity.getAssignee());

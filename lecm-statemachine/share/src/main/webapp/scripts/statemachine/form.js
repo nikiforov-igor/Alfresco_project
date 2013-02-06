@@ -51,7 +51,7 @@ LogicECM.module = LogicECM.module || {};
             }
 		},
 
-		show:function showWorkflowForm(nodeRef, workflowId, taskId, actionId, assignee) {
+		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee) {
             this.assignee = assignee;
 			if (workflowId != null && workflowId != 'null') {
 				this.selectedItem = nodeRef;
@@ -71,22 +71,23 @@ LogicECM.module = LogicECM.module || {};
 					destroyOnHide:true,
 					onSuccess:{
 						fn:function (response) {
-							this._chooseState(taskId, response.json.persistedObject, actionId);
+							this._chooseState(type, taskId, response.json.persistedObject, actionId);
 						},
 						scope:this
 					}
 				}).show();
 			} else {
-				this._chooseState(taskId, null, actionId);
+				this._chooseState("trans", taskId, null, actionId);
 			}
 		},
 
-		_chooseState:function (taskId, formResponse, actionId) {
-			var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
+		_chooseState:function (type, taskId, formResponse, actionId) {
+			var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
 			url = YAHOO.lang.substitute(url, {
+				actionType: type,
 				taskId:taskId,
 				formResponse: encodeURIComponent(formResponse),
-				actionId:actionId
+				actionId: actionId ? actionId : ""
 			});
 			callback = {
 				success:function (oResponse) {

@@ -8,7 +8,7 @@ import org.activiti.engine.impl.pvm.process.ScopeImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.impl.util.xml.Element;
 import org.activiti.engine.impl.variable.VariableDeclaration;
-import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionEndWorkflowEvent;
+import ru.it.lecm.statemachine.action.listener.EndWorkflowEvent;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 
 	@Override
 	public void parseEndEvent(Element element, ScopeImpl scope, ActivityImpl activity) {
-		activity.addExecutionListener(ExecutionListener.EVENTNAME_END, new FinishStateWithTransitionEndWorkflowEvent());
+		activity.addExecutionListener(ExecutionListener.EVENTNAME_END, new EndWorkflowEvent());
 		appendExtention(element, activity);
 	}
 

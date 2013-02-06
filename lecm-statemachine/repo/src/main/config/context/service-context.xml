@@ -76,6 +76,12 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
+	<bean id="workflowUtil" class="ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil" >
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+	</bean>
+
 	<bean id="documentStateMachineBean" class="ru.it.lecm.statemachine.bean.DocumentStateMachineBean"/>
 
 	<bean id="stateMachineCreateDocumentPolicy"
@@ -86,7 +92,7 @@
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
-		  class="ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionScript"
+		  class="ru.it.lecm.statemachine.action.script.StartWorkflowScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>

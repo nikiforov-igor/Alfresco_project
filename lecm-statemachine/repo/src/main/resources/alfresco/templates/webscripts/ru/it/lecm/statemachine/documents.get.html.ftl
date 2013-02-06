@@ -19,6 +19,7 @@
     workflows: [
         <#list document.workflows as workflow>
         {
+        id: "${workflow.id!"null"}",
         label: "${workflow.label}",
         workflowId: "${workflow.workflowId!"null"}",
         assignees: [
