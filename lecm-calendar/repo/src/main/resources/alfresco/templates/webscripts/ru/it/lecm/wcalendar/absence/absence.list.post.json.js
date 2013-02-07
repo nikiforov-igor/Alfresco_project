@@ -11,83 +11,85 @@ var pageContext = url.templateArgs["context"];
 var currentEmployee = orgstructure.getCurrentEmployee();
 if (!currentEmployee) {
 	logger.log("ERROR: current employee is null!");
-}
-var myAbsences = [];
-var items, i, j, abscentEmployeeRef;
-if (absence.isAbsenceAssociated(currentEmployee.nodeRef.toString())) {
-	myAbsences = absence.getAbsenceByEmployee(currentEmployee.nodeRef.toString());
-}
-
-// в профиле показать только свои отсутствия
-if (pageContext.toString() == "profile") {
-	items = model.data.items;
-	for (i = 0; i < items.length; ++i) {
-		abscentEmployeeRef =  items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
-		if (!abscentEmployeeRef.equals(currentEmployee.nodeRef)){
-			items.splice(i, 1);
-			model.data.paging.totalRecords -= 1;
-			i--;
-		}
+	destroyData();
+} else {
+	var myAbsences = [];
+	var items, i, j, abscentEmployeeRef;
+	if (absence.isAbsenceAssociated(currentEmployee.nodeRef.toString())) {
+		myAbsences = absence.getAbsenceByEmployee(currentEmployee.nodeRef.toString());
 	}
 
-} else if (pageContext.toString() == "admin") {
-	var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
-	var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString());
-
-	if (!isEngineer && isBoss) {
-		// если чувак не технолог, то получаем список его подчиненных.
-		// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
-		if (!currentEmployee.nodeRef) {
-			logger.log("ERROR: there is no nodeRef for currentEmployee");
-		}
-		var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef);
-		// получаем nodeRef сотрудников
-		var emplyeeRefs = [];
-		for (i = 0; i < employees.length; ++i) {
-			var employeeRef = employees[i].nodeRef;
-			if (employeeRef) {
-				emplyeeRefs.push(employeeRef);
-			} else {
-				logger.log("ERROR: there is no nodeRef for employee");
-			}
-		}
-		// бежим по model.data.items для каждого элемента проверяем его ассоциацию с сотрудником и наличие сотрудника в emplyeeRefs
-		// если его нет, то удаляем его из model.data.items
+	// в профиле показать только свои отсутствия
+	if (pageContext.toString() == "profile") {
 		items = model.data.items;
 		for (i = 0; i < items.length; ++i) {
-			var seen = false;
+			abscentEmployeeRef =  items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
+			if (!abscentEmployeeRef.equals(currentEmployee.nodeRef)){
+				items.splice(i, 1);
+				model.data.paging.totalRecords -= 1;
+				i--;
+			}
+		}
 
-			abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
-			for (j = 0; j < emplyeeRefs.length; ++j) {
-				if (abscentEmployeeRef.equals(emplyeeRefs[j])) {
-					seen = true;
-					break;
+	} else if (pageContext.toString() == "admin") {
+		var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
+		var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString());
+
+		if (!isEngineer && isBoss) {
+			// если чувак не технолог, то получаем список его подчиненных.
+			// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
+			if (!currentEmployee.nodeRef) {
+				logger.log("ERROR: there is no nodeRef for currentEmployee");
+			}
+			var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef);
+			// получаем nodeRef сотрудников
+			var emplyeeRefs = [];
+			for (i = 0; i < employees.length; ++i) {
+				var employeeRef = employees[i].nodeRef;
+				if (employeeRef) {
+					emplyeeRefs.push(employeeRef);
+				} else {
+					logger.log("ERROR: there is no nodeRef for employee");
 				}
 			}
-			if (!seen) {
-				items.splice(i, 1);
-				model.data.paging.totalRecords -= 1;
-				i--;
+			// бежим по model.data.items для каждого элемента проверяем его ассоциацию с сотрудником и наличие сотрудника в emplyeeRefs
+			// если его нет, то удаляем его из model.data.items
+			items = model.data.items;
+			for (i = 0; i < items.length; ++i) {
+				var seen = false;
+
+				abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
+				for (j = 0; j < emplyeeRefs.length; ++j) {
+					if (abscentEmployeeRef.equals(emplyeeRefs[j])) {
+						seen = true;
+						break;
+					}
+				}
+				if (!seen) {
+					items.splice(i, 1);
+					model.data.paging.totalRecords -= 1;
+					i--;
+				}
 			}
-		}
-	} else if (isEngineer) {
-		// удалим себя из списка, к себе на страницу мы и так можем попасть
-		items = model.data.items;
-		for (i = 0; i < items.length; ++i) {
-			abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
-			if (abscentEmployeeRef.equals(currentEmployee.nodeRef)){
-				items.splice(i, 1);
-				model.data.paging.totalRecords -= 1;
-				i--;
+		} else if (isEngineer) {
+			// удалим себя из списка, к себе на страницу мы и так можем попасть
+			items = model.data.items;
+			for (i = 0; i < items.length; ++i) {
+				abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
+				if (abscentEmployeeRef.equals(currentEmployee.nodeRef)){
+					items.splice(i, 1);
+					model.data.paging.totalRecords -= 1;
+					i--;
+				}
 			}
+		} else {
+			// непонятно, как сюда пришел. не показываем ничего.
+			destroyData();
 		}
 	} else {
 		// непонятно, как сюда пришел. не показываем ничего.
 		destroyData();
 	}
-} else {
-	// непонятно, как сюда пришел. не показываем ничего.
-	destroyData();
 }
 
 function destroyData() {
