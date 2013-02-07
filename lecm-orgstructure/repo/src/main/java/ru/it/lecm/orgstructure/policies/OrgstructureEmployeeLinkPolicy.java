@@ -18,12 +18,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Time: 16:21
  */
 public class OrgstructureEmployeeLinkPolicy
-	extends SecurityJournalizedPolicyBase
-	implements
-		  NodeServicePolicies.OnCreateNodePolicy
+		extends SecurityJournalizedPolicyBase
+		implements
+		NodeServicePolicies.OnCreateNodePolicy
 		, NodeServicePolicies.OnCreateAssociationPolicy
-		, NodeServicePolicies.OnDeleteAssociationPolicy
-{
+		, NodeServicePolicies.OnDeleteAssociationPolicy {
 
 	@Override
 	public void init() {
@@ -69,11 +68,19 @@ public class OrgstructureEmployeeLinkPolicy
 				// назначение СОтрудника на должность
 				notifyEmploeeSetDP(employee, position);
 			} else {
+				// Назначение на роль
+				String defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject на роль #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(staff);
+				NodeRef group = orgstructureService.getWorkGroupByWorkForce(staff);
+				List<String> objects = new ArrayList<String>(2);
+				objects.add(role != null ? role.toString() : "");
+				objects.add(group != null ? group.toString() : "");
+				businessJournalService.log(employee, EventCategory.TAKE_GROUP_ROLE, defaultDescription, objects);
+				// уведомление
 				notifyEmploeeSetBR(employee, role);
 			}
 		} catch (Exception e) {
-			logger.error( "Exception at association post processing onCreateAssociation:", e);
+			logger.error("Exception at association post processing onCreateAssociation:", e);
 		}
 	}
 
@@ -112,11 +119,19 @@ public class OrgstructureEmployeeLinkPolicy
 				}
 				notifyEmploeeRemoveDP(employee, position);
 			} else if (orgstructureService.isWorkForce(parent)) {
+				String defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с роли #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(parent);
+				NodeRef group = orgstructureService.getWorkGroupByWorkForce(staff);
+				List<String> objects = new ArrayList<String>(2);
+				objects.add(role != null ? role.toString() : "");
+				objects.add(group != null ? group.toString() : "");
+
+				businessJournalService.log(employee, EventCategory.RELEASE_GROUP_ROLE, defaultDescription, objects);
+
 				notifyEmploeeRemoveBR(employee, role);
 			}
 		} catch (Exception e) {
-			logger.error( "Exception at association post processing onDeleteAssociation:", e);
+			logger.error("Exception at association post processing onDeleteAssociation:", e);
 		}
 	}
 

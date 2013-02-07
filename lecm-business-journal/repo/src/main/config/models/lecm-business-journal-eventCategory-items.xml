@@ -65,5 +65,21 @@
             <property name="cm:name">Исключение должности</property>
             <property name="lecm-busjournal:eventCategory-code">REMOVE_STAFF_POSITION</property>
         </item>
+        <item name="Назначение на роль">
+            <property name="cm:name">Назначение на роль</property>
+            <property name="lecm-busjournal:eventCategory-code">TAKE_GROUP_ROLE</property>
+        </item>
+        <item name="Снятие с роли">
+            <property name="cm:name">Снятие с роли</property>
+            <property name="lecm-busjournal:eventCategory-code">RELEASE_GROUP_ROLE</property>
+        </item>
+        <item name="Добавление роли">
+            <property name="cm:name">Добавление роли</property>
+            <property name="lecm-busjournal:eventCategory-code">ADD_GROUP_ROLE</property>
+        </item>
+        <item name="Исключение роли">
+            <property name="cm:name">Исключение роли</property>
+            <property name="lecm-busjournal:eventCategory-code">REMOVE_GROUP_ROLE</property>
+        </item>
     </items>
 </dictionary>

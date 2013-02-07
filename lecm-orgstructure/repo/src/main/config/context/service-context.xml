@@ -160,4 +160,24 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
+
+    <bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+        <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="authService" ref="authenticationService"/>
+    </bean>
+
+    <bean id="orgstructureWorkForcePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkForcePolicy"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+        <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="authService" ref="authenticationService"/>
+    </bean>
 </beans>
