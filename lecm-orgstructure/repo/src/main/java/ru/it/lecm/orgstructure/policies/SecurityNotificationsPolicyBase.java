@@ -114,8 +114,8 @@ public abstract class SecurityNotificationsPolicyBase
 	 */
 	protected Set<NodeRef> getAllEmployeesByOU(NodeRef nodeOU) {
 		// TODO: возможно надо пройтись вниз по орг-штатке и собрать всех вложенных Сотрудников
-		final Set<NodeRef> employees = new HashSet<NodeRef>( this.orgstructureService.getOrganizationElementEmployees(nodeOU));
-		return employees;
+		final List<NodeRef> employees = this.orgstructureService.getOrganizationElementEmployees(nodeOU);
+		return (employees == null) ? null : new HashSet<NodeRef>( employees);
 	}
 
 	/**
@@ -358,10 +358,19 @@ public abstract class SecurityNotificationsPolicyBase
 				? getAllEmployeesByOU(nodeOU) // сбор со всех Родительских узлов ...
 				: new HashSet<NodeRef>( Arrays.asList(nodeOU)); // сбор только с текущего узла
 
-		final Set<NodeRef> curOUNodes = PolicyUtils.getAllParentOU(nodeOU, nodeService);
+		if (employees == null || employees.isEmpty()) {
+			logger.warn( String.format( "No employees found inside orgUnit '%s' -> linking of business roles skipped", nodeOU));
+			return;
+		}
 
-		// TODO: получить список БР и в нём уже искать нужные огранизации
+		// DONE: получить список БР и в нём уже искать нужные огранизации
 		final List<NodeRef> allRoles = orgstructureService.getBusinesRoles(true);
+		if (allRoles == null || allRoles.isEmpty()) {
+			logger.warn( "No any business roles found -> linking of business roles skipped");
+			return;
+		}
+
+		final Set<NodeRef> curOUNodes = PolicyUtils.getAllParentOU(nodeOU, nodeService, true); // включая исходное Подразделение
 
 		// получить карту ключ=Департамент(OU), Значение=Список БР, непосредственно предоставленных для OU
 		final Map<NodeRef, Set<NodeRef>> rolesByOU = PolicyUtils.scanBRolesForOrgUnits( allRoles, nodeService);
@@ -370,6 +379,8 @@ public abstract class SecurityNotificationsPolicyBase
 		for (NodeRef ou: curOUNodes) {
 			// Бизнес Роли выданные на конкретное подразделение ...
 			final Set<NodeRef> ouRoles = rolesByOU.get(ou);
+
+			if (ouRoles == null || ouRoles.isEmpty()) continue;
 
 			// Активируем БР для Сотрудников
 			for (NodeRef role: ouRoles) {

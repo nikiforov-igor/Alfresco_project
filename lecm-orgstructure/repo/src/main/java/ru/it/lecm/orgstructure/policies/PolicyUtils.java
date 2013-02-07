@@ -225,13 +225,16 @@ public class PolicyUtils {
 	/**
 	 * Получить список всех родительских Подразделений, (!) включая исходное
 	 * @param nodeOU
+	 * @param addSelf true, если в выходной список надо ввести nodeOU
 	 * @return
 	 */
-	static public Set<NodeRef> getAllParentOU(NodeRef nodeOU, NodeService nodeService) {
+	static public Set<NodeRef> getAllParentOU(NodeRef nodeOU, NodeService nodeService, boolean addSelf) {
 		final Set<NodeRef> result = new HashSet<NodeRef>();
 		for( NodeRef curOU = nodeOU; curOU != null; curOU = getParentOU(curOU, nodeService)) {
 			result.add(curOU);
 		}
+		if (!addSelf) // убрать исходный узел, если не требуется ...
+			result.remove(nodeOU);
 		return result;
 	}
 
