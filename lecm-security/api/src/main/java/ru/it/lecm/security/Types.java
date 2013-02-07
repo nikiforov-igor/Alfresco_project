@@ -33,17 +33,18 @@ public final class Types {
 	------------------------------------------------------------------------------------------------
 	 */
 
+	final static public String SFX_DELIM = "%"; // разделить внутри суффиксов - должен отличаится от разделителя внутри guid (минуса)
 	final static public String PFX_LECM = "_LECM";
-	final static public String SFX_OU  = "$OU-";   // by id
-	final static public String SFX_DP  = "$DP-";   // by id
+	final static public String SFX_OU  = "$OU"+ SFX_DELIM;   // by id
+	final static public String SFX_DP  = "$DP"+ SFX_DELIM;   // by id
 
-	final static public String SFX_USR = "$ME-";   // by id
-	final static public String SFX_BR  = "$BR-";   // by id
-	final static public String SFX_SV  = "$OUSV-"; // by id
+	final static public String SFX_USR = "$ME"+ SFX_DELIM;   // by id
+	final static public String SFX_BR  = "$BR"+ SFX_DELIM;   // by id
+	final static public String SFX_SV  = "$OUSV"+ SFX_DELIM; // by id
 
-	final static public String SFX_BRME = "$BRME-";   // by id user & id role
+	final static public String SFX_BRME = "$BRME" + SFX_DELIM;   // by id user & id role
 
-	final static public String SFX_PRIV4USER = "-PRIV4USER"; // окончание для индикации личной security-группы пользователя
+	final static public String SFX_PRIV4USER = SFX_DELIM+ "PRIV4USER"; // окончание для индикации личной security-группы пользователя
 
 
 	/**
@@ -57,15 +58,15 @@ public final class Types {
 
 	/**
 	 * Получить Pair<userId, broleCode> из названия Бизнес Роли вида:
-	 * "xxx_LECM_$BRME-USERID-ROLEID"
+	 * example: "GROUP__LECM$BRME-BR_INITIATOR-PRIV4USER-usrId"
 	 * @param authority
 	 * @return
 	 */
 	public static Pair<String, String> getUserRolePair(String authority) {
 		// [0] буквы префикса [1] id1(=usedId) [2] id2(=roleCodeId)
-		final String[] ids = authority.split("-");
-		assert ids.length == 3 : String.format( "check validity of authority named '%s' -> must be like 'XXX-userId-roleCode'", authority);
-		return new Pair<String, String>(ids[1],  ids[2]);
+		final String[] ids = authority.split(SFX_DELIM);
+		assert ids.length >= 4 : String.format( "check validity of authority named '%s' -> must be like 'XXX-roleCode-userId'", authority);
+		return new Pair<String, String>(ids[3],  ids[1]);
 	}
 
 
@@ -455,7 +456,7 @@ public final class Types {
 		@Override
 		public String getAlfrescoSuffix() {
 			// для личной бизнес-роли надо ввести id Сотрудника ...
-			return super.getAlfrescoSuffix() + "-" + this.getUserId();
+			return super.getAlfrescoSuffix() + SFX_DELIM + this.getUserId();
 		}
 	}
 

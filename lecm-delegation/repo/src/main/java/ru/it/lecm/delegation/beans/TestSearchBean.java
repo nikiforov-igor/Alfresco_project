@@ -914,18 +914,19 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 */
 	private boolean hasAuth(String shortName, String parentName) {
 		// есть user-авторизация? ...
-		Set<String> found = this.authorityService.findAuthorities(AuthorityType.USER, parentName, true, shortName, null);
-		if (found != null && found.size() > 0)
-			return true;
+//		Set<String> found = this.authorityService.findAuthorities(AuthorityType.USER, parentName, true, shortName, null);
+//		if (found != null && found.size() > 0)
+//			return true;
+		if (!this.authorityService.authorityExists( authorityService.getName( AuthorityType.USER, shortName)))
+			return false;
 		// есть групповая авторизация? ...
-		found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
-		if (found != null && found.size() > 0)
-			return true;
+//		found = this.authorityService.findAuthorities(AuthorityType.GROUP, parentName, true, shortName, null);
+//		if (found != null && found.size() > 0)
+//			return true;
+		if (!this.authorityService.authorityExists( authorityService.getName( AuthorityType.GROUP, shortName)))
+			return false;
 		// есть не группа? ...
-		found = this.authorityService.findAuthorities(AuthorityType.ROLE, parentName, true, shortName, null);
-		if (found != null && found.size() > 0)
-			return true;
-		return false; // NOT FOUND
+		return this.authorityService.authorityExists( authorityService.getName( AuthorityType.ROLE, shortName));
 	}
 
 	/**
@@ -1237,7 +1238,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 					// final String status = echoGetArg( "status", null, result);
 					// final String lifeCycle = echoGetArg( "lifeCycle", null, result);
 					final String roleAccessMap = echoGetArg( "roleAccessMap", null, result);
-					logger.info( String.format( "<RebuildACL> for node id %s as %s", id, roleAccessMap));
+					logger.info( String.format( "<RebuildACL> for node id '%s' as %s", id, roleAccessMap));
 
 					final Map<String, StdPermission> accessMap = makeBRoleMapping(roleAccessMap);
 					if (ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper))
@@ -1247,7 +1248,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				} else if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper) || ACLOPER_REVOKE_DYNAROLE.equalsIgnoreCase(oper)) {
 					final String roleCode = echoGetArg( "roleCode", null, result);
 					final String userId = echoGetArg( "userId", null, result);
-					logger.info( String.format( "<%s> for node id %s, user <%s>, role <%s>", oper, id, userId, roleCode));
+					logger.info( String.format( "<%s> for node id '%s', user <%s>, role <%s>", oper, id, userId, roleCode));
 
 					if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper))
 						builder.grantDynamicRole(roleCode, ref, userId);
@@ -1255,7 +1256,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 						builder.revokeDynamicRole(roleCode, ref, userId);
 				} else { logger.warn("Unsupported operation "+ oper); }
 			}
-			logger.info( String.format( "done test oper <%s> for node id %s", oper, id));
+			logger.info( String.format( "done test oper <%s> for node id '%s'", oper, id));
 		}
 
 		return result;
