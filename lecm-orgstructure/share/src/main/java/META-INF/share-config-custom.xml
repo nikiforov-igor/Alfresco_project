@@ -20,13 +20,16 @@
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
                     <show id="lecm-orgstr:employee-positions"/>
                     <show id="lecm-orgstr:employee-roles"/>
+	                <show id="lecm-busjournal-aspects:history-list"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
                     <set id="personal" appearance="" label-id="info.personal-info" />
                     <set id="positions" appearance="" label-id="info.personal-positions" />
                     <set id="groups" appearance="" label-id="info.personal-groups" />
-                    <field id="lecm-orgstr:employee-first-name" set="common"/>
+	                <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
+
+	                <field id="lecm-orgstr:employee-first-name" set="common"/>
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
                     <field id="lecm-orgstr:employee-last-name" set="common"/>
                     <field id="lecm-orgstr:employee-sex" set="common"/>
@@ -66,6 +69,9 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
+	                <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
+		                <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
+	                </field>
                 </appearance>
             </form>
         </forms>
