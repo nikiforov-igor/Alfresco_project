@@ -31,7 +31,7 @@
 											});
 								} else {
 									// проверим нет ли дочерних АКТИВНЫХ подразделений
-									var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=false";
+									var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=true";
 									var callback = {
 										success:function (oResponse) {
 											var oResults = eval("(" + oResponse.responseText + ")");
