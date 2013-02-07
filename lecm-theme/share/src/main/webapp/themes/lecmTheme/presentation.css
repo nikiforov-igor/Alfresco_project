@@ -465,6 +465,17 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div {
     text-align: center;
 }
+/* historic-properties-viewer */
+.yui-skin-lecmTheme div.yui-panel.historic-properties-viewer .form-container .form-fields {
+    margin-left: -1px;
+}
+.yui-skin-lecmTheme div.yui-panel.historic-properties-viewer .yui-navset .form-container {
+    padding: 0;
+}
+.yui-skin-lecmTheme div.yui-panel.historic-properties-viewer .yui-navset .form-container .form-fields {
+    margin-left: 0;
+    padding: 0;
+}
 .yui-skin-lecmTheme .yui-panel div.form-field {
     width: 100%;
     line-height: 25px;
