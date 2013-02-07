@@ -82,14 +82,26 @@ public class ChatPanelButton extends PanelButton
 	{
 		return chatWidget;
 	}
+
+    private boolean buttonIsActive()
+    {
+        return this.chatPanel.getActiveChatButton() == this;
+    }
 	
 	public void processMessage(String nick,Message message,boolean firstMessage)
 	{
         Log.log("ChatPanelButton.processMessage(nick=" + nick + ", firstMessage=" + firstMessage + ")");
 		String body = message.getBody();
-		if(!isActive()&&(body != null&&body.length()!=0))
+		//if(!isActive()&&(body != null&&body.length()!=0))
+
+        boolean messageWithBody = body != null && body.length() > 0;
+        boolean clientIsVisible = iJab.client.getIsVisible();
+        boolean myButtonIsActive = buttonIsActive();
+        boolean chatHaveNoButton = !chatPanel.haveAcitveButton();
+
+		if(messageWithBody)
 		{
-			if(!chatPanel.isButtonHide(this)&&!chatPanel.haveAcitveButton()&&iJab.client.getIsVisible())
+			if(clientIsVisible && ( myButtonIsActive || chatHaveNoButton) )
 			{
 				openWindow();
 			}

@@ -940,17 +940,16 @@ if(!presenceItem.getFrom().toString().contains("@"))
     public void toggleIsVisible()
     {
         Log.log("XmppClient.toggleIsVisible()");
+        this.isVisible = !this.isVisible;
+        Log.log("XmppClient.toggleIsVisible() now isVisible=: "+this.isVisible);
         if (this.isVisible)
-        {
-            this.fireOnHide();
-        }
-        else
         {
             this.fireOnShow();
         }
-
-        this.isVisible = !this.isVisible;
-
+        else
+        {
+            this.fireOnHide();
+        }
     }
 
     private void fireOnShow() {
