@@ -175,6 +175,49 @@
 		</property>
 	</bean>
 
+	<bean id="subscriptionsToTypeLogEventsEmployeePolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventEmployeePolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+	</bean>
+
+	<bean id="subscriptionsToTypeLogEventsWorkGroupPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventWorkGroupPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+	</bean>
+
+	<bean id="subscriptionsToTypeLogEventsOrganizationUnitPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventOrganizationUnitPolicy"
+		init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+	</bean>
+
+	<bean id="subscriptionsToTypeLogEventsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+	</bean>
+
 <!--
 	<bean id="subscribeTypeCategoryPolicy" class="ru.it.lecm.subscriptions.policy.TypeCategoryPolicy"
 		  init-method="init">

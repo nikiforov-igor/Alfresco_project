@@ -284,25 +284,25 @@
     </config>
 
     <!-- Custom Aspects forms-->
-    <config evaluator="aspect" condition="lecm-busjournal-aspects:history">
-        <forms>
+    <!--<config evaluator="aspect" condition="lecm-busjournal-aspects:history">-->
+        <!--<forms>-->
 
-            <form>
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
-                <field-visibility>
-                    <show id="lecm-busjournal-aspects:history-list"/>
-                </field-visibility>
-                <appearance>
-                    <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
-                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
-                        <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
+            <!--<form>-->
+                <!--<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>-->
+                <!--<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>-->
+                <!--<field-visibility>-->
+                    <!--<show id="lecm-busjournal-aspects:history-list"/>-->
+                <!--</field-visibility>-->
+                <!--<appearance>-->
+                    <!--<set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>-->
+                    <!--<field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">-->
+                        <!--<control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>-->
+                    <!--</field>-->
+                <!--</appearance>-->
+            <!--</form>-->
 
-        </forms>
-    </config>
+        <!--</forms>-->
+    <!--</config>-->
 
     <config evaluator="node-type" condition="lecm-busjournal:archiverSettings">
         <forms>
