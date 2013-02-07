@@ -290,6 +290,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // update current state on success
                     me.currentSearchConfig = searchConfig;
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
+
+                    //выводим предупреждающее сообщение, если достигли лимита
+                    if (oResponse.results && oResponse.results.length  >= me.options.maxSearchResults) {
+                        Alfresco.util.PopupManager.displayMessage(
+                            {
+                                displayTime:3,
+                                text: this.msg("label.limit_reached")
+                            });
+                    }
                 }
 
                 // Обработчик на неудачу
