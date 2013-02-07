@@ -43,6 +43,8 @@ public final class Types {
 
 	final static public String SFX_BRME = "$BRME-";   // by id user & id role
 
+	final static public String SFX_PRIV4USER = "-PRIV4USER"; // окончание для индикации личной security-группы пользователя
+
 
 	/**
 	 * Вернуть TRUE, если authority относится к динамическим бизнес-ролям
@@ -320,7 +322,7 @@ public final class Types {
 			// не подвязываемся на userId, т.к. оно может быть NULL, в то же время 
 			// в качестве Id для this будет уникальное значение и его будет
 			// вполне достаточно для уникальности security-группы
-			return super.getAlfrescoSuffix() + "-PRIV4USER"; // "-" + this.getUserId();
+			return super.getAlfrescoSuffix() + SFX_PRIV4USER; // "-" + this.getUserId();
 		}
 
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -25,7 +26,7 @@ public class PolicyUtils {
 
 	// название Должностной Позиции
 	// "lecm-orgstr:staffPosition"::"lecm-orgstr:staffPosition-code"
-	public static final QName PROP_DP_NAME = OrgstructureBean.PROP_STAFF_POSITION_CODE; // QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
+	public static final QName PROP_DP_INFO = ContentModel.PROP_NAME; // QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
 
 	// "lecm-orgstr:organization-element"::"element-short-name"
 	public static final QName PROP_ORGUNIT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
@@ -73,13 +74,13 @@ public class PolicyUtils {
 	 * Получить название Должностной Позиции.
 	 * @param deputyPoint
 	 * @param nodeService
-	 * @return нзвание DP
+	 * @return название DP
 	 */
-	public static String getDpName(NodeRef deputyPoint, NodeService nodeService)
+	public static String getDpInfoName(NodeRef deputyPoint, NodeService nodeService)
 	{
 		if (deputyPoint == null)
 			return null;
-		final String dpName = ""+ nodeService.getProperty( deputyPoint, PROP_DP_NAME);
+		final String dpName = ""+ nodeService.getProperty( deputyPoint, PROP_DP_INFO);
 		return dpName;
 	}
 
@@ -170,7 +171,7 @@ public class PolicyUtils {
 			, Logger logger
 	) {
 		final String dpIdCode = getDPIdCode( deputyPoint, nodeService);
-		final String dpName = ""+ nodeService.getProperty( deputyPoint, PROP_DP_NAME);
+		final String dpName = getDpInfoName(deputyPoint, nodeService);
 		final String userLogin = getEmployeeLogin( employee, nodeService, orgstructureService, logger);
 		return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, employee.getId() );
 	}

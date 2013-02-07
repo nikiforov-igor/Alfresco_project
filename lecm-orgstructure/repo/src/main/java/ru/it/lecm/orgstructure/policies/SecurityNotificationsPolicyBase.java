@@ -112,10 +112,28 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param nodeOU
 	 * @return
 	 */
-	protected Set<NodeRef> getAllEmployeesByOU(NodeRef nodeOU) {
-		// TODO: возможно надо пройтись вниз по орг-штатке и собрать всех вложенных Сотрудников
+	protected Set<NodeRef> getEmployeesByOU(NodeRef nodeOU) {
 		final List<NodeRef> employees = this.orgstructureService.getOrganizationElementEmployees(nodeOU);
 		return (employees == null) ? null : new HashSet<NodeRef>( employees);
+	}
+
+	/**
+	 * СОбрать всех Сотрудников данного подразделения и вложенных в него
+	 * @param nodeOU
+	 * @return
+	 */
+	protected Set<NodeRef> getAllEmployeesByOUAndChild(NodeRef nodeOU) {
+		// DONE: возможно надо пройтись вниз по орг-штатке и собрать всех вложенных Сотрудников
+		final List<NodeRef> units = this.orgstructureService.getSubUnits(nodeOU, true, true); // список всех вложенных Активных Подразделений
+		units.add(nodeOU); // текущее подразделение тоже надо
+
+		final Set<NodeRef> result = new HashSet<NodeRef>();
+		for(NodeRef ou: units) {
+			final Set<NodeRef> employees = getEmployeesByOU(ou);
+			if (employees == null)
+				result.addAll(employees);
+		}
+		return result;
 	}
 
 	/**
@@ -165,13 +183,12 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param orgUnit
 	 */
 	protected void notifyChangeDP(NodeRef nodeDP, boolean isBoss, NodeRef orgUnit) {
-		final String dpName = ""+ nodeService.getProperty(nodeDP, PolicyUtils.PROP_DP_NAME);
-		final NodeRef employee = orgstructureService.getEmployeeLinkByPosition(nodeDP);
+		final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeDP);
 		final String loginName = getEmployeeLogin(employee);
 		final String emplId = (employee != null) ? employee.getId() : null;
 
-		// ensure SG_DP
-		final Types.SGPosition sgDP = Types.SGKind.getSGDeputyPosition(nodeDP.getId(), dpName, loginName, emplId);
+		// ensure SG_DP // Types.SGKind.getSGDeputyPosition(nodeDP.getId(), dpName, loginName, emplId);
+		final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(nodeDP, nodeService, orgstructureService, logger);
 		sgNotifier.orgNodeCreated( sgDP);
 
 		// прописать Сотрудника в свою Должность ...
@@ -231,11 +248,9 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param dpid узел типа "lecm-orgstr:position"
 	 */
 	protected void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
-		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = PolicyUtils.getDpName(dpid, nodeService);
-
-		this.sgNotifier.sgInclude( emplPos, Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), emplPos.getDisplayInfo()));
+		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
+		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
+		this.sgNotifier.sgInclude( emplPos, dpPos);
 	}
 
 	/**
@@ -244,11 +259,9 @@ public abstract class SecurityNotificationsPolicyBase
 	 * @param brole
 	 */
 	protected void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
-		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-		// использование специального значения более "человечно" чем dpid.getId(), и переносимо между разными базами Альфреско
-		final String dpIdName = PolicyUtils.getDpName(dpid, nodeService);
-
-		this.sgNotifier.sgExclude( emplPos, Types.SGKind.getSGDeputyPosition( dpIdName, employee.getId(), emplPos.getDisplayInfo()));
+		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
+		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
+		this.sgNotifier.sgExclude( emplPos, dpPos);
 	}
 
 	/**
@@ -353,10 +366,8 @@ public abstract class SecurityNotificationsPolicyBase
 	protected void notifyPrivateBRolesOfOrgUnits( NodeRef nodeOU, boolean include
 			, boolean recursivelyUseParentsBR)
 	{
-		// все Сотрудники текущего OU
-		final Set<NodeRef> employees = (recursivelyUseParentsBR)
-				? getAllEmployeesByOU(nodeOU) // сбор со всех Родительских узлов ...
-				: new HashSet<NodeRef>( Arrays.asList(nodeOU)); // сбор только с текущего узла
+		// все Сотрудники текущего OU и всех его вложенных
+		final Set<NodeRef> employees = getAllEmployeesByOUAndChild(nodeOU);
 
 		if (employees == null || employees.isEmpty()) {
 			logger.warn( String.format( "No employees found inside orgUnit '%s' -> linking of business roles skipped", nodeOU));
@@ -370,16 +381,19 @@ public abstract class SecurityNotificationsPolicyBase
 			return;
 		}
 
-		final Set<NodeRef> curOUNodes = PolicyUtils.getAllParentOU(nodeOU, nodeService, true); // включая исходное Подразделение
+		// подразделения, с которых собирать БР
+		final Set<NodeRef> curOUNodes = (recursivelyUseParentsBR)
+				? PolicyUtils.getAllParentOU(nodeOU, nodeService, true) // со всех родительских, true = включая исходное Подразделение
+				: new HashSet<NodeRef>( Arrays.asList(nodeOU)); // только с текущего узла
 
-		// получить карту ключ=Департамент(OU), Значение=Список БР, непосредственно предоставленных для OU
+		// получить карту распределения БР по каждому OU: 
+		// ключ=Департамент(OU), Значение=Список БР, непосредственно предоставленных для OU
 		final Map<NodeRef, Set<NodeRef>> rolesByOU = PolicyUtils.scanBRolesForOrgUnits( allRoles, nodeService);
 
 		// выдаём БР для этих Сотрудников, проходя по выбранным Подразделениям ...
 		for (NodeRef ou: curOUNodes) {
 			// Бизнес Роли выданные на конкретное подразделение ...
 			final Set<NodeRef> ouRoles = rolesByOU.get(ou);
-
 			if (ouRoles == null || ouRoles.isEmpty()) continue;
 
 			// Активируем БР для Сотрудников
