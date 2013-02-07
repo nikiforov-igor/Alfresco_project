@@ -36,11 +36,7 @@
 		</#if>
 	</#if>
 	<div class="form-field">
-	<#if isActive>
-		 <span style="color: #7F0000; font-weight: bold;">Делегирование вступило в силу. Редактирование невозможно</span>
-	<#else>
-		 <span style="color: #007F00; font-weight: bold;">Делегирование еще неактивно.</span>
-	</#if>
+	<#if isActive><span style="color: #7F0000; font-weight: bold;">Делегирование вступило в силу. Редактирование невозможно</span></#if>
 	</div>
 	<#-- делегирующее лицо -->
 	<@formLib.renderField field=form.fields["assoc_lecm-d8n_delegation-opts-owner-assoc"] />
