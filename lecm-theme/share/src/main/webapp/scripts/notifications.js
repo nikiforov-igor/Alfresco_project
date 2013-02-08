@@ -73,7 +73,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 		createNotifyer: function(){
 			var btn = Dom.get(this.id);
 			var div = document.createElement("div");
-			div.innerHTML = '<div id="' + this.notificationsCounterId + '">0</div>';
+			div.innerHTML = '<div id="' + this.notificationsCounterId + '" class="headerCounter">0</div>';
 			this.createWindow(div);
 			btn.appendChild(div);
             Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления"

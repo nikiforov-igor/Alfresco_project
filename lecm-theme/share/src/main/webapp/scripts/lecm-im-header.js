@@ -62,8 +62,9 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         createNotifyer: function(){
             var btn = Dom.get(this.id);
             var div = document.createElement("div");
-            div.innerHTML = '<div id="myElem" class="hidden">0</div>';
+            div.innerHTML = '<div id="myElem" class="hidden headerCounter">0</div>';
             btn.appendChild(div);
+            Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления"
         },
 
         /// Инициализатор счетчика в заголовке

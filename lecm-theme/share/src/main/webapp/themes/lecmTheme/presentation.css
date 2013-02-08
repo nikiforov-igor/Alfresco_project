@@ -145,7 +145,7 @@ a:hover {
 }
 /* Utils: end */
 
-#notificationsCounter {
+.headerCounter {
     width: 22px;
     height : 22px;
     line-height: 22px;
