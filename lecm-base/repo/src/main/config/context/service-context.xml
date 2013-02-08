@@ -19,12 +19,6 @@
 -->
 <beans>
 
-	<bean id="webscript.ru.it.lecm.utils.node-properties.post"
-		  class="ru.it.lecm.base.scripts.GetNodePropertiesScript"
-		  parent="webscript">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-	</bean>
-
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>
