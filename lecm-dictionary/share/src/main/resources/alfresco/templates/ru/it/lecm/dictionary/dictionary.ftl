@@ -30,5 +30,17 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage showToolbar=false>
-	<@region id="dictionary-tree" scope="template" />
+<div class="yui-t1" id="lecm-dictionary">
+    <div id="yui-main-2">
+        <div class="<#if !plane>yui-b<#else>plane-dictionary-content</#if>" id="alf-content">
+			<@region id="toolbar" scope="template" />
+	            <@region id="datagrid" scope="template" />
+        </div>
+    </div>
+	<#if !plane>
+        <div id="alf-filters">
+			<@region id="tree" scope="template"/>
+        </div>
+	</#if>
+</div>
 </@bpage.basePage>
