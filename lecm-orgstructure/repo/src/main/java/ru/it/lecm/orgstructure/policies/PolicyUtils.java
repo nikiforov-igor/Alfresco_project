@@ -173,7 +173,7 @@ public class PolicyUtils {
 		final String dpIdCode = getDPIdCode( deputyPoint, nodeService);
 		final String dpName = getDpInfoName(deputyPoint, nodeService);
 		final String userLogin = getEmployeeLogin( employee, nodeService, orgstructureService, logger);
-		return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, employee.getId() );
+		return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, (employee != null) ? employee.getId() : null);
 	}
 
 
