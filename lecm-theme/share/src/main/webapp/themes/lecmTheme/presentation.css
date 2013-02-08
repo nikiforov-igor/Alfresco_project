@@ -130,7 +130,8 @@ a:hover {
 
 #yui-main-2 {
 	width: 100%;
-	position: absolute;
+    float: right;
+    margin-left: -100%;
 }
 
 #yui-main-3 {
