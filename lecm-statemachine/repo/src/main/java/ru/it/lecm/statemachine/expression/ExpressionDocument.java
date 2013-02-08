@@ -1,6 +1,8 @@
 package ru.it.lecm.statemachine.expression;
 
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 
 /**
  * User: PMelnikov
@@ -10,14 +12,17 @@ import org.alfresco.service.cmr.repository.NodeRef;
 public class ExpressionDocument {
 
 	private NodeRef nodeRef;
+	private ServiceRegistry serviceRegistry;
 
-	public ExpressionDocument(NodeRef nodeRef) {
+	public ExpressionDocument(NodeRef nodeRef, ServiceRegistry serviceRegistry) {
 		this.nodeRef = nodeRef;
+		this.serviceRegistry = serviceRegistry;
 	}
 
 	//Значение аттрибута
 	public Object attribute(String attributeName) {
-		return "Test";
+		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());
+		return serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
 	}
 
 	//Наличие вложения с определенным типом

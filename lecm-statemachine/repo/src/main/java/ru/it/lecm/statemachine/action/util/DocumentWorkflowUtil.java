@@ -61,8 +61,9 @@ public class DocumentWorkflowUtil {
 			);
 			return descriptor;
 		} catch (JSONException e) {
-			throw new IllegalStateException(e);
+			//throw new IllegalStateException(e);
 		}
+		return null;
 	}
 
 	public void removeWorkflow(String executionId) {

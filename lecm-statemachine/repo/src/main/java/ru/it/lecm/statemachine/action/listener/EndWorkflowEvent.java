@@ -5,13 +5,11 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
-import ru.it.lecm.statemachine.action.StartWorkflowAction;
-import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.action.UserWorkflow;
-import ru.it.lecm.statemachine.action.WorkflowVariables;
+import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.List;
 
@@ -54,11 +52,6 @@ public class EndWorkflowEvent implements ExecutionListener {
 						}
 					}
 				}
-				if (variables != null) {
-					helper.getOutputVariables(statemachineId, executionId, variables);
-				}
-				String taskId = helper.getCurrentTaskId(statemachineId);
-				helper.nextTransition(taskId);
 			} else if (actionName.equals(StateMachineActions.getActionName(UserWorkflow.class))) {
 				for (StateMachineAction action : actions) {
 					UserWorkflow userWorkflow = (UserWorkflow) action;
@@ -79,6 +72,19 @@ public class EndWorkflowEvent implements ExecutionListener {
 
 			if (variables != null) {
 				helper.getOutputVariables(statemachineId, executionId, variables);
+			}
+
+			String taskId = helper.getCurrentTaskId(statemachineId);
+			List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
+			Expression expression = new Expression(document, helper.getVariables(statemachineId), StateMachineHelper.getServiceRegistry());
+			boolean isTrasitionValid = false;
+			for (StateMachineAction action : transitionActions) {
+				TransitionAction transitionAction = (TransitionAction) action;
+				isTrasitionValid = isTrasitionValid || expression.execute(transitionAction.getExpression());
+			}
+
+			if (isTrasitionValid) {
+				helper.nextTransition(taskId);
 			}
 
 		}

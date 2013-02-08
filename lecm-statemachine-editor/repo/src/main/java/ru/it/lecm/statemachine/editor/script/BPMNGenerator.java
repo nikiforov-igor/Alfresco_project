@@ -408,7 +408,7 @@ public class BPMNGenerator {
 		} else if (ACTION_START_WORKFLOW.equals(actionId)) {
 			return createStartWorkflowAction(eventElement, action);
 		} else if (ACTION_TRANSITION_ACTION.equals(actionId)) {
-			return createTransitionAction(statusVar, action);
+			return createTransitionAction(eventElement, statusVar, action);
 		} else if (ACTION_USER_WORKFLOW.equals(actionId)) {
             createUserWorkflowAction(eventElement, action);
 			return Collections.EMPTY_LIST;
@@ -450,14 +450,30 @@ public class BPMNGenerator {
     }
 
 
-    private List<Flow> createTransitionAction(String statusVar, ChildAssociationRef action) {
+    private List<Flow> createTransitionAction(Element eventElement, String statusVar, ChildAssociationRef action) {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
 		List<Flow> flows = new ArrayList<Flow>();
 		for (ChildAssociationRef expression : expressions) {
+			Element actionElement = doc.createElement("lecm:action");
+			actionElement.setAttribute("type", ACTION_TRANSITION_ACTION);
+			eventElement.appendChild(actionElement);
+
+			String variableName = "id" + expression.getChildRef().getId().replace("-","");
 			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
+
+			Element attribute = doc.createElement("lecm:attribute");
+			attribute.setAttribute("name", "variableName");
+			attribute.setAttribute("value", variableName);
+			actionElement.appendChild(attribute);
+
+			attribute = doc.createElement("lecm:attribute");
+			attribute.setAttribute("name", "expression");
+			attribute.setAttribute("value", expressionValue);
+			actionElement.appendChild(attribute);
+
 			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
-			flows.add(new Flow(statusVar, target, "${" + expressionValue + "}"));
+			flows.add(new Flow(statusVar, target, "${!empty " + variableName + " && " + variableName + "}"));
 		}
 		return flows;
 	}

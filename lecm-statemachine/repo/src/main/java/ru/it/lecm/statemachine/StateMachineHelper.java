@@ -372,6 +372,15 @@ public class StateMachineHelper {
 		return serviceRegistry.getNodeService().getChildAssocs(nodeRef).get(0).getChildRef();
 	}
 
+	public Map<String, Object> getVariables(String executionId) {
+		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+		return runtimeService.getVariables(executionId.replace(ACTIVITI_PREFIX, ""));
+	}
+
+	public static ServiceRegistry getServiceRegistry() {
+		return serviceRegistry;
+	}
+
 	private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
 		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
 		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
