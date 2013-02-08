@@ -21,6 +21,7 @@
 			<property name="lecm-absence:code">4</property>
 			<property name="lecm-absence:color">#70FF94</property>
 		</item>
+		<!-- Пункт "Другое" используется в web-скрипте absence.reason.default.get.js в качестве причины по умолчанию. -->
 		<item name="Другое">
 			<property name="cm:name">Другое</property>
 			<property name="lecm-absence:code">0</property>

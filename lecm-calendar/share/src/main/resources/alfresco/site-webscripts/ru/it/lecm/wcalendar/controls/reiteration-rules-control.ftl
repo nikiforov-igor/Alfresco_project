@@ -52,8 +52,6 @@
 		var td = new YAHOO.util.Element(this);
 		var monthDaysInput = YAHOO.util.Dom.get("month-days-input");
 
-
-
 		var selectedDates = monthDaysInput.value.split(",");
 		dateSelected = this.innerText;
 		// Дата, которую только что выбрали, уже есть в списке выбранных

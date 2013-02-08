@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Get nodeRef for default absence reason</shortname>
+	<description>Get nodeRef for default absence reason</description>
+	<url>/lecm/wcalendar/absence/get/absenceReasonDefault</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+</webscript>

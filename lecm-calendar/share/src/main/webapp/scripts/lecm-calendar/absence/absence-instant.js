@@ -26,7 +26,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
 		});
 	});
-	
+
 	function Absence_ShowControlElements() {
 		Absence_DrawInstantElement();
 		Absence_DrawCancelElement();
@@ -111,8 +111,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		}
 	}
 
-
-	
 	LogicECM.module.WCalendar.Absence.cancelAbsence = function Absence_cancelAbsence() {
 		Alfresco.util.PopupManager.displayPrompt({
 			title: Alfresco.component.Base.prototype.msg("title.absence.cancel-absence"),
@@ -155,7 +153,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	LogicECM.module.WCalendar.Absence.newInstantAbsence = function Absence_onClickInstantAbsence(node) {
 
 		if (LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER) {
-			Absence_showDialogNewInstantAbsence(node);
+			Absence_onClickInstantAbsenceReasonWrapper(node)
 		} else {
 			Alfresco.util.Ajax.request({
 				method: "GET",
@@ -167,12 +165,35 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var result = response.json;
 						if (result != null) {
 							LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = result;
-							Absence_showDialogNewInstantAbsence(node);
+							Absence_onClickInstantAbsenceReasonWrapper(node);
 						}
 					},
 					scope: this
 				}
 			});
+		}
+
+		function Absence_onClickInstantAbsenceReasonWrapper(node) {
+			if (!LogicECM.module.WCalendar.Absence.defaultReasonNodeRef) {
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/absenceReasonDefault",
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					successCallback: {
+						fn: function (response) {
+							var result = response.json;
+							if (result != null) {
+								LogicECM.module.WCalendar.Absence.defaultReasonNodeRef = result.nodeRef;
+								Absence_showDialogNewInstantAbsence(node);
+							}
+						},
+						scope: this
+					}
+				});
+			} else {
+				Absence_showDialogNewInstantAbsence(node);
+			}
 		}
 
 		function Absence_showDialogNewInstantAbsence(node) {
@@ -288,4 +309,19 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 		return valid;
 	};
+
+	LogicECM.module.WCalendar.Absence.instantAbsenceReasonValidation = function Absence_instantAbsenceReasonValidation(field, args,  event, form, silent, message) {
+		var result = true;
+		if (!field.value) {
+			if (LogicECM.module.WCalendar.Absence.defaultReasonNodeRef) {
+				var htmlNodeReasonSelect = YAHOO.util.Dom.get(field.id + "-added");
+				htmlNodeReasonSelect.value = LogicECM.module.WCalendar.Absence.defaultReasonNodeRef;
+				field.value = LogicECM.module.WCalendar.Absence.defaultReasonNodeRef;
+				result = true;
+			} else {
+				result = false;
+			}
+		}
+		return result;
+	}
 })();
