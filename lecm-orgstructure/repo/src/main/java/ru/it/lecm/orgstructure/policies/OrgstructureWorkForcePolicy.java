@@ -18,7 +18,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Time: 15:07
  */
 public class OrgstructureWorkForcePolicy
-		extends SecurityJournalizedPolicyBase implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnDeleteNodePolicy {
+		extends SecurityJournalizedPolicyBase
+		implements NodeServicePolicies.OnCreateNodePolicy
+					, NodeServicePolicies.OnDeleteNodePolicy
+{
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;

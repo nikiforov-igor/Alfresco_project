@@ -10,8 +10,10 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -24,11 +26,16 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureUnitPolicy
 		extends SecurityJournalizedPolicyBase
 		implements NodeServicePolicies.OnCreateNodePolicy
-		, NodeServicePolicies.OnDeleteNodePolicy {
+					, NodeServicePolicies.OnDeleteNodePolicy 
+{
+
+	final static String CHKNAME_AUTH_SERVICE = "authService";
+
+	private AuthenticationService authService; // optional
 
 	@Override
 	public void init() {
-		PropertyCheck.mandatory(this, CHKNAME_AUTH_SERVICE, CHKNAME_AUTH_SERVICE);
+		PropertyCheck.mandatory(this, CHKNAME_AUTH_SERVICE, authService);
 
 		super.init();
 
@@ -40,6 +47,14 @@ public class OrgstructureUnitPolicy
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onDeleteNode"));
+	}
+
+	public AuthenticationService getAuthService() {
+		return authService;
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
 	}
 
 	@Override

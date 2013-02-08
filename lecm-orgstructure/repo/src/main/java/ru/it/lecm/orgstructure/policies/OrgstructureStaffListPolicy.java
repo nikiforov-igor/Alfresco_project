@@ -11,7 +11,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyCheck;
+
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -31,7 +31,6 @@ public class OrgstructureStaffListPolicy
 
 	@Override
 	public void init() {
-		PropertyCheck.mandatory(this, "authService", authService);
 		super.init();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));

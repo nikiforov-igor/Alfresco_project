@@ -74,8 +74,7 @@
 		</property>
 	</bean>
 
-    <bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
@@ -84,12 +83,19 @@
 		<property name="dictionaryService" ref="serviceDictionary"/>
 	</bean>
 
+	<bean id="orgstructureSGNotifierBean" class="ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBeanImpl" init-method="init">
+		<property name="authService" ref="authenticationService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
+
 	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 	</bean>
 
 	<bean id="orgstructureBusinessRolePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBusinessRolePolicy"
@@ -97,7 +103,7 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 	</bean>
 
 	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
@@ -105,7 +111,7 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<!-- <property name="sgNotifier" ref="lecmSecurityGroupsBean" /> -->
+		<!-- <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" /> -->
 	</bean>
 
 	<bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
@@ -113,9 +119,8 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
 	</bean>
 
 	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
@@ -123,9 +128,8 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
 	</bean>
 
 
@@ -134,10 +138,9 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
-		
 		<property name="authService" ref="authenticationService"/>
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 	</bean>
 
 	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"
@@ -145,39 +148,37 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
 	</bean>
 
-    <bean id="orgstructureOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOrganizationPolicy" init-method="init">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="businessJournalService" ref="businessJournalService"/>
-    </bean>
+	<bean id="orgstructureOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOrganizationPolicy"
+		init-method="init">
+		<property name="policyComponent" ref="policyComponent" />
+		<property name="businessJournalService" ref="businessJournalService" />
+	</bean>
 
-    <bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy"
-          init-method="init">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="businessJournalService" ref="businessJournalService"/>
-    </bean>
+	<bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy"
+		init-method="init">
+		<property name="policyComponent" ref="policyComponent" />
+		<property name="businessJournalService" ref="businessJournalService" />
+	</bean>
 
-    <bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"
-          init-method="init">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-        <property name="businessJournalService" ref="businessJournalService"/>
-        <property name="authService" ref="authenticationService"/>
-    </bean>
+	<bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"
+		init-method="init">
+		<property name="policyComponent" ref="policyComponent" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="orgstructureService" ref="serviceOrgstructure" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="businessJournalService" ref="businessJournalService" />
+	</bean>
 
-    <bean id="orgstructureWorkForcePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkForcePolicy"
-          init-method="init">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-        <property name="businessJournalService" ref="businessJournalService"/>
-        <property name="authService" ref="authenticationService"/>
-    </bean>
+	<bean id="orgstructureWorkForcePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkForcePolicy"
+		init-method="init">
+		<property name="policyComponent" ref="policyComponent" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="orgstructureService" ref="serviceOrgstructure" />
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="businessJournalService" ref="businessJournalService" />
+	</bean>
 </beans>

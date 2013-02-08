@@ -8,7 +8,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.util.PropertyCheck;
+
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -26,7 +26,6 @@ public class OrgstructureEmployeeLinkPolicy
 
 	@Override
 	public void init() {
-		PropertyCheck.mandatory(this, "authService", authService);
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,

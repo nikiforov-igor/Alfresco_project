@@ -21,7 +21,7 @@ public class OrgstructurePrimaryPositionPolicy
 		implements NodeServicePolicies.OnCreateAssociationPolicy
 {
 	public final void init() {
-		super.init( "policyComponent", "nodeService", "orgstructureService");
+		super.init( CHKNAME_POLICY_COMPONENT, CHKNAME_NODE_SERVICE, CHKNAME_ORGSTRUC_SERVICE);
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,

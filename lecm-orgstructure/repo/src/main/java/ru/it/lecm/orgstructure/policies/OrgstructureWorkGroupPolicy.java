@@ -9,7 +9,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.PropertyCheck;
+
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -22,12 +22,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureWorkGroupPolicy
 		extends SecurityJournalizedPolicyBase
 		implements NodeServicePolicies.OnCreateNodePolicy
-		, NodeServicePolicies.OnUpdatePropertiesPolicy {
+					, NodeServicePolicies.OnUpdatePropertiesPolicy
+{
 
 	@Override
 	public void init() {
-		PropertyCheck.mandatory(this, CHKNAME_AUTH_SERVICE, CHKNAME_AUTH_SERVICE);
-
 		super.init();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_WORK_GROUP, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
