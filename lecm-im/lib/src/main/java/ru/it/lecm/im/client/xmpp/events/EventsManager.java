@@ -21,12 +21,13 @@
  */
 package ru.it.lecm.im.client.xmpp.events;
 
+import com.google.gwt.core.client.GWT;
+import ru.it.lecm.im.client.Log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import com.google.gwt.core.client.GWT;
 
 public class EventsManager {
 
@@ -44,7 +45,7 @@ public class EventsManager {
 	@SuppressWarnings("unchecked")
 	public void fireEvent(Enum<?> eventType, Event event) {
 		GWT.log("Fire event " + eventType.name() + " [" + event.toString() + "]", null);
-		System.out.println("Fire event " + eventType.name() + " [" + event.toString() + "]");
+        Log.log("Fire event " + eventType.name() + " [" + event.toString() + "]");
 		event.setEventType(eventType);
 		List<Listener<? extends Event>> ecol = this.eventsCollections.get(eventType);
 		if (ecol != null) {

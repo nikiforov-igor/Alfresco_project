@@ -468,23 +468,27 @@ public class BarChatWidget extends BarChatWidgetUI
 			@Override
 			public void onSuccess(IQ iq, CollectionResultSet res) 
 			{
-				if(res==null||res.getCollections().size() == 0)
+				Log.log("History: Received list of conversations");
+                if(res==null||res.getCollections().size() == 0)
 				{
+                    Log.log("History: List of conversations is empty!");
 					archivePanel.add(new HTML("<div align='center'><span>"+i18n.msg("История переписки отсутствует")+"</span></div>"));
 				}
 				else
 				{
+                    Log.log("History: List of conversations contains " + res.getCount() + "items!");
 					CollectionItem item0 = res.getCollections().get(0);
 					DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
 					FocusHTMLPanel panel = new FocusHTMLPanel("<div align='center' class='ijab-archive-collection ui-corner-all'><span>"+fmt.format(item0.getStart())+"</span></div>");
 					archivePanel.add(panel);
 					final FlowPanel content = new FlowPanel();
 					archivePanel.add(content);
-					plugin.retriveCollection(item0.getWith(), item0.getStart(), 9999, 0, new MessageArchiveRequestHandler()
+					plugin.retriveCollection(item0.getWith(), item0.getDateSource(), 9999, 0, new MessageArchiveRequestHandler()
 					{
 						@Override
 						public void onSuccess(IQ iq, ResultSet rs) 
 						{
+                            Log.log("MessageArchiveRequestHandler.onSuccess");
 							for(Item item:rs.getItems())
 							{
 								content.add(createMessageWidget4ArchiveItem(item));
@@ -525,15 +529,18 @@ public class BarChatWidget extends BarChatWidgetUI
 		{
 			public void onClick(ClickEvent event) 
 			{
-				if(!panel.getStyleName().contains("collopse"))
+                Log.log("History: createTitleWidget4Collection.ClickHandler.onClick");
+                if(!panel.getStyleName().contains("collopse"))
 					return;
 				panel.removeStyleName("collopse");
 				final MessageArchivingPlugin plugin = Session.instance().getMessageArchivingPlugin();
-				plugin.retriveCollection(item.getWith(), item.getStart(), 9999, 0, new MessageArchiveRequestHandler()
+                Log.log("History: Making request for messages");
+				plugin.retriveCollection(item.getWith(), item.getDateSource(), 999, 0, new MessageArchiveRequestHandler()
 				{
 					@Override
 					public void onSuccess(IQ iq, ResultSet rs) 
 					{
+                        Log.log("History: MessageArchiveRequestHandler.onSuccess()");
 						for(Item item:rs.getItems())
 						{
 							content.add(createMessageWidget4ArchiveItem(item));

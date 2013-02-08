@@ -118,7 +118,7 @@ public class Session implements Responsemanager
 		Packet text = error.addChild("text", "urn:ietf:params:xml:ns:xmpp-stanzas");
 		text.setCData("Some special application diagnostic information...");
 
-		System.out.println(iq.toString());
+        Log.log(iq.toString());
 		callErrorOnResponseHandler(iq, null);
 	}
 
@@ -252,10 +252,10 @@ public class Session implements Responsemanager
 					JID to = JID.fromString(node.getAtribute("to"));
 					if (to != null && bindPlugin.getBindedJid() != null && !to.getBareJID().equals(bindPlugin.getBindedJid().getBareJID())) 
 					{
-						System.out.print("skip");
+						Log.log("skip");
 						continue;
 					}
-					// System.out.println("IN: " + node);
+					// Log.logln("IN: " + node);
 					if (!(handled = runResponceHandler(node))) 
 					{
 						boolean stopProcessing = false;
@@ -271,7 +271,6 @@ public class Session implements Responsemanager
 					if (!handled) 
 					{
                         Log.log("Session.onStanzaReceived() NOT HANDLED!!!");
-                        System.out.println("NOT HANDLED!!!");
 						PacketImp errorStanza = new PacketImp(node.getName(), node.getAtribute("xmlns"));
 
 						final String id = node.getAtribute("id");
@@ -455,7 +454,7 @@ public class Session implements Responsemanager
 			iq.setId(nextId());
 		}
 		final String key = makeKeyForResponseListener(iq.getId(), iq.getTo());
-		System.out.println("Register handler for " + key);
+		Log.log("Register handler for " + key);
 
 		this.responseHandlers.put(key, EMPTY_HANDLER);
 
@@ -468,7 +467,7 @@ public class Session implements Responsemanager
 			iq.setId(nextId());
 		}
 		final String key = makeKeyForResponseListener(iq.getId(), iq.getTo());
-		System.out.println("Register handler for " + key);
+		Log.log("Register handler for " + key);
 
 		this.responseHandlers.put(key, listener == null ? EMPTY_HANDLER : listener);
 
@@ -654,7 +653,7 @@ public class Session implements Responsemanager
 		IQ.Type type = iq.getType();
 
 		final String key = makeKeyForResponseListener(id, from);
-		System.out.println("Retrieving key: " + key);
+		Log.log("Retrieving key: " + key);
 		ResponseHandler listener = this.responseHandlers.remove(key);
 		if (listener != null) 
 		{
@@ -675,7 +674,7 @@ public class Session implements Responsemanager
 
 	public void send(Packet iq) 
 	{
-		// System.out.println("OUT: " + iq);
+		// Log.logln("OUT: " + iq);
 		this.con.send(iq);
 	}
 	

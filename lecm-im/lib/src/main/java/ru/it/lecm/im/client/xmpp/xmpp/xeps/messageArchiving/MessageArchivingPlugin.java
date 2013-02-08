@@ -1,21 +1,20 @@
 package ru.it.lecm.im.client.xmpp.xmpp.xeps.messageArchiving;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import ru.it.lecm.im.client.xmpp.*;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import ru.it.lecm.im.client.Log;
+import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Plugin;
 import ru.it.lecm.im.client.xmpp.PluginState;
 import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.messageArchiving.Item.Type;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MessageArchivingPlugin implements Plugin {
 
@@ -24,22 +23,22 @@ public class MessageArchivingPlugin implements Plugin {
 	private static DateTimeFormat df3 = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
 
 	public static Date parseDate(final String t) {
-		try {
-			return df1.parse(t);
-		} catch (Exception e) {
-			try {
-				return df2.parse(t);
-			} catch (Exception e1) {
-				try{
-					return df3.parse(t);
-				}
-				catch(Exception e3)
-				{
-					return null;
-				}
-			}
-		}
-	}
+        try {
+            return df1.parse(t);
+        } catch (Exception e) {
+            try {
+                return df2.parse(t);
+            } catch (Exception e1) {
+                try{
+                    return df3.parse(t);
+                }
+                catch(Exception e3)
+                {
+                    return null;
+                }
+            }
+        }
+    }
 
 	private List<MessageArchivingListener> listeners = new ArrayList<MessageArchivingListener>();
 
@@ -100,9 +99,11 @@ public class MessageArchivingPlugin implements Plugin {
 			if ("from".equals(item.getName())) {
 				Item it = new Item(Type.FROM, cd, body);
 				resultItems.add(it);
+                Log.log("History from: "+ body);
 			} else if ("to".equals(item.getName())) {
 				Item it = new Item(Type.TO, cd, body);
 				resultItems.add(it);
+                Log.log("History to: "+ body);
 			}
 		}
 
@@ -110,7 +111,7 @@ public class MessageArchivingPlugin implements Plugin {
 	}
 
 	public boolean process(final Packet element) {
-		System.out.println("Archive pushed :: " + element);
+		Log.log("Archive pushed :: " + element);
 		final ResultSet rs = makeResultSet(element);
 		final String id = element.getAtribute("id");
 		try {
@@ -135,13 +136,15 @@ public class MessageArchivingPlugin implements Plugin {
 	public void reset() {
 	}
 
-	public void retriveCollection(final JID withJid, final Date startTime, int max,int after,final MessageArchiveRequestHandler requestHandler) {
-		IQ iq = new IQ(IQ.Type.get);
+	public void retriveCollection(final JID withJid, final String startTime, int max,int after,final MessageArchiveRequestHandler requestHandler) {
+        Log.log("History: MessageArchivingPlugin.retriveCollection("+withJid.toString()+")");
+        IQ iq = new IQ(IQ.Type.get);
 		iq.setAttribute("id", Session.nextId());
 
 		Packet retrieve = iq.addChild("retrieve", "urn:xmpp:archive");
 		retrieve.setAttribute("with", withJid.toString());
-		retrieve.setAttribute("start", df1.format(startTime));
+		//retrieve.setAttribute("start", df3.format(startTime));
+		retrieve.setAttribute("start", startTime);
 
 		Packet set = retrieve.addChild("set", "http://jabber.org/protocol/rsm");
 
@@ -158,7 +161,8 @@ public class MessageArchivingPlugin implements Plugin {
 	
 	public void retriveCollectionList(final JID withJid,int max,Date startTime,CollectionHandler handler)
 	{
-		IQ iq = new IQ(IQ.Type.get);
+        Log.log("History: MessageArchivingPlugin.retriveCollectionList("+withJid.toString()+")");
+        IQ iq = new IQ(IQ.Type.get);
 		Packet list = iq.addChild("list", "urn:xmpp:archive");
 		list.setAttribute("with", withJid.toStringBare());
 		if(startTime != null)

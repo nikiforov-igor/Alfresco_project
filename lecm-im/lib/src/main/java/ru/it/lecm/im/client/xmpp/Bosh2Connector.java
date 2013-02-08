@@ -182,7 +182,7 @@ public class Bosh2Connector implements Connector {
 				final int httpStatusCode = response.getStatusCode();
 				final String lastSendedBody = activeRequests.remove(request);
 
-				System.out.println(" IN (" + httpStatusCode + "): " + httpResponse);
+				Log.log(" IN (" + httpStatusCode + "): " + httpResponse);
 				fireOnBodyReceive(response, httpResponse);
 
 				final Packet body = parse(response.getText().replaceAll("&semi;", ";"));
@@ -304,7 +304,7 @@ public class Bosh2Connector implements Connector {
 					}
 					continuousConnection(ack);
 				}
-				System.out.println("............sid value is:"+sid);
+                Log.log("............sid value is:"+sid);
 			}
 		};
 		
@@ -333,7 +333,7 @@ public class Bosh2Connector implements Connector {
 				final String httpResponse = responseText;
 				final String lastSendedBody = activeScriptRequests.remove(callbackID+"");
 
-				System.out.println(" IN:" + httpResponse);
+                Log.log(" IN:" + httpResponse);
 				fireOnBodyReceive(null, httpResponse);
 
 				final Packet body = parse(responseText.replaceAll("&semi;", ";"));

@@ -211,7 +211,7 @@ public class RosterItem {
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.toString());
+            Log.log(e.toString());
 		}
 	}
 	
@@ -249,7 +249,7 @@ public class RosterItem {
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.toString());
+            Log.log(e.toString());
 			return null;
 		}
 		return object;

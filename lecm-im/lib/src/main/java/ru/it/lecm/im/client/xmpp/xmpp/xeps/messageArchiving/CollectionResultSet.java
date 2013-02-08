@@ -20,13 +20,13 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.xeps.messageArchiving;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -54,8 +54,9 @@ public class CollectionResultSet
 			if(!name.equals("chat"))
 				continue;
 			JID with = JID.fromString(child.getAtribute("with"));
-			Date start = MessageArchivingPlugin.parseDate(child.getAtribute("start"));
-			CollectionItem item = new CollectionItem(with,start);
+            String dateSource = child.getAtribute("start");
+            Date start = MessageArchivingPlugin.parseDate(dateSource);
+			CollectionItem item = new CollectionItem(with,start, dateSource);
 			chats.add(item);
 		}
 		Packet setPacket = list.getFirstChild("set");

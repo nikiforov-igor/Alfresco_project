@@ -21,26 +21,15 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.presence;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
-
-import ru.it.lecm.im.client.xmpp.*;
-import ru.it.lecm.im.client.xmpp.PluginState;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.SessionListener;
-import ru.it.lecm.im.client.xmpp.Storage;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.Connector.BoshErrorCondition;
+import ru.it.lecm.im.client.xmpp.*;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
 import ru.it.lecm.im.client.xmpp.events.Events;
@@ -50,6 +39,8 @@ import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence.Show;
 import ru.it.lecm.im.client.xmpp.stanzas.Presence.Type;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterListener;
+
+import java.util.*;
 
 public class PresencePlugin implements Plugin,SessionListener {
 	
@@ -260,7 +251,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exception happen in PresencePlugin:process:"+e.toString());
+            Log.log("Exception happen in PresencePlugin:process:" + e.toString());
 		}
 		return true;
 	}
@@ -448,7 +439,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.toString());
+            Log.log(e.toString());
 		}
 	}
 	

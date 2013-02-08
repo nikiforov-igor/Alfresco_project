@@ -21,11 +21,9 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.xeps.vcard;
 
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Plugin;
-import ru.it.lecm.im.client.xmpp.PluginState;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.PluginState;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
@@ -63,7 +61,7 @@ public class VCardPlugin implements Plugin {
 
 	public void vCardRequest(final JID jid, final VCardResponseHandler handler)
 	{
-		System.out.println("--------------------------send vCardRequest, jid is:"+jid.toString()+"--------------------------");
+        Log.log("--------------------------send vCardRequest, jid is:" + jid.toString() + "--------------------------");
 		IQ iq = new IQ(IQ.Type.get);
 		iq.setAttribute("id", "" + Session.nextId());
 		if (jid != null)

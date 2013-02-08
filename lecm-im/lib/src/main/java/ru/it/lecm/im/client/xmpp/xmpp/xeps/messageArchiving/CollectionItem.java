@@ -20,10 +20,9 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.xeps.messageArchiving;
 
-import java.util.Date;
+import ru.it.lecm.im.client.xmpp.JID;
 
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.JID;
+import java.util.Date;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -33,11 +32,14 @@ public class CollectionItem
 {
 	private JID with;
 	private Date start;
-	public CollectionItem(final JID with,final Date start)
+    private String dateSource;
+
+	public CollectionItem(final JID with, final Date start, String dateSource)
 	{
 		this.with = with;
 		this.start = start;
-	}
+        this.dateSource = dateSource;
+    }
 	
 	public JID getWith()
 	{
@@ -48,5 +50,8 @@ public class CollectionItem
 	{
 		return start;
 	}
-	
+
+    public String getDateSource() {
+        return dateSource;
+    }
 }
