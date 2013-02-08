@@ -96,6 +96,7 @@ LogicECM.module.Base.Util = {
                 // 8px breathing space for resize gripper
                 Dom.setStyle(this.options.divRight, "margin-left", 8 + width + "px");
             }
+            YAHOO.Bubbling.fire("SetHeaderWidth");
         }
     });
 
