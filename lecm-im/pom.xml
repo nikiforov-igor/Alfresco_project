@@ -17,13 +17,20 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gwt.extraJvmArgs>-Xms256M -Xmx5632M -XX:PermSize=64M -XX:MaxPermSize=256M -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=90</gwt.extraJvmArgs>
+        <gwt.extraJvmArgs>-Xms256M -Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=256M -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=90</gwt.extraJvmArgs>
     </properties>
 
     <modules>
         <module>repo</module>
         <module>share</module>
         <module>lib</module>
-        <module>gwt-debug</module>
     </modules>
+	<profiles>
+		<profile>
+			<id>lecmIM-gwt-debug</id>
+			<modules>
+				<module>gwt-debug</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
