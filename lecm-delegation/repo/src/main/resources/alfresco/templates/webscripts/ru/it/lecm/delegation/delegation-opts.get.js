@@ -1,10 +1,21 @@
-var subject = url.templateArgs["subject"];
 var nodeRef = args["nodeRef"]
-logger.log ("subject is " + subject);
 logger.log ("nodeRef is " + nodeRef);
 
 var delegationOpts = null;
 var isSubjectValid;
+
+if (!nodeRef) {
+	nodeRef = person.nodeRef;
+}
+delegationOpts = delegation.getDelegationOpts (nodeRef);
+
+if (delegationOpts) {
+	logger.log (jsonUtils.toJSONString (delegationOpts));
+	model.delegationOpts = delegationOpts.nodeRef.toString();
+	model.isActive = delegationOpts.properties["lecm-dic:active"];
+}
+
+/*
 switch (subject) {
 	case "person":
 		logger.log ("we need to call getDelegationOptsByPerson");
@@ -46,3 +57,4 @@ if (isSubjectValid) {
 		model.isActive = null;
 	}
 }
+*/

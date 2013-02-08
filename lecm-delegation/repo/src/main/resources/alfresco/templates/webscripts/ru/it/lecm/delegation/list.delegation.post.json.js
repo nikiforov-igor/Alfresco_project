@@ -54,7 +54,7 @@ if (!isEngineer) {
 		if (!employeeRef) {
 			logger.log ("ERROR: there is no nodeRef for employee");
 		}
-		delegationOpts.push (delegation.getDelegationOptsByEmployee (employeeRef));
+		delegationOpts.push (delegation.getDelegationOpts (employeeRef));
 	}
 	//бежим по model.data.items для каждого элемента проверяем его наличие в employees
 	//если его нет то удаляем его из model.data.items
@@ -76,7 +76,7 @@ if (!isEngineer) {
 	if (!currentEmployee.nodeRef) {
 		logger.log ("ERROR: there is no nodeRef for currentEmployee");
 	}
-	var delegationOpts = delegation.getDelegationOptsByEmployee (currentEmployee.nodeRef);
+	var delegationOpts = delegation.getDelegationOpts (currentEmployee.nodeRef);
 	logger.log (delegationOpts.name);
 
 	var items = model.data.items;

@@ -121,7 +121,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public NodeRef getOrCreateDelegationOpts (NodeRef employeeNodeRef) {
+	public NodeRef getOrCreateDelegationOpts (final NodeRef employeeNodeRef) {
 		//делаем поиск по всем delegation-opts, если не нашли то создаем новую
 		NodeRef delegationOptsNodeRef = findNodeByAssociationRef (employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER, TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
 
@@ -130,6 +130,15 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			delegationOptsNodeRef = createDelegationOpts (employeeNodeRef);
 		}
 		return delegationOptsNodeRef;
+	}
+
+	private NodeRef getOrCreateDelegationOptsAsSystem (final NodeRef employeeNodeRef) {
+		return AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
+			@Override
+			public NodeRef doWork () throws Exception {
+				return getOrCreateDelegationOpts (employeeNodeRef);
+			}
+		});
 	}
 
 	private NodeRef createDelegationOpts (final NodeRef employeeNodeRef) {
@@ -149,28 +158,27 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public NodeRef getDelegationOptsByPerson (final NodeRef personNodeRef) {
-		//смотрим у person ассоциацию на employee если нету то null, иначе ищем по employee
-		NodeRef employeeRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
-
-			@Override
-			public NodeRef doWork () throws Exception {
-				return findNodeByAssociationRef (personNodeRef, OrgstructureBean.ASSOC_EMPLOYEE_PERSON, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.SOURCE);
+	public NodeRef getDelegationOpts (final NodeRef nodeRef) {
+		NodeRef delefationOptsRef = null;
+		if (isDelegationOpts (nodeRef)) {
+			delefationOptsRef = nodeRef;
+		} else if (orgstructureService.isEmployee (nodeRef)) {
+			delefationOptsRef = getOrCreateDelegationOptsAsSystem (nodeRef);
+		} else if (isProperType (nodeRef, ContentModel.TYPE_PERSON)) {
+			NodeRef employeeRef = orgstructureService.getEmployeeByPerson (nodeRef);
+			if (employeeRef != null) {
+				delefationOptsRef = getOrCreateDelegationOptsAsSystem (employeeRef);
+			} else {
+				String fistname = (String) nodeService.getProperty (nodeRef, ContentModel.PROP_FIRSTNAME);
+				String lastname = (String) nodeService.getProperty (nodeRef, ContentModel.PROP_LASTNAME);
+				String username = (String) nodeService.getProperty (nodeRef, ContentModel.PROP_USERNAME);
+				logger.warn (String.format ("Alfresco user %s (%s %s) does not mapped to lecm-orgstr:employee", username, fistname, lastname));
 			}
-		});
-		return (employeeRef != null) ? getDelegationOptsByEmployee (employeeRef) : null;
-	}
-
-	@Override
-	public NodeRef getDelegationOptsByEmployee (final NodeRef employeeNodeRef) {
-		//смотрим у employee ассоциацию на delegation-opts если нету то null, иначе возвращаем delegation-opts
-		return AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
-
-			@Override
-			public NodeRef doWork () throws Exception {
-				return getOrCreateDelegationOpts (employeeNodeRef);
-			}
-		});
+		} else {
+			QName nodeType = nodeService.getType (nodeRef);
+			logger.warn (String.format ("NodeRef {%s}%s can't have delegation options.", nodeType, nodeRef));
+		}
+		return delefationOptsRef;
 	}
 
 	@Override
@@ -207,30 +215,28 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public List<NodeRef> getProcuraciesByPerson (NodeRef personNodeRef, boolean onlyActive) {
-		NodeRef delegationOptsNodeRef = getDelegationOptsByPerson (personNodeRef);
-		return getProcuraciesByDelegationOpts (delegationOptsNodeRef, onlyActive);
-	}
-
-	@Override
-	public List<NodeRef> getProcuraciesByEmployee (final NodeRef employeeNodeRef, final boolean onlyActive) {
-		//получаем параметры делегирования для сотрудника
-		NodeRef delegationOptsNodeRef = getDelegationOptsByEmployee (employeeNodeRef);
-		return getProcuraciesByDelegationOpts (delegationOptsNodeRef, onlyActive);
-	}
-
-	@Override
-	public List<NodeRef> getProcuraciesByDelegationOpts (NodeRef delegationOptsNodeRef, boolean onlyActive) {
+	public List<NodeRef> getProcuracies (final NodeRef nodeRef, final boolean onlyActive) {
+		NodeRef delegationOptsNodeRef = getDelegationOpts (nodeRef);
 		List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef> ();
-		List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
-		if (childAssociationRefs != null) {
-			for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
-				NodeRef procuracyNodeRef = childAssociationRef.getChildRef ();
-				//по идее еще и бизнес роль на активность надо проверять
-				if (!onlyActive || !isArchive (procuracyNodeRef)) {
-					procuracyNodeRefs.add (procuracyNodeRef);
-				} else if ((Boolean) nodeService.getProperty (procuracyNodeRef, IS_ACTIVE)) {
-					procuracyNodeRefs.add (procuracyNodeRef);
+		if (delegationOptsNodeRef != null) {
+			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+			if (childAssociationRefs != null) {
+				for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+					NodeRef procuracyNodeRef = childAssociationRef.getChildRef ();
+					//по идее еще и бизнес роль на активность надо проверять
+					NodeRef businessRoleRef = findNodeByAssociationRef (procuracyNodeRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+					Boolean hasActiveBusinessRole;
+					if (businessRoleRef != null) {
+						hasActiveBusinessRole = (Boolean) nodeService.getProperty (businessRoleRef, IS_ACTIVE);
+					} else {
+						hasActiveBusinessRole = true;
+					}
+
+					if (hasActiveBusinessRole && (!onlyActive || !isArchive (procuracyNodeRef))) {
+						procuracyNodeRefs.add (procuracyNodeRef);
+					} else if (hasActiveBusinessRole && (Boolean) nodeService.getProperty (procuracyNodeRef, IS_ACTIVE)) {
+						procuracyNodeRefs.add (procuracyNodeRef);
+					}
 				}
 			}
 		}
@@ -415,7 +421,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		} else {
 			String template  = "Сотруднику #object1 делегированы полномочия сотрудника #mainobject в рамках бизнес роли #object2";
 			//получить список активных доверенностей и для каждой залоггировать
-			List<NodeRef> procuracyRefs = getProcuraciesByDelegationOpts (delegationOptsRef, true);
+			List<NodeRef> procuracyRefs = getProcuracies (delegationOptsRef, true);
 			for (NodeRef procuracyRef : procuracyRefs) {
 				List<String> objects = new ArrayList<String> ();
 				NodeRef trusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
@@ -446,14 +452,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public void startDelegation (final NodeRef delegator) {
-		NodeRef delegationOptsRef = null;
-		if (isProperType (delegator, ContentModel.TYPE_PERSON)) {
-			delegationOptsRef = getDelegationOptsByPerson (delegator);
-		} else if (orgstructureService.isEmployee (delegator)) {
-			delegationOptsRef = getDelegationOptsByEmployee (delegator);
-		} else if (isDelegationOpts (delegator)) {
-			delegationOptsRef = delegator;
-		}
+		NodeRef delegationOptsRef = getDelegationOpts (delegator);
 		if (delegationOptsRef != null) {
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, true);
 			logStartDelegation (delegationOptsRef);
@@ -474,14 +473,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public void stopDelegation (final NodeRef delegator) {
-		NodeRef delegationOptsRef = null;
-		if (isProperType (delegator, ContentModel.TYPE_PERSON)) {
-			delegationOptsRef = getDelegationOptsByPerson (delegator);
-		} else if (orgstructureService.isEmployee (delegator)) {
-			delegationOptsRef = getDelegationOptsByEmployee (delegator);
-		} else if (isDelegationOpts (delegator)) {
-			delegationOptsRef = delegator;
-		}
+		NodeRef delegationOptsRef = getDelegationOpts (delegator);
 		if (delegationOptsRef != null) {
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
 			logStopDelegation (delegationOptsRef);
@@ -492,10 +484,28 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
-	public boolean hasSubordinate (final NodeRef delegationOptsNodeRef) {
-		NodeRef currentEmployee = orgstructureService.getCurrentEmployee ();
-		NodeRef subordinateEmployee = findNodeByAssociationRef (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-		return orgstructureService.hasSubordinate (currentEmployee, subordinateEmployee);
+	public boolean hasSubordinate (final NodeRef nodeRef) {
+		boolean result = false;
+		if (nodeService.exists (nodeRef)) {
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee ();
+			NodeRef subordinateEmployee = null;
+			if (isDelegationOpts (nodeRef)) {
+				subordinateEmployee = findNodeByAssociationRef (nodeRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			} else if (orgstructureService.isEmployee (nodeRef)) {
+				subordinateEmployee = nodeRef;
+			} else if (isProperType (nodeRef, ContentModel.TYPE_PERSON)) {
+				subordinateEmployee = orgstructureService.getEmployeeByPerson (nodeRef);
+			} else {
+				QName nodeType = nodeService.getType (nodeRef);
+				logger.warn (String.format ("NodeRef {%s}%s can't have subordinate", nodeType, nodeRef));
+			}
+			if (currentEmployee != null && subordinateEmployee != null) {
+				result = orgstructureService.hasSubordinate (currentEmployee, subordinateEmployee);
+			}
+		} else {
+			logger.warn (String.format ("Node %s does not exist", nodeRef));
+		}
+		return result;
 	}
 
 	@Override

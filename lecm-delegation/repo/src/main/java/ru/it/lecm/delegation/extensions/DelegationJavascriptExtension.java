@@ -10,13 +10,11 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.beans.DelegationBean;
 
 /**
  * javascript root object для модуля делегирования
@@ -28,7 +26,6 @@ import ru.it.lecm.delegation.IDelegation;
  */
 public class DelegationJavascriptExtension extends BaseScopableProcessorExtension {
 
-	private final static Logger logger = LoggerFactory.getLogger (DelegationJavascriptExtension.class);
 	private ServiceRegistry serviceRegistry;
 	private IDelegation delegationService;
 
@@ -57,20 +54,15 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		return null;
 	}
 
-	public ScriptNode getDelegationOptsByPerson (final String personRef) {
-		NodeRef nodeRef = delegationService.getDelegationOptsByPerson (new NodeRef (personRef));
-		if (nodeRef != null) {
-			return new ScriptNode (nodeRef, serviceRegistry, getScope ());
+	public ScriptNode getDelegationOpts (final String ref) {
+		ScriptNode scriptNode = null;
+		if (NodeRef.isNodeRef (ref)) {
+			NodeRef nodeRef = delegationService.getDelegationOpts (new NodeRef (ref));
+			if (nodeRef != null) {
+				scriptNode = new ScriptNode (nodeRef, serviceRegistry, getScope ());
+			}
 		}
-		return null;
-	}
-
-	public ScriptNode getDelegationOptsByEmployee (final String employeeRef) {
-		NodeRef nodeRef = delegationService.getDelegationOptsByEmployee (new NodeRef (employeeRef));
-		if (nodeRef != null) {
-			return new ScriptNode (nodeRef, serviceRegistry, getScope ());
-		}
-		return null;
+		return scriptNode;
 	}
 
 	/**
@@ -108,53 +100,38 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		return getAsScriptable (uniqueBusinessRoleNodeRefs);
 	}
 
-	private final static QName ASSOC_PROCURACY_BUSINESS_ROLE = QName.createQName ("http://www.it.ru/logicECM/model/delegation/1.0", "procuracy-business-role-assoc");
-
 	/**
-	 * актуализировать список доверенностей по указанному пользователю системы
-	 * @param personRef идентификатор пользователя
-	 * @return список свежесозданных доверенностей
+	 * актуализовать список доверенностей по указанному объекту системы
+	 * @param ref объект системы, можно передать следующие типы объектов cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @return  список свежесозданных доверенностей
 	 */
-	public Scriptable actualizeProcuraciesForPerson (final String personRef) {
-		NodeRef delegationOptsNodeRef= delegationService.getDelegationOptsByPerson (new NodeRef (personRef));
-		return actualizeProcuraciesForDelegationOpts (delegationOptsNodeRef.toString ());
-	}
-
-	/**
-	 * актуализировать список доверенностей по указанному сотруднику
-	 * @param employeeRef идентификатор сотрудника
-	 * @return список свежесозданных доверенностей
-	 */
-	public Scriptable actualizeProcuraciesForEmployee (final String employeeRef) {
-		NodeRef delegationOptsNodeRef = delegationService.getDelegationOptsByEmployee (new NodeRef (employeeRef));
-		return actualizeProcuraciesForDelegationOpts (delegationOptsNodeRef.toString ());
-	}
-
-	/**
-	 * актуализировать список доверенностей по параметрам делегирования
-	 * @param delegationOptsRef идентификатор параметров делегирования
-	 * @return список свежесозданных доверенностей
-	 */
-	public Scriptable actualizeProcuraciesForDelegationOpts (final String delegationOptsRef) {
-		NodeService nodeService = serviceRegistry.getNodeService ();
-		//получаем список активных уникальных бизнес ролей
-		List<NodeRef> businessRoleNodeRefs = delegationService.getUniqueBusinessRolesByDelegationOpts (new NodeRef (delegationOptsRef), true);
-		//получаем список доверенностей, любых какие есть
-		List<NodeRef> procuracyNodeRefs = delegationService.getProcuraciesByDelegationOpts (new NodeRef (delegationOptsRef), false);
-		//смотрим есть ли среди настроенных доверенностей бизнес роли из списка уникальных
-		for (NodeRef procuracyNodeRef : procuracyNodeRefs) {
-			List<AssociationRef> associationRefs = nodeService.getTargetAssocs (procuracyNodeRef, ASSOC_PROCURACY_BUSINESS_ROLE);
-			if (associationRefs != null && !associationRefs.isEmpty ()) {
-				//у нас ассоциация 1 к много. Т.е. бизнес ролей то много, но в одной доверенности одна бизнес роль
-				NodeRef businessRoleNodeRef = associationRefs.get (0).getTargetRef ();
-				//если настроенная на доверенность бизнес роль в списке уникальных уже есть, то удалить ее оттуда
-				if (businessRoleNodeRefs.contains (businessRoleNodeRef)) {
-					businessRoleNodeRefs.remove (businessRoleNodeRef);
+	public Scriptable actualizeProcuracies (final String ref) {
+		Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {});
+		if (NodeRef.isNodeRef (ref)) {
+			NodeRef delegationOptsNodeRef = delegationService.getDelegationOpts (new NodeRef (ref));
+			if (delegationOptsNodeRef != null) {
+				NodeService nodeService = serviceRegistry.getNodeService ();
+				//получаем список активных уникальных бизнес ролей
+				List<NodeRef> businessRoleNodeRefs = delegationService.getUniqueBusinessRolesByDelegationOpts (delegationOptsNodeRef, true);
+				//получаем список доверенностей, любых какие есть
+				List<NodeRef> procuracyNodeRefs = delegationService.getProcuracies (delegationOptsNodeRef, false);
+				//смотрим есть ли среди настроенных доверенностей бизнес роли из списка уникальных
+				for (NodeRef procuracyNodeRef : procuracyNodeRefs) {
+					List<AssociationRef> associationRefs = nodeService.getTargetAssocs (procuracyNodeRef, DelegationBean.ASSOC_PROCURACY_BUSINESS_ROLE);
+					if (associationRefs != null && !associationRefs.isEmpty ()) {
+						//у нас ассоциация 1 к много. Т.е. бизнес ролей то много, но в одной доверенности одна бизнес роль
+						NodeRef businessRoleNodeRef = associationRefs.get (0).getTargetRef ();
+						//если настроенная на доверенность бизнес роль в списке уникальных уже есть, то удалить ее оттуда
+						if (businessRoleNodeRefs.contains (businessRoleNodeRef)) {
+							businessRoleNodeRefs.remove (businessRoleNodeRef);
+						}
+					}
 				}
+				//для оставшихся бизнес ролей создаем доверенности с флагом active=false и возвращаем кол-во доверенностей
+				scriptable = getAsScriptable (delegationService.createEmptyProcuracies (delegationOptsNodeRef, businessRoleNodeRefs));
 			}
 		}
-		//для оставшихся бизнес ролей создаем доверенности с флагом active=false и возвращаем кол-во доверенностей
-		return getAsScriptable (delegationService.createEmptyProcuracies (new NodeRef (delegationOptsRef), businessRoleNodeRefs));
+		return scriptable;
 	}
 
 	public String saveDelegationOpts (final String delegationOptsRef, final JSONObject options) {
@@ -165,26 +142,12 @@ public class DelegationJavascriptExtension extends BaseScopableProcessorExtensio
 		delegationService.deleteProcuracies (nodeRefs);
 	}
 
-	public boolean hasSubordinate (final JSONObject options) {
-		boolean result = false;
-		try {
-			String subject = options.getString ("subject");
-			String nodeRef = options.getString ("nodeRef");
-			if ("delegator".equals (subject)) {
-				if ("current".equals (nodeRef)) {
-					result = true; //считаем самого себя своим подчиненным если ничего нам не прислали
-				} else {
-					result = delegationService.hasSubordinate (new NodeRef (nodeRef));
-				}
-			}
-		} catch (JSONException ex) {
-			logger.error (ex.getMessage (), ex);
-		}
-		return result;
+	public boolean hasSubordinate (final String ref) {
+		return NodeRef.isNodeRef (ref) && delegationService.hasSubordinate (new NodeRef (ref));
 	}
 
 	public boolean isDelegationActive (final String delegationOptsRef) {
-		return delegationService.isDelegationActive (new NodeRef (delegationOptsRef));
+		return NodeRef.isNodeRef (delegationOptsRef) && delegationService.isDelegationActive (new NodeRef (delegationOptsRef));
 	}
 
 	/**

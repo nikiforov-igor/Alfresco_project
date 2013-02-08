@@ -1,11 +1,19 @@
 var page = url.templateArgs.page;
+logger.log ("page = " + page);
 model.page = page;
 
 function getDescriptionList () {
 	var container = delegation.getDelegationOptsContainer ();
 	var itemType = delegation.getItemType ();
-	var isEngineer = orgstructure.isDelegationEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
-	var isBoss = orgstructure.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var currentEmployee = orgstructure.getCurrentEmployee ();
+	var isEngineer = false;
+	var isBoss = false;
+	if (currentEmployee != null) {
+		isEngineer = orgstructure.isDelegationEngineer (currentEmployee.nodeRef.toString ());
+		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString ());
+	} else {
+		logger.log ("ERROR: there is no employee for user " + person.name);
+	}
 
 	model.nodeRef = container.nodeRef.toString ();
 	logger.log ("model.nodeRef = " + model.nodeRef);
@@ -18,15 +26,28 @@ function getDescriptionList () {
 }
 
 function getDescriptionOpts () {
-	var isEngineer = orgstructure.isDelegationEngineer (orgstructure.getCurrentEmployee ().nodeRef.toString ());
-	var isBoss = orgstructure.isBoss (orgstructure.getCurrentEmployee ().nodeRef.toString ());
+	var nodeRef = args["nodeRef"]
+	logger.log ("nodeRef is " + nodeRef);
+
+	if (!nodeRef) {
+		nodeRef = person.nodeRef;
+	}
+
+	var currentEmployee = orgstructure.getCurrentEmployee ();
+	var isEngineer = false;
+	var isBoss = false;
+	if (currentEmployee != null) {
+		isEngineer = orgstructure.isDelegationEngineer (currentEmployee.nodeRef.toString ());
+		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString ());
+	} else {
+		logger.log ("ERROR: there is no employee for user " + person.name);
+	}
 	model.isEngineer = isEngineer;
 	logger.log ("model.isEngineer = " + model.isEngineer);
 	model.isBoss = isBoss;
 	logger.log ("model.isBoss = " + model.isBoss);
 
-	logger.log (jsonUtils.toJSONString (json));
-	model.hasSubordinate = delegation.hasSubordinate (json);
+	model.hasSubordinate = delegation.hasSubordinate (nodeRef);
 }
 
 switch (page) {

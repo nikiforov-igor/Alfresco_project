@@ -34,7 +34,7 @@ LogicECM.module.Delegation.Const.hasSubordinate = response.hasSubordinate;
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePage>
-	<#if "current" == delegator>
+	<#if "me" == delegator>
 		<@region id="content" scope="template"/>
 	<#elseif nativeObject.isEngineer || (nativeObject.isBoss && nativeObject.hasSubordinate)>
 		<@region id="content" scope="template"/>

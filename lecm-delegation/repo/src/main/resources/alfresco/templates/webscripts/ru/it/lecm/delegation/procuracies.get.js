@@ -1,10 +1,20 @@
-var subject = url.templateArgs["subject"];
 var nodeRef = args["nodeRef"]
-logger.log ("subject is " + subject);
 logger.log ("nodeRef is " + nodeRef);
 
 var procuracies = null;
 var isSubjectValid;
+
+if (!nodeRef) {
+	nodeRef = person.nodeRef;
+}
+procuracies = delegation.actualizeProcuracies (nodeRef);
+if (procuracies) {
+	model.procuracies = procuracies;
+} else {
+	model.procuracies = [];
+}
+
+/*
 switch (subject) {
 	case "person":
 		logger.log ("we need to call actualizeProcuraciesForPerson");
@@ -55,3 +65,4 @@ if (isSubjectValid) {
 		model.procuracies = [];
 	}
 }
+*/
