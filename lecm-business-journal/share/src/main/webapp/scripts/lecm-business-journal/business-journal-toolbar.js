@@ -219,7 +219,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null;
                     this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
@@ -259,7 +259,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
                     dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,

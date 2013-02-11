@@ -1226,7 +1226,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		if (employee == null || !isEmployee(employee)) return null;
 		final NodeRef person = getPersonForEmployee(employee);
 		if (person == null) {
-			logger.warn(String.format("Employee '%s' is not linked to system user", employee.toString()));
+			logger.warn("Employee {} is not linked to system user", employee.toString());
 			return null;
 		}
 		return (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);

@@ -276,7 +276,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    //сбрасываем на значение по умолчанию
+                    if (dataGrid.initialSearchConfig != null) {
+                        datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    } else {
+                        datagridMeta.searchConfig = null;
+                    }
                     this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
@@ -362,7 +367,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta

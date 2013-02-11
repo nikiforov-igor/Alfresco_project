@@ -121,7 +121,7 @@ LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
 				YAHOO.Bubbling.fire("showFilteredLabel");
 			} else {
 				//сбрасываем на значение по умолчанию
-				datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+				datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
 				this.modules.dataGrid.search.performSearch({
 					parent:datagridMeta.nodeRef,
 					itemType:datagridMeta.itemType,
@@ -248,7 +248,7 @@ LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta
