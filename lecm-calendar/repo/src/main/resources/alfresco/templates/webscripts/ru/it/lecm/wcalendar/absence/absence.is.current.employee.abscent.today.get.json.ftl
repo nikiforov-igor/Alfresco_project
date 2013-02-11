@@ -1,3 +1,0 @@
-{
-	"isAbscent": ${isAbscent?string}
-}

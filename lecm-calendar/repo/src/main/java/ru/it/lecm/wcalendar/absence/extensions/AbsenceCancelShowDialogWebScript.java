@@ -45,7 +45,7 @@ public class AbsenceCancelShowDialogWebScript extends DeclarativeWebScript {
 			result = false;
 		} else {
 			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-			result = absenceService.isEmployeeAbscentToday(currentEmployee);
+			result = absenceService.isEmployeeAbsentToday(currentEmployee);
 			session.setAttribute("absence_cancel_denied", true);
 		}
 

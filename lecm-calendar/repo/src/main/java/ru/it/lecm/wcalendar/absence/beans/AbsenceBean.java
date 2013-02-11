@@ -125,7 +125,7 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	}
 
 	@Override
-	public boolean isEmployeeAbscent(NodeRef nodeRef, Date date) {
+	public boolean isEmployeeAbsent(NodeRef nodeRef, Date date) {
 		boolean result = false;
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
 		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
@@ -142,8 +142,8 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	}
 
 	@Override
-	public boolean isEmployeeAbscentToday(NodeRef nodeRef) {
-		return isEmployeeAbscent(nodeRef, new Date());
+	public boolean isEmployeeAbsentToday(NodeRef nodeRef) {
+		return isEmployeeAbsent(nodeRef, new Date());
 	}
 
 	@Override

@@ -81,7 +81,7 @@ public interface IAbsence {
 	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
 	 * не планировал отсутствия.
 	 */
-	boolean isEmployeeAbscent(NodeRef nodeRef, Date date);
+	boolean isEmployeeAbsent(NodeRef nodeRef, Date date);
 
 	/**
 	 * Проверить, отсутствует ли сегодня указанный сотрудник.
@@ -89,7 +89,7 @@ public interface IAbsence {
 	 * @param nodeRef NodeRef на объект типа employee
 	 * @return true - сотрудник сегодня отсутствует
 	 */
-	boolean isEmployeeAbscentToday(NodeRef nodeRef);
+	boolean isEmployeeAbsentToday(NodeRef nodeRef);
 
 	/**
 	 * Получить экземпляр отсутствия, активного для указанного сотрудника на

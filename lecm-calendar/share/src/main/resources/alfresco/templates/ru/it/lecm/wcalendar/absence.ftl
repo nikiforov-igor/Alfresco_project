@@ -10,6 +10,7 @@
 
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/absence-summary-table.css"/>
 
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
 
@@ -49,6 +50,7 @@ LogicECM.module.WCalendar.Absence.ABSENCE_LABEL = LogicECM.module.WCalendar.Abse
 <@bpage.basePage showToolbar=showContent>
 	<#if showContent>
 		<@region id="absence" scope="template"/>
+		<@region id="absence-summary-table" scope="template"/>
 	<#else/>
 		<@region id="forbidden" scope="template"/>
 	</#if>

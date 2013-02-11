@@ -1,9 +1,9 @@
 var currentEmployee = orgstructure.getCurrentEmployee();
 if (currentEmployee != null) {
-	var isAbscent = absence.isEmployeeAbscentToday(currentEmployee.nodeRef.toString());
-	model.isAbscent = isAbscent;
+	var isAbsent = absence.isEmployeeAbsentToday(currentEmployee.nodeRef.toString());
+	model.isAbsent = isAbsent;
 } else {
 	logger.log("ERROR: current employee is null!");
-	model.isAbscent = false;
+	model.isAbsent = false;
 }
 

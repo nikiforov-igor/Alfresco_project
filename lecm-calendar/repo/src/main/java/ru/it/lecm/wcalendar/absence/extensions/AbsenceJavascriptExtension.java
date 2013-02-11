@@ -122,14 +122,14 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
 	 * не планировал отсутствия.
 	 */
-	public boolean isEmployeeAbscent(String nodeRefStr, String dateStr) {
+	public boolean isEmployeeAbsent(String nodeRefStr, String dateStr) {
 		Date date;
 		try {
 			date = dateParser.parse(dateStr);
 		} catch (ParseException ex) {
 			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
 		}
-		return absenceService.isEmployeeAbscent(new NodeRef(nodeRefStr), date);
+		return absenceService.isEmployeeAbsent(new NodeRef(nodeRefStr), date);
 	}
 
 	/**
@@ -138,8 +138,8 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
 	 * @return true - сотрудник сегодня отсутствует
 	 */
-	public boolean isEmployeeAbscentToday(String nodeRefStr) {
-		return absenceService.isEmployeeAbscentToday(new NodeRef(nodeRefStr));
+	public boolean isEmployeeAbsentToday(String nodeRefStr) {
+		return absenceService.isEmployeeAbsentToday(new NodeRef(nodeRefStr));
 	}
 
 	/**

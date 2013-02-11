@@ -8,6 +8,8 @@
 
 var pageContext = url.templateArgs["context"];
 
+var showMyself = true;
+
 var currentEmployee = orgstructure.getCurrentEmployee();
 if (!currentEmployee) {
 	logger.log("ERROR: current employee is null!");
@@ -72,14 +74,16 @@ if (!currentEmployee) {
 				}
 			}
 		} else if (isEngineer) {
-			// удалим себя из списка, к себе на страницу мы и так можем попасть
-			items = model.data.items;
-			for (i = 0; i < items.length; ++i) {
-				abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
-				if (abscentEmployeeRef.equals(currentEmployee.nodeRef)){
-					items.splice(i, 1);
-					model.data.paging.totalRecords -= 1;
-					i--;
+			if (!showMyself) {
+				// удалим себя из списка, к себе на страницу мы и так можем попасть
+				items = model.data.items;
+				for (i = 0; i < items.length; ++i) {
+					abscentEmployeeRef = items[i].node.assocs["lecm-absence:abscent-employee-assoc"][0].nodeRef;
+					if (abscentEmployeeRef.equals(currentEmployee.nodeRef)){
+						items.splice(i, 1);
+						model.data.paging.totalRecords -= 1;
+						i--;
+					}
 				}
 			}
 		} else {

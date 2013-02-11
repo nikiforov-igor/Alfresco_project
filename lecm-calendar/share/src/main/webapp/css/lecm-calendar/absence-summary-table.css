@@ -1,0 +1,46 @@
+div#summary-table-container > table {
+	border: 3px solid #636363;
+	border-spacing: 0px 0px;
+	border-collapse: collapse ;
+}
+
+div#summary-table-container > td table {
+	border: none;
+	border-spacing: 0px 0px;
+	border-collapse: collapse ;
+}
+
+div#summary-table-container > table tr td {
+	border: none;
+}
+
+.diagramm-row td {
+	border: none;
+	width: 20px;
+	text-align: center;
+}
+
+.employee-header {
+	text-align: center;
+}
+
+.calendar-header {
+	border: 1px solid #000000 !important;
+}
+.employee-column {
+	border: 1px solid #000000 !important;
+	padding: 5px;
+}
+
+.reasons-legend {
+	float: right;
+	border: 1px solid #000000 !important;
+	border-collapse: separate !important;
+	margin-left: 5px;
+	width: 20%;
+	border-spacing: 2px !important;
+}
+
+div#summary-table-container {
+	width: 1100px;
+}

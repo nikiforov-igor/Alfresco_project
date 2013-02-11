@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>wcalendar-absence-summary-table</shortname>
+	<description>Work Calendar: Absence Summary Table</description>
+	<format default="html"/>
+	<url>/ru/it/lecm/wcalendar/absence/absence-summary-table</url>
+	<authentication>user</authentication>
+</webscript>
