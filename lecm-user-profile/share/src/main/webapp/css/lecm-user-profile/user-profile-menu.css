@@ -1,9 +1,9 @@
 /* TODO: Нужно поменять иконки на подходящие */
 
 #lecm-menu #menu-buttons #menu-buttons-userProfileAbsenceBtn span.first-child {
-    background: url('/share/res/images/lecm-calendar/lecm-calendar_top-menu-3.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-user-profile/lecm-user-profile_absence-3.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-userProfileDelegationBtn span.first-child {
-    background: url('/share/res/images/lecm-calendar/lecm-calendar_top-menu-3.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-delegation/delegation_32.png') no-repeat 4px 4px;
 }
 
