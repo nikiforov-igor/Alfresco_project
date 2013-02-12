@@ -382,6 +382,9 @@
 					<field id="lecm-absence:comment" set="additional"/>
 				</appearance>
 			</form>
+			<form id="createNewInstantAbsenceForm-XYZ">
+				<create-form template="/ru/it/lecm/wcalendar/absence/new-instant-absence-form.ftl"/>
+			</form>
 		</forms>
 	</config>
 	<config evaluator="model-type" condition="lecm-absence:reason">

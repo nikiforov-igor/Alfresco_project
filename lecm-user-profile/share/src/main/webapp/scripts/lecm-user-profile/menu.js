@@ -39,11 +39,18 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 				scope._reloadPage ("my-delegation");
 			}
 		},
+		
+		_userProfileInstantAbsenceBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				scope._reloadPage ("instant-absence");
+			}
+		},
 
 		_onMenuReady: function () {
 			Alfresco.util.createYUIButton(this, "userProfileAbsenceBtn", this._userProfileAbsenceBtnClick(), {});
 			Alfresco.util.createYUIButton(this, "userProfileDelegationBtn", this._userProfileDelegationBtnClick(), {});
-
+			Alfresco.util.createYUIButton(this, "userProfileInstantAbsenceBtn", this._userProfileInstantAbsenceBtnClick(), {});
 		},
 
 		onReady: function () {

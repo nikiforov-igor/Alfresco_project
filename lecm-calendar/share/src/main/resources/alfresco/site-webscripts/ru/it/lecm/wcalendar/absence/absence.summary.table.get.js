@@ -48,10 +48,6 @@ if (data != null && data.totalRecords > 0) {
 		var response = eval("(" + responseRaw + ")");
 		reasons[key].color = response.color;
 	}
-	
-	
-	//model.rawData = "rawData = " + dataRaw.response;
-	
 
 	var today = new Date();
 	var calendarHeader = {};
@@ -86,8 +82,6 @@ if (data != null && data.totalRecords > 0) {
 			today.setDate(today.getDate() + 1);
 		}
 	}
-
-	model.debug = "<br><br>data = " + jsonUtils.toJSONString(data) + "<br><br>result = " + jsonUtils.toJSONString(result) + "<br><br>reasons = " + jsonUtils.toJSONString(reasons) + "<br><br>monthNames = " + jsonUtils.toJSONString(monthNames) + "<br><br>calendarHeader = " + jsonUtils.toJSONString(calendarHeader);
 
 	today = new Date();
 	model.curMonthConst = today.getMonth();

@@ -15,7 +15,6 @@ if (!currentEmployee) {
 	if (!isEngineer && isBoss) {
 		// если чувак не технолог, то получаем список его подчиненных.
 		// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
-		logger.log ("getBossSubordinate");
 		if (!currentEmployee.nodeRef) {
 			logger.log("ERROR: there is no nodeRef for currentEmployee");
 		}
