@@ -95,8 +95,9 @@ if (data != null && data.totalRecords > 0) {
 	model.calendarHeader = calendarHeader;
 	model.reasons = reasons;
 	model.result = result;
-
-}
+} else {
+	 model.result = {};
+ }
 
 function DateFromISO8601() {
 	var fromISOString = function()
