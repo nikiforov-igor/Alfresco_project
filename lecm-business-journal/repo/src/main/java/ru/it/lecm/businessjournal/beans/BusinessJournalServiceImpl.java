@@ -155,16 +155,18 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		}
 		NodeRef record = null;
 		try {
+			// получаем текущего пользователя по person
+			NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+
 			// заполняем карту плейсхолдеров
-			Map<String, String> holdersMap = fillHolders(initiator, mainObject, objects);
+			Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
 			// пытаемся получить объект Категория события по ключу
 			NodeRef category = getEventCategoryByCode(eventCategory);
 			// получаем шаблон описания
 			String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
 			// заполняем шаблон данными
 			String filled = fillTemplateString(templateString, holdersMap);
-			// получаем текущего пользователя по логину
-			NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+
 			// создаем записи
 			record = createRecord(date, employee, mainObject, category, objects, filled);
 		} catch (Exception ex) {
@@ -251,11 +253,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
 				properties.put(PROP_BR_RECORD_DATE, date);
 				properties.put(PROP_BR_RECORD_DESC, description);
-				if (initiator != null) {
-					properties.put(PROP_BR_RECORD_INITIATOR, getObjectDescription(initiator));
-				} else {
-					properties.put(PROP_BR_RECORD_INITIATOR, DEFAULT_SYSTEM_TEMPLATE);
-				}
+				properties.put(PROP_BR_RECORD_INITIATOR, getInitiatorDescription(initiator));
 				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
@@ -329,25 +327,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	/**
-     * Метод возвращающий правильный тип для инициатора
-     * Подразумеваем, что инициировать событие может только сотрудник или Система
-     * @param initiator - инициатор события (cm:person)
-     * @return тип инициатора (lecm-orgst:employee или System)
-     */
-    private String resolveInitiatorType(NodeRef initiator) {
-	    String initiatorType;
-	    // инициатор - объект cm:person, Пытаемся получить сотрудника
-	    NodeRef employee = orgstructureService.getEmployeeByPerson(initiator);
-	    if (employee != null) {
-		    initiatorType = nodeService.getType(employee).toPrefixString(serviceRegistry.getNamespaceService());
-	    } else {
-		    // если не удалось получить сотрудника - считаем, что изменения сделала система
-		    initiatorType = SYSTEM;
-	    }
-	    return initiatorType;
-    }
-
-	/**
 	 * Метод формирующий описание заданного объекта по шаблону, определяемому по типу объекта
 	 * @param object - текущий объект
 	 * @return сформированное описание
@@ -367,8 +346,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	private String getInitiatorDescription(NodeRef initiator) {
-		String initiatorType = initiator != null ? resolveInitiatorType(initiator) : SYSTEM;
-		return initiatorType.equals(SYSTEM) ? DEFAULT_SYSTEM_TEMPLATE : getObjectDescription(orgstructureService.getEmployeeByPerson(initiator));
+		if (initiator != null) {
+			return getObjectDescription(initiator);
+		} else {
+			return DEFAULT_SYSTEM_TEMPLATE;
+		}
 	}
 
 	/**
