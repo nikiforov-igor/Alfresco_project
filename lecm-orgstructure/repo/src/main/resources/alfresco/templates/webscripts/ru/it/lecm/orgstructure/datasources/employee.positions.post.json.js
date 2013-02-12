@@ -19,7 +19,7 @@ function main() {
         staffs = orgstructure.getEmployeeStaffs(employeeRef);
     }
 
-    model.data = processResults(staffs, fields, nameSubstituteStrings, maxResults); // call method from search.lib.js
+    model.data = processResults(staffs, fields, nameSubstituteStrings, 0, staffs.length); // call method from search.lib.js
 }
 
 main();

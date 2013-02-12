@@ -29,7 +29,7 @@
  *
  * @return the final search results object
  */
-function processResults(nodes, fields, nameSubstituteStrings, maxResults) {
+function processResults(nodes, fields, nameSubstituteStrings, startIndex, total) {
     // empty cache state
     processedCache = {};
     var results = [],
@@ -61,7 +61,7 @@ function processResults(nodes, fields, nameSubstituteStrings, maxResults) {
         }
     }
 
-    for (i = 0, j = nodes.length; i < j && added < maxResults; i++) {
+    for (i = 0, j = nodes.length; i < j; i++) {
         results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(",")));
         added++;
     }
@@ -84,8 +84,8 @@ function processResults(nodes, fields, nameSubstituteStrings, maxResults) {
             create:hasPermission
         },
         paging:{
-            totalRecords:results.length,
-            startIndex:0
+            totalRecords:total,
+            startIndex:startIndex
         },
         items:results
     });
@@ -142,8 +142,11 @@ function getSearchResults(params) {
 	    nameSubstituteStrings = params.nameSubstituteStrings,
         showInactive = params.showInactive,
         parent = params.parent,
-        itemType = params.itemType;
+        itemType = params.itemType,
+        startIndex = params.startIndex,
+        pageSize = params.maxResults;
 
+    var total = 0;
     // Advanced search form data search.
     // Supplied as json in the standard Alfresco Forms data structure:
     //    prop_<name>:value|assoc_<name>:value
@@ -201,33 +204,6 @@ function getSearchResults(params) {
                                     }
                                     formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + from + '".."' + to + '"';
                                     first = false;
-                                }
-                            }
-                            else if (propName.indexOf("cm:categories") != -1) {
-                                // determines if the checkbox use sub categories was clicked
-                                if (propName.indexOf("usesubcats") == -1) {
-                                    if (formJson["prop_cm_categories_usesubcats"] == "true") {
-                                        useSubCats = true;
-                                    }
-
-                                    // build list of category terms to search for
-                                    var firstCat = true;
-                                    var catQuery = "";
-                                    var cats = propValue.split(',');
-                                    for (var i = 0; i < cats.length; i++) {
-                                        var cat = cats[i];
-                                        var catNode = search.findNode(cat);
-                                        if (catNode) {
-                                            catQuery += (firstCat ? '' : ' OR ') + "PATH:\"" + catNode.qnamePath + (useSubCats ? "//*\"" : "/member\"" );
-                                            firstCat = false;
-                                        }
-                                    }
-
-                                    if (catQuery.length !== 0) {
-                                        // surround category terms with brackets if appropriate
-                                        formQuery += (first ? '' : ' AND ') + "(" + catQuery + ")";
-                                        first = false;
-                                    }
                                 }
                             }
                             else {
@@ -361,11 +337,20 @@ function getSearchResults(params) {
             if (logger.isLoggingEnabled())
                 logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
 
-            // perform fts-alfresco language query
+            // Получаем число всех записей
             var queryDef = {
                 query:ftsQuery,
                 language:"fts-alfresco",
-                page:{maxItems:params.maxResults * 2}, // allow for space for filtering out results
+                onerror:"no-results",
+                sort:sortColumns
+            };
+            total = search.query(queryDef).length;
+
+            // выполняем запрос с ограничением
+            queryDef = {
+                query:ftsQuery,
+                language:"fts-alfresco",
+                page:{maxItems:pageSize, skipCount:(startIndex < total ? startIndex : 0)},
                 onerror:"no-results",
                 sort:sortColumns
             };
@@ -376,33 +361,12 @@ function getSearchResults(params) {
         if (parent != null && parent.length() > 0 && parent != 'NOT_LOAD') {
             var node = search.findNode(parent);
             if (node) {
-                var childs;
-                if (itemType != null && itemType.length() > 0) {
-                    childs = node.getChildAssocsByType(itemType);
-                } else {
-                    childs = node.getChildren();
-                }
-                if (!showInactive) {
-                    for (var j = 0; j < childs.length; j++) {
-                        var child = childs[j];
-                        if (!child.hasAspect("lecm-dic:aspect_active") || child.properties["lecm-dic:active"]) {
-                            nodes.push(child);
-                        }
-                    }
-                } else {
-                    nodes = childs;
-                }
-                var sortFunction = function (a, b) {
-                    if (a.properties["cm:name"] < b.properties["cm:name"])
-                        return -1;
-                    if (a.properties["cm:name"] > b.properties["cm:name"])
-                        return 1;
-                    return 0
-                };
-                nodes.sort(sortFunction);
+                var childsPaged = base.getChilds(node, itemType, pageSize, startIndex, "cm:name", true, !showInactive);
+                nodes = childsPaged.page;
+                total = childsPaged.totalResultCountUpper;
             }
         }
     }
 
-    return processResults(nodes, fields, nameSubstituteStrings, params.maxResults);
+    return processResults(nodes, fields, nameSubstituteStrings, startIndex, total);
 }

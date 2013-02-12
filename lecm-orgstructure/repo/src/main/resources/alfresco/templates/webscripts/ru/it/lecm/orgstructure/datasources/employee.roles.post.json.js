@@ -4,7 +4,7 @@
 const DEFAULT_MAX_RESULTS = 3000;
 function main() {
     var params = {};
-    var groups = [];
+    var roles = [];
     var fields;
     var nameSubstituteStrings;
     var maxResults;
@@ -16,10 +16,10 @@ function main() {
         maxResults = (pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS;
 
         var employeeRef = (pars.get("parent").length() > 0)  ? pars.get("parent") : null;
-        groups = orgstructure.getEmployeeRoles(employeeRef);
+        roles = orgstructure.getEmployeeRoles(employeeRef);
     }
 
-    model.data = processResults(groups, fields, nameSubstituteStrings, maxResults); // call method from search.lib.js
+    model.data = processResults(roles, fields, nameSubstituteStrings, 0, roles.length); // call method from search.lib.js
 }
 
 main();

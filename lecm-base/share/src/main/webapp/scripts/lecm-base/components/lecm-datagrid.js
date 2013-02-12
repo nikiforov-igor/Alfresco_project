@@ -82,7 +82,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.datagridColumns = {};
         this.dataRequestFields = [];
         this.dataResponseFields = [];
-        this.currentPage = 1;
+        this.initialPage = 1;
         this.totalRecords = 0;
         this.showingMoreActions = false;
         this.selectedItems = {};
@@ -134,6 +134,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @default false
                  */
                 usePagination: false,
+
+                useDynamicPagination: false,
 
                 showExtendSearchBlock: true,
 
@@ -260,7 +262,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @type int
              * @default 1
              */
-            currentPage: null,
+            initialPage: null,
 
             /**
              * Total number of records (documents + folders) in the currentPath.
@@ -891,14 +893,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 {
                     var bookmarkedPage = YAHOO.util.History.getBookmarkedState("page") || "1";
                     while (bookmarkedPage != (bookmarkedPage = decodeURIComponent(bookmarkedPage))){}
-                    this.currentPage = parseInt(bookmarkedPage || this.options.initialPage, 10);
+                    //this.currentPage = parseInt(bookmarkedPage || this.options.initialPage, 10);
 
                     // Register History Manager page update callback
                     YAHOO.util.History.register("page", bookmarkedPage, function DataGrid_onHistoryManagerPageChanged(newPage)
                     {
                         Alfresco.logger.debug("HistoryManager: page changed:" + newPage);
                         me.widgets.paginator.setPage(parseInt(newPage, 10));
-                        this.currentPage = parseInt(newPage, 10);
+                        //this.currentPage = parseInt(newPage, 10);
                     }, null, this);
 
                     // YUI Paginator definition
@@ -906,7 +908,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         {
                             containers: [this.id + "-paginatorBottom"],
                             rowsPerPage: this.options.pageSize,
-                            initialPage: this.currentPage,
+                            initialPage: this.initialPage,
                             template: this.msg("pagination.template"),
                             pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
@@ -949,7 +951,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         responseSchema:{
                             resultsList:"items",
                             metaFields:{
-                                paginationRecordOffset:"startIndex",
+                                startIndex:"startIndex",
                                 totalRecords:"totalRecords",
                                 isVersionable:"versionable",
                                 meta:"metadata"
@@ -1073,33 +1075,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         datagridMeta.searchConfig = {};
                     }
                     datagridMeta.searchConfig.sort = "";
-                    // Если ассоциация, то не сортируем
+                    var sortField;
                     if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
-                        if (me.desc) {
-                            datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
-                                "|false";
-                            me.desc = false;
-                            me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
-
-                        } else {
-                            datagridMeta.searchConfig.sort = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":") +
-                                "|true";
-                            me.desc = true;
-                            me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
-                        }
-                        var searchConfig = datagridMeta.searchConfig;
-                        searchConfig.formData = {
-                            datatype:datagridMeta.itemType
-                        };
-                        if (me.sort) {
-                            // Обнуляем сортировку иначе зациклится.
-                            me.sort = null;
-                            this.search.performSearch({
-                                searchConfig:searchConfig,
-                                searchShowInactive:me.options.searchShowInactive,
-                                parent:datagridMeta.nodeRef
-                            });
-                        }
+                        sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
+                    } else {
+                        sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
+                    }
+                    if (me.desc) {
+                        datagridMeta.searchConfig.sort = sortField + "|false";
+                        me.desc = false;
+                        me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
+                    } else {
+                        datagridMeta.searchConfig.sort = sortField + "|true";
+                        me.desc = true;
+                        me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
+                    }
+                    var searchConfig = datagridMeta.searchConfig;
+                    searchConfig.formData = {
+                        datatype: datagridMeta.itemType
+                    };
+                    if (me.sort) {
+                        // Обнуляем сортировку иначе зациклится.
+                        me.sort = null;
+                        this.search.performSearch({
+                            searchConfig: searchConfig,
+                            searchShowInactive: me.options.searchShowInactive,
+                            parent: datagridMeta.nodeRef
+                        });
                     }
                 }
             }, /**
@@ -1109,26 +1111,42 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @return {YAHOO.widget.DataTable} таблица
              * @private
              */
-            _setupDataTable:function (columnDefinitions, me) {
+            _setupDataTable: function (columnDefinitions, me) {
+
+                var generateRequest = function (oState, oSelf) {
+                    var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
+                        me.datagridMeta.itemType, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
+                        me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset);
+                    return YAHOO.lang.JSON.stringify(params);
+                };
+
+
                 var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
-                        renderLoopSize:this.options.usePagination ? 16 : 32,
-                        initialLoad:false,
-                        dynamicData:false,
-                        "MSG_EMPTY":this.msg("message.empty"),
-                        "MSG_ERROR":this.msg("message.error"),
-                        paginator:this.widgets.paginator
+                        generateRequest: generateRequest,
+                        initialLoad: false,
+                        dynamicData: this.options.useDynamicPagination,
+                        "MSG_EMPTY": this.msg("message.empty"),
+                        "MSG_ERROR": this.msg("message.error"),
+                        "MSG_LOADING" : this.msg("message.loading"),
+                        paginator: this.widgets.paginator
                     });
 
-                // Update totalRecords with value from server
+                // Обновляем значения totalRecords данными из ответа сервера
                 dTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
                     me.totalRecords = oResponse.meta.totalRecords;
-                    oResponse.meta.pagination =
-                    {
-                        rowsPerPage:me.options.pageSize,
-                        recordOffset:(me.currentPage - 1) * me.options.pageSize
-                    };
-                    return oResponse.meta;
+                    if (oPayload) {
+                        oPayload.totalRecords = oResponse.meta.totalRecords;
+                        oPayload.pagination.recordOffset = oResponse.meta.startIndex;
+                        return oPayload
+                    } else {
+                        oResponse.meta.pagination =
+                        {
+                            rowsPerPage: me.options.pageSize,
+                            recordOffset: oResponse.meta.startIndex
+                        };
+                        return oResponse.meta;
+                    }
                 };
 
                 // Override abstract function within DataTable to set custom error message
@@ -1147,7 +1165,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (oResponse.results.length === 0) {
                         this.fireEvent("renderEvent",
                             {
-                                type:"renderEvent"
+                                type: "renderEvent"
                             });
                     }
 
@@ -1159,8 +1177,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.doBeforeSortColumn = function DataGrid_doBeforeSortColumn(oColumn, sSortDir) {
                     me.currentSort =
                     {
-                        oColumn:oColumn,
-                        sSortDir:sSortDir
+                        oColumn: oColumn,
+                        sSortDir: sSortDir
 
                     };
                     me.sort = {
@@ -1169,32 +1187,32 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     return true;
                 };
 
-				if (this.options.showCheckboxColumn) {
-					// Событие когда выбранны все элементы
-					YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
-						YAHOO.util.Event.on(this.id +"-select-all-records", 'click', this.selectAllClick, this, true);
-					}, this, true);
+                if (this.options.showCheckboxColumn) {
+                    // Событие когда выбранны все элементы
+                    YAHOO.util.Event.onAvailable(this.id + "-select-all-records", function () {
+                        YAHOO.util.Event.on(this.id + "-select-all-records", 'click', this.selectAllClick, this, true);
+                    }, this, true);
 
-					// File checked handler
-					dTable.subscribe("checkboxClickEvent", function (e) {
-						var id = e.target.value;
-						this.selectedItems[id] = e.target.checked;
+                    // File checked handler
+                    dTable.subscribe("checkboxClickEvent", function (e) {
+                        var id = e.target.value;
+                        this.selectedItems[id] = e.target.checked;
 
-						var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
-							len = checks.length, i;
+                        var checks = Selector.query('input[type="checkbox"]', dTable.getTbodyEl()),
+                            len = checks.length, i;
 
-						var allChecked = true;
-						for (i = 0; i < len; i++) {
-							if (!checks[i].checked) {
-								allChecked = false;
-								break;
-							}
-						}
-						Dom.get(this.id + '-select-all-records').checked = allChecked;
+                        var allChecked = true;
+                        for (i = 0; i < len; i++) {
+                            if (!checks[i].checked) {
+                                allChecked = false;
+                                break;
+                            }
+                        }
+                        Dom.get(this.id + '-select-all-records').checked = allChecked;
 
-						Bubbling.fire("selectedItemsChanged");
-					}, this, true);
-				}
+                        Bubbling.fire("selectedItemsChanged");
+                    }, this, true);
+                }
                 // Сортировка. Событие при нажатии на название столбца.
                 dTable.subscribe("beforeRenderEvent", this.beforeRenderFunction.bind(this), dTable, true);
 
@@ -1213,11 +1231,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
                 dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
 
-				if (this.options.height != null) {
-					YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
-				}
+                if (this.options.height != null) {
+                    YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
+                }
 
-				return dTable;
+                return dTable;
             },
             /**
              * DataTable set-up and event registration
@@ -1391,6 +1409,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Выбранный элемент
                 var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
+                numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+
                 var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
                 if (selectItem){
                     var oData = selectItem.getData();
@@ -1692,7 +1712,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (!obj || this._hasEventInterest(obj.bubblingLabel)){
                     this._updateDataGrid.call(this,
                         {
-                            page: this.currentPage
+                            page: this.widgets.paginator.getCurrentPage()
                         });
                     Bubbling.fire("itemsListChanged");
                 }
@@ -1909,7 +1929,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         Bubbling.fire("selectedFilesChanged");
                     };
                     this.afterDataGridUpdate.push(fnAfterUpdate);
-                    this.currentPage = p_obj.page || 1;
+                    //this.currentPage = p_obj.page || 1;
                     Bubbling.fire("filterChanged", successFilter);
                     this.widgets.dataTable.onDataReturnReplaceRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 };

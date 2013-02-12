@@ -259,7 +259,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null;
                     dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,

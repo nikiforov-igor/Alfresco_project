@@ -51,4 +51,48 @@
 		</property>
 	</bean>
 
+    <bean id="lecmObjectsService" class="ru.it.lecm.base.beans.LecmObjectsServiceImpl">
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+        <property name="cannedQueryRegistry">
+            <ref bean="fileFolderCannedQueryRegistry"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService" />
+        </property>
+        <property name="transactionService">
+            <ref bean="transactionService" />
+        </property>
+    </bean>
+
+    <bean id="baseWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.BaseWebScriptBean">
+        <property name="extensionName">
+            <value>base</value>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="lecmObjectsService">
+            <ref bean="lecmObjectsService"/>
+        </property>
+    </bean>
+
+    <bean name="lecmGetChildrenCannedQueryFactory" class="ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory">
+        <property name="registry" ref="fileFolderCannedQueryRegistry"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="tenantService" ref="tenantService"/>
+        <property name="nodeDAO" ref="nodeDAO"/>
+        <property name="qnameDAO" ref="qnameDAO"/>
+        <property name="localeDAO" ref="localeDAO"/>
+        <property name="contentDataDAO" ref="contentDataDAO"/>
+        <property name="cannedQueryDAO" ref="cannedQueryDAO"/>
+        <property name="methodSecurity" ref="FileFolderService_security_list"/>
+    </bean>
 </beans>

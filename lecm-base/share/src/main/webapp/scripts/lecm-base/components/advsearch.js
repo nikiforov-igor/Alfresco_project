@@ -51,7 +51,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.currentSearchConfig = null;
         this.currentForm = null;
         this.dataGrid = grid;
-
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
     };
@@ -87,7 +86,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             currentForm:null,
 
-            dataGrid:null,
+            dataGrid: null, // Обратная ссылка на грид
 
             /**
              * Получение и отрисовка формы
@@ -231,8 +230,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var fields = reqFields.join(",");
                 var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
 
-                //очистить таблицу и отрисовать
-                this.dataTable.deleteRows(0, this.dataTable.getRecordSet().getLength());
+                this.dataTable.getRecordSet().reset();
                 this.dataTable.render();
 
                 var me = this;
@@ -289,7 +287,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     me.searchStarted = false;
                     // update current state on success
                     me.currentSearchConfig = searchConfig;
-                    me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oPayload);
+
+                    if (oResponse.meta.startIndex > oResponse.meta.totalRecords){
+                        oResponse.meta.startIndex = 0;
+                    }
+                    oResponse.meta.pagination =
+                    {
+                        rowsPerPage: me.dataGrid.options.pageSize,
+                        recordOffset: oResponse.meta.startIndex
+                    };
+                    me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
 
                     //выводим предупреждающее сообщение, если достигли лимита
                     if (oResponse.results && oResponse.results.length  >= me.options.maxSearchResults) {
@@ -345,7 +352,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -353,15 +360,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (searchConfig && searchConfig.fullTextSearch && typeof searchConfig.fullTextSearch == "object") {
                     searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchConfig.fullTextSearch);
                 }
+                var startIndex = 0;
+                if (offset >= 0 && this.dataGrid.options.useDynamicPagination) {
+                    startIndex = offset;
+                }
                 return {
                     params:{
                         parent:parent != null ? parent : "",
                         itemType:itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
-                        maxResults:this.options.maxSearchResults + 1,
+                        maxResults: this.dataGrid.options.useDynamicPagination ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,
                         fields:searchFields != null ? searchFields : "",
 	                    nameSubstituteStrings:dataRequestNameSubstituteStrings,
-                        showInactive:searchShowInactive != null ? searchShowInactive : "false"
+                        showInactive:searchShowInactive != null ? searchShowInactive : "false",
+                        startIndex: startIndex
                     }
                 };
             },

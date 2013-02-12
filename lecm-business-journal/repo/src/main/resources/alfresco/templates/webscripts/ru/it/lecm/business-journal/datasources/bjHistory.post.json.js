@@ -38,7 +38,7 @@ function main() {
         groups = businessJournal.getHistory(parentRef, sortColumnName, asc);
     }
 
-    model.data = processResults(groups, fields, nameSubstituteStrings, maxResults); // call method from search.lib.js
+    model.data = processResults(groups, fields, nameSubstituteStrings, 0, groups.length); // call method from search.lib.js
 }
 
 
