@@ -64,7 +64,6 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		}
 	}
 
-	// note: currently inclusive and OR-based
 	private boolean includeFilter(Map<QName, Serializable> propVals, List<FilterProp> filterProps) {
 		for (FilterProp filterProp : filterProps) {
 			Serializable propVal = propVals.get(filterProp.getPropName());
@@ -86,7 +85,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 					}
 				}
 			} else {
-				return true; // такого свойства нет (например, не подключен аспект) - включаем в сборку
+				return (((FilterPropLECM)filterProp).getDefaultValue());
 			}
 		}
 		return false;

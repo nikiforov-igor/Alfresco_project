@@ -21,11 +21,17 @@ public class FilterPropLECM implements FilterProp {
 	private QName propName;
 	private Serializable propVal;
 	private FilterTypeLECM filterType;
+	private Boolean defaultValue = Boolean.FALSE;
 
 	public FilterPropLECM(QName propName, Serializable propVal, FilterTypeLECM filterType) {
+		this(propName, propVal, filterType, Boolean.FALSE);
+	}
+
+	public FilterPropLECM(QName propName, Serializable propVal, FilterTypeLECM filterType, Boolean defaultValue) {
 		this.propName = propName;
 		this.propVal = propVal;
 		this.filterType = filterType;
+		this.defaultValue = defaultValue;
 	}
 
 	@Override
@@ -41,5 +47,9 @@ public class FilterPropLECM implements FilterProp {
 	@Override
 	public FilterType getFilterType() {
 		return filterType;
+	}
+
+	public Boolean getDefaultValue() {
+		return defaultValue;
 	}
 }

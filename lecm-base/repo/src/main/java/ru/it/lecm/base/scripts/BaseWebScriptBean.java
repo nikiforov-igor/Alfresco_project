@@ -64,7 +64,7 @@ public class BaseWebScriptBean extends BaseScopableProcessorExtension {
 
 		List<FilterProp> filter = new ArrayList<FilterProp>();
 		if (onlyActive) {
-			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS));
+			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
 		}
 
 		PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
