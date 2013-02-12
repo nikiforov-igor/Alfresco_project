@@ -397,6 +397,7 @@ LogicECM.module = LogicECM.module || {};
 
         onOk: function(e, p_obj)
         {
+            Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
             // Close dialog
             this.widgets.escapeListener.disable();
             this.widgets.dialog.hide();
@@ -413,6 +414,7 @@ LogicECM.module = LogicECM.module || {};
 
         onCancel: function(e, p_obj)
         {
+            Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
             this.widgets.escapeListener.disable();
             this.widgets.dialog.hide();
             if( this.widgets.pickerButton )
@@ -472,9 +474,9 @@ LogicECM.module = LogicECM.module || {};
             // Disable picker button to prevent double dialog call
             this.widgets.pickerButton.set("disabled", true);
 
+            Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "block");
             // Show the dialog
             this.widgets.dialog.show();
-
             this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
             this._loadSelectedItems();
 
