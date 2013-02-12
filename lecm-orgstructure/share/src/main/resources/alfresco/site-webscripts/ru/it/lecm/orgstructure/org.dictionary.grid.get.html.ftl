@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content" style="margin-left: 0;">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=true>
+		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(

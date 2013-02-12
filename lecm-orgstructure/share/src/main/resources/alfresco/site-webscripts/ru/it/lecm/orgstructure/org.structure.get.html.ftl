@@ -10,7 +10,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content">
         <!-- include base datagrid markup-->
-		<@grid.datagrid id>
+		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function createDatagrid() {
@@ -87,7 +87,15 @@
 										type:"action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionDelete",
 										permission:"delete",
-										label:"${msg("actions.delete-row")}"
+										label:"${msg("actions.delete-row")}",
+                                        evaluator: function (rowData) {
+                                            if (rowData) {
+                                                var itemData = rowData.itemData;
+                                                return itemData["prop_lecm-dic_active"] == undefined ||
+                                                        itemData["prop_lecm-dic_active"].value == true;
+                                            }
+                                            return false;
+                                        }
 									}
 								],
 								bubblingLabel: "${bubblingLabel!"orgstructure"}",

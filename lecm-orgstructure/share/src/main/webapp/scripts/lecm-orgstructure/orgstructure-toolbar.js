@@ -254,7 +254,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 if (searchTerm.length > 0) {
                     var columns = dataGrid.datagridColumns;
 
-                    var fields = dataGrid.getFields();
+                    var fields = dataGrid.getTextFields();
                     var fullTextSearch = {
                         parentNodeRef:datagridMeta.nodeRef,
                         fields:fields,
@@ -367,7 +367,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
                     //сбрасываем на значение по умолчанию
-                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig != null ? YAHOO.lang.merge({}, dataGrid.initialSearchConfig) : null;
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta

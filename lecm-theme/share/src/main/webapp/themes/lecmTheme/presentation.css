@@ -2012,7 +2012,7 @@ span.person a {
 	text-align: center;
 }
 
-.archive-record, .archive-record span a, .archive-record a {
+.grid .archive-record, .grid .archive-record span a, .grid .archive-record a {
     color:red;
 }
 

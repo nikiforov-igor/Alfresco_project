@@ -6,12 +6,13 @@
 	<div id="yui-main-2">
 		<div class="yui-b" id="alf-content" style="margin-left: 0;">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=true>
+		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
+							useDynamicPagination:true,
 							showExtendSearchBlock:true,
 							actions: [
 								{
@@ -33,8 +34,9 @@
 									label:"${msg("actions.delete-row")}",
 									evaluator: function (rowData) {
                                         var itemData = rowData.itemData;
-                                        return itemData["assoc_lecm-orgstr_employee-main-position"] == undefined ||
-		                                        itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0;
+                                        var isActive = itemData["prop_lecm-dic_active"] == undefined || itemData["prop_lecm-dic_active"].value == true;
+                                        return isActive && (itemData["assoc_lecm-orgstr_employee-main-position"] == undefined ||
+		                                        itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0);
                                     }
 								}
 							],
