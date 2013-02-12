@@ -130,5 +130,5 @@
             <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
         </div>
     </#if>
-    <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 </div>

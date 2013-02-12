@@ -71,7 +71,7 @@
             <div class="clear"></div>
         </div>
     </#if>
-    <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 </div>
 
 <script type="text/javascript">

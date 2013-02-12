@@ -70,7 +70,7 @@
         <div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
         <#if field.disabled == false>
-            <input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
+            <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
             <input type="hidden" id="${controlId}-added" name="${field.name}_added" />
             <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
             <div id="${controlId}-itemGroupActions" class="show-picker"></div>

@@ -13,5 +13,5 @@
 
 <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
 <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-<input type="hidden" id="${fieldHtmlId}" name="-"
+<input type="hidden" id="${fieldHtmlId}" name="${field.name}"
        <#if field.value?is_number>value="${fieldValue?c}"<#else>value="${fieldValue?html}"</#if> />

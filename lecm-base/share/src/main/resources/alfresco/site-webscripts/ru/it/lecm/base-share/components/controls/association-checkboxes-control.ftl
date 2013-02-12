@@ -61,5 +61,5 @@
 		<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
 	</#if>
 	<ul id="${controlId}-checkboxes"></ul>
-	<input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}"/>
+	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
 </div>
