@@ -85,6 +85,8 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 						default:
 					}
 				}
+			} else {
+				return true; // такого свойства нет (например, не подключен аспект) - включаем в сборку
 			}
 		}
 		return false;
