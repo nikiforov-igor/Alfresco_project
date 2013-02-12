@@ -74,11 +74,11 @@ public class OrgstructureStaffListPolicy
 			String category;
 			String defaultDescription;
 			if (curPrimary) {
-				defaultDescription = "Сотрудник #inititator внес сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
+				defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
 				category = EventCategory.TAKE_BOSS_POSITION;
 
 			} else {
-				defaultDescription = "Сотрудник #inititator внес сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
+				defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
 				category = EventCategory.RELEASE_BOSS_POSITION;
 			}
 			List<String> objects = new ArrayList<String>(1);
