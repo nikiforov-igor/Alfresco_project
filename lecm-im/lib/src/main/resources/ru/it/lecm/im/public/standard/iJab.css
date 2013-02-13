@@ -1,3 +1,8 @@
+ul, li {
+    margin: 0;
+    padding: 0;
+}
+
 #ijab {
     position: fixed;
     top: 70px;
@@ -28,16 +33,16 @@
     height: 33px;
 }
 
-#ijab.nomessages{
+#ijab.nomessages {
     width: 240px;
 }
 
-.ijab-mainwidget{
+.ijab-mainwidget {
     width: 240px;
     height: 100%;
     display: inline-block;
     float: left;
-    background-color: #e0e0e0;
+    background-color: #fff;
 }
 
 .ijab-panels {
@@ -62,6 +67,7 @@
 
 .height-flood  .ijab-chat-content{
     height: 100%;
+    max-height: 354px;
 }
 
 .ijab-chat-actions.pull-down{
@@ -85,18 +91,8 @@
     display: none;
 }
 
-.ijab-window-header.ui-widget-header h4 {
-    font-size : 1.6em;
-    font-weight: normal;
-}
-
 .mainBarHeader{
     height: 33px;
-}
-
-.mainBarHeader span{
-    font-size: 2em;
-    padding: 0 15px;
 }
 
 .gwt-Image{
@@ -126,8 +122,7 @@ body {
 .ijab {
     font-size: 10px;
     line-height: 1.5;
-    font-family: "lucida grande", tahoma, helvetica, arial,
-    "bitstream vera sans", sans-serif;
+    font-family: Arial, Arial Unicode MS, Arial, sans-serif;
     text-align: left;
 }
 
@@ -162,15 +157,12 @@ body {
     background-image: url(images/icons/icon16.gif);
 }
 
-.ijab-other-message
-{
-    color:#3B5998;
-}
-
-.ijab-local-message
-{
-    color:#a6002c;
-}
+/*.ijab-other-message {*/
+    /*color:#3B5998;*/
+/*}*/
+/*.ijab-local-message {*/
+    /*color:#a6002c;*/
+/*}*/
 
 a .ijab-icon,a .ui-icon {
     cursor: pointer;
@@ -303,27 +295,30 @@ a .ijab-icon,a .ui-icon {
 }
 
 .ijab-emot ul {
-    padding: .2em;
+    padding: 5px;
     list-style: none;
 }
 
-.ijab-emot img
-{
-    width:24px;
-    height:24px;
-}
-
 .ijab-emot ul li {
+    width: 24px;
+    height: 24px;
     float: left;
+    margin: 3px;
     cursor: pointer;
 }
 
+.ijab-emot ul img {
+    width: 24px;
+    height: 24px;
+    border: none !important;
+}
+
 .ijab-chat .ijab-emot {
+    width: 100%;
     position: absolute;
     bottom: 0;
-    border-left-width: 0;
-    border-right-width: 0;
-    width: 100%;
+    border: none;
+    background: transparent;
 }
 
 .ijab-chatlink span {
@@ -412,54 +407,45 @@ display: inline-block;
 
 
 .ijab-buddy-search {
-    padding: 0 1.6em 0 1.6em;
-    background:#EEEEEE none repeat scroll 0 0;
-    border:1px solid #CCCCCC;
-    border-top:0px;
-    border-bottom:1px solid #CCCCCC;
-    border-left:0px;
-    border-right:0px;
+    height: 20px;
+    padding: 0 25px;
+    background: #e6e6e6;
+    border: none;
+    border-bottom: 1px solid #b3b3b3;
 }
 
-.ijab-buddy-search-warning
-{
-    background-color:#ff8a94;
+.ijab-buddy-search-warning {
+    background-color: #ff8a94;
 }
-
 
 .ijab-buddy-search input {
     border: none;
     background: none;
-    padding: .2em;
     width: 95%;
+    color: #4d4d4d;
+    font-size: 14px;
+    padding: 0;
 }
 
 .ijab-buddy-search .ui-icon-search {
     float: left;
-    margin: .1em 0 0 -1.5em;
+    margin: 5px 0 0 -18px;
 }
 
 .ijab-buddy-search .ui-icon-close {
     float: right;
-    margin: .1em -1.5em 0 0;
-    cursor:pointer;
+    margin: 5px -20px 0 0;
+    cursor: pointer;
 }
 
-.ijab-indicator
-{
-    background:#EEEEEE none repeat scroll 0 0;
-    border:1px solid #CCCCCC;
-    border-top:1px solid #CCCCCC;
-    border-bottom:1px solid #CCCCCC;
-    border-left:0px;
-    border-right:0px;
-    border-spacing:0px;
-    padding-top:1px;
-    padding-left:2px;
+.ijab-indicator {
+    height: 40px;
+    background: #e6e6e6;
+    border: none;
+    border-bottom: 1px solid #b3b3b3;
 }
 
-.ijab-self-status
-{
+.ijab-self-status {
     width:140px;
     height:15px;
     overflow:hidden;
@@ -495,60 +481,56 @@ display: inline-block;
     margin:0px;
 }
 
-.ijab-self-nick
-{
-    diskplay:block;
-    float:left;
-    max-width:120px;
-    font-size:14px;
-    font-weight:bold;
-    overflow:hidden;
-    margin-right:8px;
-    padding-left:4px;
-    color:#1E2229;
-    text-shadow:0 2px 1px #C0C1C2;
+.ijab-self-nick {
+    height: 21px;
+    line-height: 21px;
+    display: block;
+    max-width: 120px;
+    font-size: 16px;
+    font-weight: normal;
+    overflow: hidden;
+    margin-right: 8px;
+    padding-left: 4px;
+    color: #4d4d4d;
 }
 
-.ijab-self-avatar
-{
-    padding:1px;
-    cursor:pointer;
+.ijab-self-avatar {
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin-left: 5px;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .ijab .ijab-user {
     margin-left: 6em;
 }
 
-.ijab-status-selector
-{
-    width:32px;
-    float:left;
-    cursor:pointer;
+.ijab-status-selector {
+    width: 32px;
+    float: left;
+    margin: 4px 0 0 2px;
+    cursor: pointer;
 }
 
-.ijab-ie .ijab-status-selector
-{
+.ijab-ie .ijab-status-selector {
     height:16px;
     width:40px;
 }
 
-.ijab-status-selector-hover
-{
-    background:#8F9193 none;
+.ijab-status-selector-hover {
+    background: #8F9193;
 }
 
-.ijab-status-selector-icon
-{
-    width:16px;
-    height:16px;
-    float:left;
+.ijab-status-selector-icon,
+.ijab-status-selector-triangle {
+    width: 16px;
+    height: 16px;
+    float: left;
 }
-
-.ijab-status-selector-triangle
-{
-    float:left;
-    width:16px;
-    height:16px;
+.ijab-status-selector-triangle em.ui-icon-triangle-1-s {
+    margin: 6px 0 0 4px;
 }
 
 .ijab-user {
@@ -570,13 +552,13 @@ display: inline-block;
 }
 
 .ijab-user-status {
-    height: 3em;
+    height: 40px;
     display: block;
 }
 
 .ijab-chat .ijab-chat-header {
-    border-left-width: 0;
-    border-right-width: 0;
+    height: 40px;
+    border-width: 0 0 1px;
 }
 
 .ijab-chat-content {
@@ -592,8 +574,7 @@ background: url(about:blank);
 }
 
 .ijab-chat .ijab-chat-actions {
-    border-width: 0;
-    border-top-width: 1px;
+    width: 360px;
 }
 
 .ijab-chat-t {
@@ -613,7 +594,10 @@ background: url(about:blank);
     width: 100% !important;
     height: 3em;
     padding: .3em 0 .2em;
-    font-size:13px !important;
+    font-size: 14px !important;
+}
+.ijab-chat-input.ijab-gray {
+    color: #b3b3b3;
 }
 
 .ijab-chat .ijab-chat-notice {
@@ -624,10 +608,12 @@ background: url(about:blank);
     position: relative;
 }
 
-.ijab-chat .ijab-chat-tools {
-    padding: 0 .3em;
+.ui-widget-content .ijab-chat .ui-state-default.ijab-chat-tools {
+    height: 22px;
     border-left-width: 0;
     border-right-width: 0;
+    margin-right: 1px;
+    background: #bbe6f3;
 }
 
 .ijab-chat-tools a,.ijab .ijab-chat-tools a em {
@@ -635,7 +621,7 @@ background: url(about:blank);
 }
 
 .ijab-chat-tools a {
-    padding: .2em;
+    padding: 3px 5px;
 }
 
 .ijab-chat-tool-content {
@@ -670,39 +656,30 @@ background: url(about:blank);
 
 .ijab-status-menu ul li span {
     padding: 0 .4em;
-    font-size:12px;
-    text-decoration:none;
-    color:#003EA8;
+    font-size: 14px;
+    text-decoration: none;
 }
 
-.ijab-status-menuitem
-{
-    background-color:white;
-    color:#003EA8;
-    cursor:pointer;
-    margin:0 1px;
-    padding:3px 7px 3px 3px;
-    font-size:13px;
+.ijab-status-menuitem {
+    background-color: white;
+    color: #4d4d4d;
+    cursor: pointer;
+    margin: 0 1px;
+    padding: 3px 7px 3px 3px;
+}
+.ijab-status-menuitem a {
+    color: #4d4d4d;
 }
 
-.ijab-status-menuitem-hover
-{
-    background-color:#4086FF;
-    color:#FFFFFF;
-    text-shadow:0 1px 0 #3B5A7A;
-    cursor:pointer;
+.ijab-status-menuitem-hover {
+    background-color: #bbe6f3;
+    cursor: pointer;
 }
 
-.ijab-status-menuitem-hover span
-{
-    color:#FFFFFF !important;
+.ijab-status-menuitem-select,
+.ijab-status-menuitem-select a {
+    color: #3498ba;
 }
-
-.ijab-status-menuitem-select
-{
-    text-decoration:underline !important;
-}
-
 
 .ijab-menu {
     padding: 1em .5em;
@@ -743,30 +720,32 @@ background: url(about:blank);
 }
 
 .ijab-history h4 {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #d9d9d9;
     margin-top: .1em;
     padding: .2em .3em .1em;
+    color: #999;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .ijab-history h4 span {
     float: right;
     padding: .1em 0;
-    font-size: .8em;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 .ijab-history p {
     margin: .2em .3em;
+    font-size: 14px;
+    font-weight: normal;
+    color: #4d4d4d;
 }
 
 .ijab-history *
 {
     word-spacing:normal;
     word-wrap:break-word;
-}
-
-.ui-widget {
-    font-size: 1.2em !important;
 }
 
 .ui-toolbar {
@@ -776,8 +755,8 @@ background: url(about:blank);
 }
 
 .ui-widget-subheader {
-    border: 1px solid #ccc;
-    background: #eee;
+    background: #e6e6e6;
+    border: 1px solid #b3b3b3;
     color: gray;
 }
 
@@ -897,13 +876,13 @@ margin: .3em .5em .3em;
 .ijab-window-header {
     cursor: pointer;
     text-align: center;
-    padding: .2em .5em;
 }
 
 .ijab-window-actions {
     position: absolute;
     right: 0;
     top: 0;
+    padding: 3px;
 }
 
 .ijab-webapi .ijab-window-actions a {
@@ -1081,99 +1060,74 @@ margin: .3em .5em .3em;
     display: none;
 }
 
-.ijab-contactview
-{
-    overflow-x:hidden;
-    overflow-y:auto;
-    max-height: 395px;
+.ijab-contactview {
+    max-height: 407px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-.ijab-contactview-grouphead
-{
-    color:#3498B8;
-    display:block;
-    font-size:12px;
-    height:15px;
-    line-height:15px;
-    text-decoration:none !important;
-    cursor:pointer;
-    background: #BCE6F4;  /*#FFFFFF url(images/groupheader.png) repeat-x scroll 0 0;*/
-    overflow:hidden;
-    border-bottom: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #5CBEE0;
-
-    border-top: 1px;
-    border-top-style: solid;
-    border-top-color: #f2f2f2;
+.ijab-contactview-grouphead {
+    height: 18px;
+    line-height: 18px;
+    color: #3498ba;
+    display: block;
+    font-size: 14px;
+    text-decoration: none !important;
+    background: #bbe6f3;
+    overflow: hidden;
+    cursor: pointer;
+    border-bottom: 1px solid #5cbee0;
+    border-top: 1px solid #f2f2f2;
+    padding: 0 5px 0 25px;
 }
 
-.ijab-contactview-grouphead em
-{
-    height:15px;
-    width:15px;
-    float:left;
-    margin-left:-3px;
-    background-image:url(images/ui-icons_d8e7f3_256x240.png) !important;
+.ijab-contactview-grouphead em {
+    float: left;
+    margin: 6px 0 0 -17px;
+}
+.ijab-contactview-grouphead em.ui-icon-triangle-1-e {
+    margin: 5px 0 0 -16px;
 }
 
-.ijab-contactview-grouphead-name
-{
-    float:left;
+.ijab-contactview-grouphead-name {
+    float: left;
 }
 
-.ijab-contactview-grouphead-count
-{
-    float:right;
-    padding-right:4px;
+.ijab-contactview-grouphead-count {
+    float: right;
 }
 
-.ijab-contactview-item
-{
-    height:30px;
-    overflow:hidden;
-    padding-left:6px;
-    padding-right:4px;
+.ijab-contactview-item {
+    height: 35px;
+    overflow: hidden;
+    padding: 0 4px;
+    border-bottom: 1px solid #999;
 }
 
-
-.ijab-contactview-item-normal
-{
-    background: transparent none repeat scroll 0% 0%;
+.ijab-contactview-item-normal {
+    background: transparent;
 }
 
-.ijab-contactview-item-odd
-{
-    background:rgb(236,243,255) none repeat scroll 0% 0%;
+.ijab-contactview-item-odd {
+    background: #ccc;
 }
 
-
-.ijab-contactview-item-hover
-{
-    background:rgb(58,118,215) none repeat scroll 0% 0%;
+.ijab-contactview-item-hover,
+.ijab-contactview-item-highlight {
+    background: #bbe6f3;
 }
 
-.ijab-contactview-item-highlight
-{
-    background:rgb(58,118,215) none repeat scroll 0% 0%;
-}
-
-
-
-.ijab-contactview-item div
-{
+.ijab-contactview-item div {
     float:left;
 }
 
-.ijab-contactview-item a
-{
-    display:block;
-    height:28px;
-    width:28px;
-    color:#333333;
-    cursor:pointer;
-    text-decoration:none !important;
-    margin-top:1px;
+.ijab-contactview-item .avatar a {
+    display: block;
+    height: 25px;
+    margin: 5px 0;
+    color: #333;
+    cursor: pointer;
+    text-decoration: none !important;
 }
 
 .ijab-contactview-item .avatar
@@ -1189,20 +1143,9 @@ margin: .3em .5em .3em;
 
 .ijab-contactview-item .statusicon img
 {
-    height:16px !important;
-    width:16px !important;
-    margin-top:7px;
-}
-
-.ijab-contactviewitem-avatar
-{
-    background:#FFFFFF url(../images/default_avatar.png) no-repeat scroll center center;
-    display:block;
-    height:24px;
-    overflow:hidden;
-    padding:1px;
-    width:24px;
-    border: 1px solid #999999 !important;
+    /*height:16px !important;*/
+    /*width:16px !important;*/
+    /*margin-top:7px;*/
 }
 
 .ijab-offline
@@ -1210,20 +1153,31 @@ margin: .3em .5em .3em;
     opacity:0.4;
 }
 
-.ijab-contactview-item .names
-{
-    cursor:default;
-    margin-right:5px;
-    overflow:hidden;
-    padding-left:3px;
-    line-height:15px;
-    white-space:nowrap;
-    width:130px;
+.ijab-contactview-item .names {
+    width: 150px;
+    overflow: hidden;
+    padding-left: 5px;
+    line-height: 16px;
+    white-space: nowrap;
+    cursor: default;
+}
+.ijab-contactview-item .names .user-name,
+.ijab-contactview-item .names .msg-count {
+    font-size: 16px;
+    color: #4d4d4d;
+    padding-top: 2px;
+}
+.ijab-contactview-item .names .user-name {
+    display: inline-block;
+}
+.ijab-contactview-item .names .msg-count {
+    margin-left: 5px;
+    color: #ff9d00;
+    font-weight: bold;
 }
 
-.ijab-contactview-item .names_nostatus
-{
-    padding-top:7.5px;
+.ijab-contactview-item .names_nostatus {
+    padding-top: 7px;
 }
 
 .ijab-blacklistwnd
@@ -1650,6 +1604,27 @@ html>body .ijab-contextmenu
     padding-right:4px;
     margin-right:4px;
     margin-bottom:4px;
+}
+
+.ijab-history a.ijab-archive-link,
+.ijab-history a.ijab-archive-top-link {
+    color: #00b0eb;
+    text-decoration: underline;
+    margin: 0 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.ijab-history a.ijab-archive-link:first-of-type,
+.ijab-history a.ijab-archive-top-link:first-of-type {
+    margin-left: 0;
+}
+.ijab-history a.ijab-archive-link:last-of-type,
+.ijab-history a.ijab-archive-top-link:last-of-type {
+    margin-right: 0;
+}
+.ijab-history a.ijab-archive-link:hover,
+.ijab-history a.ijab-archive-top-link:hover {
+    text-decoration: none;
 }
 
 .ijab-roomlist-widget
@@ -2132,13 +2107,39 @@ html>body .gwt-DecoratedTabBar {
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Lucida Grande, Lucida Sans, Arial, sans-serif; font-size: 1.1em; }
+.ui-widget {
+    font-family: Arial, Arial Unicode MS, Arial, sans-serif;;
+    font-size: 1.1em;
+}
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Lucida Grande, Lucida Sans, Arial, sans-serif; font-size: 1em; width:auto;}
-.ui-widget-content { border: 1px solid #a6c9e2; background: #fcfdfd url(images/ui-bg_inset-hard_100_fcfdfd_1x100.png) 50% bottom repeat-x; color: #222222; }
-.ui-widget-content a { color: #222222; }
-.ui-widget-header { background: #00B0EB; color: #ffffff; font-weight: bold; }
-.ui-widget-header a { color: #ffffff; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: Arial, Arial Unicode MS, Arial, sans-serif;;
+    font-size: 1em;
+    width:auto;
+}
+.ui-widget-content {
+    background: #fff;
+    color: #222222;
+    border: none;
+    border-left: 1px solid #797979;
+}
+.ui-widget-content a {
+    color: #222222;
+}
+.ui-widget-header {
+    height: 30px;
+    background: #00B0EB;
+    color: #ffffff;
+    border: none;
+    border-bottom: 1px solid #797979;
+    text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 30px;
+}
+.ui-widget-header a {
+    color: #ffffff;
+}
 
 /* Interaction states
 ----------------------------------*/
@@ -2283,7 +2284,8 @@ html>body .gwt-DecoratedTabBar {
 .ui-icon-plusthick { background-position: -32px -128px; }
 .ui-icon-minus { background-position: -48px -128px; }
 .ui-icon-minusthick { background-position: -64px -128px; }
-.ui-icon-close { background-position: -80px -128px; }
+/*.ui-icon-close { background-position: -80px -128px; }*/
+.ui-icon-close { background-position: -83px -132px; }
 .ui-icon-closethick { background-position: -96px -128px; }
 .ui-icon-key { background-position: -112px -128px; }
 .ui-icon-lightbulb { background-position: -128px -128px; }
@@ -2529,4 +2531,66 @@ html>body .gwt-DialogBox {
     height:1px;
     overflow:hidden;
     padding:0;
+}
+
+/* Our icons */
+.ijab .ui-icon-search,
+/*.ijab .ui-icon-close */
+{
+    width: 10px;
+    height: 10px;
+}
+.ijab .ui-icon-search {
+    background: url(../images/alf_chat_search.png) 0 0 no-repeat;
+}
+.ijab .ui-icon-close {
+    /*background: url(../images/alf_chat_search.png) 0 0 no-repeat; *//*todo*/
+}
+.ijab .ui-icon-close:hover {
+    /*background: url(../images/alf_chat_search.png) 0 0 no-repeat; *//*todo*/
+}
+.ijab .ui-icon-triangle-1-s {
+    width: 8px;
+    height: 5px;
+    background: url(../images/alf_chat_arrow_blue_down.png) 0 0 no-repeat;
+}
+.ijab .ijab-status-selector-triangle em.ui-icon-triangle-1-s {
+    background: url(../images/alf_chat_arrow_grey_down.png) 0 0 no-repeat;
+}
+.ijab .ui-icon-triangle-1-e {
+    width: 5px;
+    height: 8px;
+    background: url(../images/alf_chat_arrow_blue_right.png) 0 0 no-repeat;
+}
+/* chat tools icons - start */
+.ijab .ijab-icon-emot {
+    background: url(../images/alf_chat_emot.png) 0 0 no-repeat;
+}
+.ijab .ijab-icon-clear {
+    background: url(../images/alf_chat_clear.png) 0 0 no-repeat;
+}
+.ijab .ijab-icon-history {
+    background: url(../images/alf_chat_history.png) 0 0 no-repeat;
+}
+.ijab .ijab-icon-emot,
+.ijab .ijab-icon-clear,
+.ijab .ijab-icon-history {
+    opacity: .6;
+    -webkit-transition: opacity 200ms;
+    -moz-transition: opacity 200ms;
+    -o-transition: opacity 200ms;
+    -ms-transition: opacity 200ms;
+    transition: opacity 200ms;
+}
+.ijab .ijab-chat-tools a:hover .ijab-icon-emot,
+.ijab .ijab-chat-tools a:hover .ijab-icon-clear,
+.ijab .ijab-chat-tools a:hover .ijab-icon-history,
+.ijab .ijab-icon-emot:hover,
+.ijab .ijab-icon-clear:hover,
+.ijab .ijab-icon-history:hover {
+    opacity: 1;
+}
+/* chat tool icons - end */
+.ijab .ijab-icon-chat {
+    background: url(../images/alf_chat_message.png) 0 0 no-repeat;
 }

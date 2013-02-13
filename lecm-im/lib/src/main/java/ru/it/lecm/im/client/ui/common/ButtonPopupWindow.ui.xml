@@ -5,8 +5,8 @@
 		
 	</ui:style>
 	<g:FlowPanel styleName="ijab-window-window height-flood" >
-		<g:HTMLPanel styleName="ijab-window-header ui-widget-header">
-			<h4 ui:field="captionElement"></h4>
+		<g:HTMLPanel styleName="ui-widget-header">
+			<span ui:field="captionElement"></span>
             <span class="ijab-window-actions">
                 <a class="ijab-window-close" ui:field="closeElement" title="Close">
                     <em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>

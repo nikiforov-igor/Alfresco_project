@@ -122,10 +122,10 @@ public class XmppProfileManager
 	{
 		String url = iJab.conf.avatarUrl();
 		if(url == null||!url.contains("{username}"))
-			return GWT.getModuleBaseURL()+"images/default_avatar.png";
+			return GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png";
 		String node = JID.fromString(bareJid).getNode();
 		if(node == null)
-			return GWT.getModuleBaseURL()+"images/default_avatar.png";
+			return GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png";
 		return url.replace("{username}", node);
 	}
 	

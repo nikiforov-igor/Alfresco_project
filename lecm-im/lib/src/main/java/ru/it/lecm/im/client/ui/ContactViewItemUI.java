@@ -136,10 +136,10 @@ public abstract class ContactViewItemUI extends Composite {
 		
 		avatarImg.addErrorHandler(new ErrorHandler(){
 			public void onError(ErrorEvent event) {
-				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
+				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
 			}
 		});
-		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
+		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
 		
 		nameEditor.addKeyUpHandler(new KeyUpHandler()
 		{

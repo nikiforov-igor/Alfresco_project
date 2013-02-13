@@ -58,7 +58,7 @@ public class UserIndicator extends FlexTable
 {
 	private StatusSelector statusSelector = new StatusSelector();
 	//private Image statusImg;
-	private Image avatarImg = new Image(GWT.getModuleBaseURL()+"images/default_avatar.png");
+	private Image avatarImg = new Image(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
 	private Label nickName = new Label("");
 	private Label statusLabel = new Label();
 	private TextBox statusEditor = new TextBox();
@@ -78,10 +78,7 @@ public class UserIndicator extends FlexTable
 	    setTitleWidget(null);
 	    formatter.setStyleName(0, 0, "ijab-indicator-title");
 
-        avatarImg.setWidth("32px");
-		avatarImg.setHeight("32px");
-		avatarImg.setStyleName("ijab-self-avatar");
-		avatarImg.addStyleName("ui-corner-all");
+		avatarImg.setStyleName("ijab-self-avatar ui-corner-all");
 		avatarImg.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) {
@@ -98,7 +95,7 @@ public class UserIndicator extends FlexTable
 		{
 			public void onError(ErrorEvent event) 
 			{
-				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
+				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
 			}
 		});
 
@@ -158,15 +155,15 @@ public class UserIndicator extends FlexTable
 		HorizontalPanel titlePanel = new HorizontalPanel();
 		titlePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		titlePanel.setWidth("100%");
-		titlePanel.setSpacing(3);
 
 		VerticalPanel statusPanel = new VerticalPanel();
 		statusPanel.setWidth("100%");
 
 		FlowPanel hNameStatusIconPanel = new FlowPanel();
-		hNameStatusIconPanel.add(nickName);
-		hNameStatusIconPanel.add(statusSelector);
-		
+        hNameStatusIconPanel.add(statusSelector);
+        hNameStatusIconPanel.add(nickName);
+        hNameStatusIconPanel.setStyleName("status-and-name");
+
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setWidth("100%");
 		hPanel.setSpacing(2);
@@ -185,7 +182,7 @@ public class UserIndicator extends FlexTable
 
 		titlePanel.setCellWidth(statusSelector, "20px");
 		titlePanel.setCellWidth(statusPanel, "100%");
-		titlePanel.setCellWidth(avatarImg, "32px");
+		titlePanel.setCellWidth(avatarImg, "36px");
 		setTitleWidget(titlePanel);
 		
 		statusLabel.addClickHandler(new ClickHandler()

@@ -555,7 +555,8 @@ public class BarChatWidget extends BarChatWidgetUI
 	
 	private Widget createTopRangeWidget(ArchiveRange range)
 	{
-        return new HTML("<div class='ijab-archive-top ui-corner-all'><span>"+rangeString(range)+"</span></div>");
+//        return new HTML("<div class='ijab-archive-top ui-corner-all'><span>"+rangeString(range)+"</span></div>");
+        return new HTML("<a class='ijab-archive-top-link'>" + rangeString(range) + "</a>");
 	}
 	
 	private String rangeString(ArchiveRange range)
@@ -578,8 +579,8 @@ public class BarChatWidget extends BarChatWidgetUI
 	
 	private FocusHTMLPanel createWidget4Range(final ArchiveRange range)
 	{
-		FocusHTMLPanel panel = new FocusHTMLPanel("<span>"+rangeString(range)+"</span>");
-		panel.setStyleName("ijab-archive-bottom-button ui-corner-all");
+		FocusHTMLPanel panel = new FocusHTMLPanel("a", rangeString(range));
+		panel.setStyleName("ijab-archive-link");
 		panel.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) {

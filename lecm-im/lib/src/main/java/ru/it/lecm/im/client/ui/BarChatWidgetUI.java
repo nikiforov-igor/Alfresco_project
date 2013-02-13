@@ -23,18 +23,7 @@ package ru.it.lecm.im.client.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ErrorEvent;
-import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -117,25 +106,21 @@ public abstract class BarChatWidgetUI extends Composite {
 			
 		});
 		
-		msgInput.addKeyPressHandler(new KeyPressHandler()
-		{
-			public void onKeyPress(KeyPressEvent event) 
-			{
-				if(event.getCharCode() == 13)
-				{
-					msgInput.cancelKey();
-					final String msg = msgInput.getText();
-					if(msg == null||msg.length() == 0||msg.equals(inputPrompt))
-						return;
-					msgInput.setText("");
-					msgInput.setFocus(true);
-					send(msg);
-				}
-				else
-					onTyping();
-			}	
-		});
-		
+		msgInput.addKeyDownHandler(new KeyDownHandler() {
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    msgInput.cancelKey();
+                    final String msg = msgInput.getText();
+                    if (msg == null || msg.length() == 0 || msg.equals(inputPrompt))
+                        return;
+                    msgInput.setText("");
+                    msgInput.setFocus(true);
+                    send(msg);
+                } else
+                    onTyping();
+            }
+        });
+
 		msgInput.addFocusHandler(new FocusHandler(){
 			public void onFocus(FocusEvent event) {
 				final String text = msgInput.getText();
@@ -157,7 +142,7 @@ public abstract class BarChatWidgetUI extends Composite {
 				}
 			}
 		});
-		imgAvatar.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
+		imgAvatar.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
 		imgAvatar.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) 
@@ -176,7 +161,7 @@ public abstract class BarChatWidgetUI extends Composite {
 		{
 			public void onError(ErrorEvent event) 
 			{
-				imgAvatar.setUrl(GWT.getModuleBaseURL()+"images/default_avatar.png");
+				imgAvatar.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
 			}
 		});
 		

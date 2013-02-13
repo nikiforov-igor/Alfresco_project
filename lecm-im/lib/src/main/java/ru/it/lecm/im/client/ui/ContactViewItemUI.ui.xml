@@ -9,8 +9,8 @@
 			<img ui:field="statusIconElement"></img>
 		</div>
 		<div class="names" ui:field="nameElement">
-		<span ui:field="nameTextElement"></span>
-            <span ui:field="msgCounterTextElement"></span>
+		    <span ui:field="nameTextElement" class="user-name"></span>
+            <span ui:field="msgCounterTextElement" class="msg-count"></span>
             <g:TextBox styleName="ijab-contactview-item-editor" ui:field="nameEditor"></g:TextBox><br/>
             <span ui:field="statusTextElement" class="ijab-gray"></span>
 		</div>
