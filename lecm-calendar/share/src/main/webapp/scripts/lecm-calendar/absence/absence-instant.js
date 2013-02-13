@@ -8,7 +8,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 
 (function() {
-	YAHOO.util.Event.on(window, "load", function() {
+	YAHOO.util.Event.onDOMReady(function() {
 		Alfresco.util.Ajax.request({
 			method: "GET",
 			url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/isCurrentEmployeeAbsentToday",
@@ -60,15 +60,13 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				var element = menuElements[i];
 				if (element.getAttribute("templateuri") && element.getAttribute("templateuri") == "/instant-absence") {
 					LogicECM.module.WCalendar.Absence.instantButtonID = YAHOO.util.Dom.generateId(element);
-					if (Alfresco.module.SimpleDialog) {
-						element.removeAttribute("templateuri");
-						element.removeAttribute("href");
-						element.setAttribute("onclick", "LogicECM.module.WCalendar.Absence.newInstantAbsence(this)");
-					}
+					element.removeAttribute("templateuri");
+					element.removeAttribute("href");
+					element.setAttribute("onclick", "LogicECM.module.WCalendar.Absence.newInstantAbsence(this)");
 					break;
 				}
 			}
-		}	
+		}
 		htmlNode = YAHOO.util.Dom.get(LogicECM.module.WCalendar.Absence.instantButtonID);
 
 		if (LogicECM.module.WCalendar.Absence.isAbsent) {
@@ -152,26 +150,30 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	}
 
 	LogicECM.module.WCalendar.Absence.newInstantAbsence = function Absence_onClickInstantAbsence(node) {
-
-		if (LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER) {
-			Absence_onClickInstantAbsenceReasonWrapper(node)
+		if (Alfresco.module.SimpleDialog) {
+			if (LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER) {
+				Absence_onClickInstantAbsenceReasonWrapper(node)
+			} else {
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/container",
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					successCallback: {
+						fn: function (response) {
+							var result = response.json;
+							if (result != null) {
+								LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = result;
+								Absence_onClickInstantAbsenceReasonWrapper(node);
+							}
+						},
+						scope: this
+					}
+				});
+			}
 		} else {
-			Alfresco.util.Ajax.request({
-				method: "GET",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/container",
-				requestContentType: "application/json",
-				responseContentType: "application/json",
-				successCallback: {
-					fn: function (response) {
-						var result = response.json;
-						if (result != null) {
-							LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = result;
-							Absence_onClickInstantAbsenceReasonWrapper(node);
-						}
-					},
-					scope: this
-				}
-			});
+			var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "instant-absence";
+			window.location.href = url;
 		}
 
 		function Absence_onClickInstantAbsenceReasonWrapper(node) {
