@@ -76,6 +76,7 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
     <bean id="dictionaryScript" parent="baseJavaScriptExtension" class="ru.it.lecm.dictionary.scripts.DictionaryWebScriptBean"
@@ -91,4 +92,16 @@
         </property>
     </bean>
 
+	<bean id="dictionaryLogEventsPolicy" class="ru.it.lecm.dictionary.policy.DictionaryLogEventPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="serviceDictionary"/>
+		</property>
+	</bean>
 </beans>

@@ -1,12 +1,12 @@
 package ru.it.lecm.dictionary.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -28,6 +28,8 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
      */
     protected Repository repository;
 
+	private DictionaryService dictionaryService;
+
     /**
      * Set the service registry
      *
@@ -45,6 +47,10 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
     public void setRepositoryHelper(Repository repository) {
         this.repository = repository;
     }
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
     @Override
     public NodeRef getDictionaryByName(String name) {
@@ -105,5 +111,49 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			result = results.get(results.size() - 1);
 		}
 		return result;
+	}
+
+	@Override
+	public boolean isDictionary(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_DICTIONARY);
+		return isProperType(ref, types);
+	}
+
+	@Override
+	public boolean isHeirarchicalDictionaryValue(NodeRef ref) {
+		return isProperSubType(ref, TYPE_HIERARCHICAL_DICTIONARY_VALUE);
+	}
+
+	@Override
+	public boolean isPlaneDictionaryValue(NodeRef ref) {
+		return isProperSubType(ref, TYPE_PLANE_DICTIONARY_VALUE);
+	}
+
+	public boolean isProperSubType(NodeRef ref, QName type) {
+		QName refType = nodeService.getType(ref);
+		if (refType != null) {
+			return dictionaryService.isSubClass(refType, type);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isDictionaryValue(NodeRef ref) {
+		return isPlaneDictionaryValue(ref) || isHeirarchicalDictionaryValue(ref);
+	}
+
+	@Override
+	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef) {
+		if (isDictionaryValue(nodeRef)) {
+			ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
+			while (parent != null && !isDictionary(parent.getParentRef())) {
+				parent = nodeService.getPrimaryParent(parent.getParentRef());
+			}
+			if (parent != null) {
+				return parent.getParentRef();
+			}
+		}
+		return null;
 	}
 }

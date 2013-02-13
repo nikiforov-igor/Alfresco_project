@@ -11,7 +11,7 @@
             <property name="cm:name">Справочник</property>
             <property name="lecm-busjournal:objectType-code">DICTIONARY</property>
             <property name="lecm-busjournal:objectType-class">lecm-dic:dictionary</property>
-            <property name="lecm-busjournal:objectType-template">{сm:name}</property>
+            <property name="lecm-busjournal:objectType-template">{cm:name}</property>
         </item>
         <item name="Подразделение">
             <property name="cm:name">Подразделение</property>
