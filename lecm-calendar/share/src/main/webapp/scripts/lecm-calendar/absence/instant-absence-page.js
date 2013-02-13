@@ -21,10 +21,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.WCalendar.Absence.InstantAbsencePage.prototype, {
 
-		options: {
-
-		},
-
 		onInstantAbsenceForm: function(result) {
 			var contentEl = YAHOO.util.Dom.get(this.id + "-content");
 			contentEl.innerHTML = result.serverResponse.responseText;
@@ -36,7 +32,9 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					successCallback: {
 						fn: function InstantAbsence_onSuccess(response) {
 							LogicECM.module.WCalendar.Absence.isAbsent = true;
-							YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", { isAbsent: true } );
+							YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", {
+								isAbsent: true
+							} );
 							Alfresco.util.Ajax.request({
 								method: "GET",
 								url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/AbsenceCancelShowDialog",
@@ -46,15 +44,15 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 							LogicECM.module.WCalendar.Absence.drawInstantElement();
 							LogicECM.module.WCalendar.Absence.drawCancelElement();
 							Alfresco.util.PopupManager.displayMessage({
-								text:  Alfresco.component.Base.prototype.msg("message.absence.new-instant.success")
+								text: Alfresco.component.Base.prototype.msg("message.absence.new-instant.success")
 							});
 						},
 						scope: this
 					},
 					failureCallback: {
-						fn: function() {
+						fn: function InstantAbsence_onFailure(response) {
 							Alfresco.util.PopupManager.displayMessage({
-								text:  Alfresco.component.Base.prototype.msg("message.absence.new-instant.failure")
+								text: Alfresco.component.Base.prototype.msg("message.absence.new-instant.failure")
 							});
 						},
 						scope: this
@@ -66,7 +64,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var htmlNodeUnlimited = YAHOO.util.Dom.get(this.id + "_prop_lecm-absence_unlimited");
 						var endDate;
 						var htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0]
-						htmlNodeBegin.value =  Alfresco.util.toISO8601(new Date());
+						htmlNodeBegin.value = Alfresco.util.toISO8601(new Date());
 						if (htmlNodeUnlimited.checked) {
 							var beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value);
 							endDate = new Date(beginDate);
@@ -80,7 +78,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				}
 				form.setSubmitAsJSON(true);
 				form.setShowSubmitStateDynamically(true, false);
-				// Initialise the form
 				form.init();
 			}
 		},
@@ -88,7 +85,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		onReady: function() {
 
 			Alfresco.logger.info("LogicECM.module.WCalendar.Absence.InstantAbsencePage has been created");
-			
+
 			var destination = LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef;
 			var itemType = LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType;
 
@@ -105,13 +102,13 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				showResetButton: false,
 				showSubmitButton: true
 			};
-				
+
 			Alfresco.util.Ajax.request({
 				method: "GET",
 				url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 				dataObj: argsObj,
 				successCallback: {
-					fn: function(formResult) {
+					fn: function InstantAbsencePage_onSuccessForm(formResult) {
 						if (!LogicECM.module.WCalendar.Absence.defaultReasonNodeRef) {
 							Alfresco.util.Ajax.request({
 								method: "GET",
@@ -135,14 +132,19 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					},
 					scope: this
 				},
-				failureMessage: "не удалось выполнить запрос, попробуйте обновить страницу",
+				failureCallback: {
+					fn: function InstantAbsencePage_onFailureForm(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: Alfresco.component.Base.prototype.msg("message.absence.new-instant.failure")
+						});
+					},
+					scope: scope
+				},
 				execScripts: true
 			});
 
-
 			YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
 		}
-
 	}, true);
 
 })();

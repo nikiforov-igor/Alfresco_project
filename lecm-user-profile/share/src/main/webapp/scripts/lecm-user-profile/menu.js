@@ -17,9 +17,9 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 
 	YAHOO.lang.extend(LogicECM.module.UserProfile.Menu, Alfresco.component.Base, {
 
-		instantAbsenceBtn: null
+		instantAbsenceBtn: null,
 
-		,_reloadPage: function (type) {
+		_reloadPage: function (type) {
 			var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
 			window.location.href = url + type;
 		},
@@ -37,14 +37,14 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 				scope._reloadPage ("my-delegation");
 			}
 		},
-		
+
 		_userProfileInstantAbsenceBtnClick: function () {
 			var scope = this;
 			return function (event, obj) {
 				scope._reloadPage ("instant-absence");
 			}
 		},
-		
+
 		_onCurrentEmployeeAbsenceChecked: function(layer, args) {
 			if (args[1].isAbsent && !this.instantAbsenceBtn.get("disabled")) {
 				Alfresco.util.disableYUIButton(this.instantAbsenceBtn);
@@ -64,7 +64,7 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 			this.instantAbsenceBtn = Alfresco.util.createYUIButton(this, "userProfileInstantAbsenceBtn", this._userProfileInstantAbsenceBtnClick(), {
 				disabled: disableInstantAbsence
 			});
-			
+
 			YAHOO.Bubbling.on("currentEmployeeAbsenceChanged", this._onCurrentEmployeeAbsenceChecked, this);
 		},
 
