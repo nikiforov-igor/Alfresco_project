@@ -38,6 +38,10 @@
 			<url>/ru/it/lecm/wcalendar/absence/absence-summary-table</url>
 		</component>
 		<component>
+			<region-id>absence-summary-table-wrapper</region-id>
+			<url>/ru/it/lecm/wcalendar/absence/absence-summary-table-wrapper</url>
+		</component>
+		<component>
 			<region-id>forbidden</region-id>
 			<url>/ru/it/lecm/wcalendar/forbidden</url>
 		</component>

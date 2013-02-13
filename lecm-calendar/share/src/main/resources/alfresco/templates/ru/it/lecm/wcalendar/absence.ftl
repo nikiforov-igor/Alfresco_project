@@ -49,8 +49,8 @@ LogicECM.module.WCalendar.Absence.ABSENCE_LABEL = LogicECM.module.WCalendar.Abse
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePage showToolbar=showContent>
 	<#if showContent>
+		<@region id="absence-summary-table-wrapper" scope="template"/>
 		<@region id="absence" scope="template"/>
-		<@region id="absence-summary-table" scope="template"/>
 	<#else/>
 		<@region id="forbidden" scope="template"/>
 	</#if>
