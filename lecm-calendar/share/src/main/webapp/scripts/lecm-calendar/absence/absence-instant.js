@@ -19,6 +19,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					var result = response.json;
 					if (result != null) {
 						LogicECM.module.WCalendar.Absence.isAbsent = result.isAbsent;
+						YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", { isAbsent: result.isAbsent } );
 						Absence_ShowControlElements();
 					}
 				},
@@ -127,6 +128,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						successCallback: {
 							fn: function (response) {
 								LogicECM.module.WCalendar.Absence.isAbsent = false;
+								YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", { isAbsent: false } );
 								Absence_DrawInstantElement();
 								Absence_DrawCancelElement();
 								Alfresco.util.PopupManager.displayMessage({
@@ -260,6 +262,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				onSuccess: {
 					fn: function InstantAbsence_onSuccess(response) {
 						LogicECM.module.WCalendar.Absence.isAbsent = true;
+						YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", { isAbsent: true } );
 						Alfresco.util.Ajax.request({
 							method: "GET",
 							url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/AbsenceCancelShowDialog",

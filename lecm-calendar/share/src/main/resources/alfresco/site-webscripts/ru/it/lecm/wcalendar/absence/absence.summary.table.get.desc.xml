@@ -4,5 +4,11 @@
 	<description>Work Calendar: Absence Summary Table</description>
 	<format default="html"/>
 	<url>/ru/it/lecm/wcalendar/absence/absence-summary-table</url>
-	<authentication>user</authentication>
+	<!--
+	 | Авторизация отключена умышленно!
+	 | Это сделано потому, что этот скрипт выполняет remote.connect к alfresco,
+	 | и если авторизация будет активна, то вылезет окошко авторизации
+	 | В общем, плохо понятно почему так. Вероятно, бага Альфреско.
+	-->
+	<authentication>none</authentication>
 </webscript>

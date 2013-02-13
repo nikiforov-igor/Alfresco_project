@@ -36,6 +36,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					successCallback: {
 						fn: function InstantAbsence_onSuccess(response) {
 							LogicECM.module.WCalendar.Absence.isAbsent = true;
+							YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", { isAbsent: true } );
 							Alfresco.util.Ajax.request({
 								method: "GET",
 								url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/AbsenceCancelShowDialog",
