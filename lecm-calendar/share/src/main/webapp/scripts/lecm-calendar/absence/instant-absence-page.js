@@ -138,7 +138,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 							text: Alfresco.component.Base.prototype.msg("message.absence.new-instant.failure")
 						});
 					},
-					scope: scope
+					scope: this
 				},
 				execScripts: true
 			});
