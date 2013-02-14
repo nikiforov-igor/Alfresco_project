@@ -243,9 +243,13 @@ LogicECM.module = LogicECM.module || {};
 
                 var successHandler = function (sRequest, oResponse, oPayload)
                 {
-                    var emptyOptions = this.selectItem.options[0];
+                    var emptyOption = this.selectItem.options[0];
+	                var emptOpt = document.createElement('option');
+	                emptOpt.innerHTML = emptyOption.innerHTML;
+	                emptOpt.value = emptyOption.value;
+
                     this.selectItem.innerHTML = "";
-                    this.selectItem.appendChild(emptyOptions);
+                    this.selectItem.appendChild(emptOpt);
 
                     var results = oResponse.results;
                     for (var i = 0; i < results.length; i++) {
