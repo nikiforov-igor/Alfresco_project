@@ -77,6 +77,8 @@
 		var result = {};
 
 		for (employee in employeesAbsences) {
+			var employeeHasAbsence = false;
+
 			if (!result[employee]) {
 				result[employee] = []
 			}
@@ -88,11 +90,15 @@
 				for (var j = 0; j < employeesAbsences[employee].length; j++) {
 					if (checkDayAbsence(currentDay, employeesAbsences[employee][j].begin, employeesAbsences[employee][j].end)) {
 						color = reasons[employeesAbsences[employee][j].reason].color;
+						employeeHasAbsence = true;
 						break;
 					}
 				}
 				result[employee].push(color);
 				today.setDate(today.getDate() + 1);
+			}
+			if (!employeeHasAbsence) {
+				delete result[employee];
 			}
 		}
 
