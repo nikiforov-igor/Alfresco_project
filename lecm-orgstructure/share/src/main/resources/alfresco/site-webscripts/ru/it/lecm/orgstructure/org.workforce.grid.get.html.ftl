@@ -33,7 +33,7 @@
 									label:"${msg("actions.deleteEmployee")}",
 									evaluator: function (rowData) {
                                         var itemData = rowData.itemData;
-                                        return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != "undefined" &&
+                                        return itemData["assoc_lecm-orgstr_element-member-employee-assoc"] != undefined &&
 		                                        itemData["assoc_lecm-orgstr_element-member-employee-assoc"].value.length > 0;
                                     }
 								},
