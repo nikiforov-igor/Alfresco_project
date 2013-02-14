@@ -239,7 +239,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 										subscriptionName += " " + this.currentEmployee.name;
 									}
 									var date = new Date();
-									subscriptionName += " " + Alfresco.util.formatDate(date, "yyyy-mm-dd HH-MM-ss");;
+									subscriptionName += " " + Alfresco.util.formatDate(date, "dd.mm.yyyy HH-MM-ss");
 									name.value = subscriptionName;
 								}
 							},
