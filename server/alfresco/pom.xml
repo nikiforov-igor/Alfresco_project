@@ -253,7 +253,7 @@
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
-		<dependency>
+		</dependency>
 	</dependencies>
 
 	<build>
