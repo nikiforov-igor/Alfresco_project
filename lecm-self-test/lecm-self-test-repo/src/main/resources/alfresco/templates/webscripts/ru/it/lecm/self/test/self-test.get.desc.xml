@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>self test web script</shortname>
+	<description>self test web script</description>
+	<url>/lecm/self-test</url>
+	<authentication>user</authentication>
+	<format default="html"/>
+	<transaction>none</transaction>
+</webscript>
