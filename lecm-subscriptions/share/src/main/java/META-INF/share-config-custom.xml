@@ -39,7 +39,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Все</control-param>
+							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
@@ -51,7 +51,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Все</control-param>
+							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
@@ -118,7 +118,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Все</control-param>
+							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
@@ -130,7 +130,7 @@
 							</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel">Все</control-param>
+							<control-param name="notSelectedOptionLabelCode">subscriptions.all</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 						</control>
 					</field>
