@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-connect:dictionary-connection" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Connection Dictionary</description>
+	<author>AIvkin</author>
+	<published>2013-02-15</published>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.it.ru/lecm/org/connection/types/1.0" prefix="lecm-connect-types"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/org/connection/1.0" prefix="lecm-connect"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-connect:connection">
+			<title>Connection</title>
+			<parent>cm:content</parent>
+			<associations>
+				<association name="lecm-connect:primary-document-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:cmobject</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-connect:connected-document-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:cmobject</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-connect:connection-type-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-connect-types:connection-type</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+	</types>
+</model>

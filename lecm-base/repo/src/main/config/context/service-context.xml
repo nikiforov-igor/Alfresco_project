@@ -19,6 +19,47 @@
 -->
 <beans>
 
+	<bean id="${groupId}.${artifactId}.connectBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, ru.it.lecm.base.base-repo.connectDictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-connection-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/base</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="${groupId}.${artifactId}.connectDictionaryBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-connection-types-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="${groupId}.${artifactId}.connectAspectsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-connection-aspect-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-connection-types.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-connection-available-types.xml</value>
+			</list>
+		</property>
+	</bean>
+
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>
