@@ -82,7 +82,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.datagridColumns = {};
         this.dataRequestFields = [];
         this.dataResponseFields = [];
-        this.initialPage = 1;
         this.totalRecords = 0;
         this.showingMoreActions = false;
         this.selectedItems = {};
@@ -256,15 +255,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             /**
-             * Current page being browsed.
-             *
-             * @property currentPage
-             * @type int
-             * @default 1
-             */
-            initialPage: null,
-
-            /**
              * Total number of records (documents + folders) in the currentPath.
              *
              * @property totalRecords
@@ -375,8 +365,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * Порядок сортировки
              */
             desc: true,
+
             elTh: null,
+
             search: null, //Объект, отвечающий за заполнение датагрида
+
             initialSearchConfig: null,
 
             onArchiveCheckBoxClicked: function (layer, args) {
@@ -807,7 +800,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 this.datagridColumns = response.json.columns;
                 // Set-up YUI History Managers and Paginator
-                this._setupHistoryManagers();
+                this._setupPaginatior();
                 // DataSource set-up and event registration
                 this.setupDataSource();
                 // DataTable set-up and event registration
@@ -824,12 +817,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
-            /**
-             * History Manager set-up and event registration
-             *
-             * @method _setupHistoryManagers
-             */
-            _setupHistoryManagers: function DataGrid__setupHistoryManagers() {
+            _setupPaginatior: function DataGrid_setupPaginatior() {
                 /**
                  * YUI History - page
                  */
@@ -843,7 +831,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         {
                             containers: [this.id + "-paginatorBottom"],
                             rowsPerPage: this.options.pageSize,
-                            initialPage: this.initialPage,
+                            initialPage: this.options.initialPage,
                             template: this.msg("pagination.template"),
                             pageReportTemplate: this.msg("pagination.template.page-report"),
                             previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
@@ -1046,7 +1034,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         generateRequest: generateRequest,
                         initialLoad: false,
-                        dynamicData: this.options.useDynamicPagination,
+                        dynamicData: (this.options.usePagination && this.options.useDynamicPagination),
                         "MSG_EMPTY": this.msg("message.empty"),
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),
@@ -1330,7 +1318,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Выбранный элемент
                 var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
-                numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                if (this.widgets.paginator) {
+                    numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                }
 
                 var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
                 if (selectItem){
@@ -1520,11 +1510,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 var items = [],
                     recordSet = this.widgets.dataTable.getRecordSet(),
-                    aPageRecords = this.widgets.paginator.getPageRecords(),
-                    startRecord = aPageRecords[0],
-                    endRecord = aPageRecords[1],
+                    aPageRecords,
+                    startRecord,
+                    endRecord,
                     record;
-
+                if (this.widgets.paginator) {
+                    aPageRecords = this.widgets.paginator.getPageRecords();
+                    startRecord = aPageRecords[0];
+                    endRecord = aPageRecords[1];
+                } else {
+                    startRecord = 0;
+                    endRecord = this.totalRecords;
+                }
                 for (var i = startRecord; i <= endRecord; i++)
                 {
                     record = recordSet.getRecord(i);
@@ -1553,11 +1550,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				if (this.options.showCheckboxColumn) {
 					var recordSet = this.widgets.dataTable.getRecordSet(),
 						checks = Selector.query('input[type="checkbox"]', this.widgets.dataTable.getTbodyEl()),
-						aPageRecords = this.widgets.paginator.getPageRecords(),
-						startRecord = aPageRecords[0],
+						aPageRecords,
+						startRecord,
 						len = checks.length,
 						record, i, fnCheck;
-
+                    if (this.widgets.paginator) {
+                        aPageRecords = this.widgets.paginator.getPageRecords();
+                        startRecord = aPageRecords[0];
+                    } else {
+                        startRecord = 0;
+                    }
 					switch (p_selectType)
 					{
 						case "selectAll":
@@ -1631,9 +1633,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 var obj = args[1];
                 if (!obj || this._hasEventInterest(obj.bubblingLabel)){
+                    var page;
+                    if (this.widgets.paginator) {
+                        page = this.widgets.paginator.getCurrentPage();
+                    } else {
+                        page = 0;
+                    }
                     this._updateDataGrid.call(this,
                         {
-                            page: this.widgets.paginator.getCurrentPage()
+                            page: page
                         });
                     Bubbling.fire("itemsListChanged");
                 }
@@ -1769,14 +1777,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 p_obj = p_obj || {};
                 Alfresco.logger.debug("DataGrid__updateDataGrid: ", p_obj.filter);
-                var successFilter = YAHOO.lang.merge({}, p_obj.filter !== undefined ? p_obj.filter : {}),
-                    loadingMessage = null,
+                var loadingMessage = null,
                     timerShowLoadingMessage = null,
-                    me = this,
-                    params =
-                    {
-                        filter: successFilter
-                    };
+                    me = this;
 
                 // Clear the current document list if the data webscript is taking too long
                 var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
@@ -1850,8 +1853,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         Bubbling.fire("selectedFilesChanged");
                     };
                     this.afterDataGridUpdate.push(fnAfterUpdate);
-                    //this.currentPage = p_obj.page || 1;
-                    Bubbling.fire("filterChanged", successFilter);
                     this.widgets.dataTable.onDataReturnReplaceRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 };
 
@@ -1896,7 +1897,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     };
                 }
                 // Update the DataSource
-                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive);
+                var offset = 0;
+                if (this.widgets.paginator){
+                    offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                }
+
+                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,
@@ -1912,22 +1918,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param p_obj.filter {string} [Optional] Current filter
              * @return {Object} Request parameters. Can be given directly to Alfresco.util.Ajax, but must be JSON.stringified elsewhere.
              */
-            _buildDataGridParams: function DataGrid__buildDataGridParams(p_obj)
-            {
+            _buildDataGridParams: function DataGrid__buildDataGridParams(p_obj) {
                 var request =
                 {
                     fields: this.dataRequestFields
                 };
-
-                if (p_obj && p_obj.filter)
-                {
-                    request.filter =
-                    {
-                        filterId: p_obj.filter.filterId,
-                        filterData: p_obj.filter.filterData
-                    };
-                }
-
                 return request;
             },
 
@@ -1943,7 +1938,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 var recordSet = this.widgets.dataTable.getRecordSet();
                 Bubbling.fire("itemsListChanged");
-                for (var i = 0, j = recordSet.getLength(); i < j; i++)
+                var index = 0;
+                if (this.widgets.paginator) {
+                    index = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                }
+                for (var i = index, j = recordSet.getLength(); i < j; i++)
                 {
                     if (recordSet.getRecord(i).getData(p_parameter) == p_value)
                     {
