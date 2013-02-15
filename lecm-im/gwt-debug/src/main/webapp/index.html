@@ -20,7 +20,7 @@
     <script type="text/javascript" language="javascript">//<![CDATA[
 
         updateMessagesCountSubscriber( function(count){
-            var elem = document.getElementById("myElem");
+            var elem = document.getElementById("msgCounter");
             elem.innerHTML = count;
         } ) ;
 	//]]>
@@ -47,7 +47,7 @@
 
 <button onclick="toggleChat()">Toggle Chat</button>
 <div> сообщений:
-    <div id="myElem">0</div>
+    <div id="msgCounter">0</div>
 </div>
 
 </body>

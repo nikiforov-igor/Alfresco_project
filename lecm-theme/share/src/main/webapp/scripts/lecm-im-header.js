@@ -62,7 +62,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         createNotifyer: function(){
             var btn = Dom.get(this.id);
             var div = document.createElement("div");
-            div.innerHTML = '<div id="myElem" class="hidden headerCounter">0</div>';
+            div.innerHTML = '<div id="msgCounter" class="hidden headerCounter">0</div>';
             btn.appendChild(div);
             Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления"
         },
@@ -71,7 +71,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         subscribeToNewMessages: function() {
             YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
                 var count = args[1].count;
-                var elem = Dom.get("myElem");
+                var elem = Dom.get("msgCounter");
 
                 elem.innerHTML = count;
                 if (count > 0) {

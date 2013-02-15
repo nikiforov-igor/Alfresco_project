@@ -14,16 +14,6 @@ ul, li {
     border: 1px solid #797979;
 }
 
-#myElem{
-    position: absolute;
-    top: -1px;
-    color: #00B0EB;
-    font-weight: bold;
-    font-family: arial, helvetica, clean, sans-serif;
-    font-size: 1em;
-    padding-left: 54px;
-}
-
 #ijab textarea{
     resize: none;
 }
@@ -523,7 +513,12 @@ display: inline-block;
     background: #8F9193;
 }
 
-.ijab-status-selector-icon,
+.ijab-status-selector-icon {
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin: 3px;
+}
 .ijab-status-selector-triangle {
     width: 16px;
     height: 16px;
@@ -669,6 +664,9 @@ background: url(about:blank);
 }
 .ijab-status-menuitem a {
     color: #4d4d4d;
+}
+.ijab-status-menuitem img {
+    margin-top: 5px;
 }
 
 .ijab-status-menuitem-hover {
@@ -1130,22 +1128,24 @@ margin: .3em .5em .3em;
     text-decoration: none !important;
 }
 
-.ijab-contactview-item .avatar
-{
-    float:right !important;
-    height:100%;
+.ijab-contactview-item .avatar {
+    float: right !important;
+    height: 100%;
+}
+.ijab-contactview-item .avatar img {
+    width: 25px;
+    height: 25px;
 }
 
-.ijab-contactview-item .statusicon
-{
-    height:100%;
+.ijab-contactview-item .statusicon {
+    height: 35px;
+    line-height: 35px;
 }
 
-.ijab-contactview-item .statusicon img
-{
-    /*height:16px !important;*/
-    /*width:16px !important;*/
-    /*margin-top:7px;*/
+.ijab-contactview-item .statusicon img {
+    width: 10px;
+    height: 10px;
+    vertical-align: middle;
 }
 
 .ijab-offline
@@ -2544,10 +2544,7 @@ html>body .gwt-DialogBox {
     background: url(../images/alf_chat_search.png) 0 0 no-repeat;
 }
 .ijab .ui-icon-close {
-    /*background: url(../images/alf_chat_search.png) 0 0 no-repeat; *//*todo*/
-}
-.ijab .ui-icon-close:hover {
-    /*background: url(../images/alf_chat_search.png) 0 0 no-repeat; *//*todo*/
+    background: url(../images/alf_chat_close.png) 0 0 no-repeat !important;
 }
 .ijab .ui-icon-triangle-1-s {
     width: 8px;
@@ -2562,7 +2559,6 @@ html>body .gwt-DialogBox {
     height: 8px;
     background: url(../images/alf_chat_arrow_blue_right.png) 0 0 no-repeat;
 }
-/* chat tools icons - start */
 .ijab .ijab-icon-emot {
     background: url(../images/alf_chat_emot.png) 0 0 no-repeat;
 }
@@ -2574,23 +2570,24 @@ html>body .gwt-DialogBox {
 }
 .ijab .ijab-icon-emot,
 .ijab .ijab-icon-clear,
-.ijab .ijab-icon-history {
+.ijab .ijab-icon-history,
+.ijab .ui-icon-close {
     opacity: .6;
-    -webkit-transition: opacity 200ms;
-    -moz-transition: opacity 200ms;
-    -o-transition: opacity 200ms;
-    -ms-transition: opacity 200ms;
-    transition: opacity 200ms;
+    -webkit-transition: opacity 100ms;
+    -moz-transition: opacity 100ms;
+    -o-transition: opacity 100ms;
+    -ms-transition: opacity 100ms;
+    transition: opacity 100ms;
 }
 .ijab .ijab-chat-tools a:hover .ijab-icon-emot,
 .ijab .ijab-chat-tools a:hover .ijab-icon-clear,
 .ijab .ijab-chat-tools a:hover .ijab-icon-history,
 .ijab .ijab-icon-emot:hover,
 .ijab .ijab-icon-clear:hover,
-.ijab .ijab-icon-history:hover {
+.ijab .ijab-icon-history:hover,
+.ijab .ui-icon-close:hover {
     opacity: 1;
 }
-/* chat tool icons - end */
 .ijab .ijab-icon-chat {
     background: url(../images/alf_chat_message.png) 0 0 no-repeat;
 }
