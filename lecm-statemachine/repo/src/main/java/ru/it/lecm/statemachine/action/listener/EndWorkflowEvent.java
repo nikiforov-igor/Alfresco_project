@@ -28,7 +28,10 @@ public class EndWorkflowEvent implements ExecutionListener {
 	public void notify(DelegateExecution delegateExecution) throws Exception {
 		StateMachineHelper helper = new StateMachineHelper();
 		String executionId = StateMachineHelper.ACTIVITI_PREFIX + delegateExecution.getId();
+
 		NodeRef document = helper.getStatemachineDocument(executionId);
+		if (document == null) return;
+
 		DocumentWorkflowUtil utils = new DocumentWorkflowUtil();
 		WorkflowDescriptor descriptor = utils.getWorkflowDescriptor(document, executionId);
 

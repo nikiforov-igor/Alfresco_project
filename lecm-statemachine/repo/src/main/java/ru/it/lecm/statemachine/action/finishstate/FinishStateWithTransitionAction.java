@@ -61,6 +61,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 
 	@Override
 	public void execute(DelegateExecution execution) {
+		for (NextState state : states) {
+			execution.setVariable(state.getOutputVariableName(), "");
+		}
 	}
 
 	public class NextState {

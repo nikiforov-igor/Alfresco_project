@@ -68,6 +68,13 @@ public class StateMachineHandler implements ExecutionListener {
 			for (StateMachineAction action : actions) {
 				action.execute(execution);
 			}
+
+			if (eventName.equals(ExecutionListener.EVENTNAME_START)) {
+				actions = events.get(ExecutionListener.EVENTNAME_TAKE);
+				for (StateMachineAction action : actions) {
+					action.execute(execution);
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Error while action execution", e);
 			throw e;

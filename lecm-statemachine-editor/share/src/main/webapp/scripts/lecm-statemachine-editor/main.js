@@ -114,7 +114,7 @@ LogicECM.module = LogicECM.module || {};
 			tr = document.createElement("tr");
 			td = document.createElement("td");
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Тип перхода";
+			td.innerHTML = "Тип перехода";
 			tr.appendChild(td);
 
 			td = document.createElement("td");

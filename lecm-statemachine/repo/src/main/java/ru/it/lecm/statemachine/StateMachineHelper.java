@@ -369,7 +369,12 @@ public class StateMachineHelper {
 	public NodeRef getStatemachineDocument(String executionId) {
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-		return serviceRegistry.getNodeService().getChildAssocs(nodeRef).get(0).getChildRef();
+		List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+		if (documents.size() > 0) {
+			return documents.get(0).getChildRef();
+		} else {
+			return null;
+		}
 	}
 
 	public Map<String, Object> getVariables(String executionId) {
