@@ -136,4 +136,25 @@
         <property name="cannedQueryDAO" ref="cannedQueryDAO"/>
         <property name="methodSecurity" ref="FileFolderService_security_list"/>
     </bean>
+
+	<bean id="documentConnectionService" init-method="init" class="ru.it.lecm.base.beans.DocumentConnectionServiceImpl"
+	      depends-on="repositoryHelper, transactionService, nodeService, ServiceRegistry">
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="documentConnectionScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.DocumentConnectionWebScriptBean"
+	      depends-on="documentConnectionService">
+		<property name="extensionName">
+			<value>documentConnection</value>
+		</property>
+		<property name="documentConnectionService">
+			<ref bean="documentConnectionService"/>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+	</bean>
 </beans>

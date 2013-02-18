@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Connections Directory</shortname>
+	<description>Connections Directory</description>
+	<url>/lecm/connections/root</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>
