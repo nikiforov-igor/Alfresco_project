@@ -2250,6 +2250,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             createDialogShow:function (meta, callback, pattern, successMessage) {
+                // Intercept before dialog show
+                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                    Alfresco.util.populateHTML(
+                        [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
+                    );
+                };
+
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                     {
                         itemKind:"type",
@@ -2269,7 +2276,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{
-                            fn:this.doBeforeCreateDialogShow,
+                            fn:doBeforeDialogShow,
                             scope:this
                         },
                         onSuccess:{
