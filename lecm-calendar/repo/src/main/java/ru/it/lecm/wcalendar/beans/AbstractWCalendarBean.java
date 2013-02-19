@@ -9,11 +9,10 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalendar;
 
@@ -21,23 +20,11 @@ import ru.it.lecm.wcalendar.IWCalendar;
  *
  * @author vlevin
  */
-public abstract class AbstractWCalendarBean implements IWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
+public abstract class AbstractWCalendarBean extends BaseBean implements IWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
 	protected Repository repository;
-	protected NodeService nodeService;
-	protected TransactionService transactionService;
 	protected OrgstructureBean orgstructureService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalendarBean.class);
-
-	/**
-	 * Получить экземпляр NodeService от Spring-а для последующей работы с
-	 * нодами.
-	 *
-	 * @param nodeService передается Spring-ом
-	 */
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
 
 	/**
 	 * Получить экземпляр Repository от Spring-а для последующей работы с
@@ -47,16 +34,6 @@ public abstract class AbstractWCalendarBean implements IWCalendar, Authenticatio
 	 */
 	public void setRepositoryHelper(Repository repository) {
 		this.repository = repository;
-	}
-
-	/**
-	 * Получить экземпляр TransactionService от Spring-а для того, чтобы
-	 * оборачивать работу с репозиторием в транзакции
-	 *
-	 * @param transactionService передается Spring-ом
-	 */
-	public void setTransactionService(TransactionService transactionService) {
-		this.transactionService = transactionService;
 	}
 
 	/**
@@ -93,15 +70,15 @@ public abstract class AbstractWCalendarBean implements IWCalendar, Authenticatio
 	@Override
 	public NodeRef doWork() throws Exception {
 		repository.init();
-		final NodeRef companyHome = repository.getCompanyHome();
+		final NodeRef rootNode = repository.getCompanyHome();
 		final Map<String, Object> params = containerParams();
-		NodeRef container = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, (String) params.get("CONTAINER_NAME"));
+		NodeRef container = nodeService.getChildByName(rootNode, ContentModel.ASSOC_CONTAINS, (String) params.get("CONTAINER_NAME"));
 		if (container == null) {
 			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 			container = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 				@Override
 				public NodeRef execute() throws Throwable {
-					NodeRef parentRef = companyHome; //the parent node
+					NodeRef parentRef = rootNode; //the parent node
 					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
 					QName assocQName = QName.createQName(WCAL_NAMESPACE, (String) params.get("CONTAINER_NAME")); //the qualified name of the association
 					QName nodeTypeQName = (QName) params.get("CONTAINER_TYPE"); //a reference to the node type

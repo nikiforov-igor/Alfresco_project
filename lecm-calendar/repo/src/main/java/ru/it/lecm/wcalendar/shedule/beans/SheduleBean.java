@@ -12,7 +12,6 @@ import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -32,6 +31,7 @@ import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
  */
 public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	// Получить логгер, чтобы писать, что с нами происходит.
+
 	private final static Logger logger = LoggerFactory.getLogger(SheduleBean.class);
 
 	@Override
@@ -68,20 +68,16 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	}
 
 	private NodeRef recursiveSheduleSearch(NodeRef node) {
-		List<AssociationRef> sheduleAssocList = nodeService.getSourceAssocs(node, ASSOC_SHEDULE_EMPLOYEE_LINK);
-		if (sheduleAssocList == null || sheduleAssocList.isEmpty()) {
+		if (!isSheduleAssociated(node)) {
 			List<ChildAssociationRef> parentAssocList = nodeService.getParentAssocs(node);
 			if (parentAssocList == null || parentAssocList.isEmpty()) {
 				return null;
 			}
 			ChildAssociationRef parentAssoc = parentAssocList.get(0);
 			NodeRef parentNode = parentAssoc.getParentRef();
-			logger.debug(node.toString() + " has parent " + parentNode.toString());
 			return recursiveSheduleSearch(parentNode);
 		} else {
-			AssociationRef sheduleAssoc = sheduleAssocList.get(0);
-			NodeRef sheduleNode = sheduleAssoc.getSourceRef();
-			return sheduleNode;
+			return getSheduleByOrgSubject(node);
 		}
 	}
 
@@ -98,35 +94,11 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	@Override
 	public NodeRef getParentShedule(NodeRef node) {
 		NodeRef primaryOU = null;
-		QName nodeType = nodeService.getType(node);
 		boolean searchFromCurrent = true;
-		if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(nodeType)) {
-			List<AssociationRef> assocEmloyeeLinkList = nodeService.getSourceAssocs(node, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE);
-			if (assocEmloyeeLinkList == null || assocEmloyeeLinkList.isEmpty()) {
-				return null;
-			}
-			for (AssociationRef assocEmloyeeLink : assocEmloyeeLinkList) {
-				NodeRef nodeEmployeeLink = assocEmloyeeLink.getSourceRef();
-				Serializable isPrimaryLink = nodeService.getProperty(nodeEmployeeLink, OrgstructureBean.PROP_EMP_LINK_IS_PRIMARY);
-				if (!(Boolean) isPrimaryLink) {
-					continue;
-				}
-				List<AssociationRef> assocOrgElementMemberList = nodeService.getSourceAssocs(nodeEmployeeLink, OrgstructureBean.ASSOC_ELEMENT_MEMBER_EMPLOYEE);
-				if (assocOrgElementMemberList == null || assocOrgElementMemberList.isEmpty()) {
-					return null;
-				}
-				for (AssociationRef assocOrgElementMember : assocOrgElementMemberList) {
-					NodeRef nodeOrgElementMember = assocOrgElementMember.getSourceRef();
-					List<ChildAssociationRef> assocOrgUnitList = nodeService.getParentAssocs(nodeOrgElementMember);
-					if (assocOrgUnitList == null || assocOrgUnitList.isEmpty()) {
-						return null;
-					}
-					NodeRef nodeOrgUnit = (assocOrgUnitList.get(0)).getParentRef();
-					primaryOU = nodeOrgUnit;
-					searchFromCurrent = true;
-				}
-			}
-		} else if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.isMatch(nodeType)) {
+		if (orgstructureService.isEmployee(node)) {
+			primaryOU = orgstructureService.getEmployeePrimaryStaff(node);
+			searchFromCurrent = true;
+		} else if (orgstructureService.isUnit(node)) {
 			primaryOU = node;
 			searchFromCurrent = false;
 		}
@@ -188,12 +160,9 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	 */
 	@Override
 	public boolean isSheduleAssociated(NodeRef node) {
-		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_SHEDULE_EMPLOYEE_LINK);
-		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
-			return false;
-		} else {
-			return true;
-		}
+		NodeRef shedule = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, TYPE_SHEDULE, ASSOCIATION_TYPE.SOURCE);
+		boolean result = shedule != null;
+		return result;
 	}
 
 	/**
@@ -384,21 +353,20 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		}
 	}
 
-	/**
-	 * Получить расписание, привзянное к сотруднику или орг. единице.
-	 *
-	 * @param node - NodeRef сотрудника/орг. единицы.
-	 * @return NodeRef расписания, привязанного к node. Если таковое
-	 * отсутствует, то null.
-	 */
 	@Override
 	public NodeRef getSheduleByOrgSubject(NodeRef node) {
-		if (!isSheduleAssociated(node)) {
-			return null;
+		return findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, TYPE_SHEDULE, ASSOCIATION_TYPE.SOURCE);
+	}
+
+	@Override
+	public void unlinkShedule(NodeRef node) {
+		NodeRef employee = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		NodeRef orgUnit = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
+		if (employee != null) {
+			nodeService.removeAssociation(node, employee, ASSOC_SHEDULE_EMPLOYEE_LINK);
+		} else if (orgUnit != null) {
+			nodeService.removeAssociation(node, orgUnit, ASSOC_SHEDULE_EMPLOYEE_LINK);
 		}
-		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_SHEDULE_EMPLOYEE_LINK);
-		AssociationRef sourceAssoc = sourceAssocs.get(0);
-		return sourceAssoc.getSourceRef();
 	}
 
 	// класс для представления элементов графика: первый и последний рабочий день в серии

@@ -116,8 +116,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 						itemType: "lecm-cal:working-days",
 						nodeRef: selectItem.getData().nodeRef,
 						actionsConfig: {
-							fullDelete:true,
-							targetDelete:true
+							fullDelete: false,
+							targetDelete: false 
 						}
 					},
 					bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL
@@ -129,8 +129,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 						itemType: "lecm-cal:non-working-days",
 						nodeRef: selectItem.getData().nodeRef,
 						actionsConfig: {
-							fullDelete:true,
-							targetDelete:true
+							fullDelete: false,
+							targetDelete: false
 						}
 					},
 					bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL

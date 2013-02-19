@@ -116,4 +116,12 @@ public interface IShedule {
 	 * @return true - привязано, false - не привязано.
 	 */
 	boolean isSheduleAssociated(NodeRef node);
+
+	/**
+	 * Удалить ассоциацию графика работы с сотрудником или орг. единицей
+	 * (shed-employee-link-assoc).
+	 *
+	 * @param nodeRef NodeRef на график работы (shedule)
+	 */
+	public void unlinkShedule(NodeRef nodeRef);
 }

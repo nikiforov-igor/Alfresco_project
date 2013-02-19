@@ -206,6 +206,18 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 	}
 
 	/**
+	 * Установить параметр "бессрочное" ("unlimited") у объекта типа absence в
+	 * определенное значение.
+	 *
+	 * @param nodeRefStr NodeRef на объект типа absence в виде строки.
+	 * @param unlimited значение, в которое следует установить параметр
+	 * "бессрочное".
+	 */
+	public void setAbsenceUnlimited(String nodeRefStr, boolean unlimited) {
+		absenceService.setAbsenceUnlimited(new NodeRef(nodeRefStr), unlimited);
+	}
+
+	/**
 	 * Установить параметр "end" у объекта типа absence в текущую дату и время.
 	 *
 	 * @param nodeRefStr NodeRef на объект типа absence в виде строки

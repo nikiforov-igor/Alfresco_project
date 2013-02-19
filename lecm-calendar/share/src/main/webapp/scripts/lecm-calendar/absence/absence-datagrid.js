@@ -136,13 +136,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				}
 				elCell.innerHTML = html;
 			};
-		},
-
-		onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
-			this.onDelete(p_items, owner, {
-				fullDelete:true, 
-				targetDelete:true
-			}, fnDeleteComplete, null);
 		}
 	}, true);
 

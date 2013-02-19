@@ -4,6 +4,7 @@ if (currentEmployee != null) {
 	activeAbsence = absence.getActiveAbsence(currentEpmoyeeStr);
 	if (activeAbsence != null) {
 		absence.setAbsenceEnd(activeAbsence.nodeRef.toString());
+		absence.setAbsenceUnlimited(activeAbsence.nodeRef.toString(), false);
 	}
 } else {
 	logger.log("ERROR: current employee is null!");

@@ -1,0 +1,109 @@
+package ru.it.lecm.wcalendar.absence.policy;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.JavaBehaviour;
+import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.wcalendar.absence.IAbsence;
+
+/**
+ * Полиси, срабатывающее на изменение проперти у объекта типа absence. Если
+ * lecm-dic:active поменялось на false, отсутствие считается удаленным. Следует
+ * проверить, не было ли оно назначено на текущий момент и, если надо,
+ * остановить. Если поменялось время конца полиси, то проверить, должно ли
+ * отсутствие быть активно сейчас и поменялась ли дата конца на сегодняшнюю.
+ * Если да, то отсутствие отменили и его надо остановить.
+ *
+ * @author vlevin
+ */
+public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy {
+
+	private IAbsence absenceService;
+	private PolicyComponent policyComponent;
+	private final static Logger logger = LoggerFactory.getLogger(AbsenceStartPolicy.class);
+
+	public final void init() {
+		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+		PropertyCheck.mandatory(this, "absenceService", absenceService);
+
+		logger.info("Initializing AbsenceEndPolicy");
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, IAbsence.TYPE_ABSENCE, new JavaBehaviour(this, "onUpdateProperties"));
+	}
+
+	public void setPolicyComponent(PolicyComponent policyComponent) {
+		this.policyComponent = policyComponent;
+	}
+
+	public void setAbsenceService(IAbsence absenceService) {
+		this.absenceService = absenceService;
+	}
+
+	@Override
+	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+		final Date prevEnd = (Date) before.get(IAbsence.PROP_ABSENCE_END);
+		final Date prevStart = (Date) before.get(IAbsence.PROP_ABSENCE_BEGIN);
+		final Date curEnd = (Date) after.get(IAbsence.PROP_ABSENCE_END);
+		final Date curStart = (Date) after.get(IAbsence.PROP_ABSENCE_BEGIN);
+		final Date today = new Date();
+		final NodeRef employee = absenceService.getEmployeeByAbsence(nodeRef);
+
+		// если: lecm-dic:active присутствует И нода отправилась в архив И нода раньше не была в архиве И сегодняшняя дата позже начала отсутствия И раньше его конца
+		if (curActive != null && curActive == false && curActive != prevActive && today.after(curStart) && today.before(curEnd)) {
+			absenceService.endAbsence(nodeRef);
+			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
+
+		} // если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия 
+		// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
+		else if (prevEnd != null && prevEnd != curEnd && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
+			absenceService.endAbsence(nodeRef);
+			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
+		}
+//		dumpNodeContent(nodeRef, "onUpdateProperties");
+
+	}
+
+	/**
+	 * Устанавливает часы, минуты, секунды и миллисекунды в 00:00:00.000
+	 *
+	 * @param day Дата, у которой надо сбросить поля времени.
+	 * @return Дата с обнуленными полями времени.
+	 */
+	private Date resetTime(final Date day) {
+		Date resetDay = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		resetDay.setTime(cal.getTimeInMillis());
+		return resetDay;
+	}
+//	private void dumpNodeContent(NodeRef nodeRef, String tag) {
+//		logger.debug("***********************");
+//		logger.debug(tag + " is processing on " + nodeRef.toString());
+//		Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+//		logger.debug("Properties:");
+//		for (Map.Entry<QName, Serializable> entry : properties.entrySet()) {
+//			logger.debug(entry.getKey() + " = " + entry.getValue());
+//		}
+//		logger.debug("Assosc: ");
+//		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+//		for (AssociationRef assoc : targetAssocs) {
+//			logger.debug(assoc.toString() + " to " + assoc.getTargetRef().toString());
+//		}
+//		logger.debug("***********************");
+//	}
+}

@@ -6,12 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
@@ -23,6 +24,7 @@ import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
 public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	// Получить логгер, чтобы писать, что с нами происходит.
 
+	private IDelegation delegationService;
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
 	@Override
@@ -44,9 +46,14 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory(this, "delegationService", delegationService);
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
+	}
+
+	public void setDelegationService(IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	@Override
@@ -67,15 +74,14 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	 */
 	@Override
 	public List<NodeRef> getAbsenceByEmployee(NodeRef node) {
-		if (!isAbsenceAssociated(node)) {
-			return null;
-		}
 		List<NodeRef> absences = new ArrayList<NodeRef>();
-		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
-		for (AssociationRef sourceAssoc : sourceAssocs) {
-			absences.add(sourceAssoc.getSourceRef());
+		List<NodeRef> absenceList = findNodesByAssociationRef(node, ASSOC_ABSENCE_EMPLOYEE, TYPE_ABSENCE, ASSOCIATION_TYPE.SOURCE);
+		for (NodeRef absence : absenceList) {
+			if (!isArchive(absence)) {
+				absences.add(absence);
+			}
 		}
-		return absences;
+		return absences.isEmpty() ? null : absences;
 	}
 
 	/**
@@ -86,12 +92,14 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	 */
 	@Override
 	public boolean isAbsenceAssociated(NodeRef node) {
-		List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(node, ASSOC_ABSENCE_EMPLOYEE);
-		if (sourceAssocs == null || sourceAssocs.isEmpty()) {
-			return false;
-		} else {
-			return true;
+		boolean result = false;
+		List<NodeRef> absenceList = findNodesByAssociationRef(node, ASSOC_ABSENCE_EMPLOYEE, TYPE_ABSENCE, ASSOCIATION_TYPE.SOURCE);
+		for (NodeRef absence : absenceList) {
+			if (!isArchive(absence)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 
 	/**
@@ -171,11 +179,67 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	@Override
 	public void setAbsenceEnd(NodeRef nodeRef, Date date) {
 		nodeService.setProperty(nodeRef, PROP_ABSENCE_END, date);
-		nodeService.setProperty(nodeRef, PROP_ABSENCE_UNLIMITED, false);
 	}
 
 	@Override
 	public void setAbsenceEnd(NodeRef nodeRef) {
 		setAbsenceEnd(nodeRef, new Date());
+	}
+
+	@Override
+	public NodeRef getEmployeeByAbsence(NodeRef node) {
+		return findNodeByAssociationRef(node, ASSOC_ABSENCE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public void startAbsence(NodeRef node) {
+		NodeRef employee = getEmployeeByAbsence(node);
+
+		if (employee != null) {
+			delegationService.startDelegation(employee);
+
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee(); 
+			logger.debug("Current user is: " + currentEmployee.toString());// !!!
+			// TODO: добавить записи в бизнес-журнал
+			logger.debug(String.format("Absence [%s] started.", node.toString()));
+		} else {
+			logger.error(String.format("Somehow absence %s has no employee!", node.toString()));
+		}
+	}
+
+	@Override
+	public void endAbsence(NodeRef node) {
+		NodeRef employee = getEmployeeByAbsence(node);
+
+		if (employee != null) {
+			delegationService.stopDelegation(employee);
+
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee(); 
+			logger.debug("Current user is: " + currentEmployee.toString());// !!!
+			// TODO: добавить записи в бизнес-журнал
+			logger.debug(String.format("Absence [%s] ended.", node.toString()));
+		} else {
+			logger.error(String.format("Somehow absence %s has no employee!", node.toString()));
+		}
+	}
+
+	@Override
+	public NodeRef getContainer() {
+		return this.getWCalendarContainer();
+	}
+
+	@Override
+	public Date getAbsenceStartDate(NodeRef node) {
+		return (Date) nodeService.getProperty(node, PROP_ABSENCE_BEGIN);
+	}
+
+	@Override
+	public Date getAbsenceEndDate(NodeRef node) {
+		return (Date) nodeService.getProperty(node, PROP_ABSENCE_END);
+	}
+
+	@Override
+	public void setAbsenceUnlimited(NodeRef nodeRef, boolean unlimited) {
+		nodeService.setProperty(nodeRef, PROP_ABSENCE_UNLIMITED, unlimited);
 	}
 }

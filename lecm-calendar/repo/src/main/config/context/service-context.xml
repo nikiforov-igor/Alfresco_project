@@ -32,8 +32,8 @@
 			</list>
 		</property>
 	</bean>
-
-	<bean id="lecmCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<!-- Бины для сервисов календарей, графиков работы и отсутствий -->
+	<bean id="WCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
@@ -41,37 +41,174 @@
 		<property name="yearsAmountToCreate" value="3"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
-	<bean id="lecmSheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="SheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
-	<bean id="lecmAbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="delegationService" ref="delegationService"/>
 	</bean>
-	<bean id="lecmCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<!-- JavaScript root-object для  календарей, отсутствий и графиков работы  -->
+	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="lecmCalendarService"/>
+		<property name="wCalService" ref="WCalendarService"/>
 	</bean>
-	<bean id="lecmAbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="absenceService" ref="lecmAbsenceService"/>
-		<property name="wCalService" ref="lecmAbsenceService"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="wCalService" ref="AbsenceService"/>
 	</bean>
-	<bean id="lecmSheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="SheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="sheduleService" ref="lecmSheduleService"/>
-		<property name="wCalService" ref="lecmSheduleService"/>
+		<property name="sheduleService" ref="SheduleService"/>
+		<property name="wCalService" ref="SheduleService"/>
 	</bean>
+	<!-- Web-скрипты на Java -->
 	<bean id="webscript.ru.it.lecm.wcalendar.absence.AbsenceCancelShowDialogWebScript.get" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceCancelShowDialogWebScript" parent="webscript">
-		<property name="absenceService" ref="lecmAbsenceService"/>
+		<property name="absenceService" ref="AbsenceService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
+	<!-- Бины шедулера для отсутствий (начало отсутствия) -->
+	<bean id="absenceStartScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceStartScheduleExecutor" parent="action-executer">
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+		<property name="absenceService">
+			<ref bean="AbsenceService"/>
+		</property>
+	</bean>
+	<bean id="absenceStartShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceStartShedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="jobName">
+			<value>absence-start</value>
+		</property>
+		<property name="jobGroup">
+			<value>absence</value>
+		</property>
+		<property name="triggerName">
+			<value>absence-start-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>absence-trigger</value>
+		</property>
+		<property name="cronExpression">
+			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+		</property>
+		<property name="scheduler" ref="schedulerFactory"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="transactionService" ref="TransactionService"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
+	<!-- Бины шедулера для отсутствий (окончание отсутствия) -->
+	<bean id="absenceEndScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceEndScheduleExecutor" parent="action-executer">
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+		<property name="absenceService">
+			<ref bean="AbsenceService"/>
+		</property>
+	</bean>
+	<bean id="absenceEndShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceEndShedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="jobName">
+			<value>absence-end</value>
+		</property>
+		<property name="jobGroup">
+			<value>absence</value>
+		</property>
+		<property name="triggerName">
+			<value>absence-end-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>absence-trigger</value>
+		</property>
+		<property name="cronExpression">
+			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+		</property>
+		<property name="scheduler" ref="schedulerFactory"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="transactionService" ref="TransactionService"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
+	<!-- Бины шедулера для отсутствий (продление бессрочных отсутствий) -->
+	<bean id="absenceProlongationScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceProlongationScheduleExecutor" parent="action-executer">
+		<property name="ignoreLock">
+			<value>false</value>
+		</property>
+		<property name="absenceService">
+			<ref bean="AbsenceService"/>
+		</property>
+	</bean>
+	<bean id="absenceProlongationShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceProlongationShedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="jobName">
+			<value>absence-prolongation</value>
+		</property>
+		<property name="jobGroup">
+			<value>absence</value>
+		</property>
+		<property name="triggerName">
+			<value>absence-prolongation-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>absence-trigger</value>
+		</property>
+		<property name="cronExpression">
+			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+		</property>
+		<property name="scheduler" ref="schedulerFactory"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="transactionService" ref="TransactionService"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
+	<!-- Полиси для сервиса отсутствий -->
+	<bean id="absenceStartPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceStartPolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="absenceService" ref="AbsenceService"/>
+	</bean>
+	<bean id="absenceEndPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceEndPolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="absenceService" ref="AbsenceService"/>
+	</bean>
+	<!-- Полиси для сервиса графиков -->
+	<bean id="sheduleDeletePolicy" class="ru.it.lecm.wcalendar.shedule.policy.SheduleDeletePolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="sheduleService" ref="SheduleService"/>
 	</bean>
 </beans>

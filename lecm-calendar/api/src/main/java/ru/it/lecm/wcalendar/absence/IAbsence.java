@@ -65,65 +65,123 @@ public interface IAbsence {
 	 * два отсутствия, так что перед созданием нового отсутствия нужно
 	 * проверить, не запланировал ли сотрудник отлучиться на это время
 	 *
-	 * @param nodeRef NodeRef сотрудника
+	 * @param node NodeRef сотрудника
 	 * @param begin дата (и время) начала искомого промежутка
 	 * @param end дата (и время) окончания искомого промежутка
 	 * @return true - промежуток свободен, создать отсутствие можно, false - на
 	 * данный промежуток отсутствие уже запланировано.
 	 */
-	boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end);
+	boolean isIntervalSuitableForAbsence(NodeRef node, Date begin, Date end);
 
 	/**
 	 * Проверить, отсутствует ли указанный сотрудника указанный день.
 	 *
-	 * @param nodeRef NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @param date интересующая нас дата отсутствия
 	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
 	 * не планировал отсутствия.
 	 */
-	boolean isEmployeeAbsent(NodeRef nodeRef, Date date);
+	boolean isEmployeeAbsent(NodeRef node, Date date);
 
 	/**
 	 * Проверить, отсутствует ли сегодня указанный сотрудник.
 	 *
-	 * @param nodeRef NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @return true - сотрудник сегодня отсутствует
 	 */
-	boolean isEmployeeAbsentToday(NodeRef nodeRef);
+	boolean isEmployeeAbsentToday(NodeRef node);
 
 	/**
 	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
 	 * указанную дату.
 	 *
-	 * @param nodeRef NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @param date дата, на которую надо получить экземпляр отсутствия.
 	 * @return NodeRef на объект типа absence, из-за которого сотрудник
 	 * считается отсутствующим на указанную дату. Если такового нет, то null
 	 */
-	NodeRef getActiveAbsence(NodeRef nodeRef, Date date);
+	NodeRef getActiveAbsence(NodeRef node, Date date);
 
 	/**
 	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
 	 * сегодня.
 	 *
-	 * @param nodeRef NodeRef на объект типа employee
+	 * @param node NodeRef на объект типа employee
 	 * @return NodeRef на объект типа absence, из-за которого сотрудник
 	 * считается отсутствующим сегодня.
 	 */
-	NodeRef getActiveAbsence(NodeRef nodeRef);
+	NodeRef getActiveAbsence(NodeRef node);
 
 	/**
 	 * Установить параметр "end" у объекта типа absence в определенное значение.
 	 *
-	 * @param nodeRef NodeRef на объект типа absence
+	 * @param node NodeRef на объект типа absence
 	 * @param date дата, в которую необходимо установить параметр "end"
 	 */
-	void setAbsenceEnd(NodeRef nodeRef, Date date);
+	void setAbsenceEnd(NodeRef node, Date date);
 
 	/**
 	 * Установить параметр "end" у объекта типа absence в текущую дату и время.
 	 *
-	 * @param nodeRef NodeRef на объект типа absence
+	 * @param node NodeRef на объект типа absence
 	 */
-	void setAbsenceEnd(NodeRef nodeRef);
+	void setAbsenceEnd(NodeRef node);
+
+	/**
+	 * Установить параметр "бессрочное" ("unlimited") у объекта типа absence в
+	 * определенное значение.
+	 *
+	 * @param node NodeRef на объект типа absence
+	 * @param unlimited значение, в которое следует установить параметр
+	 * "бессрочное".
+	 */
+	void setAbsenceUnlimited(NodeRef node, boolean unlimited);
+
+	/**
+	 * Получить NodeRef на сотрудника, с которым ассоциирован объект отсутствия.
+	 *
+	 * @param node NodeRef на объект типа absence.
+	 * @return NodeRef на объект типа employee. Если по какой-то причине
+	 * ассоциация отсутствует (хотя такого случиться не должно), то null.
+	 */
+	NodeRef getEmployeeByAbsence(NodeRef node);
+
+	/**
+	 * Начать отсутствие: запустить процедуры делегирования, сделать запись в
+	 * бизнес-журнал.
+	 *
+	 * @param node NodeRef на объект типа absence.
+	 */
+	void startAbsence(NodeRef node);
+
+	/**
+	 * Завершить отсутствие: отозвать делегирования, сделать запись в
+	 * бизнес-журнал.
+	 *
+	 * @param node NodeRef на объект типа absence.
+	 */
+	void endAbsence(NodeRef node);
+
+	/**
+	 * Получить ссылку на контейнер, где хранятся расписания.
+	 *
+	 * @return NodeRef на absence-container
+	 */
+	NodeRef getContainer();
+
+	/**
+	 * Получить дату (и время), на которую назначено начало отсутствия.
+	 *
+	 * @param node NodeRef на объект типа absence.
+	 * @return дата начала отсутствия
+	 */
+	Date getAbsenceStartDate(NodeRef node);
+
+	/**
+	 * Получить дату (и время), на которую назначено окончание отсутствия.
+	 *
+	 * @param node NodeRef на объект типа absence.
+	 * @return дата окончания отсутствия
+	 */
+	Date getAbsenceEndDate(NodeRef node);
 }

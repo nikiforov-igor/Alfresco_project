@@ -75,15 +75,14 @@
 				<association name="lecm-shed:shed-employee-link-assoc">
 					<!-- Сотрудник/подразделение может работать только по одному графику. -->
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</source>
 					<!-- График должен быть к кому-то привязан. -->
 					<target>
-						<!--<class>lecm-shed:shedule-employee-struct-link</class>-->
 						<class>cm:cmobject</class>
 						<mandatory>false</mandatory>
-						<many>true</many>
+						<many>false</many>
 					</target>
 				</association>
 				<!-- Если сотрудник работает не по стандартному графику, то здесь ссылки на элементы рабочего графика. -->
