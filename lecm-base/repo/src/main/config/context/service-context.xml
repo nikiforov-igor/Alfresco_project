@@ -157,4 +157,20 @@
 			<ref bean="ServiceRegistry"/>
 		</property>
 	</bean>
+
+	<bean id="documentConnectionsOnCreateAssocsPolicy" class="ru.it.lecm.base.policy.DocumentConnectionsOnCreateAssocsPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
+		</property>
+	</bean>
 </beans>

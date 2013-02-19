@@ -22,6 +22,28 @@
 		<type name="lecm-connect:connection">
 			<title>Connection</title>
 			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-connect:primary-document-assoc-ref">
+					<title>Primary Document Ref</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-connect:connected-document-assoc-ref">
+					<title>Connected Document Ref</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<associations>
 				<association name="lecm-connect:primary-document-assoc">
 					<source>

@@ -42,7 +42,9 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 	YAHOO.extend(LogicECM.module.Connection.ConnectedDocuments, Alfresco.component.Base,
 		{
 			options: {
-				primaryDocumentNodeRef: null
+				primaryDocumentNodeRef: null,
+
+				datagridBublingLabel: null
 			},
 
 			id: null,
@@ -122,6 +124,14 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 						},
 						onSuccess:{
 							fn:function (response) {
+								if (me.options.datagridBublingLabel != null) {
+									YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+										{
+											nodeRef:response.json.persistedObject,
+											bubblingLabel:me.options.datagridBublingLabel
+										});
+								}
+
 								Alfresco.util.PopupManager.displayMessage(
 									{
 										text:this.msg("message.connection.add.success")
