@@ -118,7 +118,7 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-		execBuildInTransact(folder, staticPermissions);
+		execBuildInTransactStatic(folder, staticPermissions);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class StatusChangeAction extends StateMachineAction {
 
 		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
-		execBuildInTransact(children, dynamicPermissions);
+		execBuildInTransactDynamic(children, dynamicPermissions);
 	}
 
 
@@ -199,7 +199,7 @@ public class StatusChangeAction extends StateMachineAction {
 		return permissions;
 	}
 
-	private void execBuildInTransact(NodeRef node
+	private void execBuildInTransactStatic(NodeRef node
 			, final Map<String, INodeACLBuilder.StdPermission> permissions) {
 		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
 		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
@@ -212,7 +212,7 @@ public class StatusChangeAction extends StateMachineAction {
 				}, false, true);
 	}
 
-	private void execBuildInTransact(final List<ChildAssociationRef> children
+	private void execBuildInTransactDynamic(final List<ChildAssociationRef> children
 			, final Map<String, StdPermission> permissions) {
 		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
 		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
