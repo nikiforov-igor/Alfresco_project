@@ -21,6 +21,7 @@ import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionActio
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.DocumentStateMachineBean;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,17 +67,22 @@ public class DocumentListScript extends DeclarativeWebScript {
 									document.put("name", nodeService.getProperty(documentRef, ContentModel.PROP_NAME).toString());
 									document.put("status", nodeService.getProperty(documentRef, StateMachineModel.PROP_STATUS).toString());
 									document.put("taskId", task.getId());
+
+									Expression expression = new Expression(documentRef, serviceRegistry);
+
 									ArrayList<HashMap<String, String>> resultStates = new ArrayList<HashMap<String, String>>();
 									List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
 									for (StateMachineAction action : actions) {
 										FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
 										List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
 										for (FinishStateWithTransitionAction.NextState state : states) {
-											HashMap<String, String> resultState = new HashMap<String, String>();
-											resultState.put("actionId", state.getActionId());
-											resultState.put("label", state.getLabel());
-											resultState.put("workflowId", state.getWorkflowId());
-											resultStates.add(resultState);
+											if (expression.execute(state.getConditionAccess())) {
+												HashMap<String, String> resultState = new HashMap<String, String>();
+												resultState.put("actionId", state.getActionId());
+												resultState.put("label", state.getLabel());
+												resultState.put("workflowId", state.getWorkflowId());
+												resultStates.add(resultState);
+											}
 										}
 									}
 									document.put("states", resultStates);
@@ -88,17 +94,19 @@ public class DocumentListScript extends DeclarativeWebScript {
                                         List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
 										AssignExecution assignExecution = new AssignExecution();
                                         for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                                            HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                            workflow.put("id", entity.getId());
-                                            workflow.put("label", entity.getLabel());
-                                            workflow.put("workflowId", entity.getWorkflowId());
-											assignExecution.execute(entity.getAssignee());
-                                            List<String> refs = new ArrayList<String>();
-											if (assignExecution.getNodeRefResult() != null) {
-												refs.add(assignExecution.getNodeRefResult().toString());
+											if (expression.execute(entity.getConditionAccess())) {
+												HashMap<String, Object> workflow = new HashMap<String, Object>();
+												workflow.put("id", entity.getId());
+												workflow.put("label", entity.getLabel());
+												workflow.put("workflowId", entity.getWorkflowId());
+												assignExecution.execute(entity.getAssignee());
+												List<String> refs = new ArrayList<String>();
+												if (assignExecution.getNodeRefResult() != null) {
+													refs.add(assignExecution.getNodeRefResult().toString());
+												}
+												workflow.put("assignees", refs);
+												workflows.add(workflow);
 											}
-                                            workflow.put("assignees", refs);
-                                            workflows.add(workflow);
                                         }
                                     }
                                     document.put("workflows", workflows);

@@ -483,6 +483,7 @@
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
@@ -492,6 +493,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:conditionAccess" />
 				</appearance>
 			</form>
 		</forms>
@@ -504,6 +506,7 @@
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
@@ -516,6 +519,7 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:assignee" />
+					<field id="lecm-stmeditor:conditionAccess" />
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
@@ -539,6 +543,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -549,6 +554,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:conditionAccess" />
 				</appearance>
 			</form>
 		</forms>
@@ -560,6 +566,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -570,6 +577,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+			        <field id="lecm-stmeditor:conditionAccess" />
 				</appearance>
 			</form>
 		</forms>
@@ -582,6 +590,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel" />
@@ -598,6 +607,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:conditionAccess" />
 				</appearance>
 			</form>
 			<form id="datagrid">
@@ -616,6 +626,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
@@ -634,6 +645,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-stmeditor:conditionAccess" />
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>

@@ -14,6 +14,7 @@ import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,25 +55,30 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 				}
 			}
 
+
 			if (nextState != null) {
-				HashMap<String, String> parameters = new HashMap<String, String>();
-				parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
 				String executionId = helper.getCurrentExecutionId(taskId);
-				helper.setExecutionParamentersByTaskId(taskId, parameters);
-				helper.nextTransition(taskId);
+				NodeRef document = helper.getStatemachineDocument(executionId);
+				Expression expression = new Expression(document, serviceRegistry);
 
-				if (!"null".equals(persistedResponse)) {
-					int start = persistedResponse.indexOf("=") + 1;
-					int end = persistedResponse.indexOf(",");
+				boolean access = expression.execute(nextState.getConditionAccess());
 
-					String dependencyExecution = persistedResponse.substring(start, end);
+				if (access) {
+					HashMap<String, String> parameters = new HashMap<String, String>();
+					parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
+					helper.setExecutionParamentersByTaskId(taskId, parameters);
+					helper.nextTransition(taskId);
 
-					WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
-					NodeRef document = helper.getStatemachineDocument(executionId);
-					new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+					if (!"null".equals(persistedResponse)) {
+						int start = persistedResponse.indexOf("=") + 1;
+						int end = persistedResponse.indexOf(",");
 
-					helper.setInputVariables(executionId, dependencyExecution, nextState.getVariables().getInput());
+						String dependencyExecution = persistedResponse.substring(start, end);
 
+						WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+						new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+						helper.setInputVariables(executionId, dependencyExecution, nextState.getVariables().getInput());
+					}
 				}
 			}
 		} else if ("user".equals(actionType)){
@@ -90,17 +96,21 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 			}
 			if (workflow != null && !"null".equals(persistedResponse)) {
 				String executionId = helper.getCurrentExecutionId(taskId);
-				int start = persistedResponse.indexOf("=") + 1;
-				int end = persistedResponse.indexOf(",");
-
-				String dependencyExecution = persistedResponse.substring(start, end);
-
-				WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
 				NodeRef document = helper.getStatemachineDocument(executionId);
-				new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+				Expression expression = new Expression(document, serviceRegistry);
 
-				helper.setInputVariables(executionId, dependencyExecution, workflow.getVariables().getInput());
+				boolean access = expression.execute(workflow.getConditionAccess());
+				if (access) {
+					int start = persistedResponse.indexOf("=") + 1;
+					int end = persistedResponse.indexOf(",");
 
+					String dependencyExecution = persistedResponse.substring(start, end);
+
+					WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+					new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+
+					helper.setInputVariables(executionId, dependencyExecution, workflow.getVariables().getInput());
+				}
 			}
 		}
 

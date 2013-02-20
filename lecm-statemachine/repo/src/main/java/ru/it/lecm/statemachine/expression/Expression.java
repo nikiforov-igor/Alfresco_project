@@ -29,6 +29,11 @@ public class Expression {
 		context = new StandardEvaluationContext(this);
 	}
 
+	public Expression(NodeRef doc, ServiceRegistry serviceRegistry) {
+		this.doc = new ExpressionDocument(doc, serviceRegistry);
+		context = new StandardEvaluationContext(this);
+	}
+
 	public Expression(NodeRef doc, Map<String, Object> variables, ServiceRegistry serviceRegistry) {
 		this.doc = new ExpressionDocument(doc, serviceRegistry);
 		state = variables;
@@ -36,6 +41,9 @@ public class Expression {
 	}
 
 	public boolean execute(String expression) {
+		if ("".equals(expression)) {
+			expression = "true";
+		}
 		return new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
 	}
 

@@ -55,6 +55,7 @@ public class BPMNGenerator {
 	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
 	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
 	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
+	private final static QName PROP_CONDITION_ACCESS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "conditionAccess");
 
 	private final static QName PROP_INPUT_TO_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToType");
 	private final static QName PROP_INPUT_TO_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToValue");
@@ -437,11 +438,15 @@ public class BPMNGenerator {
 				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
 				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
 				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+				Object conditionAccess = nodeService.getProperty(workflow.getChildRef(), PROP_CONDITION_ACCESS);
 				attribute = doc.createElement("lecm:attribute");
 				attribute.setAttribute("id", id);
 				attribute.setAttribute("label", workflowLabel);
 				attribute.setAttribute("workflowId", workflowId);
 				attribute.setAttribute("assignee", assignee);
+				if (conditionAccess != null) {
+					attribute.setAttribute("conditionAccess", (String) conditionAccess);
+				}
 				actionElement.appendChild(attribute);
 				appendWorkflowVariables(attribute, workflow.getChildRef());
 			}
@@ -600,6 +605,15 @@ public class BPMNGenerator {
 			parameter.setAttribute("name", "labelId");
 			parameter.setAttribute("value", labelId);
 			attribute.appendChild(parameter);
+
+			Object conditionAccess = nodeService.getProperty(transition.getChildRef(), PROP_CONDITION_ACCESS);
+
+			if (conditionAccess != null) {
+				parameter = doc.createElement("lecm:parameter");
+				parameter.setAttribute("name", "conditionAccess");
+				parameter.setAttribute("value", (String) conditionAccess);
+				attribute.appendChild(parameter);
+			}
 
 			String var = "var" + actionVar;
 			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));

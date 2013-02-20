@@ -17,6 +17,7 @@ public class UserWorkflow extends StateMachineAction {
     private final static String PROP_WORKFLOW_ID = "workflowId";
     private final static String PROP_ASSIGNEE = "assignee";
     private final static String PROP_LABEL = "label";
+    private final static String PROP_CONDITION_ACCESS = "conditionAccess";
 
     private ArrayList<UserWorkflowEntity> entities = new ArrayList<UserWorkflowEntity>();
 
@@ -32,8 +33,12 @@ public class UserWorkflow extends StateMachineAction {
             String label = attribute.attribute(PROP_LABEL);
             String workflowId = attribute.attribute(PROP_WORKFLOW_ID);
             String assignee = attribute.attribute(PROP_ASSIGNEE);
+            String conditionAccess = attribute.attribute(PROP_CONDITION_ACCESS);
+			if (conditionAccess == null) {
+				conditionAccess = "";
+			}
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-            entities.add(new UserWorkflowEntity(id, label, workflowId, assignee, variables));
+            entities.add(new UserWorkflowEntity(id, label, workflowId, assignee, conditionAccess, variables));
         }
     }
 
@@ -47,13 +52,15 @@ public class UserWorkflow extends StateMachineAction {
         private String label;
         private String workflowId;
         private String assignee;
+        private String conditionAccess;
         private WorkflowVariables variables;
 
-        UserWorkflowEntity(String id, String label, String workflowId, String assignee, WorkflowVariables variables) {
+        UserWorkflowEntity(String id, String label, String workflowId, String assignee, String conditionAccess, WorkflowVariables variables) {
             this.id = id;
 			this.label = label;
             this.workflowId = workflowId;
             this.assignee = assignee;
+            this.conditionAccess = conditionAccess;
 			this.variables = variables;
         }
 
@@ -72,6 +79,10 @@ public class UserWorkflow extends StateMachineAction {
         public String getAssignee() {
             return assignee;
         }
+
+		public String getConditionAccess() {
+			return conditionAccess;
+		}
 
 		public WorkflowVariables getVariables() {
 			return variables;

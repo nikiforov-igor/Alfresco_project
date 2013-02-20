@@ -27,6 +27,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 	private static String PROP_WORKFLOW = "workflowId";
 	private static String PROP_OUTPUT_VARIABLE_NAME = "variable";
 	private static String PROP_OUTPUT_VARIABLE_VALUE = "variableValue";
+	private static String PROP_CONDITION_ACCESS = "conditionAccess";
 
 	@Override
 	public void init(Element action, String processId) {
@@ -38,6 +39,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			String label = "";
 			String workflowId = null;
 			String variableValue = "";
+			String conditionAccess = "";
 			for (Element parameter : parameters) {
 				String name = parameter.attribute("name");
 				String value = parameter.attribute("value");
@@ -47,10 +49,12 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					workflowId = value;
 				} else if (PROP_OUTPUT_VARIABLE_VALUE.equalsIgnoreCase(name)) {
 					variableValue = value;
+				} else if (PROP_CONDITION_ACCESS.equalsIgnoreCase(name)) {
+					conditionAccess = value;
 				}
 			}
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-			NextState nextState = new NextState(actionId, label, workflowId, outputVariable, variableValue, variables);
+			NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariable, variableValue, variables);
 			states.add(nextState);
 		}
 	}
@@ -71,14 +75,16 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		private String actionId;
 		private String label;
 		private String workflowId;
+		private String conditionAccess;
 		private String outputVariableName;
 		private String outputVariableValue;
 		private WorkflowVariables variables;
 
-		NextState(String actionId, String label, String workflowId, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
+		NextState(String actionId, String label, String workflowId, String conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
+			this.conditionAccess = conditionAccess;
 			this.outputVariableName = outputVariableName;
 			this.outputVariableValue = outputVariableValue;
 			this.variables = variables;
@@ -94,6 +100,10 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 
 		public String getWorkflowId() {
 			return workflowId;
+		}
+
+		public String getConditionAccess() {
+			return conditionAccess;
 		}
 
 		public String getOutputVariableName() {

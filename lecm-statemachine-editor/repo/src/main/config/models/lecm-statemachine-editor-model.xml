@@ -302,6 +302,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
                 <aspect>lecm-stmeditor:assigneeAspect</aspect>
+                <aspect>lecm-stmeditor:conditionAccessAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -318,6 +319,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
+				lecm-stmeditor:conditionAccessAspect
 			</mandatory-aspects>
 		</type>
 
@@ -350,6 +352,7 @@
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
+				<aspect>lecm-stmeditor:conditionAccessAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -498,6 +501,15 @@
 			</properties>
 		</aspect>
 
-    </aspects>
+		<aspect name="lecm-stmeditor:conditionAccessAspect">
+			<title>Business Role PermissionType</title>
+			<properties>
+				<property name="lecm-stmeditor:conditionAccess">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+
+	</aspects>
 
 </model>
