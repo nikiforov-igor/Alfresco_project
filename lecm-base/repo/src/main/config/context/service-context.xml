@@ -173,4 +173,14 @@
 			<ref bean="dictionaryService"/>
 		</property>
 	</bean>
+
+	<bean id="documentConnectionPolicy" class="ru.it.lecm.base.policy.DocumentConnectionPolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+	</bean>
 </beans>
