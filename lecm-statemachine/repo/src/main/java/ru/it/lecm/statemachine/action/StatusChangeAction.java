@@ -8,6 +8,7 @@ import java.util.Map;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -124,7 +125,7 @@ public class StatusChangeAction extends StateMachineAction {
 	@Override
 	public void execute(DelegateExecution execution) {
 		final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		NodeService nodeService = getServiceRegistry().getNodeService();
+		final NodeService nodeService = getServiceRegistry().getNodeService();
 		//Выставляем статус
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
 		for (ChildAssociationRef child : children) {
@@ -152,10 +153,20 @@ public class StatusChangeAction extends StateMachineAction {
 		if (forDraft) return;
 
 		//Перемещаем в нужную папку
-		for (ChildAssociationRef child : children) {
+                
+                final List<ChildAssociationRef> c = children;
+                AuthenticationUtil.runAsSystem( new AuthenticationUtil.RunAsWork<Void>() {
+
+                @Override
+                public Void doWork() throws Exception {
+                    for (ChildAssociationRef child : c) {
 			String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
 			nodeService.moveNode(child.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 		}
+                    return null;
+                }
+            });
+		
 
 		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
