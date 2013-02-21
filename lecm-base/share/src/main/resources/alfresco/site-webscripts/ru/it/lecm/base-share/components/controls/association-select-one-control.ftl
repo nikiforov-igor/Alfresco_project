@@ -17,6 +17,12 @@
     <#assign showCreateNewButton = true>
 </#if>
 
+<#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "true">
+	<#assign notSelectedOptionShow = true>
+<#else>
+	<#assign notSelectedOptionShow = false>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -43,6 +49,7 @@
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
                 showCreateNewButton: ${showCreateNewButton?string},
+	            notSelectedOptionShow: ${notSelectedOptionShow?string},
 	            <#if field.control.params.primaryCascading??>
                     primaryCascading: ${field.control.params.primaryCascading},
 		        </#if>
@@ -70,7 +77,7 @@
                     <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
                     <#if field.control.params.style??>style="${field.control.params.style}"</#if>
                     <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
-                <#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "true">
+                <#if notSelectedOptionShow>
                     <option value="">
                         <#if field.control.params.notSelectedOptionLabel??>
                             ${field.control.params.notSelectedOptionLabel}

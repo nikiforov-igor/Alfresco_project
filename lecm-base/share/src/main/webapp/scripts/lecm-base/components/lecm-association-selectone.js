@@ -61,7 +61,9 @@ LogicECM.module = LogicECM.module || {};
 
                 primaryCascading: false,
 
-                fieldId: null
+                fieldId: null,
+
+	            notSelectedOptionShow: false
             },
 
             rootNode: null,
@@ -243,13 +245,15 @@ LogicECM.module = LogicECM.module || {};
 
                 var successHandler = function (sRequest, oResponse, oPayload)
                 {
-                    var emptyOption = this.selectItem.options[0];
-	                var emptOpt = document.createElement('option');
-	                emptOpt.innerHTML = emptyOption.innerHTML;
-	                emptOpt.value = emptyOption.value;
+	                if (this.options.notSelectedOptionShow) {
+	                    var emptyOption = this.selectItem.options[0];
+		                var emptOpt = document.createElement('option');
+		                emptOpt.innerHTML = emptyOption.innerHTML;
+		                emptOpt.value = emptyOption.value;
 
-                    this.selectItem.innerHTML = "";
-                    this.selectItem.appendChild(emptOpt);
+	                    this.selectItem.innerHTML = "";
+	                    this.selectItem.appendChild(emptOpt);
+	                }
 
                     var results = oResponse.results;
                     for (var i = 0; i < results.length; i++) {
