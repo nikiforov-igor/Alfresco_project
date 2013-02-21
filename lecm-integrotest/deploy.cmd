@@ -1,7 +1,7 @@
 date /t
 time /t
 
-SET MODULE=lecm-security
+SET MODULE=lecm-integrotest
 
 IF %TOMCAT%x==x SET TOMCAT=C:\Alfresco\tomcat
 
@@ -25,3 +25,5 @@ xcopy /Y %SRC_SHARE%\web\*.*   %DEST_SHARE%\
 
 date /T
 time /T
+
+echo copied into %TOMCAT%/...

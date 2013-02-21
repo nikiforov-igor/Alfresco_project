@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGKind;
+import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
@@ -210,6 +211,14 @@ public class LECMSecurityGroupsBean
 	public void sgInclude( Types.SGPosition child, Types.SGPosition parent) {
 		sgSetParent(child, parent, true);
 	}
+
+	@Override
+	public boolean isSgInside(SGPosition child, SGPosition parent) {
+		final String sgChildFullName =  this.sgnm.makeSGName(child);
+		final String sgParentFullName = this.sgnm.makeSGName(parent);
+		return sgnm.hasFullAuthEx(sgChildFullName, sgParentFullName, AuthorityType.GROUP);
+	}
+
 
 	@Override
 	public void sgExclude( Types.SGPosition child, Types.SGPosition oldParent) {

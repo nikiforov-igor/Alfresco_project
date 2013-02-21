@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Registration of models -->
+
+<!--
+	<bean id="${groupId}.${artifactId}.securityBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-security-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/security</value>
+			</list>
+		</property>
+	</bean>
+
+-->
+	<!-- TODO: Проверка выполнения главных предусловий
+	<bean id="checkMainConditions"  class="ru.it.lecm.integrotest.SingleTest">
+		<property name="actions">
+			<list>
+				- Проверка существования Статустов -
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-stmeditor:taskStatus;cm:name;Черновик" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-stmeditor:taskStatus;cm:name;Согласование" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-stmeditor:taskStatus;cm:name;Подписание" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-stmeditor:taskStatus;cm:name;Дело" />
+				</bean>
+
+				- Проверка существования бизнес-ролей -
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-orgstr:business-role;lecm-orgstr:business-role-identifier;Согласующий" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-orgstr:business-role;lecm-orgstr:business-role-identifier;Подписант" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-orgstr:business-role;lecm-orgstr:business-role-identifier;Инициатор" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
+					<property name="idRefStr" value="lecm-orgstr:business-role;lecm-orgstr:business-role-identifier;Участник" />
+				</bean>
+				
+				- Проверка орг-структуры -
+				...
+			</list>
+		</property>
+	</bean>
+	  -->
+
+	<!-- TODO: Проверка выполнения доп условий [1]
+				Предусловие 1. Установка бизнес-ролей через прямое включение пользователей
+	<bean id="checkConditions_1"  class="ru.it.lecm.integrotest.SingleTest">
+		<property name="actions">
+			<list>
+				<bean class="ru.it.lecm.integrotest.actions.ChkUserRole">
+					<property name="role" value="Согласующий" />
+					- style: может ли роль содержать других (relaxed, by default) или нет (strict) -
+					<property name="style" value="relaxed" />  
+					<property name="users">
+						<list>
+							<value>Согласкин</value>
+							<value>Тарантино</value>
+							<value>Кругман</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkUserRole">
+					<property name="role" value="Подписант" />
+					<property name="users">
+						<list>
+							<value>Тарантино</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.ChkUserRole">
+					<property name="role" value="Инициатор" />
+					<property name="users">
+						<list>
+							<value>ЛаоЦзы</value>
+						</list>
+					</property>
+				</bean>
+		</property>
+	</bean>
+	  -->
+
+	<!-- Поисковый/локационный бин -->
+	<bean id="finderBean" class="ru.it.lecm.integrotest.beans.FinderBeanImpl" depends-on="searchService, nodeService">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="nsService" ref="namespaceService"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>
+
+	<!-- Тест проверки создания Департамента -->
+	<bean id="testCreateOU" class="ru.it.lecm.integrotest.SingleTest">
+		<!--  List<SingleTest> -->
+		<property name="actions">
+			<list>
+				<bean class="ru.it.lecm.integrotest.actions.CreateOrgUnitAction">
+					<property name="orgNameCode" value="O1_1" />
+					<property name="orgParentByNameCode" value="O1" />
+				</bean>
+				<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckSGInside">
+					<!-- 
+						"sgKind=SG_ME;id=..."
+						"sgKind=SG_OU;id=..."
+						"sgKind=SG_SV;id=..."
+						"sgKind=SG_BR;id=..."
+
+						"sgKind=SG_DP;id=...;userId=..."
+						"sgKind=SG_BRME;id=...;roleCode=..."
+					  -->
+					<property name="child.sgKind" value="SG_ME" />
+
+					<!-- Указание не явно id связанного child-объекта - поисковым набором тип-атрибут-значение -->
+					<property name="child.idRef.nodeType" value="lecm-orgstr:organization-unit" />
+					<property name="child.idRef.propName" value="lecm-orgstr:unit-code" />
+					<property name="child.idRef.value" value="O1_1" />
+
+					<property name="parent.sgKind" value="SG_ME" />
+					<!-- Указание не явно id связанного parent-объекта - поисковым атомарным набором тип-атрибут-значение -->
+					<property name="parent.idRefStr" value="lecm-orgstr:organization-unit;lecm-orgstr:unit-code;O1" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
+	<bean id="chkDocACL_Draft" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+
+		<!-- вызов фабричного метода получения мап (БР-доступ) и (БР-пользователь)-->
+		<property name="accessMap">
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL"
+					factory-method="makeBusinessRoleToUserAccessTable">
+				<!-- roleAccessMap: перечисление бизнес-ролей и соот-щих разрешений <property 
+					name="roleAccessMap" value="BR_01:RW; BR_02:RW; BR-10:deny; BR_INITIATOR:R" 
+  		  		  -->
+				<constructor-arg type="java.lang.String" value="BR_01:R; BR_02:W; BR_10:DENY; BR_INITIATOR:W"/>
+
+				<!-- roleUsersMap: перечисление бизнес-ролей и соот-щих пользователей (по 
+					логину) , чтобы проверять доступ по бизнес-ролям
+				  -->
+				<constructor-arg type="java.lang.String" value="BR_01:user1; BR_02:user2; BR_10:user3; BR_INITIATOR:admin" />
+			</bean>
+		</property>
+
+		<!-- rwCheckingPropName: Атрибут, используемый для проверки чтения-записи. 
+			Формат строки в виде для QName: "{type}prop", возможно с короткими именами -->
+		<property name="rwCheckingPropName" value="cm:name" />
+
+		<!-- writeValue: Значение для проверки записи в атрибут rwCheckingPropName 
+			Формат строки - в виде для QName "{type}prop", возможно с короткими именами-синонимами -->
+		<property name="writeValue" value="WriteAccess_Test_Value" />
+
+		<!-- nodeRefStr: явное задание проверяемого узла адресной строкой. <property/> 
+			name="nodeRefStr" value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" 
+		  -->
+
+		<!-- Использование поискового бина для загрузки узла: <property name="nodeRef"> 
+			<bean factory-bean="finderBean" factory-method="findNodeByProp"> <constructor-arg 
+			type="java.lang.String" value="lecm-orgstr:structure"/> <constructor-arg 
+			type="java.lang.String" value="cm:name" /> <constructor-arg type="java.lang.String" 
+			value="Структура" /> </bean> </property> -->
+
+		<!-- findRef: "typeName", "propName", "value" поисковые параметры узла 
+			для случая, когда узел задаётся не напрямую, а запросом: -->
+		<property name="findRef.nodeType" value="lecm-orgstr:structure" />
+		<property name="findRef.propName" value="cm:name" />
+		<property name="findRef.value" value="Структура" />
+	</bean>
+
+	<!-- Проверка прав доступа к документу в статусе 1 = Согласование ... -->
+	<bean id="chkDocACL_Approv" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+
+		<!-- вызов фабричного метода получения мапы (пользователь-доступ) -->
+		<property name="accessMap">
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL"
+					factory-method="makeUserToPermAccessTable">
+				<constructor-arg type="java.lang.String" value="user1:R; user2:W; user10:DENY"/>
+			</bean>
+		</property>
+
+		<property name="rwCheckingPropName" value="cm:name" />
+		<property name="writeValue" value="WriteAccess_Test_Value" />
+		<property name="findRef.nodeType" value="lecm-orgstr:structure" />
+		<property name="findRef.propName" value="cm:name" />
+		<property name="findRef.value" value="Структура" />
+	</bean>
+
+	<!-- Тест проверки доступа к новому документу во время его прогона по ЖЦ -->
+	<bean id="testChkWFDocAccess" class="ru.it.lecm.integrotest.SingleTest">
+		<!--  List<SingleTest> -->
+		<property name="actions">
+			<list>
+				<bean class="ru.it.lecm.integrotest.actions.CreateNode">
+					<property name="nodeType" value="lecm-contract:document" />
+					<property name="attributes">
+						<props>
+							<prop key="cm:name">DocExample-0543</prop>
+							<prop key="lecm-contract:regnum">543</prop>
+						</props>
+					</property>
+
+					<!-- Пользователь, от имени котрого выполнить создание
+						если не указано -> от имени системы
+					<property name="createByUser" value="vovan" />
+					  -->
+
+					<!-- куда (внутри resultMap) вынести созданный id документа (для доступа на последующх шагах) -->
+					<property name="destRefArgName" value="result.createdNodeRef" />
+
+					<!-- Задание родителя непосредственной ref-ссылкой:
+					<property name="parentNodeRefStr"  value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" />
+					  -->
+
+					<!-- Задание родителя поисковым запросом по атрибуту cm:name='contractWorkflow' -->
+					<property name="findParentRef.nodeType" value="cm:folder" />
+					<property name="findParentRef.propName" value="cm:name" />
+					<property name="findParentRef.value" value="contractWorkflow" />
+				</bean>
+
+				<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
+				<ref local="chkDocACL_Draft" />
+
+				<!-- двигаем Черновик-Согласование -->
+				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
+					<property name="nodeRefMacros" value="result.createdNodeRef" />
+				</bean>
+
+				<!-- Проверка прав доступа к документу в статусе 1 = Согласование ... -->
+				<ref local="chkDocACL_Approv" />
+
+				<!-- двигаем Согласование-Подписание -->
+				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
+					<property name="nodeRefMacros" value="result.createdNodeRef" />
+				</bean>
+
+				<!-- двигаем Подписание-Дело -->
+				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
+					<property name="nodeRefMacros" value="result.createdNodeRef" />
+				</bean>
+
+			</list>
+		</property>
+	</bean>
+
+	<!-- (!) Основной тестирующий бин -->
+	<bean id="lecmIntegroTestBean"
+			class="ru.it.lecm.integrotest.beans.ExecutorBeanImpl"
+			depends-on="authorityService,nodeService, orgstructureSGNotifierBean"
+			init-method="init">
+
+		<property name="nodeService" ref="nodeService" />
+		<property name="authorityService" ref="authorityService" />
+		<property name="authenticationService" ref="authenticationService" />
+
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+		<property name="orgstructureService" ref="serviceOrgstructure" />
+
+		<property name="publicServices" ref="ServiceRegistry"/>
+		<property name="finder" ref="finderBean" />
+		<property name="stateMachineService" ref="stateMachineHelper" />
+
+		<!-- example: аргументы для внутренних служб -->
+		<property name="configArgs">
+			<map>
+				<entry key= "arg1"  value-ref="nodeService"/>
+				<entry key= "arg2"  value="val2"/>
+			</map>
+		</property>
+
+
+		<!-- Проводимые тесты  -->
+		<property name="steps">
+			<!--  List<SingleTest> -->
+			<list>
+				<!-- 
+				<ref local="testCreateOU"/>
+				 -->
+				<ref local="testChkWFDocAccess"/>
+			</list>
+		</property>
+
+	</bean>
+
+<!-- 
+	<util:list id="Y" list-class="java.util.ArrayList">
+		<value>value1</value>
+		<ref bean="X"/>
+	</util:list>
+
+	<util:list id="greetingsList">
+		<value>Hello, world</value>
+		<value>How are you doing today?</value>
+	</util:list>
+
+	<util:map id="Z" map-class="java.util.HashMap">
+		<entry key="x" value="y"/>
+		<entry key="y"><ref bean="X"/></entry>
+	</util:map>
+
+	<util:properties id="P" location="classpath:Main.properties"/>
+
+	<bean id="simple" class="SimpleBean"/>
+
+	<util:property-path id="Q" path="simple.name"/>
+
+	<property name="theProperties">
+		<props>
+			<prop key="left">right</prop>
+			<prop key="up">down</prop>
+		</props>
+	</property>
+
+	<util:set id="S" set-class="java.util.HashSet">
+		<value>foo</value>
+		<ref bean="X"/>
+	</util:set>
+
+	вызов фабричного метода
+	<property name="nodeRef">
+		<bean factory-bean="finderBean" factory-method="findNodeByProp">
+			<constructor-arg type="java.lang.String" value="lecm-orgstr:structure"/>
+			<constructor-arg type="java.lang.String" value="cm:name" />
+			<constructor-arg type="java.lang.String" value="Структура" />
+		</bean>
+	</property>
+  -->
+
+</beans>

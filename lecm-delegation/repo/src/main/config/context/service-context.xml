@@ -29,13 +29,16 @@
         </property>
     </bean>
 
-	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean" depends-on="nodeService, NodeService, repositoryHelper">
+	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean" depends-on="nodeService, NodeService, repositoryHelper, WorkflowService">
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="repositoryHelper" ref="repositoryHelper"/>
+
 		<property name="secureNodeService" ref="NodeService" />
 		<property name="fastNodeService" ref="nodeService" />
 		<property name="authorityService" ref="authorityService" />
+
 		<property name="namespaceService" ref="namespaceService"/>
+		<property name="workflowService" ref="WorkflowService"/>
 	</bean>
 
 	<!-- ${groupId}.${artifactId}.serviceDelegation -->

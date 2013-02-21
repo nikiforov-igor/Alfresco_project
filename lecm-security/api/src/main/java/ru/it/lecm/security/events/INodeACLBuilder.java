@@ -91,9 +91,11 @@ public interface INodeACLBuilder {
 			if (name != null && name.trim().length() > 0) {
 				try {
 					name = name.trim().toLowerCase();
-					if ("read".equals(name))
+					if ("read".equals(name) || "r".equals(name))
 						return StdPermission.readonly;
-					if ("deny".equals(name))
+					if ("write".equals(name) || "w".equals(name) || "+".equals(name))
+						return StdPermission.full;
+					if ("deny".equals(name) || "-".equals(name))
 						return StdPermission.noaccess;
 					return Enum.valueOf(StdPermission.class, name);
 				} catch (Throwable t) {

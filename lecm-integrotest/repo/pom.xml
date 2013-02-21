@@ -4,15 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>ru.it.lecm.delegation</groupId>
-		<artifactId>lecm-delegation</artifactId>
+		<groupId>ru.it.lecm.integrotest</groupId>
+		<artifactId>lecm-integrotest</artifactId>
 		<version>0.1.0</version>
 	</parent>
 
-	<artifactId>lecm-delegation-repo</artifactId>
+	<artifactId>lecm-integrotest-repo</artifactId>
 	<packaging>amp</packaging>
-	<name>Logic ECM Delegation Repo</name>
-	<description>this is delegation repo module</description>
+
+	<name>Logic ECM Integral Test Repo</name>
+	<description>this is integral test repo module</description>
+
 	<properties>
 		<module.log.level>info</module.log.level>
 		<alfproject.version>4.0.c</alfproject.version>
@@ -35,6 +37,14 @@
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
 		</dependency>
@@ -54,31 +64,17 @@
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.delegation</groupId>
-			<artifactId>lecm-delegation-repo-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.business-journal</groupId>
-			<artifactId>business-journal-repo-api</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.integrotest</groupId>
 			<artifactId>lecm-integrotest-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 

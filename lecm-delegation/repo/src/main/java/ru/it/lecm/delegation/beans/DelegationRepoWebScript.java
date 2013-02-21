@@ -40,7 +40,7 @@ public class DelegationRepoWebScript extends DeclarativeWebScript implements IWe
 		public boolean equals (String obj) {
 			return this.toString().equalsIgnoreCase(obj);
 		}
-	};
+	}
 
 	private static RuntimeException createAndRegException (final Throwable t, final String info) {
 		logger.error (info, t);

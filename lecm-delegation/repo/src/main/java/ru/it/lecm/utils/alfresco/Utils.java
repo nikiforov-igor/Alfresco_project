@@ -148,14 +148,16 @@ public class Utils {
 	 * "дамп" свойств
 	 * @param dest целевой буфер вывода
 	 * @param srcprops свойства для дампа
-	 * @param propsTag название списка свойст для заголовка
-	 * @return =dest
+	 * @param propsTag название списка свойств для заголовка
+	 * @return =dest, если dest == null, воз-ся новый буфер
 	 */
 	public static StringBuilder makePropDump(
 			final StringBuilder dest, 
 			final Map<QName, Serializable> srcprops,
 			final String propsTag) {
-		final StringBuilder sb = new StringBuilder("Properties of "+ propsTag+ "\n");
+		final StringBuilder sb = (dest != null) ? dest : new StringBuilder();
+		if (propsTag != null)
+			sb.append("Properties of "+ propsTag+ "\n");
 		if (srcprops == null)
 			sb.append("\t no data");
 		else {

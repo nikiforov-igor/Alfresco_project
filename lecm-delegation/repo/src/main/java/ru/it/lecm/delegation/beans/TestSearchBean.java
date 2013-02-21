@@ -27,6 +27,8 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -37,9 +39,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.surf.util.AbstractLifecycleBean;
-import ru.it.lecm.delegation.IDelegation;
 
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.ITestSearch;
+import ru.it.lecm.integrotest.ExecutorBean;
+import ru.it.lecm.integrotest.ExecutorBean.StepResult;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.events.INodeACLBuilder;
@@ -132,6 +136,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	private NamespaceService namespaceService;
 
 	private AuthorityService authorityService;
+	private WorkflowService workflowService;
 
 	private JSONObject args;
 
@@ -185,13 +190,25 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		this.authorityService = authorityService;
 	}
 
-	@Override
-	public void setConfig(JSONObject config) throws JSONException {
-		this.args = config;
+	public WorkflowService getWorkflowService() {
+		return workflowService;
 	}
 
 	public void setNamespaceService (NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setWorkflowService(WorkflowService workflowService) {
+		this.workflowService = workflowService;
+	}
+
+	public NamespaceService getNamespaceService() {
+		return namespaceService;
+	}
+
+	@Override
+	public void setConfig(JSONObject config) throws JSONException {
+		this.args = config;
 	}
 
 	/*
@@ -708,6 +725,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 			case 6: result = doCreateNestedSGTest(); break;
 			case 7: result = doOrgStrucNotifyTest(); break;
 			case 8: result = doCheckACLTest(); break;
+			case 9: result = doIntegroTest(); break; 
+			case 10: result = doWorkFlowTest(); break;
 			default:
 				result = new JSONObject();
 				result.put( "error", "invalid test number: "+ testnum);
@@ -1064,8 +1083,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 *   "oper" = ( см ORGOPER_XXX = 7 операций)
 	 *   Остальные параметры зависят от самих операции:
 	 *     1-2) "oper"= orgNodeCreated или orgNodeDeactivated:
-	 *     		objPos: типа "sgPosition" с парой атрибутов
-	 *     			"objPos"::"sgKind" = enum SGKind = (
+	 *     		obj: типа "sgPosition" с парой атрибутов
+	 *     			"obj"::"sgKind" = enum SGKind = (
 	 *     				SG_ME		личная группа Сотрудника-пользователя
 	 *     				SG_DP		группа Должностной позиции
 	 *     				SG_OU		группа Подразделения
@@ -1259,6 +1278,80 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 			logger.info( String.format( "done test oper <%s> for node id '%s'", oper, id));
 		}
 
+		return result;
+	}
+
+	private JSONObject doIntegroTest() throws JSONException {
+		final JSONObject result = new JSONObject();
+
+		// получение бина
+		final ExecutorBean execBean = (ExecutorBean) getApplicationContext().getBean("lecmIntegroTestBean"); // getApplicationContext().getBean(ExecutorBean.class);
+		logger.info("bean found with class "+ execBean.getClass().getName());
+
+		final List<StepResult> runList = execBean.runAll(); //  (!) основные тесты
+		// final StringBuilder sb = new StringBuilder( execBean.getClass().getSimpleName()+ ".runAll called, result is:\n ");
+		result.put("called_info", execBean.getClass().getSimpleName()+ ".runAll called");
+
+		// logger.info( sb.toString());
+		// result.put("return", sb.toString());
+		addStepResults( result, runList);
+
+		logger.info(result.toString());
+
+		return result;
+	}
+
+
+	private void addStepResults(JSONObject result, List<StepResult> runList)
+			throws JSONException
+	{
+		if (runList == null) {
+			// sb.append("NULL");
+			result.put( "result", "NULL");
+		} else {
+			final JSONArray steps = new JSONArray();
+			int i = 0;
+			for(StepResult sr: runList) {
+				i++;
+				// sb.append( String.format( "\t [%d] \t %s\n", i, (sr == null ? "NULL": sr.toString())) );
+
+				final JSONObject step = new JSONObject();
+				steps.put(step);
+
+				step.put("step_num", i);
+				step.put("step_name", String.format( "test_%d", i));
+
+				if (sr == null) {
+					step.put("EResult", sr.getCode());
+				} else {
+					step.put( "EResult", sr.getCode());
+					step.put( "info", sr.getInfo() );
+					if (sr.getRtmError() != null) {
+						step.put("rtmError", sr.getRtmError());
+					}
+				}
+			}
+			result.put("steps", steps);
+		}
+	}
+
+	private JSONObject doWorkFlowTest() throws JSONException {
+		final JSONObject result = new JSONObject();
+
+		final String sNodeRef = echoGetArg( "nodeRef", null, result);
+
+		final Map<String, String> workflowList = new HashMap<String, String>();
+		if (sNodeRef != null && sNodeRef.length() > 0)  {
+			final NodeRef nodeRef = new NodeRef(sNodeRef);
+			final List<WorkflowInstance> wfInstances = workflowService.getWorkflowsForContent(nodeRef, true);
+			if (wfInstances != null) { 
+				for (WorkflowInstance wfInstance : wfInstances) {
+					workflowList.put( wfInstance.getId(), wfInstance.getDescription());
+				}
+			}
+		}
+		result.put( "wf_List", workflowList);
+		result.put( "wf_Count", workflowList.size());
 		return result;
 	}
 

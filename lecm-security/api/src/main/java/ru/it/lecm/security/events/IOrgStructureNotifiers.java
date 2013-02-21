@@ -52,6 +52,15 @@ public interface IOrgStructureNotifiers {
 	 */
 	void sgInclude( Types.SGPosition child, Types.SGPosition parent);
 
+
+	/**
+	 * Проверить является ли одна группа внутри другой 
+	 * @param child
+	 * @param parent
+	 * @return true, если child находится внутри parent
+	 */
+	boolean isSgInside( Types.SGPosition child, Types.SGPosition parent);
+
 	/**
 	 * Исключить security-группу child из oldParent.
 	 *  (!) Смена родителя у обекта орг-штатки должна выполняться явным вызовом пар sgRemove(от старого) + sgInclude(в новую)
