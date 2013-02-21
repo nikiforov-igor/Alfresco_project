@@ -47,7 +47,7 @@ import java.util.*;
  * 1. Запускать пользовательские процессы из машины состояний
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
-public class StateMachineHelper {
+public class StateMachineHelper implements StateMachineServiceBean {
 
 	public static String ACTIVITI_PREFIX = "activiti$";
 
@@ -271,11 +271,13 @@ public class StateMachineHelper {
 		}
 	}
 
+	@Override
 	public String nextTransition(String taskId) {
 		WorkflowService workflowService = serviceRegistry.getWorkflowService();
 		return workflowService.endTask(taskId, null).getId();
 	}
 
+	@Override
 	public String getCurrentTaskId(String executionId) {
 		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
 		TaskQuery taskQuery = taskService.createTaskQuery();

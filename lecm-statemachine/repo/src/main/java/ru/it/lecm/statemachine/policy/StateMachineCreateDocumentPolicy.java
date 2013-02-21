@@ -87,14 +87,14 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			// get the moderated workflow
 			WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
 			if (wfDefinition == null) {
-				throw new IllegalStateException("noworkflow: " + stateMashineId);
+				throw new IllegalStateException("no workflow: " + stateMashineId);
 			}
 			// start the workflow
 			String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
 			AuthenticationUtil.setFullyAuthenticatedUser("workflow");
 			WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
 			AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
-			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId()); 
 			for (WorkflowTask task : tasks) {
 				workflowService.endTask(task.getId(), null);
 			}
