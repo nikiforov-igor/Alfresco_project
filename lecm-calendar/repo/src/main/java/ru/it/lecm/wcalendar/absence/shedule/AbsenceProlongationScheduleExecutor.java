@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -31,15 +32,14 @@ public class AbsenceProlongationScheduleExecutor extends ActionExecuterAbstractB
 	@Override
 	protected void executeImpl(Action action, NodeRef nodeRef) {
 		logger.debug(String.format("Absence [%s] prolonged.", nodeRef.toString()));
+		Date absenceEnd = absenceService.getAbsenceEndDate(nodeRef);
 		Calendar cal = Calendar.getInstance();
-		// включить следующую строку, если шедулер будет запускаться не в начале дня, а в конце
-//		cal.add(Calendar.DATE, 1); 
-		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 0);
-		Date today = cal.getTime();
-		absenceService.setAbsenceEnd(nodeRef, today);
+		cal.setTime(absenceEnd);
+		cal.add(Calendar.HOUR_OF_DAY, 24);
+		Date tomorrow = cal.getTime();
+
+		absenceService.addBusinessJournalRecord(nodeRef, EventCategory.EDIT);
+		absenceService.setAbsenceEnd(nodeRef, tomorrow);
 	}
 
 	@Override

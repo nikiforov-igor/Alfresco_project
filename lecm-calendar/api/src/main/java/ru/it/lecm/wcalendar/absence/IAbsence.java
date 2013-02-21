@@ -34,6 +34,11 @@ public interface IAbsence {
 	 */
 	QName PROP_ABSENCE_UNLIMITED = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "unlimited");
 	/**
+	 * Флаг, обозначающий, что отсутствие уже активировано,
+	 * lecm-absence:activated
+	 */
+	QName PROP_ABSENCE_ACTIVATED = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "activated");
+	/**
 	 * Тип объекта для Отсутствий, lecm-absence:absence
 	 */
 	QName TYPE_ABSENCE = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "absence");
@@ -128,6 +133,14 @@ public interface IAbsence {
 	void setAbsenceEnd(NodeRef node);
 
 	/**
+	 * Получить параметр "бессрочное" ("unlimited") объекта типа absence.
+	 *
+	 * @param node NodeRef на объект типа absence
+	 * @return значение параметра "бессрочное" у отсутствия.
+	 */
+	boolean getAbsenceUnlimited(NodeRef node);
+
+	/**
 	 * Установить параметр "бессрочное" ("unlimited") у объекта типа absence в
 	 * определенное значение.
 	 *
@@ -184,4 +197,31 @@ public interface IAbsence {
 	 * @return дата окончания отсутствия
 	 */
 	Date getAbsenceEndDate(NodeRef node);
+
+	/**
+	 * Добавить запись в бизнес-журнал об операции над отсутствиями. Пишем
+	 * создание, удаление, начало и конец отсутствий.
+	 *
+	 * @param node NodeRef на #mainobject (объект отсутствия)
+	 * @param category категория события (EventCategory)
+	 */
+	void addBusinessJournalRecord(NodeRef node, String category);
+
+	/**
+	 * Установить параметр "активировано" ("activated") у объекта типа absence в
+	 * определенное значение.
+	 *
+	 * @param node NodeRef на объект типа absence
+	 * @param activated значение, в которое следует установить параметр
+	 * "активировано".
+	 */
+	void setAbsenceActivated(NodeRef node, boolean activated);
+
+	/**
+	 * Получить параметр "активировано" ("activated") объекта типа absence.
+	 *
+	 * @param node NodeRef на объект типа absence
+	 * @return значение параметра "активировано" у отсутствия.
+	 */
+	boolean getAbsenceActivated(NodeRef node);
 }

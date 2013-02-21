@@ -40,12 +40,16 @@
 		<!--На сколько лет вперед сгенерировать календари-->
 		<property name="yearsAmountToCreate" value="3"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
 	</bean>
 	<bean id="SheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
 	</bean>
 	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="repositoryHelper" ref="repositoryHelper"/>
@@ -53,6 +57,8 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="delegationService" ref="delegationService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
 	</bean>
 	<!-- JavaScript root-object для  календарей, отсутствий и графиков работы  -->
 	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
@@ -106,7 +112,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>
@@ -146,7 +152,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>
@@ -186,7 +192,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 1 0 * * ? *</value> <!-- каждый день в 00:01 -->
+			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>
@@ -196,6 +202,11 @@
 		<property name="runAsUser">
 			<value>System</value>
 		</property>
+	</bean>
+	<!-- Полиси для сервиса календарей -->
+	<bean id="calendarModifyPolicy" class="ru.it.lecm.wcalendar.calendar.policy.CalendarModifyPolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="wCalendarService" ref="WCalendarService"/>
 	</bean>
 	<!-- Полиси для сервиса отсутствий -->
 	<bean id="absenceStartPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceStartPolicy" init-method="init">
@@ -208,6 +219,10 @@
 	</bean>
 	<!-- Полиси для сервиса графиков -->
 	<bean id="sheduleDeletePolicy" class="ru.it.lecm.wcalendar.shedule.policy.SheduleDeletePolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="sheduleService" ref="SheduleService"/>
+	</bean>
+	<bean id="SheduleCreatePolicy" class="ru.it.lecm.wcalendar.shedule.policy.SheduleCreatePolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="sheduleService" ref="SheduleService"/>
 	</bean>

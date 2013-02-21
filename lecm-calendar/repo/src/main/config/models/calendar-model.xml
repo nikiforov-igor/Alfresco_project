@@ -75,7 +75,7 @@
 				<!-- Причина несправедливости. -->
 				<property name="lecm-cal:reason">
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>true</mandatory> 
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>

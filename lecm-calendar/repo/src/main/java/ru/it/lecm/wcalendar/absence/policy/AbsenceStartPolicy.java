@@ -11,7 +11,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -27,7 +27,7 @@ public class AbsenceStartPolicy implements NodeServicePolicies.OnCreateAssociati
 	private IAbsence absenceService;
 	private PolicyComponent policyComponent;
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceStartPolicy.class);
-	
+
 	public final void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
@@ -51,6 +51,7 @@ public class AbsenceStartPolicy implements NodeServicePolicies.OnCreateAssociati
 			final NodeRef nodeRef = nodeAssocRef.getSourceRef();
 			final Date today = new Date();
 			final Date absenceStart = absenceService.getAbsenceStartDate(nodeRef);
+			absenceService.addBusinessJournalRecord(nodeRef, EventCategory.ADD);
 			if (resetTime(today).equals(resetTime(absenceStart))) {
 				absenceService.startAbsence(nodeRef);
 				logger.debug(String.format("Policy AbsenceStartPolicy invoked on %s for employee %s", nodeRef.toString(), nodeAssocRef.getTargetRef().toString()));

@@ -45,7 +45,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!-- Бессрочно отсутствие? -->
+				<!-- Бессрочное отсутствие? -->
 				<property name="lecm-absence:unlimited">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -59,6 +59,12 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+				<!-- Отсутствие уже активировано. Человек считается отсутствующим -->
+				<property name="lecm-absence:activated">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
 				</property>
 			</properties>
 			<associations>

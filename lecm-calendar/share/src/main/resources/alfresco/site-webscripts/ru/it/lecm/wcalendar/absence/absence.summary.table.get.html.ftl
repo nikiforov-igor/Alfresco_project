@@ -1,5 +1,5 @@
 <#assign employees = result?keys>
-
+<!-- ${debug} -->
 <#if (employees?size > 0)>
 
 	<#assign month = calendarHeader?keys>

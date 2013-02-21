@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
@@ -22,10 +21,10 @@ import org.quartz.Trigger;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
- * Шедулер для одля продления бессрочного отсутствия: получить через searchService все ноды типа
- * absence, у которых окончание совпадает со вчерашней датой (23:59:59), которые
- * являются бессрочными и не находятся в архиве. Запустить над ними действие
- * "absenceProlongationScheduleExecutor".
+ * Шедулер для одля продления бессрочного отсутствия: получить через
+ * searchService все ноды типа absence, у которых окончание запланировано на
+ * этот час, которые являются бессрочными, активированными и не находятся в
+ * архиве. Запустить над ними действие "absenceProlongationScheduleExecutor".
  *
  * @see ru.it.lecm.wcalendar.absence.shedule.AbsenceProlongationScheduleExecutor
  *
@@ -38,11 +37,11 @@ public class AbsenceProlongationShedule extends AbstractScheduledAction {
 	private String triggerName = "absence-prolongation-trigger";
 	private String triggerGroup = "absence-trigger";
 	private Scheduler scheduler;
-	private String cronExpression = "0 1 0 * * ? *"; // каждый день в 00:01
+	private String cronExpression = "0 30 * * * ? *"; // каждый час в xx:30
 	private IAbsence absenceService;
 	private SearchService searchService;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	private final String searchQuery = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:\"%s\" AND @%s:true AND NOT (@lecm\\-dic:active:false)";
+	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
+	private final String searchQuery = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:\"%s\" AND @%s:true AND @%s:true AND NOT (@lecm\\-dic:active:false)";
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {
@@ -64,23 +63,14 @@ public class AbsenceProlongationShedule extends AbstractScheduledAction {
 	@Override
 	public List<NodeRef> getNodes() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
-
-		Calendar cal = Calendar.getInstance();
-		// убрать следующую строку, если шедулер будет запускаться не в начале дня, а в конце
-		cal.add(Calendar.DATE, -1);
-		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 0);
-		Date yesterday = cal.getTime();
-
+		Date now = new Date();
 		NodeRef parentContainer = absenceService.getContainer();
-		
+
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		sp.setQuery(String.format(searchQuery, parentContainer.toString(), IAbsence.TYPE_ABSENCE.toString(),
-				IAbsence.PROP_ABSENCE_END.toString(), dateFormat.format(yesterday), IAbsence.PROP_ABSENCE_UNLIMITED.toString()));
+		sp.setQuery(String.format(searchQuery, parentContainer.toString(), IAbsence.TYPE_ABSENCE.toString(), IAbsence.PROP_ABSENCE_END.toString(),
+				dateFormat.format(now), IAbsence.PROP_ABSENCE_UNLIMITED.toString(), IAbsence.PROP_ABSENCE_ACTIVATED.toString()));
 		ResultSet results = null;
 		try {
 			results = searchService.query(sp);

@@ -1,16 +1,20 @@
 (function() {
+	var clientTimeOffset = args["timeOffset"];
+	var serverTimeOffset = new Date().getTimezoneOffset();
+	var timeOffset = serverTimeOffset - clientTimeOffset;
+
 	var monthNames = {
-		m0 : "Январь", 
-		m1 : "Февраль", 
-		m2 :  "Март", 
-		m3 : "Апрель", 
-		m4 : "Май", 
+		m0 : "Январь",
+		m1 : "Февраль",
+		m2 :  "Март",
+		m3 : "Апрель",
+		m4 : "Май",
 		m5 : "Июнь",
-		m6 : "Июль", 
-		m7 : "Август", 
-		m8 : "Сентябрь", 
-		m9 : "Октябрь", 
-		m10 : "Ноябрь", 
+		m6 : "Июль",
+		m7 : "Август",
+		m8 : "Сентябрь",
+		m9 : "Октябрь",
+		m10 : "Ноябрь",
 		m11 : "Декабрь"
 	};
 
@@ -44,8 +48,8 @@
 				employeesAbsences[itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue] = [];
 			}
 			employeesAbsences[itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue].push({
-				begin: DateFromISO8601(itemData["prop_lecm-absence_begin"].value),
-				end: DateFromISO8601(itemData["prop_lecm-absence_end"].value),
+				begin: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_begin"].value), timeOffset),
+				end: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_end"].value), timeOffset),
 				reason: itemData["assoc_lecm-absence_abscence-reason-assoc"].displayValue
 			});
 			reasons[itemData["assoc_lecm-absence_abscence-reason-assoc"].displayValue] = {
@@ -73,7 +77,7 @@
 			calendarHeader["m"+month.toString()].push(today.getDate());
 			today.setDate(today.getDate() + 1);
 		}
-	
+
 		var result = {};
 
 		for (employee in employeesAbsences) {
@@ -83,7 +87,7 @@
 				result[employee] = []
 			}
 			today = new Date();
-		
+
 			for (i = 0; i < daysAmount; i++) {
 				var currentDay = new Date(today)
 				var color = "";
@@ -108,6 +112,7 @@
 		model.calendarHeader = calendarHeader;
 		model.reasons = reasons;
 		model.result = result;
+		model.debug = "clientTimeOffset = " + clientTimeOffset + " serverTimeOffset = " + serverTimeOffset + " timeOffset = " + timeOffset;
 	} else {
 		model.result = {};
 	}
@@ -130,7 +135,7 @@ function checkDayAbsence(day, start, end) {
 function DateFromISO8601() {
 	var fromISOString = function()
 	{
-  
+
 		var isoRegExp = /^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(.\d+)?)?((?:[+-](\d{2}):(\d{2}))|Z)?)?$/;
 
 		return function(formattedString)
@@ -173,6 +178,10 @@ function DateFromISO8601() {
 			return result; // Date or null
 		};
 	}();
-   
+
 	return fromISOString.apply(arguments.callee, arguments);
+}
+
+function addMinutes(date, minutes) {
+	return new Date(date.getTime() + minutes*60000);
 }

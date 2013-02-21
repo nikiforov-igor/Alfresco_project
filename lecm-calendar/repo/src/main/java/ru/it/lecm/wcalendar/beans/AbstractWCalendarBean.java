@@ -9,10 +9,12 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalendar;
 
@@ -21,8 +23,11 @@ import ru.it.lecm.wcalendar.IWCalendar;
  * @author vlevin
  */
 public abstract class AbstractWCalendarBean extends BaseBean implements IWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
+
 	protected Repository repository;
 	protected OrgstructureBean orgstructureService;
+	protected BusinessJournalService businessJournalService;
+	protected AuthenticationService authService;
 	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalendarBean.class);
 
@@ -37,6 +42,15 @@ public abstract class AbstractWCalendarBean extends BaseBean implements IWCalend
 	}
 
 	/**
+	 * Получить экземпляр AuthenticationService от Spring-а.
+	 *
+	 * @param authService передается Spring-ом
+	 */
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
+	}
+
+	/**
 	 * Получить экземпляр OrgstructureBean от Spring-а для работы с
 	 * оргструктурой.
 	 *
@@ -44,6 +58,16 @@ public abstract class AbstractWCalendarBean extends BaseBean implements IWCalend
 	 */
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	/**
+	 * Получить экземпляр BusinessJournalService от Spring-а для работы с
+	 * бизнес-журналом.
+	 *
+	 * @param businessJournalService передается Spring-ом
+	 */
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	@Override

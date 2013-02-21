@@ -10,7 +10,7 @@
 		function drawSummaryTable() {
 			Alfresco.util.Ajax.request({
 			method: "GET",
-			url: Alfresco.constants.URL_PAGECONTEXT + "ru/it/lecm/wcalendar/absence/absence-summary-table",
+			url: Alfresco.constants.URL_PAGECONTEXT + "ru/it/lecm/wcalendar/absence/absence-summary-table?timeOffset=" + new Date().getTimezoneOffset(),
 			requestContentType: "text/html",
 			responseContentType: "text/html",
 			successCallback: {

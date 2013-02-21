@@ -121,5 +121,17 @@
             <property name="lecm-busjournal:objectType-class">lecm-d8n:delegation-opts</property>
             <property name="lecm-busjournal:objectType-template">{cm:name}</property>
         </item>
+		<item name="График работы">
+			<property name="cm:name">График работы</property>
+			<property name="lecm-busjournal:objectType-code">SHEDULE</property>
+			<property name="lecm-busjournal:objectType-class">lecm-shed:shedule</property>
+			<property name="lecm-busjournal:objectType-template">график работы</property>
+		</item>
+		<item name="Отсутствие">
+			<property name="cm:name">Отсутствие</property>
+			<property name="lecm-busjournal:objectType-code">ABSENCE</property>
+			<property name="lecm-busjournal:objectType-class">lecm-absence:absence</property>
+			<property name="lecm-busjournal:objectType-template">отсутствие</property>
+		</item>
     </items>
 </dictionary>

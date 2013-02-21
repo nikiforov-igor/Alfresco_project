@@ -13,6 +13,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -58,13 +59,18 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 		final Date curStart = (Date) after.get(IAbsence.PROP_ABSENCE_BEGIN);
 		final Date today = new Date();
 		final NodeRef employee = absenceService.getEmployeeByAbsence(nodeRef);
+		boolean deleted = false;
 
-		// если: lecm-dic:active присутствует И нода отправилась в архив И нода раньше не была в архиве И сегодняшняя дата позже начала отсутствия И раньше его конца
-		if (curActive != null && curActive == false && curActive != prevActive && today.after(curStart) && today.before(curEnd)) {
+		// если: lecm-dic:active присутствует И нода отправилась в архив И нода раньше не была в архиве
+		if (curActive != null && curActive == false && curActive != prevActive) {
+			deleted = true;
+			absenceService.addBusinessJournalRecord(nodeRef, EventCategory.DELETE);
+		}
+		// если: нода была удалена И сегодняшняя дата позже начала отсутствия И раньше его конца
+		if (deleted && today.after(curStart) && today.before(curEnd)) {
 			absenceService.endAbsence(nodeRef);
 			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
-
-		} // если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия 
+		} // если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия
 		// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
 		else if (prevEnd != null && prevEnd != curEnd && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
 			absenceService.endAbsence(nodeRef);
@@ -91,19 +97,4 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 		resetDay.setTime(cal.getTimeInMillis());
 		return resetDay;
 	}
-//	private void dumpNodeContent(NodeRef nodeRef, String tag) {
-//		logger.debug("***********************");
-//		logger.debug(tag + " is processing on " + nodeRef.toString());
-//		Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
-//		logger.debug("Properties:");
-//		for (Map.Entry<QName, Serializable> entry : properties.entrySet()) {
-//			logger.debug(entry.getKey() + " = " + entry.getValue());
-//		}
-//		logger.debug("Assosc: ");
-//		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-//		for (AssociationRef assoc : targetAssocs) {
-//			logger.debug(assoc.toString() + " to " + assoc.getTargetRef().toString());
-//		}
-//		logger.debug("***********************");
-//	}
 }

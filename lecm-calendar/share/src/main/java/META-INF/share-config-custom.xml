@@ -96,7 +96,6 @@
 			</form>
 		</forms>
 	</config>
-
 	<config evaluator="model-type" condition="lecm-shed:shedule">
 		<forms>
 			<form id="datagrid">
@@ -210,6 +209,20 @@
 						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
 					</field>
 				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-shed:shedule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-shed:shed-employee-link-assoc"/>
+					<show id="lecm-shed:type"/>
+					<show id="lecm-shed:std-begin"/>
+					<show id="lecm-shed:std-end"/>
+					<show id="lecm-shed:time-limit-start"/>
+					<show id="lecm-shed:time-limit-end"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>
@@ -384,6 +397,19 @@
 			</form>
 			<form id="createNewInstantAbsenceForm-XYZ">
 				<create-form template="/ru/it/lecm/wcalendar/absence/new-instant-absence-form.ftl"/>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-absence:absence">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-absence:abscence-reason-assoc"/>
+					<show id="lecm-absence:begin"/>
+					<show id="lecm-absence:end"/>
+					<show id="lecm-absence:unlimited"/>
+					<show id="lecm-absence:comment"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>

@@ -37,11 +37,11 @@ public class AbsenceStartShedule extends AbstractScheduledAction {
 	private String triggerName = "absence-start-trigger";
 	private String triggerGroup = "absence-trigger";
 	private Scheduler scheduler;
-	private String cronExpression = "0 1 0 * * ? *"; // каждый день в 00:01
+	private String cronExpression = "0 30 * * * ? *"; // каждый час в xx:30
 	private IAbsence absenceService;
 	private SearchService searchService;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private final String searchQuery = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:\"%s\" AND NOT (@lecm\\-dic:active:false)";
+	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
+	private final String searchQuery = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:\"%s\" AND @%s:false AND NOT (@lecm\\-dic:active:false)";
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {
@@ -63,14 +63,14 @@ public class AbsenceStartShedule extends AbstractScheduledAction {
 	@Override
 	public List<NodeRef> getNodes() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
-		Date today = new Date();
+		Date now = new Date();
 		NodeRef parentContainer = absenceService.getContainer();
 
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		sp.setQuery(String.format(searchQuery, parentContainer.toString(), IAbsence.TYPE_ABSENCE.toString(),
-				IAbsence.PROP_ABSENCE_BEGIN.toString(), dateFormat.format(today)));
+				IAbsence.PROP_ABSENCE_BEGIN.toString(), dateFormat.format(now), IAbsence.PROP_ABSENCE_ACTIVATED.toString()));
 		ResultSet results = null;
 		try {
 			results = searchService.query(sp);

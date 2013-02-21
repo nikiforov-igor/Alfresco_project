@@ -19,6 +19,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
@@ -137,7 +138,7 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		if (shedule == null) {
 			return null;
 		}
-		sheduleType = (String) nodeService.getProperty(shedule, PROP_SHEDULE_TYPE);
+		sheduleType = getSheduleType(shedule);
 		if (sheduleType.equals("SPECIAL")) {
 			sheduleStdBegin = "00:00";
 			sheduleStdEnd = "00:00";
@@ -360,13 +361,76 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 
 	@Override
 	public void unlinkShedule(NodeRef node) {
+		NodeRef orgSubj = getOrgSubjectByShedule(node);
+
+		if (orgSubj != null) {
+			nodeService.removeAssociation(node, orgSubj, ASSOC_SHEDULE_EMPLOYEE_LINK);
+		}
+	}
+
+	@Override
+	public NodeRef getOrgSubjectByShedule(NodeRef node) {
+		NodeRef result = null;
 		NodeRef employee = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		NodeRef orgUnit = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
 		if (employee != null) {
-			nodeService.removeAssociation(node, employee, ASSOC_SHEDULE_EMPLOYEE_LINK);
+			result = employee;
 		} else if (orgUnit != null) {
-			nodeService.removeAssociation(node, orgUnit, ASSOC_SHEDULE_EMPLOYEE_LINK);
+			result = orgUnit;
 		}
+		return result;
+	}
+
+	@Override
+	public void addBusinessJournalRecord(NodeRef node, String category) {
+		NodeRef orgSubj = getOrgSubjectByShedule(node);
+		String messageTemplate = null;
+		String sheduleType = getSheduleType(node);
+		if (orgSubj == null) {
+			return;
+		}
+
+		List<String> objects = new ArrayList<String>();
+		objects.add(orgSubj.toString());
+
+		if (EventCategory.ADD.equals(category)) {
+			if (orgstructureService.isEmployee(orgSubj)) {
+				if ("COMMON".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_CREATE;
+				} else if ("SPECIAL".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_CREATE;
+				}
+			} else if (orgstructureService.isUnit(orgSubj)) {
+				if ("COMMON".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_OU_CREATE;
+				} else if ("SPECIAL".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_CREATE;
+				}
+			}
+		} else if (EventCategory.DELETE.equals(category)) {
+			if (orgstructureService.isEmployee(orgSubj)) {
+				if ("COMMON".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_DELETE;
+				} else if ("SPECIAL".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_DELETE;
+				}
+			} else if (orgstructureService.isUnit(orgSubj)) {
+				if ("COMMON".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_OU_DELETE;
+				} else if ("SPECIAL".equals(sheduleType)) {
+					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_DELETE;
+				}
+			}
+		}
+
+		if (messageTemplate != null) {
+			businessJournalService.log(authService.getCurrentUserName(), node, category, messageTemplate, objects);
+		}
+	}
+
+	@Override
+	public String getSheduleType(NodeRef node) {
+		return (String) nodeService.getProperty(node, PROP_SHEDULE_TYPE);
 	}
 
 	// класс для представления элементов графика: первый и последний рабочий день в серии

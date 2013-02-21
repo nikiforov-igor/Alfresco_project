@@ -1,6 +1,5 @@
 package ru.it.lecm.wcalendar.calendar.beans;
 
-import ru.it.lecm.wcalendar.calendar.ICalendar;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -22,8 +21,10 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.IWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
+import ru.it.lecm.wcalendar.calendar.ICalendar;
 
 /**
  *
@@ -63,6 +64,8 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+		PropertyCheck.mandatory(this, "authService", authService);
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
@@ -88,7 +91,6 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 		// Генерация календарей на yearsAmountToCreate вперед.
 		if (yearsAmountToCreate > 0) {
 			AuthenticationUtil.runAsSystem(raw);
-
 		}
 	}
 
@@ -198,5 +200,12 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 		params.put("CONTAINER_TYPE", TYPE_WCAL_CONTAINER);
 
 		return params;
+	}
+
+	@Override
+	public void addBusinessJournalRecord(NodeRef node, String category) {
+		if (EventCategory.EDIT.equals(category)) {
+			businessJournalService.log(authService.getCurrentUserName(), node, category, BUSINESS_JOURNAL_CALENDAR_MODIFIED, null);
+		}
 	}
 }

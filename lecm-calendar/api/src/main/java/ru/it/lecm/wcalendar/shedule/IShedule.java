@@ -121,7 +121,33 @@ public interface IShedule {
 	 * Удалить ассоциацию графика работы с сотрудником или орг. единицей
 	 * (shed-employee-link-assoc).
 	 *
-	 * @param nodeRef NodeRef на график работы (shedule)
+	 * @param node NodeRef на график работы (shedule)
 	 */
-	public void unlinkShedule(NodeRef nodeRef);
+	void unlinkShedule(NodeRef node);
+
+	/**
+	 * Получить ссылку на сотрудника или огр. единицу, с которым/-ой
+	 * ассоциирован данный график работы.
+	 *
+	 * @param node NodeRef на график.
+	 * @return NodeRef на сотрудника или огр. единицу
+	 */
+	NodeRef getOrgSubjectByShedule(NodeRef node);
+
+	/**
+	 * Получить тип графика работы.
+	 *
+	 * @param node NodeRef на график работы.
+	 * @return COMMON - обычный график. SPECIAL - особый.
+	 */
+	String getSheduleType(NodeRef node);
+
+	/**
+	 * Добавить запись в бизнес-журнал об операции над графиками работы. Пишем
+	 * создание и удаление графиков.
+	 *
+	 * @param node NodeRef на #mainobject (объект графика)
+	 * @param category категория события (EventCategory)
+	 */
+	public void addBusinessJournalRecord(NodeRef node, String category);
 }

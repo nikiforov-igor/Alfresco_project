@@ -1,5 +1,7 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWCalendar;
@@ -65,13 +68,6 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		return params;
 	}
 
-	/**
-	 * Получить список отсутствий по NodeRef-у сотрудника.
-	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee
-	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
-	 * привязаны отсутствия, возвращает null
-	 */
 	@Override
 	public List<NodeRef> getAbsenceByEmployee(NodeRef node) {
 		List<NodeRef> absences = new ArrayList<NodeRef>();
@@ -84,12 +80,6 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		return absences.isEmpty() ? null : absences;
 	}
 
-	/**
-	 * Проверить, привязаны ли к сотруднику отсутствия.
-	 *
-	 * @param nodeRefStr - NodeRef на объект типа employee
-	 * @return Расписания привязаны - true. Нет - false.
-	 */
 	@Override
 	public boolean isAbsenceAssociated(NodeRef node) {
 		boolean result = false;
@@ -102,18 +92,6 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		return result;
 	}
 
-	/**
-	 * Проверить, можно ли создать отсутствие для указанного сотрудника в
-	 * указанном промежутке времени. В одном промежутке времени не может быть
-	 * два отсутствия, так что перед созданием нового отсутствия нужно
-	 * проверить, не запланировал ли сотрудник отлучиться на это время
-	 *
-	 * @param nodeRef - NodeRef сотрудника
-	 * @param begin - дата (и время) начала искомого промежутка
-	 * @param end - дата (и время) окончания искомого промежутка
-	 * @return true - промежуток свободен, создать отсутствие можно, false - на
-	 * данный промежуток отсутствие уже запланировано.
-	 */
 	@Override
 	public boolean isIntervalSuitableForAbsence(NodeRef nodeRef, Date begin, Date end) {
 		boolean suitable = true;
@@ -121,8 +99,8 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
 		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
 			for (NodeRef absence : employeeAbsence) {
-				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
-				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				Date absenceBegin = getAbsenceStartDate(absence);
+				Date absenceEnd = getAbsenceEndDate(absence);
 				if (absenceBegin.before(end) && begin.before(absenceEnd)) {
 					suitable = false;
 					break;
@@ -138,8 +116,8 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
 		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
 			for (NodeRef absence : employeeAbsence) {
-				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
-				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				Date absenceBegin = getAbsenceStartDate(absence);
+				Date absenceEnd = getAbsenceEndDate(absence);
 				if (date.after(absenceBegin) && date.before(absenceEnd)) {
 					result = true;
 					break;
@@ -160,8 +138,8 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
 		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
 			for (NodeRef absence : employeeAbsence) {
-				Date absenceBegin = (Date) nodeService.getProperty(absence, PROP_ABSENCE_BEGIN);
-				Date absenceEnd = (Date) nodeService.getProperty(absence, PROP_ABSENCE_END);
+				Date absenceBegin = getAbsenceStartDate(absence);
+				Date absenceEnd = getAbsenceEndDate(absence);
 				if (date.after(absenceBegin) && date.before(absenceEnd)) {
 					result = absence;
 					break;
@@ -196,11 +174,9 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		NodeRef employee = getEmployeeByAbsence(node);
 
 		if (employee != null) {
+			setAbsenceActivated(node, true);
+			addBusinessJournalRecord(node, EventCategory.START_ABSENCE_ON_WORK);
 			delegationService.startDelegation(employee);
-
-			NodeRef currentEmployee = orgstructureService.getCurrentEmployee(); 
-			logger.debug("Current user is: " + currentEmployee.toString());// !!!
-			// TODO: добавить записи в бизнес-журнал
 			logger.debug(String.format("Absence [%s] started.", node.toString()));
 		} else {
 			logger.error(String.format("Somehow absence %s has no employee!", node.toString()));
@@ -212,11 +188,9 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 		NodeRef employee = getEmployeeByAbsence(node);
 
 		if (employee != null) {
+			setAbsenceActivated(node, false);
+			addBusinessJournalRecord(node, EventCategory.FINISH_ABSENCE_ON_WORK);
 			delegationService.stopDelegation(employee);
-
-			NodeRef currentEmployee = orgstructureService.getCurrentEmployee(); 
-			logger.debug("Current user is: " + currentEmployee.toString());// !!!
-			// TODO: добавить записи в бизнес-журнал
 			logger.debug(String.format("Absence [%s] ended.", node.toString()));
 		} else {
 			logger.error(String.format("Somehow absence %s has no employee!", node.toString()));
@@ -241,5 +215,49 @@ public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
 	@Override
 	public void setAbsenceUnlimited(NodeRef nodeRef, boolean unlimited) {
 		nodeService.setProperty(nodeRef, PROP_ABSENCE_UNLIMITED, unlimited);
+	}
+
+	@Override
+	public void addBusinessJournalRecord(NodeRef node, String category) {
+		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yy HH:mm");
+		List<String> objects = new ArrayList<String>();
+		NodeRef absentEmployee = getEmployeeByAbsence(node);
+		objects.add(absentEmployee.toString());
+		String messageTemplate = null;
+
+		if (EventCategory.ADD.equals(category)) {
+			messageTemplate = BUSINESS_JOURNAL_ABSENCE_ADD;
+		} else if (EventCategory.DELETE.equals(category)) {
+			messageTemplate = BUSINESS_JOURNAL_ABSENCE_DELETE;
+		} else if (EventCategory.EDIT.equals(category)) {
+			messageTemplate = BUSINESS_JOURNAL_ABSENCE_PROLONG;
+		} else if (EventCategory.START_ABSENCE_ON_WORK.equals(category)) {
+			Date absenceEnd = getAbsenceEndDate(node);
+			objects.add(dateFormat.format(absenceEnd));
+			messageTemplate = BUSINESS_JOURNAL_ABSENCE_START;
+		} else if (EventCategory.FINISH_ABSENCE_ON_WORK.equals(category)) {
+			Date absenceStart = getAbsenceStartDate(node);
+			objects.add(dateFormat.format(absenceStart));
+			messageTemplate = BUSINESS_JOURNAL_ABSENCE_END;
+		}
+
+		if (messageTemplate != null) {
+			businessJournalService.log(authService.getCurrentUserName(), node, category, messageTemplate, objects);
+		}
+	}
+
+	@Override
+	public void setAbsenceActivated(NodeRef node, boolean activated) {
+		nodeService.setProperty(node, PROP_ABSENCE_ACTIVATED, activated);
+	}
+
+	@Override
+	public boolean getAbsenceActivated(NodeRef node) {
+		return (Boolean) nodeService.getProperty(node, PROP_ABSENCE_ACTIVATED);
+	}
+
+	@Override
+	public boolean getAbsenceUnlimited(NodeRef node) {
+		return (Boolean) nodeService.getProperty(node, PROP_ABSENCE_UNLIMITED);
 	}
 }

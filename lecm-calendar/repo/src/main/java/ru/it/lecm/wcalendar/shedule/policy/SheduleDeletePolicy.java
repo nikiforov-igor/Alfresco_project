@@ -11,13 +11,14 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.shedule.IShedule;
 
 /**
  * Полиси, срабатывающее на изменение проперти у объекта типа shedule. Если
  * lecm-dic:active поменялось на false, график считается удаленным и у него
  * удаляется ассоциация с сотрудником, чтобы избежать проблем, связанных с типом
- * ассоциации.
+ * ассоциации. Добавить запись в бизнес-журнал.
  *
  * @author vlevin
  */
@@ -50,6 +51,7 @@ public class SheduleDeletePolicy implements NodeServicePolicies.OnUpdateProperti
 		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
 
 		if (curActive != null && curActive == false && curActive != prevActive) {
+			sheduleService.addBusinessJournalRecord(nodeRef, EventCategory.DELETE);
 			sheduleService.unlinkShedule(nodeRef);
 		}
 		logger.debug(String.format("Policy SheduleDeletePolicy invoked on %s", nodeRef.toString()));
