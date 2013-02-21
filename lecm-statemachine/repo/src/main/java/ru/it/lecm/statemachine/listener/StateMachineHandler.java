@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: PMelnikov
@@ -61,25 +62,31 @@ public class StateMachineHandler implements ExecutionListener {
 	}
 
 	@Override
-	public void notify(DelegateExecution execution) throws Exception {
-		try {
-			String eventName = execution.getEventName();
-			List<StateMachineAction> actions = events.get(eventName);
-			for (StateMachineAction action : actions) {
-				action.execute(execution);
-			}
+    public void notify(final DelegateExecution execution) throws Exception {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+            @Override
+            public Void doWork() throws Exception {
+                try {
+                    String eventName = execution.getEventName();
+                    List<StateMachineAction> actions = events.get(eventName);
+                    for (StateMachineAction action : actions) {
+                        action.execute(execution);
+                    }
 
-			if (eventName.equals(ExecutionListener.EVENTNAME_START)) {
-				actions = events.get(ExecutionListener.EVENTNAME_TAKE);
-				for (StateMachineAction action : actions) {
-					action.execute(execution);
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Error while action execution", e);
-			throw e;
-		}
-	}
+                    if (eventName.equals(ExecutionListener.EVENTNAME_START)) {
+                        actions = events.get(ExecutionListener.EVENTNAME_TAKE);
+                        for (StateMachineAction action : actions) {
+                            action.execute(execution);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("Error while action execution", e);
+                    throw e;
+                }
+                return null;
+            }
+        });
+    }
 
 	public Map<String, ArrayList<StateMachineAction>> getEvents() {
 		return events;
