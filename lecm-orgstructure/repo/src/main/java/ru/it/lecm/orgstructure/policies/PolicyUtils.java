@@ -193,6 +193,20 @@ public class PolicyUtils {
 	}
 
 	/**
+	 * Получить дексриптор руководящей позиции для Организации. Используется в методах IOrgStructureNotifiers.
+	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
+	 * ориентированное" описание.
+	 * @param orgUnit id узла типа "lecm-orgstr:organization-element"
+	 * @param nodeService служба работы с узлами
+	 * @return
+	 */
+	public static Types.SGSuperVisor makeOrgUnitSVPos(NodeRef orgUnit, NodeService nodeService) {
+		final Types.SGOrgUnit sgOU = PolicyUtils.makeOrgUnitPos(orgUnit, nodeService);
+		final Types.SGSuperVisor sgSV = (Types.SGSuperVisor) Types.SGKind.SG_SV.getSGPos( orgUnit.getId(), sgOU.getDisplayInfo());
+		return sgSV;
+	}
+
+	/**
 	 * Получить дексриптор Бизнес Роли, для использования в методах IOrgStructureNotifiers.
 	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
 	 * ориентированное" описание.
@@ -202,16 +216,38 @@ public class PolicyUtils {
 	 */
 	public static Types.SGBusinessRole makeBRPos(NodeRef brole, NodeService nodeService) {
 		final String brolIdCode = getBRoleIdCode( brole, nodeService);
+		if (brolIdCode == null) return null;
 		final String orgDetails= ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 		// brole.name / brole.id
-		final Object roleCode = String.format( "'%s'/'%s'"
-				, brolIdCode
-				, nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER)
-				);
-
+		// final Object roleCode = String.format( "'%s'/'%s'", brolIdCode, nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER));
 		return (Types.SGBusinessRole) Types.SGKind.SG_BR.getSGPos( brolIdCode, orgDetails);
 	}
 
+
+	/**
+	 * Получить дексриптор личной группы Бизнес Роли.
+	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
+	 * ориентированное" описание.
+	 * @param brole id узла типа "lecm-orgstr:business-role"
+	 * @param nodeService служба работы с узлами
+	 * @return
+	 */
+	public static Types.SGPrivateBusinessRole makeBRPrivatePos(
+			  NodeRef brole
+			, NodeRef employee
+			, NodeService nodeService
+			, OrgstructureBean orgstructureService
+			, Logger logger
+			)
+	{
+		final String broleIdCode = getBRoleIdCode( brole, nodeService);
+		if (broleIdCode == null || employee == null) return null;
+		// final String broleDetails= ""+ nodeService.getProperty( brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+		final String userLogin = getEmployeeLogin( employee, nodeService, orgstructureService, logger);
+
+		// return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, (employee != null) ? employee.getId() : null);
+		return (Types.SGPrivateBusinessRole) Types.SGKind.getSGMyRolePos( employee.getId(), userLogin, broleIdCode);
+	}
 
 	/**
 	 * Получить Родительское Подразделение для данного

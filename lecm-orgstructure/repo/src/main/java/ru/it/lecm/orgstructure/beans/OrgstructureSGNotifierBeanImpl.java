@@ -438,4 +438,47 @@ public class OrgstructureSGNotifierBeanImpl
 		}
 	}
 
+
+	@Override
+	public void notifyBRDelegationChanged(NodeRef brole,
+			NodeRef sourceEmployee, NodeRef destEmployee, boolean created) 
+	{
+		// получаем личные группы пользователей для бизнес-ролей
+		final Types.SGPrivateBusinessRole sgSrcPrivBR = PolicyUtils.makeBRPrivatePos(brole, sourceEmployee, nodeService, orgstructureService, logger);
+		// final Types.SGPosition destPrivBR = PolicyUtils.makeBRPrivatePos(brole, destEmployee, nodeService, orgstructureService, logger);
+		final Types.SGPrivateMeOfUser sgDestMe = PolicyUtils.makeEmploeePos(destEmployee, nodeService, orgstructureService, logger);
+
+		if (created) // включить личную группу того кому делегируем в группу бизнес роли того кто делегирует ...
+			sgNotifier.sgInclude( sgDestMe, sgSrcPrivBR);
+		else
+			sgNotifier.sgExclude( sgDestMe, sgSrcPrivBR);
+	}
+
+
+	@Override
+	public void notifyBossDelegationChanged(NodeRef sourceEmployee,
+			NodeRef destEmployee, boolean created)
+	{
+		// личная группа делегата ...
+		final Types.SGPrivateMeOfUser sgDestMe = PolicyUtils.makeEmploeePos(destEmployee, nodeService, orgstructureService, logger);
+
+		// получить все подразделения, в которых делегирующий является руководителем ...
+		final List<NodeRef> orgs = orgstructureService.getEmployeeUnits(sourceEmployee, true);
+
+		if (orgs == null || orgs.isEmpty()) {
+			logger.warn( String.format("Employee {%s} is not boss at any organization unit -> nothing to delegate for employee {%s}", sourceEmployee, destEmployee));
+			return;
+		}
+
+		for(NodeRef orgUnit: orgs) {
+			// руководящая позиция подразделения ...
+			final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
+
+			if (created) // включить личную группу в руководящую подразделения ...
+				sgNotifier.sgInclude( sgDestMe, sgSV);
+			else
+				sgNotifier.sgExclude( sgDestMe, sgSV);
+		}
+	}
+
 }

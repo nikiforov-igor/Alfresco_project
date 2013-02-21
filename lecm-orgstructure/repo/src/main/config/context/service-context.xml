@@ -42,7 +42,18 @@
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy, orgstructureBusinessRolePolicy">
+	<!--
+		"createOrUpdateDictionaries": создаёт или обновляет словарь Бизнес-ролей
+		для создания надо иметь поднятой политику orgstructureBusinessRolePolicy
+		а вот для "update" - все, которые работают с БР, должностями, подразделениями и сотрудниками.
+	  -->
+	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap"
+		depends-on="businessJournalLogEventsPolicy, orgstructureBusinessRolePolicy, orgstructureBossPolicy
+			, orgstructurePrimaryPositionPolicy, orgstructureEmployeePolicy, orgstructureEmployeeLinkPolicy
+			, orgstructureUnitPolicy, orgstructureStaffListPolicy, orgstructureOrganizationPolicy
+			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy
+		">
+
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>
@@ -114,7 +125,7 @@
 		<!-- <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" /> -->
 	</bean>
 
-	<bean id="OrgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
+	<bean id="orgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>

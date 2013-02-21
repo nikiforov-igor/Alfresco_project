@@ -113,4 +113,23 @@ public interface OrgstructureSGNotifierBean {
 	 */
 	void notifyBRAssociationChanged(AssociationRef nodeAssocRef, boolean created);
 
+
+	/**
+	 * Оповещение о делегировании (и отборе) бизнес роли от одного Сотрудника другому
+	 * @param brole бизнес роль
+	 * @param sourceEmployee от кого
+	 * @param destEmployee кому
+	 * @param created true, если БР делегируется и false, если отбирается
+	 */
+	void notifyBRDelegationChanged( NodeRef brole, NodeRef sourceEmployee, NodeRef destEmployee, boolean created);
+
+
+	/**
+	 * Оповещение о делегировании (и отборе) руководящей позиции от одного Сотрудника другому
+	 * @param sourceEmployee от кого
+	 * @param destEmployee кому
+	 * @param created true, если делегируется и false, если отбирается
+	 */
+	void notifyBossDelegationChanged( NodeRef sourceEmployee, NodeRef destEmployee, boolean created);
+
 }
