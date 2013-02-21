@@ -39,7 +39,7 @@
 
 					datagridMeta: {
 						itemType: "lecm-connect:connection",
-						datagridFormId: "connectedDocuments",
+						datagridFormId: "connected-documents",
 						createFormId: "",
 						actionsConfig: {
 							fullDelete: true
