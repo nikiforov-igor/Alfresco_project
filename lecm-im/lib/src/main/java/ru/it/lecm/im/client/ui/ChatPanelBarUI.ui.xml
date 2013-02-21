@@ -6,8 +6,8 @@
 	<ui:style>
 
 	</ui:style>
-	<g:HTMLPanel styleName="ijab-panels height-flood">
-        <g:FlowPanel styleName="ijab-panels-tab height-flood" ui:field="chatsContent">
+	<g:HTMLPanel styleName="ijab-panels">
+        <g:FlowPanel styleName="ijab-panels-tab" ui:field="chatsContent">
         </g:FlowPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

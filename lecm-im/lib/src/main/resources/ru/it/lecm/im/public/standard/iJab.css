@@ -10,7 +10,7 @@ ul, li {
     width: 600px;
     height: 500px;
     z-index: 50000;
-    background-color: #e9e9e9;
+    background-color: #fff;
     border: 1px solid #797979;
 }
 
@@ -33,14 +33,15 @@ ul, li {
     display: inline-block;
     float: left;
     background-color: #fff;
+    overflow: hidden;
 }
 
 .ijab-panels {
-    display: inline-block;
-    overflow: hidden;
     width: 360px;
     height: 100%;
     float: right;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .height-flood {
@@ -81,8 +82,9 @@ ul, li {
     display: none;
 }
 
-.mainBarHeader{
-    height: 33px;
+.mainBarContent {
+    height: 100%;
+    border-right: 1px solid #797979;
 }
 
 .gwt-Image{
@@ -2120,7 +2122,6 @@ html>body .gwt-DecoratedTabBar {
     background: #fff;
     color: #222222;
     border: none;
-    border-left: 1px solid #797979;
 }
 .ui-widget-content a {
     color: #222222;

@@ -4,7 +4,7 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:FlowPanel styleName="ijab-window-window height-flood" >
+	<g:FlowPanel styleName="ijab-window-window">
 		<g:HTMLPanel styleName="ui-widget-header">
 			<span ui:field="captionElement"></span>
             <span class="ijab-window-actions">
