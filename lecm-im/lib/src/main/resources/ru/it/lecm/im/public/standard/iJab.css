@@ -458,17 +458,17 @@ display: inline-block;
     color:#FFFFFF;
 }
 
-.ijab-self-status-editor
-{
-    width:100%;
-    height:14px;
-    font-size:10px !important;
-    background:#FFFFFF none repeat scroll 0 0;
-    overflow:hidden;
-    border-color:#999999 #CCCCCC #CCCCCC #999999;
-    border-width:1px;
-    border-style:solid;
-    margin:0px;
+.ijab-self-status-editor {
+    width: 100%;
+    height: 13px;
+    display: block;
+    font-size: 10px !important;
+    background: #fff;
+    overflow: hidden;
+    border-color: #999 #ccc #ccc #999;
+    border-width: 1px;
+    border-style: solid;
+    margin: 0;
 }
 
 .ijab-self-nick {
@@ -565,7 +565,7 @@ background: url(about:blank);
 
 .ijab-chat-status {
     font-style: italic;
-    margin-left: 5em;
+    padding: 3px 0;
 }
 
 .ijab-chat .ijab-chat-actions {
@@ -1139,13 +1139,12 @@ margin: .3em .5em .3em;
 
 .ijab-contactview-item .statusicon {
     height: 35px;
-    line-height: 35px;
 }
 
 .ijab-contactview-item .statusicon img {
     width: 10px;
     height: 10px;
-    vertical-align: middle;
+    margin-top: 12px;
 }
 
 .ijab-offline
