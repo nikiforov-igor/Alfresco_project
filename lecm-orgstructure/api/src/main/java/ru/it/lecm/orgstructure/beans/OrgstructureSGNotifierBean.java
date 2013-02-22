@@ -107,7 +107,7 @@ public interface OrgstructureSGNotifierBean {
 	void notifyPrivateBRolesOfOrgUnits( NodeRef nodeOU, boolean include, boolean recursivelyUseParentsBR);
 
 	/**
-	 * Оповещение о предоставлении/отборе Бизнес Роли для  Сотрудника/Должности/Департамента
+	 * Оповещение о предоставлении/отборе Бизнес Роли для Сотрудника/Должности/Департамента
 	 * @param nodeAssocRef связь объекта (target) и БР (source)
 	 * @param created true, если БР предоставляется и false, если отбирается
 	 */

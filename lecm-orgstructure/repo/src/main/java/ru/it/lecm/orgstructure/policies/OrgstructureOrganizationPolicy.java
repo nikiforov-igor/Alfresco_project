@@ -19,7 +19,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *         Date: 06.02.13
  *         Time: 11:29
  */
-public class OrgstructureOrganizationPolicy {
+public class OrgstructureOrganizationPolicy
+	implements NodeServicePolicies.OnUpdatePropertiesPolicy
+{
 
 	private PolicyComponent policyComponent;
 	private BusinessJournalService businessJournalService;
@@ -36,12 +38,13 @@ public class OrgstructureOrganizationPolicy {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION, new JavaBehaviour(this, "onUpdatePropertiesLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				OrgstructureBean.TYPE_ORGANIZATION, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
-	public void onUpdatePropertiesLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (before.size() == after.size()) {
 			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения об организации", null);
 		}
 	}
+
 }
