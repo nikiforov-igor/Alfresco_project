@@ -106,40 +106,6 @@
 		<property name="searchService" ref="searchService"/>
 	</bean>
 
-	<!-- Тест проверки создания Департамента -->
-	<bean id="testCreateOU" class="ru.it.lecm.integrotest.SingleTest">
-		<!--  List<SingleTest> -->
-		<property name="actions">
-			<list>
-				<bean class="ru.it.lecm.integrotest.actions.CreateOrgUnitAction">
-					<property name="orgNameCode" value="O1_1" />
-					<property name="orgParentByNameCode" value="O1" />
-				</bean>
-				<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckSGInside">
-					<!-- 
-						"sgKind=SG_ME;id=..."
-						"sgKind=SG_OU;id=..."
-						"sgKind=SG_SV;id=..."
-						"sgKind=SG_BR;id=..."
-
-						"sgKind=SG_DP;id=...;userId=..."
-						"sgKind=SG_BRME;id=...;roleCode=..."
-					  -->
-					<property name="child.sgKind" value="SG_ME" />
-
-					<!-- Указание не явно id связанного child-объекта - поисковым набором тип-атрибут-значение -->
-					<property name="child.idRef.nodeType" value="lecm-orgstr:organization-unit" />
-					<property name="child.idRef.propName" value="lecm-orgstr:unit-code" />
-					<property name="child.idRef.value" value="O1_1" />
-
-					<property name="parent.sgKind" value="SG_ME" />
-					<!-- Указание не явно id связанного parent-объекта - поисковым атомарным набором тип-атрибут-значение -->
-					<property name="parent.idRefStr" value="lecm-orgstr:organization-unit;lecm-orgstr:unit-code;O1" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-
 	<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
 	<bean id="chkDocACL_Draft" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
 

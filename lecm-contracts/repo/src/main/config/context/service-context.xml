@@ -39,5 +39,22 @@
 		<property name="stateMachineId" value="contractWorkflow"/>
 	</bean>
 
+	<bean  id="documentPolicy" class="ru.it.lecm.document.policies.DocumentPolicy"
+		   init-method="init"
+		   depends-on="lecmSecurityGroupsBean">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="lecmAclBuilder" ref="lecmAclBuilderBean" />
+
+		<property name="authenticationService" ref="authenticationService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+
+		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
+
+		<!-- 
+		<property name="businessJournalService" ref="businessJournalService"/>
+		  -->
+	</bean>
 
 </beans>

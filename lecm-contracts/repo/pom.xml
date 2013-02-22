@@ -51,6 +51,28 @@
         </dependency>
 
         <!-- Don't add here amp dependencies as it will break amp packaging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.security</groupId>
+			<artifactId>lecm-security-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

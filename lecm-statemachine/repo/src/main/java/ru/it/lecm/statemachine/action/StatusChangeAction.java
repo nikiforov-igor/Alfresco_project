@@ -210,21 +210,25 @@ public class StatusChangeAction extends StateMachineAction {
 						return null;
 					}
 				}, false, true);
+		// permissionsBuilder.rebuildStaticACL(folder, permissions);
 	}
 
 	private void execBuildInTransactDynamic(final List<ChildAssociationRef> children
 			, final Map<String, StdPermission> permissions) {
 		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
-		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
-				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-					@Override
-					public Object execute() throws Throwable {
-						for (ChildAssociationRef child : children) {
-							permissionsBuilder.rebuildStaticACL(child.getChildRef(), permissions);
-						}
-						return null;
-					}
-				}, false, true);
+//		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+//				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//					@Override
+//					public Object execute() throws Throwable {
+//						for (ChildAssociationRef child : children) {
+//							permissionsBuilder.rebuildACL(child.getChildRef(), permissions);
+//						}
+//						return null;
+//					}
+//				}, false, true);
+		for (ChildAssociationRef child : children) {
+			permissionsBuilder.rebuildACL(child.getChildRef(), permissions);
+		}
 	}
 
 }
