@@ -12,6 +12,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
@@ -26,19 +28,10 @@ import java.util.List;
  */
 public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
-	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_URI, "taskStatus");
-	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_URI, "actionId");
-	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_URI, "actionExecution");
-	public final static QName PROP_STATUS_UUID = QName.createQName(STATEMACHINE_URI, "statusUUID");
-	public final static QName TYPE_ROLES = QName.createQName(STATEMACHINE_URI, "roles");
-	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_URI, "actions");
-	public final static QName PROP_STATIC_ROLES = QName.createQName(STATEMACHINE_URI, "staticRoles");
-	public final static QName PROP_DYNAMIC_ROLES = QName.createQName(STATEMACHINE_URI, "dynamicRoles");
-
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 	private static StateMachineActions stateMachineActions;
+	private static DictionaryBean serviceDictionary;
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		StateMachineStatusPolicy.serviceRegistry = serviceRegistry;
@@ -52,13 +45,17 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 		StateMachineStatusPolicy.stateMachineActions = stateMachineActions;
 	}
 
+	public void setServiceDictionary(DictionaryBean serviceDictionary) {
+		StateMachineStatusPolicy.serviceDictionary = serviceDictionary;
+	}
+
 	public final void init() {
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "stateMachineActions", stateMachineActions);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				TYPE_STATUS, new JavaBehaviour(this, "onCreateNode"));
+				StatemachineEditorModel.TYPE_STATUS, new JavaBehaviour(this, "onCreateNode"));
 
 	}
 
@@ -68,7 +65,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 		NodeService nodeService = serviceRegistry.getNodeService();
 
 		String statusUUID = GUID.generate();
-		nodeService.setProperty(node, PROP_STATUS_UUID, statusUUID);
+		nodeService.setProperty(node, StatemachineEditorModel.PROP_STATUS_UUID, statusUUID);
 
 		HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
 		props.put(ContentModel.PROP_NAME, "actions");
@@ -77,7 +74,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 				node,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "actions"),
-				TYPE_ACTIONS,
+				StatemachineEditorModel.TYPE_ACTIONS,
 				props).getChildRef();
 
 		props.put(ContentModel.PROP_NAME, "roles");
@@ -85,7 +82,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 				node,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "roles"),
-				TYPE_ROLES,
+				StatemachineEditorModel.TYPE_ROLES,
 				props).getChildRef();
 
 		props.put(ContentModel.PROP_NAME, "static");
@@ -93,19 +90,32 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 				roles,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "static"),
-				TYPE_ROLES,
+				StatemachineEditorModel.TYPE_ROLES,
 				props).getChildRef();
 
 		props.put(ContentModel.PROP_NAME, "dynamic");
-		NodeRef dynamicRoles = nodeService.createNode(
+		NodeRef dynamicRolesFolder = nodeService.createNode(
 				roles,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "dynamic"),
-				TYPE_ROLES,
+				StatemachineEditorModel.TYPE_ROLES,
 				props).getChildRef();
 
-		nodeService.setProperty(node, PROP_STATIC_ROLES, staticRoles.toString());
-		nodeService.setProperty(node, PROP_DYNAMIC_ROLES, dynamicRoles.toString());
+		List<NodeRef> dynamicRoles = serviceDictionary.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
+		for (NodeRef dynamicRole : dynamicRoles) {
+			HashMap<QName, Serializable> roleProperties = new HashMap<QName, Serializable>();
+			roleProperties.put(StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE, "full");
+			NodeRef roleRef = nodeService.createNode(
+					dynamicRolesFolder,
+					ContentModel.ASSOC_CONTAINS,
+					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(GUID.generate())),
+					StatemachineEditorModel.TYPE_DYNAMIC_ROLE,
+					roleProperties).getChildRef();
+			nodeService.createAssociation(roleRef, dynamicRole, StatemachineEditorModel.ASSOC_ROLE);
+		}
+
+		nodeService.setProperty(node, StatemachineEditorModel.PROP_STATIC_ROLES, staticRoles.toString());
+		nodeService.setProperty(node, StatemachineEditorModel.PROP_DYNAMIC_ROLES, dynamicRolesFolder.toString());
 
 		//Добавляем действия к статусу
 		List<String> actions = stateMachineActions.getActions("start");
@@ -121,19 +131,19 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 
 		for (String action : actions) {
 			HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-			props.put(PROP_ACTION_ID, action);
-			props.put(PROP_ACTION_EXECUTION, execution);
+			props.put(StatemachineEditorModel.PROP_ACTION_ID, action);
+			props.put(StatemachineEditorModel.PROP_ACTION_EXECUTION, execution);
 			ChildAssociationRef childAssocRef = nodeService.createNode(
 				statusesFolder,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, action),
-				QName.createQName(STATEMACHINE_URI, action),
+				QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, action),
 				props);
 			if (action.equals(StateMachineActions.getActionName(FinishStateWithTransitionAction.class))) {
-				nodeService.setProperty(status, QName.createQName(STATEMACHINE_URI, execution + action + "User"), childAssocRef.getChildRef().toString());
-				nodeService.setProperty(status, QName.createQName(STATEMACHINE_URI, execution + action + "Workflow"), childAssocRef.getChildRef().toString());
+				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "User"), childAssocRef.getChildRef().toString());
+				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "Workflow"), childAssocRef.getChildRef().toString());
 			} else {
-				nodeService.setProperty(status, QName.createQName(STATEMACHINE_URI, execution + action), childAssocRef.getChildRef().toString());
+				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action), childAssocRef.getChildRef().toString());
 			}
 		}
 	}

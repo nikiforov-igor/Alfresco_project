@@ -1,10 +1,5 @@
 package ru.it.lecm.statemachine.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -21,6 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov

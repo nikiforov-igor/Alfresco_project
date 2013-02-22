@@ -14,7 +14,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.StateMachineModel;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
@@ -61,11 +61,11 @@ public class DocumentListScript extends DeclarativeWebScript {
 							List<ChildAssociationRef> children = nodeService.getChildAssocs(packageRef);
 							for (ChildAssociationRef child : children) {
 								NodeRef documentRef = child.getChildRef();
-								if (nodeService.getProperty(documentRef, StateMachineModel.PROP_STATUS) != null) {
+								if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
 									HashMap<String, Object> document = new HashMap<String, Object>();
 									document.put("nodeRef", documentRef.toString());
 									document.put("name", nodeService.getProperty(documentRef, ContentModel.PROP_NAME).toString());
-									document.put("status", nodeService.getProperty(documentRef, StateMachineModel.PROP_STATUS).toString());
+									document.put("status", nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS).toString());
 									document.put("taskId", task.getId());
 
 									Expression expression = new Expression(documentRef, serviceRegistry);

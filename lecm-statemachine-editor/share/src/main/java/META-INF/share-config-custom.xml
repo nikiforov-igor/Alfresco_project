@@ -122,9 +122,11 @@
 					<field id="lecm-stmeditor:dynamicRoles" set="permissions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:dynamic-role</control-param>
-							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowCreate">false</control-param>
+							<control-param name="allowDelete">false</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+							<control-param name="ds">lecm/statemachine/editor/ds/dynamicroles</control-param>
 						</control>
 					</field>
 
@@ -360,11 +362,14 @@
 					<field id="lecm-stmeditor:dynamicRoles" set="permissions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:dynamic-role</control-param>
-							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowCreate">false</control-param>
+							<control-param name="allowDelete">false</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+							<control-param name="ds">lecm/statemachine/editor/ds/dynamicroles</control-param>
 						</control>
 					</field>
+
 				</appearance>
 			</form>
 		</forms>
@@ -519,7 +524,6 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:assignee" />
-					<field id="lecm-stmeditor:conditionAccess" />
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
@@ -936,16 +940,6 @@
 					<show id="lecm-stmeditor:role-assoc" force="true"/>
 					<show id="lecm-stmeditor:permissionTypeValue" force="true"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">/lecm/statemachine/editor/roles/dynamic</control-param>
-							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
-					<field id="lecm-stmeditor:permissionTypeValue" />
-				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -954,17 +948,9 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-stmeditor:role-assoc" force="true"/>
 					<show id="lecm-stmeditor:permissionTypeValue" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">/lecm/statemachine/editor/roles/dynamic</control-param>
-							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
 					<field id="lecm-stmeditor:permissionTypeValue" />
 				</appearance>
 			</form>

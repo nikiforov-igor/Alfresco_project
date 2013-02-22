@@ -42,6 +42,7 @@
 		</property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="stateMachineActions" ref="stateMachineActions"/>
+		<property name="serviceDictionary" ref="serviceDictionary"/>
 	</bean>
 
 	<bean id="statemachineEndEventPolicy" class="ru.it.lecm.statemachine.editor.StateMachineEndEventPolicy"

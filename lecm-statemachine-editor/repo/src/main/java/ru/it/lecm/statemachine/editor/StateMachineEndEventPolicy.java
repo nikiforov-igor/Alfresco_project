@@ -23,12 +23,6 @@ import java.util.HashMap;
  */
 public class StateMachineEndEventPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
-	public final static QName TYPE_END_EVENT = QName.createQName(STATEMACHINE_URI, "endEvent");
-	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_URI, "actionId");
-	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_URI, "actionExecution");
-	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_URI, "actions");
-
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
 	private static StateMachineActions stateMachineActions;
@@ -51,7 +45,7 @@ public class StateMachineEndEventPolicy implements NodeServicePolicies.OnCreateN
 		PropertyCheck.mandatory(this, "stateMachineActions", stateMachineActions);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				TYPE_END_EVENT, new JavaBehaviour(this, "onCreateNode"));
+				StatemachineEditorModel.TYPE_END_EVENT, new JavaBehaviour(this, "onCreateNode"));
 
 	}
 
@@ -67,22 +61,22 @@ public class StateMachineEndEventPolicy implements NodeServicePolicies.OnCreateN
 				node,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "actions"),
-				TYPE_ACTIONS,
+				StatemachineEditorModel.TYPE_ACTIONS,
 				props).getChildRef();
 
 
 		//Добавляем действия к завершающему событию
 		String actionName = "ScriptAction";
 		HashMap<QName, Serializable> actionProps = new HashMap<QName, Serializable>(1, 1.0f);
-		actionProps.put(PROP_ACTION_ID, actionName);
-		actionProps.put(PROP_ACTION_EXECUTION, "end");
+		actionProps.put(StatemachineEditorModel.PROP_ACTION_ID, actionName);
+		actionProps.put(StatemachineEditorModel.PROP_ACTION_EXECUTION, "end");
 		childAssocRef = nodeService.createNode(
 				actionsFolder,
 				ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, actionName),
-				QName.createQName(STATEMACHINE_URI, actionName),
+				QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, actionName),
 				actionProps);
-		nodeService.setProperty(node, QName.createQName(STATEMACHINE_URI, "endEvent" + actionName), childAssocRef.getChildRef().toString());
+		nodeService.setProperty(node, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, "endEvent" + actionName), childAssocRef.getChildRef().toString());
 	}
 
 }

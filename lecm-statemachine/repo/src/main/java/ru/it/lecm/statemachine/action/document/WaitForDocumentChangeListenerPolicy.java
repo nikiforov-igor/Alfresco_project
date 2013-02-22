@@ -13,7 +13,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.StateMachineModel;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
@@ -39,12 +39,12 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
         PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                StateMachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
+                StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties"));
     }
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        if (nodeService.hasAspect(nodeRef, StateMachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+        if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
             ExpressionParser parser = new SpelExpressionParser();
             StandardEvaluationContext context = new StandardEvaluationContext();
             for (QName key : after.keySet()) {
@@ -52,7 +52,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                 String textKey = (prefixes.get(0) + "_" + key.getLocalName()).replace("-", "_");
                 context.setVariable(textKey, after.get(key));
             }
-            String taskId = (String) nodeService.getProperty(nodeRef, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
+            String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
             List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
 

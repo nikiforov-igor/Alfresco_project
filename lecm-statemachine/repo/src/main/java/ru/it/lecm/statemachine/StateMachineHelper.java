@@ -169,10 +169,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 							document = item.getChildRef();
 						}
 
-						if (!nodeService.hasAspect(document, StateMachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-							nodeService.addAspect(document, StateMachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
+						if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+							nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
 						}
-						nodeService.setProperty(document, StateMachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
+						nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
 						return null;
 					}
 				}, AuthenticationUtil.SYSTEM_USER_NAME);

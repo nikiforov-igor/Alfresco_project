@@ -18,10 +18,6 @@ import java.util.List;
  */
 public class FinishStateWithTransitionAction extends StateMachineAction {
 
-	public static String PROP_CHANGE_STATE_PREV_TASK_ID = "changeStatePrevTaskId";
-	public static String PROP_CHANGE_STATE_CUR_TASK_ID = "changeStateCurTaskId";
-	public static String PROP_CHANGE_STATE_ACTION_ID = "changeStateActionId";
-
 	private List<NextState> states = new ArrayList<NextState>();
 	private static String PROP_LABEL = "labelId";
 	private static String PROP_WORKFLOW = "workflowId";

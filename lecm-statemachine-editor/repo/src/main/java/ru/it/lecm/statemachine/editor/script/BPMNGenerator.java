@@ -10,6 +10,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,53 +44,6 @@ public class BPMNGenerator {
 	private final static String NAMESPACE_OMGDC = "http://www.omg.org/spec/DD/20100524/DC";
 	private final static String NAMESPACE_OMGDI = "http://www.omg.org/spec/DD/20100524/DI";
 	private final static String NAMESPACE_LECM = "http://www.it.ru/LogicECM/bpmn/1.0";
-
-	private final static QName TYPE_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "taskStatus");
-	private final static QName TYPE_END_EVENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "endEvent");
-
-	private final static QName PROP_ACTION_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionId");
-	private final static QName PROP_ACTION_EXECUTION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionExecution");
-	private final static QName PROP_STATUS_UUID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "statusUUID");
-	private final static QName PROP_START_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "startStatus");
-	private final static QName PROP_FOR_DRAFT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "forDraft");
-	private final static QName PROP_TRANSITION_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionLabel");
-	private final static QName PROP_WORKFLOW_ID = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowId");
-	private final static QName PROP_ASSIGNEE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "assignee");
-	private final static QName PROP_CONDITION_ACCESS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "conditionAccess");
-
-	private final static QName PROP_INPUT_TO_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToType");
-	private final static QName PROP_INPUT_TO_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputToValue");
-	private final static QName PROP_INPUT_FROM_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputFromType");
-	private final static QName PROP_INPUT_FROM_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputFromValue");
-
-	private final static QName PROP_OUTPUT_TO_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputToType");
-	private final static QName PROP_OUTPUT_TO_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputToValue");
-	private final static QName PROP_OUTPUT_FROM_TYPE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputFromType");
-	private final static QName PROP_OUTPUT_FROM_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputFromValue");
-
-	private final static QName PROP_TRANSITION_EXPRESSION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionExpression");
-	private final static QName PROP_ACTION_SCRIPT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "actionScript");
-	private final static QName PROP_WORKFLOW_LABEL = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "workflowLabel");
-	private final static QName PROP_ARCHIVE_FOLDER = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "archiveFolder");
-	private final static QName PROP_CREATION_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "creationDocument");
-	private final static QName PROP_PERMISSION_TYPE_VALUE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "permissionTypeValue");
-
-	private final static String VARIABLE = "VARIABLE";
-	private final static String VALUE = "VALUE";
-
-	private final static QName ASSOC_TRANSITION_STATUS = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionStatus");
-	private final static QName ASSOC_ROLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "role-assoc");
-
-	private final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "transitionWorkflow");
-	private final static QName TYPE_OUTPUT_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "outputVariable");
-	private final static QName TYPE_INPUT_VARIABLE = QName.createQName("http://www.it.ru/logicECM/statemachine/editor/1.0", "inputVariable");
-
-	private final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
-	private final static String ACTION_SCRIPT_ACTION = "ScriptAction";
-	private final static String ACTION_START_WORKFLOW = "StartWorkflow";
-	private final static String ACTION_WAIT_FOR_DOCUMENT_CHANGE = "WaitForDocumentChange";
-	private final static String ACTION_USER_WORKFLOW = "UserWorkflow";
-	private final static String ACTION_TRANSITION_ACTION = "TransitionAction";
 
 	public BPMNGenerator(String statemachineNodeRef, NodeService nodeService) {
 		this.statemachineNodeRef = statemachineNodeRef;
@@ -148,11 +102,11 @@ public class BPMNGenerator {
 				Element documentPermissionAction = doc.createElement("lecm:action");
 				documentPermissionAction.setAttribute("type", "DocumentPermissionAction");
 				for (ChildAssociationRef role : roles) {
-					boolean starter =  (Boolean) nodeService.getProperty(role.getChildRef(), PROP_CREATION_DOCUMENT);
+					boolean starter =  (Boolean) nodeService.getProperty(role.getChildRef(), StatemachineEditorModel.PROP_CREATION_DOCUMENT);
 					if (starter) {
 						Element attribute = doc.createElement("lecm:attribute");
 						attribute.setAttribute("name", "role");
-						List<AssociationRef> roleAssoc = nodeService.getTargetAssocs(role.getChildRef(), ASSOC_ROLE);
+						List<AssociationRef> roleAssoc = nodeService.getTargetAssocs(role.getChildRef(), StatemachineEditorModel.ASSOC_ROLE);
 						NodeRef roleRef = roleAssoc.get(0).getTargetRef();
 						String roleName = (String) nodeService.getProperty(roleRef, ContentModel.PROP_NAME);
 						attribute.setAttribute("value", roleName);
@@ -170,9 +124,9 @@ public class BPMNGenerator {
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
 
 				QName type = nodeService.getType(status.getChildRef());
-				if (type.equals(TYPE_END_EVENT)) {
+				if (type.equals(StatemachineEditorModel.TYPE_END_EVENT)) {
 					createEndEvent(process, status.getChildRef(), statusName, statusVar, stateMachine);
-				} else if (type.equals(TYPE_STATUS)) {
+				} else if (type.equals(StatemachineEditorModel.TYPE_STATUS)) {
 					createStateTask(process, status.getChildRef(), statusName, statusVar);
 				}
 			}
@@ -221,7 +175,7 @@ public class BPMNGenerator {
 		extention.appendChild(end);
 
 		//setup start transition
-		Boolean startStatus = (Boolean) nodeService.getProperty(status, PROP_START_STATUS);
+		Boolean startStatus = (Boolean) nodeService.getProperty(status, StatemachineEditorModel.PROP_START_STATUS);
 		if (startStatus != null && startStatus) {
 			Element startFlow = createFlow("start", statusVar);
 			process.appendChild(startFlow);
@@ -254,14 +208,14 @@ public class BPMNGenerator {
 		permissions = nodeService.getChildAssocs(dynamicRoles);
 		createRoleElement(dynamicRoleElement, permissions);
 
-		String statusUUID = (String) nodeService.getProperty(status, PROP_STATUS_UUID);
+		String statusUUID = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_STATUS_UUID);
 		attribute = doc.createElement("lecm:attribute");
 		attribute.setAttribute("name", "uuid");
 		attribute.setAttribute("value", statusUUID);
 		setStatusAction.appendChild(attribute);
 		start.appendChild(setStatusAction);
 
-		Boolean forDraft = (Boolean) nodeService.getProperty(status, PROP_FOR_DRAFT);
+		Boolean forDraft = (Boolean) nodeService.getProperty(status, StatemachineEditorModel.PROP_FOR_DRAFT);
 		attribute = doc.createElement("lecm:attribute");
 		attribute.setAttribute("name", "forDraft");
 		if (forDraft != null) {
@@ -283,14 +237,14 @@ public class BPMNGenerator {
 
 		//install start actions
 		for (ChildAssociationRef action : startActions) {
-			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_ID);
 			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 			flows.addAll(createEvent(extentionElements, start, statusVar, action, actionId, actionVar));
 		}
 
 		//install take actions
 		for (ChildAssociationRef action : takeActions) {
-			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_ID);
 			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 			flows.addAll(createEvent(extentionElements, take, statusVar, action, actionId, actionVar));
 
@@ -298,7 +252,7 @@ public class BPMNGenerator {
 
 		//install end actions
 		for (ChildAssociationRef action : endActions) {
-			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_ID);
 			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 			flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
 		}
@@ -327,7 +281,7 @@ public class BPMNGenerator {
 		NodeRef actionsRef = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "actions");
 		List<ChildAssociationRef> actions = nodeService.getChildAssocs(actionsRef);
 		for (ChildAssociationRef action : actions) {
-			String execution = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_EXECUTION);
+			String execution = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_EXECUTION);
 			if (execution.equals("start")) {
 				startActions.add(action);
 			} else if (execution.equals("take")) {
@@ -372,7 +326,7 @@ public class BPMNGenerator {
 
 		//install end actions
 		for (ChildAssociationRef action : endActions) {
-			String actionId = (String) nodeService.getProperty(action.getChildRef(), PROP_ACTION_ID);
+			String actionId = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_ID);
 			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
 			createEvent(extentionElements, end, statusVar, action, actionId, actionVar);
 		}
@@ -382,7 +336,7 @@ public class BPMNGenerator {
 		archiveDocumentAction.setAttribute("type", "ArchiveDocumentAction");
 		Element attribute = doc.createElement("lecm:attribute");
 		attribute.setAttribute("name", "archiveFolder");
-		String archiveFolder = (String) nodeService.getProperty(stateMachine, PROP_ARCHIVE_FOLDER);
+		String archiveFolder = (String) nodeService.getProperty(stateMachine, StatemachineEditorModel.PROP_ARCHIVE_FOLDER);
 		attribute.setAttribute("value", archiveFolder);
 		archiveDocumentAction.appendChild(attribute);
 
@@ -404,19 +358,19 @@ public class BPMNGenerator {
 	 * @return true
 	 */
 	private List<Flow> createEvent(Element extensions, Element eventElement, String statusVar, ChildAssociationRef action, String actionId, String actionVar) {
-		if (ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
+		if (StatemachineEditorModel.ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
 			return createActionFinishStateWithTransition(eventElement, statusVar, action, actionVar);
-		} else if (ACTION_START_WORKFLOW.equals(actionId)) {
+		} else if (StatemachineEditorModel.ACTION_START_WORKFLOW.equals(actionId)) {
 			return createStartWorkflowAction(eventElement, action);
-		} else if (ACTION_TRANSITION_ACTION.equals(actionId)) {
+		} else if (StatemachineEditorModel.ACTION_TRANSITION_ACTION.equals(actionId)) {
 			return createTransitionAction(eventElement, statusVar, action);
-		} else if (ACTION_USER_WORKFLOW.equals(actionId)) {
+		} else if (StatemachineEditorModel.ACTION_USER_WORKFLOW.equals(actionId)) {
             createUserWorkflowAction(eventElement, action);
 			return Collections.EMPTY_LIST;
-		} else if (ACTION_SCRIPT_ACTION.equals(actionId)) {
+		} else if (StatemachineEditorModel.ACTION_SCRIPT_ACTION.equals(actionId)) {
             createScriptAction(extensions, eventElement, action);
 			return Collections.EMPTY_LIST;
-		} else if (ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
+		} else if (StatemachineEditorModel.ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
 			return createWaitForDocumentChangeEvent(eventElement, statusVar, action, actionVar);
 		}
 		return Collections.EMPTY_LIST;
@@ -433,12 +387,12 @@ public class BPMNGenerator {
 			Element actionElement = doc.createElement("lecm:action");
 			for (ChildAssociationRef workflow : workflows) {
 				Element attribute;
-				actionElement.setAttribute("type", ACTION_USER_WORKFLOW);
+				actionElement.setAttribute("type", StatemachineEditorModel.ACTION_USER_WORKFLOW);
 				String id = "id" + workflow.getChildRef().getId().replace("-", "");
-				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
-				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_LABEL);
-				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
-				Object conditionAccess = nodeService.getProperty(workflow.getChildRef(), PROP_CONDITION_ACCESS);
+				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
+				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_LABEL);
+				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_ASSIGNEE);
+				Object conditionAccess = nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ACCESS);
 				attribute = doc.createElement("lecm:attribute");
 				attribute.setAttribute("id", id);
 				attribute.setAttribute("label", workflowLabel);
@@ -460,11 +414,11 @@ public class BPMNGenerator {
 		List<Flow> flows = new ArrayList<Flow>();
 		for (ChildAssociationRef expression : expressions) {
 			Element actionElement = doc.createElement("lecm:action");
-			actionElement.setAttribute("type", ACTION_TRANSITION_ACTION);
+			actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TRANSITION_ACTION);
 			eventElement.appendChild(actionElement);
 
 			String variableName = "id" + expression.getChildRef().getId().replace("-","");
-			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
+			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_EXPRESSION);
 
 			Element attribute = doc.createElement("lecm:attribute");
 			attribute.setAttribute("name", "variableName");
@@ -476,7 +430,7 @@ public class BPMNGenerator {
 			attribute.setAttribute("value", expressionValue);
 			actionElement.appendChild(attribute);
 
-			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
+			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 			flows.add(new Flow(statusVar, target, "${!empty " + variableName + " && " + variableName + "}"));
 		}
@@ -496,7 +450,7 @@ public class BPMNGenerator {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
 		if (expressions.size() > 0) {
 			Element actionElement = doc.createElement("lecm:action");
-			actionElement.setAttribute("type", ACTION_WAIT_FOR_DOCUMENT_CHANGE);
+			actionElement.setAttribute("type", StatemachineEditorModel.ACTION_WAIT_FOR_DOCUMENT_CHANGE);
 			eventElement.appendChild(actionElement);
 
 			Element expressionsElement = doc.createElement("lecm:expressions");
@@ -505,9 +459,9 @@ public class BPMNGenerator {
 
 			for (ChildAssociationRef expression : expressions) {
 				Element expressionElement = doc.createElement("lecm:expression");
-				String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), PROP_TRANSITION_EXPRESSION);
+				String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_EXPRESSION);
 				expressionElement.setAttribute("expression", expressionValue);
-				AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
+				AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
 				String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 				expressionElement.setAttribute("outputValue", target);
 
@@ -531,9 +485,9 @@ public class BPMNGenerator {
 		for (ChildAssociationRef workflow : workflows) {
 			Element attribute;
 			Element actionElement = doc.createElement("lecm:action");
-			actionElement.setAttribute("type", ACTION_START_WORKFLOW);
-			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), PROP_WORKFLOW_ID);
-			String assignee = (String) nodeService.getProperty(workflow.getChildRef(), PROP_ASSIGNEE);
+			actionElement.setAttribute("type", StatemachineEditorModel.ACTION_START_WORKFLOW);
+			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
+			String assignee = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_ASSIGNEE);
 			attribute = doc.createElement("lecm:attribute");
 			attribute.setAttribute("name", "id");
 			attribute.setAttribute("value", "id" + workflow.getChildRef().getId().replace("-", ""));
@@ -575,7 +529,7 @@ public class BPMNGenerator {
 		List<Flow> flows = new ArrayList<Flow>();
 		Element attribute;
 		Element actionElement = doc.createElement("lecm:action");
-		actionElement.setAttribute("type", ACTION_FINISH_STATE_WITH_TRANSITION);
+		actionElement.setAttribute("type", StatemachineEditorModel.ACTION_FINISH_STATE_WITH_TRANSITION);
 		actionElement.setAttribute("variable", "var" + actionVar);
 		take.appendChild(actionElement);
 
@@ -592,7 +546,7 @@ public class BPMNGenerator {
 
 			elementCount++;
 
-			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), ASSOC_TRANSITION_STATUS).get(0);
+			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 
 			Element parameter = doc.createElement("lecm:parameter");
@@ -600,13 +554,13 @@ public class BPMNGenerator {
 			parameter.setAttribute("value", target);
 			attribute.appendChild(parameter);
 
-			String labelId = (String) nodeService.getProperty(transition.getChildRef(), PROP_TRANSITION_LABEL);
+			String labelId = (String) nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_LABEL);
 			parameter = doc.createElement("lecm:parameter");
 			parameter.setAttribute("name", "labelId");
 			parameter.setAttribute("value", labelId);
 			attribute.appendChild(parameter);
 
-			Object conditionAccess = nodeService.getProperty(transition.getChildRef(), PROP_CONDITION_ACCESS);
+			Object conditionAccess = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ACCESS);
 
 			if (conditionAccess != null) {
 				parameter = doc.createElement("lecm:parameter");
@@ -618,8 +572,8 @@ public class BPMNGenerator {
 			String var = "var" + actionVar;
 			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
 
-			if (TYPE_WORKFLOW_TRANSITION.equals(type)) {
-				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), PROP_WORKFLOW_ID);
+			if (StatemachineEditorModel.TYPE_WORKFLOW_TRANSITION.equals(type)) {
+				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
 				parameter = doc.createElement("lecm:parameter");
 				parameter.setAttribute("name", "workflowId");
 				parameter.setAttribute("value", workflowId);
@@ -638,11 +592,11 @@ public class BPMNGenerator {
 			for (ChildAssociationRef variable : variables) {
 				QName variableType = nodeService.getType(variable.getChildRef());
 
-				if (TYPE_OUTPUT_VARIABLE.equals(variableType)) {
-					String toType = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_TO_TYPE);
-					String toValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_TO_VALUE);
-					String fromType = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_FROM_TYPE);
-					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_OUTPUT_FROM_VALUE);
+				if (StatemachineEditorModel.TYPE_OUTPUT_VARIABLE.equals(variableType)) {
+					String toType = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_OUTPUT_TO_TYPE);
+					String toValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_OUTPUT_TO_VALUE);
+					String fromType = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_OUTPUT_FROM_TYPE);
+					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_OUTPUT_FROM_VALUE);
 
 					Element variableElement = doc.createElement("lecm:output");
 					variableElement.setAttribute("toType", toType);
@@ -650,11 +604,11 @@ public class BPMNGenerator {
 					variableElement.setAttribute("fromType", fromType);
 					variableElement.setAttribute("fromValue", fromValue);
 					workflowVariables.appendChild(variableElement);
-				} else if (TYPE_INPUT_VARIABLE.equals(variableType)) {
-					String toType = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_TO_TYPE);
-					String toValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_TO_VALUE);
-					String fromType = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_FROM_TYPE);
-					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), PROP_INPUT_FROM_VALUE);
+				} else if (StatemachineEditorModel.TYPE_INPUT_VARIABLE.equals(variableType)) {
+					String toType = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_INPUT_TO_TYPE);
+					String toValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_INPUT_TO_VALUE);
+					String fromType = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_INPUT_FROM_TYPE);
+					String fromValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_INPUT_FROM_VALUE);
 
 					Element variableElement = doc.createElement("lecm:input");
 					variableElement.setAttribute("toType", toType);
@@ -691,7 +645,7 @@ public class BPMNGenerator {
             Element activitiField = doc.createElement("activiti:field");
 			activitiField.setAttribute("name", "script");
             Element activitiString = doc.createElement("activiti:string");
-            String data = (String) nodeService.getProperty(script.getChildRef(),PROP_ACTION_SCRIPT);
+            String data = (String) nodeService.getProperty(script.getChildRef(), StatemachineEditorModel.PROP_ACTION_SCRIPT);
             CDATASection cdata = doc.createCDATASection(data);
             activitiString.appendChild(cdata);
             activitiField.appendChild(activitiString);
@@ -741,9 +695,9 @@ public class BPMNGenerator {
 	 */
 	private void createRoleElement(Element rolesElement, List<ChildAssociationRef> permissions) {
 		for (ChildAssociationRef permission : permissions) {
-			AssociationRef role = nodeService.getTargetAssocs(permission.getChildRef(), ASSOC_ROLE).get(0);
+			AssociationRef role = nodeService.getTargetAssocs(permission.getChildRef(), StatemachineEditorModel.ASSOC_ROLE).get(0);
 			String roleName = (String) nodeService.getProperty(role.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-			String permissionTypeValue = (String) nodeService.getProperty(permission.getChildRef(), PROP_PERMISSION_TYPE_VALUE);
+			String permissionTypeValue = (String) nodeService.getProperty(permission.getChildRef(), StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE);
 			Element roleElement = doc.createElement("role");
 			roleElement.setAttribute("name", roleName);
 			roleElement.setAttribute("permission", permissionTypeValue);

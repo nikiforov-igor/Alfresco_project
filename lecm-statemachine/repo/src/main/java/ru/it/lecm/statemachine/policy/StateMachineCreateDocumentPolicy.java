@@ -17,7 +17,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.statemachine.StateMachineModel;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.DocumentStateMachineBean;
 
 import java.io.Serializable;
@@ -54,7 +54,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				StateMachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
+				StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
 
 	}
 
@@ -68,8 +68,8 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 		if (stateMashineId != null) {
 			//append status aspect to new document
 			HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-			aspectProps.put(StateMachineModel.PROP_STATUS, "NEW");
-			nodeService.addAspect(childAssocRef.getChildRef(), StateMachineModel.ASPECT_STATUS, aspectProps);
+			aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
+			nodeService.addAspect(childAssocRef.getChildRef(), StatemachineModel.ASPECT_STATUS, aspectProps);
 
 			PersonService personService = serviceRegistry.getPersonService();
 			NodeRef assigneeNodeRef = personService.getPerson("workflow");

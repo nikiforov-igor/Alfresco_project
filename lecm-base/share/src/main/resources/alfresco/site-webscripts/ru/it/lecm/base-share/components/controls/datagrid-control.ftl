@@ -8,6 +8,11 @@
 	<#assign allowCreate = field.control.params.allowCreate/>
 </#if>
 
+<#assign allowDelete = "true"/>
+<#if field.control.params.allowDelete??>
+    <#assign allowDelete = field.control.params.allowDelete?lower_case/>
+</#if>
+
 <#assign showActions = true/>
 <#if field.control.params.showActions??>
 	<#assign showActions = field.control.params.showActions/>
@@ -33,13 +38,17 @@
                                         id: "onActionEdit",
                                         permission: "edit",
                                         label: "${msg("actions.edit")}"
-                                    },
-                                    {
-                                        type: "action-link-${containerId}",
-                                        id: "onActionDelete",
-                                        permission: "delete",
-                                        label: "${msg("actions.delete-row")}"
-                                    }],
+                                    }
+                                    <#if allowDelete = "true">
+                                        ,
+                                        {
+                                            type: "action-link-${containerId}",
+                                            id: "onActionDelete",
+                                            permission: "delete",
+                                            label: "${msg("actions.delete-row")}"
+                                        }
+                                    </#if>
+                                 ],
                         datagridMeta: {
                                 itemType: "${field.control.params.itemType!""}",
                                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
