@@ -11,8 +11,8 @@
 
 	<artifactId>statemachine-api</artifactId>
 	<packaging>jar</packaging>
-	<name>Logic ECM State Machine Repo</name>
-	<description>Logic ECM State Machine Repo</description>
+	<name>Logic ECM State Machine API</name>
+	<description>Logic ECM State Machine API</description>
 
 	<!--
 		need to list these as a provided so that Maven doesn't download them

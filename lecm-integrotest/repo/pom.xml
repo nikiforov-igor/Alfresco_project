@@ -37,14 +37,6 @@
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
 		</dependency>
@@ -64,16 +56,24 @@
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.integrotest</groupId>
 			<artifactId>lecm-integrotest-api</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.statemachine</groupId>
+			<artifactId>statemachine-api</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>

@@ -13,13 +13,10 @@
 	<groupId>ru.it.lecm.integrotest</groupId>
 	<artifactId>lecm-integrotest</artifactId>
 	<packaging>pom</packaging>
-	<name>Logic ECM Integral Test Module</name>
+	<name>Logic ECM Integral Test</name>
 
 	<modules>
 		<module>api</module>
 		<module>repo</module>
-		<!-- 
-		<module>share</module>
-		  -->
 	</modules>
 </project>
