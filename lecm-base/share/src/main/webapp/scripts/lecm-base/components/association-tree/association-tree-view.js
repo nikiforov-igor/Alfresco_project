@@ -1147,13 +1147,13 @@ LogicECM.module = LogicECM.module || {};
                     el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
                 }
 
+	            Dom.get(this.eventGroup).value = selectedItems.toString();
+
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                     YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
                         selectedItems: this.selectedItems
                     });
                 }
-
-	            Dom.get(this.eventGroup).value = selectedItems.toString();
 
 	            if (this.options.mandatory) {
 		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);

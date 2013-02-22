@@ -120,6 +120,9 @@
 	    <#if field.control.params.treeItemType??>
 		    treeItemType: "${field.control.params.treeItemType}",
 	    </#if>
+        <#if field.control.params.changeItemsFireAction??>
+	        changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
+	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},

@@ -143,6 +143,8 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="documentConnectionScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.DocumentConnectionWebScriptBean"
@@ -155,6 +157,9 @@
 		</property>
 		<property name="serviceRegistry">
 			<ref bean="ServiceRegistry"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
 		</property>
 	</bean>
 

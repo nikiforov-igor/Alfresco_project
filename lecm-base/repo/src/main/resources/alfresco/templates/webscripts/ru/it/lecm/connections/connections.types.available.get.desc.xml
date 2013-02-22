@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Connections Available Types</shortname>
+	<description>Connections Available Types</description>
+	<url>/lecm/connections/types/available</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>
