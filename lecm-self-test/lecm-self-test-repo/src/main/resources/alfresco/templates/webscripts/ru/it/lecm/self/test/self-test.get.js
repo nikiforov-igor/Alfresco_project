@@ -1,1 +1,0 @@
-logger.log ("hello from self-test script");

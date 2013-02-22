@@ -248,8 +248,8 @@
             <scope>runtime</scope>
         </dependency>
 		<dependency>
-			<groupId>ru.it.lecm.self-test</groupId>
-			<artifactId>self-test-repo</artifactId>
+			<groupId>ru.it.lecm.integrotest</groupId>
+			<artifactId>lecm-integrotest-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>

@@ -97,7 +97,6 @@
 		<module>lecm-business-journal</module>
 		<module>lecm-calendar</module>
 		<module>lecm-user-profile</module>
-		<module>lecm-self-test</module>
 		<module>lecm-integrotest</module>
 	</modules>
     <scm>
