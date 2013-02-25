@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.Types;
 import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 //import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
@@ -28,6 +28,7 @@ public class DocumentPolicy
 	// "lecm-contract:document"
 	final public static String DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 	final public QName TYPE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "document");
+	final public StdPermission DEFAULT_ACCESS = StdPermission.full;
 
 	// private fields
 	private PolicyComponent policyComponent;
@@ -39,7 +40,7 @@ public class DocumentPolicy
 //	private BusinessJournalService businessJournalService;
 
 	private String grantDynaRoleCode = "BR_INITIATOR";
-
+	private StdPermission grantAccess = DEFAULT_ACCESS;
 
 	public PolicyComponent getPolicyComponent() {
 		return policyComponent;
@@ -105,6 +106,23 @@ public class DocumentPolicy
 		this.grantDynaRoleCode = grantDynaRoleCode;
 	}
 
+	/**
+	 * @return предоставляемый доступ для роли grantDynaRoleCode
+	 */
+	public StdPermission getGrantAccess() {
+		return grantAccess;
+	}
+
+	/**
+	 * @param value предоставляемый доступ для роли grantDynaRoleCode
+	 */
+	public void setGrantAccess(StdPermission value) {
+		this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
+	}
+
+	public void setGrantAccessTag(String value) {
+		setGrantAccess(StdPermission.findPermission(value));
+	}
 
 	/**
 	 * bean-init-method
@@ -152,7 +170,7 @@ public class DocumentPolicy
 			// sgNotifier.orgBRAssigned( this.grantDynaRoleCode, employeePos);
 
 			// нарезка прав на документ
-			lecmAclBuilder.grantDynamicRole(this.grantDynaRoleCode, docRef, employee.getId());
+			lecmAclBuilder.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), this.getGrantAccess());
 
 			logger.info( String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
 

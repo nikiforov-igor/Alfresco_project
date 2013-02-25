@@ -6,6 +6,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
+
 /**
  * Интерфейс сервиса для нарезки прав на папки и файлы.
  * Предполагаемая схема использования:
@@ -27,9 +29,9 @@ public interface INodeACLBuilder {
 	 * @param roleCode id Динамической Роли
 	 * @param nodeRef документа или папки
 	 * @param userId id Сотрудника
+	 * @param access предоставляемый доступ, если null, то будет присвоено право по-умолчанию (конфигурируется бинами)
 	 */
-	void grantDynamicRole( String roleCode, NodeRef nodeRef, String userId);
-
+	void grantDynamicRole( String roleCode, NodeRef nodeRef, String userId, StdPermission access);
 	/**
 	 * Отобрать у Сотрудника динамическую роль в документе/папке
 	 * @param roleCode id Динамической Роли
@@ -105,4 +107,5 @@ public interface INodeACLBuilder {
 			return null;
 		}
 	}
+
 }

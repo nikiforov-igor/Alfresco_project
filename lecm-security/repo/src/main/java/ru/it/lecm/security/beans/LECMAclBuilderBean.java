@@ -33,6 +33,14 @@ public class LECMAclBuilderBean
 
 	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
+	/* 
+	 * флаги наследования родительских полномочий для статического 
+	 * и динамического случая выдачи прав
+	 */
+	private boolean staticInheritParentPermissions = false;
+	private boolean dynamicInheritParentPermissions = true;
+	private StdPermission defaultAccessOnGrant = StdPermission.readonly; // право, которое сразу предоставляется по-умолчанию при выбаче БР
+
 	/**
 	 * Соответствия внутрипрограммных разрешений и тех, которые имеются в Альфреско (см const ACCPERM_EMPTY)
 	 * (названия ACCPERM_EMPTY должны быть введены в permissionDefinitions.xml)
@@ -72,6 +80,48 @@ public class LECMAclBuilderBean
 	public void setAuthorityService(AuthorityService authorityService) {
 		this.authorityService = authorityService;
 		this.sgnm.setAuthorityService(authorityService);
+	}
+
+	/**
+	 * @return флаг наследования родительских полномочий для статического случая выдачи прав
+	 */
+	public boolean isStaticInheritParentPermissions() {
+		return staticInheritParentPermissions;
+	}
+
+	/**
+	 * @param value флаг наследования родительских полномочий для статического случая выдачи прав
+	 */
+	public void setStaticInheritParentPermissions(boolean value) {
+		this.staticInheritParentPermissions = value;
+	}
+
+	/**
+	 * @return флаг наследования родительских полномочий для динамического случая выдачи прав
+	 */
+	public boolean isDynamicInheritParentPermissions() {
+		return dynamicInheritParentPermissions;
+	}
+
+	/**
+	 * @param value флаг наследования родительских полномочий для динамического случая выдачи прав
+	 */
+	public void setDynamicInheritParentPermissions(boolean value) {
+		this.dynamicInheritParentPermissions = value;
+	}
+
+	/**
+	 * @return право, которое сразу предоставляется по-умолчанию при выбаче БР
+	 */
+	public StdPermission getDefaultAccessOnGrant() {
+		return defaultAccessOnGrant;
+	}
+
+	/**
+	 * @param value право, которое сразу предоставляется по-умолчанию при выбаче БР
+	 */
+	public void setDefaultAccessOnGrant(StdPermission value) {
+		this.defaultAccessOnGrant = value;
 	}
 
 	/**
@@ -177,11 +227,13 @@ public class LECMAclBuilderBean
 	}
 
 	@Override
-	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId) {
+	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId, StdPermission access) {
 		final String authority = sgnm.makeFullBRMEAuthName(userId, roleCode);
-		final String permission = getPermName(StdPermission.readonly); // выдать право на чтение - при смене статуса должно будет выполниться перегенерирование ...
+		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
+		if (access == null) access = this.defaultAccessOnGrant; 
+		final String permission = getPermName(access);
 		permissionService.setPermission( nodeRef, authority, permission, true);
-		logger.warn(String.format("Dynamic role '%s' for user '%s' granted for document '%s' by security group <%s>", roleCode, userId, nodeRef, authority));
+		logger.warn(String.format("Dynamic role '%s' for user '%s' granted as {%s} for document '%s' by security group <%s>", roleCode, userId, access, nodeRef, authority));
 	}
 
 	@Override
@@ -196,12 +248,15 @@ public class LECMAclBuilderBean
 	{	
 //		logger.info( "rebuildStaticACL for node "+ nodeRef);
 //		return;
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node '%s' by access table: %s \r\n", nodeRef, getMapInfo(accessMap)));
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node '%s', inherit parent access rules: %s\n\t by access table: %s \r\n", nodeRef, isStaticInheritParentPermissions(), getMapInfo(accessMap)));
 		try {
 
 			// получить полный текущий ACL ...
 			final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
 			logger.debug("current doc ACL list is "+ current);
+
+			// (!) задаём свой тип наследования статических прав от родителей
+			permissionService.setInheritParentPermissions(nodeRef, this.isStaticInheritParentPermissions());
 
 			if (accessMap == null || accessMap.isEmpty()) {
 				permissionService.deletePermissions(nodeRef);
@@ -216,12 +271,18 @@ public class LECMAclBuilderBean
 				for(Map.Entry<String, StdPermission> entry: accessMap.entrySet()) {
 					final String brole = entry.getKey();
 					final String authority = sgnm.makeFullSGName( Types.SGKind.SG_BR, brole);
+					final StdPermission perm = accessMap.get(brole);
 
 					// выдаём новый доступ по Статической БР для Пользователя ...
-					setACE(nodeRef, authority, accessMap.get(brole), sb);
+					try {
+						setACE(nodeRef, authority, perm, sb);
+					} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
+						sb.append( "\n\t (!) exception "+ t.getMessage());
+						logger.error( String.format("exception in setACE( nodeRef='%s', auth='%s', perm=%s)", nodeRef, authority, perm), t);
+					}
 				}
 			}
-		} catch(Throwable t) {
+		} catch(Throwable t) {  // (!) Исключения журналируем, но не поднимаем
 			sb.append( "\n\t (!) exception "+ t.getMessage());
 			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
 		} finally {
@@ -236,12 +297,14 @@ public class LECMAclBuilderBean
 	{	
 //		logger.info( "rebuildStaticACL for node "+ nodeRef);
 //		return;
-		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node '%s' by access table: %s \n", nodeRef, getMapInfo(accessMap)));
+		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node '%s', inherit parent access rules: %s\n\t by access table: %s \n", nodeRef, isDynamicInheritParentPermissions(), getMapInfo(accessMap)));
 		try {
-
 			// получить полный текущий ACL ...
 			final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
 			logger.debug("current doc ACL list is "+ current);
+
+			// (!) задаём свой тип наследования динамических прав от родителей
+			permissionService.setInheritParentPermissions(nodeRef, this.isDynamicInheritParentPermissions());
 
 			// вычленить id пользователей с динамическими ролями ...
 			// (пользователь, ДБР)
@@ -257,10 +320,16 @@ public class LECMAclBuilderBean
 				final String userId = item.getFirst();
 				final String brole = item.getSecond();
 				final String authority = sgnm.makeFullBRMEAuthName(userId, brole);
+				final StdPermission perm = accessMap.get(brole);
 				// выдаём новый доступ по ДБР для Пользователя ...
-				setACE(nodeRef, authority, accessMap.get(brole), sb);
+				try {
+					setACE(nodeRef, authority, perm, sb);
+				} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
+					sb.append( "\n\t (!) exception "+ t.getMessage());
+					logger.error( String.format("exception in setACE( nodeRef='%s', auth='%s', perm=%s)", nodeRef, authority, perm), t);
+				}
 			}
-		} catch(Throwable t) {
+		} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
 			sb.append( "\n\t (!) exception "+ t.getMessage());
 			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
 		} finally {

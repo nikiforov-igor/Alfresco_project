@@ -43,7 +43,6 @@ public class SgNameResolver {
 		this.authorityService = authorityService;
 	}
 
-	// public 
 	/**
 	 * Проверить существование группы авторизации с коротким названием shortName
 	 * @param shortName
@@ -158,6 +157,7 @@ public class SgNameResolver {
 	public String makeFullBRMEAuthName(String userId, String roleCode) {
 		// DONE: возможно стоит сделать обращение через authorityService.getName(xxx)
 		// return "GROUP_" + Types.SGKind.getSGMyRolePos(userId, roleCode).getAlfrescoSuffix();
+		// final String userLogin = getUserLogin( userId);
 		return makeSGName( Types.SGKind.getSGMyRolePos(userId, roleCode));
 	}
 

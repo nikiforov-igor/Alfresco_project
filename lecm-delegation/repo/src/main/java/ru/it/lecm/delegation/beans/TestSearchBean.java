@@ -1267,10 +1267,11 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				} else if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper) || ACLOPER_REVOKE_DYNAROLE.equalsIgnoreCase(oper)) {
 					final String roleCode = echoGetArg( "roleCode", null, result);
 					final String userId = echoGetArg( "userId", null, result);
-					logger.info( String.format( "<%s> for node id '%s', user <%s>, role <%s>", oper, id, userId, roleCode));
+					final StdPermission access = StdPermission.findPermission( echoGetArg("access", null, result) );
+					logger.info( String.format( "<%s> for node id '%s', user <%s>, role <%s>, access <%s>", oper, id, userId, roleCode, access));
 
 					if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper))
-						builder.grantDynamicRole(roleCode, ref, userId);
+						builder.grantDynamicRole(roleCode, ref, userId, access);
 					else
 						builder.revokeDynamicRole(roleCode, ref, userId);
 				} else { logger.warn("Unsupported operation "+ oper); }

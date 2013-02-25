@@ -57,6 +57,7 @@
 		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
 
 		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
+		<property name="grantAccessTag" value="full"/>
 
 		<!-- 
 		<property name="businessJournalService" ref="businessJournalService"/>
