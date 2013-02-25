@@ -39,7 +39,13 @@
 		<property name="stateMachineId" value="contractWorkflow"/>
 	</bean>
 
-	<bean  id="documentPolicy" class="ru.it.lecm.document.policies.DocumentPolicy"
+    <bean id="${groupId}.${artifactId}.importDocumentStateMachineBean"
+          class="ru.it.lecm.statemachine.bean.DocumentStateMachineBean">
+        <property name="documentType" value="lecm-contract:document"/>
+        <property name="stateMachineId" value="importWorkflow"/>
+    </bean>
+
+    <bean  id="documentPolicy" class="ru.it.lecm.document.policies.DocumentPolicy"
 		   init-method="init"
 		   depends-on="lecmSecurityGroupsBean">
 		<property name="policyComponent" ref="policyComponent"/>

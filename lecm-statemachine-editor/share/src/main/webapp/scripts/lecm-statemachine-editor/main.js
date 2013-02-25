@@ -330,6 +330,18 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 		},
 
+        _exportStatemachine: function() {
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/export?statusesNodeRef={statusesNodeRef}";
+            sUrl = YAHOO.lang.substitute(sUrl, {
+                statusesNodeRef: this.packageNodeRef
+            });
+            document.location.href = sUrl;
+        },
+
+        _importStatemachine: function() {
+            alert('Import!!!');
+		},
+
 		_editStatus: function(nodeRef, forDraft, isStarted) {
 			var formId = "";
 			if (isStarted && forDraft) {

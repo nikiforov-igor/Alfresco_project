@@ -64,5 +64,11 @@
 		<property name="contentService" ref="contentService"/>
 	</bean>
 
+	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.export.get"
+		  class="ru.it.lecm.statemachine.editor.export.Export"
+		  parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
 
 </beans>
