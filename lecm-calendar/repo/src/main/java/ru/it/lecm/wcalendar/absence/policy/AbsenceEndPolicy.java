@@ -72,7 +72,7 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
 		} // если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия
 		// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
-		else if (prevEnd != null && prevEnd != curEnd && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
+		else if (prevEnd != null && !prevEnd.equals(curEnd) && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
 			absenceService.endAbsence(nodeRef);
 			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
 		}
