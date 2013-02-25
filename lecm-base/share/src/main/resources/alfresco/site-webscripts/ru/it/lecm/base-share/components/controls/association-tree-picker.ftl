@@ -32,12 +32,18 @@
 	<#assign showSearch = true>
 </#if>
 
+<#if field.control.params.showViewIncompleteWarning?? && field.control.params.showViewIncompleteWarning == "false">
+	<#assign showViewIncompleteWarning = false>
+<#else>
+	<#assign showViewIncompleteWarning = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field">
     <#if disabled>
         <div id="${controlId}" class="viewmode-field">
-            <#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
+            <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
             </#if>
             <span class="viewmode-label">${field.label?html}:</span>
