@@ -57,6 +57,10 @@ a:hover {
     padding-bottom: 0;
     margin-bottom: 10px;
 }
+#alf-ft {
+    padding-top: 10px;
+    margin-top: -12px;
+}
 #bd #lecm-menu {
     width: 50px;
     float: left;
@@ -2037,5 +2041,26 @@ div[id$=date-cntrl] - селектор для всех div с id, заканчи
 }
 .yui-skin-lecmTheme.alfresco-share .yui-panel .search .form-field div[id$=date-cntrl] {
     width: 460px !important;
+}
+
+/* Alfresco repository */
+#alfresco-repository #alf-filters {
+    margin-left: 0;
+}
+#alfresco-repository .yui-resize-handle.yui-resize-handle-r {
+    margin-right: 0;
+}
+#alfresco-repository .alfresco-twister-open {
+    background-position: 3px 50%;
+}
+#alfresco-repository .toolbar,
+#alfresco-repository .doclist .doclist-bar {
+    margin: 0 0 0 -10px;
+}
+#alfresco-repository .doclist .documents {
+    margin: 0 0 0 -8px;
+}
+#alfresco-repository .doclist .doclist-bar-bottom {
+    border-bottom: none;
 }
 
