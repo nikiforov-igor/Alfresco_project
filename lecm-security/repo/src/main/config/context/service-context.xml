@@ -32,6 +32,7 @@
 	</bean>
 
 	<bean id="lecmAclBuilderBean" class="ru.it.lecm.security.beans.LECMAclBuilderBean" depends-on="authorityService, nodeService, permissionService">
+
 		<property name="nodeService" ref="nodeService" />
 		<property name="permissionService" ref="permissionService" />
 		<property name="authorityService" ref="authorityService" />
@@ -39,14 +40,14 @@
 		<!-- Наследование родительских прав для случая статики и динамики:
 			по-умолчанию: статика НЕ наследует (false), динамика Наследует (true)
 		  -->
-		<!-- -->
 		<property name="staticInheritParentPermissions" value="false" />
 		<property name="dynamicInheritParentPermissions" value="true" />
 
+		<!-- Выставляем соответствие lecm-уровней доступа и стандартных security ролей alfresco  -->
 		<property name="permissionAliases">
 			<map>
-				<!-- ключ = доступ = (noaccess | readonly | full)
-					значение = название PermissionGroup Alfresco (см permissionDefinitions.xml) 
+				<!-- ключ: доступ = (noaccess | readonly | full)
+					значение: название PermissionGroup Alfresco (см permissionDefinitions.xml)
 				  -->
 				<entry key="noaccess" value="deny" />
 				<entry key="readonly" value="Consumer" />

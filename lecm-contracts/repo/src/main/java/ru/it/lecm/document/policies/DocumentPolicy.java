@@ -18,6 +18,12 @@ import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 //import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
+/**
+ * Политика отслеживания создания документов с типом "lecm-contract:document"
+ * для автоматической выдачи роли Инициатор для автора операции.
+ * 
+ * @author rabdullin
+ */
 public class DocumentPolicy
 		extends BaseBean
 		implements NodeServicePolicies.OnCreateNodePolicy
@@ -165,17 +171,24 @@ public class DocumentPolicy
 				return;
 			}
 
-			// вызов обоновления личной sg-группы для пользователя ...
+			/* 
+			 * автоматическое присвоение Динамической бизнес-роли для Cотрудника:
+			 * вызов обоновления личной sg-группы пользователя ...
+			 */
 			// final Types.SGPrivateMeOfUser employeePos = (Types.SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos( employee.getId(), authorLogin);
 			// sgNotifier.orgBRAssigned( this.grantDynaRoleCode, employeePos);
 
-			// нарезка прав на документ
+			/*
+			 * нарезка прав на Документ
+			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
+			 * такая нарезка ничего не выполнит.
+			 */
 			lecmAclBuilder.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), this.getGrantAccess());
 
 			logger.info( String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
 
 		} catch(Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-			logger.error( String.format( "Exception inside document policy handler for doc={%s}:\n\t%s", docRef, ex.getMessage() ), ex);
+			logger.error( String.format( "Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage() ), ex);
 		}
 	}
 
