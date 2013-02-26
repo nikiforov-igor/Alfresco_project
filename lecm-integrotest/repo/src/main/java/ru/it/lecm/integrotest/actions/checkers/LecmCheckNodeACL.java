@@ -34,6 +34,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 
 	/* проверяемый узел (папка или документ), см также название */
 	private NodeRef nodeRef;
+	private String nodeRefMacros;
 
 	/**
 	 * Атрибут, используемый для проверки чтения-записи.
@@ -54,6 +55,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 
 
 	private UserAccessTable accessMap;
+	private boolean continueOnErrors = true;
 
 	/**
 	 * Таблица прав доступа (value) для пользователей (key)
@@ -215,6 +217,24 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		this.setNodeRef( new NodeRef(value));
 	}
 
+	/**
+	 * Задать макрос, который надо будет использовать для вычисления nodeRef 
+	 * @param macrosValue
+	 */
+	public void setNodeRefMacros(String macrosValue) {
+		this.nodeRefMacros = macrosValue;
+	}
+
+	/**
+	 * @param macros в виде "список_аргументов.аргумент"
+	 * список аргументов - один из "result", "work", "config",
+	 * аргумент - ключ для получения значения из этого списка.
+	 * например <property name="nodeByMacros" value="result.createdId" />
+	 */
+	public void findNodeByMacros(String macros) {
+		this.setNodeRef( (NodeRef) getArgsAssigner().getMacroValue(macros) );
+	}
+
 	public NodeRefData getFindRef() {
 		return this.findRef;
 	}
@@ -258,6 +278,22 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	}
 
 	/**
+	 * @return true (это значение по-умолчанию), если при ошибках проверки надо продолжить без поднятия исключения,
+	 * false = поднимать исключения при ошибках проверки доступа.
+	 */
+	public boolean isContinueOnErrors() {
+		return continueOnErrors;
+	}
+
+	/**
+	 * @param flag true (это значение по-умолчанию), если при ошибках проверки надо продолжить без поднятия исключения,
+	 * false = поднимать исключения при ошибках проверки доступа.
+	 */
+	public void setContinueOnErrors(boolean flag) {
+		this.continueOnErrors = flag;
+	}
+
+	/**
 	 * Фабричный метод получения мапы (пользователь-доступ)
 	 * @param userAndAccess строка в виде "login:доступ; login:доступ"
 	 * @return
@@ -288,6 +324,10 @@ public class LecmCheckNodeACL extends LecmActionBase {
 			this.nodeRef = this.findRef.findNodeRef( getContext().getFinder());
 		}
 
+		if (this.nodeRef == null && this.nodeRefMacros != null) {
+			findNodeByMacros( this.nodeRefMacros);
+		}
+
 		chkConfigArgs();
 
 		final StringBuilder sb = new StringBuilder();
@@ -296,21 +336,25 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		boolean failed = false;
 		int i = 0;
 		final Map<String, StdPermission> accTable = this.accessMap.getUsersAccess();
+		sb.append( String.format( "\n\t %2s\t %5s\t %3s\t '%s'", "nn", "isOk", "access", "User Login"));
+		sb.append( "\n\t ===================================");
 		for(Map.Entry<String, StdPermission> e: accTable.entrySet() ) {
 			i++;
-			final String usrLogin = e.getKey();; // соответствующий пользователь
+			final String usrLogin = e.getKey(); // соответствующий пользователь
 			final StdPermission perm = e.getValue();
 			final boolean flagOK = chkNodeUserAccess( nodeRef, usrLogin, perm);
-			sb.append( String.format( "\n\t %d (%s) %s access for user '%s'"
-						, i, (flagOK ? "OK" : "!? FAIL"), perm, usrLogin));
+			sb.append( String.format( "\n  %2d\t %5s\t %3s\t '%s'", i, (flagOK ? "OK" : "*FAIL"), perm.getInfo(), usrLogin));
+			// выдаём состав авторизаций пользователя
+			sb.append( String.format( "\n\t\t [%s]", getContext().getAuthorityService().getAuthoritiesForUser(usrLogin) ));
 			if (!flagOK)
 				failed = true;
 		}
+		sb.append( "\n\t ===================================");
 
 		logger.info( String.format( "%s access check for node: %s\n%s", (failed ? "(!) BAD" : "SUCCESS"), this.nodeRef, sb.toString() ));
 
 		if (failed)
-			throw new TestFailException( String.format( "Failed access check for node: %s\n%s", this.nodeRef, sb.toString() ));
+			throw new TestFailException( isContinueOnErrors(), String.format( "Failed access check for node: %s\n%s", this.nodeRef, sb.toString() ));
 	}
 
 

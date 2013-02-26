@@ -1323,15 +1323,22 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				step.put("step_name", String.format( "test_%d", i));
 
 				if (sr == null) {
-					step.put("EResult", sr.getCode());
+					step.put("EResult", "NULL");
 				} else {
 					step.put( "EResult", sr.getCode());
 					step.put( "info", sr.getInfo() );
 					if (sr.getRtmError() != null) {
 						step.put("rtmError", sr.getRtmError());
 					}
+					if (sr.getNestedResults().size() == 0) {
+						step.put("substeps", "EMPTY");
+					} else {
+						final JSONObject nested = new JSONObject();
+						addStepResults(nested, sr.getNestedResults());
+						step.put("substeps", nested);
+					}
 				}
-			}
+		}
 			result.put("steps", steps);
 		}
 	}

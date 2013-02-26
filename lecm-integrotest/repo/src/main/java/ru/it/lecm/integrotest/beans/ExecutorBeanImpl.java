@@ -21,6 +21,7 @@ import ru.it.lecm.integrotest.FinderBean;
 import ru.it.lecm.integrotest.RunAction;
 import ru.it.lecm.integrotest.RunContext;
 import ru.it.lecm.integrotest.SingleTest;
+import ru.it.lecm.integrotest.TestFailException;
 import ru.it.lecm.integrotest.utils.DurationLogger;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
@@ -188,7 +189,7 @@ public class ExecutorBeanImpl
 		if (i < 0 || i >= maxLen)
 			throw new ArrayIndexOutOfBoundsException(String.format( "Step index out of bounds %d: must be inside [0,%d]", i, maxLen-1));
 		final DurationLogger d = new DurationLogger();
-		StepResult result = null;
+		final StepResult result = new StepResult( EResult.OK);
 		String stage = String.format( "runing step %s", i);
 		try {
 			final SingleTest step = this.steps.get(i);
@@ -200,23 +201,32 @@ public class ExecutorBeanImpl
 			int j = 0;
 			for (RunAction act: step.getActions()) {
 				j++;
-				stage = String.format( "runing step %s.%s, action %s", i+1, j, act.getClass());
+				stage = String.format( "step %s.%s, action %s", i+1, j, act.getClass());
 				logger.debug( stage);
 
 				act.setContext(this.getContext());
-				act.run();
+				try {
+					act.run();
+					result.getNestedResults().add( new StepResult( EResult.OK, null, stage));
+				} catch (TestFailException tx){
+					if (!tx.isCanContinue())
+						// поднимаем исключение если прописан подъём
+						throw tx;
+					// сохраним как вложенный результат ...
+					result.getNestedResults().add( new StepResult( EResult.ERROR, tx, stage));
+				}
 
 				logger.info( String.format( "SUCCESSFULL step %s.%s, action %s", i+1, j, act.getClass()) );
 			}
 
-			// it's OK
-			result = new StepResult( EResult.OK); 
+			result.setCode(EResult.OK); 
 		} catch (Throwable t) {
-			result = new StepResult( EResult.ERROR, t, "problem at phase <"+ stage+ ">"); // ERROR 
+			result.setData( EResult.ERROR, t, "problem at phase '"+ stage+ "'");
+			logger.error( "problem at phase '"+ stage+ "'", t);
 		} finally {
 			d.logCtrlDuration(logger, String.format( "step %s duration {t}", i+1));
 		}
-		
+
 		return result;
 	}
 

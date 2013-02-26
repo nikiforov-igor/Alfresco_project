@@ -20,7 +20,9 @@ import ru.it.lecm.integrotest.utils.NodeRefData;
 import ru.it.lecm.integrotest.utils.Utils;
 
 /**
-		<bean class="ru.it.lecm.integrotest.actions.CreateDoc">
+ * Действие создания узлов заданных тиов.
+ * Пример конфигурации бина:
+		<bean class="ru.it.lecm.integrotest.actions.CreateNode">
 			<property name="docType" value="lecm-orgstr::organization-unit" />
 			<property name="attributes">
 				<props>
@@ -29,10 +31,12 @@ import ru.it.lecm.integrotest.utils.Utils;
 				</props>
 			</property>
 
-			<!-- Пользователь, от имени котрого выполнить создание -->
+			<!-- Пользователь, от имени котрого выполнить создание
+				если не указано, то от имени системы
+			  -->
 			<property name="createByUser" value="admin" />
 
-			<!-- куда (внутри resultMap) вынести созданный id документа (для последующего доступа) -->
+			<!-- куда именно (внутри resultMap) сохранить созданный id документа (для последующего доступа) -->
 			<property name="destRefArgName" value="result.createdNodeRef" />
 		</bean>
  *
@@ -231,6 +235,7 @@ public class CreateNode extends LecmActionBase {
 			}
 			logger.info( String.format( "Created document: %s", result));
 
+			// сохранение результата ...
 			if (this.destRefArgName != null) {
 				stage = String.format( "Pushing result {%s} into context as {%s}", result, this.getDestRefArgName());
 				logger.debug(stage);
@@ -241,8 +246,8 @@ public class CreateNode extends LecmActionBase {
 			}
 
 		} catch (Exception ex) {
-			final String msg = String.format("Failed run action <%s> at phase <%s>:\n%s", this.getClass().getName(), stage, ex.getMessage());
-			logger.error( msg);
+			final String msg = String.format("Failed CreateNode <%s> at phase <%s>:\n%s", this.getClass().getName(), stage, ex.getMessage());
+			logger.error( msg, ex);
 			throw new RuntimeException( msg, ex);
 		}
 	}
@@ -252,10 +257,20 @@ public class CreateNode extends LecmActionBase {
 	 * @param destNode
 	 * @param nodeServ служба для работы с узлом, (!) может отличаться от getContext().getNodeService()
 	 */
-	protected void setNodeArgs(NodeRef destNode, NodeService nodeServ) {
-		final Map<QName, Serializable> data = getAttributesAsDataMap();
-		if (data != null)
-			nodeServ.addProperties(destNode, data);
+	protected void setNodeArgs( final NodeRef destNode, final NodeService nodeServ) {
+		try {
+			final Map<QName, Serializable> data = getAttributesAsDataMap();
+			if (data != null) {
+				// nodeServ.addProperties(destNode, data);
+				final Map<QName, Serializable> curNodeData = nodeServ.getProperties(destNode);
+				curNodeData.putAll( data);
+				nodeServ.setProperties(destNode, curNodeData);
+			}
+		} catch(Throwable tx) {
+			final String msg = String.format( "Exception setting configured attributes to node {%s}", destNode);
+			logger.error( msg, tx);
+			throw new RuntimeException(msg, tx);
+		}
 	}
 
 	/**

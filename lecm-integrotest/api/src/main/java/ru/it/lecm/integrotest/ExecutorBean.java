@@ -2,6 +2,7 @@ package ru.it.lecm.integrotest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,9 +46,10 @@ public interface ExecutorBean {
 
 	public static class StepResult {
 
-		final private EResult code;
-		final private Throwable rtmError;
-		final private String info;
+		private EResult code;
+		private Throwable rtmError;
+		private String info;
+		final private List<StepResult> nestedResults = new ArrayList<ExecutorBean.StepResult>(); 
 
 		public StepResult(EResult code, Throwable rtmError, String info) {
 			super();
@@ -68,15 +70,35 @@ public interface ExecutorBean {
 			return this.code;
 		}
 
+		public void setCode(EResult code) {
+			this.code = code;
+		}
+
 		public String getInfo() {
 			return this.info;
 		}
+
+		public void setInfo(String info) {
+			this.info = info;
+		}
+
 		/**
 		 * Ошибка для случая code==ERROR или null при code==OK
 		 * @return
 		 */
 		public Throwable getRtmError() {
 			return this.rtmError;
+		}
+
+		public void setRtmError(Throwable rtmError) {
+			this.rtmError = rtmError;
+		}
+
+		/**
+		 * @return вложенные результаты
+		 */
+		public List<StepResult> getNestedResults() {
+			return nestedResults;
 		}
 
 		@Override
@@ -120,6 +142,12 @@ public interface ExecutorBean {
 			}
 			wr.flush();
 			return result.toString();
+		}
+
+		public void setData(EResult code, Throwable rtmError, String info) {
+			this.code = code;
+			this.rtmError = rtmError;
+			this.info = info;
 		}
 	} 
 }

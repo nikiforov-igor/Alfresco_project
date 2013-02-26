@@ -86,7 +86,12 @@ public interface INodeACLBuilder {
 
 		/**
 		 * Получение объекта StdPermission по мнемоническому названию.
-		 * @param name: noaccess | readonly | full
+		 * @param name: название разрешения в виде: 
+		 * 			noaccess | deny | - 
+		 * 			readonly | read | r
+		 * 			full | write | w | rw | +
+		 * , здесь в каждой строке перечислены синонимы
+		 * 
 		 * @return
 		 */
 		public static StdPermission findPermission( String name) {
@@ -95,7 +100,7 @@ public interface INodeACLBuilder {
 					name = name.trim().toLowerCase();
 					if ("read".equals(name) || "r".equals(name))
 						return StdPermission.readonly;
-					if ("write".equals(name) || "w".equals(name) || "+".equals(name))
+					if ("write".equals(name) || "w".equals(name)|| "rw".equals(name) || "+".equals(name))
 						return StdPermission.full;
 					if ("deny".equals(name) || "-".equals(name))
 						return StdPermission.noaccess;

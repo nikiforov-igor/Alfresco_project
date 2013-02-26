@@ -99,27 +99,29 @@
 	</bean>
 	  -->
 
-	<!-- Поисковый/локационный бин -->
+	<!-- Поисковый/локационный бин
+		для использования там, где надо NodeRef или id, а имеются только 
+		значения отдельных полей 
+	  -->
 	<bean id="finderBean" class="ru.it.lecm.integrotest.beans.FinderBeanImpl" depends-on="searchService, nodeService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="nsService" ref="namespaceService"/>
 		<property name="searchService" ref="searchService"/>
 	</bean>
 
-	<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
-	<bean id="chkDocACL_Draft" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+	<!-- Пример сконфигурированного бина для проверки прав с заданием пары
+	     таблиц (бизнес-роль - доступ) и (бизнес-роль - пользователь)
+	  -->
+	<bean id="exampleChkDocACL" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
 
 		<!-- вызов фабричного метода получения мап (БР-доступ) и (БР-пользователь)-->
 		<property name="accessMap">
-			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL"
-					factory-method="makeBusinessRoleToUserAccessTable">
-				<!-- roleAccessMap: перечисление бизнес-ролей и соот-щих разрешений <property 
-					name="roleAccessMap" value="BR_01:RW; BR_02:RW; BR-10:deny; BR_INITIATOR:R" 
-  		  		  -->
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeBusinessRoleToUserAccessTable">
+				<!-- roleAccessMap: перечисление бизнес-ролей и соот-щих разрешений --> 
 				<constructor-arg type="java.lang.String" value="BR_01:R; BR_02:W; BR_10:DENY; BR_INITIATOR:W"/>
 
-				<!-- roleUsersMap: перечисление бизнес-ролей и соот-щих пользователей (по 
-					логину) , чтобы проверять доступ по бизнес-ролям
+				<!-- roleUsersMap: перечисление бизнес-ролей и соот-щих пользователей
+					(по логину) , чтобы проверять доступ по бизнес-ролям
 				  -->
 				<constructor-arg type="java.lang.String" value="BR_01:user1; BR_02:user2; BR_10:user3; BR_INITIATOR:admin" />
 			</bean>
@@ -133,39 +135,173 @@
 			Формат строки - в виде для QName "{type}prop", возможно с короткими именами-синонимами -->
 		<property name="writeValue" value="WriteAccess_Test_Value" />
 
-		<!-- nodeRefStr: явное задание проверяемого узла адресной строкой. <property/> 
-			name="nodeRefStr" value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" 
+		<!-- (1) nodeRefStr: явное задание проверяемого узла адресной строкой.
+			<property name="nodeRefStr" value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" /> 
 		  -->
 
-		<!-- Использование поискового бина для загрузки узла: <property name="nodeRef"> 
-			<bean factory-bean="finderBean" factory-method="findNodeByProp"> <constructor-arg 
-			type="java.lang.String" value="lecm-orgstr:structure"/> <constructor-arg 
-			type="java.lang.String" value="cm:name" /> <constructor-arg type="java.lang.String" 
-			value="Структура" /> </bean> </property> -->
+		<!-- (2) Использование поискового бина для загрузки узла:
+			<property name="nodeRef"> 
+				<bean factory-bean="finderBean" factory-method="findNodeByProp">
+					<constructor-arg type="java.lang.String" value="lecm-orgstr:structure"/>
+					<constructor-arg type="java.lang.String" value="cm:name" />
+					<constructor-arg type="java.lang.String" value="Структура" />
+				</bean>
+			</property>
+		  -->
 
-		<!-- findRef: "typeName", "propName", "value" поисковые параметры узла 
-			для случая, когда узел задаётся не напрямую, а запросом: -->
+
+		<!-- (3) findRef: "typeName", "propName", "value" поисковые параметры узла 
+			для случая, когда узел задаётся не напрямую, а запросом:
+		  -->
 		<property name="findRef.nodeType" value="lecm-orgstr:structure" />
 		<property name="findRef.propName" value="cm:name" />
 		<property name="findRef.value" value="Структура" />
+
+		<!-- (4) nodeRefMacros: задание ссылки на переменную из параметров context-а выполнения тестов
+		 	<property name="nodeRefMacros" value="result.createdNodeRef" />
+		 -->
+
+	</bean>
+
+	<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
+	<bean id="chkDocACL_Draft" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+
+		<!-- права пользователей (эффективные) -->
+		<property name="accessMap">
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
+				<constructor-arg type="java.lang.String" value="
+						Admin: W; dummyUser: R;
+						Согласкин:-; Несогласкин:-; Пупкин:-;
+						Медведкин:-; Началов:-; Зачиналов:-;
+						Руководкин:-; Тарантино:-; Кэмерон:-; 
+						Кругман:-; БигБосс:-;
+						ЛаоЦзы: W; МаоЦзеДун:W
+				 "/>
+			</bean>
+		</property>
+
+		<property name="continueOnErrors" value="true" />
+
+		<!-- Чем тестируем -->
+		<property name="rwCheckingPropName" value="cm:name" />
+		<property name="writeValue" value="WriteAccess_Test_Value" />
+
+		<!-- Какой документ проверяем -->
+	 	<property name="nodeRefMacros" value="result.createdNodeRef" />
 	</bean>
 
 	<!-- Проверка прав доступа к документу в статусе 1 = Согласование ... -->
 	<bean id="chkDocACL_Approv" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
 
-		<!-- вызов фабричного метода получения мапы (пользователь-доступ) -->
+		<!-- права пользователей (эффективные) -->
 		<property name="accessMap">
-			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL"
-					factory-method="makeUserToPermAccessTable">
-				<constructor-arg type="java.lang.String" value="user1:R; user2:W; user10:DENY"/>
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
+				<constructor-arg type="java.lang.String" value="
+						Admin: W;
+						Согласкин:W; Несогласкин:W; Пупкин:-;
+						Медведкин:-; Началов:-; Зачиналов:-;
+						Руководкин:W; Тарантино:-; Кэмерон:-; 
+						Кругман:W; БигБосс:W;
+						ЛаоЦзы:-; МаоЦзеДун:-
+				 "/>
 			</bean>
 		</property>
 
+		<property name="continueOnErrors" value="true" />
+
+		<!-- Чем тестируем -->
 		<property name="rwCheckingPropName" value="cm:name" />
 		<property name="writeValue" value="WriteAccess_Test_Value" />
-		<property name="findRef.nodeType" value="lecm-orgstr:structure" />
-		<property name="findRef.propName" value="cm:name" />
-		<property name="findRef.value" value="Структура" />
+
+		<!-- Какой документ проверяем -->
+	 	<property name="nodeRefMacros" value="result.createdNodeRef" />
+	</bean>
+
+	<!-- Проверка прав доступа к документу в статусе 2 = Подписание ... -->
+	<bean id="chkDocACL_Sign" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+
+		<!-- права пользователей (эффективные) -->
+		<property name="accessMap">
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
+				<constructor-arg type="java.lang.String" value="
+						Admin: W;
+						Согласкин:R; Несогласкин:R; Пупкин:-;
+						Медведкин:-; Началов:-; Зачиналов:-;
+						Руководкин:R; Тарантино:W; Кэмерон:-; 
+						Кругман:W; БигБосс:W;
+						ЛаоЦзы:-; МаоЦзеДун:-
+				 "/>
+			</bean>
+		</property>
+
+		<property name="continueOnErrors" value="true" />
+
+		<!-- Чем тестируем -->
+		<property name="rwCheckingPropName" value="cm:name" />
+		<property name="writeValue" value="WriteAccess_Test_Value" />
+
+		<!-- Какой документ проверяем -->
+	 	<property name="nodeRefMacros" value="result.createdNodeRef" />
+	</bean>
+
+	<!-- Проверка прав доступа к документу в конечном статусе 3 = Дело ... -->
+	<bean id="chkDocACL_Done" class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL">
+
+		<!-- права пользователей (эффективные) -->
+		<property name="accessMap">
+			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
+				<constructor-arg type="java.lang.String" value="
+						Admin: W;
+						Согласкин:R; Несогласкин:R; Пупкин:-;
+						Медведкин:-; Началов:-; Зачиналов:-;
+						Руководкин:R; Тарантино:-; Кэмерон:-; 
+						Кругман:R; БигБосс:R;
+						ЛаоЦзы:-; МаоЦзеДун:-
+				 "/>
+			</bean>
+		</property>
+
+		<property name="continueOnErrors" value="true" />
+
+		<!-- Чем тестируем -->
+		<property name="rwCheckingPropName" value="cm:name" />
+		<property name="writeValue" value="WriteAccess_Test_Value" />
+
+		<!-- Какой документ проверяем -->
+	 	<property name="nodeRefMacros" value="result.createdNodeRef" />
+	</bean>
+
+	<!-- Тест проверки создания и проверки доступа к новому документу БЕЗ прогона по ЖЦ -->
+	<bean id="testNewDocAccess" class="ru.it.lecm.integrotest.SingleTest">
+		<property name="actions">
+			<list>
+				<bean class="ru.it.lecm.integrotest.actions.CreateNode">
+					<property name="nodeType" value="lecm-contract:document" />
+					<property name="attributes">
+						<props>
+							<prop key="cm:name">DocExample-0545</prop>
+							<prop key="lecm-contract:regnum">545</prop>
+						</props>
+					</property>
+
+					<!-- Пользователь, от имени котрого выполнить создание
+						если не указано -> от имени системы
+					<property name="createByUser" value="ЛаоЦзы" />
+					  -->
+
+					<!-- куда (внутри resultMap) вынести созданный id документа (для доступа на последующх шагах) -->
+					<property name="destRefArgName" value="result.createdNodeRef" />
+
+					<!-- Задание родителя поисковым запросом по атрибуту cm:name='contractWorkflow' -->
+					<property name="findParentRef.nodeType" value="cm:folder" />
+					<property name="findParentRef.propName" value="cm:name" />
+					<property name="findParentRef.value" value="contractWorkflow" />
+				</bean>
+
+				<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
+				<ref local="chkDocACL_Draft" />
+			</list>
+		</property>
 	</bean>
 
 	<!-- Тест проверки доступа к новому документу во время его прогона по ЖЦ -->
@@ -177,14 +313,14 @@
 					<property name="nodeType" value="lecm-contract:document" />
 					<property name="attributes">
 						<props>
-							<prop key="cm:name">DocExample-0543</prop>
-							<prop key="lecm-contract:regnum">543</prop>
+							<prop key="cm:name">DocExample-0547</prop>
+							<prop key="lecm-contract:regnum">547</prop>
 						</props>
 					</property>
 
 					<!-- Пользователь, от имени котрого выполнить создание
 						если не указано -> от имени системы
-					<property name="createByUser" value="vovan" />
+					<property name="createByUser" value="ЛаоЦзы" />
 					  -->
 
 					<!-- куда (внутри resultMap) вынести созданный id документа (для доступа на последующх шагах) -->
@@ -203,7 +339,7 @@
 				<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
 				<ref local="chkDocACL_Draft" />
 
-				<!-- двигаем Черновик-Согласование -->
+				<!-- двигаем Черновик -> Согласование -->
 				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
 					<property name="nodeRefMacros" value="result.createdNodeRef" />
 				</bean>
@@ -211,15 +347,21 @@
 				<!-- Проверка прав доступа к документу в статусе 1 = Согласование ... -->
 				<ref local="chkDocACL_Approv" />
 
-				<!-- двигаем Согласование-Подписание -->
+				<!-- двигаем Согласование -> Подписание -->
 				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
 					<property name="nodeRefMacros" value="result.createdNodeRef" />
 				</bean>
+
+				<!-- Проверка прав доступа к документу в статусе 2 = Подписание ... -->
+				<ref local="chkDocACL_Sign" />
 
 				<!-- двигаем Подписание-Дело -->
 				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
 					<property name="nodeRefMacros" value="result.createdNodeRef" />
 				</bean>
+
+				<!-- Проверка прав доступа к документу в статусе 3 = Дело ... -->
+				<ref local="chkDocACL_Done" />
 
 			</list>
 		</property>
@@ -230,6 +372,16 @@
 			class="ru.it.lecm.integrotest.beans.ExecutorBeanImpl"
 			depends-on="authorityService,nodeService, orgstructureSGNotifierBean"
 			init-method="init">
+
+		<!-- Проводимые тесты  -->
+		<property name="steps">
+			<!--  List<SingleTest> -->
+			<list>
+				<!-- <ref local="testCreateOU"/>  -->
+				<ref local="testNewDocAccess" />
+				<ref local="testChkWFDocAccess"/>
+			</list>
+		</property>
 
 		<property name="nodeService" ref="nodeService" />
 		<property name="authorityService" ref="authorityService" />
@@ -250,19 +402,6 @@
 				<entry key= "arg2"  value="val2"/>
 			</map>
 		</property>
-
-
-		<!-- Проводимые тесты  -->
-		<property name="steps">
-			<!--  List<SingleTest> -->
-			<list>
-				<!-- 
-				<ref local="testCreateOU"/>
-				 -->
-				<ref local="testChkWFDocAccess"/>
-			</list>
-		</property>
-
 	</bean>
 
 <!-- 

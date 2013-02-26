@@ -82,7 +82,8 @@ public class Utils {
 	}
 
 	/**
-	 * Сформировать карту "БР-Доступ" согласно списку, заданному в виде строки.
+	 * Сформировать карту Название-Доступ (например, "БР-Доступ" или "Пользователь-Доступ")
+	 * согласно списку, заданному в виде строки "Имя:Доступ; Имя:Доступ ...".
 	 * @param value список через ';' из записей "бизнес-роль:доступ;..."
 	 *  	где роль = название роли (мнемоника),
 	 *  		доступ = (noaccess | readonly | full)
@@ -96,9 +97,9 @@ public class Utils {
 		if (rawMap != null && !rawMap.isEmpty()) {
 			for(Map.Entry<String, String> entry: rawMap.entrySet() ) {
 				try {
-					final String brole = entry.getKey();
+					final String keyName = entry.getKey().trim();
 					final StdPermission access = (entry.getValue() != null) ? StdPermission.findPermission(entry.getValue().trim()) : null;
-					result.put( brole, (access != null) ? access : StdPermission.noaccess);
+					result.put( keyName, (access != null) ? access : StdPermission.noaccess);
 				} catch(Throwable t) {
 					logger.error( String.format("Check invalid map point '%s',\n\t expected to be 'BRole:access'\n\t\t, where access is (noaccess | readonly | full),\n\t\t BRole = mnemonic of business role"
 							, entry.getKey() + ":"+ entry.getValue()), t);
@@ -116,7 +117,7 @@ public class Utils {
 	 */
 	final static public Map<String, String> makeSplitMapping(String value) {
 		final Map<String, String> result = new HashMap<String, String>();
-		final String[] parts = value.split(";");
+		final String[] parts = value.split("[;,]");
 		if (parts != null) {
 			for(String s: parts) {
 				final String[] keyAndValue = s.split(":");
