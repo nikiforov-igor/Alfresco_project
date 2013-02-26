@@ -53,8 +53,6 @@ public class XMLWriter {
 
         writeXMLNode(xmlStateMachine);
         writeRoles();
-        writeRoles();
-        writeRoles();
 
         xmlw.writeEndElement();
         xmlw.writeEndDocument();
