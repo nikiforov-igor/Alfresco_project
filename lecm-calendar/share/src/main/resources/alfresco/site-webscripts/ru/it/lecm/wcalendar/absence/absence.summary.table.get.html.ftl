@@ -33,7 +33,11 @@
 								<table>
 									<tr>
 									<#list month as m>
-										<td colspan="${calendarHeader[m]?size}" >${monthNames[m]}</td>
+										<td colspan="${calendarHeader[m]?size}" >
+											<span style="display: inline-block; overflow: hidden; white-space: nowrap; max-width: ${calendarHeader[m]?size*21}px;">
+												${monthNames[m]}
+											</span>
+										</td>
 									</#list>
 									</tr>
 									<tr class="diagramm-row">
