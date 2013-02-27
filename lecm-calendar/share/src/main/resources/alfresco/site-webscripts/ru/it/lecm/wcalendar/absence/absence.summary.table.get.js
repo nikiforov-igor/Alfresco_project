@@ -29,6 +29,7 @@
 			itemType: absenceContainerObj.itemType,
 			searchConfig: "",
 			maxResults: 9999,
+			sort: "cm:name|true",
 			fields: "lecm-absence_abscent-employee-assoc,lecm-absence_begin,lecm-absence_end,lecm-absence_unlimited,lecm-absence_abscence-reason-assoc",
 			nameSubstituteStrings: ",,,,",
 			showInactive: false
