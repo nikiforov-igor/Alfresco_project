@@ -150,7 +150,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		// Set child node type qnames (additional filter - performed by DB query)
 
 		if (childNodeTypeQNames != null) {
-			Set<Long> childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, false);
+			Set<Long> childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, true);
 			if (childNodeTypeQNameIds.size() > 0) {
 				params.setChildNodeTypeQNameIds(new ArrayList<Long>(childNodeTypeQNameIds));
 			}
