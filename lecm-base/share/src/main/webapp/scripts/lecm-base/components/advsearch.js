@@ -185,7 +185,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.performSearch(
                         {
                             searchConfig:sConfig,
-                            searchShowInactive: me.dataGrid.options.searchShowInactive
+                            searchShowInactive: me.dataGrid.options.searchShowInactive,
+                            sort:me.dataGrid.datagridMeta.sort
                         });
 
 	                if (showFilteredLabel) {
@@ -216,7 +217,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var searchConfig = args.searchConfig,
                     searchShowInactive = args.searchShowInactive,
                     parent = args.parent,
-                    itemType = args.itemType;
+                    itemType = args.itemType,
+                    sort = args.sort;
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -333,7 +335,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, itemType, searchConfig, fields, nameSubstituteStrings, searchShowInactive);
+                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -352,7 +354,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -373,7 +375,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         fields:searchFields != null ? searchFields : "",
 	                    nameSubstituteStrings:dataRequestNameSubstituteStrings,
                         showInactive:searchShowInactive != null ? searchShowInactive : "false",
-                        startIndex: startIndex
+                        startIndex: startIndex,
+                        sort:sort != null ? sort : ""
                     }
                 };
             },

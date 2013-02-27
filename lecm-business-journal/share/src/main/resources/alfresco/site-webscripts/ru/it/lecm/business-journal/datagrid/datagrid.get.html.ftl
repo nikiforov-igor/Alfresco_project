@@ -41,9 +41,9 @@
                         datagridMeta: {
                             itemType: "lecm-busjournal:bjRecord",
 	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
+                            sort:"lecm-busjournal:bjRecord-date|desc",
                             searchConfig: {
-                                filter: '+PATH:"/app:company_home/lecm-busjournal:businessJournal//*"',
-                                sort:"lecm-busjournal:bjRecord-date|desc"
+                                filter: '+PATH:"/app:company_home/lecm-busjournal:businessJournal//*"'
                             }
                         },
                         bubblingLabel: "bj-records",

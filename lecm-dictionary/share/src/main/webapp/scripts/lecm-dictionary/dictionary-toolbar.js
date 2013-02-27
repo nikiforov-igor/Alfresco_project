@@ -399,13 +399,14 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         }
                         datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
                         datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                        datagridMeta.searchConfig.sort = "cm:name|true";
+                        datagridMeta.sort = "cm:name|true";
                         datagridMeta.searchConfig.formData = {
                             datatype:datagridMeta.itemType
                         };
                         this.modules.dataGrid.search.performSearch({
                             searchConfig:datagridMeta.searchConfig,
-                            searchShowInactive:false
+                            searchShowInactive:false,
+                            sort:datagridMeta.sort
                         });
                         YAHOO.Bubbling.fire("showFilteredLabel");
                     } else {

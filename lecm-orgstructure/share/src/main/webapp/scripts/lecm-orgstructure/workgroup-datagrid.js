@@ -203,22 +203,22 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             });
 
             var searchConfig = this.datagridMeta.searchConfig;
+            var sort = this.datagridMeta.sort;
             if (searchConfig) { // Поиск через SOLR
-                if (searchConfig.sort == null || searchConfig.sort.length == 0) {
-                    searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                }
                 searchConfig.formData = {
                     datatype: this.datagridMeta.itemType
                 };
                 this.search.performSearch({
                     searchConfig: searchConfig,
-                    searchShowInactive: false
+                    searchShowInactive: false,
+                    sort:sort
                 });
             } else { // Поиск без использования SOLR
                 this.search.performSearch({
                     parent: this.datagridMeta.nodeRef,
                     itemType: this.datagridMeta.itemType,
-                    searchShowInactive: false
+                    searchShowInactive: false,
+                    sort:sort
                 });
             }
         },

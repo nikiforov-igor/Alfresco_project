@@ -265,17 +265,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }
                     datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
                     datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                    datagridMeta.searchConfig.sort = "cm:name|true";
+                    datagridMeta.sort = "cm:name|true";
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
                     this.modules.dataGrid.search.performSearch({
                         searchConfig:datagridMeta.searchConfig,
-                        searchShowInactive:false
+                        searchShowInactive:false,
+                        sort:datagridMeta.sort
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
-                    //сбрасываем на значение по умолчанию
                     //сбрасываем на значение по умолчанию
                     if (dataGrid.initialSearchConfig != null) {
                         datagridMeta.searchConfig = YAHOO.lang.merge({}, dataGrid.initialSearchConfig);

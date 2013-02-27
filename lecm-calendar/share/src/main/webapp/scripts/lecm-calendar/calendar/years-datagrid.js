@@ -162,10 +162,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
                 });
 
 			var searchConfig = this.datagridMeta.searchConfig;
+            var sort = this.datagridMeta.sort;
 			if (searchConfig) { // Поиск через SOLR
-				if (searchConfig.sort == null || searchConfig.sort.length == 0) {
-					searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-				}
 				if (searchConfig.parent == null || searchConfig.parent.length == 0){
 					searchConfig.parent = this.datagridMeta.nodeRef;
 				}
@@ -174,13 +172,15 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				};
 				this.search.performSearch({
 					searchConfig:searchConfig,
-					searchShowInactive:false
+					searchShowInactive:false,
+                    sort:sort
 				});
 			} else { // Поиск без использования SOLR
 				this.search.performSearch({
 					parent:this.datagridMeta.nodeRef,
 					itemType:this.datagridMeta.itemType,
-					searchShowInactive:false
+					searchShowInactive:false,
+                    sort:sort
 				});
 			}
 		}

@@ -144,9 +144,28 @@ function getSearchResults(params) {
         parent = params.parent,
         itemType = params.itemType,
         startIndex = params.startIndex,
-        pageSize = params.maxResults;
+        pageSize = params.maxResults,
+        sort = params.sort;
 
     var total = 0;
+
+    // sort field - expecting field to in one of the following formats:
+    //  - short QName form such as: cm:name
+    //  - pseudo cm:content field starting with "." such as: .size
+    //  - any other directly supported search field such as: TYPE
+    var sortField = {column:"cm:name", ascending:true};
+
+    if (sort != null && ("" + sort).length > 0) {
+        var asc = true;
+        var separator = sort.indexOf("|");
+        if (separator != -1) {
+            asc = (sort.substring(separator + 1) == "true");
+            sort = sort.substring(0, separator);
+        }
+        sortField.column = sort;
+        sortField.ascending = asc;
+    }
+
     // Advanced search form data search.
     // Supplied as json in the standard Alfresco Forms data structure:
     //    prop_<name>:value|assoc_<name>:value
@@ -301,41 +320,20 @@ function getSearchResults(params) {
             if (parent != null && parent.length() > 0 && ftsQuery.indexOf("PATH") < 0) {
                 ftsQuery += ' AND PARENT:"' + parent + '"';
             }
-            // sort field - expecting field to in one of the following formats:
-            //  - short QName form such as: cm:name
-            //  - pseudo cm:content field starting with "." such as: .size
-            //  - any other directly supported search field such as: TYPE
-            var sortColumns = [];
-            if (searchConfig.sort != null && searchConfig.sort.length > 0) {
-                var sort = searchConfig.sort;
-                var asc = true;
-                var separator = sort.indexOf("|");
-                if (separator != -1) {
-                    asc = (sort.substring(separator + 1) == "true");
-                    sort = sort.substring(0, separator);
-                }
-                var column;
-                if (sort.charAt(0) == '.') {
-                    // handle pseudo cm:content fields
-                    column = "@{http://www.alfresco.org/model/content/1.0}content" + sort;
-                }
-                else if (sort.indexOf(":") != -1) {
-                    // handle attribute field sort
-                    column = "@" + utils.longQName(sort);
-                }
-                else {
-                    // other sort types e.g. TYPE
-                    column = sort;
-                }
-                sortColumns.push(
-                    {
-                        column:column,
-                        ascending:asc
-                    });
-            }
 
             if (logger.isLoggingEnabled())
                 logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
+
+            var sortColumns = [];
+            if (sortField.column.charAt(0) == '.') {
+                // handle pseudo cm:content fields
+                sortField.column = "@{http://www.alfresco.org/model/content/1.0}content" + sortField.column;
+            }
+            else if (sortField.column.indexOf(":") != -1) {
+                // handle attribute field sort
+                sortField.column = "@" + utils.longQName(sortField.column);
+            }
+            sortColumns.push(sortField);
 
             // Получаем число всех записей
             var queryDef = {
@@ -361,9 +359,13 @@ function getSearchResults(params) {
         if (parent != null && parent.length() > 0 && parent != 'NOT_LOAD') {
             var node = search.findNode(parent);
             if (node) {
-                var childsPaged = base.getChilds(node, itemType, pageSize, startIndex, "cm:name", true, !showInactive);
-                nodes = childsPaged.page;
-                total = childsPaged.totalResultCountUpper;
+                if (logger.isLoggingEnabled())
+                 logger.log("Get childs for node:\r\n" + parent + "\r\nItemType: " + (itemType != null ? itemType : ""));
+                 var childsPaged = base.getChilds(node, itemType, pageSize, startIndex, utils.shortQName(sortField.column), sortField.ascending, !showInactive);
+                 nodes = childsPaged.page;
+                 total = childsPaged.totalResultCountUpper;
+                 if (logger.isLoggingEnabled())
+                 logger.log("[Results]Found:\r\n" + nodes.length + "\r\nTotal: " + (total != null ? total : ""));
             }
         }
     }

@@ -980,10 +980,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                 }
                 if (me.sort) {
-                    if (datagridMeta.searchConfig == undefined) {
-                        datagridMeta.searchConfig = {};
-                    }
-                    datagridMeta.searchConfig.sort = "";
+                    datagridMeta.sort = "";
                     var sortField;
                     if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
                         sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
@@ -991,26 +988,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
                     }
                     if (me.desc) {
-                        datagridMeta.searchConfig.sort = sortField + "|false";
+                        datagridMeta.sort = sortField + "|false";
                         me.desc = false;
                         me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
                     } else {
-                        datagridMeta.searchConfig.sort = sortField + "|true";
+                        datagridMeta.sort = sortField + "|true";
                         me.desc = true;
                         me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
                     }
-                    var searchConfig = datagridMeta.searchConfig;
-                    searchConfig.formData = {
-                        datatype: datagridMeta.itemType
-                    };
                     if (me.sort) {
                         // Обнуляем сортировку иначе зациклится.
                         me.sort = null;
-                        this.search.performSearch({
-                            searchConfig: searchConfig,
-                            searchShowInactive: me.options.searchShowInactive,
-                            parent: datagridMeta.nodeRef
-                        });
+                        if (!me.options.useDynamicPagination) {
+                            this.search.performSearch({
+                                searchConfig: datagridMeta.searchConfig,
+                                searchShowInactive: me.options.searchShowInactive,
+                                parent: datagridMeta.nodeRef,
+                                sort:datagridMeta.sort
+                            });
+                        }
                     }
                 }
             }, /**
@@ -1024,7 +1020,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 var generateRequest = function (oState, oSelf) {
                     var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
-                        me.datagridMeta.itemType, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
+                        me.datagridMeta.itemType, me.datagridMeta.sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
                         me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset);
                     return YAHOO.lang.JSON.stringify(params);
                 };
@@ -1169,6 +1165,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;
+                var sort = this.datagridMeta.sort;
 				var searchShowInactive;
 				//если в datagridMeta существует searchShowInactive
 				if (this.datagridMeta.hasOwnProperty ("searchShowInactive")) {
@@ -1178,9 +1175,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				}
 
                 if (searchConfig) { // Поиск через SOLR
-                    if (searchConfig.sort == null || searchConfig.sort.length == 0) {
-                        searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                    }
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
@@ -1192,13 +1186,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                     this.search.performSearch({
                         searchConfig:searchConfig,
-                        searchShowInactive: searchShowInactive
+                        searchShowInactive: searchShowInactive,
+                        sort:sort
                     });
                 } else { // Поиск без использования SOLR
                     this.search.performSearch({
                         parent: this.datagridMeta.nodeRef,
                         itemType: this.datagridMeta.itemType,
-                        searchShowInactive: searchShowInactive
+                        searchShowInactive: searchShowInactive,
+                        sort:sort
                     });
                 }
             },
@@ -1888,10 +1884,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
 
                 var searchConfig = this.datagridMeta.searchConfig;
+                var sort = this.datagridMeta.sort;
                 if (searchConfig) { // Поиск через SOLR
-                    if (searchConfig.sort == null || searchConfig.sort.length == 0) {
-                        searchConfig.sort = "cm:name|true"; // по умолчанию поиск по свойству cm:name по убыванию
-                    }
                     searchConfig.formData = {
                         datatype:this.datagridMeta.itemType
                     };
@@ -1902,7 +1896,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
 
-                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset);
+                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,

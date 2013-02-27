@@ -11,6 +11,7 @@ function main() {
         params =
         {
             searchConfig: (pars.get("searchConfig").length() > 0)  ? pars.get("searchConfig") : null,
+            sort: (pars.get("sort").length() > 0)  ? pars.get("sort") : null,
             maxResults:(pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_PAGE_SIZE,
             fields:(pars.get("fields").length() > 0) ? pars.get("fields") : null,
 			nameSubstituteStrings:(pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null,        

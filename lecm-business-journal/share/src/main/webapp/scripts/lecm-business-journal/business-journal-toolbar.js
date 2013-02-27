@@ -208,13 +208,14 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         datagridMeta.searchConfig = {};
                     }
                     datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                    datagridMeta.searchConfig.sort = "cm:name|true";
+                    datagridMeta.sort = "cm:name|true";
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
                     this.modules.dataGrid.search.performSearch({
                         searchConfig:datagridMeta.searchConfig,
-                        searchShowInactive:dataGrid.options.searchShowInactive
+                        searchShowInactive:dataGrid.options.searchShowInactive,
+                        sort:datagridMeta.sort
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
