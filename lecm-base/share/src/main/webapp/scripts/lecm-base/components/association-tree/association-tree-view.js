@@ -123,7 +123,9 @@ LogicECM.module = LogicECM.module || {};
                 find: null
             },
 
-			additionalFilter: ""
+			additionalFilter: "",
+
+            ignoreNodes: null
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -586,16 +588,30 @@ LogicECM.module = LogicECM.module || {};
                     if (oResults != null) {
                         node.children = [];
                         for (var nodeIndex in oResults) {
-                            var newNode = {
-                                label:oResults[nodeIndex].label,
-	                            title:oResults[nodeIndex].title,
-                                nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf,
-                                type:oResults[nodeIndex].type,
-                                isContainer: oResults[nodeIndex].isContainer,
-                                renderHidden:true
-                            };
-                            new YAHOO.widget.TextNode(newNode, node);
+                            var nodeRef = oResults[nodeIndex].nodeRef;
+                            var ignore = false;
+                            var ignoreNodes = this.argument.context.options.ignoreNodes;
+                            if (ignoreNodes != null) {
+                                for (var i = 0; i < ignoreNodes.length; i++) {
+                                    if (ignoreNodes[i] == nodeRef) {
+                                        ignore = true;
+                                    }
+                                }
+                            }
+
+                            if (!ignore) {
+                                var newNode = {
+                                    label:oResults[nodeIndex].label,
+                                    title:oResults[nodeIndex].title,
+                                    nodeRef:oResults[nodeIndex].nodeRef,
+                                    isLeaf:oResults[nodeIndex].isLeaf,
+                                    type:oResults[nodeIndex].type,
+                                    isContainer: oResults[nodeIndex].isContainer,
+                                    renderHidden:true
+                                };
+
+                                new YAHOO.widget.TextNode(newNode, node);
+                            }
                         }
                     }
 
@@ -700,6 +716,26 @@ LogicECM.module = LogicECM.module || {};
                                 oFullResponse.data.parent.type = "tag";
                             }
                         }
+                    }
+
+                    var ignoreItems = me.options.ignoreNodes;
+                    if (ignoreItems != null) {
+                        var tempItems = [];
+                        var k = 0;
+                        for (index in items) {
+                            item = items[index];
+                            var ignore = false;
+                            for (var i = 0; i < ignoreItems.length; i++) {
+                                if (ignoreItems[i] == item.nodeRef) {
+                                    ignore = true;
+                                }
+                            }
+                            if (!ignore) {
+                                tempItems[k] = item;
+                                k++;
+                            }
+                        }
+                        items = tempItems;
                     }
 
                     // we need to wrap the array inside a JSON object so the DataTable is happy

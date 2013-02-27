@@ -129,6 +129,9 @@
         <#if field.control.params.changeItemsFireAction??>
 	        changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
 	    </#if>
+        <#if args.ignoreNodes??>
+            ignoreNodes: ["${args.ignoreNodes}"],
+	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},

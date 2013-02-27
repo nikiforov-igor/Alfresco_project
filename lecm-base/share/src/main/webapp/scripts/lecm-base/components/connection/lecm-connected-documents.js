@@ -100,14 +100,15 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 					}
 				};
 
-				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
 					{
 						itemKind:"type",
 						itemId:"lecm-connect:connection",
 						destination: this.rootRef,
 						mode:"create",
 						formId: this.id + "-create-form",
-						submitType:"json"
+						submitType:"json",
+                        ignoreNodes: this.options.primaryDocumentNodeRef
 					});
 
 //				// Using Forms Service, so always create new instance
