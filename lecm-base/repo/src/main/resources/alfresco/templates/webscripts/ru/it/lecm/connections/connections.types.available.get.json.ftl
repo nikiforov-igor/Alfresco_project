@@ -13,7 +13,19 @@
 				}
 				<#if connectionType_has_next>,</#if>
 			</#list>
-		]
+		],
 	</#if>
+    <#if existConnectionTypes??>
+        "existConnectionTypes":
+        [
+            <#list existConnectionTypes as connectionType>
+                {
+                    "nodeRef": "${connectionType.nodeRef}",
+                    "name": "${connectionType.properties.name}"
+                }
+                <#if connectionType_has_next>,</#if>
+            </#list>
+        ]
+    </#if>
 }
 </#escape>

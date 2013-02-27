@@ -11,7 +11,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -63,7 +62,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	/**
 	 * Получение узла подписки, в котором хрянится информация об подписках.
 	 * Если такой узел отсутствует - он создаётся автоматически (внутри /CompanyHome)
-	 * @return
+	 * @return ссылка на корневую директорию
 	 */
 	public NodeRef init() {
 		final String rootName = DOCUMENT_CONNECTIONS_ROOT_NAME;
@@ -168,8 +167,48 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
+    public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+
+        String connectionType = DocumentConnectionService.TYPE_CONNECTION.toPrefixString(namespaceService);
+
+        String propPrimaryDocumentRef = "@" + DocumentConnectionService.PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+        String propConnectedDocumentRef = "@" + DocumentConnectionService.PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+
+        SearchParameters parameters = new SearchParameters();
+        parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+        parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\"" +
+                primaryDocumentRef + "\" AND " + propConnectedDocumentRef + ":\"" + connectedDocumentRef + "\"");
+        ResultSet resultSet = null;
+        try {
+            resultSet = searchService.query(parameters);
+            if (resultSet != null) {
+                List<NodeRef> connectionRefs = resultSet.getNodeRefs();
+                for (NodeRef ref: connectionRefs) {
+                    List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(ref, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
+                    if (typeAssoc != null && typeAssoc.size() == 1) {
+                        NodeRef typeRef = typeAssoc.get(0).getTargetRef();
+                        if (typeRef != null && !results.contains(typeRef)) {
+                            results.add(typeRef);
+                        }
+                    }
+                }
+            }
+        } catch (LuceneQueryParserException e) {
+            logger.error("Error while getting exist connection types", e);
+        } catch (Exception e) {
+            logger.error("Error while getting exist connection types", e);
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
+        return results;
+    }
+
 	public List<NodeRef> getAllConnectionTypes() {
-		String type = DocumentConnectionService.TYPE_CONNECTION_TYPES.toPrefixString(namespaceService);
+		String type = DocumentConnectionService.TYPE_CONNECTION_TYPE.toPrefixString(namespaceService);
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);

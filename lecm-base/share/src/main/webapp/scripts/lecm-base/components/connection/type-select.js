@@ -69,6 +69,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			connectedDocumentNodeRef: null,
 			defaultSelectedValue: null,
 			typeSelectElements: null,
+			existConnectionTypes: null,
 
 			onReady: function()
 			{
@@ -127,7 +128,18 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 						var opt = document.createElement('option');
 						opt.innerHTML = node.name;
 						opt.value = node.nodeRef;
-						if (this.defaultSelectedValue != null && node.nodeRef == this.defaultSelectedValue) {
+                        var exist = false;
+                        if (this.existConnectionTypes != null) {
+                            for (var j = 0; j < this.existConnectionTypes.length; j++) {
+                                if (node.nodeRef == this.existConnectionTypes[j].nodeRef) {
+                                    exist = true;
+                                }
+                            }
+                        }
+                        if (exist) {
+                            opt.disabled = "disabled";
+                        }
+						if (!exist && this.defaultSelectedValue != null && node.nodeRef == this.defaultSelectedValue) {
 							opt.selected = true;
 						}
 						this.selectItem.appendChild(opt);
@@ -159,6 +171,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 							var oResults = eval("(" + oResponse.responseText + ")");
 							if (oResults != null && me.selectItem != null) {
 								me.defaultSelectedValue = oResults.defaultConnectionType;
+								me.existConnectionTypes = oResults.existConnectionTypes;
 								me.typeSelectElements = oResults.availableConnectionTypes;
 
 								if (me.typeSelectElements == null) {

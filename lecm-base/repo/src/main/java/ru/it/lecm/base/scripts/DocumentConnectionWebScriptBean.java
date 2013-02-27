@@ -81,6 +81,22 @@ public class DocumentConnectionWebScriptBean extends BaseScopableProcessorExtens
 		return null;
 	}
 
+    public Scriptable getExistConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+        ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
+        ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+
+        NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
+        NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
+
+        if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
+            List<NodeRef> existConnectionType = this.documentConnectionService.getExistsConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+            if (existConnectionType != null) {
+                return createScriptable(existConnectionType);
+            }
+        }
+        return null;
+    }
+
 	public Scriptable getAllConnectionTypes() {
 		List<NodeRef> allConnectionType = this.documentConnectionService.getAllConnectionTypes();
 		if (allConnectionType != null) {
