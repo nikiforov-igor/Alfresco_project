@@ -421,12 +421,12 @@ display: inline-block;
 
 .ijab-buddy-search .ui-icon-search {
     float: left;
-    margin: 5px 0 0 -18px;
+    margin: 5px 0 0 -20px;
 }
 
 .ijab-buddy-search .ui-icon-close {
     float: right;
-    margin: 5px -20px 0 0;
+    margin: 0 -25px 0 0;
     cursor: pointer;
 }
 
@@ -1078,7 +1078,7 @@ margin: .3em .5em .3em;
     cursor: pointer;
     border-bottom: 1px solid #5cbee0;
     border-top: 1px solid #f2f2f2;
-    padding: 0 5px 0 25px;
+    padding: 0 3px 0 22px;
 }
 
 .ijab-contactview-grouphead em {
@@ -2136,6 +2136,7 @@ html>body .gwt-DecoratedTabBar {
     font-size: 16px;
     font-weight: normal;
     line-height: 30px;
+    position: relative;
 }
 .ui-widget-header a {
     color: #ffffff;
@@ -2534,9 +2535,7 @@ html>body .gwt-DialogBox {
 }
 
 /* Our icons */
-.ijab .ui-icon-search,
-/*.ijab .ui-icon-close */
-{
+.ijab .ui-icon-search {
     width: 10px;
     height: 10px;
 }
@@ -2544,7 +2543,9 @@ html>body .gwt-DialogBox {
     background: url(../images/alf_chat_search.png) 0 0 no-repeat;
 }
 .ijab .ui-icon-close {
-    background: url(../images/alf_chat_close.png) 0 0 no-repeat !important;
+    width: 20px;
+    height: 20px;
+    background: url(../images/alf_chat_close.png) 5px 5px no-repeat !important;
 }
 .ijab .ui-icon-triangle-1-s {
     width: 8px;

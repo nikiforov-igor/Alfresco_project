@@ -13,6 +13,11 @@
             <g:HTMLPanel ui:field="disconnected">
                 <span ui:field="disText">Disconnected</span>
             </g:HTMLPanel>
+            <span class="ijab-window-actions">
+                <a class="ijab-window-close" ui:field="closeElement" title="Close">
+                    <em class="ui-icon ui-icon-close" ui:field="closePicElement">Close</em>
+                </a>
+            </span>
         </g:HTMLPanel>
 
         <!--Блок видимый когда мы в онлайне-->

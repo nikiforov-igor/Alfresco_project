@@ -22,11 +22,13 @@ package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.*;
+import ru.it.lecm.im.client.iJab;
 import ru.it.lecm.im.client.utils.i18n;
 
 public class BarMainWidget extends Composite implements HasVisibility, EventListener, HasAttachHandlers, IsWidget, IsRenderable {
@@ -43,13 +45,28 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 	@UiField SearchBox searchBox;
 	@UiField Element disText;
 	@UiField FlowPanel mainWidget;
+    @UiField Element closeElement;
+    @UiField Element closePicElement;
 
-	public BarMainWidget() 
+    private SimpleFocusWidget closeButton;
+
+    public BarMainWidget()
 	{
 		initWidget(BarMainWidget.uiBinder.createAndBindUi(this));
 		disText.setInnerText(i18n.msg("Отключен"));
+
+        closeButton = new SimpleFocusWidget(closeElement);
+        closeButton.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                iJab.client.toggleIsVisible();
+                //clickClose();
+            }
+        });
+
+        closePicElement.setInnerText(i18n.msg("Закрыть"));
+        closeElement.setAttribute("title", i18n.msg("Закрыть"));
 	}
-	
+
 	public ContactView getContactView()
 	{
 		return contactView;
