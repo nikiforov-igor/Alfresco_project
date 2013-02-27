@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -31,10 +30,10 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.DelegationEventCategory;
-
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 
 public class DelegationBean extends BaseBean implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
@@ -44,6 +43,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	private OrgstructureBean orgstructureService;
 	private PersonService personService;
 	private BusinessJournalService businessJournalService;
+	private OrgstructureSGNotifierBean sgNotifierService;
 
 	public void setRepositoryHelper (Repository repository) {
 		this.repository = repository;
@@ -59,6 +59,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	public void setBusinessJournalService (BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
+	}
+
+	public void setSgNotifierService (OrgstructureSGNotifierBean sgNotifierService) {
+		this.sgNotifierService = sgNotifierService;
 	}
 
 	public final void bootstrap () {
@@ -450,6 +454,37 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 	}
 
+	/**
+	 * служебный метод делегирования, нарезает или отбирает права с помощью OrgstructureSGNotifierBean
+	 * @param delegationOptsRef ссылка на параметры делегирования
+	 * @param created true - права нарезаются, false - права отбираются
+	 */
+	private void delegate (final NodeRef delegationOptsRef, final boolean created) {
+		List<NodeRef> procuracies = getProcuracies (delegationOptsRef, true);
+		//пробегаемся по активным доверенностям и нарезаем права
+		//находим галку "передавать права руководителя" и запоминаем этого чувака
+
+		NodeRef sourceEmployee = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		NodeRef bossAssistant = null; //заместитель
+		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
+		Boolean canTransferAllRights = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS);
+		for (NodeRef procuracyRef : procuracies) {
+			NodeRef brole = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			NodeRef destEmployee = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			Boolean canTransferRights = (Boolean) nodeService.getProperty (procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS);
+			if (canTransferRights) {
+				bossAssistant = destEmployee;
+			}
+			sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
+		}
+		if (canDelegateAll && canTransferAllRights) {
+			bossAssistant = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		}
+		if (bossAssistant != null) {
+			sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
+		}
+	}
+
 	@Override
 	public void startDelegation (final NodeRef delegator) {
 		NodeRef delegationOptsRef = getDelegationOpts (delegator);
@@ -457,6 +492,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, true);
 			logStartDelegation (delegationOptsRef);
 			//нарезка прав согласно сервису Руслана
+			delegate (delegationOptsRef, true);
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
 		}
@@ -478,6 +514,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
 			logStopDelegation (delegationOptsRef);
 			//отбирание ранее нарезанных прав согласно сервису Руслана
+			delegate (delegationOptsRef, false);
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
 		}
