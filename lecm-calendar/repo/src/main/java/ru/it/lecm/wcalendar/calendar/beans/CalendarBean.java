@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -22,22 +25,23 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.wcalendar.IWCalendar;
-import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
+import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 
 /**
  *
  * @author vlevin
  */
-public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
+public class CalendarBean extends AbstractCommonWCalendarBean implements ICalendar {
 
-	private int yearsAmountToCreate = 0;
+	private int yearsNumberToCreate = 0;
+	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private Logger logger = LoggerFactory.getLogger(CalendarBean.class);
 
 	@Override
-	public IWCalendar getWCalendarDescriptor() {
+	public ICommonWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 
@@ -49,10 +53,10 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 	/**
 	 * Получить количество лет, на которые нам надо сгенерировать календари.
 	 *
-	 * @param yearsAmountToCreate передается Spring-ом
+	 * @param yearsNumberToCreate передается Spring-ом
 	 */
-	public final void setYearsAmountToCreate(int yearsAmountToCreate) {
-		this.yearsAmountToCreate = yearsAmountToCreate;
+	public final void setYearsNumberToCreate(int yearsNumberToCreate) {
+		this.yearsNumberToCreate = yearsNumberToCreate;
 	}
 
 	/**
@@ -79,7 +83,7 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 					@Override
 					public Object execute() throws Throwable {
 						// Собственно генерация
-						int yearsCreated = generateYearsList(yearsAmountToCreate);
+						int yearsCreated = generateYearsList(yearsNumberToCreate);
 						logger.info(String.format("Created %d calendars", yearsCreated));
 						return "ok";
 					}
@@ -89,7 +93,7 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 		};
 
 		// Генерация календарей на yearsAmountToCreate вперед.
-		if (yearsAmountToCreate > 0) {
+		if (yearsNumberToCreate > 0) {
 			AuthenticationUtil.runAsSystem(raw);
 		}
 	}
@@ -120,7 +124,7 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 			Date yearToAddFormatted;
 
 			yearToAdd = currentYear + i;
-			if (!isCalendarExists(parentNodeRef, yearToAdd)) {
+			if (!isCalendarExists(yearToAdd)) {
 				yearToAddStr = String.valueOf(yearToAdd);
 				yearNodeName = String.format("Calendar %d", yearToAdd);
 				try {
@@ -160,37 +164,7 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 	 */
 	@Override
 	public boolean isCalendarExists(int yearToExamine) {
-		return isCalendarExists(this.getWCalendarContainer(), yearToExamine);
-	}
-
-	/**
-	 * Проверка календаря на существование. Игнорирует lecm-dic:active. Если
-	 * календарь выключен, он считается существующим.
-	 *
-	 * @param parentNodeRef nodeRef контейнера, в котором лежат календари.
-	 * @param yearToExamine год, существование календаря на который нужно
-	 * проверить.
-	 * @return true, если календарь существует. false в противном случае.
-	 */
-	@Override
-	public boolean isCalendarExists(NodeRef parentNodeRef, int yearToExamine) {
-		boolean exists = false;
-		int yearProp;
-		SimpleDateFormat dateParser = new SimpleDateFormat("yyyy");
-		List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-		if (childAssociationRefs != null) {
-			for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
-				NodeRef calendarNodeRef = childAssociationRef.getChildRef();
-				Serializable year = nodeService.getProperty(calendarNodeRef, PROP_CALENDAR_YEAR);
-				yearProp = Integer.valueOf(dateParser.format(year));
-				// Игнорирует lecm-dic:active. Если календарь существует, но выключен, он его добавлять не будет.
-				if (yearToExamine == yearProp) {
-					exists = true;
-					break;
-				}
-			}
-		}
-		return exists;
+		return getCalendarByYear(yearToExamine) != null;
 	}
 
 	@Override
@@ -207,5 +181,107 @@ public class CalendarBean extends AbstractWCalendarBean implements ICalendar {
 		if (EventCategory.EDIT.equals(category)) {
 			businessJournalService.log(authService.getCurrentUserName(), node, category, BUSINESS_JOURNAL_CALENDAR_MODIFIED, null);
 		}
+	}
+
+	@Override
+	public Boolean isWorkingDay(Date day) {
+		boolean result;
+		List<NodeRef> daysList;
+
+		Date dayNoTime = resetTime(day);
+		int year = Integer.valueOf(yearParser.format(day));
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+		if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
+			result = false;
+			daysList = getAllWorkingDaysByYear(year);
+		} else {
+			result = true;
+			daysList = getAllNonWorkingDaysByYear(year);
+		}
+
+		if (daysList != null) {
+			for (NodeRef specialDay : daysList) {
+				Date specialDayDate = resetTime(getSpecialDayDate(specialDay));
+				if (dayNoTime.equals(specialDayDate)) {
+					result = !result;
+					break;
+				}
+			}
+		} else {
+			return null;
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getCalendarByYear(int year) {
+		NodeRef result = null;
+		int yearProp;
+
+		List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(this.getWCalendarContainer(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		if (childAssociationRefs != null) {
+			for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+				NodeRef calendarNodeRef = childAssociationRef.getChildRef();
+				yearProp = getCalendarYear(calendarNodeRef);
+				if (year == yearProp) {
+					result = calendarNodeRef;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int getCalendarYear(NodeRef node) {
+		Date yearDate = (Date) nodeService.getProperty(node, PROP_CALENDAR_YEAR);
+		return Integer.valueOf(yearParser.format(yearDate));
+	}
+
+	@Override
+	public List<NodeRef> getDaysInCalendarByType(NodeRef calendar, QName dayType) {
+		List<NodeRef> daysList = null;
+		if (calendar != null) {
+			daysList = new ArrayList<NodeRef>();
+			Set<QName> childNodesType = new HashSet<QName>();
+			childNodesType.add(dayType);
+			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(calendar, childNodesType);
+			if (childAssociationRefs != null) {
+				for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+					NodeRef specialDayNodeRef = childAssociationRef.getChildRef();
+					daysList.add(specialDayNodeRef);
+				}
+			}
+		}
+		return daysList;
+	}
+
+	@Override
+	public List<NodeRef> getAllWorkingDaysByYear(int year) {
+		NodeRef calendar = getCalendarByYear(year);
+		if (calendar == null) {
+			return null;
+		} else {
+			return getDaysInCalendarByType(calendar, TYPE_WORKING_DAYS);
+		}
+	}
+
+	@Override
+	public List<NodeRef> getAllNonWorkingDaysByYear(int year) {
+		NodeRef calendar = getCalendarByYear(year);
+		if (calendar == null) {
+			return null;
+		} else {
+			return getDaysInCalendarByType(calendar, TYPE_NON_WORKING_DAYS);
+		}
+	}
+
+	@Override
+	public Date getSpecialDayDate(NodeRef node) {
+		return (Date) nodeService.getProperty(node, PROP_SPECIAL_DAY_DAY);
 	}
 }

@@ -38,7 +38,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<!--На сколько лет вперед сгенерировать календари-->
-		<property name="yearsAmountToCreate" value="3"/>
+		<property name="yearsNumberToCreate" value="3"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="authService" ref="authenticationService"/>
@@ -60,23 +60,38 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="authService" ref="authenticationService"/>
 	</bean>
+	<bean id="WorkCalendarService" class="ru.it.lecm.wcalendar.beans.WorkCalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="wCalendarService" ref="WCalendarService"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="sheduleService" ref="SheduleService"/>
+	</bean>
 	<!-- JavaScript root-object для  календарей, отсутствий и графиков работы  -->
-	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.CommonWCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="wCalService" ref="WCalendarService"/>
+		<property name="commonWCalService" ref="WCalendarService"/>
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="wCalService" ref="AbsenceService"/>
+		<property name="commonWCalService" ref="AbsenceService"/>
 	</bean>
 	<bean id="SheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="sheduleService" ref="SheduleService"/>
-		<property name="wCalService" ref="SheduleService"/>
+		<property name="commonWCalService" ref="SheduleService"/>
+	</bean>
+	<bean id="WorkCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WorkCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="workCalendar"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="workCalendarService" ref="WorkCalendarService"/>
+		<property name="commonWCalService" ref="WorkCalendarService"/>
 	</bean>
 	<!-- Web-скрипты на Java -->
 	<bean id="webscript.ru.it.lecm.wcalendar.absence.AbsenceCancelShowDialogWebScript.get" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceCancelShowDialogWebScript" parent="webscript">
@@ -112,7 +127,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
+			<value>0 1 * * * ? *</value> <!-- каждый час в xx:01 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>
@@ -152,7 +167,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
+			<value>0 59 * * * ? *</value> <!-- каждый час в xx:59 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>
@@ -192,7 +207,7 @@
 			<value>absence-trigger</value>
 		</property>
 		<property name="cronExpression">
-			<value>0 30 * * * ? *</value> <!-- каждый час в xx:30 -->
+			<value>0 1 * * * ? *</value> <!-- каждый час в xx:01 -->
 		</property>
 		<property name="scheduler" ref="schedulerFactory"/>
 		<property name="actionService" ref="ActionService"/>

@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
+import ru.it.lecm.wcalendar.extensions.CommonWCalendarJavascriptExtension;
 import ru.it.lecm.wcalendar.shedule.IShedule;
 import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
 import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
@@ -21,7 +21,7 @@ import ru.it.lecm.wcalendar.shedule.beans.SpecialSheduleRawBean;
  *
  * @author vlevin
  */
-public class SheduleJavascriptExtension extends WCalendarJavascriptExtension {
+public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtension {
 
 	private IShedule sheduleService;
 	// Получить логгер, чтобы писать, что с нами происходит.

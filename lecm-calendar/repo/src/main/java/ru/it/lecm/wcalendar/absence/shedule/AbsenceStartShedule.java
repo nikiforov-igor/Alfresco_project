@@ -37,7 +37,7 @@ public class AbsenceStartShedule extends AbstractScheduledAction {
 	private String triggerName = "absence-start-trigger";
 	private String triggerGroup = "absence-trigger";
 	private Scheduler scheduler;
-	private String cronExpression = "0 30 * * * ? *"; // каждый час в xx:30
+	private String cronExpression = "0 1 * * * ? *"; // каждый час в xx:01
 	private IAbsence absenceService;
 	private SearchService searchService;
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");

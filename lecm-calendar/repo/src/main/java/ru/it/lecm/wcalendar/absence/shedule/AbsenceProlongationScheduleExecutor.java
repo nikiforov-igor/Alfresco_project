@@ -35,6 +35,7 @@ public class AbsenceProlongationScheduleExecutor extends ActionExecuterAbstractB
 		Date absenceEnd = absenceService.getAbsenceEndDate(nodeRef);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(absenceEnd);
+		cal.set(Calendar.MINUTE, 59);
 		cal.add(Calendar.HOUR_OF_DAY, 24);
 		Date tomorrow = cal.getTime();
 

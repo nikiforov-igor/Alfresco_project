@@ -16,22 +16,22 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
-import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
+import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
 
 /**
  *
  * @author vlevin
  */
-public class AbsenceBean extends AbstractWCalendarBean implements IAbsence {
+public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence {
 	// Получить логгер, чтобы писать, что с нами происходит.
 
 	private IDelegation delegationService;
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceBean.class);
 
 	@Override
-	public IWCalendar getWCalendarDescriptor() {
+	public ICommonWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 

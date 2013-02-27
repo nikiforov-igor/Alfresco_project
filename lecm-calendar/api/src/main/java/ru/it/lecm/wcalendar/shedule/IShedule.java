@@ -1,9 +1,11 @@
 package ru.it.lecm.wcalendar.shedule;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
 
 /**
  *
@@ -19,52 +21,54 @@ public interface IShedule {
 	 * Ассоцияация между расписанием и сотрудником,
 	 * lecm-shed:shed-employee-link-assoc
 	 */
-	QName ASSOC_SHEDULE_EMPLOYEE_LINK = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "shed-employee-link-assoc");
+	QName ASSOC_SHEDULE_EMPLOYEE_LINK = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "shed-employee-link-assoc");
 	/**
 	 * Элемент графика: дата начала рабочей смены, lecm-shed:begin
 	 */
-	QName PROP_SHEDULE_ELEMENT_BEGIN = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "begin");
+	QName PROP_SHEDULE_ELEMENT_BEGIN = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "begin");
 	/**
 	 * Элемент графика: дата конца рабочей смены, lecm-shed:end
 	 */
-	QName PROP_SHEDULE_ELEMENT_END = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "end");
+	QName PROP_SHEDULE_ELEMENT_END = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "end");
 	/**
 	 * Элемент графика: комментарий, lecm-shed:comment
 	 */
-	QName PROP_SHEDULE_ELEMENT_COMMENT = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "comment");
+	QName PROP_SHEDULE_ELEMENT_COMMENT = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "comment");
 	/**
 	 * Время началя рабочего дня, lecm-shed:std-begin
 	 */
-	QName PROP_SHEDULE_STD_BEGIN = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "std-begin");
+	QName PROP_SHEDULE_STD_BEGIN = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "std-begin");
 	/**
 	 * Время окончания рабочего дня, lecm-shed:std-end
 	 */
-	QName PROP_SHEDULE_STD_END = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "std-end");
+	QName PROP_SHEDULE_STD_END = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "std-end");
 	/**
 	 * Дата начала действия особого графика работы, lecm-shed:time-limit-start
 	 */
-	QName PROP_SHEDULE_TIME_LIMIT_START = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "time-limit-start");
+	QName PROP_SHEDULE_TIME_LIMIT_START = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "time-limit-start");
 	/**
 	 * Дата окончания действия особого графика работы, lecm-shed:time-limit-end
 	 */
-	QName PROP_SHEDULE_TIME_LIMIT_END = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "time-limit-end");
+	QName PROP_SHEDULE_TIME_LIMIT_END = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "time-limit-end");
 	/**
 	 * Тип графика: COMMON - обычный, SPECIAL - особый, lecm-shed:type
 	 */
-	QName PROP_SHEDULE_TYPE = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "type");
+	QName PROP_SHEDULE_TYPE = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "type");
 	/**
 	 * Тип для объекта График работы, lecm-shed:shedule
 	 */
-	QName TYPE_SHEDULE = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "shedule");
+	QName TYPE_SHEDULE = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "shedule");
 	/**
 	 * Тип для объекта Элемент особого графика работы,
 	 * lecm-shed:special-shed-element
 	 */
-	QName TYPE_SHEDULE_ELEMENT = QName.createQName(IWCalendar.SHEDULE_NAMESPACE, "special-shed-element");
+	QName TYPE_SHEDULE_ELEMENT = QName.createQName(ICommonWCalendar.SHEDULE_NAMESPACE, "special-shed-element");
 	/**
 	 * Корневой контейнер для графиков, lecm-wcal:shedule-container
 	 */
-	QName TYPE_SHEDULE_CONTAINER = QName.createQName(IWCalendar.WCAL_NAMESPACE, "shedule-container");
+	QName TYPE_SHEDULE_CONTAINER = QName.createQName(ICommonWCalendar.WCAL_NAMESPACE, "shedule-container");
+	String SHEDULE_TYPE_COMMON = "COMMON";
+	String SHEDULE_TYPE_SPECIAL = "SPECIAL";
 
 	/**
 	 * Создает новое особое расписание.
@@ -149,5 +153,41 @@ public interface IShedule {
 	 * @param node NodeRef на #mainobject (объект графика)
 	 * @param category категория события (EventCategory)
 	 */
-	public void addBusinessJournalRecord(NodeRef node, String category);
+	void addBusinessJournalRecord(NodeRef node, String category);
+
+	/**
+	 * Проверяет, является ли день рабочим для данного ОСОБОГО расписания.
+	 *
+	 * @param node NodeRef на объект "расписание".
+	 * @param day Дата, которую следует проверить.
+	 *
+	 * @return true - день рабочий. false - не рабочий. null - если тип
+	 * расписания не "особое".
+	 */
+	Boolean isWorkingDay(NodeRef node, Date day);
+
+	/**
+	 * Получить все элементы особого расписания.
+	 *
+	 * @param node NodeRef на объект "расписание".
+	 * @return список NodeRef'ов на объекты "shedule-element". Если node - не
+	 * особое расписание, то null.
+	 */
+	List<NodeRef> getSheduleElements(NodeRef node);
+
+	/**
+	 * Получить дату первого рабочего дня в серии ("shedule-element").
+	 *
+	 * @param node NodeRef'ов на объект "shedule-element".
+	 * @return дата первого рабочего дня.
+	 */
+	Date getSheduleElementStart(NodeRef node);
+
+	/**
+	 * Получить дату последнего рабочего дня в серии ("shedule-element").
+	 *
+	 * @param node NodeRef'ов на объект "shedule-element".
+	 * @return дата последнего рабочего дня.
+	 */
+	Date getSheduleElementEnd(NodeRef node);
 }

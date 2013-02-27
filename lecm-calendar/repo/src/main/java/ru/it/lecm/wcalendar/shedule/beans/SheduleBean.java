@@ -15,14 +15,15 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWCalendar;
-import ru.it.lecm.wcalendar.beans.AbstractWCalendarBean;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
+import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
 import ru.it.lecm.wcalendar.shedule.IShedule;
 import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
 
@@ -30,13 +31,13 @@ import ru.it.lecm.wcalendar.shedule.ISpecialSheduleRaw;
  *
  * @author vlevin
  */
-public class SheduleBean extends AbstractWCalendarBean implements IShedule {
+public class SheduleBean extends AbstractCommonWCalendarBean implements IShedule {
 	// Получить логгер, чтобы писать, что с нами происходит.
 
 	private final static Logger logger = LoggerFactory.getLogger(SheduleBean.class);
 
 	@Override
-	public IWCalendar getWCalendarDescriptor() {
+	public ICommonWCalendar getWCalendarDescriptor() {
 		return this;
 	}
 
@@ -82,16 +83,6 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		}
 	}
 
-	/**
-	 * Если node - сотрудник, то возвращает ссылку на расписание подразделения,
-	 * в котором сотрудник занимает основную позицию (или вышестоящего
-	 * подразделения). Если node - подразделение, то возвращает ссылку на
-	 * расписание вышестоящего подразделения. Если расписание к node не
-	 * привязано, то возвращает null.
-	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
-	 * @return NodeRef на расписание.
-	 */
 	@Override
 	public NodeRef getParentShedule(NodeRef node) {
 		NodeRef primaryOU = null;
@@ -122,14 +113,6 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		return result;
 	}
 
-	/**
-	 * Возвращает время работы и тип родительского расписания (см.
-	 * getParentShedule).
-	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
-	 * @return Ключи map'а: "type" - тип расписания, "begin" - время начала
-	 * работы, "end" - время конца работы.
-	 */
 	@Override
 	public Map<String, String> getParentSheduleStdTime(NodeRef node) {
 		HashMap<String, String> result = new HashMap<String, String>();
@@ -153,12 +136,6 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		return result;
 	}
 
-	/**
-	 * Проверяет, привязано ли какое-нибудь расписание к node.
-	 *
-	 * @param node - NodeRef на сотрудника или орг. единицу.
-	 * @return true - привязано, false - не привязано.
-	 */
 	@Override
 	public boolean isSheduleAssociated(NodeRef node) {
 		NodeRef shedule = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, TYPE_SHEDULE, ASSOCIATION_TYPE.SOURCE);
@@ -166,16 +143,6 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 		return result;
 	}
 
-	/**
-	 * Создает новое особое расписание.
-	 *
-	 * @param sheduleRawData - объект с правилами повторения расписания.
-	 * @param sheduleEmployeeAssoc - NodeRef на сотрудника или орг. единицу, к
-	 * которому надо привязать расписание.
-	 * @param sheduleContainer - NodeRef на каталог, в котором будет создано
-	 * расписание.
-	 * @return - NodeRef на созданное расписание.
-	 */
 	@Override
 	public NodeRef createNewSpecialShedule(final ISpecialSheduleRaw sheduleRawData, final NodeRef sheduleEmployeeAssoc, final NodeRef sheduleContainer) {
 		NodeRef createdSheduleNode;
@@ -395,29 +362,29 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 
 		if (EventCategory.ADD.equals(category)) {
 			if (orgstructureService.isEmployee(orgSubj)) {
-				if ("COMMON".equals(sheduleType)) {
+				if (SHEDULE_TYPE_COMMON.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_CREATE;
-				} else if ("SPECIAL".equals(sheduleType)) {
+				} else if (SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_CREATE;
 				}
 			} else if (orgstructureService.isUnit(orgSubj)) {
-				if ("COMMON".equals(sheduleType)) {
+				if (SHEDULE_TYPE_COMMON.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_OU_CREATE;
-				} else if ("SPECIAL".equals(sheduleType)) {
+				} else if (SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_CREATE;
 				}
 			}
 		} else if (EventCategory.DELETE.equals(category)) {
 			if (orgstructureService.isEmployee(orgSubj)) {
-				if ("COMMON".equals(sheduleType)) {
+				if (SHEDULE_TYPE_COMMON.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_DELETE;
-				} else if ("SPECIAL".equals(sheduleType)) {
+				} else if (SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_DELETE;
 				}
 			} else if (orgstructureService.isUnit(orgSubj)) {
-				if ("COMMON".equals(sheduleType)) {
+				if (SHEDULE_TYPE_COMMON.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SHEDULE_OU_DELETE;
-				} else if ("SPECIAL".equals(sheduleType)) {
+				} else if (SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_DELETE;
 				}
 			}
@@ -431,6 +398,54 @@ public class SheduleBean extends AbstractWCalendarBean implements IShedule {
 	@Override
 	public String getSheduleType(NodeRef node) {
 		return (String) nodeService.getProperty(node, PROP_SHEDULE_TYPE);
+	}
+
+	@Override
+	public Boolean isWorkingDay(NodeRef node, Date day) {
+		Boolean result = false;
+		if (SHEDULE_TYPE_SPECIAL.equals(getSheduleType(node))) {
+			Date dayReset = resetTime(day);
+			List<NodeRef> sheduleElements = getSheduleElements(node);
+			if (sheduleElements != null && !sheduleElements.isEmpty()) {
+				for (NodeRef sheduleElement : sheduleElements) {
+					Date start = getSheduleElementStart(sheduleElement);
+					Date end = getSheduleElementEnd(sheduleElement);
+					if (!dayReset.before(start) && !dayReset.after(end)) {
+						result = true;
+						break;
+					}
+				}
+			}
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<NodeRef> getSheduleElements(NodeRef node) {
+		List<NodeRef> sheduleElements = null;
+		if (SHEDULE_TYPE_SPECIAL.equals(getSheduleType(node))) {
+			sheduleElements = new ArrayList<NodeRef>();
+			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(node, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+			if (childAssociationRefs != null) {
+				for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+					sheduleElements.add(childAssociationRef.getChildRef());
+				}
+			}
+		}
+		return sheduleElements;
+	}
+
+	@Override
+	public Date getSheduleElementStart(NodeRef node) {
+		return (Date) nodeService.getProperty(node, PROP_SHEDULE_ELEMENT_BEGIN);
+	}
+
+	@Override
+	public Date getSheduleElementEnd(NodeRef node) {
+		return (Date) nodeService.getProperty(node, PROP_SHEDULE_ELEMENT_END);
 	}
 
 	// класс для представления элементов графика: первый и последний рабочий день в серии

@@ -1,6 +1,8 @@
 package ru.it.lecm.wcalendar.beans;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
@@ -16,20 +18,20 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
 
 /**
  *
  * @author vlevin
  */
-public abstract class AbstractWCalendarBean extends BaseBean implements IWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
+public abstract class AbstractCommonWCalendarBean extends BaseBean implements ICommonWCalendar, AuthenticationUtil.RunAsWork<NodeRef> {
 
 	protected Repository repository;
 	protected OrgstructureBean orgstructureService;
 	protected BusinessJournalService businessJournalService;
 	protected AuthenticationService authService;
 	// Получить логгер, чтобы писать, что с нами происходит.
-	final private static Logger logger = LoggerFactory.getLogger(AbstractWCalendarBean.class);
+	final private static Logger logger = LoggerFactory.getLogger(AbstractCommonWCalendarBean.class);
 
 	/**
 	 * Получить экземпляр Repository от Spring-а для последующей работы с
@@ -116,5 +118,23 @@ public abstract class AbstractWCalendarBean extends BaseBean implements IWCalend
 			});
 		}
 		return container;
+	}
+
+	/**
+	 * Устанавливает часы, минуты, секунды и миллисекунды в 00:00:00.000
+	 *
+	 * @param day Дата, у которой надо сбросить поля времени.
+	 * @return Дата с обнуленными полями времени.
+	 */
+	protected Date resetTime(final Date day) {
+		Date resetDay = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		resetDay.setTime(cal.getTimeInMillis());
+		return resetDay;
 	}
 }

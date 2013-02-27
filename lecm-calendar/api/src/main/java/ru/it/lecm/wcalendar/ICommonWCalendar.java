@@ -7,7 +7,7 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vlevin
  */
-public interface IWCalendar {
+public interface ICommonWCalendar {
 	// Задаем namespace-ы из моделей данных
 
 	/**
@@ -89,7 +89,7 @@ public interface IWCalendar {
 	/**
 	 * Шаблон сообщения в бизнес-журнал: окончание отсутствия.
 	 */
-	String BUSINESS_JOURNAL_ABSENCE_END = "Сотрудник #object1 вернулся в офисе (#mainobject с #object2)";
+	String BUSINESS_JOURNAL_ABSENCE_END = "Сотрудник #object1 вернулся в офис (#mainobject с #object2)";
 
 	/**
 	 * Получение ссылки на корневые каталоги для календарей, графиков работы и
@@ -105,7 +105,7 @@ public interface IWCalendar {
 	 *
 	 * @return объект CalendarBean, AbsenceBean или SheduleBean
 	 */
-	IWCalendar getWCalendarDescriptor();
+	ICommonWCalendar getWCalendarDescriptor();
 
 	/**
 	 * Получение правильно оформленного типа данных для календаря, графика

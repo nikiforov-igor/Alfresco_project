@@ -58,7 +58,7 @@ if (!currentEmployee) {
 					}
 				}
 				if (!seen) {
-					shedules.push(subUnitShedule)
+					shedules.push(subUnitShedule);
 				}
 			}
 		}

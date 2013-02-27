@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
 
 /**
  *
@@ -20,32 +20,32 @@ public interface IAbsence {
 	 * Ассоцияация между отсутствием и сотрудником,
 	 * lecm-absence:abscent-employee-assoc
 	 */
-	QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "abscent-employee-assoc");
+	QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "abscent-employee-assoc");
 	/**
 	 * Дата и время начала отсутствия, lecm-absence:begin
 	 */
-	QName PROP_ABSENCE_BEGIN = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "begin");
+	QName PROP_ABSENCE_BEGIN = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "begin");
 	/**
 	 * Дата и время окончания отсутствия, lecm-absence:end
 	 */
-	QName PROP_ABSENCE_END = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "end");
+	QName PROP_ABSENCE_END = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "end");
 	/**
 	 * Флаг, обозначающий, что отсутствие бессрочное, lecm-absence:unlimited
 	 */
-	QName PROP_ABSENCE_UNLIMITED = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "unlimited");
+	QName PROP_ABSENCE_UNLIMITED = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "unlimited");
 	/**
 	 * Флаг, обозначающий, что отсутствие уже активировано,
 	 * lecm-absence:activated
 	 */
-	QName PROP_ABSENCE_ACTIVATED = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "activated");
+	QName PROP_ABSENCE_ACTIVATED = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "activated");
 	/**
 	 * Тип объекта для Отсутствий, lecm-absence:absence
 	 */
-	QName TYPE_ABSENCE = QName.createQName(IWCalendar.ABSENCE_NAMESPACE, "absence");
+	QName TYPE_ABSENCE = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "absence");
 	/**
 	 * Корневой контейнер для отсутствий, lecm-wcal:absence-container
 	 */
-	QName TYPE_ABSENCE_CONTAINER = QName.createQName(IWCalendar.WCAL_NAMESPACE, "absence-container");
+	QName TYPE_ABSENCE_CONTAINER = QName.createQName(ICommonWCalendar.WCAL_NAMESPACE, "absence-container");
 
 	/**
 	 * Получить список отсутствий по NodeRef-у сотрудника.

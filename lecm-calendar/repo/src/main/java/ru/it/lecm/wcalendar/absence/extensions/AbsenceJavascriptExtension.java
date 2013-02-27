@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.wcalendar.absence.IAbsence;
-import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
+import ru.it.lecm.wcalendar.extensions.CommonWCalendarJavascriptExtension;
 
 /**
  * JavaScript root-object под названием "absence". Предоставляет доступ к
@@ -22,7 +22,7 @@ import ru.it.lecm.wcalendar.extensions.WCalendarJavascriptExtension;
  *
  * @author vlevin
  */
-public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
+public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtension {
 
 	private IAbsence absenceService;
 	private final static Logger logger = LoggerFactory.getLogger(AbsenceJavascriptExtension.class);
@@ -97,6 +97,7 @@ public class AbsenceJavascriptExtension extends WCalendarJavascriptExtension {
 		} catch (JSONException ex) {
 			throw new WebScriptException(ex.getMessage(), ex);
 		}
+
 		try {
 			begin = dateParser.parse(beginStr);
 		} catch (ParseException ex) {

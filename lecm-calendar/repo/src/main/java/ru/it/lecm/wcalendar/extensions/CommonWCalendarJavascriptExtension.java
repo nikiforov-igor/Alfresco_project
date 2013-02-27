@@ -11,20 +11,20 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.wcalendar.IWCalendar;
+import ru.it.lecm.wcalendar.ICommonWCalendar;
 
 /**
  * Реализация JavaScript root-object для получения информации о контейнерах для
- * календарей, графиков и отсутсвий и их типов данных.
+ * календарей, графиков и отсутствий и их типов данных.
  *
  * @author vlevin
  */
-public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension {
+public class CommonWCalendarJavascriptExtension extends BaseScopableProcessorExtension {
 
 	protected ServiceRegistry serviceRegistry;
-	protected IWCalendar wCalendarService;
+	protected ICommonWCalendar commonWCalendarService;
 	// Получить логгер, чтобы писать, что с нами происходит.
-	private final static Logger logger = LoggerFactory.getLogger(WCalendarJavascriptExtension.class);
+	private final static Logger logger = LoggerFactory.getLogger(CommonWCalendarJavascriptExtension.class);
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
@@ -33,19 +33,19 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 	/**
 	 * Получить от Spring-а экземпляр CalendarBean, AbsenceBean или SheduleBean
 	 *
-	 * @param wCalendarService передается Spring-ом
+	 * @param commonWCalendarService передается Spring-ом
 	 */
-	public void setWCalService(IWCalendar wCalendarService) {
-		this.wCalendarService = wCalendarService;
+	public void setCommonWCalService(ICommonWCalendar commonWCalendarService) {
+		this.commonWCalendarService = commonWCalendarService;
 	}
 
 	/**
-	 * Получить nodeRef на контейнер, в котором находится wCalendarService.
+	 * Получить nodeRef на контейнер, в котором находится commonWCalendarService.
 	 *
 	 * @return ScriptNode c nodeRef-ом на контейнер, если контейнер определен
 	 */
 	public ScriptNode getWCalendarContainer() {
-		NodeRef container = wCalendarService.getWCalendarDescriptor().getWCalendarContainer();
+		NodeRef container = commonWCalendarService.getWCalendarDescriptor().getWCalendarContainer();
 		if (container != null) {
 			return new ScriptNode(container, serviceRegistry, getScope());
 		}
@@ -58,7 +58,7 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 	 * @return строка с типом данных, если тот определен.
 	 */
 	public String getItemType() {
-		QName itemType = wCalendarService.getWCalendarDescriptor().getWCalendarItemType();
+		QName itemType = commonWCalendarService.getWCalendarDescriptor().getWCalendarItemType();
 		if (itemType != null) {
 			NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
 			return itemType.toPrefixString(namespacePrefixResolver);
@@ -81,4 +81,5 @@ public class WCalendarJavascriptExtension extends BaseScopableProcessorExtension
 		}
 		return Context.getCurrentContext().newArray(scope, nodes);
 	}
+
 }
