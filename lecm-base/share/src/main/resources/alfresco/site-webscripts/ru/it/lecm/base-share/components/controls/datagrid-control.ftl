@@ -1,7 +1,8 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
+<#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#assign containerId = fieldHtmlId + "-container">
+<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 
 <#assign allowCreate = true/>
 <#if field.control.params.allowCreate??>
