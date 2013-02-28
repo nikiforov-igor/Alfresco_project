@@ -1,10 +1,13 @@
 package ru.it.lecm.integrotest.beans;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -123,14 +126,34 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 		return QName.createQName( resolveUri(uri), part);
 	}
 
+	@Override
+	public NodeRef findNodeByProp( String nodeType, String propName, String value) {
+		return findNodeByProp( makeQName(nodeType), makeQName(propName), value);
+	}
+
 	// DONE: сделать поиск через SearchService или хотя бы отфильтровать по значениям в цикле
 	@Override
-	public NodeRef findNodeByProp( QName typeName, QName prop, String value)
-	{
+	public NodeRef findNodeByProp( QName typeName, QName propName, String value) {
+		final List<NodeRef> found = findNodesByProp(typeName, propName, value);
+
+		// DONE: here can use check if result contains exactly one node
+		if (found != null && found.size() != 1)
+			logger.warn( String.format( "Single node needed but found %s", found.size()) );
+
+		return (found != null && found.size() > 0) ? found.get(0) : null;
+	}
+
+	@Override
+	public List<NodeRef> findNodesByProp( String nodeType, String propName, String value) {
+		return findNodesByProp( makeQName(nodeType), makeQName(propName), value);
+	}
+
+	@Override
+	public List<NodeRef> findNodesByProp( QName typeName, QName propName, String value) {
+	
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( 
-				"Exec search query :\n\t for type='%s'\n\t where '%s'='%s'"
-				, typeName, prop, value));
+				"Exec search query :\n\t for type='%s'\n\t where '%s'='%s'", typeName, propName, value));
 		}
 		/*
 		 * @NOTE: метод findNodes для nodeService явно поднимает исключение "java.lang.UnsupportedOperationException"
@@ -146,7 +169,7 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 		 */
 
 		final Map<String, Object> args = new HashMap<String, Object>();
-		args.put( prop.toString(), value);
+		args.put( propName.toString(), value);
 		final NodeRef parentNode = null;
 
 		try {
@@ -171,25 +194,24 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 
 			// return (found != null && !found.isEmpty()) ? found.get(0) : null;
 			if (found != null) {
+				final List<NodeRef> result = new ArrayList<NodeRef>(); 
 				for(ResultSetRow row : found) {
-					return row.getNodeRef(); // found something ...
+					// return row.getNodeRef(); // found something ...
+					result.add(row.getNodeRef());
 				}
+				if (result.size() > 0)
+					return result;
 			}
 		} catch (LuceneQueryParserException ex) {
 			final String info = String.format( 
 					"Exec search query error:\n\t for type='%s'\n\t where '%s'='%s'"
-					, typeName, prop, value);
+					, typeName, propName, value);
 			logger.error( info + ex.getMessage());
 			// throw new RuntimeException( info, ex);
 		}
 
-		// if (found == null || !found.hasMore())
-		throw new RuntimeException( String.format( "Object not found: \n\t of type:%s\n\t by field:%s\n\t with value:%s", typeName, prop, value));
-	}
-
-	@Override
-	public NodeRef findNodeByProp( String nodeType, String prop, String value) {
-		return findNodeByProp( makeQName(nodeType), makeQName(prop), value);
+		// nothing found -> ERROR 
+		throw new RuntimeException( String.format( "Object not found: \n\t of type:%s\n\t by field:%s\n\t with value:%s", typeName, propName, value));
 	}
 
 	@Override
@@ -198,15 +220,6 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 			return null;
 		return findNodeByProp( ""+ args.get(FinderBean.TYPE_NODE), ""+ args.get(FinderBean.PROP_NAME), ""+ args.get(FinderBean.PROP_VALUE));
 	}
-
-//	public String findNodeIdByProp( QName nodeType, QName prop, String value) {
-//		final NodeRef ref = findNodeByProp(nodeType, prop, value);
-//		return (ref == null) ? null : ref.getId();
-//	}
-//
-//	public String findNodeIdByProp( String nodeType, String prop, String value) {
-//		return findNodeIdByProp( makeQName(nodeType), makeQName(prop), value);
-//	}
 
 	@Override
 	public NodeRef findOUByName(String value) {
@@ -229,6 +242,24 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 		return (value == null) ? null : '"'+ value + '"';
 	}
 
+
+	@Override
+	public List<NodeRef> getParents(NodeRef ref) {
+		if (ref == null)
+			return null;
+		final List<ChildAssociationRef> assocs = nodeService.getParentAssocs(ref);
+		if (assocs == null || assocs.isEmpty())
+			return null;
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+		for(ChildAssociationRef a: assocs) {
+			if (a.isPrimary()) // главный родитель - д.б. первым
+				result.add(0, a.getParentRef());
+			else 
+				result.add(a.getParentRef());
+		}
+
+		return result;
+	}
 
 	/**
 	 * Сформировать Search-запрос.
@@ -297,4 +328,5 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 		if (ref != null)	
 			args.put( argNodeId,ref.getId());
 	}
+
 }

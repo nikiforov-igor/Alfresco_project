@@ -100,7 +100,7 @@ public class LECMSecurityGroupsBean
 	 */
 	void removeAlfrescoGroupName(String simpleName) {
 		final String sgFullName = this.sgnm.makeSGName(simpleName);
-;
+
 		if (!sgnm.hasAuth(simpleName)) {
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' NOT exists or already removed", sgFullName, simpleName));
 		} else {

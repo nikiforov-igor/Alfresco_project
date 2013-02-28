@@ -1,8 +1,12 @@
 package ru.it.lecm.integrotest.utils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,5 +131,34 @@ public class Utils {
 			}
 		}
 		return result;
+	}
+
+	final static public StringBuilder makeAttrDump(NodeRef node, NodeService nodeService) {
+		return makeAttrDump(node, nodeService, String.format("\nAttributes of node {%s}:\n", node));
+	}
+
+	/**
+	 * Сформировать дамп всех атрибутов указанного узла
+	 * @param node
+	 * @param nodeService
+	 * @return
+	 */
+	final static public StringBuilder makeAttrDump(NodeRef node, NodeService nodeService, String msg) {
+		final StringBuilder dump = new StringBuilder();
+		if (msg != null)
+			dump.append(msg);
+		if (node != null) {
+			final Map<QName, Serializable> chkData = nodeService.getProperties(node);
+			int i = 0;
+			dump.append( "============================================================\n");
+			dump.append( String.format( "\t[%s]\t %15s \t <%s>\n", "nn", "attribute", "value"));
+			dump.append( "============================================================\n");
+			for (Map.Entry<QName, Serializable> e: chkData.entrySet() ) {
+				i++;
+				dump.append( String.format( "\t[%d]\t %15s \t <%s>\n", i, e.getKey(), e.getValue()));
+			}
+			dump.append( "============================================================\n");
+		}
+		return dump;
 	}
 }

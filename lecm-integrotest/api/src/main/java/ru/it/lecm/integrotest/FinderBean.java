@@ -1,9 +1,9 @@
 package ru.it.lecm.integrotest;
 
+import java.util.List;
 import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 
 public interface FinderBean {
@@ -44,6 +44,10 @@ public interface FinderBean {
 	 */
 	NodeRef findNodeByProp( QName nodeType, QName propName, String value);
 	NodeRef findNodeByProp( String nodeType, String propName, String value);
+
+	List<NodeRef> findNodesByProp( QName nodeType, QName propName, String value);
+	List<NodeRef> findNodesByProp( String nodeType, String propName, String value);
+
 	/**
 	 * Поиск узла по параметрам, указанным в map
 	 * @param args отсюда используются параметры "nodeType", "propName", "value"
@@ -87,4 +91,11 @@ public interface FinderBean {
 	 * 
 	 */
 	void ensureNodePresent( Map<String, Object> args, String argNodeId, String argNodeRef);
+
+	/**
+	 * Получить список родительских узлов, первым будет идти основной родитель.
+	 * @param ref
+	 * @return
+	 */
+	List<NodeRef> getParents( NodeRef ref);
 }

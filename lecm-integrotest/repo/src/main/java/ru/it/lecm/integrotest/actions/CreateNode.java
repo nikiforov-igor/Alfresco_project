@@ -7,8 +7,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -31,10 +29,7 @@ import ru.it.lecm.integrotest.utils.Utils;
 				</props>
 			</property>
 
-			<!-- Пользователь, от имени котрого выполнить создание
-				если не указано, то от имени системы
-			  -->
-			<property name="createByUser" value="admin" />
+			<!-- Пользователь, от имени которого выполнить создание - см action RunAs -->
 
 			<!-- куда именно (внутри resultMap) сохранить созданный id документа (для последующего доступа) -->
 			<property name="destRefArgName" value="result.createdNodeRef" />
@@ -45,7 +40,7 @@ public class CreateNode extends LecmActionBase {
 
 	final public static String DEST_ARGNAME = "result.createdNode";
 
-	private String nodeType, createByUser, destRefArgName = DEST_ARGNAME;
+	private String nodeType, destRefArgName = DEST_ARGNAME;
 
 	private Properties attributes;
 
@@ -64,21 +59,6 @@ public class CreateNode extends LecmActionBase {
 	 */
 	public void setNodeType(String docType) {
 		this.nodeType = docType;
-	}
-
-	/**
-	 * @return пользователь, от имени котрого выполнить операция создания
-	 */
-	public String getCreateByUser() {
-		return createByUser;
-	}
-
-	/**
-	 * @param value пользователь, от имени котрого выполнить операция создания
-	 * значение null == от имени системы
-	 */
-	public void setCreateByUser(String value) {
-		this.createByUser = ("NULL".equalsIgnoreCase(value)) ? null : value;
 	}
 
 	/**
@@ -158,8 +138,7 @@ public class CreateNode extends LecmActionBase {
 	@Override
 	public String toString() {
 		return "CreateNode [" 
-				+ "createBy '" + Utils.coalesce( createByUser, "system") + "'"
-				+ ", put new nodeRef into {"+ destRefArgName + "}"
+				+ "put new nodeRef into {"+ destRefArgName + "}"
 
 				+ ", nodeType '" + nodeType+ "'"
 				+ ", parentNodeRef=" + parentNodeRef
@@ -191,56 +170,46 @@ public class CreateNode extends LecmActionBase {
 				stage = String.format( "run findParentNodeRef(%s)", this.findParentRef);
 				logger.debug( stage);
 				this.parentNodeRef = this.findParentRef.findNodeRef( getContext().getFinder());
+				logger.debug("found parent: "+ this.parentNodeRef);
 			} else {
 				logger.debug( "parentNodeRef used as "+ this.parentNodeRef);
 			}
 
+
 			// выбор исполняющего сервиса ...
 			stage = "getService";
-			final boolean enRunAsUser = (this.getCreateByUser() != null);
-			final NodeService nodeServ = enRunAsUser 
-					? getContext().getPublicServices().getNodeService() // публичная служба
-					: getContext().getNodeService(); // обыкновенная системная
+//			final boolean enRunAsUser = (this.getCreateByUser() != null);
+//			final NodeService nodeServ = enRunAsUser 
+//					? getContext().getPublicServices().getNodeService() // публичная служба
+//					: getContext().getNodeService(); // обыкновенная системная
+			final NodeService nodeServ = getContext().getNodeService(); // обыкновенная системная
 
-			final RunAsWork<NodeRef> runner = new RunAsWork<NodeRef>() {
-					@Override
-					public NodeRef doWork() throws Exception {
-						final ChildAssociationRef newRef = nodeServ.createNode( 
-								parentNodeRef, assicTypeQName, assocQName, nodeTypeQName
-						);
-						final NodeRef created = newRef.getChildRef();
-						setNodeArgs( created, nodeServ);
-						return created; 
-					}
-			};
+			if (parentNodeRef != null && logger.isDebugEnabled()) {
+				logger.debug( Utils.makeAttrDump(parentNodeRef, nodeServ, String.format("\nAttributes of parent node {%s}:\n", parentNodeRef)).toString());
+			}
 
 			// Выполнение создания узла-документа ...
-			final NodeRef result;
-			if (enRunAsUser) {
-				// получение Person по сконфигурированному имени ...
-				stage = String.format( "search Person for login '%s'", this.getCreateByUser());
-				logger.debug(stage);
-				final NodeRef person = getContext().getPublicServices().getPersonService().getPerson(this.getCreateByUser());
-
-				// doit...
-				stage = String.format( "run as user <%s> (found Person is node %s) ...", this.getCreateByUser(), person);
-				logger.debug(stage);
-				result = AuthenticationUtil.runAs( runner, person.getId());
-			} else { // вполнение от имени "системы"
-				stage = "run as <system>";
-				logger.debug(stage);
-
-				// doit... // result = runner.doWork();
-				result = AuthenticationUtil.runAsSystem( runner);
-			}
+			final Map<QName, Serializable> data = getAttributesAsDataMap(); // получение сконфигурированных атрибутов
+			final ChildAssociationRef newRef = nodeServ.createNode( 
+						parentNodeRef
+						, assicTypeQName, assocQName
+						, nodeTypeQName, data);
+			final NodeRef result = newRef.getChildRef();
+			// setNodeArgs( result, nodeServ);
 			logger.info( String.format( "Created document: %s", result));
 
-			// сохранение результата ...
+			// журналирование свойств созданного документа ...
+			if (result != null && logger.isDebugEnabled()) {
+				logger.debug( Utils.makeAttrDump(result, nodeServ).toString());
+			}
+
+			// сохранение id результата ...
 			if (this.destRefArgName != null) {
 				stage = String.format( "Pushing result {%s} into context as {%s}", result, this.getDestRefArgName());
 				logger.debug(stage);
 
 				getArgsAssigner().setMacroValue( this.getDestRefArgName(), result);
+
 				stage = String.format( "Result {%s} pushed into context as {%s}", result, this.getDestRefArgName());
 				logger.info(stage);
 			}
@@ -283,9 +252,11 @@ public class CreateNode extends LecmActionBase {
 		final Map<QName, Serializable> result = new HashMap<QName, Serializable>();
 
 		// Выполняем ~ result.putAll( this.attributes); ...
-		final FinderBean finder = this.getContext().getFinder();
-		for(Map.Entry<Object, Object> e: this.attributes.entrySet()) {
-			result.put( finder.makeQName(e.getKey().toString()), (Serializable) e.getValue());
+		if (this.attributes != null) {
+			final FinderBean finder = this.getContext().getFinder();
+			for(Map.Entry<Object, Object> e: this.attributes.entrySet()) {
+				result.put( finder.makeQName(e.getKey().toString()), (Serializable) e.getValue());
+			}
 		}
 		return result;
 	}

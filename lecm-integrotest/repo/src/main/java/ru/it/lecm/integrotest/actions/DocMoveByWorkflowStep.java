@@ -63,6 +63,10 @@ public class DocMoveByWorkflowStep extends LecmActionBase {
 			findNodeByMacros( this.nodeRefMacros);
 		}
 
+		doNext();
+	}
+
+	private void doNext() {
 		final WorkflowService wfSrvc = getContext().getPublicServices().getWorkflowService();
 		final List<WorkflowInstance> wfi = wfSrvc.getWorkflowsForContent(this.nodeRef, true); // активные процессы
 		if (wfi != null && wfi.size() >=1 )  {

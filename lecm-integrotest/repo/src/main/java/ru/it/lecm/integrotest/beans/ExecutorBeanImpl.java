@@ -1,16 +1,20 @@
 package ru.it.lecm.integrotest.beans;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +48,9 @@ public class ExecutorBeanImpl
 
 	private AuthenticationService authenticationService;
 	private AuthorityService authorityService;
+
 	private ServiceRegistry publicServices;
+	private PermissionService permissionService;
 
 	private OrgstructureSGNotifierBean orgSGNotifier;
 	private IOrgStructureNotifiers sgNotifier;
@@ -58,11 +64,15 @@ public class ExecutorBeanImpl
 
 	private StateMachineServiceBean stateMachineService;
 
-
 	public void init() {
 		logger.debug("initializing");
-		PropertyCheck.mandatory(this, "authService", authenticationService);
+		PropertyCheck.mandatory(this, "authService", this.authenticationService);
+		PropertyCheck.mandatory(this, "authorityService", this.authorityService);
+
 		PropertyCheck.mandatory(this, "nodeService", this.nodeService);
+		PropertyCheck.mandatory(this, "transactionService", this.transactionService);
+
+		PropertyCheck.mandatory(this, "permissionService", this.permissionService);
 		PropertyCheck.mandatory(this, "publicServices", this.publicServices);
 
 		PropertyCheck.mandatory(this, "sgNotifier", this.sgNotifier);
@@ -95,6 +105,14 @@ public class ExecutorBeanImpl
 
 	public void setPublicServices(ServiceRegistry value) {
 		this.publicServices = value;
+	}
+
+	public PermissionService getPermissionService() {
+		return permissionService;
+	}
+
+	public void setPermissionService(PermissionService permissionService) {
+		this.permissionService = permissionService;
 	}
 
 	public IOrgStructureNotifiers getSgNotifier() {
@@ -138,11 +156,14 @@ public class ExecutorBeanImpl
 	}
 
 	public Map<String, Object> getConfigArgs() {
+		if (configArgs == null)
+			configArgs = new HashMap<String, Object>();
 		return configArgs;
 	}
 
-	public void setConfigArgs(Map<String, Object> configArgs) {
-		this.configArgs = configArgs;
+	public void setConfigArgs(Map<String, Object> value) {
+		this.configArgs = value;
+		getConfigArgs();
 	}
 
 	public TestingContextImpl getContext() {
@@ -166,6 +187,29 @@ public class ExecutorBeanImpl
 
 	@Override
 	public List<StepResult> runAll() {
+		final RunAsWork<List<StepResult>> runner = new RunAsWork<List<StepResult>>() {
+			@Override
+			public List<StepResult> doWork() throws Exception {
+				// для проверки записи начинаем новую пишущую транзакцию ...
+				final boolean transReadonly = false;
+				final boolean transReaquiersNew = true; // (!) новая транзакция
+				final List<StepResult> result 
+					= transactionService.getRetryingTransactionHelper().doInTransaction(
+						new RetryingTransactionHelper.RetryingTransactionCallback<List<StepResult>>() {
+							@Override
+							public List<StepResult> execute() throws Throwable {
+								return doRunAll();
+							}
+						}
+						, transReadonly, transReaquiersNew);
+				return result;
+			}
+		};
+
+		return AuthenticationUtil.runAsSystem( runner);
+	}
+
+	private List<StepResult> doRunAll() {
 		final List<StepResult> result = new ArrayList<ExecutorBean.StepResult>();
 		int ok = 0;
 		for(int i = 0; i < steps.size(); i++) {
@@ -184,7 +228,30 @@ public class ExecutorBeanImpl
 	}
 
 	@Override
-	public StepResult runStep(int i) {
+	public StepResult runStep(final int i) {
+		final RunAsWork<StepResult> runner = new RunAsWork<StepResult>() {
+			@Override
+			public StepResult doWork() throws Exception {
+				// для проверки записи надо будет пишущую транзакцию ...
+				final boolean transReadonly = false;
+				final boolean transReaquiersNew = false; // если транзакция будет - входим в неё
+				final StepResult result 
+					= transactionService.getRetryingTransactionHelper().doInTransaction(
+						new RetryingTransactionHelper.RetryingTransactionCallback<StepResult>() {
+							@Override
+							public StepResult execute() throws Throwable {
+								return doRunStep(i);
+							}
+						}
+						, transReadonly, transReaquiersNew);
+				return result;
+			}
+		};
+
+		return AuthenticationUtil.runAsSystem( runner);
+	}
+
+	private StepResult doRunStep(int i) {
 		final int maxLen = (steps == null) ? 0 : steps.size();
 		if (i < 0 || i >= maxLen)
 			throw new ArrayIndexOutOfBoundsException(String.format( "Step index out of bounds %d: must be inside [0,%d]", i, maxLen-1));
@@ -251,13 +318,18 @@ public class ExecutorBeanImpl
 
 		public TestingContextImpl(SingleTest parent) {
 			this.parentTest = parent;
-			this.roConfigArgs = Collections.unmodifiableMap( configArgs);
+			this.roConfigArgs = Collections.unmodifiableMap( getConfigArgs());
 			resetContext();
 		}
 
 		@Override
 		public NodeService getNodeService() {
 			return nodeService;
+		}
+
+		@Override
+		public TransactionService getTransactionService() {
+			return transactionService;
 		}
 
 		@Override
@@ -327,6 +399,11 @@ public class ExecutorBeanImpl
 		}
 
 		@Override
+		public PermissionService getPermissionService() {
+			return permissionService;
+		}
+
+		@Override
 		public StateMachineServiceBean getStateMachineService() {
 			return stateMachineService;
 		}
@@ -363,5 +440,6 @@ public class ExecutorBeanImpl
 			}
 			this.workArgs.put( key, dest);
 		}
+
 	}
 }

@@ -3,11 +3,13 @@ package ru.it.lecm.integrotest.actions.checkers;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.namespace.QName;
 
 import ru.it.lecm.integrotest.TestFailException;
@@ -26,6 +28,8 @@ import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
  *
  */
 public class LecmCheckNodeACL extends LecmActionBase {
+
+	private static final String STR_TABLE_DELIMITER = "\n\t ========================================";
 
 	/**
 	 * Значение по-умолчанию для проверки возможности записи в атрибут
@@ -328,7 +332,19 @@ public class LecmCheckNodeACL extends LecmActionBase {
 			findNodeByMacros( this.nodeRefMacros);
 		}
 
+		logger.debug( String.format("checking users access for node {%s}", this.nodeRef));
+
 		chkConfigArgs();
+
+		if (logger.isDebugEnabled()) { 
+			final StringBuilder dump = Utils.makeAttrDump(this.nodeRef, getContext().getNodeService(), String.format("\nAnalyzing node {%s}:\n", this.nodeRef ));
+			final Set<AccessPermission> perms = getContext().getPermissionService().getAllSetPermissions(this.nodeRef);
+			if (perms == null)
+				dump.append("\n\t (!) ACL is NULL\n");
+			else
+				dump.append( String.format("\n\t ACL counter %d: [%s]\n", perms.size(), perms.toString() ));
+			logger.debug( dump.toString());
+		}
 
 		final StringBuilder sb = new StringBuilder();
 
@@ -336,20 +352,23 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		boolean failed = false;
 		int i = 0;
 		final Map<String, StdPermission> accTable = this.accessMap.getUsersAccess();
+		sb.append( STR_TABLE_DELIMITER);
 		sb.append( String.format( "\n\t %2s\t %5s\t %3s\t '%s'", "nn", "isOk", "access", "User Login"));
-		sb.append( "\n\t ===================================");
+		sb.append( STR_TABLE_DELIMITER);
 		for(Map.Entry<String, StdPermission> e: accTable.entrySet() ) {
 			i++;
 			final String usrLogin = e.getKey(); // соответствующий пользователь
 			final StdPermission perm = e.getValue();
 			final boolean flagOK = chkNodeUserAccess( nodeRef, usrLogin, perm);
 			sb.append( String.format( "\n  %2d\t %5s\t %3s\t '%s'", i, (flagOK ? "OK" : "*FAIL"), perm.getInfo(), usrLogin));
-			// выдаём состав авторизаций пользователя
-			sb.append( String.format( "\n\t\t [%s]", getContext().getAuthorityService().getAuthoritiesForUser(usrLogin) ));
+
+			if (logger.isTraceEnabled()) { // выдаём состав авторизаций пользователя
+				sb.append( String.format( "\n\t\t [%s]", getContext().getAuthorityService().getAuthoritiesForUser(usrLogin) ));
+			}
 			if (!flagOK)
 				failed = true;
 		}
-		sb.append( "\n\t ===================================");
+		sb.append( STR_TABLE_DELIMITER);
 
 		logger.info( String.format( "%s access check for node: %s\n%s", (failed ? "(!) BAD" : "SUCCESS"), this.nodeRef, sb.toString() ));
 
@@ -392,13 +411,26 @@ public class LecmCheckNodeACL extends LecmActionBase {
 
 		final NodeRef person = getContext().getPublicServices().getPersonService().getPerson(usrLogin);
 
-		final Boolean result = AuthenticationUtil.runAs( new RunAsWork<Boolean>(){
+		final RunAsWork<Boolean> runner = new RunAsWork<Boolean>() {
 			@Override
 			public Boolean doWork() throws Exception {
-				return doAccessCheck(usrLogin, nodeServ, ref, prop, perm); 
-			}}
-			, person.getId()
-		);
+//				// для проверки записи надо будет пишущую транзакцию ...
+//				final boolean transReadonly = (perm != StdPermission.full);
+//				final boolean transReaquiersNew = false;
+//				final Boolean flag = getContext().getTransactionService().getRetryingTransactionHelper().doInTransaction(
+//					new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+//						@Override
+//						public Boolean execute() throws Throwable {
+//							return doAccessCheck(usrLogin, nodeServ, ref, prop, perm); 
+//						}
+//
+//					}, transReadonly, transReaquiersNew);
+//				return flag;
+				return doAccessCheck(usrLogin, nodeServ, ref, prop, perm);
+			}
+		};
+
+		final Boolean result = AuthenticationUtil.runAs( runner, person.getId());
 
 		return result;
 	}
@@ -407,15 +439,20 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	boolean doAccessCheck(String usrLogin, NodeService nodeServ, NodeRef ref, QName prop, StdPermission perm)
 	{
 		// DONE: типизировать исключение только для случая org.alfresco.repo.security.permissions.AccessDeniedException
+		String stage = String.format( "read property '%s'", prop);
+
 		switch(perm) {
 			case noaccess: {  // : должно свалиться при чтении
 				try {
 					final Serializable x = nodeServ.getProperty(ref, prop);
+
 					// раз прочитано -> доступ имеется, а это не правильно при deny
+					logger.warn( String.format("Fail AccessDeny by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+
 					return false;
 				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.warn( String.format("check AccessDeny of user '%s' for node '%s':\n%s" 
-							, usrLogin, ref, tx.getMessage()));
+					logger.debug( String.format("Success AccessDeny by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
+
 					return true; // падение правильное, т.к. нет доступа ...
 				}
 			} 
@@ -423,28 +460,55 @@ public class LecmCheckNodeACL extends LecmActionBase {
 				try {
 					final Serializable x = nodeServ.getProperty(ref, prop);
 					// раз прочитано -> доступ имеется, правильно
+					logger.debug( String.format("Success ReadAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+
 					return true;
 				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.warn( String.format("check ReadAccess of user '%s' for node '%s'/attribute '%s':\n%s" 
-							, usrLogin, ref, prop, tx.getMessage()));
+					logger.warn( String.format("Fail ReadAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
 					return false;
 				}
 			} 
-			case full: {  // : должно писаться в некоторый атрибут
+			case full: {  // должно писаться в некоторый атрибут ...
 				try {
+					/* 
+					 * Вариант чтения-записи отдельного атрибута:
+					 */ 
 					// раз можно писать -> доступ на чтение тоже должен иметься ...
 					final Serializable x = nodeServ.getProperty(ref, prop);
+					logger.debug( String.format("ok read at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
 
 					// пишем сконфигурированное значение ...
-					nodeServ.setProperty(ref, prop, this.writeValue);
-
+					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
+					nodeServ.setProperty(ref, prop, this.writeValue); // Валится
+					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
 					// восстановим прежнее значение атрибута
 					nodeServ.setProperty(ref, prop, x);
 
+
+					/*
+					 * Вариант чтения-записи всех атрибутов:
+					 * 
+					// раз можно писать -> доступ на чтение тоже должен иметься ...
+					final Map<QName, Serializable> props = nodeServ.getProperties(ref);
+					final Serializable x = props.get(prop);
+					logger.debug( String.format("ok readProperties at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+
+					// пишем сконфигурированное значение ...
+					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
+					props.put( prop, this.writeValue);
+					nodeServ.setProperties(ref, props);
+					logger.debug( String.format("ok writeProperty at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+
+					// восстановим прежнее значение атрибута
+					stage = String.format( "restore previous property '%s'='%s'", prop, this.writeValue);
+					props.put( prop, x);
+					nodeServ.setProperties(ref, props);
+					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+					 */
+
 					return true;
 				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.warn( String.format("check WriteAccess of user '%s' for node '%s'/attribute '%s':\n%s" 
-							, usrLogin, ref, prop, tx.getMessage()));
+					logger.warn( String.format("Fail WriteAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
 					return false;
 				}
 			}

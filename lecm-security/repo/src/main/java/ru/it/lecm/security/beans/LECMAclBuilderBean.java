@@ -253,7 +253,7 @@ public class LECMAclBuilderBean
 
 			// получить полный текущий ACL ...
 			final Set<AccessPermission> current = permissionService.getAllSetPermissions(nodeRef);
-			logger.debug("current doc ACL list is "+ current);
+			logger.debug( String.format( "current doc {%s} ACL list is ", nodeRef, current));
 
 			// (!) задаём свой тип наследования статических прав от родителей
 			permissionService.setInheritParentPermissions(nodeRef, this.isStaticInheritParentPermissions());

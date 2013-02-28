@@ -3,6 +3,7 @@ package ru.it.lecm.delegation.beans;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -546,7 +547,11 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 		} catch(Throwable ex) {
 			logger.error( String.format("Exception in args ", args), ex);
-			// result.put( "error", ex.toString());
+			try {
+				result.put( "error", ex.toString());
+			} catch(JSONException e2) {
+				logger.error("double-exception", e2);
+			}
 			throw new RuntimeException("Fail test", ex);
 		} finally {
 			final String msg = d.fmtDuration( "{t} msec");
@@ -554,7 +559,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 			try {
 				result.put( "testTime", msg);
 			} catch(JSONException ex) {
-				logger.error("", ex);
+				logger.error("finalization errror", ex);
 			}
 		}
 
@@ -1289,7 +1294,13 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		final ExecutorBean execBean = (ExecutorBean) getApplicationContext().getBean("lecmIntegroTestBean"); // getApplicationContext().getBean(ExecutorBean.class);
 		logger.info("bean found with class "+ execBean.getClass().getName());
 
-		final List<StepResult> runList = execBean.runAll(); //  (!) основные тесты
+		final List<StepResult> runList;
+		if (args.has("numStep")) {
+			final int stepNum = Integer.parseInt( echoGetArg("numStep", null, result));
+			runList = Arrays.asList( execBean.runStep(stepNum));
+		} else {
+			runList = execBean.runAll(); //  (!) основные тесты
+		}
 		// final StringBuilder sb = new StringBuilder( execBean.getClass().getSimpleName()+ ".runAll called, result is:\n ");
 		result.put("called_info", execBean.getClass().getSimpleName()+ ".runAll called");
 

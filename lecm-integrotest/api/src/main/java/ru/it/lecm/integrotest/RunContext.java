@@ -6,6 +6,8 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.transaction.TransactionService;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
@@ -60,6 +62,18 @@ public interface RunContext {
 	 * @return сервис узлов alfresco
 	 */
 	NodeService getNodeService();
+
+	/**
+	 * @return для явного управления транзакциями 
+	 * (!) при фромировании объектов в базе надо иметь активной writable-транзакцию,
+	 * а такие обычно надо создавать явно
+	 */
+	TransactionService getTransactionService();
+
+	/**
+	 * @return Служба прав доступа к узлам
+	 */
+	PermissionService getPermissionService();
 
 	/**
 	 * @return Публичные службы
