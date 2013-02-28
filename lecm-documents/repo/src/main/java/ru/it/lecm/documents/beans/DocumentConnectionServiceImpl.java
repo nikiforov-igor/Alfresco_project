@@ -1,4 +1,4 @@
-package ru.it.lecm.base.beans;
+package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
@@ -17,6 +17,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -107,7 +108,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
 		}
 		if (dictionary != null) {
-			List<AssociationRef> defaultTypeAssoc = nodeService.getTargetAssocs(dictionary, DocumentConnectionService.ASSOC_DEFAULT_CONNECTION_TYPE);
+			List<AssociationRef> defaultTypeAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_DEFAULT_CONNECTION_TYPE);
 			if (defaultTypeAssoc != null && defaultTypeAssoc.size() > 0) {
 				return defaultTypeAssoc.get(0).getTargetRef();
 			}
@@ -120,7 +121,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
 		if (dictionary != null) {
 			results = new ArrayList<NodeRef>();
-			List<AssociationRef> availableTypesAssoc = nodeService.getTargetAssocs(dictionary, DocumentConnectionService.ASSOC_AVAILABLE_CONNECTION_TYPES);
+			List<AssociationRef> availableTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_AVAILABLE_CONNECTION_TYPES);
 			if (availableTypesAssoc != null) {
 				for (AssociationRef assocRef: availableTypesAssoc) {
 					results.add(assocRef.getTargetRef());
@@ -139,10 +140,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		String primaryDocumentType = nodeService.getType(primaryDocumentRef).toPrefixString(namespaceService);
 		String connectedDocumentType = nodeService.getType(connectedDocumentRef).toPrefixString(namespaceService);
 
-		String propPrimaryDocumentType = "@" + DocumentConnectionService.PROP_PRIMARY_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
-		String propConnectedDocumentType = "@" + DocumentConnectionService.PROP_CONNECTED_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
+		String propPrimaryDocumentType = "@" + PROP_PRIMARY_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
+		String propConnectedDocumentType = "@" + PROP_CONNECTED_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
 
-		String dictionaryType = DocumentConnectionService.TYPE_AVAILABLE_CONNECTION_TYPES.toPrefixString(namespaceService);
+		String dictionaryType = TYPE_AVAILABLE_CONNECTION_TYPES.toPrefixString(namespaceService);
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
@@ -170,10 +171,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
     public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
         List<NodeRef> results = new ArrayList<NodeRef>();
 
-        String connectionType = DocumentConnectionService.TYPE_CONNECTION.toPrefixString(namespaceService);
+        String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
 
-        String propPrimaryDocumentRef = "@" + DocumentConnectionService.PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
-        String propConnectedDocumentRef = "@" + DocumentConnectionService.PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+        String propPrimaryDocumentRef = "@" + PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+        String propConnectedDocumentRef = "@" + PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
 
         SearchParameters parameters = new SearchParameters();
         parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
@@ -186,7 +187,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
             if (resultSet != null) {
                 List<NodeRef> connectionRefs = resultSet.getNodeRefs();
                 for (NodeRef ref: connectionRefs) {
-                    List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(ref, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
+                    List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(ref, ASSOC_CONNECTION_TYPE);
                     if (typeAssoc != null && typeAssoc.size() == 1) {
                         NodeRef typeRef = typeAssoc.get(0).getTargetRef();
                         if (typeRef != null && !results.contains(typeRef)) {
@@ -208,7 +209,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
     }
 
 	public List<NodeRef> getAllConnectionTypes() {
-		String type = DocumentConnectionService.TYPE_CONNECTION_TYPE.toPrefixString(namespaceService);
+		String type = TYPE_CONNECTION_TYPE.toPrefixString(namespaceService);
 
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);

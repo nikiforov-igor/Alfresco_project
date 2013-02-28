@@ -1,4 +1,206 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/documents/connections/lecm-connected-documents.js"/>
+                <js src="/scripts/documents/connections/type-select.js"/>
+            </dependencies>
+        </forms>
+    </config>
 
+    <config evaluator="node-type" condition="lecm-connect-types:connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
+    <config evaluator="model-type" condition="lecm-connect-types:connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+            </form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-connect-types:available-connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect-types:available-connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-connect:connection">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect-types:available-connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-connect:connection">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect:primary-document-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect:connection">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect:primary-document-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-connect:connected-document-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">/app:company_home</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="treeNodeSubstituteString">{cm:name}</control-param>
+                            <control-param name="treeNodeTitleSubstituteString">{cm:name}</control-param>
+                            <control-param name="plane">false</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showSelectedItemsPath">false</control-param>
+                            <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-connect:connection-type-assoc">
+                        <control template="/ru/it/lecm/documents/controls/connections/select-types.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/lecm-dic:Dictionary/lecm-dic:Типы_x0020_связи
+                            </control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="connected-documents">
+                <field-visibility>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="connected-with-documents">
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect:connection-type-assoc"
+                           substituteString="{lecm-connect-types:reverse-name}"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="aspect" condition="lecm-connect-aspects:connectable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-aspects"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect-aspects" set="connections">
+                        <control
+                                template="/ru/it/lecm/documents/controls/connections/connected-documents.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="aspect" condition="lecm-connect-aspects:has-connected-documents">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-aspects-has-connect"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect-aspects-has-connect" set="connections">
+                        <control
+                                template="/ru/it/lecm/documents/controls/connections/primary-documents.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

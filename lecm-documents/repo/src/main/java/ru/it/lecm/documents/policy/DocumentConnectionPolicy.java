@@ -1,4 +1,4 @@
-package ru.it.lecm.base.policy;
+package ru.it.lecm.documents.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -7,7 +7,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
-import ru.it.lecm.base.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 import java.util.List;
 

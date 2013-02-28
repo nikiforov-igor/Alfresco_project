@@ -32,4 +32,91 @@
         </property>
     </bean>
 
+    <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionDictionariesBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="documents.LogicEcmModelsConnectionDictionariesBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-types-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="documents.LogicEcmModelsConnectionAspectBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-aspect-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="${groupId}.${artifactId}.dictionaryBootstrap" parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy">
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-types.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-available-types.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="documentConnectionService" init-method="init" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl"
+          depends-on="repositoryHelper, transactionService, nodeService, ServiceRegistry">
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="searchService" ref="SearchService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+    </bean>
+
+    <bean id="documentConnectionScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"
+          depends-on="documentConnectionService">
+        <property name="extensionName">
+            <value>documentConnection</value>
+        </property>
+        <property name="documentConnectionService">
+            <ref bean="documentConnectionService"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+    </bean>
+
+    <bean id="documentConnectionsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionsOnCreateAssocsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
+
+    <bean id="documentConnectionPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+    </bean>
 </beans>

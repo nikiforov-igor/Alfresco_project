@@ -1,8 +1,8 @@
-package ru.it.lecm.base.policy;
+package ru.it.lecm.documents.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
-import ru.it.lecm.base.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 
 /**

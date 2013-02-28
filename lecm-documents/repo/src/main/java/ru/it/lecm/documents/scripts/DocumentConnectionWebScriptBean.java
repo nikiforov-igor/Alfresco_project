@@ -1,4 +1,4 @@
-package ru.it.lecm.base.scripts;
+package ru.it.lecm.documents.scripts;
 
 
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -10,7 +10,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
-import ru.it.lecm.base.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 import java.util.List;
 

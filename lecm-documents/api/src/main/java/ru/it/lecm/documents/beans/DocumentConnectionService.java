@@ -1,4 +1,4 @@
-package ru.it.lecm.base.beans;
+package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
