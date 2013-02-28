@@ -1,6 +1,6 @@
 <webscript>
     <shortname>Мои задачи</shortname>
     <description>Компонент "Мои задачи"</description>
-    <family>dashlet</family>
+    <family>document-dashlet</family>
     <url>/lecm/components/dashlets/document-my-tasks</url>
 </webscript>

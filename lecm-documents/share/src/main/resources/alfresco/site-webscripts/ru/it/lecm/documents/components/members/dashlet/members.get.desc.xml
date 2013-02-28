@@ -1,6 +1,6 @@
 <webscript>
     <shortname>Участники</shortname>
     <description>Компонент "Участники"</description>
-    <family>dashlet</family>
+    <family>document-dashlet</family>
     <url>/lecm/components/dashlets/document-members</url>
 </webscript>
