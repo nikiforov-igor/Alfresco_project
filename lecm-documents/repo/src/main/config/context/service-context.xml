@@ -32,6 +32,12 @@
         </property>
     </bean>
 
+    <bean id="documentService" init-method="init" class="ru.it.lecm.documents.beans.DocumentServiceImpl"
+          depends-on="transactionService, nodeService">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionDictionariesBootstrap">
         <property name="models">
