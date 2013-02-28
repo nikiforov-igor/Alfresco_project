@@ -1,3 +1,4 @@
+<#if page.url.args.statemachineId??>
 <#assign id = args.htmlid>
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <@comp.baseMenu>
@@ -45,3 +46,4 @@
 	    </span>
 </div>
 </@comp.baseMenu>
+</#if>
