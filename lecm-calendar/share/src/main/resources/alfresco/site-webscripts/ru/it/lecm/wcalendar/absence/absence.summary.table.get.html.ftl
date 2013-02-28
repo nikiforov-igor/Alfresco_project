@@ -68,7 +68,7 @@
 										<tr class="diagramm-row">
 										<#list result[employee] as day>
 											<#assign curMonthStr = "m" + curMonth?string>
-											<td <#if (day?length > 0)>style="background-color: ${day}; color: ${day}; border-color: ${day};" </#if> >&nbsp;</td>
+											<td <#if (day?length > 0)>style="background-color: ${day}; color: ${day}; border-color: ${day};"</#if>>&nbsp;</td>
 											<#if (day_index == (calendarHeader[curMonthStr]?size + prevMonthSize - 1)) >
 												<#assign curMonth = curMonth + 1>
 												<#assign prevMonthSize =  prevMonthSize + calendarHeader[curMonthStr]?size>

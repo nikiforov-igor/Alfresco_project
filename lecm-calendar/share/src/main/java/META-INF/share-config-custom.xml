@@ -43,7 +43,7 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"	
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation"
 										event="blur" message-id="message.new-date.error" />
 						</constraint-handlers>
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl"/>
@@ -163,7 +163,7 @@
 					<show id="lecm-shed:type"/>
 				</field-visibility>
 				<appearance>
-					<set id="time-limit" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.date-interval" />
+					<set id="time-limit" template="/ru/it/lecm/wcalendar/controls/2-column-set-augmented.ftl" appearance="title" label-id="label.shedule.form.set.date-interval" />
 					<set id="reiteration-rules"  appearance="title" label-id="label.shedule.form.reiteration-rules" />
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.shedule.form.set.work-time" />
 					<field id="lecm-shed:shed-employee-link-assoc" mandatory="true">
@@ -201,10 +201,18 @@
 							<control-param name="value">SPECIAL</control-param>
 						</control>
 					</field>
-					<!-- TODO: добавить валидатор, проверяющий, что окончание срока действия расписания ПОЗЖЕ его начала. -->
-					<field id="lecm-shed:time-limit-start" label-id="label.shedule.form.set.date-interval.begin" mandatory="true" set="time-limit"/>
-					<field id="lecm-shed:time-limit-end" label-id="label.shedule.form.set.date-interval.end" mandatory="true" set="time-limit"/>
-					<!-- TODO: в сам контрол добавить проверку на обязательные поля -->
+					<field id="lecm-shed:time-limit-start" label-id="label.shedule.form.set.date-interval.begin" mandatory="true" set="time-limit">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.sheduleLimitValidation"
+										event="keyup" message-id="message.error.shedule.shedule-date-limit-validation.early-end" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-shed:time-limit-end" label-id="label.shedule.form.set.date-interval.end" mandatory="true" set="time-limit">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Shedule.sheduleLimitValidation"
+										event="keyup" message-id="message.error.shedule.shedule-date-limit-validation.early-end" />
+						</constraint-handlers>
+					</field>
 					<field id="reiteration-rules" label-id="label.shedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
 						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
 					</field>
@@ -244,7 +252,7 @@
 					<show id="lecm-absence:end"/>
 					<show id="lecm-absence:unlimited"/>
 					<show id="lecm-absence:comment"/>
-					<show id="lecm-absence:abscence-reason-assoc"/>					
+					<show id="lecm-absence:abscence-reason-assoc"/>
 				</field-visibility>
 			</form>
 			<form id="createNewEmployeeAbsenceForm">
@@ -355,7 +363,7 @@
 					<show id="lecm-absence:end"/>
 					<show id="lecm-absence:unlimited"/>
 					<show id="lecm-absence:abscence-reason-assoc"/>
-					<show id="lecm-absence:comment"/>					
+					<show id="lecm-absence:comment"/>
 				</field-visibility>
 				<appearance>
 					<!--"fieldset", "panel", "bordered-panel", "title" and "whitespace"-->

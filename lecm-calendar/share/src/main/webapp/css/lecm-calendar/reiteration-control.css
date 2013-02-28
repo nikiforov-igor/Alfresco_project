@@ -46,3 +46,8 @@
 	background-color: #2E2EE6;
 	color: #FFFFFF;
 }
+#reiteration-rules-error-container {
+    float: left;
+    width: 100%;
+    padding-top: 7px;
+}

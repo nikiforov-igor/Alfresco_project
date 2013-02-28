@@ -1,35 +1,55 @@
 <script type="text/javascript">//<![CDATA[
-	if(!Array.prototype.indexOf) {
+	if (!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function(needle) {
-			for(var i = 0; i < this.length; i++) {
-				if(this[i] === needle) {
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] === needle) {
 					return i;
 				}
 			}
 			return -1;
 		};
 	}
-	YAHOO.util.Event.onContentReady("control-buttons", function () {
-		var elements = YAHOO.util.Selector.query("input","control-buttons");
-		for(var i = 0; i < elements.length; i++){
+
+	YAHOO.Bubbling.on("reiterationRulesUpdated", LogicECM.module.WCalendar.Shedule.reiterationRulesValidation);
+
+	YAHOO.util.Event.onContentReady("control-buttons", function() {
+		var elements = YAHOO.util.Selector.query("input", "control-buttons");
+		for (var i = 0; i < elements.length; i++) {
 			YAHOO.util.Event.addListener(elements[i], "click", onRadioClicked);
 		}
 	});
 
-	YAHOO.util.Event.onContentReady("month-days-mode", function () {
-		var elements = YAHOO.util.Selector.query("td","month-days-mode");
-		for(var i = 0; i < elements.length; i++){
+	YAHOO.util.Event.onContentReady("month-days-mode", function() {
+		var elements = YAHOO.util.Selector.query("td", "month-days-mode");
+		for (var i = 0; i < elements.length; i++) {
 			YAHOO.util.Event.addListener(elements[i], "click", onDateClicked);
 		}
 	});
 
+	YAHOO.util.Event.onContentReady("shift-work-mode", function() {
+		YAHOO.util.Event.addListener("working-days", "change", fireElementChanged);
+		YAHOO.util.Event.addListener("non-working-days", "change", fireElementChanged);
+	});
+
+	YAHOO.util.Event.onContentReady("week-days-mode", function() {
+		var elements = YAHOO.util.Selector.query("input", "week-days-mode");
+		for (var i = 0; i < elements.length; i++) {
+			YAHOO.util.Event.addListener(elements[i], "click", fireElementChanged);
+		}
+	});
+
+	YAHOO.util.Event.onContentReady("reiteration-control-container", function() {
+		fireElementChanged();
+	});
+
+	function fireElementChanged() {
+		YAHOO.Bubbling.fire("reiterationRulesUpdated", this);
+	}
 
 	function onRadioClicked() {
-
 		var monthDays = new YAHOO.util.Element('month-days-mode');
 		var weekDays = new YAHOO.util.Element('week-days-mode');
 		var shiftWork = new YAHOO.util.Element('shift-work-mode');
-
 
 		if (this.value === "week-days") {
 			monthDays.setStyle("display", "none");
@@ -47,9 +67,9 @@
 			alert(this.value);
 		}
 
+		 fireElementChanged();
 	}
 	function onDateClicked() {
-		var td = new YAHOO.util.Element(this);
 		var monthDaysInput = YAHOO.util.Dom.get("month-days-input");
 
 		var selectedDates = monthDaysInput.value.split(",");
@@ -59,27 +79,29 @@
 			var newMonthDaysInput = "";
 			this.removeAttribute("class", 0);
 			for (var j = 0; j < selectedDates.length; j++) {
-				if (selectedDates[j] === dateSelected)  {
+				if (selectedDates[j] === dateSelected) {
 					continue;
 				}
 				if (newMonthDaysInput.length > 0) {
-					newMonthDaysInput += ","
+					newMonthDaysInput += ",";
 				}
 				newMonthDaysInput += selectedDates[j];
 			}
 			monthDaysInput.value = newMonthDaysInput;
 		} else {
-			if (monthDaysInput.value.length > 0 ){
+			if (monthDaysInput.value.length > 0) {
 				monthDaysInput.value += "," + dateSelected;
 			} else {
 				monthDaysInput.value += this.innerText;
 			}
 			this.setAttribute("class", "selected-date");
 		}
+
+		fireElementChanged();
 	}
 //]]></script>
 
-<div class="control-container">
+<div class="control-container" id="reiteration-control-container">
 	<#-- TODO: добавить локализацию для дней недели -->
 	<div class="rule-body" id="week-days-mode" style="display:block">
 		<input type="checkbox" name="w1" value=true> Понедельник<br/>
@@ -115,4 +137,6 @@
 		<input type="radio" name="reiteration-type" value="month-days"/> ${msg("label.shedule.form.month-days-type")}<br/>
 		<input type="radio" name="reiteration-type" value="shift-work"/> ${msg("label.shedule.form.shift-work-type")}<br/>
 	</div>
+
+	<div id="reiteration-rules-error-container"></div>
 </div>

@@ -3,7 +3,7 @@
 	<shortname>wcalendar-absence-summary-table</shortname>
 	<description>Work Calendar: Absence Summary Table</description>
 	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/absence/absence-summary-table?timeOffser={timeOffset}</url>
+	<url>/ru/it/lecm/wcalendar/absence/absence-summary-table?timeOffset={timeOffset}</url>
 	<!--
 	 | Авторизация отключена умышленно!
 	 | Это сделано потому, что этот скрипт выполняет remote.connect к alfresco,

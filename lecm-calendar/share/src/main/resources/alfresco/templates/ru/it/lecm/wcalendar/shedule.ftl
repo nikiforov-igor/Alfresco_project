@@ -18,9 +18,10 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-toolbar.js"/>
 <#-- Служебные функции -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
-<#-- Валидатор времени -->
+<#-- Валидаторы -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-limit-validation.js" />
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/reiteration-rules-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/time-validation.js" />
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/mandatory-validation.js" />
 <#-- Side menu javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
 
