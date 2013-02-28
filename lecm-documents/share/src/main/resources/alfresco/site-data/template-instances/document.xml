@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+   <template-type>ru/it/lecm/documents/document</template-type>
+   <components>
+      <!-- Заголовок -->
+      <!--<component>
+         <region-id>title</region-id>
+         <sub-components>
+            <sub-component id="default">
+               <evaluations>
+                  <evaluation id="lecm-document">
+                     <url>/components/title/simple-title</url>
+                     <properties>
+                        <title>page.lecm.document.title</title>
+                     </properties>
+                  </evaluation>
+               </evaluations>
+            </sub-component>
+         </sub-components>
+      </component>-->
+
+      <!-- Хэдер -->
+      <component>
+         <region-id>document-header</region-id>
+         <sub-components>
+            <sub-component id="default">
+               <evaluations>
+                  <evaluation id="lecm-document">
+                     <url>/components/node-details/node-header</url>
+                     <properties>
+                        <nodeRef>{nodeRef}</nodeRef>
+                        <rootPage>repository</rootPage>
+                        <rootLabelId>path.repository</rootLabelId>
+                        <showPath>false</showPath>
+                     </properties>
+                  </evaluation>
+               </evaluations>
+            </sub-component>
+         </sub-components>
+      </component>
+
+      <!-- Основные сведения -->
+       <component>
+           <region-id>main</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/document-main</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
+       <!-- Вложения -->
+       <component>
+           <region-id>attachments</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/document-attachments</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
+       <!-- Участники -->
+       <component>
+           <region-id>members</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/document-members</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
+       <!-- Мои задачи -->
+       <component>
+           <region-id>tasks</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/document-my-tasks</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
+      <!-- Комментарии -->
+      <component>
+         <region-id>comments</region-id>
+         <url>/components/comments/list</url>
+         <properties>
+            <nodeRef>{nodeRef}</nodeRef>
+            <activityType>document</activityType>
+         </properties>
+      </component>
+
+      <!-- Действия-->
+      <component>
+         <region-id>document-actions</region-id>
+         <url>/components/document-details/document-actions</url>
+         <properties>
+            <nodeRef>{nodeRef}</nodeRef>
+         </properties>
+      </component>
+
+       <!-- Основные сведения -->
+       <component>
+           <region-id>document-metadata</region-id>
+           <url>/components/document-details/document-metadata</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+       <!-- Вложения -->
+       <component>
+           <region-id>document-attachments</region-id>
+           <url>/lecm/components/document/document-attachments</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+       <!-- Бизнес-процессы -->
+       <component>
+           <region-id>document-workflows</region-id>
+           <url>/components/document-details/document-workflows</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+       <!-- История -->
+       <component>
+           <region-id>document-history</region-id>
+           <url>/lecm/components/document/document-history</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+       <!-- Связи -->
+       <component>
+           <region-id>document-links</region-id>
+           <url>/lecm/components/document/document-links</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+      <!-- Метки -->
+      <component>
+         <region-id>document-tags</region-id>
+         <sub-components>
+            <sub-component id="default">
+               <evaluations>
+                  <evaluation>
+                     <url>/components/document-details/document-tags</url>
+                     <properties>
+                        <nodeRef>{nodeRef}</nodeRef>
+                     </properties>
+                  </evaluation>
+               </evaluations>
+            </sub-component>
+         </sub-components>
+      </component>
+
+       <!-- Участники документа -->
+       <component>
+           <region-id>document-members</region-id>
+           <url>/lecm/components/document/document-members</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
+      <!-- Задачи -->
+      <component>
+         <region-id>document-tasks</region-id>
+         <url>/lecm/components/document/document-tasks</url>
+         <properties>
+            <nodeRef>{nodeRef}</nodeRef>
+         </properties>
+      </component>
+
+      <!-- Uploaders -->
+      <component>
+         <region-id>html-upload</region-id>
+         <url>/components/upload/html-upload</url>
+      </component>
+      <component>
+         <region-id>flash-upload</region-id>
+         <url>/components/upload/flash-upload</url>
+      </component>
+      <component>
+         <region-id>file-upload</region-id>
+         <url>/components/upload/file-upload</url>
+      </component>
+
+      <!-- Custom Code -->
+      <component>
+         <region-id>doclib-custom</region-id>
+         <url>/components/documentlibrary/doclib-custom</url>
+      </component>
+
+   </components>
+</template-instance>

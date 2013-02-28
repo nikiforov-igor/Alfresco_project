@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>document-attachments</shortname>
+  <description>Document Attachments Component</description>
+  <url>/lecm/components/document/document-attachments</url>
+</webscript>

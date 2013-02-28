@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Вложения</shortname>
+    <description>Компонент "Вложения"</description>
+    <family>dashlet</family>
+    <url>/lecm/components/dashlets/document-attachments</url>
+</webscript>

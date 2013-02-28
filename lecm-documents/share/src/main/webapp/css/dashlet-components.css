@@ -1,0 +1,27 @@
+.dashlet.document a,
+.dashlet.document a:hover,
+.dashlet.document a:visited {
+    color: #0600cc;
+}
+.dashlet.document.yui-resize .yui-resize-handle {
+    z-index: 0;
+}
+.dashlet.document .toolbar {
+    white-space: nowrap;
+}
+.dashlet.document .body .row {
+	line-height: 16px;
+	margin: 10px;
+}
+
+.yui-gd .yui-u .column2 {
+    width: 49%;
+}
+
+.first .yui-gd div.column1 {
+     width: 49%;
+ }
+
+.first .yui-gd div.column2 {
+    width: 49%;
+}
