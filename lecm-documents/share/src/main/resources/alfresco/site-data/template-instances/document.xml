@@ -220,10 +220,10 @@
          <url>/components/upload/file-upload</url>
       </component>
 
-      <!-- Custom Code -->
+      <!-- Настраиваемая область - заглушка -->
       <component>
-         <region-id>doclib-custom</region-id>
-         <url>/components/documentlibrary/doclib-custom</url>
+         <region-id>custom</region-id>
+         <url>/lecm/components/document/document-custom</url>
       </component>
 
    </components>

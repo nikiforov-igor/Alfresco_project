@@ -15,7 +15,7 @@
     <@region id="document-header" scope="template"/>
     <div class="yui-gc">
         <div class="yui-u first">
-            <div id="main" class="yui-gd grid columnSize2">
+            <div id="main-content-region" class="yui-gd grid columnSize2">
                 <div class="yui-u first column1">
                     <@region id="main" scope="template"/>
                     <@region id="members" scope="template"/>
@@ -25,6 +25,7 @@
                     <@region id="tasks" scope="template"/>
                 </div>
             </div>
+            <@region id="custom" scope="template"/>
             <@region id="comments" scope="template"/>
         </div>
         <div class="yui-u">
@@ -44,7 +45,6 @@
     <@region id="flash-upload" scope="template"/>
     <@region id="file-upload" scope="template"/>
 </div>
-    <@region id="doclib-custom" scope="template"/>
 </@>
 
 <@templateFooter>
