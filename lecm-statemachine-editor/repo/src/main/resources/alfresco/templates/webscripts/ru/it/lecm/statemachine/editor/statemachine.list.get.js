@@ -1,6 +1,6 @@
 var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
 var dictionaryService = ctx.getBean("dictionaryService");
-var qname = Packages.org.alfresco.service.namespace.QName.createQName("http://www.it.ru/logicECM/document/1.0", "base");
+var qname = Packages.ru.it.lecm.documents.beans.DocumentService.TYPE_BASE_DOCUMENT;
 var types = dictionaryService.getSubTypes(qname, true);
 types.remove(qname);
 
