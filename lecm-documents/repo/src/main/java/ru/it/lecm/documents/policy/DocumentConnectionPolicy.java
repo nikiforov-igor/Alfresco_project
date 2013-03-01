@@ -7,9 +7,13 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -41,7 +45,10 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef documentRef = nodeAssocRef.getTargetRef();
 		if (!nodeService.hasAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS)){
-			nodeService.addAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS, null);
+            Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
+            aspectValues.put(DocumentConnectionService.PROP_CONNECTIONS_WITH_LIST, "");
+
+			nodeService.addAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS, aspectValues);
 		}
 	}
 

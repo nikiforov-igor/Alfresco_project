@@ -161,8 +161,8 @@
 
        <!-- Связи -->
        <component>
-           <region-id>document-links</region-id>
-           <url>/lecm/components/document/document-links</url>
+           <region-id>document-connections</region-id>
+           <url>/lecm/components/document/connections</url>
            <properties>
                <nodeRef>{nodeRef}</nodeRef>
            </properties>

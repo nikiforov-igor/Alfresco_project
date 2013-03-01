@@ -36,7 +36,7 @@
             <@region id="document-attachments" scope="template"/>
             <@region id="document-workflows" scope="template"/>
             <@region id="document-history" scope="template"/>
-            <@region id="document-links" scope="template"/>
+            <@region id="document-connections" scope="template"/>
             <@region id="document-tags" scope="template"/>
             <@region id="document-members" scope="template"/>
             <@region id="document-tasks" scope="template"/>

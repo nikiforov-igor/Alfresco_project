@@ -1,6 +1,6 @@
 <#macro renderTreePickerDialogHTML controlId plane showSearch>
 <#assign pickerId = controlId + "-picker">
-<div id="${pickerId}" class="picker yui-panel" style="display: none;">
+<div id="${pickerId}" class="picker yui-panel tree-picker" style="display: none;">
 
     <style type="text/css" media="screen">
         #${pickerId}-searchContainer {
@@ -19,11 +19,21 @@
         #${pickerId}-group-members thead { display: none; }
         #${pickerId}-group-members table { border: none; width: 100% }
         #${pickerId}-group-members td { border-right: none; }
+
         #${pickerId}-groups td { text-align: left; }
+        div.tree-picker div.picker-groups td {
+            text-align: left;
+        }
+
         #${pickerId}-searchText {
             width: 410px;
             padding: 0.3em 1em 0.4em 0.5em;
         }
+        div.tree-picker div.search input.search-input {
+            width: 410px;
+            padding: 0.3em 1em 0.4em 0.5em;
+        }
+
         #${pickerId}-view-selector { padding-top: 0.7em; }
         #${pickerId}-view-roles, #${pickerId}-view-people { padding-left: 1em; }
 
@@ -57,7 +67,7 @@
         <div class="yui-g">
             <#if !plane>
                 <div id="${pickerId}-treeSelector" class="yui-u first panel-left tree">
-                    <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
+                    <div id="${pickerId}-groups" class="picker-items ygtv-highlight picker-groups">
                         <#nested>
                     </div>
                 </div>

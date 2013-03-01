@@ -19,7 +19,7 @@
 -->
 <beans>
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, documents.LogicEcmModelsConnectionAspectBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
@@ -39,7 +39,7 @@
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionDictionariesBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionDictionariesBootstrap, documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-connection-model.xml</value>
