@@ -52,4 +52,11 @@
 		  -->
 	</bean>
 
+    <bean id="contractsService" init-method="init" class="ru.it.lecm.document.beans.ContractsServiceImpl"
+          depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService">
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
 </beans>

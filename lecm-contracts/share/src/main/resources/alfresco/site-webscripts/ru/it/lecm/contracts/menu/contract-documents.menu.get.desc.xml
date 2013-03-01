@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>menu</shortname>
+    <description>Returns the contracts menu.</description>
+    <url>/lecm/contracts/menu</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
