@@ -29,9 +29,6 @@
                      <url>/lecm/components/document/header</url>
                      <properties>
                         <nodeRef>{nodeRef}</nodeRef>
-                        <rootPage>repository</rootPage>
-                        <rootLabelId>path.repository</rootLabelId>
-                        <showPath>false</showPath>
                      </properties>
                   </evaluation>
                </evaluations>

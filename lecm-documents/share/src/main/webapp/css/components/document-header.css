@@ -1,0 +1,30 @@
+.document-header {
+    background: #c5c5c5;
+}
+
+.document-header h1 {
+    padding: 0.5em 0 0.2em;
+}
+
+.document-header .document-info {
+    float: left;
+    width: 78%;
+}
+
+.document-header .status-banner {
+    margin-top: 0.75em;
+    padding: 0.5em 1em;
+}
+
+.document-header .document-action {
+    float: right;
+    width: 20%;
+    text-align: right;
+    padding-top: 4.5em;
+}
+
+/*.node-header .node-action .onDownloadDocumentClick a*/
+/*{*/
+/*background: transparent url(../documentlibrary/actions/document-download-16.png) no-repeat scroll 12px 4px;*/
+/*padding-left: 32px;*/
+/*}*/
