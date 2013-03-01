@@ -3,7 +3,7 @@
 }
 
 .document-header h1 {
-    padding: 0.5em 0 0.2em;
+    padding: 0.5em 1em 0.2em;
 }
 
 .document-header .document-info {
@@ -20,11 +20,15 @@
     float: right;
     width: 20%;
     text-align: right;
-    padding-top: 4.5em;
+    padding-top: 0.5em;
 }
 
-/*.node-header .node-action .onDownloadDocumentClick a*/
-/*{*/
-/*background: transparent url(../documentlibrary/actions/document-download-16.png) no-repeat scroll 12px 4px;*/
-/*padding-left: 32px;*/
-/*}*/
+.document-header .document-action .subscribe span.first-child {
+    background: url('../../images/lecm-subscriptions/alf_subscribe_16.png') no-repeat 5px 5px;
+    padding-left: 7px;
+}
+
+.document-header .document-action .unsubscribe span.first-child {
+    background: url('../../images/lecm-subscriptions/alf_unsubscribe_16.png') no-repeat 5px 5px;
+    padding-left: 7px;
+}
