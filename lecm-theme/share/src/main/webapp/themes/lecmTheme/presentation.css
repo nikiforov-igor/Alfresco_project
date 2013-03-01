@@ -2056,6 +2056,9 @@ div[id$=date-cntrl] - селектор для всех div с id, заканчи
 #alfresco-console .tools-link h2 {
     background-position: 3px 50%;
 }
+#alfresco-repository .alfresco-twister-closed {
+    background-position: 5px 50%;
+}
 #alfresco-repository .toolbar,
 #alfresco-repository .doclist .doclist-bar {
     margin: 0 0 0 -10px;
