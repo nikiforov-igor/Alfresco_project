@@ -11,18 +11,16 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	LogicECM.module.WCalendar.Absence.Toolbar = function(containerId) {
 		return  LogicECM.module.WCalendar.Absence.Toolbar.superclass.constructor.call(
-			this,
-			"LogicECM.module.WCalendar.Absence.Toolbar",
-			containerId,
-			["button", "container", "connection", "json", "selector"]);
+				this,
+				"LogicECM.module.WCalendar.Absence.Toolbar",
+				containerId,
+				["button", "container", "connection", "json", "selector"]);
 	};
 
 	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.Toolbar, Alfresco.component.Base, {
-
 		options: {
 			pageId: null
 		},
-
 		_createNewEmployeeAbsence: function Absence_newEmployeeAbsence(wantedBubblingLabel) {
 			var scope = this;
 			return function(event, obj) {
@@ -33,22 +31,22 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 				var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
 					Alfresco.util.populateHTML(
-						[ p_dialog.id + "-form-container_h", this.msg("label.absence.create-employee-absence.title") ]
-						);
+							[p_dialog.id + "-form-container_h", this.msg("label.absence.create-employee-absence.title")]
+							);
 				};
 
 				var url = "components/form"
-				+ "?itemKind={itemKind}"
-				+ "&itemId={itemId}"
-				+ "&formId={formId}"
-				+ "&destination={destination}"
-				+ "&mode={mode}"
-				+ "&submitType={submitType}"
-				+ "&showCancelButton=true";
+						+ "?itemKind={itemKind}"
+						+ "&itemId={itemId}"
+						+ "&formId={formId}"
+						+ "&destination={destination}"
+						+ "&mode={mode}"
+						+ "&submitType={submitType}"
+						+ "&showCancelButton=true";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
 					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
-					formId: "createNewEmployeeAbsenceForm",//The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
+					formId: "createNewEmployeeAbsenceForm", //The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
 					destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
 					mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
 					submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
@@ -61,9 +59,9 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
-					doBeforeDialogShow:{
-						fn:doBeforeDialogShow,
-						scope:this
+					doBeforeDialogShow: {
+						fn: doBeforeDialogShow,
+						scope: this
 					},
 					doBeforeFormSubmit: {
 						fn: function() {
@@ -105,17 +103,14 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					}
 				});
 				employeeAbsenceForm.show();
-			}
+			};
 		},
-
-
 		_onToolbarReady: function Absence__onToolbarReady() {
 			var scope = this;
 			Alfresco.util.createYUIButton(this, "btnCreateNewEmployeeAbsence", this._createNewEmployeeAbsence(LogicECM.module.WCalendar.Absence.ABSENCE_LABEL), {
 				label: scope.msg("button.new-employee-absence")
 			});
 		},
-
 		onReady: function Absence_onReady() {
 
 			Alfresco.logger.info("A new LogicECM.module.WCalendar.Absence.ToolbarProfile has been created");
@@ -125,5 +120,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		}
 	});
 
-	LogicECM.module.WCalendar.Absence.ChangeFormFieldsNames = function() {};
+	LogicECM.module.WCalendar.Absence.ChangeFormFieldsNames = function() {
+	};
 })();

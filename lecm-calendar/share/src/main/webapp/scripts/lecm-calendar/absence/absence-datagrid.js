@@ -10,34 +10,26 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	var attributeForShow = "";
 
-	LogicECM.module.WCalendar.Absence.DataGrid = function (containerId) {
+	LogicECM.module.WCalendar.Absence.DataGrid = function(containerId) {
 		return LogicECM.module.WCalendar.Absence.DataGrid.superclass.constructor.call(this, containerId);
 	};
 
-	/**
-	 * Extend from LogicECM.module.Base.DataGrid
-	 */
-	YAHOO.lang.extend (LogicECM.module.WCalendar.Absence.DataGrid, LogicECM.module.Base.DataGrid);
+	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DataGrid, LogicECM.module.Base.DataGrid);
 
-	/**
-     * Augment prototype with main class implementation, ensuring overwrite is enabled
-     */
-	YAHOO.lang.augmentObject (LogicECM.module.WCalendar.Absence.DataGrid.prototype, {
-		
-		
+	YAHOO.lang.augmentObject(LogicECM.module.WCalendar.Absence.DataGrid.prototype, {
 		getCellFormatter: function DataGrid_getCellFormatter()
 		{
 			var scope = this;
 
 			/**
-                 * Data Type formatter
-                 *
-                 * @method renderCellDataType
-                 * @param elCell {object}
-                 * @param oRecord {object}
-                 * @param oColumn {object}
-                 * @param oData {object|string}
-                 */
+			 * Data Type formatter
+			 *
+			 * @method renderCellDataType
+			 * @param elCell {object}
+			 * @param oRecord {object}
+			 * @param oColumn {object}
+			 * @param oData {object|string}
+			 */
 			return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
 				var $html = Alfresco.util.encodeHTML;
 				var $links = Alfresco.util.activateLinks;
@@ -129,7 +121,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					html = htmlValue;
 				}
 
-				if (oRecord && oRecord.getData("itemData")){
+				if (oRecord && oRecord.getData("itemData")) {
 					if (oRecord.getData("itemData")["prop_lecm-dic_active"] && oRecord.getData("itemData")["prop_lecm-dic_active"].value == false) {
 						elCell.className += " archive-record";
 					}

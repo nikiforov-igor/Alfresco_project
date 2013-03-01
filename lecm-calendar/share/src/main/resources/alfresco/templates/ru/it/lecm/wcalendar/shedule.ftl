@@ -1,30 +1,25 @@
-
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
-
-<#-- подключить все скрипты необходимые для диалоговых форм -->
+<#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
-<#-- Custom toolbar stylesheet -->
+<#-- Custom stylesheets -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/reiteration-control.css"/>
 
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-datagrid.js"/>
-<#-- Custom Toolbar javascript-->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-toolbar.js"/>
-<#-- Служебные функции -->
+<#-- Скрипты меню, тулбара и датагрида -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-toolbar.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
 <#-- Валидаторы -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/shedule-limit-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/reiteration-rules-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/shedule/time-validation.js" />
-<#-- Side menu javascript-->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
-
 
 <script type="text/javascript">//<![CDATA[
 
@@ -46,7 +41,6 @@ LogicECM.module.WCalendar.Shedule.SHEDULE_CONTAINER = LogicECM.module.WCalendar.
 LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL = LogicECM.module.WCalendar.Shedule.SHEDULE_LABEL || "sheduleDatagrid";
 
 //]]></script>
-
 </@>
 
 <#assign showContent = isEngineer || isBoss>

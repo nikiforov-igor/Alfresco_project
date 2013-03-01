@@ -1,29 +1,26 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
-<#--<#include "/org/alfresco/include/documentlibrary.inc.ftl" />-->
 
 <@templateHeader "transitional">
+<#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
-<#-- Custom calendar stylesheet -->
+<#-- Custom stylesheets -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-calendar/wcalendar-calendar.css" />
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
 
-<#-- Служебные функции -->
+<#-- Скрипты меню, тулбара и датагрида -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
-<#-- Скрипт для валидации формы. Определяет, нет ли уже в списке дня, который пытаются добавить -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
-<#-- Custom Data Grid javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/non-working-days-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/working-days-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/years-datagrid.js"/>
-<#-- Custom Toolbar javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/special-days-toolbar.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/years-toolbar.js"/>
-<#-- Side menu javascript-->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
+<#-- Валидаторы -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/date-existence-validation.js" />
 
 <script type="text/javascript">//<![CDATA[
 <#if isEngineer>

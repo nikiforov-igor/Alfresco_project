@@ -15,13 +15,13 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			requestContentType: "application/json",
 			responseContentType: "application/json",
 			successCallback: {
-				fn: function (response) {
+				fn: function(response) {
 					var result = response.json;
 					if (result != null) {
 						LogicECM.module.WCalendar.Absence.isAbsent = result.isAbsent;
 						YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", {
 							isAbsent: result.isAbsent
-						} );
+						});
 						Absence_ShowControlElements();
 					}
 				},
@@ -41,7 +41,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				requestContentType: "application/json",
 				responseContentType: "application/json",
 				successCallback: {
-					fn: function (response) {
+					fn: function(response) {
 						var result = response.json;
 						if (result != null && result.showCancelAbsenceDialog) {
 							LogicECM.module.WCalendar.Absence.cancelAbsence();
@@ -120,40 +120,40 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			close: false,
 			modal: true,
 			buttons: [{
-				text: Alfresco.component.Base.prototype.msg("button.yes"),
-				handler: function Absence_cancelAbsence_acceptCancel() {
-					Alfresco.util.Ajax.request({
-						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/set/endCurrentEmployeeActiveAbsence",
-						requestContentType: "application/json",
-						responseContentType: "application/json",
-						successCallback: {
-							fn: function (response) {
-								LogicECM.module.WCalendar.Absence.isAbsent = false;
-								YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", {
-									isAbsent: false
-								} );
-								Absence_DrawInstantElement();
-								Absence_DrawCancelElement();
-								Alfresco.util.PopupManager.displayMessage({
-									text: Alfresco.component.Base.prototype.msg("message.absence.cancel-absence.success")
-								});
-							},
-							scope: this
-						}
-					});
-					this.destroy();
-				}
-			},
-			{
-				text: Alfresco.component.Base.prototype.msg("button.no"),
-				handler: function Absence_cancelAbsence_denyCancel() {
-					this.destroy();
+					text: Alfresco.component.Base.prototype.msg("button.yes"),
+					handler: function Absence_cancelAbsence_acceptCancel() {
+						Alfresco.util.Ajax.request({
+							method: "GET",
+							url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/set/endCurrentEmployeeActiveAbsence",
+							requestContentType: "application/json",
+							responseContentType: "application/json",
+							successCallback: {
+								fn: function(response) {
+									LogicECM.module.WCalendar.Absence.isAbsent = false;
+									YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", {
+										isAbsent: false
+									});
+									Absence_DrawInstantElement();
+									Absence_DrawCancelElement();
+									Alfresco.util.PopupManager.displayMessage({
+										text: Alfresco.component.Base.prototype.msg("message.absence.cancel-absence.success")
+									});
+								},
+								scope: this
+							}
+						});
+						this.destroy();
+					}
 				},
-				isDefault: true
-			}]
+				{
+					text: Alfresco.component.Base.prototype.msg("button.no"),
+					handler: function Absence_cancelAbsence_denyCancel() {
+						this.destroy();
+					},
+					isDefault: true
+				}]
 		});
-	}
+	};
 
 	LogicECM.module.WCalendar.Absence.newInstantAbsence = function Absence_onClickInstantAbsence(node) {
 		// если отсутствие каких-либо скриптов будет мешать созданию диалога, их можно добавить сюда
@@ -167,7 +167,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					requestContentType: "application/json",
 					responseContentType: "application/json",
 					successCallback: {
-						fn: function (response) {
+						fn: function(response) {
 							var result = response.json;
 							if (result != null) {
 								LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = result;
@@ -191,7 +191,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					requestContentType: "application/json",
 					responseContentType: "application/json",
 					successCallback: {
-						fn: function (response) {
+						fn: function(response) {
 							var result = response.json;
 							if (result != null) {
 								LogicECM.module.WCalendar.Absence.defaultReasonNodeRef = result.nodeRef;
@@ -214,18 +214,18 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 			var doBeforeDialogShow = function Absence_doBeforeDialogShow(p_form, p_dialog) {
 				Alfresco.util.populateHTML(
-					[ p_dialog.id + "-form-container_h", Alfresco.component.Base.prototype.msg("label.absence.create-instant-absence.title") ]
-					);
+						[p_dialog.id + "-form-container_h", Alfresco.component.Base.prototype.msg("label.absence.create-instant-absence.title")]
+						);
 			};
 
 			var url = "components/form"
-			+ "?itemKind={itemKind}"
-			+ "&itemId={itemId}"
-			+ "&formId={formId}"
-			+ "&destination={destination}"
-			+ "&mode={mode}"
-			+ "&submitType={submitType}"
-			+ "&showCancelButton=true";
+					+ "?itemKind={itemKind}"
+					+ "&itemId={itemId}"
+					+ "&formId={formId}"
+					+ "&destination={destination}"
+					+ "&mode={mode}"
+					+ "&submitType={submitType}"
+					+ "&showCancelButton=true";
 			var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 				itemKind: "type",
 				itemId: itemType,
@@ -242,7 +242,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				width: "50em",
 				templateUrl: templateUrl,
 				destroyOnHide: true,
-				doBeforeDialogShow:{
+				doBeforeDialogShow: {
 					fn: doBeforeDialogShow,
 					scope: this
 				},
@@ -251,7 +251,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-createNewInstantAbsenceForm_prop_lecm-absence_end");
 						var htmlNodeUnlimited = YAHOO.util.Dom.get(scope.id + "-createNewInstantAbsenceForm_prop_lecm-absence_unlimited");
 						var endDate;
-						var htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0]
+						var htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0];
 						htmlNodeBegin.value = Alfresco.util.toISO8601(new Date());
 						if (htmlNodeUnlimited.checked) {
 							var beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value);
@@ -269,7 +269,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						LogicECM.module.WCalendar.Absence.isAbsent = true;
 						YAHOO.Bubbling.fire("currentEmployeeAbsenceChanged", {
 							isAbsent: true
-						} );
+						});
 						Alfresco.util.Ajax.request({
 							method: "GET",
 							url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/AbsenceCancelShowDialog",
@@ -342,7 +342,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
 		}
 		return result;
-	}
+	};
 
 	LogicECM.module.WCalendar.Absence.drawCancelElement = Absence_DrawCancelElement;
 	LogicECM.module.WCalendar.Absence.drawInstantElement = Absence_DrawInstantElement;

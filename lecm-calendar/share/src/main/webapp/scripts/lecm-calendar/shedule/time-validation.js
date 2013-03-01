@@ -14,7 +14,7 @@ LogicECM.module.WCalendar.Shedule.timeValidation = function time(field, args, ev
 	if (!args) {
 		args = {};
 	}
-	//	  TODO: Добавить проверку того, что время окончания работы больше времени начала работы
+
 	if (field.value.length < 1) {
 		return false;
 	}

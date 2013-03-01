@@ -1,20 +1,20 @@
 <#include "/org/alfresco/include/alfresco-template.ftl"/>
 
 <@templateHeader>
-
-<#-- подключить все скрипты необходимые для диалоговых форм -->
+<#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.get.head.ftl">
 
-<#-- Далее перечисляются самописные скрипты LogicECM  -->
+<#-- Custom stylesheets -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-user-profile/user-profile-menu.css"/>
 
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
-<#-- Служебные функции -->
+<#-- Скрипты меню, тулбара и датагрида -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/date-interval-validation.js"/>
-
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
+<#-- Скрипт для страницы "Меня нет в офисе" -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/instant-absence-page.js"/>
+<#-- Валидаторы -->
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/date-interval-validation.js"/>
 
 <script type="text/javascript">//<![CDATA[
 
@@ -32,7 +32,6 @@ LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
 LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER || absenceContainer;
 
 //]]></script>
-
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

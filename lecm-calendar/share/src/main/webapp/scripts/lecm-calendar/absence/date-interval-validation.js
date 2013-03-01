@@ -85,7 +85,7 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 					nodeRef: assocEmployeeRef
 				};
 
-				// Yahoo UI не умеет синхронных (блокирующий) AJAX. Придется использовать jQuery
+				// Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
 				jQuery.ajax({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/get/isIntervalSuitableForAbsence",
 					type: "POST",
