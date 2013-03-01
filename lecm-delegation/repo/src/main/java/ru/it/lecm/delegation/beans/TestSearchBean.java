@@ -1306,7 +1306,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 		// logger.info( sb.toString());
 		// result.put("return", sb.toString());
-		addStepResults( result, runList);
+		addStepResults( result, runList, "test");
 
 		logger.info(result.toString());
 
@@ -1314,7 +1314,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	}
 
 
-	private void addStepResults(JSONObject result, List<StepResult> runList)
+	private void addStepResults(JSONObject result, List<StepResult> runList, String prefix)
 			throws JSONException
 	{
 		if (runList == null) {
@@ -1330,23 +1330,23 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				final JSONObject step = new JSONObject();
 				steps.put(step);
 
-				step.put("step_num", i);
-				step.put("step_name", String.format( "test_%d", i));
+				step.put( prefix+ "-Num", i);
+				step.put( prefix+ "-Name", String.format( "test_%d", i));
 
 				if (sr == null) {
-					step.put("EResult", "NULL");
+					step.put( prefix+ "-Result", "NULL");
 				} else {
-					step.put( "EResult", sr.getCode());
+					step.put( prefix+ "-Result", sr.getCode());
 					step.put( "info", sr.getInfo() );
 					if (sr.getRtmError() != null) {
 						step.put("rtmError", sr.getRtmError());
 					}
 					if (sr.getNestedResults().size() == 0) {
-						step.put("substeps", "EMPTY");
+						step.put( prefix+ "s", "EMPTY");
 					} else {
 						final JSONObject nested = new JSONObject();
-						addStepResults(nested, sr.getNestedResults());
-						step.put("substeps", nested);
+						addStepResults(nested, sr.getNestedResults(), "action");
+						step.put( prefix+ "s", nested);
 					}
 				}
 		}

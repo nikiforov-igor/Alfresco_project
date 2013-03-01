@@ -160,6 +160,13 @@ public class CreateNode extends LecmActionBase {
 				logger.debug("run() with args: "+ this.toString() );
 			}
 
+			// предварительная очистка результатов
+			if (this.destRefArgName != null) {
+				stage = String.format( "Clear result {%s} inside context as NULL", this.getDestRefArgName());
+				logger.debug(stage);
+				getArgsAssigner().setMacroValue( this.getDestRefArgName(), null);
+			}
+
 			final QName assicTypeQName = ContentModel.ASSOC_CONTAINS;
 			// final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
 			final QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID ().toString ());
@@ -215,7 +222,7 @@ public class CreateNode extends LecmActionBase {
 			}
 
 		} catch (Exception ex) {
-			final String msg = String.format("Failed CreateNode <%s> at phase <%s>:\n%s", this.getClass().getName(), stage, ex.getMessage());
+			final String msg = String.format("Failed CreateNode %s at phase %s:\n%s", this.getClass().getName(), stage, ex.getMessage());
 			logger.error( msg, ex);
 			throw new RuntimeException( msg, ex);
 		}

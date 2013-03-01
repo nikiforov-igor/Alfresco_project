@@ -191,6 +191,7 @@ public class ExecutorBeanImpl
 			@Override
 			public List<StepResult> doWork() throws Exception {
 				// для проверки записи начинаем новую пишущую транзакцию ...
+				/*
 				final boolean transReadonly = false;
 				final boolean transReaquiersNew = true; // (!) новая транзакция
 				final List<StepResult> result 
@@ -202,6 +203,8 @@ public class ExecutorBeanImpl
 							}
 						}
 						, transReadonly, transReaquiersNew);
+				*/
+				final List<StepResult> result = doRunAll(); 
 				return result;
 			}
 		};
@@ -234,13 +237,15 @@ public class ExecutorBeanImpl
 			public StepResult doWork() throws Exception {
 				// для проверки записи надо будет пишущую транзакцию ...
 				final boolean transReadonly = false;
-				final boolean transReaquiersNew = false; // если транзакция будет - входим в неё
+				final boolean transReaquiersNew = true; // шаг = отдельный ТЕСТ, так что начинаем новую транзакцию ...
 				final StepResult result 
 					= transactionService.getRetryingTransactionHelper().doInTransaction(
 						new RetryingTransactionHelper.RetryingTransactionCallback<StepResult>() {
 							@Override
 							public StepResult execute() throws Throwable {
-								return doRunStep(i);
+								final StepResult code = doRunStep(i);
+								// if (code != null && code.getCode() == EResult.OK) commit();
+								return code;
 							}
 						}
 						, transReadonly, transReaquiersNew);
@@ -258,6 +263,7 @@ public class ExecutorBeanImpl
 		final DurationLogger d = new DurationLogger();
 		final StepResult result = new StepResult( EResult.OK);
 		String stage = String.format( "runing step %s", i);
+		int j = 0;
 		try {
 			final SingleTest step = this.steps.get(i);
 			if (step == null || step.getActions() == null)
@@ -265,7 +271,6 @@ public class ExecutorBeanImpl
 
 			this.context = new TestingContextImpl(step);
 
-			int j = 0;
 			for (RunAction act: step.getActions()) {
 				j++;
 				stage = String.format( "step %s.%s, action %s", i+1, j, act.getClass());
@@ -286,12 +291,12 @@ public class ExecutorBeanImpl
 				logger.info( String.format( "SUCCESSFULL step %s.%s, action %s", i+1, j, act.getClass()) );
 			}
 
-			result.setCode(EResult.OK); 
+			result.setCode(EResult.OK);
 		} catch (Throwable t) {
 			result.setData( EResult.ERROR, t, "problem at phase '"+ stage+ "'");
 			logger.error( "problem at phase '"+ stage+ "'", t);
 		} finally {
-			d.logCtrlDuration(logger, String.format( "step %s duration {t}", i+1));
+			d.logCtrlDuration(logger, String.format( "step %s (%s actions) duration {t} msec", i+1, j));
 		}
 
 		return result;

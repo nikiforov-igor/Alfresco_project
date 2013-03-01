@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 
 import ru.it.lecm.integrotest.utils.NodeRefData;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * Продвинуть документ по его ЖЦ.
@@ -36,8 +37,8 @@ public class DocMoveByWorkflowStep extends LecmActionBase {
 	 * аргумент - ключ для получения значения из этого списка.
 	 * например <property name="nodeByMacros" value="result.createdId" />
 	 */
-	public void findNodeByMacros(String macros) {
-		this.setNodeRef( (NodeRef) getArgsAssigner().getMacroValue(macros) );
+	public NodeRef findNodeByMacros(String macros) {
+		return (NodeRef) getArgsAssigner().getMacroValue(macros);
 	}
 
 	/**
@@ -54,34 +55,34 @@ public class DocMoveByWorkflowStep extends LecmActionBase {
 
 	@Override
 	public void run() {
+		NodeRef docRef = this.nodeRef;
 		// при необходимости находим узел ...
-		if (this.nodeRef == null && ref.hasRefData()) {
-			this.nodeRef = ref.findNodeRef(getContext().getFinder());
+		if (docRef == null && ref.hasRefData()) {
+			docRef = ref.findNodeRef(getContext().getFinder());
 		}
 
-		if (this.nodeRef == null && this.nodeRefMacros != null) {
-			findNodeByMacros( this.nodeRefMacros);
+		if (docRef == null && this.nodeRefMacros != null) {
+			docRef = findNodeByMacros( this.nodeRefMacros);
 		}
 
-		doNext();
+		doNext( docRef, getContext().getStateMachineService(), getContext().getPublicServices().getWorkflowService());
 	}
 
-	private void doNext() {
-		final WorkflowService wfSrvc = getContext().getPublicServices().getWorkflowService();
-		final List<WorkflowInstance> wfi = wfSrvc.getWorkflowsForContent(this.nodeRef, true); // активные процессы
+	private static void doNext(final NodeRef doc, final StateMachineServiceBean smSrvc, final WorkflowService wfSrvc) {
+		final List<WorkflowInstance> wfi = wfSrvc.getWorkflowsForContent(doc, true); // активные процессы
 		if (wfi != null && wfi.size() >=1 )  {
 			final String wfid = wfi.get(0).getId();
 			// final WorkflowTask wfTask = wfSrvc.getStartTask(wfid);
 			// final String taskId = ...
-			final String taskId = getContext().getStateMachineService().getCurrentTaskId(wfid);
-			logger.warn( String.format("Document %s using active Workflow item %s", nodeRef, taskId));
+			final String taskId = smSrvc.getCurrentTaskId(wfid);
+			logger.warn( String.format("Document %s using active Workflow item %s", doc, taskId));
 
 			// смена статуса ...
-			getContext().getStateMachineService().nextTransition( taskId);
+			smSrvc.nextTransition( taskId);
 
-			logger.info( String.format("Document '%s' has been moved to the next Workflow step", nodeRef));
+			logger.info( String.format("Document '%s' has been moved to the next Workflow step", doc));
 		} else {
-			logger.warn( String.format("Document '%s' has no active Workflow items -> nothing to move", nodeRef));
+			logger.warn( String.format("Document '%s' has no active Workflow items -> nothing to move", doc));
 		}
 	}
 

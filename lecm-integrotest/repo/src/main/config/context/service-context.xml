@@ -438,9 +438,10 @@
 					<property name="findParentRef.parent.value" value="Company Home" />
 				</bean>
 
-				<!-- Проверка прав доступа к документу в статусе 0 = Черновик... -->
+				<!-- Проверка прав доступа к документу в статусе 0 = Черновик...
 				<ref local="chkDocACL_byAdmin" />
 				<ref local="chkDocACL_Draft1" />
+				 -->
 			</list>
 		</property>
 	</bean>

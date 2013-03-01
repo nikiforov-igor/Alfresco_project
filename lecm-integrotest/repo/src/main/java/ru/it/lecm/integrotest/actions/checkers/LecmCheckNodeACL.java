@@ -60,6 +60,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 
 	private UserAccessTable accessMap;
 	private boolean continueOnErrors = true;
+	private boolean dontThrowErrors = false;
 
 	/**
 	 * Таблица прав доступа (value) для пользователей (key)
@@ -210,7 +211,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	 */
 	public void setNodeRef(NodeRef value) {
 		this.nodeRef = value;
-		this.findRef.clear(); // drop
+		// this.findRef.clear(); // drop
 	}
 
 	/**
@@ -235,8 +236,8 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	 * аргумент - ключ для получения значения из этого списка.
 	 * например <property name="nodeByMacros" value="result.createdId" />
 	 */
-	public void findNodeByMacros(String macros) {
-		this.setNodeRef( (NodeRef) getArgsAssigner().getMacroValue(macros) );
+	public NodeRef findNodeByMacros(String macros) {
+		return (NodeRef) getArgsAssigner().getMacroValue(macros);
 	}
 
 	public NodeRefData getFindRef() {
@@ -298,6 +299,18 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	}
 
 	/**
+	 * @return true, чтобы при исключениях о неверных проверках НЕ поднимать исключения из своего метода run(),
+	 * (по-умол false)
+	 */
+	public boolean isDontThrowErrors() {
+		return dontThrowErrors;
+	}
+
+	public void setDontThrowErrors(boolean dontThrowErrors) {
+		this.dontThrowErrors = dontThrowErrors;
+	}
+
+	/**
 	 * Фабричный метод получения мапы (пользователь-доступ)
 	 * @param userAndAccess строка в виде "login:доступ; login:доступ"
 	 * @return
@@ -324,21 +337,22 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	@Override
 	public void run() {
 		// получение узла ...
-		if (this.nodeRef == null && this.findRef.hasRefData() ) {
-			this.nodeRef = this.findRef.findNodeRef( getContext().getFinder());
+		NodeRef docRef = this.nodeRef;
+		if (docRef == null && this.findRef.hasRefData() ) {
+			docRef = this.findRef.findNodeRef( getContext().getFinder());
 		}
 
-		if (this.nodeRef == null && this.nodeRefMacros != null) {
-			findNodeByMacros( this.nodeRefMacros);
+		if (docRef == null && this.nodeRefMacros != null) {
+			docRef = findNodeByMacros( this.nodeRefMacros);
 		}
 
-		logger.debug( String.format("checking users access for node {%s}", this.nodeRef));
+		logger.debug( String.format("checking users access for node {%s}", docRef));
 
 		chkConfigArgs();
 
 		if (logger.isDebugEnabled()) { 
-			final StringBuilder dump = Utils.makeAttrDump(this.nodeRef, getContext().getNodeService(), String.format("\nAnalyzing node {%s}:\n", this.nodeRef ));
-			final Set<AccessPermission> perms = getContext().getPermissionService().getAllSetPermissions(this.nodeRef);
+			final StringBuilder dump = Utils.makeAttrDump(docRef, getContext().getNodeService(), String.format("\nAnalyzing node {%s}:\n", docRef));
+			final Set<AccessPermission> perms = getContext().getPermissionService().getAllSetPermissions(docRef);
 			if (perms == null)
 				dump.append("\n\t (!) ACL is NULL\n");
 			else
@@ -359,7 +373,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 			i++;
 			final String usrLogin = e.getKey(); // соответствующий пользователь
 			final StdPermission perm = e.getValue();
-			final boolean flagOK = chkNodeUserAccess( nodeRef, usrLogin, perm);
+			final boolean flagOK = chkNodeUserAccess( docRef, usrLogin, perm);
 			sb.append( String.format( "\n  %2d\t %5s\t %3s\t '%s'", i, (flagOK ? "OK" : "*FAIL"), perm.getInfo(), usrLogin));
 
 			if (logger.isTraceEnabled()) { // выдаём состав авторизаций пользователя
@@ -370,10 +384,10 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		}
 		sb.append( STR_TABLE_DELIMITER);
 
-		logger.info( String.format( "%s access check for node: %s\n%s", (failed ? "(!) BAD" : "SUCCESS"), this.nodeRef, sb.toString() ));
+		logger.info( String.format( "%s access check for node: %s\n%s", (failed ? "(!) BAD" : "SUCCESS"), docRef, sb.toString() ));
 
-		if (failed)
-			throw new TestFailException( isContinueOnErrors(), String.format( "Failed access check for node: %s\n%s", this.nodeRef, sb.toString() ));
+		if (failed && !isDontThrowErrors())
+			throw new TestFailException( isContinueOnErrors(), String.format( "Failed access check for node: %s\n%s", docRef, sb.toString() ));
 	}
 
 
@@ -389,7 +403,10 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	 * Проверить сконфигурированные параметры
 	 */
 	private void chkConfigArgs() {
-		chkAndLogCondition( nodeRef == null || nodeRef.getId().trim().length() == 0, "No node ref assigned");
+		chkAndLogCondition( (nodeRef == null || nodeRef.getId().trim().length() == 0) 
+				&& (!this.findRef.hasRefData())
+				&& (this.nodeRefMacros == null || this.nodeRefMacros.trim().length() == 0)
+				, "No node ref assigned");
 		chkAndLogCondition( rwCheckingPropName == null || rwCheckingPropName.trim().length() == 0, "No check property assigned");
 
 		chkAndLogCondition( accessMap == null, "No access mapping assigned");
@@ -430,7 +447,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 			}
 		};
 
-		final Boolean result = AuthenticationUtil.runAs( runner, person.getId());
+		final Boolean result = AuthenticationUtil.runAs( runner, usrLogin); // person.getId());
 
 		return result;
 	}

@@ -26,8 +26,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureEmployeePolicy
 	extends SecurityJournalizedPolicyBase
 	implements NodeServicePolicies.OnCreateNodePolicy
+
 				, NodeServicePolicies.OnUpdatePropertiesPolicy
 				, NodeServicePolicies.OnDeleteNodePolicy
+
 				, NodeServicePolicies.OnCreateAssociationPolicy
 				, NodeServicePolicies.OnDeleteAssociationPolicy
 {

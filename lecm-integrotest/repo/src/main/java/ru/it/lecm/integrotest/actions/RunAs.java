@@ -109,12 +109,12 @@ public class RunAs extends LecmActionBase {
 		} else if (ASSYSTEM.equalsIgnoreCase(getByUser())) { // выполнить от имени системы
 			AuthenticationUtil.runAsSystem( runner);
 		} else { // выполнить от имени указанного ползователя ...
-			// получение Person по сконфигурированному имени ...
+			// (for safe) получение Person по сконфигурированному имени ...
 			final NodeRef person = getContext().getPublicServices().getPersonService().getPerson(this.getByUser());
 			logger.debug( String.format( "run as user <%s>: found Person node is %s", this.getByUser(), person));
 
 			// doit...
-			AuthenticationUtil.runAs( runner, person.getId());
+			AuthenticationUtil.runAs( runner, getByUser()) ; // person.getId());
 		}
 
 		logger.info( String.format( "SUCCESS %s", this.toString()));
