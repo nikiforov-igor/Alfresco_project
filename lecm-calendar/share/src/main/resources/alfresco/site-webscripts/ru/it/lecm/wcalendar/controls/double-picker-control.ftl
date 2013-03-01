@@ -112,6 +112,8 @@ function Shedule_DrawPicker(instance) {
 		var pickerNode = Dom.get("${controlPickerId}-" + instance.value);
 		pickerNode.checked = 1;
 	}
+
+	YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 }
 
 function Shedule_PickerOKPressed(layer, args) {
@@ -164,14 +166,12 @@ YAHOO.Bubbling.on("${controlPickerLabel}", Shedule_PickerOKPressed, this);
 
 Shedule_DrawPicker({ value: '1'});
 
-
 //]]></script>
 
 
 <div class="form-field" id="${controlContainerId}">
 	<@htmlMarkup field/>
 </div>
-
 
 <#macro htmlMarkup field>
 	<#assign pickerId = controlId + "-picker">
