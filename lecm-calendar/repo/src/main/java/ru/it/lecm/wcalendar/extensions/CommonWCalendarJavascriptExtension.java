@@ -35,7 +35,7 @@ public class CommonWCalendarJavascriptExtension extends BaseScopableProcessorExt
 	 *
 	 * @param commonWCalendarService передается Spring-ом
 	 */
-	public void setCommonWCalService(ICommonWCalendar commonWCalendarService) {
+	public void setCommonWCalService(final ICommonWCalendar commonWCalendarService) {
 		this.commonWCalendarService = commonWCalendarService;
 	}
 
@@ -72,7 +72,7 @@ public class CommonWCalendarJavascriptExtension extends BaseScopableProcessorExt
 	 * @param nodeRefs список NodeRef-ов
 	 * @return специальный объект, доступный для работы из JS
 	 */
-	protected Scriptable getAsScriptable(List<NodeRef> nodeRefs) {
+	protected Scriptable getAsScriptable(final List<NodeRef> nodeRefs) {
 		Scriptable scope = getScope();
 		int size = nodeRefs.size();
 		Object[] nodes = new Object[size];

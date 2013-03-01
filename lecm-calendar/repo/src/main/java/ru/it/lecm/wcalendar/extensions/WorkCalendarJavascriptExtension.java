@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -12,7 +13,8 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import org.mozilla.javascript.Context;
 
 /**
- * JavaScript root-object обертка для интерфейса IWorkCalendar.
+ * JavaScript root-object под названием "workCalendar". Предоставляет доступ к
+ * методам интерфейса IWorkCalendar из web-script'ов.
  *
  * @see ru.it.lecm.wcalendar.IWorkCalendar
  * @author vlevin
@@ -34,11 +36,11 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return сотрудник работает в указанную дату - true
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public boolean getEmployeeAvailability(String nodeRefStr, Object jsDate) {
+	public boolean getEmployeeAvailability(final String nodeRefStr, final Object jsDate) {
 		Date date;
 		date = (Date) Context.jsToJava(jsDate, Date.class);
 
-		return workCalendarService.getEmployeeAvailability(new NodeRef(nodeRefStr), date);
+		return getEmployeeAvailability(new NodeRef(nodeRefStr), date);
 	}
 
 	/**
@@ -50,7 +52,7 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return сотрудник работает в указанную дату - true
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public boolean getEmployeeAvailability(String nodeRefStr, String dateStr) {
+	public boolean getEmployeeAvailability(final String nodeRefStr, final String dateStr) {
 		Date date;
 
 		try {
@@ -58,7 +60,46 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 		} catch (ParseException ex) {
 			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
 		}
-		return workCalendarService.getEmployeeAvailability(new NodeRef(nodeRefStr), date);
+		return getEmployeeAvailability(new NodeRef(nodeRefStr), date);
+	}
+
+	/**
+	 * Узнать, работает ли сотрудник в указанный день.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param jsDate интересуюшая дата в виде JS-объекта Date.
+	 * @return сотрудник работает в указанную дату - true
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public boolean getEmployeeAvailability(final ScriptNode nodeRef, final Object jsDate) {
+		Date date;
+		date = (Date) Context.jsToJava(jsDate, Date.class);
+
+		return getEmployeeAvailability(nodeRef.getNodeRef(), date);
+	}
+
+	/**
+	 * Узнать, работает ли сотрудник в указанный день.
+	 *
+	 * @param nodeRef NodeRef на сотрудника в виде строки.
+	 * @param dateStr интересуюшая дата в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @return сотрудник работает в указанную дату - true
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public boolean getEmployeeAvailability(final ScriptNode nodeRef, final String dateStr) {
+		Date date;
+
+		try {
+			date = dateParser.parse(dateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
+		}
+		return getEmployeeAvailability(nodeRef.getNodeRef(), date);
+	}
+
+	private boolean getEmployeeAvailability(NodeRef node, Date date) {
+		return workCalendarService.getEmployeeAvailability(node, date);
 	}
 
 	/**
@@ -72,9 +113,8 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return JSON-массив дат рабочих дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public JSONArray getEmployeeWorkindDays(String nodeRefStr, String startStr, String endStr) {
+	public JSONArray getEmployeeWorkindDays(final String nodeRefStr, final String startStr, final String endStr) {
 		Date start, end;
-		JSONArray result;
 
 		try {
 			start = dateParser.parse(startStr);
@@ -88,10 +128,7 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(new NodeRef(nodeRefStr), start, end);
-		result = new JSONArray(employeeWorkindDays);
-
-		return result;
+		return getEmployeeWorkindDays(new NodeRef(nodeRefStr), start, end);
 	}
 
 	/**
@@ -103,14 +140,65 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return JSON-массив дат рабочих дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public JSONArray getEmployeeWorkindDays(String nodeRefStr, Object jsStart, Object jsEnd) {
+	public JSONArray getEmployeeWorkindDays(final String nodeRefStr, final Object jsStart, final Object jsEnd) {
 		Date start, end;
-		JSONArray result;
 
 		start = (Date) Context.jsToJava(jsStart, Date.class);
 		end = (Date) Context.jsToJava(jsEnd, Date.class);
 
-		List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(new NodeRef(nodeRefStr), start, end);
+		return getEmployeeWorkindDays(new NodeRef(nodeRefStr), start, end);
+	}
+
+	/**
+	 * Получить список рабочих дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param startStr начало периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @param endStr конец периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @return JSON-массив дат рабочих дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public JSONArray getEmployeeWorkindDays(final ScriptNode nodeRef, final String startStr, final String endStr) {
+		Date start, end;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		try {
+			end = dateParser.parse(endStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return getEmployeeWorkindDays(nodeRef.getNodeRef(), start, end);
+	}
+
+	/**
+	 * Получить список рабочих дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param jsStart начало периода в виде JS-объекта Date.
+	 * @param jsEnd конец периода в виде JS-объекта Date.
+	 * @return JSON-массив дат рабочих дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public JSONArray getEmployeeWorkindDays(final ScriptNode nodeRef, final Object jsStart, final Object jsEnd) {
+		Date start, end;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+		end = (Date) Context.jsToJava(jsEnd, Date.class);
+
+		return getEmployeeWorkindDays(nodeRef.getNodeRef(), start, end);
+	}
+
+	private JSONArray getEmployeeWorkindDays(NodeRef node, Date start, Date end) {
+		JSONArray result;
+		List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(node, start, end);
 		result = new JSONArray(employeeWorkindDays);
 
 		return result;
@@ -127,9 +215,8 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return JSON-массив дат выходных дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public JSONArray getEmployeeNonWorkindDays(String nodeRefStr, String startStr, String endStr) {
+	public JSONArray getEmployeeNonWorkindDays(final String nodeRefStr, final String startStr, final String endStr) {
 		Date start, end;
-		JSONArray result;
 
 		try {
 			start = dateParser.parse(startStr);
@@ -143,10 +230,7 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		List<Date> employeeNonWorkindDays = workCalendarService.getEmployeeNonWorkindDays(new NodeRef(nodeRefStr), start, end);
-		result = new JSONArray(employeeNonWorkindDays);
-
-		return result;
+		return getEmployeeNonWorkindDays(new NodeRef(nodeRefStr), start, end);
 
 	}
 
@@ -159,18 +243,70 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return JSON-массив дат выходных дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public JSONArray getEmployeeNonWorkindDays(String nodeRefStr, Object jsStart, Object jsEnd) {
+	public JSONArray getEmployeeNonWorkindDays(final String nodeRefStr, final Object jsStart, final Object jsEnd) {
 		Date start, end;
-		JSONArray result;
 
 		start = (Date) Context.jsToJava(jsStart, Date.class);
 		end = (Date) Context.jsToJava(jsEnd, Date.class);
 
-		List<Date> employeeNonWorkindDays = workCalendarService.getEmployeeNonWorkindDays(new NodeRef(nodeRefStr), start, end);
+		return getEmployeeNonWorkindDays(new NodeRef(nodeRefStr), start, end);
+	}
+
+	/**
+	 * Получить список выходных дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param startStr начало периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @param endStr конец периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @return JSON-массив дат выходных дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public JSONArray getEmployeeNonWorkindDays(final ScriptNode nodeRef, final String startStr, final String endStr) {
+		Date start, end;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		try {
+			end = dateParser.parse(endStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return getEmployeeNonWorkindDays(nodeRef.getNodeRef(), start, end);
+
+	}
+
+	/**
+	 * Получить список выходных дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника в виде строки.
+	 * @param jsStart начало периода в виде JS-объекта Date.
+	 * @param jsEnd конец периода в виде JS-объекта Date.
+	 * @return JSON-массив дат выходных дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public JSONArray getEmployeeNonWorkindDays(final ScriptNode nodeRef, final Object jsStart, final Object jsEnd) {
+		Date start, end;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+		end = (Date) Context.jsToJava(jsEnd, Date.class);
+
+		return getEmployeeNonWorkindDays(nodeRef.getNodeRef(), start, end);
+	}
+
+	private JSONArray getEmployeeNonWorkindDays(NodeRef node, Date start, Date end) {
+		JSONArray result;
+
+		List<Date> employeeNonWorkindDays = workCalendarService.getEmployeeNonWorkindDays(node, start, end);
 		result = new JSONArray(employeeNonWorkindDays);
 
 		return result;
-
 	}
 
 	/**
@@ -184,9 +320,8 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return количество рабочих дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public int getEmployeeWorkingDaysNumber(String nodeRefStr, String startStr, String endStr) {
+	public int getEmployeeWorkingDaysNumber(final String nodeRefStr, final String startStr, final String endStr) {
 		Date start, end;
-		int result;
 
 		try {
 			start = dateParser.parse(startStr);
@@ -200,9 +335,7 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		result = workCalendarService.getEmployeeWorkingDaysNumber(new NodeRef(nodeRefStr), start, end);
-		return result;
-
+		return getEmployeeWorkingDaysNumber(new NodeRef(nodeRefStr), start, end);
 	}
 
 	/**
@@ -214,16 +347,64 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return количество рабочих дней сотрудника.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public int getEmployeeWorkingDaysNumber(String nodeRefStr, Object jsStart, Object jsEnd) {
+	public int getEmployeeWorkingDaysNumber(final String nodeRefStr, final Object jsStart, final Object jsEnd) {
 		Date start, end;
-		int result;
 
 		start = (Date) Context.jsToJava(jsStart, Date.class);
 		end = (Date) Context.jsToJava(jsEnd, Date.class);
 
-		result = workCalendarService.getEmployeeWorkingDaysNumber(new NodeRef(nodeRefStr), start, end);
-		return result;
+		return getEmployeeWorkingDaysNumber(new NodeRef(nodeRefStr), start, end);
+	}
 
+	/**
+	 * Получить количество рабочих дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param startStr начало периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @param endStr конец периода в виде строки yyyy-MM-dd'T'HH:mm:ss.SSS
+	 * (напр. 2013-03-04T00:00:00.000)
+	 * @return количество рабочих дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public int getEmployeeWorkingDaysNumber(final ScriptNode nodeRef, final String startStr, final String endStr) {
+		Date start, end;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		try {
+			end = dateParser.parse(endStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + endStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return getEmployeeWorkingDaysNumber(nodeRef.getNodeRef(), start, end);
+	}
+
+	/**
+	 * Получить количество рабочих дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param jsStart начало периода в виде JS-объекта Date.
+	 * @param jsEnd конец периода в виде JS-объекта Date.
+	 * @return количество рабочих дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public int getEmployeeWorkingDaysNumber(final ScriptNode nodeRef, final Object jsStart, final Object jsEnd) {
+		Date start, end;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+		end = (Date) Context.jsToJava(jsEnd, Date.class);
+
+		return getEmployeeWorkingDaysNumber(nodeRef.getNodeRef(), start, end);
+	}
+
+	private int getEmployeeWorkingDaysNumber(NodeRef nodeRef, Date start, Date end) {
+		return workCalendarService.getEmployeeWorkingDaysNumber(nodeRef, start, end);
 	}
 
 	/**
@@ -237,8 +418,8 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return плановая дата выполнения задачи.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public Date getPlannedJobFinish(String nodeRefStr, String startStr, int workingDaysRequired) {
-		Date start, result;
+	public Date getPlannedJobFinish(final String nodeRefStr, final String startStr, final int workingDaysRequired) {
+		Date start;
 
 		try {
 			start = dateParser.parse(startStr);
@@ -246,9 +427,7 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		result = workCalendarService.getPlannedJobFinish(new NodeRef(nodeRefStr), start, workingDaysRequired);
-
-		return result;
+		return getPlannedJobFinish(new NodeRef(nodeRefStr), start, workingDaysRequired);
 	}
 
 	/**
@@ -261,13 +440,56 @@ public class WorkCalendarJavascriptExtension extends CommonWCalendarJavascriptEx
 	 * @return плановая дата выполнения задачи.
 	 * @see ru.it.lecm.wcalendar.IWorkCalendar
 	 */
-	public Date getPlannedJobFinish(String nodeRefStr, Object jsStart, int workingDaysRequired) {
-		Date start, result;
+	public Date getPlannedJobFinish(final String nodeRefStr, final Object jsStart, final int workingDaysRequired) {
+		Date start;
 
 		start = (Date) Context.jsToJava(jsStart, Date.class);
 
-		result = workCalendarService.getPlannedJobFinish(new NodeRef(nodeRefStr), start, workingDaysRequired);
+		return getPlannedJobFinish(new NodeRef(nodeRefStr), start, workingDaysRequired);
+	}
 
-		return result;
+	/**
+	 * Получить плановую дату выполнения сотрудником задачи.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param startStr начало выполнения задачи в виде строки
+	 * yyyy-MM-dd'T'HH:mm:ss.SSS (напр. 2013-03-04T00:00:00.000)
+	 * @param workingDaysRequired количество рабочих дней, необходимых для
+	 * выполнения задачи.
+	 * @return плановая дата выполнения задачи.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public Date getPlannedJobFinish(final ScriptNode nodeRef, final String startStr, final int workingDaysRequired) {
+		Date start;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return getPlannedJobFinish(nodeRef.getNodeRef(), start, workingDaysRequired);
+	}
+
+	/**
+	 * Получить плановую дату выполнения сотрудником задачи.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param jsStart начало выполнения задачи в виде JS-объекта Date
+	 * @param workingDaysRequired количество рабочих дней, необходимых для
+	 * выполнения задачи.
+	 * @return плановая дата выполнения задачи.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public Date getPlannedJobFinish(final ScriptNode nodeRef, final Object jsStart, final int workingDaysRequired) {
+		Date start;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+
+		return getPlannedJobFinish(nodeRef.getNodeRef(), start, workingDaysRequired);
+	}
+
+	private Date getPlannedJobFinish(final NodeRef nodeRef, final Date start, final int workingDaysRequired) {
+		return workCalendarService.getPlannedJobFinish(nodeRef, start, workingDaysRequired);
 	}
 }

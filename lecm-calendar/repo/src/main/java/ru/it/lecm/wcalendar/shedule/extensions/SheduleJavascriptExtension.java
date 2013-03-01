@@ -43,18 +43,47 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @return ScriptNode расписания.
 	 */
 	public ScriptNode getParentSheduleNodeRef(final JSONObject node) {
-		NodeRef sheduleList = null;
+		String nodeRefStr;
 		try {
-			sheduleList = sheduleService.getParentShedule(new NodeRef(node.getString("nodeRef")));
+			nodeRefStr = node.getString("nodeRef");
 		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 			throw new WebScriptException(ex.getMessage(), ex);
 		}
-		if (sheduleList != null) {
-			return new ScriptNode(sheduleList, serviceRegistry);
-		} else {
-			throw new WebScriptException("Error parsing JSON params!");
-		}
+		return getParentSheduleNodeRef(nodeRefStr);
+	}
+
+	/**
+	 * Если node - сотрудник, то возвращает ссылку на расписание подразделения,
+	 * в котором сотрудник занимает основную позицию (или вышестоящего
+	 * подразделения). Если node - подразделение, то возвращает ссылку на
+	 * расписание вышестоящего подразделения. Если расписание к node не
+	 * привязано, то возвращает null.
+	 *
+	 * @param node NodeRef на сотрудника или орг. единицу в виде строки
+	 * @return ScriptNode расписания.
+	 */
+	public ScriptNode getParentSheduleNodeRef(final String nodeRefStr) {
+		return getParentSheduleNodeRef(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Если node - сотрудник, то возвращает ссылку на расписание подразделения,
+	 * в котором сотрудник занимает основную позицию (или вышестоящего
+	 * подразделения). Если node - подразделение, то возвращает ссылку на
+	 * расписание вышестоящего подразделения. Если расписание к node не
+	 * привязано, то возвращает null.
+	 *
+	 * @param node NodeRef на сотрудника или орг. единицу в виде строки
+	 * @return ScriptNode расписания.
+	 */
+	public ScriptNode getParentSheduleNodeRef(final ScriptNode nodeRef) {
+		return getParentSheduleNodeRef(nodeRef.getNodeRef());
+	}
+
+	private ScriptNode getParentSheduleNodeRef(final NodeRef node) {
+		NodeRef shedule = sheduleService.getParentShedule(node);
+		return new ScriptNode(shedule, serviceRegistry);
 	}
 
 	/**
@@ -67,13 +96,45 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * работы, "end" - время конца работы.
 	 */
 	public JSONObject getParentSheduleStdTime(final JSONObject node) {
-		JSONObject result = null;
+		String nodeRefStr;
 		try {
-			Map<String, String> JSONMap = sheduleService.getParentSheduleStdTime(new NodeRef(node.getString("nodeRef")));
-			result = new JSONObject(JSONMap);
+			nodeRefStr = node.getString("nodeRef");
 		} catch (JSONException ex) {
 			throw new WebScriptException(ex.getMessage(), ex);
 		}
+		return getParentSheduleStdTime(nodeRefStr);
+	}
+
+	/**
+	 * Возвращает время работы и тип родительского расписания (см.
+	 * getParentShedule).
+	 *
+	 * @param nodeRefStr NodeRef на сотрудника или орг. единицу в виде строки
+	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
+	 * работы, "end" - время конца работы.
+	 */
+	public JSONObject getParentSheduleStdTime(final String nodeRefStr) {
+		return getParentSheduleStdTime(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Возвращает время работы и тип родительского расписания (см.
+	 * getParentShedule).
+	 *
+	 * @param nodeRef NodeRef на сотрудника или орг. единицу
+	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
+	 * работы, "end" - время конца работы.
+	 */
+	public JSONObject getParentSheduleStdTime(final ScriptNode nodeRef) {
+		return getParentSheduleStdTime(nodeRef.getNodeRef());
+	}
+
+	private JSONObject getParentSheduleStdTime(final NodeRef node) {
+		JSONObject result;
+
+		Map<String, String> JSONMap = sheduleService.getParentSheduleStdTime(node);
+		result = new JSONObject(JSONMap);
+
 		return result;
 	}
 
@@ -96,12 +157,27 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.
 	 *
-	 * @param employeeRef строка с NodeRef на сотрудника или орг. единицу.
+	 * @param nodeRefStr NodeRef на сотрудника или орг. единицу в виде строки
 	 * @return NodeRef расписания, привязанного к node. Если таковое
 	 * отсутствует, то null.
 	 */
-	public ScriptNode getSheduleByOrgSubject(final String employeeRef) {
-		NodeRef nodeRef = sheduleService.getSheduleByOrgSubject(new NodeRef(employeeRef));
+	public ScriptNode getSheduleByOrgSubject(final String nodeRefStr) {
+		return getSheduleByOrgSubject(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Получить расписание, привзянное к сотруднику или орг. единице.
+	 *
+	 * @param nodeRef NodeRef на сотрудника или орг. единицу
+	 * @return NodeRef расписания, привязанного к node. Если таковое
+	 * отсутствует, то null.
+	 */
+	public ScriptNode getSheduleByOrgSubject(final ScriptNode nodeRef) {
+		return getSheduleByOrgSubject(nodeRef.getNodeRef());
+	}
+
+	private ScriptNode getSheduleByOrgSubject(NodeRef node) {
+		NodeRef nodeRef = sheduleService.getSheduleByOrgSubject(node);
 		if (nodeRef != null) {
 			return new ScriptNode(nodeRef, serviceRegistry);
 		}
@@ -111,11 +187,25 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	/**
 	 * Проверяет, привязано ли какое-нибудь расписание к node.
 	 *
-	 * @param nodeRef NodeRef на сотрудника или орг. единицу.
+	 * @param nodeRef NodeRef на сотрудника или орг. единицу. в виде строки
 	 * @return true - привязано, false - не привязано.
 	 */
 	public boolean isSheduleAssociated(final String nodeRef) {
-		return sheduleService.isSheduleAssociated(new NodeRef(nodeRef));
+		return isSheduleAssociated(new NodeRef(nodeRef));
+	}
+
+	/**
+	 * Проверяет, привязано ли какое-нибудь расписание к node.
+	 *
+	 * @param nodeRef NodeRef на сотрудника или орг. единицу.
+	 * @return true - привязано, false - не привязано.
+	 */
+	public boolean isSheduleAssociated(final ScriptNode nodeRef) {
+		return isSheduleAssociated(nodeRef.getNodeRef());
+	}
+
+	private boolean isSheduleAssociated(final NodeRef node) {
+		return sheduleService.isSheduleAssociated(node);
 	}
 
 	/**

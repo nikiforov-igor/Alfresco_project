@@ -9,6 +9,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,12 +41,18 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * привязаны отсутствия, возвращает null
 	 */
 	public Scriptable getAbsenceByEmployee(final String nodeRefStr) {
-		List<NodeRef> absenceList = absenceService.getAbsenceByEmployee(new NodeRef(nodeRefStr));
-		if (absenceList != null) {
-			return getAsScriptable(absenceList);
-		} else {
-			return null;
-		}
+		return getAbsenceByEmployee(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Получить список отсутствий по NodeRef-у сотрудника.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
+	 * привязаны отсутствия, возвращает null
+	 */
+	public Scriptable getAbsenceByEmployee(final ScriptNode nodeRef) {
+		return getAbsenceByEmployee(nodeRef.getNodeRef());
 	}
 
 	/**
@@ -64,6 +71,15 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 		}
 	}
 
+	private Scriptable getAbsenceByEmployee(final NodeRef node) {
+		List<NodeRef> absenceList = absenceService.getAbsenceByEmployee(node);
+		if (absenceList != null) {
+			return getAsScriptable(absenceList);
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Проверить, привязаны ли к сотруднику отсутствия.
 	 *
@@ -71,7 +87,21 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @return Расписания привязаны - true. Нет - false.
 	 */
 	public boolean isAbsenceAssociated(final String nodeRefStr) {
-		return absenceService.isAbsenceAssociated(new NodeRef(nodeRefStr));
+		return isAbsenceAssociated(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Проверить, привязаны ли к сотруднику отсутствия.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee в виде строки
+	 * @return Расписания привязаны - true. Нет - false.
+	 */
+	public boolean isAbsenceAssociated(final ScriptNode nodeRef) {
+		return isAbsenceAssociated(nodeRef.getNodeRef());
+	}
+
+	private boolean isAbsenceAssociated(final NodeRef node) {
+		return absenceService.isAbsenceAssociated(node);
 	}
 
 	/**
@@ -113,7 +143,6 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 		return absenceService.isIntervalSuitableForAbsence(new NodeRef(employeeRefStr), begin, end);
 	}
 
-	// TODO Зпилить реализацию нижеследующих методов, которая будет принимать не String, а ScriptNode
 	/**
 	 * Проверить, отсутствует ли указанный сотрудника указанный день.
 	 *
@@ -123,14 +152,63 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
 	 * не планировал отсутствия.
 	 */
-	public boolean isEmployeeAbsent(String nodeRefStr, String dateStr) {
+	public boolean isEmployeeAbsent(final String nodeRefStr, final String dateStr) {
+		return isEmployeeAbsent(new NodeRef(nodeRefStr), dateStr);
+	}
+
+	/**
+	 * Проверить, отсутствует ли указанный сотрудника указанный день.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param dateStr интересующая нас дата отсутствия в виде строки
+	 * (2013-06-15T12:43:52.371)
+	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
+	 * не планировал отсутствия.
+	 */
+	public boolean isEmployeeAbsent(final ScriptNode nodeRef, final String dateStr) {
+		return isEmployeeAbsent(nodeRef.getNodeRef(), dateStr);
+	}
+
+	/**
+	 * Проверить, отсутствует ли указанный сотрудника указанный день.
+	 *
+	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
+	 * @param jsDate интересующая нас дата отсутствия в виде JS-объекта Date.
+	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
+	 * не планировал отсутствия.
+	 */
+	public boolean isEmployeeAbsent(final String nodeRefStr, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		return isEmployeeAbsent(new NodeRef(nodeRefStr), date);
+	}
+
+	/**
+	 * Проверить, отсутствует ли указанный сотрудника указанный день.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param jsDate интересующая нас дата отсутствия в виде JS-объекта Date.
+	 * (2013-06-15T12:43:52.371)
+	 * @return true - сотрудник отсутствует в указанный день. false - сотрудник
+	 * не планировал отсутствия.
+	 */
+	public boolean isEmployeeAbsent(final ScriptNode nodeRef, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		return isEmployeeAbsent(nodeRef.getNodeRef(), date);
+	}
+
+	private boolean isEmployeeAbsent(final NodeRef node, final String dateStr) {
 		Date date;
+
 		try {
 			date = dateParser.parse(dateStr);
 		} catch (ParseException ex) {
 			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
 		}
-		return absenceService.isEmployeeAbsent(new NodeRef(nodeRefStr), date);
+		return isEmployeeAbsent(node, date);
+	}
+
+	private boolean isEmployeeAbsent(final NodeRef node, final Date date) {
+		return absenceService.isEmployeeAbsent(node, date);
 	}
 
 	/**
@@ -139,8 +217,22 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
 	 * @return true - сотрудник сегодня отсутствует
 	 */
-	public boolean isEmployeeAbsentToday(String nodeRefStr) {
-		return absenceService.isEmployeeAbsentToday(new NodeRef(nodeRefStr));
+	public boolean isEmployeeAbsentToday(final String nodeRefStr) {
+		return isEmployeeAbsentToday(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Проверить, отсутствует ли сегодня указанный сотрудник.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @return true - сотрудник сегодня отсутствует
+	 */
+	public boolean isEmployeeAbsentToday(final ScriptNode nodeRef) {
+		return isEmployeeAbsentToday(nodeRef.getNodeRef());
+	}
+
+	private boolean isEmployeeAbsentToday(final NodeRef node) {
+		return absenceService.isEmployeeAbsentToday(node);
 	}
 
 	/**
@@ -148,20 +240,73 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * указанную дату.
 	 *
 	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
-	 * @param date дата, на которую надо получить экземпляр отсутствия в виде
+	 * @param dateStr дата, на которую надо получить экземпляр отсутствия в виде
 	 * строки (2013-06-15T12:43:52.371)
 	 * @return NodeRef на объект типа absence, из-за которого сотрудник
 	 * считается отсутствующим на указанную дату. Если такового нет, то null
 	 */
-	public ScriptNode getActiveAbsence(String nodeRefStr, String dateStr) {
+	public ScriptNode getActiveAbsence(final String nodeRefStr, final String dateStr) {
+		return getActiveAbsence(new NodeRef(nodeRefStr), dateStr);
+	}
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * указанную дату.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param dateStr дата, на которую надо получить экземпляр отсутствия в виде
+	 * строки (2013-06-15T12:43:52.371)
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим на указанную дату. Если такового нет, то null
+	 */
+	public ScriptNode getActiveAbsence(final ScriptNode nodeRef, final String dateStr) {
+		return getActiveAbsence(nodeRef.getNodeRef(), dateStr);
+	}
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * указанную дату.
+	 *
+	 * @param nodeRefStr NodeRef на объект типа employee в виде строки
+	 * @param jsDate дата, на которую надо получить экземпляр отсутствия в виде
+	 * JS-объекта Date.
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим на указанную дату. Если такового нет, то null
+	 */
+	public ScriptNode getActiveAbsence(final String nodeRefStr, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		return getActiveAbsence(new NodeRef(nodeRefStr), date);
+	}
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * указанную дату.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @param jsDate дата, на которую надо получить экземпляр отсутствия в виде
+	 * JS-объекта Date.
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим на указанную дату. Если такового нет, то null
+	 */
+	public ScriptNode getActiveAbsence(final ScriptNode nodeRef, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		return getActiveAbsence(nodeRef.getNodeRef(), date);
+	}
+
+	private ScriptNode getActiveAbsence(final NodeRef node, final String dateStr) {
 		Date date;
-		NodeRef absenceNode;
+
 		try {
 			date = dateParser.parse(dateStr);
 		} catch (ParseException ex) {
 			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
 		}
-		absenceNode = absenceService.getActiveAbsence(new NodeRef(nodeRefStr), date);
+
+		return getActiveAbsence(node, date);
+	}
+
+	private ScriptNode getActiveAbsence(final NodeRef node, final Date date) {
+		NodeRef absenceNode = absenceService.getActiveAbsence(node, date);
 
 		if (absenceNode != null) {
 			return new ScriptNode(absenceNode, serviceRegistry);
@@ -178,9 +323,26 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @return NodeRef на объект типа absence, из-за которого сотрудник
 	 * считается отсутствующим сегодня.
 	 */
-	public ScriptNode getActiveAbsence(String nodeRefStr) {
+	public ScriptNode getActiveAbsence(final String nodeRefStr) {
+		return getActiveAbsence(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Получить экземпляр отсутствия, активного для указанного сотрудника на
+	 * сегодня.
+	 *
+	 * @param nodeRef NodeRef на объект типа employee
+	 * @return NodeRef на объект типа absence, из-за которого сотрудник
+	 * считается отсутствующим сегодня.
+	 */
+	public ScriptNode getActiveAbsence(final ScriptNode nodeRef) {
+		return getActiveAbsence(nodeRef.getNodeRef());
+	}
+
+	private ScriptNode getActiveAbsence(final NodeRef node) {
 		NodeRef absenceNode;
-		absenceNode = absenceService.getActiveAbsence(new NodeRef(nodeRefStr));
+
+		absenceNode = absenceService.getActiveAbsence(node);
 
 		if (absenceNode != null) {
 			return new ScriptNode(absenceNode, serviceRegistry);
@@ -196,14 +358,58 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @param dateStr дата, в которую необходимо установить параметр "end" в
 	 * виде строки (2013-06-15T12:43:52.371)
 	 */
-	public void setAbsenceEnd(String nodeRefStr, String dateStr) {
+	public void setAbsenceEnd(final String nodeRefStr, final String dateStr) {
+		setAbsenceEnd(new NodeRef(nodeRefStr), dateStr);
+	}
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в определенное значение.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence
+	 * @param dateStr дата, в которую необходимо установить параметр "end" в
+	 * виде строки (2013-06-15T12:43:52.371)
+	 */
+	public void setAbsenceEnd(final ScriptNode nodeRef, final String dateStr) {
+		setAbsenceEnd(nodeRef.getNodeRef(), dateStr);
+	}
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в определенное значение.
+	 *
+	 * @param nodeRefStr NodeRef на объект типа absence в виде строки
+	 * @param jsDate дата, в которую необходимо установить параметр "end" в виде
+	 * JS-объекта Date.
+	 */
+	public void setAbsenceEnd(final String nodeRefStr, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		setAbsenceEnd(new NodeRef(nodeRefStr), date);
+	}
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в определенное значение.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence
+	 * @param jsDate дата, в которую необходимо установить параметр "end" в виде
+	 * JS-объекта Date.
+	 */
+	public void setAbsenceEnd(final ScriptNode nodeRef, final Object jsDate) {
+		Date date = (Date) Context.jsToJava(jsDate, Date.class);
+		setAbsenceEnd(nodeRef.getNodeRef(), date);
+	}
+
+	private void setAbsenceEnd(final NodeRef node, final String dateStr) {
 		Date date;
+
 		try {
 			date = dateParser.parse(dateStr);
 		} catch (ParseException ex) {
 			throw new WebScriptException("Can not parse " + dateStr + " as Date! " + ex.getMessage(), ex);
 		}
-		absenceService.setAbsenceEnd(new NodeRef(nodeRefStr), date);
+		setAbsenceEnd(node, date);
+	}
+
+	private void setAbsenceEnd(final NodeRef node, final Date date) {
+		absenceService.setAbsenceEnd(node, date);
 	}
 
 	/**
@@ -214,8 +420,24 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @param unlimited значение, в которое следует установить параметр
 	 * "бессрочное".
 	 */
-	public void setAbsenceUnlimited(String nodeRefStr, boolean unlimited) {
-		absenceService.setAbsenceUnlimited(new NodeRef(nodeRefStr), unlimited);
+	public void setAbsenceUnlimited(final String nodeRefStr, final boolean unlimited) {
+		setAbsenceUnlimited(new NodeRef(nodeRefStr), unlimited);
+	}
+
+	/**
+	 * Установить параметр "бессрочное" ("unlimited") у объекта типа absence в
+	 * определенное значение.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence
+	 * @param unlimited значение, в которое следует установить параметр
+	 * "бессрочное".
+	 */
+	public void setAbsenceUnlimited(final ScriptNode nodeRef, final boolean unlimited) {
+		setAbsenceUnlimited(nodeRef.getNodeRef(), unlimited);
+	}
+
+	private void setAbsenceUnlimited(final NodeRef node, final boolean unlimited) {
+		absenceService.setAbsenceUnlimited(node, unlimited);
 	}
 
 	/**
@@ -223,7 +445,20 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 *
 	 * @param nodeRefStr NodeRef на объект типа absence в виде строки
 	 */
-	public void setAbsenceEnd(String nodeRefStr) {
-		absenceService.setAbsenceEnd(new NodeRef(nodeRefStr));
+	public void setAbsenceEnd(final String nodeRefStr) {
+		setAbsenceEnd(new NodeRef(nodeRefStr));
+	}
+
+	/**
+	 * Установить параметр "end" у объекта типа absence в текущую дату и время.
+	 *
+	 * @param nodeRef NodeRef на объект типа absence в виде строки
+	 */
+	public void setAbsenceEnd(final ScriptNode nodeRef) {
+		setAbsenceEnd(nodeRef.getNodeRef());
+	}
+
+	private void setAbsenceEnd(final NodeRef node) {
+		absenceService.setAbsenceEnd(node);
 	}
 }
