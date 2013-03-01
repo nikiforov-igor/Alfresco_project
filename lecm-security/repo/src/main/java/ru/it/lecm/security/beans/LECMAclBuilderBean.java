@@ -371,8 +371,17 @@ public class LECMAclBuilderBean
 		 */
 		if (allowed) // ALLOW
 			permissionService.setPermission(nodeRef, authority, rawPerm, true);
-		else // DENY
-			permissionService.setPermission(nodeRef, authority, "Read", false);
+		else { // DENY
+			/*
+			 * (2013.03.01, RuSA, EERofeev) если явно прописать запрет чтения то
+			 * у пользователя входящего и в группу с DENY и в другие группы 
+			 * (которым чтение разрешено), потеряется право чтения, т.е. тогда 
+			 * надо будет "разводить" слои доступа c индексами.
+			 * Сейчас не станем усложнять и просто не пропишем ничего (clear уже было выполнено).
+			 *  
+			permissionService.setPermission(nodeRef, authority, "Read", false); // явный запрет
+			 */
+		}
 
 		logger.debug( String.format("... called OK setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s)", nodeRef, authority, rawPerm, allowed));
 
