@@ -52,6 +52,16 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-busjournal:objectType-list-template">
+                    <title>List Template</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>

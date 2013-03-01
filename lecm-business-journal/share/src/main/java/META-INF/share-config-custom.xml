@@ -16,6 +16,7 @@
                     <show id="lecm-busjournal:objectType-code"/>
                     <show id="lecm-busjournal:objectType-class"/>
                     <show id="lecm-busjournal:objectType-template"/>
+                    <show id="lecm-busjournal:objectType-list-template"/>
                 </field-visibility>
             </form>
         </forms>
@@ -29,6 +30,7 @@
                     <show id="lecm-busjournal:objectType-code"/>
                     <show id="lecm-busjournal:objectType-class"/>
                     <show id="lecm-busjournal:objectType-template"/>
+                    <show id="lecm-busjournal:objectType-list-template"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
