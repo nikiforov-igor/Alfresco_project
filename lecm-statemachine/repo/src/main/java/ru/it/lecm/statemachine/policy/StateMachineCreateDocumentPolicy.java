@@ -18,7 +18,6 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.bean.DocumentStateMachineBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -32,13 +31,8 @@ import java.util.Map;
  */
 public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-	private static DocumentStateMachineBean documentStateMachineBean;
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
-
-	public void setDocumentStateMachineBean(DocumentStateMachineBean documentStateMachineBean) {
-		StateMachineCreateDocumentPolicy.documentStateMachineBean = documentStateMachineBean;
-	}
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		StateMachineCreateDocumentPolicy.serviceRegistry = serviceRegistry;
@@ -49,7 +43,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	}
 
 	public final void init() {
-		PropertyCheck.mandatory(this, "documentStateMachineBean", documentStateMachineBean);
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
@@ -64,7 +57,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 		QName type = nodeService.getType(childAssocRef.getChildRef());
 		List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
-		String stateMashineId = documentStateMachineBean.getStateMachines().get(prefixes.get(0) + ":" + type.getLocalName());
+		String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
 		if (stateMashineId != null) {
 			//append status aspect to new document
 			HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();

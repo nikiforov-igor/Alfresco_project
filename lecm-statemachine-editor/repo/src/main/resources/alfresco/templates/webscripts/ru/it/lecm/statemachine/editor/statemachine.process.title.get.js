@@ -1,5 +1,9 @@
 var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-var documentStateMachineBean = ctx.getBean("documentStateMachineBean");
+var dictionaryService = ctx.getBean("dictionaryService");
+var resolver = ctx.getBean("namespaceService");
+var machineId = args["statemachineId"].replace("_", ":");
+var type = Packages.org.alfresco.service.namespace.QName.createQName(machineId, resolver);
 
-var processId = args["statemachineId"];
-model.title = documentStateMachineBean.getTitle(processId);
+var typeDef = dictionaryService.getType(type);
+
+model.title = typeDef.getTitle();

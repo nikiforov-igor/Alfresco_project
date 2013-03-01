@@ -19,7 +19,6 @@ import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.assign.AssignExecution;
-import ru.it.lecm.statemachine.bean.DocumentStateMachineBean;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.expression.Expression;
 
@@ -37,13 +36,12 @@ import java.util.Map;
 public class DocumentListScript extends DeclarativeWebScript {
 
 	private static ServiceRegistry serviceRegistry;
-	private static DocumentStateMachineBean documentStateMachineBean;
 
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String documentType = req.getParameter("documentType");
-		String stateMachineId = documentStateMachineBean.getStateMachines().get(documentType);
+		String stateMachineId = documentType.replaceFirst(":", "_");
 		if (stateMachineId != null) {
 			WorkflowService workflowService = serviceRegistry.getWorkflowService();
 			NodeService nodeService = serviceRegistry.getNodeService();
@@ -127,7 +125,4 @@ public class DocumentListScript extends DeclarativeWebScript {
 		DocumentListScript.serviceRegistry = serviceRegistry;
 	}
 
-	public void setDocumentStateMachineBean(DocumentStateMachineBean documentStateMachineBean) {
-		DocumentListScript.documentStateMachineBean = documentStateMachineBean;
-	}
 }

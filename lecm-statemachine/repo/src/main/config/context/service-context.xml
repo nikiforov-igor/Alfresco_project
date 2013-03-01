@@ -81,12 +81,9 @@
 		</property>
 	</bean>
 
-	<bean id="documentStateMachineBean" class="ru.it.lecm.statemachine.bean.DocumentStateMachineBean"/>
-
 	<bean id="stateMachineCreateDocumentPolicy"
 		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
 		<property name="policyComponent" ref="policyComponent"/>
 	</bean>
 
@@ -100,7 +97,6 @@
 		  class="ru.it.lecm.statemachine.script.DocumentListScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="documentStateMachineBean" ref="documentStateMachineBean"/>
 	</bean>
 
 	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActions" />
