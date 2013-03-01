@@ -274,7 +274,7 @@ public class ExecutorBeanImpl
 			for (RunAction act: step.getActions()) {
 				j++;
 				stage = String.format( "step %s.%s, action %s", i+1, j, act.getClass());
-				logger.debug( stage);
+				logger.debug( "enter "+ stage);
 
 				act.setContext(this.getContext());
 				try {
@@ -296,7 +296,7 @@ public class ExecutorBeanImpl
 			result.setData( EResult.ERROR, t, "problem at phase '"+ stage+ "'");
 			logger.error( "problem at phase '"+ stage+ "'", t);
 		} finally {
-			d.logCtrlDuration(logger, String.format( "step %s (%s actions) duration {t} msec", i+1, j));
+			d.logCtrlDuration(logger, String.format( "done step %s (%s actions): duration {t} msec", i+1, j));
 		}
 
 		return result;

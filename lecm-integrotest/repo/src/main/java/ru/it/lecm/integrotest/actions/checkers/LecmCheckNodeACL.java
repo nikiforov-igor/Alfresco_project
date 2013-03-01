@@ -1,15 +1,16 @@
 package ru.it.lecm.integrotest.actions.checkers;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AccessStatus;
 import org.alfresco.service.namespace.QName;
 
 import ru.it.lecm.integrotest.TestFailException;
@@ -29,7 +30,7 @@ import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
  */
 public class LecmCheckNodeACL extends LecmActionBase {
 
-	private static final String STR_TABLE_DELIMITER = "\n\t ========================================";
+	private static final String STR_TABLE_DELIMITER = "\n  ========================================";
 
 	/**
 	 * Значение по-умолчанию для проверки возможности записи в атрибут
@@ -367,7 +368,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		int i = 0;
 		final Map<String, StdPermission> accTable = this.accessMap.getUsersAccess();
 		sb.append( STR_TABLE_DELIMITER);
-		sb.append( String.format( "\n\t %2s\t %5s\t %3s\t '%s'", "nn", "isOk", "access", "User Login"));
+		sb.append( String.format( "\n  %2s\t %5s\t %3s\t '%s'", "nn", "isOk", "access", "User Login"));
 		sb.append( STR_TABLE_DELIMITER);
 		for(Map.Entry<String, StdPermission> e: accTable.entrySet() ) {
 			i++;
@@ -424,9 +425,9 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		// AuthenticationUtil.runAs(runAsWork, uid);
 		final QName prop = getContext().getFinder().makeQName(this.rwCheckingPropName);
 
-		final NodeService nodeServ = getContext().getPublicServices().getNodeService();
+		// final NodeService nodeServ = getContext().getPublicServices().getNodeService();
 
-		final NodeRef person = getContext().getPublicServices().getPersonService().getPerson(usrLogin);
+		// final NodeRef person = getContext().getPublicServices().getPersonService().getPerson(usrLogin);
 
 		final RunAsWork<Boolean> runner = new RunAsWork<Boolean>() {
 			@Override
@@ -443,7 +444,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 //
 //					}, transReadonly, transReaquiersNew);
 //				return flag;
-				return doAccessCheck(usrLogin, nodeServ, ref, prop, perm);
+				return doAccessCheck(usrLogin, getContext().getPublicServices(), ref, prop, perm);
 			}
 		};
 
@@ -453,81 +454,76 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	}
 
 	@SuppressWarnings("unused")
-	boolean doAccessCheck(String usrLogin, NodeService nodeServ, NodeRef ref, QName prop, StdPermission perm)
+	boolean doAccessCheck(String usrLogin, ServiceRegistry registry, NodeRef ref, QName prop, StdPermission perm)
 	{
+		final NodeService nodeServ = registry.getNodeService();
+	
 		// DONE: типизировать исключение только для случая org.alfresco.repo.security.permissions.AccessDeniedException
-		String stage = String.format( "read property '%s'", prop);
+		String stage = String.format( "read property '%s' as '%s'", prop, usrLogin);
+
+		if (logger.isDebugEnabled()) {
+			final AccessStatus accRead = registry.getPermissionService().hasPermission(ref, "Read");
+			final AccessStatus accWrite = registry.getPermissionService().hasPermission(ref, "Write");
+			logger.debug( String.format( "\n\t {%s} %5s %10s read(%7s) write(%s)", ref, perm.getInfo(), usrLogin, accRead, accWrite) );
+		} 
+		final AccessStatus accPerm = registry.getPermissionService().hasPermission(ref, (perm == StdPermission.full) ? "Write" : "Read");
 
 		switch(perm) {
 			case noaccess: {  // : должно свалиться при чтении
-				try {
-					final Serializable x = nodeServ.getProperty(ref, prop);
-
-					// раз прочитано -> доступ имеется, а это не правильно при deny
-					logger.warn( String.format("Fail AccessDeny by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-
-					return false;
-				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.debug( String.format("Success AccessDeny by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
-
-					return true; // падение правильное, т.к. нет доступа ...
-				}
-			} 
+				return accPerm == AccessStatus.DENIED;
+			}
 			case readonly: {  // : должно читаться
-				try {
-					final Serializable x = nodeServ.getProperty(ref, prop);
-					// раз прочитано -> доступ имеется, правильно
-					logger.debug( String.format("Success ReadAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-
-					return true;
-				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.warn( String.format("Fail ReadAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
-					return false;
-				}
-			} 
+				return accPerm == AccessStatus.ALLOWED;
+			}
 			case full: {  // должно писаться в некоторый атрибут ...
-				try {
-					/* 
-					 * Вариант чтения-записи отдельного атрибута:
-					 */ 
-					// раз можно писать -> доступ на чтение тоже должен иметься ...
-					final Serializable x = nodeServ.getProperty(ref, prop);
-					logger.debug( String.format("ok read at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-
-					// пишем сконфигурированное значение ...
-					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
-					nodeServ.setProperty(ref, prop, this.writeValue); // Валится
-					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-					// восстановим прежнее значение атрибута
-					nodeServ.setProperty(ref, prop, x);
-
-
-					/*
-					 * Вариант чтения-записи всех атрибутов:
-					 * 
-					// раз можно писать -> доступ на чтение тоже должен иметься ...
-					final Map<QName, Serializable> props = nodeServ.getProperties(ref);
-					final Serializable x = props.get(prop);
-					logger.debug( String.format("ok readProperties at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-
-					// пишем сконфигурированное значение ...
-					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
-					props.put( prop, this.writeValue);
-					nodeServ.setProperties(ref, props);
-					logger.debug( String.format("ok writeProperty at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-
-					// восстановим прежнее значение атрибута
-					stage = String.format( "restore previous property '%s'='%s'", prop, this.writeValue);
-					props.put( prop, x);
-					nodeServ.setProperties(ref, props);
-					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-					 */
-
-					return true;
-				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-					logger.warn( String.format("Fail WriteAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
-					return false;
-				}
+				return accPerm == AccessStatus.ALLOWED;
+//				try {
+//					/* 
+//					 * Вариант чтения-записи отдельного атрибута:
+//					 */ 
+//					// раз можно писать -> доступ на чтение тоже должен иметься ...
+//					final Serializable x = nodeServ.getProperty(ref, prop);
+//					logger.debug( String.format("ok read at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+//
+//					// пишем сконфигурированное значение ...
+//					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
+//					nodeServ.setProperty(ref, prop, this.writeValue); // Валится
+//					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+//					// восстановим прежнее значение атрибута
+//					nodeServ.setProperty(ref, prop, x);
+//					writeProp = true;
+//
+//					/*
+//					 * Вариант чтения-записи всех атрибутов:
+//					 * 
+//					// раз можно писать -> доступ на чтение тоже должен иметься ...
+//					final Map<QName, Serializable> props = nodeServ.getProperties(ref);
+//					final Serializable x = props.get(prop);
+//					logger.debug( String.format("ok readProperties at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+//
+//					// пишем сконфигурированное значение ...
+//					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
+//					props.put( prop, this.writeValue);
+//					nodeServ.setProperties(ref, props);
+//					logger.debug( String.format("ok writeProperty at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+//
+//					// восстановим прежнее значение атрибута
+//					stage = String.format( "restore previous property '%s'='%s'", prop, this.writeValue);
+//					props.put( prop, x);
+//					nodeServ.setProperties(ref, props);
+//					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
+//					 */
+//
+//					return true;
+//				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
+//					logger.warn( String.format("Fail WriteAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
+//					return false;
+//				} finally {
+//					if (canWrite == writeProp)
+//						logger.debug( "hasPermission(Write) and ReadProp done equevalent (both read or both deny, not mixed)");
+//					else
+//						logger.warn( String.format( "(!) (canWrite=%s) != (WriteProp=%s)", canWrite, writeProp) );
+//				}
 			}
 		}
 

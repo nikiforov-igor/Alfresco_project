@@ -170,7 +170,7 @@
 		<property name="accessMap">
 			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
 				<constructor-arg type="java.lang.String" value="
-						dummyUser: R; Admin: W
+						dummyUser: -; Admin: W
 				 "/>
 			</bean>
 		</property>
@@ -195,7 +195,7 @@
 		<property name="accessMap">
 			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
 				<constructor-arg type="java.lang.String" value="
-						Admin: W; dummyUser: R;
+						Admin: W; dummyUser: -;
 						Согласкин:-; Несогласкин:-; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
 						Руководкин:-; Тарантино:-; Кэмерон:-; 
@@ -225,7 +225,7 @@
 		<property name="accessMap">
 			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeUserToPermAccessTable">
 				<constructor-arg type="java.lang.String" value="
-						Admin: W; dummyUser: R;
+						Admin: W; dummyUser: -;
 						Согласкин:-; Несогласкин:-; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
 						Руководкин:-; Тарантино:-; Кэмерон:-; 
@@ -439,9 +439,9 @@
 				</bean>
 
 				<!-- Проверка прав доступа к документу в статусе 0 = Черновик...
-				<ref local="chkDocACL_byAdmin" />
 				<ref local="chkDocACL_Draft1" />
 				 -->
+				<ref local="chkDocACL_byAdmin" />
 			</list>
 		</property>
 	</bean>
@@ -455,8 +455,8 @@
 					<property name="nodeType" value="lecm-contract:document" />
 					<property name="attributes">
 						<props>
-							<prop key="cm:name">DocTest1-0547-1</prop>
-							<prop key="lecm-contract:regnum">547-1</prop>
+							<prop key="cm:name">DocTest1-0547-17</prop>
+							<prop key="lecm-contract:regnum">547-17</prop>
 						</props>
 					</property>
 
