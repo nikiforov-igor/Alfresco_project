@@ -9,6 +9,7 @@
     ${msg("heading")}
         <#if allowMetaDataUpdate!false>
             <span class="alfresco-twister-actions">
+            <a id="${el}-link" href="javascript:void(0);" onclick="" class="view" title="${msg("label.view")}">&nbsp;</a>
             <a href="${siteURL("edit-metadata?nodeRef=" + nodeRef?url)}" class="edit" title="${msg("label.edit")}">&nbsp;</a>
          </span>
         </#if>
@@ -21,13 +22,16 @@
 
 <!-- Javascript instance -->
 <script type="text/javascript">//<![CDATA[
-new Alfresco.DocumentMetadata("${el}").setOptions(
-        {
-            nodeRef: "${nodeRef}",
-            site: <#if site??>"${site?js_string}"<#else>null</#if>,
-            formId: <#if formId??>"${formId?js_string}"<#else>null</#if>
-        }).setMessages(
-        ${messages}
-        );
+    new Alfresco.DocumentMetadata("${el}").setOptions(
+            {
+                nodeRef: "${nodeRef}",
+                site: <#if site??>"${site?js_string}"<#else>null</#if>,
+                formId: <#if formId??>"${formId?js_string}"<#else>null</#if>
+            }).setMessages(${messages});
+    new LogicECM.DocumentMain("${el}").setOptions(
+            {
+                nodeRef: "${nodeRef}",
+                title:"${msg('heading')}"
+            }).setMessages(${messages});
 //]]></script>
 </#if>

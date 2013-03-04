@@ -34,3 +34,6 @@
 {
     background-image: url(../components/images/info-16.png);
 }
+.document-metadata-header h2 .view {
+    background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");
+}
