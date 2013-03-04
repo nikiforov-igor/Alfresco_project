@@ -44,7 +44,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentHistory_onReady() {
-                var linkEl = Dom.get(this.id + "-link");
+                var linkEl = Dom.get(this.id + "-action-expand");
                 linkEl.onclick = this.onLinkClick.bind(this);
             },
 
@@ -57,7 +57,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             nodeRef: this.options.nodeRef
                         },
                         successCallback: {
-                            fn: this.onExtendView,
+                            fn:function(response){
+                                var text = response.serverResponse.responseText;
+                                this.expandView(text);
+                            },
                             scope: this
                         },
                         failureMessage: this.msg("message.failure"),

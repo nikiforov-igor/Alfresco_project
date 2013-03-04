@@ -11,11 +11,10 @@
         var collapseDashletEvent = new YAHOO.util.CustomEvent("onCollaspeDashlet");
         collapseDashletEvent.subscribe(collapseDashlet, null, true);
 
+        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}");
+
         function collapseDashlet() {
-            // скрываем dashlet
-            Dom.setStyle("custom-dashlet", "display", "none");
-            // отображаем main region
-            Dom.setStyle("main-region", "display", "block");
+            documentComponentBase.collapseView();
         }
 
         function init() {

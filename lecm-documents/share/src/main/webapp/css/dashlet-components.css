@@ -30,9 +30,24 @@
     background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");
 }
 
-.dashlet .titleBarActions .collapse
-{
-    background-image: url(../components/images/info-16.png);
+.dashlet .titleBarActions .collapse {
+    background-image: url("/share/res/images/lecm-documents/collapse-16.png");
+}
+
+.alfresco-twister-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 0.5em;
+    text-decoration: none;
+}
+
+.alfresco-twister-actions {
+    position: absolute;
+    right: 1em;
+}
+
+.document-metadata-header h2 .expand {
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
 }
 .document-metadata-header h2 .view {
     background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");

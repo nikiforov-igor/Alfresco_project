@@ -59,17 +59,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 title: "Custom Dashlet"
             },
 
-            onExtendView: function Base_onExtendView(response) {
+            expandView: function Base_expandView(responseText) {
                 // копируем контент в дашлет
                 var formEl = this.getCustomDashletContent();
-                formEl.innerHTML = response.serverResponse.responseText;
-                // подменяем заголовок
-                var titleEl = this.getCustomDashletTitle();
-                titleEl.innerHTML = this.getTitle();
-                // скрываем основной регион
-                Dom.setStyle(this.MAIN_REGION, "display", "none");
-                // отображаем дашлет
-                Dom.setStyle(this.CUSTOM_DASHLET, "display", "block");
+                if (formEl != null) {
+                    formEl.innerHTML = responseText;
+                    // подменяем заголовок
+                    var titleEl = this.getCustomDashletTitle();
+                    if (titleEl != null) {
+                        titleEl.innerHTML = this.getTitle();
+                    }
+                    // скрываем основной регион
+                    Dom.setStyle(this.MAIN_REGION, "display", "none");
+                    // отображаем дашлет
+                    Dom.setStyle(this.CUSTOM_DASHLET, "display", "block");
+                }
+            },
+
+            collapseView: function Base_collapseView() {
+                // скрываем dashlet
+                Dom.setStyle(this.CUSTOM_DASHLET, "display", "none");
+                // отображаем main region
+                Dom.setStyle(this.MAIN_REGION, "display", "block");
             },
 
             getTitle: function () {

@@ -79,7 +79,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             mode: "view"
                         },
                         successCallback: {
-                            fn: this.onExtendView,
+                            fn:function(response){
+                                var text = response.serverResponse.responseText;
+                                this.expandView(text);
+                            },
                             scope: this
                         },
                         failureMessage: "message.failure",
