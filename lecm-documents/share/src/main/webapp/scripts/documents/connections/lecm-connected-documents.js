@@ -57,29 +57,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 
 			onReady: function()
 			{
-				this.loadConnectionsRoot();
 				this.connectButton = Alfresco.util.createYUIButton(this, this.controlId + "-add-connection-button", this.onConnect.bind(this), {}, Dom.get(this.controlId + "-add-connection-button"));
-			},
-
-			loadConnectionsRoot: function() {
-				var me = this;
-				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/connections/root";
-				var callback = {
-					success:function (oResponse) {
-						var oResults = eval("(" + oResponse.responseText + ")");
-						if (oResults != null && oResults.nodeRef != null) {
-							me.rootRef = oResults.nodeRef;
-						}
-					},
-					failure:function (oResponse) {
-						YAHOO.log("Failed to process XHR transaction.", "info", "example");
-					},
-					argument:{
-						context:this
-					},
-					timeout:10000
-				};
-				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			},
 
 			onConnect: function(e, p_obj) {
@@ -104,7 +82,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 					{
 						itemKind:"type",
 						itemId:"lecm-connect:connection",
-						destination: this.rootRef,
+						destination: this.options.primaryDocumentNodeRef,
 						mode:"create",
 						formId: this.id + "-create-form",
 						submitType:"json",

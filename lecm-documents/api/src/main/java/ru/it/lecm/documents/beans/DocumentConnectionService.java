@@ -40,12 +40,6 @@ public interface DocumentConnectionService {
     public static final QName PROP_CONNECTIONS_WITH_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-with-list");
 
 	/**
-	 * Получение директории подписки.
-	 * Если такой узел отсутствует - он НЕ создаётся.
-	 */
-	NodeRef getConnectionsRootRef();
-
-	/**
 	 * Получение типа связи по умолчанию для документов. Берётся из справочника "Доступные типы связи"
 	 * @param primaryDocumentRef Ссылка на исходный объект
 	 * @param connectedDocumentRef Ссылка на связанный объект

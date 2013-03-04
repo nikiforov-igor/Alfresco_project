@@ -79,10 +79,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             fn:function(response){
                                 var container = Dom.get("custom-region");
                                 if (container != null) {
-                                    container.innerHTML = response.serverResponse.responseText;
-
                                     Dom.setStyle("main-content-region", "display", "none");
                                     Dom.setStyle("custom-region", "display", "block");
+
+                                    container.innerHTML = response.serverResponse.responseText;
                                 }
                             }
                         },

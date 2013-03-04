@@ -3,7 +3,6 @@ package ru.it.lecm.documents.scripts;
 
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -34,19 +33,6 @@ public class DocumentConnectionWebScriptBean extends BaseScopableProcessorExtens
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
-	}
-
-	/**
-	 * Получение корневой папки связей
-	 * @return
-	 */
-	public ScriptNode getRoot() {
-		try {
-			NodeRef ref = this.documentConnectionService.getConnectionsRootRef();
-			return new ScriptNode(ref, this.serviceRegistry, getScope());
-		} catch (Exception e) {
-			throw new ScriptException("Не удалось получить директорию с уведомлениями активного канала", e);
-		}
 	}
 
 	public ScriptNode getDefaultConnectionType(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {

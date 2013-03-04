@@ -74,12 +74,10 @@
         </property>
     </bean>
 
-    <bean id="documentConnectionService" init-method="init" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl"
-          depends-on="repositoryHelper, transactionService, nodeService, ServiceRegistry">
-        <property name="repositoryHelper" ref="repositoryHelper"/>
+    <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl"
+          depends-on="transactionService, nodeService">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="searchService" ref="SearchService"/>
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
