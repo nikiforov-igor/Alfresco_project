@@ -21,19 +21,12 @@
                         successCallback:{
                             fn:function(response){
                                 if (arguments[0].config.htmlId == "DocumentMain") {
-                                    var contain = Dom.get("custom-dashlet");
+                                    var contain = Dom.get("custom-dashlet-content");
                                     if (contain != null) {
                                         contain.innerHTML = response.serverResponse.responseText;
-
-                                        Dom.setStyle("main-content-region", "display", "none");
+                                        Dom.get("custom-dashlet-title").innerHTML = "${msg("label.title")}";
+                                        Dom.setStyle("main-region", "display", "none");
                                         Dom.setStyle("custom-dashlet", "display", "block");
-                                        var oButton = new YAHOO.widget.Button({
-                                            id:"cancelDocumentButton",
-                                            type:"button",
-                                            label:"${msg("dashlet.button.cancel")?js_string}",
-                                            container:contain
-                                        });
-                                        oButton.on("click", hiddenViewForm);
                                     }
                                 } else {
                                     container.innerHTML = response.serverResponse.responseText;
@@ -46,15 +39,13 @@
                     });
         }
 
-        function hiddenViewForm(){
-            Dom.setStyle("custom-dashlet", "display", "none");
-            Dom.setStyle("main-content-region", "display", "block");
-        }
         function showViewForm() {
             drawForm("${nodeRef}","DocumentMain","${id}");
         }
+
         var viewForm = new YAHOO.util.CustomEvent("onDashletConfigure");
         viewForm.subscribe(showViewForm, null, true);
+
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.main.dashlet");
             new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
