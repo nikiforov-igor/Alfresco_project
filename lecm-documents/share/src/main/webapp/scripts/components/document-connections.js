@@ -63,8 +63,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentConnections_onReady() {
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onExtendView.bind(this);
+                linkEl.onclick = this.onLinkClick.bind(this);
+            },
 
+            onLinkClick: function () {
                 // Load the form
                 Alfresco.util.Ajax.request(
                     {
@@ -77,18 +79,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             mode: "view"
                         },
                         successCallback: {
-                            fn: this.onConnectionsLoaded,
+                            fn: this.onExtendView,
                             scope: this
                         },
                         failureMessage: "message.failure",
                         execScripts: true
                     });
-            },
-
-            onConnectionsLoaded: function (response) {
-                // грузим контент
-                var formEl = this.getFormElement();
-                formEl.innerHTML = response.serverResponse.responseText;
             }
         }, true);
 })();

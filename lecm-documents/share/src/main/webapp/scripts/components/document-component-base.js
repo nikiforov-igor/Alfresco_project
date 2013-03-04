@@ -59,10 +59,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 title: "Custom Dashlet"
             },
 
-            onExtendView: function Base_onExtendView() {
-                // копируем скрытый контент в дашлет
+            onExtendView: function Base_onExtendView(response) {
+                // копируем контент в дашлет
                 var formEl = this.getCustomDashletContent();
-                formEl.innerHTML = this.getFormElement().innerHTML;
+                formEl.innerHTML = response.serverResponse.responseText;
                 // подменяем заголовок
                 var titleEl = this.getCustomDashletTitle();
                 titleEl.innerHTML = this.getTitle();
