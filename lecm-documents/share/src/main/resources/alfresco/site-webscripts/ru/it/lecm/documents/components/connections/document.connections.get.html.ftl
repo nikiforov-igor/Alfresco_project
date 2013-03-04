@@ -8,14 +8,26 @@
     </h2>
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
-        <div id="${el}-connection-set">
+        <table id="${el}-connection-set" style="width:  100%">
             <#if connections?? && connections.items??>
                 <#list connections.items as item>
-                    <div>${item.name!""}</div>
+                    <tr>
+                        <td>
+                            <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">${item.connectedDocument.name}</a>
+                        </td>
+                        <td style="text-align: right">
+                            ${item.type.name}
+                        </td>
+                    </tr>
                 </#list>
             </#if>
-        </div>
-        <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
+            <tr>
+                <td></td>
+                <td style="text-align: right">
+                    <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <script type="text/javascript">//<![CDATA[
