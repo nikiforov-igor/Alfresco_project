@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Get Connections</shortname>
+	<description>Get Connections</description>
+	<url>/lecm/connections/api/records?primaryDocumentNodeRef={primaryDocumentNodeRef}&amp;skipItemsCount={skipItemsCount}&amp;loadItemsCount={loadItemsCount}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

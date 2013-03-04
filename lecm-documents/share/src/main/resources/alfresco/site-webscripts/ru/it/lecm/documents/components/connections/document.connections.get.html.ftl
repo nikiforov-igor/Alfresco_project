@@ -8,6 +8,13 @@
     </h2>
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
+        <div id="${el}-connection-set">
+            <#if connections?? && connections.items??>
+                <#list connections.items as item>
+                    <div>${item.name!""}</div>
+                </#list>
+            </#if>
+        </div>
         <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
     </div>
 
