@@ -111,7 +111,33 @@ function createDatagrid(attributeForShow) {
 	new LogicECM.module.Base.DataGrid('${id}').setOptions(
 			{
 				usePagination:true,
-				showExtendSearchBlock:false
+				showExtendSearchBlock:false,
+            actions: [
+                {
+                    type:"datagrid-action-link",
+                    id:"onActionEdit",
+                    permission:"edit",
+                    label:"${msg("actions.edit")}"
+                },
+                {
+                    type:"datagrid-action-link}",
+                    id:"onActionVersion",
+                    permission:"edit",
+                    label:"${msg("actions.version")}"
+                },
+                {
+                    type:"datagrid-action-link}",
+                    id:"onActionDuplicate",
+                    permission:"create",
+                    label:"${msg("actions.duplicate-row")}"
+                },
+                {
+                    type:"datagrid-action-link}",
+                    id:"onActionDelete",
+                    permission:"delete",
+                    label:"${msg("actions.delete-row")}"
+                }
+            ]
 			}).setMessages(${messages});
 }
 

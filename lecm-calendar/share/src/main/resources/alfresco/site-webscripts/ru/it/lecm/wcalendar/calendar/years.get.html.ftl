@@ -11,13 +11,13 @@ datagrid.setOptions({
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Calendar.YEARS_LABEL,
 	actions: [{
-		type:"action-link-${bubblingLabel!"wcalendarYears"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarYears"}",
 		id:"onActionEdit",
 		permission:"edit",
 		label:"${msg("actions.edit")}"
 		} <#-- ,
         {
-		type:"action-link-${bubblingLabel!"wcalendarYears"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarYears"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"

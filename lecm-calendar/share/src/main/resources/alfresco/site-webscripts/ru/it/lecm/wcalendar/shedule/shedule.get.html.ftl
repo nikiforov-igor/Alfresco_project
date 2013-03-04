@@ -13,7 +13,7 @@ datagrid.setOptions({
 	dataSource: "/lecm/wcalendar/shedule/get/list",
 	actions: [
        {
-		type:"action-link-${bubblingLabel!"sheduleDatagrid"}",
+		type:"datagrid-action-link-${bubblingLabel!"sheduleDatagrid"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"

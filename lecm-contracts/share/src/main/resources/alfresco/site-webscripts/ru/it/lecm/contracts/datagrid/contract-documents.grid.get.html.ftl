@@ -126,13 +126,13 @@
 							showExtendSearchBlock:true,
 							actions: [
 								{
-									type:"action-link-${bubblingLabel!''}",
+									type:"datagrid-action-link-${bubblingLabel!''}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-${bubblingLabel!''}",
+									type:"datagrid-action-link-${bubblingLabel!''}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}"

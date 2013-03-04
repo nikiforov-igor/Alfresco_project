@@ -103,7 +103,7 @@
                         actions: [
 	                        <#if form.mode != "view">
 		                        {
-	                                type: "action-link-${containerId}",
+	                                type: "datagrid-action-link-${containerId}",
 	                                id: "onActionMakePrimary",
 	                                permission: "edit",
 	                                label: "${msg("actions.makePrimary")}",

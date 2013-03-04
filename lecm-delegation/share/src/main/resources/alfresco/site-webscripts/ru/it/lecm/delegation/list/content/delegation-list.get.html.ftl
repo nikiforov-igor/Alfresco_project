@@ -16,7 +16,7 @@
 		dataSource: "lecm/delegation/list",
 		actions: [
 			{
-				type: "action-link-delegation-list-datagrid",
+				type: "datagrid-action-link-delegation-list-datagrid",
 				id: "onActionEdit",
 				permission: "edit",
 				label: "делегировать полномочия"

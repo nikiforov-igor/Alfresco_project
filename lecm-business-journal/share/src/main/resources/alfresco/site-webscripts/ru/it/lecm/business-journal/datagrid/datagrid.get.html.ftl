@@ -16,7 +16,7 @@
 							showExtendSearchBlock:true,
 							actions: [
 								{
-									type:"action-link-${bubblingLabel!"bj-records"}",
+									type:"datagrid-action-link-${bubblingLabel!"bj-records"}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",

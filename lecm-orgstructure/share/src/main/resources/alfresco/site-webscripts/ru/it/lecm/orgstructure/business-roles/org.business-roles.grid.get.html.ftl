@@ -15,7 +15,7 @@ datagrid.setOptions ({
 	editForm: "configureBusinessRole",
 	attributeForShow: "cm:name",
 	actions: [{
-		type:"action-link-businessRole",
+		type:"datagrid-action-link-businessRole",
 		id:"onActionEdit",
 		permission:"edit",
 		label:"${msg("actions.edit")}"

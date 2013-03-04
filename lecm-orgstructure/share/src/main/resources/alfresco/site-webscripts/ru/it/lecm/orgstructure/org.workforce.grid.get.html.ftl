@@ -16,7 +16,7 @@
 							showExtendSearchBlock:false,
 							actions: [
 								{
-									type:"action-link-${bubblingLabel!"workForce"}",
+									type:"datagrid-action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEmployeeAdd",
 									permission:"edit",
 									label:"${msg("actions.addEmployee")}",
@@ -27,7 +27,7 @@
                                     }
 								},
 								{
-									type:"action-link-${bubblingLabel!"workForce"}",
+									type:"datagrid-action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEmployeeDelete",
 									permission:"edit",
 									label:"${msg("actions.deleteEmployee")}",
@@ -38,13 +38,13 @@
                                     }
 								},
 								{
-									type:"action-link-${bubblingLabel!"workForce"}",
+									type:"datagrid-action-link-${bubblingLabel!"workForce"}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-${bubblingLabel!"workForce"}",
+									type:"datagrid-action-link-${bubblingLabel!"workForce"}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}",

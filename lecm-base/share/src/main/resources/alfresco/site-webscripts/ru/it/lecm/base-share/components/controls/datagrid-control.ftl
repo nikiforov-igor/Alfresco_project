@@ -35,7 +35,7 @@
                         usePagination: ${usePagination?string},
                         showExtendSearchBlock: false,
                         actions: [{
-                                        type: "action-link-${containerId}",
+                                        type: "datagrid-action-link-${containerId}",
                                         id: "onActionEdit",
                                         permission: "edit",
                                         label: "${msg("actions.edit")}"
@@ -43,7 +43,7 @@
                                     <#if allowDelete = "true">
                                         ,
                                         {
-                                            type: "action-link-${containerId}",
+                                            type: "datagrid-action-link-${containerId}",
                                             id: "onActionDelete",
                                             permission: "delete",
                                             label: "${msg("actions.delete-row")}"

@@ -70,13 +70,13 @@
 					showActionColumn: true,
 					actions: [
 						{
-							type: "action-link-procuracy-datagrid",
+							type: "datagrid-action-link-procuracy-datagrid",
 							id: "onActionEdit",
 							permission: "edit",
 							label: "редактировать доверенность"
 						},
 						{
-							type: "action-link-procuracy-datagrid",
+							type: "datagrid-action-link-procuracy-datagrid",
 							id: "onActionDelete",
 							permission: "delete",
 							label: "удалить доверенность"

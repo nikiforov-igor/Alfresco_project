@@ -11,13 +11,13 @@ wDaysDatagrid.setOptions({
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL,
 	actions: [{
-		type:"action-link-${bubblingLabel!"wcalendarWorkingDays"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarWorkingDays"}",
 		id:"onActionEdit",
 		permission:"edit",
 		label:"${msg("actions.edit")}"
 		},
         {
-		type:"action-link-${bubblingLabel!"wcalendarWorkingDays"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarWorkingDays"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"

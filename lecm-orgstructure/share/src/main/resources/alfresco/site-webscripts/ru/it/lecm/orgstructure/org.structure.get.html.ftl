@@ -72,19 +72,19 @@
 								showExtendSearchBlock:${showSearchBlock?string},
 								actions:[
 									{
-										type:"action-link-${bubblingLabel!"orgstructure"}",
+										type:"datagrid-action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionEdit",
 										permission:"edit",
 										label:"${msg("actions.edit")}"
 									},
 									{
-										type:"action-link-${bubblingLabel!"orgstructure"}",
+										type:"datagrid-action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionVersion",
 										permission:"edit",
 										label:"${msg("actions.version")}"
 									},
 									{
-										type:"action-link-${bubblingLabel!"orgstructure"}",
+										type:"datagrid-action-link-${bubblingLabel!"orgstructure"}",
 										id:"onActionDelete",
 										permission:"delete",
 										label:"${msg("actions.delete-row")}",

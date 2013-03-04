@@ -13,7 +13,7 @@ datagrid.setOptions({
 	dataSource: "/lecm/wcalendar/absence/get/list/profile",
 	actions: [
        {
-		type:"action-link-${bubblingLabel!"absenceProfileDatagrid"}",
+		type:"datagrid-action-link-${bubblingLabel!"absenceProfileDatagrid"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"

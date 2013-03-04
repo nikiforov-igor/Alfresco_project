@@ -188,7 +188,21 @@ new LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
 			usePagination: true,
 			showExtendSearchBlock:false,
-            showCheckboxColumn:false
+            showCheckboxColumn:false,
+            actions: [
+                {
+                    type:"datagrid-action-link",
+                    id:"onActionEdit",
+                    permission:"edit",
+                    label:"${msg("actions.edit")}"
+                },
+                {
+                    type:"datagrid-action-link}",
+                    id:"onActionExportXML",
+                    permission:"edit",
+                    label:"${msg("actions.export-xml")}"
+                }
+            ]
 		}).setMessages(${messages});
 //]]></script>
 </@grid.datagrid>

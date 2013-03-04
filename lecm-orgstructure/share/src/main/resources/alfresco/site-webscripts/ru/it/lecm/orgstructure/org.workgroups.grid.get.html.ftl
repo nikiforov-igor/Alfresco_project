@@ -16,19 +16,19 @@
 							showExtendSearchBlock:false,
 							actions: [
 								{
-									type:"action-link-${bubblingLabel!"workGroup"}",
+									type:"datagrid-action-link-${bubblingLabel!"workGroup"}",
 									id:"onActionEdit",
 									permission:"edit",
 									label:"${msg("actions.edit")}"
 								},
 								{
-									type:"action-link-${bubblingLabel!"workGroup"}",
+									type:"datagrid-action-link-${bubblingLabel!"workGroup"}",
 									id:"onActionVersion",
 									permission:"edit",
 									label:"${msg("actions.version")}"
 								},
 								{
-									type:"action-link-${bubblingLabel!"workGroup"}",
+									type:"datagrid-action-link-${bubblingLabel!"workGroup"}",
 									id:"onActionDelete",
 									permission:"delete",
 									label:"${msg("actions.delete-row")}"

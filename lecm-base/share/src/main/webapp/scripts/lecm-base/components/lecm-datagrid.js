@@ -685,7 +685,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                         return true;
                     };
-                    Bubbling.addDefaultAction("action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
+                    Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
                     Bubbling.addDefaultAction("show-more", fnActionHandler);
                 }
 
@@ -1214,7 +1214,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                             var actionA = document.createElement("a");
                             actionA.rel = action.permission;
-                            actionA.className = "action-link " + action.type;
+                            actionA.className = "datagrid-action-link " + action.type;
                             actionA.title = action.label;
 
                             var actionSpan = document.createElement("span");

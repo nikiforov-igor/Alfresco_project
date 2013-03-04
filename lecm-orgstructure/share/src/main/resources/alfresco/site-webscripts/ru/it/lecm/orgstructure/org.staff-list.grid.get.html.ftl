@@ -267,7 +267,7 @@
 								showExtendSearchBlock:${showSearchBlock?string},
 								actions: [
 									{
-										type:"action-link-${bubblingLabel!"staff-list"}",
+										type:"datagrid-action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEmployeeAdd",
 										permission:"edit",
 										label:"${msg("actions.addEmployee")}",
@@ -278,7 +278,7 @@
                                         }
 									},
 									{
-										type:"action-link-${bubblingLabel!"staff-list"}",
+										type:"datagrid-action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEmployeeDelete",
 										permission:"edit",
 										label:"${msg("actions.deleteEmployee")}",
@@ -289,13 +289,13 @@
                                         }
 									},
 									{
-										type:"action-link-${bubblingLabel!"staff-list"}",
+										type:"datagrid-action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionEdit",
 										permission:"edit",
 										label:"${msg("actions.edit")}"
 									},
 									{
-										type:"action-link-${bubblingLabel!"staff-list"}",
+										type:"datagrid-action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionDelete",
 										permission:"delete",
 										label:"${msg("actions.delete-row")}",
@@ -306,7 +306,7 @@
                                         }
 									},
 									{
-										type:"action-link-${bubblingLabel!"staff-list"}",
+										type:"datagrid-action-link-${bubblingLabel!"staff-list"}",
 										id:"onActionMakeBoss",
 										permission:"edit",
 										label:"${msg("actions.makeBoss")}",

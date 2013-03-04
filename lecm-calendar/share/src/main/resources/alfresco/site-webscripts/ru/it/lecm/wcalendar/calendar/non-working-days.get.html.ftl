@@ -11,13 +11,13 @@ nwDaysDatagrid.setOptions({
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL,
 	actions: [{
-		type:"action-link-${bubblingLabel!"wcalendarNonWorkingDays"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarNonWorkingDays"}",
 		id:"onActionEdit",
 		permission:"edit",
 		label:"${msg("actions.edit")}"
 		},
         {
-		type:"action-link-${bubblingLabel!"wcalendarNonWorkingDays"}",
+		type:"datagrid-action-link-${bubblingLabel!"wcalendarNonWorkingDays"}",
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg("actions.delete-row")}"

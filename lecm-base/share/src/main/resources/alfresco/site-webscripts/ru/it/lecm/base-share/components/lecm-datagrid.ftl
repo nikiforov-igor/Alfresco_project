@@ -169,7 +169,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 		<div id="${id}-actionSet" class="action-set simple">
 			<#if actionSet??>
                 <#list actionSet as action>
-                    <div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="action-link ${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
+                    <div class="${action.id}"><a rel="${action.permission!""}" href="${action.href}" class="datagrid-action-link ${action.type}" title="${msg(action.label)}"><span>${msg(action.label)}</span></a></div>
                 </#list>
             </#if>
 		</div>

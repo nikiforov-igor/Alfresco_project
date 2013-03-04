@@ -1,7 +1,8 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
+<#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#assign containerId = fieldHtmlId + "-container">
+<#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 
 <div class="form-field with-grid" id="connected-documents-${controlId}">
 	<input type="hidden" id="${fieldHtmlId}" name="${fieldHtmlId}" value="${field.value?html}" />
@@ -31,7 +32,7 @@
 					showExtendSearchBlock: false,
 					actions: [
 						{
-							type: "action-link-${containerId}",
+							type: "datagrid-action-link-${containerId}",
 							id: "onActionDelete",
 							permission: "delete",
 							label: "${msg("actions.delete-row")}"
