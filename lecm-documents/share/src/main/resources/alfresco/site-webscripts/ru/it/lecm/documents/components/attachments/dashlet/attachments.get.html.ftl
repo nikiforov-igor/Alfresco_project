@@ -9,7 +9,7 @@
         var container;
 
         function init() {
-            new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
+            new Alfresco.widget.DashletResizer("${id}", "document.attachments.dashlet");
             new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
                 actions: [
                     {

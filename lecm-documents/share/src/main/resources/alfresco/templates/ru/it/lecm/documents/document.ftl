@@ -1,10 +1,14 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-header.css" />
     <@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/yui/resize/resize-min.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-details-panel.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
+    <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
     <@templateHtmlEditorAssets />
 </@>
 

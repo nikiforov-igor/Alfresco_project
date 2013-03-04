@@ -2,6 +2,6 @@
     <shortname>Get document history</shortname>
     <description>Document History Gef</description>
     <url>/lecm/document/history?nodeRef={nodeRef}</url>
-    <format default="json">argument</format>
+    <format default="html">argument</format>
     <authentication>user</authentication>
 </webscript>

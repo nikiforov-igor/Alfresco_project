@@ -29,30 +29,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @constructor
      */
     LogicECM.DocumentHistory = function DocumentHistory_constructor(htmlId) {
-        LogicECM.DocumentHistory.superclass.constructor.call(this, "LogicECM.DocumentHistory", htmlId);
+        LogicECM.DocumentHistory.superclass.constructor.call(this, htmlId);
         return this;
     };
 
-    YAHOO.extend(LogicECM.DocumentHistory, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.DocumentHistory, LogicECM.DocumentComponentBase);
+
+    YAHOO.lang.augmentObject(LogicECM.DocumentHistory.prototype,
         {
-
-            /**
-             * Object container for initialization options
-             *
-             * @property options
-             * @type object
-             */
-            options: {
-                /**
-                 * The nodeRefs to load the form for.
-                 *
-                 * @property nodeRef
-                 * @type string
-                 * @required
-                 */
-                nodeRef: null
-            },
-
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
@@ -61,11 +45,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentHistory_onReady() {
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onLinkClick.bind(this);
-            },
-
-            onLinkClick: function DocumentHistory_onLinkClick() {
-
+                linkEl.onclick = this.onExtendView.bind(this);
                 // Load the form
                 Alfresco.util.Ajax.request(
                     {
@@ -81,17 +61,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         scope: this,
                         execScripts: true
                     });
-
-                Dom.setStyle("main-region", "display", "none");
-                Dom.setStyle("custom-region", "display", "block");
             },
 
-            onHistoryLoaded: function DocumentHistory_onHistoryLoaded() {
-                var formEl = Dom.get("custom-region");
-                formEl.innerHTML = "История!!!!!!"; //response.serverResponse.responseText;
-
-                Dom.setStyle("main-content-region", "display", "none");
-                Dom.setStyle("custom-region", "display", "block");
+            onHistoryLoaded: function DocumentHistory_onHistoryLoaded(response) {
+                // грузим контент
+                var formEl = this.getFormElement();
+                formEl.innerHTML = response.serverResponse.responseText;
             }
-        });
+        }, true);
 })();

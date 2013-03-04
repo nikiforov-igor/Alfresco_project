@@ -7,6 +7,7 @@
         ${msg("heading")}
     </h2>
     <div id="${el}-formContainer">
+        <div id="${el}-form" style="display:none"></div>
         <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
     </div>
 
@@ -15,7 +16,8 @@
 
         new LogicECM.DocumentConnections("${el}").setOptions(
                 {
-                    nodeRef: "${nodeRef}"
+                    nodeRef: "${nodeRef}",
+                    title:"${msg('heading')}"
             }).setMessages(${messages});
     //]]></script>
 </div>

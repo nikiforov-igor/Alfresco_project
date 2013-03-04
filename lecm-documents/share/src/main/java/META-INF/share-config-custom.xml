@@ -2,6 +2,7 @@
     <config>
         <forms>
             <dependencies>
+                <js src="/scripts/components/document-component-base.js"/>
                 <js src="/scripts/documents/connections/lecm-connected-documents.js"/>
                 <js src="/scripts/documents/connections/type-select.js"/>
             </dependencies>

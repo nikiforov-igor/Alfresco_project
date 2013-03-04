@@ -29,11 +29,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @constructor
      */
     LogicECM.DocumentConnections = function DocumentConnections_constructor(htmlId) {
-        LogicECM.DocumentConnections.superclass.constructor.call(this, "LogicECM.DocumentConnections", htmlId);
+        LogicECM.DocumentConnections.superclass.constructor.call(this, htmlId);
         return this;
     };
 
-    YAHOO.extend(LogicECM.DocumentConnections, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.DocumentConnections, LogicECM.DocumentComponentBase);
+
+    YAHOO.lang.augmentObject(LogicECM.DocumentConnections.prototype,
         {
 
             /**
@@ -61,34 +63,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentConnections_onReady() {
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onLinkClick.bind(this);
-            },
+                linkEl.onclick = this.onExtendView.bind(this);
 
-            onLinkClick: function DocumentConnections_onLinkClick() {
+                // Load the form
                 Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj:{
-                            htmlid:"document-connections-" + this.options.nodeRef,
-                            itemKind:"node",
-                            itemId:this.options.nodeRef,
-                            formId:"connections",
-                            mode:"view"
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj: {
+                            htmlid: "document-connections-" + this.options.nodeRef,
+                            itemKind: "node",
+                            itemId: this.options.nodeRef,
+                            formId: "connections",
+                            mode: "view"
                         },
-                        successCallback:{
-                            fn:function(response){
-                                var container = Dom.get("custom-region");
-                                if (container != null) {
-                                    Dom.setStyle("main-content-region", "display", "none");
-                                    Dom.setStyle("custom-region", "display", "block");
-
-                                    container.innerHTML = response.serverResponse.responseText;
-                                }
-                            }
+                        successCallback: {
+                            fn: this.onConnectionsLoaded,
+                            scope: this
                         },
-                        failureMessage:"message.failure",
-                        execScripts:true
+                        failureMessage: "message.failure",
+                        execScripts: true
                     });
+            },
+
+            onConnectionsLoaded: function (response) {
+                // грузим контент
+                var formEl = this.getFormElement();
+                formEl.innerHTML = response.serverResponse.responseText;
             }
-        });
+        }, true);
 })();
