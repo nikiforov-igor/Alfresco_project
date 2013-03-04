@@ -38,7 +38,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentObject(LogicECM.DocumentComponentBase.prototype,
         {
 
-            MAIN_REGION: "main-content-region",
+            MAIN_REGION: "main-region",
             CUSTOM_DASHLET: "custom-dashlet",
 
             /**

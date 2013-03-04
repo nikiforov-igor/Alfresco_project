@@ -29,3 +29,8 @@
 .dashlet .titleBarActions .view {
     background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");
 }
+
+.dashlet .titleBarActions .collapse
+{
+    background-image: url(../components/images/info-16.png);
+}

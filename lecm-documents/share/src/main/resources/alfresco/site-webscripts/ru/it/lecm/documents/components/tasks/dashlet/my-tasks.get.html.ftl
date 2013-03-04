@@ -1,4 +1,4 @@
-<#assign id = args.htmlid>
+<#assign id = args.htmlid?js_string>
 
 <script type="text/javascript">
     //<![CDATA[
@@ -9,8 +9,8 @@
         var container;
 
         function init() {
-            new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-            new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
+            new Alfresco.widget.DashletResizer("${id}", "document.tasks.dashlet");
+            new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
                 actions: [
                     {
                         cssClass: "help",

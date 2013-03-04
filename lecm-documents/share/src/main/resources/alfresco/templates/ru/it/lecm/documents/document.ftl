@@ -10,6 +10,11 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
     <@templateHtmlEditorAssets />
+    <script type="text/javascript">
+        //<![CDATA[
+        Alfresco.constants.DASHLET_RESIZE = true;
+        //]]>
+    </script>
 </@>
 
 <@templateBody>
@@ -21,7 +26,7 @@
     <@region id="document-header" scope="template"/>
     <div class="yui-gc">
         <div class="yui-u first">
-            <div id="main-content-region" class="yui-gd grid columnSize2">
+            <div id="main-region" class="yui-gd grid columnSize2">
                 <div class="yui-u first column1">
                     <@region id="main" scope="template"/>
                     <@region id="members" scope="template"/>

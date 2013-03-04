@@ -1,4 +1,4 @@
-<#assign id = args.htmlid>
+<#assign id = args.htmlid?js_string>
 <script type="text/javascript">
     //<![CDATA[
     (function() {
@@ -56,8 +56,8 @@
         var viewForm = new YAHOO.util.CustomEvent("onDashletConfigure");
         viewForm.subscribe(showViewForm, null, true);
         function init() {
-            new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-            new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
+            new Alfresco.widget.DashletResizer("${id}", "document.main.dashlet");
+            new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
                 actions: [
                     {
                         cssClass: "view",
