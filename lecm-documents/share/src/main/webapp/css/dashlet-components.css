@@ -25,3 +25,7 @@
 .first .yui-gd div.column2 {
     width: 49%;
 }
+
+.dashlet .titleBarActions .view {
+    background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");
+}

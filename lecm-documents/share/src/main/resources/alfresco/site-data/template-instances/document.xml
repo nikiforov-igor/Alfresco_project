@@ -126,7 +126,7 @@
        <!-- Основные сведения -->
        <component>
            <region-id>document-metadata</region-id>
-           <url>/components/document-details/document-metadata</url>
+           <url>/lecm/components/document/document-main</url>
            <properties>
                <nodeRef>{nodeRef}</nodeRef>
            </properties>

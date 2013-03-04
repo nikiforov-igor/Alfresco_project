@@ -1,5 +1,4 @@
 <#assign id = args.htmlid>
-
 <script type="text/javascript">
     //<![CDATA[
     (function() {
@@ -8,31 +7,69 @@
             Selector = YAHOO.util.Selector;
         var container;
 
-        function drawForm(nodeRef){
+        function drawForm(nodeRef, htmlId, formId){
             Alfresco.util.Ajax.request(
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj:{
-                            htmlid:"DocumentMetadata-" + nodeRef,
-                            itemKind:"node",
+                            htmlid: htmlId + "-" + nodeRef,
+                            itemKind: "node",
                             itemId:nodeRef,
-                            formId:"${id}",
+                            formId: formId,
                             mode:"view"
                         },
                         successCallback:{
                             fn:function(response){
-                                container.innerHTML = response.serverResponse.responseText;
+                                if (arguments[0].config.htmlId == "DocumentMain") {
+                                    var contain = Dom.get("custom-dashlet");
+                                    if (contain != null) {
+                                        contain.innerHTML = response.serverResponse.responseText;
+
+                                        Dom.setStyle("main-content-region", "display", "none");
+                                        Dom.setStyle("custom-dashlet", "display", "block");
+                                        var oButton = new YAHOO.widget.Button({
+                                            id:"cancelDocumentButton",
+                                            type:"button",
+                                            label:"${msg("dashlet.button.cancel")?js_string}",
+                                            container:contain
+                                        });
+                                        oButton.on("click", hiddenViewForm);
+                                    }
+                                } else {
+                                    container.innerHTML = response.serverResponse.responseText;
+                                }
                             }
                         },
                         failureMessage:"message.failure",
-                        execScripts:true
+                        execScripts:true,
+                        htmlId:htmlId
                     });
         }
 
+        function hiddenViewForm(){
+            Dom.setStyle("custom-dashlet", "display", "none");
+            Dom.setStyle("main-content-region", "display", "block");
+        }
+        function showViewForm() {
+            drawForm("${nodeRef}","DocumentMain","${id}");
+        }
+        var viewForm = new YAHOO.util.CustomEvent("onDashletConfigure");
+        viewForm.subscribe(showViewForm, null, true);
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
             new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
                 actions: [
+                    {
+                        cssClass: "view",
+                        <#--linkOnClick:  Alfresco.constants.URL_PAGECONTEXT +"view-metadata?nodeRef=" + "${nodeRef}",-->
+                        eventOnClick: viewForm,
+                        tooltip: "${msg("dashlet.view.tooltip")?js_string}"
+                    },
+                    {
+                        cssClass: "edit",
+                        linkOnClick:  Alfresco.constants.URL_PAGECONTEXT +"edit-metadata?nodeRef=" + "${nodeRef}",
+                        tooltip: "${msg("dashlet.edit.tooltip")?js_string}"
+                    },
                     {
                         cssClass: "help",
                         bubbleOnClick: {
@@ -44,7 +81,7 @@
             });
 
             container = Dom.get('${id}_results');
-            drawForm("${nodeRef}");
+            drawForm("${nodeRef}","DocumentMetadata", "document");
         }
         Event.onDOMReady(init);
     })();

@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>document-main</shortname>
+    <description>Компонент "основные сведения"</description>
+    <url>/lecm/components/document/document-main</url>
+</webscript>
