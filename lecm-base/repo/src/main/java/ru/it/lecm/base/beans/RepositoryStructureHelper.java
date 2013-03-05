@@ -121,6 +121,7 @@ public class RepositoryStructureHelper implements IRepositoryStructureHelper {
 		PropertyCheck.mandatory (this, "home", home);
 		PropertyCheck.mandatory (this, "documents", documents);
 		PropertyCheck.mandatory (this, "drafts", drafts);
+		repository.init ();
 		debug ("Root directory is %s. It's noderef is %s", root, getRootRef ());
 		debug ("Home directory is %s. It's noderef is %s", home, getHomeRef ());
 		debug ("Documents directory is %s. It's noderef is %s", documents, getDocumentsRef ());
