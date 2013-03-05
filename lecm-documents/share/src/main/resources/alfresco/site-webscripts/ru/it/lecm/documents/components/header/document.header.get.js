@@ -5,7 +5,13 @@ function main() {
     var nodeDetails = AlfrescoUtil.getNodeDetails(model.nodeRef);
     if (nodeDetails) {
         model.item = nodeDetails.item;
-        model.documentName = nodeDetails.item.node.properties["cm:name"];
+
+        var presentString = nodeDetails.item.node.properties["lecm-document:present-string"];
+        if (presentString != null) {
+            model.documentName = presentString;
+        } else {
+            model.documentName = nodeDetails.item.node.displayName;
+        }
 
         var aspects = geAspects(model.nodeRef);
         var subscribed = false;

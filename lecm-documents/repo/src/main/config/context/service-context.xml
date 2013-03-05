@@ -123,4 +123,20 @@
             <ref bean="nodeService"/>
         </property>
     </bean>
+
+    <bean id="documenPresentStringPolicy" class="ru.it.lecm.documents.policy.DocumentPresentStringPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+        <property name="substituteService">
+            <ref bean="substitudeService"/>
+        </property>
+    </bean>
 </beans>

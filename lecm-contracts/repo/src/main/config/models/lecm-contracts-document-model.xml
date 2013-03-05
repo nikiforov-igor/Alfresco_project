@@ -11,6 +11,17 @@
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
 	</namespaces>
 
+    <constraints>
+        <constraint name="lecm-contract:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value>Договор {cm:name} от: {cm:created} автор: {cm:creator}</value>
+            </parameter>
+            <parameter name="listPresentString">
+                <value>Договор {cm:name}</value>
+            </parameter>
+        </constraint>
+    </constraints>
+
 	<types>
 		<type name="lecm-contract:document">
 			<title>Logic Ecm Contract Document</title>
