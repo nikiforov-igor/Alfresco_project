@@ -12,7 +12,10 @@ public class StatemachineEditorModel {
 
 	public final static String STATEMACHINE_EDITOR_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
 
-	public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "taskStatus");
+    public final static QName TYPE_STATEMACHINE = QName.createQName(STATEMACHINE_EDITOR_URI, "statemachine");
+
+    public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "taskStatus");
+    public final static QName TYPE_STATUSES = QName.createQName(STATEMACHINE_EDITOR_URI, "statuses");
 	public final static QName TYPE_ROLES = QName.createQName(STATEMACHINE_EDITOR_URI, "roles");
 	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_EDITOR_URI, "actions");
 	public final static QName TYPE_END_EVENT = QName.createQName(STATEMACHINE_EDITOR_URI, "endEvent");
@@ -47,11 +50,16 @@ public class StatemachineEditorModel {
 	public final static QName PROP_CREATION_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "creationDocument");
 	public final static QName PROP_PERMISSION_TYPE_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "permissionTypeValue");
 	public final static QName PROP_EDITABLE_FIELD = QName.createQName(STATEMACHINE_EDITOR_URI, "editableField");
+	public final static QName PROP_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "rolesFolder");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
 	public final static QName ASSOC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "role-assoc");
 
-	public final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
+    public static final String STATEMACHINES = "statemachines";
+    public static final String STATUSES = "statuses";
+    public static final String ROLES = "roles";
+
+    public final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
 	public final static String ACTION_SCRIPT_ACTION = "ScriptAction";
 	public final static String ACTION_START_WORKFLOW = "StartWorkflow";
 	public final static String ACTION_WAIT_FOR_DOCUMENT_CHANGE = "WaitForDocumentChange";

@@ -70,5 +70,11 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.post"
+          class="ru.it.lecm.statemachine.editor.export.Import"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+    </bean>
 
 </beans>

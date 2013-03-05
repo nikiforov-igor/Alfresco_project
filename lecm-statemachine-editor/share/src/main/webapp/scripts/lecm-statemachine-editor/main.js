@@ -338,8 +338,17 @@ LogicECM.module = LogicECM.module || {};
         },
 
         _importStatemachine: function() {
-            alert('Import!!!');
-		},
+            var Connect = YAHOO.util.Connect;
+            Connect.setForm(this.id + '-import-xml-form', true);
+            var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/import";
+            var fileUploadCallback = {
+                upload:function(o){
+                    console.log('Server Response: ' + o.responseText);
+                    document.location.reload(true);
+                }
+            };
+            Connect.asyncRequest(Alfresco.util.Ajax.POST, url, fileUploadCallback);
+        },
 
 		_editStatus: function(nodeRef, forDraft, isStarted) {
 			var formId = "";

@@ -33,7 +33,9 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
  */
 (function () {
 
-    var Dom = YAHOO.util.Dom
+    var Dom = YAHOO.util.Dom;
+    var Event = YAHOO.util.Event;
+    var UA = YAHOO.util.UserAction;
     var Bubbling = YAHOO.Bubbling;
     LogicECM.module.StatemachineEditor.Menu = function (htmlId) {
         return LogicECM.module.StatemachineEditor.Menu.superclass.constructor.call(
@@ -88,17 +90,26 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 			};
 			this.widgets.exportButton = Alfresco.util.createYUIButton(this, "machine-export", onButtonClick5, {});
 
-			var onButtonClick6 = function (e) {
-				this.editor._importStatemachine();
-			};
-			this.widgets.importButton = Alfresco.util.createYUIButton(this, "machine-import", onButtonClick6, {});
-
             var onButtonClick7 = function (e) {
                 this.editor.formFieldsOnStatus();
             };
             this.widgets.fieldsButton = Alfresco.util.createYUIButton(this, "machine-status-fields", onButtonClick7, {});
 
-        }
+            // Import XML
+            var importXmlButton = Alfresco.util.createYUIButton(this, "machine-import", function(){},{});
+            var inputId = this.id + "-import-xml-input";
 
+            Event.on(inputId, "mouseenter", function() {
+                UA.mouseover(importXmlButton);
+            });
+            Event.on(inputId, "mouseleave", function() {
+                UA.mouseout(importXmlButton);
+            });
+            Event.on(inputId, "change", this.editor._importStatemachine, null, this);
+
+            // Finally show the component body here to prevent UI artifacts on YUI button decoration
+            Dom.setStyle(this.id + "-body", "visibility", "visible");
+
+            this.widgets.importButton = importXmlButton;        }
     });
 })();

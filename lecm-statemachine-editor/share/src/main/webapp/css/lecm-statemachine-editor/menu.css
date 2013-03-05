@@ -18,10 +18,30 @@
 	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
-#lecm-menu .statemachine-menu #menu-buttons-machine-import span.first-child {
-	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
-}
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-status-fields span.first-child {
     background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
+
+/*import xml block*/
+.import-xml {
+    position: relative;
+}
+
+.import-xml button {
+    background: url("../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png") no-repeat 4px 4px;
+    cursor: pointer;
+}
+.import-xml {
+    position: relative;
+    overflow: hidden;
+}
+.import-xml input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 30px;
+}
+

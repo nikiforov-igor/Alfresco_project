@@ -1,28 +1,34 @@
 package ru.it.lecm.statemachine.editor.export;
 
+import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.servlet.FormData;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.
  * User: pkotelnikova
- * Date: 18.02.13
- * Time: 16:53
+ * Date: 26.02.13
+ * Time: 17:45
  * To change this template use File | Settings | File Templates.
  */
-public class Export extends AbstractWebScript {
+public class Import extends AbstractWebScript {
     private static final Log log = LogFactory.getLog(Export.class);
-    private static final String STATUSES_NODE_REF = "statusesNodeRef";
 
+    private Repository repositoryHelper;
     private NodeService nodeService;
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -30,35 +36,26 @@ public class Export extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-        String statusesNodeRef = req.getParameter(STATUSES_NODE_REF);
-        if (statusesNodeRef == null) {
-            log.error("No State Machine to export! statusesNodeRef is null.");
+        String stateMachineId = req.getParameter("stateMachineId");
+        if (stateMachineId == null) {
+            log.error("No State Machine to import! stateMachineId is null.");
             return;
         }
-
-        OutputStream resOutputStream = null;
+        InputStream inputStream = null;
         try {
-            res.setContentEncoding("UTF-8");
-            res.setContentType("text/xml");
-            res.addHeader("Content-Disposition", "attachment; filename=StateMachineExport.xml");
+            FormData formData = (FormData) req.parseContent();
+            FormData.FormField[] fields = formData.getFields();
 
-            resOutputStream = res.getOutputStream();
-
-            XMLExporter xmlExporter = new XMLExporter(resOutputStream, nodeService);
-            xmlExporter.write(statusesNodeRef);
-            xmlExporter.close();
-
-            resOutputStream.flush();
+            inputStream = fields[0].getInputStream();
+            XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryHelper, nodeService, stateMachineId);
+            xmlImporter.importStateMachine();
+            xmlImporter.close();
         } catch (XMLStreamException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
-            if (resOutputStream != null) {
-                resOutputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
             }
         }
-
-        log.info("Export complete");
     }
 }
