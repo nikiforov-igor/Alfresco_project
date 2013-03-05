@@ -5,7 +5,11 @@
 <div class="document-metadata-header document-details-panel">
     <h2 id="${el}-heading" class="thin dark">
         ${msg("heading")}
+        <span class="alfresco-twister-actions">
+            <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
+        </span>
     </h2>
+
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
         <table id="${el}-connection-set" style="width:  100%">
@@ -26,13 +30,15 @@
                         </td>
                     </tr>
                 </#list>
+                <#if connections.hasNext == "true">
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right">
+                            <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
+                        </td>
+                    </tr>
+                </#if>
             </#if>
-            <tr>
-                <td></td>
-                <td style="text-align: right">
-                    <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
-                </td>
-            </tr>
         </table>
     </div>
 

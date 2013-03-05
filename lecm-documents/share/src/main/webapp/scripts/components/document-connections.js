@@ -62,8 +62,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentConnections_onReady() {
+                var expandEl = Dom.get(this.id + "-action-expand");
+                if (expandEl != null) {
+                    expandEl.onclick = this.onLinkClick.bind(this);
+                }
+
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onLinkClick.bind(this);
+                if (linkEl != null) {
+                    linkEl.onclick = this.onLinkClick.bind(this);
+                }
             },
 
             onLinkClick: function () {
