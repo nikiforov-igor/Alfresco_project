@@ -64,7 +64,7 @@ public class OrgstructureEmployeeLinkPolicy
 					objects.add(unit != null ? unit.toString() : "");
 					businessJournalService.log(employee, EventCategory.TAKE_BOSS_POSITION, defaultDescription, objects);
 				}
-				// назначение СОтрудника на должность
+				// назначение Сотрудника на должность
 				notifyEmploeeSetDP(employee, position);
 			} else {
 				// Назначение на роль

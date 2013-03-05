@@ -62,7 +62,7 @@ public class OrgstructureUnitPolicy
 		NodeRef unit = childAssocRef.getChildRef();
 		NodeRef parent = orgstructureService.getParentUnit(unit);
 
-		// оповещение securityService по Должностной Позиции ...
+		// оповещение securityService по Департаменту ...
 		notifyChangedOU( unit, parent);
 	}
 
@@ -77,6 +77,21 @@ public class OrgstructureUnitPolicy
 
 		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
 			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о подразделении #mainobject");
+		}
+
+		// отслеживаем котороткое название для SG-обозначений
+		{
+			final Object oldValue = before.get(PolicyUtils.PROP_ORGUNIT_NAME);
+			final Object newValue = after.get(PolicyUtils.PROP_ORGUNIT_NAME);
+			final boolean flagChanged = ! PolicyUtils.safeEquals( newValue, oldValue);
+			if (flagChanged) {
+				logger.debug( String.format( "updating details for OU '%s'\n\t from '%s'\n\t to '%s'", nodeRef, oldValue, newValue));
+				notifyNodeCreated( PolicyUtils.makeOrgUnitPos(nodeRef, nodeService));
+				/* 
+				notifyNodeCreated( PolicyUtils.makeOrgUnitSVPos(nodeRef, nodeService));
+				(!) для OUSV явный вызов не потребуется, т.к. notifyOU автоматом создаёт sv-часть
+				*/
+			}
 		}
 	}
 

@@ -370,9 +370,10 @@ public class OrgstructureSGNotifierBeanImpl
 					final String userLogin = getEmployeeLogin( employee);
 					// Активация/деактивация личной Личной группы бизнес роли SG_BRME относительно SG_OU ...
 					final Types.SGPrivateBusinessRole brmePos = Types.SGKind.getSGMyRolePos(employee.getId(), userLogin, ouPos.getDisplayInfo());
-					if (include)
-						this.sgNotifier.sgInclude( brmePos, ouPos);
-					else
+					if (include) {
+						this.sgNotifier.sgInclude( brmePos, ouPos); // BRME -> OU
+						this.sgNotifier.sgInclude( Types.SGKind.SG_ME.getSGPos( employee.getId(), userLogin), brmePos); // ME -> BRME
+					} else
 						this.sgNotifier.sgExclude( brmePos, ouPos);
 				}
 			}
@@ -409,6 +410,9 @@ public class OrgstructureSGNotifierBeanImpl
 			assocPos = PolicyUtils.makeEmploeePos(destObj, nodeService, orgstructureService, logger);
 		} else if (orgstructureService.isStaffList(destObj)) { // присвоение БР для Должностной Позиции
 			assocPos = PolicyUtils.makeDeputyPos(destObj, nodeService, orgstructureService, logger);
+
+			// (!) включаем Сотрудника в личную группу бизнес роли
+			
 		} else if (orgstructureService.isUnit(destObj)) { // присвоение БР для Подразделения
 			assocPos = PolicyUtils.makeOrgUnitPos(destObj, nodeService);
 			isOrgUnitAssoc = true;

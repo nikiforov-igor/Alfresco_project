@@ -11,6 +11,7 @@ import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
+import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 public class LECMSecurityGroupsBean
@@ -247,7 +248,7 @@ public class LECMSecurityGroupsBean
 			 *   - и эта группа включается в SG_BR бизнес роли.
 			 */
 			final String myBRole = SGKind.getSGMyRolePos(obj.getId(), broleId).getAlfrescoSuffix(); // личная группа для БР
-			final String sgMyRole = ensureAlfrescoGroupName(myBRole, broleId + " for user "+ obj.getId() + " "+ obj.getDisplayInfo());
+			final String sgMyRole = ensureAlfrescoGroupName(myBRole, broleId + " for user '"+ obj.getDisplayInfo()+ "' {"+ obj.getId()+ "}");
 
 
 			// SG_Me -> SG_MyRole
@@ -272,9 +273,16 @@ public class LECMSecurityGroupsBean
 			// SG_DP -> SG_Role
 			ensureParent( sgObj, sgBRole);
 
-			// SG_MyBRole -> SG_DP
 			if ( dp.getUserId() != null) {
-				sgInclude( SGKind.getSGMyRolePos( dp.getUserId(), broleId), dp);
+				// SG_MyBRole -> SG_DP
+				final SGPrivateBusinessRole sgMyRole = SGKind.getSGMyRolePos( dp.getUserId(), broleId);
+				sgInclude( sgMyRole, dp);
+
+				// SG_Me -> SG_MyRole 
+				final SGPrivateMeOfUser sgMe = (SGPrivateMeOfUser) SGKind.SG_ME.getSGPos( dp.getUserId(), dp.getUserLogin());
+				sgInclude( sgMe, sgMyRole);
+			} else {
+				logger.warn( String.format("DP '%s'/{%s} is not linked with Employee -> skipping links (BRME->DP) and (ME->BRME)", dp.getDPName(), dp.getDPId()));
 			}
 		}
 		else if (SGKind.SG_OU.equals(obj.getSgKind())) {
