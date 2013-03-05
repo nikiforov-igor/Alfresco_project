@@ -13,7 +13,13 @@
                 <#list connections.items as item>
                     <tr>
                         <td>
-                            <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">${item.connectedDocument.name}</a>
+                            <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">
+                                <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
+                                    ${item.connectedDocument.presentString}
+                                <#else>
+                                    ${item.connectedDocument.name}
+                                </#if>
+                            </a>
                         </td>
                         <td style="text-align: right">
                             ${item.type.name}
