@@ -25,7 +25,7 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 
 	private IAbsence absenceService;
 	private IShedule sheduleService;
-	private ICalendar wCalendarService;
+	private ICalendar WCalendarService;
 	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
 	private final static Logger logger = LoggerFactory.getLogger(WorkCalendarBean.class);
 
@@ -36,7 +36,7 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
 		PropertyCheck.mandatory(this, "sheduleService", sheduleService);
-		PropertyCheck.mandatory(this, "wCalendarService", wCalendarService);
+		PropertyCheck.mandatory(this, "wCalendarService", WCalendarService);
 
 	}
 
@@ -273,8 +273,8 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 		this.sheduleService = sheduleService;
 	}
 
-	public void setwCalendarService(ICalendar wCalendarService) {
-		this.wCalendarService = wCalendarService;
+	public void setWCalendarService(ICalendar WCalendarService) {
+		this.WCalendarService = WCalendarService;
 	}
 
 	@Override
@@ -314,7 +314,7 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 
 	private Boolean isEmployeePresent(Date day, NodeRef node) {
 		Boolean result;
-		Boolean isWorking = wCalendarService.isWorkingDay(day);
+		Boolean isWorking = WCalendarService.isWorkingDay(day);
 
 		if (isWorking == null) {
 			result = null;

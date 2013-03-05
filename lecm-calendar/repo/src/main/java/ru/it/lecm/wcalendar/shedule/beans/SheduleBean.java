@@ -114,29 +114,6 @@ public class SheduleBean extends AbstractCommonWCalendarBean implements IShedule
 	}
 
 	@Override
-	public Map<String, String> getParentSheduleStdTime(NodeRef node) {
-		HashMap<String, String> result = new HashMap<String, String>();
-		String sheduleStdBegin, sheduleStdEnd, sheduleType;
-		NodeRef shedule = this.getParentShedule(node);
-		if (shedule == null) {
-			return null;
-		}
-		sheduleType = getSheduleType(shedule);
-		if (sheduleType.equals("SPECIAL")) {
-			sheduleStdBegin = "00:00";
-			sheduleStdEnd = "00:00";
-
-		} else {
-			sheduleStdBegin = (String) nodeService.getProperty(shedule, PROP_SHEDULE_STD_BEGIN);
-			sheduleStdEnd = (String) nodeService.getProperty(shedule, PROP_SHEDULE_STD_END);
-		}
-		result.put("type", sheduleType);
-		result.put("begin", sheduleStdBegin);
-		result.put("end", sheduleStdEnd);
-		return result;
-	}
-
-	@Override
 	public boolean isSheduleAssociated(NodeRef node) {
 		NodeRef shedule = findNodeByAssociationRef(node, ASSOC_SHEDULE_EMPLOYEE_LINK, TYPE_SHEDULE, ASSOCIATION_TYPE.SOURCE);
 		boolean result = shedule != null;
@@ -447,6 +424,17 @@ public class SheduleBean extends AbstractCommonWCalendarBean implements IShedule
 	public Date getSheduleElementEnd(NodeRef node) {
 		return (Date) nodeService.getProperty(node, PROP_SHEDULE_ELEMENT_END);
 	}
+
+	@Override
+	public String getSheduleBeginTime(NodeRef node) {
+		return (String) nodeService.getProperty(node, PROP_SHEDULE_STD_BEGIN);
+	}
+
+	@Override
+	public String getSheduleEndTime(NodeRef node) {
+		return (String) nodeService.getProperty(node, PROP_SHEDULE_STD_END);
+	}
+
 
 	// класс для представления элементов графика: первый и последний рабочий день в серии
 	private class SheduleElemetObject {

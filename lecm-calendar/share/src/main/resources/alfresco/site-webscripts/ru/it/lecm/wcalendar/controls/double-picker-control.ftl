@@ -120,10 +120,7 @@ function Shedule_PickerOKPressed(layer, args) {
 	var scope = this;
 	var picker = args[1];
 	var selectedItems = picker.getSelectedItems();
-	var nodeRefObj = []
-	for (var i = 0; i < selectedItems.length; i++) {
-		nodeRefObj.push({nodeRef: selectedItems[i]})
-	}
+	var nodeRefObj = {nodeRef: selectedItems[0]};
 
 	Alfresco.util.Ajax.request({
 		method: "POST",
@@ -133,22 +130,17 @@ function Shedule_PickerOKPressed(layer, args) {
 		responseContentType: "application/json",
 		successCallback: {
 			fn: function (response) {
-				var results = response.json;
+				var result = response.json;
 				var htmlOutput = "${msg("label.shedule.picker.parent-shedule")}:<br>";
-				if (results != null) {
-					for (var i = 0; i < results.length; i++) {
-						var result = results[i];
-						if (result) {
-							if (result.type == "COMMON") {
-								<#-- TODO: Сделать локализацию сообщений -->
-								htmlOutput += "c " + result.begin + " до " + result.end + "<br>";
-							} else if (result.type == "SPECIAL") {
-								htmlOutput += "особый<br>";
-							} else {
-								htmlOutput += "отсутствует<br>";
-							}
+				if (result != null) {
+					if (result) {
+						if (result.type == "COMMON") {
+							htmlOutput += "c " + result.begin + " до " + result.end + "<br>";
+						} else if (result.type == "SPECIAL") {
+							htmlOutput += "особый<br>";
+						} else {
+							htmlOutput += "отсутствует<br>";
 						}
-
 					}
 					var htmlNode = Dom.get("${controlTimeField}");
 					if (htmlNode) {

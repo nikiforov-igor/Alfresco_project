@@ -78,7 +78,7 @@ public interface ICalendar {
 	 * Получить NodeRef объекта типа "календарь" по году.
 	 *
 	 * @param year интересующий год
-	 * @return NodeRef календаря. Если календаря на искомы годе нет, то null.
+	 * @return NodeRef календаря. Если календаря на искомый год нет, то null.
 	 */
 	NodeRef getCalendarByYear(int year);
 

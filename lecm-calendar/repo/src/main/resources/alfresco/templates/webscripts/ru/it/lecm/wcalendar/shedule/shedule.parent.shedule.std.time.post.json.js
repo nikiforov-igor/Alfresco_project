@@ -1,11 +1,7 @@
-var result = [];
-for (var i = 0; i < json.length(); i++) {
-	var q = json.optJSONObject(i);
-	var sheduleTime = shedule.getParentSheduleStdTime(q);
-	if (sheduleTime == null) {
-		sheduleTime = {};
-	}
-	result.push(sheduleTime);
-}
+var parentShedule = shedule.getParentSheduleNodeRef(json);
 
-model.data = result.toString();
+if (parentShedule != null) {
+	model.begin = shedule.getSheduleBeginTime(parentShedule);
+	model.end = shedule.getSheduleEndTime(parentShedule);
+	model.type = shedule.getSheduleType(parentShedule);
+}

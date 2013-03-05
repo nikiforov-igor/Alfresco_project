@@ -2,7 +2,6 @@ package ru.it.lecm.wcalendar.shedule.extensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
@@ -83,59 +82,50 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 
 	private ScriptNode getParentSheduleNodeRef(final NodeRef node) {
 		NodeRef shedule = sheduleService.getParentShedule(node);
+		if (shedule == null) {
+			return null;
+		}
 		return new ScriptNode(shedule, serviceRegistry);
 	}
 
 	/**
-	 * Возвращает время работы и тип родительского расписания (см.
-	 * getParentShedule).
+	 * Возвращает время начала работы у данного графика работы.
 	 *
-	 * @param node JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
-	 * сотрудника или орг. единицу.
-	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
-	 * работы, "end" - время конца работы.
+	 * @param node NodeRef на график работы.
+	 * @return Время начала работы.
 	 */
-	public JSONObject getParentSheduleStdTime(final JSONObject node) {
-		String nodeRefStr;
-		try {
-			nodeRefStr = node.getString("nodeRef");
-		} catch (JSONException ex) {
-			throw new WebScriptException(ex.getMessage(), ex);
-		}
-		return getParentSheduleStdTime(nodeRefStr);
+	public String getSheduleBeginTime(ScriptNode node) {
+		return sheduleService.getSheduleBeginTime(node.getNodeRef());
 	}
 
 	/**
-	 * Возвращает время работы и тип родительского расписания (см.
-	 * getParentShedule).
+	 * Возвращает время начала работы у данного графика работы.
 	 *
-	 * @param nodeRefStr NodeRef на сотрудника или орг. единицу в виде строки
-	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
-	 * работы, "end" - время конца работы.
+	 * @param nodeRefStr NodeRef на график работы в виде ссылки.
+	 * @return Время начала работы.
 	 */
-	public JSONObject getParentSheduleStdTime(final String nodeRefStr) {
-		return getParentSheduleStdTime(new NodeRef(nodeRefStr));
+	public String getSheduleBeginTime(String nodeRefStr) {
+		return sheduleService.getSheduleBeginTime(new NodeRef(nodeRefStr));
 	}
 
 	/**
-	 * Возвращает время работы и тип родительского расписания (см.
-	 * getParentShedule).
+	 * Возвращает время конца работы у данного графика работы.
 	 *
-	 * @param nodeRef NodeRef на сотрудника или орг. единицу
-	 * @return Ключи JSON'а: "type" - тип расписания, "begin" - время начала
-	 * работы, "end" - время конца работы.
+	 * @param node NodeRef на график работы.
+	 * @return Время начала работы.
 	 */
-	public JSONObject getParentSheduleStdTime(final ScriptNode nodeRef) {
-		return getParentSheduleStdTime(nodeRef.getNodeRef());
+	public String getSheduleEndTime(ScriptNode node) {
+		return sheduleService.getSheduleEndTime(node.getNodeRef());
 	}
 
-	private JSONObject getParentSheduleStdTime(final NodeRef node) {
-		JSONObject result;
-
-		Map<String, String> JSONMap = sheduleService.getParentSheduleStdTime(node);
-		result = new JSONObject(JSONMap);
-
-		return result;
+	/**
+	 * Возвращает время конца работы у данного графика работы.
+	 *
+	 * @param nodeRefStr NodeRef на график работы.
+	 * @return Время начала работы.
+	 */
+	public String getSheduleEndTime(String nodeRefStr) {
+		return sheduleService.getSheduleEndTime(new NodeRef(nodeRefStr));
 	}
 
 	/**
@@ -206,6 +196,26 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 
 	private boolean isSheduleAssociated(final NodeRef node) {
 		return sheduleService.isSheduleAssociated(node);
+	}
+
+	/**
+	 * Получить тип графика работы.
+	 *
+	 * @param node NodeRef на график работы.
+	 * @return COMMON - обычный график. SPECIAL - особый.
+	 */
+	public String getSheduleType(final ScriptNode node) {
+		return sheduleService.getSheduleType(node.getNodeRef());
+	}
+
+	/**
+	 * Получить тип графика работы.
+	 *
+	 * @param node NodeRef на график работы.
+	 * @return COMMON - обычный график. SPECIAL - особый.
+	 */
+	public String getSheduleType(final String nodeStr) {
+		return sheduleService.getSheduleType(new NodeRef(nodeStr));
 	}
 
 	/**

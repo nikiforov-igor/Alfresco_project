@@ -99,7 +99,6 @@
 			</associations>
 		</type>
 		<!-- Список возможных причин отсутствия. -->
-
 		<type name="lecm-absence:reason">
 			<title>Absence reason</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>

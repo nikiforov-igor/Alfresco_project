@@ -95,14 +95,20 @@ public interface IShedule {
 	NodeRef getParentShedule(NodeRef node);
 
 	/**
-	 * Возвращает время работы и тип родительского расписания (см.
-	 * getParentShedule).
+	 * Возвращает время начала работы у данного графика работы.
 	 *
-	 * @param node NodeRef на сотрудника или орг. единицу.
-	 * @return Ключи map'а: "type" - тип расписания, "begin" - время начала
-	 * работы, "end" - время конца работы.
+	 * @param node NodeRef на график работы.
+	 * @return Время начала работы.
 	 */
-	Map<String, String> getParentSheduleStdTime(NodeRef node);
+	String getSheduleBeginTime(NodeRef node);
+
+	/**
+	 * Возвращает время конца работы у данного графика работы.
+	 *
+	 * @param node NodeRef на график работы.
+	 * @return Время начала работы.
+	 */
+	String getSheduleEndTime(NodeRef node);
 
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.

@@ -41,22 +41,6 @@
 					</index>
 				</property>
 			</properties>
-			<associations>
-				<!-- Рабочие дни принадлежат отпределенному календарю (году) -->
-				<child-association name="lecm-cal:contains-special-days">
-					<!-- День без года не имеет смысла. -->
-					<source>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</source>
-					<!-- В году может быть много рабочих дней. -->
-					<target>
-						<class>lecm-cal:special-days</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</child-association>
-			</associations>
 		</type>
 		<!-- Сущность, от которой наследуются выходные и рабочие дни. -->
 		<type name="lecm-cal:special-days">

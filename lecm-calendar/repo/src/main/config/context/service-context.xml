@@ -69,10 +69,11 @@
 		<property name="absenceService" ref="AbsenceService"/>
 		<property name="sheduleService" ref="SheduleService"/>
 	</bean>
-	<!-- JavaScript root-object для  календарей, отсутствий и графиков работы  -->
-	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.CommonWCalendarJavascriptExtension" parent="baseJavaScriptExtension">
+	<!-- JavaScript root-object для календарей, отсутствий и графиков работы  -->
+	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.calendar.extensions.CalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="wCalendarService" ref="WCalendarService"/>
 		<property name="commonWCalService" ref="WCalendarService"/>
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">

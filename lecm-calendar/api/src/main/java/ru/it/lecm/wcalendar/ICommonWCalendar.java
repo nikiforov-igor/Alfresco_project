@@ -8,7 +8,6 @@ import org.alfresco.service.namespace.QName;
  * @author vlevin
  */
 public interface ICommonWCalendar {
-	// Задаем namespace-ы из моделей данных
 
 	/**
 	 * Namespace: lecm-absence, absence-model.xml
