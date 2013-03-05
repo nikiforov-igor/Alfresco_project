@@ -21,3 +21,7 @@
 #lecm-menu .statemachine-menu #menu-buttons-machine-import span.first-child {
 	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
+
+#lecm-menu .statemachine-menu #menu-buttons-machine-status-fields span.first-child {
+    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
+}

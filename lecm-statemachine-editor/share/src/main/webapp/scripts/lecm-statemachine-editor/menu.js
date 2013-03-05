@@ -93,7 +93,12 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 			};
 			this.widgets.importButton = Alfresco.util.createYUIButton(this, "machine-import", onButtonClick6, {});
 
-		}
+            var onButtonClick7 = function (e) {
+                this.editor.formFieldsOnStatus();
+            };
+            this.widgets.fieldsButton = Alfresco.util.createYUIButton(this, "machine-status-fields", onButtonClick7, {});
+
+        }
 
     });
 })();

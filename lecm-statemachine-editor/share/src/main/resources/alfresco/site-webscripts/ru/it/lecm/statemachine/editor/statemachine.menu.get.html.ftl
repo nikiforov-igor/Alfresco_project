@@ -45,5 +45,13 @@
 	        </span>
 	    </span>
 </div>
+
+<div class="statemachine-menu">
+		<span id="menu-buttons-machine-status-fields" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Доступ к полям на статусе">&nbsp;</button>
+	        </span>
+	    </span>
+</div>
 </@comp.baseMenu>
 </#if>

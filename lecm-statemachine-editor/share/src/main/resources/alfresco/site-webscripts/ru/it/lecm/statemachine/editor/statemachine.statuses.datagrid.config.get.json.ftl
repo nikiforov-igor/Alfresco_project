@@ -1,0 +1,1 @@
+<#include "/ru/it/lecm/base-share/components/datagrid/config/columns.get.json.ftl">

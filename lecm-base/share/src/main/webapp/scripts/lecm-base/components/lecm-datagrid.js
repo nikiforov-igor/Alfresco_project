@@ -251,7 +251,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            /**
 	             * идентификатор формы расширенного поиска
 	             */
-	            advSearchFormId: "searchBlock-forms"
+	            advSearchFormId: "searchBlock-forms",
+
+                /**
+                 * Альтернативный адрес для конфигурирования таблицы
+                 */
+                configURL: null,
+
+                /**
+                 * Запрос Datasource с сервера
+                 */
+                repoDatasource: true
             },
 
             /**
@@ -498,10 +508,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                         var columnContent = "";
                                         switch (datalistColumn.dataType.toLowerCase()) {
+                                            case "checkboxtable":
+                                                columnContent += "<div style='text-align: center'><input type='checkbox' " + (data.displayValue == "true" ? "checked='checked'" : "") + " onClick='changeFieldState(this, \"" + data.value + "\")' /></div>"; //data.displayValue;
+                                                break;
                                             case "lecm-orgstr:employee":
                                                 columnContent += scope.getEmployeeView(data.value, data.displayValue);
                                                 break;
-
                                             case "lecm-orgstr:employee-link":
                                                 columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
                                                 break;
@@ -769,9 +781,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 				this.renderDataGridMeta();
                 // Query the visible columns for this list's item type
+                var configURL = "";
+                if (this.options.configURL != null) {
+                    configURL = $combine(Alfresco.constants.URL_SERVICECONTEXT, this.options.configURL + "?nodeRef=" + encodeURIComponent(this.options.datagridMeta.nodeRef));
+                } else {
+                    configURL = $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.datagridFormId) : ""));
+                }
+
                 Alfresco.util.Ajax.jsonGet(
                     {
-                        url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.datagridFormId) : "")),
+                        url: configURL,
                         successCallback:
                         {
                             fn: this.onDataGridColumns,
@@ -851,7 +870,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _setupDataSource:function () {
                 var ds = this.options.dataSource ? this.options.dataSource : "lecm/search";
-                var uriSearchResults = Alfresco.constants.PROXY_URI + ds;
+                if (this.options.repoDatasource) {
+                    var uriSearchResults = Alfresco.constants.PROXY_URI + ds;
+                } else {
+                    var uriSearchResults = Alfresco.constants.URL_SERVICECONTEXT + ds;
+                }
+
                 var dSource = new YAHOO.util.DataSource(uriSearchResults,
                     {
                         connMethodPost:true,

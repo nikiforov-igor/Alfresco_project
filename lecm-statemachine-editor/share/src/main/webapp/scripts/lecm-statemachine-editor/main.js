@@ -284,10 +284,9 @@ LogicECM.module = LogicECM.module || {};
 			}).show();
 		},
 
-		_setFormDialogTitle:function (p_form, p_dialog) {
+		_setFormDialogTitle:function (p_form, p_dialog, message) {
 			// Dialog title
-			var message = this.msg("actions.edit");
-			var fileSpan = '<span class="light">Статус</span>';
+			var fileSpan = '<span class="light">' + message + '</span>';
 			Alfresco.util.populateHTML(
 				[ p_dialog.id + "-form-container_h", fileSpan]
 			);
@@ -410,148 +409,45 @@ LogicECM.module = LogicECM.module || {};
 
 		},
 
+        formFieldsOnStatus: function () {
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            templateUrl = YAHOO.lang.substitute(templateUrl, {
+                itemKind: "node",
+                itemId: this.machineNodeRef,
+                mode: "edit",
+                submitType: "json",
+                formId: "statemachine-status-fields"
+            });
+
+            this._showSplash();
+            new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
+                width:"40em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:true,
+                doBeforeDialogShow:{
+                    fn: function(p_form, p_dialog) {
+                        this._hideSplash();
+                        this._setFormDialogTitle(p_form, p_dialog, "Редактирование полей на статусе");
+                    },
+                    scope: this
+                }
+            }).show();
+        },
+
 		_showSplash: function() {
-		/*	this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+		this.splashScreen = Alfresco.util.PopupManager.displayMessage(
 				{
 					text: Alfresco.util.message("label.loading"),
 					spanClass: "wait",
 					displayTime: 0
-				});*/
+				});
 		},
+
 		_hideSplash: function() {
-			//YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
 		}
 
 	});
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	Alfresco.widget.InsituEditor.statemachineEditActions = function (p_params) {
-		this.params = YAHOO.lang.merge({}, p_params);
-
-		// Create icons instances
-		this.editIcon = new Alfresco.widget.InsituEditorUnitEdit(this, p_params);
-		this.deleteIcon = new Alfresco.widget.InsituEditorUnitDelete(this, p_params);
-		return this;
-	};
-
-	YAHOO.extend(Alfresco.widget.InsituEditor.statemachineEditActions, Alfresco.widget.InsituEditor.textBox,
-		{
-			doShow:function InsituEditor_textBox_doShow() {
-				if (this.contextStyle === null)
-					this.contextStyle = Dom.getStyle(this.params.context, "display");
-				Dom.setStyle(this.params.context, "display", "none");
-				Dom.setStyle(this.editForm, "display", "inline");
-			},
-
-			doHide:function InsituEditor_textBox_doHide(restoreUI) {
-				if (restoreUI) {
-					Dom.setStyle(this.editForm, "display", "none");
-					Dom.setStyle(this.params.context, "display", this.contextStyle);
-				}
-			},
-
-			_generateMarkup:function InsituEditor_textBox__generateMarkup() {
-				return;
-			}
-		});
-
-	Alfresco.widget.InsituEditorUnitEdit = function (p_editor, p_params) {
-		this.editor = p_editor;
-		this.params = YAHOO.lang.merge({}, p_params);
-		this.disabled = p_params.disabled;
-
-		this.editIcon = document.createElement("span");
-		this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
-		Dom.addClass(this.editIcon, "insitu-edit-unit");
-
-		this.params.context.appendChild(this.editIcon, this.params.context);
-		Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
-		Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
-		Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
-		Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
-	};
-
-	YAHOO.extend(Alfresco.widget.InsituEditorUnitEdit, Alfresco.widget.InsituEditorIcon,
-		{
-			onIconClick:function InsituEditorUnitEdit_onIconClick(e, obj) {
-				var context = obj.params;
-				if (context.elementType == "status") {
-					context.parent._editStatus(context.nodeRef);
-				} else if (context.elementType == "action") {
-					context.parent._editAction(context.nodeRef);
-				}
-			}
-		});
-
-	Alfresco.widget.InsituEditorUnitDelete = function (p_editor, p_params) {
-		this.editor = p_editor;
-		this.params = YAHOO.lang.merge({}, p_params);
-		this.disabled = p_params.disabled;
-
-		this.editIcon = document.createElement("span");
-		this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
-		Dom.addClass(this.editIcon, "insitu-delete-unit");
-
-		this.params.context.appendChild(this.editIcon, this.params.context);
-		Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
-		Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
-		Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
-		Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
-	};
-
-	YAHOO.extend(Alfresco.widget.InsituEditorUnitDelete, Alfresco.widget.InsituEditorIcon,
-		{
-			onIconClick: function InsituEditorUnitDelete_onIconClick(e, obj) {
-				var context = obj.params;
-				if (context.elementType == "status") {
-					Alfresco.util.PopupManager.displayPrompt(
-						{
-							title: "Удаление статуса",
-							text: "Вы действительно хотите удалить статус \"" + context.elementName + "\"",
-							buttons: [
-								{
-									text: "Удалить",
-									handler: function dlA_onActionDelete_delete()
-									{
-										this.destroy();
-										context.parent._deleteStatus(context.nodeRef);
-									}
-								},
-								{
-									text: "Отмена",
-									handler: function dlA_onActionDelete_cancel()
-									{
-										this.destroy();
-									},
-									isDefault: true
-								}]
-						});
-				} else if (context.elementType == "action") {
-					Alfresco.util.PopupManager.displayPrompt(
-						{
-							title: "Удаление действия",
-							text: "Вы действительно хотите удалить действие \"" + context.elementName + "\"",
-							buttons: [
-								{
-									text: "Удалить",
-									handler: function dlA_onActionDelete_delete()
-									{
-										this.destroy();
-										context.parent._deleteAction(context.nodeRef);
-									}
-								},
-								{
-									text: "Отмена",
-									handler: function dlA_onActionDelete_cancel()
-									{
-										this.destroy();
-									},
-									isDefault: true
-								}]
-						});
-				}
-			}
-		});
 
 })();

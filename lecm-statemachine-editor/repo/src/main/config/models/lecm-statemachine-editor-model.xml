@@ -420,6 +420,17 @@
 		</type>
 		<!--         #Workflow Variables         -->
 
+        <type name="lecm-stmeditor:documentField">
+            <title>Logic ECM Statemachine Document Field</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="lecm-stmeditor:editableField">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
 	</types>
 
 	<aspects>

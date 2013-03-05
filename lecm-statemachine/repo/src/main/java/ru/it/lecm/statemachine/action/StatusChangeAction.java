@@ -17,10 +17,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -37,6 +34,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private String uuid = null;
 	private boolean forDraft = false;
 	private Map<String,INodeACLBuilder.StdPermission> dynamicPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
+	private Set<StateField> fields = new HashSet<StateField>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -57,7 +55,18 @@ public class StatusChangeAction extends StateMachineAction {
 			}
 		}
 
-		//Инициализация ролей
+        //Инициализация полей для редактирования
+        Element fieldsRoot = action.element("fields");
+        if (fieldsRoot != null) {
+            List<Element> fieldElements = fieldsRoot.elements("field");
+            for (Element fieldElement : fieldElements) {
+                String name = fieldElement.attribute("name");
+                boolean isEditable = Boolean.parseBoolean(fieldElement.attribute("isEditable"));
+                fields.add(new StateField(name, isEditable));
+            }
+        }
+
+        //Инициализация ролей
 		Map<String, INodeACLBuilder.StdPermission> staticPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 		Element roles = action.element("roles");
 		if (roles != null) {
@@ -68,7 +77,7 @@ public class StatusChangeAction extends StateMachineAction {
 			dynamicPermissions = initPermissions(dynamicRoleElement);
 		}
 
-		//Если начальный статус, то папки для него не требуется
+        //Если начальный статус, то папки для него не требуется
 		if (forDraft) return;
 
 		// NOTE: теперь этот метод не нужно вызывать, т.к. права задаются во время смены статуса
@@ -162,8 +171,11 @@ public class StatusChangeAction extends StateMachineAction {
 		execBuildInTransactDynamic(children, dynamicPermissions);
 	}
 
+    public Set<StateField> getFields() {
+        return fields;
+    }
 
-	private void checkStatus(NodeRef processFolder) {
+    private void checkStatus(NodeRef processFolder) {
 		NodeService nodeService = getServiceRegistry().getNodeService();
 		NodeRef existsFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, status);
 		if (existsFolder != null && !existsFolder.equals(folder)) {

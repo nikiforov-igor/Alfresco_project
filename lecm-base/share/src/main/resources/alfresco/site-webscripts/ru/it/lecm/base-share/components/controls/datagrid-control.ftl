@@ -64,6 +64,12 @@
                         <#if field.control.params.height??>
                             height: ${field.control.params.height},
                         </#if>
+                        <#if field.control.params.configURL??>
+                            configURL: "${field.control.params.configURL}",
+                        </#if>
+                        <#if field.control.params.repoDatasource??>
+                            repoDatasource: ${field.control.params.repoDatasource},
+                        </#if>
                         allowCreate: ${allowCreate?string},
                         showActionColumn: ${showActions?string},
                         showCheckboxColumn: false
