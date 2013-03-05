@@ -60,6 +60,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 dashletId: null
             },
 
+            /**
+             * метод, разворачивающий свернутый настраиваемый дашлет и обновляющий его содержимое
+             *
+             * @property html
+             * @type string
+             */
             expandView: function Base_expandView(html) {
                 // копируем контент в дашлет
                 var formEl = this.getCustomDashletContent();
@@ -77,6 +83,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
+            /**
+             * метод, сворачивающий развернутый настраиваемый дашлет
+             */
             collapseView: function Base_collapseView() {
                 // скрываем dashlet
                 Dom.setStyle(this.CUSTOM_DASHLET, "display", "none");
@@ -84,28 +93,51 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 Dom.setStyle(this.MAIN_REGION, "display", "block");
             },
 
+            /**
+             * метод получения заголовка компонента
+             */
             getTitle: function () {
                 return this.options.title;
             },
 
+            /**
+             * метод получения элемента с разметкой текущей "формы"
+             */
             getFormElement: function () {
                 return Dom.get(this.id + "-formContainer");
             },
 
+            /**
+             * метод получения заголовка кастомного(разворачивающегося) дашлета
+             */
             getCustomDashletTitle: function () {
                 return Dom.get("custom-dashlet-title");
             },
 
+            /**
+             * метод получения контента кастомного(разворачивающегося) дашлета
+             */
             getCustomDashletContent: function () {
                 return Dom.get("custom-dashlet-content");
             },
 
+            /**
+             * метод получения объекта с содержимым дашлета, связанного с данным объектом через параметр dashletId
+             */
             getDashletContainer: function () {
                 if (this.options.dashletId != null) {
                     return Dom.get(this.options.dashletId + "_results");
                 }
                 return null;
             },
+
+            /**
+             * метод записывающий html код в дашлет, связанный с данным объектом через параметр dashletId
+             * Код записывается в div c ID= "dashletId_results"
+             *
+             * @property html
+             * @type string
+             */
             writeToDashlet: function (html) {
                 var dashlet = this.getDashletContainer();
                 if (dashlet != null) {
