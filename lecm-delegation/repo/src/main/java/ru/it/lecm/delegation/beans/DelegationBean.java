@@ -38,6 +38,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 public class DelegationBean extends BaseBean implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
 	final private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
+	private final static String CONTAINER = "DelegationOptionsContainer";
+	public final static String DELEGATION_FOLDER = "DELEGATION_FOLDER";
 
 	private Repository repository;
 	private OrgstructureBean orgstructureService;
@@ -65,7 +67,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		this.sgNotifierService = sgNotifierService;
 	}
 
-	public final void bootstrap () {
+	public final void init () {
 		PropertyCheck.mandatory (this, "repository", repository);
 		PropertyCheck.mandatory (this, "nodeService", nodeService);
 		PropertyCheck.mandatory (this, "transactionService", transactionService);
@@ -73,6 +75,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		repository.init ();
 		//создание контейнера для хранения параметров делегирования
 		AuthenticationUtil.runAsSystem (this);
+
+		NodeRef delegationFolderRef = getDelegationFolder ();
+		nodeService.getProperty (delegationFolderRef, ContentModel.PROP_NAME);
+		logger.debug (String.format ("Delegation service root directory is"));
 
 		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
 	}
@@ -101,6 +107,11 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			});
 		}
 		return container;
+	}
+
+	@Override
+	public NodeRef getDelegationFolder () {
+		return getFolder (DELEGATION_FOLDER);
 	}
 
 	@Override

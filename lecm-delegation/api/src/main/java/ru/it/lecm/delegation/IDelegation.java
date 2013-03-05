@@ -11,7 +11,6 @@ import org.json.JSONObject;
  * @author rabdullin
  */
 public interface IDelegation {
-	String CONTAINER = "DelegationOptionsContainer";
 
 	/**
 	 * &lt;namespace uri="http://www.it.ru/logicECM/model/delegation/1.0" prefix="lecm-d8n"/&gt;
@@ -77,6 +76,13 @@ public interface IDelegation {
 	 * &lt;child-association name="lecm-d8n:delegation-opts-procuracy-assoc"&gt;
 	 */
 	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
+
+	/**
+	 * получение ссылки на папку сервиса делегирования
+	 * если папка отсутствует она будет создана
+	 * @return NodeRef
+	 */
+	NodeRef getDelegationFolder ();
 
 	/**
 	 * получение начальной информации от модуля делегирования

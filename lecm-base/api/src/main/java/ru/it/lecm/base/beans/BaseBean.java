@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,19 +27,31 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.transaction.TransactionService;
+import org.springframework.beans.factory.InitializingBean;
+import ru.it.lecm.base.ServiceFolder;
 
 /**
  * User: AIvkin
  * Date: 27.12.12
  * Time: 15:12
   */
-public abstract class BaseBean {
+public abstract class BaseBean implements InitializingBean {
 	public static  final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
 	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
 	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
 	final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
+	/**
+	 * карта с папками из декларативного описания бина
+	 */
+	private Map<String, String> folders;
+	/**
+	 * карта с папками для конкретного сервиса
+	 */
+	private final Map<String, ServiceFolder> serviceFolders = new HashMap<String, ServiceFolder> ();
+
+	private IRepositoryStructureHelper repositoryStructureHelper;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
 
@@ -59,6 +72,24 @@ public abstract class BaseBean {
 
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
+	}
+
+	public void setRepositoryStructureHelper (final IRepositoryStructureHelper repositoryStructureHelper) {
+		this.repositoryStructureHelper = repositoryStructureHelper;
+	}
+
+	@Override
+	public void afterPropertiesSet () throws Exception {
+		//когда все проперти проинициализируются, мы пробежимся по карте с папками и создадим их все
+		if (folders != null) {
+			for (Entry<String, String> entry : folders.entrySet ()) {
+				String relativePath = entry.getValue ();
+				ServiceFolder serviceFolder = new ServiceFolder (relativePath, null);
+				NodeRef folderRef = repositoryStructureHelper.getFolderRef (serviceFolder);
+				serviceFolder.setFolderRef (folderRef);
+				serviceFolders.put (entry.getKey (), serviceFolder);
+			}
+		}
 	}
 
 	/**
@@ -254,5 +285,22 @@ public abstract class BaseBean {
 		Pattern pattern = Pattern.compile("^[^\\:^ ]+\\:\\/\\/[^\\:^ ]+\\/[^ ]+$");
 		Matcher matcher = pattern.matcher(ref);
 		return matcher.find();
+	}
+
+	/**
+	 * Папки создаются относительно папки Home
+	 * @param folders карта с папками которые мы хотим создать
+	 */
+	public void setFolders (final Map<String, String> folders) {
+		this.folders = folders;
+	}
+
+	/**
+	 * получение созданной папки
+	 * @param folderId
+	 * @return
+	 */
+	public NodeRef getFolder (final String folderId) {
+		return repositoryStructureHelper.getFolderRef (serviceFolders.get (folderId));
 	}
 }

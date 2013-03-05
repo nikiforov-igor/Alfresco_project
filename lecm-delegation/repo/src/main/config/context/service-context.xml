@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- Registration of Delegations models -->
 	<bean id="${groupId}.${artifactId}.delegationBootstrap"
@@ -41,8 +43,16 @@
 		<property name="workflowService" ref="WorkflowService"/>
 	</bean>
 
-	<!-- ${groupId}.${artifactId}.serviceDelegation -->
-	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean" depends-on="${groupId}.${artifactId}.delegationBootstrap" init-method="bootstrap">
+	<util:constant id="delegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.DELEGATION_FOLDER"/>
+	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean"
+		  parent="baseBean"
+		  depends-on="${groupId}.${artifactId}.delegationBootstrap"
+		  init-method="init">
+		<property name="folders">
+			<map>
+				<entry key="#{delegationFolder}" value="Сервис делегирования полномочий"/>
+			</map>
+		</property>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
