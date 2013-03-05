@@ -212,22 +212,24 @@ public class BPMNGenerator {
 
         //Fields
         NodeRef fields = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "fields");
-        Element fieldsElement = doc.createElement("fields");
-        setStatusAction.appendChild(fieldsElement);
+        if (fields != null) {
+            Element fieldsElement = doc.createElement("fields");
+            setStatusAction.appendChild(fieldsElement);
 
-        List<ChildAssociationRef> fieldsItems = nodeService.getChildAssocs(fields);
-        for (ChildAssociationRef fieldItem : fieldsItems) {
-            String name = (String) nodeService.getProperty(fieldItem.getChildRef(), ContentModel.PROP_NAME);
-            boolean isEditable = false;
+            List<ChildAssociationRef> fieldsItems = nodeService.getChildAssocs(fields);
+            for (ChildAssociationRef fieldItem : fieldsItems) {
+                String name = (String) nodeService.getProperty(fieldItem.getChildRef(), ContentModel.PROP_NAME);
+                boolean isEditable = false;
 
-            Object isEditableProperty = nodeService.getProperty(fieldItem.getChildRef(), StatemachineEditorModel.PROP_EDITABLE_FIELD);
-            if (isEditableProperty != null) {
-                isEditable = (Boolean) isEditableProperty;
+                Object isEditableProperty = nodeService.getProperty(fieldItem.getChildRef(), StatemachineEditorModel.PROP_EDITABLE_FIELD);
+                if (isEditableProperty != null) {
+                    isEditable = (Boolean) isEditableProperty;
+                }
+                Element fieldElement = doc.createElement("field");
+                fieldElement.setAttribute("name", name.replaceFirst("_", ":"));
+                fieldElement.setAttribute("isEditable", "" + Boolean.toString(isEditable));
+                fieldsElement.appendChild(fieldElement);
             }
-            Element fieldElement = doc.createElement("field");
-            fieldElement.setAttribute("name", name.replaceFirst("_", ":"));
-            fieldElement.setAttribute("isEditable", "" + Boolean.toString(isEditable));
-            fieldsElement.appendChild(fieldElement);
         }
 
         String statusUUID = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_STATUS_UUID);
