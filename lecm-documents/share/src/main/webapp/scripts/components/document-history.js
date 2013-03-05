@@ -49,12 +49,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onLinkClick: function () {
-                // Load the form
+                // Load the datagrid
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/history",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/history-datagrid",
                         dataObj: {
-                            nodeRef: this.options.nodeRef
+                            nodeRef: this.options.nodeRef,
+                            htmlid: this.id + Alfresco.util.generateDomId()
                         },
                         successCallback: {
                             fn:function(response){
