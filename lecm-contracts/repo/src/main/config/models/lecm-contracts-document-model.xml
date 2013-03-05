@@ -32,6 +32,15 @@
 				</property>
 			</properties>
 		</type>
+		<type name="lecm-contract:importTestDocument">
+			<title>Logic Ecm Import Test Document</title>
+			<parent>lecm-document:base</parent>
+			<properties>
+				<property name="lecm-contract:importTestRegnum">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</type>
 	</types>
 
 </model>
