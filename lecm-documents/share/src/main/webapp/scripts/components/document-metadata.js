@@ -28,14 +28,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @return {LogicECM.DocumentHistory} The new DocumentHistory instance
      * @constructor
      */
-    LogicECM.DocumentMain = function DocumentMain_constructor(htmlId) {
-        LogicECM.DocumentMain.superclass.constructor.call(this, htmlId);
+    LogicECM.DocumentMetadata = function DocumentMain_constructor(htmlId) {
+        LogicECM.DocumentMetadata.superclass.constructor.call(this, htmlId);
         return this;
     };
 
-    YAHOO.extend(LogicECM.DocumentMain, LogicECM.DocumentComponentBase);
+    YAHOO.extend(LogicECM.DocumentMetadata, LogicECM.DocumentComponentBase);
 
-    YAHOO.lang.augmentObject(LogicECM.DocumentMain.prototype,
+    YAHOO.lang.augmentObject(LogicECM.DocumentMetadata.prototype,
         {
 
             /**
@@ -63,10 +63,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentMain_onReady() {
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onLinkClick.bind(this);
+                linkEl.onclick = this.onExpand.bind(this);
             },
 
-            onLinkClick: function () {
+            onExpand: function () {
                 // Load the form
                 Alfresco.util.Ajax.request(
                     {
@@ -80,8 +80,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         },
                         successCallback: {
                             fn:function(response){
-                                var text = response.serverResponse.responseText;
-                                this.expandView(text);
+                                this.expandView(response.serverResponse.responseText);
                             },
                             scope: this
                         },

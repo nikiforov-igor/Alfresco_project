@@ -64,16 +64,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function DocumentConnections_onReady() {
                 var expandEl = Dom.get(this.id + "-action-expand");
                 if (expandEl != null) {
-                    expandEl.onclick = this.onLinkClick.bind(this);
+                    expandEl.onclick = this.onExpand.bind(this);
                 }
 
                 var linkEl = Dom.get(this.id + "-link");
                 if (linkEl != null) {
-                    linkEl.onclick = this.onLinkClick.bind(this);
+                    linkEl.onclick = this.onExpand.bind(this);
                 }
             },
 
-            onLinkClick: function () {
+            onExpand: function () {
                 // Load the form
                 Alfresco.util.Ajax.request(
                     {
@@ -87,8 +87,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         },
                         successCallback: {
                             fn:function(response){
-                                var text = response.serverResponse.responseText;
-                                this.expandView(text);
+                                this.expandView(response.serverResponse.responseText);
                             },
                             scope: this
                         },

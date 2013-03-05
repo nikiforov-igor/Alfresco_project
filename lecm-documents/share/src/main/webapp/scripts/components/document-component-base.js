@@ -70,6 +70,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // копируем контент в дашлет
                 var formEl = this.getCustomDashletContent();
                 if (formEl != null) {
+                    currentExtendedComponent = this;
                     formEl.innerHTML = html;
                     // подменяем заголовок
                     var titleEl = this.getCustomDashletTitle();
@@ -103,7 +104,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             /**
              * метод получения элемента с разметкой текущей "формы"
              */
-            getFormElement: function () {
+            getComponentContainer: function () {
                 return Dom.get(this.id + "-formContainer");
             },
 
@@ -122,13 +123,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * метод получения объекта с содержимым дашлета, связанного с данным объектом через параметр dashletId
+             * метод получения объекта с содержимым дашлета, если такой дашлет есть
              */
             getDashletContainer: function () {
-                if (this.options.dashletId != null) {
-                    return Dom.get(this.options.dashletId + "_results");
-                }
-                return null;
+                var dashletId = this.id.replace("document-", "");
+                return Dom.get(dashletId + "_results");
             },
 
             /**
@@ -141,8 +140,27 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             writeToDashlet: function (html) {
                 var dashlet = this.getDashletContainer();
                 if (dashlet != null) {
-                    dashlet.innerHtml = html;
+                    dashlet.innerHTML = html;
                 }
+            },
+            writeToTab: function (html) {
+                var component = this.getComponentContainer();
+                if (component != null) {
+                    component.innerHTML = html;
+                }
+            },
+            onExpand: function() {
+                this.expandView("Нет данных");
+            },
+            onCollapse: function(){
+                this.collapseView();
             }
+            /*,
+            onScriptLoaded: function (response) {
+                // пишем полученный ответ во вкладку
+                this.writeToTab(response.serverResponse.responseText);
+                // пишем полученный ответ в дашлет
+                this.writeToDashlet(response.serverResponse.responseText);
+            }*/
         }, true);
 })();

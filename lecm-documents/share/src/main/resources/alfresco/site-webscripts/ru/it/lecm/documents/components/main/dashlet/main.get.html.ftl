@@ -39,7 +39,9 @@
         });
 
         function expandDashlet() {
-            documentComponentBase.expandView(container.innerHTML);
+            if (documentMetadataComponent != null) {
+                documentMetadataComponent.onExpand();
+            }
         }
 
         function init() {

@@ -38,7 +38,7 @@
 
       <!-- Основные сведения -->
        <component>
-           <region-id>main</region-id>
+           <region-id>metadata</region-id>
            <sub-components>
                <sub-component id="default">
                    <evaluations>

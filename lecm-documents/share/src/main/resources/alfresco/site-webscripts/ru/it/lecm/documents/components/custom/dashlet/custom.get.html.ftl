@@ -11,16 +11,12 @@
         var collapseDashletEvent = new YAHOO.util.CustomEvent("onCollaspeDashlet");
         collapseDashletEvent.subscribe(collapseDashlet, null, true);
 
-        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}");
-
         function collapseDashlet() {
-            documentComponentBase.collapseView();
+            currentExtendedComponent.onCollapse();
         }
 
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.custom.dashlet");
-            /*var mainHeigth = Dom.get("main-region").clientHeight;
-            Dom.setAttribute("custom-dashlet","heigth", mainHeigth);*/
             new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
                 actions: [
                     {

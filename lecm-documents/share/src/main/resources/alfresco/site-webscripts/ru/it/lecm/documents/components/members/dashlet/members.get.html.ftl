@@ -16,7 +16,9 @@
         });
 
         function expandDashlet() {
-            documentComponentBase.expandView(container.innerHtml);
+            if (documentMembersComponent != null) {
+                documentMembersComponent.onExpand();
+            }
         }
 
         function init() {

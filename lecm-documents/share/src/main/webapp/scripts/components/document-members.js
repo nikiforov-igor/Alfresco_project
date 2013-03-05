@@ -28,7 +28,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @return {LogicECM.DocumentMembers} The new DocumentHistory instance
      * @constructor
      */
-    LogicECM.DocumentMembers = function DocumentHistory_constructor(htmlId) {
+    LogicECM.DocumentMembers = function DocumentMembers_constructor(htmlId) {
         LogicECM.DocumentMembers.superclass.constructor.call(this, htmlId);
         return this;
     };
@@ -39,26 +39,26 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         {
             onReady: function DocumentHistory_onReady() {
                 var linkEl = Dom.get(this.id + "-action-expand");
-                linkEl.onclick = this.onLinkClick.bind(this);
+                linkEl.onclick = this.onExpand.bind(this);
 
                 // грузим в formContainer данные об участниках
-                Alfresco.util.Ajax.request(
+                /*Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.PROXY_URI + "lecm/document/members",
                         dataObj: {
                             nodeRef: this.options.nodeRef
                         },
                         successCallback: {
-                            fn: this.onMembersLoaded,
+                            fn: this.onScriptLoaded,
                             scope: this
                         },
                         failureMessage: this.msg("message.failure"),
                         scope: this,
                         execScripts: true
-                    });
+                    });*/
             },
 
-            onLinkClick: function () {
+            onExpand: function () {
                 // Обновляем форму и раскрываем в "большом окне"
                 Alfresco.util.Ajax.request(
                     {
@@ -68,7 +68,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         },
                         successCallback: {
                             fn: function (response) {
-                                this.onMembersLoaded(response);
                                 this.expandView(response.serverResponse.responseText);
                             },
                             scope: this
@@ -77,20 +76,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         scope: this,
                         execScripts: true
                     });
-                /*var formElement = this.getFormElement();
-                if (formElement != null) {
-                    this.expandView(formElement.innerHtml);
-                }*/
-            },
-
-            onMembersLoaded: function (response) {
-                var formElement = this.getFormElement();
-                if (formElement != null) {
-                    // сохраняем данные из ответа в контейнер
-                    formElement.innerHTML = response.serverResponse.responseText;
-                    // пишем полученный ответ в дашлет
-                    this.writeToDashlet(response.serverResponse.responseText);
-                }
             }
         }, true);
 })();

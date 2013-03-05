@@ -13,6 +13,7 @@
     <script type="text/javascript">
         //<![CDATA[
         Alfresco.constants.DASHLET_RESIZE = true;
+        var currentExtendedComponent = null;
         //]]>
     </script>
 </@>
@@ -28,7 +29,7 @@
         <div class="yui-u first">
             <div id="main-region" class="yui-gd grid columnSize2">
                 <div class="yui-u first column1">
-                    <@region id="main" scope="template"/>
+                    <@region id="metadata" scope="template"/>
                     <@region id="members" scope="template"/>
                 </div>
                 <div class="yui-u column2">
