@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get document members</shortname>
+    <description>Document Members Get</description>
+    <url>/lecm/document/members?nodeRef={nodeRef}</url>
+    <format default="html">argument</format>
+    <authentication>user</authentication>
+</webscript>

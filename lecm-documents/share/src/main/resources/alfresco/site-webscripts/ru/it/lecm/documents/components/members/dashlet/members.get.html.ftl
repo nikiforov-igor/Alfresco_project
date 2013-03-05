@@ -8,16 +8,25 @@
             Selector = YAHOO.util.Selector;
         var container;
 
+        var expandDashletEvent = new YAHOO.util.CustomEvent("onExpandDashlet");
+        expandDashletEvent.subscribe(expandDashlet, null, true);
+
+        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}").setOptions({
+            title:"${msg('label.title')}"
+        });
+
+        function expandDashlet() {
+            documentComponentBase.expandView(container.innerHtml);
+        }
+
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.members.dashlet");
             new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
                 actions: [
                     {
-                        cssClass: "help",
-                        bubbleOnClick: {
-                            message: "${msg("dashlet.help")?js_string}"
-                        },
-                        tooltip: "${msg("dashlet.help.tooltip")?js_string}"
+                        cssClass: "expand",
+                        eventOnClick: expandDashletEvent,
+                        tooltip: "${msg("dashlet.expand.tooltip")?js_string}"
                     }
                 ]
             });

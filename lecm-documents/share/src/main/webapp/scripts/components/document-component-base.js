@@ -56,14 +56,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @required
                  */
                 nodeRef: null,
-                title: "Custom Dashlet"
+                title: "Custom Dashlet",
+                dashletId: null
             },
 
-            expandView: function Base_expandView(responseText) {
+            expandView: function Base_expandView(html) {
                 // копируем контент в дашлет
                 var formEl = this.getCustomDashletContent();
                 if (formEl != null) {
-                    formEl.innerHTML = responseText;
+                    formEl.innerHTML = html;
                     // подменяем заголовок
                     var titleEl = this.getCustomDashletTitle();
                     if (titleEl != null) {
@@ -88,7 +89,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             getFormElement: function () {
-                return Dom.get(this.id + "-form");
+                return Dom.get(this.id + "-formContainer");
             },
 
             getCustomDashletTitle: function () {
@@ -97,6 +98,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             getCustomDashletContent: function () {
                 return Dom.get("custom-dashlet-content");
+            },
+
+            getDashletContainer: function () {
+                if (this.options.dashletId != null) {
+                    return Dom.get(this.options.dashletId + "_results");
+                }
+                return null;
+            },
+            writeToDashlet: function (html) {
+                var dashlet = this.getDashletContainer();
+                if (dashlet != null) {
+                    dashlet.innerHtml = html;
+                }
             }
         }, true);
 })();

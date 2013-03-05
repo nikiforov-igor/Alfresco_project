@@ -34,6 +34,10 @@
     background-image: url("/share/res/images/lecm-documents/collapse-16.png");
 }
 
+.dashlet .titleBarActions .expand {
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+}
+
 .alfresco-twister-actions a {
     background-position: 0 center;
     background-repeat: no-repeat;

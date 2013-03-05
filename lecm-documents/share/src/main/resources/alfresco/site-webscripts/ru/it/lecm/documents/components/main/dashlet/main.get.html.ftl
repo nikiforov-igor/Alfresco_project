@@ -12,7 +12,7 @@
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj:{
-                            htmlid: htmlId + "-" + nodeRef,
+                            htmlid: htmlId,
                             itemKind: "node",
                             itemId:nodeRef,
                             formId: formId,
@@ -20,15 +20,7 @@
                         },
                         successCallback:{
                             fn:function(response){
-                                if (arguments[0].config.htmlId == "DocumentMain") {
-                                    var contain = Dom.get("custom-dashlet-content");
-                                    if (contain != null) {
-                                        contain.innerHTML = response.serverResponse.responseText;
-                                        Dom.get("custom-dashlet-title").innerHTML = "${msg("label.title")}";
-                                        Dom.setStyle("main-region", "display", "none");
-                                        Dom.setStyle("custom-dashlet", "display", "block");
-                                    }
-                                } else {
+                                if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
                                 }
                             }
@@ -39,12 +31,16 @@
                     });
         }
 
-        function showViewForm() {
-            drawForm("${nodeRef}","DocumentMain","${id}");
-        }
-
         var viewForm = new YAHOO.util.CustomEvent("onDashletConfigure");
-        viewForm.subscribe(showViewForm, null, true);
+        viewForm.subscribe(expandDashlet, null, true);
+
+        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}").setOptions({
+            title:"${msg('label.title')}"
+        });
+
+        function expandDashlet() {
+            documentComponentBase.expandView(container.innerHTML);
+        }
 
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.main.dashlet");
@@ -52,7 +48,6 @@
                 actions: [
                     {
                         cssClass: "view",
-                        <#--linkOnClick:  Alfresco.constants.URL_PAGECONTEXT +"view-metadata?nodeRef=" + "${nodeRef}",-->
                         eventOnClick: viewForm,
                         tooltip: "${msg("dashlet.view.tooltip")?js_string}"
                     },
@@ -72,7 +67,7 @@
             });
 
             container = Dom.get('${id}_results');
-            drawForm("${nodeRef}","DocumentMetadata", "document");
+            drawForm("${nodeRef}",'${id}_results', "document");
         }
         Event.onDOMReady(init);
     })();
