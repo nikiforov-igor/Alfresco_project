@@ -56,3 +56,7 @@
 .document-metadata-header h2 .view {
     background-image: url("/share/res/images/lecm-documents/view-discussion-16.png");
 }
+
+.alfresco-twister-closed .alfresco-twister-actions {
+    display: inline;
+}
