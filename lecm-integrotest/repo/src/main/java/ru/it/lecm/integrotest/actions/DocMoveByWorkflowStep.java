@@ -68,7 +68,7 @@ public class DocMoveByWorkflowStep extends LecmActionBase {
 		doNext( docRef, getContext().getStateMachineService(), getContext().getPublicServices().getWorkflowService());
 	}
 
-	private static void doNext(final NodeRef doc, final StateMachineServiceBean smSrvc, final WorkflowService wfSrvc) {
+	private void doNext(final NodeRef doc, final StateMachineServiceBean smSrvc, final WorkflowService wfSrvc) {
 		final List<WorkflowInstance> wfi = wfSrvc.getWorkflowsForContent(doc, true); // активные процессы
 		if (wfi != null && wfi.size() >=1 )  {
 			logger.info( String.format("Found %d WorkflowInstanses for Document {%s}", wfi.size(), doc));
@@ -83,9 +83,9 @@ public class DocMoveByWorkflowStep extends LecmActionBase {
 				logger.warn( String.format("Document %s using active Workflow item %s", doc, taskId));
 
 				// смена статуса ...
-				smSrvc.nextTransition( taskId);
+				final String res = smSrvc.nextTransition( taskId);
 
-				logger.info( String.format("Document '%s' has been moved to the next Workflow step", doc));
+				logger.info( String.format("Document '%s' has been moved to the next Workflow step as '%s'", doc, res));
 			}
 		} else {
 			logger.warn( String.format("Document '%s' has no active Workflow items -> nothing to move", doc));

@@ -11,9 +11,21 @@ import ru.it.lecm.integrotest.RunContext;
 
 public abstract class LecmActionBase implements RunAction {
 
-	final static protected Logger logger = LoggerFactory.getLogger (LecmActionBase.class);
+	final protected Logger logger = LoggerFactory.getLogger (LecmActionBase.class);
 
 	private RunContext context;
+	private String description;
+
+	/**
+	 * @return описание данного действия
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@Override
 	public void setContext(RunContext context) {

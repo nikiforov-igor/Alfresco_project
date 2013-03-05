@@ -446,6 +446,9 @@
 		</property>
 	</bean>
 
+	<bean id="break" class="ru.it.lecm.integrotest.actions.RunModifierImpl">
+	</bean>
+
 	<!-- Тест 1 для проверки доступа к новому документу во время его прогона по ЖЦ -->
 	<bean id="test.1.ChkWFDocAccess" class="ru.it.lecm.integrotest.SingleTest">
 		<!--  List<SingleTest> -->
@@ -484,6 +487,8 @@
 				<bean class="ru.it.lecm.integrotest.actions.DocMoveByWorkflowStep">
 					<property name="nodeRefMacros" value="result.createdNodeRef" />
 				</bean>
+
+				<ref local="break" />
 
 				<!-- Проверка прав доступа к документу в статусе 1 = Согласование ... -->
 				<ref local="chkDocACL_Approv1" />

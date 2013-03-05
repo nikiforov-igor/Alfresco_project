@@ -24,6 +24,8 @@ import ru.it.lecm.integrotest.ExecutorBean;
 import ru.it.lecm.integrotest.FinderBean;
 import ru.it.lecm.integrotest.RunAction;
 import ru.it.lecm.integrotest.RunContext;
+import ru.it.lecm.integrotest.RunModifier;
+import ru.it.lecm.integrotest.RunModifier.TodoStatus;
 import ru.it.lecm.integrotest.SingleTest;
 import ru.it.lecm.integrotest.TestFailException;
 import ru.it.lecm.integrotest.utils.DurationLogger;
@@ -271,15 +273,40 @@ public class ExecutorBeanImpl
 
 			this.context = new TestingContextImpl(step);
 
-			for (RunAction act: step.getActions()) {
+			boolean skipNext = false; // признак пропуска следующего шага-действия ...
+			runner: for (RunAction act: step.getActions()) {
 				j++;
 				stage = String.format( "step %s.%s, action %s", i+1, j, act.getClass());
+				if (skipNext) {
+					skipNext = false;
+					logger.warn( "skipping step due to previous RunModifier: "+ stage);
+					continue;
+				}
 				logger.debug( "enter "+ stage);
 
 				act.setContext(this.getContext());
 				try {
 					act.run();
-					result.getNestedResults().add( new StepResult( EResult.OK, null, stage));
+					// ловим модификаторы потока действий ...
+					if (act instanceof RunModifier) {
+						final RunModifier mod = (RunModifier) act;
+						final TodoStatus todo = mod.getTodoStatus();
+						stage = String.format( "(!) RunModifier %s at step %s.%s, action %s", todo, i+1, j, act.getClass());
+						logger.warn(stage);
+						switch (todo) {
+							case doBreak:
+								result.getNestedResults().add( new StepResult( EResult.OK, null, stage));
+								break runner;
+							case doSkipNext:
+								skipNext = true;
+								break;
+							default:
+								logger.warn("RunModifier is dummy");
+						}
+					}
+
+					result.getNestedResults().add( new StepResult( EResult.OK, null, stage)); 
+					result.setInfo( String.format( "affected break at step %s.%s", i+1, j));
 				} catch (TestFailException tx){
 					if (!tx.isCanContinue())
 						// поднимаем исключение если прописан подъём
@@ -289,7 +316,7 @@ public class ExecutorBeanImpl
 				}
 
 				logger.info( String.format( "SUCCESSFULL step %s.%s, action %s", i+1, j, act.getClass()) );
-			}
+			} // runner: for
 
 			result.setCode(EResult.OK);
 		} catch (Throwable t) {

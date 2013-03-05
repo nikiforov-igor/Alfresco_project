@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AccessStatus;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.integrotest.TestFailException;
 import ru.it.lecm.integrotest.actions.LecmActionBase;
@@ -140,7 +141,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 
 		public void setRoleAccess(Map<String, StdPermission> roleAccess) {
 			this.roleAccess = roleAccess;
-			logger.debug( String.format( "after setRoleAccess access table:\n\t %s", this.roleAccess));
+			LoggerFactory.getLogger (UserWithBR.class).debug( String.format( "after setRoleAccess access table:\n\t %s", this.roleAccess));
 		}
 
 		/**
@@ -165,7 +166,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		 */
 		public void setRoleUsers(Map<String, String> roleUsers) {
 			this.roleUsers = roleUsers;
-			logger.debug( String.format( "after setRoleUsers access table:\n\t %s", this.roleUsers));
+			LoggerFactory.getLogger (UserWithBR.class).debug( String.format( "after setRoleUsers access table:\n\t %s", this.roleUsers));
 		}
 
 		/**
@@ -392,9 +393,9 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	}
 
 
-	static boolean chkAndLogCondition(boolean condStop, String msg) {
+	static boolean chkAndLogCondition( boolean condStop, String msg) {
 		if (condStop) { // при статусе = "ошибка": логирование и поднятие исключения
-			logger.warn(msg);
+			LoggerFactory.getLogger (LecmCheckNodeACL.class).warn(msg);
 			throw new RuntimeException(msg);
 		}
 		return !condStop;

@@ -195,7 +195,7 @@ public class CreateNode extends LecmActionBase {
 				logger.debug( Utils.makeAttrDump(parentNodeRef, nodeServ, String.format("\nAttributes of parent node {%s}:\n", parentNodeRef)).toString());
 			}
 
-			// Выполнение создания узла-документа ...
+			// (!) Выполнение создания узла-документа ...
 			final Map<QName, Serializable> data = getAttributesAsDataMap(); // получение сконфигурированных атрибутов
 			final ChildAssociationRef newRef = nodeServ.createNode( 
 						parentNodeRef
