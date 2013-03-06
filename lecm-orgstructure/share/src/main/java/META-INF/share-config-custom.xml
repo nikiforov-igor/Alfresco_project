@@ -21,6 +21,7 @@
                     <show id="lecm-orgstr:employee-positions"/>
                     <show id="lecm-orgstr:employee-roles"/>
 	                <show id="lecm-busjournal-aspects:history-list"/>
+                    <show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
@@ -48,6 +49,9 @@
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
                     <field id="lecm-orgstr:employee-person-assoc" set="common"/>
                     <field id="lecm-subscr-aspects" set="common"/>
+                    <field id="lecm-subscr-aspects" set="common">
+                        <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
+                    </field>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
@@ -478,10 +482,14 @@
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
                     <show id="lecm-orgstr:workGroup-description"/>
+                    <show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:workGroup-description">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecm-subscr-aspects">
+                        <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
                     </field>
                 </appearance>
             </form>
