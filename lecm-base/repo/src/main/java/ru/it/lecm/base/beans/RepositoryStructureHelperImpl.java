@@ -39,6 +39,7 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 
 	private final static Logger logger = LoggerFactory.getLogger (RepositoryStructureHelperImpl.class);
 	private final static char FOLDER_SEPARATOR = '/';
+	private final static String COLLABORATOR = "Collaborator";
 
 	private Repository repository;
 	private NodeService nodeService;
@@ -183,13 +184,18 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 			final NodeRef folderRef = createFolder (repository.getCompanyHome (), root);
 			//отбираем права у папки lecmRoot
 			logger.trace ("Try to modify root folder permissions...");
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-			rootRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+			rootRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
 				@Override
-				public NodeRef execute () throws Throwable {
-					permissionService.clearPermission (folderRef, PermissionService.ALL_AUTHORITIES);
-					permissionService.setInheritParentPermissions (folderRef, false);
-					return folderRef;
+				public NodeRef doWork () throws Exception {
+					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+					return transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+						@Override
+						public NodeRef execute () throws Throwable {
+							permissionService.clearPermission (folderRef, PermissionService.ALL_AUTHORITIES);
+							permissionService.setInheritParentPermissions (folderRef, false);
+							return folderRef;
+						}
+					});
 				}
 			});
 			logger.trace ("Root folder has no more permissions");
@@ -215,16 +221,21 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 			final NodeRef folderRef = createFolder (getRootRef (), home);
 			//для папки home выдаем полные права
 			logger.trace ("Try to modify home folder permissions...");
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-			homeRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+			homeRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
 				@Override
-				public NodeRef execute () throws Throwable {
-					permissionService.setPermission (folderRef, PermissionService.ALL_AUTHORITIES, "Collaborator", true);
-					permissionService.setInheritParentPermissions (folderRef, false);
-					return folderRef;
+				public NodeRef doWork () throws Exception {
+					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+					return transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+						@Override
+						public NodeRef execute () throws Throwable {
+							permissionService.setPermission (folderRef, PermissionService.ALL_AUTHORITIES, COLLABORATOR, true);
+							permissionService.setInheritParentPermissions (folderRef, false);
+							return folderRef;
+						}
+					});
 				}
 			});
-			logger.trace ("Home folder has {} permissions", "Collaborator");
+			logger.trace ("Home folder has {} permissions", COLLABORATOR);
 		}
 		logger.trace ("Home directory is {}. It's noderef is {}", home, homeRef);
 		return homeRef;

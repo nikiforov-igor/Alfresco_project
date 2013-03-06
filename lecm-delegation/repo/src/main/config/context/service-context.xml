@@ -50,10 +50,9 @@
 		  init-method="init">
 		<property name="folders">
 			<map>
-				<entry key="#{delegationFolder}" value="Сервис делегирования полномочий"/>
+				<entry key="#{delegationFolder}" value="сервис Делегирование полномочий"/>
 			</map>
 		</property>
-		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="personService" ref="personService"/>

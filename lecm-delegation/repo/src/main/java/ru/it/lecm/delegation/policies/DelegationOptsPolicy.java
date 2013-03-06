@@ -3,7 +3,6 @@ package ru.it.lecm.delegation.policies;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -41,12 +40,7 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
 	@Override
 	public void onUpdateNode (final NodeRef nodeRef) {
+		delegationService.getOrCreateDelegationOpts (nodeRef);
 		logger.info ("employee with nodeRef '{}' sucessfully updated", nodeRef);
-		AuthenticationUtil.runAsSystem (new AuthenticationUtil.RunAsWork<NodeRef> () {
-			@Override
-			public NodeRef doWork () throws Exception {
-				return delegationService.getOrCreateDelegationOpts (nodeRef);
-			}
-		});
 	}
 }

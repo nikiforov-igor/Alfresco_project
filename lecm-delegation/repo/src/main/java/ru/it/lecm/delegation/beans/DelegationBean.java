@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -41,15 +40,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	private final static String CONTAINER = "DelegationOptionsContainer";
 	public final static String DELEGATION_FOLDER = "DELEGATION_FOLDER";
 
-	private Repository repository;
 	private OrgstructureBean orgstructureService;
 	private PersonService personService;
 	private BusinessJournalService businessJournalService;
 	private OrgstructureSGNotifierBean sgNotifierService;
-
-	public void setRepositoryHelper (Repository repository) {
-		this.repository = repository;
-	}
 
 	public void setOrgstructureService (OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -68,11 +62,13 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	public final void init () {
-		PropertyCheck.mandatory (this, "repository", repository);
 		PropertyCheck.mandatory (this, "nodeService", nodeService);
 		PropertyCheck.mandatory (this, "transactionService", transactionService);
+		PropertyCheck.mandatory (this, "personService", personService);
+		PropertyCheck.mandatory (this, "businessJournalService", businessJournalService);
+		PropertyCheck.mandatory (this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory (this, "sgNotifierService", sgNotifierService);
 
-		repository.init ();
 		//создание контейнера для хранения параметров делегирования
 		AuthenticationUtil.runAsSystem (this);
 
@@ -85,14 +81,14 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public NodeRef doWork () throws Exception {
-		final NodeRef companyHome = repository.getCompanyHome ();
-		NodeRef container = nodeService.getChildByName (companyHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
+		final NodeRef delegationHome = getDelegationFolder ();
+		NodeRef container = nodeService.getChildByName (delegationHome, ContentModel.ASSOC_CONTAINS, CONTAINER);
 		if (container == null) {
 			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
 			container = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
 				@Override
 				public NodeRef execute () throws Throwable {
-					NodeRef parentRef = companyHome; //the parent node
+					NodeRef parentRef = delegationHome; //the parent node
 					QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
 					QName assocQName = QName.createQName (DELEGATION_NAMESPACE, CONTAINER); //the qualified name of the association
 					QName nodeTypeQName = TYPE_DELEGATION_OPTS_CONTAINER; //a reference to the node type
@@ -147,29 +143,25 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		return delegationOptsNodeRef;
 	}
 
-	private NodeRef getOrCreateDelegationOptsAsSystem (final NodeRef employeeNodeRef) {
+	private NodeRef createDelegationOpts (final NodeRef employeeNodeRef) {
 		return AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
 			@Override
 			public NodeRef doWork () throws Exception {
-				return getOrCreateDelegationOpts (employeeNodeRef);
+				Serializable employeeName = nodeService.getProperty (employeeNodeRef, ContentModel.PROP_NAME);
+				String delegationOptsName = String.format ("параметры делегирования для %s", employeeName);
+				//создание ноды и установка ей ассоциации
+				NodeRef parentRef = getDelegationOptsContainer (); //the parent node
+				QName assocTypeQName = ASSOC_DELEGATION_OPTS_CONTAINER; //the type of the association to create. This is used for verification against the data dictionary.
+				QName assocQName = QName.createQName (DELEGATION_NAMESPACE, delegationOptsName); //the qualified name of the association
+				QName nodeTypeQName = TYPE_DELEGATION_OPTS; //a reference to the node type
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable> (); //optional map of properties to keyed by their qualified names
+				properties.put (ContentModel.PROP_NAME, delegationOptsName);
+				properties.put (IS_ACTIVE, false);//параметры делегирования по умолчанию создаем неактивными
+				NodeRef delegationOptsNodeRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef ();
+				nodeService.createAssociation (delegationOptsNodeRef, employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
+				return delegationOptsNodeRef;
 			}
 		});
-	}
-
-	private NodeRef createDelegationOpts (final NodeRef employeeNodeRef) {
-		Serializable employeeName = nodeService.getProperty (employeeNodeRef, ContentModel.PROP_NAME);
-		String delegationOptsName = String.format ("параметры делегирования для %s", employeeName);
-		//создание ноды и установка ей ассоциации
-		NodeRef parentRef = getDelegationOptsContainer (); //the parent node
-		QName assocTypeQName = ASSOC_DELEGATION_OPTS_CONTAINER; //the type of the association to create. This is used for verification against the data dictionary.
-		QName assocQName = QName.createQName (DELEGATION_NAMESPACE, delegationOptsName); //the qualified name of the association
-		QName nodeTypeQName = TYPE_DELEGATION_OPTS; //a reference to the node type
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable> (); //optional map of properties to keyed by their qualified names
-		properties.put (ContentModel.PROP_NAME, delegationOptsName);
-		properties.put (IS_ACTIVE, false);//параметры делегирования по умолчанию создаем неактивными
-		NodeRef delegationOptsNodeRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef ();
-		nodeService.createAssociation (delegationOptsNodeRef, employeeNodeRef, ASSOC_DELEGATION_OPTS_OWNER);
-		return delegationOptsNodeRef;
 	}
 
 	@Override
@@ -178,11 +170,11 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		if (isDelegationOpts (nodeRef)) {
 			delefationOptsRef = nodeRef;
 		} else if (orgstructureService.isEmployee (nodeRef)) {
-			delefationOptsRef = getOrCreateDelegationOptsAsSystem (nodeRef);
+			delefationOptsRef = getOrCreateDelegationOpts (nodeRef);
 		} else if (isProperType (nodeRef, ContentModel.TYPE_PERSON)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByPerson (nodeRef);
 			if (employeeRef != null) {
-				delefationOptsRef = getOrCreateDelegationOptsAsSystem (employeeRef);
+				delefationOptsRef = getOrCreateDelegationOpts (employeeRef);
 			} else {
 				String fistname = (String) nodeService.getProperty (nodeRef, ContentModel.PROP_FIRSTNAME);
 				String lastname = (String) nodeService.getProperty (nodeRef, ContentModel.PROP_LASTNAME);
