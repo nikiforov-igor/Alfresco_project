@@ -1,8 +1,5 @@
 package ru.it.lecm.businessjournal.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
@@ -27,6 +24,9 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -645,8 +645,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-    public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
-        List<NodeRef> result = getHistory(nodeRef);
+    public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending, final boolean includeSecondary) {
+
+        List<NodeRef> result = getHistory(nodeRef, includeSecondary);
 
         final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
         if (sortFieldQName == null) {
@@ -675,7 +676,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     }
 
     @Override
-    public List<NodeRef> getHistory(NodeRef nodeRef) {
+    public List<NodeRef> getHistory(NodeRef nodeRef, boolean includeSecondary) {
         if (nodeRef == null) {
             return new ArrayList<NodeRef>();
         }
@@ -683,11 +684,31 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
 
         List<NodeRef> result = new ArrayList<NodeRef>();
-        for (AssociationRef sourceAssoc : sourceAssocs) {
-            NodeRef bjRecordRef = sourceAssoc.getSourceRef();
 
-            if (!isArchive(bjRecordRef)) {
-                result.add(bjRecordRef);
+        int index = includeSecondary ? 5 : 1;
+
+        for (int i = 0; i<index; i++) {
+            if (i == 1) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ1);
+            }
+            if (i == 2) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ2);
+            }
+            if (i == 3) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ3);
+            }
+            if (i == 4) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ4);
+            }
+            if (i == 5) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ5);
+            }
+            for (AssociationRef sourceAssoc : sourceAssocs) {
+                NodeRef bjRecordRef = sourceAssoc.getSourceRef();
+
+                if (!isArchive(bjRecordRef)) {
+                    result.add(bjRecordRef);
+                }
             }
         }
 

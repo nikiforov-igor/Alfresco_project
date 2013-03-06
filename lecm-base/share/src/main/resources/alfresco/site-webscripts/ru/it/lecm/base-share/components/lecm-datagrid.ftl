@@ -145,7 +145,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 	<#if showArchiveCheckBox>
         <div align="right" style="padding: 0.5em;">
             <input type="checkbox" class="formsCheckBox" id="${id}-cbShowArchive" onChange="YAHOO.Bubbling.fire('archiveCheckBoxClicked', null)">
-            <label class="checkbox" for="${id}-cbShowArchive">Отображать архивные</label>
+            <label class="checkbox" for="${id}-cbShowArchive">${msg("logicecm.base.show-arhive.label")}</label>
         </div>
 	</#if>
 	<div id="${id}-grid" class="grid"></div>
