@@ -302,7 +302,6 @@
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
                 <aspect>lecm-stmeditor:assigneeAspect</aspect>
-                <aspect>lecm-stmeditor:conditionAccessAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
