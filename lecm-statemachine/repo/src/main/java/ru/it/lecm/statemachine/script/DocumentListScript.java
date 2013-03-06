@@ -79,7 +79,6 @@ public class DocumentListScript extends DeclarativeWebScript {
 											for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
                                                 if (!expression.execute(condition.getExpression())) {
                                                     messages.add(condition.getErrorMessage());
-                                                    condition.getFields()
                                                 }
                                             }
 
