@@ -10,7 +10,7 @@ function main() {
         if (presentString != null) {
             model.documentName = presentString;
         } else {
-            model.documentName = nodeDetails.item.node.displayName;
+            model.documentName = nodeDetails.item.displayName;
         }
 
         var aspects = geAspects(model.nodeRef);
