@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -121,15 +123,20 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 	private NodeRef createFolder (final NodeRef parentRef, final String folder) {
 		ParameterCheck.mandatory ("parentRef", parentRef);
 		ParameterCheck.mandatory ("folder", folder);
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-		NodeRef folderRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+		NodeRef folderRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
 			@Override
-			public NodeRef execute () throws Throwable {
-				QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, folder);
-				Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
-				properties.put (ContentModel.PROP_NAME, folder);
-				ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-				return childAssoc.getChildRef ();
+			public NodeRef doWork () throws Exception {
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+				return transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+					@Override
+					public NodeRef execute () throws Throwable {
+						QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, folder);
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
+						properties.put (ContentModel.PROP_NAME, folder);
+						ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+						return childAssoc.getChildRef ();
+					}
+				});
 			}
 		});
 		logger.trace ("NodeRef {} was sucessfully created for {} folder", folderRef, folder);
