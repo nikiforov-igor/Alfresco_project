@@ -51,7 +51,7 @@ public class Import extends AbstractWebScript {
             xmlImporter.importStateMachine();
             xmlImporter.close();
         } catch (XMLStreamException e) {
-            e.printStackTrace();
+            throw new IOException("Failed to import State Machine!", e);
         } finally {
             if (inputStream != null) {
                 inputStream.close();

@@ -343,7 +343,16 @@ LogicECM.module = LogicECM.module || {};
             var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/import";
             var fileUploadCallback = {
                 upload:function(o){
-                    console.log('Server Response: ' + o.responseText);
+                    if (o.responseText && eval("(" + o.responseText + ")").status.code != 200) {
+                        Alfresco.util.PopupManager.displayMessage(
+                            {
+                                text: Alfresco.util.message("import.error"),
+                                spanClass: "wait",
+                                displayTime: 5
+                            });
+                        return;
+                    }
+
                     document.location.reload(true);
                 }
             };
@@ -445,7 +454,7 @@ LogicECM.module = LogicECM.module || {};
         },
 
 		_showSplash: function() {
-		this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+		    this.splashScreen = Alfresco.util.PopupManager.displayMessage(
 				{
 					text: Alfresco.util.message("label.loading"),
 					spanClass: "wait",
