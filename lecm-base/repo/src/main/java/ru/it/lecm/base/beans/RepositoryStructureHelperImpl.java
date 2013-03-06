@@ -10,6 +10,7 @@ import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -32,48 +33,10 @@ import ru.it.lecm.base.ServiceFolder;
  * @since 01.03.2013 11:59:19
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public class RepositoryStructureHelper implements IServiceFolderStructureHelper {
+public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 
-	private final static Logger logger = LoggerFactory.getLogger (RepositoryStructureHelper.class);
+	private final static Logger logger = LoggerFactory.getLogger (RepositoryStructureHelperImpl.class);
 	private final static char FOLDER_SEPARATOR = '/';
-
-	private static void debug (String format, Object... args) {
-		if (logger.isDebugEnabled ()) {
-			logger.debug (String.format (format, args));
-		}
-	}
-
-	private static void trace (String format, Object... args) {
-		if (logger.isTraceEnabled ()) {
-			logger.trace (String.format (format, args));
-		}
-	}
-
-	/**
-	 * служебный класс для хранения ссылки на папку и флага ее создания
-	 */
-	private final static class FolderRef {
-		private final NodeRef nodeRef;
-		private final boolean created;
-
-		public FolderRef (NodeRef nodeRef, boolean created) {
-			this.nodeRef = nodeRef;
-			this.created = created;
-		}
-
-		public NodeRef getNodeRef () {
-			return nodeRef;
-		}
-
-		public boolean isCreated () {
-			return created;
-		}
-
-		@Override
-		public String toString () {
-			return nodeRef.toString ();
-		}
-	}
 
 	private Repository repository;
 	private NodeService nodeService;
@@ -112,7 +75,7 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 	 * root
 	 */
 	public final void init () {
-		debug ("initializing RepositoryStructureHelper and creating default folders...");
+		logger.debug ("initializing RepositoryStructureHelper and creating default folders...");
 		PropertyCheck.mandatory (this, "repository", repository);
 		PropertyCheck.mandatory (this, "nodeService", nodeService);
 		PropertyCheck.mandatory (this, "permissionService", permissionService);
@@ -122,9 +85,9 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 		PropertyCheck.mandatory (this, "documents", documents);
 		PropertyCheck.mandatory (this, "drafts", drafts);
 		repository.init ();
-		debug ("Root directory is %s. It's noderef is %s", root, getRootRef ());
-		debug ("Home directory is %s. It's noderef is %s", home, getHomeRef ());
-		debug ("Documents directory is %s. It's noderef is %s", documents, getDocumentsRef ());
+		logger.debug ("Root directory is {}. It's noderef is {}", root, getRootRef ());
+		logger.debug ("Home directory is {}. It's noderef is {}", home, getHomeRef ());
+		logger.debug ("Documents directory is {}. It's noderef is {}", documents, getDocumentsRef ());
 	}
 
 	/**
@@ -150,41 +113,50 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 	}
 
 	/**
-	 * получаем или создаем папку у указанного родителя
+	 * создаем папку у указанного родителя
 	 * @param parentRef ссылка на родителя
 	 * @param folder имя папки без слешей и прочей ерунды
+	 * @return NodeRef свежесозданной папки
 	 */
-	private FolderRef getOrCreateFolder (final NodeRef parentRef, final String folder) {
+	private NodeRef createFolder (final NodeRef parentRef, final String folder) {
 		ParameterCheck.mandatory ("parentRef", parentRef);
 		ParameterCheck.mandatory ("folder", folder);
-		//проверяем а есть ли такая папка
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+		NodeRef folderRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+			@Override
+			public NodeRef execute () throws Throwable {
+				QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, folder);
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
+				properties.put (ContentModel.PROP_NAME, folder);
+				ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+				return childAssoc.getChildRef ();
+			}
+		});
+		logger.trace ("NodeRef {} was sucessfully created for {} folder", folderRef, folder);
+		return folderRef;
+	}
+
+	/**
+	 * получаем папку у указанного родителя
+	 * @param parentRef ссылка на родителя
+	 * @param folder имя папки без слешей и прочей ерунды
+	 * @return NodeRef если папка есть, null в противном случае
+	 */
+	private NodeRef getFolder (final NodeRef parentRef, final String folder) {
+		ParameterCheck.mandatory ("parentRef", parentRef);
+		ParameterCheck.mandatory ("folder", folder);
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs (parentRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-		FolderRef folderRef = null;
+		NodeRef folderRef = null;
 		if (childAssocs != null) {
 			for (ChildAssociationRef childAssoc : childAssocs) {
 				NodeRef childRef = childAssoc.getChildRef ();
 				String name = (String) nodeService.getProperty (childRef, ContentModel.PROP_NAME);
 				if (folder.equals (name)) {
-					folderRef = new FolderRef (childRef, false);
+					folderRef = childRef;
+					logger.trace ("Folder {} already exists, it's noderef is {}", folder, folderRef);
 					break;
 				}
 			}
-		}
-		if (folderRef == null) {
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-			folderRef = transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<FolderRef> () {
-				@Override
-				public FolderRef execute () throws Throwable {
-					QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, folder);
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
-					properties.put (ContentModel.PROP_NAME, folder);
-					ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-					return new FolderRef (childAssoc.getChildRef (), true);
-				}
-			});
-			trace ("NodeRef %s was sucessfully created for %s folder", folderRef, folder);
-		} else {
-			trace ("Folder %s already exists, it's noderef is %s", folder, folderRef);
 		}
 		return folderRef;
 	}
@@ -199,23 +171,24 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 	}
 
 	private NodeRef getRootRef () {
-		final FolderRef rootRef = getOrCreateFolder (repository.getCompanyHome (), root);
-		trace ("Root directory is %s. It's noderef is %s", root, rootRef);
-		if (rootRef.isCreated ()) {
+		NodeRef rootRef = getFolder (repository.getCompanyHome (), root);
+		if (rootRef == null) {
+			final NodeRef folderRef = createFolder (repository.getCompanyHome (), root);
 			//отбираем права у папки lecmRoot
-			trace ("Try to modify root folder permissions...");
+			logger.trace ("Try to modify root folder permissions...");
 			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+			rootRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
 				@Override
-				public Void execute () throws Throwable {
-					permissionService.clearPermission (rootRef.getNodeRef (), PermissionService.ALL_AUTHORITIES);
-					permissionService.setInheritParentPermissions (rootRef.getNodeRef (), false);
-					return null;
+				public NodeRef execute () throws Throwable {
+					permissionService.clearPermission (folderRef, PermissionService.ALL_AUTHORITIES);
+					permissionService.setInheritParentPermissions (folderRef, false);
+					return folderRef;
 				}
 			});
-			trace ("Root folder has no more permissions");
+			logger.trace ("Root folder has no more permissions");
 		}
-		return rootRef.getNodeRef ();
+		logger.trace ("Root directory is {}. It's noderef is {}", root, rootRef);
+		return rootRef;
 	}
 
 	/**
@@ -230,23 +203,24 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 
 	@Override
 	public NodeRef getHomeRef () {
-		final FolderRef homeRef = getOrCreateFolder (getRootRef (), home);
-		trace ("Home directory is %s. It's noderef is %s", home, homeRef);
-		//для папки home выдаем полные права
-		if (homeRef.isCreated ()) {
-			trace ("Try to modify home folder permissions...");
+		NodeRef homeRef = getFolder (getRootRef (), home);
+		if (homeRef == null) {
+			final NodeRef folderRef = createFolder (getRootRef (), home);
+			//для папки home выдаем полные права
+			logger.trace ("Try to modify home folder permissions...");
 			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-			transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+			homeRef = transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
 				@Override
-				public Void execute () throws Throwable {
-					permissionService.setPermission (homeRef.getNodeRef (), PermissionService.ALL_AUTHORITIES, "Collaborator", true);
-					permissionService.setInheritParentPermissions (homeRef.getNodeRef (), false);
-					return null;
+				public NodeRef execute () throws Throwable {
+					permissionService.setPermission (folderRef, PermissionService.ALL_AUTHORITIES, "Collaborator", true);
+					permissionService.setInheritParentPermissions (folderRef, false);
+					return folderRef;
 				}
 			});
-			trace ("Home folder has %s permissions", "Collaborator");
+			logger.trace ("Home folder has {} permissions", "Collaborator");
 		}
-		return homeRef.getNodeRef ();
+		logger.trace ("Home directory is {}. It's noderef is {}", home, homeRef);
+		return homeRef;
 	}
 
 	/**
@@ -261,9 +235,12 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 
 	@Override
 	public NodeRef getDocumentsRef () {
-		NodeRef documentsRef = getOrCreateFolder (getRootRef (), documents).getNodeRef ();
-		trace ("Documents directory is %s. It's noderef is %s", documents, documentsRef);
+		NodeRef documentsRef = getFolder (getRootRef (), documents);
+		if (documentsRef == null) {
+			documentsRef = createFolder (getRootRef (), documents);
+		}
 		//права не нарезаем, они по-умолчанию наследуют права root
+		logger.trace ("Documents directory is {}. It's noderef is {}", documents, documentsRef);
 		return documentsRef;
 	}
 
@@ -288,11 +265,14 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 		NodeRef draftsRef;
 		if (isProperType (personRef, ContentModel.TYPE_PERSON)) {
 			NodeRef personHome = repository.getUserHome (personRef);
-			draftsRef = getOrCreateFolder (personHome, drafts).getNodeRef ();
-			trace ("Person drafts directory is %s. It's noderef is %s", drafts, draftsRef);
+			draftsRef = getFolder (personHome, drafts);
+			if (draftsRef == null) {
+				draftsRef = createFolder (personHome, drafts);
+			}
+			logger.trace ("Person drafts directory is {}. It's noderef is {}", drafts, draftsRef);
 		} else {
 			QName nodeType = nodeService.getType (personRef);
-			logger.error (String.format ("NodeRef {%s}%s is not a %s and can't have home directory", nodeType, personRef, ContentModel.TYPE_PERSON.toPrefixString ()));
+			logger.error ("NodeRef [{}]{} is not a {} and can't have home directory", new Object[] {nodeType, personRef, ContentModel.TYPE_PERSON.toPrefixString ()});
 			draftsRef = null;
 		}
 		//права не нарезаем, потому что права по-умолчанию нас устраивают
@@ -313,7 +293,10 @@ public class RepositoryStructureHelper implements IServiceFolderStructureHelper 
 				if (StringUtils.isEmpty (folder)) {
 					logger.error ("Folder name can't be empty. Folder won't be created.");
 				} else {
-					folderRef = getOrCreateFolder (parentRef, folder).getNodeRef ();
+					folderRef = getFolder (parentRef, folder);
+					if (folderRef == null) {
+						folderRef = createFolder (parentRef, folder);
+					}
 					parentRef = folderRef;
 				}
 			}

@@ -19,7 +19,7 @@
 -->
 <beans>
 
-	<bean id="repositoryStructureHelper" class="ru.it.lecm.base.beans.RepositoryStructureHelper" init-method="init">
+	<bean id="repositoryStructureHelper" class="ru.it.lecm.base.beans.RepositoryStructureHelperImpl" init-method="init">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="permissionService" ref="permissionService"/>
 		<property name="personService" ref="personService"/>

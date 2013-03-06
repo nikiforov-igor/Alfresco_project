@@ -3,6 +3,7 @@ package ru.it.lecm.base.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.ServiceFolder;
 
+
 /**
  * Класс отвечающий за создание структуры папок в хранилище
  * он создает папки с правильными правами на них
@@ -10,7 +11,7 @@ import ru.it.lecm.base.ServiceFolder;
  * @since 01.03.2013 10:25:22
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public interface IRepositoryStructureHelper {
+public interface RepositoryStructureHelper {
 
 	/**
 	 * получение ссылки на корневую папку LECM
@@ -39,22 +40,4 @@ public interface IRepositoryStructureHelper {
 	 * @return
 	 */
 	NodeRef getDraftsRef (final NodeRef personRef);
-
-}
-
-/**
- * вспомогательный интерфейс который добавляет возможность
- * получения (создания) папки для какого-либо сервиса (функционального модуля)
- * поскольку вся работа с папками ведется через BaseBean,
- * этот интерфейс не является публичным.
- * @author VLadimir Malygin
- */
-interface IServiceFolderStructureHelper extends IRepositoryStructureHelper {
-	/**
-	 * получение ссылки на интересующую нас папку
-	 * Если папка не существует, то она будет создана
-	 * @param folder
-	 * @return
-	 */
-	NodeRef getFolderRef (final ServiceFolder serviceFolder);
 }
