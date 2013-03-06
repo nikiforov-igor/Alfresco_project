@@ -37,24 +37,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentConnections.prototype,
         {
-
-            /**
-             * Object container for initialization options
-             *
-             * @property options
-             * @type object
-             */
-            options: {
-                /**
-                 * The nodeRefs to load the form for.
-                 *
-                 * @property nodeRef
-                 * @type string
-                 * @required
-                 */
-                nodeRef: null
-            },
-
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
@@ -74,7 +56,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onExpand: function () {
-                // Load the form
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",

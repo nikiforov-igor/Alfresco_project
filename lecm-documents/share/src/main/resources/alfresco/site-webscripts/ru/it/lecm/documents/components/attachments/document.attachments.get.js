@@ -2,7 +2,7 @@
 
 function main()
 {
-
+    AlfrescoUtil.param("nodeRef");
 }
 
 main();
