@@ -32,7 +32,7 @@ import ru.it.lecm.base.ServiceFolder;
  * @since 01.03.2013 11:59:19
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public class RepositoryStructureHelper implements IRepositoryStructureHelper {
+public class RepositoryStructureHelper implements IServiceFolderStructureHelper {
 
 	private final static Logger logger = LoggerFactory.getLogger (RepositoryStructureHelper.class);
 	private final static char FOLDER_SEPARATOR = '/';

@@ -51,7 +51,7 @@ public abstract class BaseBean implements InitializingBean {
 	 */
 	private final Map<String, ServiceFolder> serviceFolders = new HashMap<String, ServiceFolder> ();
 
-	private IRepositoryStructureHelper repositoryStructureHelper;
+	private IServiceFolderStructureHelper repositoryStructureHelper;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
 
@@ -74,7 +74,7 @@ public abstract class BaseBean implements InitializingBean {
 		this.transactionService = transactionService;
 	}
 
-	public void setRepositoryStructureHelper (final IRepositoryStructureHelper repositoryStructureHelper) {
+	public void setRepositoryStructureHelper (final IServiceFolderStructureHelper repositoryStructureHelper) {
 		this.repositoryStructureHelper = repositoryStructureHelper;
 	}
 

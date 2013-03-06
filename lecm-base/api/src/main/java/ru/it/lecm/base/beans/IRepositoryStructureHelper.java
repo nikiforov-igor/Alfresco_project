@@ -40,6 +40,16 @@ public interface IRepositoryStructureHelper {
 	 */
 	NodeRef getDraftsRef (final NodeRef personRef);
 
+}
+
+/**
+ * вспомогательный интерфейс который добавляет возможность
+ * получения (создания) папки для какого-либо сервиса (функционального модуля)
+ * поскольку вся работа с папками ведется через BaseBean,
+ * этот интерфейс не является публичным.
+ * @author VLadimir Malygin
+ */
+interface IServiceFolderStructureHelper extends IRepositoryStructureHelper {
 	/**
 	 * получение ссылки на интересующую нас папку
 	 * Если папка не существует, то она будет создана
