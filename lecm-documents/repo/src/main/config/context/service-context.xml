@@ -139,4 +139,26 @@
             <ref bean="substitudeService"/>
         </property>
     </bean>
+
+    <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"
+          depends-on="transactionService, nodeService">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="documentAttachmentsScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
+          depends-on="documentAttachmentsService">
+        <property name="extensionName">
+            <value>documentAttachments</value>
+        </property>
+        <property name="documentAttachmentsService">
+            <ref bean="documentAttachmentsService"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+    </bean>
 </beans>

@@ -17,7 +17,8 @@
         function init() {
             new LogicECM.DocumentAttachmentsList("${el}").setOptions(
                     {
-                        nodeRef: "${nodeRef}"
+                        nodeRef: "${nodeRef}",
+                        rootFolder: "${rootFolder.nodeRef}"
                     }).setMessages(${messages});
         }
 

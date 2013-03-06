@@ -44,14 +44,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @type object
              */
             options: {
-                /**
-                 * The nodeRefs to load the form for.
-                 *
-                 * @property nodeRef
-                 * @type string
-                 * @required
-                 */
-                nodeRef: null
+                nodeRef: null,
+
+                rootFolder: null
             },
 
             /**
@@ -74,7 +69,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 var multiUploadConfig =
                 {
-                    destination: this.options.nodeRef,
+                    destination: this.options.rootFolder,
                     filter: [],
                     mode: fileUpload.MODE_MULTI_UPLOAD,
                     thumbnails: "doclib",

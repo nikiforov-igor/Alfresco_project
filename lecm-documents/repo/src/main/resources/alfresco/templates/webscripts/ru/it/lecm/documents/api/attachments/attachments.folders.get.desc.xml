@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get document attachments folders</shortname>
+    <description>Document Attachments Folders</description>
+    <url>/lecm/document/attachments/api/folders?documentNodeRef={documentNodeRef}</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>
