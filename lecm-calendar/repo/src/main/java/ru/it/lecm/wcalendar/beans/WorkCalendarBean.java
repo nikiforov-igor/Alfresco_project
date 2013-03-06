@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
-import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.shedule.IShedule;
@@ -21,23 +19,25 @@ import ru.it.lecm.wcalendar.shedule.IShedule;
  *
  * @author vlevin
  */
-public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWorkCalendar {
+public class WorkCalendarBean implements IWorkCalendar {
 
+	private OrgstructureBean orgstructureService;
 	private IAbsence absenceService;
 	private IShedule sheduleService;
 	private ICalendar WCalendarService;
 	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
 	private final static Logger logger = LoggerFactory.getLogger(WorkCalendarBean.class);
 
-	public final void bootstrap() {
-		PropertyCheck.mandatory(this, "repository", repository);
-		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		PropertyCheck.mandatory(this, "transactionService", transactionService);
+	public final void init() {
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
 		PropertyCheck.mandatory(this, "sheduleService", sheduleService);
 		PropertyCheck.mandatory(this, "wCalendarService", WCalendarService);
 
+	}
+
+	public void setOrgstructureService (OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	@Override
@@ -277,21 +277,6 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 		this.WCalendarService = WCalendarService;
 	}
 
-	@Override
-	public ICommonWCalendar getWCalendarDescriptor() {
-		return this;
-	}
-
-	@Override
-	public QName getWCalendarItemType() {
-		return null;
-	}
-
-	@Override
-	protected Map<String, Object> containerParams() {
-		return null;
-	}
-
 	private int getYearByDate(Date date) {
 		return Integer.valueOf(yearParser.format(date));
 	}
@@ -326,5 +311,23 @@ public class WorkCalendarBean extends AbstractCommonWCalendarBean implements IWo
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Устанавливает часы, минуты, секунды и миллисекунды в 00:00:00.000
+	 *
+	 * @param day Дата, у которой надо сбросить поля времени.
+	 * @return Дата с обнуленными полями времени.
+	 */
+	protected Date resetTime(final Date day) {
+		Date resetDay = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		resetDay.setTime(cal.getTimeInMillis());
+		return resetDay;
 	}
 }

@@ -10,7 +10,7 @@ import ru.it.lecm.wcalendar.ICommonWCalendar;
  *
  * @author vlevin
  */
-public interface IAbsence {
+public interface IAbsence extends ICommonWCalendar {
 
 	/**
 	 * Имя для контейнера, в котором хранятся отсутствия

@@ -32,38 +32,33 @@
 			</list>
 		</property>
 	</bean>
-	<!-- Бины для сервисов календарей, графиков работы и отсутствий -->
-	<bean id="WCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="repositoryHelper" ref="repositoryHelper"/>
+	<bean id="commonWCalendarBean" class="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean"
+		  abstract="true" parent="baseBean">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="folders">
+			<map>
+				<entry key="WORK_CALENDAR_FOLDER" value="Сервис Рабочий календарь"/>
+			</map>
+		</property>
+	</bean>
+	<!-- Бины для сервисов календарей, графиков работы и отсутствий -->
+	<bean id="WCalendarService" class="ru.it.lecm.wcalendar.calendar.beans.CalendarBean" init-method="init"
+		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<!--На сколько лет вперед сгенерировать календари-->
 		<property name="yearsNumberToCreate" value="3"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
 	</bean>
-	<bean id="SheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="repositoryHelper" ref="repositoryHelper"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="transactionService" ref="transactionService"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
-	</bean>
-	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="repositoryHelper" ref="repositoryHelper"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="transactionService" ref="transactionService"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	<bean id="SheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="init"
+		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap"/>
+	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="init"
+		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="delegationService" ref="delegationService"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="authService" ref="authenticationService"/>
 	</bean>
-	<bean id="WorkCalendarService" class="ru.it.lecm.wcalendar.beans.WorkCalendarBean" init-method="bootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
-		<property name="repositoryHelper" ref="repositoryHelper"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="transactionService" ref="transactionService"/>
+	<bean id="WorkCalendarService" class="ru.it.lecm.wcalendar.beans.WorkCalendarBean" init-method="init">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
 		<property name="absenceService" ref="AbsenceService"/>
@@ -74,25 +69,23 @@
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
-		<property name="commonWCalService" ref="WCalendarService"/>
+		<!--<property name="commonWCalService" ref="WCalendarService"/>-->
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="commonWCalService" ref="AbsenceService"/>
+		<!--<property name="commonWCalService" ref="AbsenceService"/>-->
 	</bean>
 	<bean id="SheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="shedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="sheduleService" ref="SheduleService"/>
-		<property name="commonWCalService" ref="SheduleService"/>
+		<!--<property name="commonWCalService" ref="SheduleService"/>-->
 	</bean>
 	<bean id="WorkCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WorkCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="workCalendar"/>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
-		<property name="commonWCalService" ref="WorkCalendarService"/>
 	</bean>
 	<!-- Web-скрипты на Java -->
 	<bean id="webscript.ru.it.lecm.wcalendar.absence.AbsenceCancelShowDialogWebScript.get" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceCancelShowDialogWebScript" parent="webscript">

@@ -2,7 +2,6 @@ package ru.it.lecm.wcalendar.shedule;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
@@ -11,7 +10,7 @@ import ru.it.lecm.wcalendar.ICommonWCalendar;
  *
  * @author vlevin
  */
-public interface IShedule {
+public interface IShedule extends ICommonWCalendar {
 
 	/**
 	 * Имя для контейнера, в котором хранятся расписания

@@ -24,6 +24,7 @@ public class CalendarJavascriptExtension extends CommonWCalendarJavascriptExtens
 
 	public void setWCalendarService(ICalendar WCalendarService) {
 		this.WCalendarService = WCalendarService;
+		this.commonWCalendarService = WCalendarService;
 	}
 
 	/**

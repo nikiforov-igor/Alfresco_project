@@ -44,7 +44,7 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 	 * Метод, который запускает Spring при старте Tomcat-а. Создает корневой
 	 * объект для графиков отсутствия.
 	 */
-	public final void bootstrap() {
+	public final void init() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);

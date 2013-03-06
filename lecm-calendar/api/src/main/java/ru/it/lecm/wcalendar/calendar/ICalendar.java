@@ -10,7 +10,7 @@ import ru.it.lecm.wcalendar.ICommonWCalendar;
  *
  * @author vlevin
  */
-public interface ICalendar {
+public interface ICalendar extends ICommonWCalendar {
 
 	/**
 	 * Имя для контейнера, в котором хранятся календари

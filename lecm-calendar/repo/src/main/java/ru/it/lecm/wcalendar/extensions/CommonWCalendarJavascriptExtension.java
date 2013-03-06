@@ -31,15 +31,6 @@ public class CommonWCalendarJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	/**
-	 * Получить от Spring-а экземпляр CalendarBean, AbsenceBean или SheduleBean
-	 *
-	 * @param commonWCalendarService передается Spring-ом
-	 */
-	public void setCommonWCalService(final ICommonWCalendar commonWCalendarService) {
-		this.commonWCalendarService = commonWCalendarService;
-	}
-
-	/**
 	 * Получить nodeRef на контейнер, в котором находится commonWCalendarService.
 	 *
 	 * @return ScriptNode c nodeRef-ом на контейнер, если контейнер определен

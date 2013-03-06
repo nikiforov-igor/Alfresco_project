@@ -50,7 +50,7 @@ public class SheduleBean extends AbstractCommonWCalendarBean implements IShedule
 	 * Метод, который запускает Spring при старте Tomcat-а. Создает корневой
 	 * объект для графиков работы.
 	 */
-	public final void bootstrap() {
+	public final void init() {
 		PropertyCheck.mandatory(this, "repository", repository);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);

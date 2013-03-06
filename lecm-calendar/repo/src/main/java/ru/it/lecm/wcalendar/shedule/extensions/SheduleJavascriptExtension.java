@@ -28,6 +28,7 @@ public class SheduleJavascriptExtension extends CommonWCalendarJavascriptExtensi
 
 	public void setSheduleService(IShedule sheduleService) {
 		this.sheduleService = sheduleService;
+		this.commonWCalendarService = sheduleService;
 	}
 
 	/**

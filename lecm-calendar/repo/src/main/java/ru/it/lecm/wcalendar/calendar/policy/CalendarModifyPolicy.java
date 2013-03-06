@@ -34,8 +34,6 @@ public class CalendarModifyPolicy implements NodeServicePolicies.OnUpdatePropert
 		logger.info("Initializing CalendarModifyPolicy");
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, ICalendar.TYPE_SPECIAL_DAYS, new JavaBehaviour(this, "onUpdateProperties"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, ICalendar.TYPE_CALENDAR, new JavaBehaviour(this, "onUpdateProperties"));
-//		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, ICalendar.TYPE_WORKING_DAYS, new JavaBehaviour(this, "onUpdateProperties"));
-
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {

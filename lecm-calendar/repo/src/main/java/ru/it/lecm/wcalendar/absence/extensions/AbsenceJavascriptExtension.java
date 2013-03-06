@@ -31,6 +31,7 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 
 	public void setAbsenceService(IAbsence absenceService) {
 		this.absenceService = absenceService;
+		this.commonWCalendarService = absenceService;
 	}
 
 	/**
