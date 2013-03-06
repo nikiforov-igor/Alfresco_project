@@ -12,7 +12,6 @@
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[
-        Alfresco.constants.DASHLET_RESIZE = true;
         var currentExtendedComponent = null;
         //]]>
     </script>
@@ -26,8 +25,8 @@
 <div id="bd">
     <@region id="document-header" scope="template"/>
     <div class="yui-gc">
-        <div class="yui-u first">
-            <div id="main-region" class="yui-gd grid columnSize2">
+        <div id="main-region" class="yui-u first">
+            <div class="yui-gd grid columnSize2">
                 <div class="yui-u first column1">
                     <@region id="metadata" scope="template"/>
                     <@region id="members" scope="template"/>
@@ -37,9 +36,9 @@
                     <@region id="tasks" scope="template"/>
                 </div>
             </div>
-            <@region id="custom" scope="template"/>
             <@region id="comments" scope="template"/>
         </div>
+        <div id="custom-region" class="yui-u first" style="display:none"></div>
         <div class="yui-u">
             <@region id="document-actions" scope="template"/>
             <@region id="document-metadata" scope="template"/>

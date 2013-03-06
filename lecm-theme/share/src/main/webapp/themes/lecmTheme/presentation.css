@@ -2070,3 +2070,8 @@ div[id$=date-cntrl] - селектор для всех div с id, заканчи
     border-bottom: none;
 }
 
+.dark a.title {
+    color: #333333;
+    text-decoration: underline;
+}
+

@@ -6,7 +6,7 @@
     <div class="document-header">
         <div class="document-info">
             <h1 class="thin dark">
-                <a href="${siteURL("document?nodeRef=" + nodeRef?url)}">${documentName}</a>
+                <a id="document-title" class="title" href="${siteURL("document?nodeRef=" + nodeRef?url)}">${documentName}</a><span id="document-title-breadcrumb"></span>
             </h1>
         </div>
 

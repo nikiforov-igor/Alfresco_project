@@ -39,7 +39,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         {
 
             MAIN_REGION: "main-region",
-            CUSTOM_DASHLET: "custom-dashlet",
+            CUSTOM_REGION: "custom-region",
 
             /**
              * Object container for initialization options
@@ -67,21 +67,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @type string
              */
             expandView: function Base_expandView(html) {
-                // копируем контент в дашлет
-                var formEl = this.getCustomDashletContent();
+                // копируем контент в кастомный регион
+                var formEl = this.getCustomRegion();
                 if (formEl != null) {
                     currentExtendedComponent = this;
                     formEl.innerHTML = html;
                     // подменяем заголовок
-                    var titleEl = this.getCustomDashletTitle();
+                    var titleEl = this.getDocumentTitle();
                     if (titleEl != null) {
-                        titleEl.innerHTML = this.getTitle();
+                        titleEl.innerHTML = " :: " + this.getTitle();
                     }
                     // скрываем основной регион
                     Dom.setStyle(this.MAIN_REGION, "display", "none");
                     // отображаем дашлет
-                    Dom.setStyle(this.CUSTOM_DASHLET, "display", "block");
+                    Dom.setStyle(this.CUSTOM_REGION, "display", "block");
                 }
+            },
+
+            getDocumentTitle: function(){
+                return Dom.get("document-title-breadcrumb");
             },
 
             /**
@@ -89,7 +93,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             collapseView: function Base_collapseView() {
                 // скрываем dashlet
-                Dom.setStyle(this.CUSTOM_DASHLET, "display", "none");
+                Dom.setStyle(this.CUSTOM_REGION, "display", "none");
                 // отображаем main region
                 Dom.setStyle(this.MAIN_REGION, "display", "block");
             },
@@ -109,58 +113,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * метод получения заголовка кастомного(разворачивающегося) дашлета
-             */
-            getCustomDashletTitle: function () {
-                return Dom.get("custom-dashlet-title");
-            },
-
-            /**
              * метод получения контента кастомного(разворачивающегося) дашлета
              */
-            getCustomDashletContent: function () {
-                return Dom.get("custom-dashlet-content");
+            getCustomRegion: function () {
+                return Dom.get("custom-region");
             },
 
-            /**
-             * метод получения объекта с содержимым дашлета, если такой дашлет есть
-             */
-            getDashletContainer: function () {
-                var dashletId = this.id.replace("document-", "");
-                return Dom.get(dashletId + "_results");
-            },
-
-            /**
-             * метод записывающий html код в дашлет, связанный с данным объектом через параметр dashletId
-             * Код записывается в div c ID= "dashletId_results"
-             *
-             * @property html
-             * @type string
-             */
-            writeToDashlet: function (html) {
-                var dashlet = this.getDashletContainer();
-                if (dashlet != null) {
-                    dashlet.innerHTML = html;
-                }
-            },
-            writeToTab: function (html) {
-                var component = this.getComponentContainer();
-                if (component != null) {
-                    component.innerHTML = html;
-                }
-            },
             onExpand: function() {
                 this.expandView("Нет данных");
             },
             onCollapse: function(){
                 this.collapseView();
             }
-            /*,
-            onScriptLoaded: function (response) {
-                // пишем полученный ответ во вкладку
-                this.writeToTab(response.serverResponse.responseText);
-                // пишем полученный ответ в дашлет
-                this.writeToDashlet(response.serverResponse.responseText);
-            }*/
         }, true);
 })();

@@ -12,7 +12,7 @@
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj:{
-                            htmlid: htmlId,
+                            htmlid: htmlId + nodeRef,
                             itemKind: "node",
                             itemId:nodeRef,
                             formId: formId,
@@ -27,43 +27,17 @@
                         },
                         failureMessage:"message.failure",
                         execScripts:true,
-                        htmlId:htmlId
+                        htmlId:htmlId + nodeRef
                     });
         }
 
-        var viewForm = new YAHOO.util.CustomEvent("onDashletConfigure");
-        viewForm.subscribe(expandDashlet, null, true);
-
-        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}").setOptions({
-            title:"${msg('label.title')}"
-        });
-
-        function expandDashlet() {
-            if (documentMetadataComponent != null) {
-                documentMetadataComponent.onExpand();
-            }
-        }
-
         function init() {
-            new Alfresco.widget.DashletResizer("${id}", "document.main.dashlet");
             new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
                 actions: [
-                    {
-                        cssClass: "view",
-                        eventOnClick: viewForm,
-                        tooltip: "${msg("dashlet.view.tooltip")?js_string}"
-                    },
                     {
                         cssClass: "edit",
                         linkOnClick:  Alfresco.constants.URL_PAGECONTEXT +"edit-metadata?nodeRef=" + "${nodeRef}",
                         tooltip: "${msg("dashlet.edit.tooltip")?js_string}"
-                    },
-                    {
-                        cssClass: "help",
-                        bubbleOnClick: {
-                            message: "${msg("dashlet.help")?js_string}"
-                        },
-                        tooltip: "${msg("dashlet.help.tooltip")?js_string}"
                     }
                 ]
             });
@@ -77,6 +51,11 @@
 </script>
 
 <div class="dashlet document">
-    <div class="title">${msg("label.title")}</div>
+    <div class="title">
+    ${msg("label.title")}
+        <span class="lecm-dashlet-actions">
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+         </span>
+    </div>
     <div class="body scrollableList" id="${id}_results"></div>
 </div>

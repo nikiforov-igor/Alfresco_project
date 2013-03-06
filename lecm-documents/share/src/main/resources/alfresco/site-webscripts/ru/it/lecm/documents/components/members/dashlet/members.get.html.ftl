@@ -8,33 +8,13 @@
             Selector = YAHOO.util.Selector;
         var container;
 
-        var expandDashletEvent = new YAHOO.util.CustomEvent("onExpandDashlet");
-        expandDashletEvent.subscribe(expandDashlet, null, true);
-
-        var documentComponentBase = new LogicECM.DocumentComponentBase("${id}").setOptions({
-            title:"${msg('label.title')}"
-        });
-
-        function expandDashlet() {
-            if (documentMembersComponent != null) {
-                documentMembersComponent.onExpand();
-            }
-        }
-
         function init() {
-            new Alfresco.widget.DashletResizer("${id}", "document.members.dashlet");
             new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
-                actions: [
-                    {
-                        cssClass: "expand",
-                        eventOnClick: expandDashletEvent,
-                        tooltip: "${msg("dashlet.expand.tooltip")?js_string}"
-                    }
-                ]
+                actions: []
             });
 
             container = Dom.get('${id}_results');
-            container.innerHTML = 'Участники';
+            container.innerHTML = 'Участники будут здесь';
         }
         Event.onDOMReady(init);
     })();
@@ -42,6 +22,10 @@
 </script>
 
 <div class="dashlet document">
-    <div class="title">${msg("label.title")}</div>
+    <div class="title">${msg("label.title")}
+        <span class="lecm-dashlet-actions">
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+         </span>
+    </div>
     <div class="body scrollableList" id="${id}_results"></div>
 </div>

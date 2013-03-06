@@ -40,26 +40,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function DocumentHistory_onReady() {
                 var linkEl = Dom.get(this.id + "-action-expand");
                 linkEl.onclick = this.onExpand.bind(this);
-
-                // грузим в formContainer данные об участниках
-                /*Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/members",
-                        dataObj: {
-                            nodeRef: this.options.nodeRef
-                        },
-                        successCallback: {
-                            fn: this.onScriptLoaded,
-                            scope: this
-                        },
-                        failureMessage: this.msg("message.failure"),
-                        scope: this,
-                        execScripts: true
-                    });*/
             },
 
             onExpand: function () {
-                // Обновляем форму и раскрываем в "большом окне"
+                // Обновляем форму и раскрываем в "большой области"
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.PROXY_URI + "lecm/document/members",

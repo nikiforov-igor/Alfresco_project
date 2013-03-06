@@ -50,6 +50,14 @@
     right: 1em;
 }
 
+.lecm-dashlet-actions {
+    left: 4em;
+}
+
+.dashlet .lecm-dashlet-actions .expand {
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+}
+
 .document-metadata-header h2 .expand {
     background-image: url("/share/res/images/lecm-documents/expand-16.png");
 }
@@ -59,4 +67,11 @@
 
 .alfresco-twister-closed .alfresco-twister-actions {
     display: inline;
+}
+
+.dashlet .lecm-dashlet-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 1em;
+    text-decoration: none;
 }
