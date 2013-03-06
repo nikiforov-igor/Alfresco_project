@@ -46,8 +46,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             options: {
                 nodeRef: null,
 
-                rootFolder: null
+                categories: null
             },
+
+            fileUpload: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -56,22 +58,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentAttachmentsList_onReady() {
-                this.widgets.fileUpload = Alfresco.util.createYUIButton(this, "fileUpload-button", this.onFileUpload,
-                    {
-                        disabled: false,
-                        value: "CreateChildren"
-                    });
+                if (this.options.categories != null) {
+                    for (var i = 0; i < this.options.categories.length; i++) {
+                        var category = this.options.categories[i];
+                        var button = Alfresco.util.createYUIButton(this, category + "-fileUpload-button", this.onFileUpload,
+                            {
+                                disabled: false,
+                                value: "CreateChildren"
+                            });
+                        button.categoryNodeRef = category;
+                    }
+                }
             },
 
-            onFileUpload: function DocumentAttachmentsList_onFileUpload(e, p_obj)
+            onFileUpload: function DocumentAttachmentsList_onFileUpload(e, obj)
             {
-                var fileUpload = Alfresco.getFileUploadInstance();
+                if (this.fileUpload == null)
+                {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
+                }
 
                 var multiUploadConfig =
                 {
-                    destination: this.options.rootFolder,
+                    destination: obj.categoryNodeRef,
                     filter: [],
-                    mode: fileUpload.MODE_MULTI_UPLOAD,
+                    mode: this.fileUpload.MODE_MULTI_UPLOAD,
                     thumbnails: "doclib",
                     onFileUploadComplete:
                     {
@@ -79,11 +90,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         scope: this
                     }
                 };
-                fileUpload.show(multiUploadConfig);
+                this.fileUpload.show(multiUploadConfig);
+                Event.preventDefault(e);
             },
 
             onFileUploadComplete: function DocumentAttachmentsList_onFileUploadComplete(complete) {
-                alert("complete upload");
             }
         }, true);
 })();

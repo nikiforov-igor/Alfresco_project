@@ -144,6 +144,7 @@
           depends-on="transactionService, nodeService">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

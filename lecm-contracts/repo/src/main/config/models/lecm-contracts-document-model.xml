@@ -17,6 +17,15 @@
                 <value>Договор {cm:name} от: {cm:created} регистрационный номер: {lecm-contract:regnum}</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-contract:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Основные</value>
+                    <value>Схемы</value>
+                    <value>Остальные</value>
+                </list>
+            </parameter>
+        </constraint>
     </constraints>
 
 	<types>

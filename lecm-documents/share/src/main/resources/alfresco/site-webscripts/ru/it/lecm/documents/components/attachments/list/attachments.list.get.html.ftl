@@ -4,13 +4,28 @@
 <div id="${el}">
     Здесь будет перечень вложений
 
-    <div class="file-upload">
-       <span id="${el}-fileUpload-button" class="yui-button yui-push-button">
-          <span class="first-child">
-             <button name="fileUpload">${msg("button.upload")}</button>
-          </span>
-       </span>
-    </div>
+    <#if categories??>
+        <#list categories as category>
+            <div id="category-${category.name}">
+                <table>
+                    <tr>
+                        <td>
+                            ${category.name}
+                        </td>
+                        <td>
+                            <div class="file-upload">
+                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
+                                  <span class="first-child">
+                                     <button name="fileUpload">${msg("button.upload")}</button>
+                                  </span>
+                               </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </#list>
+    </#if>
 
     <script type="text/javascript">//<![CDATA[
     (function () {
@@ -18,7 +33,13 @@
             new LogicECM.DocumentAttachmentsList("${el}").setOptions(
                     {
                         nodeRef: "${nodeRef}",
-                        rootFolder: "${rootFolder.nodeRef}"
+                        categories: [
+                            <#if categories??>
+                                <#list categories as category>
+                                    "${category.nodeRef}"<#if category_has_next>,</#if>
+                                </#list>
+                            </#if>
+                        ]
                     }).setMessages(${messages});
         }
 

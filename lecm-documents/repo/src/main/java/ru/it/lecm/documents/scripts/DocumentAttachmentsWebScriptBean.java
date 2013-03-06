@@ -6,7 +6,11 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ParameterCheck;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -30,17 +34,41 @@ public class DocumentAttachmentsWebScriptBean extends BaseScopableProcessorExten
         this.nodeService = nodeService;
     }
 
-    public ScriptNode getAttachmentsRootFolder(String documentNodeRef) {
+    public ScriptNode getRootFolder(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
         NodeRef documentRef = new NodeRef(documentNodeRef);
 
         if (this.nodeService.exists(documentRef)) {
-            NodeRef attachmentsRoot = this.documentAttachmentsService.getAttacmentRootFolder(documentRef);
+            NodeRef attachmentsRoot = this.documentAttachmentsService.getRootFolder(documentRef);
             if (attachmentsRoot != null) {
                 return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
             }
         }
         return null;
+    }
+
+    public Scriptable getCategories(String documentNodeRef) {
+        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+
+        NodeRef documentRef = new NodeRef(documentNodeRef);
+        if (this.nodeService.exists(documentRef)) {
+            List<NodeRef> categories = this.documentAttachmentsService.getCategories(documentRef);
+            return createScriptable(categories);
+        }
+        return null;
+    }
+
+    /**
+     * Возвращает массив, пригодный для использования в веб-скриптах
+     *
+     * @return Scriptable
+     */
+    private Scriptable createScriptable(List<NodeRef> refs) {
+        Object[] results = new Object[refs.size()];
+        for (int i = 0; i < results.length; i++) {
+            results[i] = new ScriptNode(refs.get(i), this.serviceRegistry, getScope());
+        }
+        return Context.getCurrentContext().newArray(getScope(), results);
     }
 }
