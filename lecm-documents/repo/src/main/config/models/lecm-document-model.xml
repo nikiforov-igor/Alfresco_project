@@ -41,6 +41,7 @@
             <mandatory-aspects>
                 <aspect>lecm-subscr-aspects:subscribed</aspect>
                 <aspect>lecm-connect-aspects:connectable</aspect>
+                <aspect>cm:taggable</aspect>
             </mandatory-aspects>
 		</type>
 	</types>

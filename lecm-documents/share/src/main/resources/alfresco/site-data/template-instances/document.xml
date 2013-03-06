@@ -175,7 +175,7 @@
             <sub-component id="default">
                <evaluations>
                   <evaluation>
-                     <url>/components/document-details/document-tags</url>
+                     <url>/lecm/components/document/document-tags</url>
                      <properties>
                         <nodeRef>{nodeRef}</nodeRef>
                      </properties>
