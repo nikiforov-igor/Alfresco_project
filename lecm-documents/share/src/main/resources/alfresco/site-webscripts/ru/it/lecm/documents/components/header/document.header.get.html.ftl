@@ -1,11 +1,12 @@
 <#assign id = args.htmlid?html>
 <#assign controlId = id + "-cntrl">
+<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 
 <#if item??>
     <div class="document-header">
         <div class="document-info">
             <h1 class="thin dark">
-                ${documentName}
+                <a href="${siteURL("document?nodeRef=" + nodeRef?url)}">${documentName}</a>
             </h1>
         </div>
 

@@ -13,6 +13,10 @@ function main() {
             model.documentName = nodeDetails.item.displayName;
         }
 
+        var listPresentString = nodeDetails.item.node.properties["lecm-document:list-present-string"];
+        if (listPresentString != null) {
+            model.listPresent = listPresentString;
+        }
         var aspects = geAspects(model.nodeRef);
         var subscribed = false;
         if (aspects != null) {
