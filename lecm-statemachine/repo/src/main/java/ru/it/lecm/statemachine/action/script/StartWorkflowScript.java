@@ -9,6 +9,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
+import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
@@ -61,7 +62,12 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 				NodeRef document = helper.getStatemachineDocument(executionId);
 				Expression expression = new Expression(document, serviceRegistry);
 
-				boolean access = expression.execute(nextState.getConditionAccess());
+				boolean access =true;
+                Conditions conditions = nextState.getConditionAccess();
+                for (Conditions.Condition condition : conditions.getConditions()) {
+                    access = access && expression.execute(condition.getExpression());
+                }
+
 
 				if (access) {
 					HashMap<String, String> parameters = new HashMap<String, String>();
@@ -99,7 +105,11 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 				NodeRef document = helper.getStatemachineDocument(executionId);
 				Expression expression = new Expression(document, serviceRegistry);
 
-				boolean access = expression.execute(workflow.getConditionAccess());
+                boolean access =true;
+                Conditions conditions = workflow.getConditionAccess();
+                for (Conditions.Condition condition : conditions.getConditions()) {
+                    access = access && expression.execute(condition.getExpression());
+                }
 				if (access) {
 					int start = persistedResponse.indexOf("=") + 1;
 					int end = persistedResponse.indexOf(",");

@@ -3,6 +3,8 @@ package ru.it.lecm.statemachine.expression;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.statemachine.StateMachineHelper;
@@ -20,6 +22,8 @@ public class Expression {
 	private Map<String, Object> state = new HashMap<String, Object>();
 	private ExpressionDocument doc;
 	private StandardEvaluationContext context;
+
+    private static Log logger = LogFactory.getLog(Expression.class);
 
 	public Expression(DelegateExecution execution, ServiceRegistry serviceRegistry) {
 		StateMachineHelper helper = new StateMachineHelper();
@@ -44,8 +48,13 @@ public class Expression {
 		if ("".equals(expression)) {
 			expression = "true";
 		}
-		return new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
-	}
+        try {
+            return new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
+        } catch (Exception e) {
+            logger.error("Expression: " + expression + " has errors", e);
+            return false;
+        }
+    }
 
 	public Object state(String variableName) {
 		return state.get(variableName);

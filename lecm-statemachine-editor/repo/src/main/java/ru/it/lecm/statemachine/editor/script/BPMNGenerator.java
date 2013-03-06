@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -416,22 +417,22 @@ public class BPMNGenerator {
 				String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
 				String workflowLabel = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_LABEL);
 				String assignee = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_ASSIGNEE);
-				Object conditionAccess = nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ACCESS);
+
 				attribute = doc.createElement("lecm:attribute");
 				attribute.setAttribute("id", id);
 				attribute.setAttribute("label", workflowLabel);
 				attribute.setAttribute("workflowId", workflowId);
 				attribute.setAttribute("assignee", assignee);
-				if (conditionAccess != null) {
-					attribute.setAttribute("conditionAccess", (String) conditionAccess);
-				}
 				actionElement.appendChild(attribute);
+                //добавление условий
+                appendConditionsElement(attribute, workflow.getChildRef());
+
+                //добавление переменных
 				appendWorkflowVariables(attribute, workflow.getChildRef());
 			}
 			eventElement.appendChild(actionElement);
 		}
     }
-
 
     private List<Flow> createTransitionAction(Element eventElement, String statusVar, ChildAssociationRef action) {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
@@ -584,14 +585,7 @@ public class BPMNGenerator {
 			parameter.setAttribute("value", labelId);
 			attribute.appendChild(parameter);
 
-			Object conditionAccess = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ACCESS);
-
-			if (conditionAccess != null) {
-				parameter = doc.createElement("lecm:parameter");
-				parameter.setAttribute("name", "conditionAccess");
-				parameter.setAttribute("value", (String) conditionAccess);
-				attribute.appendChild(parameter);
-			}
+            appendConditionsElement(attribute, transition.getChildRef());
 
 			String var = "var" + actionVar;
 			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
@@ -609,7 +603,10 @@ public class BPMNGenerator {
 	}
 
 	private void appendWorkflowVariables(Element attribute, NodeRef workflow) {
-		List<ChildAssociationRef> variables = nodeService.getChildAssocs(workflow);
+        HashSet<QName> types = new HashSet<QName>();
+        types.add(StatemachineEditorModel.TYPE_OUTPUT_VARIABLE);
+        types.add(StatemachineEditorModel.TYPE_INPUT_VARIABLE);
+		List<ChildAssociationRef> variables = nodeService.getChildAssocs(workflow, types);
 		if (variables.size() > 0) {
 			Element workflowVariables = doc.createElement("lecm:workflowVariables");
 			attribute.appendChild(workflowVariables);
@@ -645,7 +642,37 @@ public class BPMNGenerator {
 		}
 	}
 
-	/**
+    private void appendConditionsElement(Element attribute, NodeRef parent) {
+        HashSet<QName> types = new HashSet<QName>();
+        types.add(StatemachineEditorModel.TYPE_CONDITION_ACCESS);
+        List<ChildAssociationRef> conditions = nodeService.getChildAssocs(parent, types);
+        if (conditions.size() > 0) {
+            Element conditionElements = doc.createElement("conditions");
+            attribute.appendChild(conditionElements);
+            for (ChildAssociationRef condition : conditions) {
+                String expression = (String) nodeService.getProperty(condition.getChildRef(), StatemachineEditorModel.PROP_CONDITION);
+                String errorMessage = (String) nodeService.getProperty(condition.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ERROR_MESSAGE);
+
+                Element conditionElement = doc.createElement("condition");
+
+                Element expressionElement = doc.createElement("expression");
+                CDATASection cdata = doc.createCDATASection(expression);
+                expressionElement.appendChild(cdata);
+                conditionElement.appendChild(expressionElement);
+
+                Element errorMessageElement = doc.createElement("errorMessage");
+                cdata = doc.createCDATASection(errorMessage);
+                errorMessageElement.appendChild(cdata);
+                conditionElement.appendChild(errorMessageElement);
+
+                conditionElements.appendChild(conditionElement);
+
+            }
+        }
+    }
+
+
+    /**
      * Метод добавляет расширение Activiti BPM для Alfresco для выполнения произвольного скрипта
      * @param extensions
      * @param eventElement

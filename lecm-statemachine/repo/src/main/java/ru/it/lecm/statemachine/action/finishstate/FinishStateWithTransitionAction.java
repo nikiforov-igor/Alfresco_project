@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.action.finishstate;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
+import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 
@@ -49,8 +50,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					conditionAccess = value;
 				}
 			}
+            Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-			NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariable, variableValue, variables);
+			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables);
 			states.add(nextState);
 		}
 	}
@@ -71,12 +73,12 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		private String actionId;
 		private String label;
 		private String workflowId;
-		private String conditionAccess;
+		private Conditions conditionAccess;
 		private String outputVariableName;
 		private String outputVariableValue;
 		private WorkflowVariables variables;
 
-		NextState(String actionId, String label, String workflowId, String conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -98,7 +100,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			return workflowId;
 		}
 
-		public String getConditionAccess() {
+		public Conditions getConditionAccess() {
 			return conditionAccess;
 		}
 

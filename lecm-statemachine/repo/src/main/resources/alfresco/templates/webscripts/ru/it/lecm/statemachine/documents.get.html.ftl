@@ -11,7 +11,13 @@
 		{
 		actionId: "${state.actionId}",
 		label: "${state.label}",
-		workflowId: "${state.workflowId!"null"}"
+		workflowId: "${state.workflowId!"null"}",
+        errors: [
+            <#list state.errors as error>
+                "${error}"
+                <#if error_has_next>,</#if>
+            </#list>
+            ]
 		}
 			<#if state_has_next>,</#if>
 		</#list>
@@ -27,7 +33,13 @@
                        "${assignee}"
                        <#if assignee_has_next>,</#if>
                    </#list>
-                   ]
+        ],
+        errors: [
+            <#list workflow.errors as error>
+            "${error}"
+                <#if error_has_next>,</#if>
+            </#list>
+        ]
         }
             <#if workflow_has_next>,</#if>
         </#list>

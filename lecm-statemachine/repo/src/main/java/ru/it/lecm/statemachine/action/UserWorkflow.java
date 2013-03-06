@@ -37,8 +37,9 @@ public class UserWorkflow extends StateMachineAction {
 			if (conditionAccess == null) {
 				conditionAccess = "";
 			}
+            Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-            entities.add(new UserWorkflowEntity(id, label, workflowId, assignee, conditionAccess, variables));
+            entities.add(new UserWorkflowEntity(id, label, workflowId, assignee, conditions, variables));
         }
     }
 
@@ -52,10 +53,10 @@ public class UserWorkflow extends StateMachineAction {
         private String label;
         private String workflowId;
         private String assignee;
-        private String conditionAccess;
+        private Conditions conditionAccess;
         private WorkflowVariables variables;
 
-        UserWorkflowEntity(String id, String label, String workflowId, String assignee, String conditionAccess, WorkflowVariables variables) {
+        UserWorkflowEntity(String id, String label, String workflowId, String assignee, Conditions conditionAccess, WorkflowVariables variables) {
             this.id = id;
 			this.label = label;
             this.workflowId = workflowId;
@@ -80,7 +81,7 @@ public class UserWorkflow extends StateMachineAction {
             return assignee;
         }
 
-		public String getConditionAccess() {
+		public Conditions getConditionAccess() {
 			return conditionAccess;
 		}
 

@@ -20,7 +20,7 @@ public class ExpressionDocument {
 	}
 
 	//Значение аттрибута
-	public Object attribute(String attributeName) {
+	public Object attr(String attributeName) {
 		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());
 		return serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
 	}

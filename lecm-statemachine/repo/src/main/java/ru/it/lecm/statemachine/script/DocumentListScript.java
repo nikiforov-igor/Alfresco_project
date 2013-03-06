@@ -15,6 +15,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
@@ -68,20 +69,27 @@ public class DocumentListScript extends DeclarativeWebScript {
 
 									Expression expression = new Expression(documentRef, serviceRegistry);
 
-									ArrayList<HashMap<String, String>> resultStates = new ArrayList<HashMap<String, String>>();
+									ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
 									List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
 									for (StateMachineAction action : actions) {
 										FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
 										List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
 										for (FinishStateWithTransitionAction.NextState state : states) {
-											if (expression.execute(state.getConditionAccess())) {
-												HashMap<String, String> resultState = new HashMap<String, String>();
-												resultState.put("actionId", state.getActionId());
-												resultState.put("label", state.getLabel());
-												resultState.put("workflowId", state.getWorkflowId());
-												resultStates.add(resultState);
-											}
-										}
+                                            ArrayList<String> messages = new ArrayList<String>();
+											for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
+                                                if (!expression.execute(condition.getExpression())) {
+                                                    messages.add(condition.getErrorMessage());
+                                                    condition.getFields()
+                                                }
+                                            }
+
+                                            HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                            resultState.put("actionId", state.getActionId());
+                                            resultState.put("label", state.getLabel());
+                                            resultState.put("workflowId", state.getWorkflowId());
+                                            resultState.put("errors", messages);
+                                            resultStates.add(resultState);
+                                        }
 									}
 									document.put("states", resultStates);
 
@@ -92,19 +100,24 @@ public class DocumentListScript extends DeclarativeWebScript {
                                         List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
 										AssignExecution assignExecution = new AssignExecution();
                                         for (UserWorkflow.UserWorkflowEntity entity : entities) {
-											if (expression.execute(entity.getConditionAccess())) {
-												HashMap<String, Object> workflow = new HashMap<String, Object>();
-												workflow.put("id", entity.getId());
-												workflow.put("label", entity.getLabel());
-												workflow.put("workflowId", entity.getWorkflowId());
-												assignExecution.execute(entity.getAssignee());
-												List<String> refs = new ArrayList<String>();
-												if (assignExecution.getNodeRefResult() != null) {
-													refs.add(assignExecution.getNodeRefResult().toString());
-												}
-												workflow.put("assignees", refs);
-												workflows.add(workflow);
-											}
+                                            ArrayList<String> messages = new ArrayList<String>();
+                                            for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
+                                                if (!expression.execute(condition.getExpression())) {
+                                                    messages.add(condition.getErrorMessage());
+                                                }
+                                            }
+                                            HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                            workflow.put("id", entity.getId());
+                                            workflow.put("label", entity.getLabel());
+                                            workflow.put("workflowId", entity.getWorkflowId());
+                                            assignExecution.execute(entity.getAssignee());
+                                            List<String> refs = new ArrayList<String>();
+                                            if (assignExecution.getNodeRefResult() != null) {
+                                                refs.add(assignExecution.getNodeRefResult().toString());
+                                            }
+                                            workflow.put("assignees", refs);
+                                            workflow.put("errors", messages);
+                                            workflows.add(workflow);
                                         }
                                     }
                                     document.put("workflows", workflows);

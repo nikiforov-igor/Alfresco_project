@@ -315,11 +315,10 @@
 		<!-- User Transition -->
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>
-			<parent>cm:content</parent>
+			<parent>cm:folder</parent>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
-                <aspect>lecm-stmeditor:conditionAccessAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -352,7 +351,6 @@
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
-				<aspect>lecm-stmeditor:conditionAccessAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -426,6 +424,22 @@
             <properties>
                 <property name="lecm-stmeditor:editableField">
                     <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
+        <!-- Condition Access Object -->
+        <type name="lecm-stmeditor:conditionAccess">
+            <title>Condition Access Object</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="lecm-stmeditor:condition">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-stmeditor:conditionErrorMessage">
+                    <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
             </properties>
@@ -508,15 +522,6 @@
 					<constraints>
 						<constraint ref="lecm-stmeditor:permissionType" />
 					</constraints>
-				</property>
-			</properties>
-		</aspect>
-
-		<aspect name="lecm-stmeditor:conditionAccessAspect">
-			<title>Business Role PermissionType</title>
-			<properties>
-				<property name="lecm-stmeditor:conditionAccess">
-					<type>d:text</type>
 				</property>
 			</properties>
 		</aspect>

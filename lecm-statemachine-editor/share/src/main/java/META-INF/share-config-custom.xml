@@ -448,13 +448,15 @@
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
 							<control-param name="height">100</control-param>
-						</control>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
 					</field>
 					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:outputVariable</control-param>
 							<control-param name="height">100</control-param>
-						</control>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
 					</field>
 				</appearance>
 
@@ -488,7 +490,6 @@
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
@@ -498,8 +499,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:conditionAccess" />
-				</appearance>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -511,7 +511,7 @@
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:assignee" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
+					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
@@ -524,16 +524,25 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:assignee" />
-					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
+                    <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
 							<control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:outputVariable</control-param>
 							<control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -547,7 +556,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
+					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -558,8 +567,14 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:conditionAccess" />
-				</appearance>
+                    <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -570,7 +585,6 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -581,8 +595,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-			        <field id="lecm-stmeditor:conditionAccess" />
-				</appearance>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -594,7 +607,6 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel" />
@@ -611,7 +623,6 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:conditionAccess" />
 				</appearance>
 			</form>
 			<form id="datagrid">
@@ -630,7 +641,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
-					<show id="lecm-stmeditor:conditionAccess" force="true"/>
+					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
 				</field-visibility>
@@ -649,17 +660,25 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:conditionAccess" />
+                    <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
                             <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-stmeditor:outputWorkflowData" label-id="statemachine.editor.form.label.outputWorkflowData">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:outputVariable</control-param>
                             <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -735,7 +754,7 @@
                     <show id="lecm-stmeditor:statusFields" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-stmeditor:statusFields">
+                    <field id="lecm-stmeditor:statusFields" label-id="statemachine.editor.form.label.statusFields">
                         <control template="/ru/it/lecm/statemachine/editor/components/lecm-checkboxtable.ftl">
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
@@ -973,5 +992,35 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="model-type" condition="lecm-stmeditor:conditionAccess">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:condition" force="true"/>
+                    <show id="lecm-stmeditor:conditionErrorMessage" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:condition" />
+                    <field id="lecm-stmeditor:conditionErrorMessage" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-stmeditor:conditionAccess">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:condition" force="true"/>
+                    <show id="lecm-stmeditor:conditionErrorMessage" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:condition" />
+                    <field id="lecm-stmeditor:conditionErrorMessage" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
 </alfresco-config>
