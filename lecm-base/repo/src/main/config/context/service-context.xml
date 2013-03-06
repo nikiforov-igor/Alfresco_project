@@ -41,6 +41,10 @@
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="dateFormat">
+            <value>${lecm.base.date.format}</value>
+        </property>
     </bean>
 
     <bean id="substitudeWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SubstitudeWebScriptBean"

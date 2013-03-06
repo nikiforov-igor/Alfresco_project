@@ -1,11 +1,13 @@
 package ru.it.lecm.base.beans;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -13,6 +15,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 /**
  * @author dbashmakov
@@ -21,8 +24,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
-	private ServiceRegistry serviceRegistry;
+    public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
+    private ServiceRegistry serviceRegistry;
 	private NamespaceService namespaceService;
+    private DictionaryBean dictionaryService;
+    private String dateFormat = "yyyy-MM-dd HH:mm";
 
 	final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
 
@@ -47,7 +53,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 		return result;
 	}
 
-	/**
+    @Override
+    public String getObjectDescription(NodeRef object) {
+        // получаем шаблон описания
+        String templateString = getTemplateStringForObject(object);
+        // формируем описание
+        return formatNodeTitle(object, templateString);
+    }
+
+    public String getTemplateStringForObject(NodeRef object) {
+        return getTemplateStringForObject(object, false);
+    }
+
+    public String getTemplateStringForObject(NodeRef object, boolean forList) {
+        NodeRef objectTypeRef = getObjectTypeRef(object);
+        return getTemplateStringByType(objectTypeRef, forList);
+    }
+    /**
 	 * Получение значения выражения для элемента.
 	 * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)
 	 * Элементами выражения могут быть:
@@ -70,103 +92,145 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	public Object getSubstitudeField(NodeRef node, String field) {
 		NodeRef showNode = node;
 		List<NodeRef> showNodes = new ArrayList<NodeRef>();
-		String fieldName;
+		String fieldName = null;
 		List<String> transitions = new ArrayList<String>();
 
-		if (field.contains(SPLIT_TRANSITIONS_SYMBOL)) {
-			int firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
-			transitions.add(field.substring(0, firstIndex));
-			int lastIndex = field.lastIndexOf(SPLIT_TRANSITIONS_SYMBOL);
-			while (firstIndex != lastIndex) {
-				int oldFirstIndex = firstIndex;
-				firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL, firstIndex + 1);
-				transitions.add(field.substring(oldFirstIndex + 1, firstIndex));
-			}
-			fieldName = field.substring(lastIndex + 1, field.length());
-		} else {
-			fieldName = field;
-		}
-		for (String el : transitions) {
-			Map<String, String> expressions = getExpression(el);
-			if (!expressions.isEmpty()) {
-				el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
-			}
-			if (el.indexOf(PARENT_SYMBOL) == 0) {
-				String assocType = el.replace(PARENT_SYMBOL, "");
-				if (!assocType.isEmpty()) {
-					showNodes = findNodesByAssociationRef(showNode,
-							QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
-					if (showNodes.isEmpty()) {
-						logger.debug("Не удалось получить список Source ассоциаций для [" + showNode.toString() + "]");
-                        showNode = null;
-						break;
-					}
-				} else {
-					showNodes.add(nodeService.getPrimaryParent(showNode).getParentRef());
-				}
-			} else {
-				List<NodeRef> temps = findNodesByAssociationRef(showNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
-				if (temps.isEmpty()) {
-					List<ChildAssociationRef> childs = nodeService.getChildAssocs(showNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
-					for (ChildAssociationRef child : childs) {
-						showNodes.add(child.getChildRef());
-					}
-					if (showNodes.isEmpty()) {
-						logger.debug("Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
-                        showNode = null;
-						break;
-					}
-				} else {
-					showNodes.addAll(temps);
-				}
-			}
-			if (!expressions.isEmpty()) {
-				boolean exist = false;
-				for (NodeRef nodeRef : showNodes) {
-					boolean expressionsFalse = false;
-					for (Map.Entry<String, String> entry : expressions.entrySet()) {
-						Object currentPropertyValue =
-								nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-						if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-								|| !currentPropertyValue.toString().equals(entry.getValue())) {
-							expressionsFalse = true;
-							break;
-						}
-					}
-					if (!isArchive(nodeRef) && !expressionsFalse) {
-						showNode = nodeRef;
-						exist = true;
-						break;
-					}
-				}
-				if (!exist) {
-					logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
-					showNode = null;
-					break;
-				}
-			} else if (!showNodes.isEmpty()) {
-				for (NodeRef nodeRef : showNodes) {
-					if (!isArchive(nodeRef)) {
-						showNode = nodeRef;
-					}
-				}
-			}
-		}
+        Object result = "";
 
-		Object result = "";
+        boolean wrapAsLink = false;
+
+        if (field.startsWith(WRAP_AS_LINK_SYMBOL)) {
+            wrapAsLink = true;
+            field = field.substring(1);
+        }
+        if(!field.startsWith(PSEUDO_PROPERTY_SYMBOL)) {
+            if (field.contains(SPLIT_TRANSITIONS_SYMBOL)) {
+                int firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
+                transitions.add(field.substring(0, firstIndex));
+                int lastIndex = field.lastIndexOf(SPLIT_TRANSITIONS_SYMBOL);
+                while (firstIndex != lastIndex) {
+                    int oldFirstIndex = firstIndex;
+                    firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL, firstIndex + 1);
+                    transitions.add(field.substring(oldFirstIndex + 1, firstIndex));
+                }
+                fieldName = field.substring(lastIndex + 1, field.length());
+            } else {
+                fieldName = field;
+            }
+            for (String el : transitions) {
+                Map<String, String> expressions = getExpression(el);
+                if (!expressions.isEmpty()) {
+                    el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
+                }
+                if (el.indexOf(PARENT_SYMBOL) == 0) {
+                    String assocType = el.replace(PARENT_SYMBOL, "");
+                    if (!assocType.isEmpty()) {
+                        showNodes = findNodesByAssociationRef(showNode,
+                                QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
+                        if (showNodes.isEmpty()) {
+                            logger.debug("Не удалось получить список Source ассоциаций для [" + showNode.toString() + "]");
+                            showNode = null;
+                            break;
+                        }
+                    } else {
+                        showNodes.add(nodeService.getPrimaryParent(showNode).getParentRef());
+                    }
+                } else {
+                    List<NodeRef> temps = findNodesByAssociationRef(showNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
+                    if (temps.isEmpty()) {
+                        List<ChildAssociationRef> childs = nodeService.getChildAssocs(showNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
+                        for (ChildAssociationRef child : childs) {
+                            showNodes.add(child.getChildRef());
+                        }
+                        if (showNodes.isEmpty()) {
+                            logger.debug("Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
+                            showNode = null;
+                            break;
+                        }
+                    } else {
+                        showNodes.addAll(temps);
+                    }
+                }
+                if (!expressions.isEmpty()) {
+                    boolean exist = false;
+                    for (NodeRef nodeRef : showNodes) {
+                        boolean expressionsFalse = false;
+                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
+                            Object currentPropertyValue =
+                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
+                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
+                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
+                                expressionsFalse = true;
+                                break;
+                            }
+                        }
+                        if (!isArchive(nodeRef) && !expressionsFalse) {
+                            showNode = nodeRef;
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (!exist) {
+                        logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+                        showNode = null;
+                        break;
+                    }
+                } else if (!showNodes.isEmpty()) {
+                    for (NodeRef nodeRef : showNodes) {
+                        if (!isArchive(nodeRef)) {
+                            showNode = nodeRef;
+                        }
+                    }
+                }
+            }
+        } else {
+            fieldName = field;
+            field = field.substring(1);
+            if (field.toUpperCase().equals(AUTHOR)) {
+                showNode = getDocumentAuthor(showNode);
+                result = getObjectDescription(showNode);
+            }
+        }
+
 		if (showNode != null) {
-			Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-			if (property != null) {
-				result = property;
-			} else {
-				result = "";
-			}
+            if (!fieldName.contains("~")) {
+                Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
+                if (property != null) {
+                    result = result.toString().isEmpty() ? property : result;
+                    if (result instanceof Date) {
+                        DateFormat dFormat = new SimpleDateFormat(dateFormat);
+                        result = dFormat.format(result);
+                    }
+                } else {
+                    result = "";
+                }
+            }
+            if (wrapAsLink && !result.toString().isEmpty()) {
+                SysAdminParams params = serviceRegistry.getSysAdminParams();
+                String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+                result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
+                        + result + "</a>";
+            }
 		}
 
 		return result;
 	}
 
-	/**
+    private NodeRef getDocumentAuthor(NodeRef document) {
+        Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+        NodeRef person = serviceRegistry.getPersonService().getPerson(creator.toString(), false);
+        if (person != null) {
+            List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
+            for (AssociationRef lRef : lRefs) {
+                if (!isArchive(lRef.getSourceRef())) {
+                    return lRef.getSourceRef();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
 	 * Получение выражений из форматной строки
 	 *
 	 * @param str         форматная строка
@@ -234,4 +298,50 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
 	}
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = !dateFormat.equals("${lecm.base.date.format}") ? dateFormat : this.dateFormat;
+    }
+
+    /**
+     * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
+     *
+     * @param nodeRef - ссылка на объект
+     * @return ссылка на объект справочника или NULL
+     */
+    private NodeRef getObjectTypeRef(NodeRef nodeRef) {
+        // получаем тип объекта
+        QName type = nodeService.getType(nodeRef);
+        String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+        // получаем Тип Объекта
+        return getObjectTypeByClass(shortTypeName);
+    }
+
+    /**
+     * Метод, возвращающий ссылку на объект справочника "Тип объекта"по заданному классу(типу)
+     *
+     * @param type - тип(класс) объекта
+     * @return ссылка на объект справочника или NULL
+     */
+    private NodeRef getObjectTypeByClass(String type) {
+        return dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CLASS, type);
+    }
+
+    /**
+     * Метод возвращающий шаблон описание по типу объхекта
+     * @param objectType - ссылка на тип объекта
+     * @return сформированное описание или DEFAULT_OBJECT_TYPE_TEMPLATE, если для типа не задан шаблон
+     */
+    private String getTemplateStringByType(NodeRef objectType, boolean forList) {
+        if (objectType != null) {
+            Object template = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
+            return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
+        } else {
+            return DEFAULT_OBJECT_TYPE_TEMPLATE;
+        }
+    }
+
+    public void setDictionaryService(DictionaryBean dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 }

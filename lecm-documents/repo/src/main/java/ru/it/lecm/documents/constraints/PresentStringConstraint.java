@@ -10,7 +10,6 @@ import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
 public class PresentStringConstraint extends AbstractConstraint {
 
     private String presentString;
-    private String listPresentString;
 
     public String getPresentString() {
         return presentString;
@@ -18,14 +17,6 @@ public class PresentStringConstraint extends AbstractConstraint {
 
     public void setPresentString(String presentString) {
         this.presentString = presentString;
-    }
-
-    public String getListPresentString() {
-        return listPresentString;
-    }
-
-    public void setListPresentString(String listPresentString) {
-        this.listPresentString = listPresentString;
     }
 
     @Override

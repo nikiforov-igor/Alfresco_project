@@ -14,10 +14,7 @@
     <constraints>
         <constraint name="lecm-contract:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value>Договор {cm:name} от: {cm:created} автор: {cm:creator}</value>
-            </parameter>
-            <parameter name="listPresentString">
-                <value>Договор {cm:name}</value>
+                <value>Договор {cm:name} от: {cm:created} регистрационный номер: {lecm-contract:regnum}</value>
             </parameter>
         </constraint>
     </constraints>

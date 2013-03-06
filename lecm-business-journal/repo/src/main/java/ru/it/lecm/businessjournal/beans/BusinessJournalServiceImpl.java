@@ -333,16 +333,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	@Override
 	public String getObjectDescription(NodeRef object) {
-		// получаю ссылку на справочник "Тип объекта" по типу object
-		NodeRef objectType = getObjectType(object);
-		// получаем шаблон описания
-		String templateString = getTemplateStringByType(objectType);
-		// формируем описание
-		return substinateDescription(object, templateString);
-	}
-
-	private String substinateDescription(NodeRef object, String templateString) {
-		return substituteService.formatNodeTitle(object, templateString);
+        return substituteService.getObjectDescription(object);
 	}
 
 	private String getInitiatorDescription(NodeRef initiator) {
@@ -350,29 +341,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			return getObjectDescription(initiator);
 		} else {
 			return DEFAULT_SYSTEM_TEMPLATE;
-		}
-	}
-
-	/**
-	 * Метод возвращающий шаблон описание по типу объхекта
-	 * @param objectType - ссылка на тип объекта
-	 * @return сформированное описание или null, если для типа не задан шаблон
-	 */
-	private String getTemplateStringByType(NodeRef objectType) {
-		return getTemplateByType(objectType);
-	}
-
-	/**
-	 * Метод для получения шаблонной строки для заданного типа
-	 * @param type - ссылка на объект справочника "Тип Объекта"
-	 * @return шаблонную строку или DEFAULT_OBJECT_TYPE_TEMPLATE, если не удалось найти соответствие
-	 */
-	public String getTemplateByType(NodeRef type) {
-		if (type != null) {
-			Object template = nodeService.getProperty(type, PROP_OBJ_TYPE_TEMPLATE);
-			return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
-		} else {
-			return DEFAULT_OBJECT_TYPE_TEMPLATE;
 		}
 	}
 
@@ -543,16 +511,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		QName type = nodeService.getType(nodeRef);
 		String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
 		// получаем Тип Объекта
-		return getObjectTypeByClass(shortTypeName);
-	}
-
-	/**
-	 * Метод, возвращающий ссылку на объект справочника "Тип объекта"по заданному классу(типу)
-	 *
-	 * @param type - тип(класс) объекта
-	 * @return ссылка на объект справочника или NULL
-	 */
-	private NodeRef getObjectTypeByClass(String type) {
 		return dictionaryService.getRecordByParamValue("Тип объекта", PROP_OBJ_TYPE_CLASS, type);
 	}
 

@@ -55,7 +55,6 @@ public class DocumentPresentStringPolicy implements NodeServicePolicies.OnUpdate
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         String presentString = "{cm:name}";
-        String listPresentString = "{cm:name}";
 
         QName type = nodeService.getType(nodeRef);
         ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_PRESENT_STRING));
@@ -64,15 +63,14 @@ public class DocumentPresentStringPolicy implements NodeServicePolicies.OnUpdate
             if (psConstraint.getPresentString() != null) {
                 presentString = psConstraint.getPresentString();
             }
-            if (psConstraint.getListPresentString() != null) {
-                listPresentString = psConstraint.getListPresentString();
-            }
         }
 
         String presentStringValue = substituteService.formatNodeTitle(nodeRef, presentString);
         if (presentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
         }
+        String listPresentString = substituteService.getTemplateStringForObject(nodeRef, true);
+
         String listPresentStringValue = substituteService.formatNodeTitle(nodeRef, listPresentString);
         if (listPresentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_LIST_PRESENT_STRING, listPresentStringValue);
