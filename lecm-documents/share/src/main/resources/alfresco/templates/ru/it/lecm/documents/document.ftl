@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[
@@ -22,7 +23,7 @@
     <@region id="header" scope="global"/>
     <#--<@region id="title" scope="template"/>-->
 </div>
-<div id="bd">
+<div id="doc-bd">
     <@region id="document-header" scope="template"/>
     <div class="yui-gc">
         <div id="main-region" class="yui-u first">
@@ -39,7 +40,7 @@
             <@region id="comments" scope="template"/>
         </div>
         <div id="custom-region" class="yui-u first" style="display:none"></div>
-        <div class="yui-u">
+        <div class="yui-u bordered">
             <#--<@region id="document-actions" scope="template"/>-->
             <@region id="document-metadata" scope="template"/>
             <@region id="document-attachments" scope="template"/>

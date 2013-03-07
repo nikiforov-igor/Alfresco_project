@@ -14,18 +14,6 @@
 	margin: 10px;
 }
 
-.yui-gd .yui-u .column2 {
-    width: 49%;
-}
-
-.first .yui-gd div.column1 {
-     width: 49%;
- }
-
-.first .yui-gd div.column2 {
-    width: 49%;
-}
-
 .dashlet .titleBarActions .view {
     background-image: url("/share/res/images/lecm-documents/expand-16.png");
 }
@@ -74,13 +62,4 @@
     background-repeat: no-repeat;
     padding: 1em;
     text-decoration: none;
-}
-
-.yui-gc .yui-u {
-    margin-left: 1.99%;
-    width: 20%;
-}
-
-.yui-gc div.first {
-    width: 78%;
 }
