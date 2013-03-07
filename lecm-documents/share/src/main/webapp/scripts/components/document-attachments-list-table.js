@@ -45,6 +45,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
         this.dataSourceUrl = $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/documentlibrary/data/doclist/");
         this.renderers = {};
+	    this.showingMoreActions = false;
         return this;
     };
 
@@ -169,6 +170,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             options: {
 
 	            /**
+	             * Delay time value for "More Actions" popup, in milliseconds
+	             *
+	             * @property actionsPopupTimeout
+	             * @type int
+	             * @default 500
+	             */
+	            actionsPopupTimeout: 700,
+
+	            /**
 	             * Delay before showing "loading" message for slow data requests
 	             *
 	             * @property loadingMessageDelay
@@ -182,9 +192,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 path: null
             },
 
-            fileUpload: null,
-
             renderers: null,
+
+	        showingMoreActions: null,
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -193,6 +203,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentAttachmentsList_onReady() {
+	            var me = this;
+
                 // Set-up default metadata renderers
                 this._setupMetadataRenderers();
 
@@ -203,6 +215,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._setupDataTable();
 
                 this._updateDocList();
+
+	            // Hook action events
+	            var fnActionHandler = function (layer, args)
+	            {
+		            var owner = YAHOO.Bubbling.getOwnerByTagName(args[1].anchor, "div");
+		            if (owner !== null)
+		            {
+			            if (typeof me[owner.title] === "function")
+			            {
+				            args[1].stop = true;
+				            var record = me.widgets.dataTable.getRecord(args[1].target.offsetParent).getData();
+				            try
+				            {
+					            me[owner.title].call(me, record, owner);
+				            }
+				            catch (e)
+				            {
+					            Alfresco.logger.error("DL_fnActionHandler", owner.title, e);
+				            }
+			            }
+		            }
+		            return true;
+	            };
+	            YAHOO.Bubbling.addDefaultAction("action-link", fnActionHandler);
+	            YAHOO.Bubbling.addDefaultAction("show-more", fnActionHandler);
             },
 
             /**
@@ -387,7 +424,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param p_obj.filter {object} Optional filter to navigate with
              * @param p_obj.page {string} Optional page to navigate to (defaults to this.currentPage)
              */
-            _updateDocList: function (p_obj)
+            _updateDocList: function ()
             {
                 var loadingMessage = null,
                     timerShowLoadingMessage = null,
@@ -721,71 +758,71 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		        // Call through to get the row highlighted by YUI
 		        this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
-//		        // elActions is the element id of the active table cell where we'll inject the actions
-//		        var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
-//
-//		        // Inject the correct action elements into the actionsId element
-//		        if (elActions && elActions.firstChild === null)
-//		        {
-//			        // Retrieve the actionSet for this record
-//			        var oRecord = this.widgets.dataTable.getRecord(oArgs.target.id),
-//				        record = oRecord.getData(),
-//				        jsNode = record.jsNode,
-//				        actions = record.actions,
-//				        actionsEl = document.createElement("div"),
-//				        actionHTML = "",
-//				        actionsSel;
-//
-//			        record.actionParams = {};
-//			        for (var i = 0, ii = actions.length; i < ii; i++)
-//			        {
-//				        actionHTML += this.renderAction(actions[i], record);
-//			        }
-//
-//			        // Token replacement - action Urls
-//			        actionsEl.innerHTML = YAHOO.lang.substitute(actionHTML, this.getActionUrls(record));
-//
-//			        // Simple or detailed view
-//			        Dom.addClass(actionsEl, "action-set");
-//			        Dom.addClass(actionsEl, this.options.simpleView ? "simple" : "detailed");
-//
-//			        // Need the "More >" container?
-//			        var splitAt = jsNode.isContainer ? 2 : 3;
-//			        actionsSel = YAHOO.util.Selector.query("div", actionsEl);
-//			        if (actionsSel.length > splitAt + (this.options.simpleView ? 0 : 1))
-//			        {
-//				        var moreContainer = Dom.get(this.id + "-moreActions").cloneNode(true),
-//					        containerDivs = YAHOO.util.Selector.query("div", moreContainer);
-//
-//				        // Insert the two necessary DIVs before the third action item
-//				        Dom.insertBefore(containerDivs[0], actionsSel[splitAt]);
-//				        Dom.insertBefore(containerDivs[1], actionsSel[splitAt]);
-//
-//				        // Now make action items three onwards children of the 2nd DIV
-//				        var index, moreActions = actionsSel.slice(splitAt);
-//				        for (index in moreActions)
-//				        {
-//					        if (moreActions.hasOwnProperty(index))
-//					        {
-//						        containerDivs[1].appendChild(moreActions[index]);
-//					        }
-//				        }
-//			        }
-//
-//			        elActions.appendChild(actionsEl);
-//		        }
-//
-//		        if (this.showingMoreActions)
-//		        {
-//			        this.deferredActionsMenu = elActions;
-//		        }
-//		        else if (!Dom.hasClass(document.body, "masked"))
-//		        {
-//			        this.currentActionsMenu = elActions;
-//			        // Show the actions
-//			        Dom.removeClass(elActions, "hidden");
-//			        this.deferredActionsMenu = null;
-//		        }
+		        // elActions is the element id of the active table cell where we'll inject the actions
+		        var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
+
+		        // Inject the correct action elements into the actionsId element
+		        if (elActions && elActions.firstChild === null)
+		        {
+			        // Retrieve the actionSet for this record
+			        var oRecord = this.widgets.dataTable.getRecord(oArgs.target.id),
+				        record = oRecord.getData(),
+				        jsNode = record.jsNode,
+				        actions = record.actions,
+				        actionsEl = document.createElement("div"),
+				        actionHTML = "",
+				        actionsSel;
+
+			        record.actionParams = {};
+			        for (var i = 0, ii = actions.length; i < ii; i++)
+			        {
+				        actionHTML += this.renderAction(actions[i], record);
+			        }
+
+			        // Token replacement - action Urls
+			        actionsEl.innerHTML = YAHOO.lang.substitute(actionHTML, this.getActionUrls(record));
+
+			        // Simple or detailed view
+			        Dom.addClass(actionsEl, "action-set");
+			        Dom.addClass(actionsEl, "detailed");
+
+			        // Need the "More >" container?
+			        var splitAt = jsNode.isContainer ? 2 : 3;
+			        actionsSel = YAHOO.util.Selector.query("div", actionsEl);
+			        if (actionsSel.length > splitAt + 1)
+			        {
+				        var moreContainer = Dom.get(this.id + "-moreActions").cloneNode(true),
+					        containerDivs = YAHOO.util.Selector.query("div", moreContainer);
+
+				        // Insert the two necessary DIVs before the third action item
+				        Dom.insertBefore(containerDivs[0], actionsSel[splitAt]);
+				        Dom.insertBefore(containerDivs[1], actionsSel[splitAt]);
+
+				        // Now make action items three onwards children of the 2nd DIV
+				        var index, moreActions = actionsSel.slice(splitAt);
+				        for (index in moreActions)
+				        {
+					        if (moreActions.hasOwnProperty(index))
+					        {
+						        containerDivs[1].appendChild(moreActions[index]);
+					        }
+				        }
+			        }
+
+			        elActions.appendChild(actionsEl);
+		        }
+
+		        if (this.showingMoreActions)
+		        {
+			        this.deferredActionsMenu = elActions;
+		        }
+		        else if (!Dom.hasClass(document.body, "masked"))
+		        {
+			        this.currentActionsMenu = elActions;
+			        // Show the actions
+			        Dom.removeClass(elActions, "hidden");
+			        this.deferredActionsMenu = null;
+		        }
 	        },
 
 	        /**
@@ -799,16 +836,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	        {
 		        // Call through to get the row unhighlighted by YUI
 		        this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
-//
-//		        var elActions = Dom.get(this.id + "-actions-" + (oArgs.target.id));
-//
-//		        // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
-//		        if ((elActions && !this.showingMoreActions) || Dom.hasClass(document.body, "masked"))
-//		        {
-//			        // Just hide the action links, rather than removing them from the DOM
-//			        Dom.addClass(elActions, "hidden");
-//			        this.deferredActionsMenu = null;
-//		        }
+
+		        var elActions = Dom.get(this.id + "-actions-" + (oArgs.target.id));
+
+		        // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
+		        if ((elActions && !this.showingMoreActions) || Dom.hasClass(document.body, "masked"))
+		        {
+			        // Just hide the action links, rather than removing them from the DOM
+			        Dom.addClass(elActions, "hidden");
+			        this.deferredActionsMenu = null;
+		        }
 	        },
 
             /**
@@ -1116,6 +1153,76 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			        elCell.innerHTML = '<div id="' + scope.id + '-actions-' + oRecord.getId() + '" class="hidden"></div>';
 		        };
+	        },
+
+	        onActionShowMore: function DL_onActionShowMore(record, elMore)
+	        {
+		        var me = this;
+
+		        // Fix "More Actions" hover style
+		        Dom.addClass(elMore.firstChild, "highlighted");
+
+		        // Get the pop-up div, sibling of the "More Actions" link
+		        var elMoreActions = Dom.getNextSibling(elMore);
+		        Dom.removeClass(elMoreActions, "hidden");
+		        me.showingMoreActions = true;
+
+		        // Hide pop-up timer function
+		        var fnHidePopup = function DL_oASM_fnHidePopup()
+		        {
+			        // Need to rely on the "elMoreActions" enclosed variable, as MSIE doesn't support
+			        // parameter passing for timer functions.
+			        Event.removeListener(elMoreActions, "mouseover");
+			        Event.removeListener(elMoreActions, "mouseout");
+			        Dom.removeClass(elMore.firstChild, "highlighted");
+			        Dom.addClass(elMoreActions, "hidden");
+			        me.showingMoreActions = false;
+			        if (me.deferredActionsMenu !== null)
+			        {
+				        Dom.addClass(me.currentActionsMenu, "hidden");
+				        me.currentActionsMenu = me.deferredActionsMenu;
+				        me.deferredActionsMenu = null;
+				        Dom.removeClass(me.currentActionsMenu, "hidden");
+			        }
+		        };
+
+		        // Initial after-click hide timer - 4x the mouseOut timer delay
+		        if (elMoreActions.hideTimerId)
+		        {
+			        window.clearTimeout(elMoreActions.hideTimerId);
+		        }
+		        elMoreActions.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout * 4);
+
+		        // Mouse over handler
+		        var onMouseOver = function DLSM_onMouseOver(e, obj)
+		        {
+			        // Clear any existing hide timer
+			        if (obj.hideTimerId)
+			        {
+				        window.clearTimeout(obj.hideTimerId);
+				        obj.hideTimerId = null;
+			        }
+		        };
+
+		        // Mouse out handler
+		        var onMouseOut = function DLSM_onMouseOut(e, obj)
+		        {
+			        var elTarget = Event.getTarget(e);
+			        var related = elTarget.relatedTarget;
+
+			        // In some cases we should ignore this mouseout event
+			        if ((related !== obj) && (!Dom.isAncestor(obj, related)))
+			        {
+				        if (obj.hideTimerId)
+				        {
+					        window.clearTimeout(obj.hideTimerId);
+				        }
+				        obj.hideTimerId = window.setTimeout(fnHidePopup, me.options.actionsPopupTimeout);
+			        }
+		        };
+
+		        Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
+		        Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
 	        }
         }, true);
 })();

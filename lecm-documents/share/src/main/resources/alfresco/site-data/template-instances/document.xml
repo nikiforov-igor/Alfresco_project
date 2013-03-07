@@ -115,13 +115,13 @@
       </component>
 
       <!-- Действия-->
-      <component>
-         <region-id>document-actions</region-id>
-         <url>/components/document-details/document-actions</url>
-         <properties>
-            <nodeRef>{nodeRef}</nodeRef>
-         </properties>
-      </component>
+      <!--<component>-->
+         <!--<region-id>document-actions</region-id>-->
+         <!--<url>/components/document-details/document-actions</url>-->
+         <!--<properties>-->
+            <!--<nodeRef>{nodeRef}</nodeRef>-->
+         <!--</properties>-->
+      <!--</component>-->
 
        <!-- Основные сведения -->
        <component>
