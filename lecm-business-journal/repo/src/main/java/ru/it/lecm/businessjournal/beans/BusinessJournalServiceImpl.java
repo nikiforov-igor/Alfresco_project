@@ -93,58 +93,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
 	 */
 	public void init() {
-		final String rootName = BJ_ROOT_NAME;
-		repositoryHelper.init();
-
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef bjRef = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, rootName);
-						if (bjRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(BJ_NAMESPACE_URI, BR_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(companyHome, assocTypeQName, assocQName, nodeTypeQName, properties);
-							bjRef = associationRef.getChildRef();
-						}
-						return bjRef;
-					}
-				});
-			}
-		};
-		bjRootRef = AuthenticationUtil.runAsSystem(raw);
-
-		AuthenticationUtil.RunAsWork<NodeRef> raw2 = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef bjRef = getBusinessJournalDirectory();
-						NodeRef archiveRef = nodeService.getChildByName(bjRef, ContentModel.ASSOC_CONTAINS, BJ_ARCHIVE_ROOT_NAME);
-						if (archiveRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(BJ_NAMESPACE_URI, BR_ARCHIVE_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, BJ_ARCHIVE_ROOT_NAME);
-							ChildAssociationRef associationRef = nodeService.createNode(bjRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-							archiveRef = associationRef.getChildRef();
-						}
-						return archiveRef;
-					}
-				});
-			}
-		};
-		bjArchiveRef =  AuthenticationUtil.runAsSystem(raw2);
+		bjRootRef = getFolder("BJ_ROOT_FOLDER");
+		bjArchiveRef =  getFolder("BJ_ARCHIVE_ROOT_FOLDER");
 	}
 
 	@Override
