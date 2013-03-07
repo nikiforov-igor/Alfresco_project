@@ -585,14 +585,13 @@ public class Session {
 	
 	public synchronized int numPendingRequests() {
 		int num_pending = 0;
-		Iterator it = this.responses.values().iterator();
-		
-		while (it.hasNext()) {
-			Response r = (Response) it.next();
-			
-			if (!r.getStatus().equals(Response.STATUS_DONE))
-				num_pending++;
-		}
+
+        for (Object o : this.responses.values()) {
+            Response r = (Response) o;
+
+            if (!r.getStatus().equals(Response.STATUS_DONE))
+                num_pending++;
+        }
 		
 		return num_pending;
 	}
