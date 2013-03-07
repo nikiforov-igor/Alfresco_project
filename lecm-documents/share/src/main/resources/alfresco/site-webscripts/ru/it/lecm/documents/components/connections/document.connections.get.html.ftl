@@ -12,34 +12,30 @@
 
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
-        <table id="${el}-connection-set" style="width:  100%">
-            <#if connections?? && connections.items??>
-                <#list connections.items as item>
-                    <tr>
-                        <td>
-                            <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">
-                                <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
+        <ul id="${el}-connection-set" style="width:  100%">
+        <#if connections?? && connections.items??>
+            <#list connections.items as item>
+                <li>
+                ${item.type.name}
+                    <br/>
+                    <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">
+                        <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
                                     ${item.connectedDocument.presentString}
                                 <#else>
-                                    ${item.connectedDocument.name}
-                                </#if>
-                            </a>
-                        </td>
-                        <td style="text-align: right">
-                            ${item.type.name}
-                        </td>
-                    </tr>
-                </#list>
-                <#if connections.hasNext == "true">
-                    <tr>
-                        <td></td>
-                        <td style="text-align: right">
-                            <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit" title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
-                        </td>
-                    </tr>
-                </#if>
+                        ${item.connectedDocument.name}
+                        </#if>
+                    </a>
+                    <hr>
+                </li>
+            </#list>
+            <#if connections.hasNext == "true">
+                <li style="text-align: right">
+                    <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"
+                       title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
+                </li>
             </#if>
-        </table>
+        </#if>
+        </ul>
     </div>
 
     <script type="text/javascript">//<![CDATA[
