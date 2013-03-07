@@ -1,12 +1,8 @@
 package ru.it.lecm.statemachine.action;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -14,9 +10,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -26,9 +26,9 @@ import ru.it.lecm.statemachine.bean.StateMachineActions;
 abstract public class StateMachineAction {
 
 	private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
 	private INodeACLBuilder lecmAclBuilderBean;
 	private BusinessJournalService businessJournalService;
+	private RepositoryStructureHelper repositoryStructureHelper;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -36,10 +36,6 @@ abstract public class StateMachineAction {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
 	}
 
 	public void setLecmAclBuilderBean(INodeACLBuilder lecmAclBuilderBean) {
@@ -58,7 +54,15 @@ abstract public class StateMachineAction {
 		return businessJournalService;
 	}
 
-	abstract public void execute(DelegateExecution execution);
+    public RepositoryStructureHelper getRepositoryStructureHelper() {
+        return repositoryStructureHelper;
+    }
+
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
+    abstract public void execute(DelegateExecution execution);
 
 	abstract public void init(Element actionElement, String processId);
 
@@ -92,7 +96,4 @@ abstract public class StateMachineAction {
 		return childAssocRef.getChildRef();
 	}
 
-	protected NodeRef getCompanyHome() {
-		return repositoryHelper.getCompanyHome();
-	}
 }

@@ -3,10 +3,11 @@ package ru.it.lecm.statemachine.listener;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
-import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: PMelnikov
@@ -33,8 +33,8 @@ public class StateMachineHandler implements ExecutionListener {
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
 	private static INodeACLBuilder lecmAclBuilderBean;
-	private static Repository repositoryHelper;
 	private static BusinessJournalService businessJournalService;
+	private static RepositoryStructureHelper repositoryStructureHelper;
 
 	private String processId = "";
 
@@ -96,10 +96,6 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.serviceRegistry = serviceRegistry;
 	}
 
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		StateMachineHandler.repositoryHelper = repositoryHelper;
-	}
-
 	public void setLecmAclBuilderBean(INodeACLBuilder lecmAclBuilderBean) {
 		StateMachineHandler.lecmAclBuilderBean = lecmAclBuilderBean;
 	}
@@ -108,7 +104,11 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.businessJournalService = businessJournalService;
 	}
 
-	private StateMachineAction getStateMachineAction(Element actionElement) {
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        StateMachineHandler.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
+    private StateMachineAction getStateMachineAction(Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
@@ -120,9 +120,9 @@ public class StateMachineHandler implements ExecutionListener {
 
 		if (action != null) {
 			action.setServiceRegistry(serviceRegistry);
-			action.setRepositoryHelper(repositoryHelper);
 			action.setLecmAclBuilderBean(lecmAclBuilderBean);
 			action.setBusinessJournalService(businessJournalService);
+			action.setRepositoryStructureHelper(repositoryStructureHelper);
 			try {
 				action.init(actionElement, processId);
 			} catch (Exception e) {

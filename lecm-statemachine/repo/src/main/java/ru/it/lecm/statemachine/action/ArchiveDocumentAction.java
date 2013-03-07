@@ -67,7 +67,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
 		}
 
 		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef archiveFolder = getCompanyHome();
+		NodeRef archiveFolder = getRepositoryStructureHelper().getHomeRef();
 		StringTokenizer tokenizer = new StringTokenizer(path, "/");
 		while (tokenizer.hasMoreTokens()) {
 			String folderName = tokenizer.nextToken();

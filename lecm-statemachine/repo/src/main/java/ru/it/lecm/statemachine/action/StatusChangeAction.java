@@ -103,14 +103,7 @@ public class StatusChangeAction extends StateMachineAction {
 		} else {
 			//Если статус не существует проверяем всю структуру папок
 
-			NodeRef companyHome = getCompanyHome();
-
-			//Существует ли папка documents
-			NodeRef documents = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS,"documents");
-			if (documents == null) {
-				//Создаем папку
-				documents = createFolder(companyHome, "documents");
-			}
+			NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
 
 			//Существует ли папка processId
 			NodeRef processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
