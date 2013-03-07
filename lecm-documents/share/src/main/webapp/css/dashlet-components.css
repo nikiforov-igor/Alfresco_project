@@ -55,7 +55,7 @@
 }
 
 .dashlet .lecm-dashlet-actions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+    background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 
 .document-metadata-header h2 .expand {
@@ -74,4 +74,13 @@
     background-repeat: no-repeat;
     padding: 1em;
     text-decoration: none;
+}
+
+.yui-gc .yui-u {
+    margin-left: 1.99%;
+    width: 20%;
+}
+
+.yui-gc div.first {
+    width: 78%;
 }
