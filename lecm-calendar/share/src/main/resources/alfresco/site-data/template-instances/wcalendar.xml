@@ -65,7 +65,7 @@
 		</component>
 		<component>
 			<region-id>forbidden</region-id>
-			<url>/ru/it/lecm/wcalendar/forbidden</url>
+			<url>/lecm/base/forbidden</url>
 		</component>
 	</components>
 </template-instance>

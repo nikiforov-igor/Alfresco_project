@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-  <shortname>wcalendar-forbidden</shortname>
-  <description>Work Calendar: Forbidden Page</description>
-  <format default="html"/>
-  <url>/ru/it/lecm/wcalendar/forbidden</url>
-  <authentication>user</authentication>
-</webscript>
