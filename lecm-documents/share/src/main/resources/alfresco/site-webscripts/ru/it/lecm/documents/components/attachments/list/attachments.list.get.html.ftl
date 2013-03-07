@@ -2,27 +2,32 @@
 <#assign el=args.htmlid/>
 
 <div id="${el}">
-    Здесь будет перечень вложений
-
     <#if categories??>
         <#list categories as category>
-            <div id="category-${category.name}">
-                <table>
+            <div id="${el}-${category.nodeRef}"  class="attachment-list no-check-bg">
+	            <div id="${el}-${category.nodeRef}-main-template" class="hidden">
+		            <div>
+		            </div>
+	            </div>
+
+	            <table class="category-title">
                     <tr>
-                        <td>
+                        <td class="category-name">
                             ${category.name}
                         </td>
-                        <td>
+                        <td class="category-upload">
                             <div class="file-upload">
                                <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
                                   <span class="first-child">
-                                     <button name="fileUpload">${msg("button.upload")}</button>
+                                     <button name="fileUpload">${msg("button.upload.file")}</button>
                                   </span>
                                </span>
                             </div>
                         </td>
                     </tr>
                 </table>
+
+	            <div id="${el}-${category.nodeRef}-documents" class="documents"></div>
             </div>
         </#list>
     </#if>
@@ -41,6 +46,17 @@
                             </#if>
                         ]
                     }).setMessages(${messages});
+
+			<#if categories??>
+				<#list categories as category>
+
+			            new LogicECM.DocumentAttachmentsListTable("${el}-${category.nodeRef}").setOptions(
+			                    {
+			                        nodeRef: "${category.nodeRef}",
+				                    path: "${category.path}".replace("/Company Home", "")
+			                    }).setMessages(${messages});
+				</#list>
+			</#if>
         }
 
         YAHOO.util.Event.onDOMReady(init);
