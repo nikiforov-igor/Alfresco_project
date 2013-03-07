@@ -3,6 +3,7 @@ package ru.it.lecm.orgstructure.policies;
 import java.util.List;
 
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -24,19 +25,23 @@ public class OrgstructureBossPolicy
 	@Override
 	public void init() {
 		super.init();
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateNode"));
+		policyComponent.bindClassBehaviour(
+				NodeServicePolicies.OnCreateNodePolicy.QNAME
+			, OrgstructureBean.TYPE_STAFF_LIST
+			, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT)
+		);
 	}
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeRef nodeDP = childAssocRef.getChildRef();
-		NodeRef orgUnit = childAssocRef.getParentRef();
+		final NodeRef staff = childAssocRef.getChildRef(); // type: "lecm-orgstr:staff-list"
+		final NodeRef orgUnit = childAssocRef.getParentRef();
 		List<NodeRef> staffList = orgstructureService.getUnitStaffLists(orgUnit);
-		final boolean isBoss = staffList.size() >= 1 && staffList.get(0).equals(nodeDP);
-		nodeService.setProperty(nodeDP, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, isBoss);
+		final boolean isBoss = staffList.size() >= 1 && staffList.get(0).equals(staff);
+		nodeService.setProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, isBoss);
 
 		// оповещение securityService по Должностной Позиции ...
+		final NodeRef nodeDP = this.orgstructureService.getPositionByStaff(staff);
 		notifyChangeDP( nodeDP, isBoss, orgUnit);
 	}
 

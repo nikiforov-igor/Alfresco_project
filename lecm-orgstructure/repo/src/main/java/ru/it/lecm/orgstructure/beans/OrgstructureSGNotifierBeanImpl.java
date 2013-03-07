@@ -95,7 +95,7 @@ public class OrgstructureSGNotifierBeanImpl
 		final Set<NodeRef> result = new HashSet<NodeRef>();
 		for(NodeRef ou: units) {
 			final Set<NodeRef> employees = getEmployeesByOU(ou);
-			if (employees == null)
+			if (employees != null)
 				result.addAll(employees);
 		}
 		return result;
@@ -135,10 +135,21 @@ public class OrgstructureSGNotifierBeanImpl
 	 * Оповещение о создании/изменении должностной позиции
 	 * @param nodeDP  узел должностной позиции
 	 * @param isBoss true, если она является руководящей
-	 * @param orgUnit
+	 * @param nodeOrgUnit
 	 */
 	@Override
-	public void notifyChangeDP(NodeRef nodeDP, boolean isBoss, NodeRef orgUnit) {
+	public void notifyChangeDP(NodeRef nodeDP, boolean isBoss, NodeRef nodeOrgUnit) {
+		if (logger.isDebugEnabled()) {
+			try {
+				logger.debug( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s} of type {%s}\n\t OU {%s} of type {%s}",
+					isBoss, nodeDP, nodeService.getType(nodeDP), nodeOrgUnit, nodeService.getType(nodeOrgUnit)));
+			} catch(Throwable t) {
+				logger.error( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s}\n\t OU {%s}",
+						isBoss, nodeDP, nodeOrgUnit), t);
+				// eat the exception
+			}
+		}
+
 		final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeDP);
 		final String loginName = getEmployeeLogin(employee);
 		final String emplId = (employee != null) ? employee.getId() : null;
@@ -150,17 +161,21 @@ public class OrgstructureSGNotifierBeanImpl
 		// прописать Сотрудника в свою Должность ...
 		// SG_Me -> SG_DP
 		if (employee != null) {
+			// safely-свяжем пользователя с его личной группой
+			if (loginName != null)
+				sgNotifier.orgEmployeeTie(emplId, loginName, true);
+
 			final Types.SGPosition sgMe = Types.SGKind.SG_ME.getSGPos( emplId, loginName);
 			sgNotifier.sgInclude( sgMe, sgDP);
 		}
 
 		// Прописать SG_DP в своё Подразделение (SG_OU) ...
 		// include SG_DP -> SG_OU
-		final Types.SGPosition sgOU = PolicyUtils.makeOrgUnitPos(orgUnit, nodeService);
+		final Types.SGPosition sgOU = PolicyUtils.makeOrgUnitPos(nodeOrgUnit, nodeService);
 		sgNotifier.sgInclude( sgDP, sgOU);
 
 		// Если позиция руководящая прописать её в SG_SV своего Подразделения ...
-		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( orgUnit.getId(), sgOU.getDisplayInfo());
+		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (isBoss) { // прописать руководящую SG_DP -> SG_SV(OU)
 			sgNotifier.sgInclude( sgDP, sgSV);
 		} else { // снять отметку руководящей ...
@@ -176,6 +191,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyEmploeeSetBR(NodeRef employee, NodeRef brole) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeSetBR:\n\t Employee {%s} of type {%s}\n\t Business Role {%s} of type {%s}",
+					employee, nodeService.getType(employee), brole, nodeService.getType(brole)));
+		}
+
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
 		if (broleCode != null)
@@ -191,6 +211,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t Business Role {%s} of type {%s}",
+					employee, nodeService.getType(employee), brole, nodeService.getType(brole)));
+		}
+
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
 		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
@@ -207,6 +232,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeSetDP:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), dpid, nodeService.getType(dpid)));
+		}
+
 		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
 		this.sgNotifier.sgInclude( emplPos, dpPos);
@@ -219,6 +249,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), dpid, nodeService.getType(dpid)));
+		}
+
 		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
 		this.sgNotifier.sgExclude( emplPos, dpPos);
@@ -231,8 +266,18 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyEmploeeTie(NodeRef employee, Boolean isActive) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeTie: setActive=%s\n\t Employee {%s} of type {%s}",
+					isActive, employee, nodeService.getType(employee)));
+		}
+
 		// ASSOC_EMPLOYEE_PERSON: "lecm-orgstr:employee-person-assoc"
 		final String loginName = getEmployeeLogin(employee);
+
+		// safely-свяжем пользователя с его личной группой
+		if (loginName != null)
+			sgNotifier.orgEmployeeTie(employee.getId(), loginName, true);
+
 		sgNotifier.orgNodeCreated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 		sgNotifier.orgEmployeeTie( employee.getId(), loginName, (isActive != null) && isActive.booleanValue());
 	}
@@ -255,6 +300,15 @@ public class OrgstructureSGNotifierBeanImpl
 	@Override
 	public void notifyEmploeeDown(NodeRef employee) {
 		final String loginName = getEmployeeLogin(employee);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeDown: login '%s'\n\t Employee {%s} of type {%s}",
+					loginName, employee, nodeService.getType(employee)));
+		}
+
+		if (loginName == null)
+			throw new RuntimeException( String.format( "Empty login: cannot untie employee {%s} from SG-ME", employee.getId() ));
+
 		sgNotifier.orgEmployeeTie( employee.getId(), loginName, false);
 		sgNotifier.orgNodeDeactivated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 	}
@@ -273,6 +327,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyChangedOU(NodeRef nodeOU, NodeRef parent) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyChangedOU:\n\t OU {%s} of type {%s}\n\t Parent {%s} of type {%s}",
+					nodeOU, nodeService.getType(nodeOU), parent, nodeService.getType(parent)));
+		}
+
 		final Types.SGPosition posNodeOU = PolicyUtils.makeOrgUnitPos(nodeOU, nodeService);
 		sgNotifier.orgNodeCreated( posNodeOU);
 
@@ -296,6 +355,12 @@ public class OrgstructureSGNotifierBeanImpl
 
 	@Override
 	public void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyDeleteOU:\n\t OU {%s} of type {%s}\n\t Parent {%s} of type {%s}",
+					nodeOU, nodeService.getType(nodeOU), parent, nodeService.getType(parent)));
+		}
+
 		final Types.SGPosition posNodeOU = PolicyUtils.makeOrgUnitPos(nodeOU, nodeService);
 
 		/*
@@ -333,6 +398,12 @@ public class OrgstructureSGNotifierBeanImpl
 	public void notifyPrivateBRolesOfOrgUnits( NodeRef nodeOU, boolean include
 			, boolean recursivelyUseParentsBR)
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyGiveBR4OU: direction %s\n\t recurse %s\n\t OU {%s}\n\t of type {%s}"
+					, (include ? "INCLUDE" : "EXCLUDE"), recursivelyUseParentsBR
+					, nodeOU, nodeService.getType(nodeOU)) );
+		}
+
 		// все Сотрудники текущего OU и всех его вложенных
 		final Set<NodeRef> employees = getAllEmployeesByOUAndChild(nodeOU);
 
@@ -368,6 +439,12 @@ public class OrgstructureSGNotifierBeanImpl
 				final Types.SGPosition ouPos = PolicyUtils.makeOrgUnitPos(role, nodeService);
 				for (NodeRef employee : employees) {
 					final String userLogin = getEmployeeLogin( employee);
+
+					// safely-свяжем пользователя с его личной группой
+					// (случай include=false, по-сути, не влияет на привязку User к SG_ME)
+					if (userLogin != null)
+						sgNotifier.orgEmployeeTie(employee.getId(), userLogin, true);
+
 					// Активация/деактивация личной Личной группы бизнес роли SG_BRME относительно SG_OU ...
 					final Types.SGPrivateBusinessRole brmePos = Types.SGKind.getSGMyRolePos(employee.getId(), userLogin, ouPos.getDisplayInfo());
 					if (include) {
@@ -387,11 +464,19 @@ public class OrgstructureSGNotifierBeanImpl
 	 * @param created true, если БР предоставляется и false, если отбирается
 	 */
 	@Override
-	public void notifyBRAssociationChanged(AssociationRef nodeAssocRef
-			, boolean created)
+	public void notifyBRAssociationChanged(AssociationRef nodeAssocRef, boolean created)
 	{
-		// получаем основной объект - Бизнес Роль
 		final NodeRef brole = nodeAssocRef.getSourceRef();
+		final NodeRef destObj = nodeAssocRef.getTargetRef();
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyBRAssociationChanged: created %s\n\t Business Role{%s} of type {%s}\n\t Dest {%s} of type {%s}"
+					, created
+					, brole, nodeService.getType(brole)
+					, destObj, nodeService.getType(destObj)
+			));
+		}
+
 		final Types.SGPosition brolePos = PolicyUtils.makeBRPos(brole, nodeService);
 
 		/*
@@ -403,7 +488,6 @@ public class OrgstructureSGNotifierBeanImpl
 		 QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-assoc");
 		 QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-member-assoc");
 		 */
-		final NodeRef destObj = nodeAssocRef.getTargetRef();
 		Types.SGPosition assocPos;
 		boolean isOrgUnitAssoc = false;
 		if (orgstructureService.isEmployee(destObj)) { // присвоение БР для Сотрудника
@@ -438,7 +522,7 @@ public class OrgstructureSGNotifierBeanImpl
 		*/
 		if (isOrgUnitAssoc) {
 			final boolean recurseBRFromParents = false;
-			notifyPrivateBRolesOfOrgUnits(brole, created, recurseBRFromParents);
+			notifyPrivateBRolesOfOrgUnits(destObj, created, recurseBRFromParents);
 		}
 	}
 
@@ -447,6 +531,15 @@ public class OrgstructureSGNotifierBeanImpl
 	public void notifyBRDelegationChanged(NodeRef brole,
 			NodeRef sourceEmployee, NodeRef destEmployee, boolean created) 
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyBRDelegationChanged: created %s\n\t Business Role{%s} of type {%s}\n\t Source Employee {%s} of type {%s}\n\t Dest Employee {%s} of type {%s}"
+					, created
+					, brole, nodeService.getType(brole)
+					, sourceEmployee, nodeService.getType(sourceEmployee)
+					, destEmployee, nodeService.getType(destEmployee)
+			));
+		}
+
 		// получаем личные группы пользователей для бизнес-ролей
 		final Types.SGPrivateBusinessRole sgSrcPrivBR = PolicyUtils.makeBRPrivatePos(brole, sourceEmployee, nodeService, orgstructureService, logger);
 		// final Types.SGPosition destPrivBR = PolicyUtils.makeBRPrivatePos(brole, destEmployee, nodeService, orgstructureService, logger);
@@ -463,6 +556,14 @@ public class OrgstructureSGNotifierBeanImpl
 	public void notifyBossDelegationChanged(NodeRef sourceEmployee,
 			NodeRef destEmployee, boolean created)
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyBossDelegationChanged: created %s\n\t Source Employee {%s} of type {%s}\n\t Dest Employee {%s} of type {%s}"
+					, created
+					, sourceEmployee, nodeService.getType(sourceEmployee)
+					, destEmployee, nodeService.getType(destEmployee)
+			));
+		}
+
 		// личная группа делегата ...
 		final Types.SGPrivateMeOfUser sgDestMe = PolicyUtils.makeEmploeePos(destEmployee, nodeService, orgstructureService, logger);
 

@@ -160,21 +160,24 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie) {
+		if (alfrescoUserLogin == null) {
+			logger.warn( String.format( "employee {%s}: user login is null -> %s operation skipped", 
+					employeeId, (tie ? "tie" : "untie")));
+		}
+
 		final String emplSuffix = SGKind.SG_ME.getAlfrescoSuffix(employeeId);
 
-		// safe-действия
-		if (safeMode) { // гарантировать создание группы Сотрудника (SG_ME)
+		// safe-действия if (safeMode) ...
+		{ // (!) гарантировать создание группы Сотрудника (SG_ME)
 			ensureAlfrescoGroupName( emplSuffix, alfrescoUserLogin);
 		}
 
-		if (alfrescoUserLogin != null) {
-			final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
-			final String sg_me_group = this.sgnm.makeSGName(emplSuffix);
-			if (tie) // привязать ...
-				ensureUserParent( sg_user_name, sg_me_group);
-			else // отвязать ...
-				removeUserParent( sg_user_name, sg_me_group);
-		}
+		final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
+		final String sg_me_group = this.sgnm.makeSGName(emplSuffix);
+		if (tie) // привязать ...
+			ensureUserParent( sg_user_name, sg_me_group);
+		else // отвязать ...
+			removeUserParent( sg_user_name, sg_me_group);
 	}
 
 	@Override
@@ -231,6 +234,7 @@ public class LECMSecurityGroupsBean
 	public void orgBRAssigned(String broleId, Types.SGPosition obj) {
 		final String broleSuffix = SGKind.SG_BR.getAlfrescoSuffix(broleId);
 
+		
 		// safe-действия по созданию security-groups под БР и сам объект
 		if (safeMode) {
 			ensureAlfrescoGroupName( broleSuffix, "BRole-"+ broleId);

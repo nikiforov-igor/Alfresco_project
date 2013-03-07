@@ -173,7 +173,10 @@
 	<bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy"
 		init-method="init">
 		<property name="policyComponent" ref="policyComponent" />
-		<property name="businessJournalService" ref="businessJournalService" />
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
 	<bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"
