@@ -15,7 +15,7 @@
 
 <@comp.baseMenu>
 	<@comp.baseMenuButton "wcalendarCalendar"  msg('label.wcalendar.menu.calendar.btn') />
-	<@comp.baseMenuButton "wcalendarShedule" msg('label.wcalendar.menu.shedule.btn') />
+	<@comp.baseMenuButton "wcalendarSchedule" msg('label.wcalendar.menu.schedule.btn') />
     <@comp.baseMenuButton "wcalendarAbsence" msg('label.wcalendar.menu.absence.btn') />
 </@comp.baseMenu>
 

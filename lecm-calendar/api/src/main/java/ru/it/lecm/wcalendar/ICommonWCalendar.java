@@ -18,9 +18,9 @@ public interface ICommonWCalendar {
 	 */
 	String CALENDAR_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/calendar/1.0";
 	/**
-	 * Namespace: lecm-shed, shedule-model.xml
+	 * Namespace: lecm-sched, schedule-model.xml
 	 */
-	String SHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/shedule/1.0";
+	String SCHEDULE_NAMESPACE = "http://www.it.ru/logicECM/model/work-calendar/schedule/1.0";
 	/**
 	 * Namespace: lecm-wcal, wcal-common.xml
 	 */
@@ -33,42 +33,42 @@ public interface ICommonWCalendar {
 	 * Шаблон сообщения в бизнес-журнал: создание типового расписания для орг.
 	 * единицы.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SHEDULE_OU_CREATE = "Сотрудник #initiator создал типовой #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_CREATE = "Сотрудник #initiator создал типовой #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание типового расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал типовой #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал типовой #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание индивидуального расписания для
 	 * орг. единицы.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание индивидуального расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление типового расписания для орг.
 	 * единицы.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SHEDULE_OU_DELETE = "Сотрудник #initiator удалил типовой #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_DELETE = "Сотрудник #initiator удалил типовой #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление типового расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил типовой #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил типовой #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление индивидуального расписания для
 	 * орг. единицы.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SHEDULE_OU_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление индивидуального расписания для
 	 * осотрудника
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: планирование отсутствия.
 	 */
@@ -100,9 +100,9 @@ public interface ICommonWCalendar {
 
 	/**
 	 * Получение обекта класса, реализующего интерфейс IWCalCommon
-	 * (CalendarBean, AbsenceBean, SheduleBean).
+	 * (CalendarBean, AbsenceBean, ScheduleBean).
 	 *
-	 * @return объект CalendarBean, AbsenceBean или SheduleBean
+	 * @return объект CalendarBean, AbsenceBean или ScheduleBean
 	 */
 	ICommonWCalendar getWCalendarDescriptor();
 

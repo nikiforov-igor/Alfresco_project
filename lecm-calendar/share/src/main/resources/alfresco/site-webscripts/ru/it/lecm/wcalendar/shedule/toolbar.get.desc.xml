@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>wcalendar-shedule-toolbar</shortname>
-	<description>Shedule: Toolbar</description>
-	<format default="html"/>
-	<url>/ru/it/lecm/wcalendar/shedule/toolbar</url>
-	<authentication>user</authentication>
-</webscript>

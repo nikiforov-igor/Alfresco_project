@@ -10,7 +10,7 @@
 		};
 	}
 
-	YAHOO.Bubbling.on("reiterationRulesUpdated", LogicECM.module.WCalendar.Shedule.reiterationRulesValidation);
+	YAHOO.Bubbling.on("reiterationRulesUpdated", LogicECM.module.WCalendar.Schedule.reiterationRulesValidation);
 
 	YAHOO.util.Event.onContentReady("control-buttons", function() {
 		var elements = YAHOO.util.Selector.query("input", "control-buttons");
@@ -127,15 +127,15 @@
 
 	<div class="rule-body" id="shift-work-mode" style="display:none">
 		<div class="shift-picker">
-			 ${msg("label.shedule.form.shift-work.working-days")}: <input name="working-days-amount" id="working-days" type="number" ><br/>
-			${msg("label.shedule.form.shift-work.non-working-days")}: <input name="working-days-interval" id="non-working-days" type="number">
+			 ${msg("label.schedule.form.shift-work.working-days")}: <input name="working-days-amount" id="working-days" type="number" ><br/>
+			${msg("label.schedule.form.shift-work.non-working-days")}: <input name="working-days-interval" id="non-working-days" type="number">
 		</div>
 	</div>
 
 	<div class="rule-control" id="control-buttons">
-		<input type="radio" name="reiteration-type" value="week-days" checked/> ${msg("label.shedule.form.week-days-type")}<br/>
-		<input type="radio" name="reiteration-type" value="month-days"/> ${msg("label.shedule.form.month-days-type")}<br/>
-		<input type="radio" name="reiteration-type" value="shift-work"/> ${msg("label.shedule.form.shift-work-type")}<br/>
+		<input type="radio" name="reiteration-type" value="week-days" checked/> ${msg("label.schedule.form.week-days-type")}<br/>
+		<input type="radio" name="reiteration-type" value="month-days"/> ${msg("label.schedule.form.month-days-type")}<br/>
+		<input type="radio" name="reiteration-type" value="shift-work"/> ${msg("label.schedule.form.shift-work-type")}<br/>
 	</div>
 
 	<div id="reiteration-rules-error-container"></div>

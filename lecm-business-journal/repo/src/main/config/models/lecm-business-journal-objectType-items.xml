@@ -143,8 +143,8 @@
         </item>
 		<item name="График работы">
 			<property name="cm:name">График работы</property>
-			<property name="lecm-busjournal:objectType-code">SHEDULE</property>
-			<property name="lecm-busjournal:objectType-class">lecm-shed:shedule</property>
+			<property name="lecm-busjournal:objectType-code">SCHEDULE</property>
+			<property name="lecm-busjournal:objectType-class">lecm-sched:schedule</property>
 			<property name="lecm-busjournal:objectType-template">график работы</property>
             <property name="lecm-busjournal:objectType-list-template">график работы</property>
 		</item>

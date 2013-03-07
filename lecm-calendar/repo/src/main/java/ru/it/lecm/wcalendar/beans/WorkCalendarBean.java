@@ -13,7 +13,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
-import ru.it.lecm.wcalendar.shedule.IShedule;
+import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
  *
@@ -23,7 +23,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 	private OrgstructureBean orgstructureService;
 	private IAbsence absenceService;
-	private IShedule sheduleService;
+	private ISchedule scheduleService;
 	private ICalendar WCalendarService;
 	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
 	private final static Logger logger = LoggerFactory.getLogger(WorkCalendarBean.class);
@@ -31,7 +31,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 	public final void init() {
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
-		PropertyCheck.mandatory(this, "sheduleService", sheduleService);
+		PropertyCheck.mandatory(this, "scheduleService", scheduleService);
 		PropertyCheck.mandatory(this, "wCalendarService", WCalendarService);
 
 	}
@@ -49,16 +49,16 @@ public class WorkCalendarBean implements IWorkCalendar {
 			logger.error(errMessage, t);
 			throw t;
 		}
-		NodeRef shedule = getSheduleOrParentShedule(node);
-		if (shedule == null) {
-			String errMessage = "No shedule associated with employee nor with it's parent OUs!";
+		NodeRef schedule = getScheduleOrParentSchedule(node);
+		if (schedule == null) {
+			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
 			logger.error(errMessage, t);
 			throw t;
 		}
-		String sheduleType = sheduleService.getSheduleType(shedule);
+		String scheduleType = scheduleService.getScheduleType(schedule);
 
-		if (IShedule.SHEDULE_TYPE_COMMON.equals(sheduleType)) {
+		if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 			Boolean isPresent = isEmployeePresent(day, node);
 
 			if (isPresent == null) {
@@ -70,13 +70,13 @@ public class WorkCalendarBean implements IWorkCalendar {
 				result = isPresent;
 			}
 
-		} else if (IShedule.SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
-			result = sheduleService.isWorkingDay(shedule, day);
+		} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
+			result = scheduleService.isWorkingDay(schedule, day);
 			if (result) {
 				result = !absenceService.isEmployeeAbsent(node, day);
 			}
 		} else {
-			String errMessage = String.format("Something wrong with shedule: it has some strange type: %s", sheduleType);
+			String errMessage = String.format("Something wrong with schedule: it has some strange type: %s", scheduleType);
 			RuntimeException t = new RuntimeException(errMessage);
 			logger.error(errMessage, t);
 			throw t;
@@ -95,16 +95,16 @@ public class WorkCalendarBean implements IWorkCalendar {
 			logger.error(errMessage, t);
 			throw t;
 		}
-		NodeRef shedule = getSheduleOrParentShedule(node);
-		if (shedule == null) {
-			String errMessage = "No shedule associated with employee nor with it's parent OUs!";
+		NodeRef schedule = getScheduleOrParentSchedule(node);
+		if (schedule == null) {
+			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
 			logger.error(errMessage, t);
 			throw t;
 		}
-		String sheduleType = sheduleService.getSheduleType(shedule);
+		String scheduleType = scheduleService.getScheduleType(schedule);
 
-		if (IShedule.SHEDULE_TYPE_COMMON.equals(sheduleType)) {
+		if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 			Date curDay = new Date(start.getTime());
 			while (!curDay.after(end)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
@@ -123,11 +123,11 @@ public class WorkCalendarBean implements IWorkCalendar {
 				curDay = addDayToDate(curDay);
 			}
 
-		} else if (IShedule.SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
-			List<NodeRef> sheduleElements = sheduleService.getSheduleElements(shedule);
-			for (NodeRef sheduleElement : sheduleElements) {
-				Date elementStart = sheduleService.getSheduleElementStart(sheduleElement);
-				Date elementEnd = sheduleService.getSheduleElementEnd(sheduleElement);
+		} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
+			List<NodeRef> scheduleElements = scheduleService.getScheduleElements(schedule);
+			for (NodeRef scheduleElement : scheduleElements) {
+				Date elementStart = scheduleService.getScheduleElementStart(scheduleElement);
+				Date elementEnd = scheduleService.getScheduleElementEnd(scheduleElement);
 				Date curElementDay = new Date(elementStart.getTime());
 				while (!curElementDay.after(elementEnd)) {
 					if (!curElementDay.before(start) && !curElementDay.after(end)) {
@@ -153,21 +153,21 @@ public class WorkCalendarBean implements IWorkCalendar {
 			logger.error(errMessage, t);
 			throw t;
 		}
-		NodeRef shedule = getSheduleOrParentShedule(node);
-		if (shedule == null) {
-			String errMessage = "No shedule associated with employee nor with it's parent OUs!";
+		NodeRef schedule = getScheduleOrParentSchedule(node);
+		if (schedule == null) {
+			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
 			logger.error(errMessage, t);
 			throw t;
 		}
-		String sheduleType = sheduleService.getSheduleType(shedule);
-		List<NodeRef> sheduleElements = sheduleService.getSheduleElements(shedule);
+		String scheduleType = scheduleService.getScheduleType(schedule);
+		List<NodeRef> scheduleElements = scheduleService.getScheduleElements(schedule);
 
 		Date curDay = new Date(start.getTime());
 		while (!curDay.after(end)) {
 			boolean toBeAdded = true;
 
-			if (IShedule.SHEDULE_TYPE_COMMON.equals(sheduleType)) {
+			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
 
 				if (isPresent == null) {
@@ -180,12 +180,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 				if (isPresent) {
 					toBeAdded = false;
 				}
-			} else if (IShedule.SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
+			} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
 				Date curDayNoTime = resetTime(curDay);
 
-				for (NodeRef sheduleElement : sheduleElements) {
-					Date elementStart = sheduleService.getSheduleElementStart(sheduleElement);
-					Date elementEnd = sheduleService.getSheduleElementEnd(sheduleElement);
+				for (NodeRef scheduleElement : scheduleElements) {
+					Date elementStart = scheduleService.getScheduleElementStart(scheduleElement);
+					Date elementEnd = scheduleService.getScheduleElementEnd(scheduleElement);
 
 					if (!curDayNoTime.before(elementStart) && !curDayNoTime.after(elementEnd)) {
 						if (!absenceService.isEmployeeAbsent(node, curDay)) {
@@ -221,17 +221,17 @@ public class WorkCalendarBean implements IWorkCalendar {
 			logger.error(errMessage, t);
 			throw t;
 		}
-		NodeRef shedule = getSheduleOrParentShedule(node);
-		if (shedule == null) {
-			String errMessage = "No shedule associated with employee nor with it's parent OUs!";
+		NodeRef schedule = getScheduleOrParentSchedule(node);
+		if (schedule == null) {
+			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
 			logger.error(errMessage, t);
 			throw t;
 		}
-		String sheduleType = sheduleService.getSheduleType(shedule);
+		String scheduleType = scheduleService.getScheduleType(schedule);
 		Date curDay = new Date(start.getTime());
 		while (i < workingDaysRequired) {
-			if (IShedule.SHEDULE_TYPE_COMMON.equals(sheduleType)) {
+			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
 
 				if (isPresent == null) {
@@ -244,8 +244,8 @@ public class WorkCalendarBean implements IWorkCalendar {
 					i++;
 				}
 
-			} else if (IShedule.SHEDULE_TYPE_SPECIAL.equals(sheduleType)) {
-				if (sheduleService.isWorkingDay(shedule, curDay)) {
+			} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
+				if (scheduleService.isWorkingDay(schedule, curDay)) {
 					if (!absenceService.isEmployeeAbsent(node, curDay)) {
 						i++;
 					}
@@ -269,8 +269,8 @@ public class WorkCalendarBean implements IWorkCalendar {
 		this.absenceService = absenceService;
 	}
 
-	public void setSheduleService(IShedule sheduleService) {
-		this.sheduleService = sheduleService;
+	public void setScheduleService(ISchedule scheduleService) {
+		this.scheduleService = scheduleService;
 	}
 
 	public void setWCalendarService(ICalendar WCalendarService) {
@@ -281,13 +281,13 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return Integer.valueOf(yearParser.format(date));
 	}
 
-	private NodeRef getSheduleOrParentShedule(NodeRef node) {
-		NodeRef shedule;
-		shedule = sheduleService.getSheduleByOrgSubject(node);
-		if (shedule == null) {
-			shedule = sheduleService.getParentShedule(node);
+	private NodeRef getScheduleOrParentSchedule(NodeRef node) {
+		NodeRef schedule;
+		schedule = scheduleService.getScheduleByOrgSubject(node);
+		if (schedule == null) {
+			schedule = scheduleService.getParentSchedule(node);
 		}
-		return shedule;
+		return schedule;
 	}
 
 	private Date addDayToDate(Date date) {

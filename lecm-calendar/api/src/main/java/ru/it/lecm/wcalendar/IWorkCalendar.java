@@ -8,7 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * API для получения информации о рабочих и выходных днях сотрудника.
  *
  * @see ru.it.lecm.wcalendar.absence.IAbsence
- * @see ru.it.lecm.wcalendar.shedule.IShedule
+ * @see ru.it.lecm.wcalendar.schedule.ISchedule
  * @see ru.it.lecm.wcalendar.calendar.ICalendar
  * @author vlevin
  */

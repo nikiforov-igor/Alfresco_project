@@ -29,10 +29,10 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 				scope._reloadPage("wcalendar-calendar");
 			};
 		},
-		_wcalendarSheduleBtnClick: function() {
+		_wcalendarScheduleBtnClick: function() {
 			var scope = this;
 			return function(event, obj) {
-				scope._reloadPage("wcalendar-shedule");
+				scope._reloadPage("wcalendar-schedule");
 			};
 		},
 		_wcalendarAbsenceBtnClick: function() {
@@ -43,18 +43,18 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 		},
 		_onMenuReady: function() {
 			var canUseCalendar = LogicECM.module.WCalendar.Const.ROLES.isEngineer;
-			var canUseSheduleAbsence = LogicECM.module.WCalendar.Const.ROLES.isEngineer || LogicECM.module.WCalendar.Const.ROLES.isBoss;
+			var canUseScheduleAbsence = LogicECM.module.WCalendar.Const.ROLES.isEngineer || LogicECM.module.WCalendar.Const.ROLES.isBoss;
 
 			Alfresco.util.createYUIButton(this, "wcalendarCalendarBtn", this._wcalendarCalendarBtnClick(), {
 				disabled: !canUseCalendar
 			});
 
-			Alfresco.util.createYUIButton(this, "wcalendarSheduleBtn", this._wcalendarSheduleBtnClick(), {
-				disabled: !canUseSheduleAbsence
+			Alfresco.util.createYUIButton(this, "wcalendarScheduleBtn", this._wcalendarScheduleBtnClick(), {
+				disabled: !canUseScheduleAbsence
 			});
 
 			Alfresco.util.createYUIButton(this, "wcalendarAbsenceBtn", this._wcalendarAbsenceBtnClick(), {
-				disabled: !canUseSheduleAbsence
+				disabled: !canUseScheduleAbsence
 			});
 
 			switch (this.options.pageId) {
@@ -63,13 +63,13 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 						YAHOO.util.Dom.addClass("menu-buttons-wcalendarCalendarBtn", "selected");
 					}
 					break;
-				case "wcalendar-shedule":
-					if (canUseSheduleAbsence) {
-						YAHOO.util.Dom.addClass("menu-buttons-wcalendarSheduleBtn", "selected");
+				case "wcalendar-schedule":
+					if (canUseScheduleAbsence) {
+						YAHOO.util.Dom.addClass("menu-buttons-wcalendarScheduleBtn", "selected");
 					}
 					break;
 				case "wcalendar-absence":
-					if (canUseSheduleAbsence) {
+					if (canUseScheduleAbsence) {
 						YAHOO.util.Dom.addClass("menu-buttons-wcalendarAbsenceBtn", "selected");
 					}
 					break;

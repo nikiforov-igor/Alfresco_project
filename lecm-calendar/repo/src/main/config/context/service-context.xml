@@ -9,7 +9,7 @@
 			<list>
 				<value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/absence-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/shedule-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/schedule-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/wcal-common.xml</value>
 			</list>
 		</property>
@@ -52,7 +52,7 @@
 		<!--На сколько лет вперед сгенерировать календари-->
 		<property name="yearsNumberToCreate" value="3"/>
 	</bean>
-	<bean id="SheduleService" class="ru.it.lecm.wcalendar.shedule.beans.SheduleBean" init-method="init"
+	<bean id="ScheduleService" class="ru.it.lecm.wcalendar.schedule.beans.ScheduleBean" init-method="init"
 		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap"/>
 	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="init"
 		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
@@ -62,7 +62,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<property name="sheduleService" ref="SheduleService"/>
+		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
 	<!-- JavaScript root-object для календарей, отсутствий и графиков работы  -->
 	<bean id="WCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.calendar.extensions.CalendarJavascriptExtension" parent="baseJavaScriptExtension">
@@ -77,11 +77,11 @@
 		<property name="absenceService" ref="AbsenceService"/>
 		<!--<property name="commonWCalService" ref="AbsenceService"/>-->
 	</bean>
-	<bean id="SheduleJavascriptExtension" class="ru.it.lecm.wcalendar.shedule.extensions.SheduleJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="shedule"/>
+	<bean id="ScheduleJavascriptExtension" class="ru.it.lecm.wcalendar.schedule.extensions.ScheduleJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="schedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="sheduleService" ref="SheduleService"/>
-		<!--<property name="commonWCalService" ref="SheduleService"/>-->
+		<property name="scheduleService" ref="ScheduleService"/>
+		<!--<property name="commonWCalService" ref="ScheduleService"/>-->
 	</bean>
 	<bean id="WorkCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WorkCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="workCalendar"/>
@@ -93,7 +93,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 	<!-- Бины шедулера для отсутствий (начало отсутствия) -->
-	<bean id="absenceStartScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceStartScheduleExecutor" parent="action-executer">
+	<bean id="absenceStartScheduleExecutor" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartScheduleExecutor" parent="action-executer">
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
@@ -101,7 +101,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceStartShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceStartShedule">
+	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
@@ -133,7 +133,7 @@
 		</property>
 	</bean>
 	<!-- Бины шедулера для отсутствий (окончание отсутствия) -->
-	<bean id="absenceEndScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceEndScheduleExecutor" parent="action-executer">
+	<bean id="absenceEndScheduleExecutor" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndScheduleExecutor" parent="action-executer">
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
@@ -141,7 +141,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceEndShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceEndShedule">
+	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
@@ -173,7 +173,7 @@
 		</property>
 	</bean>
 	<!-- Бины шедулера для отсутствий (продление бессрочных отсутствий) -->
-	<bean id="absenceProlongationScheduleExecutor" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceProlongationScheduleExecutor" parent="action-executer">
+	<bean id="absenceProlongationScheduleExecutor" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationScheduleExecutor" parent="action-executer">
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
@@ -181,7 +181,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceProlongationShedule" class="ru.it.lecm.wcalendar.absence.shedule.AbsenceProlongationShedule">
+	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
@@ -227,12 +227,12 @@
 		<property name="absenceService" ref="AbsenceService"/>
 	</bean>
 	<!-- Полиси для сервиса графиков -->
-	<bean id="sheduleDeletePolicy" class="ru.it.lecm.wcalendar.shedule.policy.SheduleDeletePolicy" init-method="init">
+	<bean id="scheduleDeletePolicy" class="ru.it.lecm.wcalendar.schedule.policy.ScheduleDeletePolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
-		<property name="sheduleService" ref="SheduleService"/>
+		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
-	<bean id="SheduleCreatePolicy" class="ru.it.lecm.wcalendar.shedule.policy.SheduleCreatePolicy" init-method="init">
+	<bean id="ScheduleCreatePolicy" class="ru.it.lecm.wcalendar.schedule.policy.ScheduleCreatePolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
-		<property name="sheduleService" ref="SheduleService"/>
+		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
 </beans>

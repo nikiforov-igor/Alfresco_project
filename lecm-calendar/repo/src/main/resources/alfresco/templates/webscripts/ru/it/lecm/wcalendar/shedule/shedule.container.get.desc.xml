@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get Shedule container</shortname>
-	<description>Create and return folder for storing shedule</description>
-	<url>/lecm/wcalendar/shedule/get/container</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>

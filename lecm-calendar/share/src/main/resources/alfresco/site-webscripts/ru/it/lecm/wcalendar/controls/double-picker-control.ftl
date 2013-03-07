@@ -26,7 +26,7 @@ var markupToDraw = '<@compress single_line=true>
 	<@htmlMarkup field/>
 </@compress>';
 
-function Shedule_DrawPicker(instance) {
+function Schedule_DrawPicker(instance) {
 	picker = new LogicECM.module.ObjectFinder("${controlId}", "${fieldHtmlId}").setOptions({
 		<#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
 		field: "${field.name}",
@@ -116,7 +116,7 @@ function Shedule_DrawPicker(instance) {
 	YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 }
 
-function Shedule_PickerOKPressed(layer, args) {
+function Schedule_PickerOKPressed(layer, args) {
 	var scope = this;
 	var picker = args[1];
 	var selectedItems = picker.getSelectedItems();
@@ -124,14 +124,14 @@ function Shedule_PickerOKPressed(layer, args) {
 
 	Alfresco.util.Ajax.request({
 		method: "POST",
-		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/shedule/get/parentSheduleStdTime",
+		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/schedule/get/parentScheduleStdTime",
 		dataObj: nodeRefObj,
 		requestContentType: "application/json",
 		responseContentType: "application/json",
 		successCallback: {
 			fn: function (response) {
 				var result = response.json;
-				var htmlOutput = "${msg("label.shedule.picker.parent-shedule")}:<br>";
+				var htmlOutput = "${msg("label.schedule.picker.parent-schedule")}:<br>";
 				if (result != null) {
 					if (result) {
 						if (result.type == "COMMON") {
@@ -154,9 +154,9 @@ function Shedule_PickerOKPressed(layer, args) {
 	});
 }
 
-YAHOO.Bubbling.on("${controlPickerLabel}", Shedule_PickerOKPressed, this);
+YAHOO.Bubbling.on("${controlPickerLabel}", Schedule_PickerOKPressed, this);
 
-Shedule_DrawPicker({ value: '1'});
+Schedule_DrawPicker({ value: '1'});
 
 //]]></script>
 
@@ -179,8 +179,8 @@ Shedule_DrawPicker({ value: '1'});
 		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 		<div id="${controlId}" class="object-finder">
 			<div>
-				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Shedule_DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
-				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Shedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
+				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Schedule_DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
+				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Schedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
 			</div>
 			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
