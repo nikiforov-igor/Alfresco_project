@@ -1,7 +1,9 @@
 .panel-body {
-    clear: left;
-    line-height: 1.5em;
+    height: auto;
     min-height: 1.5em;
+    line-height: 1.5em;
+    clear: left;
+    overflow-y: hidden;
 }
 
 .yui-skin-lecmTheme .panel-body span.item {
