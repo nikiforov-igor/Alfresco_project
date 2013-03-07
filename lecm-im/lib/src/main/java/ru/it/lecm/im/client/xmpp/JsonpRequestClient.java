@@ -16,7 +16,7 @@ public class JsonpRequestClient extends RequestClient
 	public int sendRequest(String body, final RequestClientCallback callback) 
 	{
 		ID++;
-		StringBuffer uri = new StringBuffer(url);
+		StringBuilder uri = new StringBuilder(url);
 		uri.append(url.contains("?") ? "&" : "?");
 		uri.append("xml=").append(URL.encodeComponent(body));
 		request.setTimeout(timeoutMillis);

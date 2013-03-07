@@ -14,36 +14,33 @@ public class Log {
     }
 
     private static native void ensureLogPresense() /*-{
-        if (!window.console)
-        {
-            window.console = {
-                 log : function(){}
+
+        if (window.Alfresco && window.Alfresco.logger) {
+            window.imLog = function (message) {
+                Alfresco.logger.trace("IMLog: " + message);
+            };
+        } else {
+
+            if (!window.console) {
+                window.console = {
+                    log: function () {
+                    }
+                };
+            }
+
+            window.imLog = function (message) {
+                console.log("IMLog: " + message);
             };
         }
 
-        if (!window.Alfresco){
-            window.Alfresco = {};
-            if (!window.Alfresco.logger){
-                window.Alfresco.logger = {
-                    debug : function(){}
-                }
-            }
-        }
     }-*/;
 
     public static void log(String message)
     {
-        logConsole(message);
-        alfrescoLog(message);
+        myLog(message);
     }
 
-
-    public static native void logConsole(String message) /*-{
-        console.log( "IMLog: " + message );
-
-    }-*/;
-
-    public static native void alfrescoLog(String message) /*-{
-        Alfresco.logger.debug("IMLog: "+ message);
+    public static native void myLog(String message) /*-{
+        window.imLog(message);
     }-*/;
 }

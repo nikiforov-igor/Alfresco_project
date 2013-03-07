@@ -23,7 +23,6 @@ package ru.it.lecm.im.client.xmpp.stanzas;
 
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.Session.ServerType;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 
@@ -66,7 +65,7 @@ public class Presence extends AbstractStanza {
 		setTo(to);
 		setShow(show);
 		setStatus(status);
-		setPriority(priority);
+		setPriority(0);//priority);
 	}
 
 	public String getExtNick() {
@@ -78,15 +77,15 @@ public class Presence extends AbstractStanza {
 	}
 
 	public int getPriority() {
-		Packet child = getFirstChild("priority");
-		final String priority = child == null ? null : child.getCData();
-		if (priority != null) {
-			try {
-				return Integer.parseInt(priority);
-			} catch (final NumberFormatException e) {
-				return 0;
-			}
-		}
+//		Packet child = getFirstChild("priority");
+//		final String priority = child == null ? null : child.getCData();
+//		if (priority != null) {
+//			try {
+//				return 5;//Integer.parseInt(priority);
+//			} catch (final NumberFormatException e) {
+//				return 5;
+//			}
+//		}
 		return 0;
 	}
 
@@ -133,8 +132,8 @@ public class Presence extends AbstractStanza {
 	}
 
 	public void setPriority(final Integer value) {
-		String v = value == null ? null : Integer.toString(value >= 0 ? value : 0);
-		setChildrenValue("priority", v);
+		//String v = value == null ? null : Integer.toString(value >= 0 ? value : 0);
+		setChildrenValue("priority", "0");//v);
 	}
 
 	public void setShow(Show value) {

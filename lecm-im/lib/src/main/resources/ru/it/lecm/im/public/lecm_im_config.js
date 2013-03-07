@@ -78,15 +78,9 @@ var iJabConf =
     talkto_spam_function:spamCall,
     talkto_spam_repeat:2,
     xmpp:{
-        //domain:"akatamanov-pc",
         domain:"localhost",
-        //http_bind:"http://akatamanov-pc:8080/palladium/",
         http_bind:"/share/proxy/alfresco/bosh",
         host:"",
-        //domain:"localhost",
-        //http_bind:"http://127.0.0.1:7070/http-bind/",
-        //domain:"ijab.im",
-        //http_bind:"http://ijab.im:5280/http-bind/",
         port:5222,
         server_type:"ejabberd",
         auto_login:true,
@@ -96,9 +90,9 @@ var iJabConf =
         token_cookie_field:"JIDPWD",
         anonymous_prefix:"",
         max_reconnect:3,
-        enable_muc:true,
-        muc_servernode:"conference.akatamanov-pc",
-        vcard_search_servernode:"akatamanov-pc",
+        enable_muc:false,
+        muc_servernode:"conference.localhost",
+        vcard_search_servernode:"localhost",
         gateways:
         [
 //        	{

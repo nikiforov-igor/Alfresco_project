@@ -33,7 +33,7 @@ public class MUCUserItem extends ContactViewItemUI
 {
 
 	/**
-	 * @param id
+	 * @param presence presence
 	 */
 	public MUCUserItem(Presence presence) 
 	{
@@ -60,20 +60,10 @@ public class MUCUserItem extends ContactViewItemUI
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onAvatarClicked(int, int)
 	 */
-	@Override
-	protected void onAvatarClicked(int clientX, int clientY) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onAvatarOver(int, int)
 	 */
-	@Override
-	protected void onAvatarOver(int clientX, int clientY) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onConextMenu(int, int)
@@ -93,13 +83,5 @@ public class MUCUserItem extends ContactViewItemUI
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onAvatarOut(int, int)
-	 */
-	@Override
-	protected void onAvatarOut(int clientX, int clientY) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

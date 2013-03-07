@@ -21,12 +21,11 @@
  */
 package ru.it.lecm.im.client.xmpp.citeria;
 
+import ru.it.lecm.im.client.xmpp.packet.Packet;
+
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-
-import ru.it.lecm.im.client.xmpp.packet.Packet;
 
 public class ElementCriteria implements Criteria {
 
@@ -85,18 +84,15 @@ public class ElementCriteria implements Criteria {
 			return false;
 		}
 		boolean result = true;
-		Iterator<Entry<String, String>> attrIterator = this.attrs.entrySet().iterator();
-		while (attrIterator.hasNext()) {
-			Entry<String, String> entry = attrIterator.next();
-
-			String at = element.getAtribute(entry.getKey().toString());
-			if (at != null) {
-				if (at == null || !at.equals(entry.getValue())) {
-					result = false;
-					break;
-				}
-			}
-		}
+        for (Entry<String, String> entry : this.attrs.entrySet()) {
+            String at = element.getAtribute(entry.getKey());
+            if (at != null) {
+                if (!at.equals(entry.getValue())) {
+                    result = false;
+                    break;
+                }
+            }
+        }
 
 		if (this.nextCriteria != null) {
 			final List<? extends Packet> children = element.getChildren();

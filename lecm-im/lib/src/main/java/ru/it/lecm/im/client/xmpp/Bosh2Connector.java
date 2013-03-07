@@ -543,45 +543,37 @@ public class Bosh2Connector implements Connector {
 
 	private void fireDisconnectByServer(BoshErrorCondition boshCondition, ErrorCondition xmppCondition, String msg) 
 	{
-		for (int i = 0; i < this.listeners.size(); i++) {
-			ConnectorListener l = this.listeners.get(i);
-			l.onBoshTerminate(this, boshCondition);
-		}
+        for (ConnectorListener l : this.listeners) {
+            l.onBoshTerminate(this, boshCondition);
+        }
 	}
 
 	private void fireEventError(BoshErrorCondition boshErrorCondition, ErrorCondition xmppErrorCondition, String message) 
 	{
-		for (int i = 0; i < this.listeners.size(); i++) {
-			ConnectorListener l = this.listeners.get(i);
-			l.onBoshError(xmppErrorCondition, boshErrorCondition, message);
-		}
+        for (ConnectorListener l : this.listeners) {
+            l.onBoshError(xmppErrorCondition, boshErrorCondition, message);
+        }
 	}
 
 	private void fireEventReceiveStanzas(List<? extends Packet> nodes) 
 	{
-		for (int i = 0; i < this.listeners.size(); i++) 
-		{
-			ConnectorListener l = this.listeners.get(i);
-			l.onStanzaReceived(nodes);
-		}
+        for (ConnectorListener l : this.listeners) {
+            l.onStanzaReceived(nodes);
+        }
 	}
 
 	private void fireOnBodyReceive(Response response, String body) 
 	{
-		for (int i = 0; i < this.listeners.size(); i++)
-		{
-			ConnectorListener l = this.listeners.get(i);
-			l.onBodyReceive(response, body);
-		}
+        for (ConnectorListener l : this.listeners) {
+            l.onBodyReceive(response, body);
+        }
 	}
 
 	private void fireOnBodySend(String body) 
 	{
-		for (int i = 0; i < this.listeners.size(); i++) 
-		{
-			ConnectorListener l = this.listeners.get(i);
-			l.onBodySend(body);
-		}
+        for (ConnectorListener l : this.listeners) {
+            l.onBodySend(body);
+        }
 	}
 	
 	private void fireOnResumeSuccessed()

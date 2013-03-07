@@ -137,34 +137,6 @@ public class NativeClientListener implements ClientListener, MessageReceiveListe
 		}
 	}-*/;
 
-	public native void onAvatarMouseOver(int clientX, int clientY, String username,
-			String bareJid) 
-	/*-{
-		var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
-		try
-		{
-			delegate.onAvatarMouseOver(clientX,clientY,username,bareJid);
-		}
-		catch(e)
-		{
-		}
-	}-*/;
-	
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ClientListener#onAvatarMouseOut(int, int, java.lang.String, java.lang.String)
-	 */
-	public native void onAvatarMouseOut(int clientX, int clientY, String usrname,
-			String bareJid) 
-	/*-{
-	var delegate = this.@ru.it.lecm.im.client.NativeClientListener::delegate;
-	try
-	{
-		delegate.onAvatarMouseOut(clientX,clientY,username,bareJid);
-	}
-	catch(e)
-	{
-	}
-}-*/;
 
 	public native void onStatusTextUpdated(String text) 
 	/*-{

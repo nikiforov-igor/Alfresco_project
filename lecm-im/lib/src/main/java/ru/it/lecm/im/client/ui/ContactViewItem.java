@@ -21,13 +21,12 @@
 package ru.it.lecm.im.client.ui;
 
 import ru.it.lecm.im.client.Log;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
-import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
-import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.listeners.XmppProfileListener;
 import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.listeners.XmppProfileListener;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.XmppStatus.Status;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
+import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItemListener;
 
 public class ContactViewItem extends ContactViewItemUI
@@ -65,7 +64,7 @@ public class ContactViewItem extends ContactViewItemUI
 			}
 		};
 		XmppProfileManager.regsiterLister(item.getJid(),profileListener);
-		setAvatar(XmppProfileManager.getAvatarUrl(item.getJid()));
+		//setAvatar(XmppProfileManager.getAvatarUrl(item.getJid()));
 
         item.addListener(new RosterItemListener() {
             @Override
@@ -140,18 +139,6 @@ public class ContactViewItem extends ContactViewItemUI
 		return "ijabonlineuser_"+jid;
 	}
 
-	@Override
-	protected void onAvatarClicked(int clientX, int clientY) 
-	{
-		iJab.client.onAvatarClicked(clientX,clientY,item.getJid());
-	}
-
-	@Override
-	protected void onAvatarOver(int clientX, int clientY) 
-	{
-		iJab.client.onAvatarMouseOver(clientX, clientY, item.getJid());
-		view.fireOnAvatarOver(item);
-	}
 
 	@Override
 	protected void onConextMenu(int x,int y) 
@@ -159,14 +146,6 @@ public class ContactViewItem extends ContactViewItemUI
 		view.onItemContextMenu(this,x,y);
 	}
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onAvatarOut(int, int)
-	 */
-	@Override
-	protected void onAvatarOut(int clientX, int clientY) 
-	{
-		iJab.client.onAvatarMouseOut(clientX, clientY, item.getJid());
-		view.fireOnAvatarOut(item);
-	}
+
 
 }

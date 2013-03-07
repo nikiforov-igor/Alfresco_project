@@ -21,13 +21,7 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.sasl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import ru.it.lecm.im.client.xmpp.Connector;
-import ru.it.lecm.im.client.xmpp.Plugin;
+import com.google.gwt.core.client.GWT;
 import ru.it.lecm.im.client.xmpp.Connector;
 import ru.it.lecm.im.client.xmpp.Plugin;
 import ru.it.lecm.im.client.xmpp.PluginState;
@@ -40,7 +34,10 @@ import ru.it.lecm.im.client.xmpp.events.EventsManager;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
 
-import com.google.gwt.core.client.GWT;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SaslAuthPlugin implements Plugin {
 
@@ -98,23 +95,23 @@ public class SaslAuthPlugin implements Plugin {
 
 	@Deprecated
 	private void fireEventFail(String message) {
-		for (int i = 0; i < listeners.size(); i++) {
-			(listeners.get(i)).onFail(message);
-		}
+        for (SaslAuthPluginListener listener : listeners) {
+            listener.onFail(message);
+        }
 	}
 
 	@Deprecated
 	private void fireEventStartAuth() {
-		for (int i = 0; i < listeners.size(); i++) {
-			(listeners.get(i)).onStartAuth();
-		}
+        for (SaslAuthPluginListener listener : listeners) {
+            listener.onStartAuth();
+        }
 	}
 
 	@Deprecated
 	private void fireEventSuccess() {
-		for (int i = 0; i < listeners.size(); i++) {
-			(listeners.get(i)).onSuccess();
-		}
+        for (SaslAuthPluginListener listener : listeners) {
+            listener.onSuccess();
+        }
 	}
 
 	public Criteria getCriteria() {

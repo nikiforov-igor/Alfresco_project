@@ -116,10 +116,8 @@ public class BarUI implements ClientListener, VisibilityListener {
 	public void onAvatarClicked(int clientX, int clientY, String username,
 			String bareJid) {
 	}
-	public void onAvatarMouseOver(int clientX, int clientY, String username,
-			String bareJid) {
-	}
-	public void onStatusTextUpdated(String text) {
+
+    public void onStatusTextUpdated(String text) {
 	}
 	/* (non-Javadoc)
 	 * @see anzsoft.iJab.client.iJabUI#setStatusText(java.lang.String)

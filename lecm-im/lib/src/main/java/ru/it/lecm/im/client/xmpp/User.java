@@ -38,7 +38,7 @@ public class User {
 
 	private String password;
 
-	private int priority;
+	private int priority = 0;
 
 	private String resource;
 
@@ -63,7 +63,7 @@ public class User {
 		this.domainname = domainname;
 		this.password = password;
 		this.resource = resource;
-		this.priority = priority;
+		this.priority = 0;//priority;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class User {
 	 * @return the priority
 	 */
 	public int getPriority() {
-		return priority;
+		return 0;
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class User {
 	 *            the priority to set
 	 */
 	public void setPriority(int priority) {
-		this.priority = priority;
+		this.priority = 0;//priority;
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class User {
 
 		jUser.put(STORAGE_DOMAIN, new JSONString(domainname));
 		//jUser.put("password", new JSONString(password)); //It's uneeded, and not safe
-		String strPriority = String.valueOf(priority);
-		if(strPriority !=null)
-			jUser.put(STORAGE_PRIORITY, new JSONString(String.valueOf(priority)));
+
+
+		jUser.put(STORAGE_PRIORITY, new JSONString("0"));
 		jUser.put(STORAGE_RESOURCE, new JSONString(resource));
 		jUser.put(STORAGE_USERNAME, new JSONString(username));
 		
@@ -198,7 +198,7 @@ public class User {
 		//this.password = jUser.get("password").isString().stringValue();  
 		//jUser.put("priority", new JSONString(String.valueOf(priority)));
 		this.resource = jUser.get(STORAGE_RESOURCE).isString().stringValue();
-		this.priority = Integer.parseInt( jUser.get(STORAGE_PRIORITY).isString().stringValue());
+		this.priority = 0;//Integer.parseInt( jUser.get(STORAGE_PRIORITY).isString().stringValue());
 		//Cookies.removeCookie(COOKIENAME);
 		if(username.length()==0||domainname.length()==0)
         {

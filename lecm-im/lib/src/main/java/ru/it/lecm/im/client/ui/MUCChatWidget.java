@@ -119,12 +119,6 @@ public class MUCChatWidget extends BarChatWidgetUI
 	protected void onTyping() {
 	}
 	@Override
-	protected void userAvatarClicked(int clientX, int clientY) {
-	}
-	@Override
-	protected void userAvatarMouseOver(int clientX, int clientY) {
-	}
-	@Override
 	protected void viewHistory() {
 	}
 

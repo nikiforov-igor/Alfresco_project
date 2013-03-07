@@ -639,10 +639,9 @@ public class Session implements Responsemanager
 		rosterPlugin.reset();
 		responseHandlers.clear();
 		con.reset();
-		for (int i = 0; i < this.plugins.size(); i++) 
-		{
-			(this.plugins.get(i)).reset();
-		}
+        for (Plugin plugin : this.plugins) {
+            plugin.reset();
+        }
 	}
 
 	private boolean runResponceHandler(Packet packet) 
@@ -690,41 +689,33 @@ public class Session implements Responsemanager
 	
 	private void fireOnBeforeLogin()
 	{
-		for(int i = 0;i<listeners.size();i++)
-		{
-			SessionListener l = listeners.get(i);
-			l.onBeforeLogin();
-		}
+        for (SessionListener l : listeners) {
+            l.onBeforeLogin();
+        }
 	}
 	
 	private void fireOnEndLogin()
 	{
         Log.log("Session.fireOnEndLogin");
-		for(int i = 0;i<listeners.size();i++)
-		{
-			SessionListener l = listeners.get(i);
-			l.onEndLogin();
-		}
+        for (SessionListener l : listeners) {
+            l.onEndLogin();
+        }
 	}
 	
 	private void fireOnLoginOut()
 	{
         Log.log("Session.fireOnLoginOut");
-		for(int i = 0;i<listeners.size();i++)
-		{
-			SessionListener l = listeners.get(i);
-			l.onLoginOut();
-		}
+        for (SessionListener l : listeners) {
+            l.onLoginOut();
+        }
 	}
 	
 	private void fireOnError(BoshErrorCondition boshErrorCondition,String message)
 	{
         Log.log("Session.fireOnError");
-		for(int i = 0;i<listeners.size();i++)
-		{
-			SessionListener l = listeners.get(i);
-			l.onError(boshErrorCondition, message);
-		}
+        for (SessionListener l : listeners) {
+            l.onError(boshErrorCondition, message);
+        }
 	}
 	
 	private void fireOnResumeSuccessed()

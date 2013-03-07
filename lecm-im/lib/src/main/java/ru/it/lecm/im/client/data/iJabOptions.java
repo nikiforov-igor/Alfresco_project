@@ -95,24 +95,10 @@ public class iJabOptions
 
 			public void onSuspend() {
 			}
-			public void onAvatarClicked(int clientX, int clientY,
-					String username, String bareJid) {
-			}
 
-			public void onAvatarMouseOver(int clientX, int clientY,
-					String username, String bareJid) {
+            public void onStatusTextUpdated(String text) {
 			}
-
-			public void onStatusTextUpdated(String text) {
-			}
-
-			public void onAvatarMouseOut(int clientX, int clientY,
-					String usrname, String bareJid) {
-			}
-
-			public void onMessageReceive(String jid, String message) {
-			}
-		});
+        });
 		connectUI();
 	}
 	

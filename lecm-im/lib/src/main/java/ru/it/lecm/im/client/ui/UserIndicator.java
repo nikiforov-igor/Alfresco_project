@@ -79,18 +79,7 @@ public class UserIndicator extends FlexTable
 	    formatter.setStyleName(0, 0, "ijab-indicator-title");
 
 		avatarImg.setStyleName("ijab-self-avatar ui-corner-all");
-		avatarImg.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) {
-				iJab.client.onAvatarClicked(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY(),Session.instance().getUser().getStringBareJid());
-			}
-		});
-		avatarImg.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) {
-				iJab.client.onAvatarMouseOver(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY(),Session.instance().getUser().getStringBareJid());
-			}
-		});
+
 		avatarImg.addErrorHandler(new ErrorHandler()
 		{
 			public void onError(ErrorEvent event) 

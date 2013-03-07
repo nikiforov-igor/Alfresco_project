@@ -44,12 +44,11 @@ public class Or implements Criteria {
 	}
 
 	public boolean match(Packet element) {
-		for (int i = 0; i < crits.length; i++) {
-			Criteria c = this.crits[i];
-			if (c.match(element)) {
-				return true;
-			}
-		}
+        for (Criteria c : crits) {
+            if (c.match(element)) {
+                return true;
+            }
+        }
 		return false;
 	}
 

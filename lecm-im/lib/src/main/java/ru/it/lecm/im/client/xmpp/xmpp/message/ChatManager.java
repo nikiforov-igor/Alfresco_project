@@ -193,7 +193,8 @@ public class ChatManager<T> {
 
 	void send(Chat<T> chat, String message, String userNickname) {
         GWT.log("ChatManager.send()");
-        this.messagePlugin.sendChatMessage(chat.getJid(), message, chat.getThreadId(), null, userNickname);
+        JID bareJID = chat.getJid().getBareJID();
+        this.messagePlugin.sendChatMessage(bareJID, message, chat.getThreadId(), null, userNickname);
 	}
 
 	public Chat<T> startChat(JID jid) {

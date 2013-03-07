@@ -27,7 +27,6 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import ru.it.lecm.im.client.data.XmppConf;
 import ru.it.lecm.im.client.data.iJabConfImpl;
 import ru.it.lecm.im.client.data.iJabOptions;
@@ -72,7 +71,7 @@ import java.util.Set;
 public class XmppClient
 {
 	private final String RESOURCE_PREFIX = "AlfIM";
-    private int priority = 5;
+    private int priority = 0;
     private static String SELF_NICK = "SELFNICK";
 
     public static String BLACKLIST = "IJAB_BLACKLIST";
@@ -82,6 +81,7 @@ public class XmppClient
 
 	private int onlineContactCount = 0;
 	private int totalContactCount = 0;
+    private boolean isRosterUpdating = false;
     private boolean isVisible = false;
     protected boolean isLogined = false;
     private int talkToCount = 0;
@@ -478,7 +478,8 @@ public class XmppClient
 		user.setDomainname(conf.getDomain());
 		user.setPassword(password);
 		user.setResource(RESOURCE_PREFIX+TextUtils.genUniqueId());
-		user.setPriority(priority);
+        //user.setResource(RESOURCE_PREFIX);
+		user.setPriority(0);
 		
 		session.login();
 	}
@@ -507,21 +508,33 @@ public class XmppClient
 			public void onAddItem(RosterItem item)
 			{
                 Log.log("XmppClient.RosterListener.onAddItem()");
-                if(!item.getJid().toString().contains("@"))
+                if(!item.getJid().contains("@"))
 					return;
 				XmppProfileManager.commitNewName(item.getJid(), item.getName());
 				iJab.ui.getContactView().addRosterItem(item);
 				totalContactCount++;
-				iJab.ui.updateTotalCount(totalContactCount);
+                if (!isRosterUpdating)
+                {
+                    iJab.ui.updateTotalCount(totalContactCount);
+                }
+
+//                if (totalContactCount % 50 == 0)
+//                {
+//                    iJab.ui.getContactView().RefreshGroupCounters();
+//                }
 			}
 
 			public void onEndRosterUpdating()
 			{
                 Log.log("XmppClient.RosterListener.onEndRosterUpdating()");
-                MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
-				oracle.addAll(XmppProfileManager.names.keySet());
-				oracle.addAll(XmppProfileManager.names.values());
+                isRosterUpdating = false;
+                //MultiWordSuggestOracle oracle = (MultiWordSuggestOracle)iJab.ui.getSearchWidget().getSuggestOracle();
+				//oracle.addAll(XmppProfileManager.names.keySet());
+				//oracle.addAll(XmppProfileManager.names.values());
 				readNickFromCache();
+                iJab.ui.updateTotalCount(totalContactCount);
+
+                iJab.ui.getContactView().RefreshGroupCounters();
 			}
 
 			public void onRemoveItem(RosterItem item)
@@ -534,6 +547,7 @@ public class XmppClient
 			public void onStartRosterUpdating()
 			{
                 Log.log("XmppClient.RosterListener.onStartRosterUpdating()");
+                isRosterUpdating = true;
 				//onlineContactCount = 0;
 				totalContactCount = 0;
 				if(!iJab.conf.getXmppConf().isGetRosterDelay())
@@ -592,8 +606,8 @@ public class XmppClient
 
             public void onItemClick(RosterItem item)
             {
-Log.log("XmppClient.ContactViewListener.onItemClick()");
-xmppChatManager.openChat(item.getJid());
+                Log.log("XmppClient.ContactViewListener.onItemClick()");
+                xmppChatManager.openChat(item.getJid());
             }
 
             public void onAvatarOut(RosterItem item) {
@@ -973,21 +987,6 @@ if(!presenceItem.getFrom().toString().contains("@"))
         visibilityListeners.add(handler);
     }
 
-    public void onAvatarClicked(int clientX,int clientY,final String bareJid)
-    {
-        fireOnAvatarClicked(clientX,clientY,JID.fromString(bareJid).getNode(),bareJid);
-    }
-
-    public void onAvatarMouseOver(int clientX,int clientY,final String bareJid)
-    {
-        fireOnAvatarMouseOver(clientX,clientY,JID.fromString(bareJid).getNode(),bareJid);
-    }
-
-    public void onAvatarMouseOut(int clientX,int clientY,final String bareJid)
-    {
-        fireOnAvatarMouseOut(clientX,clientY, JID.fromString(bareJid).getNode(),bareJid);
-    }
-
     public void onStatusTextUpdate(final String text)
     {
         fireOnStatusTextUpdated(text);
@@ -1028,30 +1027,6 @@ if(!presenceItem.getFrom().toString().contains("@"))
         for(ClientListener l: clientListeners)
         {
             l.onLogout();
-        }
-    }
-
-    protected void fireOnAvatarClicked(int clientX,int clientY,final String username,final String bareJid)
-    {
-        for(ClientListener l: clientListeners)
-        {
-            l.onAvatarClicked(clientX,clientY,username,bareJid);
-        }
-    }
-
-    protected void fireOnAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid)
-    {
-        for(ClientListener l: clientListeners)
-        {
-            l.onAvatarMouseOver(clientX,clientY,username,bareJid);
-        }
-    }
-
-    protected void fireOnAvatarMouseOut(int clientX,int clientY,final String username,final String bareJid)
-    {
-        for(ClientListener l: clientListeners)
-        {
-            l.onAvatarMouseOut(clientX,clientY,username,bareJid);
         }
     }
 

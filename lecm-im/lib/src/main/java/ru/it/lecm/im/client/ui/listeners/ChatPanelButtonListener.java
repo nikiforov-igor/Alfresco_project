@@ -23,5 +23,4 @@ package ru.it.lecm.im.client.ui.listeners;
 public interface ChatPanelButtonListener 
 {
 	void onMessageSend(final String message);
-	void onAvatarClicked();
 }

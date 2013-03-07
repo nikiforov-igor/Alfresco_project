@@ -21,13 +21,12 @@
  */
 package ru.it.lecm.im.client.xmpp.stanzas;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
-import ru.it.lecm.im.client.xmpp.JID;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author bmalkow
@@ -130,19 +129,17 @@ public class Message extends AbstractStanza {
 		if(xEvent!=null)
 		{
 			List<? extends Packet> childs = xEvent.getChildren();
-			for(int index=0;index<childs.size();index++)
-			{
-				Packet event = childs.get(index);
-				final String eventName = event.getName();
-				if(eventName.equals("id"))
-					eventId = event.getCData();
-				else if(eventName.equals("displayed"))
-					eventList.add(MsgEvent.DisplayedEvent);
-				else if(eventName.equals("composing"))
-					eventList.add(MsgEvent.ComposingEvent);
-				else if(eventName.equals("delivered"))
-					eventList.add(MsgEvent.DeliveredEvent);
-			}
+            for (Packet event : childs) {
+                final String eventName = event.getName();
+                if (eventName.equals("id"))
+                    eventId = event.getCData();
+                else if (eventName.equals("displayed"))
+                    eventList.add(MsgEvent.DisplayedEvent);
+                else if (eventName.equals("composing"))
+                    eventList.add(MsgEvent.ComposingEvent);
+                else if (eventName.equals("delivered"))
+                    eventList.add(MsgEvent.DeliveredEvent);
+            }
 			if(eventList.isEmpty())
 				eventList.add(MsgEvent.CancelEvent);
 		}

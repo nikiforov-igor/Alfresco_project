@@ -21,22 +21,13 @@
 package ru.it.lecm.im.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ContextMenuEvent;
-import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -83,57 +74,57 @@ public abstract class ContactViewItemUI extends Composite {
 			}
 		});
 		
-		mainWidget.addContextMenuHandler(new ContextMenuHandler()
-		{
-			public void onContextMenu(ContextMenuEvent event) 
-			{
-				event.stopPropagation();
-				onConextMenu(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-			}
-			
-		});
+//		mainWidget.addContextMenuHandler(new ContextMenuHandler()
+//		{
+//			public void onContextMenu(ContextMenuEvent event)
+//			{
+//				event.stopPropagation();
+//				onConextMenu(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
+//			}
+//
+//		});
 		
-		mainWidget.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event)
-			{
-				ContactViewItemUI.this.onMouseOut();		
-			}
-		});
-		
-		mainWidget.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				ContactViewItemUI.this.onMouseOver();
-			}
-		});
-		
-		avatarImg.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				onAvatarClicked(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-				event.stopPropagation();
-			}
-			
-		});
-		
-		avatarImg.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) 
-			{
-				onAvatarOver(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-			}
-		});
-		
-		avatarImg.addMouseOutHandler(new MouseOutHandler()
-		{
-			public void onMouseOut(MouseOutEvent event) {
-				onAvatarOut(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-			}
-		});
-		
+//		mainWidget.addMouseOutHandler(new MouseOutHandler()
+//		{
+//			public void onMouseOut(MouseOutEvent event)
+//			{
+//				ContactViewItemUI.this.onMouseOut();
+//			}
+//		});
+//
+//		mainWidget.addMouseOverHandler(new MouseOverHandler()
+//		{
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				ContactViewItemUI.this.onMouseOver();
+//			}
+//		});
+//
+//		avatarImg.addClickHandler(new ClickHandler()
+//		{
+//			public void onClick(ClickEvent event)
+//			{
+//				onAvatarClicked(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
+//				event.stopPropagation();
+//			}
+//
+//		});
+//
+//		avatarImg.addMouseOverHandler(new MouseOverHandler()
+//		{
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				onAvatarOver(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
+//			}
+//		});
+//
+//		avatarImg.addMouseOutHandler(new MouseOutHandler()
+//		{
+//			public void onMouseOut(MouseOutEvent event) {
+//				onAvatarOut(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
+//			}
+//		});
+//
 		avatarImg.addErrorHandler(new ErrorHandler(){
 			public void onError(ErrorEvent event) {
 				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
@@ -141,42 +132,42 @@ public abstract class ContactViewItemUI extends Composite {
 		});
 		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
 		
-		nameEditor.addKeyUpHandler(new KeyUpHandler()
-		{
-			public void onKeyUp(KeyUpEvent event) 
-			{
-				if(event.getNativeKeyCode() == 13)
-				{
-					String newName = nameEditor.getValue();
-					newName = newName==null?"":newName;
-					newName= newName.equals("") ?nameTextElement.getInnerText():newName;
-					if(editListener !=null &&!newName.equals(nameTextElement.getInnerText()))
-					{
-						editListener.onNameChange(nameEditor.getValue());
-						nameTextElement.setInnerText(newName);
-					}
-					nameEditor.setVisible(false);
-					nameTextElement.getStyle().setDisplay(Display.BLOCK);
-					editListener = null;
-						
-				}
-				else if(event.getNativeKeyCode() == 27)
-				{
-					nameEditor.setFocus(false);
-				}
-			}
-			
-		});
-		
-		nameEditor.addBlurHandler(new BlurHandler()
-		{
-			public void onBlur(BlurEvent event) 
-			{
-				nameEditor.setVisible(false);
-				nameTextElement.getStyle().setDisplay(Display.BLOCK);
-				editListener = null;
-			}
-		});
+//		nameEditor.addKeyUpHandler(new KeyUpHandler()
+//		{
+//			public void onKeyUp(KeyUpEvent event)
+//			{
+//				if(event.getNativeKeyCode() == 13)
+//				{
+//					String newName = nameEditor.getValue();
+//					newName = newName==null?"":newName;
+//					newName= newName.equals("") ?nameTextElement.getInnerText():newName;
+//					if(editListener !=null &&!newName.equals(nameTextElement.getInnerText()))
+//					{
+//						editListener.onNameChange(nameEditor.getValue());
+//						nameTextElement.setInnerText(newName);
+//					}
+//					nameEditor.setVisible(false);
+//					nameTextElement.getStyle().setDisplay(Display.BLOCK);
+//					editListener = null;
+//
+//				}
+//				else if(event.getNativeKeyCode() == 27)
+//				{
+//					nameEditor.setFocus(false);
+//				}
+//			}
+//
+//		});
+//
+//		nameEditor.addBlurHandler(new BlurHandler()
+//		{
+//			public void onBlur(BlurEvent event)
+//			{
+//				nameEditor.setVisible(false);
+//				nameTextElement.getStyle().setDisplay(Display.BLOCK);
+//				editListener = null;
+//			}
+//		});
 	}
 	
 	public String getWidgetID()
@@ -214,7 +205,14 @@ public abstract class ContactViewItemUI extends Composite {
 	
 	public void setAvatar(final String url)
 	{
-		avatarImg.setUrl(url);
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                avatarImg.setUrl(url);
+            }
+        });
+
+
 	}
 	
 	public void setStatusIcon(final String url)
@@ -231,12 +229,9 @@ public abstract class ContactViewItemUI extends Composite {
 		else
 			avatarImg.removeStyleName("ijab-offline");
 	}
-	
+
 	protected abstract void onConextMenu(int x,int y);
 	protected abstract void onItemClicked();
-	protected abstract void onAvatarOver(int clientX,int clientY);
-	protected abstract void onAvatarOut(int clientX,int clientY);
-	protected abstract void onAvatarClicked(int clientX,int clientY);
 	
 	private void onMouseOver()
 	{

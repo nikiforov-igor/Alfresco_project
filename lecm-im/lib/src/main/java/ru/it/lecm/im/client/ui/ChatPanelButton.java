@@ -129,19 +129,7 @@ public class ChatPanelButton extends PanelButton
 	{
 		fireOnMessageSend(message);
 	}
-	
-	public void onAvatarClicked(int clientX,int clientY)
-	{
-		iJab.client.onAvatarClicked(clientX, clientY, chatItem.getJid().toStringBare());
-		fireOnAvatarClicked();
-	}
-	
-	public void onAvatarMouseOver(int clientX,int clientY)
-	{
-		iJab.client.onAvatarMouseOver(clientX, clientY, chatItem.getJid().toStringBare());
-		//TODO: fire..
-	}
-	
+
 	public void addListener(ChatPanelButtonListener l)
 	{
 		listeners.add(l);
@@ -159,15 +147,7 @@ public class ChatPanelButton extends PanelButton
 			l.onMessageSend(message);
 		}
 	}
-	
-	private void fireOnAvatarClicked()
-	{
-		for(ChatPanelButtonListener l:listeners)
-		{
-			l.onAvatarClicked();
-		}
-	}
-	
+
 	public void openWindow()
 	{
 		super.openWindow();

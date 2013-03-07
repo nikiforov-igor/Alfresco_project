@@ -168,30 +168,30 @@ public class BrowserHelper
 
 		String ua = getUserAgent();
 
-		isOpera = ua.indexOf("opera") != -1;
-		isIE = !isOpera && ua.indexOf("msie") != -1;
-		isIE7 = !isOpera && ua.indexOf("msie 7") != -1;
-		isIE8 = !isOpera && ua.indexOf("msie 8") != -1;
+		isOpera = ua.contains("opera");
+		isIE = !isOpera && ua.contains("msie");
+		isIE7 = !isOpera && ua.contains("msie 7");
+		isIE8 = !isOpera && ua.contains("msie 8");
 		isIE6 = isIE && !isIE7 && !isIE8;
 
-		isChrome = !isIE && ua.indexOf("chrome") != -1;
+		isChrome = !isIE && ua.contains("chrome");
 
-		isWebKit = ua.indexOf("webkit") != -1;
+		isWebKit = ua.contains("webkit");
 
-		isSafari = !isChrome && ua.indexOf("safari") != -1;
-		isSafari3 = isSafari && ua.indexOf("version/3") != -1;
-		isSafari4 = isSafari && ua.indexOf("version/4") != -1;
+		isSafari = !isChrome && ua.contains("safari");
+		isSafari3 = isSafari && ua.contains("version/3");
+		isSafari4 = isSafari && ua.contains("version/4");
 		isSafari2 = isSafari && !isSafari3 && !isSafari4;
 
-		isGecko = !isWebKit && ua.indexOf("gecko") != -1;
-		isGecko3 = isGecko && ua.indexOf("rv:1.9.0") != -1;
-		isGecko35 = isGecko && ua.indexOf("rv:1.9.1") != -1;
+		isGecko = !isWebKit && ua.contains("gecko");
+		isGecko3 = isGecko && ua.contains("rv:1.9.0");
+		isGecko35 = isGecko && ua.contains("rv:1.9.1");
 		isGecko2 = isGecko && !isGecko3 && !isGecko35;
 
-		isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1);
-		isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1);
-		isAir = (ua.indexOf("adobeair") != -1);
-		isLinux = (ua.indexOf("linux") != -1);
+		isWindows = (ua.contains("windows") || ua.contains("win32"));
+		isMac = (ua.contains("macintosh") || ua.contains("mac os x"));
+		isAir = (ua.contains("adobeair"));
+		isLinux = (ua.contains("linux"));
 
 		useShims = isIE6 || (isMac && isGecko2);
 

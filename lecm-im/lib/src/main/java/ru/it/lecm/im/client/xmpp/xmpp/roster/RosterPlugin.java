@@ -25,6 +25,8 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.IncrementalCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import ru.it.lecm.im.client.Log;
+import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.xmpp.*;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
@@ -71,10 +73,10 @@ public class RosterPlugin implements Plugin {
 		item.setAttribute("name", name);
 
 		if (groupsNames != null) {
-			for (int i = 0; i < groupsNames.size(); i++) {
-				Packet group = item.addChild("group", null);
-				group.setCData(groupsNames.get(i).toString());
-			}
+            for (String groupsName : groupsNames) {
+                Packet group = item.addChild("group", null);
+                group.setCData(groupsName);
+            }
 		}
 
 		session.addResponseHandler(iq, handler);
@@ -83,9 +85,9 @@ public class RosterPlugin implements Plugin {
 	public void addItem(JID jid, String text, String[] itemGroups, ResponseHandler itemEditorDialog) {
 		List<String> groups = new ArrayList<String>();
 		if (itemGroups != null) {
-			for (int i = 0; i < itemGroups.length; i++) {
-				groups.add(itemGroups[i]);
-			}
+            for (String itemGroup : itemGroups) {
+                groups.add(itemGroup);
+            }
 		}
 		addItem(jid, text, groups, itemEditorDialog);
 	}
@@ -99,9 +101,9 @@ public class RosterPlugin implements Plugin {
 	}
 
 	private void fireAddRosterItem(final RosterItem rosterItem) {
-		for (int i = 0; i < rosterListeners.size(); i++) {
-			rosterListeners.get(i).onAddItem(rosterItem);
-		}
+        for (RosterListener rosterListener : rosterListeners) {
+            rosterListener.onAddItem(rosterItem);
+        }
 	}
 	
 	private boolean fireBeforeAddItemfinal(JID jid, final String name, final List<String> groupsNames) {
@@ -116,27 +118,27 @@ public class RosterPlugin implements Plugin {
 	}
 
 	private void fireEndRosterUpdating() {
-		for (int i = 0; i < rosterListeners.size(); i++) {
-			rosterListeners.get(i).onEndRosterUpdating();
-		}
+        for (RosterListener rosterListener : rosterListeners) {
+            rosterListener.onEndRosterUpdating();
+        }
 	}
 
 	private void fireRemoveRosterItem(final RosterItem rosterItem) {
-		for (int i = 0; i < rosterListeners.size(); i++) {
-			rosterListeners.get(i).onRemoveItem(rosterItem);
-		}
+        for (RosterListener rosterListener : rosterListeners) {
+            rosterListener.onRemoveItem(rosterItem);
+        }
 	}
 
 	private void fireStartRosterUpdating() {
-		for (int i = 0; i < rosterListeners.size(); i++) {
-			rosterListeners.get(i).onStartRosterUpdating();
-		}
+        for (RosterListener rosterListener : rosterListeners) {
+            rosterListener.onStartRosterUpdating();
+        }
 	}
 
 	private void fireUpdateRosterItem(final RosterItem rosterItem) {
-		for (int i = 0; i < rosterListeners.size(); i++) {
-			rosterListeners.get(i).onUpdateItem(rosterItem);
-		}
+        for (RosterListener rosterListener : rosterListeners) {
+            rosterListener.onUpdateItem(rosterItem);
+        }
 	}
 
 	public List<RosterItem> getAllRosteritems() {
@@ -164,21 +166,19 @@ public class RosterPlugin implements Plugin {
 
 	public List<String> getJidsByGroupName(String groupName) {
 		ArrayList<String> result = new ArrayList<String>();
-		Iterator<RosterItem> iterator = this.rosterItemsByBareJid.values().iterator();
-		while (iterator.hasNext()) {
-			RosterItem ri = iterator.next();
-			boolean ok = false;
-			if (groupName == null && (ri.getGroups() == null || ri.getGroups().length == 0)) {
-				ok = true;
-			} else if (groupName != null && ri.getGroups() != null) {
-				for (int i = 0; i < ri.getGroups().length; i++) {
-					ok = ok | groupName.equals(ri.getGroups()[i]);
-				}
-			}
-			if (ok) {
-				result.add(ri.getJid());
-			}
-		}
+        for (RosterItem ri : this.rosterItemsByBareJid.values()) {
+            boolean ok = false;
+            if (groupName == null && (ri.getGroups() == null || ri.getGroups().length == 0)) {
+                ok = true;
+            } else if (groupName != null && ri.getGroups() != null) {
+                for (int i = 0; i < ri.getGroups().length; i++) {
+                    ok = ok | groupName.equals(ri.getGroups()[i]);
+                }
+            }
+            if (ok) {
+                result.add(ri.getJid());
+            }
+        }
 		return result;
 	}
 
@@ -261,21 +261,19 @@ public class RosterPlugin implements Plugin {
 	public List<RosterItem> getRosterItemsByGroupName(String groupName) 
 	{
 		ArrayList<RosterItem> result = new ArrayList<RosterItem>();
-		Iterator<RosterItem> iterator = this.rosterItemsByBareJid.values().iterator();
-		while (iterator.hasNext()) {
-			RosterItem ri = iterator.next();
-			boolean ok = false;
-			if (groupName == null && (ri.getGroups() == null || ri.getGroups().length == 0)) {
-				ok = true;
-			} else if (groupName != null && ri.getGroups() != null) {
-				for (int i = 0; i < ri.getGroups().length; i++) {
-					ok = ok | groupName.equals(ri.getGroups()[i]);
-				}
-			}
-			if (ok) {
-				result.add(ri);
-			}
-		}
+        for (RosterItem ri : this.rosterItemsByBareJid.values()) {
+            boolean ok = false;
+            if (groupName == null && (ri.getGroups() == null || ri.getGroups().length == 0)) {
+                ok = true;
+            } else if (groupName != null && ri.getGroups() != null) {
+                for (int i = 0; i < ri.getGroups().length; i++) {
+                    ok = ok | groupName.equals(ri.getGroups()[i]);
+                }
+            }
+            if (ok) {
+                result.add(ri);
+            }
+        }
 		return result;
 	}
 
@@ -305,42 +303,114 @@ public class RosterPlugin implements Plugin {
 			fireStartRosterUpdating();	
 			final List<? extends Packet> childs = rosterQuery.getChildren();
 			final int itemsCount = childs.size();
-			IncrementalCommand ic = new IncrementalCommand()
-			{
-				int counter = 0;
-				IQ queryIQ = new IQ(iq);
-				public boolean execute() 
-				{
-					if(itemsCount == 0)
-					{
-						fireEndRosterUpdating();
-						return false;
-					}
-					else
-					{
-						for(int i=0;i<50;i++)
-						{
-							processRosterItem(queryIQ,childs.get(counter));
-							counter++;
-							if(counter == itemsCount||counter>1000)
-							{
-								fireEndRosterUpdating();
-								return false;
-							}
-						}
-						return true;
-					}
-				}
-			};
-			DeferredCommand.addCommand(ic);
+
+//            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+//                @Override
+//                public void execute() {
+//                    //To change body of implemented methods use File | Settings | File Templates.
+//                }
+//            });
+
+            final Date rosterBeginUpdateTime = new Date();
+
+//			IncrementalCommand ic = new IncrementalCommand()
+//			{
+//				int counter = 0;
+//				IQ queryIQ = new IQ(iq);
+//				public boolean execute()
+//				{
+//					if(itemsCount == 0)
+//					{
+//						fireEndRosterUpdating();
+//						return false;
+//					}
+//					else
+//					{
+//						for(int i=0;i<50;i++)
+//						{
+//							Date itemProcessBegin = new Date();
+//                            processRosterItem(queryIQ,childs.get(counter));
+//                            Log.log("RosterITEM: "+ (new Date().getTime() - itemProcessBegin.getTime())+"ms");
+//
+//                            counter++;
+//							if(counter == itemsCount)
+//							{
+//								fireEndRosterUpdating();
+//                                Date rosterEndUpdateTime = new Date();
+//                                Log.log("ROSTER: " + (rosterEndUpdateTime.getTime() - rosterBeginUpdateTime.getTime())+ "ms");
+//								return false;
+//							}
+//						}
+//						return true;
+//					}
+//				}
+//			};
+
+            final List<Packet> onlineChilds = new ArrayList<Packet>();
+            final List<Packet> offlineChilds = new ArrayList<Packet>();
+            for (Packet item : childs)
+            {
+                String jid = item.getAtribute("jid");
+                XmppStatus.Status newStatus = XmppStatus.makeStatus(XmppProfileManager.getPresence(jid));
+                if (newStatus.equals(XmppStatus.Status.STATUS_OFFLINE))
+                {
+                    offlineChilds.add(item);
+                }
+                else
+                {
+                    onlineChilds.add(item);
+                }
+            }
+
+            final int onlineItemsCount = onlineChilds.size();
+            addItemsToRoster(iq, rosterBeginUpdateTime, onlineChilds, onlineItemsCount);
+
+            //addItemsToRoster(iq, new Date(), offlineChilds, 1);
 		}
 		catch(Exception e) 
 		{
 			fireEndRosterUpdating();
 		}
 	}
-	
-	public void processPushRoster(final IQ iq)
+
+    private void addItemsToRoster(final IQ iq, final Date rosterBeginUpdateTime, final List<Packet> childs, final int commandSize) {
+        final int itemsCount = childs.size();
+        IncrementalCommand ic = new IncrementalCommand()
+        {
+            int counter = 0;
+            IQ queryIQ = new IQ(iq);
+            public boolean execute()
+            {
+                if(itemsCount == 0)
+                {
+                    fireEndRosterUpdating();
+                    return false;
+                }
+                else
+                {
+                    for(int i=0;i<commandSize;i++)
+                    {
+                        Date itemProcessBegin = new Date();
+                        processRosterItem(queryIQ, childs.get(counter));
+                        Log.log("RosterITEM2: " + (new Date().getTime() - itemProcessBegin.getTime()) + "ms");
+
+                        counter++;
+                        if(counter == itemsCount)
+                        {
+                            fireEndRosterUpdating();
+                            Date rosterEndUpdateTime = new Date();
+                            Log.log("ROSTER: " + (rosterEndUpdateTime.getTime() - rosterBeginUpdateTime.getTime())+ "ms");
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+        };
+        DeferredCommand.addCommand(ic);
+    }
+
+    public void processPushRoster(final IQ iq)
 	{
 		Packet rosterQuery = iq.getFirstChild("query");
 		try 
@@ -359,11 +429,11 @@ public class RosterPlugin implements Plugin {
 					}
 					else
 					{
-						for(int i=0;i<50;i++)
+						for(int i=0;i<1;i++)
 						{
 							processRosterItem(queryIQ,childs.get(counter));
 							counter++;
-							if(counter == itemsCount||counter>1000)
+							if(counter == itemsCount)
 							{
 								return false;
 							}

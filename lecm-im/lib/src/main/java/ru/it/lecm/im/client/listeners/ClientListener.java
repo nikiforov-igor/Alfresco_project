@@ -28,9 +28,6 @@ public interface ClientListener
 	void onError(final String error);
 	void onBeforeLogin();
 	void onEndLogin();
-	void onAvatarClicked(int clientX,int clientY,final String username,final String bareJid);
-	void onAvatarMouseOver(int clientX,int clientY,final String username,final String bareJid);
-	void onAvatarMouseOut(int clientX,int clientY,final String usrname,final String bareJid);
 	void onStatusTextUpdated(final String text);
 }
 

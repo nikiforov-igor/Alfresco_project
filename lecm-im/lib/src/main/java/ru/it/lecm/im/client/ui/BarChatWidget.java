@@ -179,17 +179,6 @@ public class BarChatWidget extends BarChatWidgetUI
 		resetComposing();
 	}
 
-	@Override
-	protected void userAvatarClicked(int clientX,int clientY) 
-	{
-		button.onAvatarClicked(clientX,clientY);
-	}
-	
-	@Override
-	protected void userAvatarMouseOver(int clientX, int clientY) {
-		button.onAvatarMouseOver(clientX,clientY);
-	}
-	
 	public void cleanHistory()
 	{
 		super.cleanHistory();

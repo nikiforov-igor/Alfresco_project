@@ -560,4 +560,11 @@ public class ContactView extends Composite {
 		}
 		return ret;
 	}
+
+    public void RefreshGroupCounters(){
+        for ( ContactViewGroup group : this.groups.values() )
+        {
+           group.updateGroupCount();
+        }
+    }
 }

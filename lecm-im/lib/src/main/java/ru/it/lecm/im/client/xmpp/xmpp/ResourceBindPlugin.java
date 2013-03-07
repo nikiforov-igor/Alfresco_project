@@ -21,13 +21,6 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp;
 
-import java.util.ArrayList;
-
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.Plugin;
-import ru.it.lecm.im.client.xmpp.PluginState;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.User;
 import ru.it.lecm.im.client.xmpp.*;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
@@ -35,6 +28,8 @@ import ru.it.lecm.im.client.xmpp.citeria.Or;
 import ru.it.lecm.im.client.xmpp.events.Events;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.stanzas.IQ;
+
+import java.util.ArrayList;
 
 public class ResourceBindPlugin implements Plugin {
 
@@ -96,10 +91,9 @@ public class ResourceBindPlugin implements Plugin {
 	@Deprecated
 	private void fireOnBindResource(final JID jid)
 	{
-		for (int i = 0; i < this.listeners.size(); i++) {
-			ResourceBindListener l = this.listeners.get(i);
-			l.onBindResource(jid);
-		}
+        for (ResourceBindListener l : this.listeners) {
+            l.onBindResource(jid);
+        }
 	}
 
 	/**

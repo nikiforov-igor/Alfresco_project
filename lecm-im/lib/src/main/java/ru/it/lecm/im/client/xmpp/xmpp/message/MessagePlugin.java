@@ -21,19 +21,17 @@
  */
 package ru.it.lecm.im.client.xmpp.xmpp.message;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ru.it.lecm.im.client.xmpp.JID;
 import ru.it.lecm.im.client.xmpp.Plugin;
 import ru.it.lecm.im.client.xmpp.PluginState;
 import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.JID;
-import ru.it.lecm.im.client.xmpp.Plugin;
 import ru.it.lecm.im.client.xmpp.citeria.Criteria;
 import ru.it.lecm.im.client.xmpp.citeria.ElementCriteria;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.stanzas.Message;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessagePlugin implements Plugin {
 
@@ -65,9 +63,9 @@ public class MessagePlugin implements Plugin {
 		if (chatManager != null)
 			chatManager.process(message);
 
-		for (int i = 0; i < this.messageListeners.size(); i++) {
-			this.messageListeners.get(i).onMessageReceived(message);
-		}
+        for (MessageListener messageListener : this.messageListeners) {
+            messageListener.onMessageReceived(message);
+        }
 		return true;
 	}
 

@@ -83,10 +83,10 @@ public class ContactViewGroup extends ContactViewGroupUI
 		setGroupVisible(true);
 	}
 	
-	public ContactViewItem addRosterItem(RosterItem item)
+	public void addRosterItem(RosterItem item)
 	{
 		if(contains(item))
-			return getChildViewItem(item);
+			return;
 		
 		ContactViewItem viewItem = new ContactViewItem(view,this,item,onlineGroup);
 		groupBody.add(viewItem);
@@ -94,8 +94,7 @@ public class ContactViewGroup extends ContactViewGroupUI
 		viewItem.setXmppStatus(newStatus);
 		childs.put(viewItem.getWidgetID(), viewItem);
 		viewItem.setItemOdd(groupBody.getWidgetIndex(viewItem)%2!=0);
-		updateGroupCount();
-		return viewItem;
+		//27.02.2013 updateGroupCount();
 	}
 	
 	public void removeRosterItem(String bareJid)
@@ -183,7 +182,7 @@ public class ContactViewGroup extends ContactViewGroupUI
 	}
 	
 	
-	private void updateGroupCount()
+	public void updateGroupCount()
 	{
 		if(!onlineGroup)
 			setGroupHeaderCount("["+onlineCount+"/"+childs.size()+"]");

@@ -143,20 +143,6 @@ public abstract class BarChatWidgetUI extends Composite {
 			}
 		});
 		imgAvatar.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
-		imgAvatar.addClickHandler(new ClickHandler()
-		{
-			public void onClick(ClickEvent event) 
-			{
-				userAvatarClicked(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-			}
-			
-		});
-		imgAvatar.addMouseOverHandler(new MouseOverHandler()
-		{
-			public void onMouseOver(MouseOverEvent event) {
-				userAvatarMouseOver(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-			}
-		});
 		imgAvatar.addErrorHandler(new ErrorHandler()
 		{
 			public void onError(ErrorEvent event) 
@@ -241,10 +227,7 @@ public abstract class BarChatWidgetUI extends Composite {
 	{
 		msgInput.setFocus(true);
 	}
-	
-	
-	protected abstract void userAvatarClicked(int clientX,int clientY);
-	protected abstract void userAvatarMouseOver(int clientX,int clientY);
+
 	protected abstract void send(final String msg);
 	protected abstract void onTyping();
 	protected abstract void viewHistory();

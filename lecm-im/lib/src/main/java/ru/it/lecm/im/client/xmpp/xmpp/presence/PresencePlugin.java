@@ -72,7 +72,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 	 */
 	private Map<String,Presence> availablePresences = new HashMap<String,Presence>();
 
-	private int priority = 5;
+	private int priority = 0;
 
 	private Session session;
 	
@@ -94,13 +94,11 @@ public class PresencePlugin implements Plugin,SessionListener {
 		if (resourcesPresence == null)
 			return null;
 		List<Presence> result = new ArrayList<Presence>();
-		Iterator<Presence> it = resourcesPresence.values().iterator();
-		while (it.hasNext()) {
-			Presence pi = it.next();
-			if (pi.getType() != Presence.Type.unavailable) {
-				result.add(pi);
-			}
-		}
+        for (Presence pi : resourcesPresence.values()) {
+            if (pi.getType() != Type.unavailable) {
+                result.add(pi);
+            }
+        }
 		return result.size() == 0 ? null : result;
 	}
 
@@ -133,15 +131,13 @@ public class PresencePlugin implements Plugin,SessionListener {
 		Map<String, Presence> resourcesPresence = this.presencesMapByBareJid.get(jid);
 		Presence result = null;
 		if (resourcesPresence != null) {
-			Iterator<Presence> it = resourcesPresence.values().iterator();
-			while (it.hasNext()) {
-				Presence x = it.next();
-				if (x.getType() == Presence.Type.error || x.getType() == Presence.Type.unavailable)
-					continue;
-				if (result == null || (result.getPriority() < x.getPriority() && x.getFrom().getResource() != null)
-						|| (x.getFrom().getResource() != null && result.getFrom().getResource() == null))
-					result = x;
-			}
+            for (Presence x : resourcesPresence.values()) {
+                if (x.getType() == Type.error || x.getType() == Type.unavailable)
+                    continue;
+                if (result == null || (result.getPriority() < x.getPriority() && x.getFrom().getResource() != null)
+                        || (x.getFrom().getResource() != null && result.getFrom().getResource() == null))
+                    result = x;
+            }
 		}
 		return result;
 	}
@@ -154,11 +150,9 @@ public class PresencePlugin implements Plugin,SessionListener {
 		Map<String, Presence> resourcesPresence = this.presencesMapByBareJid.get(jid);
 		boolean result = false;
 		if (resourcesPresence != null) {
-			Iterator<Presence> it = resourcesPresence.values().iterator();
-			while (it.hasNext()) {
-				Presence x = it.next();
-				result = result | x.getType() == Type.available;
-			}
+            for (Presence x : resourcesPresence.values()) {
+                result = result | x.getType() == Type.available;
+            }
 		}
 		return result;
 
@@ -213,19 +207,17 @@ public class PresencePlugin implements Plugin,SessionListener {
 				{
 					//session.getEventsManager().fireEvent(Events.contactAvailable, new PresenceEvent(presence));
 					availablePresences.put(presence.getFrom().toStringBare(), presence);
-					for (int i = 0; i < this.presenceListeners.size(); i++) 
-					{
-						(this.presenceListeners.get(i)).onContactAvailable(presence);
-					}
+                    for (PresenceListener presenceListener : this.presenceListeners) {
+                        presenceListener.onContactAvailable(presence);
+                    }
 				} 
 				else if (availableOld && !availableNow) 
 				{
 					//session.getEventsManager().fireEvent(Events.contactUnavailable, new PresenceEvent(presence));
 					availablePresences.remove(presence.getFrom().toStringBare());
-					for (int i = 0; i < this.presenceListeners.size(); i++) 
-					{
-						(this.presenceListeners.get(i)).onContactUnavailable(presence);
-					}
+                    for (PresenceListener presenceListener : this.presenceListeners) {
+                        presenceListener.onContactUnavailable(presence);
+                    }
 				}
 				
 				if(availablePresences.containsKey(presence.getFrom().toStringBare()))
@@ -234,19 +226,17 @@ public class PresencePlugin implements Plugin,SessionListener {
 				}
 	
 				//session.getEventsManager().fireEvent(Events.presenceChange, new PresenceEvent(presence));
-				for (int i = 0; i < this.presenceListeners.size(); i++) 
-				{
-					(this.presenceListeners.get(i)).onPresenceChange(presence);
-				}
+                for (PresenceListener presenceListener : this.presenceListeners) {
+                    presenceListener.onPresenceChange(presence);
+                }
 	
 			} 
 			else 
 			{
-	
-				for (int i = 0; i < this.presenceListeners.size(); i++) 
-				{
-					(this.presenceListeners.get(i)).onPresenceChange(presence);
-				}
+
+                for (PresenceListener presenceListener : this.presenceListeners) {
+                    presenceListener.onPresenceChange(presence);
+                }
 			}
 		}
 		catch(Exception e)
@@ -276,7 +266,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		Presence presence = session.getInitPresence();
 		if(presence == null)
 			presence = new Presence((Presence.Type) null);
-		presence.setPriority(priority);
+		presence.setPriority(0);//priority);
 		for (PresenceListener listener : this.presenceListeners) 
 		{
 			listener.beforeSendInitialPresence(presence);
@@ -292,7 +282,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		Presence presence = session.getInitPresence();
 		if(presence == null)
 			presence = new Presence((Presence.Type) null);
-		presence.setPriority(priority);
+		presence.setPriority(0);//priority);
 
 		for (PresenceListener listener : this.presenceListeners) {
 			listener.beforeSendInitialPresence(presence);
@@ -310,7 +300,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		}
 
 		presence.setShow(show);
-		presence.setPriority(priority);
+		presence.setPriority(5);//priority);
 
 		presence.setExtNick(extNick);
 
@@ -333,7 +323,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		Presence presence = new Presence(Type.available);
 
 		presence.setShow(currentShow);
-		presence.setPriority(priority);
+		presence.setPriority(0);
 		presence.setStatus(text);
 		currentPresence = presence;
 		session.send(presence);
@@ -388,7 +378,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		
 		//save current self presence status
 		storage.set(STORAGE_CURRENTSHOW, currentShow!=null?currentShow.toString():"");
-		storage.set(STORAGE_PRIORITY, String.valueOf(priority));
+		storage.set(STORAGE_PRIORITY, "0");//String.valueOf(priority));
 		storage.set(STORAGE_INIT_PRESENCE, String.valueOf(initialPresenceSended));
 	}
 	
@@ -408,9 +398,9 @@ public class PresencePlugin implements Plugin,SessionListener {
 			String showStr = storage.get(STORAGE_CURRENTSHOW);
 			if(showStr != null&&!(showStr.length()==0))
 				currentShow = Show.valueOf(showStr);
-			String priorityStr = storage.get(STORAGE_PRIORITY);
-			if(priorityStr !=null&&!(priorityStr.length()==0))
-				priority = Integer.valueOf(priorityStr);
+			//String priorityStr = storage.get(STORAGE_PRIORITY);
+			//if(priorityStr !=null&&!(priorityStr.length()==0))
+			priority = 0;//Integer.valueOf(priorityStr);
 			String initStr = storage.get(STORAGE_INIT_PRESENCE);
 			if(initStr != null)
 				initialPresenceSended = initStr.equals("true");
