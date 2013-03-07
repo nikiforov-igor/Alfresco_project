@@ -337,7 +337,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             Object template = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
             return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
         } else {
-            return DEFAULT_OBJECT_TYPE_TEMPLATE;
+            return forList ?  DEFAULT_OBJECT_TYPE_LIST_TEMPLATE : DEFAULT_OBJECT_TYPE_TEMPLATE;
         }
     }
 

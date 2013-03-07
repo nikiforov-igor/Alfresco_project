@@ -65,6 +65,7 @@ public interface SubstitudeBean {
     final String LINK_URL = "/share/page/view-metadata";
 
     final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
+    final String DEFAULT_OBJECT_TYPE_LIST_TEMPLATE = "автор : {!~AUTHOR}, дата изменения: {cm:modified}";
 
     final String BJ_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
     final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
