@@ -41,8 +41,8 @@ public class OrgstructureBossPolicy
 		nodeService.setProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, isBoss);
 
 		// оповещение securityService по Должностной Позиции ...
-		final NodeRef nodeDP = this.orgstructureService.getPositionByStaff(staff);
-		notifyChangeDP( nodeDP, isBoss, orgUnit);
+		// final NodeRef nodeDP = this.orgstructureService.getPositionByStaff(staff);
+		notifyChangeDP( staff, isBoss, orgUnit);
 	}
 
 }
