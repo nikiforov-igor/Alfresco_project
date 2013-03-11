@@ -1,5 +1,6 @@
 <!-- Parameters and libs -->
-<#assign el=args.htmlid/>
+<#assign aDateTime = .now>
+<#assign el=args.htmlid + aDateTime?iso_utc/>
 
 <div id="${el}">
     <#if categories??>
@@ -31,9 +32,9 @@
 
 	            <div style="display: none">
 
-	            <#-- Action Set "More" template -->
+	                <#-- Action Set "More" template -->
 		            <div id="${el}-${category.nodeRef}-moreActions">
-			            <div class="internal-show-more" title="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"><span>${msg("actions.more")}</span></a></div>
+			            <div class="internal-show-more" title="onActionShowMore"><a href="#" class="doc-list-show-more doc-list-show-more-${category.nodeRef}-${aDateTime?iso_utc}" title="${msg("actions.more")}"><span>${msg("actions.more")}</span></a></div>
 			            <div class="more-actions hidden"></div>
 		            </div>
 
@@ -66,7 +67,8 @@
 			            new LogicECM.DocumentAttachmentsListTable("${el}-${category.nodeRef}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
-				                    path: path
+				                    path: path,
+				                    bubblingLabel: "${category.nodeRef}-${aDateTime?iso_utc}"
 			                    }).setMessages(${messages});
 				</#list>
 			</#if>

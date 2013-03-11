@@ -3,9 +3,9 @@
 	margin: 0;
 }
 
-.attachment-list a.action-link,
+.attachment-list a.doc-list-action-link,
 .attachment-list a.simple-link,
-.attachment-list a.show-more
+.attachment-list a.doc-list-show-more
 {
 	background-position: 4px 1px;
 	background-repeat: no-repeat;

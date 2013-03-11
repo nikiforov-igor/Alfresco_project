@@ -56,7 +56,7 @@
 .form-container .edit-metadata a,
 .form-container .edit-metadata a:visited
 {
-	background: transparent url(actions/document-edit-metadata-16.png) no-repeat 12px 4px;
+	background: transparent url(/share/res/components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
 	padding-left: 32px;
 }
 
@@ -172,7 +172,7 @@ body .attachment-list tr.yui-dt-highlighted
 .attachment-list .documents .icon32 span.link,
 .attachment-list .documents .folder-small span.link
 {
-	background: url(images/link-16.png) no-repeat;
+	background: url(/share/res/components/documentlibrary/images/link-16.png) no-repeat;
 	height: 16px;
 	width: 16px;
 	position: absolute;
@@ -180,7 +180,7 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .documents .folder-small span.droppable
 {
-	background: url(../images/drop-arrow-left-small.png) no-repeat;
+	background: url(/share/res/components/images/drop-arrow-left-small.png) no-repeat;
 	display: none;
 	height: 14px;
 	position: absolute;
@@ -203,7 +203,7 @@ body .attachment-list tr.yui-dt-highlighted
 .attachment-list .documents .thumbnail span.link,
 .attachment-list .documents .folder span.link
 {
-	background: url(images/link-32.png) no-repeat;
+	background: url(/share/res/components/documentlibrary/images/link-32.png) no-repeat;
 	height: 32px;
 	width: 32px;
 	position: absolute;
@@ -211,7 +211,7 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .documents .folder span.droppable
 {
-	background: url(../images/drop-arrow-left-large.png) no-repeat;
+	background: url(/share/res/components/images/drop-arrow-left-large.png) no-repeat;
 	display: none;
 	height: 25px;
 	position: absolute;
@@ -326,7 +326,7 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .documents .detail span.category-item
 {
-	background-image: url(images/category-16.png);
+	background-image: url(/share/res/components/documentlibrary/images/category-16.png);
 	background-position: 0px 2px;
 	background-repeat: no-repeat;
 	margin-right: 0;
@@ -338,7 +338,7 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .documents .detail a.comment
 {
-	background-image: url(../images/comment-16.png);
+	background-image: url(/share/res/components//images/comment-16.png);
 }
 
 /* Document Info Banner */
@@ -346,7 +346,7 @@ body .attachment-list tr.yui-dt-highlighted
 .attachment-list .info-banner
 {
 	background-color: #ffffe0;
-	background-image: url(images/warning-16.png);
+	background-image: url(/share/res/components/documentlibrary/images/warning-16.png);
 	background-position: 6px 4px;
 	background-repeat: no-repeat;
 	border: 1px solid #ffca7a;
@@ -443,12 +443,12 @@ body .attachment-list tr.yui-dt-highlighted
 
 .attachment-list .action-set a
 {
-	background-image: url(actions/default-16.png);
+	background-image: url(/share/res/components/documentlibrary/actions/default-16.png);
 }
 
 .attachment-list .internal-show-more a
 {
-	background-image: url(images/plus-sign-16.png);
+	background-image: url(/share/res/components/documentlibrary/images/plus-sign-16.png);
 }
 
 /* Drag and Drop */
@@ -641,4 +641,3 @@ body .attachment-list tr.yui-dt-highlighted
 	background-color: #DCEAF4 !important;
 	color: #515D6B !important;
 }
-

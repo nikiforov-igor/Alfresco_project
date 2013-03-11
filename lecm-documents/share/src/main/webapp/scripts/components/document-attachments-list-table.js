@@ -89,22 +89,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     };
 
     /**
-     * Generate "changeFilter" event mark-up specifically for path changes
-     *
-     * @method generatePathMarkup
-     * @param locn {object} Location object containing path and folder name to navigate to
-     * @return {string} Mark-up for use in node attribute
-     */
-    LogicECM.DocumentAttachmentsListTable.generatePathMarkup = function (locn)
-    {
-        return LogicECM.DocumentAttachmentsListTable.generateFilterMarkup(
-            {
-                filterId: "path",
-                filterData: $combine(locn.path, locn.file)
-            });
-    };
-
-    /**
      * Generate User Profile link
      *
      * @method generateUserLink
@@ -189,7 +173,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 nodeRef: null,
 
-                path: null
+                path: null,
+
+	            /**
+	             * Метка для bubbling. Используется для отрисовки датагрида. Следует передать в datagridMeta
+	             */
+	            bubblingLabel: null,
+
+	            ignoreActions: [
+		            "document-edit-offline",
+		            "document-copy-to",
+		            "document-move-to",
+		            "document-assign-workflow",
+		            "document-publish"
+	            ]
             },
 
             renderers: null,
@@ -238,8 +235,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		            }
 		            return true;
 	            };
-	            YAHOO.Bubbling.addDefaultAction("action-link", fnActionHandler);
-	            YAHOO.Bubbling.addDefaultAction("show-more", fnActionHandler);
+	            YAHOO.Bubbling.addDefaultAction("doc-list-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
+	            YAHOO.Bubbling.addDefaultAction("doc-list-show-more" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
             },
 
             /**
@@ -768,7 +765,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        var oRecord = this.widgets.dataTable.getRecord(oArgs.target.id),
 				        record = oRecord.getData(),
 				        jsNode = record.jsNode,
-				        actions = record.actions,
+				        actions = this.checkActions(record.actions),
 				        actionsEl = document.createElement("div"),
 				        actionHTML = "",
 				        actionsSel;
@@ -776,7 +773,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        record.actionParams = {};
 			        for (var i = 0, ii = actions.length; i < ii; i++)
 			        {
-				        actionHTML += this.renderAction(actions[i], record);
+				        actionHTML += this.customRenderAction(actions[i], record);
 			        }
 
 			        // Token replacement - action Urls
@@ -1223,6 +1220,101 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 		        Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
 		        Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
+	        },
+
+	        /**
+	         * Renders a single action for a given record.
+	         * Callers should then use
+	         * <pre>
+	         *    YAHOO.lang.substitute(actionHTML, this.getActionUrls(record))
+	         * </pre>
+	         * on the final concatenated HTML for multiple actions to populate placeholder URLs.
+	         *
+	         * @method renderAction
+	         * @param p_action {object} Object literal representing the node
+	         * @param p_record {string} Optional siteId override for site-based locations
+	         * @return {string} HTML containing action markup
+	         */
+	        customRenderAction: function dlA_renderAction(p_action, p_record)
+	        {
+		        var urlContext = Alfresco.constants.URL_RESCONTEXT + "components/documentlibrary/actions/",
+			        iconStyle = 'style="background-image:url(' + urlContext + '{icon}-16.png)" ',
+			        actionTypeMarkup =
+			        {
+				        "link": '<div class="{id}"><a title="{label}" class="simple-link" href="{href}" ' + iconStyle + '{target}><span>{label}</span></a></div>',
+				        "pagelink": '<div class="{id}"><a title="{label}" class="simple-link" href="{pageUrl}" ' + iconStyle + '><span>{label}</span></a></div>',
+				        "javascript": '<div class="{id}" title="{jsfunction}"><a title="{label}" class="doc-list-action-link doc-list-action-link' + (this.options.bubblingLabel ? "-"+ this.options.bubblingLabel : "") + '" href="#"' + iconStyle + '><span>{label}</span></a></div>'
+			        };
+
+		        // Store quick look-up for client-side actions
+		        p_record.actionParams[p_action.id] = p_action.params;
+
+		        var markupParams =
+		        {
+			        "id": p_action.id,
+			        "icon": p_action.icon,
+			        "label": Alfresco.util.substituteDotNotation(this.msg(p_action.label), p_record)
+		        };
+
+		        // Parameter substitution for each action type
+		        if (p_action.type === "link")
+		        {
+			        if (p_action.params.href)
+			        {
+				        markupParams.href = Alfresco.util.substituteDotNotation(p_action.params.href, p_record);
+				        markupParams.target = p_action.params.target ? "target=\"" + p_action.params.target + "\"" : "";
+			        }
+			        else
+			        {
+				        Alfresco.logger.warn("Action configuration error: Missing 'href' parameter for actionId: ", p_action.id);
+			        }
+		        }
+		        else if (p_action.type === "pagelink")
+		        {
+			        if (p_action.params.page)
+			        {
+				        var recordSiteName = $isValueSet(p_record.location.site) ? p_record.location.site.name : null;
+				        markupParams.pageUrl = $siteURL(Alfresco.util.substituteDotNotation(p_action.params.page, p_record),
+					        {
+						        site: recordSiteName
+					        });
+			        }
+			        else
+			        {
+				        Alfresco.logger.warn("Action configuration error: Missing 'page' parameter for actionId: ", p_action.id);
+			        }
+		        }
+		        else if (p_action.type === "javascript")
+		        {
+			        if (p_action.params["function"])
+			        {
+				        markupParams.jsfunction = p_action.params["function"];
+			        }
+			        else
+			        {
+				        Alfresco.logger.warn("Action configuration error: Missing 'function' parameter for actionId: ", p_action.id);
+			        }
+		        }
+
+		        return YAHOO.lang.substitute(actionTypeMarkup[p_action.type], markupParams);
+	        },
+	        checkActions: function(actions) {
+		        var result = [];
+		        if (actions != null) {
+			        for (var i = 0; i < actions.length; i++) {
+				        var action = actions[i];
+				        var show = true;
+				        for (var j = 0; j < this.options.ignoreActions.length; j++) {
+					        if (action.id == this.options.ignoreActions[j]) {
+						        show = false;
+					        }
+				        }
+				        if (show) {
+					        result.push(action);
+				        }
+			        }
+		        }
+		        return result;
 	        }
         }, true);
 })();
