@@ -160,11 +160,6 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie) {
-		if (alfrescoUserLogin == null) {
-			logger.warn( String.format( "employee {%s}: user login is null -> %s operation skipped", 
-					employeeId, (tie ? "tie" : "untie")));
-		}
-
 		final String emplSuffix = SGKind.SG_ME.getAlfrescoSuffix(employeeId);
 
 		// safe-действия if (safeMode) ...
@@ -172,12 +167,17 @@ public class LECMSecurityGroupsBean
 			ensureAlfrescoGroupName( emplSuffix, alfrescoUserLogin);
 		}
 
-		final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
-		final String sg_me_group = this.sgnm.makeSGName(emplSuffix);
-		if (tie) // привязать ...
-			ensureUserParent( sg_user_name, sg_me_group);
-		else // отвязать ...
-			removeUserParent( sg_user_name, sg_me_group);
+		if (alfrescoUserLogin == null) {
+			logger.warn( String.format( "employee {%s}: user login is null -> %s operation with {USER <-> SG_ME} skipped", 
+					employeeId, (tie ? "tie" : "untie")));
+		} else {
+			final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
+			final String sg_me_group = this.sgnm.makeSGName(emplSuffix);
+			if (tie) // привязать ...
+				ensureUserParent( sg_user_name, sg_me_group);
+			else // отвязать ...
+				removeUserParent( sg_user_name, sg_me_group);
+		}
 	}
 
 	@Override
