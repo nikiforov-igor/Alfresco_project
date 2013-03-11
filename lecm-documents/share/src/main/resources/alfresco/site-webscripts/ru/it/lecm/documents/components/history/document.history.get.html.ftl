@@ -2,7 +2,7 @@
 <#assign el=args.htmlid/>
 
 <!-- Markup -->
-<div class="document-metadata-header document-details-panel">
+<div class="document-details-panel">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("heading")}
         <span class="alfresco-twister-actions">

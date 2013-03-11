@@ -14,28 +14,8 @@
 	margin: 10px;
 }
 
-.dashlet .titleBarActions .view {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
-}
-
-.dashlet .titleBarActions .collapse {
-    background-image: url("/share/res/images/lecm-documents/collapse-16.png");
-}
-
 .dashlet .titleBarActions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
-}
-
-.alfresco-twister-actions a {
-    background-position: 0 center;
-    background-repeat: no-repeat;
-    padding: 0.5em;
-    text-decoration: none;
-}
-
-.alfresco-twister-actions {
-    position: absolute;
-    right: 1em;
+    background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 
 .lecm-dashlet-actions {
@@ -46,20 +26,22 @@
     background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 
-.document-metadata-header h2 .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
-}
-.document-metadata-header h2 .view {
-    background-image: url("/share/res/images/lecm-documents/expand-16.png");
-}
-
-.alfresco-twister-closed .alfresco-twister-actions {
-    display: inline;
-}
-
 .dashlet .lecm-dashlet-actions a {
     background-position: 0 center;
     background-repeat: no-repeat;
     padding: 1em;
+    text-decoration: none;
+}
+
+.yui-u .dashlet .dashlet-title {
+    background-color: #515151;
+}
+
+.dashlet .title span {
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
     text-decoration: none;
 }

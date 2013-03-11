@@ -12,12 +12,11 @@
 }
 
 .bordered {
-    border: 1px solid black;
+    border: 1px solid #6C6C6C;
 }
 
-
 .yui-u .document-details-panel {
-    background-color: #FAFAFA;
+    background-color: #F2F2F2;
     border-top: 1px solid #CCCCCC;
     padding: 1em 0 1em 1em;
 }
@@ -36,4 +35,24 @@
 
 .first .yui-gd div.column2 {
     width: 49%;
+}
+
+.alfresco-twister-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 0.5em;
+    text-decoration: none;
+}
+
+.alfresco-twister-actions {
+    position: absolute;
+    right: 1em;
+}
+
+.alfresco-twister-actions .expand {
+    background-image: url("/share/res/images/lecm-documents/expand-10.png");
+}
+
+.alfresco-twister-closed .alfresco-twister-actions {
+    display: inline;
 }

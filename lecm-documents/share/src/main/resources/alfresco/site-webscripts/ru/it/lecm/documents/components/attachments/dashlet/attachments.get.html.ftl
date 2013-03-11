@@ -30,7 +30,9 @@
     //]]>
 </script>
 
-<div class="dashlet document">
-    <div class="title">${msg("label.title")}</div>
+<div class="dashlet document bordered">
+    <div class="title dashlet-title">
+        <span>${msg("label.title")}</span>
+    </div>
     <div class="body scrollableList" id="${id}_results"></div>
 </div>

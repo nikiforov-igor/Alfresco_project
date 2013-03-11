@@ -21,8 +21,9 @@
     //]]>
 </script>
 
-<div class="dashlet document">
-    <div class="title">${msg("label.title")}
+<div class="dashlet document bordered">
+    <div class="title dashlet-title">
+        <span>${msg("label.title")}</span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
          </span>
