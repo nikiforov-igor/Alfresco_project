@@ -6,12 +6,12 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract:regnum" force="true"/>
-					<show id="lecm-document:sys_workflows" force="true"/>
+					<show id="lecm-contract:contentAttr" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:name"/>
-					<field id="lecm-contract:regnum"/>
-					<field id="lecm-document:sys_workflows"/>
+					<field id="lecm-contract:contentAttr">
+                        <control  template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
 				</appearance>
 			</form>
             <form id="connections">
@@ -28,6 +28,13 @@
                     </field>
                 </appearance>
             </form>
+            <form id="document">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:regnum" force="true"/>
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 
@@ -37,12 +44,22 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract:regnum" force="true"/>
+                    <show id="lecm-contract:contentAttr" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
 					<field id="lecm-contract:regnum"/>
+                    <field id="lecm-contract:contentAttr"/>
 				</appearance>
 			</form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-contract:regnum" force="true"/>
+                    <show id="lecm-document:present-string" force="true"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 

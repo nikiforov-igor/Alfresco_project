@@ -36,6 +36,9 @@
 				<property name="lecm-contract:regnum">
 					<type>d:text</type>
 				</property>
+                <property name="lecm-contract:contentAttr">
+					<type>d:text</type>
+				</property>
 			</properties>
 		</type>
 		<type name="lecm-contract:importTestDocument">
