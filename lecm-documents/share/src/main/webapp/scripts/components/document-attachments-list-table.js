@@ -46,6 +46,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.dataSourceUrl = $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/documentlibrary/data/doclist/");
         this.renderers = {};
 	    this.showingMoreActions = false;
+
+	    YAHOO.Bubbling.on("metadataRefresh", this.onDocListRefresh, this);
+	    YAHOO.Bubbling.on("fileRenamed", this.onFileRenamed, this);
+	    YAHOO.Bubbling.on("fileDeleted", this.onFileAction, this);
         return this;
     };
 
@@ -201,6 +205,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentAttachmentsList_onReady() {
 	            var me = this;
+
+	            // DocLib Actions module
+	            this.modules.actions = new Alfresco.module.DoclibActions();
 
                 // Set-up default metadata renderers
                 this._setupMetadataRenderers();
@@ -1315,6 +1322,91 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        }
 		        }
 		        return result;
+	        },
+
+	        /**
+	         * DocList Refresh Required event handler
+	         *
+	         * @method onDocListRefresh
+	         * @param layer {object} Event fired (unused)
+	         * @param args {array} Event parameters (unused)
+	         */
+	        onDocListRefresh: function DL_onDocListRefresh(layer, args)
+	        {
+		        var obj = args[1];
+		        if (obj && obj.highlightFile)
+		        {
+			        this.options.highlightFile = obj.highlightFile;
+		        }
+		        this._updateDocList.call(this);
+	        },
+
+	        /**
+	         * Searches the current recordSet for a record with the given parameter value
+	         *
+	         * @private
+	         * @method _findRecordByParameter
+	         * @param p_value {string} Value to find
+	         * @param p_parameter {string} Parameter to look for the value in
+	         * @return {YAHOO.widget.Record} Successful search result or null
+	         */
+	        _findRecordByParameter: function DL__findRecordByParameter(p_value, p_parameter)
+	        {
+		        var oRecordSet = this.widgets.dataTable.getRecordSet(),
+			        oRecord, record, i, j;
+
+		        for (i = 0, j = oRecordSet.getLength(); i < j; i++)
+		        {
+			        oRecord = oRecordSet.getRecord(i);
+			        record = oRecord.getData();
+
+			        if (record[p_parameter] === p_value || (record.node && record.node[p_parameter] === p_value))
+			        {
+				        return oRecord;
+			        }
+		        }
+		        return null;
+	        },
+
+	        /**
+	         * File or folder renamed event handler
+	         *
+	         * @method onFileRenamed
+	         * @param layer {object} Event fired
+	         * @param args {array} Event parameters (depends on event type)
+	         */
+	        onFileRenamed: function DL_onFileRenamed(layer, args)
+	        {
+		        var obj = args[1];
+		        if (obj && (obj.file !== null))
+		        {
+			        var recordFound = this._findRecordByParameter(obj.file.node.nodeRef, "nodeRef");
+			        if (recordFound !== null)
+			        {
+				        this.widgets.dataTable.updateRow(recordFound, obj.file);
+				        var el = this.widgets.dataTable.getTrEl(recordFound);
+				        Alfresco.util.Anim.pulse(el);
+			        }
+		        }
+	        },
+
+	        /**
+	         * Generic file action event handler
+	         *
+	         * @method onFileAction
+	         * @param layer {object} Event fired
+	         * @param args {array} Event parameters (depends on event type)
+	         */
+	        onFileAction: function DL_onFileAction(layer, args)
+	        {
+		        var obj = args[1];
+		        if (obj)
+		        {
+			        if (!obj.multiple)
+			        {
+				        this._updateDocList.call(this);
+			        }
+		        }
 	        }
         }, true);
 })();
