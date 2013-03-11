@@ -27,7 +27,7 @@
         tagEditor.innerHTML = '';
         if (tagsList && tagsList.length > 0) {
             for (var i = 0; i < tagsList.length; i++) {
-                var tag = tagsList[i].name;
+                var tag = tagsList[i].name || tagsList[i];
 
                 tagEditor.innerHTML += '<span class="tag"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'repository#filter=tag|' + encodeURIComponent(tag) + '&page=1" class="tag-link">' + tag + '</a></span>';
             }
