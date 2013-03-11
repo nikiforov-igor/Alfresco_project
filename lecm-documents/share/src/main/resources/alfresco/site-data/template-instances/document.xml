@@ -3,7 +3,7 @@
    <template-type>ru/it/lecm/documents/document</template-type>
    <components>
       <!-- Заголовок -->
-      <!--<component>
+      <component>
          <region-id>title</region-id>
          <sub-components>
             <sub-component id="default">
@@ -11,13 +11,13 @@
                   <evaluation id="lecm-document">
                      <url>/components/title/simple-title</url>
                      <properties>
-                        <title>page.lecm.document.title</title>
+                        <title>title.documents</title>
                      </properties>
                   </evaluation>
                </evaluations>
             </sub-component>
          </sub-components>
-      </component>-->
+      </component>
 
       <!-- Хэдер -->
       <component>

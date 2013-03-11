@@ -128,7 +128,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentAttachmentsListTable.generateFileFolderLinkMarkup = function (scope, record)
     {
-        var html = scope.getActionUrls(record).documentDetailsUrl;
+        var html = Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + record.jsNode.nodeRef;
         return '<a href="' + html + '">';
     };
 

@@ -1,6 +1,5 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader>
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-header.css" />
 	<@script type="text/javascript" src="${page.url.context}/res/components/documentlibrary/actions.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/yui/resize/resize-min.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
@@ -21,7 +20,7 @@
 <@templateBody>
 <div id="alf-hd">
     <@region id="header" scope="global"/>
-    <#--<@region id="title" scope="template"/>-->
+    <@region id="title" scope="template"/>
 </div>
 <div id="doc-bd">
     <@region id="document-header" scope="template"/>

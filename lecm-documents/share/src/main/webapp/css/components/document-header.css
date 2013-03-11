@@ -4,6 +4,34 @@
 
 .document-header h1 {
     padding: 0.5em 1em 0.2em;
+
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: normal;
+	text-decoration: none;
+	color: #333333;
+}
+
+.document-header h1 .document-version
+{
+	margin-left: 0.8em;
+	position: relative;
+	top: -2px;
+	background-color: white;
+	color: black;
+	border: 1px solid black;
+
+	font-size: 13px;
+}
+
+.document-header h1 .document-modified-info
+{
+	margin-left: 0.8em;
+	position: relative;
+
+	font-size: 13px;
+	font-weight: normal;
 }
 
 .document-header .document-info {
@@ -32,3 +60,10 @@
     background: url('../../images/lecm-subscriptions/alf_unsubscribe_16.png') no-repeat 5px 5px;
     padding-left: 7px;
 }
+
+.document-header .attachment-thumbnail
+{
+	float: left;
+	padding-left: 0.1em 0.5em 0.1em 0;
+}
+
