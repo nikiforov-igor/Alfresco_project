@@ -26,6 +26,21 @@
     background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 
+.dashlet-metadata .lecm-dashlet-actions .edit {
+    background-image: url("/share/res/components/profile/images/edit.png");
+    background-repeat: no-repeat;
+    padding-right: 13px;
+}
+
+.dashlet-metadata .lecm-dashlet-actions {
+    cursor: pointer;
+    float: right;
+    height: 16px;
+    margin: 3px;
+    width: 16px;
+    padding-right: 15px;
+}
+
 .dashlet .lecm-dashlet-actions a {
     background-position: 0 center;
     background-repeat: no-repeat;

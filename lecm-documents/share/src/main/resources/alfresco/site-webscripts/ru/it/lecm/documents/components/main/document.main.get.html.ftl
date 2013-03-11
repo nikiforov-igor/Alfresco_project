@@ -10,7 +10,6 @@
         <#if allowMetaDataUpdate!false>
             <span class="alfresco-twister-actions">
             <a id="${el}-link" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.view")}">&nbsp;</a>
-            <a href="${siteURL("edit-metadata?nodeRef=" + nodeRef?url)}" class="edit" title="${msg("label.edit")}">&nbsp;</a>
          </span>
         </#if>
     </h2>

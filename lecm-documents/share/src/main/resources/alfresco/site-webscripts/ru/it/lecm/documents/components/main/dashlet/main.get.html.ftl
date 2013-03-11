@@ -32,16 +32,6 @@
         }
 
         function init() {
-            new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
-                actions: [
-                    {
-                        cssClass: "edit",
-                        linkOnClick:  Alfresco.constants.URL_PAGECONTEXT +"edit-metadata?nodeRef=" + "${nodeRef}",
-                        tooltip: "${msg("dashlet.edit.tooltip")?js_string}"
-                    }
-                ]
-            });
-
             container = Dom.get('${id}_results');
             drawForm("${nodeRef}",'${id}_results', "document");
         }
@@ -55,7 +45,7 @@
         <span>${msg("label.title")}</span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
-         </span>
+        </span>
     </div>
     <div class="body scrollableList" id="${id}_results"></div>
 </div>

@@ -1,0 +1,52 @@
+<#--<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>-->
+<#assign id = args.htmlid?js_string>
+
+<script type="text/javascript">
+    //<![CDATA[
+    (function() {
+        var Dom = YAHOO.util.Dom,
+                Event = YAHOO.util.Event,
+                Selector = YAHOO.util.Selector;
+        var container;
+
+        function drawForm(nodeRef, htmlId){
+            console.log(htmlId);
+            Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj:{
+                            htmlid: htmlId,
+                            itemKind: "node",
+                            itemId:nodeRef,
+                            formId: "",
+                            mode:"view"
+                        },
+                        successCallback:{
+                            fn:function(response){
+                                container = Dom.get('${id}_container');
+                                if (container != null) {
+                                    container.innerHTML = response.serverResponse.responseText;
+                                }
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true,
+                        htmlId:htmlId + nodeRef
+                    });
+        }
+
+        function init() {
+            drawForm("${nodeRef}",'${id}');
+        }
+        Event.onDOMReady(init);
+    })();
+    //]]>
+</script>
+
+<div class="dashlet-metadata" id="${id}_metadata">
+        <div class="lecm-dashlet-actions">
+            <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
+                   class="edit" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+        </div>
+    <div id="${id}_container">
+    </div>

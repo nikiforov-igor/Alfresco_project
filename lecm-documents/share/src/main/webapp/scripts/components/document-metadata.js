@@ -52,7 +52,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @type string
                  * @required
                  */
-                nodeRef: null
+                nodeRef: null,
+                formId: "",
+                containerId: null
+
             },
 
             /**
@@ -70,13 +73,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // Load the form
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/metadata",
                         dataObj: {
-                            htmlid: "documentMain-" + this.options.nodeRef,
-                            itemKind: "node",
-                            itemId: this.options.nodeRef,
-                            formId: "",
-                            mode: "view"
+                            htmlid: "documentMetadata-" + this.options.nodeRef,
+                            nodeRef: this.options.nodeRef
                         },
                         successCallback: {
                             fn:function(response){
@@ -87,6 +87,76 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         failureMessage: "message.failure",
                         execScripts: true
                     });
+            },
+            onEdit: function(containerId, formId) {
+                if (formId != undefined || formId != null) {
+                    this.options.formId = formId;
+                }
+                if (containerId != undefined || containerId != null) {
+                    this.options.containerId = containerId;
+                }
+                var templateUrl = this.generateCreateNewUrl(this.options.nodeRef,"NodeMetadata-" + this.id);
+                new Alfresco.module.SimpleDialog("documentMetadata-"+this.id+"_results").setOptions({
+                    width:"50em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn:this.setCreateNewFormDialogTitle
+                    },
+                    onSuccess:{
+                        fn:function (response) {
+                            this.refreshContainer(this.options.containerId, this.options.formId,response);
+                            this.refreshContainer(this.id+"-formContainer","document",response);
+                        },
+                        scope:this
+                    }
+                }).show();
+            },
+            refreshContainer: function(containerId, formId, response){
+                Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj:{
+                            htmlid: 'documentMetadata-'+response.json.persistedObject,
+                            itemKind: "node",
+                            itemId:nodeRef,
+                            formId: formId,
+                            mode:"view"
+                        },
+                        successCallback:{
+                            fn:function(response){
+                                var container = Dom.get(arguments[0].config.containerId);
+                                container.innerHTML = response.serverResponse.responseText;
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true,
+                        htmlId:response.json.persistedObject,
+                        containerId: containerId
+                    });
+            },
+            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef,formId) {
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT +
+                "components/form"
+                    + "?itemKind={itemKind}"
+                    + "&itemId={itemId}"
+                    + "&mode={mode}"
+                    + "&submitType={submitType}"
+                + "&showCancelButton=true";
+                return YAHOO.lang.substitute(templateUrl, {
+                    itemKind: "node",
+                    itemId:nodeRef,
+                    formId: formId,
+                    mode:"edit",
+                    submitType:"json"
+                });
+            },
+            setCreateNewFormDialogTitle: function (p_form, p_dialog) {
+                var fileSpan = '<span class="light">Create new</span>';
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-form-container_h", fileSpan]
+                );
             }
         }, true);
 })();
