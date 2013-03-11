@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.beans;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -88,16 +89,19 @@ public class OrgstructureSGNotifierBeanImpl
 	 * @return
 	 */
 	protected Set<NodeRef> getAllEmployeesByOUAndChild(NodeRef nodeOU) {
+		final Set<NodeRef> result = new HashSet<NodeRef>();
 		// DONE: возможно надо пройтись вниз по орг-штатке и собрать всех вложенных Сотрудников
-		final List<NodeRef> units = this.orgstructureService.getSubUnits(nodeOU, true, true); // список всех вложенных Активных Подразделений
+		List<NodeRef> units = this.orgstructureService.getSubUnits(nodeOU, true, true); // список всех вложенных Активных Подразделений
+		if (units == null)
+			units = new ArrayList<NodeRef>();
 		units.add(nodeOU); // текущее подразделение тоже надо
 
-		final Set<NodeRef> result = new HashSet<NodeRef>();
 		for(NodeRef ou: units) {
 			final Set<NodeRef> employees = getEmployeesByOU(ou);
 			if (employees != null)
 				result.addAll(employees);
 		}
+
 		return result;
 	}
 
@@ -125,9 +129,11 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyChangeDP(NodeRef nodeDP) {
+		if (nodeDP == null) return;
 		final NodeRef orgUnit = orgstructureService.getUnitByStaff(nodeDP);
+		if (orgUnit == null) return;
 		final List<NodeRef> staffList = orgstructureService.getUnitStaffLists(orgUnit);
-		final boolean isBoss = staffList.size() >= 1 && staffList.get(0).equals(nodeDP);
+		final boolean isBoss = (staffList != null) && (staffList.size() >= 1) && staffList.get(0).equals(nodeDP);
 		notifyChangeDP(nodeDP, isBoss, orgUnit);
 	}
 
