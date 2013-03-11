@@ -132,36 +132,36 @@ public class OrgstructureSGNotifierBeanImpl
 		if (nodeDP == null) return;
 		final NodeRef orgUnit = orgstructureService.getUnitByStaff(nodeDP);
 		if (orgUnit == null) return;
-		final List<NodeRef> staffList = orgstructureService.getUnitStaffLists(orgUnit);
-		final boolean isBoss = (staffList != null) && (staffList.size() >= 1) && staffList.get(0).equals(nodeDP);
+
+		final boolean isBoss = Boolean.TRUE.equals(nodeService.getProperty(nodeDP, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS));
 		notifyChangeDP(nodeDP, isBoss, orgUnit);
 	}
 
 	/**
 	 * Оповещение о создании/изменении должностной позиции
-	 * @param nodeDP  узел должностной позиции
+	 * @param staffDP  узел должностной позиции
 	 * @param isBoss true, если она является руководящей
 	 * @param nodeOrgUnit
 	 */
 	@Override
-	public void notifyChangeDP(NodeRef nodeDP, boolean isBoss, NodeRef nodeOrgUnit) {
+	public void notifyChangeDP(NodeRef staffDP, boolean isBoss, NodeRef nodeOrgUnit) {
 		if (logger.isDebugEnabled()) {
 			try {
 				logger.debug( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s} of type {%s}\n\t OU {%s} of type {%s}",
-					isBoss, nodeDP, nodeService.getType(nodeDP), nodeOrgUnit, nodeService.getType(nodeOrgUnit)));
+					isBoss, staffDP, nodeService.getType(staffDP), nodeOrgUnit, nodeService.getType(nodeOrgUnit)));
 			} catch(Throwable t) {
 				logger.error( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s}\n\t OU {%s}",
-						isBoss, nodeDP, nodeOrgUnit), t);
+						isBoss, staffDP, nodeOrgUnit), t);
 				// eat the exception
 			}
 		}
 
-		final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeDP);
+		final NodeRef employee = orgstructureService.getEmployeeByPosition(staffDP);
 		final String loginName = getEmployeeLogin(employee);
 		final String emplId = (employee != null) ? employee.getId() : null;
 
 		// ensure SG_DP // Types.SGKind.getSGDeputyPosition(nodeDP.getId(), dpName, loginName, emplId);
-		final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(nodeDP, nodeService, orgstructureService, logger);
+		final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staffDP, nodeService, orgstructureService, logger);
 		sgNotifier.orgNodeCreated( sgDP);
 
 		// прописать Сотрудника в свою Должность ...
@@ -234,7 +234,7 @@ public class OrgstructureSGNotifierBeanImpl
 	/**
 	 * Назначение DP для Сотрудника.
 	 * @param employee узел типа "lecm-orgstr:employee-link"
-	 * @param dpid узел типа "lecm-orgstr:position"
+	 * @param dpid узел типа "lecm-orgstr:staff-list
 	 */
 	@Override
 	public void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {

@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 
@@ -71,16 +72,23 @@ public class PolicyUtils {
 	}
 
 	/**
-	 * Получить название Должностной Позиции.
-	 * @param deputyPoint
+	 * Получить название Должностной Позиции - здесь выдаётся название словарной 
+	 * позиции с Должностью, т.к. родное name для staff-позиции будет содержать
+	 * нечитабельный GUID.
+	 * @param staffDP
 	 * @param nodeService
+	 * @param orgstructureService
 	 * @return название DP
 	 */
-	public static String getDpInfoName(NodeRef deputyPoint, NodeService nodeService)
+	public static String getDpInfoName(NodeRef staffDP, NodeService nodeService
+			, OrgstructureBean orgstructureService)
 	{
-		if (deputyPoint == null)
+		if (staffDP == null)
 			return null;
-		final String dpName = ""+ nodeService.getProperty( deputyPoint, PROP_DP_INFO);
+		// final String dpName = ""+ nodeService.getProperty( staffDP, PROP_DP_INFO); // тут будет GUID, который плохо читается
+		final NodeRef posRef = orgstructureService.getPositionByStaff(staffDP); // получить словарное значение Должности по штатной позиции 
+		final String dpName = ""+ nodeService.getProperty( posRef, PROP_DP_INFO);
+
 		return dpName;
 	}
 
@@ -138,25 +146,25 @@ public class PolicyUtils {
 	 * Получить дексриптор Должностной Позиции, который используется в методах IOrgStructureNotifiers.
 	 * Здесь формируется "гуманоид-ориентированное" описание с названием DP и
 	 * присоединяется Сотрудник, связанный с Должностной Позицией.
-	 * @param deputyPoint id узла Должностной Позиции тип "lecm-orgstr:staffPosition"
+	 * @param staffDP id узла Должностной Позиции тип "lecm-orgstr:staffPosition"
 	 * @param nodeService служба работы с узлами
 	 * @return
 	 */
 	public static Types.SGDeputyPosition makeDeputyPos(
-			NodeRef deputyPoint
+			NodeRef staffDP
 			, NodeService nodeService
 			, OrgstructureBean orgstructureService
 			, Logger logger
 	) {
-		final NodeRef employee = orgstructureService.getEmployeeByPosition(deputyPoint);
-		return makeDeputyPos(deputyPoint, employee, nodeService, orgstructureService, logger);
+		final NodeRef employee = orgstructureService.getEmployeeByPosition(staffDP);
+		return makeDeputyPos(staffDP, employee, nodeService, orgstructureService, logger);
 	}
 
 	/**
 	 * Получить дексриптор Должностной Позиции, который используется в методах IOrgStructureNotifiers.
 	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
 	 * ориентированное" описание с названием DP.
-	 * @param deputyPoint id узла Должностной Позиции тип "lecm-orgstr:staffPosition"
+	 * @param staffDP id узла Должностной Позиции тип "lecm-orgstr:staffPosition"
 	 * @param employee Сотрудник, соотвествующий Должности
 	 * @param nodeService служба работы с узлами
 	 * @param orgstructureService
@@ -164,14 +172,14 @@ public class PolicyUtils {
 	 * @return
 	 */
 	public static Types.SGDeputyPosition makeDeputyPos(
-			NodeRef deputyPoint
+			NodeRef staffDP
 			, NodeRef employee
 			, NodeService nodeService
 			, OrgstructureBean orgstructureService
 			, Logger logger
 	) {
-		final String dpIdCode = getDPIdCode( deputyPoint, nodeService);
-		final String dpName = getDpInfoName(deputyPoint, nodeService);
+		final String dpIdCode = getDPIdCode(staffDP, nodeService);
+		final String dpName = getDpInfoName(staffDP, nodeService, orgstructureService);
 		final String userLogin = getEmployeeLogin( employee, nodeService, orgstructureService, logger);
 		return Types.SGKind.getSGDeputyPosition( dpIdCode, dpName, userLogin, (employee != null) ? employee.getId() : null);
 	}

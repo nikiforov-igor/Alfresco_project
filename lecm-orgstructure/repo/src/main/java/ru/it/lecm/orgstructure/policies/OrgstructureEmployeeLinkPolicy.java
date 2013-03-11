@@ -65,7 +65,7 @@ public class OrgstructureEmployeeLinkPolicy
 					businessJournalService.log(employee, EventCategory.TAKE_BOSS_POSITION, defaultDescription, objects);
 				}
 				// назначение Сотрудника на должность
-				notifyEmploeeSetDP(employee, position);
+				notifyEmploeeSetDP(employee, staff);
 			} else {
 				// Назначение на роль
 				String defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject на роль #object1 в рабочей группе #object2";
@@ -116,7 +116,7 @@ public class OrgstructureEmployeeLinkPolicy
 					objects.add(unit != null ? unit.toString() : "");
 					businessJournalService.log(employee, EventCategory.RELEASE_BOSS_POSITION, defaultDescription, objects);
 				}
-				notifyEmploeeRemoveDP(employee, position);
+				notifyEmploeeRemoveDP(employee, staff);
 			} else if (orgstructureService.isWorkForce(parent)) {
 				String defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с роли #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(parent);

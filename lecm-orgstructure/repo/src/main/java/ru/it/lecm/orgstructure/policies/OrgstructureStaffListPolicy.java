@@ -12,9 +12,11 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.Types;
 
 /**
  * @author dbashmakov
@@ -41,11 +43,17 @@ public class OrgstructureStaffListPolicy
 	}
 
 	public void onDeleteStaffListLog(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+		final NodeRef staff = childAssocRef.getChildRef();
+
 		if (!isNodeArchived) {
-			final NodeRef staff = childAssocRef.getChildRef();
 			final NodeRef unit = orgstructureService.getUnitByStaff(staff);
 			final List<String> objects = Arrays.asList(staff.toString());
 			businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "Сотрудник #initiator внес сведения об исключении должности #object1 из подразделения #mainobject", objects);
+		}
+
+		{	// исключение штаной SG_DP ...
+			final Types.SGDeputyPosition sgDP = (Types.SGDeputyPosition) PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);
+			this.orgSGNotifier.notifyNodeDeactivated(sgDP);
 		}
 	}
 
@@ -56,6 +64,9 @@ public class OrgstructureStaffListPolicy
 		final List<String> objects = Arrays.asList(staff.toString());
 
 		businessJournalService.log(unit, EventCategory.ADD_STAFF_POSITION, "Сотрудник #initiator  внес сведения о добавлении должности #object1 в подразделение #mainobject", objects);
+
+		// оповещение по должности для создания SG_DP ...
+		this.orgSGNotifier.notifyChangeDP( staff);
 	}
 
 	public void onUpdateStaffListLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -64,11 +75,12 @@ public class OrgstructureStaffListPolicy
 		final boolean changed = !PolicyUtils.safeEquals(prevPrimary, curPrimary);
 
 		final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeRef);
+
 		if (changed && employee != null) {
 			final NodeRef unit = nodeService.getPrimaryParent(nodeRef).getParentRef();
 
-			String category;
-			String defaultDescription;
+			final String category;
+			final String defaultDescription;
 			if (curPrimary) {
 				defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
 				category = EventCategory.TAKE_BOSS_POSITION;
@@ -79,6 +91,19 @@ public class OrgstructureStaffListPolicy
 			}
 			final List<String> objects = Arrays.asList(unit.toString());
 			businessJournalService.log(employee, category, defaultDescription, objects);
+		}
+
+		// @NOTE: обновление SG_DP для штаной позиции ...
+		{
+			final NodeRef staffPos = nodeRef;
+			final boolean curActive = Boolean.TRUE.equals(after.get(BaseBean.IS_ACTIVE));
+			final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staffPos, employee, nodeService, orgstructureService, logger);
+			// оповещение по должности для связывания/отвязки SG_DP ...
+			if (curActive) {
+				this.orgSGNotifier.notifyNodeCreated(sgDP);
+				this.orgSGNotifier.notifyChangeDP( staffPos);
+			} else
+				this.orgSGNotifier.notifyNodeDeactivated(sgDP);
 		}
 	}
 }

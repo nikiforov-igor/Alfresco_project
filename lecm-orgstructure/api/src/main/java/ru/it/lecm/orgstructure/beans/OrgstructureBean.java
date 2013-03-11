@@ -341,6 +341,11 @@ public interface OrgstructureBean {
 	 */
 	NodeRef getPersonForEmployee(NodeRef employee);
 
+	/**
+	 * Получить словарную должность для указанной Штатной Должностной Позиии. 
+	 * @param staffList должностная позиция
+	 * @return
+	 */
 	NodeRef getPositionByStaff(NodeRef staffList);
 
 	NodeRef getRoleByWorkForce(NodeRef staffList);
@@ -523,4 +528,5 @@ public interface OrgstructureBean {
 	String getEmployeeLogin(NodeRef employee);
 
 	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
+
 }
