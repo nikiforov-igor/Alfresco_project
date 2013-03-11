@@ -188,7 +188,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             field = field.substring(1);
             if (field.toUpperCase().equals(AUTHOR)) {
                 showNode = getDocumentAuthor(showNode);
-                result = getObjectDescription(showNode);
+                if (showNode != null) {
+                    result = getObjectDescription(showNode);
+                }
             }
         }
 
