@@ -16,7 +16,7 @@
 	<@region id="actions" scope="template"/>
 	<@region id="document-attachment-header" scope="template"/>
 	<div class="yui-gc">
-		<div class="yui-u first">
+		<div class="yui-u first preview">
 			<#if (config.scoped['DocumentDetails']['document-details'].getChildValue('display-web-preview') == "true")>
 				<@region id="web-preview" scope="template"/>
 			</#if>
