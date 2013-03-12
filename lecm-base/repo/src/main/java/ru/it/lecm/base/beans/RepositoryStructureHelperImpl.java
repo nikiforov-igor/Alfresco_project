@@ -88,9 +88,12 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 		PropertyCheck.mandatory (this, "documents", documents);
 		PropertyCheck.mandatory (this, "drafts", drafts);
 		repository.init ();
-		logger.debug ("Root directory is {}. It's noderef is {}", root, getRootRef ());
-		logger.debug ("Home directory is {}. It's noderef is {}", home, getHomeRef ());
-		logger.debug ("Documents directory is {}. It's noderef is {}", documents, getDocumentsRef ());
+		NodeRef rootRef = getRootRef ();
+		logger.debug ("Root directory is {}. It's noderef is {}", root, rootRef);
+		NodeRef homeRef = getHomeRef ();
+		logger.debug ("Home directory is {}. It's noderef is {}", home, homeRef);
+		NodeRef documentsRef = getDocumentsRef ();
+		logger.debug ("Documents directory is {}. It's noderef is {}", documents, documentsRef);
 	}
 
 	/**

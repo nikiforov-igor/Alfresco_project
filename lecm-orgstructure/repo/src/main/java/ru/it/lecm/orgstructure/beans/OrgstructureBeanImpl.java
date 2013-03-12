@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -36,15 +35,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	final static protected Logger logger = LoggerFactory.getLogger(OrgstructureBeanImpl.class);
 
-	private Repository repositoryHelper;
 	private AuthenticationService authService;
 	private PersonService personService;
 	private DictionaryBean dictionaryService;
 	private NodeRef organizationRootRef;
-
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
-	}
 
 	public void setAuthService(AuthenticationService authService) {
 		this.authService = authService;
@@ -466,10 +460,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public List<NodeRef> getStaffPositions(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
-		NodeRef positionsRoot = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, POSITIONS_DICTIONARY_NAME);
+		NodeRef positionsRoot = dictionaryService.getDictionaryByName (POSITIONS_DICTIONARY_NAME);
 
 		Set<QName> positions = new HashSet<QName>();
 		positions.add(TYPE_STAFF_POSITION);
@@ -687,15 +678,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public List<NodeRef> getWorkRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
-		NodeRef positionsRoot = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, ROLES_DICTIONARY_NAME);
+		NodeRef rolesRoot = dictionaryService.getDictionaryByName (ROLES_DICTIONARY_NAME);
 
 		Set<QName> positions = new HashSet<QName>();
 		positions.add(TYPE_WORK_ROLE);
 
-		List<ChildAssociationRef> workRoles = nodeService.getChildAssocs(positionsRoot, positions);
+		List<ChildAssociationRef> workRoles = nodeService.getChildAssocs(rolesRoot, positions);
 		for (ChildAssociationRef workRole : workRoles) {
 			if (!onlyActive) {
 				results.add(workRole.getChildRef());
@@ -733,15 +721,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public List<NodeRef> getBusinesRoles(boolean onlyActive) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
-		NodeRef rolesRoot = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, BUSINESS_ROLES_DICTIONARY_NAME);
+		NodeRef businessRolesRoot = dictionaryService.getDictionaryByName (BUSINESS_ROLES_DICTIONARY_NAME);
 
 		Set<QName> roles = new HashSet<QName>();
 		roles.add(TYPE_BUSINESS_ROLE);
 
-		List<ChildAssociationRef> businessRoles = nodeService.getChildAssocs(rolesRoot, roles);
+		List<ChildAssociationRef> businessRoles = nodeService.getChildAssocs(businessRolesRoot, roles);
 		for (ChildAssociationRef businessRole : businessRoles) {
 			if (!onlyActive || !isArchive(businessRole.getChildRef())) {
 				results.add(businessRole.getChildRef());

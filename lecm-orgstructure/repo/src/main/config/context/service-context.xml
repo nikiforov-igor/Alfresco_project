@@ -74,7 +74,6 @@
 
 	<bean id="serviceOrgstructure" class="ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl" init-method="init" parent="baseBean"
 		  depends-on="${groupId}.${artifactId}.orgStructureBootstrap">
-		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="personService" ref="personService"/>
