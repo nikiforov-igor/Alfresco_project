@@ -16,7 +16,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 
@@ -67,8 +66,21 @@ public class PolicyUtils {
 			logger.warn( String.format( "Employee '%s' is not linked to system user", employee.toString() ));
 			return null;
 		}
-		final String loginName = ""+ nodeService.getProperty( person, PolicyUtils.PROP_USER_NAME);
-		return loginName;
+		return getPersonLogin(person, nodeService);
+	}
+
+
+	/**
+	 * Получить логин Пользователя.
+	 * @param person
+	 * @param nodeService
+	 * @return имя входа или null, если person = null или property "userName" пустое
+	 */
+	public static String getPersonLogin(final NodeRef person, NodeService nodeService) {
+		if (person == null)
+			return null;
+		final Object loginName = nodeService.getProperty( person, PolicyUtils.PROP_USER_NAME);
+		return (loginName != null && loginName.toString().length() > 0 ) ? loginName.toString() : null;
 	}
 
 	/**

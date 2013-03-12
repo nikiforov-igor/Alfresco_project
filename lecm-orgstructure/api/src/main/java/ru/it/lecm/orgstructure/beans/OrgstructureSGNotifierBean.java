@@ -79,9 +79,10 @@ public interface OrgstructureSGNotifierBean {
 	/**
 	 * Нотификация об отвязывании Сотрудника и пользователя Альфреско.
 	 * @param employee
+	 * @param person 
 	 * @param userLogin
 	 */
-	void notifyEmploeeDown(NodeRef employee);
+	void notifyEmploeeDown(NodeRef employee, NodeRef person);
 
 	void notifyChangedOU(NodeRef nodeDP);
 

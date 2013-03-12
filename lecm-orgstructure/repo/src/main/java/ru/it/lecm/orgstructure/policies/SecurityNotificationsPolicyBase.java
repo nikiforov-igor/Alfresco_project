@@ -182,11 +182,11 @@ public abstract class SecurityNotificationsPolicyBase
 
 	/**
 	 * Нотификация об отвязывании Сотрудника и пользователя Альфреско.
-	 * @param employee
-	 * @param userLogin
+	 * @param employee Сотрудник
+	 * @param person отвязываемая Персона
 	 */
-	protected void notifyEmploeeDown(NodeRef employee) {
-		this.orgSGNotifier.notifyEmploeeDown(employee);
+	protected void notifyEmploeeDown(NodeRef employee, NodeRef person) {
+		this.orgSGNotifier.notifyEmploeeDown(employee, person);
 	}
 
 	protected void notifyChangedOU(NodeRef nodeDP) {

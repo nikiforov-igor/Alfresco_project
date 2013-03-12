@@ -304,8 +304,8 @@ public class OrgstructureSGNotifierBeanImpl
 	 * @param userLogin
 	 */
 	@Override
-	public void notifyEmploeeDown(NodeRef employee) {
-		final String loginName = getEmployeeLogin(employee);
+	public void notifyEmploeeDown(NodeRef employee, NodeRef person) {
+		final String loginName = PolicyUtils.getPersonLogin(person, nodeService);// getEmployeeLogin(employee);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "notifyEmploeeDown: login '%s'\n\t Employee {%s} of type {%s}",

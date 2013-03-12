@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -85,7 +86,8 @@ public class OrgstructureEmployeePolicy
 	@Override
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		final NodeRef employee = nodeAssocRef.getSourceRef();
-		notifyEmploeeDown(employee);
+		final NodeRef person = nodeAssocRef.getTargetRef(); 
+		notifyEmploeeDown(employee, person);
 	}
 
 	@Override
@@ -100,7 +102,8 @@ public class OrgstructureEmployeePolicy
 	@Override
 	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
 		final NodeRef employee = childAssocRef.getChildRef();
-		notifyEmploeeDown(employee);
+		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
+		notifyEmploeeDown(employee, person);
 	}
 
 	public void onCreateEmployeeLog(ChildAssociationRef childAssocRef) {
