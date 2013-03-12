@@ -19,7 +19,7 @@
 -->
 <beans>
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, documents.LogicEcmModelsConnectionAspectBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, documents.LogicEcmModelsConnectionAspectBootstrap,documents-members.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
@@ -28,6 +28,15 @@
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-documents</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="documents-members.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-document-member-model.xml</value>
             </list>
         </property>
     </bean>
@@ -160,6 +169,42 @@
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
+        </property>
+    </bean>
+
+    <bean id="documentMembersService" class="ru.it.lecm.documents.beans.DocumentMembersServiceImpl"
+          depends-on="transactionService, nodeService">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="lecmObjectsService" ref="lecmObjectsService"/>
+    </bean>
+
+    <bean id="documentMembersScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentMembersWebScriptBean"
+          depends-on="documentMembersService">
+        <property name="extensionName">
+            <value>documentMembers</value>
+        </property>
+        <property name="documentMembersService">
+            <ref bean="documentMembersService"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+    </bean>
+
+    <bean id="documentMembersPolicy" class="ru.it.lecm.documents.policy.DocumentMembersPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="documentMembersService">
+            <ref bean="documentMembersService"/>
         </property>
     </bean>
 </beans>

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get document members folder</shortname>
+    <description>Document Members Folder Get</description>
+    <url>/lecm/document/api/getMembersFolder?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

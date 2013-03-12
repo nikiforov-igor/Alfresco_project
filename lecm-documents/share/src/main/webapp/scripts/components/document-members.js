@@ -38,26 +38,36 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentObject(LogicECM.DocumentMembers.prototype,
         {
             onReady: function DocumentHistory_onReady() {
-                var linkEl = Dom.get(this.id + "-action-expand");
-                linkEl.onclick = this.onExpand.bind(this);
+                var expandEl = Dom.get(this.id + "-action-expand");
+                if (expandEl != null) {
+                    expandEl.onclick = this.onExpand.bind(this);
+                }
+
+                var linkEl = Dom.get(this.id + "-link");
+                if (linkEl != null) {
+                    linkEl.onclick = this.onExpand.bind(this);
+                }
             },
 
             onExpand: function () {
                 // Обновляем форму и раскрываем в "большой области"
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.PROXY_URI + "lecm/document/members",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj: {
-                            nodeRef: this.options.nodeRef
+                            htmlid: "document-members-" + this.options.nodeRef,
+                            itemKind: "node",
+                            itemId: this.options.nodeRef,
+                            formId: "members",
+                            mode: "view"
                         },
                         successCallback: {
-                            fn: function (response) {
+                            fn:function(response){
                                 this.expandView(response.serverResponse.responseText);
                             },
                             scope: this
                         },
-                        failureMessage: this.msg("message.failure"),
-                        scope: this,
+                        failureMessage: "message.failure",
                         execScripts: true
                     });
             }

@@ -5,6 +5,7 @@
                 <js src="/scripts/components/document-component-base.js"/>
                 <js src="/scripts/documents/connections/lecm-connected-documents.js"/>
                 <js src="/scripts/documents/connections/type-select.js"/>
+                <js src="/scripts/documents/members/lecm-document-members.js"/>
             </dependencies>
         </forms>
     </config>
@@ -170,6 +171,40 @@
                     <field id="lecm-connect:connection-type-assoc"
                            substituteString="{lecm-connect-types:reverse-name}"/>
                 </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-members:member">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-members:group"/>
+                    <show id="lecm-doc-members:employee-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-doc-members:member-fio" force="true"/>
+                    <show id="lecm-doc-members:member-unit" force="true"/>
+                    <show id="lecm-doc-members:member-position" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-members:member-fio" substituteString="{lecm-doc-members:employee-assoc/lecm-orgstr:employee-last-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-middle-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-first-name}"/>
+                    <field id="lecm-doc-members:member-unit" substituteString="{lecm-doc-members:employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>
+                    <field id="lecm-doc-members:member-position" substituteString="{lecm-doc-members:employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-members:member">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-doc-members:group"/>
+                    <show id="lecm-doc-members:employee-assoc"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

@@ -8,7 +8,26 @@
          </span>
     </h2>
 
-    <div id="${el}-formContainer">Участники будут здесь</div>
+    <div id="${el}-formContainer">
+        <div id="${el}-form" style="display:none"></div>
+        <ul id="${el}-members-set" style="width: 100%">
+        <#if members?? && members.items??>
+            <#list members.items as item>
+                <li>
+                    <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a>&nbsp${item.employeePosition}
+                    <hr>
+                </li>
+            </#list>
+            <#if members.hasNext == "true">
+                <li style="text-align: right">
+                    <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"
+                       title="${msg("label.members.more")}">${msg("label.members.more")}</a>
+                </li>
+            </#if>
+        </#if>
+        </ul>
+    </div>
+
     <script type="text/javascript">
         var documentMembersComponent = null;
     </script>

@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Get document members</shortname>
     <description>Document Members Get</description>
-    <url>/lecm/document/members?nodeRef={nodeRef}</url>
-    <format default="html">argument</format>
+    <url>/lecm/document/api/getMembers?nodeRef={nodeRef}&amp;skipCount={skipCount}&amp;loadCount={loadCount}</url>
+    <format default="json">extension</format>
     <authentication>user</authentication>
 </webscript>
