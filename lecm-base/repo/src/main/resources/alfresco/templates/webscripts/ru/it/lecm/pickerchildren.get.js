@@ -11,7 +11,7 @@ function main()
       argsSelectedItemsNameSubstituteString = args['selectedItemsNameSubstituteString'] != null ? args['selectedItemsNameSubstituteString'] : argsNameSubstituteString,
       pathElements = url.service.split("/"),
       parent = null,
-      rootNode = companyhome,
+      rootNode = businessPlatform.getHomeRef(),
       results = [],
       categoryResults = null,
       resultObj = null,
@@ -39,14 +39,14 @@ function main()
       logger.log("argsXPathLocation = " + argsXPathLocation);
       logger.log("argsXPathRoot = " + argsXPathRoot);
     }
-         
+
    try
    {
       // construct the NodeRef from the URL
       var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id;
-      
+
       // determine if we need to resolve the parent NodeRef
-      
+
       if (argsXPath != null)
       {
          // resolve the provided XPath to a NodeRef
@@ -58,7 +58,7 @@ function main()
       }
       if (argsXPathLocation != null)
       {
-          var root = companyhome;
+          var root = businessPlatform.getHomeRef();
           // resolve the root for XPath
           if (argsXPathRoot != null) {
               var node = resolveNode(argsXPathRoot);
@@ -85,10 +85,10 @@ function main()
       if (pathElements.length > 0)
       {
          lastPathElement = pathElements[pathElements.length-1];
-         
+
          if (logger.isLoggingEnabled())
             logger.log("lastPathElement = " + lastPathElement);
-         
+
          if (lastPathElement == "siblings")
          {
             // the provided nodeRef is the node we want the siblings of so get it's parent
@@ -120,7 +120,7 @@ function main()
             return null;
         }
         if (argsRootNode != null){
-            rootNode = resolveNode(argsRootNode) || companyhome;
+            rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
         }
 
         if ((argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == ""))  {
@@ -220,7 +220,7 @@ function main()
                parent = search.findNode(nodeRef);
                categoryResults = parent.children;
             }
-            
+
             if (argsSearchTerm != null)
             {
                var filteredResults = [];
@@ -234,14 +234,14 @@ function main()
                categoryResults = filteredResults.slice(0);
             }
             categoryResults.sort(sortByName);
-            
+
             // make each result an object and indicate it is selectable in the UI
             for each (var result in categoryResults)
             {
                results.push(
-               { 
-                  item: result, 
-                  selectable: true 
+               {
+                  item: result,
+                  selectable: true
                });
             }
          }
@@ -263,19 +263,19 @@ function main()
             findUsers(argsSearchTerm, maxResults, results);
          }
       }
-      
+
       if (logger.isLoggingEnabled())
          logger.log("Found " + results.length + " results");
    }
    catch (e)
    {
       var msg = e.message;
-      
+
       if (logger.isLoggingEnabled())
          logger.log(msg);
-      
+
       status.setCode(500, msg);
-      
+
       return;
    }
 
@@ -288,11 +288,11 @@ function main()
 function isItemSelectable(node, selectableType)
 {
    var selectable = true;
-   
+
    if (selectableType !== null && selectableType !== "")
    {
       selectable = node.isSubType(selectableType);
-      
+
       if (!selectable)
       {
          // the selectableType could also be an aspect,
@@ -300,7 +300,7 @@ function isItemSelectable(node, selectableType)
          selectable = node.hasAspect(selectableType);
       }
    }
-   
+
    return selectable;
 }
 
@@ -314,18 +314,18 @@ function findUsers(searchTerm, maxResults, results)
 {
    var paging = utils.createPaging(maxResults, -1);
    var searchResults = groups.searchUsers(searchTerm, paging, "lastName");
-   
+
    // create person object for each result
    for each(var user in searchResults)
    {
       if (logger.isLoggingEnabled())
          logger.log("found user = " + user.userName);
-      
+
       // add to results
       results.push(
       {
          item: createPersonResult(user.person),
-         selectable: true 
+         selectable: true
       });
    }
 }
@@ -334,22 +334,22 @@ function findGroups(searchTerm, maxResults, results)
 {
    if (logger.isLoggingEnabled())
       logger.log("Finding groups matching pattern: " + searchTerm);
-   
+
    var paging = utils.createPaging(maxResults, 0);
    var searchResults = groups.getGroupsInZone(searchTerm, "APP.DEFAULT", paging, "displayName");
    for each(var group in searchResults)
    {
       if (logger.isLoggingEnabled())
          logger.log("found group = " + group.fullName);
-         
+
       // add to results
       results.push(
       {
          item: createGroupResult(group.groupNode),
-         selectable: true 
+         selectable: true
       });
    }
-   
+
    // sort the groups by name alphabetically
    if (results.length > 0)
    {
@@ -364,7 +364,7 @@ function findGroups(searchTerm, maxResults, results)
  * Returns the nodeRef of the document library of the site the
  * given nodeRef is located within. If the nodeRef provided does
  * not live within a site "alfresco://company/home" is returned.
- * 
+ *
  * @param nodeRef The node to find the document library for
  * @return The nodeRef of the doclib or "alfresco://company/home" if the node
  *         is not located within a site
@@ -372,17 +372,17 @@ function findGroups(searchTerm, maxResults, results)
 function findDoclib(nodeRef)
 {
    var resultNodeRef = "alfresco://company/home";
-   
+
    // find the given node
    var node = search.findNode(nodeRef);
    if (node !== null)
    {
       // get the name of the site
       var siteName = node.siteShortName;
-      
+
       if (logger.isLoggingEnabled())
          logger.log("siteName = " + siteName);
-      
+
       // if the node is in a site find the document library node using an XPath search
       if (siteName !== null)
       {
@@ -394,7 +394,7 @@ function findDoclib(nodeRef)
          }
       }
    }
-   
+
    return resultNodeRef;
 }
 

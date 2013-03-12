@@ -34,6 +34,12 @@
 		-->
 	</bean>
 
+	<bean id="repositoryStructureHelperJavascriptExtension" class="ru.it.lecm.base.extensions.RepositoryStructureHelperJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="businessPlatform"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+	</bean>
+
 	<bean id="baseBean" class="ru.it.lecm.base.beans.BaseBean" abstract="true">
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
 	</bean>
