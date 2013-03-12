@@ -61,38 +61,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     YAHOO.lang.augmentProto(LogicECM.DocumentAttachmentsListTable, Alfresco.doclib.Actions);
 
     /**
-     * Generate "changeFilter" event mark-up suitable for element attribute.
-     *
-     * @method generateFilterMarkup
-     * @param filter {object} Object literal containing new filter parameters
-     * @return {string} Mark-up for use in node attribute
-     */
-    LogicECM.DocumentAttachmentsListTable.generateFilterMarkup = function (filter)
-    {
-        var filterObj = Alfresco.util.cleanBubblingObject(filter);
-        return YAHOO.lang.substitute("{filterOwner}|{filterId}|{filterData}|{filterDisplay}", filterObj, function(p_key, p_value, p_meta)
-        {
-            return typeof p_value === "undefined" ? "" : window.escape(p_value);
-        });
-    };
-
-    /**
-     * Generate "changeFilter" event mark-up specifically for category changes
-     *
-     * @method generateCategoryMarkup
-     * @param category {Array} category[0] is name, category[1] is qnamePath
-     * @return {string} Mark-up for use in node attribute
-     */
-    LogicECM.DocumentAttachmentsListTable.generateCategoryMarkup = function (category)
-    {
-        return LogicECM.DocumentAttachmentsListTable.generateFilterMarkup(
-            {
-                filterId: "category",
-                filterData: $combine(category[1], category[0])
-            });
-    };
-
-    /**
      * Generate User Profile link
      *
      * @method generateUserLink
@@ -174,8 +142,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	             * @default 1000
 	             */
 	            loadingMessageDelay: 1000,
-
-                nodeRef: null,
 
                 path: null,
 
@@ -277,8 +243,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.registerRenderer("date", function(record, label)
                 {
                     var jsNode = record.jsNode,
-                        properties = jsNode.properties,
-                        html = "";
+                        properties = jsNode.properties;
 
                     var dateI18N = "modified", dateProperty = properties.modified.iso8601;
                     if (record.workingCopy && record.workingCopy.isWorkingCopy)
@@ -388,37 +353,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     return '<span id="' + id + '" class="item">' + label + html + '</span>';
                 });
-
-                /**
-                 * Categories
-                 */
-                this.registerRenderer("categories", function(record, label)
-                {
-                    var jsNode = record.jsNode,
-                        properties = jsNode.properties,
-                        html = "";
-
-                    if (jsNode.hasAspect("cm:generalclassifiable"))
-                    {
-                        var categories = jsNode.categories, category;
-                        html += '<span class="category-item item">&nbsp;</span><span class="item">' + label;
-                        if (categories.length > 0)
-                        {
-                            for (var i = 0, j = categories.length; i < j; i++)
-                            {
-                                category = categories[i];
-                                html += '<span class="category"><a href="#" class="filter-change" rel="' + LogicECM.DocumentAttachmentsListTable.generateCategoryMarkup(category) + '">' + $html(category[0]) + '</a></span>' + (j - i > 1 ? ", " : "");
-                            }
-                        }
-                        else
-                        {
-                            html += '<span class="faded">' + label + this.msg("details.categories.none") + '</span>';
-                        }
-                        html += '</span>';
-                    }
-
-                    return html;
-                });
             },
 
             /**
@@ -463,9 +397,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Reset the custom error messages
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
-
-                // Reset preview tooltips array
-                this.previewTooltips = [];
 
                 this.insituEditors = [];
 
@@ -962,12 +893,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         record = oRecord.getData(),
                         jsNode = record.jsNode,
                         properties = jsNode.properties,
-                        isContainer = jsNode.isContainer,
-                        isLink = jsNode.isLink,
                         title = "",
                         titleHTML = "",
-                        version = "",
-                        canComment = jsNode.permissions.user.CreateChildren;
+                        version = "";
 
                     if (jsNode.isLink)
                     {
