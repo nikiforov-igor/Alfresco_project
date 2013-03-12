@@ -118,7 +118,7 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 			for (NodeRef absence : employeeAbsence) {
 				Date absenceBegin = getAbsenceStartDate(absence);
 				Date absenceEnd = getAbsenceEndDate(absence);
-				if (date.after(absenceBegin) && date.before(absenceEnd)) {
+				if (!date.before(absenceBegin) && !date.after(absenceEnd)) {
 					result = true;
 					break;
 				}
