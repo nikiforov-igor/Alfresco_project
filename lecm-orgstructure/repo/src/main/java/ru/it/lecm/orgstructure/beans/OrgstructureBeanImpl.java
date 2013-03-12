@@ -65,8 +65,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	 */
 	public void init() {
 		final String rootName = ORGANIZATION_ROOT_NAME;
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
+		final NodeRef rootDir = getFolder(ORGANIZATION_ROOT_ID);
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -74,14 +73,14 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 					@Override
 					public NodeRef execute() throws Throwable {
 						NodeRef organizationRef;
-						organizationRef = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, rootName);
+						organizationRef = nodeService.getChildByName(rootDir, ContentModel.ASSOC_CONTAINS, rootName);
 						if (organizationRef == null) {
 							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);;
 
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
 							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(companyHome, assocTypeQName, assocQName, TYPE_ORGANIZATION, properties);
+							ChildAssociationRef associationRef = nodeService.createNode(rootDir, assocTypeQName, assocQName, TYPE_ORGANIZATION, properties);
 
 							/**
 							 Структура директорий

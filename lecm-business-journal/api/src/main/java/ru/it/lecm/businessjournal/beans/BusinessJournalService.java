@@ -21,8 +21,10 @@ public interface BusinessJournalService {
 	/**
 	 * Корневой узел Business Journal
 	 */
-	String BJ_ROOT_NAME = "Business Journal";
+	String BJ_ROOT_NAME = "Сервис Бизнес-журнал";
+	String BJ_ROOT_ID = "BJ_ROOT_ID";
 	String BJ_ARCHIVE_ROOT_NAME = "Архивные записи";
+	String BJ_ARCHIVE_ROOT_ID = "BJ_ARCHIVE_ROOT_ID";
 	String BJ_ARCHIVER_SETTINGS_NAME = "Настройки автоматического архивирования";
 	String BR_ASSOC_QNAME = "businessJournal";
 	String BR_ARCHIVE_ASSOC_QNAME = "archive";

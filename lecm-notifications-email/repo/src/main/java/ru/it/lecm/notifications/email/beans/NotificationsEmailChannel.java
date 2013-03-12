@@ -34,7 +34,7 @@ import java.util.Map;
 public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	private static final transient Logger logger = LoggerFactory.getLogger(NotificationsEmailChannel.class);
 	public static final String NOTIFICATIONS_EMAIL_ROOT_NAME = "Email";
-	public static final String NOTIFICATIONS_EMAIL_ASSOC_QNAME = "email";
+	public static final String NOTIFICATIONS_EMAIL_ROOT_ID = "NOTIFICATIONS_EMAIL_ROOT_ID";
 
 	public static final String NOTIFICATIONS_EMAIL_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/email/1.0";
 	public final QName TYPE_NOTIFICATION_EMAIL = QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, "notification");
@@ -67,31 +67,7 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	 * Создает рабочую директорию - если она еще не создана.
 	 */
 	public void init() {
-		final String rootName = NOTIFICATIONS_EMAIL_ROOT_NAME;
-		repositoryHelper.init();
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef rootRef = nodeService.getChildByName(notificationsService.getNotificationsRootRef(), ContentModel.ASSOC_CONTAINS, rootName);
-						if (rootRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, NOTIFICATIONS_EMAIL_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(notificationsService.getNotificationsRootRef(), assocTypeQName, assocQName, nodeTypeQName, properties);
-							rootRef = associationRef.getChildRef();
-						}
-						return rootRef;
-					}
-				});
-			}
-		};
-		this.rootRef = AuthenticationUtil.runAsSystem(raw);
+		this.rootRef = getFolder(NOTIFICATIONS_EMAIL_ROOT_ID);
 	}
 
 	@Override

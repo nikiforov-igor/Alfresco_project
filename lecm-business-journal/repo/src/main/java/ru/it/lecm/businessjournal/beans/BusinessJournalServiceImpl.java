@@ -2,7 +2,6 @@ package ru.it.lecm.businessjournal.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
@@ -38,7 +37,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
 
 	private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
 	private SearchService searchService;
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
@@ -83,18 +81,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return serviceRegistry;
 	}
 
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
-	}
-
 	/**
 	 * Метод инициализвции сервиса
 	 * Создает рабочую директорию - если она еще не создана.
 	 * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
 	 */
 	public void init() {
-		bjRootRef = getFolder("BJ_ROOT_FOLDER");
-		bjArchiveRef =  getFolder("BJ_ARCHIVE_ROOT_FOLDER");
+		bjRootRef = getFolder(BJ_ROOT_ID);
+		bjArchiveRef =  getFolder(BJ_ARCHIVE_ROOT_ID);
 	}
 
 	@Override

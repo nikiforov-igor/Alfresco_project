@@ -5,7 +5,6 @@ import java.util.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -20,6 +19,7 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -44,6 +44,8 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 
 	private static final Logger logger = LoggerFactory.getLogger (OrgstructureWebScriptBean.class);
 	public static final String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
+	public static final String WORKGROUPS_ROLES_DICTIONARY_NAMES = "Роли для рабочих групп";
+	public static final String BUSINESS_ROLES_DICTIONARY_NAMES = "Бизнес роли";
 	public static final String PAGE_ORG_POSITIONS = "org-positions";
 	public static final String PAGE_ORG_ROLES = "org-roles";
 	public static final String PAGE_ORG_EMPLOYEES = "org-employees";
@@ -65,15 +67,13 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String TYPE_ROLE = "workRole";
 	public static final String TYPE_BUSINESS_ROLE = "business-role";
 	public static final String TYPE_ORGANIZATION = "organization";
+
+	private DictionaryBean dictionaryService;
 	/**
 	 * Service registry
 	 */
 	protected ServiceRegistry services;
 
-	/**
-	 * Repository helper
-	 */
-	protected Repository repository;
 
 	private OrgstructureBean orgstructureService;
 
@@ -86,17 +86,12 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		this.services = services;
 	}
 
-	/**
-	 * Set the repository helper
-	 *
-	 * @param repository the repository helper
-	 */
-	public void setRepositoryHelper(Repository repository) {
-		this.repository = repository;
-	}
-
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	/**
@@ -123,7 +118,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public String getRoots() {
 		JSONArray nodes = new JSONArray();
 		NodeService nodeService = services.getNodeService();
-		repository.init();
 		JSONObject root;
 		NodeRef organizationRef = orgstructureService.getOrganizationRootRef();
 		try {
@@ -135,10 +129,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			nodes.put(root);
 
 			// Справочники
-			final NodeRef companyHome = repository.getCompanyHome();
-			NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DICTIONARIES_ROOT_NAME);
-
-			NodeRef positions = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, POSITIONS_DICTIONARY_NAME);
+			NodeRef positions = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
 			// Добавить справочник Должности
 			root = new JSONObject();
 			root.put(NODE_REF, positions.toString());
@@ -147,7 +138,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			root.put(DELETE_NODE, false);
 			nodes.put(root);
 
-			NodeRef roles = nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Роли для рабочих групп");
+			NodeRef roles = dictionaryService.getDictionaryByName(WORKGROUPS_ROLES_DICTIONARY_NAMES);
 			// Добавить справочник Роли в рабочих группах
 			root = new JSONObject();
 			root.put(NODE_REF, roles.toString());
@@ -157,7 +148,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			nodes.put(root);
 
 			//Добавить справочник Бизнес Роли
-			NodeRef businessRoles = nodeService.getChildByName (dictionariesRoot, ContentModel.ASSOC_CONTAINS, "Бизнес роли");
+			NodeRef businessRoles = dictionaryService.getDictionaryByName(BUSINESS_ROLES_DICTIONARY_NAMES);
 			root = new JSONObject();
 			root.put(NODE_REF, businessRoles.toString());
 			root.put(ITEM_TYPE, TYPE_BUSINESS_ROLE);

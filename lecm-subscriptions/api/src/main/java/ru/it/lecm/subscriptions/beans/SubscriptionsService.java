@@ -11,7 +11,8 @@ import java.util.List;
  * Time: 11:25
  */
 public interface SubscriptionsService {
-	public static final String SUBSCRIPTIONS_ROOT_NAME = "Подписки";
+	public static final String SUBSCRIPTIONS_ROOT_NAME = "Сервис Подписки";
+	public static final String SUBSCRIPTIONS_ROOT_ID = "SUBSCRIPTIONS_ROOT_ID";
 	public static final String DICTIONARY_ROOT_NAME = "Dictionary";
 	public static final String DICTIONARY_ROOT_NAME_EVENT_CATEGORY = "Категория события";
 	public static final String DICTIONARY_ROOT_NAME_TYPE_OBJECT = "Тип объекта";

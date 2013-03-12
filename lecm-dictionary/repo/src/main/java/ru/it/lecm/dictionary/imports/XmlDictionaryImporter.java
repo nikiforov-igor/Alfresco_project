@@ -1,7 +1,6 @@
 package ru.it.lecm.dictionary.imports;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -23,22 +22,22 @@ import java.util.Map;
 public class XmlDictionaryImporter {
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
-	private Repository repositoryHelper;
 	private QName itemsType = null;
 	private InputStream inputStream;
+	private NodeRef dictionariesRoot;
 
 	/**
 	 * Конструктор загрузчика XML
 	 * @param inputStream входной XML поток
-	 * @param repositoryHelper      repositoryHelper
 	 * @param nodeService           nodeService
 	 * @param namespaceService      namespaceService
+	 * @param rootDir Корневая папка для словарей.
 	 */
-	public XmlDictionaryImporter(InputStream inputStream, Repository repositoryHelper, NodeService nodeService, NamespaceService namespaceService) {
+	public XmlDictionaryImporter(InputStream inputStream, NodeService nodeService, NamespaceService namespaceService, NodeRef dictionariesRoot) {
 		this.inputStream = inputStream;
-		this.repositoryHelper = repositoryHelper;
 		this.nodeService = nodeService;
 		this.namespaceService = namespaceService;
+		this.dictionariesRoot = dictionariesRoot;
 	}
 
 	/**
@@ -178,15 +177,7 @@ public class XmlDictionaryImporter {
 	 * @return ссылку на корневой контейнер справочников
 	 */
 	private NodeRef getDictionariesRoot() {
-		repositoryHelper.init();
-		final NodeRef companyHome = repositoryHelper.getCompanyHome();
-		NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, ExportNamespace.DICTIONARIES_ROOT_NAME);
-		if (dictionariesRoot == null) {
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-			properties.put(ContentModel.PROP_NAME, ExportNamespace.DICTIONARIES_ROOT_NAME);
-			dictionariesRoot = nodeService.createNode(companyHome, ContentModel.ASSOC_CONTAINS, QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, ExportNamespace.DICTIONARIES_ROOT_NAME), ContentModel.TYPE_FOLDER, properties).getChildRef();
-		}
-		return dictionariesRoot;
+		return this.dictionariesRoot;
 	}
 
 	/** считываем свойства из XML

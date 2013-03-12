@@ -35,7 +35,7 @@ import java.util.*;
  */
 public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_NAME = "Активный канал";
-	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_ASSOC_QNAME = "active_channel";
+	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_ID = "NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_ID";
 
 	public static final String NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/channel/active/1.0";
 	public static final QName TYPE_NOTIFICATION_ACTIVE_CHANNEL = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, "notification");
@@ -45,7 +45,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannel.class);
 
 	private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
 	protected NotificationsService notificationsService;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
@@ -53,10 +52,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
 	}
 
 	public void setNotificationsService(NotificationsService notificationsService) {
@@ -84,31 +79,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	 * Создает рабочую директорию - если она еще не создана.
 	 */
 	public void init() {
-		final String rootName = NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_NAME;
-		repositoryHelper.init();
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef rootRef = nodeService.getChildByName(notificationsService.getNotificationsRootRef(), ContentModel.ASSOC_CONTAINS, rootName);
-						if (rootRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, NOTIFICATIONS_ACTIVE_CHANNEL_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(notificationsService.getNotificationsRootRef(), assocTypeQName, assocQName, nodeTypeQName, properties);
-							rootRef = associationRef.getChildRef();
-						}
-						return rootRef;
-					}
-				});
-			}
-		};
-		this.rootRef = AuthenticationUtil.runAsSystem(raw);
+		this.rootRef = getFolder(NOTIFICATIONS_ACTIVE_CHANNEL_ROOT_ID);
 	}
 
 	@Override

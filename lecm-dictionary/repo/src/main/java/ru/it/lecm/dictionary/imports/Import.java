@@ -1,6 +1,5 @@
 package ru.it.lecm.dictionary.imports;
 
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.json.JSONArray;
@@ -15,6 +14,8 @@ import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
+import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 
 /**
@@ -23,20 +24,13 @@ import java.io.InputStream;
  * Time: 12:01
  */
 public class Import extends AbstractWebScript {
-
-
-
-    NodeService nodeService;
-    NamespaceService namespaceService;
-    Repository repositoryHelper;
+	private NodeService nodeService;
+	private NamespaceService namespaceService;
+	private DictionaryBean dictionaryService;
 
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
-    }
-
-    public void setRepositoryHelper(Repository repositoryHelper) {
-        this.repositoryHelper = repositoryHelper;
     }
 
     public void setNamespaceService(NamespaceService namespaceService) {
@@ -45,8 +39,6 @@ public class Import extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-
 	    JSONObject wf = new JSONObject();
 	    JSONArray compositions = new JSONArray();
 	    InputStream inputStream = null;
@@ -55,7 +47,8 @@ public class Import extends AbstractWebScript {
 		    FormField[] fields = formData.getFields();
 
 		    inputStream = fields[0].getInputStream();
-		    XmlDictionaryImporter xmlDictionaryImporter = new XmlDictionaryImporter(inputStream, repositoryHelper, nodeService, namespaceService);
+			NodeRef rootDir = dictionaryService.getDictionariesRoot();
+		    XmlDictionaryImporter xmlDictionaryImporter = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
 		    xmlDictionaryImporter.readDictionary();
 		    //Возможно необходимо выводить статистику по добавленым значениям
 		    wf.put("text", "Справочник успешно создан");
@@ -73,4 +66,8 @@ public class Import extends AbstractWebScript {
 	    }
 
     }
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 }

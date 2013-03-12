@@ -1,23 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
-<!--
-	Licensed to the Apache Software Foundation (ASF) under one or more
-	contributor license agreements.  See the NOTICE file distributed with
-	this work for additional information regarding copyright ownership.
-	The ASF licenses this file to You under the Apache License, Version 2.0
-	(the "License"); you may not use this file except in compliance with
-	the License.  You may obtain a copy of the License at
-	
-	http://www.apache.org/licenses/LICENSE-2.0
-	
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-	
--->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	<!-- Registration of orgStructure models -->
 	<bean id="${groupId}.${artifactId}.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap">
@@ -68,14 +54,19 @@
 		</property>
 	</bean>
 
-	<bean id="subscriptionsService" init-method="init" class="ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl"
-	      depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService, serviceOrgstructure, businessJournalService">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="repositoryHelper" ref="repositoryHelper"/>
-		<property name="transactionService" ref="transactionService"/>
+	<util:constant id="SUBSCRIPTIONS_ROOT_ID" static-field="ru.it.lecm.subscriptions.beans.SubscriptionsService.SUBSCRIPTIONS_ROOT_ID"/>
+	<util:constant id="SUBSCRIPTIONS_ROOT_NAME" static-field="ru.it.lecm.subscriptions.beans.SubscriptionsService.SUBSCRIPTIONS_ROOT_NAME"/>
+
+	<bean id="subscriptionsService" class="ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl" parent="baseBean"
+	      depends-on="nodeService, serviceOrgstructure, businessJournalService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="folders">
+			<map>
+				<entry key="#{SUBSCRIPTIONS_ROOT_ID}" value="#{SUBSCRIPTIONS_ROOT_NAME}"/>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="businessJournalSchedule" class="ru.it.lecm.subscriptions.schedule.BusinessJournalSchedule">

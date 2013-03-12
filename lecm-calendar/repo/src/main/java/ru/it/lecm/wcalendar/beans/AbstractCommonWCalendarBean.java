@@ -30,6 +30,7 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	protected OrgstructureBean orgstructureService;
 	protected BusinessJournalService businessJournalService;
 	protected AuthenticationService authService;
+	public static final String WORK_CALENDAR_FOLDER_ID = "WORK_CALENDAR_FOLDER_ID";
 	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractCommonWCalendarBean.class);
 
@@ -97,7 +98,7 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	public NodeRef doWork() throws Exception {
 		repository.init();
 //		final NodeRef rootNode = repository.getCompanyHome();
-		final NodeRef rootNode = getFolder("WORK_CALENDAR_FOLDER");
+		final NodeRef rootNode = getFolder(WORK_CALENDAR_FOLDER_ID);
 		final Map<String, Object> params = containerParams();
 		NodeRef container = nodeService.getChildByName(rootNode, ContentModel.ASSOC_CONTAINS, (String) params.get("CONTAINER_NAME"));
 		if (container == null) {

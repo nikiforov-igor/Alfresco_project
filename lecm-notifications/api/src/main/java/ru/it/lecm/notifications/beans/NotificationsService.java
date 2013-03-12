@@ -14,10 +14,10 @@ public interface NotificationsService {
 	public static final String NOTIFICATIONS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/1.0";
 	public static final String NOTIFICATIONS_TYPE_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/types/1.0";
 
-	public static final String NOTIFICATIONS_ROOT_NAME = "Уведомления";
-	public static final String NOTIFICATIONS_ASSOC_QNAME = "notifications";
+	public static final String NOTIFICATIONS_ROOT_NAME = "Сервис Уведомления";
+	public static final String NOTIFICATIONS_ROOT_ID = "NOTIFICATIONS_ROOT_ID";
 	public static final String NOTIFICATIONS_GENERALIZATION_ROOT_NAME = "Обобщённые уведомления";
-	public static final String NOTIFICATIONS_GENERALIZATION_ASSOC_QNAME = "generalization";
+	public static final String NOTIFICATIONS_GENERALIZATION_ROOT_ID = "NOTIFICATIONS_GENERALIZATION_ROOT_ID";
 
 	public final QName TYPE_GENERALIZED_NOTIFICATION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "generalized-notification");
 

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -18,35 +16,7 @@ import ru.it.lecm.base.beans.BaseBean;
  */
 public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
-    /**
-     * Service registry
-     */
-    protected ServiceRegistry services;
-
-    /**
-     * Repository helper
-     */
-    protected Repository repository;
-
 	private DictionaryService dictionaryService;
-
-    /**
-     * Set the service registry
-     *
-     * @param services the service registry
-     */
-    public void setServiceRegistry(ServiceRegistry services) {
-        this.services = services;
-    }
-
-    /**
-     * Set the repository helper
-     *
-     * @param repository the repository helper
-     */
-    public void setRepositoryHelper(Repository repository) {
-        this.repository = repository;
-    }
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -54,12 +24,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
     @Override
     public NodeRef getDictionaryByName(String name) {
-        repository.init();
-
-        final NodeRef companyHome = repository.getCompanyHome();
-        NodeRef dictionariesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DictionaryBean.DICTIONARIES_ROOT_NAME);
-
-        return nodeService.getChildByName(dictionariesRoot, ContentModel.ASSOC_CONTAINS, name);
+        return nodeService.getChildByName(getDictionariesRoot(), ContentModel.ASSOC_CONTAINS, name);
     }
 
     @Override
@@ -155,5 +120,10 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public NodeRef getDictionariesRoot() {
+		return getFolder(DICTIONARIES_ROOT_ID);
 	}
 }

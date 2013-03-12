@@ -22,6 +22,7 @@ public interface OrgstructureBean {
 	 * Корневой узел Организации
 	 */
 	String ORGANIZATION_ROOT_NAME = "Организация";
+	String ORGANIZATION_ROOT_ID = "ORGANIZATION_ROOT_ID";
 	String STRUCTURE_ROOT_NAME = "Структура";
 	String EMPLOYEES_ROOT_NAME = "Сотрудники";
 	String PERSONAL_DATA_ROOT_NAME = "Персональные данные";

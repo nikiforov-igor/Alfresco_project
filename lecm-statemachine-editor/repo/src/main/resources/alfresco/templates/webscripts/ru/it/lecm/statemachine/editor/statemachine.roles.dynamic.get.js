@@ -2,7 +2,7 @@ var nodeRef = args["nodeRef"];
 
 if (nodeRef != null) {
 
-	var rolesRoot = search.xpathSearch("/app:company_home/lecm-dic:Dictionary/lecm-dic:Бизнес_x0020_роли")[0];
+	var rolesRoot = search.xpathSearch("/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли")[0];
 	var query = " +PATH:\"" + rolesRoot.getQnamePath() + "//* \" AND @lecm-orgstr\\:business-role-is-dynamic: \"true\"";
 
 	var roles = search.query(

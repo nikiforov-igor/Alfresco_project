@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="${groupId}.${artifactId}.wCalendarBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
@@ -32,6 +34,8 @@
 			</list>
 		</property>
 	</bean>
+
+	<util:constant id="WORK_CALENDAR_FOLDER_ID" static-field="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean.WORK_CALENDAR_FOLDER_ID"/>
 	<bean id="commonWCalendarBean" class="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean"
 		  abstract="true" parent="baseBean">
 		<property name="nodeService" ref="nodeService"/>
@@ -42,7 +46,7 @@
 		<property name="authService" ref="authenticationService"/>
 		<property name="folders">
 			<map>
-				<entry key="WORK_CALENDAR_FOLDER" value="Сервис Рабочий календарь"/>
+				<entry key="#{WORK_CALENDAR_FOLDER_ID}" value="Сервис Рабочий календарь"/>
 			</map>
 		</property>
 	</bean>

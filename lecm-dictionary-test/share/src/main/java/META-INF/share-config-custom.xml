@@ -48,7 +48,7 @@
                 <appearance>
                     <field id="lecm-dic-test:regOneSelect">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
@@ -58,7 +58,7 @@
 
                     <field id="lecm-dic-test:regOneAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
@@ -66,7 +66,7 @@
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
 	                        <control-param name="showCreateNewLink">true</control-param>
 	                        <control-param name="showCreateNewButton">true</control-param>
@@ -75,7 +75,7 @@
 
                     <field id="lecm-dic-test:regOneTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
 	                        <control-param name="showCreateNewLink">true</control-param>
@@ -84,7 +84,7 @@
                     </field>
                     <field id="lecm-dic-test:regManyTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
@@ -94,7 +94,7 @@
 
                     <field id="lecm-dic-test:addressOneTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
@@ -103,7 +103,7 @@
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
 	                        <control-param name="showCreateNewLink">true</control-param>
@@ -135,7 +135,7 @@
                 <appearance>
                     <field id="lecm-dic-test:regOneSelect">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel">Empty</control-param>
@@ -145,7 +145,7 @@
 
                     <field id="lecm-dic-test:regOneAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
@@ -153,7 +153,7 @@
                     </field>
                     <field id="lecm-dic-test:regManyAutocomplete">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
 	                        <control-param name="showCreateNewLink">true</control-param>
 	                        <control-param name="showCreateNewButton">true</control-param>
@@ -162,7 +162,7 @@
 
                     <field id="lecm-dic-test:regOneTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -172,7 +172,7 @@
                     </field>
                     <field id="lecm-dic-test:regManyTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Регионы</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Регионы</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-regions:code} - {cm:name}</control-param>
                             <control-param name="plane">true</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -183,7 +183,7 @@
 
                     <field id="lecm-dic-test:addressOneTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
@@ -193,7 +193,7 @@
                     </field>
                     <field id="lecm-dic-test:addressManyTree">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/lecm-dic:Dictionary/lecm-dic:Адрес</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адрес</control-param>
                             <control-param name="nameSubstituteString">{lecm-dic-address:prefix} - {cm:name}</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showCreateNewLink">true</control-param>

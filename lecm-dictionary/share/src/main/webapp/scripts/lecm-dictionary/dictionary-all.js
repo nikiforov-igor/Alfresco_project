@@ -9,7 +9,7 @@
 			datagridMeta:{
 				itemType:"lecm-dic:dictionary",
                 searchConfig:{
-                    filter:'+PATH:"/app:company_home/lecm-dic:Dictionary/*"'
+                    filter:'+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*"'
                 }
 			}
 		});
