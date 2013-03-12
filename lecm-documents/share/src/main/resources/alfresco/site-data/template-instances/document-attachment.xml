@@ -73,7 +73,7 @@
 		<!-- Document Actions (incl commons) -->
 		<component>
 			<region-id>document-actions</region-id>
-			<url>/components/document-details/document-actions</url>
+			<url>/lecm/components/document/attachment/actions</url>
 			<properties>
 				<nodeRef>{nodeRef}</nodeRef>
 			</properties>
