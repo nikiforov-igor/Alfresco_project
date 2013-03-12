@@ -10,8 +10,37 @@
         </span>
     </h2>
 
-    <div id="${el}-formContainer">
-        Вложения будут здесь
+    <div id="${el}-formContainer" class="attachments-set">
+		<ul id="${el}-attachments-set" class="attachment-category">
+			<#if attachments?? && attachments.items??>
+				<#list attachments.items as item>
+					<li>
+						<div class="category-title">
+							<#if item.category??>
+								${item.category.name!""}
+							</#if>
+						</div>
+						<#if item.attachments??>
+							<ul class="attachment">
+								<#list item.attachments as attachment>
+									<li>
+										<a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
+											${attachment.name!""}
+										</a>
+									</li>
+								</#list>
+							</ul>
+						</#if>
+					</li>
+				</#list>
+					<#--<#if connections.hasNext == "true">-->
+						<#--<li style="text-align: right">-->
+							<#--<a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"-->
+							   <#--title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>-->
+						<#--</li>-->
+					<#--</#if>-->
+			</#if>
+	    </ul>
     </div>
     <script type="text/javascript">//<![CDATA[
         (function () {

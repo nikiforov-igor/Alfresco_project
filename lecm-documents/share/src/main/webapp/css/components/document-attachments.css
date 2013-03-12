@@ -1,0 +1,22 @@
+.attachments-set .attachment-category {
+	padding-left: 1.5em;
+}
+
+.attachments-set .attachment-category .category-title {
+	padding-top: 0.5em;
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	color: #333333;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.attachments-set .attachment-category .attachment {
+	padding-left: 1em;
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+}

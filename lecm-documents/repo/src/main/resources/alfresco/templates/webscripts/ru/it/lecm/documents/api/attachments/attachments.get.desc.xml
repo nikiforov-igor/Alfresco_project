@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get document attachments</shortname>
+    <description>Document Attachments</description>
+    <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>
