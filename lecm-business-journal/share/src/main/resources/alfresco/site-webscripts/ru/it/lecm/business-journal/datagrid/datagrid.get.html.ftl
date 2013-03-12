@@ -43,7 +43,7 @@
 	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
                             sort:"lecm-busjournal:bjRecord-date|desc",
                             searchConfig: {
-                                filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Бизнес-журнал/*"'
+                                filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Бизнес-журнал//*"'
                             }
                         },
                         bubblingLabel: "bj-records",
