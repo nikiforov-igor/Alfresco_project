@@ -50,10 +50,9 @@ import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
-import ru.it.lecm.security.impl.OrgStrucureAfterInvocationProvider;
 import ru.it.lecm.utils.DurationLogger;
-import ru.it.lecm.utils.alfresco.SearchHelper;
-import ru.it.lecm.utils.alfresco.Utils;
+import ru.it.lecm.utils.SearchHelper;
+import ru.it.lecm.utils.Utils;
 
 public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 {
@@ -874,8 +873,6 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 					if (hasAccess) i_allow++;
 				}
-				if (foundSet instanceof OrgStrucureAfterInvocationProvider.FilteringResultSet)
-					i_rawLength = ((OrgStrucureAfterInvocationProvider.FilteringResultSet)foundSet).rawLength();
 			}
 			logger.info( String.format("found %s record(s)", i_total));
 
@@ -1354,6 +1351,13 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		}
 	}
 
+	/**
+	 * Метод получения списка задач Activity, связанных с данным узлом.
+	 * Входной аргумент - узел для инспектирования: 
+	 * 		"nodeRef":"workspace://SpacesStore/2bab80c5-8e43-41a8-ac53-1e4d337c9869"
+	 * @return (wf_count:count, wf_list[id:desc])
+	 * @throws JSONException
+	 */
 	private JSONObject doWorkFlowTest() throws JSONException {
 		final JSONObject result = new JSONObject();
 
@@ -1369,8 +1373,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				}
 			}
 		}
-		result.put( "wf_List", workflowList);
-		result.put( "wf_Count", workflowList.size());
+		result.put( "wf_count", workflowList.size());
+		result.put( "wf_list", workflowList);
 		return result;
 	}
 

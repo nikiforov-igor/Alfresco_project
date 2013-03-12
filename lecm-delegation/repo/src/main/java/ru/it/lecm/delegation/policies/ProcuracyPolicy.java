@@ -41,10 +41,9 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 
 	public final void init () {
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
-		logger.info ("initializing ProcuracyPolicy...");
-		logger.info ("initializing onCreateAssociation");
+		logger.info ("initializing ProcuracyPolicy.onCreateAssociation");
 		policyComponent.bindAssociationBehaviour (OnCreateAssociationPolicy.QNAME, IDelegation.TYPE_PROCURACY, new JavaBehaviour (this, "onCreateAssociation"));
-		logger.info ("initializing onDeleteAssociation");
+		logger.info ("initializing ProcuracyPolicy.onDeleteAssociation");
 		policyComponent.bindAssociationBehaviour (OnDeleteAssociationPolicy.QNAME, IDelegation.TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
 	}
 

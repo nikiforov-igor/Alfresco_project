@@ -82,32 +82,4 @@
 		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
-<!--
-	<bean id="mapperBusinessRole" class="ru.it.lecm.model.orm.DataMap">
-		<property name="modelClazz" value="ru.it.lecm.model.BusinessRole" />
-		<property name="namespacePrefixResolver">
-			<ref bean="namespaceService"></ref>
-		</property>
-		<property name="enSkipUnmapedProps" value="true" />
-		<property name="mapPropsIntoPojo">
-			<map>
-				<entry key="lecm-ba:role">
-					<value>name</value>
-				</entry>
-				<entry key="lecm-ba:securityGroup">
-					<value>securityGroup</value>
-				</entry>
-			</map>
-		</property>
-	</bean>
-
-	<bean id="modelFactory" class="ru.it.lecm.model.orm.ModelFactory">
-		<property name="namespacePrefixResolver" ref="namespaceService" />
-		<property name="mappers">
-			<list>
-				<ref local="mapperBusinessRole"/>
-			</list>
-		</property>
-	</bean>
-  -->
 </beans>
