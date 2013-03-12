@@ -184,12 +184,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	             */
 	            bubblingLabel: null,
 
-	            ignoreActions: [
-		            "document-edit-offline",
-		            "document-copy-to",
-		            "document-move-to",
-		            "document-assign-workflow",
-		            "document-publish"
+	            showActions: [
+		            "document-download",
+		            "document-view-content",
+		            "document-edit-properties",
+		            "document-upload-new-version",
+		            "document-delete"
 	            ]
             },
 
@@ -1310,10 +1310,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		        if (actions != null) {
 			        for (var i = 0; i < actions.length; i++) {
 				        var action = actions[i];
-				        var show = true;
-				        for (var j = 0; j < this.options.ignoreActions.length; j++) {
-					        if (action.id == this.options.ignoreActions[j]) {
-						        show = false;
+				        var show = false;
+				        for (var j = 0; j < this.options.showActions.length; j++) {
+					        if (action.id == this.options.showActions[j]) {
+						        show = true;
 					        }
 				        }
 				        if (show) {
