@@ -41,6 +41,7 @@
         <div id="custom-region" class="yui-u first" style="display:none"></div>
         <div class="yui-u bordered">
             <#--<@region id="document-actions" scope="template"/>-->
+            <@region id="document-actions" scope="template"/>
             <@region id="document-metadata" scope="template"/>
             <@region id="document-attachments" scope="template"/>
             <@region id="document-workflows" scope="template"/>

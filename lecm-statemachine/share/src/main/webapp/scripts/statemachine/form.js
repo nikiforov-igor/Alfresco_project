@@ -51,8 +51,17 @@ LogicECM.module = LogicECM.module || {};
             }
 		},
 
-		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee) {
+		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, field) {
             this.assignee = assignee;
+            if (errors.length > 0) {
+                Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: "Поля надо заполнить",
+                        spanClass: "wait",
+                        displayTime: 3
+                    });
+                return;
+            }
 			if (workflowId != null && workflowId != 'null') {
 				this.selectedItem = nodeRef;
 				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";

@@ -93,8 +93,8 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.statemachine.documents.get"
-		  class="ru.it.lecm.statemachine.script.DocumentListScript"
+	<bean id="webscript.ru.it.lecm.statemachine.actions.get"
+		  class="ru.it.lecm.statemachine.script.ActionsScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>

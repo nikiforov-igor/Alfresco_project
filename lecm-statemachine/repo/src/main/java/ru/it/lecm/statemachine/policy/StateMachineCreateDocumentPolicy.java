@@ -91,7 +91,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			} finally {
 				AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
 			}
-			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId()); 
+            aspectProps = new HashMap<QName, Serializable>();
+            aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
+            nodeService.addAspect(childAssocRef.getChildRef(), StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
+
+            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
 			for (WorkflowTask task : tasks) {
 				workflowService.endTask(task.getId(), null);
 			}

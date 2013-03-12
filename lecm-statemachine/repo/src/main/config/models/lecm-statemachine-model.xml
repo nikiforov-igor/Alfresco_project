@@ -51,5 +51,13 @@
 				</property>
 			</properties>
 		</aspect>
+        <aspect name="lecm-statemachine:statemachineAspect">
+            <properties>
+                <property name="lecm-statemachine:statemachineId">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

@@ -60,3 +60,25 @@
 .alfresco-twister-closed .alfresco-twister-actions {
     display: inline;
 }
+
+.widget-panel-grey {
+    background-color: #ccc;
+    padding: 1em 0 1em 1em;
+}
+
+.widget-button-grey {
+    margin: 5px 10px 5px 15px;
+    padding: 4px 4px 4px 11px;
+    cursor: pointer;
+}
+
+.widget-button-grey:hover {
+    background-color: #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: #999 1px solid;
+    border-radius: 5px;
+    margin: 5px 10px 5px 15px;
+    padding: 3px 3px 3px 10px;
+    cursor: pointer;
+}

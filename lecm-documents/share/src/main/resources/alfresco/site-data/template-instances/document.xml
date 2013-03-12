@@ -36,7 +36,7 @@
          </sub-components>
       </component>
 
-      <!-- Основные сведения -->
+       <!-- Основные сведения -->
        <component>
            <region-id>metadata</region-id>
            <sub-components>
@@ -122,6 +122,23 @@
             <!--<nodeRef>{nodeRef}</nodeRef>-->
          <!--</properties>-->
       <!--</component>-->
+
+       <!-- Действия -->
+       <component>
+           <region-id>document-actions</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/dashlets/document-actions</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
 
        <!-- Основные сведения -->
        <component>

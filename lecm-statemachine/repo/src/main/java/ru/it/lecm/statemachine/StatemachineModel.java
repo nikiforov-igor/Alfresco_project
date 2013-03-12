@@ -16,6 +16,8 @@ public class StatemachineModel {
 	public final static QName PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS = QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "stateProcess");
 	public final static QName TYPE_CONTENT = QName.createQName("http://www.it.ru/logicECM/document/1.0", "base");
 	public final static QName ASPECT_STATUS = QName.createQName(STATEMACHINE_URI, "documentStatus");
+	public final static QName ASPECT_STATEMACHINE = QName.createQName(STATEMACHINE_URI, "statemachineAspect");
+	public final static QName PROP_STATEMACHINE_ID = QName.createQName(STATEMACHINE_URI, "statemachineId");
 
 
 }

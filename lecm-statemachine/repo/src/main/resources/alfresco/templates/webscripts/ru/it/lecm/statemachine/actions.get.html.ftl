@@ -1,13 +1,8 @@
 <#escape x as x?js_string>
-[
-	<#list documents as document>
 	{
-	nodeRef: "${document.nodeRef}",
-	name: "${document.name}",
-	status: "${document.status}",
-	taskId: "${document.taskId}",
+	taskId: "${taskId}",
 	states: [
-		<#list document.states as state>
+		<#list states as state>
 		{
 		actionId: "${state.actionId}",
 		label: "${state.label}",
@@ -17,13 +12,19 @@
                 "${error}"
                 <#if error_has_next>,</#if>
             </#list>
-            ]
+            ],
+        fields: [
+            <#list state.fields as field>
+            "${field}"
+                <#if field_has_next>,</#if>
+            </#list>
+        ]
 		}
 			<#if state_has_next>,</#if>
 		</#list>
 	],
     workflows: [
-        <#list document.workflows as workflow>
+        <#list workflows as workflow>
         {
         id: "${workflow.id!"null"}",
         label: "${workflow.label}",
@@ -39,13 +40,16 @@
             "${error}"
                 <#if error_has_next>,</#if>
             </#list>
+        ],
+        fields: [
+            <#list workflow.fields as field>
+            "${field}"
+                <#if field_has_next>,</#if>
+            </#list>
         ]
         }
             <#if workflow_has_next>,</#if>
         </#list>
     ]
 	}
-		<#if document_has_next>,</#if>
-	</#list>
-]
 </#escape>
