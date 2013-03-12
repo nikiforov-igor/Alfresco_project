@@ -17,7 +17,7 @@ function main() {
         if (listPresentString != null) {
             model.listPresent = listPresentString;
         }
-        var aspects = geAspects(model.nodeRef);
+        var aspects = nodeDetails.item.node.aspects;
         var subscribed = false;
         if (aspects != null) {
             for (var i = 0; i < aspects.length; i++) {
@@ -30,20 +30,6 @@ function main() {
 
         model.subscribed = subscribed;
     }
-}
-
-function geAspects(nodeRef, defaultValue) {
-    var url = '/slingshot/doclib/aspects/node/' + nodeRef.replace('://', '/');
-    var result = remote.connect("alfresco").get(url);
-    if (result.status != 200)
-    {
-        if (defaultValue !== undefined)
-        {
-            return defaultValue;
-        }
-        AlfrescoUtil.error(result.status, 'Could not blog details for post ' + nodeRef);
-    }
-    return eval('(' + result + ')').current;
 }
 
 main();

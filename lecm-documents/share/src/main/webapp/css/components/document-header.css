@@ -25,6 +25,12 @@
 	font-size: 13px;
 }
 
+.document-header h1.breadcrumb
+{
+	float: left;
+	padding: 0.5em 0.2em 0.2em 0.5em;
+}
+
 .document-header h1 .document-modified-info
 {
 	margin-left: 0.8em;
@@ -37,6 +43,11 @@
 .document-header .document-info {
     float: left;
     width: 78%;
+}
+
+.document-header .document-attachment-info {
+	float: left;
+	width: 100%;
 }
 
 .document-header .status-banner {
@@ -64,6 +75,6 @@
 .document-header .attachment-thumbnail
 {
 	float: left;
-	padding-left: 0.1em 0.5em 0.1em 0;
+	padding: 0.1em 0.5em 0.1em 0;
 }
 

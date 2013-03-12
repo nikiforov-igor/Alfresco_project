@@ -37,7 +37,10 @@ function showAction(action) {
 		"document-edit-metadata",
 		"document-upload-new-version",
 		"document-inline-edit",
+		"document-edit-online",
 		"document-edit-offline",
+		"document-view-working-copy",
+		"document-cancel-editing",
 		"document-copy-to",
 		"document-delete"
 	];

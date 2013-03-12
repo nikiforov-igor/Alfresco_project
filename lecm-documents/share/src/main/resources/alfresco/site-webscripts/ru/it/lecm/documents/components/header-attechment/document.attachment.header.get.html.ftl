@@ -6,7 +6,11 @@
 	<#assign displayName = (item.displayName!item.fileName)?html>
 
 	<div class="document-header">
-		<div class="document-info">
+		<div class="document-attachment-info">
+			<h1 class="thin dark breadcrumb">
+				<a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef)}">${documentName}</a> :: <a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef + "&view=attachments")}">${msg("title.attachments")}</a> ::
+			</h1>
+
 			<!-- Icon -->
 			<img src="${url.context}/components/images/filetypes/${fileExt}-file-32.png"
 			     onerror="this.src='${url.context}/res/components/images/filetypes/generic-file-32.png'"
@@ -19,9 +23,6 @@
 				<#assign modifierLink = userProfileLink(modifyUser.userName, modifyUser.displayName, 'class="theme-color-1"') >
 				${displayName}<span class="document-version">${item.version}</span><span class="document-modified-info">${msg("label.modified-by-user-on-date", modifierLink, xmldate(modifyDate.iso8601)?string(msg("date-format.defaultFTL")))}</span>
 			</h1>
-		</div>
-
-		<div class="document-action">
 		</div>
 
 		<div class="clear"></div>

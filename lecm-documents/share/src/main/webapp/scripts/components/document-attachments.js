@@ -37,6 +37,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.prototype,
         {
+	        options: {
+		        showAfterReady: false
+	        },
+
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
@@ -46,6 +50,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function DocumentAttachments_onReady() {
                 var linkEl = Dom.get(this.id + "-action-expand");
                 linkEl.onclick = this.onLinkClick.bind(this);
+
+	            if (this.options.showAfterReady) {
+		            this.onLinkClick();
+	            }
             },
 
             onLinkClick: function DocumentAttachments_onLinkClick() {

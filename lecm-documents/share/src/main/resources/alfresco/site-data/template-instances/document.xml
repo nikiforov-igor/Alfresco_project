@@ -63,6 +63,7 @@
                            <url>/lecm/components/dashlets/document-attachments</url>
                            <properties>
                                <nodeRef>{nodeRef}</nodeRef>
+	                           <view>{view}</view>
                            </properties>
                        </evaluation>
                    </evaluations>

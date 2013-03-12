@@ -3,6 +3,7 @@
 function main()
 {
     AlfrescoUtil.param("nodeRef");
+    AlfrescoUtil.param("view", "");
 }
 
 main();

@@ -21,7 +21,8 @@
                 new LogicECM.DocumentAttachments("${el}").setOptions(
                         {
                             nodeRef: "${nodeRef}",
-                            title: "${msg('heading')}"
+                            title: "${msg('heading')}",
+	                        showAfterReady: ${(view?? && view == "attachments")?string}
                         }).setMessages(${messages});
             }
 
