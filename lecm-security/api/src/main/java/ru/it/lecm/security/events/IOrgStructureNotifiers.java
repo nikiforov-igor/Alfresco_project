@@ -26,7 +26,7 @@ public interface IOrgStructureNotifiers {
 	 * Связать Сотрудника с системным пользователем или наоборот отвязать
 	 * @param employeeId id Сотрудника
 	 * @param alfrescoUserLogin login пользователя Альфреско
-	 * @param tie true для привязки пользователя, false иначе
+	 * @param tie true для привязки пользователя, false для отвязывания.
 	 */
 	void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie);
 
