@@ -20,8 +20,6 @@
  */
 package ru.it.lecm.im.client.data;
 
-import com.google.gwt.core.client.JsArray;
-
 import ru.it.lecm.im.client.xmpp.Session.ServerType;
 
 public interface XmppConf 
@@ -41,5 +39,4 @@ public interface XmppConf
 	String getPasswordCookieField();
 	String getAnonymousPrefix();
 	int getMaxReconnet();
-	JsArray<GatewayItemImpl> getGateways();
 }

@@ -84,9 +84,6 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
             mucButton = btnManager.createIconButton(i18n.msg("MUC"), "ijab-icon-muc");
 			mucButton.setButtonWindow(mucWidget);
             mucButton.addWidgetListener(new BarButtonListener() {
-                @Override
-                public void onMax() {
-                }
 
                 @Override
                 public void onClose() {
@@ -119,10 +116,6 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
             optionsButton = null;
         }
 
-
-
-        setupRosterManagement();
-
 		if(!iJab.conf.disableToolBox())
         {
             toolButton = btnManager.createCaptionButton(i18n.msg("Tools"), "ijab-icon-home", "");
@@ -137,7 +130,7 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
 		
 		mainWidget.getSearchWidget().addListener(contactView.getSearchListener());
 
-        addBuddysButtonClickHandler();
+
 
 		readTools();
 
@@ -166,53 +159,8 @@ public class MainBar extends Composite implements  HasVisibility, EventListener,
         }
     }
 
-    private void setupRosterManagement() {
-        if(!iJab.conf.isRosterManageEnabled())
-			mainWidget.removeToolBar();
-		else
-		{
-			mainWidget.setToolBarListener(new BarMainWidget.IToolBarListener()
-			{
-				public void addButtonClicked()
-				{
-					if(add_searchWnd == null)
-						add_searchWnd = new AddSearchWnd();
-					add_searchWnd.center();
-					add_searchWnd.show();
-				}
-				public void manageButtonClicked() {
 
-				}
-			});
-		}
-    }
-
-
-
-    private void addBuddysButtonClickHandler() {
-        // Это надо куда-то перенести   например в Плашку "Дисконектед"
-       /* buddysButton.getButton().addClickHandler(new ClickHandler()
-        {
-
-            public void onClick(ClickEvent event)
-            {
-                if(!iJab.conf.getXmppConf().isNoneRoster()&&iJab.client.isLogined()&&iJab.conf.getXmppConf().isGetRosterDelay()&&!getRostered)
-                {
-                    Session.instance().getRosterPlugin().getRoster(null);
-                    getRostered = true;
-                }
-                if(iJab.conf.getXmppConf().isAutoLogin()&&!connected)
-                {
-                    iJab.client.resume();
-                }
-                else if(iJab.conf.isLoginDialogEnabled()&&!connected)
-                    LoginDialog.instance().center();
-            }
-        });*/
-    }
-
-
-	private void readTools()
+    private void readTools()
 	{
 		JsArray<LinkItemImpl> array = iJab.conf.getTools();
 		for(int index=0;index<array.length();index++)

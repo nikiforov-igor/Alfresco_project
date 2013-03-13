@@ -23,7 +23,6 @@ package ru.it.lecm.im.client.xmpp;
 
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Cookies;
 import ru.it.lecm.im.client.Log;
 
@@ -159,16 +158,16 @@ public class User {
 		if(domainname == null||username == null)
 			return false;
 
-		jUser.put(STORAGE_DOMAIN, new JSONString(domainname));
+		//jUser.put(STORAGE_DOMAIN, new JSONString(domainname));
 		//jUser.put("password", new JSONString(password)); //It's uneeded, and not safe
 
 
-		jUser.put(STORAGE_PRIORITY, new JSONString("0"));
-		jUser.put(STORAGE_RESOURCE, new JSONString(resource));
-		jUser.put(STORAGE_USERNAME, new JSONString(username));
+		//jUser.put(STORAGE_PRIORITY, new JSONString("0"));
+		//jUser.put(STORAGE_RESOURCE, new JSONString(resource));
+		//jUser.put(STORAGE_USERNAME, new JSONString(username));
 		
-		Storage storage = Storage.createStorage(COOKIENAME, "");
-		storage.set(COOKIENAME, jUser.toString());
+		//Storage storage = Storage.createStorage(COOKIENAME, "");
+		//storage.set(COOKIENAME, jUser.toString());
 		//Cookies.setCookie(COOKIENAME, jUser.toString(),null,null,"/",false);		
 		return true;
 	}

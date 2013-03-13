@@ -73,9 +73,6 @@ public class BarButtonManager
 			public void onClose() {
 			}
 
-			public void onMax() {
-			}
-
 			public void onWindowClose() {
 				if(activeButton == btn)
 					activeButton = null;

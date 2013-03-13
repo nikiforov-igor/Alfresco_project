@@ -116,8 +116,8 @@ public class BlackListWnd extends DialogBox
 		
 		if(iJab.client != null)
 		{
-			privacyListsPlugin = Session.instance().getPrivacyListPlugin();
-			loadBlackList();
+			//privacyListsPlugin = Session.instance().getPrivacyListPlugin();
+			//loadBlackList();
 		}
 		setWidget(vPanel);
 	}

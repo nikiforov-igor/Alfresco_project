@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.Widget;
 import ru.it.lecm.im.client.XmppChat;
 import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.ChatTextFormatter;
-import ru.it.lecm.im.client.utils.SoundManager;
+//import ru.it.lecm.im.client.utils.SoundManager;
 import ru.it.lecm.im.client.utils.i18n;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		String body = message.getBody();
 		if(body!=null&&body.length()!=0)
 		{
-			SoundManager.playMessage();
+			// SoundManager.playMessage();
 			DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
 			String dateTime = fmt.format(new Date());
 			addMessage(createMessageWidget(nick,body,dateTime));

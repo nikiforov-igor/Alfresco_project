@@ -23,7 +23,6 @@ package ru.it.lecm.im.client.data;
 import ru.it.lecm.im.client.xmpp.Session.ServerType;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
 
 public class XmppConfImpl extends JavaScriptObject implements XmppConf
 {
@@ -170,22 +169,10 @@ public class XmppConfImpl extends JavaScriptObject implements XmppConf
 			return "";
 		}
 	}-*/;
-	
-	public final native JsArray<GatewayItemImpl> getGateways()
-	/*-{
-		try
-		{
-			return this.gateways;
-		}
-		catch(e)
-		{
-			return [];
-		}
-	}-*/;
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.data.XmppConf#getMUCServernode()
-	 */
+    /* (non-Javadoc)
+     * @see anzsoft.iJab.client.data.XmppConf#getMUCServernode()
+     */
 	public final native String getMUCServernode() 
 	/*-{
 		try

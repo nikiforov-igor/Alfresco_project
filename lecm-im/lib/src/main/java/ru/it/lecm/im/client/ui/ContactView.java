@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
+import ru.it.lecm.im.client.Log;
 import ru.it.lecm.im.client.XmppClient;
 import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.iJab;
@@ -56,6 +57,8 @@ public class ContactView extends Composite {
 	@UiField FlowPanel widget;
 	
 	private Map<String,ContactViewGroup> groups = new HashMap<String,ContactViewGroup>();
+	private Map<String,ContactViewGroup> groupsCashe = new HashMap<String,ContactViewGroup>();
+
 	
 	private ContactViewGroup onlineGroup;
 	private ContactViewGroup noGroup = null;
@@ -68,7 +71,22 @@ public class ContactView extends Composite {
 	private ContextMenuItem addToBlackListItem = null;
 	private ContextMenuItem manageBlackListItem = null;
 	private MenuBar groupSubMenu = null;
-	interface ContactViewUiBinder extends UiBinder<Widget, ContactView> 
+
+    public void onEndRosterUpdating() {
+        for(String key : groupsCashe.keySet())
+        {
+            if (!groups.containsKey(key))
+            {
+                ContactViewGroup contactViewGroup = groupsCashe.get(key);
+                groups.put(key, contactViewGroup);
+                widget.add(contactViewGroup);
+                widget.add(contactViewGroup.getGroupBody());
+            }
+        }
+        groupsCashe.clear();
+    }
+
+    interface ContactViewUiBinder extends UiBinder<Widget, ContactView>
 	{
 	}
 
@@ -261,8 +279,8 @@ public class ContactView extends Composite {
 	
 	private ContactViewGroup ensureGroup(final String groupName,final String groupStyle)
 	{
-		if(groups.containsKey(groupName))
-			return groups.get(groupName);
+		if(groupsCashe.containsKey(groupName))
+			return groupsCashe.get(groupName);
 		
 		FlowPanel groupBody = new FlowPanel();
 		ContactViewGroup group;
@@ -270,9 +288,7 @@ public class ContactView extends Composite {
 			group = new ContactViewGroup(this,groupName,groupBody);
 		else
 			group = new ContactViewGroup(this,groupName,groupBody,groupStyle);
-		widget.add(group);
-		widget.add(group.getGroupBody());
-		groups.put(groupName,group);
+		groupsCashe.put(groupName,group);
 		return group;
 	}
 	
@@ -315,7 +331,8 @@ public class ContactView extends Composite {
 		}
 		catch(Exception e)
 		{
-		}
+            Log.log("ContactView exception: "+ e.toString());
+        }
 		return groupId;
 	}
 
@@ -416,13 +433,8 @@ public class ContactView extends Composite {
 		}
 		onlineGroup.removeRosterItem(addRosterItem);
 	}
-	
-	public Widget getMainWidget()
-	{
-		return this.widget;
-	}
-	
-	public void addListener(ContactViewListener l)
+
+    public void addListener(ContactViewListener l)
 	{
 		listeners.add(l);
 	}
@@ -439,24 +451,8 @@ public class ContactView extends Composite {
 			l.onItemClick(item);
 		}
 	}
-	
-	public void fireOnAvatarOver(RosterItem item)
-	{
-		for(ContactViewListener l:listeners)
-		{
-			l.onAvatarOver(item);
-		}
-	}
-	
-	public void fireOnAvatarOut(RosterItem item)
-	{
-		for(ContactViewListener l:listeners)
-		{
-			l.onAvatarOut(item);
-		}
-	}
-	
-	private String getItemGroupName(ContactViewItem item)
+
+    private String getItemGroupName(ContactViewItem item)
 	{
 		String curGroupName = "";
 		if(item.getRosterItem().getGroups().length>0)

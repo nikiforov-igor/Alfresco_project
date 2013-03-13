@@ -198,8 +198,6 @@ public class ChatPanelBar extends ChatPanelBarUI
                 tryPopButton();
             }
 
-            public void onMax() {
-            }
 
             public void onWindowClose()
             {

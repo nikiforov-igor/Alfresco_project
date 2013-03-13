@@ -20,47 +20,43 @@
  */
 package ru.it.lecm.im.client.utils;
 
-import com.allen_sauer.gwt.voices.client.Sound;
-import com.allen_sauer.gwt.voices.client.SoundController;
-import com.google.gwt.core.client.GWT;
-
-public class SoundManager 
-{
-	private static SoundController soundController = new SoundController();
-	private static Sound msgSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/msg.wav");
-	private static Sound onlineSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/on.wav");
-	private static Sound offlineSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/off.wav");
-	private static boolean onlineEnable = false;
-	private static boolean messageEnable = false;
-	
-	public static void setOnlineEnabled(boolean enabled)
-	{
-		onlineEnable = enabled;
-	}
-	
-	public static void setMessageEnabled(boolean enabled)
-	{
-		messageEnable = enabled;
-	}
-	
-	public static void playMessage()
-	{
-		if(!messageEnable)
-			return;
-		msgSound.play();
-	}
-	
-	public static void playOnline()
-	{
-		if(!onlineEnable)
-			return;
-		onlineSound.play();
-	}
-	
-	public static void playOffline()
-	{
-		if(!onlineEnable)
-			return;
-		offlineSound.play();
-	}
-}
+//public class SoundManager
+//{
+//	private static SoundController soundController = new SoundController();
+//	private static Sound msgSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/msg.wav");
+//	private static Sound onlineSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/on.wav");
+//	private static Sound offlineSound = soundController.createSound(Sound.MIME_TYPE_AUDIO_BASIC, GWT.getModuleBaseURL()+"sound/off.wav");
+//	private static boolean onlineEnable = false;
+//	private static boolean messageEnable = false;
+//
+//	public static void setOnlineEnabled(boolean enabled)
+//	{
+//		onlineEnable = enabled;
+//	}
+//
+//	public static void setMessageEnabled(boolean enabled)
+//	{
+//		messageEnable = enabled;
+//	}
+//
+//	public static void playMessage()
+//	{
+//		if(!messageEnable)
+//			return;
+//		msgSound.play();
+//	}
+//
+//	public static void playOnline()
+//	{
+//		if(!onlineEnable)
+//			return;
+//		onlineSound.play();
+//	}
+//
+//	public static void playOffline()
+//	{
+//		if(!onlineEnable)
+//			return;
+//		offlineSound.play();
+//	}
+//}

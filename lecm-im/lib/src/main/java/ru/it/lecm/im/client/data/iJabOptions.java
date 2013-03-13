@@ -20,6 +20,16 @@
  */
 package ru.it.lecm.im.client.data;
 
+import ru.it.lecm.im.client.XmppClient;
+import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.iJab;
+import ru.it.lecm.im.client.listeners.ClientListener;
+import ru.it.lecm.im.client.ui.OptionWidget;
+import ru.it.lecm.im.client.ui.UserIndicator;
+import ru.it.lecm.im.client.ui.listeners.IndicatorListener;
+import ru.it.lecm.im.client.ui.listeners.OptionWidgetListener;
+import ru.it.lecm.im.client.utils.XmppStatus;
+import ru.it.lecm.im.client.utils.i18n;
 import ru.it.lecm.im.client.xmpp.Session;
 import ru.it.lecm.im.client.xmpp.packet.Packet;
 import ru.it.lecm.im.client.xmpp.packet.PacketImp;
@@ -30,17 +40,6 @@ import ru.it.lecm.im.client.xmpp.stanzas.Presence.Type;
 import ru.it.lecm.im.client.xmpp.xmpp.ErrorCondition;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.privateStorage.PrivateStoragePlugin;
 import ru.it.lecm.im.client.xmpp.xmpp.xeps.privateStorage.PrivateStorageRequestCallback;
-import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.listeners.ClientListener;
-import ru.it.lecm.im.client.XmppClient;
-import ru.it.lecm.im.client.XmppProfileManager;
-import ru.it.lecm.im.client.ui.listeners.IndicatorListener;
-import ru.it.lecm.im.client.ui.OptionWidget;
-import ru.it.lecm.im.client.ui.listeners.OptionWidgetListener;
-import ru.it.lecm.im.client.ui.UserIndicator;
-import ru.it.lecm.im.client.utils.SoundManager;
-import ru.it.lecm.im.client.utils.XmppStatus;
-import ru.it.lecm.im.client.utils.i18n;
 
 public class iJabOptions
 {
@@ -191,8 +190,8 @@ public class iJabOptions
 				widget.setOptions(disableOnlineSoundNotification,disableMessageSoundNotification, autoClearHistory);
 				UserIndicator indicator = (UserIndicator)iJab.ui.getIndictorWidget();
 				indicator.setOption(XmppProfileManager.getName(Session.instance().getUser().getStringBareJid()),statusText, status);
-				SoundManager.setOnlineEnabled(!disableOnlineSoundNotification);
-				SoundManager.setMessageEnabled(!disableMessageSoundNotification);
+				// SoundManager.setOnlineEnabled(!disableOnlineSoundNotification);
+				// SoundManager.setMessageEnabled(!disableMessageSoundNotification);
 				if(!resume)
 					sendStorePresence();
 			}
@@ -209,7 +208,8 @@ public class iJabOptions
 		Presence presence = new Presence(Type.available);
 		if(status == XmppStatus.Status.STATUS_INVISIBLE)
 		{
-			presence.setType(Type.invisible);
+			//presence.setType(Type.invisible);
+            presence.setShow(Show.notSpecified);
 		}
 		else
 		{
@@ -290,14 +290,14 @@ public class iJabOptions
 	public void setDisableOnlineSoundNotification(boolean disableOnlineSoundNotification) 
 	{
 		this.disableOnlineSoundNotification = disableOnlineSoundNotification;
-		SoundManager.setOnlineEnabled(!disableOnlineSoundNotification);
+		// SoundManager.setOnlineEnabled(!disableOnlineSoundNotification);
 		store();
 	}
 	
 	public void setDisableMessageSoundNotification(boolean disableMessageSoundNotification) 
 	{
 		this.disableMessageSoundNotification = disableMessageSoundNotification;
-		SoundManager.setMessageEnabled(!disableMessageSoundNotification);
+		// SoundManager.setMessageEnabled(!disableMessageSoundNotification);
 		store();
 	}
 

@@ -24,7 +24,6 @@ package ru.it.lecm.im.client.xmpp;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
@@ -287,7 +286,7 @@ public class Bosh2Connector implements Connector {
 					else if (receivedSid != null && sid == null) 
 					{
 						sid = receivedSid;
-						Cookies.setCookie(user.getResource()+"sid", sid, null, null, "/", false);
+						//Cookies.setCookie(user.getResource()+"sid", sid, null, null, "/", false);
 						state = State.connected;
 					}
 					
@@ -422,7 +421,7 @@ public class Bosh2Connector implements Connector {
 					else if (receivedSid != null && sid == null) 
 					{
 						sid = receivedSid;
-						Cookies.setCookie(user.getResource()+"sid", sid,null,null,"/",false);
+						//Cookies.setCookie(user.getResource()+"sid", sid,null,null,"/",false);
 						state = State.connected;
 					}
 					
@@ -599,13 +598,13 @@ public class Bosh2Connector implements Connector {
 		this.rid++;
 		String tmp = String.valueOf(this.rid);
 		final Date expire = new Date(39 * 1000 + (new Date()).getTime());
-		Cookies.setCookie(user.getResource()+"rid", tmp, expire,null,"/",false);
+		//Cookies.setCookie(user.getResource()+"rid", tmp, expire,null,"/",false);
 		return tmp;
 	}
 
 	public boolean isCacheAvailable() 
 	{
-		return Cookies.getCookie(user.getResource()+"sid") != null && Cookies.getCookie(user.getResource()+"rid") != null;
+		return false;//Cookies.getCookie(user.getResource()+"sid") != null && Cookies.getCookie(user.getResource()+"rid") != null;
 	}
 
 	public boolean isConnected() 
@@ -656,8 +655,8 @@ public class Bosh2Connector implements Connector {
 	{
 		Log.log("Bosh2Connector.reset");
         state = State.disconnected;
-		Cookies.removeCookie(user.getResource()+"sid");
-		Cookies.removeCookie(user.getResource()+"rid");
+		//Cookies.removeCookie(user.getResource()+"sid");
+		//Cookies.removeCookie(user.getResource()+"rid");
 		this.errorCounter = 0;
 		this.activeRequests.clear();
 		this.activeScriptRequests.clear();
@@ -754,13 +753,14 @@ public class Bosh2Connector implements Connector {
 	
 	private boolean isCrossDomain(final String boshUrl)
 	{
-		if(boshUrl.startsWith("/"))
-			return false;
-		String baseUrl = GWT.getHostPageBaseURL();
-		
-		if(getUrlProtocol(boshUrl).equals(getUrlProtocol(baseUrl))&&getUrlHost(boshUrl).equals(getUrlHost(baseUrl)))
-			return false;
-		return true;
+        return false;
+//		if(boshUrl.startsWith("/"))
+//			return false;
+//		String baseUrl = GWT.getHostPageBaseURL();
+//
+//		if(getUrlProtocol(boshUrl).equals(getUrlProtocol(baseUrl))&&getUrlHost(boshUrl).equals(getUrlHost(baseUrl)))
+//			return false;
+//		return true;
 	}
 	
 	private String getUrlHost(String url)
@@ -850,15 +850,15 @@ public class Bosh2Connector implements Connector {
 	{
         Log.log("Bosh2Connector.resume");
 		makeNewRequestBuilder(defaultTimeout + 7);
-		this.sid = Cookies.getCookie(user.getResource()+"sid");
-		try 
-		{
-			this.rid = Long.parseLong(Cookies.getCookie(user.getResource()+"rid"));
-		}
-		catch (Exception e) 
-		{
+//		this.sid = Cookies.getCookie(user.getResource()+"sid");
+//		try
+//		{
+//			this.rid = Long.parseLong(Cookies.getCookie(user.getResource()+"rid"));
+//		}
+//		catch (Exception e)
+//		{
 			this.rid = 0;
-		}
+		//}
 
 		if(this.sid == null||this.rid == 0)
 			return false;

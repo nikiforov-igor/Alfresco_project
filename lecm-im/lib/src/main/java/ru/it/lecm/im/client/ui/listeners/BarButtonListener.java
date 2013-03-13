@@ -22,8 +22,7 @@ package ru.it.lecm.im.client.ui.listeners;
 
 public interface BarButtonListener
 {
-	void onMax();
-	void onClose();
+    void onClose();
 	void onWindowClose();
 	void onWindowOpen();
 }

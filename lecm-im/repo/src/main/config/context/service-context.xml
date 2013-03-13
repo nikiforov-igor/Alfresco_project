@@ -41,6 +41,8 @@
         <property name="logic" ref="palladiumLogic"/>
     </bean>
 
+    <bean id="webscript.ru.it.lecm.im.proxy.bosh.post" class="ru.it.lecm.im.bosh.BoshProxyWebScript" parent="webscript"/>
+
     <bean id="palladiumLogic" class="ru.it.lecm.im.bosh.PalladiumLogic"/>
 
 </beans>

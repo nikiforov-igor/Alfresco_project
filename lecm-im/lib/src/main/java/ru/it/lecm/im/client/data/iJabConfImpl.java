@@ -187,20 +187,7 @@ public class iJabConfImpl extends JavaScriptObject implements iJabConf
 	}-*/;
 
 
-	public final native boolean isBarExpandDefault()
-	/*-{
-		try
-		{
-			return this.expand_bar_default;
-		}
-		catch(e)
-		{
-			return false;
-		}
-	}-*/;
-
-
-	public final native boolean isEnableTalkToStranger() 
+    public final native boolean isEnableTalkToStranger()
 	/*-{
 		try
 		{

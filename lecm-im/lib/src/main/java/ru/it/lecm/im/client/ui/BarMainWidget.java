@@ -104,15 +104,5 @@ public class BarMainWidget extends Composite implements HasVisibility, EventList
 	{
 
 	}
-	
-	public void setToolBarListener(IToolBarListener listener)
-	{
 
-	}
-
-    public interface IToolBarListener
-    {
-        void addButtonClicked();
-        void manageButtonClicked();
-    }
 }

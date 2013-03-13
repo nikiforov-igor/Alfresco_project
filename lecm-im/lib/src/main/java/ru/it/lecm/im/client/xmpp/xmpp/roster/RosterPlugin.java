@@ -42,7 +42,8 @@ public class RosterPlugin implements Plugin {
 
 	private Map<String, RosterItem> rosterItemsByBareJid = new HashMap<String, RosterItem>();
 	private List<String> transports = new ArrayList<String>();
-	private List<RosterListener> rosterListeners = new ArrayList<RosterListener>();
+	//private List<RosterListener> rosterListeners = new ArrayList<RosterListener>();
+    private RosterListener rosterListener = null;
 
 	private boolean rosterReceived;
 
@@ -97,20 +98,27 @@ public class RosterPlugin implements Plugin {
 	}
 
 	public void addRosterListener(RosterListener listener) {
-		this.rosterListeners.add(listener);
+		//this.rosterListeners.add(listener);
+        rosterListener = listener;
 	}
 
 	private void fireAddRosterItem(final RosterItem rosterItem) {
-        for (RosterListener rosterListener : rosterListeners) {
-            rosterListener.onAddItem(rosterItem);
-        }
+        //for (RosterListener rosterListener : rosterListeners) {
+            if(rosterListener != null)
+            {
+                rosterListener.onAddItem(rosterItem);
+            }
+        //}
 	}
 	
 	private boolean fireBeforeAddItemfinal(JID jid, final String name, final List<String> groupsNames) {
 		try {
-			for (RosterListener listener : this.rosterListeners) {
-				listener.beforeAddItem(jid, name, groupsNames);
-			}
+			//for (RosterListener rosterListener : this.rosterListeners) {
+            if(rosterListener != null)
+            {
+                rosterListener.beforeAddItem(jid, name, groupsNames);
+            }
+			//}
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -118,71 +126,52 @@ public class RosterPlugin implements Plugin {
 	}
 
 	private void fireEndRosterUpdating() {
-        for (RosterListener rosterListener : rosterListeners) {
+        //for (RosterListener rosterListener : rosterListeners) {
+        if(rosterListener != null)
+        {
             rosterListener.onEndRosterUpdating();
         }
+        //}
 	}
 
 	private void fireRemoveRosterItem(final RosterItem rosterItem) {
-        for (RosterListener rosterListener : rosterListeners) {
+        //for (RosterListener rosterListener : rosterListeners) {
+        if(rosterListener != null)
+        {
             rosterListener.onRemoveItem(rosterItem);
         }
+        //}
 	}
 
 	private void fireStartRosterUpdating() {
-        for (RosterListener rosterListener : rosterListeners) {
+        //for (RosterListener rosterListener : rosterListeners) {
+        if(rosterListener != null)
+        {
             rosterListener.onStartRosterUpdating();
         }
+        //}
 	}
 
 	private void fireUpdateRosterItem(final RosterItem rosterItem) {
-        for (RosterListener rosterListener : rosterListeners) {
+        //for (RosterListener rosterListener : rosterListeners) {
+        if(rosterListener != null)
+        {
             rosterListener.onUpdateItem(rosterItem);
         }
+        //}
 	}
 
 	public List<RosterItem> getAllRosteritems() {
 		return new ArrayList<RosterItem>(this.rosterItemsByBareJid.values());
 	}
-	
-	public int getAllRosterItemCount()
-	{
-		return getAllRosteritems().size();
-	}
 
-	public Criteria getCriteria() 
+    public Criteria getCriteria()
 	{
 		return ElementCriteria.name("iq").add(
 				ElementCriteria.name("query", new String[] { "xmlns" }, new String[] { "jabber:iq:roster" }));
 	}
 
-	public String[] getGroupsByJid(JID jid) {
-		RosterItem rosterItem = this.rosterItemsByBareJid.get(jid.toStringBare());
-		if (rosterItem != null) {
-			return rosterItem.getGroups();
-		}
-		return null;
-	}
-
-	public List<String> getJidsByGroupName(String groupName) {
-		ArrayList<String> result = new ArrayList<String>();
-        for (RosterItem ri : this.rosterItemsByBareJid.values()) {
-            boolean ok = false;
-            if (groupName == null && (ri.getGroups() == null || ri.getGroups().length == 0)) {
-                ok = true;
-            } else if (groupName != null && ri.getGroups() != null) {
-                for (int i = 0; i < ri.getGroups().length; i++) {
-                    ok = ok | groupName.equals(ri.getGroups()[i]);
-                }
-            }
-            if (ok) {
-                result.add(ri.getJid());
-            }
-        }
-		return result;
-	}
-
-	public String getNameByJid(JID from) 
+    public String getNameByJid(JID from)
 	{
 		RosterItem rosterItem = this.rosterItemsByBareJid.get(from.toStringBare());
 		if (rosterItem != null) {
@@ -363,9 +352,9 @@ public class RosterPlugin implements Plugin {
             }
 
             final int onlineItemsCount = onlineChilds.size();
-            addItemsToRoster(iq, rosterBeginUpdateTime, onlineChilds, onlineItemsCount);
+            addItemsToRoster(iq, rosterBeginUpdateTime, onlineChilds, onlineItemsCount, true);
 
-            //addItemsToRoster(iq, new Date(), offlineChilds, 1);
+            //addItemsToRoster(iq, new Date(), offlineChilds, 50, true);
 		}
 		catch(Exception e) 
 		{
@@ -373,7 +362,7 @@ public class RosterPlugin implements Plugin {
 		}
 	}
 
-    private void addItemsToRoster(final IQ iq, final Date rosterBeginUpdateTime, final List<Packet> childs, final int commandSize) {
+    private void addItemsToRoster(final IQ iq, final Date rosterBeginUpdateTime, final List<Packet> childs, final int commandSize, final boolean fireEvent) {
         final int itemsCount = childs.size();
         IncrementalCommand ic = new IncrementalCommand()
         {
@@ -383,7 +372,10 @@ public class RosterPlugin implements Plugin {
             {
                 if(itemsCount == 0)
                 {
-                    fireEndRosterUpdating();
+                    if (fireEvent){
+                        fireEndRosterUpdating();
+                    }
+
                     return false;
                 }
                 else
@@ -397,7 +389,9 @@ public class RosterPlugin implements Plugin {
                         counter++;
                         if(counter == itemsCount)
                         {
-                            fireEndRosterUpdating();
+                            if (fireEvent){
+                                fireEndRosterUpdating();
+                            }
                             Date rosterEndUpdateTime = new Date();
                             Log.log("ROSTER: " + (rosterEndUpdateTime.getTime() - rosterBeginUpdateTime.getTime())+ "ms");
                             return false;
@@ -562,7 +556,8 @@ public class RosterPlugin implements Plugin {
 
 	public void removeRosterListener(RosterListener listener) 
 	{
-		this.rosterListeners.remove(listener);
+		//this.rosterListeners.remove(listener);
+        rosterListener = null;
 	}
 
 	public void reset() 

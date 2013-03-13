@@ -25,7 +25,6 @@ import com.google.gwt.core.client.JsArray;
 
 public interface iJabConf
 {
-	public enum ClientType {xmpp,ijabcometd};
 	String getTheme();
 	String avatarUrl();
 	boolean isRosterManageEnabled();
@@ -36,11 +35,11 @@ public interface iJabConf
 	boolean isHidePoweredBy();
 	boolean isHideOnlineGroup();
 	boolean isEnableTalkToStranger();
-	boolean isBarExpandDefault();
-	//for talkto spam
+    //for talkto spam
 	boolean isEnableTalkToSpam();
 	JavaScriptObject talkToSpamFunction();
 	int talkToSpamRepeat();
+
 	//
 	XmppConf getXmppConf();
 	JsArray<LinkItemImpl> getTools();

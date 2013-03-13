@@ -25,6 +25,5 @@ import ru.it.lecm.im.client.xmpp.xmpp.roster.RosterItem;
 public interface ContactViewListener 
 {
 	void onItemClick(final RosterItem item);
-	void onAvatarOver(final RosterItem item);
-	void onAvatarOut(final RosterItem item);
+
 }

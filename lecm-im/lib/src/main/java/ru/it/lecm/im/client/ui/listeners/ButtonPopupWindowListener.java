@@ -22,6 +22,4 @@ package ru.it.lecm.im.client.ui.listeners;
 
 public interface ButtonPopupWindowListener {
 	void onClose();
-	void onMin();
-	void onMax();
 }

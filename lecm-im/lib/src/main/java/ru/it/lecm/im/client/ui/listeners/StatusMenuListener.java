@@ -24,6 +24,5 @@ import ru.it.lecm.im.client.utils.XmppStatus;
 
 public interface StatusMenuListener
 {
-	//void onSetStatusText(final String statusText);
 	void onSetXmppStatus(XmppStatus.Status status);
 }
