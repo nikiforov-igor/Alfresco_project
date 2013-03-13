@@ -30,6 +30,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentMembers = function DocumentMembers_constructor(htmlId) {
         LogicECM.DocumentMembers.superclass.constructor.call(this, htmlId);
+
+        YAHOO.Bubbling.on("memberCreated", this.onRefresh, this);
+        YAHOO.Bubbling.on("dataItemsDeleted", this.onRefresh, this);
         return this;
     };
 
@@ -68,6 +71,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             scope: this
                         },
                         failureMessage: "message.failure",
+                        execScripts: true
+                    });
+            },
+            onRefresh: function (layer, args) {
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-members",
+                        dataObj: {
+                            nodeRef: this.options.nodeRef,
+                            htmlid: this.id + "-" + Alfresco.util.generateDomId()
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                var container = Dom.get(this.id);
+                                if (container != null) {
+                                    container.innerHTML = response.serverResponse.responseText;
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: "message.failure",
+                        scope: this,
                         execScripts: true
                     });
             }

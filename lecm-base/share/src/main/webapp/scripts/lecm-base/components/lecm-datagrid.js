@@ -1937,11 +1937,20 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @return {Object} Request parameters. Can be given directly to Alfresco.util.Ajax, but must be JSON.stringified elsewhere.
              */
             _buildDataGridParams: function DataGrid__buildDataGridParams(p_obj) {
-                var request =
-                {
-                    fields: this.dataRequestFields
+                var reqFields = [];
+                var reqNameSubstituteStrings = [];
+                for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
+                    var column = this.datagridColumns[i],
+                        columnName = column.name.replace(":", "_");
+                    reqFields.push(columnName);
+                    reqNameSubstituteStrings.push(column.nameSubstituteString);
+                }
+                var fields = reqFields.join(",");
+                var nameSubstituteStrings = reqNameSubstituteStrings;
+                return {
+                    fields: this.dataRequestFields,
+                    substituteStrings: nameSubstituteStrings
                 };
-                return request;
             },
 
             /**

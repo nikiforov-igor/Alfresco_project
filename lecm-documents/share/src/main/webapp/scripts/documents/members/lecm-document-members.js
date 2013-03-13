@@ -56,14 +56,15 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
             onReady: function () {
                 this.memberButton = Alfresco.util.createYUIButton(this, this.controlId + "-add-member-button", this.onAdd.bind(this), {}, Dom.get(this.controlId + "-add-member-button"));
+            },
 
+            onAdd: function (e, p_obj) {
+                this.currentMembers = [];
                 var membersRefsDivs = Dom.getElementsByClassName('member-ref');
                 for (var index in membersRefsDivs) {
                     this.currentMembers.push(membersRefsDivs[index].innerHTML);
                 }
-            },
 
-            onAdd: function (e, p_obj) {
                 var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function (p_form, p_dialog) {
@@ -106,9 +107,18 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         onSuccess: {
                             fn: function (response) {
                                 if (me.options.datagridBublingLabel != null) {
-                                    YAHOO.Bubbling.fire("datagridRefresh",
+                                   /* YAHOO.Bubbling.fire("datagridRefresh",
                                         {
                                             bubblingLabel:me.options.bubblingLabel
+                                        });*/
+                                    YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                        {
+                                            nodeRef:response.json.persistedObject,
+                                            bubblingLabel:me.options.datagridBublingLabel
+                                        });
+                                    YAHOO.Bubbling.fire("memberCreated",
+                                        {
+                                            nodeRef:response.json.persistedObject
                                         });
                                 }
 

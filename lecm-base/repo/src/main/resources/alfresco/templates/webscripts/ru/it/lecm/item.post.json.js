@@ -1,6 +1,5 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
-
 /**
  * Copyright (C) 2005-2010 Alfresco Software Limited.
  *
@@ -53,7 +52,18 @@ function getData()
          fields.push(jsonFields.get(count).replaceFirst("_", ":"));
       }
    }
-
+   var substituteFields = null;
+    if (json.has("substituteStrings"))
+    {
+        // Convert the JSONArray object into a native JavaScript array
+        substituteFields = [];
+        var jsonSFields = json.get("substituteStrings");
+        numSFields = jsonSFields.length();
+        for (count = 0; count < numSFields; count++)
+        {
+            substituteFields.push(jsonSFields.get(count));
+        }
+    }
    // Try to find a filter query based on the passed-in arguments
    var node = search.findNode(parsedArgs.nodeRef),
       items = [],
@@ -63,7 +73,7 @@ function getData()
    {
       try
       {
-         item = Evaluator.run(node, fields);
+         item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields);
          if (node.hasAspect("cm:versionable")) {
             versionable = true;
          }

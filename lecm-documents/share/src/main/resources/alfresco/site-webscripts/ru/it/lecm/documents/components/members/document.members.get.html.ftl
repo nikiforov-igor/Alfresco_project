@@ -9,7 +9,6 @@
     </h2>
 
     <div id="${el}-formContainer">
-        <div id="${el}-form" style="display:none"></div>
         <ul id="document-members-set" style="width: 100%">
         <#if members?? && members.items??>
             <#list members.items as item>
