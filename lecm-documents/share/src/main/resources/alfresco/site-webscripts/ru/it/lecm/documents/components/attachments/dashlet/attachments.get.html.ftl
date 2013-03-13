@@ -132,6 +132,9 @@
 								    }
 							    } else if (oColumn.field == "prop_cm_versionLabel") {
 								    html += "1.0";
+							    } else if (oColumn.field == "prop_cm_image") {
+								    var icon = Alfresco.util.getFileIcon(oRecord.getData("itemData")["prop_cm_name"].value, "cm:content", 16);
+								    html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
 							    }
 						    }
 					    } else {
