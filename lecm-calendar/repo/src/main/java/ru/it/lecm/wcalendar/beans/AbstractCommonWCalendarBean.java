@@ -97,7 +97,6 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	@Override
 	public NodeRef doWork() throws Exception {
 		repository.init();
-//		final NodeRef rootNode = repository.getCompanyHome();
 		final NodeRef rootNode = getFolder(WORK_CALENDAR_FOLDER_ID);
 		final Map<String, Object> params = containerParams();
 		NodeRef container = nodeService.getChildByName(rootNode, ContentModel.ASSOC_CONTAINS, (String) params.get("CONTAINER_NAME"));
