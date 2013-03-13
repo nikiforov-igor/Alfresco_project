@@ -137,6 +137,12 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-web-framework-commons</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.extensions.surf</groupId>
                 <artifactId>spring-surf</artifactId>
                 <version>${spring.surf.version}</version>

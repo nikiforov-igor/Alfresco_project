@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Fields for Document State</shortname>
+	<description>Fields for Document State</description>
+	<url>/lecm/statemachine/statefields</url>
+	<format default="json">extension</format>
+	<authentication runas="admin">none</authentication>
+</webscript>

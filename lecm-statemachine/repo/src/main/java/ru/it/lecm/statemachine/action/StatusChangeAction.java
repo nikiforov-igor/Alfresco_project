@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
+import ru.it.lecm.statemachine.StateField;
 
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class StatusChangeAction extends StateMachineAction {
             for (Element fieldElement : fieldElements) {
                 String name = fieldElement.attribute("name");
                 boolean isEditable = Boolean.parseBoolean(fieldElement.attribute("isEditable"));
-                fields.add(new StateField(name, isEditable));
+                fields.add(new StateFieldImpl(name, isEditable));
             }
         }
 

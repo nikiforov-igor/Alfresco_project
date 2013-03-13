@@ -27,8 +27,10 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.statemachine.action.StateMachineAction;
+import ru.it.lecm.statemachine.action.StatusChangeAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.assign.AssignExecution;
+import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.bean.WorkflowTaskPageBean;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
@@ -382,7 +384,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		}
 	}
 
-	public String getCurrentExecutionId(String taskId) {
+    @Override
+    public Set<StateField> getStateFields(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String taskId = getCurrentTaskId(executionId);
+        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+        Set<StateField> result = new HashSet<StateField>();
+        for (StateMachineAction action : actions) {
+            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+            result.addAll(statusChangeAction.getFields());
+        }
+        return result;
+    }
+
+    public String getCurrentExecutionId(String taskId) {
 		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
 		TaskQuery taskQuery = taskService.createTaskQuery();
 		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
@@ -493,4 +508,5 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		}
 		return result;
 	}
+
 }
