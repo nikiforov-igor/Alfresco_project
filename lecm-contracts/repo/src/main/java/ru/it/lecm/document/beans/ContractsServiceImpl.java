@@ -3,8 +3,10 @@ package ru.it.lecm.document.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -37,6 +39,9 @@ public class ContractsServiceImpl extends BaseBean {
     static final QName PROP_CONTRACT_DOCUMENT = QName.createQName(DOCUMENT_MODEL_URI, "lecm-contract");
 
     public static final String CONTRACTS_ROOT_NAME = "Contracts";
+    private FileFolderService fileFolderService;
+
+
 
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
@@ -44,6 +49,7 @@ public class ContractsServiceImpl extends BaseBean {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+        fileFolderService = serviceRegistry.getFileFolderService();
     }
 
     public ServiceRegistry getServiceRegistry() {
@@ -109,7 +115,13 @@ public class ContractsServiceImpl extends BaseBean {
                     result.addAll(getChild(childRef));
                 } else {
                     if (nodeService.getType(childRef).getLocalName().equals("document")) {
-                        result.add(childRef);
+                        try {
+                            fileFolderService.getFileInfo(nodeRef);    //проверка доступности
+                            fileFolderService.getFileInfo(childRef);    //проверка доступности
+                            result.add(childRef);
+                        } catch (AccessDeniedException e) {
+                            //пропускаем недоступные
+                        }
                     }
                 }
             }
