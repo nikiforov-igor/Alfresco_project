@@ -55,14 +55,7 @@ function getData()
    var substituteFields = null;
     if (json.has("substituteStrings"))
     {
-        // Convert the JSONArray object into a native JavaScript array
-        substituteFields = [];
-        var jsonSFields = json.get("substituteStrings");
-        numSFields = jsonSFields.length();
-        for (count = 0; count < numSFields; count++)
-        {
-            substituteFields.push(jsonSFields.get(count));
-        }
+        substituteFields = json.get("substituteStrings");
     }
    // Try to find a filter query based on the passed-in arguments
    var node = search.findNode(parsedArgs.nodeRef),
@@ -73,7 +66,7 @@ function getData()
    {
       try
       {
-         item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields);
+         item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields.split(","));
          if (node.hasAspect("cm:versionable")) {
             versionable = true;
          }

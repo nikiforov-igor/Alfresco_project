@@ -1956,7 +1956,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     reqNameSubstituteStrings.push(column.nameSubstituteString);
                 }
                 var fields = reqFields.join(",");
-                var nameSubstituteStrings = reqNameSubstituteStrings;
+                var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
                 return {
                     fields: this.dataRequestFields,
                     substituteStrings: nameSubstituteStrings
