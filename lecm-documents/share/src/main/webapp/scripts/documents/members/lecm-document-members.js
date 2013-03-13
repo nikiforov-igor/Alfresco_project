@@ -34,6 +34,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
         LogicECM.module.Members.DocumentMembers.superclass.constructor.call(this, "LogicECM.module.Members.DocumentMembers", fieldHtmlId, [ "container", "datasource"]);
         this.id = fieldHtmlId;
         this.controlId = fieldHtmlId + "-cntrl";
+        this.currentMembers = [];
         return this;
     };
 
@@ -51,8 +52,15 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
             memberButton: null,
 
+            currentMembers: [],
+
             onReady: function () {
                 this.memberButton = Alfresco.util.createYUIButton(this, this.controlId + "-add-member-button", this.onAdd.bind(this), {}, Dom.get(this.controlId + "-add-member-button"));
+
+                var membersRefsDivs = Dom.getElementsByClassName('member-ref');
+                for (var index in membersRefsDivs) {
+                    this.currentMembers.push(membersRefsDivs[index].innerHTML);
+                }
             },
 
             onAdd: function (e, p_obj) {
@@ -62,6 +70,14 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.member.add.title") ]
                     );
+                    var added = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc_added'];
+                    if (added != null) {
+                        added.value = this.currentMembers.join(",")
+                    }
+                    var current = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc'];
+                    if (current != null) {
+                        current.value = this.currentMembers.join(",")
+                    }
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
@@ -72,7 +88,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         mode: "create",
                         formId: this.id + "-create-form",
                         submitType: "json",
-                        ignoreNodes: this.options.documentMembersFolderRef
+                        ignoreNodes: this.currentMembers.join(",")
                     });
 
 //				// Using Forms Service, so always create new instance
@@ -90,11 +106,6 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         onSuccess: {
                             fn: function (response) {
                                 if (me.options.datagridBublingLabel != null) {
-                                    /*YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-                                        {
-                                            nodeRef: response.json.persistedObject,
-                                            bubblingLabel: me.options.datagridBublingLabel
-                                        });*/
                                     YAHOO.Bubbling.fire("datagridRefresh",
                                         {
                                             bubblingLabel:me.options.bubblingLabel

@@ -60,7 +60,9 @@ LogicECM.module = LogicECM.module || {};
 
 	            selectedItemsNameSubstituteString: null,
 
-				additionalFilter: ""
+				additionalFilter: "",
+
+                ignoreNodes: []
             },
 
             selectedItems: null,
@@ -274,6 +276,26 @@ LogicECM.module = LogicECM.module || {};
                                     oFullResponse.data.parent.type = "tag";
                                 }
                             }
+                        }
+
+                        var ignoreItems = me.options.ignoreNodes;
+                        if (ignoreItems != null) {
+                            var tempItems = [];
+                            var k = 0;
+                            for (index in items) {
+                                item = items[index];
+                                var ignore = false;
+                                for (var i = 0; i < ignoreItems.length; i++) {
+                                    if (ignoreItems[i] == item.nodeRef) {
+                                        ignore = true;
+                                    }
+                                }
+                                if (!ignore) {
+                                    tempItems[k] = item;
+                                    k++;
+                                }
+                            }
+                            items = tempItems;
                         }
 
                         updatedResponse =

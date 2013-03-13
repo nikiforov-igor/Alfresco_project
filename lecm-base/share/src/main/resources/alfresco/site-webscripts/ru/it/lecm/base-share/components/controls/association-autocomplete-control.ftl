@@ -52,6 +52,9 @@
 	            <#elseif field.endpointMandatory??>
 		            mandatory: ${field.endpointMandatory?string},
 	            </#if>
+                <#if args.ignoreNodes??>
+                    ignoreNodes: "${args.ignoreNodes}".split(","),
+                </#if>
                 multipleSelectMode: ${field.endpointMany?string},
                 itemType: "${field.endpointType}",
                 currentValue: "${field.value!''}",
@@ -88,6 +91,9 @@
 		    </#if>
             <#if field.control.params.parentNodeRef??>
                 rootNodeRef: "${field.control.params.parentNodeRef}",
+            </#if>
+            <#if args.ignoreNodes??>
+                ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>
             showCreateNewLink: ${showCreateNewLink?string},
 	        showSearch: ${showSearch?string},
