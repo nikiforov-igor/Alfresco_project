@@ -7,7 +7,26 @@
         ${msg("heading")}
     </h2>
     <div id="${el}-formContainer">Задачи будут здесь</div>
+    <script type="text/javascript">
+        var documentTasksComponent = null;
+    </script>
     <script type="text/javascript">//<![CDATA[
-    Alfresco.util.createTwister("${el}-heading", "DocumentTasks");
-    //]]></script>
+    (function () {
+        Alfresco.util.createTwister("${el}-heading", "DocumentTasks");
+
+        function init() {
+            documentTasksComponent = new LogicECM.DocumentTasks("${el}").setOptions(
+                    {
+                        nodeRef: "${nodeRef}",
+                        title: "${msg('heading')}"
+                    }).setMessages(${messages});
+        }
+
+        YAHOO.util.Event.onDOMReady(init);
+    })();
+    //]]>
+    </script>
+
 </div>
+
+

@@ -3,36 +3,44 @@
 <script type="text/javascript">
     //<![CDATA[
     (function() {
-        var Dom = YAHOO.util.Dom,
-            Event = YAHOO.util.Event,
-            Selector = YAHOO.util.Selector;
-        var container;
-
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.tasks.dashlet");
-            new Alfresco.widget.DashletTitleBarActions("${id}").setOptions({
-                actions: [
-                    {
-                        cssClass: "help",
-                        bubbleOnClick: {
-                            message: "${msg("dashlet.help")?js_string}"
-                        },
-                        tooltip: "${msg("dashlet.help.tooltip")?js_string}"
-                    }
-                ]
-            });
-
-            container = Dom.get('${id}_results');
-            container.innerHTML = 'Мои задачи';
         }
-        Event.onDOMReady(init);
+
+        YAHOO.util.Event.onDOMReady(init);
     })();
     //]]>
 </script>
 
 <div class="dashlet document bordered">
     <div class="title dashlet-title">
-        <span>${msg("label.title")}</span>
+        <span>
+            <div style="float:left; margin-right: 4px;">${msg("label.title")}</div>
+            <div class="dashlet-task-total-tasks">${msg("dashlet.tasks.count")}: <span class="dashlet-task-total-tasks-count">${data.count}</span></div>
+        </span>
+        <span class="lecm-dashlet-actions">
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentTasksComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+        </span>
     </div>
-    <div class="body scrollableList" id="${id}_results"></div>
+    <div class="body scrollableList" id="${id}_results">
+        <#assign maxMainTextLength = 60>
+        <#list data.tasks as task>
+            <#assign mainTextLength = task.title?length + task.description?length + 2>
+            <#if mainTextLength < maxMainTextLength>
+                <#assign description = task.description>
+            <#else>
+                <#assign descriptionLength = maxMainTextLength - task.title?length - 5>
+                <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
+            </#if>
+            <div class="dashlet-task">
+                <div class="dashlet-task-date">${task.startDate}</div>
+                <div class="dashlet-task-status ${task.state}">${task.stateMessage}</div>
+                <div class="dashlet-task-main-text">
+                    <span class="dashlet-task-title">
+                        <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
+                    </span>&nbsp;${description}
+                </div>
+            </div>
+        </#list>
+    </div>
 </div>

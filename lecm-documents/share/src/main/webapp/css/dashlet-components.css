@@ -60,3 +60,65 @@
     font-weight: bold;
     text-decoration: none;
 }
+
+.dashlet-task {
+    margin-left: 5px;
+    margin-right: 50px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+/***********My tasks dashlet*************/
+.dashlet-task-main-text {
+    clear: both;
+    margin-left: 20px;
+    padding-top: 5px;
+}
+
+.dashlet-task-title {
+    font-weight: bold;
+    color: #6CA5CE;
+}
+
+.dashlet-task-date {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666666;
+    float: left;
+    margin-left: 12px;
+}
+
+.dashlet-task-status {
+    font-size: 9px;
+    font-weight: bold;
+    text-align: right;
+    float: right;
+}
+
+.WORKFLOWTASKSTATE_NA {
+    display: none;
+}
+
+.WORKFLOWTASKSTATE_OVERDUE {
+    color: #FF0000;
+}
+
+.WORKFLOWTASKSTATE_NEW {
+    color: #006600;
+}
+
+.WORKFLOWTASKSTATE_SOON {
+    color: #CC6600;
+}
+
+.dashlet-task-total-tasks {
+    font-size: 13px;
+    font-weight: normal;
+    float:right;
+}
+
+.dashlet .title span.dashlet-task-total-tasks-count {
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: underline;
+}
