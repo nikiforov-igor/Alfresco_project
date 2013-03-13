@@ -71,7 +71,7 @@
                 </executions>
                 <configuration>
                     <extraJvmArgs>${gwt.extraJvmArgs}</extraJvmArgs>
-                    <localWorkers>4</localWorkers>
+                    <localWorkers>2</localWorkers>
                     <!--<compileReport>true</compileReport>-->
                     <!--<optimizationLevel>9</optimizationLevel>-->
                     <!--<treeLogger>true</treeLogger>-->
