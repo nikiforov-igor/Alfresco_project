@@ -3,18 +3,21 @@ var count = parseInt(args['count']);
 
 var categories = documentAttachments.getCategories(documentNodeRef);
 var items = [];
+var hasNext = false;
 var k = 0;
 if (categories != null) {
 	for (var i = 0; i < categories.length; i++) {
-		if (k < count) {
+		if (k <= count) {
 			var attachments = categories[i].getChildren();
 			if (attachments != null && attachments.length > 0) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
 					if (k < count) {
 						showAttachments.push(attachments[j]);
-						k++;
+					} else {
+						hasNext = true;
 					}
+					k++;
 				}
 
 				items.push({
@@ -26,3 +29,4 @@ if (categories != null) {
 	}
 }
 model.items = items;
+model.hasNext = hasNext;

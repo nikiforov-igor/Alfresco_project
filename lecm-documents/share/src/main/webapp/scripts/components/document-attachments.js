@@ -48,11 +48,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentAttachments_onReady() {
-                var linkEl = Dom.get(this.id + "-action-expand");
-                linkEl.onclick = this.onLinkClick.bind(this);
+	            var expandEl = Dom.get(this.id + "-action-expand");
+	            if (expandEl != null) {
+		            expandEl.onclick = this.onLinkClick.bind(this);
+	            }
 
-	            if (this.options.showAfterReady) {
-		            this.onLinkClick();
+	            var linkEl = Dom.get(this.id + "-link");
+	            if (linkEl != null) {
+		            linkEl.onclick = this.onLinkClick.bind(this);
 	            }
             },
 

@@ -33,12 +33,12 @@
 						</#if>
 					</li>
 				</#list>
-					<#--<#if connections.hasNext == "true">-->
-						<#--<li style="text-align: right">-->
-							<#--<a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"-->
-							   <#--title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>-->
-						<#--</li>-->
-					<#--</#if>-->
+				<#if attachments.hasNext == "true">
+					<li style="text-align: right">
+						<a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"
+						   title="${msg("label.connections.more")}">${msg("label.attachments.more")}</a>
+					</li>
+				</#if>
 			</#if>
 	    </ul>
     </div>

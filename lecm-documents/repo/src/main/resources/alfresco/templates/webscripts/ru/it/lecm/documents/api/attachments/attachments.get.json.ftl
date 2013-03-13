@@ -1,5 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
+	"hasNext": "${hasNext?string}",
     "items": [
         <#list items as item>
             {
