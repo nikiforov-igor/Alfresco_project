@@ -65,15 +65,14 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                                 nodeRef: root.nodeRef,
                                 actionsConfig: {
                                     fullDelete: "true"
+                                },
+                                sort:"lecm-contract:document|desc",
+                                searchConfig: {
+                                    filter: '+PATH:"'+ root.draftPath +'//*"'
+                                   + ' OR +PATH:"'+ root.documentPath +'//*"'
                                 }
+
                             },
-//                            datagridMeta:{
-//                                itemType:root.itemType,
-//                                nodeRef:root.nodeRef,
-//                                actionsConfig:{
-//                                    fullDelete:true
-//                                }
-//                            },
                             bubblingLabel:root.bubblingLabel
                         });
                 }
@@ -112,7 +111,9 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
                             var root = {
-                                nodeRef: oResults.nodeRef
+                                nodeRef: oResults.nodeRef,
+                                draftPath: oResults.draftPath,
+                                documentPath: oResults.documentPath
                             };
                         var page = "contract-documents";
                         root.itemType = "lecm-contract:document";

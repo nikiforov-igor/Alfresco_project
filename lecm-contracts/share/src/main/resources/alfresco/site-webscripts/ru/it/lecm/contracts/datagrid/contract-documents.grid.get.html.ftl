@@ -126,24 +126,23 @@
                     pageSize: 20,
                     showExtendSearchBlock: true,
                     actions: [
-                    {
-                        type: "datagrid-action-link-${bubblingLabel!''}",
-                        id: "onActionEdit",
-                        permission: "edit",
-                        label: "${msg("actions.edit")}"
-                    },
                         {
-                            type: "datagrid-action-link-${bubblingLabel!''}",
+                            type: "datagrid-action-link-${bubblingLabel!'contract'}",
+                            id: "onActionEdit",
+                            permission: "edit",
+                            label: "${msg("actions.edit")}"
+                        },
+                        {
+                            type: "datagrid-action-link-${bubblingLabel!'contract'}",
                             id: "onActionDelete",
                             permission: "delete",
                             label: "${msg("actions.delete-row")}"
                         }
                     ],
-                    dataSource:"lecm/contracts/datasource/all-contracts",
                     allowCreate: false,
                     showActionColumn: true,
                     showCheckboxColumn: true,
-                    bubblingLabel: "${bubblingLabel!"bj-history-records"}",
+                    bubblingLabel: "${bubblingLabel!"contract"}",
                     attributeForShow:"cm:name"
                 }).setMessages(${messages});
 			}

@@ -53,12 +53,13 @@
 	</bean>
 
     <bean id="contractsService" class="ru.it.lecm.document.beans.ContractsServiceImpl"
-          depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService">
+          depends-on="ServiceRegistry, repositoryHelper, transactionService, nodeService, namespaceService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="contractsScript" parent="baseJavaScriptExtension" class="ru.it.lecm.document.script.ContractsWebScriptBean"

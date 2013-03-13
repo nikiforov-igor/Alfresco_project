@@ -1,3 +1,5 @@
 {
-nodeRef: "${catalog}"
+    nodeRef: "${nodeRef}",
+    draftPath: "${draftPath}",
+    documentPath: "${documentPath}"
 }
