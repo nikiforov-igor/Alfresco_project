@@ -30,6 +30,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      */
     LogicECM.DocumentAttachments = function DocumentAttachments_constructor(htmlId) {
         LogicECM.DocumentAttachments.superclass.constructor.call(this, htmlId);
+
+	    YAHOO.Bubbling.on("metadataRefresh", this.onAttachmentsUpdate, this);
+	    YAHOO.Bubbling.on("fileRenamed", this.onAttachmentsUpdate, this);
+	    YAHOO.Bubbling.on("fileDeleted", this.onAttachmentsUpdate, this);
         return this;
     };
 
@@ -79,6 +83,29 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         scope: this,
                         execScripts: true
                     });
-            }
+            },
+
+	        onAttachmentsUpdate: function DocumentAttachments_onAttachmentsUpdate(layer, args) {
+		        Alfresco.util.Ajax.request(
+			        {
+				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
+				        dataObj: {
+					        nodeRef: this.options.nodeRef,
+					        htmlid: this.id + "-" + Alfresco.util.generateDomId()
+				        },
+				        successCallback: {
+					        fn:function(response){
+						        var container = Dom.get(this.id);
+						        if (container != null) {
+							    	container.innerHTML = response.serverResponse.responseText;
+						        }
+					        },
+					        scope: this
+				        },
+				        failureMessage: this.msg("message.failure"),
+				        scope: this,
+				        execScripts: true
+			        });
+	        }
         }, true);
 })();
