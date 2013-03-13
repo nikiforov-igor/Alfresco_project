@@ -42,20 +42,24 @@
 			</#if>
 	    </ul>
     </div>
-    <script type="text/javascript">//<![CDATA[
-        (function () {
-            function init() {
-                Alfresco.util.createTwister("${el}-heading", "DocumentAttachments");
+	<script type="text/javascript">
+		var documentAttachmentsComponent = null;
+	</script>
+	<script type="text/javascript">//<![CDATA[
+	(function () {
+		Alfresco.util.createTwister("${el}-heading", "DocumentAttachments");
 
-                new LogicECM.DocumentAttachments("${el}").setOptions(
-                        {
-                            nodeRef: "${nodeRef}",
-                            title: "${msg('heading')}",
-	                        showAfterReady: ${(view?? && view == "attachments")?string}
-                        }).setMessages(${messages});
-            }
+		function init() {
+			documentAttachmentsComponent =new LogicECM.DocumentAttachments("${el}").setOptions(
+				{
+					nodeRef: "${nodeRef}",
+					title: "${msg('heading')}",
+					showAfterReady: ${(view?? && view == "attachments")?string}
+				}).setMessages(${messages});
+		}
 
-            YAHOO.util.Event.onDOMReady(init);
-        })();
-    //]]></script>
+		YAHOO.util.Event.onDOMReady(init);
+	})();
+	//]]>
+	</script>
 </div>

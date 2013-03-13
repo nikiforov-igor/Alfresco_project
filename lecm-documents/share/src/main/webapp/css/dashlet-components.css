@@ -32,6 +32,15 @@
     padding-right: 13px;
 }
 
+.dashlet .lecm-dashlet-actions-right {
+	float: right;
+}
+
+.dashlet select.attachment-categories-select {
+	font-size: 13px;
+	padding: 0;
+}
+
 .dashlet-metadata .lecm-dashlet-actions {
     cursor: pointer;
     float: right;

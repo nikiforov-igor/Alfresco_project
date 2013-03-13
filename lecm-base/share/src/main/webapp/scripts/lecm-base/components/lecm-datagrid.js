@@ -691,7 +691,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 var row = me.widgets.dataTable.getRecord(args[1].target.offsetParent);
                                 if (row) {
                                     var asset = row.getData();
-                                    me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, null);
+
+	                                var confirmFunction = null;
+	                                if (me.options.actions != null) {
+		                                for (var i = 0; i < me.options.actions.length; i++) {
+			                            	if (me.options.actions[i].id == owner.className && me.options.actions[i].confirmFunction != null) {
+					                            confirmFunction = me.options.actions[i].confirmFunction;
+				                            }
+		                                }
+	                                }
+
+                                    me[owner.className].call(me, asset, owner, me.datagridMeta.actionsConfig, confirmFunction);
                                 }
                             }
                         }
@@ -924,7 +934,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     var column = this.datagridColumns[i],
                         columnName = column.name.replace(":", "_"),
-                        fieldLookup = (column.type == "property" ? "prop" : "assoc") + "_" + columnName;
+                        fieldLookup = ((column.type == "property" || column.formsName.indexOf("prop_") == 0) ? "prop" : "assoc") + "_" + columnName;
 
                     this.dataRequestFields.push(columnName);
                     this.dataRequestNameSubstituteStrings.push(column.nameSubstituteString);
@@ -1316,7 +1326,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             _showVersionLabel:function (oData, id) {
                 if (this.versionable) {
-                    var versionValue = oData.prop_cm_versionLabel.value;
+                    var versionValue = oData.prop_cm_versionLabel != null ? oData.prop_cm_versionLabel.value : "1.0";
                     // Получаем список ячеек tr
                     var childTrElement = Dom.getChildren(id);
                     // Количество элементов tr
