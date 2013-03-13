@@ -58,13 +58,22 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                 if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
                     Bubbling.fire("activeGridChanged",
                         {
-                            datagridMeta:{
-                                itemType:root.itemType,
-                                nodeRef:root.nodeRef,
-                                actionsConfig:{
-                                    fullDelete:true
+                            datagridMeta: {
+                                itemType: "lecm-contract:document",
+                                datagridFormId: "all-contracts",
+                                createFormId: "",
+                                nodeRef: root.nodeRef,
+                                actionsConfig: {
+                                    fullDelete: "true"
                                 }
                             },
+//                            datagridMeta:{
+//                                itemType:root.itemType,
+//                                nodeRef:root.nodeRef,
+//                                actionsConfig:{
+//                                    fullDelete:true
+//                                }
+//                            },
                             bubblingLabel:root.bubblingLabel
                         });
                 }
@@ -97,7 +106,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
         },
 
         draw:function draw() {
-            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/contracts/root";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/contracts/draft-root";
             var callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");

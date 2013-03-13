@@ -73,6 +73,19 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.extensions.surf</groupId>
+            <artifactId>spring-webscripts</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.base</groupId>
+            <artifactId>base-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

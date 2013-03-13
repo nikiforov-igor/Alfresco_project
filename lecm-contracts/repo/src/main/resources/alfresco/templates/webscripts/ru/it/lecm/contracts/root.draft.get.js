@@ -1,0 +1,1 @@
+model.catalog = contracts.getDraftRoot().getNodeRef().toString();

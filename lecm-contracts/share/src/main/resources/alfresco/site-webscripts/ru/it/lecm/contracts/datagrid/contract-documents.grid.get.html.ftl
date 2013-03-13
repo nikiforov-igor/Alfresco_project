@@ -120,29 +120,32 @@
                         elCell.innerHTML = html;
                     };
                 };
-				new LogicECM.module.Base.DataGrid('${id}').setOptions(
-						{
-							usePagination:true,
-							showExtendSearchBlock:true,
-							actions: [
-								{
-									type:"datagrid-action-link-${bubblingLabel!''}",
-									id:"onActionEdit",
-									permission:"edit",
-									label:"${msg("actions.edit")}"
-								},
-								{
-									type:"datagrid-action-link-${bubblingLabel!''}",
-									id:"onActionDelete",
-									permission:"delete",
-									label:"${msg("actions.delete-row")}"
-								}
-							],
-							bubblingLabel: "${bubblingLabel!''}",
-							showCheckboxColumn: true,
-							attributeForShow:"cm:name",
-							advSearchFormId: "${advSearchFormId!''}"
-						}).setMessages(${messages});
+
+                new LogicECM.module.BusinessJournal.DataGrid('${id}').setOptions({
+                    usePagination: true,
+                    pageSize: 20,
+                    showExtendSearchBlock: true,
+                    actions: [
+                    {
+                        type: "datagrid-action-link-${bubblingLabel!''}",
+                        id: "onActionEdit",
+                        permission: "edit",
+                        label: "${msg("actions.edit")}"
+                    },
+                        {
+                            type: "datagrid-action-link-${bubblingLabel!''}",
+                            id: "onActionDelete",
+                            permission: "delete",
+                            label: "${msg("actions.delete-row")}"
+                        }
+                    ],
+                    dataSource:"lecm/contracts/datasource/all-contracts",
+                    allowCreate: false,
+                    showActionColumn: true,
+                    showCheckboxColumn: true,
+                    bubblingLabel: "${bubblingLabel!"bj-history-records"}",
+                    attributeForShow:"cm:name"
+                }).setMessages(${messages});
 			}
 
 			function init() {

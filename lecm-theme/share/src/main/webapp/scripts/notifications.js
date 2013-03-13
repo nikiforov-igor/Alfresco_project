@@ -140,7 +140,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		loadNewNotificationsCount: function() {
 			var me = this;
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/notifications/active-channel/api/new-count";
+			var sUrl = Alfresco.constants.PROXY_URI + "lecm/notifications/active-channel/api/new-count";
 			var callback = {
 				success:function (oResponse) {
 					var oResults = eval("(" + oResponse.responseText + ")");
