@@ -60,8 +60,6 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                         {
                             datagridMeta: {
                                 itemType: "lecm-contract:document",
-                                datagridFormId: "all-contracts",
-                                createFormId: "",
                                 nodeRef: root.nodeRef,
                                 actionsConfig: {
                                     fullDelete: "true"
