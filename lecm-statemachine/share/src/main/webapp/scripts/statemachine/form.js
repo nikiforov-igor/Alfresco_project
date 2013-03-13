@@ -51,15 +51,11 @@ LogicECM.module = LogicECM.module || {};
             }
 		},
 
-		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, field) {
+		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, fields, label) {
             this.assignee = assignee;
             if (errors.length > 0) {
-                Alfresco.util.PopupManager.displayMessage(
-                    {
-                        text: "Поля надо заполнить",
-                        spanClass: "wait",
-                        displayTime: 3
-                    });
+                viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
+                viewDialog.show(label, errors, fields);
                 return;
             }
 			if (workflowId != null && workflowId != 'null') {
@@ -100,7 +96,7 @@ LogicECM.module = LogicECM.module || {};
 			});
 			callback = {
 				success:function (oResponse) {
-					alert("OK");
+					document.location.reload();
 				},
 				argument:{
 					contractsObject:this
@@ -132,5 +128,49 @@ LogicECM.module = LogicECM.module || {};
 		}
 
 	});
+})();
+
+(function () {
+    LogicECM.module.EditFieldsConfirm = function EditFieldsConfirm_constructor(htmlId) {
+        var module = LogicECM.module.EditFieldsConfirm.superclass.constructor.call(this, "LogicECM.module.EditFieldsConfirm", htmlId, ["button"]);
+        return module;
+    };
+
+    YAHOO.extend(LogicECM.module.EditFieldsConfirm, Alfresco.component.Base, {
+        show: function showEditFieldsConfirm(label, errors, fields) {
+            var containerDiv = document.createElement("div");
+            var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
+                '<div id="confirm-edit-fields-head" class="hd">Ошибка действия "' + label + '"</div>' +
+                '<div id="confirm-edit-fields-body" class="bd">' +
+                '<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields" style="padding: 1em">Выполнение действия не возможно.<br/>';
+                for (var i = 0; i < errors.length; i++) {
+                    form += errors[i];
+                    form += "<br/>";
+                }
+
+                form += '</div></div>' +
+                '<div class="bdft">' +
+                '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
+                '<span class="first-child">' +
+                '<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">Отмена</button>' +
+                '</span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            containerDiv.innerHTML = form;
+            this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
+                {
+                    width: "30em"
+                });
+            Dom.setStyle("confirm-edit-fields-form-container", "display", "block");
+            this.dialog.show();
+            var button = document.getElementById("confirm-edit-fields-cancel-button");
+            button.onclick = function() {
+                this.dialog.hide();
+            }.bind(this);
+        }
+
+    });
 
 })();
