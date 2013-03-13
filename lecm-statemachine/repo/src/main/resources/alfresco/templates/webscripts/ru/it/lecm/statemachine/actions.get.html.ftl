@@ -1,5 +1,7 @@
+<#if taskId??>
 <#escape x as x?js_string>
 	{
+
 	taskId: "${taskId}",
 	states: [
 		<#list states as state>
@@ -51,5 +53,7 @@
             <#if workflow_has_next>,</#if>
         </#list>
     ]
+
 	}
 </#escape>
+</#if>

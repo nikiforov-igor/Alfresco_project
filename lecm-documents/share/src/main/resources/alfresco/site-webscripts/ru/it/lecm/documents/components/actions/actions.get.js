@@ -13,7 +13,11 @@ function getActions(nodeRef) {
     if (result.status != 200) {
         AlfrescoUtil.error(result.status, 'Could not get actions for node ' + nodeRef);
     }
-    return eval('(' + result + ')');
+    if (result == "") {
+        return {};
+    } else {
+        return eval('(' + result + ')');
+    }
 }
 
 main();

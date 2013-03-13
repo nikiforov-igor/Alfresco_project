@@ -39,6 +39,9 @@ public class ActionsScript extends DeclarativeWebScript {
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> result = new HashMap<String, Object>();
+
+        if (req.getParameter("documentNodeRef") == null) return result;
+
         NodeRef nodeRef = new NodeRef(req.getParameter("documentNodeRef"));
         NodeService nodeService = serviceRegistry.getNodeService();
         String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);

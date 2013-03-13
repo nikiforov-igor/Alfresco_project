@@ -1,3 +1,4 @@
+<#if result.states?? || result.workflows?? >
 <!-- Parameters and libs -->
     <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
     <#include "/org/alfresco/components/component.head.inc">
@@ -15,12 +16,16 @@
             Alfresco.util.createTwister("${el}-heading", "DocumentActions");
         //]]>
        </script>
-
-        <#list result.states as state>
-            <div class="widget-button-grey" onclick="workflowForm.show('trans', '${nodeRef}', '${state.workflowId}', '${result.taskId}', '${state.actionId}', '', [<#list state.errors as error>'${error}'<#if error_has_next>,</#if></#list>], [<#list state.fields as field>'${field}'<#if field_has_next>,</#if></#list>])">${state.label}</div>
-        </#list>
+       <#if result.states?? >
+            <#list result.states as state>
+                <div class="widget-button-grey" onclick="workflowForm.show('trans', '${nodeRef}', '${state.workflowId}', '${result.taskId}', '${state.actionId}', '', [<#list state.errors as error>'${error}'<#if error_has_next>,</#if></#list>], [<#list state.fields as field>'${field}'<#if field_has_next>,</#if></#list>])">${state.label}</div>
+            </#list>
+       </#if>
+       <#if result.workflows??>
         <#list result.workflows as workflow>
             <div class="widget-button-grey" onclick="workflowForm.show('user','${nodeRef}', '${workflow.workflowId}', '${result.taskId}', '${workflow.id}', '<#list workflow.assignees as assignee>${assignee}<#if assignee_has_next>,</#if></#list>', [<#list workflow.errors as error>'${error}'<#if error_has_next>,</#if></#list>], [<#list workflow.fields as field>'${field}'<#if field_has_next>,</#if></#list>])">${workflow.label}</div>
         </#list>
+       </#if>
     </div>
 </div>
+</#if>
