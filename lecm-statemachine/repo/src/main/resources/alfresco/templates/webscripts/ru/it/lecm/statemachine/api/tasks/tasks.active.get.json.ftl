@@ -1,7 +1,7 @@
 {
-    "count": "${count}",
+    "totalTasksCount": ${data.totalTasksCount},
 	"tasks": [
-		<#list tasks as task>
+		<#list data.tasks as task>
 		{
 			"id": "${task.id}",
 			"name": "${task.name}",

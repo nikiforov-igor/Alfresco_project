@@ -70,39 +70,7 @@
     text-decoration: none;
 }
 
-.dashlet-task {
-    margin-left: 5px;
-    margin-right: 50px;
-    margin-top: 6px;
-    margin-bottom: 10px;
-}
-
-/***********My tasks dashlet*************/
-.dashlet-task-main-text {
-    clear: both;
-    margin-left: 20px;
-    padding-top: 5px;
-}
-
-.dashlet-task-title {
-    font-weight: bold;
-    color: #6CA5CE;
-}
-
-.dashlet-task-date {
-    font-size: 12px;
-    font-weight: bold;
-    color: #666666;
-    float: left;
-    margin-left: 12px;
-}
-
-.dashlet-task-status {
-    font-size: 9px;
-    font-weight: bold;
-    text-align: right;
-    float: right;
-}
+/***********My tasks *************/
 
 .WORKFLOWTASKSTATE_NA {
     display: none;
@@ -120,16 +88,78 @@
     color: #CC6600;
 }
 
-.dashlet-task-total-tasks {
+.my-task-date {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666666;
+    float: left;
+}
+
+.my-task-status {
+    font-size: 9px;
+    font-weight: bold;
+    text-align: right;
+    float: right;
+}
+
+.my-task-main-text {
+    clear: both;
+    padding-top: 5px;
+}
+
+.my-task-title {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.dashlet .my-task {
+    margin-left: 5px;
+    margin-right: 40px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.dashlet .my-task-date {
+    margin-left: 12px;
+}
+
+.dashlet .my-task-status {
+    margin-left: 12px;
+}
+
+.dashlet .my-task-main-text {
+    margin-left: 20px;
+}
+
+.dashlet .total-tasks-count {
     font-size: 13px;
     font-weight: normal;
     float:right;
 }
 
-.dashlet .title span.dashlet-task-total-tasks-count {
+.dashlet .title .total-tasks-count span {
     font-size: 13px;
-    font-weight: bold;
     text-decoration: underline;
+}
+
+.total-tasks-count-right {
+    float: left;
+    background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
+    height: 26px;
+    width: 26px;
+    text-align: center;
+    padding-top: 3px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.my-task-right {
+    margin-left: 5px;
+    margin-right: 25px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #CCCCCC;
+    padding-bottom: 5px;
 }
 
 .datagrid .action-set .onActionViewContent a {

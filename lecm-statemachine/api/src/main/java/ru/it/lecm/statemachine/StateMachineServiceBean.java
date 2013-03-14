@@ -12,8 +12,7 @@ public interface StateMachineServiceBean {
 
     String getCurrentTaskId(String executionId);
 
-    List<WorkflowTaskBean> getMyActiveTasks(String nodeRef);
+    WorkflowTaskListBean getMyActiveTasks(String nodeRef, int loadCount);
 
     List<WorkflowTaskBean> getMyCompleteTasks(String nodeRef);
-
 }

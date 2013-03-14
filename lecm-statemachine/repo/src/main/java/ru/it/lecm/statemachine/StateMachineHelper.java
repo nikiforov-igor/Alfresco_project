@@ -31,6 +31,7 @@ import ru.it.lecm.statemachine.action.StatusChangeAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.WorkflowTaskListPageBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskPageBean;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
@@ -133,8 +134,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
 	}
 
     @Override
-    public List<WorkflowTaskBean> getMyActiveTasks(String nodeRef) {
-        return getMyTasks(nodeRef, true);
+    public WorkflowTaskListBean getMyActiveTasks(String nodeRef, int loadCount) {
+        List<WorkflowTaskBean> myTasks = getMyTasks(nodeRef, true);
+        if (loadCount == 0 || myTasks.size() <= loadCount) {
+            return new WorkflowTaskListPageBean(myTasks, myTasks.size());
+        }
+
+        return new WorkflowTaskListPageBean(myTasks.subList(0, loadCount), myTasks.size());
     }
 
     @Override
