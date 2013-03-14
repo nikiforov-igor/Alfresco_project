@@ -16,7 +16,7 @@
         </span>
     </div>
 
-<@grid.datagrid containerId false>
+<@grid.datagrid containerId true>
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
@@ -46,7 +46,7 @@
                 datagridBublingLabel: "${containerId}"
             });
 
-            var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+            var datagrid = new LogicECM.module.DocumentMembers.DataGrid('${containerId}').setOptions({
                 usePagination: true,
                 pageSize: 10,
                 showExtendSearchBlock: false,

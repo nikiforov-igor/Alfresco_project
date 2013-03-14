@@ -97,17 +97,21 @@ var Evaluator =
     * @param node {ScriptNode} The list item node for this field
     * @return {Boolean} false to prevent this field being added to the output stream.
     */
-      decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString)
-   {
-      var value = objData.value,
-         type = objData.type,
-         obj;
+   decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString) {
+       var value = objData.value,
+           type = objData.type,
+           obj;
        var substituteNode = null;
-       if(nameSubstituteString != null && nameSubstituteString.indexOf("#parent") == 0) {
-           nameSubstituteString = nameSubstituteString.replace("#parent", "");
+       var includeRef = false;
+       if (nameSubstituteString != null && nameSubstituteString.indexOf("$parent") == 0) {
+           nameSubstituteString = nameSubstituteString.replace("$parent", "");
            substituteNode = node;
        }
-      if (type == "cm:person") {
+       if (nameSubstituteString != null && nameSubstituteString.indexOf("$includeRef") == 0) {
+           nameSubstituteString = nameSubstituteString.replace("$includeRef", "");
+           includeRef = true;
+       }
+       if (type == "cm:person") {
            obj = Evaluator.getPersonObject(value);
            if (obj == null) {
                return false;
@@ -118,37 +122,39 @@ var Evaluator =
                objData.displayValue = substitude.formatNodeTitle(value, nameSubstituteString);
            }
            objData.metadata = obj.userName;
-      }
-      else if (type == "cm:folder")
-      {
-         obj = Evaluator.getContentObject(value);
-         if (obj == null)
-         {
-            return false;
-         }
-         objData.displayValue = obj.displayPath.substring(companyhome.name.length() + 1);
-         objData.metadata = "container";
-      }
-      else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject"))
-      {
-          obj = Evaluator.getContentObject(value);
-	      if (obj == null) {
-		      return false;
-	      }
-          if (substituteNode == null) {
-              substituteNode = obj;
-          }
-	      if (nameSubstituteString == null) {
-		      objData.displayValue = obj.properties["cm:name"];
-	      } else {
-		      objData.displayValue = substitude.formatNodeTitle(substituteNode, nameSubstituteString);
-	      }
-          objData.metadata = obj.isContainer ? "container" : "document";
-      } else if (nameSubstituteString != null) {
-	      objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
-	      objData.value = objData.displayValue;
-      }
-      return true;
+       }
+       else if (type == "cm:folder") {
+           obj = Evaluator.getContentObject(value);
+           if (obj == null) {
+               return false;
+           }
+           objData.displayValue = obj.displayPath.substring(companyhome.name.length() + 1);
+           objData.metadata = "container";
+       }
+       else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject")) {
+           obj = Evaluator.getContentObject(value);
+           if (obj == null) {
+               return false;
+           }
+           if (substituteNode == null) {
+               substituteNode = obj;
+           }
+           if (nameSubstituteString == null) {
+               objData.displayValue = obj.properties["cm:name"];
+           } else {
+               objData.displayValue = substitude.formatNodeTitle(substituteNode, nameSubstituteString);
+           }
+           objData.metadata = obj.isContainer ? "container" : "document";
+       } else if (nameSubstituteString != null) {
+           objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
+           if (!includeRef) {
+               objData.value = objData.displayValue;
+           } else {
+               var refs = substitude.getObjectsByTitle(node, nameSubstituteString);
+               objData.value = refs.length > 0 ? refs[0].nodeRef.toString() : node.nodeRef.toString();
+           }
+       }
+       return true;
    },
    
    /**

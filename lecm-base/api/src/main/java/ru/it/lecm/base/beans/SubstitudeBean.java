@@ -3,6 +3,8 @@ package ru.it.lecm.base.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.List;
+
 /**
  * @author dbashmakov
  *         Date: 28.12.12
@@ -90,4 +92,6 @@ public interface SubstitudeBean {
     public String getTemplateStringForObject(NodeRef object);
 
     public String getTemplateStringForObject(NodeRef object, boolean forList);
+
+    public List<NodeRef> getObjectsByTitle(NodeRef object, String formatTitle);
 }

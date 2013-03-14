@@ -61,6 +61,7 @@
         <property name="service">
             <ref bean="substitudeService"/>
         </property>
+        <property name="registry" ref="ServiceRegistry"/>
     </bean>
 
 	<bean id="LogicECMContentPolicy"
