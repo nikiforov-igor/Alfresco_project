@@ -65,7 +65,25 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                     this.currentMembers.push(membersRefsDivs[index].innerHTML);
                 }
 
-                var me = this;
+                Alfresco.util.Ajax.request ({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/member/add",
+                    dataObj: {
+                        document:this.options.documentNodeRef,
+                        employee:"workspace://SpacesStore/87eb8778-3fe6-4a2b-ac10-f92617eb3fe1"
+
+                    },
+                    requestContentType: "application/json",
+                    successCallback: {
+                        fn: function (response) {
+                            alert(response);
+                        },
+                        scope: this
+                    },
+                    failureMessage: "не удалось установить прочитанные уведомления"
+                });
+
+                /*var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     Alfresco.util.populateHTML(
@@ -107,10 +125,10 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         onSuccess: {
                             fn: function (response) {
                                 if (me.options.datagridBublingLabel != null) {
-                                   /* YAHOO.Bubbling.fire("datagridRefresh",
+                                   *//* YAHOO.Bubbling.fire("datagridRefresh",
                                         {
                                             bubblingLabel:me.options.bubblingLabel
-                                        });*/
+                                        });*//*
                                     YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                         {
                                             nodeRef:response.json.persistedObject,
@@ -138,7 +156,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                             },
                             scope: this
                         }
-                    }).show();
+                    }).show();*/
             }
         });
 })();

@@ -5,7 +5,7 @@ items: [
     <#list members as item>
     {
     nodeRef: "${item.nodeRef}",
-    group: "${item.group}",
+    group: "${item.group!""}",
     employeeName:"${item.employeeName}",
     employeePosition:"${item.employeePosition}",
     employeeRef: "${item.employeeRef}"

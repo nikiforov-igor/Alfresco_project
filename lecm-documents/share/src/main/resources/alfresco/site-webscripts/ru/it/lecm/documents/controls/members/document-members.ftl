@@ -1,5 +1,6 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
+<#assign gridId = args.htmlid/>
 <#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
@@ -16,7 +17,7 @@
         </span>
     </div>
 
-<@grid.datagrid containerId true>
+<@grid.datagrid containerId true gridId + "form">
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {

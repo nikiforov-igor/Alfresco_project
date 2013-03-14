@@ -43,8 +43,9 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                 public NodeRef execute() throws Throwable {
                     ChildAssociationRef associationRef = nodeService.createNode(documentMembersFolder, ContentModel.ASSOC_CONTAINS,
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
-                    nodeService.createAssociation(document, employeeRef, DocumentService.ASSOC_DOC_MEMBERS);
-                    return associationRef.getChildRef();
+                    NodeRef newMemberRef = associationRef.getChildRef();
+                    nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+                    return newMemberRef;
                 }
             });
         }

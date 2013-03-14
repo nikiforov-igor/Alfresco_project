@@ -58,7 +58,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj: {
-                            htmlid: "document-members-" + this.options.nodeRef,
+                            htmlid: this.id + Alfresco.util.generateDomId(),
                             itemKind: "node",
                             itemId: this.options.nodeRef,
                             formId: "members",
