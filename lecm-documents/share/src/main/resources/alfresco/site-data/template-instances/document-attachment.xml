@@ -92,12 +92,8 @@
 			<sub-components>
 				<sub-component id="default">
 					<evaluations>
-						<!-- if in site: Site tags -->
-						<evaluation id="site">
-							<evaluators>
-								<evaluator type="site.component.evaluator"/>
-							</evaluators>
-							<url>/components/document-details/document-tags</url>
+						<evaluation>
+							<url>/lecm/components/document/document-tags</url>
 							<properties>
 								<nodeRef>{nodeRef}</nodeRef>
 							</properties>
@@ -137,6 +133,10 @@
 		<component>
 			<region-id>file-upload</region-id>
 			<url>/components/upload/file-upload</url>
+		</component>
+		<component>
+			<region-id>dnd-upload</region-id>
+			<url>/components/upload/dnd-upload</url>
 		</component>
 	</components>
 </template-instance>

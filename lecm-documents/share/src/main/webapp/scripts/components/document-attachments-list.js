@@ -1459,7 +1459,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         * @param e {object} HTML5 drag and drop event
 	         * @method onDocumentListDrop
 	         */
-	        onDocumentListDrop: function DL_onDocumentListDrop(e)
+	        onDocumentListDrop: function DocumentAttachmentsList_onDocumentListDrop(e)
 	        {
 		        try
 		        {
