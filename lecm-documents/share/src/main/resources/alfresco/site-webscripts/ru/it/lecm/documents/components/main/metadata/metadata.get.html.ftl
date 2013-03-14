@@ -10,7 +10,6 @@
         var container;
 
         function drawForm(nodeRef, htmlId){
-            console.log(htmlId);
             Alfresco.util.Ajax.request(
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",

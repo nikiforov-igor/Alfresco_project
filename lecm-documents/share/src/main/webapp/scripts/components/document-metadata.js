@@ -106,8 +106,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     },
                     onSuccess:{
                         fn:function (response) {
-                            this.refreshContainer(this.options.containerId, this.options.formId,response);
-                            this.refreshContainer(this.id+"-formContainer","document",response);
+                            location.reload();
                         },
                         scope:this
                     }
