@@ -129,6 +129,12 @@ var $html = Alfresco.util.encodeHTML,
 				}
 			}
 			return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+		},
+
+		onActionViewContent: function (p_item, owner, actionsConfig, fnCallback) {
+			var viewUrl = Alfresco.constants.PROXY_URI_RELATIVE + "api/node/content/" + p_item.nodeRef.replace(":/", "") + "/" + p_item.itemData.prop_cm_name.value;
+
+			window.open(viewUrl);
 		}
 	}, true);
 })();

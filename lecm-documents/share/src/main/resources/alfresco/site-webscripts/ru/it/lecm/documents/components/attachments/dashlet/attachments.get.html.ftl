@@ -39,6 +39,14 @@
 					    actions: [
 						    {
 							    type: "datagrid-action-link-${containerId}",
+							    id: "onActionViewContent",
+							    permission: "edit",
+							    isLink: true,
+							    href: "{viewUrl}",
+							    label: "${msg("actions.view-content")}"
+						    },
+						    {
+							    type: "datagrid-action-link-${containerId}",
 							    id: "onActionDelete",
 							    permission: "delete",
 							    label: "${msg("actions.delete-row")}",

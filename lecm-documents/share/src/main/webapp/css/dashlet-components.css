@@ -131,3 +131,7 @@
     font-weight: bold;
     text-decoration: underline;
 }
+
+.datagrid .action-set .onActionViewContent a {
+	background-image: url(/share/res/components/documentlibrary/actions/document-view-content-16.png);
+}
