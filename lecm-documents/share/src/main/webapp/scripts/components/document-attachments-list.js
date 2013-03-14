@@ -46,6 +46,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.dataSourceUrl = $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/documentlibrary/data/doclist/");
         this.renderers = {};
 	    this.showingMoreActions = false;
+	    this.dragEventRefCount = 0;
 
 	    YAHOO.Bubbling.on("metadataRefresh", this.onDocListRefresh, this);
 	    YAHOO.Bubbling.on("fileRenamed", this.onFileRenamed, this);
@@ -167,6 +168,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	        fileUpload: null,
 
+	        dragEventRefCount: null,
+
             /**
              * Fired by YUI when parent element is available for scripting.
              * Template initialisation, including instantiation of YUI widgets and event listener binding.
@@ -220,6 +223,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	            };
 	            YAHOO.Bubbling.addDefaultAction("doc-list-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
 	            YAHOO.Bubbling.addDefaultAction("doc-list-show-more" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
+
+	            this._addDragAndDrop();
             },
 
 	        onFileUpload: function DocumentAttachmentsList_onFileUpload(e, obj)
@@ -237,9 +242,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        thumbnails: "doclib",
 			        onFileUploadComplete:
 			        {
-				        fn: function() {
-
-				        },
+				        fn: function() {},
 				        scope: this
 			        }
 		        };
@@ -1370,6 +1373,197 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				        this._updateDocList.call(this);
 			        }
 		        }
+	        },
+
+	        /**
+	         * Adds HTML5 drag and drop listeners to the document list.
+	         *
+	         * @method _addDragAndDrop
+	         */
+	        _addDragAndDrop: function DL__addDragAndDrop()
+	        {
+		        // Make the entire DocumentList available for dropping files for uploading onto.
+		        try
+		        {
+			        // Add listeners to the HTML5 drag and drop events fired from the entire doc list
+			        var doclist = Dom.get(this.id);
+			        Event.addListener(doclist, "dragenter", this.onDocumentListDragEnter, this, true);
+			        Event.addListener(doclist, "dragover", this.onDocumentListDragOver, this, true);
+			        Event.addListener(doclist, "dragleave", this.onDocumentListDragLeave, this, true);
+			        Event.addListener(doclist, "drop", this.onDocumentListDrop, this, true);
+		        }
+		        catch(exception)
+		        {
+			        Alfresco.logger.error("_addDragAndDrop: The following exception occurred: ", exception);
+		        }
+	        },
+
+	        /**
+	         * Fired when an object is dragged into the DocumentList DOM element and then again when dragged into a Folder
+	         * icon image DOM element.
+	         *
+	         * @param e {object} HTML5 drag and drop event
+	         * @method onDocumentListDragEnter
+	         */
+	        onDocumentListDragEnter: function DocumentAttachmentsList_onDocumentListDragEnter(e) {
+		        var containerEl = this.widgets.dataTable.getContainerEl();
+
+		        // Firefox is a bit buggy with it's enter/leave event matching
+		        this.dragEventRefCount = Math.min(++this.dragEventRefCount, 2);
+		        Dom.addClass(containerEl, "dndDocListHighlight");
+
+		        e.stopPropagation();
+		        e.preventDefault();
+	        },
+
+	        /**
+	         * Fired when an object is dragged into the DocumentList DOM element and then again when dragged into a Folder
+	         * icon image DOM element.
+	         *
+	         * @param e {object} HTML5 drag and drop event
+	         * @method onDocumentListDragOver
+	         */
+	        onDocumentListDragOver: function DocumentAttachmentsList_onDocumentListDragOver(e)
+	        {
+		        // Firefox 3.6 set effectAllowed = "move" for files, however the "copy" effect is more accurate for uploads
+		        e.dataTransfer.dropEffect = Math.floor(YAHOO.env.ua.gecko) === 1 ? "move" : "copy";
+		        e.stopPropagation();
+		        e.preventDefault();
+	        },
+
+	        /**
+	         * Fired when an object is dragged out of the DocumentList DOM element or the Folder icon image DOM element.
+	         *
+	         * @param e {object} HTML5 drag and drop event
+	         * @method onDocumentListDragLeave
+	         */
+	        onDocumentListDragLeave: function DocumentAttachmentsList_onDocumentListDragLeave(e)
+	        {
+		        // Providing that the drop target a <TR> (or a child node of a <TR>) in the DocumentList data table then a record
+		        // will be returned from this call. If nothing is returned then we cannot proceed with the file upload operation.
+		        if (--this.dragEventRefCount === 0)
+		        {
+			        Dom.removeClass(this.widgets.dataTable.getContainerEl(), "dndDocListHighlight");
+		        }
+
+		        e.stopPropagation();
+		        e.preventDefault();
+	        },
+
+	        /**
+	         * Fired when an object is dropped onto the DocumentList DOM element.
+	         * Checks that files are present for upload, determines the target (either the current document list or
+	         * a specific folder rendered in the document list and then calls on the DNDUpload singleton component
+	         * to perform the upload.
+	         *
+	         * @param e {object} HTML5 drag and drop event
+	         * @method onDocumentListDrop
+	         */
+	        onDocumentListDrop: function DL_onDocumentListDrop(e)
+	        {
+		        try
+		        {
+			        // Only perform a file upload if the user has *actually* dropped some files!
+			        if (e.dataTransfer.files !== undefined && e.dataTransfer.files !== null && e.dataTransfer.files.length > 0)
+			        {
+				        // We need to get the upload progress dialog widget so that we can display it.
+				        // The function called has been added to file-upload.js and ensures the dialog is a singleton.
+				        var progressDialog = Alfresco.getDNDUploadProgressInstance();
+
+				        var continueWithUpload = false;
+
+				        // Check that at least one file with some data has been dropped...
+				        var zeroByteFiles = "", i, j;
+
+				        j = e.dataTransfer.files.length;
+				        for (i = 0; i < j; i++)
+				        {
+					        if (e.dataTransfer.files[i].size > 0)
+					        {
+						        continueWithUpload = true;
+					        }
+					        else
+					        {
+						        zeroByteFiles += '"' + e.dataTransfer.files[i].name + '", ';
+					        }
+				        }
+
+				        if (!continueWithUpload)
+				        {
+					        zeroByteFiles = zeroByteFiles.substring(0, zeroByteFiles.lastIndexOf(", "));
+					        Alfresco.util.PopupManager.displayMessage(
+						        {
+							        text: progressDialog.msg("message.zeroByteFiles", zeroByteFiles)
+						        });
+				        }
+
+				        // Perform some checks on based on the browser and selected files to ensure that we will
+				        // support the upload request.
+				        if (continueWithUpload && progressDialog.uploadMethod === progressDialog.INMEMORY_UPLOAD)
+				        {
+					        // Add up the total size of all selected files to see if they exceed the maximum allowed.
+					        // If the user has requested to upload too large a file or too many files in one operation
+					        // then generate an error dialog and abort the upload...
+					        var totalRequestedUploadSize = 0;
+
+					        j = e.dataTransfer.files.length;
+					        for (i = 0; i < j; i++)
+					        {
+						        totalRequestedUploadSize += e.dataTransfer.files[i].size;
+					        }
+					        if (totalRequestedUploadSize > progressDialog.getInMemoryLimit())
+					        {
+						        continueWithUpload = false;
+						        Alfresco.util.PopupManager.displayPrompt(
+							        {
+								        text: progressDialog.msg("inmemory.uploadsize.exceeded", Alfresco.util.formatFileSize(progressDialog.getInMemoryLimit()))
+							        });
+					        }
+				        }
+
+				        // If all tests are passed...
+				        if (continueWithUpload)
+				        {
+					        // Initialise the target directory as the current path represented by the current rendering of the DocumentList.
+					        // If we determine that the user has actually dropped some files onto the a folder icon (which we're about to check
+					        // for) then we'll change this value to be that of the folder targeted...
+					        var directory = this.options.path,
+						        directoryName = directory.substring(directory.lastIndexOf("/") + 1),
+						        destination = this.options.nodeRef;
+
+					        // Remove all the highlighting
+					        Dom.removeClass(this.widgets.dataTable.getContainerEl(), "dndDocListHighlight");
+
+					        // Show uploader for multiple files
+					        var multiUploadConfig =
+					        {
+						        files: e.dataTransfer.files,
+						        uploadDirectoryName: directoryName,
+						        destination: destination,
+						        filter: [],
+						        mode: progressDialog.MODE_MULTI_UPLOAD,
+						        thumbnails: "doclib",
+						        onFileUploadComplete:
+						        {
+							        fn: function() {},
+							        scope: this
+						        }
+					        };
+
+					        progressDialog.show(multiUploadConfig);
+				        }
+			        }
+			        else
+			        {
+				        Alfresco.logger.debug("DL_onDocumentListDrop: A drop event was detected, but no files were present for upload: ", e.dataTransfer);
+			        }
+		        }
+		        catch(exception)
+		        {
+			        Alfresco.logger.error("DL_onDocumentListDrop: The following error occurred when files were dropped onto the Document List: ", exception);
+		        }
+		        e.stopPropagation();
+		        e.preventDefault();
 	        }
         }, true);
 })();
