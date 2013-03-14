@@ -7,11 +7,9 @@
 <div class="document-metadata-header document-details-panel">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("heading")}
-        <#if allowMetaDataUpdate!false>
-            <span class="alfresco-twister-actions">
+         <span class="alfresco-twister-actions">
             <a id="${el}-link" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.view")}">&nbsp;</a>
          </span>
-        </#if>
     </h2>
     <div id="${el}-formContainer"></div>
     <script type="text/javascript">//<![CDATA[
