@@ -82,3 +82,7 @@
     padding: 3px 3px 3px 10px;
     cursor: pointer;
 }
+
+.highlight_field {
+    border: 1px red solid;
+}

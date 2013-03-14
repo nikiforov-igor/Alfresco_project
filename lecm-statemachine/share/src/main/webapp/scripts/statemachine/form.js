@@ -55,7 +55,7 @@ LogicECM.module = LogicECM.module || {};
             this.assignee = assignee;
             if (errors.length > 0) {
                 viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
-                viewDialog.show(label, errors, fields);
+                viewDialog.show(nodeRef, label, errors, fields);
                 return;
             }
 			if (workflowId != null && workflowId != 'null') {
@@ -137,7 +137,7 @@ LogicECM.module = LogicECM.module || {};
     };
 
     YAHOO.extend(LogicECM.module.EditFieldsConfirm, Alfresco.component.Base, {
-        show: function showEditFieldsConfirm(label, errors, fields) {
+        show: function showEditFieldsConfirm(nodeRef, label, errors, fields) {
             var containerDiv = document.createElement("div");
             var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
                 '<div id="confirm-edit-fields-head" class="hd">Ошибка действия "' + label + '"</div>' +
@@ -150,6 +150,11 @@ LogicECM.module = LogicECM.module || {};
 
                 form += '</div></div>' +
                 '<div class="bdft">' +
+                '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
+                '<span class="first-child">' +
+                '<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">Редактировать</button>' +
+                '</span>' +
+                '</span>' +
                 '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
                 '<span class="first-child">' +
                 '<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">Отмена</button>' +
@@ -168,6 +173,40 @@ LogicECM.module = LogicECM.module || {};
             var button = document.getElementById("confirm-edit-fields-cancel-button");
             button.onclick = function() {
                 this.dialog.hide();
+            }.bind(this);
+            button = document.getElementById("confirm-edit-fields-edit-button");
+            button.onclick = function() {
+                this.dialog.hide();
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&fields={fields}";
+                templateUrl = YAHOO.lang.substitute(templateUrl, {
+                    itemKind:"node",
+                    itemId: nodeRef,
+                    mode:"edit",
+                    submitType:"json",
+                    formId: "",
+                    fields: JSON.stringify(fields)
+                });
+                new Alfresco.module.SimpleDialog("statemachine-editor-new-status").setOptions({
+                    width:"60em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn: function(p_form, p_dialog) {
+                            var fileSpan = '<span class="light">Заголовок</span>';
+                            Alfresco.util.populateHTML(
+                                [ p_dialog.id + "-form-container_h", fileSpan]
+                            );
+                        },
+                        scope: this
+                    },
+                    onSuccess:{
+                        fn:function (response) {
+                            document.location.reload();
+                        },
+                        scope:this
+                    }
+                }).show();
             }.bind(this);
         }
 
