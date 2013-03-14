@@ -61,6 +61,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	            if (linkEl != null) {
 		            linkEl.onclick = this.onExpand.bind(this);
 	            }
+
+	            if (this.options.showAfterReady) {
+		            this.onExpand();
+	            }
             },
 
 	        onExpand: function DocumentAttachments_onLinkClick() {

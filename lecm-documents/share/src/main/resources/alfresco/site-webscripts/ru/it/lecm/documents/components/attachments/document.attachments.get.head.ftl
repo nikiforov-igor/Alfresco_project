@@ -6,4 +6,4 @@
 
 <@script type="text/javascript" src="${page.url.context}/scripts/components/document-attachments.js"></@script>
 <@script type="text/javascript" src="${page.url.context}/scripts/components/document-attachments-list.js"></@script>
-<@script type="text/javascript" src="${page.url.context}/scripts/components/document-attachments-list-table.js"></@script>
+<@script type="text/javascript" src="${page.url.context}/scripts/components/document-attachments-dashlet-datagrid.js"></@script>

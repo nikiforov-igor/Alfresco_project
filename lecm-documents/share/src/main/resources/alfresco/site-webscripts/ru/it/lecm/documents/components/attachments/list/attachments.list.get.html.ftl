@@ -46,30 +46,18 @@
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
-            new LogicECM.DocumentAttachmentsList("${el}").setOptions(
-                    {
-                        nodeRef: "${nodeRef}",
-                        categories: [
-                            <#if categories??>
-                                <#list categories as category>
-                                    "${category.nodeRef}"<#if category_has_next>,</#if>
-                                </#list>
-                            </#if>
-                        ]
-                    }).setMessages(${messages});
-
 			<#if categories??>
 				<#list categories as category>
 
-						var path = "${category.path}";
-						path = path.substring(path.indexOf("/", 1), path.length);
+					var path = "${category.path}";
+					path = path.substring(path.indexOf("/", 1), path.length);
 
-			            new LogicECM.DocumentAttachmentsListTable("${el}-${category.nodeRef}").setOptions(
-			                    {
-			                        nodeRef: "${category.nodeRef}",
-				                    path: path,
-				                    bubblingLabel: "${category.nodeRef}-${aDateTime?iso_utc}"
-			                    }).setMessages(${messages});
+		            new LogicECM.DocumentAttachmentsList("${el}-${category.nodeRef}").setOptions(
+		                    {
+		                        nodeRef: "${category.nodeRef}",
+			                    path: path,
+			                    bubblingLabel: "${category.nodeRef}-${aDateTime?iso_utc}"
+		                    }).setMessages(${messages});
 				</#list>
 			</#if>
         }
