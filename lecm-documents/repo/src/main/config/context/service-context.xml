@@ -42,9 +42,10 @@
     </bean>
 
     <bean id="documentService" init-method="init" class="ru.it.lecm.documents.beans.DocumentServiceImpl"
-          depends-on="transactionService, nodeService">
+          depends-on="transactionService, nodeService, serviceOrgstructure">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
@@ -226,4 +227,14 @@
             </list>
         </property>
     </bean>
+
+    <bean id="documentScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentWebScriptBean"
+          depends-on="documentService">
+        <property name="extensionName">
+            <value>documentScript</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
 </beans>

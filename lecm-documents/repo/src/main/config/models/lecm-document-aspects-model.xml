@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-document-aspects:aspects" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Document aspects</description>
+	<author>ORakovskaya</author>
+	<published>2013-03-12</published>
+	<version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+	</namespaces>
+
+	<aspects>
+		<!--Аспект возможности оценивания (рейтинга)-->
+        <aspect name="lecm-document-aspects:ratingable">
+            <properties>
+                <property name="lecm-document-aspects:rating">
+                    <type>d:float</type>
+                </property>
+                <property name="lecm-document-aspects:rated-persons-count">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-document-aspects:rated-1">
+                    <source>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </target>
+                </association>
+                <association name="lecm-document-aspects:rated-2">
+                    <source>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </target>
+                </association>
+                <association name="lecm-document-aspects:rated-3">
+                    <source>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </target>
+                </association>
+                <association name="lecm-document-aspects:rated-4">
+                    <source>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </target>
+                </association>
+                <association name="lecm-document-aspects:rated-5">
+                    <source>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <many>true</many>
+                        <mandatory>false</mandatory>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+
+	</aspects>
+</model>
