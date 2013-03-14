@@ -135,3 +135,7 @@
 .datagrid .action-set .onActionViewContent a {
 	background-image: url(/share/res/components/documentlibrary/actions/document-view-content-16.png);
 }
+
+.datagrid .action-set .onActionUploadNewVersion a {
+	background-image: url(/share/res/components/documentlibrary/actions/document-upload-new-version-16.png);
+}

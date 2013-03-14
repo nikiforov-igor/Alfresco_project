@@ -30,6 +30,8 @@ var $html = Alfresco.util.encodeHTML,
 	 * Augment prototype with main class implementation, ensuring overwrite is enabled
 	 */
 	YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.DataGrid.prototype, {
+		fileUpload: null,
+
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
 			var html = "";
 			// Populate potentially missing parameters
@@ -135,6 +137,59 @@ var $html = Alfresco.util.encodeHTML,
 			var viewUrl = Alfresco.constants.PROXY_URI_RELATIVE + "api/node/content/" + p_item.nodeRef.replace(":/", "") + "/" + p_item.itemData.prop_cm_name.value;
 
 			window.open(viewUrl);
+		},
+
+		onActionUploadNewVersion: function (p_item, owner, actionsConfig, fnCallback) {
+			var displayName = p_item.itemData.prop_cm_name.value,
+				nodeRef = p_item.nodeRef;
+			var version = "1.0";
+			if (p_item.itemData.prop_cm_versionLabel != null) {
+				version = p_item.itemData.prop_cm_versionLabel.value;
+			}
+
+			if (!this.fileUpload)
+			{
+				this.fileUpload = Alfresco.getFileUploadInstance();
+			}
+
+			// Show uploader for multiple files
+			var description = this.msg("label.filter-description", displayName),
+				extensions = "*";
+
+			if (displayName && new RegExp(/[^\.]+\.[^\.]+/).exec(displayName))
+			{
+				// Only add a filtering extension if filename contains a name and a suffix
+				extensions = "*" + displayName.substring(displayName.lastIndexOf("."));
+			}
+
+			var singleUpdateConfig =
+			{
+				updateNodeRef: nodeRef,
+				updateFilename: displayName,
+				updateVersion: version,
+				overwrite: true,
+				filter: [
+					{
+						description: description,
+						extensions: extensions
+					}],
+				mode: this.fileUpload.MODE_SINGLE_UPDATE,
+				onFileUploadComplete:
+				{
+					fn: this.onNewVersionUploadComplete,
+					scope: this
+				}
+			};
+
+			this.fileUpload.show(singleUpdateConfig);
+		},
+
+		onNewVersionUploadComplete: function (complete)
+		{
+			YAHOO.Bubbling.fire("datagridRefresh",
+				{
+					bubblingLabel:this.options.bubblingLabel
+				});
 		}
 	}, true);
 })();

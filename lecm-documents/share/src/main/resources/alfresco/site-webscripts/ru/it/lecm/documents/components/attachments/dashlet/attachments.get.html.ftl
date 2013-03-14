@@ -41,9 +41,13 @@
 							    type: "datagrid-action-link-${containerId}",
 							    id: "onActionViewContent",
 							    permission: "edit",
-							    isLink: true,
-							    href: "{viewUrl}",
 							    label: "${msg("actions.view-content")}"
+						    },
+						    {
+							    type: "datagrid-action-link-${containerId}",
+							    id: "onActionUploadNewVersion",
+							    permission: "edit",
+							    label: "${msg("actions.upload-new-version")}"
 						    },
 						    {
 							    type: "datagrid-action-link-${containerId}",
