@@ -281,12 +281,12 @@ var Evaluator =
       }
 	   for (var j = 0; j < fields.length; j++) {
 		   var obj = fields[j].replace(":","_");
-		   if (nodeData["assoc_" + obj] == null && nodeData["prop_" + obj] == null && nameSubstituteStringDefs[obj] != null) {
+		   if (nameSubstituteStringDefs[obj] != null) {
 			   var fieldData = {
 				   type: "text"
 			   };
 			   Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDefs[obj]);
-			   nodeData["assoc_" + obj] = fieldData;
+			   nodeData["prop_" + obj] = fieldData;
 		   }
 	   }
 
