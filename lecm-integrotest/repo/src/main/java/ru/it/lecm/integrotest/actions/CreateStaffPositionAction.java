@@ -58,7 +58,7 @@ public class CreateStaffPositionAction extends LecmActionBase {
 
 	@Override
 	public void run() {
-		logger.info( String.format("... test creating staff position: orgUnit '%s', position '%s', employee %s", 
+		logger.info( String.format("... test creating staff position:\n\t orgUnit '%s'\n\t position '%s'\n\t employee %s", 
 				this.orgName, this.dpName, this.employeeName));
 
 		final FinderBean finder = getContext().getFinder();
@@ -69,7 +69,9 @@ public class CreateStaffPositionAction extends LecmActionBase {
 
 		final NodeRef newNode = getContext().getOrgstructureService().createStaff(ouRef, dpRef);
 		getContext().getOrgstructureService().includeEmployeeIntoStaff(userRef, newNode, isPrimary());
-		// TestFailException
+
+		logger.info( String.format("staff position created as {%s}:\n\t orgUnit '%s'\n\t position '%s'\n\t employee %s",
+				newNode, this.orgName, this.dpName, this.employeeName));
 	}
 
 }

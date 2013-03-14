@@ -86,6 +86,21 @@ public class CreateNode extends LecmActionBase {
 	}
 
 	/**
+	 * Добавить атриюут в начальные значения с гарантией инициализации списка хранимых атрибутов.
+	 * @param attrName
+	 * @param value
+	 * @return not-null список атрибутов, содержаизим как минимум attrName=value.
+	 */
+	public Properties addProp(String attrName, Object value) {
+		Properties props = getAttributes();
+		if (props == null)
+			props = new Properties();
+		props.put( attrName, value);
+		setAttributes(props);
+		return getAttributes();
+	}
+
+	/**
 	 * Задать значения свойств для создаваемого узла.
 	 * @param attributes
 	 */
@@ -167,7 +182,7 @@ public class CreateNode extends LecmActionBase {
 				getArgsAssigner().setMacroValue( this.getDestRefArgName(), null);
 			}
 
-			final QName assicTypeQName = ContentModel.ASSOC_CONTAINS;
+			final QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 			// final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
 			final QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID ().toString ());
 			final QName nodeTypeQName = getContext().getFinder().makeQName(this.nodeType);
@@ -181,7 +196,6 @@ public class CreateNode extends LecmActionBase {
 			} else {
 				logger.debug( "parentNodeRef used as "+ this.parentNodeRef);
 			}
-
 
 			// выбор исполняющего сервиса ...
 			stage = "getService";
@@ -197,9 +211,14 @@ public class CreateNode extends LecmActionBase {
 
 			// (!) Выполнение создания узла-документа ...
 			final Map<QName, Serializable> data = getAttributesAsDataMap(); // получение сконфигурированных атрибутов
+
+			stage = "checkCreateArgs";
+			checkArgs( parentNodeRef, assocTypeQName, assocQName, nodeTypeQName, data);
+
+			stage = "createNode";
 			final ChildAssociationRef newRef = nodeServ.createNode( 
 						parentNodeRef
-						, assicTypeQName, assocQName
+						, assocTypeQName, assocQName
 						, nodeTypeQName, data);
 			final NodeRef result = newRef.getChildRef();
 			// setNodeArgs( result, nodeServ);
@@ -226,6 +245,19 @@ public class CreateNode extends LecmActionBase {
 			logger.error( msg, ex);
 			throw new RuntimeException( msg, ex);
 		}
+	}
+
+	/**
+	 * Проверить допустить указанным параметров для создания узла
+	 * @param parentRef 
+	 * @param assocTypeQName
+	 * @param assocQName
+	 * @param nodeTypeQName
+	 * @param data 
+	 */
+	protected void checkArgs(NodeRef parentRef, QName assocTypeQName, QName assocQName,
+			QName nodeTypeQName, Map<QName, Serializable> data) {
+		// DO NOTHING = enable any arguments
 	}
 
 	/**

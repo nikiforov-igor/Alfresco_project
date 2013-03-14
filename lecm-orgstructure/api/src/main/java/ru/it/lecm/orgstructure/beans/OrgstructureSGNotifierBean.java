@@ -50,14 +50,14 @@ public interface OrgstructureSGNotifierBean {
 	void notifyEmploeeRemoveBR(NodeRef employee, NodeRef brole);
 
 	/**
-	 * Назначение DP для Сотрудника.
+	 * Назначение Сотрудника на Должностную Позицию.
 	 * @param employee узел типа "lecm-orgstr:employee-link"
 	 * @param dpid узел типа "lecm-orgstr:position"
 	 */
 	void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid);
 
 	/**
-	 * Убрать БР у Сотрудника
+	 * Снять Сотрудника с Должностной Позиции.
 	 * @param employee
 	 * @param brole
 	 */
@@ -80,14 +80,13 @@ public interface OrgstructureSGNotifierBean {
 	 * Нотификация об отвязывании Сотрудника и пользователя Альфреско.
 	 * @param employee
 	 * @param person 
-	 * @param userLogin
 	 */
 	void notifyEmploeeDown(NodeRef employee, NodeRef person);
 
 	void notifyChangedOU(NodeRef nodeDP);
 
 	/**
-	 * Оповещение об изменении/создании орг-единицы
+	 * Оповещение об изменении Подразделения.
 	 * @param nodeOU изменённое Подразделение
 	 * @param parentOU родительский узел (доп здесь будет проверка, что это
 	 * Подразделение, а не просто папка)
@@ -97,8 +96,8 @@ public interface OrgstructureSGNotifierBean {
 	void notifyDeleteOU(NodeRef nodeOU, NodeRef parent);
 
 	/**
-	 * Выполнить подключение БР выданных для подразделения OU и всех его вложенных,
-	 * для Сотрудников подразделения OU (и вложенных)
+	 * Выполнить подключение БР выданных для подразделения OU и всех его 
+	 * вложенных подразделений (и, как следствие, для Сотрудников подразделения и вложенных в него).
 	 * @param nodeOU исходное подразделение
 	 * @param include true, чтобы выдать БРоли, false чтобы отозвать
 	 * @param recursivelyUseParentsBR true, чтобы дополнительно выполнить привязку

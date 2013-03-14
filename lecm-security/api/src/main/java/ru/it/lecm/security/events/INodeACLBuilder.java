@@ -6,8 +6,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
-
 /**
  * Интерфейс сервиса для нарезки прав на папки и файлы.
  * Предполагаемая схема использования:
@@ -46,16 +44,15 @@ public interface INodeACLBuilder {
 	 * @param nodeRef ref-документа или папки
 	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической 
 	 * Бизнес Роли (динамической групповой, например, "Инициаторы" или "Читатели"),
-	 * значение - права доступа на документ для своей Динамической БР.
+	 * значение - права доступа на документ для этой Динамической БР.
 	 */
 	void rebuildACL(NodeRef nodeRef, Map<String, StdPermission> accessMap);
 
 	/**
 	 * Прописать Статические Роли на папку (документ).
 	 * @param nodeRef id статусной-папки
-	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической 
-	 * Бизнес Роли (динамической групповой, например, "Инициаторы" или "Читатели"),
-	 * значение - права доступа на документ для своей Динамической БР.
+	 * @param accessMap карта нарезки прав: здесь ключ - это код Статической 
+	 * Бизнес Роли, значение - права доступа на документ для этой Статической БР.
 	 */
 	void rebuildStaticACL(NodeRef nodeRef, Map<String, StdPermission> accessMap);
 

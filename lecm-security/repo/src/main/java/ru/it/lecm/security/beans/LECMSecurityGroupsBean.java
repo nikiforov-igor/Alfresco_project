@@ -70,7 +70,9 @@ public class LECMSecurityGroupsBean
 	 * Проверить наличие и сохдать при отсутствии security-группу Альфреско
 	 * с указанным коротким названием
 	 * @param simpleName
-	 * @return полное Альфресковское название для security-группы simpleName
+	 * @return полное Альфресковское название для security-группы simpleName,
+	 * например, "GROUP_LECM$BR%BR_INITIATOR", "GROUP_LECM$ME%14e3cde7-da7c-4824-8991-d6270224744f"
+	 * или "GROUP_LECM$OUSV%6f448346-1f8e-4aa6-8fc3-b169f89c8088"
 	 */
 	String ensureAlfrescoGroupName(String simpleName, String details) {
 		final String sgFullName;

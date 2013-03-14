@@ -1,11 +1,12 @@
 package ru.it.lecm.integrotest.actions;
 
 
+
 /**
  * Непосредственное действие для создания Департамента
  * @author rabdullin
  */
-public class CreateOrgUnitAction extends LecmActionBase {
+public class CreateOrgUnitAction extends CreateNode {
 
 	/**
 	 * The node name.
@@ -35,11 +36,27 @@ public class CreateOrgUnitAction extends LecmActionBase {
 		this.orgParentByNameCode = value;
 	}
 
+/*
 	@Override
+	protected void checkArgs(NodeRef parentRef, QName assocTypeQName, QName assocQName,
+			QName nodeTypeQName, Map<QName, Serializable> data) {
+		// NOTE: если надо жёсткость, то здесь можно проверить что тип деёствительно OU... 
+	}
+ */
+
 	public void run() {
-		logger.info( String.format("... creating OU-node: name ''%s' under parent''%s'", orgNameCode, orgParentByNameCode));
-		// getContext().getOrgstructureService().createStaff(orgElement, staffPosition)
-		// TestFailException
+		logger.info( String.format("... creating OU-node: name '%s' under parent '%s'", orgNameCode, orgParentByNameCode));
+
+		// добавление в начальные свойства названия нового подразделения
+		addProp( "lecm-orgstr:unit-code", this.orgNameCode);
+
+		// если не указан тип - укажем его как организация ...
+		if (super.getNodeType() == null)
+			setNodeType( "lecm-orgstr:organization-unit" ); // OrgstructureBean.TYPE_ORGANIZATION_UNIT.getLocalName());
+
+		super.run();
+
+		// getContext().getOrgstructureService()...
 	}
 
 }

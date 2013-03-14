@@ -446,7 +446,15 @@
 		</property>
 	</bean>
 
+	<!-- Действие для прерывания теста. Удобен для целей отладки. -->
 	<bean id="break" class="ru.it.lecm.integrotest.actions.RunModifierImpl">
+		<!--
+			possible TodoStatus values:
+				doNormal		продолжать выполнение
+				doBreak			завершить выполнение этапа
+				doSkipNext		пропустить следующий шаг
+		  -->
+		<!-- <property name="todoStatus" value="doBreak"/> -->
 	</bean>
 
 	<!-- Тест 1 для проверки доступа к новому документу во время его прогона по ЖЦ -->

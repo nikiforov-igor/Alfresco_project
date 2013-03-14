@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import ru.it.lecm.security.Types;
+import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.events.INodeACLBuilder;
 
 public class LECMAclBuilderBean
@@ -30,6 +31,12 @@ public class LECMAclBuilderBean
 	private NodeService nodeService;
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
+	/*
+	 * если потребуется прозрачное присвоение БР "по факту" - т.е. выдавать
+	 * автоматически личную БР при прописывании сотрудника в ACL узла 
+	 * (документа) при вызове метода grantDynamicRole
+	private IOrgStructureNotifiers orgStructureNotifiers; 
+	*/
 
 	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
@@ -81,6 +88,16 @@ public class LECMAclBuilderBean
 		this.authorityService = authorityService;
 		this.sgnm.setAuthorityService(authorityService);
 	}
+
+/*
+	public IOrgStructureNotifiers getOrgStructureNotifiers() {
+		return orgStructureNotifiers;
+	}
+
+	public void setOrgStructureNotifiers(IOrgStructureNotifiers value) {
+		this.orgStructureNotifiers = value;
+	}
+ */
 
 	/**
 	 * @return флаг наследования родительских полномочий для статического случая выдачи прав
@@ -228,7 +245,13 @@ public class LECMAclBuilderBean
 
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId, StdPermission access) {
-		final String authority = sgnm.makeFullBRMEAuthName(userId, roleCode);
+		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(userId, roleCode);
+
+		// оповещение основной службы "теневых групп" о личном присвоении БР
+		// if (this.orgStructureNotifiers != null) this.orgStructureNotifiers.orgBRAssigned(roleCode, posBRME);
+
+		// непосредственная нарезка в ACL ...
+		final String authority = sgnm.makeSGName(posBRME); // sgnm.makeFullBRMEAuthName(userId, roleCode);
 		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
 		if (access == null) access = this.defaultAccessOnGrant; 
 		final String permission = getPermName(access);
