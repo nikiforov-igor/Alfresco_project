@@ -41,11 +41,9 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                 @Override
                 public NodeRef execute() throws Throwable {
-                    /*String newMemberName = generateMemberName(employeeRef, properties);
-                    properties.put(ContentModel.PROP_NAME, newMemberName);*/
-
                     ChildAssociationRef associationRef = nodeService.createNode(documentMembersFolder, ContentModel.ASSOC_CONTAINS,
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
+                    nodeService.createAssociation(document, employeeRef, DocumentService.ASSOC_DOC_MEMBERS);
                     return associationRef.getChildRef();
                 }
             });
@@ -63,7 +61,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         }
         String propName = employee != null ? (String) nodeService.getProperty(employee, ContentModel.PROP_NAME) : "unnamed";
 
-        return propName + " " + groupName;
+        return (propName + " " + groupName).trim();
     }
 
     @Override
@@ -98,7 +96,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     @Override
     public List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems) {
         List<NodeRef> results = new ArrayList<NodeRef>();
-        List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+        /*List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
         sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
 
         PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
@@ -115,6 +113,14 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
         for (NodeRef ref : nodeInfos) {
             results.add(ref);
+        }*/
+        int current = 0;
+        List<AssociationRef> membersRefs = nodeService.getTargetAssocs(document, DocumentService.ASSOC_DOC_MEMBERS);
+        for (AssociationRef memberRef : membersRefs) {
+            NodeRef member = memberRef.getTargetRef();
+            if (current <= maxItems && current >= skipCount) {
+                results.add(member);
+            }
         }
         return results;
     }
@@ -138,13 +144,12 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
-        NodeRef docMembersFolder = getMembersFolderRef(document);
-        List<AssociationRef> empMembers = nodeService.getSourceAssocs(employee, ASSOC_MEMBER_EMPLOYEE);
+        List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentService.ASSOC_DOC_MEMBERS);
         for (AssociationRef empMember : empMembers) {
-            NodeRef member = empMember.getSourceRef();
-            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
-            if (folder.equals(docMembersFolder)) {
-                return empMember.getSourceRef();
+            NodeRef member = empMember.getTargetRef();
+            NodeRef employeeRef = nodeService.getTargetAssocs(member, ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
+            if (employeeRef.equals(employee)) {
+                return member;
             }
         }
         return null;

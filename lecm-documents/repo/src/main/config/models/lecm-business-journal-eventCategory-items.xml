@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Категория события">
+    <items>
+        <item name="Приглашение участника">
+            <property name="cm:name">Приглашение участника</property>
+            <property name="lecm-busjournal:eventCategory-code">INVITE_DOCUMENT_MEMBER</property>
+        </item>
+    </items>
+</dictionary>

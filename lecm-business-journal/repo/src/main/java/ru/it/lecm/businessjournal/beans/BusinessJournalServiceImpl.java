@@ -201,7 +201,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i)),
+						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i+1)),
 								(isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)),false) : objects.get(i)));
 					}
 				}
@@ -228,7 +228,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				if (objects != null && objects.size() > 0) {
 					for (int j = 0; j < objects.size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
 						if (isNodeRef(objects.get(j))) {
-							nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j)));
+							nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j+1)));
 						}
 					}
 				}
@@ -375,11 +375,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	private String getSeconObjAssocName(int j) {
-		return "bjRecord-secondaryObj" + (j + 1) + "-assoc";
+		return "bjRecord-secondaryObj" + j + "-assoc";
 	}
 
 	private String getSecondObjPropName(int i) {
-		return "bjRecord-secondaryObj" + (i + 1);
+		return "bjRecord-secondaryObj" + i;
 	}
 
 	/**
@@ -455,7 +455,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		QName type = nodeService.getType(nodeRef);
 		String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
 		// получаем Тип Объекта
-		return dictionaryService.getRecordByParamValue("Тип объекта", PROP_OBJ_TYPE_CLASS, type);
+		return dictionaryService.getRecordByParamValue("Тип объекта", PROP_OBJ_TYPE_CLASS, shortTypeName);
 	}
 
 	@Override

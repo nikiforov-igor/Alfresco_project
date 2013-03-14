@@ -206,5 +206,24 @@
         <property name="documentMembersService">
             <ref bean="documentMembersService"/>
         </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="notificationActiveChannel">
+            <ref bean="notificationActiveChannel"/>
+        </property>
+        <property name="authService">
+            <ref bean="authenticationService"/>
+        </property>
+    </bean>
+
+    <bean id="document.businessJournalDictionaryBootstrap"
+          parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, businessJournalLogEventsPolicy">
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+            </list>
+        </property>
     </bean>
 </beans>

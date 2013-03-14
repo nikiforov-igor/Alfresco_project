@@ -75,4 +75,14 @@
         </property>
     </bean>
 
+    <bean id="contract.businessJournalDictionaryBootstrap"
+          parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, businessJournalLogEventsPolicy">
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
