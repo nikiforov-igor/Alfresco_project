@@ -43,6 +43,7 @@
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
+        <property name="businessJournalService" ref="businessJournalService"/>
 
 		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
 		<property name="grantAccessTag" value="full"/>

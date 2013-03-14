@@ -10,12 +10,16 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import java.io.Serializable;
+import java.util.Map;
 //import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
 /**
@@ -43,7 +47,7 @@ public class DocumentPolicy
 	private AuthenticationService authenticationService;
 	private OrgstructureBean orgstructureService;
 	private IOrgStructureNotifiers sgNotifier;
-//	private BusinessJournalService businessJournalService;
+	private BusinessJournalService businessJournalService;
 
 	private String grantDynaRoleCode = "BR_INITIATOR";
 	private StdPermission grantAccess = DEFAULT_ACCESS;
@@ -88,13 +92,13 @@ public class DocumentPolicy
 		this.sgNotifier = value;
 	}
 
-//	public BusinessJournalService getBusinessJournalService() {
-//		return businessJournalService;
-//	}
-//
-//	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-//		this.businessJournalService = businessJournalService;
-//	}
+	public BusinessJournalService getBusinessJournalService() {
+		return businessJournalService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
 
 	/**
 	 * @return код динамической роли, котрую надо автоматически присвоить 
@@ -147,6 +151,8 @@ public class DocumentPolicy
 
 		policyComponent.bindClassBehaviour( NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				TYPE_DOCUMENT, new JavaBehaviour(this, "onCreateNode"));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                TYPE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties"));
 
 		logger.info( "Policy installed");
 	}
@@ -191,6 +197,13 @@ public class DocumentPolicy
 			logger.error( String.format( "Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage() ), ex);
 		}
 	}
+
+    public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        if (before.size() == after.size()) {
+            businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"", null);
+
+        }
+    }
 
 }
 
