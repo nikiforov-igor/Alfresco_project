@@ -20,6 +20,7 @@
                     datagridFormId: "bjHistory",
                     createFormId: "",
                     nodeRef: "${nodeRef}",
+                    sort:"lecm-busjournal:bjRecord-date|false",
                     actionsConfig: {
                         fullDelete: "false"
                     }

@@ -628,24 +628,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
 
         List<NodeRef> result = new ArrayList<NodeRef>();
+        int index = includeSecondary ? MAX_SECONDARY_OBJECTS_COUNT  : 0;
 
-        int index = includeSecondary ? 5 : 1;
-
-        for (int i = 0; i<index; i++) {
-            if (i == 1) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ1);
-            }
-            if (i == 2) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ2);
-            }
-            if (i == 3) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ3);
-            }
-            if (i == 4) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ4);
-            }
-            if (i == 5) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_SEC_OBJ5);
+        for (int i = -1; i<index; i++) {
+            if (i >= 0) {
+                sourceAssocs = nodeService.getSourceAssocs(nodeRef, QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(i)));
             }
             for (AssociationRef sourceAssoc : sourceAssocs) {
                 NodeRef bjRecordRef = sourceAssoc.getSourceRef();
