@@ -7,7 +7,7 @@
 }
 
 .yui-gc .yui-u {
-    margin-left: 1.99%;
+    margin-left: 0%;
     width: 20%;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .yui-gc div.first {
-    width: 77%;
+    width: 79%;
 }
 
 .yui-gd .yui-u .column2 {
@@ -34,11 +34,13 @@
 }
 
 .first .yui-gd div.column1 {
-    width: 49%;
+    width: 47%;
+    margin-left: 2%;
 }
 
 .first .yui-gd div.column2 {
-    width: 49%;
+    width: 47%;
+    margin-right: 2%
 }
 
 .alfresco-twister-actions a {

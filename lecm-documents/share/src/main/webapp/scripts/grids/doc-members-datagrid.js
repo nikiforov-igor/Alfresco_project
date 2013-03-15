@@ -83,7 +83,7 @@ LogicECM.module.DocumentMembers = LogicECM.module.DocumentMembers || {};
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
         },
         getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
-            return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+            return "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a>";
         }
     }, true);
 })();
