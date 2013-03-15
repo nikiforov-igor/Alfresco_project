@@ -97,7 +97,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     @Override
     public List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems) {
         List<NodeRef> results = new ArrayList<NodeRef>();
-        /*List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+        List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
         sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
 
         PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
@@ -114,14 +114,6 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
         for (NodeRef ref : nodeInfos) {
             results.add(ref);
-        }*/
-        int current = 0;
-        List<AssociationRef> membersRefs = nodeService.getTargetAssocs(document, DocumentService.ASSOC_DOC_MEMBERS);
-        for (AssociationRef memberRef : membersRefs) {
-            NodeRef member = memberRef.getTargetRef();
-            if (current <= maxItems && current >= skipCount) {
-                results.add(member);
-            }
         }
         return results;
     }
