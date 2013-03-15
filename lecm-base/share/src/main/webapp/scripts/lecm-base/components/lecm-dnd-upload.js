@@ -491,6 +491,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
          this.statusText = Dom.get(this.id + "-status-span");
          this.aggregateProgressText = Dom.get(this.id + "-aggregate-status-span");
          this.aggregateDataWrapper = Dom.get(this.id + "-aggregate-data-wrapper");
+	     Dom.addClass(this.aggregateDataWrapper, "hidden");
+
          this.description = Dom.get(this.id + "-description-textarea");
 
          // Save reference to version radio so we can reset and get its value later
@@ -915,7 +917,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
          this.aggregateUploadTargetSize = 0;
          this.aggregateUploadCurrentSize = 0;
          Dom.setStyle(this.id + "-aggregate-progress-span", "left", "-620px");
-         Dom.removeClass(this.aggregateDataWrapper, "hidden");
       },
 
       /**
@@ -1034,6 +1035,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	    */
 	   onUploadButtonClick: function DNDUpload_onUploadButtonClick() {
 		   this.widgets.uploadButton.set("disabled", true);
+		   Dom.removeClass(this.aggregateDataWrapper, "hidden");
 		   this.minorVersion.disabled = true;
 		   this.majorVersion.disabled = true;
 
@@ -1152,11 +1154,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
       _applyConfig: function DNDUpload__applyConfig()
       {
          // Generate the title based on number of files and destination
-         var title = "",
-            i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload",
+         var i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload",
             location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
 
-         this.titleText.innerHTML = this.msg(i18n, '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/documentlibrary/images/folder-open-16.png" class="title-folder" />' + $html(location));
+         this.titleText.innerHTML = this.msg(i18n, $html(location));
 
          if (this.showConfig.mode === this.MODE_SINGLE_UPDATE)
          {
