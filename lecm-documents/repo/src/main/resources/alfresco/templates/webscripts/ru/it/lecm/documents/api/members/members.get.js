@@ -2,7 +2,7 @@ var documentRef = args['nodeRef'];
 var skipItemsCount = parseInt(args["skipCount"]);
 var loadItemsCount = parseInt(args["loadCount"]);
 
-var members = documentMembers.getMembers(documentRef, skipItemsCount, loadItemsCount);
+var members = documentMembers.getMembers(documentRef);
 var membersArray = [];
 for (var index in members){
     var member = members[index];

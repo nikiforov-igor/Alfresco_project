@@ -84,6 +84,16 @@ public class DocumentMembersWebScriptBean extends BaseScopableProcessorExtension
         return null;
     }
 
+    public Scriptable getMembers(String documentNodeRef) {
+        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+        NodeRef documentRef = new NodeRef(documentNodeRef);
+        if (this.nodeService.exists(documentRef)) {
+            List<NodeRef> members = this.documentMembersService.getDocumentMembers(documentRef);
+            return createScriptable(members);
+        }
+        return null;
+    }
+
     public ScriptNode getMembersFolder(String documentRef) {
         ParameterCheck.mandatory("documentRef", documentRef);
         NodeRef document = new NodeRef(documentRef);

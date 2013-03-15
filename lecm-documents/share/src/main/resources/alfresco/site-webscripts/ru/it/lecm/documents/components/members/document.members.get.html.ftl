@@ -1,21 +1,27 @@
 <#assign el=args.htmlid/>
+<#assign skipCount=5/>
 
 <div class="document-details-panel">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("heading")}
         <span class="alfresco-twister-actions">
-            <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
+            <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand"
+               title="${msg("label.expand")}">&nbsp</a>
          </span>
     </h2>
 
     <div id="${el}-formContainer">
         <ul id="document-members-set" style="width: 100%">
         <#if members?? && members.items??>
+            <#assign i=0/>
             <#list members.items as item>
                 <li>
+                    <#if i < skipCount>
                     ${item.employeePosition}<br/>
-                    <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a>
-                    <hr>
+                        <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a>
+                        <hr>
+                        <#assign i = i+1/>
+                    </#if>
                     <div class="member-ref" style="display: none">${item.employeeRef}</div>
                 </li>
             </#list>
