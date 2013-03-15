@@ -216,6 +216,9 @@
         <property name="authService">
             <ref bean="authenticationService"/>
         </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
     </bean>
 
     <bean id="document.businessJournalDictionaryBootstrap"

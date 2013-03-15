@@ -19,6 +19,7 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -43,6 +44,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     private BusinessJournalService businessJournalService;
     private NotificationChannelBeanBase notificationActiveChannel;
     private AuthenticationService authService;
+    private OrgstructureBean orgstructureService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -68,6 +70,12 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 DocumentMembersService.TYPE_DOC_MEMBER, new JavaBehaviour(this, "onCreateNodeLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+                DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateDocument", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onUpdateDocument", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     @Override
@@ -136,5 +144,22 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
     public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
         this.notificationActiveChannel = notificationActiveChannel;
+    }
+
+    public void onCreateDocument(ChildAssociationRef childAssocRef) {
+        NodeRef document = childAssocRef.getChildRef();
+        String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+        documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName) , null);
+    }
+
+    public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        if (before.size() == after.size()) {
+            String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+            documentMembersService.addMember(nodeRef, orgstructureService.getEmployeeByPerson(userName) , null);
+        }
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 }
