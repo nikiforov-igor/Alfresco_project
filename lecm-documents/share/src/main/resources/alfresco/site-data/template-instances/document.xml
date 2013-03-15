@@ -236,7 +236,7 @@
       </component>
 	  <component>
 	     <region-id>dnd-upload</region-id>
-	     <url>/components/upload/dnd-upload</url>
+	     <url>/lecm/components/dnd-upload</url>
 	  </component>
 
       <!-- Настраиваемая область - заглушка -->

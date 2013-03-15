@@ -22,17 +22,19 @@
 			</#if>
             <@region id="comments" scope="template"/>
 		</div>
-		<div class="yui-u bordered">
+		<div id="doc-attach-right" class="yui-u bordered">
 			<@region id="document-actions" scope="template"/>
             <@region id="document-tags" scope="template"/>
             <@region id="document-metadata" scope="template"/>
             <@region id="document-versions" scope="template"/>
+            <@region id="document-attachment-dnd" scope="template"/>
 		</div>
 	</div>
 
 	<@region id="html-upload" scope="template"/>
 	<@region id="flash-upload" scope="template"/>
 	<@region id="file-upload" scope="template"/>
+	<@region id="dnd-upload" scope="template"/>
 </div>
 </@>
 

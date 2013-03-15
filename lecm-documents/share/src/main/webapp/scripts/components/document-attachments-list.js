@@ -1468,7 +1468,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        {
 				        // We need to get the upload progress dialog widget so that we can display it.
 				        // The function called has been added to file-upload.js and ensures the dialog is a singleton.
-				        var progressDialog = Alfresco.getDNDUploadProgressInstance();
+				        var progressDialog = LogicECM.getDNDUploadProgressInstance();
 
 				        var continueWithUpload = false;
 

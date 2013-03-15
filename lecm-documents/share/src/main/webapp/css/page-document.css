@@ -83,6 +83,12 @@
     cursor: pointer;
 }
 
+.dndDocListHighlight
+{
+	outline: 2px solid #4F94C9;
+	outline-offset: -2px;
+}
+
 .highlight_field {
     border: 1px red solid;
 }

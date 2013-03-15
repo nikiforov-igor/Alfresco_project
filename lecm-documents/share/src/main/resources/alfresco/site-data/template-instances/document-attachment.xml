@@ -103,6 +103,15 @@
 			</sub-components>
 		</component>
 
+		<!-- Document Attachment DND -->
+		<component>
+			<region-id>document-attachment-dnd</region-id>
+			<url>/lecm/components/document/attachment/dnd</url>
+			<properties>
+				<nodeRef>{nodeRef}</nodeRef>
+			</properties>
+		</component>
+
 		<!-- Document Metadata -->
 		<component>
 			<region-id>document-metadata</region-id>
@@ -136,7 +145,7 @@
 		</component>
 		<component>
 			<region-id>dnd-upload</region-id>
-			<url>/components/upload/dnd-upload</url>
+			<url>/lecm/components/dnd-upload</url>
 		</component>
 	</components>
 </template-instance>
