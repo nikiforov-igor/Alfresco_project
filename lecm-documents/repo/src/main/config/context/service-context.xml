@@ -240,4 +240,25 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="documentAttachmentsPolicy" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="documentMembersService">
+            <ref bean="documentMembersService"/>
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService"/>
+        </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
 </beans>
