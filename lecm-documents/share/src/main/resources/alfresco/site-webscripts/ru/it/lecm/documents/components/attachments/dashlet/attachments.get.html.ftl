@@ -90,7 +90,7 @@
 				    YAHOO.Bubbling.fire("activeGridChanged",
 						    {
 							    datagridMeta: meta,
-							    bubblingLabel:datagrid.bubblingLabel
+							    bubblingLabel:datagrid.options.bubblingLabel
 						    });
 			    }
 
