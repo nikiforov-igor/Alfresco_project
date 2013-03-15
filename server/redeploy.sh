@@ -20,8 +20,8 @@ rm -rf $CATALINA_HOME/webapps/alfresco
 rm -rf $CATALINA_HOME/webapps/share
 
 echo "Copy tomcat webapps"
-cp -f server/alfresco/target/alfresco.war $CATALINA_HOME/webapps/alfresco/
-cp -f server/share/target/share.war $CATALINA_HOME/webapps/alfresco/
+cp -f server/alfresco/target/alfresco.war $CATALINA_HOME/webapps/alfresco
+cp -f server/share/target/share.war $CATALINA_HOME/webapps/alfresco
 
 echo "Starting server"
 $ALF_HOME/./alfresco.sh start
