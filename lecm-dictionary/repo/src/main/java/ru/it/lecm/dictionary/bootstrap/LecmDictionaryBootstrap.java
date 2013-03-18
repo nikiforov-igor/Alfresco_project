@@ -2,18 +2,17 @@ package ru.it.lecm.dictionary.bootstrap;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.dictionary.imports.XmlDictionaryImporter;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 
 /**
@@ -23,7 +22,7 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
  */
 public class LecmDictionaryBootstrap extends BaseBean {
 
-	private static final Log log = LogFactory.getLog(LecmDictionaryBootstrap.class);
+	private static final Logger logger = LoggerFactory.getLogger(LecmDictionaryBootstrap.class);
 
 	private List<String> dictionaries;
 	private List<String> createOrUpdateDictionaries;
@@ -49,12 +48,14 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	}
 
 	public void bootstrap() {
+        logger.info("Bootstraping dictionaries");
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
 				final NodeRef rootDir = dictionaryService.getDictionariesRoot();
 				if (dictionaries != null) {
 					for (final String dictionary : dictionaries) {
+                        logger.info("Importing dictionary: {}", dictionary);
 						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 							@Override
 							public Object execute() throws Throwable {
@@ -62,8 +63,8 @@ public class LecmDictionaryBootstrap extends BaseBean {
 								try {
 									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
 									importer.readDictionary(true);
-								} catch (XMLStreamException e) {
-									log.warn("Cann not create dictionary: " + dictionary);
+								} catch (Exception e) {
+									logger.warn("Can not create dictionary: " + dictionary, e);
 								} finally {
 									try {
 										if (inputStream != null) {
@@ -80,6 +81,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 				}
 				if (createOrUpdateDictionaries != null) {
 					for (final String dictionary : createOrUpdateDictionaries) {
+                        logger.info("Updating dictionary: {}", dictionary);
 						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 							@Override
 							public Object execute() throws Throwable {
@@ -87,8 +89,8 @@ public class LecmDictionaryBootstrap extends BaseBean {
 								try {
 									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
 									importer.readDictionary(false);
-								} catch (XMLStreamException e) {
-									log.warn("Cann not create dictionary: " + dictionary);
+								} catch (Exception e) {
+									logger.warn("Cann not create dictionary: " + dictionary);
 								} finally {
 									try {
 										if (inputStream != null) {
