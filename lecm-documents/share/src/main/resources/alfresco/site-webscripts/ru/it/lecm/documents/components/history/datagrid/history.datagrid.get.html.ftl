@@ -4,10 +4,16 @@
 <#assign controlId = gridId + "-cntrl">
 <#assign containerId = gridId + "-container">
 <#assign nodeRef = args.nodeRef/>
+<#assign showCheckBox = false/>
+<#assign dataSource = args.dataSource/>
+
 
 <div class="form-field with-grid" id="bjHistory-${controlId}">
 
-<@grid.datagrid containerId true gridId+"form" true>
+<#if args.showSecondaryCheckBox?? && args.showSecondaryCheckBox == "true">
+    <#assign showCheckBox = true>
+</#if>
+<@grid.datagrid containerId true gridId+"form" showCheckBox>
     <script type="text/javascript">//<![CDATA[
     (function () {
         YAHOO.util.Event.onDOMReady(function (){
@@ -25,7 +31,7 @@
                         fullDelete: "false"
                     }
                 },
-                dataSource:"lecm/business-journal/ds/history",
+                dataSource:"${dataSource}",
                 allowCreate: false,
                 showActionColumn: false,
                 showCheckboxColumn: false,

@@ -55,7 +55,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/history-datagrid",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId()
+                            htmlid: this.id + Alfresco.util.generateDomId(),
+                            showSecondaryCheckBox: true,
+                            dataSource: "lecm/business-journal/ds/history"
                         },
                         successCallback: {
                             fn:function(response){

@@ -33,7 +33,7 @@
 
         function init() {
             container = Dom.get('${id}_results');
-            drawForm("${nodeRef}",'${id}_results', "document");
+            drawForm("${nodeRef}",'${id}_results', "document-dashlet");
         }
         Event.onDOMReady(init);
     })();

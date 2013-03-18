@@ -68,6 +68,8 @@ public interface BusinessJournalService {
 	QName PROP_BR_RECORD_SEC_OBJ4 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj4");
 	QName PROP_BR_RECORD_SEC_OBJ5 = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-secondaryObj5");
 
+    QName PROP_BR_RECORD_EVENT_CAT = QName.createQName(BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-ref");
+
 	QName PROP_ARCHIVER_DEEP = QName.createQName(BJ_NAMESPACE_URI, "archiver-deep");
 	QName PROP_ARCHIVER_PERIOD= QName.createQName(BJ_NAMESPACE_URI, "archiver-period");
 
@@ -231,6 +233,8 @@ public interface BusinessJournalService {
     List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnName, boolean ascending, boolean includeSecondary);
 
     List<NodeRef> getHistory(NodeRef nodeRef, boolean includeSecondary);
+
+    List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending);
 
 	/**
 	 * Является ли текущий пользователь технологом бизнес-журнала

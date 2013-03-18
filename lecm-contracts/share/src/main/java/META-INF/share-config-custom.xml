@@ -45,6 +45,18 @@
                     <show id="lecm-contract:regnum" force="true"/>
                 </field-visibility>
             </form>
+            <form id="document-dashlet">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:regnum" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-statemachine:status">
+                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 

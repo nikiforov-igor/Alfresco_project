@@ -152,6 +152,14 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
         return createScriptable(records);
     }
 
+    public Scriptable getStatusHistory(String nodeRef, String sortColumnName, boolean ascending) {
+        ParameterCheck.mandatory("parentRef", nodeRef);
+        NodeRef ref = new NodeRef(nodeRef);
+        List<NodeRef> records = service.getStatusHistory(ref, sortColumnName, ascending);
+
+        return createScriptable(records);
+    }
+
 	public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
 		this.archiverSettings = archiverSettings;
 	}

@@ -645,4 +645,54 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
         return result;
     }
+
+    @Override
+    public List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
+
+        List<NodeRef> result = getHistory(nodeRef, true);
+        List<NodeRef> resultStatus = new ArrayList<NodeRef>();
+
+        final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
+        if (sortFieldQName == null) {
+            return result;
+        }
+
+        List<NodeRef> eventStatus = new ArrayList<NodeRef>();
+        // Получаем nodeRef события - Переход документа в новый статус
+        eventStatus.add(getEventCategoryByCode("CHANGE_DOCUMENT_STATUS"));
+        eventStatus.add(getEventCategoryByCode("ADD"));
+
+        for (NodeRef status : eventStatus) {
+            for (int i = 0; i < result.size(); i++) {
+                String strNodeRef = (String) nodeService.getProperty(result.get(i), PROP_BR_RECORD_EVENT_CAT);
+                NodeRef property = new NodeRef(strNodeRef);
+                if (property != null) {
+                    if (status.equals(property)) {
+                        resultStatus.add(result.get(i));
+                    }
+                }
+            }
+        }
+        result = resultStatus;
+
+        class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
+            @Override
+            public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
+                T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
+                T obj2 = (T) nodeService.getProperty(nodeRef2, sortFieldQName);
+
+                return sortAscending ? obj1.compareTo(obj2) : obj2.compareTo(obj1);
+            }
+        }
+
+        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DATE.getLocalName())) {
+            Collections.sort(result, new NodeRefComparator<Date>());
+        }
+
+        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DESC.getLocalName())) {
+            Collections.sort(result, new NodeRefComparator<String>());
+        }
+
+        return result;
+    }
 }
