@@ -35,7 +35,10 @@
 							type: "datagrid-action-link-${containerId}",
 							id: "onActionDelete",
 							permission: "delete",
-							label: "${msg("actions.delete-row")}"
+							label: "${msg("actions.delete-row")}",
+							confirmFunction: function () {
+								YAHOO.Bubbling.fire("connectionsUpdate", {});
+							}
 						}],
 
 					datagridMeta: {

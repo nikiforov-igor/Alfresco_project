@@ -134,6 +134,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 												nodeRef:response.json.persistedObject,
 												bubblingLabel:me.options.datagridBublingLabel
 											});
+										YAHOO.Bubbling.fire("connectionsUpdate");
 									}
 
 									Alfresco.util.PopupManager.displayMessage(
