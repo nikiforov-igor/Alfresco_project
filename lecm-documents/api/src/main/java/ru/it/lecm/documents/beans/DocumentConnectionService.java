@@ -75,13 +75,4 @@ public interface DocumentConnectionService {
      * @return список ссылок на элементы справочника "Типы связи"
      */
     public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
-
-    /**
-     * Получение связей для документа
-     * @param primaryDocumentRef Ссылка на документ
-     * @param skipCount Индекс начала выборки
-     * @param maxItems Количество выбираемых элементов
-     * @return список ссылок на связи
-     */
-    public List<NodeRef> getConnections(NodeRef primaryDocumentRef, int skipCount, int maxItems);
 }

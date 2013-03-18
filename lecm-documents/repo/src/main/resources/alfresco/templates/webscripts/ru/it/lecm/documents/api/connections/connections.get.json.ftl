@@ -1,8 +1,8 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"hasNext": <#if next?? && (next?size > 0)>"true"<#else>"false"</#if>,
+	"hasNext": "${hasNext?string}",
 	"items": [
-		<#list connections as item>
+		<#list items as item>
 		{
 			"nodeRef": "${item.nodeRef}",
 			"name": "${item.properties["cm:name"]}",

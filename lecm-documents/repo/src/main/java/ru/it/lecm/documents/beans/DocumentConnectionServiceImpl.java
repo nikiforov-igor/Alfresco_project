@@ -203,37 +203,4 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		}
 		return null;
 	}
-
-    public List<NodeRef> getConnections(NodeRef primaryDocumentRef, int skipCount, int maxItems) {
-        List<NodeRef> results = new ArrayList<NodeRef>();
-
-        String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
-
-        String propPrimaryDocumentRef = "@" + PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
-
-        SearchParameters parameters = new SearchParameters();
-        parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-        parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        parameters.addSort("@" + ContentModel.PROP_MODIFIED, false);
-        parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\"" +
-                primaryDocumentRef + "\"");
-        parameters.setSkipCount(skipCount);
-        parameters.setMaxItems(maxItems);
-        ResultSet resultSet = null;
-        try {
-            resultSet = searchService.query(parameters);
-            if (resultSet != null) {
-                results = resultSet.getNodeRefs();
-            }
-        } catch (LuceneQueryParserException e) {
-            logger.error("Error while getting connections", e);
-        } catch (Exception e) {
-            logger.error("Error while getting connections", e);
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        }
-        return results;
-    }
 }

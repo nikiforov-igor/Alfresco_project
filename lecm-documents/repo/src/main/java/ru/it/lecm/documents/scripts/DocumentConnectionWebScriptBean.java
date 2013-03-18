@@ -105,18 +105,6 @@ public class DocumentConnectionWebScriptBean extends BaseScopableProcessorExtens
 		return null;
 	}
 
-    public Scriptable getConnections(String primaryDocumentNodeRef, String skipItemsCount, String loadItemsCount) {
-        ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
-        ParameterCheck.mandatory("skipItemsCount", skipItemsCount);
-        ParameterCheck.mandatory("loadItemsCount", loadItemsCount);
-        NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
-        if (this.nodeService.exists(primaryDocumentRef)) {
-            List<NodeRef> connections = this.documentConnectionService.getConnections(primaryDocumentRef, Integer.parseInt(skipItemsCount), Integer.parseInt(loadItemsCount));
-            return createScriptable(connections);
-        }
-        return null;
-    }
-
 	/**
 	 * Возвращает массив, пригодный для использования в веб-скриптах
 	 *
