@@ -32,7 +32,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         LogicECM.DocumentMembers.superclass.constructor.call(this, htmlId);
 
         YAHOO.Bubbling.on("memberCreated", this.onRefresh, this);
-        YAHOO.Bubbling.on("dataItemsDeleted", this.onRefresh, this);
+        /*YAHOO.Bubbling.on("dataItemsDeleted", this.onRefresh, this);*/
         return this;
     };
 

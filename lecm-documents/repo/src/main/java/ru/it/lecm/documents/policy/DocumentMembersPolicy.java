@@ -20,6 +20,8 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -46,12 +48,58 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     private AuthenticationService authService;
     private OrgstructureBean orgstructureService;
 
+    final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
+
+    private String grantDynaRoleCode = "BR_MEMBER";
+    private StdPermission grantAccess = DEFAULT_ACCESS;
+    private INodeACLBuilder lecmAclBuilder;
+
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public void setAuthService(AuthenticationService authService) {
+        this.authService = authService;
+    }
+
+    public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
+        this.notificationActiveChannel = notificationActiveChannel;
+    }
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public String getGrantDynaRoleCode() {
+        return grantDynaRoleCode;
+    }
+
+    public void setGrantDynaRoleCode(String grantDynaRoleCode) {
+        this.grantDynaRoleCode = grantDynaRoleCode;
+    }
+
+    public StdPermission getGrantAccess() {
+        return grantAccess;
+    }
+
+    public void setGrantAccessTag(String value) {
+        setGrantAccess(StdPermission.findPermission(value));
+    }
+
+    public void setGrantAccess(StdPermission value) {
+        this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
     }
 
     public final void init() {
@@ -79,48 +127,78 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     }
 
     @Override
-    public void onCreateAssociation(AssociationRef nodeAssocRef) {
-        logger.debug("!!!Here are given permission to document!!!");
-        // Обновляем имя ноды
-        String newName = documentMembersService.generateMemberNodeName(nodeAssocRef.getSourceRef());
-        nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
-    }
-
-    @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
+        // создание ассоциации документ -> участник
         NodeRef member = childAssocRef.getChildRef();
         NodeRef folder = childAssocRef.getParentRef();
         NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
         nodeService.createAssociation(document, member, DocumentService.ASSOC_DOC_MEMBERS);
     }
 
-    public void onCreateNodeLog(ChildAssociationRef childAssocRef) {
-        NodeRef member = childAssocRef.getChildRef();
-        NodeRef folder = childAssocRef.getParentRef();
-        NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
+    @Override
+    public void onCreateAssociation(AssociationRef nodeAssocRef) {
+        // Обновляем имя ноды
+        String newName = documentMembersService.generateMemberNodeName(nodeAssocRef.getSourceRef());
+        nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
 
-        NodeRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
-        final List<String> objects = Arrays.asList(employee.toString());
+        NodeRef docRef = null;
+        try {
+            NodeRef member = nodeAssocRef.getSourceRef();
+            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+            docRef = nodeService.getPrimaryParent(folder).getParentRef();
 
-        // запись в БЖ
-        final String initiator = authService.getCurrentUserName();
-        businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "Сотрудник #initiator пригласил сотрудника #object1 в документ #mainobject", objects);
+            if (this.getGrantDynaRoleCode() == null) {
+                logger.warn(String.format("Dynamic role configured as NULL -> nothing performed (document {%s})", docRef));
+                return;
+            }
 
-        // уведомление
-        NotificationUnit notification = new NotificationUnit();
-        notification.setRecipientRef(employee);
-        notification.setAutor(authService.getCurrentUserName());
-        notification.setDescription("Вы приглашены как новый участник в документ " + nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING));
-        notificationActiveChannel.sendNotification(notification);
+            logger.debug(String.format("Assigning dynamic role <%s> in document {%s}", this.getGrantDynaRoleCode(), docRef));
+
+            final String authorLogin = authService.getCurrentUserName();
+            final NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
+            if (employee == null) {
+                logger.debug(String.format("Fail assigning dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
+                return;
+            }
+
+			/*
+			 * нарезка прав на Документ
+			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
+			 * такая нарезка ничего не выполнит.
+			 */
+            lecmAclBuilder.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), this.getGrantAccess());
+
+            logger.info(String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
+
+        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+            logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
+        }
     }
 
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-        logger.debug("!!!Here are taken permission to the document!!!");
-    }
+        NodeRef docRef = null;
+        try {
+            NodeRef member = nodeAssocRef.getSourceRef();
+            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+            docRef = nodeService.getPrimaryParent(folder).getParentRef();
 
-    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
-        this.documentMembersService = documentMembersService;
+            logger.debug(String.format("Revoke dynamic role <%s> in document {%s}", this.getGrantDynaRoleCode(), docRef));
+
+            final String authorLogin = authService.getCurrentUserName();
+            final NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
+            if (employee == null) {
+                logger.debug(String.format("Fail revoke dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
+                return;
+            }
+
+            lecmAclBuilder.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId());
+
+            logger.info(String.format("Dynamic role revoked\n\t for user '%s'/employee {%s}\n\t in document {%s}", authorLogin, employee, docRef));
+
+        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+            logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
+        }
     }
 
     @Override
@@ -134,32 +212,44 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
         }
     }
 
-    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-        this.businessJournalService = businessJournalService;
-    }
+    public void onCreateNodeLog(ChildAssociationRef childAssocRef) {
+        NodeRef member = childAssocRef.getChildRef();
+        NodeRef folder = childAssocRef.getParentRef();
+        NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
 
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
-    }
+        NodeRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
+        final List<String> objects = Arrays.asList(employee.toString());
 
-    public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
-        this.notificationActiveChannel = notificationActiveChannel;
-    }
+        // запись в БЖ
+        final String initiator = authService.getCurrentUserName();
+        if (!initiator.equals(orgstructureService.getEmployeeLogin(employee))) { // не создавать запись и уведомление для текущего пользователя
+            businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "Сотрудник #initiator пригласил сотрудника #object1 в документ #mainobject", objects);
 
-    public void onCreateDocument(ChildAssociationRef childAssocRef) {
-        NodeRef document = childAssocRef.getChildRef();
-        String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
-        documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName) , null);
-    }
-
-    public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        if (before.size() == after.size()) {
-            String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-            documentMembersService.addMember(nodeRef, orgstructureService.getEmployeeByPerson(userName) , null);
+            // уведомление
+            NotificationUnit notification = new NotificationUnit();
+            notification.setRecipientRef(employee);
+            notification.setAutor(authService.getCurrentUserName());
+            notification.setDescription("Вы приглашены как новый участник в документ " + nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING));
+            notificationActiveChannel.sendNotification(notification);
         }
     }
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
+    public void onCreateDocument(ChildAssociationRef childAssocRef) {
+        // добаваление сотрудника, создавшего документ в участники
+        NodeRef document = childAssocRef.getChildRef();
+        String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+        documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName), null);
+    }
+
+    public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        // добаваление сотрудника, изменившего документ в участники
+        if (before.size() == after.size()) {
+            String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+            documentMembersService.addMember(nodeRef, orgstructureService.getEmployeeByPerson(userName), null);
+        }
+    }
+
+    public void setLecmAclBuilder(INodeACLBuilder lecmAclBuilder) {
+        this.lecmAclBuilder = lecmAclBuilder;
     }
 }
