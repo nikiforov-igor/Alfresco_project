@@ -106,6 +106,8 @@
                 <js src="/yui/tabview/tabview-min.js" />
 	            <js src="/scripts/lecm-base/components/lecm-association-checkboxes.js" />
                 <css src="/css/lecm-base/components/textfield-decoded-html.css" />
+	            <js src="/scripts/lecm-base/components/lecm-association-search.js" />
+	            <css src="/css/lecm-base/components/lecm-association-search.css" />
             </dependencies>
 
             <constraint-handlers>
