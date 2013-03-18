@@ -23,11 +23,13 @@
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-aspects-model.xml</value>
             </list>
         </property>
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-documents</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-document-aspects-model</value>
             </list>
         </property>
     </bean>

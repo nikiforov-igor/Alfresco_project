@@ -1,0 +1,34 @@
+.document-rating {
+    width: 150px;
+    float: right;
+    margin: 0 10px;
+    text-align: right;
+}
+.document-rating h2 {
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+#raiting {
+    position:relative;
+    width: 105px;
+    height: 21px;
+    float: right;
+    cursor: pointer;
+}
+#raiting_blank,
+#raiting_votes,
+#raiting_hover {
+    height: 21px;
+    position: absolute;
+}
+#raiting_blank {
+    background: url('../../images/rating.png') repeat-x;
+    width: 105px;
+}
+#raiting_votes {
+    background: url('../../images/rating.png') repeat-x 0 -21px;
+}
+#raiting_hover {
+    background: url('../../images/rating.png') repeat-x 0 -42px;
+    display: none;
+}

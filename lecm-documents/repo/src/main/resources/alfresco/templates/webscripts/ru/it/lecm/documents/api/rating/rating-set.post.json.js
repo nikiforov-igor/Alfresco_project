@@ -1,5 +1,6 @@
 function main() {
     var msg = "";
+    model.error = 1;
     if (json.has("rating") == false || json.get("rating").length == 0) {
         msg = "Rating missing when it setting";
         status.setCode(status.STATUS_BAD_REQUEST, msg);
@@ -18,6 +19,7 @@ function main() {
     var setted = documentScript.setMyRating(nodeRef, rating);
 
     if (parseInt(rating) == parseInt(setted)) {
+        model.error = 0;
         model.msg = "Rating successfully set";
     } else {
         model.msg = "Some error is occured during rating setting";

@@ -36,6 +36,7 @@
                     <@region id="tasks" scope="template"/>
                 </div>
             </div>
+            <@region id="rating" scope="template"/>
             <@region id="comments" scope="template"/>
         </div>
         <div id="custom-region" class="yui-u first" style="display:none"></div>

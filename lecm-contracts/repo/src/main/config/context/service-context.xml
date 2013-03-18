@@ -29,6 +29,7 @@
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-contracts-workflow-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-document-model</value>
 			</list>
 		</property>
 	</bean>

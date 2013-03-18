@@ -9,6 +9,7 @@
 
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
     </imports>
 
 	<namespaces>
@@ -17,10 +18,10 @@
 
 	<aspects>
 		<!--Аспект возможности оценивания (рейтинга)-->
-        <aspect name="lecm-document-aspects:ratingable">
+        <aspect name="lecm-document-aspects:rateable">
             <properties>
                 <property name="lecm-document-aspects:rating">
-                    <type>d:float</type>
+                    <type>d:text</type> <!-- хранится строкой для упрощения округления -->
                 </property>
                 <property name="lecm-document-aspects:rated-persons-count">
                     <type>d:int</type>
@@ -30,57 +31,57 @@
             <associations>
                 <association name="lecm-document-aspects:rated-1">
                     <source>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-document-aspects:rated-2">
                     <source>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-document-aspects:rated-3">
                     <source>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-document-aspects:rated-4">
                     <source>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-document-aspects:rated-5">
                     <source>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <many>true</many>
                         <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
             </associations>

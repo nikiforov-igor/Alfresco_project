@@ -7,6 +7,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public Float getRating(NodeRef documentNodeRef) {
-        return (Float) nodeService.getProperty(documentNodeRef, DocumentService.PROP_RATING);
+    public String getRating(NodeRef documentNodeRef) {
+        return (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_RATING);
     }
 
     @Override
@@ -104,9 +105,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 summaryRating += (size * i);
             }
         }
+        BigDecimal rating = (new BigDecimal((float) summaryRating / personsCount)).setScale(1, BigDecimal.ROUND_HALF_UP);
 
         nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
-        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, (float) summaryRating / personsCount);
+        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
     }
 
 }

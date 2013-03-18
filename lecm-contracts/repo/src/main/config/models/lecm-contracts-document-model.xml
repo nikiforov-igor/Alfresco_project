@@ -6,6 +6,7 @@
 	<imports>
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
@@ -50,6 +51,9 @@
                     </index>
 				</property>
 			</properties>
+            <mandatory-aspects>
+                <aspect>lecm-document-aspects:rateable</aspect>
+            </mandatory-aspects>
 		</type>
 		<type name="lecm-contract:importTestDocument">
 			<title>Logic Ecm Import Test Document</title>

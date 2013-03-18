@@ -115,6 +115,23 @@
          </properties>
       </component>
 
+      <!-- Рейтинг -->
+      <component>
+         <region-id>rating</region-id>
+          <sub-components>
+              <sub-component id="default">
+                  <evaluations>
+                      <evaluation>
+                          <url>/lecm/components/document/rating</url>
+                          <properties>
+                              <nodeRef>{nodeRef}</nodeRef>
+                          </properties>
+                      </evaluation>
+                  </evaluations>
+              </sub-component>
+          </sub-components>
+      </component>
+
       <!-- Действия-->
       <!--<component>-->
          <!--<region-id>document-actions</region-id>-->

@@ -21,7 +21,7 @@ public class DocumentWebScriptBean extends BaseScopableProcessorExtension {
         this.nodeService = nodeService;
     }
 
-    public Float getRating(String documentNodeRef) {
+    public String getRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
         NodeRef documentRef = new NodeRef(documentNodeRef);

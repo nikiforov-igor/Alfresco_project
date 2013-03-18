@@ -27,7 +27,7 @@ public interface DocumentService {
      * documentNodeRef - document nodeRef
      * @return document rating
      */
-    public Float getRating(NodeRef documentNodeRef);
+    public String getRating(NodeRef documentNodeRef);
 
     /**
      * Метод для получения количества сотрудников, оценивших документ
