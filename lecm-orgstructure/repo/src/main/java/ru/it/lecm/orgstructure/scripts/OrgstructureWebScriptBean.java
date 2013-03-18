@@ -586,7 +586,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 			if (orgstructureService.isEmployee(ref)) {
 				NodeRef photo = orgstructureService.getEmployeePhoto(ref);
 				if (photo != null) {
-					return new ScriptNode(ref, this.services, getScope());
+					return new ScriptNode(photo, this.services, getScope());
 				}
 			}
 		}

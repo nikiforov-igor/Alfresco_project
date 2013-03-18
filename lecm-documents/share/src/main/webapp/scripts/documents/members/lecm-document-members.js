@@ -30,11 +30,12 @@ LogicECM.module.Members = LogicECM.module.Members || {};
         Event = YAHOO.util.Event;
 
 
-    LogicECM.module.Members.DocumentMembers = function (fieldHtmlId) {
-        LogicECM.module.Members.DocumentMembers.superclass.constructor.call(this, "LogicECM.module.Members.DocumentMembers", fieldHtmlId, [ "container", "datasource"]);
-        this.id = fieldHtmlId;
-        this.controlId = fieldHtmlId + "-cntrl";
+    LogicECM.module.Members.DocumentMembers = function (id) {
+        LogicECM.module.Members.DocumentMembers.superclass.constructor.call(this, "LogicECM.module.Members.DocumentMembers", id, [ "container", "datasource"]);
+        this.id = id;
         this.currentMembers = [];
+
+        YAHOO.Bubbling.on("memberCreated", this.onMembersUpdate, this);
         return this;
     };
 
@@ -48,14 +49,12 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
             id: null,
 
-            controlId: null,
-
             memberButton: null,
 
             currentMembers: [],
 
             onReady: function () {
-                this.memberButton = Alfresco.util.createYUIButton(this, this.controlId + "-add-member-button", this.onAdd.bind(this), {}, Dom.get(this.controlId + "-add-member-button"));
+                this.memberButton = Alfresco.util.createYUIButton(this, this.id + "-addMember-button", this.onAdd.bind(this), {}, Dom.get(this.id + "-addMember-button"));
             },
 
             onAdd: function (e, p_obj) {
@@ -107,11 +106,11 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         onSuccess: {
                             fn: function (response) {
                                 if (me.options.datagridBublingLabel != null) {
-                                    YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                    /*YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                         {
                                             nodeRef:response.json.persistedObject,
                                             bubblingLabel:me.options.datagridBublingLabel
-                                        });
+                                        });*/
                                     YAHOO.Bubbling.fire("memberCreated",
                                         {
                                             nodeRef:response.json.persistedObject
@@ -135,6 +134,29 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                             scope: this
                         }
                     }).show();
+            },
+
+            onMembersUpdate: function DocumentMembers_onMembersUpdate(layer, args) {
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/members-list",
+                        dataObj: {
+                            nodeRef: this.options.documentNodeRef,
+                            htmlid: this.id + "-" + Alfresco.util.generateDomId()
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                var container = Dom.get(this.id);
+                                if (container != null) {
+                                    container.innerHTML = response.serverResponse.responseText;
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: this.msg("message.failure"),
+                        scope: this,
+                        execScripts: true
+                    });
             }
         });
 })();

@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>members-list</shortname>
+    <description>Document Members List</description>
+    <url>/lecm/components/document/members-list</url>
+</webscript>

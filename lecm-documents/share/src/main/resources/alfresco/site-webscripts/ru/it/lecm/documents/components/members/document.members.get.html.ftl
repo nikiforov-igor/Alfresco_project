@@ -16,14 +16,13 @@
         <#if members?? && members.items??>
             <#assign i=0/>
             <#list members.items as item>
+                <#if i < skipCount>
                 <li style="padding-bottom: 0.4em;">
-                    <#if i < skipCount>
-                        <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a><br/>
-                        ${item.employeePosition}<br/>
-                        <#assign i = i+1/>
-                    </#if>
-                    <div class="member-ref" style="display: none">${item.employeeRef}</div>
+                    <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a><br/>
+                    ${item.employeePosition}<br/>
+                    <#assign i = i+1/>
                 </li>
+                </#if>
             </#list>
             <#if members.hasNext == "true">
                 <li style="text-align: right; padding-right: 0.5em;">

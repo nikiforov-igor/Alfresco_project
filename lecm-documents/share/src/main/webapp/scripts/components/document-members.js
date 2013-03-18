@@ -56,13 +56,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // Обновляем форму и раскрываем в "большой области"
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/members-list",
                         dataObj: {
                             htmlid: this.id + Alfresco.util.generateDomId(),
-                            itemKind: "node",
-                            itemId: this.options.nodeRef,
-                            formId: "members",
-                            mode: "view"
+                            /*itemKind: "node",*/
+                            nodeRef: this.options.nodeRef
+                            /*formId: "members",
+                            mode: "view"*/
                         },
                         successCallback: {
                             fn:function(response){
