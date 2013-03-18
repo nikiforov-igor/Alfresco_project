@@ -231,9 +231,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                     if (!datagridMeta.searchConfig) {
                         datagridMeta.searchConfig = {};
                     }
-                    datagridMeta.searchConfig.filter = ""; // сбрасываем фильтр, так как поиск будет полнотекстовый
                     datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                    datagridMeta.sort = "cm:name|true";
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
@@ -244,11 +242,14 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
-                    datagridMeta.searchConfig = null;
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig;
+                    if (datagridMeta.searchConfig.fullTextSearch) {
+                        datagridMeta.searchConfig.fullTextSearch = null;
+                    }
                     this.modules.dataGrid.search.performSearch({
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
-                        searchConfig:null,
+                        searchConfig: datagridMeta.searchConfig,
                         searchShowInactive:false
                     });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
@@ -349,7 +350,10 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                 if (this.modules.dataGrid) {
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
-                    datagridMeta.searchConfig = null;
+                    datagridMeta.searchConfig = dataGrid.initialSearchConfig;
+                    if (datagridMeta.searchConfig.fullTextSearch) {
+                        datagridMeta.searchConfig.fullTextSearch = null;
+                    }
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta:datagridMeta

@@ -181,7 +181,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                     sConfig.formData = formData; // запрос
                     sConfig.fullTextSearch = fullTextSearch;
-                    sConfig.filter = "";
                     this.performSearch(
                         {
                             searchConfig:sConfig,

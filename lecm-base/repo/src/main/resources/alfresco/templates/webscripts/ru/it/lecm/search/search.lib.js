@@ -269,7 +269,7 @@ function getSearchResults(params) {
             logger.log("parentNodeRef = " + parentNodeRef);
             if (parentNodeRef != null && parentNodeRef.length > 0) {
                 var parentNode = search.findNode(parentNodeRef);
-                if (parentNode != null) {
+                if (parentNode != null && searchConfig.filter.indexOf('PATH') == -1) {
                     var xpath = parentNode.getQnamePath();
                     fullTextSearchQuery += " +PATH:\"" + xpath + "//*\"";
                 }
@@ -288,7 +288,11 @@ function getSearchResults(params) {
                 }
                 if (fieldsQuery.length > 5) {
                     fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
-                    fullTextSearchQuery += " AND (" + fieldsQuery + ")";
+                    if (searchConfig.filter.indexOf('PATH') == -1) {
+                        fullTextSearchQuery += " AND (" + fieldsQuery + ")";
+                    } else {
+                        fullTextSearchQuery += " (" + fieldsQuery + ")";
+                    }
                 }
             }
         }
