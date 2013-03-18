@@ -20,39 +20,17 @@
  */
 package ru.it.lecm.im.client.ui;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.client.ui.*;
+import ru.it.lecm.im.client.XmppProfileManager;
+import ru.it.lecm.im.client.listeners.XmppProfileListener;
 import ru.it.lecm.im.client.ui.listeners.IndicatorListener;
 import ru.it.lecm.im.client.ui.listeners.StatusMenuListener;
-import ru.it.lecm.im.client.xmpp.Session;
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ErrorEvent;
-import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.i18n.client.HasDirection.Direction;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import ru.it.lecm.im.client.iJab;
-import ru.it.lecm.im.client.listeners.XmppProfileListener;
-import ru.it.lecm.im.client.XmppProfileManager;
 import ru.it.lecm.im.client.utils.XmppStatus;
 import ru.it.lecm.im.client.utils.i18n;
+import ru.it.lecm.im.client.xmpp.Session;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 
 public class UserIndicator extends FlexTable
 {

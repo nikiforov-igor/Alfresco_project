@@ -20,10 +20,8 @@
  */
 package ru.it.lecm.im.client.ui;
 
-import com.google.gwt.dom.client.Style.Display;
-
-import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 import ru.it.lecm.im.client.utils.XmppStatus;
+import ru.it.lecm.im.client.xmpp.stanzas.Presence;
 
 /**
  * @author "Fanglin Zhong<zhongfanglin@gmail.com>"
@@ -38,7 +36,7 @@ public class MUCUserItem extends ContactViewItemUI
 	public MUCUserItem(Presence presence) 
 	{
 		super(presence.getFrom().toString());
-		avatar.getStyle().setDisplay(Display.NONE);
+		//avatar.getStyle().setDisplay(Display.NONE);
 		setStatusText(null);
 		setName(shortName(presence.getFrom().getResource()));
 		mainWidget.setTitle(presence.getFrom().getResource());

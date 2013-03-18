@@ -44,8 +44,8 @@ public abstract class ContactViewItemUI extends Composite {
 			UiBinder<Widget, ContactViewItemUI> {
 	}
 
-	@UiField Element avatar;
-	@UiField Image avatarImg;
+//	@UiField Element avatar;
+//	@UiField Image avatarImg;
 	@UiField Element nameElement;
 	@UiField Element nameTextElement;
 	@UiField Element msgCounterTextElement;
@@ -125,12 +125,12 @@ public abstract class ContactViewItemUI extends Composite {
 //			}
 //		});
 //
-		avatarImg.addErrorHandler(new ErrorHandler(){
-			public void onError(ErrorEvent event) {
-				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
-			}
-		});
-		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
+//		avatarImg.addErrorHandler(new ErrorHandler(){
+//			public void onError(ErrorEvent event) {
+//				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
+//			}
+//		});
+//		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
 		
 //		nameEditor.addKeyUpHandler(new KeyUpHandler()
 //		{
@@ -205,12 +205,12 @@ public abstract class ContactViewItemUI extends Composite {
 	
 	public void setAvatar(final String url)
 	{
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                avatarImg.setUrl(url);
-            }
-        });
+//        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+//            @Override
+//            public void execute() {
+//                avatarImg.setUrl(url);
+//            }
+//        });
 
 
 	}
@@ -222,12 +222,12 @@ public abstract class ContactViewItemUI extends Composite {
 	
 	public void setOffline(boolean b)
 	{
-		if(b)
-		{
-			avatarImg.addStyleName("ijab-offline");
-		}
-		else
-			avatarImg.removeStyleName("ijab-offline");
+//		if(b)
+//		{
+//			avatarImg.addStyleName("ijab-offline");
+//		}
+//		else
+//			avatarImg.removeStyleName("ijab-offline");
 	}
 
 	protected abstract void onConextMenu(int x,int y);

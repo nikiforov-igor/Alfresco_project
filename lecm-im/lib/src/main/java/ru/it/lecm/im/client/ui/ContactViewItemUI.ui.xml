@@ -14,10 +14,10 @@
             <g:TextBox styleName="ijab-contactview-item-editor" ui:field="nameEditor"></g:TextBox><br/>
             <span ui:field="statusTextElement" class="ijab-gray"></span>
 		</div>
-		<div class="avatar" ui:field="avatar">
-			<a>
-				<g:Image ui:field="avatarImg" styleName="ijab-contactviewitem-avatar ijab-offline ui-corner-all"></g:Image>
-			</a>
-		</div>
+		<!--<div class="avatar" ui:field="avatar">-->
+			<!--<a>-->
+				<!--<g:Image ui:field="avatarImg" styleName="ijab-contactviewitem-avatar ijab-offline ui-corner-all"></g:Image>-->
+			<!--</a>-->
+		<!--</div>-->
 	</iJab:FocusHTMLPanel>
 </ui:UiBinder> 
