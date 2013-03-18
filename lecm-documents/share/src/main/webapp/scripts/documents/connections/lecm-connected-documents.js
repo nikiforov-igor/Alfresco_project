@@ -53,81 +53,112 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 
 			connectButton: null,
 
-			rootRef: "",
+			rootRef: null,
 
 			onReady: function()
 			{
+				this.loadConnectionsFolder();
 				this.connectButton = Alfresco.util.createYUIButton(this, this.controlId + "-add-connection-button", this.onConnect.bind(this), {}, Dom.get(this.controlId + "-add-connection-button"));
 			},
 
+			loadConnectionsFolder: function() {
+				if (this.options.primaryDocumentNodeRef != null) {
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/folder?documentNodeRef=" + this.options.primaryDocumentNodeRef;
+					var me = this;
+					var callback = {
+						success:function (oResponse) {
+							var oResults = eval("(" + oResponse.responseText + ")");
+							if (oResults != null && oResults.nodeRef != null) {
+								me.rootRef = oResults.nodeRef;
+							}
+						},
+						failure:function (oResponse) {
+							YAHOO.log("Failed to process XHR transaction.", "info", "example");
+						},
+						argument:{
+							context:this
+						},
+						timeout:10000
+					};
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+				}
+			},
+
 			onConnect: function(e, p_obj) {
-				var me = this;
-				// Intercept before dialog show
-				var doBeforeDialogShow = function(p_form, p_dialog) {
-					Alfresco.util.populateHTML(
-						[ p_dialog.id + "-form-container_h", this.msg("label.connection.add.title") ]
-					);
+				if (this.rootRef != null) {
+					var me = this;
+					// Intercept before dialog show
+					var doBeforeDialogShow = function(p_form, p_dialog) {
+						Alfresco.util.populateHTML(
+							[ p_dialog.id + "-form-container_h", this.msg("label.connection.add.title") ]
+						);
 
-					var primaryDocumentAddedInput = p_dialog.dialog.form['assoc_lecm-connect_primary-document-assoc_added'];
-					if (primaryDocumentAddedInput != null) {
-						primaryDocumentAddedInput.value = this.options.primaryDocumentNodeRef;
-					}
-					var primaryDocumentInput = p_dialog.dialog.form['assoc_lecm-connect_primary-document-assoc'];
-					if (primaryDocumentInput != null) {
-						primaryDocumentInput.value = this.options.primaryDocumentNodeRef;
-					}
-				};
-
-				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
-					{
-						itemKind:"type",
-						itemId:"lecm-connect:connection",
-						destination: this.options.primaryDocumentNodeRef,
-						mode:"create",
-						formId: this.id + "-create-form",
-						submitType:"json",
-                        ignoreNodes: this.options.primaryDocumentNodeRef
-					});
-
-//				// Using Forms Service, so always create new instance
-				var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-				createDetails.setOptions(
-					{
-						width:"50em",
-						templateUrl:templateUrl,
-						actionUrl:null,
-						destroyOnHide:true,
-						doBeforeDialogShow:{
-							fn:doBeforeDialogShow,
-							scope:this
-						},
-						onSuccess:{
-							fn:function (response) {
-								if (me.options.datagridBublingLabel != null) {
-									YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-										{
-											nodeRef:response.json.persistedObject,
-											bubblingLabel:me.options.datagridBublingLabel
-										});
-								}
-
-								Alfresco.util.PopupManager.displayMessage(
-									{
-										text:this.msg("message.connection.add.success")
-									});
-							},
-							scope:this
-						},
-						onFailure:{
-							fn:function (response) {
-								Alfresco.util.PopupManager.displayMessage(
-									{
-										text:this.msg("message.connection.add.failure")
-									});
-							},
-							scope:this
+						var primaryDocumentAddedInput = p_dialog.dialog.form['assoc_lecm-connect_primary-document-assoc_added'];
+						if (primaryDocumentAddedInput != null) {
+							primaryDocumentAddedInput.value = this.options.primaryDocumentNodeRef;
 						}
-					}).show();
+						var primaryDocumentInput = p_dialog.dialog.form['assoc_lecm-connect_primary-document-assoc'];
+						if (primaryDocumentInput != null) {
+							primaryDocumentInput.value = this.options.primaryDocumentNodeRef;
+						}
+					};
+
+					var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
+						{
+							itemKind:"type",
+							itemId:"lecm-connect:connection",
+							destination: this.rootRef,
+							mode:"create",
+							formId: this.id + "-create-form",
+							submitType:"json",
+	                        ignoreNodes: this.options.primaryDocumentNodeRef
+						});
+
+	//				// Using Forms Service, so always create new instance
+					var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+					createDetails.setOptions(
+						{
+							width:"50em",
+							templateUrl:templateUrl,
+							actionUrl:null,
+							destroyOnHide:true,
+							doBeforeDialogShow:{
+								fn:doBeforeDialogShow,
+								scope:this
+							},
+							onSuccess:{
+								fn:function (response) {
+									if (me.options.datagridBublingLabel != null) {
+										YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+											{
+												nodeRef:response.json.persistedObject,
+												bubblingLabel:me.options.datagridBublingLabel
+											});
+									}
+
+									Alfresco.util.PopupManager.displayMessage(
+										{
+											text:this.msg("message.connection.add.success")
+										});
+								},
+								scope:this
+							},
+							onFailure:{
+								fn:function (response) {
+									Alfresco.util.PopupManager.displayMessage(
+										{
+											text:this.msg("message.connection.add.failure")
+										});
+								},
+								scope:this
+							}
+						}).show();
+				} else {
+					Alfresco.util.PopupManager.displayMessage(
+						{
+							text:this.msg("message.connection.folder.failure")
+						});
+				}
 			}
 		});
 })();

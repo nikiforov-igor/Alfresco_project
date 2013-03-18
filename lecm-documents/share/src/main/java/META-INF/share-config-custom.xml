@@ -133,7 +133,7 @@
                     </field>
                     <field id="lecm-connect:connected-document-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="treeItemType">cm:folder</control-param>
                             <control-param name="treeNodeSubstituteString">{cm:name}</control-param>

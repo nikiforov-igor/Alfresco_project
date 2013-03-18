@@ -35,6 +35,20 @@ public class DocumentConnectionWebScriptBean extends BaseScopableProcessorExtens
 		this.nodeService = nodeService;
 	}
 
+	public ScriptNode getRootFolder(String documentNodeRef) {
+		org.alfresco.util.ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+
+		NodeRef documentRef = new NodeRef(documentNodeRef);
+
+		if (this.nodeService.exists(documentRef)) {
+			NodeRef attachmentsRoot = this.documentConnectionService.getRootFolder(documentRef);
+			if (attachmentsRoot != null) {
+				return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
+
 	public ScriptNode getDefaultConnectionType(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);

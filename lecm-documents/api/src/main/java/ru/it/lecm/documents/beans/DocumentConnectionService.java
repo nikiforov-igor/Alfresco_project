@@ -40,6 +40,13 @@ public interface DocumentConnectionService {
     public static final QName PROP_CONNECTIONS_WITH_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-with-list");
 
 	/**
+	 * Получение папки со связями для документа
+	 * @param documentRef Ссылка на документ
+	 * @return Ссылка на папку
+	 */
+	public NodeRef getRootFolder(final NodeRef documentRef);
+
+	/**
 	 * Получение типа связи по умолчанию для документов. Берётся из справочника "Доступные типы связи"
 	 * @param primaryDocumentRef Ссылка на исходный объект
 	 * @param connectedDocumentRef Ссылка на связанный объект

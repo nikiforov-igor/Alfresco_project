@@ -2,17 +2,22 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -26,6 +31,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 
+	private final Object lock = new Object();
+
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
@@ -34,6 +41,36 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		this.namespaceService = namespaceService;
 	}
 
+	public NodeRef getRootFolder(final NodeRef documentRef) {
+		final String attachmentsRootName = DOCUMENT_CONNECTIONS_ROOT_NAME;
+
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						NodeRef attachmentsRef;
+						synchronized (lock) {
+							attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+							if (attachmentsRef == null) {
+								QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+								QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
+								QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+								Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+								properties.put(ContentModel.PROP_NAME, attachmentsRootName);
+								ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+								attachmentsRef = associationRef.getChildRef();
+							}
+						}
+						return attachmentsRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
+	}
 
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
 		return getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, null);
