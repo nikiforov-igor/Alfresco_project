@@ -59,7 +59,7 @@ public class UserIndicator extends FlexTable
 	private StatusSelector statusSelector = new StatusSelector();
 	//private Image statusImg;
 	private Image avatarImg = new Image(GWT.getModuleBaseURL()+"images/alf_chat_userpic_32.png");
-	private Label nickName = new Label("");
+	//private Label nickName = new Label("");
 	private Label statusLabel = new Label();
 	private TextBox statusEditor = new TextBox();
 	private String STATUS_TIP = i18n.msg("Введите здесь свой статус.");
@@ -88,8 +88,8 @@ public class UserIndicator extends FlexTable
 			}
 		});
 
-        nickName.setDirection(Direction.LTR);
-		nickName.setStyleName("ijab-self-nick");
+        //nickName.setDirection(Direction.LTR);
+		//nickName.setStyleName("ijab-self-nick");
 
         statusSelector.setUrl(XmppStatus.statusIconFromStatus(XmppStatus.Status.STATUS_ONLINE));
 		
@@ -117,7 +117,7 @@ public class UserIndicator extends FlexTable
 				simplePopup.setPopupPosition(left, top);
 				simplePopup.show();
 				*/
-				menu.showRelativeTo(nickName);
+				menu.showRelativeTo(statusSelector);
 			}
 		});
 
@@ -150,7 +150,7 @@ public class UserIndicator extends FlexTable
 
 		FlowPanel hNameStatusIconPanel = new FlowPanel();
         hNameStatusIconPanel.add(statusSelector);
-        hNameStatusIconPanel.add(nickName);
+        //hNameStatusIconPanel.add(nickName);
         hNameStatusIconPanel.setStyleName("status-and-name");
 
 		HorizontalPanel hPanel = new HorizontalPanel();
@@ -247,7 +247,7 @@ public class UserIndicator extends FlexTable
 	{
         if (nick != null)
         {
-            nickName.setText(nick);
+            //nickName.setText(nick);
         }
 	}
 	
