@@ -106,7 +106,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     },
                     onSuccess:{
                         fn:function (response) {
-                            location.reload();
+                            LogicECM.module.Base.Util.addUrlParam(location.search, 'dashlet', 'main');
+                            self.location;
                         },
                         scope:this
                     }

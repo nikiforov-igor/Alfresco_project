@@ -34,6 +34,13 @@
         function init() {
             container = Dom.get('${id}_results');
             drawForm("${nodeRef}",'${id}_results', "document-dashlet");
+            var param = decodeURIComponent(location.search.substr(1)).split('&');
+            for (var i=0; i < param.length; i++) {
+                var tmp = param[i].split('=');
+                if (tmp[0] == 'dashlet' && tmp[1] == 'main') {
+                    documentMetadataComponent.onExpand();
+                }
+            }
         }
         Event.onDOMReady(init);
     })();
