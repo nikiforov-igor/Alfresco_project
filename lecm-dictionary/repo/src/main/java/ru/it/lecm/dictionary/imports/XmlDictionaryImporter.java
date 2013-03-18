@@ -5,6 +5,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.export.ExportNamespace;
 
 import javax.xml.stream.XMLInputFactory;
@@ -25,8 +27,9 @@ public class XmlDictionaryImporter {
 	private QName itemsType = null;
 	private InputStream inputStream;
 	private NodeRef dictionariesRoot;
+    private static final transient Logger logger = LoggerFactory.getLogger(XmlDictionaryImporter.class);
 
-	/**
+    /**
 	 * Конструктор загрузчика XML
 	 * @param inputStream входной XML поток
 	 * @param nodeService           nodeService
@@ -54,6 +57,7 @@ public class XmlDictionaryImporter {
 	 * @throws XMLStreamException
 	 */
 	public void readDictionary(boolean doNotUpdateIfExist) throws XMLStreamException {
+        logger.info("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
 		NodeRef parentNodeRef;
@@ -73,6 +77,7 @@ public class XmlDictionaryImporter {
 			parentNodeRef = createDictionary(dictionaryName, dicProps, doNotUpdateIfExist);
 			String type = nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString();
 			itemsType = QName.createQName(type, namespaceService);
+            logger.info("Items type '{}'", itemsType);
 			readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
 		}
 	}
@@ -145,8 +150,10 @@ public class XmlDictionaryImporter {
 					QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, dictionaryName),
 					ExportNamespace.DICTIONARY,
 					properties).getChildRef();
+            logger.info("Dictionary '{}' created", dictionaryName);
 		} else if (!doNotUpdateIfExist) {
 			nodeService.addProperties(dictionary, dicProps);
+            logger.info("Dictionary '{}' updated", dictionaryName);
 		}
 		return dictionary;
 	}
@@ -166,8 +173,10 @@ public class XmlDictionaryImporter {
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
 				itemsType,
 				properties).getChildRef();
+            logger.info("Item '{}' created", name);
 		} else if (!doNotUpdateIfExist) {
 			nodeService.addProperties(node, properties);
+            logger.info("Item '{}' updated", name);
 		}
 		return node;
 	}

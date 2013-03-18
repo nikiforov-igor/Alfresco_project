@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class LecmDictionaryBootstrap extends BaseBean {
 
-	private static final Logger logger = LoggerFactory.getLogger(LecmDictionaryBootstrap.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(LecmDictionaryBootstrap.class);
 
 	private List<String> dictionaries;
 	private List<String> createOrUpdateDictionaries;
@@ -64,7 +64,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
 									importer.readDictionary(true);
 								} catch (Exception e) {
-									logger.warn("Can not create dictionary: " + dictionary, e);
+									logger.error("Can not create dictionary: " + dictionary, e);
 								} finally {
 									try {
 										if (inputStream != null) {
@@ -90,7 +90,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
 									importer.readDictionary(false);
 								} catch (Exception e) {
-									logger.warn("Cann not create dictionary: " + dictionary);
+									logger.error("Can not create dictionary: " + dictionary);
 								} finally {
 									try {
 										if (inputStream != null) {
