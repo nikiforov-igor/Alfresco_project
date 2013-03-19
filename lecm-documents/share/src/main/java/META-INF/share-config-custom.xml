@@ -174,7 +174,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-doc-members:group"/>
+                    <!--<show id="lecm-doc-members:group"/>-->
                     <show id="lecm-doc-members:employee-assoc"/>
                 </field-visibility>
             </form>
@@ -197,7 +197,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-doc-members:group"/>
+                    <!--<show id="lecm-doc-members:group"/>-->
                     <show id="lecm-doc-members:employee-assoc"/>
                 </field-visibility>
             </form>

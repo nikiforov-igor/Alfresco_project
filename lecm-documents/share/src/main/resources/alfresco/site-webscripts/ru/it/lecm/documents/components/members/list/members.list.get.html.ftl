@@ -1,3 +1,5 @@
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
 <#assign docRef= nodeRef/>
@@ -19,6 +21,7 @@
         </tr>
     </table>
     <hr>
+    <@view.viewForm formId="${el}-view-node-form"/>
     <div class="members-table body scrollableList">
     <#if members?? && members.items??>
         <#list members.items as member>
@@ -27,7 +30,7 @@
                     <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${member.employeeRef}"alt="Avatar" />
                 </div>
                 <div class="person">
-                    <h3><a href="${url.context}/page/view-metadata?nodeRef=${member.employeeRef}" class="theme-color-1">${member.employeeName?html}</a></h3>
+                    <h3>${view.showViewLink(member.employeeName, member.employeeRef)}</h3>
                     <div>${member.employeePosition}</div>
                     <div class="member-ref" style="display: none">${member.employeeRef}</div>
                 </div>

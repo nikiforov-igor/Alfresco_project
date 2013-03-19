@@ -1,3 +1,5 @@
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+
 <#assign el=args.htmlid/>
 <#assign skipCount=5/>
 
@@ -15,6 +17,7 @@
     </h2>
 
     <div id="${el}-formContainer">
+        <@view.viewForm formId="${el}-view-node-form"/>
         <ul id="document-members-set" style="width: 100%">
         <hr>
         <#if members?? && members.items??>
@@ -22,7 +25,7 @@
             <#list members.items as item>
                 <#if i < skipCount>
                 <li style="padding-bottom: 0.4em;">
-                    <a href="${url.context}/page/view-metadata?nodeRef=${item.employeeRef}">${item.employeeName}</a><br/>
+                    ${view.showViewLink(item.employeeName, item.employeeRef)}
                     ${item.employeePosition}<br/>
                     <#assign i = i+1/>
                 </li>
