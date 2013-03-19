@@ -564,7 +564,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		return serviceRegistry;
 	}
 
-	private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
+    @Override
+    public boolean isDraft(NodeRef document) {
+        boolean result = false;
+        List<StateMachineAction> actions = getStatusChangeActions(document);
+        for (StateMachineAction action : actions) {
+            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+            result = result || statusChangeAction.isForDraft();
+        }
+        return result;
+    }
+
+    private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
 		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
 		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
 		ActivityImpl activity = processDefinitionEntity.findActivity(activityId);

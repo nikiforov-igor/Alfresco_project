@@ -25,4 +25,6 @@ public interface StateMachineServiceBean {
     WorkflowTaskListBean getMyActiveTasks(String nodeRef, int loadCount);
 
     List<WorkflowTaskBean> getMyCompleteTasks(String nodeRef);
+
+    public boolean isDraft(NodeRef document);
 }

@@ -131,6 +131,10 @@ public class StatusChangeAction extends StateMachineAction {
         return result;
     }
 
+    public boolean isForDraft() {
+        return forDraft;
+    }
+
     @Override
 	public void execute(DelegateExecution execution) {
 		final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
