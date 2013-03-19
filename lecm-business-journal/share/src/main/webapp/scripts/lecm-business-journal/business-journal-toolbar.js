@@ -208,7 +208,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         datagridMeta.searchConfig = {};
                     }
                     datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                    datagridMeta.sort = "cm:name|true";
+                    datagridMeta.sort = "lecm-busjournal:bjRecord-date|desc";
                     datagridMeta.searchConfig.formData = {
                         datatype:datagridMeta.itemType
                     };
@@ -225,7 +225,8 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         parent:datagridMeta.nodeRef,
                         itemType:datagridMeta.itemType,
                         searchConfig:datagridMeta.searchConfig,
-                        searchShowInactive:dataGrid.options.searchShowInactive
+                        searchShowInactive:dataGrid.options.searchShowInactive,
+                        sort:datagridMeta.sort
                     });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                 }
