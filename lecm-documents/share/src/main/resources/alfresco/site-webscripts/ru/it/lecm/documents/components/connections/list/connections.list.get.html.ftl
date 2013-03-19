@@ -20,8 +20,52 @@
 	</table>
 	<hr>
 	<div class="connections-table body scrollableList">
-	<#if connections?? && connections.items??>
-		<#list connections.items as item>
+		<#if connections?? && connections.items??>
+			<#list connections.items as item>
+				<div class="detail-list-item">
+					<div class="icon">
+						<img src="/share/res/images/lecm-documents/document_img.png"/>
+					</div>
+					<div class="connection">
+						<div class="connection-type">
+							<#if item.type??>
+								${item.type.name!""}
+							</#if>
+						</div>
+						<div class="connection-name">
+							<#if item.connectedDocument??>
+								<div class="document-name">
+									<a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef!""}" class="theme-color-1">
+										${item.connectedDocument.presentString!""}
+									</a>
+								</div>
+								<div class="document-list-name">
+									${item.connectedDocument.listPresentString!""}
+								</div>
+							</#if>
+						</div>
+					</div>
+					<hr>
+				</div>
+			</#list>
+		</#if>
+	</div>
+
+	<div class="space"></div>
+
+	<table class="connections-title">
+		<tr>
+			<td class="connections-name">
+				${msg("title.connected-with-documents")}
+			</td>
+			<td class="connections-add">
+			</td>
+		</tr>
+	</table>
+	<hr>
+	<div class="connections-table body scrollableList">
+	<#if connectionsWithDocument?? && connectionsWithDocument.items??>
+		<#list connectionsWithDocument.items as item>
 			<div class="detail-list-item">
 				<div class="icon">
 					<img src="/share/res/images/lecm-documents/document_img.png"/>
@@ -29,18 +73,18 @@
 				<div class="connection">
 					<div class="connection-type">
 						<#if item.type??>
-							${item.type.name!""}
-						</#if>
+								${item.type.reverseName!""}
+							</#if>
 					</div>
 					<div class="connection-name">
-						<#if item.connectedDocument??>
+						<#if item.primaryDocument??>
 							<div class="document-name">
-								<a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef!""}" class="theme-color-1">
-									${item.connectedDocument.presentString!""}
+								<a href="${url.context}/page/document?nodeRef=${item.primaryDocument.nodeRef!""}" class="theme-color-1">
+									${item.primaryDocument.presentString!""}
 								</a>
 							</div>
 							<div class="document-list-name">
-								${item.connectedDocument.listPresentString!""}
+								${item.primaryDocument.listPresentString!""}
 							</div>
 						</#if>
 					</div>
@@ -50,6 +94,7 @@
 		</#list>
 	</#if>
 	</div>
+
 	<script type="text/javascript">//<![CDATA[
 		new LogicECM.DocumentConnectionsList("${el}").setOptions(
 				{

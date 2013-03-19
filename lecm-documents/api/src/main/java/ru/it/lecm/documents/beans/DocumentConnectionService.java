@@ -75,4 +75,11 @@ public interface DocumentConnectionService {
      * @return список ссылок на элементы справочника "Типы связи"
      */
     public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
+
+	/**
+	 * Получение документов, связанных с документом
+	 * @param documentRef Ссылка на документ
+	 * @return Список сслыок на связи
+	 */
+	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef);
 }

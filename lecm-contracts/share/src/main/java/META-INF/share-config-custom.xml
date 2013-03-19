@@ -14,20 +14,6 @@
 					</field>
 				</appearance>
 			</form>
-            <form id="connections">
-                <field-visibility>
-                    <show id="lecm-connect-aspects:connections-list"/>
-                    <show id="lecm-connect-aspects:connections-with-list"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-connect-aspects:connections-list">
-                        <control template="/ru/it/lecm/documents/controls/connections/connected-documents.ftl"/>
-                    </field>
-                    <field id="lecm-connect-aspects:connections-with-list">
-                        <control template="/ru/it/lecm/documents/controls/connections/primary-documents.ftl"/>
-                    </field>
-                </appearance>
-            </form>
             <form id="document">
                 <field-visibility>
                     <show id="cm:name" force="true"/>

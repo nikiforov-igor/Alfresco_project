@@ -3,7 +3,6 @@
         <forms>
             <dependencies>
                 <js src="/scripts/components/document-component-base.js"/>
-                <js src="/scripts/documents/connections/lecm-connected-documents.js"/>
                 <js src="/scripts/documents/connections/type-select.js"/>
                 <js src="/scripts/documents/members/lecm-document-members.js"/>
                 <js src="/scripts/grids/doc-members-datagrid.js"/>
@@ -90,35 +89,6 @@
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-connect-types:available-connection-type">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-connect:primary-document-assoc"/>
-                    <show id="lecm-connect:connected-document-assoc"/>
-                    <show id="lecm-connect:connection-type-assoc"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-connect:connection">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-connect:primary-document-assoc"/>
-                    <show id="lecm-connect:connected-document-assoc"/>
-                    <show id="lecm-connect:connection-type-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-connect:primary-document-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
     <config evaluator="model-type" condition="lecm-connect:connection">
         <forms>
             <form>
@@ -149,22 +119,6 @@
                             <control-param name="notSelectedOptionLabel"></control-param>
                         </control>
                     </field>
-                </appearance>
-            </form>
-            <form id="connected-documents">
-                <field-visibility>
-                    <show id="lecm-connect:connected-document-assoc"/>
-                    <show id="lecm-connect:connection-type-assoc"/>
-                </field-visibility>
-            </form>
-            <form id="connected-with-documents">
-                <field-visibility>
-                    <show id="lecm-connect:primary-document-assoc"/>
-                    <show id="lecm-connect:connection-type-assoc"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-connect:connection-type-assoc"
-                           substituteString="{lecm-connect-types:reverse-name}"/>
                 </appearance>
             </form>
         </forms>

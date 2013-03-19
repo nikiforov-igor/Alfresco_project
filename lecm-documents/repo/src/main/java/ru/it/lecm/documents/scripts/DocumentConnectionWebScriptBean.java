@@ -105,6 +105,16 @@ public class DocumentConnectionWebScriptBean extends BaseScopableProcessorExtens
 		return null;
 	}
 
+	public Scriptable getConnectionsWithDocument(String documentNodeRef) {
+		ParameterCheck.mandatory("вocumentNodeRef", documentNodeRef);
+		NodeRef documentRef = new NodeRef(documentNodeRef);
+		if (this.nodeService.exists(documentRef)) {
+			List<NodeRef> connections = this.documentConnectionService.getConnectionsWithDocument(documentRef);
+			return createScriptable(connections);
+		}
+		return null;
+	}
+
 	/**
 	 * Возвращает массив, пригодный для использования в веб-скриптах
 	 *

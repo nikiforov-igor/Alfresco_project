@@ -2,7 +2,6 @@
 
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"hasNext": "${hasNext?string}",
 	"items": <@connectionsLib.renderConnections items />
 }
 </#escape>
