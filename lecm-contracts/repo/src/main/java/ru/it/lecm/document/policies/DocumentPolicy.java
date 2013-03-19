@@ -205,13 +205,13 @@ public class DocumentPolicy
         final String prevRating = (String) before.get(DocumentService.PROP_RATING);
         final String curRating = (String) after.get(DocumentService.PROP_RATING);
 
-        if (!curRating.equals(prevRating)) {
-            businessJournalService.log(nodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг документу \"#mainobject\"");
-        } else if (before.size() == after.size()) {
-            businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"");
+        if (before.size() == after.size()) {
+            if (!curRating.equals(prevRating)) {
+                businessJournalService.log(nodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг документу \"#mainobject\"");
+            } else {
+                businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"");
+            }
         }
-
     }
-
 }
 
