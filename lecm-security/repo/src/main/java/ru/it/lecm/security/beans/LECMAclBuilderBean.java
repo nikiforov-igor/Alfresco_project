@@ -21,7 +21,9 @@ import org.springframework.beans.factory.InitializingBean;
 
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
+import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 public class LECMAclBuilderBean
 	implements InitializingBean, INodeACLBuilder
@@ -35,8 +37,8 @@ public class LECMAclBuilderBean
 	 * если потребуется прозрачное присвоение БР "по факту" - т.е. выдавать
 	 * автоматически личную БР при прописывании сотрудника в ACL узла 
 	 * (документа) при вызове метода grantDynamicRole
+	 */ 
 	private IOrgStructureNotifiers orgStructureNotifiers; 
-	*/
 
 	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
@@ -89,7 +91,6 @@ public class LECMAclBuilderBean
 		this.sgnm.setAuthorityService(authorityService);
 	}
 
-/*
 	public IOrgStructureNotifiers getOrgStructureNotifiers() {
 		return orgStructureNotifiers;
 	}
@@ -97,7 +98,7 @@ public class LECMAclBuilderBean
 	public void setOrgStructureNotifiers(IOrgStructureNotifiers value) {
 		this.orgStructureNotifiers = value;
 	}
- */
+
 
 	/**
 	 * @return флаг наследования родительских полномочий для статического случая выдачи прав
@@ -247,8 +248,11 @@ public class LECMAclBuilderBean
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef, String userId, StdPermission access) {
 		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(userId, roleCode);
 
-		// оповещение основной службы "теневых групп" о личном присвоении БР
-		// if (this.orgStructureNotifiers != null) this.orgStructureNotifiers.orgBRAssigned(roleCode, posBRME);
+		// оповещение основной службы о личном присвоении БР (создание "теневой группы" )
+		if (this.orgStructureNotifiers != null) { 
+			final SGPrivateMeOfUser posMe = (SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos(userId);
+			this.orgStructureNotifiers.orgBRAssigned(roleCode, posMe);
+		}
 
 		// непосредственная нарезка в ACL ...
 		final String authority = sgnm.makeSGName(posBRME); // sgnm.makeFullBRMEAuthName(userId, roleCode);

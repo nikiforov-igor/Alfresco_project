@@ -36,9 +36,7 @@
 		<property name="nodeService" ref="nodeService" />
 		<property name="permissionService" ref="permissionService" />
 		<property name="authorityService" ref="authorityService" />
-		<!-- 
 		<property name="orgStructureNotifiers" ref="lecmSecurityGroupsBean" />
-		  -->
 
 		<!-- Наследование родительских прав для случая статики и динамики:
 			по-умолчанию: статика НЕ наследует (false), динамика Наследует (true)

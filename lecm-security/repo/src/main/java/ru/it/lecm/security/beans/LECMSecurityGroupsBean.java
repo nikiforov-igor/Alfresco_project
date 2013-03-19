@@ -239,8 +239,9 @@ public class LECMSecurityGroupsBean
 		
 		// safe-действия по созданию security-groups под БР и сам объект
 		if (safeMode) {
-			ensureAlfrescoGroupName( broleSuffix, "BRole-"+ broleId);
-			orgNodeCreated( obj);
+			final String details = "BRole-"+ broleId;
+			ensureAlfrescoGroupName( broleSuffix, details); // sg для БР
+			orgNodeCreated( obj); // sg для объекта (SGME, SGSV, SGOU, SGDP ...)
 		}
 
 		final String sgBRole = this.sgnm.makeSGName(broleSuffix);
