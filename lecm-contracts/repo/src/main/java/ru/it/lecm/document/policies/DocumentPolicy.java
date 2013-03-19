@@ -206,7 +206,7 @@ public class DocumentPolicy
         final String curRating = (String) after.get(DocumentService.PROP_RATING);
 
         if (before.size() == after.size()) {
-            if (!curRating.equals(prevRating)) {
+            if (prevRating != null && !prevRating.equals(curRating)) {
                 businessJournalService.log(nodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг документу \"#mainobject\"");
             } else {
                 businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"");
