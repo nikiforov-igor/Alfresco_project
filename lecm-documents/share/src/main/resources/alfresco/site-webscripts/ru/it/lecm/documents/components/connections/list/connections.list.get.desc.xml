@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>connections-list</shortname>
+    <description>Document Connections List Component</description>
+    <url>/lecm/components/document/connections-list</url>
+</webscript>

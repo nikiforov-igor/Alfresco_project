@@ -58,25 +58,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onExpand: function () {
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj: {
-                            htmlid: "document-connections-" + this.options.nodeRef,
-                            itemKind: "node",
-                            itemId: this.options.nodeRef,
-                            formId: "connections",
-                            mode: "view"
-                        },
-                        successCallback: {
-                            fn:function(response){
-                                this.expandView(response.serverResponse.responseText);
-                            },
-                            scope: this
-                        },
-                        failureMessage: "message.failure",
-                        execScripts: true
-                    });
+	            // Load the form
+	            Alfresco.util.Ajax.request(
+		            {
+			            url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/connections-list",
+			            dataObj: {
+				            nodeRef: this.options.nodeRef,
+				            htmlid: this.id + Alfresco.util.generateDomId()
+			            },
+			            successCallback: {
+				            fn:function(response){
+					            var text = response.serverResponse.responseText;
+					            this.expandView(text);
+				            },
+				            scope: this
+			            },
+			            failureMessage: this.msg("message.failure"),
+			            scope: this,
+			            execScripts: true
+		            });
             },
 
 	        onConnectionsUpdate: function (layer, args) {

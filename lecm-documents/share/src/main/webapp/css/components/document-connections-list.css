@@ -1,0 +1,49 @@
+.connections-list {
+	padding-left: 2em;
+}
+.connections-list .connections-title {
+	width: 100%;
+	padding: 0.4em;
+}
+.connections-list .connections-title .connections-name {
+	color: #666666;
+	font-family: Arial;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: bold;
+	text-align: left;
+	text-decoration: none;
+}
+
+.connections-list .connections-title  .connections-add {
+	text-align: right;
+	padding-right: 1em;
+}
+
+.connections-list .detail-list-item .icon {
+	float: left;
+}
+
+.connections-list .detail-list-item .connection {
+	padding-left: 100px;
+}
+
+.connections-list .detail-list-item .connection {
+	font-family: Arial;
+	font-size: 13px;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	color: #333333;
+}
+
+.connections-list .detail-list-item .connection .connection-name {
+	padding-left: 20px;
+}
+
+.connections-list .detail-list-item .connection .connection-name div.document-name {
+	font-family: Arial;
+	font-size: 18px;
+	font-weight: normal;
+	font-style: normal;
+}
