@@ -187,7 +187,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 
 			loadConnectionTypes: function() {
 				if (this.primaryDocumentNodeRef != null && this.connectedDocumentNodeRef != null) {
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/connections/types/available?primaryDocumentNodeRef=" +
+					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/types/available?primaryDocumentNodeRef=" +
 						this.primaryDocumentNodeRef + "&connectedDocumentNodeRef=" + this.connectedDocumentNodeRef;
 					var me = this;
 					var callback = {
@@ -217,7 +217,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			},
 
 			loadAllConnectionTypes: function() {
-				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/connections/types/all";
+				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/types/all";
 				var me = this;
 				var callback = {
 					success:function (oResponse) {
