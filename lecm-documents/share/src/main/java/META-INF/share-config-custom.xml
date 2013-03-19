@@ -185,7 +185,7 @@
                     <show id="lecm-doc-members:member-position" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-doc-members:member-fio" substituteString="$includeRef{lecm-doc-members:employee-assoc/lecm-orgstr:employee-last-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-middle-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-first-name}"/>
+                    <field id="lecm-doc-members:member-fio" substituteString="$includeRef{lecm-doc-members:employee-assoc/lecm-orgstr:employee-last-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-first-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-middle-name}"/>
                     <!--<field id="lecm-doc-members:member-unit" substituteString="{lecm-doc-members:employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>-->
                     <field id="lecm-doc-members:member-position" substituteString="{lecm-doc-members:employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
                 </appearance>
