@@ -121,7 +121,7 @@
                     };
                 };
 
-                new LogicECM.module.BusinessJournal.DataGrid('${id}').setOptions({
+                new LogicECM.module.Base.DataGrid('${id}').setOptions({
                     usePagination: true,
                     pageSize: 20,
                     showExtendSearchBlock: true,
