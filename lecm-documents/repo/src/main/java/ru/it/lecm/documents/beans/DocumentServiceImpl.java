@@ -4,6 +4,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -23,12 +25,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     private NodeService nodeService;
     private OrgstructureBean orgstructureService;
+    private BusinessJournalService businessJournalService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
     }
 
     @Override
@@ -84,7 +90,15 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 }
                 ratedList.add(currentEmployee);
                 nodeService.setProperty(documentNodeRef, thisRatedList, (Serializable) ratedList);
+
+                //обновить хранимые значения (среднего рейтинга и количества проголосовавших)
                 refreshValues(documentNodeRef);
+
+                //логировать изменения в журнал
+                List<String> ratingList = new ArrayList<String>();
+                ratingList.add(rating.toString());
+                businessJournalService.log(documentNodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг #object1 документу \"#mainobject\"", ratingList);
+
                 return getMyRating(documentNodeRef);
             }
         }

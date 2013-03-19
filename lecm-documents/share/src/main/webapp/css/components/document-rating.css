@@ -1,5 +1,6 @@
 .document-rating {
     width: 150px;
+    height: 95px;
     float: right;
     margin: 0 10px;
     text-align: right;
@@ -14,6 +15,7 @@
     height: 21px;
     float: right;
     cursor: pointer;
+    margin-bottom: 5px;
 }
 #raiting_blank,
 #raiting_votes,
@@ -30,5 +32,9 @@
 }
 #raiting_hover {
     background: url('../../images/rating.png') repeat-x 0 -42px;
+    display: none;
+}
+#rating_change {
+    cursor: pointer;
     display: none;
 }

@@ -11,6 +11,7 @@
             <div id="raiting_hover"></div>
             <div id="raiting_votes"></div>
         </div>
+        <a id="rating_change" href="javascript:void(0);">Изменить</a>
     </div>
 
 <script type="text/javascript">//<![CDATA[
@@ -23,59 +24,86 @@
     Event.onContentReady('raiting', function() {
         var ratingBlock = Dom.get('raiting'),
             ratingHover = Dom.get('raiting_hover'),
-            ratingVotes = Dom.get('raiting_votes');
+            ratingVotes = Dom.get('raiting_votes'),
+            change = Dom.get('rating_change');
         var ratingMargin = Dom.getX(ratingBlock);
-        var user_votes;
-        var setVotes = function(votes) {
-            Dom.setStyle(ratingVotes, 'width', votes + 'px');
-            if (votes > 0) {
-                Dom.get('rating_title').innerHTML = yourVote;
-            }
-        };
+        var userVote,
+            currentRating;
+        <#-- Обработчики: -->
+        var onMouseOver = function(e) {
+                Dom.setStyle(ratingVotes, 'display', 'none');
+                Dom.setStyle(ratingHover, 'display', 'block');
+            },
+            onMouseOut = function(e) {
+                Dom.setStyle(ratingHover, 'display', 'none');
+                Dom.setStyle(ratingVotes, 'display', 'block');
+            },
+            onMouseMove = function(e) {
+                var width_votes = e.pageX - ratingMargin;
 
-        ratingBlock.onmouseover = function(e) {
-            Dom.setStyle(ratingVotes, 'display', 'none');
-            Dom.setStyle(ratingHover, 'display', 'block');
-        };
-        ratingBlock.onmouseout = function(e) {
-            Dom.setStyle(ratingHover, 'display', 'none');
-            Dom.setStyle(ratingVotes, 'display', 'block');
-        };
-        ratingBlock.onmousemove = function(e) {
-            var widht_votes = e.pageX - ratingMargin;
+                userVote = Math.ceil(width_votes / oneStarWidth);
+                Dom.setStyle(ratingHover, 'width', (userVote * oneStarWidth) + 'px')
+            },
+            onClick = function(e) {
+                if (currentRating == userVote) {
+                    setRating(currentRating);
+                } else {
+                    <#-- установить рейтинг -->
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI + "lecm/document/api/setRating",
+                        dataObj: {
+                            "nodeRef": nodeRef,
+                            "rating": userVote
+                        },
+                        successCallback: {
+                            fn: function refreshSuccess(response) {
+                                var json = response.json;
 
-            user_votes = Math.ceil(widht_votes / oneStarWidth);
-            Dom.setStyle(ratingHover, 'width', (user_votes * oneStarWidth) + 'px')
-        };
-        ratingBlock.onclick = function(e) {
-            <#-- установить рейтинг -->
-            Alfresco.util.Ajax.jsonPost({
-                url: Alfresco.constants.PROXY_URI + "lecm/document/api/setRating",
-                dataObj: {
-                    "nodeRef": nodeRef,
-                    "rating": user_votes
-                },
-                successCallback: {
-                    fn: function refreshSuccess(response) {
-                        var json = response.json;
-
-                        if (json && json.error == 0) {
-    //                        setVotes(user_votes * oneStarWidth);
-                            location.reload(); // чтобы обновились значения в "основных сведениях"
+                                if (json && json.error == 0) {
+                                    setRating(userVote);
+                                }
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function refreshFailure(response) {
+                                console.log(response);
+                            },
+                            scope: this
                         }
-                    },
-                    scope: this
-                },
-                failureCallback: {
-                    fn: function refreshFailure(response) {
-                        console.log(response);
-                    },
-                    scope: this
+                    });
                 }
-            });
+            };
+
+        var addListeners = function() {
+            ratingBlock.addEventListener('mouseover', onMouseOver);
+            ratingBlock.addEventListener('mouseout', onMouseOut);
+            ratingBlock.addEventListener('mousemove', onMouseMove);
+            ratingBlock.addEventListener('click', onClick);
+        };
+        var setRating = function(rating) {
+            currentRating = rating;
+            if (rating > 0) {
+                Dom.setStyle(ratingVotes, 'width', (rating * oneStarWidth) + 'px');
+                Dom.get('rating_title').innerHTML = yourVote;
+                Dom.setStyle(change, 'display', 'inline');
+
+                ratingBlock.removeEventListener('mouseover', onMouseOver);
+                ratingBlock.removeEventListener('mouseout', onMouseOut);
+                ratingBlock.removeEventListener('mousemove', onMouseMove);
+                ratingBlock.removeEventListener('click', onClick);
+            } else {
+                addListeners();
+            }
+            onMouseOut();
         };
 
-        <#-- Получение рейтинга для текущего пользователя -->
+        change.onclick = function(e) {
+            addListeners();
+            Dom.setStyle(change, 'display', 'none');
+        };
+
+        <#-- Получение рейтинга для текущего пользователя (при загрузке страницы)-->
         Alfresco.util.Ajax.request({
             url: Alfresco.constants.PROXY_URI + "lecm/document/api/getRating?nodeRef=" + nodeRef,
             successCallback: {
@@ -84,8 +112,7 @@
 
                     if (json) {
                         var rating = json.myRating;
-                        var starsWidth = rating * oneStarWidth;
-                        setVotes(starsWidth);
+                        setRating(rating);
                     }
                 },
                 scope: this

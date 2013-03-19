@@ -48,6 +48,7 @@
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
