@@ -1,6 +1,7 @@
 package ru.it.lecm.document.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.documents.DocumentEventCategory;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
@@ -152,7 +155,7 @@ public class DocumentPolicy
 		policyComponent.bindClassBehaviour( NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				TYPE_DOCUMENT, new JavaBehaviour(this, "onCreateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                TYPE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties"));
+                TYPE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		logger.info( "Policy installed");
 	}
@@ -199,10 +202,15 @@ public class DocumentPolicy
 	}
 
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        if (before.size() == after.size()) {
-            businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"", null);
+        final String prevRating = (String) before.get(DocumentService.PROP_RATING);
+        final String curRating = (String) after.get(DocumentService.PROP_RATING);
 
+        if (!curRating.equals(prevRating)) {
+            businessJournalService.log(nodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг документу \"#mainobject\"");
+        } else if (before.size() == after.size()) {
+            businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"");
         }
+
     }
 
 }
