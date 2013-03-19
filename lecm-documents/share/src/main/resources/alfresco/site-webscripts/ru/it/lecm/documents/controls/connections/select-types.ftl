@@ -52,11 +52,6 @@
 	<label for="${fieldHtmlId}-added">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 	<input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
 	<div id="${fieldHtmlId}-controls" class="selectone-control">
-		<div>
-			<input type="checkbox" id="${fieldHtmlId}-show-all">
-			<label for="${fieldHtmlId}-show-all" class="checkbox">${msg("connection.types.show.all")}</label>
-		</div>
-
 		<select id="${fieldHtmlId}-added" name="${field.name}_added" tabindex="0"
 		        <#if field.description??>title="${field.description}"</#if>
 		        <#if field.control.params.size??>size="${field.control.params.size}"</#if>

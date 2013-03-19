@@ -39,7 +39,6 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 		this.removedItemId = fieldHtmlId + "-removed";
 		this.controlId = fieldHtmlId;
 		this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
-		this.chbxShowAllId = fieldHtmlId + "-show-all";
 
 		Bubbling.on("changeConnectedDocument", this.changeConnectedDocument, this);
 		return this;
@@ -59,7 +58,6 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			controlId: null,
 			createNewButton: null,
 			selectItemId: null,
-			chbxShowAllId: null,
 			removedItemId: null,
 			currentDisplayValueId: null,
 			selectItem: null,
@@ -75,7 +73,6 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			{
 				this.selectItem = Dom.get(this.selectItemId);
 				Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
-				Event.on(this.chbxShowAllId, "click", this.populateSelect, this, true);
 				this.loadAllConnectionTypes();
 			},
 
@@ -113,39 +110,66 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			},
 
 			populateSelect: function() {
-				var chbxShowAll = Dom.get(this.chbxShowAllId);
-				var selectItems = null;
-				if (chbxShowAll.checked) {
-					selectItems = this.allConnectionTypes;
-				} else {
-					selectItems = this.typeSelectElements;
+				var recommendedItems = this.typeSelectElements;
+
+				var notRecommendedItems = [];
+				if (this.allConnectionTypes != null) {
+					if (recommendedItems != null) {
+						for (var i = 0; i < this.allConnectionTypes.length; i++) {
+							var exist = false;
+							for (var j = 0; j < recommendedItems.length; j++) {
+								if (this.allConnectionTypes[i].nodeRef == recommendedItems[j].nodeRef) {
+									exist = true;
+								}
+							}
+							if (!exist) {
+								notRecommendedItems.push(this.allConnectionTypes[i]);
+							}
+						}
+					} else {
+						notRecommendedItems = this.allConnectionTypes;
+					}
 				}
 
 				this.clearSelect();
-				if (selectItems != null) {
-					for (var i = 0; i < selectItems.length; i++) {
-						var node = selectItems[i];
+
+				this.insertSelectItems(recommendedItems);
+				if (recommendedItems != null && recommendedItems.length > 0 &&
+						notRecommendedItems != null && notRecommendedItems.length > 0) {
+
+					var optSplit = document.createElement('option');
+					optSplit.innerHTML = "---------------";
+					optSplit.disabled = "disabled";
+					this.selectItem.appendChild(optSplit);
+				}
+				this.insertSelectItems(notRecommendedItems);
+
+				this.onSelectChange();
+			},
+
+			insertSelectItems: function(items) {
+				if (items != null && items.length > 0) {
+					for (var i = 0; i < items.length; i++) {
+						var node = items[i];
 						var opt = document.createElement('option');
 						opt.innerHTML = node.name;
 						opt.value = node.nodeRef;
-                        var exist = false;
-                        if (this.existConnectionTypes != null) {
-                            for (var j = 0; j < this.existConnectionTypes.length; j++) {
-                                if (node.nodeRef == this.existConnectionTypes[j].nodeRef) {
-                                    exist = true;
-                                }
-                            }
-                        }
-                        if (exist) {
-                            opt.disabled = "disabled";
-                        }
+						var exist = false;
+						if (this.existConnectionTypes != null) {
+							for (var j = 0; j < this.existConnectionTypes.length; j++) {
+								if (node.nodeRef == this.existConnectionTypes[j].nodeRef) {
+									exist = true;
+								}
+							}
+						}
+						if (exist) {
+							opt.disabled = "disabled";
+						}
 						if (!exist && this.defaultSelectedValue != null && node.nodeRef == this.defaultSelectedValue) {
 							opt.selected = true;
 						}
 						this.selectItem.appendChild(opt);
 					}
-
-					this.onSelectChange();
 				}
 			},
 
