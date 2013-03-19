@@ -40,8 +40,6 @@
 
     <script type="text/javascript">//<![CDATA[
     (function () {
-        Alfresco.util.createTwister("${el}-heading", "DocumentMembers");
-
         function init() {
             documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
                     {

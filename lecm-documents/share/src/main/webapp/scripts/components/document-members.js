@@ -32,7 +32,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         LogicECM.DocumentMembers.superclass.constructor.call(this, htmlId);
 
         YAHOO.Bubbling.on("memberCreated", this.onRefresh, this);
-        /*YAHOO.Bubbling.on("dataItemsDeleted", this.onRefresh, this);*/
         return this;
     };
 
@@ -50,6 +49,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (linkEl != null) {
                     linkEl.onclick = this.onExpand.bind(this);
                 }
+
+                Alfresco.util.createTwister(this.id + "-heading", "DocumentMembers");
             },
 
             onExpand: function () {
@@ -59,10 +60,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/members-list",
                         dataObj: {
                             htmlid: this.id + Alfresco.util.generateDomId(),
-                            /*itemKind: "node",*/
                             nodeRef: this.options.nodeRef
-                            /*formId: "members",
-                            mode: "view"*/
                         },
                         successCallback: {
                             fn:function(response){
@@ -75,12 +73,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
             onRefresh: function (layer, args) {
+                var newId = this.id + "-" + Alfresco.util.generateDomId();
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-members",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + "-" + Alfresco.util.generateDomId()
+                            htmlid: newId
                         },
                         successCallback: {
                             fn:function(response){
@@ -88,6 +87,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
                                 }
+                                this.id = newId;
+                                this.onReady();
                             },
                             scope: this
                         },
