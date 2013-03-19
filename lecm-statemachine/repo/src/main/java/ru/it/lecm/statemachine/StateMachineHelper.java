@@ -26,6 +26,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.StatusChangeAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
@@ -55,6 +56,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
 	private static ServiceRegistry serviceRegistry;
 	private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+	private static OrgstructureBean orgstructureBean;
+
 
 	private static String BPM_PACKAGE_PREFIX = "bpm_";
 
@@ -77,7 +80,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		StateMachineHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
 	}
 
-	public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        StateMachineHelper.orgstructureBean = orgstructureBean;
+    }
+
+    public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
 		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
 		WorkflowService workflowService = serviceRegistry.getWorkflowService();
 		WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
@@ -291,14 +298,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		TaskQuery taskQuery = taskService.createTaskQuery();
-		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		if (task != null) {
-			Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
-			String activityId = ((ExecutionEntity) execution).getActivityId();
-			ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-			String processDefinitionId = process.getProcessDefinitionId();
-			result = getStateMachineActions(processDefinitionId, activityId, onFire);
-		}
+        if (taskId != null) {
+            Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+            if (task != null) {
+                Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+                String activityId = ((ExecutionEntity) execution).getActivityId();
+                ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+                String processDefinitionId = process.getProcessDefinitionId();
+                result = getStateMachineActions(processDefinitionId, activityId, onFire);
+            }
+        }
 		return result;
 	}
 
@@ -392,15 +401,68 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public Set<StateField> getStateFields(NodeRef document) {
-        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
-        String taskId = getCurrentTaskId(executionId);
-        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+        List<StateMachineAction> actions = getStatusChangeActions(document);
         Set<StateField> result = new HashSet<StateField>();
         for (StateMachineAction action : actions) {
             StatusChangeAction statusChangeAction = (StatusChangeAction) action;
             result.addAll(statusChangeAction.getFields());
         }
         return result;
+    }
+
+    @Override
+    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, String privilege) {
+        HashSet<String> privileges = new HashSet<String>();
+        privileges.add(privilege);
+        return  hasPrivilegeByEmployee(employee, document, privileges);
+    }
+
+    @Override
+    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, Collection<String> privileges) {
+        List<NodeRef> businessRoles = orgstructureBean.getEmployeeRoles(employee);
+        //Выбираем роли сотрудника
+        HashSet<String> employeeRoles = new HashSet<String>();
+        for (NodeRef role : businessRoles) {
+            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+            employeeRoles.add(name);
+        }
+
+        //Выбираем привилегии для ролей сотрудника
+        HashSet<String> employeePrivileges = new HashSet<String>();
+        List<StateMachineAction> actions = getStatusChangeActions(document);
+        for (StateMachineAction action : actions) {
+            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+            Map<String, String> statePrivileges = statusChangeAction.getPrivileges();
+            for (String role : employeeRoles) {
+                String privilege = statePrivileges.get(role);
+                if (privilege != null) {
+                    employeePrivileges.add(privilege);
+                }
+            }
+        }
+
+        for (String privilege : privileges) {
+            if (employeePrivileges.contains(privilege)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, String privilege) {
+        HashSet<String> privileges = new HashSet<String>();
+        privileges.add(privilege);
+        return hasPrivilegeByPerson(person, document, privileges);
+    }
+
+    @Override
+    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, Collection<String> privileges) {
+        NodeRef employee = orgstructureBean.getEmployeeByPerson(person);
+        if (employee == null) {
+            return false;
+        } else {
+            return hasPrivilegeByEmployee(employee, document, privileges);
+        }
     }
 
     public String getCurrentExecutionId(String taskId) {
@@ -514,5 +576,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		}
 		return result;
 	}
+
+    private List<StateMachineAction> getStatusChangeActions(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String taskId = getCurrentTaskId(executionId);
+        return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+    }
 
 }

@@ -50,6 +50,7 @@
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StateMachineHelper">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignExecution">
@@ -163,5 +164,20 @@
 		<property name="type" value="system" />
 		<property name="execution" value="take" />
 	</bean>
+
+    <bean id="statePrivileges" class="ru.it.lecm.statemachine.StatePrivileges" />
+
+    <bean id="statemachineScript" parent="baseJavaScriptExtension" class="ru.it.lecm.statemachine.script.StatemachineWebScriptBean"
+          depends-on="serviceOrgstructure">
+        <property name="extensionName">
+            <value>statemachine</value>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="stateMachineHelper">
+            <ref bean="stateMachineHelper"/>
+        </property>
+    </bean>
 
 </beans>

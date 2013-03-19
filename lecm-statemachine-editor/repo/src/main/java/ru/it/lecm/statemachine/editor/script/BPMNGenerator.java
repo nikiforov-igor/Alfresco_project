@@ -751,7 +751,7 @@ public class BPMNGenerator {
 			String permissionTypeValue = (String) nodeService.getProperty(permission.getChildRef(), StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE);
 			Element roleElement = doc.createElement("role");
 			roleElement.setAttribute("name", roleName);
-			roleElement.setAttribute("permission", permissionTypeValue);
+			roleElement.setAttribute("privilege", permissionTypeValue);
 			rolesElement.appendChild(roleElement);
 		}
 	}

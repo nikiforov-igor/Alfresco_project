@@ -30,15 +30,6 @@
 				</list>
 			</parameter>
 		</constraint>
-		<constraint name="lecm-stmeditor:permissionType" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>noaccess</value>
-					<value>readonly</value>
-					<value>full</value>
-				</list>
-			</parameter>
-		</constraint>
 	</constraints>
 
 	<types>
@@ -518,9 +509,6 @@
 				<property name="lecm-stmeditor:permissionTypeValue">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-					<constraints>
-						<constraint ref="lecm-stmeditor:permissionType" />
-					</constraints>
 				</property>
 			</properties>
 		</aspect>

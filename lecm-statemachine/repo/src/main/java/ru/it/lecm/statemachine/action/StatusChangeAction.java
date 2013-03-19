@@ -34,7 +34,8 @@ public class StatusChangeAction extends StateMachineAction {
 	private NodeRef folder = null;
 	private String uuid = null;
 	private boolean forDraft = false;
-	private Map<String,INodeACLBuilder.StdPermission> dynamicPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
+	private Map<String, String> staticPrivileges = new TreeMap<String, String>();
+	private Map<String, String> dynamicPrivileges = new TreeMap<String, String>();
 	private Set<StateField> fields = new HashSet<StateField>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
@@ -68,14 +69,13 @@ public class StatusChangeAction extends StateMachineAction {
         }
 
         //Инициализация ролей
-		Map<String, INodeACLBuilder.StdPermission> staticPermissions = new HashMap<String, INodeACLBuilder.StdPermission>();
 		Element roles = action.element("roles");
 		if (roles != null) {
 			Element staticRoleElement = roles.element("static-roles");
-			staticPermissions = initPermissions(staticRoleElement);
+			staticPrivileges = initPrivileges(staticRoleElement);
 
 			Element dynamicRoleElement = roles.element("dynamic-roles");
-			dynamicPermissions = initPermissions(dynamicRoleElement);
+			dynamicPrivileges = initPrivileges(dynamicRoleElement);
 		}
 
         //Если начальный статус, то папки для него не требуется
@@ -121,10 +121,17 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-		execBuildInTransactStatic(folder, staticPermissions);
+		//execBuildInTransactStatic(folder, staticPermissions);
 	}
 
-	@Override
+    public Map<String, String> getPrivileges() {
+        TreeMap<String, String> result = new TreeMap<String, String>();
+        result.putAll(staticPrivileges);
+        result.putAll(dynamicPrivileges);
+        return result;
+    }
+
+    @Override
 	public void execute(DelegateExecution execution) {
 		final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		NodeService nodeService = getServiceRegistry().getNodeService();
@@ -162,7 +169,7 @@ public class StatusChangeAction extends StateMachineAction {
 
 		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
-		execBuildInTransactDynamic(children, dynamicPermissions);
+		//execBuildInTransactDynamic(children, dynamicPermissions);
 	}
 
     public Set<StateField> getFields() {
@@ -184,22 +191,17 @@ public class StatusChangeAction extends StateMachineAction {
 
 	/**
 	 * Инициализирует список ролей из элемента role
-	 * @param rolesElement                      INodeACLBuilder.StdPermission.valueOf(value)
+	 * @param rolesElement
 	 * @return Список прав доступа для ролей
 	 */
-	private Map<String, INodeACLBuilder.StdPermission> initPermissions(Element rolesElement) {
-		Map<String, INodeACLBuilder.StdPermission> permissions = new HashMap<String, INodeACLBuilder.StdPermission>();
+	private Map<String, String> initPrivileges(Element rolesElement) {
+		Map<String, String> permissions = new TreeMap<String, String>();
 		if (rolesElement != null) {
 			List<Element> roleElements = rolesElement.elements("role");
 			for (Element roleElement : roleElements) {
 				String role = roleElement.attribute("name");
-				INodeACLBuilder.StdPermission permission;
-				try {
-					permission = INodeACLBuilder.StdPermission.valueOf(roleElement.attribute("permission"));
-				} catch (IllegalArgumentException e) {
-					permission = INodeACLBuilder.StdPermission.noaccess;
-				}
-				permissions.put(role, permission);
+                String privilege = roleElement.attribute("privilege");
+				permissions.put(role, privilege);
 			}
 		}
 		return permissions;

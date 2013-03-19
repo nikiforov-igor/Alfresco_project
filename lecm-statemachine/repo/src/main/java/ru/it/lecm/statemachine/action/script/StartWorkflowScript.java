@@ -62,7 +62,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 				NodeRef document = helper.getStatemachineDocument(executionId);
 				Expression expression = new Expression(document, serviceRegistry);
 
-				boolean access =true;
+				boolean access = true;
                 Conditions conditions = nextState.getConditionAccess();
                 for (Conditions.Condition condition : conditions.getConditions()) {
                     access = access && expression.execute(condition.getExpression());
