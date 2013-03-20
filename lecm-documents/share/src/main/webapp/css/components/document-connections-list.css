@@ -27,6 +27,10 @@
 	border-bottom: 1px solid #E4E4E4;
 }
 
+.connections-list .detail-list-item td.icon {
+	width: 70px;
+}
+
 .connections-list .detail-list-item .connection {
 	padding-left: 20px;
 
@@ -83,7 +87,8 @@ div.list-action-set a.list-action-link {
 	background-color: #F3F5FF;
 }
 
-div.list-action-set a.list-action-link:hover {
+div.list-action-set a.list-action-link:hover
+{
 	border: 1px solid #2b6eb5;
 	text-decoration: none;
 }
