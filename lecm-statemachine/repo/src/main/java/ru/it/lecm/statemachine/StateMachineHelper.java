@@ -364,7 +364,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		runtimeService.setVariable(execution.getId(), PROP_PARENT_PROCESS_ID, Long.valueOf(taskId));
 	}
 
-	public void setExecutionParamentersByTaskId(String taskId, Map<String, String> parameters) {
+	public void setExecutionParamentersByTaskId(String taskId, Map<String, Object> parameters) {
 		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
 		TaskQuery taskQuery = taskService.createTaskQuery();
 		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
@@ -373,7 +373,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		}
 	}
 
-	public void setExecutionParameters(String executionId, Map<String, String> parameters) {
+	public void setExecutionParameters(String executionId, Map<String, Object> parameters) {
 		for (String key : parameters.keySet()) {
 			RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 			runtimeService.setVariable(executionId.replace(ACTIVITI_PREFIX, ""), key, parameters.get(key));

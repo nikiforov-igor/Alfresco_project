@@ -11,6 +11,7 @@ import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.expression.Expression;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -83,7 +84,12 @@ public class EndWorkflowEvent implements ExecutionListener {
 			boolean isTrasitionValid = false;
 			for (StateMachineAction action : transitionActions) {
 				TransitionAction transitionAction = (TransitionAction) action;
-				isTrasitionValid = isTrasitionValid || expression.execute(transitionAction.getExpression());
+                boolean currentTransitionValid = expression.execute(transitionAction.getExpression());
+                HashMap<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put(transitionAction.getVariableName(), currentTransitionValid);
+                helper.setExecutionParamentersByTaskId(taskId, parameters);
+
+                isTrasitionValid = isTrasitionValid || currentTransitionValid;
 			}
 
 			if (isTrasitionValid) {

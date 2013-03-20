@@ -9,8 +9,8 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
@@ -90,7 +90,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 
 
 				if (access) {
-					HashMap<String, String> parameters = new HashMap<String, String>();
+					HashMap<String, Object> parameters = new HashMap<String, Object>();
 					parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
 					helper.setExecutionParamentersByTaskId(taskId, parameters);
 					helper.nextTransition(taskId);

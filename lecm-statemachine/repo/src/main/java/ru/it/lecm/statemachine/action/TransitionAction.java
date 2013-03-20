@@ -43,4 +43,8 @@ public class TransitionAction extends StateMachineAction {
 	public String getExpression() {
 		return expressionValue;
 	}
+
+    public String getVariableName() {
+        return variableName;
+    }
 }

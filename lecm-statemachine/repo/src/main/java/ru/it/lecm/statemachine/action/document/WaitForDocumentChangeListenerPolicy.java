@@ -72,7 +72,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
             }
 
             if (result != null) {
-                HashMap<String, String> parameters = new HashMap<String, String>();
+                HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put(result.getOutputVariable(), result.getOutputValue());
                 helper.setExecutionParamentersByTaskId(taskId, parameters);
                 helper.stopDocumentProcessing(taskId);
