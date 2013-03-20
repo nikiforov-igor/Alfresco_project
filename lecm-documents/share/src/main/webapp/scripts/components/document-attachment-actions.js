@@ -36,15 +36,7 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 			});
 		},
 
-		/**
-		 * Delete Asset confirmed.
-		 *
-		 * @override
-		 * @method _onActionDeleteConfirm
-		 * @param asset {object} Object literal representing file or folder to be actioned
-		 * @private
-		 */
-		_onActionDeleteConfirm: function DocumentActions__onActionDeleteConfirm(asset)
+		_onActionDeleteConfirm: function (asset)
 		{
 			var path = asset.location.path,
 				fileName = asset.fileName,
@@ -71,7 +63,7 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 						},
 						callback:
 						{
-							fn: function DocumentActions_oADC_success(data)
+							fn: function (data)
 							{
 								window.location = $siteURL("document?nodeRef=" + me.options.documentNodeRef + "&view=attachments");
 							}
@@ -88,6 +80,78 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 						params:
 						{
 							nodeRef: nodeRef.uri
+						}
+					}
+				});
+		},
+
+		onActionEditOffline: function (asset)
+		{
+			var displayName = asset.displayName,
+				nodeRef = new Alfresco.util.NodeRef(asset.nodeRef);
+
+			this.modules.actions.genericAction(
+				{
+					success:
+					{
+						callback:
+						{
+							fn: function (data)
+							{
+								var nodeRef = data.json.results[0].nodeRef;
+								this.recordData.jsNode.setNodeRef(nodeRef);
+								window.location = $siteURL("document-attachment?nodeRef=" + nodeRef + "#editOffline");
+							},
+							scope: this
+						}
+					},
+					failure:
+					{
+						message: this.msg("message.edit-offline.failure", displayName)
+					},
+					webscript:
+					{
+						method: Alfresco.util.Ajax.POST,
+						name: "checkout/node/{nodeRef}",
+						params:
+						{
+							nodeRef: nodeRef.uri
+						}
+					}
+				});
+		},
+
+		onActionCancelEditing: function (record)
+		{
+			var displayName = record.displayName;
+
+			this.modules.actions.genericAction(
+				{
+					success:
+					{
+						callback:
+						{
+							fn: function (data)
+							{
+								var nodeRef = data.json.results[0].nodeRef;
+								this.recordData.jsNode.setNodeRef(nodeRef);
+								window.location = $siteURL("document-attachment?nodeRef=" + nodeRef);
+							},
+							scope: this
+						},
+						message: this.msg("message.edit-cancel.success", displayName)
+					},
+					failure:
+					{
+						message: this.msg("message.edit-cancel.failure", displayName)
+					},
+					webscript:
+					{
+						method: Alfresco.util.Ajax.POST,
+						name: "cancel-checkout/node/{nodeRef}",
+						params:
+						{
+							nodeRef: record.jsNode.nodeRef.uri
 						}
 					}
 				});
