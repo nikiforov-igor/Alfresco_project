@@ -108,7 +108,7 @@ public class StateMachineHandler implements ExecutionListener {
         StateMachineHandler.repositoryStructureHelper = repositoryStructureHelper;
     }
 
-    private StateMachineAction getStateMachineAction(Element actionElement) {
+    private StateMachineAction getStateMachineAction(final Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
@@ -123,8 +123,15 @@ public class StateMachineHandler implements ExecutionListener {
 			action.setLecmAclBuilderBean(lecmAclBuilderBean);
 			action.setBusinessJournalService(businessJournalService);
 			action.setRepositoryStructureHelper(repositoryStructureHelper);
+            final StateMachineAction currentAction = action;
 			try {
-				action.init(actionElement, processId);
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                    @Override
+                    public Void doWork() throws Exception {
+                        currentAction.init(actionElement, processId);
+                        return null;
+                    }
+                });
 			} catch (Exception e) {
 				logger.error("Error while init action", e);
 				throw new IllegalStateException(e);
