@@ -5,6 +5,7 @@ import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -45,6 +46,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private DictionaryBean dictionaryService;
 	private PersonService personService;
 	private AuthenticationService authService;
+    private DictionaryService dicService;
 
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -62,7 +64,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		this.authService = authService;
 	}
 
-	private static enum WhoseEnum {
+    public void setDicService(DictionaryService dicService) {
+        this.dicService = dicService;
+    }
+
+    private static enum WhoseEnum {
 		MY,
 		DEPARTMENT,
 		CONTROL,
@@ -263,8 +269,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
 		String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
 		if (link != null) {
-			return "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + link.toString() + "\">"
-					+ description + "</a>";
+            String linkUrl = isLECMDocument(link) ? DOCUMENT_LINK_URL : LINK_URL;
+            return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">"
+                        + description + "</a>";
 		} else {
 			return description;
 		}
@@ -694,5 +701,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         }
 
         return result;
+    }
+
+    private boolean isLECMDocument(NodeRef document){
+        QName testType = nodeService.getType(document);
+        Collection<QName> subDocumentTypes = dicService.getSubTypes(TYPE_BASE_DOCUMENT, true);
+        return subDocumentTypes != null && subDocumentTypes.contains(testType);
     }
 }

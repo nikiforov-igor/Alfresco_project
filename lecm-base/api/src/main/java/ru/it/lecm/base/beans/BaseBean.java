@@ -42,6 +42,8 @@ public abstract class BaseBean implements InitializingBean {
 	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
 	final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
+    public static final QName TYPE_BASE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/document/1.0", "base");
+
 	/**
 	 * карта с папками из декларативного описания бина
 	 */

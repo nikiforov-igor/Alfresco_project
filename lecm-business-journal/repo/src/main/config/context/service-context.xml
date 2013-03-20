@@ -81,6 +81,7 @@
         <property name="searchService" ref="searchService"/>
         <property name="personService" ref="personService"/>
         <property name="authService" ref="authenticationService"/>
+        <property name="dicService" ref="dictionaryService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

@@ -94,6 +94,7 @@ public interface BusinessJournalService {
 	String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
 
 	String LINK_URL = "/share/page/view-metadata";
+    String DOCUMENT_LINK_URL = "/share/page/document";
     /**
      * Метод для создания записи бизнеса-журнала
      *
