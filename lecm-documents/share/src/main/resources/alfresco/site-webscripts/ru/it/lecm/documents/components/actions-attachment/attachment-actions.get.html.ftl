@@ -9,7 +9,8 @@
          rootNode: "${rootNode}",
          replicationUrlMapping: ${replicationUrlMappingJSON!"{}"},
          documentDetails: ${documentDetailsJSON},
-         repositoryBrowsing: ${(rootNode??)?string}
+         repositoryBrowsing: ${(rootNode??)?string},
+	     documentNodeRef: "${documentNodeRef!""}"
       }).setMessages(
          ${messages}
       );

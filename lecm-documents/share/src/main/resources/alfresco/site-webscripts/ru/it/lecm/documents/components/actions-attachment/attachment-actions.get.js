@@ -17,6 +17,25 @@ function main()
 	  documentDetails.item.actions = getShowAction(documentDetails.item.actions);
 	  model.documentDetailsJSON = jsonUtils.toJSONString(documentDetails);
       doclibCommon();
+
+	   if (documentDetails.item.parent !=- null) {
+		   var attachmentsFolder = AlfrescoUtil.getNodeDetails(documentDetails.item.parent.nodeRef);
+		   if (attachmentsFolder != null && attachmentsFolder.item.parent != null) {
+			   var categoryFolder = AlfrescoUtil.getNodeDetails(attachmentsFolder.item.parent.nodeRef);
+			   if (categoryFolder != null && categoryFolder.item.parent != null){
+				   var documentFolder = AlfrescoUtil.getNodeDetails(categoryFolder.item.parent.nodeRef);
+				   if (documentFolder != null) {
+					   model.documentNodeRef = documentFolder.item.node.nodeRef;
+					   var presentString = documentFolder.item.node.properties["lecm-document:present-string"];
+					   if (presentString != null) {
+						   model.documentName = presentString;
+					   } else {
+						   model.documentName = documentFolder.item.displayName;
+					   }
+				   }
+			   }
+		   }
+	   }
    }
 }
 
