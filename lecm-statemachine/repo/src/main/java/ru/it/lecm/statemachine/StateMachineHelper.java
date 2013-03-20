@@ -583,7 +583,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
             String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
             NodeRef ownerNodeRef = serviceRegistry.getPersonService().getPerson(owner);
             NodeRef employee = orgstructureBean.getEmployeeByPerson(ownerNodeRef);
-            result.add(employee);
+            if (employee != null) {
+                result.add(employee);
+            }
         }
         return result;
     }
