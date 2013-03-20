@@ -9,5 +9,13 @@
             <property name="cm:name">Присвоение рейтинга</property>
             <property name="lecm-busjournal:eventCategory-code">SET_RATING</property>
         </item>
+	    <item name="Создание связи">
+		    <property name="cm:name">Создание связи</property>
+		    <property name="lecm-busjournal:eventCategory-code">CREATE_DOCUMENT_CONNECTION</property>
+	    </item>
+	    <item name="Удаление связи">
+		    <property name="cm:name">Удаление связи</property>
+		    <property name="lecm-busjournal:eventCategory-code">DELETE_DOCUMENT_CONNECTION</property>
+	    </item>
     </items>
 </dictionary>

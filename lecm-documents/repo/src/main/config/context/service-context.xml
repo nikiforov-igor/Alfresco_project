@@ -172,6 +172,9 @@
         <property name="nodeService">
             <ref bean="nodeService"/>
         </property>
+	    <property name="businessJournalService">
+		    <ref bean="businessJournalService"/>
+	    </property>
     </bean>
 
     <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"
