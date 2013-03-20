@@ -174,22 +174,6 @@
         </property>
     </bean>
 
-    <bean id="documenPresentStringPolicy" class="ru.it.lecm.documents.policy.DocumentPresentStringPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
-        <property name="substituteService">
-            <ref bean="substitudeService"/>
-        </property>
-    </bean>
-
     <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"
           depends-on="transactionService, nodeService">
         <property name="transactionService" ref="transactionService"/>
@@ -333,6 +317,19 @@
         </property>
         <property name="freaquencyService">
             <ref bean="frequencyAnalysisService"/>
+        </property>
+    </bean>
+
+    <bean  id="documentPolicy" class="ru.it.lecm.documents.policy.DocumentPolicy"
+           init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+        <property name="substituteService">
+            <ref bean="substitudeService"/>
         </property>
     </bean>
 </beans>

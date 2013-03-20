@@ -148,11 +148,7 @@ public class StatusChangeAction extends StateMachineAction {
 				String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
 				List<String> objects = new ArrayList<String>(1);
 				objects.add(status);
-				if (forDraft) { // если стартовый статус - генерируем событие о создании в начальном статусе
-					getBusinessJournalService().log(initiator, child.getChildRef(),
-							EventCategory.ADD,
-							"Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
-				} else { // о переводе в другой статус
+				if (!forDraft) {
 					getBusinessJournalService().log(initiator, child.getChildRef(),
 							EventCategory.CHANGE_DOCUMENT_STATUS,
 							"Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\"", objects);
