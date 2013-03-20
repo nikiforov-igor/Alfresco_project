@@ -1,10 +1,6 @@
 package ru.it.lecm.statemachine;
 
-import org.alfresco.service.namespace.QName;
-
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,13 +22,38 @@ public interface WorkflowTaskBean {
 
     Date getDueDate();
 
-    String getWorkflowTaskState();
+    String getStatusMessage();
 
-    String getWorkflowTaskStateMessage();
+    String getType();
 
-    Map<QName, Serializable> getProperties();
+    String getTypeMessage();
 
-    public enum WorkflowTaskState {
-        WORKFLOWTASKSTATE_NA, WORKFLOWTASKSTATE_NEW, WORKFLOWTASKSTATE_OVERDUE, WORKFLOWTASKSTATE_SOON
+    int getPriority();
+
+    String getWorkflowTaskPriority();
+
+    String getPriorityMessage();
+
+    public enum WorkflowTaskType {
+        WORKFLOWTASKTYPE_NA, WORKFLOWTASKTYPE_OVERDUE, WORKFLOWTASKTYPE_SOON
+    }
+
+    public enum WorkflowTaskPriority {
+        WORKFLOWTASKPRIORITY_LOW(1), WORKFLOWTASKPRIORITY_MEDIUM(2), WORKFLOWTASKPRIORITY_HIGH(3);
+        int priority;
+
+        private WorkflowTaskPriority(int priority) {
+            this.priority = priority;
+        }
+
+        public static WorkflowTaskPriority getValue(int priority) {
+            for (WorkflowTaskPriority workflowTaskPriority : values()) {
+                if (workflowTaskPriority.priority == priority) {
+                    return workflowTaskPriority;
+                }
+            }
+
+            return null;
+        }
     }
 }

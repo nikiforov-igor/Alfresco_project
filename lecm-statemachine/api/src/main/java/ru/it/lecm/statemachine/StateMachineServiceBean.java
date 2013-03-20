@@ -22,11 +22,9 @@ public interface StateMachineServiceBean {
 
     String getCurrentTaskId(String executionId);
 
-    WorkflowTaskListBean getMyActiveTasks(String nodeRef, int loadCount);
-
-    List<WorkflowTaskBean> getMyCompleteTasks(String nodeRef);
-
     public boolean isDraft(NodeRef document);
 
     public List<NodeRef> getAssigneesForWorkflow(String workflowId);
+
+    WorkflowTaskListBean getTasks(String nodeRef, String type, String addSubordinatesTask, int loadCount);
 }

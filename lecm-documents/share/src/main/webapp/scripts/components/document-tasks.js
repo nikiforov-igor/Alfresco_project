@@ -12,7 +12,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * DocumentHistory
  *
  * @namespace LogicECM
- * @class LogicECM.DocumentMembers
+ * @class LogicECM.DocumentTasks
  */
 (function () {
     /**
@@ -25,7 +25,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * DocumentHistory constructor.
      *
      * @param {String} htmlId The HTML id of the parent element
-     * @return {LogicECM.DocumentMembers} The new DocumentHistory instance
+     * @return {LogicECM.DocumentTasks} The new DocumentTasks instance
      * @constructor
      */
     LogicECM.DocumentTasks = function DocumentTasks_constructor(htmlId) {
@@ -37,30 +37,36 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentTasks.prototype,
         {
-//            onReady: function DocumentHistory_onReady() {
-//                var linkEl = Dom.get(this.id + "-action-expand");
-//                linkEl.onclick = this.onExpand.bind(this);
-//            },
+            tasksType: "active",
+
+            onReady: function DocumentTasks_onReady() {
+                var linkEl = Dom.get(this.id + "-action-expand");
+                linkEl.onclick = this.onExpand.bind(this);
+            },
+
+            setTasksType: function(value) {
+                this.tasksType = value;
+            },
 
             onExpand: function () {
-                // Обновляем форму и раскрываем в "большой области"
-                Alfresco.util.Ajax.request(
-                    {
-                        //TODO: this is stub!!! implement main area
-                        url: Alfresco.constants.PROXY_URI + "/lecm/statemachine/api/tasks/active",
-                        dataObj: {
-                            nodeRef: this.options.nodeRef
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        htmlid: this.id + Alfresco.util.generateDomId(),
+                        tasksType: this.tasksType
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var text = response.serverResponse.responseText;
+                            this.expandView(text);
                         },
-                        successCallback: {
-                            fn: function (response) {
-                                this.expandView(response.serverResponse.responseText);
-                            },
-                            scope: this
-                        },
-                        failureMessage: this.msg("message.failure"),
-                        scope: this,
-                        execScripts: true
-                    });
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
             }
         }, true);
 })();

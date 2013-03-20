@@ -94,3 +94,50 @@
 .highlight_field {
     border: 1px red solid;
 }
+
+/**************** Workflow Task List *******************************/
+.workflow-task {
+    border-top: 1px solid #CCCCCC;
+    padding-top: 5px;
+    padding-bottom: 40px;
+}
+.workflow-tasks-container {
+    padding-left: 40px;
+    padding-top: 10px;
+}
+.workflow-tasks-category {
+    padding-top: 12px;
+}
+.workflow-tasks-category-title {
+    font-size:20px;
+    font-weight:bold;
+    color:#666666;
+    padding-bottom: 10px;
+}
+.workflow-task-list-picture {
+    background-repeat: no-repeat;
+    margin-left: 18px;
+    float: left;
+    width: 16px;
+    margin-right: 35px;
+}
+.WORKFLOWTASKPRIORITY_LOW {
+    background-image: url("/share/res/components/images/priority-low-16.png");
+}
+.WORKFLOWTASKPRIORITY_MEDIUM {
+    background-image: url("/share/res/components/images/priority-medium-16.png");
+}
+.WORKFLOWTASKPRIORITY_HIGH {
+    background-image: url("/share/res/components/images/priority-high-16.png");
+}
+.workflow-task-list-left-column {
+    float:left;
+    width: 200px;
+}
+.workflow-task-list-label {
+    color: #999999;
+}
+.workflow-description {
+    padding-top: 7px;
+    padding-bottom: 3px;
+}

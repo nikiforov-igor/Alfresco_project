@@ -1,7 +1,7 @@
 <webscript>
 	<shortname>Get Tasks</shortname>
 	<description>Get Tasks</description>
-	<url>/lecm/statemachine/api/tasks/completed?nodeRef={nodeRef}</url>
+	<url>/lecm/statemachine/api/tasks</url>
 	<authentication>user</authentication>
 	<format default="json"/>
 	<transaction>required</transaction>

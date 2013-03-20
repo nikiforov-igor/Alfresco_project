@@ -23,7 +23,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -33,7 +32,6 @@ import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListPageBean;
-import ru.it.lecm.statemachine.bean.WorkflowTaskPageBean;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
@@ -139,104 +137,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		return instanceId;
 
 	}
-
-    @Override
-    public WorkflowTaskListBean getMyActiveTasks(String nodeRef, int loadCount) {
-        List<WorkflowTaskBean> myTasks = getMyTasks(nodeRef, true);
-        if (loadCount == 0 || myTasks.size() <= loadCount) {
-            return new WorkflowTaskListPageBean(myTasks, myTasks.size());
-        }
-
-        return new WorkflowTaskListPageBean(myTasks.subList(0, loadCount), myTasks.size());
-    }
-
-    @Override
-    public List<WorkflowTaskBean> getMyCompleteTasks(String nodeRef) {
-        return getMyTasks(nodeRef, false);
-    }
-
-    private List<WorkflowTaskBean> getMyTasks(String nodeRef, boolean isActive) {
-        List<WorkflowTask> tasks = getTasksForContent(nodeRef, isActive);
-
-        PersonService personService = serviceRegistry.getPersonService();
-        NodeRef loggedUser = personService.getPerson(AuthenticationUtil.getFullyAuthenticatedUser());
-
-        List<WorkflowTask> myTasks = filterTasks(tasks, Collections.singletonList(loggedUser));
-
-        return wrapTasks(myTasks);
-    }
-
-    private List<WorkflowTask> getTasksForContent(String nodeRef, boolean isActive) {
-        if (nodeRef == null || !NodeRef.isNodeRef(nodeRef)) {
-            return new ArrayList<WorkflowTask>();
-        }
-
-        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
-        WorkflowService workflowService = serviceRegistry.getWorkflowService();
-
-        NodeRef contentNodeRef = new NodeRef(nodeRef);
-        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, true);
-        for (WorkflowInstance workflow : activeWorkflows) {
-            List<WorkflowTask> tasks = getWorkflowTasks(workflow, isActive);
-            result.addAll(tasks);
-        }
-
-        if (!isActive) {
-            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, false);
-            for (WorkflowInstance workflow : completedWorkflows) {
-                List<WorkflowTask> tasks = getWorkflowTasks(workflow, false);
-                result.addAll(tasks);
-            }
-        }
-
-        return result;
-    }
-
-    private List<WorkflowTask> getWorkflowTasks(WorkflowInstance workflow, boolean isActive) {
-        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
-        WorkflowService workflowService = serviceRegistry.getWorkflowService();
-
-        WorkflowTask startTask = workflowService.getStartTask(workflow.getId());
-
-        WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
-        taskQuery.setProcessId(workflow.getId());
-        taskQuery.setTaskState(isActive ? WorkflowTaskState.IN_PROGRESS : WorkflowTaskState.COMPLETED);
-        taskQuery.setActive(isActive);
-
-        List<WorkflowTask> workflowTasks = workflowService.queryTasks(taskQuery);
-        for (WorkflowTask workflowTask : workflowTasks) {
-            if (!startTask.getId().equals(workflowTask.getId())) {
-                result.add(workflowTask);
-            }
-        }
-
-        return result;
-    }
-
-    //TODO: compare by owner names
-    private List<WorkflowTask> filterTasks(List<WorkflowTask> tasks, List<NodeRef> assignees) {
-        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
-
-        for (WorkflowTask task : tasks) {
-            String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
-            NodeRef ownerNodeRef = serviceRegistry.getPersonService().getPerson(owner);
-
-            if (assignees.contains(ownerNodeRef)) {
-                result.add(task);
-            }
-        }
-
-        return result;
-    }
-
-    private List<WorkflowTaskBean> wrapTasks(List<WorkflowTask> tasks) {
-        List<WorkflowTaskBean> result = new ArrayList<WorkflowTaskBean>();
-        for (WorkflowTask task : tasks) {
-            result.add(new WorkflowTaskPageBean(task));
-        }
-
-        return result;
-    }
 
     public void stopUserWorkflowProcessing(DelegateExecution delegateExecution) {
 		Object taskId = delegateExecution.getVariable(PROP_PARENT_PROCESS_ID);
@@ -607,6 +507,118 @@ public class StateMachineHelper implements StateMachineServiceBean {
         String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String taskId = getCurrentTaskId(executionId);
         return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+    }
+
+    enum RequestTaskState {
+        NA, ACTIVE, COMPLETED, ALL;
+
+        public static RequestTaskState getValue(String name) {
+            try {
+                return valueOf(name.toUpperCase());
+            } catch (Exception e) {
+                return NA;
+            }
+        }
+    }
+
+    @Override
+    public WorkflowTaskListBean getTasks(String nodeRef, String state, String addSubordinatesTask, int myTasksLimit) {
+        RequestTaskState taskState = RequestTaskState.getValue(state);
+
+        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
+        if (taskState == RequestTaskState.ACTIVE || taskState == RequestTaskState.ALL) {
+            tasks.addAll(getTasksForContent(nodeRef, true));
+        }
+
+        if (taskState == RequestTaskState.COMPLETED || taskState == RequestTaskState.ALL) {
+            tasks.addAll(getTasksForContent(nodeRef, false));
+        }
+
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        List<WorkflowTask> myTasks = filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
+
+        boolean isBoss = orgstructureBean.isBoss(currentEmployee);
+        WorkflowTaskListPageBean result = new WorkflowTaskListPageBean(myTasks, myTasksLimit, isBoss);
+
+        boolean isAddSubordinatesTask = Boolean.valueOf(addSubordinatesTask);
+        if (isAddSubordinatesTask) {
+            List<NodeRef> subordinateEmployees = orgstructureBean.getBossSubordinate(currentEmployee);
+            List<WorkflowTask> subordinatesTasks = filterTasksByAssignees(tasks, subordinateEmployees);
+            result.setSubordinatesTasks(subordinatesTasks);
+        }
+
+        return result;
+    }
+
+    private List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
+        if (tasks == null || tasks.isEmpty() || assigneesEmployees == null || assigneesEmployees.isEmpty()) {
+            return new ArrayList<WorkflowTask>();
+        }
+
+        List<NodeRef> persons = new ArrayList<NodeRef>();
+        for (NodeRef employee : assigneesEmployees) {
+            NodeRef person = orgstructureBean.getPersonForEmployee(employee);
+            if (person != null) {
+                persons.add(person);
+            }
+        }
+
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+        for (WorkflowTask task : tasks) {
+            String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
+            NodeRef ownerPerson = serviceRegistry.getPersonService().getPerson(owner);
+            if (persons.contains(ownerPerson)) {
+                result.add(task);
+            }
+        }
+
+        return result;
+    }
+
+    private List<WorkflowTask> getTasksForContent(String nodeRef, boolean activeTasks) {
+        if (nodeRef == null || !NodeRef.isNodeRef(nodeRef)) {
+            return new ArrayList<WorkflowTask>();
+        }
+
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        NodeRef contentNodeRef = new NodeRef(nodeRef);
+
+        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, true);
+        for (WorkflowInstance workflow : activeWorkflows) {
+            List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
+            result.addAll(tasks);
+        }
+
+        if (!activeTasks) {
+            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, false);
+            for (WorkflowInstance workflow : completedWorkflows) {
+                List<WorkflowTask> tasks = getWorkflowTasks(workflow, false);
+                result.addAll(tasks);
+            }
+        }
+
+        return result;
+    }
+
+    private List<WorkflowTask> getWorkflowTasks(WorkflowInstance workflow, boolean activeTasks) {
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+
+        WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
+        taskQuery.setProcessId(workflow.getId());
+        taskQuery.setTaskState(activeTasks ? WorkflowTaskState.IN_PROGRESS : WorkflowTaskState.COMPLETED);
+        taskQuery.setActive(activeTasks);
+
+        WorkflowTask startTask = workflowService.getStartTask(workflow.getId());
+        List<WorkflowTask> workflowTasks = workflowService.queryTasks(taskQuery);
+        for (WorkflowTask workflowTask : workflowTasks) {
+            if (!startTask.getId().equals(workflowTask.getId())) {
+                result.add(workflowTask);
+            }
+        }
+
+        return result;
     }
 
 }

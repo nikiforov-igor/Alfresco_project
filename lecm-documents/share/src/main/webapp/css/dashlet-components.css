@@ -70,65 +70,50 @@
     text-decoration: none;
 }
 
-/***********My tasks *************/
+/***********Workflow tasks *************/
 
-.WORKFLOWTASKSTATE_NA {
+.WORKFLOWTASKTYPE_NA {
     display: none;
 }
 
-.WORKFLOWTASKSTATE_OVERDUE {
+.WORKFLOWTASKTYPE_OVERDUE {
     color: #FF0000;
 }
 
-.WORKFLOWTASKSTATE_NEW {
-    color: #006600;
-}
-
-.WORKFLOWTASKSTATE_SOON {
+.WORKFLOWTASKTYPE_SOON {
     color: #CC6600;
 }
 
-.my-task-date {
+.workflow-task-date {
     font-size: 12px;
     font-weight: bold;
     color: #666666;
     float: left;
 }
 
-.my-task-status {
+.workflow-task-status {
     font-size: 9px;
     font-weight: bold;
     text-align: right;
-    float: right;
 }
 
-.my-task-main-text {
-    clear: both;
+.workflow-task-main-text {
     padding-top: 5px;
 }
 
-.my-task-title {
+.workflow-task-title {
     font-weight: bold;
-    text-decoration: none;
 }
 
 .dashlet .my-task {
-    margin-left: 5px;
-    margin-right: 40px;
-    margin-top: 6px;
-    margin-bottom: 10px;
+    padding-right: 40px;
+    padding-bottom: 5px;
+    padding-top: 6px;
+    padding-left: 15px;
 }
 
-.dashlet .my-task-date {
-    margin-left: 12px;
-}
-
-.dashlet .my-task-status {
-    margin-left: 12px;
-}
-
-.dashlet .my-task-main-text {
-    margin-left: 20px;
+.dashlet .workflow-task-main-text {
+    padding-left: 9px;
 }
 
 .dashlet .total-tasks-count {
@@ -153,13 +138,30 @@
     font-weight: bold;
 }
 
-.my-task-right {
-    margin-left: 5px;
-    margin-right: 25px;
+.right-task {
     margin-top: 12px;
     margin-bottom: 10px;
     border-bottom: 1px solid #CCCCCC;
     padding-bottom: 5px;
+}
+
+.right-tasks-more {
+    text-decoration: underline;
+    font-size: 12px;
+    color: #999999;
+    float: left;
+    padding-left: 187px;
+    cursor: pointer;
+}
+
+.right-tasks-more-arrow {
+    background-image: url(/share/res/images/lecm-documents/gray_arrow.png);
+    float: right;
+    width: 12px;
+    height: 11px;
+    margin-right: 7px;
+    margin-top: 2px;
+    cursor: pointer;
 }
 
 .datagrid .action-set .onActionViewContent a {

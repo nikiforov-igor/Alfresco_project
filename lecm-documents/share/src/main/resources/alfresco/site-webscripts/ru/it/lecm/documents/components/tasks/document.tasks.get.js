@@ -6,7 +6,7 @@ function main() {
 }
 
 function getTasks(nodeRef) {
-    var url = "/lecm/statemachine/api/tasks/active?nodeRef=" + args["nodeRef"] + "&loadCount=2";
+    var url = "/lecm/statemachine/api/tasks?nodeRef=" + args["nodeRef"] + "&type=active&myTasksLimit=5";
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
