@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.events.INodeACLBuilder;
 import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -43,6 +43,7 @@ public class DocumentPolicy
 	final public QName TYPE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "document");
 	final public StdPermission DEFAULT_ACCESS = StdPermission.full;
 
+    final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 	// private fields
 	private PolicyComponent policyComponent;
 	private INodeACLBuilder lecmAclBuilder;
@@ -202,16 +203,22 @@ public class DocumentPolicy
 	}
 
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        final String prevRating = (String) before.get(DocumentService.PROP_RATING);
-        final String curRating = (String) after.get(DocumentService.PROP_RATING);
-
-        if (before.size() == after.size()) {
-            if (prevRating != null && !prevRating.equals(curRating)) {
-                businessJournalService.log(nodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг документу \"#mainobject\"");
-            } else {
+        if (!changeIgnoredProperties(before, after)) {
+            if (before.size() == after.size()) { // только при изменении свойств
                 businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в договор \"#mainobject\"");
             }
         }
+    }
+
+    private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        for (QName ignored : IGNORED_PROPERTIES) {
+            Object prev = before.get(ignored);
+            Object cur = after.get(ignored);
+            if (cur != null && !cur.equals(prev)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
