@@ -19,14 +19,14 @@
 		</tr>
 	</table>
 	<hr>
-	<div class="connections-table body scrollableList">
+	<table class="connections-table">
 		<#if connections?? && connections.items??>
 			<#list connections.items as item>
-				<div class="detail-list-item">
-					<div class="icon">
+				<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
+					<td class="icon">
 						<img src="/share/res/images/lecm-documents/document_img.png"/>
-					</div>
-					<div class="connection">
+					</td>
+					<td class="connection">
 						<div class="connection-type">
 							<#if item.type??>
 								${item.type.name!""}
@@ -44,12 +44,22 @@
 								</div>
 							</#if>
 						</div>
-					</div>
-					<hr>
-				</div>
+					</td>
+					<td class="list-actions-td">
+						<div class="list-action-set">
+							<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.presentString!""}"</#if>>
+								<a title="${msg("action.delete-connection.title")}" class="list-action-link" href="#">
+									<span>
+										${msg("action.delete-connection.title")}
+									</span>
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
 			</#list>
 		</#if>
-	</div>
+	</table>
 
 	<div class="space"></div>
 
@@ -63,14 +73,14 @@
 		</tr>
 	</table>
 	<hr>
-	<div class="connections-table body scrollableList">
+	<table class="connections-table">
 	<#if connectionsWithDocument?? && connectionsWithDocument.items??>
 		<#list connectionsWithDocument.items as item>
-			<div class="detail-list-item">
-				<div class="icon">
+			<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
+				<td class="icon">
 					<img src="/share/res/images/lecm-documents/document_img.png"/>
-				</div>
-				<div class="connection">
+				</td>
+				<td class="connection">
 					<div class="connection-type">
 						<#if item.type??>
 								${item.type.reverseName!""}
@@ -88,12 +98,11 @@
 							</div>
 						</#if>
 					</div>
-				</div>
-				<hr>
-			</div>
+				</td>
+			</tr>
 		</#list>
 	</#if>
-	</div>
+	</table>
 
 	<script type="text/javascript">//<![CDATA[
 		new LogicECM.DocumentConnectionsList("${el}").setOptions(

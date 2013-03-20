@@ -10,7 +10,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 (function()
 {
-	var Dom = YAHOO.util.Dom;
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		Bubbling = YAHOO.Bubbling;
 
 
 	LogicECM.DocumentConnectionsList = function (fieldHtmlId)
@@ -35,6 +37,30 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			{
 				this.loadConnectionsFolder();
 				this.connectButton = Alfresco.util.createYUIButton(this, "addConnection-button", this.onConnect.bind(this));
+
+				this.modules.actions = new LogicECM.module.Base.Actions();
+
+				var me = this;
+				var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
+				{
+					var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+					if (owner !== null)
+					{
+						if (typeof me[owner.className] == "function" && owner.dataset != null)
+						{
+							me[owner.className].call(me, owner.dataset);
+						}
+					}
+					return true;
+				};
+				Bubbling.addDefaultAction("list-action-link", fnActionHandler);
+
+				var rows = Dom.getElementsByClassName('detail-list-item');
+				for (var i = 0; i < rows.length; i++)
+				{
+					Event.addListener(rows[i], "mouseover", this.onEventHighlightRow, {row: rows[i]}, this);
+					Event.addListener(rows[i], "mouseout", this.onEventUnhighlightRow, {row: rows[i]}, this);
+				}
 			},
 
 			loadConnectionsFolder: function() {
@@ -152,6 +178,68 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						scope: this,
 						execScripts: true
 					});
+			},
+
+			onEventHighlightRow: function(e, itemInfo) {
+				Dom.addClass(itemInfo.row, "highlighted");
+			},
+
+			onEventUnhighlightRow: function(e, itemInfo) {
+				Dom.removeClass(itemInfo.row, "highlighted");
+			},
+
+			onActionDelete: function (data) {
+				if (data.noderef != null && data.name != null) {
+					var me = this;
+
+					var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(nodeRef) {
+						this.modules.actions.genericAction(
+							{
+								success:{
+									event:{
+										name:"connectionsUpdate"
+									},
+									message:me.msg("message.delete.success")
+								},
+								failure:{
+									message:me.msg("message.delete.failure")
+								},
+								webscript:{
+									method:Alfresco.util.Ajax.DELETE,
+									name:"delete",
+									queryString:"full=true"
+								},
+								config:{
+									requestContentType:Alfresco.util.Ajax.JSON,
+									dataObj:{
+										nodeRefs:[nodeRef]
+									}
+								}
+							});
+					};
+
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							title:this.msg("message.confirm.delete.title"),
+							text: this.msg("message.confirm.delete.description", '"' + data.name + '"'),
+							buttons:[
+								{
+									text:this.msg("button.delete"),
+									handler:function () {
+										this.destroy();
+										fnActionDeleteConfirm.call(me, data.noderef);
+									}
+								},
+								{
+									text:this.msg("button.cancel"),
+									handler:function () {
+										this.destroy();
+									},
+									isDefault:true
+								}
+							]
+						});
+				}
 			}
 		});
 })();
