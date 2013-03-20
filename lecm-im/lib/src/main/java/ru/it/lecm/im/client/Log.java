@@ -15,6 +15,15 @@ public class Log {
 
     private static native void ensureLogPresense() /*-{
 
+
+        if(!window.iJabLoggerEnabled){
+            window.imLog = function (){
+
+            };
+
+            return;
+        }
+
         if (window.Alfresco && window.Alfresco.logger) {
             window.imLog = function (message) {
                 Alfresco.logger.trace("IMLog: " + message);

@@ -24,7 +24,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import ru.it.lecm.im.client.data.XmppConf;
@@ -446,9 +445,9 @@ public class XmppClient
 	private void loginByCookieField()
 	{
         Log.log("XmmpClient.loginByCookieField()");
-        String userName = Cookies.getCookie(conf.getUserCookieField());
+        String userName = getLogin();
 		userName = userName==null?"":userName;
-		String pwd = Cookies.getCookie(conf.getPasswordCookieField());
+		String pwd = getPassword();
 		pwd = pwd==null?"":pwd;
 		if(userName.length() == 0||pwd.length() == 0)
 			return;
@@ -457,7 +456,15 @@ public class XmppClient
 		connect(userName,pwd);
 		
 	}
-	
+
+    public static native String getLogin() /*-{
+        return $wnd.iJabPass;
+    }-*/;
+
+    public static native String getPassword() /*-{
+        return $wnd.iJabPass;
+    }-*/;
+
 	private void loginAnonymous()
 	{
         Log.log("XmppClient.loginAnonymous()");
@@ -465,8 +472,6 @@ public class XmppClient
 			return;
 		String userName = conf.getAnonymousPrefix() + TextUtils.genUniqueId();
 		connect(userName,userName);
-		//connect("mirco","123456");
-		//connect("imdev","imdev631");
 	}
 	
 	private void connect(final String id,final String password)

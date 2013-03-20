@@ -6,41 +6,24 @@ var spamCall = function(callback)
 };
 
 // Авторизация
-
-function setCookie(c_name,value,exdays)
-{
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie=c_name + "=" + c_value;
-}
-
 if (window.Alfresco && window.Alfresco.constants && window.Alfresco.constants.USERNAME ){
-    setCookie('JID', Alfresco.constants.USERNAME, new Date() + 1);
-    setCookie('JIDPWD', Alfresco.constants.USERNAME, new Date() + 1);
+    window.iJabPass = Alfresco.constants.USERNAME;
 }
-else
-{
-    // debug fallbak
-    setCookie('JID', 'q', new Date() + 1);
-    setCookie('JIDPWD', 'q', new Date() + 1);
-
+else{
+    window.iJabPass = 'q';// debug fallback
 }
 
 // Скрытие чата
-
 var toggleChat = function()
 {
     if (window.iJab)
     {
         window.iJab.toggleIsVisible();
     }
-
 };
 
 
-// Счетчик сообщений
-
+// Обновление счетчика непрочитанных сообщений
 var updateMessagesCount = function (c)
 {
     YAHOO.Bubbling.fire("ru.it.lecm.im.update-messages-count",
@@ -57,15 +40,17 @@ var updateMessagesCountSubscriber = function(callback){
     });
 };
 
-// Конфигурация мессенджера
+// Разренение логгирования
+window.iJabLoggerEnabled = false;
 
+// Конфигурация мессенджера
 var iJabConf =
 {
     client_type:"xmpp",
     theme:"standard",
     debug:false,
-    avatar_url:"http://dummyimage.com/32x32/?text={username}",
-    //avatar_url:"/share/proxy/alfresco/slingshot/profile/avatar/{username}",
+    //avatar_url:"http://dummyimage.com/32x32/?text={username}",
+    avatar_url:"/share/proxy/alfresco/slingshot/profile/avatar/{username}",
     enable_roster_manage:false,
     enable_talkto_stranger:true,
     expand_bar_default:true,
@@ -79,10 +64,8 @@ var iJabConf =
     talkto_spam_repeat:2,
     xmpp:{
         domain:"localhost",
-        //http_bind:"/share/proxy/alfresco/bosh",
         http_bind:"/share/proxy/alfresco/http-bind",
-        //http_bind:"http://127.0.0.1:7070/http-bind/",
-        //http_bind:"https://127.0.0.1:7443/http-bind/",
+        //http_bind:"http://localhost:7070/http-bind/",
         host:"",
         port:5222,
         server_type:"ejabberd",
