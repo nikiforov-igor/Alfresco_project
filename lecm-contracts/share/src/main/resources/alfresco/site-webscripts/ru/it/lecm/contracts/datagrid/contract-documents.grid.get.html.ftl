@@ -127,13 +127,13 @@
                     showExtendSearchBlock: true,
                     actions: [
                         {
-                            type: "datagrid-action-link-${bubblingLabel!'contract'}",
+                            type: "datagrid-action-link-${bubblingLabel!'contracts'}",
                             id: "onActionEdit",
                             permission: "edit",
                             label: "${msg("actions.edit")}"
                         },
                         {
-                            type: "datagrid-action-link-${bubblingLabel!'contract'}",
+                            type: "datagrid-action-link-${bubblingLabel!'contracts'}",
                             id: "onActionDelete",
                             permission: "delete",
                             label: "${msg("actions.delete-row")}"
@@ -142,7 +142,7 @@
                     allowCreate: false,
                     showActionColumn: true,
                     showCheckboxColumn: true,
-                    bubblingLabel: "${bubblingLabel!"contract"}",
+                    bubblingLabel: "${bubblingLabel!"contracts"}",
                     attributeForShow:"cm:name"
                 }).setMessages(${messages});
 			}
