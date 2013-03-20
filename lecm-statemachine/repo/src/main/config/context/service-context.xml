@@ -92,6 +92,7 @@
 		  class="ru.it.lecm.statemachine.action.script.StartWorkflowScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.actions.get"

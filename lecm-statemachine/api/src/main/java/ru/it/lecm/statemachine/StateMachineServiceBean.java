@@ -27,4 +27,6 @@ public interface StateMachineServiceBean {
     List<WorkflowTaskBean> getMyCompleteTasks(String nodeRef);
 
     public boolean isDraft(NodeRef document);
+
+    public List<NodeRef> getAssigneesForWorkflow(String workflowId);
 }

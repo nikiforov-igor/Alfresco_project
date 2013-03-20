@@ -7,6 +7,7 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.Conditions;
@@ -29,10 +30,15 @@ import java.util.Map;
 public class StartWorkflowScript extends DeclarativeWebScript {
 
 	private static ServiceRegistry serviceRegistry;
+    private static DocumentMembersService documentMembersService;
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		StartWorkflowScript.serviceRegistry = serviceRegistry;
 	}
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        StartWorkflowScript.documentMembersService = documentMembersService;
+    }
 
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
@@ -84,7 +90,14 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 						WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
 						new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 						helper.setInputVariables(executionId, dependencyExecution, nextState.getVariables().getInput());
-					}
+
+                        //Добавляем участников к документу.
+                        List<NodeRef> assignees = helper.getAssigneesForWorkflow(dependencyExecution);
+                        for (NodeRef assignee : assignees) {
+                            documentMembersService.addMember(document, assignee, null);
+                        }
+
+                    }
 				}
 			}
 		} else if ("user".equals(actionType)){
@@ -120,6 +133,12 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 					new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 
 					helper.setInputVariables(executionId, dependencyExecution, workflow.getVariables().getInput());
+
+                    //Добавляем участников к документу.
+                    List<NodeRef> assignees = helper.getAssigneesForWorkflow(dependencyExecution);
+                    for (NodeRef assignee : assignees) {
+                        documentMembersService.addMember(document, assignee, null);
+                    }
 				}
 			}
 		}

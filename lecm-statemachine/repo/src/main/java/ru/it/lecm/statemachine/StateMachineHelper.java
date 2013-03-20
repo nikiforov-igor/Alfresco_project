@@ -339,7 +339,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
 	public List<StateMachineAction> getHistoricalTaskActions(String taskId, String onFire) {
 		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
 		HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
 		HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
 		if (task != null) {
 			result = getStateMachineActions(task.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
@@ -571,6 +570,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
         for (StateMachineAction action : actions) {
             StatusChangeAction statusChangeAction = (StatusChangeAction) action;
             result = result || statusChangeAction.isForDraft();
+        }
+        return result;
+    }
+
+    @Override
+    public List<NodeRef> getAssigneesForWorkflow(String workflowId) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        WorkflowInstance instance = serviceRegistry.getWorkflowService().getWorkflowById(workflowId);
+        List<WorkflowTask> tasks = getWorkflowTasks(instance, true);
+        for (WorkflowTask task : tasks) {
+            String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
+            NodeRef ownerNodeRef = serviceRegistry.getPersonService().getPerson(owner);
+            NodeRef employee = orgstructureBean.getEmployeeByPerson(ownerNodeRef);
+            result.add(employee);
         }
         return result;
     }
