@@ -21,12 +21,12 @@
  */
 package ru.it.lecm.im.client.xmpp.packet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author bmalkow
@@ -57,10 +57,30 @@ public class PacketGwtImpl implements Packet {
 	public String getCData() {
 		Node x = element.getFirstChild();
 		if (x != null) {
-			return x.getNodeValue();
+			//return x.getNodeValue();
+            return getNodeValue(element.getChildNodes());
 		}
 		return null;
 	}
+
+    private String getNodeValue(NodeList nodes)
+    {
+        StringBuilder sb = new StringBuilder();
+        int count = nodes.getLength();
+        for (int i = 0; i < count; i++)
+        {
+            Node node = nodes.item(i);
+            if ("br".equals(node.getNodeName()))
+            {
+                sb.append('\n');
+            }
+            else{
+                sb.append(node.getNodeValue());
+            }
+        }
+
+        return sb.toString();
+    }
 
 	public List<? extends Packet> getChildren() {
 		NodeList nodes = this.element.getChildNodes();
