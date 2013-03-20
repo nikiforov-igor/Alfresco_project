@@ -234,18 +234,35 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 								var name = form['prop_cm_name'];
 								if (name != null) {
-									var subscriptionName = this.options.objectDescription;
+									var subscriptionName = this.options.objectDescription.split(":").join("-");
 									if (this.currentEmployee != null && this.currentEmployee.name != null) {
 										subscriptionName += " " + this.currentEmployee.name;
 									}
 									var date = new Date();
 									subscriptionName += " " + Alfresco.util.formatDate(date, "dd.mm.yyyy HH-MM-ss");
-									name.value = subscriptionName;
+									name.value = this.getValidFileName(subscriptionName);
 								}
 							},
 							scope:this
 						}
 					}).show();
+			},
+
+			getValidFileName: function(str) {
+				var result = str;
+				result = result.split(":").join("-");
+				result = result.split("/").join("");
+				result = result.split("\\").join("");
+				result = result.split("|").join("");
+				result = result.split("?").join("");
+				result = result.split("<").join("");
+				result = result.split(">").join("");
+				result = result.split("*").join("");
+				result = result.split('"').join("");
+				result = result.split("'").join("");
+				result = result.split("[").join("");
+				result = result.split("]").join("");
+				return result;
 			},
 
 			onUnsubscribe: function(e, p_obj) {
