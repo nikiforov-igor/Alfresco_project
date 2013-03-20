@@ -48,6 +48,8 @@
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 

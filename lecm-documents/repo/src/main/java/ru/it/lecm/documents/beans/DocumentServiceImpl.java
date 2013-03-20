@@ -1,7 +1,9 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -11,7 +13,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +30,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private NodeService nodeService;
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
+    private Repository repositoryHelper;
+    private NamespaceService namespaceService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -37,6 +43,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         this.businessJournalService = businessJournalService;
     }
 
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
     @Override
     public String getRating(NodeRef documentNodeRef) {
         return (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_RATING);
@@ -123,6 +135,20 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
         nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
         nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
+    }
+
+    @Override
+    public Map<QName, Serializable> getProperties(NodeRef documentRef) {
+        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
+
+        for (Map.Entry<QName, Serializable> e: nodeService.getProperties(documentRef).entrySet()) {
+            if (!(namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("cm") ||
+                    namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("sys"))) {
+                properties.put(e.getKey(),e.getValue());
+            }
+        }
+        return properties;
+
     }
 
 }

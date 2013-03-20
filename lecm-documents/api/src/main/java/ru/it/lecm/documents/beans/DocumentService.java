@@ -3,6 +3,9 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * User: AIvkin
  * Date: 28.02.13
@@ -50,5 +53,12 @@ public interface DocumentService {
      * @return setted rating
      */
     public Integer setMyRating(NodeRef documentNodeRef, Integer rating);
+
+    /**
+     * Метод получения аттрибутов документа
+     * @param nodeRef
+     * @return attributes
+     */
+    public Map<QName, Serializable> getProperties(NodeRef nodeRef);
 
 }
