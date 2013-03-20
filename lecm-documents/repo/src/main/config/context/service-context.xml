@@ -78,13 +78,14 @@
     </bean>
 
     <bean id="documentService" init-method="init" class="ru.it.lecm.documents.beans.DocumentServiceImpl"
-          depends-on="transactionService, nodeService, serviceOrgstructure">
+          depends-on="transactionService, nodeService, serviceOrgstructure, contractsService">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
@@ -280,6 +281,7 @@
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
     <bean id="documentPrivileges" class="ru.it.lecm.statemachine.StatePrivileges">

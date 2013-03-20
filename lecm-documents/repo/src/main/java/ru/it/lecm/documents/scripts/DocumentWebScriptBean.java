@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -106,4 +107,21 @@ public class DocumentWebScriptBean extends BaseScopableProcessorExtension {
         return properties.put(object).toString();
     }
 
+    public ScriptNode createDocument(String type, Scriptable properties) {
+        Map<String, String> property = add(Context.getCurrentContext().getElements(properties));
+        NodeRef documentRef = documentService.createDocument(type, property);
+
+        return new ScriptNode(documentRef, serviceRegistry, getScope());
+    }
+    private Map<String, String> add(Object[] object){
+        Map<String, String> map =  new HashMap<String, String>();
+        String[] string = null;
+        String value = "";
+        for (Object obj : object) {
+            string = obj.toString().split("=");
+            value = (string.length < 2) ? "" : string[1];
+            map.put(string[0],value);
+        }
+        return map;
+    }
 }

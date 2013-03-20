@@ -1,11 +1,14 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -32,6 +35,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
+    private RepositoryStructureHelper repositoryStructureHelper;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -49,6 +53,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
     @Override
     public String getRating(NodeRef documentNodeRef) {
         return (String) nodeService.getProperty(documentNodeRef, DocumentService.PROP_RATING);
@@ -149,6 +157,39 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         }
         return properties;
 
+    }
+
+    /**
+     * Создание документа
+     * @param type тип документа lecm-contract:document
+     * @param property свойства документа
+     * @return
+     */
+    @Override
+    public NodeRef createDocument(String type, Map<String, String> property) {
+        // получение папки черновиков для документа
+        NodeRef person = repositoryHelper.getPerson();
+        NodeRef draftRef = repositoryStructureHelper.getDraftsRef(person);
+
+        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+        QName assocQName = ContentModel.ASSOC_CONTAINS;
+        QName nodeTypeQName =  QName.createQName(type, namespaceService);
+
+        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
+        for(Map.Entry<String, String> e: property.entrySet()) {
+            properties.put(QName.createQName(e.getKey(),namespaceService),e.getValue());
+        }
+
+        ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+
+        return associationRef.getChildRef();
+
+    }
+
+
+    @Override
+    public Map<QName, Serializable> changeProperties(NodeRef documentRef, Map<QName, Serializable> properties) {
+        return null;
     }
 
 }
