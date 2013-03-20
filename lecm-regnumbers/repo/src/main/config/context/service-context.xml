@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="${groupId}.${artifactId}.regNumbersBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/regnumbers-model.xml</value>
+
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/regnumbers</value>
+			</list>
+		</property>
+	</bean>
+	<!--	<bean id="${groupId}.${artifactId}.regNumbersTemplatesDicBootstrap"
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.regNumbersBootstrap,businessJournalLogEventsPolicy" >
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/regnumbers-temlates-dictionary.xml</value>
+			</list>
+		</property>
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/regnumbers-temlates-dictionary-items.xml</value>
+			</list>
+		</property>
+	</bean>-->
+
+	<bean id="regNumbersService" class="ru.it.lecm.regnumbers.bean.RegNumbersServiceImpl" init-method="init"
+		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap">
+		<property name="сounterFactory" ref="regNumbersCounterFactory"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
+	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>
+	<bean id="regNumbersCounterFactory" class="ru.it.lecm.regnumbers.counter.CounterFactory" init-method="init"
+		  parent="baseBean" depends-on="${groupId}.${artifactId}.regNumbersBootstrap, documentService">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="folders">
+			<map>
+				<entry key="#{REGNUMBERS_FOLDER_ID}" value="Сервис Регистрационные номера"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">
+		<property name="extensionName" value="regnumbers"/>
+		<property name="regNumbersService" ref="regNumbersService"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.regnumbers.regnum.test.get" class="ru.it.lecm.regnumbers.bean.RegNumWebTest" parent="webscript">
+		<property name="regNumbersServise" ref="regNumbersService"/>
+	</bean>
+</beans>

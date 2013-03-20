@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Test registration numbers</shortname>
+	<url>/lecm/regNumbers/regNumTest</url>
+	<authentication>user</authentication>
+</webscript>

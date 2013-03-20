@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Get document registration number</shortname>
+	<description>Generate registration number for document instance using given template</description>
+	<url>/lecm/regNumbers/getNumber?documentNodeRef={documentNodeRef}&amp;template={template}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+    <transaction>required</transaction>
+</webscript>
