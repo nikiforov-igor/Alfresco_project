@@ -24,7 +24,11 @@
 			<#list connections.items as item>
 				<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
 					<td class="icon">
-						<img src="/share/res/images/lecm-documents/document_img.png"/>
+						<#if item.connectedDocument?? && item.connectedDocument.type??>
+							<img src="/share/res/images/lecm-documents/type-icons/${item.connectedDocument.type?replace(":", "_")}.png"/>
+						<#else>
+							<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
+						</#if>
 					</td>
 					<td class="connection">
 						<div class="connection-type">
@@ -78,7 +82,12 @@
 		<#list connectionsWithDocument.items as item>
 			<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
 				<td class="icon">
-					<img src="/share/res/images/lecm-documents/document_img.png"/>
+					<#if item.primaryDocument?? && item.primaryDocument.type??>
+						<img src="/share/res/images/lecm-documents/type-icons/${item.primaryDocument.type?replace(":", "_")}.png"
+						     onerror="this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';"/>
+					<#else>
+						<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
+					</#if>
 				</td>
 				<td class="connection">
 					<div class="connection-type">
