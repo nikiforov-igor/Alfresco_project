@@ -25,7 +25,7 @@
             <#list members.items as item>
                 <#if i < skipCount>
                 <li style="padding-bottom: 0.4em;">
-                    ${view.showViewLink(item.employeeName, item.employeeRef)}
+                    ${view.showViewLink(item.employeeName, item.employeeRef)}<br/>
                     ${item.employeePosition}<br/>
                     <#assign i = i+1/>
                 </li>
