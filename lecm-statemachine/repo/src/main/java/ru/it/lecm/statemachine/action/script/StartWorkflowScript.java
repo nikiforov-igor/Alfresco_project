@@ -3,11 +3,15 @@ package ru.it.lecm.statemachine.action.script;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.Conditions;
@@ -30,7 +34,17 @@ import java.util.Map;
 public class StartWorkflowScript extends DeclarativeWebScript {
 
 	private static ServiceRegistry serviceRegistry;
+    private static DocumentFrequencyAnalysisService frequencyAnalysisService;
+    private static OrgstructureBean orgstructureService;
     private static DocumentMembersService documentMembersService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        StartWorkflowScript.orgstructureService = orgstructureService;
+    }
+
+    public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
+        StartWorkflowScript.frequencyAnalysisService = frequencyAnalysisService;
+    }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		StartWorkflowScript.serviceRegistry = serviceRegistry;
@@ -98,6 +112,9 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                         }
 
                     }
+
+                    //Обновляем счетчик действий для пользователя
+                    updateActionCount(document, actionId);
 				}
 			}
 		} else if ("user".equals(actionType)){
@@ -134,6 +151,9 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 
 					helper.setInputVariables(executionId, dependencyExecution, workflow.getVariables().getInput());
 
+                    //Обновляем счетчик действий для пользователя
+                    updateActionCount(document, actionId);
+                    
                     //Добавляем участников к документу.
                     List<NodeRef> assignees = helper.getAssigneesForWorkflow(dependencyExecution);
                     for (NodeRef assignee : assignees) {
@@ -145,5 +165,16 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 
 		return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.
 	}
+
+    private void updateActionCount(NodeRef document, String actionId) {
+        NodeService nodeService = serviceRegistry.getNodeService();
+        QName type = nodeService.getType(document);
+        String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+
+        NodeRef employee = orgstructureService.getCurrentEmployee();
+        if (employee != null) {
+            frequencyAnalysisService.updateFrequencyCount(employee, shortTypeName, actionId);
+        }
+    }
 
 }

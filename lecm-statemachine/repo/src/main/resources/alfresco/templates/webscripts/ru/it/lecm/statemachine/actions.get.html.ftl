@@ -7,6 +7,7 @@
 		<#list states as state>
 		{
 		actionId: "${state.actionId}",
+        count: "${state.count}",
 		label: "${state.label}",
 		workflowId: "${state.workflowId!"null"}",
         errors: [
@@ -30,6 +31,7 @@
         {
         id: "${workflow.id!"null"}",
         label: "${workflow.label}",
+        count: "${workflow.count}",
         workflowId: "${workflow.workflowId!"null"}",
         assignees: [
                    <#list workflow.assignees as assignee>

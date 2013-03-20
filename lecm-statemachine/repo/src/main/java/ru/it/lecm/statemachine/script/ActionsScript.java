@@ -14,6 +14,8 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
@@ -35,6 +37,16 @@ import java.util.*;
 public class ActionsScript extends DeclarativeWebScript {
 
     private static ServiceRegistry serviceRegistry;
+    private static DocumentFrequencyAnalysisService frequencyAnalysisService;
+    private static OrgstructureBean orgstructureService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        ActionsScript.orgstructureService = orgstructureService;
+    }
+
+    public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
+        ActionsScript.frequencyAnalysisService = frequencyAnalysisService;
+    }
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
@@ -76,15 +88,19 @@ public class ActionsScript extends DeclarativeWebScript {
                                         }
                                     }
 
+                                    long count = getActionCount(nodeRef, state.getActionId());
+
                                     HashMap<String, Object> resultState = new HashMap<String, Object>();
                                     resultState.put("actionId", state.getActionId());
                                     resultState.put("label", state.getLabel());
                                     resultState.put("workflowId", state.getWorkflowId());
                                     resultState.put("errors", messages);
                                     resultState.put("fields", fields);
+                                    resultState.put("count", count);
                                     resultStates.add(resultState);
                                 }
                             }
+                            sort(resultStates);
                             result.put("states", resultStates);
 
                             ArrayList<HashMap<String, Object>> workflows = new ArrayList<HashMap<String, Object>>();
@@ -102,6 +118,9 @@ public class ActionsScript extends DeclarativeWebScript {
                                             fields.addAll(condition.getFields());
                                         }
                                     }
+
+                                    long count = getActionCount(nodeRef, entity.getId());
+
                                     HashMap<String, Object> workflow = new HashMap<String, Object>();
                                     workflow.put("id", entity.getId());
                                     workflow.put("label", entity.getLabel());
@@ -114,9 +133,11 @@ public class ActionsScript extends DeclarativeWebScript {
                                     workflow.put("assignees", refs);
                                     workflow.put("errors", messages);
                                     workflow.put("fields", fields);
+                                    workflow.put("count",count);
                                     workflows.add(workflow);
                                 }
                             }
+                            sort(workflows);
                             result.put("workflows", workflows);
                         }
                     }
@@ -124,6 +145,31 @@ public class ActionsScript extends DeclarativeWebScript {
             }
         }
         return result;
+    }
+
+    private long getActionCount(NodeRef nodeRef, String id) {
+        NodeService nodeService = serviceRegistry.getNodeService();
+        QName type = nodeService.getType(nodeRef);
+        String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+
+        NodeRef employee = orgstructureService.getCurrentEmployee();
+        long count = 0;
+        if (employee != null) {
+            count = frequencyAnalysisService.getFrequencyCount(employee, shortTypeName, id);
+        }
+        return count;
+    }
+
+    private void sort(ArrayList<HashMap<String, Object>> unsorted) {
+        class ElementComparator<T extends Map> implements Comparator<T> {
+            @Override
+            public int compare(T o1, T o2) {
+                Long count1 = (Long) o1.get("count");
+                Long count2 = (Long) o2.get("count");
+                return count2.compareTo(count1);
+            }
+        }
+        Collections.sort(unsorted, new ElementComparator<HashMap>());
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {

@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <!--
 	Licensed to the Apache Software Foundation (ASF) under one or more
 	contributor license agreements.  See the NOTICE file distributed with
@@ -17,7 +16,12 @@
 	limitations under the License.
 	
 -->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap, ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, documents.LogicEcmModelsConnectionAspectBootstrap,documents-members.LogicEcmModelsBootstrap">
         <property name="models">
@@ -40,6 +44,36 @@
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-document-member-model.xml</value>
             </list>
+        </property>
+    </bean>
+
+    <util:constant id="DFA_ROOT_ID" static-field="ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService.DFA_ROOT_ID"/>
+    <util:constant id="DFA_ROOT_NAME" static-field="ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService.DFA_ROOT_NAME"/>
+
+    <bean id="documents-frequency-analysis.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-document-frequency-analysis-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="frequencyAnalysisService" init-method="init" class="ru.it.lecm.documents.beans.DocumentFrequencyAnalysisServiceImpl" parent="baseBean"
+          depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary">
+       <!-- <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="substituteService" ref="substitudeService"/>-->
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="transactionService" ref="transactionService"/>
+        <!--<property name="searchService" ref="searchService"/>
+        <property name="personService" ref="personService"/>
+        <property name="authService" ref="authenticationService"/>-->
+        <!-- Автоматическое создание каталогов. -->
+        <property name="folders">
+            <map>
+                <entry key="#{DFA_ROOT_ID}" value="#{DFA_ROOT_NAME}"/>
+            </map>
         </property>
     </bean>
 
@@ -281,6 +315,22 @@
         </property>
         <property name="dictionaryService">
             <ref bean="dictionaryService"/>
+        </property>
+    </bean>
+
+    <bean id="documentFrequenciesPolicy" class="ru.it.lecm.documents.policy.DocumentFrequencyPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="freaquencyService">
+            <ref bean="frequencyAnalysisService"/>
         </property>
     </bean>
 </beans>

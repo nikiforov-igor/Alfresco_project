@@ -92,6 +92,8 @@
 		  class="ru.it.lecm.statemachine.action.script.StartWorkflowScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
@@ -99,6 +101,8 @@
 		  class="ru.it.lecm.statemachine.script.ActionsScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActions" />
