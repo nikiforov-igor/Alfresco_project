@@ -476,6 +476,12 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public String getDocumentStatus(NodeRef document) {
+        Serializable status = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATUS);
+        return status == null ? null : status.toString();
+    }
+
+    @Override
     public List<NodeRef> getAssigneesForWorkflow(String workflowId) {
         List<NodeRef> result = new ArrayList<NodeRef>();
         WorkflowInstance instance = serviceRegistry.getWorkflowService().getWorkflowById(workflowId);

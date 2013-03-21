@@ -35,4 +35,6 @@ public interface StateMachineServiceBean {
     public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef);
 
     WorkflowListBean getWorkflows(NodeRef nodeRef, String stateParam, int activeWorkflowsLimit);
+
+    public String getDocumentStatus(NodeRef document);
 }

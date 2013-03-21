@@ -82,6 +82,10 @@ public class StatemachineWebScriptBean extends BaseScopableProcessorExtension {
         return stateMachineHelper.getDocumentWorkflows(node.getNodeRef());
     }
 
+    public String getDocumentStatus(ScriptNode document) {
+        return stateMachineHelper.getDocumentStatus(document.getNodeRef());
+    }
+
     private Collection<String> convertToJavaCollection(Object privileges) {
         HashSet<String> result = new HashSet<String>();
         if (privileges instanceof String) {
