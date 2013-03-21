@@ -2,12 +2,12 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    AlfrescoUtil.param("tasksType");
-    model.data = getTasks(model.nodeRef, model.tasksType);
+    AlfrescoUtil.param("tasksState");
+    model.data = getTasks(model.nodeRef, model.tasksState);
 }
 
-function getTasks(nodeRef, tasksType) {
-    var url = "/lecm/statemachine/api/tasks?nodeRef=" + nodeRef + "&type=" + tasksType + "&addSubordinatesTask=true";
+function getTasks(nodeRef, tasksState) {
+    var url = "/lecm/statemachine/api/tasks?nodeRef=" + nodeRef + "&state=" + tasksState + "&addSubordinatesTask=true";
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         AlfrescoUtil.error(result.status, 'Could not get tasks for node ' + nodeRef);

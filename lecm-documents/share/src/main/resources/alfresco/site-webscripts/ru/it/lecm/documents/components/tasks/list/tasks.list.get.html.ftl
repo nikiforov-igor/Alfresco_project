@@ -1,19 +1,19 @@
 <#assign id = args.htmlid?js_string>
 
 <#assign activeSeleted = "">
-<#if tasksType == "active">
+<#if tasksState == "active">
     <#assign activeSeleted = "selected">
 </#if>
 
 <#assign completedSeleted = "">
-<#if tasksType == "completed">
+<#if tasksState == "completed">
     <#assign completedSeleted = "selected">
 </#if>
 
 <div class="workflow-tasks-container">
     <div>
         <span>${msg("tasklist.label.display")}</span>
-        <select id="${id}-tasks-types" style="margin-left: 13px;">
+        <select id="${id}-tasks-states" style="margin-left: 13px;">
             <option selected value="all">${msg("tasklist.option.all")}</option>
             <option ${activeSeleted} value="active">${msg("tasklist.option.active")}</option>
             <option ${completedSeleted} value="completed">${msg("tasklist.option.completed")}</option>
@@ -81,22 +81,21 @@
     </div>
 </div>
 
-
 <script type="text/javascript">//<![CDATA[
 (function () {
     YAHOO.util.Event.onDOMReady(function (){
-        YAHOO.util.Event.on("${id}-tasks-types", "change", onTasksTypesSelectChange, this, true);
+        YAHOO.util.Event.on("${id}-tasks-states", "change", onTasksStatesSelectChange, this, true);
     });
 
-    function onTasksTypesSelectChange() {
-        var typesSelect = Dom.get("${id}-tasks-types");
+    function onTasksStatesSelectChange() {
+        var statesSelect = Dom.get("${id}-tasks-states");
 
-        var selectValue = "";
-        if (typesSelect != null && typesSelect.value != null) {
-            selectValue = typesSelect.value;
+        var selectedValue = "";
+        if (statesSelect != null && statesSelect.value != null) {
+            selectedValue = statesSelect.value;
         }
 
-        documentTasksComponent.setTasksType(selectValue);
+        documentTasksComponent.setTasksState(selectedValue);
         documentTasksComponent.onExpand();
     }
 

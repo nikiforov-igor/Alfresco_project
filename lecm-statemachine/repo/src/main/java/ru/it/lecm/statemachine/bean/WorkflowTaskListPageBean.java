@@ -21,24 +21,8 @@ import java.util.*;
 public class WorkflowTaskListPageBean implements WorkflowTaskListBean {
     private List<WorkflowTaskBean> myTasks = new ArrayList<WorkflowTaskBean>();
     private List<WorkflowTaskBean> subordinateTasks = new ArrayList<WorkflowTaskBean>();
-    private int myTasksTotalCount;
-    private boolean showSubordinateTasks;
-
-    public WorkflowTaskListPageBean(List<WorkflowTask> myTasks, int myTasksLimit, boolean showSubordinateTasks) {
-        this.myTasksTotalCount = myTasks.size();
-        this.showSubordinateTasks = showSubordinateTasks;
-
-        List<WorkflowTask> myTasksToDisplay;
-        if (myTasksLimit > 0 && myTasksTotalCount > myTasksLimit) {
-            myTasksToDisplay = myTasks.subList(0, myTasksLimit);
-        } else {
-            myTasksToDisplay = myTasks;
-        }
-
-        for (WorkflowTask task : myTasksToDisplay) {
-            this.myTasks.add(new WorkflowTaskPageBean(task));
-        }
-    }
+    private int myTasksTotalCount = 0;
+    private boolean showSubordinateTasks = false;
 
     @Override
     public String getShowSubordinateTasks() {
@@ -51,7 +35,7 @@ public class WorkflowTaskListPageBean implements WorkflowTaskListBean {
     }
 
     @Override
-    public int getMyTasksLimitedCount() {
+    public int getMyTasksDisplayedCount() {
         return myTasks.size();
     }
 
@@ -65,6 +49,25 @@ public class WorkflowTaskListPageBean implements WorkflowTaskListBean {
         return subordinateTasks;
     }
 
+    public void setMyTasks(List<WorkflowTask> myTasks, int myTasksLimit) {
+        if (myTasks == null) {
+            return;
+        }
+
+        this.myTasksTotalCount = myTasks.size();
+
+        List<WorkflowTask> myTasksDisplayed;
+        if (myTasksLimit > 0 && myTasksTotalCount > myTasksLimit) {
+            myTasksDisplayed = myTasks.subList(0, myTasksLimit);
+        } else {
+            myTasksDisplayed = myTasks;
+        }
+
+        for (WorkflowTask task : myTasksDisplayed) {
+            this.myTasks.add(new WorkflowTaskPageBean(task));
+        }
+    }
+
     public void setSubordinatesTasks(List<WorkflowTask> subordinatesTasks) {
         if (subordinatesTasks == null) {
             return;
@@ -73,6 +76,10 @@ public class WorkflowTaskListPageBean implements WorkflowTaskListBean {
         for (WorkflowTask task : subordinatesTasks) {
             this.subordinateTasks.add(new WorkflowTaskPageBean(task));
         }
+    }
+
+    public void setShowSubordinateTasks(boolean showSubordinateTasks) {
+        this.showSubordinateTasks = showSubordinateTasks;
     }
 
     class WorkflowTaskPageBean implements WorkflowTaskBean {
@@ -110,7 +117,7 @@ public class WorkflowTaskListPageBean implements WorkflowTaskListBean {
         }
 
         public String getDescription() {
-        return workflowTask.getDescription();
+            return workflowTask.getDescription();
         }
 
         public Date getStartDate() {

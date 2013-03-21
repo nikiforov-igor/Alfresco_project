@@ -37,15 +37,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentTasks.prototype,
         {
-            tasksType: "active",
+            tasksState: "active",
 
             onReady: function DocumentTasks_onReady() {
                 var linkEl = Dom.get(this.id + "-action-expand");
                 linkEl.onclick = this.onExpand.bind(this);
             },
 
-            setTasksType: function(value) {
-                this.tasksType = value;
+            setTasksState: function(value) {
+                this.tasksState = value;
             },
 
             onExpand: function () {
@@ -54,7 +54,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     dataObj: {
                         nodeRef: this.options.nodeRef,
                         htmlid: this.id + Alfresco.util.generateDomId(),
-                        tasksType: this.tasksType
+                        tasksState: this.tasksState
                     },
                     successCallback: {
                         fn: function(response) {

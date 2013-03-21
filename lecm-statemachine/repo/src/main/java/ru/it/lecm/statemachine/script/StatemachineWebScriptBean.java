@@ -6,6 +6,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.WorkflowTaskListBean;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,6 +50,10 @@ public class StatemachineWebScriptBean extends BaseScopableProcessorExtension {
     public boolean hasPrivilegeByPerson(ScriptNode person, ScriptNode document, Object privileges) {
         Collection<String> privilegesCollection = convertToJavaCollection(privileges);
         return stateMachineHelper.hasPrivilegeByPerson(person.getNodeRef(), document.getNodeRef(), privilegesCollection);
+    }
+
+    public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
+        return stateMachineHelper.getTasks(node.getNodeRef(), stateParam, addSubordinatesTask, myTasksLimit);
     }
 
     private Collection<String> convertToJavaCollection(Object privileges) {

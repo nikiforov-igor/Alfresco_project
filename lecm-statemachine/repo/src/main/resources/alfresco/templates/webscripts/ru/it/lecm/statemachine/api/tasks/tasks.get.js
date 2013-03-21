@@ -1,5 +1,5 @@
 var nodeRef = args['nodeRef'];
-var type = args['type'];
+var state = args['state'];
 var addSubordinatesTask = args['addSubordinatesTask'];
 
 var myTasksLimit = args['myTasksLimit'];
@@ -7,7 +7,6 @@ if (myTasksLimit == null) {
     myTasksLimit = 0;
 }
 
-var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-var stateMachineHelper = ctx.getBean("stateMachineHelper");
+var node = search.findNode(nodeRef);
 
-model.data = stateMachineHelper.getTasks(nodeRef, type, addSubordinatesTask, myTasksLimit);
+model.data = statemachine.getTasks(node, state, addSubordinatesTask == "true", myTasksLimit);

@@ -10,13 +10,13 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface WorkflowTaskListBean {
-    List<WorkflowTaskBean> getMyTasks();
-
-    List<WorkflowTaskBean> getSubordinateTasks();
+    String getShowSubordinateTasks();
 
     int getMyTasksTotalCount();
 
-    int getMyTasksLimitedCount();
+    int getMyTasksDisplayedCount();
 
-    String getShowSubordinateTasks();
+    List<WorkflowTaskBean> getMyTasks();
+
+    List<WorkflowTaskBean> getSubordinateTasks();
 }

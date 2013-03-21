@@ -31,6 +31,7 @@ import ru.it.lecm.statemachine.action.StatusChangeAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.WorkflowListPageBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListPageBean;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
@@ -509,10 +510,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
     }
 
-    enum RequestTaskState {
+    enum BPMState {
         NA, ACTIVE, COMPLETED, ALL;
 
-        public static RequestTaskState getValue(String name) {
+        public static BPMState getValue(String name) {
             try {
                 return valueOf(name.toUpperCase());
             } catch (Exception e) {
@@ -522,25 +523,30 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public WorkflowTaskListBean getTasks(String nodeRef, String state, String addSubordinatesTask, int myTasksLimit) {
-        RequestTaskState taskState = RequestTaskState.getValue(state);
+    public WorkflowTaskListBean getTasks(NodeRef nodeRef, String stateParam, boolean isAddSubordinatesTask, int myTasksLimit) {
+        if (nodeRef == null) {
+            return new WorkflowTaskListPageBean();
+        }
+        BPMState state = BPMState.getValue(stateParam);
 
         List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
-        if (taskState == RequestTaskState.ACTIVE || taskState == RequestTaskState.ALL) {
+        if (state == BPMState.ACTIVE || state == BPMState.ALL) {
             tasks.addAll(getTasksForContent(nodeRef, true));
         }
 
-        if (taskState == RequestTaskState.COMPLETED || taskState == RequestTaskState.ALL) {
+        if (state == BPMState.COMPLETED || state == BPMState.ALL) {
             tasks.addAll(getTasksForContent(nodeRef, false));
         }
 
+        WorkflowTaskListPageBean result = new WorkflowTaskListPageBean();
+
         NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-        List<WorkflowTask> myTasks = filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
-
         boolean isBoss = orgstructureBean.isBoss(currentEmployee);
-        WorkflowTaskListPageBean result = new WorkflowTaskListPageBean(myTasks, myTasksLimit, isBoss);
+        result.setShowSubordinateTasks(isBoss);
 
-        boolean isAddSubordinatesTask = Boolean.valueOf(addSubordinatesTask);
+        List<WorkflowTask> myTasks = filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
+        result.setMyTasks(myTasks, myTasksLimit);
+
         if (isAddSubordinatesTask) {
             List<NodeRef> subordinateEmployees = orgstructureBean.getBossSubordinate(currentEmployee);
             List<WorkflowTask> subordinatesTasks = filterTasksByAssignees(tasks, subordinateEmployees);
@@ -575,23 +581,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private List<WorkflowTask> getTasksForContent(String nodeRef, boolean activeTasks) {
-        if (nodeRef == null || !NodeRef.isNodeRef(nodeRef)) {
-            return new ArrayList<WorkflowTask>();
-        }
-
+    private List<WorkflowTask> getTasksForContent(NodeRef nodeRef, boolean activeTasks) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        NodeRef contentNodeRef = new NodeRef(nodeRef);
 
-        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, true);
+        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
         for (WorkflowInstance workflow : activeWorkflows) {
             List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
             result.addAll(tasks);
         }
 
         if (!activeTasks) {
-            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(contentNodeRef, false);
+            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
             for (WorkflowInstance workflow : completedWorkflows) {
                 List<WorkflowTask> tasks = getWorkflowTasks(workflow, false);
                 result.addAll(tasks);
@@ -616,6 +617,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
             if (!startTask.getId().equals(workflowTask.getId())) {
                 result.add(workflowTask);
             }
+        }
+
+        return result;
+    }
+
+    @Override
+    public WorkflowListBean getWorkflows(String nodeRefParam, String stateParam, int activeWorkflowsLimit) {
+        if (nodeRefParam == null || !NodeRef.isNodeRef(nodeRefParam)) {
+            new WorkflowListPageBean();
+        }
+        NodeRef nodeRef = new NodeRef(nodeRefParam);
+        BPMState workflowState = BPMState.getValue(stateParam);
+
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        WorkflowListPageBean result = new WorkflowListPageBean();
+
+        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
+        result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
+
+        if (workflowState == BPMState.ALL) {
+            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
+            result.setCompletedWorkflows(completedWorkflows);
         }
 
         return result;

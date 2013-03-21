@@ -26,5 +26,7 @@ public interface StateMachineServiceBean {
 
     public List<NodeRef> getAssigneesForWorkflow(String workflowId);
 
-    WorkflowTaskListBean getTasks(String nodeRef, String type, String addSubordinatesTask, int loadCount);
+    WorkflowListBean getWorkflows(String nodeRefParam, String stateParam, int activeWorkflowsLimit);
+
+    WorkflowTaskListBean getTasks(NodeRef nodeRef, String stateParam, boolean isAddSubordinatesTask, int myTasksLimit);
 }

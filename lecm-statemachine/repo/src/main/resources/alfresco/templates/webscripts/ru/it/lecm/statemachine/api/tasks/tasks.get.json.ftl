@@ -1,7 +1,7 @@
 {
     "showSubordinateTasks": "${data.showSubordinateTasks}",
     "myTasksTotalCount": ${data.myTasksTotalCount},
-    "myTasksLimitedCount": ${data.myTasksLimitedCount},
+    "myTasksDisplayedCount": ${data.myTasksDisplayedCount},
 	"myTasks": [
 		<#list data.myTasks as task>
 		{
