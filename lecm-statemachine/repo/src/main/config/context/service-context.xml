@@ -65,6 +65,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
 	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignExecution">
@@ -108,7 +109,6 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.actions.get"

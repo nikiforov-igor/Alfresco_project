@@ -37,4 +37,6 @@ public interface StateMachineServiceBean {
     WorkflowListBean getWorkflows(NodeRef nodeRef, String stateParam, int activeWorkflowsLimit);
 
     public String getDocumentStatus(NodeRef document);
+
+    public List<String> executeUserAction(NodeRef document, String actionId);
 }

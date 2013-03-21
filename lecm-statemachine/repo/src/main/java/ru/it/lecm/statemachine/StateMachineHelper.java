@@ -3,7 +3,6 @@ package ru.it.lecm.statemachine;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
@@ -25,14 +24,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.action.StatusChangeAction;
-import ru.it.lecm.statemachine.action.WorkflowVariables;
+import ru.it.lecm.statemachine.action.*;
+import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
+import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.bean.WorkflowListPageBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListPageBean;
+import ru.it.lecm.statemachine.expression.Expression;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
@@ -51,63 +52,58 @@ import java.util.*;
  */
 public class StateMachineHelper implements StateMachineServiceBean {
 
-	public static String ACTIVITI_PREFIX = "activiti$";
+    public static String ACTIVITI_PREFIX = "activiti$";
 
-	private static ServiceRegistry serviceRegistry;
-	private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
-	private static OrgstructureBean orgstructureBean;
+    private static ServiceRegistry serviceRegistry;
+    private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
+    private static OrgstructureBean orgstructureBean;
+    private static DocumentMembersService documentMembersService;
 
+    private static String BPM_PACKAGE_PREFIX = "bpm_";
 
-	private static String BPM_PACKAGE_PREFIX = "bpm_";
+    private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
 
-	private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        StateMachineHelper.serviceRegistry = serviceRegistry;
+    }
 
-	private static HashSet<String> ignoredKeys = new HashSet<String>();
-
-	static {
-		ignoredKeys.add("cancelled");
-		ignoredKeys.add("workflowinstanceid");
-		ignoredKeys.add("companyhome");
-		ignoredKeys.add("parentProcessId");
-	}
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		StateMachineHelper.serviceRegistry = serviceRegistry;
-	}
-
-	public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
-		StateMachineHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
-	}
+    public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
+        StateMachineHelper.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
+    }
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         StateMachineHelper.orgstructureBean = orgstructureBean;
     }
 
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        StateMachineHelper.documentMembersService = documentMembersService;
+    }
+
     public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
-		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
-		WorkflowService workflowService = serviceRegistry.getWorkflowService();
-		WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
 
-		Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
-		NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+        Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+        NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
 
-		NodeService nodeService = serviceRegistry.getNodeService();
-		List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
+        NodeService nodeService = serviceRegistry.getNodeService();
+        List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
 
-		NodeRef subprocessPackage = workflowService.createPackage(null);
-		for (ChildAssociationRef document : documents) {
-			nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
-		}
-		workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
-		//workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
-		AssignExecution assignExecution = new AssignExecution();
-		assignExecution.execute(assignee);
-		NodeRef person = assignExecution.getNodeRefResult();
-		if (person == null) return null;
-		workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
+        NodeRef subprocessPackage = workflowService.createPackage(null);
+        for (ChildAssociationRef document : documents) {
+            nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
+        }
+        workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
+        //workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
+        AssignExecution assignExecution = new AssignExecution();
+        assignExecution.execute(assignee);
+        NodeRef person = assignExecution.getNodeRefResult();
+        if (person == null) return null;
+        workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, person);
 
 /*
-		List<NodeRef> assignees = Arrays.asList(personManager.get(USER2), personManager.get(USER3));
+        List<NodeRef> assignees = Arrays.asList(personManager.get(USER2), personManager.get(USER3));
 		params.put(WorkflowModel.ASSOC_ASSIGNEES, (Serializable) assignees);
 */
 
@@ -120,85 +116,68 @@ public class StateMachineHelper implements StateMachineServiceBean {
 			};
 		}*/
 
-		//if (!async) {
-		//	workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
-		//}
-		// get the moderated workflow
-		WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
-		if (wfDefinition == null) {
-			throw new IllegalStateException("noworkflow: " + workflowId);
-		}
+        //if (!async) {
+        //	workflowProps.put(QName.createQName("{}" + PROP_PARENT_PROCESS_ID), Long.valueOf(taskId));
+        //}
+        // get the moderated workflow
+        WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowId);
+        if (wfDefinition == null) {
+            throw new IllegalStateException("noworkflow: " + workflowId);
+        }
 
-		// start the workflow
-		WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-		String instanceId = path.getInstance().getId();
-		WorkflowTask startTask = workflowService.getStartTask(instanceId);
-		workflowService.endTask(startTask.getId(), null);
+        // start the workflow
+        WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+        String instanceId = path.getInstance().getId();
+        WorkflowTask startTask = workflowService.getStartTask(instanceId);
+        workflowService.endTask(startTask.getId(), null);
 
-		return instanceId;
+        return instanceId;
 
-	}
+    }
 
-    public void stopUserWorkflowProcessing(DelegateExecution delegateExecution) {
-		Object taskId = delegateExecution.getVariable(PROP_PARENT_PROCESS_ID);
-		if (taskId != null) {
-			WorkflowService workflowService = serviceRegistry.getWorkflowService();
-			WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId.toString());
-			String processId = task.getPath().getId().replace(ACTIVITI_PREFIX, "");
-			RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-			Map<String, Object> variables = delegateExecution.getVariables();
-			for (String key : variables.keySet()) {
-				if (!key.startsWith(BPM_PACKAGE_PREFIX) && !ignoredKeys.contains(key)) {
-					runtimeService.setVariable(processId, key, delegateExecution.getVariable(key));
-				}
-			}
-			workflowService.endTask(ACTIVITI_PREFIX + taskId.toString(), null);
-		}
-	}
+    public void startDocumentProcessing(final String taskId) {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 
-	public void startDocumentProcessing(final String taskId) {
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        NodeService nodeService = serviceRegistry.getNodeService();
 
-					@Override
-					public Object doWork() throws Exception {
-						NodeService nodeService = serviceRegistry.getNodeService();
+                        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+                        WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
 
-						WorkflowService workflowService = serviceRegistry.getWorkflowService();
-						WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
+                        NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
 
-						NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+                        NodeRef document = null;
+                        List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
+                        for (ChildAssociationRef item : documents) {
+                            document = item.getChildRef();
+                        }
 
-						NodeRef document = null;
-						List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
-						for (ChildAssociationRef item : documents) {
-							document = item.getChildRef();
-						}
+                        if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+                            nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
+                        }
+                        nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
+                        return null;
+                    }
+                }, AuthenticationUtil.SYSTEM_USER_NAME);
+            }
+        };
+        timer.schedule(task, 1000);
+    }
 
-						if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-							nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
-						}
-						nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
-						return null;
-					}
-				}, AuthenticationUtil.SYSTEM_USER_NAME);
-			}
-		};
-		timer.schedule(task, 1000);
-	}
+    public void stopDocumentProcessing(String taskId) {
+        nextTransition(ACTIVITI_PREFIX + taskId);
+    }
 
-	public void stopDocumentProcessing(String taskId) {
-		nextTransition(ACTIVITI_PREFIX + taskId);
-	}
-
-	public List<StateMachineAction> getTaskActions(String taskId, String onFire) {
-		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		TaskQuery taskQuery = taskService.createTaskQuery();
+    public List<StateMachineAction> getTaskActions(String taskId, String onFire) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
         if (taskId != null) {
             Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (task != null) {
@@ -209,95 +188,96 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 result = getStateMachineActions(processDefinitionId, activityId, onFire);
             }
         }
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Выбирает список действий для старта процесса последней версии.
-	 * @param definitionKey - Id процесса в схеме BPMN
-	 * @return
-	 */
-	public List<StateMachineAction> getStartActions(String definitionKey) {
-		RepositoryServiceImpl repositoryService = (RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService();
-		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionKey(definitionKey).latestVersion().singleResult();
-		String processDefinitionId = processDefinitionEntity.getId();
-		String activityId = "start";
-		String onFire = "take";
-		return getStateMachineActions(processDefinitionId, activityId, onFire);
-	}
+    /**
+     * Выбирает список действий для старта процесса последней версии.
+     *
+     * @param definitionKey - Id процесса в схеме BPMN
+     * @return
+     */
+    public List<StateMachineAction> getStartActions(String definitionKey) {
+        RepositoryServiceImpl repositoryService = (RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionKey(definitionKey).latestVersion().singleResult();
+        String processDefinitionId = processDefinitionEntity.getId();
+        String activityId = "start";
+        String onFire = "take";
+        return getStateMachineActions(processDefinitionId, activityId, onFire);
+    }
 
-	public List<StateMachineAction> getTaskActionsByName(String taskId, String actionType, String onFire) {
-		List<StateMachineAction> actions = getTaskActions(taskId, onFire);
-		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-		for (StateMachineAction action : actions) {
-			if (action.getActionName().equalsIgnoreCase(actionType)) {
-				result.add(action);
-			}
-		}
-		return result;
-	}
+    public List<StateMachineAction> getTaskActionsByName(String taskId, String actionType, String onFire) {
+        List<StateMachineAction> actions = getTaskActions(taskId, onFire);
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        for (StateMachineAction action : actions) {
+            if (action.getActionName().equalsIgnoreCase(actionType)) {
+                result.add(action);
+            }
+        }
+        return result;
+    }
 
-	public List<StateMachineAction> getHistoricalTaskActions(String taskId, String onFire) {
-		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-		HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-		HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		if (task != null) {
-			result = getStateMachineActions(task.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
-		}
-		return result;
-	}
+    public List<StateMachineAction> getHistoricalTaskActions(String taskId, String onFire) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+        HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            result = getStateMachineActions(task.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
+        }
+        return result;
+    }
 
-	public List<StateMachineAction> getHistoricalTaskActionsByName(String taskId, String actionType, String onFire) {
-		List<StateMachineAction> actions = getHistoricalTaskActions(taskId, onFire);
-		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-		for (StateMachineAction action : actions) {
-			if (action.getActionName().equalsIgnoreCase(actionType)) {
-				result.add(action);
-			}
-		}
-		return result;
-	}
+    public List<StateMachineAction> getHistoricalTaskActionsByName(String taskId, String actionType, String onFire) {
+        List<StateMachineAction> actions = getHistoricalTaskActions(taskId, onFire);
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        for (StateMachineAction action : actions) {
+            if (action.getActionName().equalsIgnoreCase(actionType)) {
+                result.add(action);
+            }
+        }
+        return result;
+    }
 
-	public void addProcessDependency(String currentTask, String dependencyProcess) {
-		String taskId = currentTask.replace(ACTIVITI_PREFIX, "");
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		Execution execution = runtimeService.createExecutionQuery().processInstanceId(dependencyProcess.replace(ACTIVITI_PREFIX, "")).singleResult();
-		runtimeService.setVariable(execution.getId(), PROP_PARENT_PROCESS_ID, Long.valueOf(taskId));
-	}
+    public void addProcessDependency(String currentTask, String dependencyProcess) {
+        String taskId = currentTask.replace(ACTIVITI_PREFIX, "");
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        Execution execution = runtimeService.createExecutionQuery().processInstanceId(dependencyProcess.replace(ACTIVITI_PREFIX, "")).singleResult();
+        runtimeService.setVariable(execution.getId(), PROP_PARENT_PROCESS_ID, Long.valueOf(taskId));
+    }
 
-	public void setExecutionParamentersByTaskId(String taskId, Map<String, Object> parameters) {
-		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
-		TaskQuery taskQuery = taskService.createTaskQuery();
-		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		if (task != null) {
-			setExecutionParameters(task.getExecutionId(), parameters);
-		}
-	}
+    public void setExecutionParamentersByTaskId(String taskId, Map<String, Object> parameters) {
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            setExecutionParameters(task.getExecutionId(), parameters);
+        }
+    }
 
-	public void setExecutionParameters(String executionId, Map<String, Object> parameters) {
-		for (String key : parameters.keySet()) {
-			RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-			runtimeService.setVariable(executionId.replace(ACTIVITI_PREFIX, ""), key, parameters.get(key));
-		}
-	}
+    public void setExecutionParameters(String executionId, Map<String, Object> parameters) {
+        for (String key : parameters.keySet()) {
+            RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+            runtimeService.setVariable(executionId.replace(ACTIVITI_PREFIX, ""), key, parameters.get(key));
+        }
+    }
 
-	@Override
-	public String nextTransition(String taskId) {
-		WorkflowService workflowService = serviceRegistry.getWorkflowService();
-		return workflowService.endTask(taskId, null).getId();
-	}
+    @Override
+    public String nextTransition(String taskId) {
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        return workflowService.endTask(taskId, null).getId();
+    }
 
-	@Override
-	public String getCurrentTaskId(String executionId) {
-		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
-		TaskQuery taskQuery = taskService.createTaskQuery();
-		Task task = taskQuery.executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		if (task != null) {
-			return ACTIVITI_PREFIX + task.getId();
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public String getCurrentTaskId(String executionId) {
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (task != null) {
+            return ACTIVITI_PREFIX + task.getId();
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public Set<StateField> getStateFields(NodeRef document) {
@@ -314,7 +294,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, String privilege) {
         HashSet<String> privileges = new HashSet<String>();
         privileges.add(privilege);
-        return  hasPrivilegeByEmployee(employee, document, privileges);
+        return hasPrivilegeByEmployee(employee, document, privileges);
     }
 
     @Override
@@ -366,103 +346,103 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     public String getCurrentExecutionId(String taskId) {
-		TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
-		TaskQuery taskQuery = taskService.createTaskQuery();
-		Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
-		return task.getExecutionId();
-	}
+        TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+        TaskQuery taskQuery = taskService.createTaskQuery();
+        Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        return task.getExecutionId();
+    }
 
-	public void setInputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		for (WorkflowVariables.WorkflowVariable variable : variables) {
-			String value = "";
-			if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
-				value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
-			} else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
-				NodeService nodeService = serviceRegistry.getNodeService();
+    public void setInputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        for (WorkflowVariables.WorkflowVariable variable : variables) {
+            String value = "";
+            if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
+                value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+            } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
+                NodeService nodeService = serviceRegistry.getNodeService();
 
-				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-				if (documents.size() > 0) {
-					NodeRef document = documents.get(0).getChildRef();
-					QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
-					value = nodeService.getProperty(document, propertyName).toString();
-				}
-			} else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
-				value = variable.getFromValue();
-			}
+                NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+                if (documents.size() > 0) {
+                    NodeRef document = documents.get(0).getChildRef();
+                    QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+                    value = nodeService.getProperty(document, propertyName).toString();
+                }
+            } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+                value = variable.getFromValue();
+            }
 
-			if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
-				runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
-			} else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
-				NodeService nodeService = serviceRegistry.getNodeService();
+            if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
+                runtimeService.setVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+            } else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
+                NodeService nodeService = serviceRegistry.getNodeService();
 
-				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-				if (documents.size() > 0) {
-					NodeRef document = documents.get(0).getChildRef();
-					QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
-					nodeService.setProperty(document, propertyName, value);
-				}
-			}
-		}
-	}
+                NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+                if (documents.size() > 0) {
+                    NodeRef document = documents.get(0).getChildRef();
+                    QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
+                    nodeService.setProperty(document, propertyName, value);
+                }
+            }
+        }
+    }
 
-	public void getOutputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		for (WorkflowVariables.WorkflowVariable variable : variables) {
-			String value = "";
-			if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
-				value = runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
-			} else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
-				NodeService nodeService = serviceRegistry.getNodeService();
+    public void getOutputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        for (WorkflowVariables.WorkflowVariable variable : variables) {
+            String value = "";
+            if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
+                value = runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+            } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
+                NodeService nodeService = serviceRegistry.getNodeService();
 
-				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-				if (documents.size() > 0) {
-					NodeRef document = documents.get(0).getChildRef();
-					QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
-					value = nodeService.getProperty(document, propertyName).toString();
-				}
-			} else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
-				value = variable.getFromValue();
-			}
+                NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(workflowExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+                if (documents.size() > 0) {
+                    NodeRef document = documents.get(0).getChildRef();
+                    QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+                    value = nodeService.getProperty(document, propertyName).toString();
+                }
+            } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+                value = variable.getFromValue();
+            }
 
-			if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
-				runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
-			} else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
-				NodeService nodeService = serviceRegistry.getNodeService();
+            if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
+                runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+            } else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
+                NodeService nodeService = serviceRegistry.getNodeService();
 
-				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-				if (documents.size() > 0) {
-					NodeRef document = documents.get(0).getChildRef();
-					QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
-					nodeService.setProperty(document, propertyName, value);
-				}
-			}
-		}
-	}
+                NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+                if (documents.size() > 0) {
+                    NodeRef document = documents.get(0).getChildRef();
+                    QName propertyName = QName.createQName(variable.getToValue(), serviceRegistry.getNamespaceService());
+                    nodeService.setProperty(document, propertyName, value);
+                }
+            }
+        }
+    }
 
-	public NodeRef getStatemachineDocument(String executionId) {
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-		List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
-		if (documents.size() > 0) {
-			return documents.get(0).getChildRef();
-		} else {
-			return null;
-		}
-	}
+    public NodeRef getStatemachineDocument(String executionId) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+        List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+        if (documents.size() > 0) {
+            return documents.get(0).getChildRef();
+        } else {
+            return null;
+        }
+    }
 
-	public Map<String, Object> getVariables(String executionId) {
-		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-		return runtimeService.getVariables(executionId.replace(ACTIVITI_PREFIX, ""));
-	}
+    public Map<String, Object> getVariables(String executionId) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        return runtimeService.getVariables(executionId.replace(ACTIVITI_PREFIX, ""));
+    }
 
-	public static ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
-	}
+    public static ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
 
     @Override
     public boolean isDraft(NodeRef document) {
@@ -497,18 +477,35 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
+    @Override
+    public List<String> executeUserAction(NodeRef document, String actionId) {
+        return executeUserAction(document, actionId, FinishStateWithTransitionAction.class, null);
+    }
+
+    public List<String> executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String currentTask = getCurrentTaskId(statemachineId);
+        List<String> errors = new ArrayList<String>();
+        if (FinishStateWithTransitionAction.class.equals(actionType)) {
+            errors = executeTransitionAction(document, statemachineId, currentTask, actionId, persistedResponse);
+        } else if (UserWorkflow.class.equals(actionType)) {
+            errors = executeUserWorkflowAction(document, statemachineId, currentTask, actionId, persistedResponse);
+        }
+        return errors;
+    }
+
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
-		List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
-		ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
-		List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-		for (ExecutionListener listener : listeners) {
-			if (listener instanceof StateMachineHandler) {
-				result = ((StateMachineHandler) listener).getEvents().get(onFire);
-			}
-		}
-		return result;
-	}
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
+        ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
+        List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+        for (ExecutionListener listener : listeners) {
+            if (listener instanceof StateMachineHandler) {
+                result = ((StateMachineHandler) listener).getEvents().get(onFire);
+            }
+        }
+        return result;
+    }
 
     private List<StateMachineAction> getStatusChangeActions(NodeRef document) {
         String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
@@ -597,7 +594,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
         NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, true);
-        for (WorkflowInstance instance :activeWorkflows) {
+        for (WorkflowInstance instance : activeWorkflows) {
             if (!workflowSysUser.equals(instance.getInitiator())) {
                 result.add(instance);
             }
@@ -665,6 +662,114 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         return result;
+    }
+
+    private List<String> executeTransitionAction(NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+        List<String> errors = new ArrayList<String>();
+        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+        FinishStateWithTransitionAction.NextState nextState = null;
+        for (StateMachineAction action : actions) {
+            FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
+            List<FinishStateWithTransitionAction.NextState> states = finishStateWithTransitionAction.getStates();
+            for (FinishStateWithTransitionAction.NextState state : states) {
+                if (state.getActionId().equalsIgnoreCase(actionId)) {
+                    nextState = state;
+                }
+            }
+        }
+
+        if (nextState != null) {
+            Expression expression = new Expression(document, serviceRegistry);
+
+            boolean access = true;
+            Conditions conditions = nextState.getConditionAccess();
+            for (Conditions.Condition condition : conditions.getConditions()) {
+                boolean currentAccess = expression.execute(condition.getExpression());
+                if (!currentAccess) {
+                    errors.add("Выражение " + condition.getExpression() + " не верно для действия");
+                }
+                access = access && currentAccess;
+            }
+
+            if (access) {
+                HashMap<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
+                setExecutionParamentersByTaskId(taskId, parameters);
+                nextTransition(taskId);
+
+                if (persistedResponse != null && !"null".equals(persistedResponse)) {
+                    int start = persistedResponse.indexOf("=") + 1;
+                    int end = persistedResponse.indexOf(",");
+
+                    String dependencyExecution = persistedResponse.substring(start, end);
+
+                    WorkflowDescriptor descriptor = new WorkflowDescriptor(statemachineId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                    new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+                    setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
+
+                    //Добавляем участников к документу.
+                    List<NodeRef> assignees = getAssigneesForWorkflow(dependencyExecution);
+                    for (NodeRef assignee : assignees) {
+                        documentMembersService.addMember(document, assignee, null);
+                    }
+
+                } else {
+                    errors.add("Переход осуществлен, но дочерний процесс небыл запущен");
+                }
+            }
+        } else {
+            errors.add("Данный actionId не существует для документа в текущем статусе");
+        }
+        return errors;
+    }
+
+    private List<String> executeUserWorkflowAction(NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+        List<String> errors = new ArrayList<String>();
+        StateMachineHelper helper = new StateMachineHelper();
+        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+        UserWorkflow.UserWorkflowEntity workflow = null;
+        for (StateMachineAction action : actions) {
+            UserWorkflow userWorkflow = (UserWorkflow) action;
+            List<UserWorkflow.UserWorkflowEntity> workflows = userWorkflow.getUserWorkflows();
+            for (UserWorkflow.UserWorkflowEntity workflowEntity : workflows) {
+                if (workflowEntity.getId().equalsIgnoreCase(actionId)) {
+                    workflow = workflowEntity;
+                }
+            }
+        }
+        if (workflow != null && persistedResponse != null && !"null".equals(persistedResponse)) {
+            Expression expression = new Expression(document, serviceRegistry);
+
+            boolean access = true;
+            Conditions conditions = workflow.getConditionAccess();
+            for (Conditions.Condition condition : conditions.getConditions()) {
+                boolean currentAccess = expression.execute(condition.getExpression());
+                if (!currentAccess) {
+                    errors.add("Выражение " + condition.getExpression() + " не верно для действия");
+                }
+                access = access && currentAccess;
+            }
+            if (access) {
+                int start = persistedResponse.indexOf("=") + 1;
+                int end = persistedResponse.indexOf(",");
+
+                String dependencyExecution = persistedResponse.substring(start, end);
+
+                WorkflowDescriptor descriptor = new WorkflowDescriptor(statemachineId, taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+
+                helper.setInputVariables(statemachineId, dependencyExecution, workflow.getVariables().getInput());
+
+                //Добавляем участников к документу.
+                List<NodeRef> assignees = helper.getAssigneesForWorkflow(dependencyExecution);
+                for (NodeRef assignee : assignees) {
+                    documentMembersService.addMember(document, assignee, null);
+                }
+            }
+        } else {
+            errors.add("Данный actionId не существует для документа в текущем статусе");
+        }
+        return errors;
     }
 
 }
