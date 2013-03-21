@@ -80,6 +80,9 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			// get the moderated workflow
 			WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
 			if (wfDefinition == null) {
+                wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
+			}
+			if (wfDefinition == null) {
 				throw new IllegalStateException("no workflow: " + stateMashineId);
 			}
 			// start the workflow

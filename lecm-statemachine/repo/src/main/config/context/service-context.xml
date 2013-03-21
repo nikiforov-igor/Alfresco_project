@@ -33,6 +33,20 @@
 		</property>
 	</bean>
 
+
+    <bean id="statemachineDefaultWorkflowBootstrap" parent="workflowDeployer">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/models/lecm-statemachine-default-workflow.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">false</prop>
+                </props>
+            </list>
+        </property>
+    </bean>
+
 	<bean id="activitiCustomizer" class="ru.it.lecm.statemachine.listener.ActivitiConfigurationCustomizer">
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 	</bean>
