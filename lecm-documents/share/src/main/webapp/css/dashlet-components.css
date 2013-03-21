@@ -69,7 +69,9 @@
     font-weight: bold;
     text-decoration: none;
 }
-
+.yui-skin-lecmTheme .datagrid .grid.yui-dt {
+    white-space: normal;
+}
 /***********Workflow tasks *************/
 
 .WORKFLOWTASKTYPE_NA {
