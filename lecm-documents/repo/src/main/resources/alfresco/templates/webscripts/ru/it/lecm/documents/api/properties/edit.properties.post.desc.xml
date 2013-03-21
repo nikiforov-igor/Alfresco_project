@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Document Edit Properties</shortname>
+    <description>Создание документа</description>
+    <url>/lecm/document/api/properties/editDocument</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

@@ -63,6 +63,8 @@ public interface DocumentService {
 
     public NodeRef createDocument(String type, Map<String, String> properties);
 
+    public NodeRef editDocument(NodeRef nodeRef, Map<String, String> properties);
+
     public Map<QName, Serializable> changeProperties (NodeRef documentRef, Map<QName, Serializable> properties);
 
 }

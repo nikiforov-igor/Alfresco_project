@@ -113,6 +113,15 @@ public class DocumentWebScriptBean extends BaseScopableProcessorExtension {
 
         return new ScriptNode(documentRef, serviceRegistry, getScope());
     }
+
+    public ScriptNode editDocument(String nodeRef, Scriptable properties) {
+        NodeRef documentRef = new NodeRef(nodeRef);
+        Map<String, String> property = add(Context.getCurrentContext().getElements(properties));
+        documentRef = documentService.editDocument(documentRef, property);
+
+        return new ScriptNode(documentRef, serviceRegistry, getScope());
+    }
+
     private Map<String, String> add(Object[] object){
         Map<String, String> map =  new HashMap<String, String>();
         String[] string = null;

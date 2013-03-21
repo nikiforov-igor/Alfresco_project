@@ -186,6 +186,26 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     }
 
+    /**
+     * Изменение свойств документа
+     * @param nodeRef
+     * @param property
+     * @return
+     */
+    @Override
+    public NodeRef editDocument(NodeRef nodeRef, Map<String, String> property) {
+
+        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
+        for(Map.Entry<String, String> e: property.entrySet()) {
+            properties.put(QName.createQName(e.getKey(),namespaceService),e.getValue());
+        }
+
+        nodeService.setProperties(nodeRef, properties);
+
+        return nodeRef;
+
+    }
+
 
     @Override
     public Map<QName, Serializable> changeProperties(NodeRef documentRef, Map<QName, Serializable> properties) {
