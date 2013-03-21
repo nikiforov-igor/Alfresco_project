@@ -3,6 +3,8 @@ package ru.it.lecm.statemachine.script;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
@@ -11,6 +13,7 @@ import ru.it.lecm.statemachine.WorkflowTaskListBean;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * User: pmelnikov
@@ -59,6 +62,24 @@ public class StatemachineWebScriptBean extends BaseScopableProcessorExtension {
 
     public WorkflowListBean getWorkflows(ScriptNode node, String stateParam, int activeWorkflowsLimit) {
         return stateMachineHelper.getWorkflows(node.getNodeRef(), stateParam, activeWorkflowsLimit);
+    }
+
+    /**
+     * Возвращает список активных задач для документа
+     * @param node
+     * @return
+     */
+    public List<WorkflowTask> getDocumentTasks(ScriptNode node) {
+        return stateMachineHelper.getDocumentTasks(node.getNodeRef());
+    }
+
+    /**
+     * Возвращает список активных рабочих процессов
+     * @param node
+     * @return
+     */
+    public List<WorkflowInstance> getDocumentWorkflows(ScriptNode node) {
+        return stateMachineHelper.getDocumentWorkflows(node.getNodeRef());
     }
 
     private Collection<String> convertToJavaCollection(Object privileges) {

@@ -531,11 +531,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
         List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
         if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-            tasks.addAll(getTasksForContent(nodeRef, true));
+            tasks.addAll(getDocumentTasks(nodeRef, true));
         }
 
         if (state == BPMState.COMPLETED || state == BPMState.ALL) {
-            tasks.addAll(getTasksForContent(nodeRef, false));
+            tasks.addAll(getDocumentTasks(nodeRef, false));
         }
 
         WorkflowTaskListPageBean result = new WorkflowTaskListPageBean();
@@ -581,7 +581,25 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private List<WorkflowTask> getTasksForContent(NodeRef nodeRef, boolean activeTasks) {
+    @Override
+    public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef) {
+        return getDocumentTasks(nodeRef, true);
+    }
+
+    @Override
+    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
+        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
+        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
+        List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, true);
+        for (WorkflowInstance instance :activeWorkflows) {
+            if (!workflowSysUser.equals(instance.getInitiator())) {
+                result.add(instance);
+            }
+        }
+        return result;
+    }
+
+    private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
