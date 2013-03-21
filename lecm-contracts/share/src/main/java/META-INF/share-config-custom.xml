@@ -63,4 +63,12 @@
 		</forms>
 	</config>
 
+    <config evaluator="string-compare" condition="AdvancedSearch">
+        <advanced-search>
+            <forms>
+                <form>lecm-contract:document</form>
+            </forms>
+        </advanced-search>
+    </config>
+
 </alfresco-config>
