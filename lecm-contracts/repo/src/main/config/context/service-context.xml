@@ -19,7 +19,7 @@
 -->
 <beans>
 
-	<bean id="${groupId}.${artifactId}.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="contracts.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
@@ -34,9 +34,9 @@
 		</property>
 	</bean>
 
-    <bean  id="documentPolicy" class="ru.it.lecm.document.policies.DocumentPolicy"
+    <bean  id="contractPolicy" class="ru.it.lecm.document.policies.ContractPolicy"
 		   init-method="init"
-		   depends-on="lecmSecurityGroupsBean">
+		   depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="lecmAclBuilder" ref="lecmAclBuilderBean" />

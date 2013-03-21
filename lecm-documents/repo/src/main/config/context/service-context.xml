@@ -324,7 +324,7 @@
     </bean>
 
     <bean  id="documentPolicy" class="ru.it.lecm.documents.policy.DocumentPolicy"
-           init-method="init">
+           init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="businessJournalService" ref="businessJournalService"/>

@@ -25,11 +25,11 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author rabdullin
  */
-public class DocumentPolicy
+public class ContractPolicy
         extends BaseBean
         implements NodeServicePolicies.OnCreateNodePolicy {
 
-    final static protected Logger logger = LoggerFactory.getLogger(DocumentPolicy.class);
+    final static protected Logger logger = LoggerFactory.getLogger(ContractPolicy.class);
 
     // "lecm-contract:document"
     final public static String DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
