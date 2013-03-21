@@ -1,0 +1,65 @@
+/**
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+/**
+ * DocumentHistory
+ *
+ * @namespace LogicECM
+ * @class LogicECM.DocumentWorkflows
+ */
+(function () {
+    /**
+     * YUI Library aliases
+     */
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
+
+    /**
+     * DocumentHistory constructor.
+     *
+     * @param {String} htmlId The HTML id of the parent element
+     * @return {LogicECM.DocumentWorkflows} The new DocumentWorkflows instance
+     * @constructor
+     */
+    LogicECM.DocumentWorkflows = function DocumentWorkflows_constructor(htmlId) {
+        LogicECM.DocumentWorkflows.superclass.constructor.call(this, htmlId);
+        return this;
+    };
+
+    YAHOO.extend(LogicECM.DocumentWorkflows, LogicECM.DocumentComponentBase);
+
+    YAHOO.lang.augmentObject(LogicECM.DocumentWorkflows.prototype,
+        {
+            onReady: function DocumentWorkflows_onReady() {
+                var linkEl = Dom.get(this.id + "-action-expand");
+                linkEl.onclick = this.onExpand.bind(this);
+            },
+
+            onExpand: function () {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/workflows",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        htmlid: this.id + Alfresco.util.generateDomId(),
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var text = response.serverResponse.responseText;
+                            this.expandView(text);
+                        },
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            }
+        }, true);
+})();

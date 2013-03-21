@@ -14,7 +14,7 @@
     </h2>
 
     <div id="${el}-formContainer">
-        <div style="margin-right: 25px;margin-left: 15px;">
+        <div class="right-tasks-container">
             <#assign maxMainTextLength = 53>
             <#list data.myTasks as task>
                 <#assign mainTextLength = task.title?length + task.description?length + 2>
@@ -38,8 +38,8 @@
         </div>
 
         <#if (data.myTasksTotalCount > 0 && data.myTasksTotalCount > data.myTasksDisplayedCount)>
-            <div class="right-tasks-more" onclick="documentTasksComponent.onExpand();">${msg('right.label.more')}</div>
-            <div class="right-tasks-more-arrow" onclick="documentTasksComponent.onExpand();"></div>
+            <div class="right-more-link" onclick="documentTasksComponent.onExpand();">${msg('right.label.more')}</div>
+            <div class="right-more-link-arrow" onclick="documentTasksComponent.onExpand();"></div>
             <div style="clear:both;"></div>
         </#if>
     </div>

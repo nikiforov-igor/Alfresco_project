@@ -1,5 +1,7 @@
 <#assign id = args.htmlid?js_string>
 
+<#if data??>
+
 <#assign activeSeleted = "">
 <#if tasksState == "active">
     <#assign activeSeleted = "selected">
@@ -101,3 +103,5 @@
 
 })();
 //]]></script>
+
+</#if>

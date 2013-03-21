@@ -591,15 +591,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
-        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
-        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, true);
-        for (WorkflowInstance instance : activeWorkflows) {
-            if (!workflowSysUser.equals(instance.getInitiator())) {
-                result.add(instance);
-            }
-        }
-        return result;
+        return filterWorkflows(activeWorkflows);
     }
 
     private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
@@ -654,13 +647,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         WorkflowListPageBean result = new WorkflowListPageBean();
 
         List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
-        result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
+        result.setActiveWorkflows(filterWorkflows(activeWorkflows), activeWorkflowsLimit);
 
         if (workflowState == BPMState.ALL) {
             List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
-            result.setCompletedWorkflows(completedWorkflows);
+            result.setCompletedWorkflows(filterWorkflows(completedWorkflows));
         }
 
+        return result;
+    }
+
+    private List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
+        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
+        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
+        for (WorkflowInstance instance : workflows) {
+            if (!workflowSysUser.equals(instance.getInitiator())) {
+                result.add(instance);
+            }
+        }
         return result;
     }
 

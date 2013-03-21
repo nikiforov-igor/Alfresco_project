@@ -74,18 +74,6 @@
 }
 /***********Workflow tasks *************/
 
-.WORKFLOWTASKTYPE_NA {
-    display: none;
-}
-
-.WORKFLOWTASKTYPE_OVERDUE {
-    color: #FF0000;
-}
-
-.WORKFLOWTASKTYPE_SOON {
-    color: #CC6600;
-}
-
 .workflow-task-date {
     font-size: 12px;
     font-weight: bold;
@@ -129,42 +117,7 @@
     text-decoration: underline;
 }
 
-.total-tasks-count-right {
-    float: left;
-    background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
-    height: 26px;
-    width: 26px;
-    text-align: center;
-    padding-top: 3px;
-    color: #FFFFFF;
-    font-weight: bold;
-}
-
-.right-task {
-    margin-top: 12px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #CCCCCC;
-    padding-bottom: 5px;
-}
-
-.right-tasks-more {
-    text-decoration: underline;
-    font-size: 12px;
-    color: #999999;
-    float: left;
-    padding-left: 187px;
-    cursor: pointer;
-}
-
-.right-tasks-more-arrow {
-    background-image: url(/share/res/images/lecm-documents/gray_arrow.png);
-    float: right;
-    width: 12px;
-    height: 11px;
-    margin-right: 7px;
-    margin-top: 2px;
-    cursor: pointer;
-}
+/******************************************/
 
 .datagrid .action-set .onActionViewContent a {
 	background-image: url(/share/res/components/documentlibrary/actions/document-view-content-16.png);

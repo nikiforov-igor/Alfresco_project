@@ -179,7 +179,7 @@
        <!-- Бизнес-процессы -->
        <component>
            <region-id>document-workflows</region-id>
-           <url>/components/document-details/document-workflows</url>
+           <url>/lecm/components/document/document-workflows</url>
            <properties>
                <nodeRef>{nodeRef}</nodeRef>
            </properties>
