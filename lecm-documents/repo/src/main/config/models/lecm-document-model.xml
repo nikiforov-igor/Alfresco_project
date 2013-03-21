@@ -42,13 +42,11 @@
                     <title>LECM Creator</title>
                     <type>d:text</type>
                     <protected>true</protected>
-                    <mandatory enforced="true">true</mandatory>
                 </property>
                 <property name="lecm-document:modifier">
                     <title>LECM Modifier</title>
                     <type>d:text</type>
                     <protected>true</protected>
-                    <mandatory enforced="true">true</mandatory>
                 </property>
                 <property name="lecm-document:creator-ref">
                     <title>LECM Creator Ref</title>
