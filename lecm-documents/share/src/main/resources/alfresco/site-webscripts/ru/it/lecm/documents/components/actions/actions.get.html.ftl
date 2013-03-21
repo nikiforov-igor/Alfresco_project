@@ -1,4 +1,4 @@
-<#if result.states?? || result.workflows?? >
+<#if result?? && (result.states?? || result.workflows??) >
 <!-- Parameters and libs -->
     <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
     <#include "/org/alfresco/components/component.head.inc">

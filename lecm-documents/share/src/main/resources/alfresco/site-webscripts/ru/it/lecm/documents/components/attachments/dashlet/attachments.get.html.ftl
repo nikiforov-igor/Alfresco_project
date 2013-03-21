@@ -1,101 +1,103 @@
-<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#assign id = args.htmlid>
-<#assign containerId = id + "-container">
+<#if categories??>
+    <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+    <#assign id = args.htmlid>
+    <#assign containerId = id + "-container">
 
 <div class="dashlet document bordered">
-	<div class="title dashlet-title">
-		<span>${msg("label.title")}</span>
+    <div class="title dashlet-title">
+        <span>${msg("label.title")}</span>
 	    <span class="lecm-dashlet-actions">
 	        <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentAttachmentsComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
 	    </span>
 	    <span class="lecm-dashlet-actions-right">
 	        <select id="${id}-attachment-categories" class="attachment-categories-select">
-				<#if categories??>
-					<#list categories as category>
-						<option value="${category.nodeRef}">${category.name}</option>
-					</#list>
-				</#if>
-		    </select>
+                <#if categories??>
+                    <#list categories as category>
+                        <option value="${category.nodeRef}">${category.name}</option>
+                    </#list>
+                </#if>
+            </select>
 	    </span>
-	</div>
+    </div>
     <div class="body scrollableList" id="${id}_results">
-	    <@grid.datagrid containerId false>
-		    <script type="text/javascript">//<![CDATA[
-		    (function () {
-			    var datagrid = null;
-			    var select = null;
+        <@grid.datagrid containerId false>
+            <script type="text/javascript">//<![CDATA[
+            (function () {
+                var datagrid = null;
+                var select = null;
 
-			    YAHOO.util.Event.onDOMReady(function (){
-				    select = Dom.get("${id}-attachment-categories");
-					var selectValue = "";
-					if (select != null && select.value != null) {
-						selectValue = select.value;
-					}
-				    YAHOO.util.Event.on("${id}-attachment-categories", "change", onCategoriesSelectChange, this, true);
+                YAHOO.util.Event.onDOMReady(function (){
+                    select = Dom.get("${id}-attachment-categories");
+                    var selectValue = "";
+                    if (select != null && select.value != null) {
+                        selectValue = select.value;
+                    }
+                    YAHOO.util.Event.on("${id}-attachment-categories", "change", onCategoriesSelectChange, this, true);
 
-				    datagrid = new LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
-					    usePagination: false,
-					    showExtendSearchBlock: false,
-					    actions: [
-						    {
-							    type: "datagrid-action-link-${containerId}",
-							    id: "onActionViewContent",
-							    permission: "edit",
-							    label: "${msg("actions.view-content")}"
-						    },
-						    {
-							    type: "datagrid-action-link-${containerId}",
-							    id: "onActionUploadNewVersion",
-							    permission: "edit",
-							    label: "${msg("actions.upload-new-version")}"
-						    },
-						    {
-							    type: "datagrid-action-link-${containerId}",
-							    id: "onActionDelete",
-							    permission: "delete",
-							    label: "${msg("actions.delete-row")}",
-							    confirmFunction: function () {
-								    YAHOO.Bubbling.fire("fileDeleted", {});
-							    }
-						    }
-					    ],
-					    datagridMeta: {
-						    itemType: "cm:content",
-						    datagridFormId: "attachments-dashlet-table",
-						    createFormId: "",
-					        nodeRef: selectValue,
-						    actionsConfig: {
-							    fullDelete: true
-						    }
-					    },
-					    dataSource:"lecm/search",
-					    bubblingLabel: "${containerId}",
+                    datagrid = new LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
+                        usePagination: false,
+                        showExtendSearchBlock: false,
+                        actions: [
+                            {
+                                type: "datagrid-action-link-${containerId}",
+                                id: "onActionViewContent",
+                                permission: "edit",
+                                label: "${msg("actions.view-content")}"
+                            },
+                            {
+                                type: "datagrid-action-link-${containerId}",
+                                id: "onActionUploadNewVersion",
+                                permission: "edit",
+                                label: "${msg("actions.upload-new-version")}"
+                            },
+                            {
+                                type: "datagrid-action-link-${containerId}",
+                                id: "onActionDelete",
+                                permission: "delete",
+                                label: "${msg("actions.delete-row")}",
+                                confirmFunction: function () {
+                                    YAHOO.Bubbling.fire("fileDeleted", {});
+                                }
+                            }
+                        ],
+                        datagridMeta: {
+                            itemType: "cm:content",
+                            datagridFormId: "attachments-dashlet-table",
+                            createFormId: "",
+                            nodeRef: selectValue,
+                            actionsConfig: {
+                                fullDelete: true
+                            }
+                        },
+                        dataSource:"lecm/search",
+                        bubblingLabel: "${containerId}",
 
-					    allowCreate: false,
-					    showActionColumn: true,
-					    showCheckboxColumn: false
-				    }).setMessages(${messages});
+                        allowCreate: false,
+                        showActionColumn: true,
+                        showCheckboxColumn: false
+                    }).setMessages(${messages});
 
-				    datagrid.draw();
-			    });
+                    datagrid.draw();
+                });
 
-			    function onCategoriesSelectChange() {
-				    var selectValue = "";
-				    if (select != null && select.value != null) {
-					    selectValue = select.value;
-				    }
-				    var meta = datagrid.datagridMeta;
-				    meta.nodeRef = selectValue;
+                function onCategoriesSelectChange() {
+                    var selectValue = "";
+                    if (select != null && select.value != null) {
+                        selectValue = select.value;
+                    }
+                    var meta = datagrid.datagridMeta;
+                    meta.nodeRef = selectValue;
 
-				    YAHOO.Bubbling.fire("activeGridChanged",
-						    {
-							    datagridMeta: meta,
-							    bubblingLabel:datagrid.options.bubblingLabel
-						    });
-			    }
+                    YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta: meta,
+                                bubblingLabel:datagrid.options.bubblingLabel
+                            });
+                }
 
-		    })();
-		    //]]></script>
-	    </@grid.datagrid>
+            })();
+            //]]></script>
+        </@grid.datagrid>
     </div>
 </div>
+</#if>

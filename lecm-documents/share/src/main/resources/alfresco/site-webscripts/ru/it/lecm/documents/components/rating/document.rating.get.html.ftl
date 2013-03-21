@@ -3,7 +3,7 @@
 <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 
 <!-- Markup -->
-<#if rateable>
+<#if rateable?? && rateable>
     <div class="document-rating">
         <h2 id="rating_title" class="thin dark">Ваш голос</h2>
         <div id="raiting">

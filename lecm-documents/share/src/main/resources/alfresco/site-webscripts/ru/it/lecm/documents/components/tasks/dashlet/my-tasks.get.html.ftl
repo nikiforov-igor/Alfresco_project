@@ -1,5 +1,5 @@
 <#assign id = args.htmlid?js_string>
-
+<#if data??>
 <script type="text/javascript">
     //<![CDATA[
     (function() {
@@ -45,3 +45,4 @@
         </#list>
     </div>
 </div>
+</#if>

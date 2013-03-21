@@ -1,6 +1,6 @@
 <!-- Parameters and libs -->
 <#assign el=args.htmlid/>
-
+<#if data??>
 <!-- Markup -->
 <div class="document-metadata-header document-details-panel">
     <h2 id="${el}-heading" class="thin dark">
@@ -63,5 +63,5 @@
     })();
     //]]>
     </script>
-
 </div>
+</#if>
