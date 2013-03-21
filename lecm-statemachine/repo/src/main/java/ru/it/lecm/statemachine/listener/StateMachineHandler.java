@@ -81,7 +81,6 @@ public class StateMachineHandler implements ExecutionListener {
                     }
                 } catch (Exception e) {
                     logger.error("Error while action execution", e);
-                    throw e;
                 }
                 return null;
             }

@@ -42,6 +42,12 @@
 				<property name="lecm-stmeditor:archiveFolder">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+                    <constraints>
+                        <constraint name="lecm-stmeditor:archiveFolder-const" type="REGEX">
+                            <parameter name="expression"><value><![CDATA[(.*[\"\*\\\>\<\?\:\|]+.*)|(.*[\.]?.*[\.]+$)|(.*[ ]+$)]]></value></parameter>
+                            <parameter name="requiresMatch"><value>false</value></parameter>
+                        </constraint>
+                    </constraints>
 				</property>
 				<property name="lecm-stmeditor:rolesFolder">
 					<type>d:text</type>

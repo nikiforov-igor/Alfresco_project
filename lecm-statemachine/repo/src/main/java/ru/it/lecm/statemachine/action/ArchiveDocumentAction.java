@@ -9,6 +9,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -25,19 +27,25 @@ public class ArchiveDocumentAction extends StateMachineAction {
 	private String archiveFolderPath = "/Archive";
 	private String status = "UNKNOWN";
 
+    private static Log logger = LogFactory.getLog(ArchiveDocumentAction.class);
+
 	@Override
 	public void execute(DelegateExecution execution) {
-		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-		for (ChildAssociationRef document : documents) {
-			String name = (String) nodeService.getProperty(document.getChildRef(), ContentModel.PROP_NAME);
-			nodeService.setProperty(document.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
-			NodeRef folder = createArchivePath(document.getChildRef());
-			nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-		}
+        try {
+            NodeService nodeService = getServiceRegistry().getNodeService();
+            NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+            List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+            for (ChildAssociationRef document : documents) {
+                String name = (String) nodeService.getProperty(document.getChildRef(), ContentModel.PROP_NAME);
+                nodeService.setProperty(document.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
+                NodeRef folder = createArchivePath(document.getChildRef());
+                nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+            }
+        } catch (Exception e) {
+            logger.error("Error while move to archive folder", e);
+        }
 
-	}
+    }
 
 	@Override
 	public void init(Element actionElement, String processId) {
@@ -68,18 +76,22 @@ public class ArchiveDocumentAction extends StateMachineAction {
 
 		NodeService nodeService = getServiceRegistry().getNodeService();
 		NodeRef archiveFolder = getRepositoryStructureHelper().getHomeRef();
-		StringTokenizer tokenizer = new StringTokenizer(path, "/");
-		while (tokenizer.hasMoreTokens()) {
-			String folderName = tokenizer.nextToken();
-			if (!"".equals(folderName)) {
-				NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
-				if (folder == null) {
-					folder = createFolder(archiveFolder, folderName);
-				}
-				archiveFolder = folder;
-			}
-		}
-		return archiveFolder;
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(path, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String folderName = tokenizer.nextToken();
+                if (!"".equals(folderName)) {
+                    NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
+                    if (folder == null) {
+                        folder = createFolder(archiveFolder, folderName);
+                    }
+                    archiveFolder = folder;
+                }
+            }
+        } catch (Exception e) {
+           logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return archiveFolder;
 	}
 
 }
