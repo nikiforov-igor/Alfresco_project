@@ -9,7 +9,6 @@ if (activeWorkflowsLimit == null) {
     activeWorkflowsLimit = 0;
 }
 
-var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-var stateMachineHelper = ctx.getBean("stateMachineHelper");
+var node = search.findNode(nodeRef);
 
-model.data = stateMachineHelper.getWorkflows(nodeRef, state, activeWorkflowsLimit);
+model.data = statemachine.getWorkflows(node, state, activeWorkflowsLimit);

@@ -623,11 +623,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public WorkflowListBean getWorkflows(String nodeRefParam, String stateParam, int activeWorkflowsLimit) {
-        if (nodeRefParam == null || !NodeRef.isNodeRef(nodeRefParam)) {
-            new WorkflowListPageBean();
+    public WorkflowListBean getWorkflows(NodeRef nodeRef, String stateParam, int activeWorkflowsLimit) {
+        if (nodeRef == null) {
+            return new WorkflowListPageBean();
         }
-        NodeRef nodeRef = new NodeRef(nodeRefParam);
         BPMState workflowState = BPMState.getValue(stateParam);
 
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
