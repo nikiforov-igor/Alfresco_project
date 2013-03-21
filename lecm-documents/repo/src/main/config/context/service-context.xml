@@ -305,6 +305,7 @@
         <property name="dictionaryService">
             <ref bean="dictionaryService"/>
         </property>
+        <property name="substituteService" ref="substitudeService"/>
     </bean>
 
     <bean id="documentFrequenciesPolicy" class="ru.it.lecm.documents.policy.DocumentFrequencyPolicy"

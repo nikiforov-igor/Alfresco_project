@@ -1,9 +1,10 @@
 <!-- Parameters and libs -->
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
-
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 <div id="${el}">
     <#if categories??>
+        <@view.viewForm formId="${el}-view-modifier-form"/>
         <#list categories as category>
             <div id="${el}-${category.nodeRef}"  class="attachment-list no-check-bg">
 	            <div id="${el}-${category.nodeRef}-main-template" class="hidden">

@@ -1,11 +1,13 @@
 <#if item??>
 	<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
+    <#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 	<#assign id = args.htmlid?html>
 	<#assign fileExtIndex = item.fileName?last_index_of(".")>
 	<#assign fileExt = (fileExtIndex > -1)?string(item.fileName?substring(fileExtIndex + 1)?lower_case, "generic")>
 	<#assign displayName = (item.displayName!item.fileName)?html>
 
 	<div class="document-header">
+        <@view.viewForm formId="${id}-view-modifier-header-form"/>
 		<div class="document-attachment-info">
 			<h1 class="thin dark breadcrumb">
 				<a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef)}">${documentName}</a> :: <a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef + "&view=attachments")}">${msg("title.attachments")}</a> ::
@@ -18,9 +20,10 @@
 
 			<!-- Title and Version -->
 			<h1 class="thin dark">
-				<#assign modifyUser = node.properties["cm:modifier"]>
+				<#assign modifyUser = node.properties["lecm-document:modifier"]>
+                <#assign modifyUserRef = node.properties["lecm-document:modifier-ref"]>
 				<#assign modifyDate = node.properties["cm:modified"]>
-				<#assign modifierLink = userProfileLink(modifyUser.userName, modifyUser.displayName, 'class="theme-color-1"') >
+				<#assign modifierLink = view.showViewLink(modifyUser, modifyUserRef)>
 				${displayName}<span class="document-version">${item.version}</span><span class="document-modified-info">${msg("label.modified-by-user-on-date", modifierLink, xmldate(modifyDate.iso8601)?string(msg("date-format.defaultFTL")))}</span>
 			</h1>
 		</div>

@@ -78,6 +78,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         return $userProfile(oUser.userName, YAHOO.lang.trim(oUser.firstName + " " + oUser.lastName));
     };
 
+    LogicECM.DocumentAttachmentsList.generateLECMUserLink = function (scope, oUser, oUserRef)
+    {
+        if (oUserRef != null) {
+            return "<span><a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + oUserRef + "')\">" + (oUser.userName ?  oUser.userName : oUser) + "</a></span>";
+        } else {
+            return $userProfile(oUser.userName, YAHOO.lang.trim(oUser.firstName + " " + oUser.lastName));
+        }
+    };
     /**
      * Generate URL for a file- or folder-link that may be located within a different Site
      *
@@ -292,8 +300,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     {
                         dateI18N = "created";
                     }
-
-                    html = '<span class="item">' + label + this.msg("details." + dateI18N + "-by", $relTime(dateProperty), LogicECM.DocumentAttachmentsList.generateUserLink(this, properties.modifier)) + '</span>';
+                    var modifier = properties["lecm-document:modifier"];
+                    var modifierRef = properties["lecm-document:modifier-ref"];
+                    var userLink = modifier ?
+                        LogicECM.DocumentAttachmentsList.generateLECMUserLink(this, modifier, modifierRef) :
+                        LogicECM.DocumentAttachmentsList.generateUserLink(this, properties.modifier);
+                    html = '<span class="item">' + label + this.msg("details." + dateI18N + "-by", $relTime(dateProperty), userLink) + '</span>';
 
                     return html;
                 });
