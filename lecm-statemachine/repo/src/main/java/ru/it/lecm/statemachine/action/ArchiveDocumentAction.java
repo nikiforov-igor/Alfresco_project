@@ -11,7 +11,9 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -24,13 +26,13 @@ import java.util.regex.Pattern;
  */
 public class ArchiveDocumentAction extends StateMachineAction {
 
-	private String archiveFolderPath = "/Archive";
-	private String status = "UNKNOWN";
+    private String archiveFolderPath = "/Archive";
+    private String status = "UNKNOWN";
 
     private static Log logger = LogFactory.getLog(ArchiveDocumentAction.class);
 
-	@Override
-	public void execute(DelegateExecution execution) {
+    @Override
+    public void execute(DelegateExecution execution) {
         try {
             NodeService nodeService = getServiceRegistry().getNodeService();
             NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
@@ -40,6 +42,17 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 nodeService.setProperty(document.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
                 NodeRef folder = createArchivePath(document.getChildRef());
                 nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+                try {
+                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+                    List<String> objects = new ArrayList<String>(1);
+                    objects.add(status);
+                    getBusinessJournalService().log(initiator, document.getChildRef(),
+                            EventCategory.CHANGE_DOCUMENT_STATUS,
+                            "Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\"", objects);
+                } catch (Exception e) {
+                    logger.error("Не удалось создать запись бизнес-журнала", e);
+                }
+
             }
         } catch (Exception e) {
             logger.error("Error while move to archive folder", e);
@@ -47,35 +60,35 @@ public class ArchiveDocumentAction extends StateMachineAction {
 
     }
 
-	@Override
-	public void init(Element actionElement, String processId) {
-		List<Element> attributes = actionElement.elements("attribute");
-		for (Element attribute : attributes) {
-			String name = attribute.attribute("name");
-			String value = attribute.attribute("value");
-			if ("archiveFolder".equalsIgnoreCase(name)) {
-				archiveFolderPath = value;
-			} else if ("status".equalsIgnoreCase(name)) {
-				status = value;
-			}
-		}
-	}
+    @Override
+    public void init(Element actionElement, String processId) {
+        List<Element> attributes = actionElement.elements("attribute");
+        for (Element attribute : attributes) {
+            String name = attribute.attribute("name");
+            String value = attribute.attribute("value");
+            if ("archiveFolder".equalsIgnoreCase(name)) {
+                archiveFolderPath = value;
+            } else if ("status".equalsIgnoreCase(name)) {
+                status = value;
+            }
+        }
+    }
 
-	private NodeRef createArchivePath(NodeRef node) {
-		//Проверяем структуру
-		Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
-		Matcher matcher = pattern.matcher(archiveFolderPath);
-		String path = archiveFolderPath;
-		while (matcher.find()) {
-			String prefix = matcher.group(1);
-			String attributeName = matcher.group(2);
-			QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
-			String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
-			path = path.replace("{" + prefix + ":" + attributeName + "}", value);
-		}
+    private NodeRef createArchivePath(NodeRef node) {
+        //Проверяем структуру
+        Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
+        Matcher matcher = pattern.matcher(archiveFolderPath);
+        String path = archiveFolderPath;
+        while (matcher.find()) {
+            String prefix = matcher.group(1);
+            String attributeName = matcher.group(2);
+            QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
+            String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
+            path = path.replace("{" + prefix + ":" + attributeName + "}", value);
+        }
 
-		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef archiveFolder = getRepositoryStructureHelper().getHomeRef();
+        NodeService nodeService = getServiceRegistry().getNodeService();
+        NodeRef archiveFolder = getRepositoryStructureHelper().getCompanyHomeRef();
         try {
             StringTokenizer tokenizer = new StringTokenizer(path, "/");
             while (tokenizer.hasMoreTokens()) {
@@ -89,9 +102,9 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 }
             }
         } catch (Exception e) {
-           logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
         }
         return archiveFolder;
-	}
+    }
 
 }

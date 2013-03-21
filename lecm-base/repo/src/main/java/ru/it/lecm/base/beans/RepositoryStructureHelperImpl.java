@@ -1,12 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -28,6 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.ServiceFolder;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -300,7 +296,12 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 		return draftsRef;
 	}
 
-	@Override
+    @Override
+    public NodeRef getCompanyHomeRef() {
+        return repository.getCompanyHome();
+    }
+
+    @Override
 	public NodeRef getFolderRef (final ServiceFolder serviceFolder) {
 		NodeRef candidateRef = serviceFolder.getFolderRef ();
 		NodeRef folderRef = null;

@@ -1,7 +1,6 @@
 package ru.it.lecm.base.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.lecm.base.ServiceFolder;
 
 
 /**
@@ -40,4 +39,10 @@ public interface RepositoryStructureHelper {
 	 * @return
 	 */
 	NodeRef getDraftsRef (final NodeRef personRef);
+
+    /**
+     * получение ссылки на корневую папку Alfresco ECM
+     * @return
+     */
+    NodeRef getCompanyHomeRef ();
 }
