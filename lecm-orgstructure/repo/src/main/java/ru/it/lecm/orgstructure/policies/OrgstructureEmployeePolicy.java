@@ -1,9 +1,5 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -14,10 +10,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: mShafeev
@@ -55,6 +54,12 @@ public class OrgstructureEmployeePolicy
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PERSON,
 				new JavaBehaviour(this, "onDeleteAssociation"));
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO,
+				new JavaBehaviour(this, "onDeleteAvatarAssociation"));
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                OrgstructureBean.TYPE_EMPLOYEE, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO,
+                new JavaBehaviour(this, "onCreateAvatarAssociation"));
 	}
 
 	@Override
@@ -82,6 +87,39 @@ public class OrgstructureEmployeePolicy
 		final NodeRef employee = nodeAssocRef.getSourceRef();
 		notifyEmploeeTie(employee);
 	}
+
+    public void onCreateAvatarAssociation(AssociationRef nodeAssocRef) {
+        final NodeRef employee = nodeAssocRef.getSourceRef();
+        // Соответствует ли сотруднику учетная запись?
+        NodeRef person = getOrgstructureService().getPersonForEmployee(employee);
+        if (person != null) {
+            // получаем ссылку на аватар
+            NodeRef avatar = nodeAssocRef.getTargetRef();
+            if (nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).size() != 0) {
+                // сравнить ссылки на аватарки
+                if (!nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).get(0).getTargetRef().equals(avatar)) {
+                    nodeService.removeAssociation(person, nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).get(0).getTargetRef(), ContentModel.ASSOC_AVATAR);
+                    // далее срабатывает метод onDeleteAvatarAssociation и в нем добавляется person ассоциация на новую аватарку
+                    // если мы поменяли аватарки у сотрудника
+                }
+            } else {
+                // добавляем учетной записи ассоциацию на аватарку
+                nodeService.createAssociation(person, avatar, ContentModel.ASSOC_AVATAR);
+            }
+        }
+    }
+
+    public void onDeleteAvatarAssociation(AssociationRef nodeAssocRef) {
+        final NodeRef employee = nodeAssocRef.getSourceRef();
+        final NodeRef person = getOrgstructureService().getPersonForEmployee(employee);
+        if (nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).size() != 0) {
+            nodeService.removeAssociation(person, nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).get(0).getTargetRef(), ContentModel.ASSOC_AVATAR);
+        }
+        if (nodeService.getTargetAssocs(employee, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO).size()!=0){
+            nodeService.createAssociation(person, nodeService.getTargetAssocs(employee, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO).get(0).getTargetRef(), ContentModel.ASSOC_AVATAR);
+        }
+
+    }
 
 	@Override
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
