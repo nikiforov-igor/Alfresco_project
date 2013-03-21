@@ -9,13 +9,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -45,23 +43,18 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-            ExpressionParser parser = new SpelExpressionParser();
-            StandardEvaluationContext context = new StandardEvaluationContext();
-            for (QName key : after.keySet()) {
-                List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(key.getNamespaceURI());
-                String textKey = (prefixes.get(0) + "_" + key.getLocalName()).replace("-", "_");
-                context.setVariable(textKey, after.get(key));
-            }
             String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
             List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
+
+            Expression lecmExpression = new Expression(nodeRef, serviceRegistry);
 
             WaitForDocumentChangeAction.Expression result = null;
             for (StateMachineAction action : actions) {
                 WaitForDocumentChangeAction documentChangeAction = (WaitForDocumentChangeAction) action;
                 List<WaitForDocumentChangeAction.Expression> expressions = documentChangeAction.getExpressions();
                 for (WaitForDocumentChangeAction.Expression expression : expressions) {
-                    if (parser.parseExpression(expression.getExpression()).getValue(context, Boolean.class)) {
+                    if (lecmExpression.execute(expression.getExpression())) {
                         result = expression;
                         break;
                     }
