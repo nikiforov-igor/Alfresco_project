@@ -6,11 +6,10 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public interface StateMachineServiceBean {
 
-    public Set<StateField> getStateFields(NodeRef document);
+    public StateFields getStateFields(NodeRef document);
 
     public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, String privilege);
 

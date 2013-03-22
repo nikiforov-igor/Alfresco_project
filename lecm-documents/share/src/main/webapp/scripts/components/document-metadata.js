@@ -116,7 +116,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             refreshContainer: function(containerId, formId, response){
                 Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                         dataObj:{
                             htmlid: 'documentMetadata-'+response.json.persistedObject,
                             itemKind: "node",
@@ -138,7 +138,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
             generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef,formId) {
                 var templateUrl = Alfresco.constants.URL_SERVICECONTEXT +
-                "components/form"
+                "lecm/components/form"
                     + "?itemKind={itemKind}"
                     + "&itemId={itemId}"
                     + "&mode={mode}"

@@ -29,7 +29,7 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
 
-				var url = "components/form"
+				var url = "lecm/components/form"
 						+ "?itemKind={itemKind}"
 						+ "&itemId={itemId}"
 						+ "&formId={formId}"

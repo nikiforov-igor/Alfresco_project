@@ -465,7 +465,7 @@
         loadProperties: function HPV_loadProperties(){
             Alfresco.util.Ajax.request(
                 {
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind=node&itemId=" + this.showConfig.nodeRef + "&mode=view&htmlid=" + this.id,
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind=node&itemId=" + this.showConfig.nodeRef + "&mode=view&htmlid=" + this.id,
                     successCallback:
                     {
                         fn: this.onPropertiesLoaded,

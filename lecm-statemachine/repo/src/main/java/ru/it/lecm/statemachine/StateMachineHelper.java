@@ -280,14 +280,21 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public Set<StateField> getStateFields(NodeRef document) {
-        List<StateMachineAction> actions = getStatusChangeActions(document);
-        Set<StateField> result = new HashSet<StateField>();
-        for (StateMachineAction action : actions) {
-            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
-            result.addAll(statusChangeAction.getFields());
+    public StateFields getStateFields(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String taskId = getCurrentTaskId(executionId);
+
+        if (taskId != null) {
+            List<StateMachineAction> actions = getStatusChangeActions(document);
+            Set<StateField> result = new HashSet<StateField>();
+            for (StateMachineAction action : actions) {
+                StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                result.addAll(statusChangeAction.getFields());
+            }
+            return new StateFields(true, result);
+        } else {
+            return new StateFields(false);
         }
-        return result;
     }
 
     @Override

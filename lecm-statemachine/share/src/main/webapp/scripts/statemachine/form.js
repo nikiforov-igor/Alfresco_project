@@ -60,7 +60,7 @@ LogicECM.module = LogicECM.module || {};
             }
 			if (workflowId != null && workflowId != 'null') {
 				this.selectedItem = nodeRef;
-				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 				templateUrl = YAHOO.lang.substitute(templateUrl, {
 					itemKind:"workflow",
 					itemId:workflowId,

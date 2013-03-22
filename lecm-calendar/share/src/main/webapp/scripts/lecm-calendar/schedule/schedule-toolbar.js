@@ -35,7 +35,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 							);
 				};
 
-				var url = "components/form"
+				var url = "lecm/components/form"
 						+ "?itemKind={itemKind}"
 						+ "&itemId={itemId}"
 						+ "&formId={formId}"
@@ -102,7 +102,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 							);
 				};
 
-				var url = "components/form"
+				var url = "lecm/components/form"
 						+ "?itemKind={itemKind}"
 						+ "&itemId={itemId}"
 						+ "&formId={formId}"

@@ -35,7 +35,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 							);
 				};
 
-				var url = "components/form"
+				var url = "lecm/components/form"
 						+ "?itemKind={itemKind}"
 						+ "&itemId={itemId}"
 						+ "&formId={formId}"

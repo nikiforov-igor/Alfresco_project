@@ -102,7 +102,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 			Alfresco.util.Ajax.request({
 				method: "GET",
-				url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 				dataObj: argsObj,
 				successCallback: {
 					fn: function InstantAbsencePage_onSuccessForm(formResult) {

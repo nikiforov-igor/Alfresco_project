@@ -42,7 +42,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 							);
 				};
 
-				var url = "components/form"
+				var url = "lecm/components/form"
 						+ "?itemKind={itemKind}"
 						+ "&itemId={itemId}"
 						+ "&formId={formId}"

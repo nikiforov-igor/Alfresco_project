@@ -83,7 +83,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_createUrl:function (type, nodeRef, childNodeType) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			if (type == "create") {
 				return YAHOO.lang.substitute(templateUrl, {
 					itemKind:"type",

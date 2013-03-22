@@ -4,14 +4,21 @@ var node = search.findNode(nodeRef);
 var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
 var helper = ctx.getBean("stateMachineHelper");
 
-var fields = helper.getStateFields(node.nodeRef).toArray();
-var result = [];
+var stateFields = helper.getStateFields(node.nodeRef);
+var items = [];
+var fields = stateFields.getFields().toArray();
+
 
 for each (var field in fields) {
-    result.push({
+    items.push({
         name: field.getName(),
         editable: field.isEditable()
     });
+}
+
+var result = {
+    hasStatemachine: stateFields.hasStatemachine(),
+    fields: items
 }
 
 model.result = jsonUtils.toJSONString(result);

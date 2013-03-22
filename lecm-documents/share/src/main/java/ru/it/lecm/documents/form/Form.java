@@ -59,13 +59,18 @@ public class Form extends FormUIGet {
         String url = "/lecm/statemachine/statefields?documentNodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
         Response response = scriptRemote.connect("alfresco").get(url);
         HashSet<String> editableFields = new HashSet<String>();
+        boolean hasStatemachine = false;
         try {
             if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-                JSONArray editableFieldsJSON = new JSONArray(response.getResponse());
-                for (int i = 0; i < editableFieldsJSON.length(); i++) {
-                    JSONObject fieldJSON = editableFieldsJSON.getJSONObject(i);
-                    if(fieldJSON.getBoolean("editable")) {
-                        editableFields.add(fieldJSON.getString("name"));
+                JSONObject stateFields = new JSONObject(response.getResponse());
+                hasStatemachine = stateFields.getBoolean("hasStatemachine");
+                if (hasStatemachine) {
+                    JSONArray editableFieldsJSON = stateFields.getJSONArray("fields");
+                    for (int i = 0; i < editableFieldsJSON.length(); i++) {
+                        JSONObject fieldJSON = editableFieldsJSON.getJSONObject(i);
+                        if(fieldJSON.getBoolean("editable")) {
+                            editableFields.add(fieldJSON.getString("name"));
+                        }
                     }
                 }
             } else {
@@ -77,23 +82,27 @@ public class Form extends FormUIGet {
 
         //формируем подсветку для полей
         HashSet<String> highlightedFields = new HashSet<String>();
-        try {
-            JSONArray highlightedFieldsJSON = new JSONArray(context.getRequest().getParameter("fields"));
-            for (int i = 0; i < highlightedFieldsJSON.length(); i++) {
-                highlightedFields.add(highlightedFieldsJSON.getString(i));
+        if (context.getRequest().getParameter("fields") != null) {
+            try {
+                JSONArray highlightedFieldsJSON = new JSONArray(context.getRequest().getParameter("fields"));
+                for (int i = 0; i < highlightedFieldsJSON.length(); i++) {
+                    highlightedFields.add(highlightedFieldsJSON.getString(i));
+                }
+            } catch (JSONException e) {
+                logger.warn("Highlighted fields is wrong format", e);
             }
-        } catch (JSONException e) {
-            logger.warn("Highlighted fields is wrong format", e);
         }
 
         JSONArray highlightResultFields = new JSONArray();
         Map<String, Field> fields = context.getFields();
         for (String prop : fields.keySet()) {
             Field field = fields.get(prop);
-            if (editableFields.contains(field.getConfigName())) {
-                field.setDisabled(false);
-            } else {
-                field.setDisabled(true);
+            if (hasStatemachine) {
+                if (editableFields.contains(field.getConfigName())) {
+                    field.setDisabled(false);
+                } else {
+                    field.setDisabled(true);
+                }
             }
             if (highlightedFields.contains(field.getConfigName())) {
                 highlightResultFields.put(field.getId());

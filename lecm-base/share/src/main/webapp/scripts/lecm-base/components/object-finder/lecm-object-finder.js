@@ -27,7 +27,7 @@ function _viewLinkAttributes(id, nodeRef, setId){
     linkViewId = id;
     Alfresco.util.Ajax.request(
         {
-            url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+            url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
             dataObj:{
                 htmlid:"LinkMetadata-" + nodeRef,
                 itemKind:"node",

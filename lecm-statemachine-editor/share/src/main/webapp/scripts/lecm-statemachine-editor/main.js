@@ -253,7 +253,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_createTask: function(itemId) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 					itemKind:"type",
 					itemId: itemId,
@@ -366,7 +366,7 @@ LogicECM.module = LogicECM.module || {};
 			} else if (isStarted) {
 				formId = "forDraftFormFalse";
 			}
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 				itemKind:"node",
 				itemId: nodeRef,
@@ -401,7 +401,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_editStatemachine: function() {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
 			templateUrl = YAHOO.lang.substitute(templateUrl, {
 				itemKind: "node",
 				itemId: this.machineNodeRef,
@@ -428,7 +428,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         formFieldsOnStatus: function () {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
             templateUrl = YAHOO.lang.substitute(templateUrl, {
                 itemKind: "node",
                 itemId: this.machineNodeRef,

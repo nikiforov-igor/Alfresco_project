@@ -89,7 +89,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				};
 				Alfresco.util.Ajax.request ({
 					method: "GET",
-					url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 					dataObj: argsPart1,
 					successCallback: {
 						fn: this.onDelegationOptsPart1,
