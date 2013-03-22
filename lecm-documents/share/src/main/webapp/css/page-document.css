@@ -29,6 +29,10 @@
     width: 79%;
 }
 
+.yui-gc .yui-u .columnSize2{
+    margin-left: 1.99%;
+}
+
 .yui-gd .yui-u .column2 {
     width: 49%;
 }
@@ -103,6 +107,12 @@
 
 .highlight_field {
     border: 1px red solid;
+}
+
+.yui-gc .comments-list {
+    text-align: left;
+    margin-left:3.99%;
+    width: 93%;
 }
 
 /**************** Workflow Tasks *******************************/
