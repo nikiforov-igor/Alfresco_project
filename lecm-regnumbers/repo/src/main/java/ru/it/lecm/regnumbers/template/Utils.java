@@ -28,13 +28,13 @@ public final class Utils implements ApplicationContextAware {
 	private final static Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	public static Method getDeclaredMethod (String name, Class<?>... parameterTypes) {
-		Method m = null;
+		Method method = null;
 		try {
-			m = Utils.class.getDeclaredMethod(name, parameterTypes);
+			method = Utils.class.getDeclaredMethod(name, parameterTypes);
 		} catch (NoSuchMethodException ex) {
 			logger.error("Can't get declared method named " + name, ex);
 		}
-		return m;
+		return method;
 	}
 
 	@Override

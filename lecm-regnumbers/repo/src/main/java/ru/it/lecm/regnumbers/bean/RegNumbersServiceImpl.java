@@ -1,5 +1,7 @@
 package ru.it.lecm.regnumbers.bean;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
+import ru.it.lecm.regnumbers.template.TemplateParseException;
+import ru.it.lecm.regnumbers.template.TemplateRunException;
 
 /**
  *
@@ -32,13 +36,13 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 
 	@Override
-	public String getNumber(NodeRef documetNode, String templateStr) {
+	public String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException {
 		Parser parser = new ParserImpl(applicationContext);
-		return parser.runTemplate(templateStr, documetNode);
+		return parser.runTemplate(templateStr, documentNode);
 	}
 
 	@Override
-	public String getNumber(NodeRef documetNode, NodeRef templateNode) {
+	public String getNumber(NodeRef documentNode, NodeRef templateNode) {
 		throw new UnsupportedOperationException("getNumber(NodeRef, NodeRef) not supported yet.");
 	}
 
@@ -48,8 +52,22 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 
 	@Override
-	public boolean validateTemplate(String templateStr) {
+	public String validateTemplate(String templateStr, boolean verbose) {
+		String result = "";
 		Parser parser = new ParserImpl(applicationContext);
-		return parser.validateTemplate(templateStr);
+		try {
+			parser.parseTemplate(templateStr);
+		} catch (TemplateParseException ex) {
+			result = ex.getMessage() + " because of following: " + ex.getCause().getMessage();
+			if (verbose) {
+				StringWriter stringWriter = new StringWriter();
+				PrintWriter printWriter = new PrintWriter(stringWriter);
+				ex.printStackTrace(printWriter);
+
+				result += stringWriter.toString();
+			}
+		}
+
+		return result;
 	}
 }

@@ -1,8 +1,9 @@
 package ru.it.lecm.regnumbers;
 
-import ru.it.lecm.regnumbers.counter.CounterType;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.regnumbers.template.TemplateParseException;
+import ru.it.lecm.regnumbers.template.TemplateRunException;
 
 /**
  *
@@ -48,23 +49,37 @@ public interface RegNumbersService {
 	/**
 	 * Сгенерировать номер документа до данному шаблону номера.
 	 *
-	 * @param documetNode ссылка на экземпляр документа, для которого необходимо
+	 * @param documentNode ссылка на экземпляр документа, для которого
+	 * необходимо
 	 * сгенерировать номер.
 	 * @param templateStr шаблон номера документа в виде строки.
 	 * @return сгененриванный номер документа.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
 	 */
-	String getNumber(NodeRef documetNode, String templateStr);
+	String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException;
 
 	/**
 	 * Сгенерировать номер документа до данному шаблону номера.
 	 *
-	 * @param documetNode ссылка на экземпляр документа, для которого необходимо
+	 * @param documentNode ссылка на экземпляр документа, для которого
+	 * необходимо
 	 * сгенерировать номер.
 	 * @param templateNode ссылка на шаблон номера (объект типа
 	 * lecm-regnum:template)
 	 * @return сгененриванный номер документа.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
 	 */
-	String getNumber(NodeRef documetNode, NodeRef templateNode);
+	String getNumber(NodeRef documentNode, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
 	 * Проверить, является ли номер документа уникальным
@@ -76,12 +91,13 @@ public interface RegNumbersService {
 	boolean isNumberUnique(String number);
 
 	/**
-	 * Проверить, является ли шаблон номера синтаксический верным с точни зрения
-	 * SpEL.
+	 * Проверить, является ли шаблон номера синтаксический верным с точки зрения
+	 * SpEL и если нет, то почему.
 	 *
 	 * @param templateStr строка-шаблон.
-	 * @return true - если шаблон проходит синтаксическую валидацию. Если нет -
-	 * false.
+	 * @param verbose нужно ли возвращать стек-трейс.
+	 * @return Пустая строка, если шаблон проходит валидацию. В противном случае
+	 * - сообщение из TemplateParseException и, если нужно, стек-трейс.
 	 */
-	boolean validateTemplate(String templateStr);
+	String validateTemplate(String templateStr, boolean verbose);
 }

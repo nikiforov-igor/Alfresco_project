@@ -41,43 +41,49 @@ public class ParserImpl implements Parser {
 	}
 
 	@Override
-	public String runTemplate(String templateStr, NodeRef documentNode) {
+	public String runTemplate(String templateStr, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
 		String result = null;
 		setDoc(documentNode);
 		Expression exp = null;
 		try {
 			exp = expressionParser.parseExpression(templateStr);
 		} catch (ParseException ex) {
-			logger.error(String.format("Error parsing registration number template '%s'", templateStr), ex);
+			String errorMsg = String.format("Error parsing registration number template '%s'", templateStr);
+			logger.error(errorMsg, ex);
+			throw new TemplateParseException(errorMsg, ex);
 		} catch (Exception ex) {
-			logger.error(String.format("Internal error parsing registration number template '%s'", templateStr), ex);
+			String errorMsg = String.format("Internal error parsing registration number template '%s'", templateStr);
+			logger.error(errorMsg, ex);
+			throw new TemplateParseException(errorMsg, ex);
 		}
 		if (exp != null) {
 			try {
 				result = exp.getValue(context, String.class);
-				logger.debug(result);
+				logger.debug("Generated new regnum: " + result);
 			} catch (EvaluationException ex) {
-				logger.error(String.format("Error getting registration number using template '%s'", templateStr), ex);
+				String errorMsg = String.format("Error getting registration number using template '%s'", templateStr);
+				logger.error(errorMsg, ex);
+				throw new TemplateRunException(errorMsg, ex);
 			}
 		}
 		return result;
 	}
 
 	@Override
-	public boolean validateTemplate(String templateStr) {
-		boolean result = true;
-		Expression exp = null;
+	public void parseTemplate(String templateStr) throws TemplateParseException {
+
 		try {
 			expressionParser.parseExpression(templateStr);
 		} catch (ParseException ex) {
-			result = false;
-			logger.error(String.format("Error parsing registration number template '%s'", templateStr), ex);
+			String errorMsg = String.format("Error parsing registration number template '%s'", templateStr);
+			logger.debug("Validating template: " + errorMsg);
+			throw new TemplateParseException(errorMsg, ex);
 		} catch (Exception ex) {
-			result = false;
-			logger.error(String.format("Internal error parsing registration number template '%s'", templateStr), ex);
+			String errorMsg = String.format("Internal error parsing registration number template '%s'", templateStr);
+			logger.debug("Validating template: " + errorMsg);
+			throw new TemplateParseException(errorMsg, ex);
 		}
 
-		return result;
 	}
 
 	public Document getDoc() {

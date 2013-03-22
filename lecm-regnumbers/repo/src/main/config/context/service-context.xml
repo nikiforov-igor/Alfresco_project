@@ -53,15 +53,11 @@
 		</property>
 	</bean>
 
-	<bean id="regNumbersTemplateUtils" class="ru.it.lecm.regnumbers.template.Utils"
-		  depends-on="serviceOrgstructure"/>
+	<bean id="regNumbersTemplateUtils" class="ru.it.lecm.regnumbers.template.Utils" depends-on="serviceOrgstructure"/>
 
 	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="regnumbers"/>
 		<property name="regNumbersService" ref="regNumbersService"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.regnumbers.regnum.test.get" class="ru.it.lecm.regnumbers.bean.RegNumWebTest" parent="webscript">
-		<property name="regNumbersServise" ref="regNumbersService"/>
-	</bean>
 </beans>

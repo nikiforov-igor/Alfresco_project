@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -28,7 +29,6 @@ public class DocumentImpl implements Document {
 	private NamespaceService namespaceService;
 	private ApplicationContext applicationContext;
 	private DocumentMembersService documentMembersService;
-	
 	final private static Logger logger = LoggerFactory.getLogger(DocumentImpl.class);
 
 	public DocumentImpl(NodeRef documentNode, ApplicationContext applicationContext) {
@@ -57,13 +57,20 @@ public class DocumentImpl implements Document {
 			StringBuilder stringBuilder = new StringBuilder();
 			ListIterator itr = resultAttributes.listIterator();
 			while (itr.hasNext()) {
-				stringBuilder.append(itr.next());
-				if (itr.hasNext()) {
-					stringBuilder.append(", ");
+				Object next = itr.next();
+				if (next != null) {
+					stringBuilder.append(next);
+					if (itr.hasNext()) {
+						stringBuilder.append(", ");
+					}
+				} else {
+					if (stringBuilder.lastIndexOf(", ") == stringBuilder.length() - 2) {
+						stringBuilder.deleteCharAt(stringBuilder.length() - 2);
+					}
 				}
 			}
 			return stringBuilder.toString();
-		} else if (resultAttributes.size() == 1) {
+		} else if (resultAttributes.size() == 1 && resultAttributes.get(0) != null) {
 			return resultAttributes.get(0);
 		} else {
 			return "";
@@ -84,8 +91,7 @@ public class DocumentImpl implements Document {
 
 	@Override
 	public Date getCreationDate() {
-		logger.warn("getCreationDate() not supported yet.");
-		return new Date();
+		return (Date) nodeService.getProperty(documentNode, ContentModel.PROP_CREATED);
 	}
 
 	@Override
