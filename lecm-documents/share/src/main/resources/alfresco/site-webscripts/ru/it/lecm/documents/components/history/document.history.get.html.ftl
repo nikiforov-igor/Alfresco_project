@@ -3,7 +3,7 @@
 
 <!-- Markup -->
 <div class="widget-bordered-panel">
-<div class="document-components-panel">
+<div class="document-history-panel">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("heading")}
         <span class="alfresco-twister-actions">

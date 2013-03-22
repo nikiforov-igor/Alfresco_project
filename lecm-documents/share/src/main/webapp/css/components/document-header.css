@@ -4,7 +4,7 @@
 }
 
 .document-header h1 {
-    padding: 0.5em 1em 0.2em;
+    padding: 0.5em 1em 0.5em;
 
 	font-family: Arial;
 	font-size: 16px;
@@ -44,6 +44,7 @@
 .document-header .document-info {
     float: left;
     width: 78%;
+    padding: 0.2em;
 }
 
 .document-header .document-attachment-info {
