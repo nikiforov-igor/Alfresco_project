@@ -41,6 +41,7 @@
 
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="workflowService" ref="WorkflowService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 	</bean>
 
 	<util:constant id="delegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.DELEGATION_FOLDER"/>

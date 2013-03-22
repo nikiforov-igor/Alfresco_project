@@ -45,10 +45,10 @@ import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.integrotest.ExecutorBean;
 import ru.it.lecm.integrotest.ExecutorBean.StepResult;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
-import ru.it.lecm.security.events.INodeACLBuilder;
-import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import ru.it.lecm.utils.DurationLogger;
 import ru.it.lecm.utils.SearchHelper;
@@ -137,6 +137,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	private AuthorityService authorityService;
 	private WorkflowService workflowService;
+	private LecmPermissionService lecmPermissionService;
 
 	private JSONObject args;
 
@@ -204,6 +205,14 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	public NamespaceService getNamespaceService() {
 		return namespaceService;
+	}
+
+	public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService value) {
+		this.lecmPermissionService = value;
 	}
 
 	@Override
@@ -1178,6 +1187,33 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	}
 
 	/**
+	 * Получить название полномочия, исходя из упрощённого:
+	 *   ---------------------------------
+	 *    Упрощённое				Полное
+	 *   ---------------------------------
+	 *    r или						Read
+	 *    rw | full | w | +			Write
+	 *    deny | -					deny
+	 *    остальное					как есть
+	 *   ---------------------------------
+	 * @param simplePermName
+	 * @return
+	 */
+	final static String findPermission(String simplePermName) {
+		if (simplePermName != null && simplePermName.trim().length() > 0) {
+			String normName = simplePermName.trim().toLowerCase();
+			if ("read".equals(normName) || "r".equals(normName))
+				return "Read";
+			if ("write".equals(normName) || "w".equals(normName)|| "rw".equals(normName) || "+".equals(normName))
+				return "Write";
+			if ("deny".equals(normName) || "-".equals(normName))
+				return "deny";
+			return simplePermName;
+		}
+		return simplePermName;
+	}
+
+	/**
 	 * Сформировать карту "БР-Доступ" согласно списку, заданному в виде строки.
 	 * @param value список через ';' из записей "бизнес-роль:доступ;..."
 	 *  	где роль = название роли (мнемоника),
@@ -1185,8 +1221,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 * 			если доступ опущен, принимается за пустой
 	 * @return
 	 */
-	final static Map<String, StdPermission> makeBRoleMapping(String value) {
-		final Map<String, StdPermission> result = new HashMap<String, StdPermission>();
+	final Map<String, LecmPermissionGroup> makeBRoleMapping(String value) {
+		final Map<String, LecmPermissionGroup> result = new HashMap<String, LecmPermissionGroup>();
 		final String[] parts = value.split(";");
 		if (parts != null) {
 			for(String broleAccess: parts) {
@@ -1194,8 +1230,11 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 					final String[] roleAcc = broleAccess.split(":");
 					if (roleAcc.length == 0) continue;
 					final String brole = roleAcc[0].trim();
-					final StdPermission access = (roleAcc.length > 1) ? StdPermission.findPermission(roleAcc[1].trim()) : null;
-					result.put( brole, (access != null) ? access : StdPermission.noaccess);
+					final String access = (roleAcc.length > 1) ? findPermission(roleAcc[1].trim()) : null;
+					if ("deny".equalsIgnoreCase(access))
+						continue; // skip
+					// result.put( brole, (access != null) ? access : StdPermission.noaccess);
+					result.put( brole, this.lecmPermissionService.makePermGroup(access));
 				} catch(Throwable t) {
 					logger.error( String.format("Check invalid map point '%s',\n\t expected to be 'BRole:access'\n\t\t, where access is (noaccess | readonly | full),\n\t\t BRole = mnemonic of business role"
 							, broleAccess), t);
@@ -1237,8 +1276,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		final JSONObject result = new JSONObject();
 
 		// получение бина
-		final INodeACLBuilder builder = (INodeACLBuilder) getApplicationContext().getBean("lecmAclBuilderBean");
-		logger.info("bean found class "+ builder.getClass().getName());
+		logger.info("bean found class "+ this.lecmPermissionService.getClass().getName());
 
 		// выполнение Операции
 		final String oper = echoGetArg("oper", ACLOPER_REBUILD, result);
@@ -1261,21 +1299,22 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 					final String roleAccessMap = echoGetArg( "roleAccessMap", null, result);
 					logger.info( String.format( "<RebuildACL> for node id '%s' as %s", id, roleAccessMap));
 
-					final Map<String, StdPermission> accessMap = makeBRoleMapping(roleAccessMap);
+					final Map<String, LecmPermissionGroup> accessMap = makeBRoleMapping(roleAccessMap);
 					if (ACLOPER_REBUILDSTATIC.equalsIgnoreCase(oper))
-						builder.rebuildStaticACL( ref, accessMap);
+						this.lecmPermissionService.rebuildStaticACL( ref, accessMap);
 					else
-						builder.rebuildACL( ref, accessMap);
+						this.lecmPermissionService.rebuildACL( ref, accessMap);
 				} else if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper) || ACLOPER_REVOKE_DYNAROLE.equalsIgnoreCase(oper)) {
 					final String roleCode = echoGetArg( "roleCode", null, result);
 					final String userId = echoGetArg( "userId", null, result);
-					final StdPermission access = StdPermission.findPermission( echoGetArg("access", null, result) );
+					// final StdPermission access = StdPermission.findPermission( echoGetArg("access", null, result) );
+					final String access = findPermission( echoGetArg("access", null, result) );
 					logger.info( String.format( "<%s> for node id '%s', user <%s>, role <%s>, access <%s>", oper, id, userId, roleCode, access));
 
 					if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper))
-						builder.grantDynamicRole(roleCode, ref, userId, access);
+						this.lecmPermissionService.grantDynamicRole(roleCode, ref, userId, this.lecmPermissionService.makePermGroup(access) );
 					else
-						builder.revokeDynamicRole(roleCode, ref, userId);
+						this.lecmPermissionService.revokeDynamicRole(roleCode, ref, userId);
 				} else { logger.warn("Unsupported operation "+ oper); }
 			}
 			logger.info( String.format( "done test oper <%s> for node id '%s'", oper, id));

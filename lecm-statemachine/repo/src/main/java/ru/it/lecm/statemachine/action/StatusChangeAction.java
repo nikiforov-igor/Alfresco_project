@@ -1,5 +1,12 @@
 package ru.it.lecm.statemachine.action;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -13,12 +20,11 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.security.events.INodeACLBuilder;
-import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
-import ru.it.lecm.statemachine.StateField;
 
-import java.util.*;
+import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
+import ru.it.lecm.statemachine.StateField;
 
 /**
  * User: PMelnikov
@@ -169,7 +175,7 @@ public class StatusChangeAction extends StateMachineAction {
 
 		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
-		//execBuildInTransactDynamic(children, dynamicPermissions);
+		// execBuildInTransactDynamic(children, dynamicPermissions);
 	}
 
     public Set<StateField> getFields() {
@@ -208,8 +214,8 @@ public class StatusChangeAction extends StateMachineAction {
 	}
 
 	private void execBuildInTransactStatic(NodeRef node
-			, final Map<String, INodeACLBuilder.StdPermission> permissions) {
-		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+			, final Map<String, LecmPermissionGroup> permissions) {
+		final LecmPermissionService permissionsBuilder = getLecmPermissionService();
 		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
 				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
@@ -222,8 +228,8 @@ public class StatusChangeAction extends StateMachineAction {
 	}
 
 	private void execBuildInTransactDynamic(final List<ChildAssociationRef> children
-			, final Map<String, StdPermission> permissions) {
-		final INodeACLBuilder permissionsBuilder = getLecmAclBuilderBean();
+			, final Map<String, LecmPermissionGroup> permissions) {
+		final LecmPermissionService permissionsBuilder = getLecmPermissionService();
 //		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
 //				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 //					@Override

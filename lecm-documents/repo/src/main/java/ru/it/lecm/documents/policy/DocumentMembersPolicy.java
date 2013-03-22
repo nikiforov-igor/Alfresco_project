@@ -1,5 +1,10 @@
 package ru.it.lecm.documents.policy;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -13,6 +18,7 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -20,13 +26,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.events.INodeACLBuilder;
-import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import ru.it.lecm.security.LecmPermissionService;
 
 /**
  * User: dbashmakov
@@ -48,11 +48,13 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     private AuthenticationService authService;
     private OrgstructureBean orgstructureService;
 
-    final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
+    // final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
+    // private StdPermission grantAccess = DEFAULT_ACCESS;
+    final public String DEFAULT_ACCESS = LecmPermissionService.PGROLE_Reader;
+    private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
 
     private String grantDynaRoleCode = "BR_MEMBER";
-    private StdPermission grantAccess = DEFAULT_ACCESS;
-    private INodeACLBuilder lecmAclBuilder;
+    private LecmPermissionService lecmPermissionService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -70,7 +72,15 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
         this.authService = authService;
     }
 
-    public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
+    public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
         this.notificationActiveChannel = notificationActiveChannel;
     }
 
@@ -90,15 +100,15 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
         this.grantDynaRoleCode = grantDynaRoleCode;
     }
 
-    public StdPermission getGrantAccess() {
+    public String getGrantAccess() {
         return grantAccess;
     }
 
     public void setGrantAccessTag(String value) {
-        setGrantAccess(StdPermission.findPermission(value));
+        setGrantAccess( value); // StdPermission.findPermission(value));
     }
 
-    public void setGrantAccess(StdPermission value) {
+    public void setGrantAccess(String value) {
         this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
     }
 
@@ -166,7 +176,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
 			 * такая нарезка ничего не выполнит.
 			 */
-            lecmAclBuilder.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), this.getGrantAccess());
+            lecmPermissionService.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), lecmPermissionService.makePermGroup(this.getGrantAccess()) );
 
             logger.info(String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
 
@@ -192,7 +202,8 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
                 return;
             }
 
-            lecmAclBuilder.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId());
+            // lecmAclBuilder.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId());
+            lecmPermissionService.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId() );
 
             logger.info(String.format("Dynamic role revoked\n\t for user '%s'/employee {%s}\n\t in document {%s}", authorLogin, employee, docRef));
 
@@ -249,7 +260,4 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
         }
     }
 
-    public void setLecmAclBuilder(INodeACLBuilder lecmAclBuilder) {
-        this.lecmAclBuilder = lecmAclBuilder;
-    }
 }

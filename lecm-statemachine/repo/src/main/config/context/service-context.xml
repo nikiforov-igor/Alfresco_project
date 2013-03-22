@@ -75,7 +75,7 @@
 
 	<bean id="stateMachineHandler" class="ru.it.lecm.statemachine.listener.StateMachineHandler">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="lecmAclBuilderBean" ref="lecmAclBuilderBean" />
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="businessJournalService" ref="businessJournalService" />
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
 	</bean>
@@ -101,6 +101,11 @@
 		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nsService" ref="namespaceService"/>
+		<!-- 
+		<property name="supportNodeTypes" value="lecm-contract:document, lecm-document:base"/>
+		  -->
+		<property name="supportNodeTypes" value="lecm-document:base" />
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"

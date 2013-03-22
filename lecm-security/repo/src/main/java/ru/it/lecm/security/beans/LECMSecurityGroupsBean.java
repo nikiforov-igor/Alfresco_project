@@ -1,5 +1,7 @@
 package ru.it.lecm.security.beans;
 
+import org.alfresco.repo.security.permissions.impl.model.PermissionModel;
+import org.alfresco.repo.security.permissions.impl.model.PermissionModelBootstrap;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.util.PropertyCheck;
@@ -319,6 +321,10 @@ public class LECMSecurityGroupsBean
 			removeParent(sgMyRole, sgBRole);
 		} else {
 			removeParent(sgObj, sgBRole);
+//			PermissionModel model;
+//			model.addPermissionModel("");
+//			PermissionModelBootstrap bt;
+//			bt.setPermissionModel("");
 		}
 	}
 

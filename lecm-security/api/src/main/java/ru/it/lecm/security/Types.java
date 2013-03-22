@@ -1,6 +1,9 @@
 package ru.it.lecm.security;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
+
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
 
 /**
@@ -43,6 +46,7 @@ public final class Types {
 	final static public String SFX_SV  = "$OUSV"+ SFX_DELIM; // by id
 
 	final static public String SFX_BRME = "$BRME" + SFX_DELIM;   // by id user & id role
+	final static public String SFX_SPEC = "$SPEC" + SFX_DELIM;   // by id user & low-level permission group name
 
 	final static public String SFX_PRIV4USER = SFX_DELIM+ "PRIV4USER"; // окончание для индикации личной security-группы пользователя
 
@@ -57,12 +61,16 @@ public final class Types {
 	}
 
 	/**
-	 * Получить Pair<userId, broleCode> из названия Бизнес Роли вида:
+	 * Выделить из полного имени sec-группы Альфреско пару отдельных элементов:
+	 *    1) id Сорудника
+	 *    2) Бизнес роль
+	 * Здесь формат имени принимается таким:
+	 * 		"GROUP__LECM$BRME%BR_INITIATOR%PRIV4USER%usrID"
 	 * example: "GROUP__LECM$BRME-BR_INITIATOR-PRIV4USER-usrId"
-	 * @param authority
-	 * @return
+	 * @param authority полное имя sec-группы Альфреско
+	 * @return объект Pair<userId, broleCode> с полями, полученными из названия authority
 	 */
-	public static Pair<String, String> getUserRolePair(String authority) {
+	public static Pair<String, String> splitAuthname2UserRolePair(String authority) {
 		// [0] буквы префикса [1] id1(=usedId) [2] id2(=roleCodeId)
 		final String[] ids = authority.split(SFX_DELIM);
 		assert ids.length >= 4 : String.format( "check validity of authority named '%s' -> must be like 'XXX-roleCode-userId'", authority);
@@ -94,6 +102,8 @@ public final class Types {
 		, SG_SV(SFX_SV, "Boss Position")			// группа Руководящая (связана с Подразделением и Должностью)
 		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
 		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
+
+		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальнаый доступ Сотрудника на конкретный узел
 		;
 
 		final private String suffix;
@@ -172,6 +182,17 @@ public final class Types {
 		public static SGDeputyPosition getSGDeputyPosition(String dpId, String employeerId) {
 			return getSGDeputyPosition(dpId, employeerId, null);
 		}
+
+		public static SGSpecialUserRole getSGSpecialUserRole(String employeeId,
+				LecmPermissionGroup permissionGroup, NodeRef nodeRef, String userLogin) {
+			return new SGSpecialUserRole(employeeId, nodeRef, permissionGroup, userLogin);
+		}
+
+		public static SGSpecialUserRole getSGSpecialUserRole(String employeeId,
+				LecmPermissionGroup permissionGroup, NodeRef nodeRef) {
+			return getSGSpecialUserRole(employeeId, permissionGroup, nodeRef, null);
+		}
+
 	}
 
 
@@ -366,6 +387,29 @@ public final class Types {
 			super.setDisplayInfo(value);
 		}
 
+	}
+
+	/**
+	 * Индикатор индивидуальной роли Сотрудника в документе.
+	 */
+	public static class SGSpecialUserRole extends SGPositionWithUser 
+	{
+		public SGSpecialUserRole(String employeeId, NodeRef nodeRef,
+				LecmPermissionGroup permissionGroup, String userLogin) {
+			super( SGKind.SG_SPEC, permissionGroup.getName(), /*displayInfo*/nodeRef.getId(), employeeId, userLogin);
+		}
+
+		public SGSpecialUserRole(String employeeId, NodeRef nodeRef, LecmPermissionGroup permissionGroup) {
+			this(employeeId, nodeRef, permissionGroup, null);
+		}
+
+		public String getLecmPermGroupName() {
+			return super.getId();
+		}
+
+		public String getDocId() {
+			return super.getDisplayInfo();
+		}
 	}
 
 	/**

@@ -246,8 +246,8 @@
             <ref bean="serviceOrgstructure"/>
         </property>
         <property name="grantDynaRoleCode" value="BR_MEMBER"/>
-        <property name="grantAccessTag" value="readonly"/>
-        <property name="lecmAclBuilder" ref="lecmAclBuilderBean" />
+        <property name="grantAccessTag" value="LECM_BASIC_PG_READER"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
     </bean>
 
     <bean id="document.businessJournalDictionaryBootstrap"

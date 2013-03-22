@@ -1,5 +1,8 @@
 package ru.it.lecm.statemachine.action;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -10,13 +13,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
-
-import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -26,7 +27,7 @@ import java.util.HashMap;
 abstract public class StateMachineAction {
 
 	private ServiceRegistry serviceRegistry;
-	private INodeACLBuilder lecmAclBuilderBean;
+	private LecmPermissionService lecmPermissionService;
 	private BusinessJournalService businessJournalService;
 	private RepositoryStructureHelper repositoryStructureHelper;
 
@@ -38,12 +39,12 @@ abstract public class StateMachineAction {
 		this.serviceRegistry = serviceRegistry;
 	}
 
-	public void setLecmAclBuilderBean(INodeACLBuilder lecmAclBuilderBean) {
-		this.lecmAclBuilderBean = lecmAclBuilderBean;
+	public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
 	}
 
-	public INodeACLBuilder getLecmAclBuilderBean() {
-		return lecmAclBuilderBean;
+	public void setLecmPermissionService(LecmPermissionService value) {
+		this.lecmPermissionService = value;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {

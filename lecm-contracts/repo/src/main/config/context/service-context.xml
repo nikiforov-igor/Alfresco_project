@@ -34,17 +34,17 @@
 		</property>
 	</bean>
 
-    <bean  id="contractPolicy" class="ru.it.lecm.document.policies.ContractPolicy"
-		   init-method="init"
-		   depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
+	<bean id="contractPolicy" class="ru.it.lecm.document.policies.ContractPolicy"
+			init-method="init"
+			depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="lecmAclBuilder" ref="lecmAclBuilderBean" />
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-        <property name="businessJournalService" ref="businessJournalService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
 
 		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
 		<property name="grantAccessTag" value="full"/>

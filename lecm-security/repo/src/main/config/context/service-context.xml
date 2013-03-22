@@ -21,8 +21,15 @@
 		</property>
 	</bean>
   -->
+	<!--  регистрируем свою часть подсистемы безопасности "Гуппы полномочий" -->
+	<bean id="lecmModuleSecurePermissionModelBootstrap" parent="permissionModelBootstrap" depends-on="documents.LogicEcmModelsBootstrap">
+		<property name="model">
+			<value>alfresco/model/lecm/lecmPermissionDefinitions.xml</value>
+		</property>
+	</bean>
 
-	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="authorityService">
+
+	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="lecmModuleSecurePermissionModelBootstrap">
 		<property name="authorityService" ref="authorityService" />
 		<property name="safeMode" value="true" />
 		<!--
@@ -31,30 +38,21 @@
 		  -->
 	</bean>
 
-	<bean id="lecmAclBuilderBean" class="ru.it.lecm.security.beans.LECMAclBuilderBean" depends-on="authorityService, nodeService, permissionService">
+	<bean id="lecmPermissionServiceBean" class="ru.it.lecm.security.beans.LecmPermissionServiceImpl"
+			depends-on="lecmModuleSecurePermissionModelBootstrap">
 
 		<property name="nodeService" ref="nodeService" />
 		<property name="permissionService" ref="permissionService" />
 		<property name="authorityService" ref="authorityService" />
 		<property name="orgStructureNotifiers" ref="lecmSecurityGroupsBean" />
 
+		<property name="modelDAOService" ref="permissionsModelDAO" />
+
 		<!-- Наследование родительских прав для случая статики и динамики:
 			по-умолчанию: статика НЕ наследует (false), динамика Наследует (true)
 		  -->
 		<property name="staticInheritParentPermissions" value="false" />
 		<property name="dynamicInheritParentPermissions" value="true" />
-
-		<!-- Выставляем соответствие lecm-уровней доступа и стандартных security ролей alfresco  -->
-		<property name="permissionAliases">
-			<map>
-				<!-- ключ: доступ = (noaccess | readonly | full)
-					значение: название PermissionGroup Alfresco (см permissionDefinitions.xml)
-				  -->
-				<entry key="noaccess" value="deny" />
-				<entry key="readonly" value="Consumer" />
-				<entry key="full" value="Editor" />
-			</map>
-		</property>
 	</bean>
 
 </beans>

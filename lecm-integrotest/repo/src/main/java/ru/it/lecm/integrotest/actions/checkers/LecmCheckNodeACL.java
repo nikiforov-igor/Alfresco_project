@@ -18,7 +18,6 @@ import ru.it.lecm.integrotest.TestFailException;
 import ru.it.lecm.integrotest.actions.LecmActionBase;
 import ru.it.lecm.integrotest.utils.NodeRefData;
 import ru.it.lecm.integrotest.utils.Utils;
-import ru.it.lecm.security.events.INodeACLBuilder.StdPermission;
 
 /**
  * Класс для проверки доступа к узлам.
@@ -69,9 +68,9 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	 */
 	public interface UserAccessTable {
 		/**
-		 * @return список пользователь(key) -> соответствующее право 
+		 * @return список пользователь(key) -> соответствующее право (lecm-группа полномочий "LECM_BASIC_PG_") 
 		 */
-		public Map<String, StdPermission> getUsersAccess();
+		public Map<String, String> getUsersAccess();
 
 		/**
 		 * Проверить корректнгость данных, при ошибках - выполнить журналирование
@@ -86,7 +85,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	static class UserWithPermissions implements UserAccessTable {
 
 		// ключ = login пользователя, value=соот-щее право
-		private Map<String, StdPermission> usersAccessMap;  // для строк в формате функции Utils.makeBRoleMapping
+		private Map<String, String> usersAccessMap;  // для строк в формате функции Utils.makeBRoleMapping
 
 		@Override
 		public void validateAndLogIfError() {
@@ -96,11 +95,11 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		}
 
 		@Override
-		public Map<String, StdPermission> getUsersAccess() {
+		public Map<String, String> getUsersAccess() {
 			return this.usersAccessMap;
 		}
 
-		public void setUsersAccess(Map<String, StdPermission> value) {
+		public void setUsersAccess(Map<String, String> value) {
 			this.usersAccessMap = value;
 		}
 
@@ -123,7 +122,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	static class UserWithBR implements UserAccessTable {
 
 		/* перечисление бизнес-ролей (key) и соот-щих разрешений (value) */
-		private Map<String, StdPermission> roleAccess; // для строк в формате функции Utils.makeBRoleMapping
+		private Map<String, String> roleAccess; // для строк в формате функции Utils.makeBRoleMapping
 
 		/* 
 		 * перечисление бизнес-ролей (key) и соот-щих логинов пользователей (value),
@@ -135,11 +134,11 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		/**
 		 * @return карта БР -> доступ
 		 */
-		public Map<String, StdPermission> getRoleAccess() {
+		public Map<String, String> getRoleAccess() {
 			return roleAccess;
 		}
 
-		public void setRoleAccess(Map<String, StdPermission> roleAccess) {
+		public void setRoleAccess(Map<String, String> roleAccess) {
 			this.roleAccess = roleAccess;
 			LoggerFactory.getLogger (UserWithBR.class).debug( String.format( "after setRoleAccess access table:\n\t %s", this.roleAccess));
 		}
@@ -190,11 +189,11 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		}
 
 		@Override
-		public Map<String, StdPermission> getUsersAccess() {
-			final Map<String, StdPermission> result = new HashMap<String, StdPermission>();
-			for(Map.Entry<String, StdPermission> e: roleAccess.entrySet() ) {
+		public Map<String, String> getUsersAccess() {
+			final Map<String, String> result = new HashMap<String, String>();
+			for(Map.Entry<String, String> e: roleAccess.entrySet() ) {
 				final String brole = e.getKey();
-				final StdPermission perm = e.getValue();
+				final String perm = (e.getValue() != null) ? e.getValue().trim() : "";
 				final String usrLogin = roleUsers.get(brole); // соответствующий этой БР Пользователь
 				result.put( usrLogin, perm);
 			}
@@ -367,16 +366,16 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		// проверка доступа по бизнес ролям, через конкретных пользователей...
 		boolean failed = false;
 		int i = 0;
-		final Map<String, StdPermission> accTable = this.accessMap.getUsersAccess();
+		final Map<String, String> accTable = this.accessMap.getUsersAccess();
 		sb.append( STR_TABLE_DELIMITER);
 		sb.append( String.format( "\n  %2s\t %5s\t %3s\t '%s'", "nn", "isOk", "access", "User Login"));
 		sb.append( STR_TABLE_DELIMITER);
-		for(Map.Entry<String, StdPermission> e: accTable.entrySet() ) {
+		for(Map.Entry<String, String> e: accTable.entrySet() ) {
 			i++;
 			final String usrLogin = e.getKey(); // соответствующий пользователь
-			final StdPermission perm = e.getValue();
+			final String perm = e.getValue();
 			final boolean flagOK = chkNodeUserAccess( docRef, usrLogin, perm);
-			sb.append( String.format( "\n  %2d\t %5s\t %3s\t '%s'", i, (flagOK ? "OK" : "*FAIL"), perm.getInfo(), usrLogin));
+			sb.append( String.format( "\n  %2d\t %5s\t %3s\t '%s'", i, (flagOK ? "OK" : "*FAIL"), perm, usrLogin));
 
 			if (logger.isTraceEnabled()) { // выдаём состав авторизаций пользователя
 				sb.append( String.format( "\n\t\t [%s]", getContext().getAuthorityService().getAuthoritiesForUser(usrLogin) ));
@@ -422,7 +421,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	 * @param perm
 	 * @return
 	 */
-	private boolean chkNodeUserAccess( final NodeRef ref, final String usrLogin, final StdPermission perm) {
+	private boolean chkNodeUserAccess( final NodeRef ref, final String usrLogin, final String perm) {
 		// AuthenticationUtil.runAs(runAsWork, uid);
 		final QName prop = getContext().getFinder().makeQName(this.rwCheckingPropName);
 
@@ -455,7 +454,7 @@ public class LecmCheckNodeACL extends LecmActionBase {
 	}
 
 	@SuppressWarnings("unused")
-	boolean doAccessCheck(String usrLogin, ServiceRegistry registry, NodeRef ref, QName prop, StdPermission perm)
+	boolean doAccessCheck(String usrLogin, ServiceRegistry registry, NodeRef ref, QName prop, String perm)
 	{
 		final NodeService nodeServ = registry.getNodeService();
 	
@@ -465,71 +464,20 @@ public class LecmCheckNodeACL extends LecmActionBase {
 		if (logger.isDebugEnabled()) {
 			final AccessStatus accRead = registry.getPermissionService().hasPermission(ref, "Read");
 			final AccessStatus accWrite = registry.getPermissionService().hasPermission(ref, "Write");
-			logger.debug( String.format( "\n\t {%s} %5s %10s read(%7s) write(%s)", ref, perm.getInfo(), usrLogin, accRead, accWrite) );
-		} 
-		final AccessStatus accPerm = registry.getPermissionService().hasPermission(ref, (perm == StdPermission.full) ? "Write" : "Read");
-
-		switch(perm) {
-			case noaccess: {  // : должно свалиться при чтении
-				return accPerm == AccessStatus.DENIED;
-			}
-			case readonly: {  // : должно читаться
-				return accPerm == AccessStatus.ALLOWED;
-			}
-			case full: {  // должно писаться в некоторый атрибут ...
-				return accPerm == AccessStatus.ALLOWED;
-//				try {
-//					/* 
-//					 * Вариант чтения-записи отдельного атрибута:
-//					 */ 
-//					// раз можно писать -> доступ на чтение тоже должен иметься ...
-//					final Serializable x = nodeServ.getProperty(ref, prop);
-//					logger.debug( String.format("ok read at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-//
-//					// пишем сконфигурированное значение ...
-//					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
-//					nodeServ.setProperty(ref, prop, this.writeValue); // Валится
-//					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-//					// восстановим прежнее значение атрибута
-//					nodeServ.setProperty(ref, prop, x);
-//					writeProp = true;
-//
-//					/*
-//					 * Вариант чтения-записи всех атрибутов:
-//					 * 
-//					// раз можно писать -> доступ на чтение тоже должен иметься ...
-//					final Map<QName, Serializable> props = nodeServ.getProperties(ref);
-//					final Serializable x = props.get(prop);
-//					logger.debug( String.format("ok readProperties at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-//
-//					// пишем сконфигурированное значение ...
-//					stage = String.format( "write property '%s'='%s'", prop, this.writeValue);
-//					props.put( prop, this.writeValue);
-//					nodeServ.setProperties(ref, props);
-//					logger.debug( String.format("ok writeProperty at WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-//
-//					// восстановим прежнее значение атрибута
-//					stage = String.format( "restore previous property '%s'='%s'", prop, this.writeValue);
-//					props.put( prop, x);
-//					nodeServ.setProperties(ref, props);
-//					logger.debug( String.format("Success WriteAccess by user '%s' for node '%s' by <%s>", usrLogin, ref, stage));
-//					 */
-//
-//					return true;
-//				} catch(org.alfresco.repo.security.permissions.AccessDeniedException tx) {
-//					logger.warn( String.format("Fail WriteAccess by user '%s' for node '%s' by <%s>:\n%s", usrLogin, ref, stage, tx.getMessage()));
-//					return false;
-//				} finally {
-//					if (canWrite == writeProp)
-//						logger.debug( "hasPermission(Write) and ReadProp done equevalent (both read or both deny, not mixed)");
-//					else
-//						logger.warn( String.format( "(!) (canWrite=%s) != (WriteProp=%s)", canWrite, writeProp) );
-//				}
-			}
+			logger.debug( String.format( "\n\t {%s} %5s %10s read(%7s) write(%s)", ref, perm, usrLogin, accRead, accWrite) );
 		}
 
-		// неизвестное значение - бросаемся исключением ... 
-		return chkAndLogCondition( false, String.format( "Permission '%s' is not supported", perm));
+		try {
+			final boolean deny = (perm == null || "deny".equalsIgnoreCase(perm));
+			final String checkPermission = deny ? "Read" : perm;
+			final AccessStatus accPerm = registry.getPermissionService().hasPermission(ref, checkPermission); // ((perm == StdPermission.full) ? "Write" : "Read");
+			return (!deny) ? (accPerm == AccessStatus.ALLOWED) : (accPerm == AccessStatus.DENIED);
+		} catch (Throwable ex) {
+			final String info = String.format( "Permission '%s' is not supported", perm);
+			// неизвестное значение - бросаемся исключением ... 
+			logger.error( info, ex);
+			return chkAndLogCondition( false, info);
+		}
 	}
 
 }

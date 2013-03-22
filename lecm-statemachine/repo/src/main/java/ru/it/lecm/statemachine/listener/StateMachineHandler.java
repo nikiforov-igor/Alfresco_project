@@ -1,5 +1,10 @@
 package ru.it.lecm.statemachine.listener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
@@ -7,16 +12,12 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.security.events.INodeACLBuilder;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -32,7 +33,7 @@ public class StateMachineHandler implements ExecutionListener {
 
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
-	private static INodeACLBuilder lecmAclBuilderBean;
+	private LecmPermissionService lecmPermissionService;
 	private static BusinessJournalService businessJournalService;
 	private static RepositoryStructureHelper repositoryStructureHelper;
 
@@ -95,19 +96,23 @@ public class StateMachineHandler implements ExecutionListener {
 		StateMachineHandler.serviceRegistry = serviceRegistry;
 	}
 
-	public void setLecmAclBuilderBean(INodeACLBuilder lecmAclBuilderBean) {
-		StateMachineHandler.lecmAclBuilderBean = lecmAclBuilderBean;
+	public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService value) {
+		this.lecmPermissionService = value;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		StateMachineHandler.businessJournalService = businessJournalService;
 	}
 
-    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
-        StateMachineHandler.repositoryStructureHelper = repositoryStructureHelper;
-    }
+	public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+		StateMachineHandler.repositoryStructureHelper = repositoryStructureHelper;
+	}
 
-    private StateMachineAction getStateMachineAction(final Element actionElement) {
+	private StateMachineAction getStateMachineAction(final Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
@@ -119,18 +124,18 @@ public class StateMachineHandler implements ExecutionListener {
 
 		if (action != null) {
 			action.setServiceRegistry(serviceRegistry);
-			action.setLecmAclBuilderBean(lecmAclBuilderBean);
+			action.setLecmPermissionService(this.lecmPermissionService);
 			action.setBusinessJournalService(businessJournalService);
 			action.setRepositoryStructureHelper(repositoryStructureHelper);
-            final StateMachineAction currentAction = action;
+			final StateMachineAction currentAction = action;
 			try {
-                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                    @Override
-                    public Void doWork() throws Exception {
-                        currentAction.init(actionElement, processId);
-                        return null;
-                    }
-                });
+				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						currentAction.init(actionElement, processId);
+						return null;
+					}
+				});
 			} catch (Exception e) {
 				logger.error("Error while init action", e);
 				throw new IllegalStateException(e);
