@@ -33,7 +33,7 @@
                 <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
             </#if>
             <div class="my-task">
-                <div class="workflow-task-date">${task.startDate}</div>
+                <div class="workflow-date">${task.startDate}</div>
                 <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
                 <div style="clear:both;"></div>
                 <div class="workflow-task-main-text">

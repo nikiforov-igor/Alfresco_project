@@ -12,7 +12,7 @@
     <#assign completedSeleted = "selected">
 </#if>
 
-<div class="workflow-tasks-container">
+<div class="list-container">
     <div>
         <span>${msg("tasklist.label.display")}</span>
         <select id="${id}-tasks-states" style="margin-left: 13px;">
@@ -24,11 +24,11 @@
 
     <div class="body scrollableList" id="${id}_results">
 
-        <div class="workflow-tasks-category">
-            <div class="workflow-tasks-category-title">${msg("tasklist.label.mytasks")}</div>
+        <div class="list-category">
+            <div class="list-category-title">${msg("tasklist.label.mytasks")}</div>
 
             <#list data.myTasks as task>
-                <div class="workflow-task">
+                <div class="workflow-task-item">
                     <div class="workflow-task-list-picture ${task.workflowTaskPriority}" title="${task.priorityMessage}">&nbsp;</div>
                     <div style="float: left;">
                         <div>
@@ -38,10 +38,15 @@
                             <span class="workflow-task-status ${task.type}">${task.typeMessage}</span>
                         </div>
                         <div style="clear: both;"></div>
-                        <div class="workflow-description">${task.description}</div>
+                        <div class="workflow-task-description">${task.description}</div>
                         <div>
                             <div class="workflow-task-list-left-column">
-                                <span class="workflow-task-list-label">${msg("tasklist.label.duedate")}:&nbsp;</span>${task.dueDate}
+                                <#if task.dueDate == "">
+                                    <#assign dueDate = " - ">
+                                <#else>
+                                    <#assign dueDate = task.dueDate>
+                                </#if>
+                                <span class="workflow-task-list-label">${msg("tasklist.label.duedate")}:&nbsp;</span>${dueDate}
                             </div>
                             <span class="workflow-task-list-label">${msg("tasklist.label.status")}: </span>${task.statusMessage}
                         </div>
@@ -52,11 +57,11 @@
         </div>
 
         <#if data.showSubordinateTasks == "true">
-            <div class="workflow-tasks-category">
-                <div class="workflow-tasks-category-title">${msg("tasklist.label.subordinatestasks")}</div>
+            <div class="list-category">
+                <div class="list-category-title">${msg("tasklist.label.subordinatestasks")}</div>
 
                 <#list data.subordinateTasks as task>
-                    <div class="workflow-task">
+                    <div class="workflow-task-item">
                         <div class="workflow-task-list-picture ${task.workflowTaskPriority}" title="${task.priorityMessage}">&nbsp;</div>
                         <div style="float: left;">
                             <div>
@@ -66,10 +71,15 @@
                                 <span class="workflow-task-status ${task.type}">${task.typeMessage}</span>
                             </div>
                             <div style="clear: both;"></div>
-                            <div class="workflow-description">${task.description}</div>
+                            <div class="workflow-task-description">${task.description}</div>
                             <div>
                                 <div class="workflow-task-list-left-column">
-                                    <span class="workflow-task-list-label">${msg("tasklist.label.duedate")}:&nbsp;</span>${task.dueDate}
+                                    <#if task.dueDate == "">
+                                        <#assign dueDate = " - ">
+                                    <#else>
+                                        <#assign dueDate = task.dueDate>
+                                    </#if>
+                                    <span class="workflow-task-list-label">${msg("tasklist.label.duedate")}:&nbsp;</span>${dueDate}
                                 </div>
                                 <span class="workflow-task-list-label">${msg("tasklist.label.status")}: </span>${task.statusMessage}
                             </div>

@@ -115,6 +115,11 @@
 .WORKFLOWTASKPRIORITY_HIGH {
     background-image: url("/share/res/components/images/priority-high-16.png");
 }
+.workflow-date {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666666;
+}
 .total-tasks-count-right {
     float: left;
     background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
@@ -157,19 +162,19 @@
     margin-left: 15px;
 }
 
-.workflow-task {
+.workflow-task-item {
     border-top: 1px solid #CCCCCC;
     padding-top: 5px;
     padding-bottom: 40px;
 }
-.workflow-tasks-container {
+.list-container {
     padding-left: 40px;
     padding-top: 10px;
 }
-.workflow-tasks-category {
+.list-category {
     padding-top: 12px;
 }
-.workflow-tasks-category-title {
+.list-category-title {
     font-size:20px;
     font-weight:bold;
     color:#666666;
@@ -189,7 +194,7 @@
 .workflow-task-list-label {
     color: #999999;
 }
-.workflow-description {
+.workflow-task-description {
     padding-top: 7px;
     padding-bottom: 3px;
 }
@@ -204,6 +209,11 @@
     margin-right: 25px;
     margin-left: 15px;
     margin-bottom: 5px;
+}
+
+.list-workflow-description {
+    padding-left: 3px;
+    font-size: 18px;
 }
 
 /***********************************************/
