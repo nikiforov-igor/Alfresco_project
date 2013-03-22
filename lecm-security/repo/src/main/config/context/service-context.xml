@@ -24,7 +24,7 @@
 	<!--  регистрируем свою часть подсистемы безопасности "Гуппы полномочий" -->
 	<bean id="lecmModuleSecurePermissionModelBootstrap" parent="permissionModelBootstrap" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="model">
-			<value>alfresco/model/lecm/lecmPermissionDefinitions.xml</value>
+			<value>alfresco/module/${artifactId}/alfresco/model/lecm/lecmPermissionDefinitions.xml</value>
 		</property>
 	</bean>
 
