@@ -64,6 +64,9 @@ public class WaitForDocumentChangeAction extends StateMachineAction {
 			}
 		};
 		timer.schedule(task, 1000);
+        for (Expression expression : expressions) {
+            execution.setVariable(expression.getOutputVariable(), "");
+        }
 	}
 
 
