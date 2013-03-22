@@ -5,7 +5,6 @@ package ru.it.lecm.regnumbers.counter;
  * @author vlevin
  */
 public enum CounterType {
-	// имена для глобальных счетчиков
 
 	/**
 	 * Глобальный сквозной счетчик.
@@ -15,8 +14,6 @@ public enum CounterType {
 	 * Глобальный счетчик в пределах текущего года.
 	 */
 	YEAR("globalYearCounter"),
-	// шаблоны имен для счетчиков по типу документов
-	// напр. plainCounter[lecm-document:base]
 	/**
 	 * Сквозной счетчик для типа документа.
 	 */

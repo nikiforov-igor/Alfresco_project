@@ -34,8 +34,7 @@
 	</bean>-->
 
 	<bean id="regNumbersService" class="ru.it.lecm.regnumbers.bean.RegNumbersServiceImpl" init-method="init"
-		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap">
-		<property name="сounterFactory" ref="regNumbersCounterFactory"/>
+		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
@@ -53,6 +52,9 @@
 			</map>
 		</property>
 	</bean>
+
+	<bean id="regNumbersTemplateUtils" class="ru.it.lecm.regnumbers.template.Utils"
+		  depends-on="serviceOrgstructure"/>
 
 	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="regnumbers"/>

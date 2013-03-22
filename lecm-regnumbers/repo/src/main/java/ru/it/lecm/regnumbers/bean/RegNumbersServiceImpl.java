@@ -4,40 +4,37 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.regnumbers.counter.Counter;
-import ru.it.lecm.regnumbers.counter.CounterType;
 import ru.it.lecm.regnumbers.RegNumbersService;
-import ru.it.lecm.regnumbers.counter.CounterFactory;
+import ru.it.lecm.regnumbers.template.Parser;
+import ru.it.lecm.regnumbers.template.ParserImpl;
 
 /**
  *
  * @author vlevin
  */
-public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService {
+public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
+
 	final private static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
-
-	private CounterFactory сounterFactory;
-
-	public void setСounterFactory(CounterFactory сounterFactory) {
-		this.сounterFactory = сounterFactory;
-	}
+	private ApplicationContext applicationContext;
 
 	public final void init() {
-		PropertyCheck.mandatory(this, "regNumbersCounterFactory", сounterFactory);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 	}
 
 	@Override
-	public long getCounterValue(CounterType counterType, NodeRef document) {
-		Counter counter = сounterFactory.getCounter(counterType, document);
-		return counter.getValue();
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 
 	@Override
 	public String getNumber(NodeRef documetNode, String templateStr) {
-		throw new UnsupportedOperationException("getNumber(NodeRef, String) not supported yet.");
+		Parser parser = new ParserImpl(applicationContext);
+		return parser.runTemplate(templateStr, documetNode);
 	}
 
 	@Override
@@ -48,5 +45,11 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	@Override
 	public boolean isNumberUnique(String number) {
 		throw new UnsupportedOperationException("isNumberUnique(String) not supported yet.");
+	}
+
+	@Override
+	public boolean validateTemplate(String templateStr) {
+		Parser parser = new ParserImpl(applicationContext);
+		return parser.validateTemplate(templateStr);
 	}
 }

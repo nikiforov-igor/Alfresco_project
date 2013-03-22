@@ -31,12 +31,36 @@
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-webmvc</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>spring-context</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>spring-context-support</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>spring-web</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.regnumbers</groupId>
@@ -52,6 +76,12 @@
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

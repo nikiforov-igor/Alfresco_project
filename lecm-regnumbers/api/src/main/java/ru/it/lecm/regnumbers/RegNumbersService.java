@@ -75,5 +75,13 @@ public interface RegNumbersService {
 	 */
 	boolean isNumberUnique(String number);
 
-	long getCounterValue(CounterType counterType, NodeRef document);
+	/**
+	 * Проверить, является ли шаблон номера синтаксический верным с точни зрения
+	 * SpEL.
+	 *
+	 * @param templateStr строка-шаблон.
+	 * @return true - если шаблон проходит синтаксическую валидацию. Если нет -
+	 * false.
+	 */
+	boolean validateTemplate(String templateStr);
 }

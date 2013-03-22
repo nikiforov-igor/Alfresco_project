@@ -1,8 +1,15 @@
 package ru.it.lecm.regnumbers.template;
 
+import java.util.Date;
 import org.alfresco.service.cmr.repository.NodeRef;
 
 /**
+ * Обертка вокруг документа. Объект данного класса играет роль объекта 'doc' в
+ * шаблоне номера документа. Соответственно, геттеры объекта можно дергать из
+ * шаблона номера (читай, SpEL'а) таким образом: Document.getFoo() -> doc.foo.
+ * Необходимо помнить, что параметры геттеру передать нельзя. Поэтому, если
+ * нужен метод с параметрами, то он выглядит таким образом: Document.bar(arg) ->
+ * doc.bar(arg).
  *
  * @author vlevin
  */
@@ -14,7 +21,7 @@ public interface Document {
 	 * @param attributeName название атрибута из модели данных.
 	 * @return атрибут документа.
 	 */
-	Object getAttribute(String attributeName);
+	Object attribute(String attributeName);
 
 	/**
 	 * Получить атрибут объекта по названию ассоциации с документом и названию
@@ -25,7 +32,7 @@ public interface Document {
 	 * модели данных.
 	 * @return значение атрибута.
 	 */
-	Object getAssosiatedAttribute(String assocName, String attributeName);
+	Object associatedAttribute(String assocName, String attributeName);
 
 	/**
 	 * Колучить код типа документа.
@@ -47,5 +54,42 @@ public interface Document {
 	 * @param memberType Какого участника надо получить
 	 * @return ссылка на участника.
 	 */
-	NodeRef getMember(String memberType);
+	NodeRef member(String memberType);
+
+	/**
+	 * Получить значение сквозного счетчика, единого для всей системы.
+	 *
+	 * @return значение счетчика.
+	 */
+	long getCounterPlain();
+
+	/**
+	 * Получить значение счетчика в пределах года, единого для всей системы.
+	 * Каждый год нумерация начинается заново.
+	 *
+	 * @return значение счетчика.
+	 */
+	long getCounterYear();
+
+	/**
+	 * Получить значение сквозного счетчика, отдельного для каждого из типов
+	 * документов.
+	 *
+	 * @return значение счетчика.
+	 */
+	long getCounterPlainDoctype();
+
+	/**
+	 * Получить значение счетчика в пределах года, отдельного для каждого из
+	 * типов документов.
+	 * Каждый год нумерация начинается заново.
+	 *
+	 * @return значение счетчика.
+	 */
+	long getCounterYearDoctype();
+
+	/**
+	 * @return Дата содания документа.
+	 */
+	Date getCreationDate();
 }
