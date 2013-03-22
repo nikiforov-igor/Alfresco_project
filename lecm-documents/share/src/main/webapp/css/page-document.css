@@ -121,21 +121,28 @@
     color: #666666;
 }
 .total-tasks-count-right {
-    float: left;
+    float: right;
+    margin-right: 30px;
+    margin-top: 1px;
     background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
-    height: 26px;
-    width: 26px;
+    height: 24px;
+    width: 24px;
     text-align: center;
-    padding-top: 3px;
+    padding-top: 5px;
+    padding-left: 1px;
     color: #FFFFFF;
     font-weight: bold;
+    font-size: 13px;
 }
-
 .right-task {
     margin-top: 12px;
     margin-bottom: 10px;
     border-bottom: 1px solid #CCCCCC;
     padding-bottom: 5px;
+}
+
+.right-task .workflow-date {
+    float: left;
 }
 
 .right-more-link {

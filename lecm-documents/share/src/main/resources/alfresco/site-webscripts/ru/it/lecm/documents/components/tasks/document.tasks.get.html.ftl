@@ -3,14 +3,18 @@
 <#if data??>
 <!-- Markup -->
 <div class="document-metadata-header document-details-panel">
+
     <h2 id="${el}-heading" class="thin dark">
-    ${msg("heading")}
-        <span class="alfresco-twister-actions">
-            <div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>
-            <div style="float: right; margin-left: 15px;">
+        <div style="float: left;margin-top: 5px;">${msg("heading")}</div>
+
+        <div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>
+        <div style="padding-top: 4px;">
+            <span class="alfresco-twister-actions">
                 <a id="${el}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp</a>
-            </div>
-        </span>
+            </span>
+        </div>
+
+        <div style="clear: both;" />
     </h2>
 
     <div id="${el}-formContainer">
@@ -25,7 +29,7 @@
                     <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
                 </#if>
                 <div class="right-task">
-                    <div class="workflow-task-date">${task.startDate}</div>
+                    <div class="workflow-date">${task.startDate}</div>
                     <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
                     <div style="clear:both;"></div>
                     <div class="workflow-task-main-text">
