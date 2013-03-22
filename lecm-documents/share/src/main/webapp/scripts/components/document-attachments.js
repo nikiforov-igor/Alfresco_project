@@ -62,6 +62,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		            linkEl.onclick = this.onExpand.bind(this);
 	            }
 
+                Alfresco.util.createTwister(this.id  + "-heading", "DocumentAttachments");
+
 	            if (this.options.showAfterReady) {
 		            this.onExpand();
 	            }
@@ -90,19 +92,22 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
 	        onAttachmentsUpdate: function DocumentAttachments_onAttachmentsUpdate(layer, args) {
+                var newId = this.id + "-" + Alfresco.util.generateDomId();
 		        Alfresco.util.Ajax.request(
 			        {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
 				        dataObj: {
 					        nodeRef: this.options.nodeRef,
-					        htmlid: this.id + "-" + Alfresco.util.generateDomId()
+					        htmlid: newId
 				        },
 				        successCallback: {
 					        fn:function(response){
 						        var container = Dom.get(this.id);
 						        if (container != null) {
 							    	container.innerHTML = response.serverResponse.responseText;
-						        }
+                                }
+                                this.id = newId;
+                                this.onReady();
 					        },
 					        scope: this
 				        },

@@ -47,8 +47,6 @@
     </script>
     <script type="text/javascript">//<![CDATA[
     (function () {
-        Alfresco.util.createTwister("${el}-heading", "DocumentAttachments");
-
         function init() {
             documentAttachmentsComponent =new LogicECM.DocumentAttachments("${el}").setOptions(
                     {
