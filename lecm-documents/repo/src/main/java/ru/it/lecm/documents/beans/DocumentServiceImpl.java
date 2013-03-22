@@ -8,7 +8,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -35,7 +34,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
-    private RepositoryStructureHelper repositoryStructureHelper;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -52,9 +50,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
-    }
-    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
-        this.repositoryStructureHelper = repositoryStructureHelper;
     }
 
     @Override

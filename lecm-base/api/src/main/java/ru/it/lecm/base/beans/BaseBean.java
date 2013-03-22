@@ -53,7 +53,7 @@ public abstract class BaseBean implements InitializingBean {
 	 */
 	private final Map<String, ServiceFolder> serviceFolders = new HashMap<String, ServiceFolder> ();
 
-	private ServiceFolderStructureHelper repositoryStructureHelper;
+	protected RepositoryStructureHelper repositoryStructureHelper;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
 
@@ -76,18 +76,19 @@ public abstract class BaseBean implements InitializingBean {
 		this.transactionService = transactionService;
 	}
 
-	public void setRepositoryStructureHelper (final ServiceFolderStructureHelper repositoryStructureHelper) {
+	public void setRepositoryStructureHelper (final RepositoryStructureHelper repositoryStructureHelper) {
 		this.repositoryStructureHelper = repositoryStructureHelper;
 	}
 
 	@Override
 	public void afterPropertiesSet () throws Exception {
 		//когда все проперти проинициализируются, мы пробежимся по карте с папками и создадим их все
+		final ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
 		if (folders != null) {
 			for (Entry<String, String> entry : folders.entrySet ()) {
 				String relativePath = entry.getValue ();
 				ServiceFolder serviceFolder = new ServiceFolder (relativePath, null);
-				NodeRef folderRef = repositoryStructureHelper.getFolderRef (serviceFolder);
+				NodeRef folderRef = serviceFolderStructureHelper.getFolderRef (serviceFolder);
 				serviceFolder.setFolderRef (folderRef);
 				serviceFolders.put (entry.getKey (), serviceFolder);
 			}
@@ -303,6 +304,7 @@ public abstract class BaseBean implements InitializingBean {
 	 * @return
 	 */
 	public NodeRef getFolder (final String folderId) {
-		return repositoryStructureHelper.getFolderRef (serviceFolders.get (folderId));
+		final ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
+		return serviceFolderStructureHelper.getFolderRef (serviceFolders.get (folderId));
 	}
 }
