@@ -4,17 +4,19 @@
     <#assign el=args.htmlid/>
 
 <!-- Markup -->
-<div class="document-metadata-header document-details-panel">
-    <h2 id="${el}-heading" class="thin dark">
-    ${msg("heading")}
-         <span class="alfresco-twister-actions">
+<div class="widget-bordered-panel">
+    <div class="document-metadata-header document-components-panel">
+        <h2 id="${el}-heading" class="thin dark">
+        ${msg("heading")}
+            <span class="alfresco-twister-actions">
             <a id="${el}-link" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.view")}">&nbsp;</a>
          </span>
-    </h2>
-    <div id="${el}-formContainer"></div>
-    <script type="text/javascript">//<![CDATA[
-    Alfresco.util.createTwister("${el}-heading", "DocumentMetadata");
-    //]]></script>
+        </h2>
+        <div id="${el}-formContainer"></div>
+        <script type="text/javascript">//<![CDATA[
+        Alfresco.util.createTwister("${el}-heading", "DocumentMetadata");
+        //]]></script>
+    </div>
 </div>
 
 <!-- Javascript instance -->

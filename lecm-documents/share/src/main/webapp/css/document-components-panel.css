@@ -1,0 +1,22 @@
+.document-components-panel
+{
+    background-color: #F2F2F2;
+    border-top: 1px solid #000000;
+    padding: 0.8em 0.8em 0.8em 0.8em;
+}
+
+.document-components-panel .panel-body
+{
+    padding: 1em 1em 0;
+}
+
+.document-components-panel .form-container .form-fields
+{
+    border-bottom: none;
+    padding: 1em 1em 0;
+}
+
+.widget-bordered-panel {
+    background-color: #F2F2F2;
+    padding: 0 0.8em 0 0.8em;
+}

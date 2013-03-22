@@ -4,7 +4,7 @@
     <@script type="text/javascript" src="${page.url.context}/yui/resize/resize-min.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-details-panel.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
@@ -40,17 +40,16 @@
             <@region id="comments" scope="template"/>
         </div>
         <div id="custom-region" class="yui-u first" style="display:none"></div>
-        <div class="yui-u bordered">
-            <#--<@region id="document-actions" scope="template"/>-->
+        <div class="yui-u bordered-panel">
             <@region id="document-actions" scope="template"/>
             <@region id="document-metadata" scope="template"/>
             <@region id="document-attachments" scope="template"/>
-            <@region id="document-workflows" scope="template"/>
-            <@region id="document-history" scope="template"/>
-            <@region id="document-connections" scope="template"/>
-            <@region id="document-tags" scope="template"/>
-            <@region id="document-members" scope="template"/>
             <@region id="document-tasks" scope="template"/>
+            <@region id="document-workflows" scope="template"/>
+            <@region id="document-connections" scope="template"/>
+            <@region id="document-members" scope="template"/>
+            <@region id="document-tags" scope="template"/>
+            <@region id="document-history" scope="template"/>
         </div>
     </div>
 

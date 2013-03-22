@@ -10,7 +10,7 @@
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
          </span>
     </div>
-    <div class="body scrollableList" id="${id}_results">
+    <div class="body scrollableList dashlet-body" id="${id}_results">
         <@grid.datagrid containerId true containerId + "-form">
             <script type="text/javascript">//<![CDATA[
             (function () {

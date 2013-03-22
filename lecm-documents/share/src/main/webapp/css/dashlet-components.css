@@ -39,6 +39,7 @@
 .dashlet select.attachment-categories-select {
 	font-size: 13px;
 	padding: 0;
+    width: 12em;
 }
 
 .dashlet-metadata .lecm-dashlet-actions {
@@ -59,6 +60,27 @@
 
 .yui-u .dashlet .dashlet-title {
     background-color: #515151;
+    border-radius: 4px 4px 0px 0px;
+}
+
+.yui-u .dashlet .dashlet-body {
+    padding: 0em 1em 0em 1em;
+    height: 165px;
+}
+
+.yui-u .dashlet .dashlet-body .datagrid {
+    padding: 0.5em 0em 0.5em 0em;
+}
+
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td{
+    border-bottom: 0;
+}
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt th {
+    border-bottom: 0;
+}
+
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt table {
+    border: 0;
 }
 
 .dashlet .title span {

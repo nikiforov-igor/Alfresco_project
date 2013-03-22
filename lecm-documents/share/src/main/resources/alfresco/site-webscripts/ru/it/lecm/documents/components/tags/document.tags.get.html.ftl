@@ -2,7 +2,8 @@
 <#assign el=args.htmlid/>
 <#if record??>
 <!-- Markup -->
-<div class="document-metadata-header document-details-panel document-tags">
+<div class="widget-bordered-panel">
+<div class="document-metadata-header document-components-panel document-tags">
     <h2 id="${el}-heading" class="thin dark">
         ${msg("document.tags")}
     </h2>
@@ -105,5 +106,6 @@
             obj: record
         });
     //]]></script>
+</div>
 </div>
 </#if>

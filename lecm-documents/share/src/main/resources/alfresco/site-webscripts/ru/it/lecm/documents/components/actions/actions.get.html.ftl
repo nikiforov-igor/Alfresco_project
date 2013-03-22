@@ -6,6 +6,7 @@
 
 <@script type="text/javascript" src="${page.url.context}/scripts/statemachine/form.js"></@script>
 <!-- Markup -->
+<div class="widget-panel-white">
 <div class="widget-panel-grey">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("label.title")}
@@ -27,5 +28,6 @@
         </#list>
        </#if>
     </div>
+</div>
 </div>
 </#if>

@@ -3,6 +3,7 @@
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-details-panel.css" />
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
 	<@templateHtmlEditorAssets />
 </@>
 
@@ -22,7 +23,7 @@
 			</#if>
             <@region id="comments" scope="template"/>
 		</div>
-		<div id="doc-attach-right" class="yui-u bordered">
+		<div id="doc-attach-right" class="yui-u bordered-panel">
 			<@region id="document-actions" scope="template"/>
             <@region id="document-tags" scope="template"/>
             <@region id="document-metadata" scope="template"/>

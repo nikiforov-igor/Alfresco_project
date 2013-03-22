@@ -2,7 +2,8 @@
 <#assign el=args.htmlid/>
 <#if attachments??>
 <!-- Markup -->
-<div class="document-metadata-header document-details-panel">
+<div class="widget-bordered-panel">
+<div class="document-metadata-header document-components-panel">
     <h2 id="${el}-heading" class="thin dark">
     ${msg("heading")}
         <span class="alfresco-twister-actions">
@@ -60,5 +61,6 @@
     })();
     //]]>
     </script>
+</div>
 </div>
 </#if>

@@ -2,7 +2,8 @@
 <#assign el=args.htmlid/>
 <#if data??>
 <!-- Markup -->
-<div class="document-metadata-header document-details-panel">
+<div class="widget-bordered-panel">
+<div class="document-metadata-header document-components-panel">
 
     <h2 id="${el}-heading" class="thin dark">
         <div style="float: left;margin-top: 5px;">${msg("heading")}</div>
@@ -67,5 +68,6 @@
     })();
     //]]>
     </script>
+</div>
 </div>
 </#if>

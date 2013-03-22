@@ -54,5 +54,5 @@
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
         </span>
     </div>
-    <div class="body scrollableList" id="${id}_results"></div>
+    <div class="body scrollableList dashlet-body" id="${id}_results"></div>
 </div>

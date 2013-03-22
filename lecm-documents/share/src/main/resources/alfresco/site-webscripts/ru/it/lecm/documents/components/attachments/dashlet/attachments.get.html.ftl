@@ -19,7 +19,7 @@
             </select>
 	    </span>
     </div>
-    <div class="body scrollableList" id="${id}_results">
+    <div class="body scrollableList dashlet-body" id="${id}_results">
         <@grid.datagrid containerId false>
             <script type="text/javascript">//<![CDATA[
             (function () {

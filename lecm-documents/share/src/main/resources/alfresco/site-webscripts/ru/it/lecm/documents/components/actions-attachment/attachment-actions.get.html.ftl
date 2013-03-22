@@ -16,7 +16,7 @@
       );
    //]]></script>
 
-   <div id="${el}-body" class="document-actions document-details-panel">
+   <div id="${el}-body" class="document-actions document-components-panel">
       <h2 id="${el}-heading" class="thin dark">
          ${msg("heading")}
       </h2>
