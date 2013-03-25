@@ -30,8 +30,8 @@
         </div>
 
         <#if (data.activeWorkflowsTotalCount > 0 && data.activeWorkflowsTotalCount > data.activeWorkflowsDisplayedCount)>
-            <div class="right-more-link" onclick="documentWorkflowsComponent.onExpand();">${msg('right.label.more')}</div>
             <div class="right-more-link-arrow" onclick="documentWorkflowsComponent.onExpand();"></div>
+            <div class="right-more-link" onclick="documentWorkflowsComponent.onExpand();">${msg('right.label.more')}</div>
             <div style="clear:both;"></div>
         </#if>
     </div>

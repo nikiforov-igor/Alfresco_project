@@ -35,10 +35,11 @@
                     </li>
                 </#list>
                 <#if attachments.hasNext == "true">
-                    <li style="text-align: right">
-                        <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"
-                           title="${msg("label.connections.more")}">${msg("label.attachments.more")}</a>
-                    </li>
+                <li>
+                    <div class="right-more-link-arrow" onclick="documentAttachmentsComponent.onExpand();"></div>
+                    <div class="right-more-link" onclick="documentAttachmentsComponent.onExpand();">${msg('label.attachments.more')}</div>
+                    <div style="clear:both;"></div>
+                </li>
                 </#if>
             </#if>
         </ul>

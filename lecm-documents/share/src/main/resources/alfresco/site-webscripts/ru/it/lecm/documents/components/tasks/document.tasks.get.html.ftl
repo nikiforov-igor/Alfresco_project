@@ -43,8 +43,8 @@
         </div>
 
         <#if (data.myTasksTotalCount > 0 && data.myTasksTotalCount > data.myTasksDisplayedCount)>
-            <div class="right-more-link" onclick="documentTasksComponent.onExpand();">${msg('right.label.more')}</div>
             <div class="right-more-link-arrow" onclick="documentTasksComponent.onExpand();"></div>
+            <div class="right-more-link" onclick="documentTasksComponent.onExpand();">${msg('right.label.more')}</div>
             <div style="clear:both;"></div>
         </#if>
     </div>

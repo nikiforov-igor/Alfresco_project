@@ -33,10 +33,11 @@
                     </#if>
                 </#list>
                 <#if members.hasNext == "true">
-                    <li style="text-align: right; padding-right: 0.5em;">
-                        <a id="${el}-link" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()" class="edit"
-                           title="${msg("label.members.more")}">${msg("label.members.more")}</a>
-                    </li>
+                <li>
+                    <div class="right-more-link-arrow" onclick="documentMembersComponent.onExpand();"></div>
+                    <div class="right-more-link" onclick="documentMembersComponent.onExpand();">${msg('label.members.more')}</div>
+                    <div style="clear:both;"></div>
+                </li>
                 </#if>
             </#if>
         </ul>

@@ -57,11 +57,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		            expandEl.onclick = this.onExpand.bind(this);
 	            }
 
-	            var linkEl = Dom.get(this.id + "-link");
-	            if (linkEl != null) {
-		            linkEl.onclick = this.onExpand.bind(this);
-	            }
-
                 Alfresco.util.createTwister(this.id  + "-heading", "DocumentAttachments");
 
 	            if (this.options.showAfterReady) {
