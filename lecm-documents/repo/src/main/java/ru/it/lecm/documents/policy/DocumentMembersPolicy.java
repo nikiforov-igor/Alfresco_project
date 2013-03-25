@@ -177,7 +177,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
 			 * такая нарезка ничего не выполнит.
 			 */
-            lecmPermissionService.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), lecmPermissionService.makePermGroup(this.getGrantAccess()) );
+            lecmPermissionService.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), lecmPermissionService.findPermissionGroup(this.getGrantAccess()) );
 
             logger.info(String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
 
