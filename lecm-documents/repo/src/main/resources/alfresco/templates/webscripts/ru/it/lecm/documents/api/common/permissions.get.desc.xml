@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get document permissions</shortname>
+    <description>Document Permission Get</description>
+    <url>/lecm/document/api/getPermissions?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
