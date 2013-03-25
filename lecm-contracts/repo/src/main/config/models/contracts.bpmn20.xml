@@ -105,8 +105,8 @@
 						</lecm:action>
 						<lecm:action type="WaitForDocumentChange">
 							<lecm:expressions outputVariable="signed">
-								<lecm:expression expression="#lecm_contract_regnum.equals('3')" outputValue="true"/>
-								<lecm:expression expression="#lecm_contract_regnum.equals('5')" outputValue="false"/>
+								<lecm:expression expression="#lecm_document_regnum.equals('3')" outputValue="true"/>
+								<lecm:expression expression="#lecm_document_regnum.equals('5')" outputValue="false"/>
 							</lecm:expressions>
 						</lecm:action>
 					</lecm:event>
