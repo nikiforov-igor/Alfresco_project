@@ -30,9 +30,10 @@
                     </li>
                 </#list>
                 <#if connections.hasNext == "true">
-                    <li style="text-align: right">
-                        <a id="${el}-link" href="javascript:void(0);" onclick="" class="edit"
-                           title="${msg("label.connections.more")}">${msg("label.connections.more")}</a>
+                    <li>
+                        <div class="right-more-link-arrow" onclick="documentConnectionsComponent.onExpand();"></div>
+                        <div class="right-more-link" onclick="documentConnectionsComponent.onExpand();">${msg('label.connections.more')}</div>
+                        <div style="clear:both;"></div>
                     </li>
                 </#if>
             </#if>
@@ -42,7 +43,7 @@
     <script type="text/javascript">//<![CDATA[
     Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
 
-    new LogicECM.DocumentConnections("${el}").setOptions(
+    var documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions(
             {
                 nodeRef: "${nodeRef}",
                 title:"${msg('heading')}"

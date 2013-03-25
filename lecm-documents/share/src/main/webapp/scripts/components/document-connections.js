@@ -50,11 +50,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (expandEl != null) {
                     expandEl.onclick = this.onExpand.bind(this);
                 }
-
-                var linkEl = Dom.get(this.id + "-link");
-                if (linkEl != null) {
-                    linkEl.onclick = this.onExpand.bind(this);
-                }
             },
 
             onExpand: function () {
