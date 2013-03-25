@@ -108,7 +108,7 @@
       <!-- Комментарии -->
       <component>
          <region-id>comments</region-id>
-         <url>/components/comments/list</url>
+         <url>/lecm/components/comments/list</url>
          <properties>
             <nodeRef>{nodeRef}</nodeRef>
             <activityType>document</activityType>
