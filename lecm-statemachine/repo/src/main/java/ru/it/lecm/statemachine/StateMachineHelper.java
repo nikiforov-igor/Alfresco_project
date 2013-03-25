@@ -627,12 +627,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
+        WorkflowTask startTask = workflowService.getStartTask(workflow.getId());
+
         WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
         taskQuery.setProcessId(workflow.getId());
         taskQuery.setTaskState(activeTasks ? WorkflowTaskState.IN_PROGRESS : WorkflowTaskState.COMPLETED);
-        taskQuery.setActive(activeTasks);
+        taskQuery.setActive(workflow.isActive());
 
-        WorkflowTask startTask = workflowService.getStartTask(workflow.getId());
         List<WorkflowTask> workflowTasks = workflowService.queryTasks(taskQuery);
         for (WorkflowTask workflowTask : workflowTasks) {
             if (!startTask.getId().equals(workflowTask.getId())) {
