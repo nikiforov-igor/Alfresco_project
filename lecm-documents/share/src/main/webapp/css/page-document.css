@@ -59,7 +59,7 @@
     right: 1em;
 }
 
-.alfresco-twister-actions .expand {
+.alfresco-twister-actions .expand:hover {
     background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 
@@ -142,7 +142,7 @@
 }
 .total-tasks-count-right {
     float: right;
-    margin-right: 30px;
+    margin-right: 20px;
     margin-top: 1px;
     background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
     height: 24px;
@@ -185,8 +185,7 @@
 }
 
 .right-tasks-container {
-    margin-right: 25px;
-    margin-left: 15px;
+    padding-left: 15px;
 }
 
 .workflow-task-item {
