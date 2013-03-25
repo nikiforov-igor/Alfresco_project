@@ -47,7 +47,7 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 
 		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
-		<property name="grantAccessTag" value="full"/>
+		<property name="grantAccessTag" value="LECM_BASIC_PG_EDITOR"/>
 
 		<!-- 
 		<property name="businessJournalService" ref="businessJournalService"/>
