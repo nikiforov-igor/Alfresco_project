@@ -47,7 +47,7 @@ public final class Utils implements ApplicationContextAware {
 		return dateFormatter.format(date);
 	}
 
-	public static String formatCurrentDate(String format) {
+	public static String formatDate(String format) {
 		return formatDate(format, new Date());
 	}
 

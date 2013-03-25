@@ -8,6 +8,7 @@
 	<imports>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
 	</imports>
 
 	<namespaces>
@@ -51,6 +52,33 @@
 				<aspect>lecm-regnum:year-aspect</aspect>
 				<aspect>lecm-regnum:doctype-aspect</aspect>
 			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-regnum:template">
+			<title>Шаблон регистрационного номера</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-regnum:template-string">
+					<title>Шаблон номера</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-regnum:template-comment">
+					<title>Комментарий</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 		</type>
 	</types>
 

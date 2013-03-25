@@ -45,6 +45,18 @@ public interface RegNumbersService {
 	 * Тип документа, к которому привязан счетчик, lecm-regnum:doctype
 	 */
 	QName PROP_DOCTYPE = QName.createQName(REGNUMBERS_NAMESPACE, "doctype");
+	/**
+	 * Объект для хранения шаблона номеров, lecm-regnum:template
+	 */
+	QName TYPE_REGNUMBERS_TEMPLATE = QName.createQName(REGNUMBERS_NAMESPACE, "template");
+	/**
+	 * Непосредственно строка шаблона, lecm-regnum:template-string
+	 */
+	QName PROP_TEMPLATE_STRING = QName.createQName(REGNUMBERS_NAMESPACE, "template-string");
+	/**
+	 * Комментарий к шаблону, lecm-regnum:template-comment
+	 */
+	QName PROP_TEMPLATE_COMMENT = QName.createQName(REGNUMBERS_NAMESPACE, "template-comment");
 
 	/**
 	 * Сгенерировать номер документа до данному шаблону номера.
@@ -100,4 +112,13 @@ public interface RegNumbersService {
 	 * - сообщение из TemplateParseException и, если нужно, стек-трейс.
 	 */
 	String validateTemplate(String templateStr, boolean verbose);
+
+	/**
+	 * Получить строку шаблона регистрационного номера из объекта, в котором
+	 * этот шаблон хранится.
+	 *
+	 * @param templateNode ссылка на объект типа lecm-regnum:template.
+	 * @return строка шаблона рег. номера
+	 */
+	String getTemplateString(NodeRef templateNode);
 }

@@ -42,8 +42,8 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 
 	@Override
-	public String getNumber(NodeRef documentNode, NodeRef templateNode) {
-		throw new UnsupportedOperationException("getNumber(NodeRef, NodeRef) not supported yet.");
+	public String getNumber(NodeRef documentNode, NodeRef templateNode) throws TemplateParseException, TemplateRunException {
+		return getNumber(documentNode, getTemplateString(templateNode));
 	}
 
 	@Override
@@ -69,5 +69,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		}
 
 		return result;
+	}
+
+	@Override
+	public String getTemplateString(NodeRef templateNode) {
+		return (String) nodeService.getProperty(templateNode, PROP_TEMPLATE_STRING);
 	}
 }

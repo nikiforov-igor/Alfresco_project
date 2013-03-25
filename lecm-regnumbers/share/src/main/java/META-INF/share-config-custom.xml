@@ -1,4 +1,31 @@
 <alfresco-config>
-
-
+	<config evaluator="model-type" condition="lecm-regnum:template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:template-string"/>
+					<show id="lecm-regnum:template-comment"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:template-string"/>
+					<show id="lecm-regnum:template-comment"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-regnum:template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:template-string"/>
+					<show id="lecm-regnum:template-comment"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

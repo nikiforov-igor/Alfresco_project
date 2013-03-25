@@ -78,6 +78,35 @@ public class DocumentImpl implements Document {
 	}
 
 	@Override
+	public Object associatedAttributePath(String attributePath) {
+		Object result;
+		NodeRef currentNode = documentNode;
+		String pathElements[] = attributePath.split("/");
+
+		for (int i = 0; i < pathElements.length - 1; i++) {
+			QName assocQName = QName.createQName(pathElements[i], namespaceService);
+			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(currentNode, assocQName);
+			if (targetAssocs == null || targetAssocs.isEmpty()) {
+				currentNode = null;
+				break;
+			} else {
+				currentNode = targetAssocs.get(0).getTargetRef();
+			}
+		}
+
+		if (currentNode == null) {
+			result = "";
+		} else {
+			result = getNodeRefAttribute(currentNode, pathElements[pathElements.length - 1]);
+			if (result == null) {
+				result = "";
+			}
+		}
+
+		return result;
+	}
+
+	@Override
 	public int getTypeCode() {
 		logger.warn("getTypeCode() not supported yet.");
 		return 9999;

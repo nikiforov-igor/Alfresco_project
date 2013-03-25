@@ -31,7 +31,7 @@ public class ParserImpl implements Parser {
 		context.setBeanResolver(new BeanFactoryResolver(applicationContext));
 
 		context.registerFunction("formatDate", Utils.getDeclaredMethod("formatDate", String.class, Date.class));
-		context.registerFunction("formatCurrentDate", Utils.getDeclaredMethod("formatCurrentDate", String.class));
+		context.registerFunction("formatCurrentDate", Utils.getDeclaredMethod("formatDate", String.class));
 		context.registerFunction("formatNumber", Utils.getDeclaredMethod("formatNumber", String.class, Long.class));
 		context.registerFunction("employeeOrgUnitCode", Utils.getDeclaredMethod("employeeOrgUnitCode", NodeRef.class));
 		context.registerFunction("employeeInitials", Utils.getDeclaredMethod("employeeInitials", NodeRef.class));
