@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -27,6 +29,7 @@ public class DocumentImpl implements Document {
 	private NodeService nodeService;
 	private CounterFactory counterFactory;
 	private NamespaceService namespaceService;
+	private DictionaryService dictionaryService;
 	private ApplicationContext applicationContext;
 	private DocumentMembersService documentMembersService;
 	final private static Logger logger = LoggerFactory.getLogger(DocumentImpl.class);
@@ -36,6 +39,7 @@ public class DocumentImpl implements Document {
 		this.applicationContext = applicationContext;
 		this.nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		this.namespaceService = applicationContext.getBean("namespaceService", NamespaceService.class);
+		this.dictionaryService = applicationContext.getBean("dictionaryService", DictionaryService.class);
 		this.counterFactory = applicationContext.getBean("regNumbersCounterFactory", CounterFactory.class);
 		this.documentMembersService = applicationContext.getBean("documentMembersService", DocumentMembersService.class);
 	}
@@ -114,8 +118,8 @@ public class DocumentImpl implements Document {
 
 	@Override
 	public String getTypeName() {
-		logger.warn("getTypeName() not supported yet.");
-		return "documentTypeNamePlaseholder";
+		TypeDefinition documentType = dictionaryService.getType(nodeService.getType(documentNode));
+		return documentType.getTitle();
 	}
 
 	@Override

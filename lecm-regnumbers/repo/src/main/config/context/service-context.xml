@@ -38,6 +38,7 @@
 		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="searchService" ref="searchService"/>
 	</bean>
 
 	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>

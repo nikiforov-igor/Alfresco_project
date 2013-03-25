@@ -3,6 +3,10 @@ package ru.it.lecm.regnumbers.bean;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
+import ru.it.lecm.documents.beans.DocumentService;
 
 /**
  *
@@ -23,7 +28,9 @@ import ru.it.lecm.regnumbers.template.TemplateRunException;
 public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
 
 	final private static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
+	private final String searchQuery = "TYPE:\"%s\" AND @%s:\"%s\"";
 	private ApplicationContext applicationContext;
+	private SearchService searchService;
 
 	public final void init() {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
@@ -33,6 +40,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
+	}
+
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
 	}
 
 	@Override
@@ -48,7 +59,23 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	@Override
 	public boolean isNumberUnique(String number) {
-		throw new UnsupportedOperationException("isNumberUnique(String) not supported yet.");
+		boolean isUnique;
+		SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+		sp.setQuery(String.format(searchQuery, DocumentService.TYPE_BASE_DOCUMENT.toString(), DocumentService.PROP_DOCUMENT_REGNUM.toString(), number));
+
+		ResultSet results = null;
+		try {
+			results = searchService.query(sp);
+			isUnique = results.length() == 0;
+		} finally {
+			if (results != null) {
+				results.close();
+			}
+		}
+
+		return isUnique;
 	}
 
 	@Override

@@ -21,9 +21,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public final class Utils implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
-	private static OrgstructureBean orgstructureService = null;
-	private static NodeService nodeService = null;
-
 
 	private final static Logger logger = LoggerFactory.getLogger(Utils.class);
 
@@ -57,13 +54,14 @@ public final class Utils implements ApplicationContextAware {
 	}
 
 	public static String employeeOrgUnitCode(NodeRef employeeNode) {
-		initServices();
+		OrgstructureBean orgstructureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
+		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		NodeRef employeeUnit = orgstructureService.getUnitByStaff(orgstructureService.getEmployeePrimaryStaff(employeeNode));
 		return (String) nodeService.getProperty(employeeUnit, OrgstructureBean.PROP_UNIT_CODE);
 	}
 
 	public static String employeeInitials(NodeRef employeeNode) {
-		initServices();
+		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		String lastName = (String) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
 		String firstName = (String) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
 		String middleName = (String) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME);
@@ -72,17 +70,8 @@ public final class Utils implements ApplicationContextAware {
 	}
 
 	public static String employeeNumber(NodeRef employeeNode) {
-		initServices();
+		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		return (String) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_NUMBER);
-	}
-
-	private static void initServices() {
-		if (orgstructureService == null) {
-			orgstructureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
-		}
-		if (nodeService == null) {
-			nodeService = applicationContext.getBean("nodeService", NodeService.class);
-		}
 	}
 
 	private Utils() {
