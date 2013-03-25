@@ -25,7 +25,7 @@ import ru.it.lecm.integrotest.utils.Utils;
 			<property name="attributes">
 				<props>
 					<prop key="cm:name">DocExample-0543</prop>
-					<prop key="lecm-contract:regnum">543</prop>
+					<prop key="lecm-document:regnum">543</prop>
 				</props>
 			</property>
 

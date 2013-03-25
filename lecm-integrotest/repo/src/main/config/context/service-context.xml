@@ -181,7 +181,7 @@
 		<property name="rwCheckingPropName" value="cm:name" />
 		<property name="writeValue" value="WriteAccess_Test_Value" />
 		  -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -211,7 +211,7 @@
 		<property name="rwCheckingPropName" value="cm:name" />
 		<property name="writeValue" value="WriteAccess_Test_Value" />
 		  -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -238,7 +238,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -265,7 +265,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -292,7 +292,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -319,7 +319,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -346,7 +346,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -373,7 +373,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -400,7 +400,7 @@
 		<property name="continueOnErrors" value="true" />
 
 		<!-- Чем тестируем -->
-		<property name="rwCheckingPropName" value="lecm-contract:regnum" />
+		<property name="rwCheckingPropName" value="lecm-document:regnum" />
 		<property name="writeValue" value="777" />
 
 		<!-- Какой документ проверяем -->
@@ -416,7 +416,7 @@
 					<property name="attributes">
 						<props>
 							<prop key="cm:name">DocExample-0545</prop>
-							<prop key="lecm-contract:regnum">545</prop>
+							<prop key="lecm-document:regnum">545</prop>
 						</props>
 					</property>
 
@@ -467,7 +467,7 @@
 					<property name="attributes">
 						<props>
 							<prop key="cm:name">DocTest1-0547-17</prop>
-							<prop key="lecm-contract:regnum">547-17</prop>
+							<prop key="lecm-document:regnum">547-17</prop>
 						</props>
 					</property>
 
@@ -534,7 +534,7 @@
 							<property name="attributes">
 								<props>
 									<prop key="cm:name">DocTest2-0547-2</prop>
-									<prop key="lecm-contract:regnum">547-2</prop>
+									<prop key="lecm-document:regnum">547-2</prop>
 								</props>
 							</property>
 
