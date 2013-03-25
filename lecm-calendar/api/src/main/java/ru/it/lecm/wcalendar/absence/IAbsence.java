@@ -17,7 +17,7 @@ public interface IAbsence extends ICommonWCalendar {
 	 */
 	String CONTAINER_NAME = "AbsenceContainer";
 	/**
-	 * Ассоцияация между отсутствием и сотрудником,
+	 * Ассоциация между отсутствием и сотрудником,
 	 * lecm-absence:abscent-employee-assoc
 	 */
 	QName ASSOC_ABSENCE_EMPLOYEE = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "abscent-employee-assoc");

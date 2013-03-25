@@ -22,7 +22,7 @@
 		</property>
 	</bean>
 	<bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
-		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap,businessJournalLogEventsPolicy" >
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap, businessJournalLogEventsPolicy" >
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/absence-reason-dictionary.xml</value>
@@ -73,19 +73,16 @@
 		<property name="extensionName" value="calendar"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
-		<!--<property name="commonWCalService" ref="WCalendarService"/>-->
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="absenceService" ref="AbsenceService"/>
-		<!--<property name="commonWCalService" ref="AbsenceService"/>-->
 	</bean>
 	<bean id="ScheduleJavascriptExtension" class="ru.it.lecm.wcalendar.schedule.extensions.ScheduleJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="schedule"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="scheduleService" ref="ScheduleService"/>
-		<!--<property name="commonWCalService" ref="ScheduleService"/>-->
 	</bean>
 	<bean id="WorkCalendarJavascriptExtension" class="ru.it.lecm.wcalendar.extensions.WorkCalendarJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="workCalendar"/>
