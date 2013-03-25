@@ -7,8 +7,8 @@
       "repositoryId": "${server.id}",
       <#if doclist.container??>"container": "${doclist.container.nodeRef}",</#if>
       <#if doclist.parent??>"parent": <#noescape>${doclist.parent.nodeJSON},</#noescape></#if>
-      <#--<#if doclist.customJSON??>"custom": <#noescape>${doclist.customJSON},</#noescape></#if>-->
-      <#if doclist.customJSON??>"custom": "",</#if>
+      <#if doclist.customJSON??>"custom": <#noescape>${doclist.customJSON},</#noescape></#if>
+
       "onlineEditing": ${doclist.onlineEditing?string},
       "workingCopyLabel": "${workingCopyLabel}"
    },
@@ -17,8 +17,7 @@
    <#if doclist.item??>
       <#assign item = doclist.item>
       "node": <#noescape>${item.nodeJSON}</#noescape>,
-      <#--<#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape></#if>-->
-      <#if item.parent??>"parent": "",</#if>
+      <#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape></#if>
       <@itemLib.itemJSON item=item />
    </#if>
    }

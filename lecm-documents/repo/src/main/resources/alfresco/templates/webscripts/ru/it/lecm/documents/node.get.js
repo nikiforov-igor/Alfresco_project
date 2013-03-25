@@ -36,9 +36,7 @@ function getDoclist() {
     };
 
     item.parent = {};
-    if (node.parent != null && node.parent.hasPermission("Read")) {
-        item.parent = Evaluator.run(node.parent, true);
-    } else {
+    if (node.parent != null) {
         item.parent = Evaluator.run(node.parent, true);
     }
 

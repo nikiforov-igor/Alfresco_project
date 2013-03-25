@@ -1,4 +1,5 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
+<import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 
 var DocumentTags = {
     PROP_TAGGABLE: "cm:taggable",
@@ -13,7 +14,7 @@ var DocumentTags = {
 function main() {
     AlfrescoUtil.param('nodeRef');
     AlfrescoUtil.param('site', null);
-    var documentDetails = AlfrescoUtil.getNodeDetails(model.nodeRef, model.site);
+    var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
     if (documentDetails) {
         model.record = jsonUtils.toJSONString(documentDetails.item);
         model.tags = jsonUtils.toJSONString(DocumentTags.getTags(documentDetails.item));

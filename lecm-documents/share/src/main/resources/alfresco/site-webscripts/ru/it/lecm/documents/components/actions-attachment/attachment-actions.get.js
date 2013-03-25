@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/components/documentlibrary/include/documentlist.lib.js">
+<import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 
 function main()
 {
@@ -8,7 +9,7 @@ function main()
    AlfrescoUtil.param('container', 'documentLibrary');
 	args.view = "attachment";
 
-   var documentDetails = AlfrescoUtil.getNodeDetails(model.nodeRef, model.site,
+   var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
    {
       actions: true
    });
@@ -18,12 +19,12 @@ function main()
 	  model.documentDetailsJSON = jsonUtils.toJSONString(documentDetails);
       doclibCommon();
 
-	   if (documentDetails.item.parent !=- null) {
-		   var attachmentsFolder = AlfrescoUtil.getNodeDetails(documentDetails.item.parent.nodeRef);
+	   if (documentDetails.item.parent != null) {
+		   var attachmentsFolder = DocumentUtils.getNodeDetails(documentDetails.item.parent.nodeRef);
 		   if (attachmentsFolder != null && attachmentsFolder.item.parent != null) {
-			   var categoryFolder = AlfrescoUtil.getNodeDetails(attachmentsFolder.item.parent.nodeRef);
+			   var categoryFolder = DocumentUtils.getNodeDetails(attachmentsFolder.item.parent.nodeRef);
 			   if (categoryFolder != null && categoryFolder.item.parent != null){
-				   var documentFolder = AlfrescoUtil.getNodeDetails(categoryFolder.item.parent.nodeRef);
+				   var documentFolder = DocumentUtils.getNodeDetails(categoryFolder.item.parent.nodeRef);
 				   if (documentFolder != null) {
 					   model.documentNodeRef = documentFolder.item.node.nodeRef;
 					   var presentString = documentFolder.item.node.properties["lecm-document:present-string"];
