@@ -16,6 +16,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -36,7 +37,7 @@ implements NodeServicePolicies.OnCreateNodePolicy {
 	final public QName TYPE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "document");
 
 	// final public StdPermission DEFAULT_ACCESS = StdPermission.full;
-	final public String DEFAULT_ACCESS = LecmPermissionService.PGROLE_Initiator;
+	final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Initiator;
 
 	final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 	// private fields

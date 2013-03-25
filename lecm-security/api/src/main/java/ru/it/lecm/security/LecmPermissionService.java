@@ -26,17 +26,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 public interface LecmPermissionService {
 
 	public static final String BEAN_NAME = "lecmPermissionServiceBean";
-	/**
-	 * префикс в названии привилегии Альфреско, которую надо относить к LECM-Системе
-	 * Например, "_lecmPermCreateTag", "_lecmPermViewTag"
-	 */
-	public static final String PFX_LECM_PERMISSION = "_lecmPerm_"; 
-
-	/**
-	 * префикс системной Роли (группы полномочий Альфреско), которую надо относить к LECM-Системе
-	 * Например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
-	 */
-	public static final String PFX_LECM_ROLE = "LECM_BASIC_PG_";
 
 	/**
 	 * Разрешение, соответствующее deny
@@ -44,28 +33,22 @@ public interface LecmPermissionService {
 	final public static String ACCPERM_EMPTY = "deny";
 
 	/**
-	 * "Well known" permission groups 
-	 */
-	public static String PGROLE_Initiator = PFX_LECM_ROLE + "Initiator"; // "LECM_BASIC_PG_Initiator"
-	public static String PGROLE_Reader = PFX_LECM_ROLE + "Reader"; // "LECM_BASIC_PG_Reader"
-
-	/**
-	 * Получить обозначение группы.
+	 * Получить обозначение группы полномочий по имени, среди зарегистрированных групп.
 	 * @param lecmPermissionGroupName назвнаие группы, например, "LECM_BASIC_PG_Editor"
 	 * Регистр не важен, в любом возвращаемое значение будет содержать точное 
 	 * название с учётом регистра. 
 	 * @return
 	 */
-	LecmPermissionGroup makePermGroup( String lecmPermissionGroupName );
+	LecmPermissionGroup findPermissionGroup( String lecmPermissionGroupName );
 
 	/**
-	 * Получить обозначение разрешения.
-	 * @param lecmPermissionName название полномочия, например, "_lecmPerm_ViewTag".
+	 * Найти полномочие по имени среди фактически зарегистрированных 
+	 * @param lecmPermissionName полное Альфреско-имя полномочия (например, "_lecmPermCreateTag", "_lecmPermViewTag").
 	 * Регистр не важен, в любом возвращаемое значение будет содержать точное 
 	 * название с учётом регистра. 
-	 * @return
+	 * @return существующее полномочие или Null, если такого полномочия не зарегистрировано
 	 */
-	LecmPermission makePerm( String lecmPermissionName );
+	LecmPermission findPermission( String lecmPermissionName );
 
 
 	/**
@@ -145,37 +128,63 @@ public interface LecmPermissionService {
 	 */
 	void rebuildACL(NodeRef nodeRef, Map<String, LecmPermissionGroup> accessMap);
 
-	public interface LecmPermissionGroup {
+
+	/**
+	 * Именованный security-объект Альфреско, в имено которого содержится префикс
+	 */
+	public interface AlfrescoSecurityNamedItemWithPrefix {
 
 		/**
-		 * Вернуть полное название группы (с префиксом PFX_LECM_ROLE = "LECM_BASIC_PG_")
-		 * @return системное наименование of permissionGroup. Например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader".
+		 * Вернуть полное название объекта (Группы Привилегий с префиксом PFX_LECM_ROLE = "LECM_BASIC_PG_",
+		 * или Полномочия с префиксом PFX_LECM_PERMISSION = "_lecmPerm_")
+		 * @return системное наименование:
+		 * 		1) of permissionGroup. Например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
+		 *		2) of permission. Например, "_lecmPerm_SetRate", "_lecmPerm_CreateTag"
 		 * Всегда не NULL.
 		 */
 		String getName();
 
 		/**
-		 * Вернуть короткое название (без префикса PFX_LECM_ROLE = "LECM_BASIC_PG_")
-		 * @return короткое системное наименование of permissionGroup. Например, "Initiator", "Reader".
+		 * Вернуть короткое название (без префикса PFX_LECM_ROLE = "LECM_BASIC_PG_" или префикса PFX_LECM_PERMISSION = "_lecmPerm_")
+		 * @return короткое системное наименование:
+		 * 		1) of permissionGroup. Например, "Initiator", "Reader".
+		 * 		2) of permission. Например, "SetRate", "CreateTag".
 		 * Всегда не NULL.
 		 */
 		String getShortName();
+
+		/**
+		 * @return характерный (для объектов данного типа) префикс внутри названия name. 
+		 */
+		String getPrefix();
 	}
 
-	public interface LecmPermission {
-		/**
-		 * Вернуть полное название полномочия (с префиксом PFX_LECM_PERMISSION = "_lecmPerm_")
-		 * @return системное наименование of permission. Например, "_lecmPerm_SetRate", "_lecmPerm_CreateTag".
-		 * Всегда не NULL.
-		 */
-		String getName();
+	public interface LecmPermissionGroup
+		extends AlfrescoSecurityNamedItemWithPrefix
+	{
 
 		/**
-		 * Вернуть короткое название (без префикса PFX_LECM_PERMISSION = "_lecmPerm_")
-		 * @return короткое системное наименование of permission. Например, "SetRate", "CreateTag".
-		 * Всегда не NULL.
+		 * префикс системной Роли (группы полномочий Альфреско), которую надо относить к LECM-Системе
+		 * Например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 		 */
-		String getShortName();
+		public static final String PFX_LECM_ROLE = "LECM_BASIC_PG_";
+
+		/**
+		 * "Well known" permission groups 
+		 */
+		public static String PGROLE_Initiator = PFX_LECM_ROLE + "Initiator"; // "LECM_BASIC_PG_Initiator"
+		public static String PGROLE_Reader = PFX_LECM_ROLE + "Reader"; // "LECM_BASIC_PG_Reader"
+
+	}
+
+	public interface LecmPermission
+		extends AlfrescoSecurityNamedItemWithPrefix
+	{
+		/**
+		 * префикс в названии привилегии Альфреско, которую надо относить к LECM-Системе
+		 * Например, "_lecmPermCreateTag", "_lecmPermViewTag"
+		 */
+		public static final String PFX_LECM_PERMISSION = "_lecmPerm_";
 	}
 
 }

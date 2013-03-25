@@ -8,6 +8,7 @@ import ru.it.lecm.security.Types;
  */
 public interface IOrgStructureNotifiers {
 
+	public static final String BEAN_NAME = "lecmSecurityGroupsBean";
 
 	/**
 	 * Оповещение о создании узла указанного типа (Сотрудник, Должность, Департамент и Бизнес-Роль).

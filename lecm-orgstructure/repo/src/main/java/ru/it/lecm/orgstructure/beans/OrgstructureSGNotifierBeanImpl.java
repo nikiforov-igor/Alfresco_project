@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.alfresco.service.namespace.QName;
+
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -38,7 +40,36 @@ public class OrgstructureSGNotifierBeanImpl
 		PropertyCheck.mandatory(this, "nodeService", this.nodeService);
 		PropertyCheck.mandatory(this, "sgNotifier", this.sgNotifier);
 		PropertyCheck.mandatory(this, "orgstructureService", this.orgstructureService);
+
+		autoTieAllEmployeers();
+
 		logger.info("initialized");
+	}
+
+
+	// public static QName TYPE_EMPLOYEE = QName.createQName( OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee");
+
+	/**
+	 * Привязать для всех активных Сотрудников Login/userId к sgME группам ... 
+	 */
+	void autoTieAllEmployeers() {
+		final long start = System.currentTimeMillis();
+
+		final Set<QName> typEmpl = new HashSet<QName>();
+		typEmpl.add( OrgstructureBean.TYPE_EMPLOYEE);
+
+		final List<ChildAssociationRef> employeeRefs = nodeService.getChildAssocs(orgstructureService.getEmployeesDirectory(), typEmpl);
+		if (employeeRefs == null || employeeRefs.isEmpty()) {
+			logger.warn("No Employeers found");
+		} else {
+			logger.warn("Employeers found : "+ employeeRefs.size());
+			for(ChildAssociationRef item: employeeRefs) {
+				final NodeRef employee = item.getChildRef();
+				this.notifyEmploeeTie(employee);
+			}
+		}
+
+		logger.info("scan time, ms: "+ (System.currentTimeMillis() - start) );
 	}
 
 

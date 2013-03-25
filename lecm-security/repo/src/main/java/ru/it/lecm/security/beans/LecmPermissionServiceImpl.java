@@ -58,7 +58,7 @@ public class LecmPermissionServiceImpl
 	 */
 	private boolean staticInheritParentPermissions = false;
 	private boolean dynamicInheritParentPermissions = true;
-	private LecmPermissionGroup defaultAccessOnGrant = makePermGroup( PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
+	private LecmPermissionGroup defaultAccessOnGrant = findPermissionGroup( LecmPermissionGroup.PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
 
 	static String getMapInfo( Map<String, LecmPermissionGroup> map) {
 		final StringBuilder sb = new StringBuilder();
@@ -173,10 +173,10 @@ public class LecmPermissionServiceImpl
 	}
 
 	public void setDefaultAccessOnGrant(String permGroupName) {
-		this.defaultAccessOnGrant = makePermGroup(permGroupName);
+		this.defaultAccessOnGrant = findPermissionGroup(permGroupName);
 	}
 
-	Map<String, LecmPermissionImpl> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
+	private Map<String, LecmPermissionImpl> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
 
 	/**
 	 * Построение общесистемного списка атомарных lecm-полномочий
@@ -197,9 +197,10 @@ public class LecmPermissionServiceImpl
 			int i = 0;
 			for (PermissionReference item: list) {
 				i++;
-				final boolean isLecm = item.getName().toUpperCase().startsWith(PFX_LECM_PERMISSION.toUpperCase());
+				final String key = makePermissionKey(item.getName());
+				final boolean isLecm = key.startsWith(LecmPermission.PFX_LECM_PERMISSION.toUpperCase());
 				if (isLecm)
-					this.allPermissions.put( item.getName().toUpperCase(), new LecmPermissionImpl(item.getName()) );
+					this.allPermissions.put( key, new LecmPermissionImpl(item.getName()) );
 				// отметка звёздочкой lecm-групп
 				sb.append( String.format( "\t%s[%d]\t%s\t%s\n", (isLecm ? "*" : "" ), i, item.getName(), item.getQName() ));
 			}
@@ -209,28 +210,37 @@ public class LecmPermissionServiceImpl
 	}
 
 
+	private String makePermissionKey(String permName) {
+		return (permName != null && permName.length() > 0)
+					? permName.trim().toUpperCase()
+					: "";
+	}
+
+
 	@Override
-	public LecmPermission makePerm(String lecmPermissionName) {
+	public LecmPermission findPermission(String lecmPermissionName) {
 		if (lecmPermissionName == null)
 			return null;
 
 		if (allPermissions == null)
 			initAllPermissions(); // кешируем ...
 
-		final String key = lecmPermissionName.trim().toUpperCase();
+		final String key = makePermissionKey(lecmPermissionName);
 
 		// DONE: check via real list of permissions
 		final LecmPermission result = 
 				(allPermissions.containsKey(key)) ? allPermissions.get(key) : null;
 		if (result == null) {
-			// allPermissions.put( key, new LecmPermissionImpl(lecmPermissionName));
-			throw new RuntimeException( new InvalidNameException( String.format( "Unknown permission '%s'", lecmPermissionName)) );
+			// // allPermissions.put( key, new LecmPermissionImpl(lecmPermissionName));
+			final String info = String.format( "Unknown permission '%s' -> skipped", lecmPermissionName);
+			// throw new RuntimeException( new InvalidNameException(info));
+			logger.warn(info);
 		}
 		return result;
 	}
 
 
-	Map<String, LecmPermissionGroupImpl> allGroups = null;
+	private Map<String, LecmPermissionGroupImpl> allGroups = null;
 
 	/**
 	 * Построение общесистемного списка lecm-групп полномочий
@@ -251,9 +261,10 @@ public class LecmPermissionServiceImpl
 			int i = 0;
 			for (PermissionReference item: list) {
 				i++;
-				final boolean isLecm = item.getName().toUpperCase().startsWith(PFX_LECM_ROLE.toUpperCase());
+				final String key = makePermissionGroupKey(item.getName());
+				final boolean isLecm = key.startsWith(LecmPermissionGroup.PFX_LECM_ROLE.toUpperCase());
 				if (isLecm)
-					this.allGroups.put( item.getName().toUpperCase(), new LecmPermissionGroupImpl(item.getName()) );
+					this.allGroups.put( key, new LecmPermissionGroupImpl(item.getName()) );
 				// отметка звёздочкой lecm-групп
 				sb.append( String.format( "\t%s[%d]\t%s\t%s\n", (isLecm ? "*" : "" ), i, item.getName(), item.getQName() ));
 			}
@@ -262,15 +273,21 @@ public class LecmPermissionServiceImpl
 		logger.info( sb.toString() );
 	}
 
+	private String makePermissionGroupKey(String permGroupName) {
+		return (permGroupName != null && permGroupName.length() > 0)
+					? permGroupName.trim().toUpperCase()
+					: "";
+	}
+
 	@Override
-	public LecmPermissionGroup makePermGroup(String lecmGroupName)
+	public LecmPermissionGroup findPermissionGroup(String lecmGroupName)
 	{
 		if (lecmGroupName == null)
 			return null;
 
 		// созданные кешируем для единообразия, со врменем можно будет 
 		// инициализировать список по данным xml-настроек permissionService.
-		final String key = lecmGroupName.trim().toUpperCase();
+		final String key = makePermissionGroupKey(lecmGroupName);
 		if (allGroups == null) {
 			if (this.modelDAOService == null) {
 				// not yet initialized
@@ -281,9 +298,12 @@ public class LecmPermissionServiceImpl
 
 		final LecmPermissionGroup result = 
 				(allGroups.containsKey(key)) ? allGroups.get(key) : null;
-		if (result == null)
-			// allGroups.put( key, new LecmPermissionGroupImpl(lecmGroupName));
-			throw new RuntimeException( new InvalidNameException( String.format( "Unknown permission group '%s'", lecmGroupName)) );
+		if (result == null) {
+			// // allGroups.put( key, new LecmPermissionGroupImpl(lecmGroupName));
+			// throw new RuntimeException( new InvalidNameException(info)) );
+			final String info = String.format(String.format( "Unknown permission group name '%s' -> skipped", lecmGroupName));
+			logger.warn( info);
+		}
 
 		return result;
 	}
@@ -380,7 +400,7 @@ public class LecmPermissionServiceImpl
 		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
 		final String permission = findACEPermission(permissionGroup);
 		permissionService.setPermission( nodeRef, authority, permission, true);
-		logger.warn(String.format("Private role '%s' for employee '%s' granted as {%s} for document '%s' by security group <%s>", permissionGroup, employeeId, permission, nodeRef, authority));
+		logger.warn(String.format("Private role '%s' for employee '%s'\n\tGRANTED as {%s}\n\t for document '%s'\n\t by security group <%s>", permissionGroup, employeeId, permission, nodeRef, authority));
 	}
 
 	@Override
@@ -390,7 +410,7 @@ public class LecmPermissionServiceImpl
 
 		final String authority = sgnm.makeSGName(posUserSpec);
 		permissionService.clearPermission( nodeRef, authority);
-		logger.warn(String.format("Private role '%s' for employee '%s' revoked from document '%s'", permissionGroup, employeeId, nodeRef));
+		logger.warn(String.format("Private role '%s' for employee '%s'\n\tREVOKED from document '%s'", permissionGroup, employeeId, nodeRef));
 	}
 
 	@Override
@@ -507,7 +527,7 @@ public class LecmPermissionServiceImpl
 		 * @throws InvalidNameException 
 		 */
 		public LecmPermissionGroupImpl(String fullLecmPermGroupName) {
-			super(PFX_LECM_ROLE, fullLecmPermGroupName);
+			super(LecmPermissionGroup.PFX_LECM_ROLE, fullLecmPermGroupName);
 		}
 	}
 
@@ -532,7 +552,7 @@ public class LecmPermissionServiceImpl
 		 * @throws InvalidNameException 
 		 */
 		public LecmPermissionImpl(String fullLecmPermName) {
-			super( PFX_LECM_PERMISSION, fullLecmPermName);
+			super( LecmPermission.PFX_LECM_PERMISSION, fullLecmPermName);
 		}
 	}
 
@@ -680,6 +700,12 @@ public class LecmPermissionServiceImpl
 		setACE(nodeRef, authority, permGrp, null);
 	}
 
+	/**
+	 * Вернуть название полномочия Альфреско, которое будет соот-ть группе полномочий 
+	 * @param permissionGroup группа полномочий
+	 * @return Сейчас воз-ет полное имя группы permissionGroup, т.к. она уже
+	 * является достаточной для Альфреско и дробить до атомарных полномочий не требуется.
+	 */
 	String findACEPermission(LecmPermissionGroup permissionGroup) {
 		if (permissionGroup == null) permissionGroup = this.defaultAccessOnGrant;
 		final String permission = (permissionGroup == null) ? null : permissionGroup.getName();

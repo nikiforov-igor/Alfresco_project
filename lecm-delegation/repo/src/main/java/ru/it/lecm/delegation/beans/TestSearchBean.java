@@ -33,6 +33,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.PropertyCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -234,11 +235,11 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	/**
 	 * Получить ссылку на узел по id узла
-	 * @param procuracyid
+	 * @param nodeid
 	 * @return
 	 */
-	static NodeRef makeFullRef(String procuracyid) {
-		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, procuracyid);
+	static NodeRef makeFullRef(String nodeid) {
+		return new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, nodeid);
 	}
 
 	/*
@@ -767,7 +768,11 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 */
 	String echoGetArg( String argName, String argDefault, JSONObject echoObj
 		) throws JSONException {
-		final String found = this.args.optString(argName, argDefault);
+		return echoGetArg( this.args, argName, argDefault, echoObj); 
+	}
+	static String echoGetArg( JSONObject args, String argName, String argDefault, JSONObject echoObj
+				) throws JSONException {
+		final String found = args.optString(argName, argDefault);
 		if (echoObj != null)
 			echoObj.put("called_"+ argName, found);
 		return found != null ? found.trim() : null;
@@ -775,20 +780,38 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	boolean echoGetArgBool( String argName, boolean argDefault, JSONObject echoObj
 		) throws JSONException {
-		final boolean found = this.args.optBoolean(argName, argDefault);
+		return echoGetArgBool(args, argName, argDefault, echoObj);
+	}
+
+	static boolean echoGetArgBool( JSONObject args, String argName, boolean argDefault, JSONObject echoObj
+			) throws JSONException {
+		final boolean found = args.optBoolean(argName, argDefault);
 		if (echoObj != null)
 			echoObj.put("called_"+ argName, found);
 		return found;
 	}
 
+	NodeRef echoGetNodeRef( String argName, String argDefault, JSONObject echoObj
+		) throws JSONException {
+		return echoGetNodeRef(args, argName, argDefault, echoObj);
+	}
+
+	static NodeRef echoGetNodeRef(  JSONObject args, String argName, String argDefault, JSONObject echoObj
+			) throws JSONException {
+		final String id = echoGetArg( args, argName, argDefault, echoObj);
+		return (id != null && id.length() > 0) ? makeFullRef(id) : null;
+	}
+
 	/**
 	 * Получение из this.args именованного аргумента типа SGPosition, как вложенного json под-объекта
-	 * @param argName
-	 * @param echoObj
+	 * @param argName название аргумента внутри this.args
+	 * @param echoObj объект, в который выводится эхо получаемых значений
+	 * @param lecmPermService служба работы с разрешениями
 	 * @return
 	 * @throws JSONException
 	 */
-	SGPosition echoGetArgSGPosition(String argName, JSONObject echoObj) throws JSONException {
+	SGPosition echoGetArgSGPosition(String argName, JSONObject echoObj
+			, LecmPermissionService lecmPermService) throws JSONException {
 		final JSONObject jdata = this.args.optJSONObject(argName);
 		if (jdata == null)
 			return null;
@@ -796,12 +819,21 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		final SGPosition result;
 		switch(kind) {
 			case SG_DP:
-				result = SGKind.getSGDeputyPosition( jdata.optString("id", null), jdata.optString("userId", null));
+				result = SGKind.getSGDeputyPosition( jdata.optString("id", null), jdata.optString("displayName", null), jdata.optString("userLogin", null), jdata.optString("userId", null));
 				break;
 			case SG_BRME:
-				result = SGKind.getSGMyRolePos( jdata.optString("id", null), jdata.optString("roleCode", null));
+				result = SGKind.getSGMyRolePos( jdata.optString("id", null), jdata.optString("userLogin", null), jdata.optString("roleCode", null));
 				break;
-			default: result = kind.getSGPos( jdata.optString("id", null));
+			case SG_SPEC:
+				final NodeRef node = echoGetNodeRef( jdata, "nodeRef", null, echoObj);// (!) надо брать из объекта jdata, а не из this!
+				result = SGKind.getSGSpecialUserRole(
+						echoGetArg(jdata, "id", null, echoObj)
+						, lecmPermService.findPermissionGroup( echoGetArg( jdata, "permGroup", null, echoObj))
+						, node
+						, echoGetArg( jdata, "userLogin", null, echoObj));
+
+				break;
+			default: result = kind.getSGPos( jdata.optString("id", null), jdata.optString("displayName", null));
 		}
 		if (echoObj != null)
 			echoObj.put("called_"+ argName, result);
@@ -1089,6 +1121,9 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	final static String ORGOPER_BRASSIGNED = "orgBRAssigned";
 	final static String ORGOPER_BRREMOVED = "orgBRRemoved";
 
+	final static String ORGOPER_GRANTACCESS = "grantAccess";
+	final static String ORGOPER_REVOKEACCESS = "revokeAccess";
+
 	/**
 	 * json-параметры теста орг-штатки:
 	 *   "oper" = ( см ORGOPER_XXX = 7 операций)
@@ -1123,22 +1158,30 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	private JSONObject doOrgStrucNotifyTest() throws JSONException {
 		final JSONObject result = new JSONObject();
 
-		// получение бина
-		final IOrgStructureNotifiers noti = (IOrgStructureNotifiers) getApplicationContext().getBean("lecmSecurityGroupsBean"); // getApplicationContext().getBean(IOrgStructureNotifiers.class);
-		logger.info("bean found class "+ noti.getClass().getName());
+		// получение бинов ...
+		final IOrgStructureNotifiers notiServ = (IOrgStructureNotifiers) getApplicationContext().getBean(IOrgStructureNotifiers.BEAN_NAME); // getApplicationContext().getBean(IOrgStructureNotifiers.class);
+		PropertyCheck.mandatory(this, IOrgStructureNotifiers.BEAN_NAME, notiServ);
+
+		final LecmPermissionService lecmServ = (LecmPermissionService)  getApplicationContext().getBean(LecmPermissionService.BEAN_NAME);
+		PropertyCheck.mandatory(this, LecmPermissionService.BEAN_NAME, lecmServ);
+
+		logger.info(
+				"\n\tbean IOrgStructureNotifiers found class: "+ notiServ.getClass().getName()
+				+"\n\tbean LecmPermissionService found class: "+ lecmServ.getClass().getName()
+		);
 
 		// выполнение Операции
 		final String oper = echoGetArg("oper", "", result);
 
 		if (ORGOPER_NODECREATED.equalsIgnoreCase(oper)) {
-			final SGPosition obj = echoGetArgSGPosition( "obj", result);
-			final String res = noti.orgNodeCreated(obj);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result, lecmServ);
+			final String res = notiServ.orgNodeCreated(obj);
 			logger.info( String.format("%s return '%s'", oper, res));
 			result.put("return", res);
 		}
 		else if (ORGOPER_NODEDEACTIVATED.equalsIgnoreCase(oper)) {
-			final SGPosition obj = echoGetArgSGPosition( "obj", result);
-			noti.orgNodeDeactivated(obj);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result, lecmServ);
+			notiServ.orgNodeDeactivated(obj);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
@@ -1146,38 +1189,52 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 			final String employeeId = echoGetArg( "employeeId", null, result);
 			final String userLogin = echoGetArg( "alfrescoUserLogin", null, result);
 			final boolean isActive = echoGetArgBool( "isActive", true, result);
-			noti.orgEmployeeTie(employeeId, userLogin, isActive);
+			notiServ.orgEmployeeTie(employeeId, userLogin, isActive);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
 		else if (ORGOPER_SGINCLUDE.equalsIgnoreCase(oper)) {
-			final SGPosition child = echoGetArgSGPosition( "child", result);
-			final SGPosition parent= echoGetArgSGPosition( "parent", result);
-			noti.sgInclude(child, parent);
+			final SGPosition child = echoGetArgSGPosition( "child", result, lecmServ);
+			final SGPosition parent= echoGetArgSGPosition( "parent", result, lecmServ);
+			notiServ.sgInclude(child, parent);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
 		else if (ORGOPER_SGEXCLUDE.equalsIgnoreCase(oper)) {
-			final SGPosition child = echoGetArgSGPosition( "child", result);
-			final SGPosition oldParent= echoGetArgSGPosition( "oldParent", result);
-			noti.sgInclude(child, oldParent);
+			final SGPosition child = echoGetArgSGPosition( "child", result, lecmServ);
+			final SGPosition oldParent= echoGetArgSGPosition( "oldParent", result, lecmServ);
+			notiServ.sgInclude(child, oldParent);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
 		else if (ORGOPER_BRASSIGNED.equalsIgnoreCase(oper)) {
 			final String roleCode = echoGetArg( "roleCode", null, result);
-			final SGPosition obj = echoGetArgSGPosition( "obj", result);
-			noti.orgBRAssigned(roleCode, obj);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result, lecmServ);
+			notiServ.orgBRAssigned(roleCode, obj);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
 		else if (ORGOPER_BRREMOVED.equalsIgnoreCase(oper)) {
 			final String roleCode = echoGetArg( "roleCode", null, result);
-			final SGPosition obj = echoGetArgSGPosition( "obj", result);
-			noti.orgBRRemoved(roleCode, obj);
+			final SGPosition obj = echoGetArgSGPosition( "obj", result, lecmServ);
+			notiServ.orgBRRemoved(roleCode, obj);
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
+
+		else if (ORGOPER_GRANTACCESS.equalsIgnoreCase(oper) || ORGOPER_REVOKEACCESS.equalsIgnoreCase(oper) ) {
+			final boolean grant = ORGOPER_GRANTACCESS.equalsIgnoreCase(oper);
+			final String employeeId = echoGetArg( "id", null, result);
+			final NodeRef node = echoGetNodeRef( "nodeId", echoGetArg( "node", null, result), result); // "nodeId" или "node"
+			final LecmPermissionGroup permissionGroup = lecmServ.findPermissionGroup( echoGetArg( "permGroup", null, result));
+			if (grant)
+				lecmServ.grantAccess( permissionGroup, node, employeeId);
+			else
+				lecmServ.revokeAccess( permissionGroup, node, employeeId);
+			logger.info( String.format("%s called", oper));
+			result.put("return", "void");
+		}
+
 		else { // UNKNOWN OPER
 			result.put("called_oper", "skipped unknown oper "+ oper);
 			logger.warn( String.format("Skipping unsupported operation '%s'", oper));
@@ -1234,7 +1291,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 					if ("deny".equalsIgnoreCase(access))
 						continue; // skip
 					// result.put( brole, (access != null) ? access : StdPermission.noaccess);
-					result.put( brole, this.lecmPermissionService.makePermGroup(access));
+					result.put( brole, this.lecmPermissionService.findPermissionGroup(access));
 				} catch(Throwable t) {
 					logger.error( String.format("Check invalid map point '%s',\n\t expected to be 'BRole:access'\n\t\t, where access is (noaccess | readonly | full),\n\t\t BRole = mnemonic of business role"
 							, broleAccess), t);
@@ -1312,7 +1369,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 					logger.info( String.format( "<%s> for node id '%s', user <%s>, role <%s>, access <%s>", oper, id, userId, roleCode, access));
 
 					if (ACLOPER_GRANT_DYNAROLE.equalsIgnoreCase(oper))
-						this.lecmPermissionService.grantDynamicRole(roleCode, ref, userId, this.lecmPermissionService.makePermGroup(access) );
+						this.lecmPermissionService.grantDynamicRole(roleCode, ref, userId, this.lecmPermissionService.findPermissionGroup(access) );
 					else
 						this.lecmPermissionService.revokeDynamicRole(roleCode, ref, userId);
 				} else { logger.warn("Unsupported operation "+ oper); }
@@ -1400,11 +1457,9 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	private JSONObject doWorkFlowTest() throws JSONException {
 		final JSONObject result = new JSONObject();
 
-		final String sNodeRef = echoGetArg( "nodeRef", null, result);
-
+		final NodeRef nodeRef = echoGetNodeRef( "nodeRef", null, result);
 		final Map<String, String> workflowList = new HashMap<String, String>();
-		if (sNodeRef != null && sNodeRef.length() > 0)  {
-			final NodeRef nodeRef = new NodeRef(sNodeRef);
+		if (nodeRef != null) {
 			final List<WorkflowInstance> wfInstances = workflowService.getWorkflowsForContent(nodeRef, true);
 			if (wfInstances != null) { 
 				for (WorkflowInstance wfInstance : wfInstances) {

@@ -10,7 +10,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 
@@ -103,7 +103,7 @@ public class Utils {
 				try {
 					final String keyName = entry.getKey().trim();
 					final String access = (entry.getValue() != null) ? entry.getValue().trim() : null;
-					result.put( keyName, (access != null) ? access : LecmPermissionService.PGROLE_Reader);
+					result.put( keyName, (access != null) ? access : LecmPermissionGroup.PGROLE_Reader);
 				} catch(Throwable t) {
 					logger.error( String.format("Check invalid map point '%s',\n\t expected to be 'BRole:access'\n\t\t, where access is (noaccess | readonly | full),\n\t\t BRole = mnemonic of business role"
 							, entry.getKey() + ":"+ entry.getValue()), t);

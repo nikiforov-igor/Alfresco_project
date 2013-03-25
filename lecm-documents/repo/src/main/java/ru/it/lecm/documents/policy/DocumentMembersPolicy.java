@@ -27,6 +27,7 @@ import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
 /**
  * User: dbashmakov
@@ -50,7 +51,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
     // final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
     // private StdPermission grantAccess = DEFAULT_ACCESS;
-    final public String DEFAULT_ACCESS = LecmPermissionService.PGROLE_Reader;
+    final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
     private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
 
     private String grantDynaRoleCode = "BR_MEMBER";
