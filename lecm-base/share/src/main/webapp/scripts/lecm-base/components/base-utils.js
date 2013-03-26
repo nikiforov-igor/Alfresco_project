@@ -58,18 +58,17 @@ LogicECM.module.Base.Util = {
      */
     addUrlParam: function(search, key, val){
         var newParam = key + '=' + val,
-            params = '?' + newParam,
-            _url;
+            params = '?' + newParam;
 
 
         // If the "search" string exists, then build params from it
         if (search) {
-            // Try to replace an existance instance
-            params = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '&' + newParam);
-
-            // If nothing was replaced, then add the new param to the end
-            if (params === search) {
-                params += '&' + newParam;
+            if (search.match(key + '[^&]*') != null) {
+                // Try to replace an existance instance
+                params = search.replace(new RegExp(key + '[^&]*'), newParam);
+            } else {
+                // If nothing was replaced, then add the new param to the end
+                params = search + '&' + newParam;
             }
         }
         location.search = params;
