@@ -249,7 +249,7 @@ public class LecmPermissionServiceImpl
 		if (this.allGroups != null) return;
 		this.allGroups = new HashMap<String, LecmPermissionGroupImpl>();
 
-		final Set<PermissionReference> list = modelDAOService.getAllExposedPermissions();
+		final Set<PermissionReference> list = modelDAOService.getAllPermissions(); // modelDAOService.getAllExposedPermissions();
 		final StringBuilder sb = new StringBuilder("\n");
 		if (list == null || list.isEmpty()) {
 			sb.append("(!?) No permission groups found\n");

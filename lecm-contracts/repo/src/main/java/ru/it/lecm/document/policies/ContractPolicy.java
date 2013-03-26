@@ -173,7 +173,7 @@ implements NodeServicePolicies.OnCreateNodePolicy {
 			 final String authorLogin = authenticationService.getCurrentUserName();
 			 final NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
 			 if (employee == null) {
-				 logger.debug(String.format("Fail assigning dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
+				 logger.warn(String.format("Fail assigning dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
 				 return;
 			 }
 
