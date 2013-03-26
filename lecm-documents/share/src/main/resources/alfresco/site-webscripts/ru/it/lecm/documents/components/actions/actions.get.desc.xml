@@ -1,6 +1,5 @@
 <webscript>
     <shortname>Действия</shortname>
     <description>Компонент "Действия"</description>
-    <family>document-actions</family>
     <url>/lecm/components/dashlets/document-actions</url>
 </webscript>

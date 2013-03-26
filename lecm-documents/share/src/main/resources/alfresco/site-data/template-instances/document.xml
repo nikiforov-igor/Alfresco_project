@@ -255,12 +255,5 @@
 	     <region-id>dnd-upload</region-id>
 	     <url>/lecm/components/dnd-upload</url>
 	  </component>
-
-      <!-- Настраиваемая область - заглушка -->
-      <component>
-         <region-id>custom</region-id>
-         <url>/lecm/components/document/document-custom</url>
-      </component>
-
    </components>
 </template-instance>

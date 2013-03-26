@@ -39,18 +39,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentMembers.prototype,
         {
+            newId: null,
+
             onReady: function DocumentHistory_onReady() {
-                var expandEl = Dom.get(this.id + "-action-expand");
+                var id = this.newId ? this.newId : this.id;
+
+                var expandEl = Dom.get(id + "-action-expand");
                 if (expandEl != null) {
                     expandEl.onclick = this.onExpand.bind(this);
                 }
 
-                var linkEl = Dom.get(this.id + "-link");
-                if (linkEl != null) {
-                    linkEl.onclick = this.onExpand.bind(this);
-                }
-
-                Alfresco.util.createTwister(this.id + "-heading", "DocumentMembers");
+                Alfresco.util.createTwister(id + "-heading", "DocumentMembers");
             },
 
             onExpand: function () {
@@ -73,7 +72,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
             onRefresh: function (layer, args) {
-                var newId = this.id + "-" + Alfresco.util.generateDomId();
+                var newId = Alfresco.util.generateDomId();
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-members",
@@ -87,7 +86,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
                                 }
-                                this.id = newId;
+                                this.newId = newId;
                                 this.onReady();
                             },
                             scope: this

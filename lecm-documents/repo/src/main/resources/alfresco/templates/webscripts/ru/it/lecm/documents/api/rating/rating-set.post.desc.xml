@@ -11,5 +11,4 @@
     <authentication>user</authentication>
     <transaction>required</transaction>
     <lifecycle>draft_public_api</lifecycle>
-    <family>Rating</family>
 </webscript>

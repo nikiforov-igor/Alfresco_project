@@ -46,11 +46,13 @@
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
-            documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
-                    {
-                        nodeRef: "${nodeRef}",
-                        title: "${msg('heading')}"
-                    }).setMessages(${messages});
+            if (documentMembersComponent == null) {
+                documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
+                        {
+                            nodeRef: "${nodeRef}",
+                            title: "${msg('heading')}"
+                        }).setMessages(${messages});
+            }
         }
 
         YAHOO.util.Event.onDOMReady(init);

@@ -41,7 +41,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentAttachments.prototype,
         {
-	        options: {
+	        newId: null,
+            options: {
 		        showAfterReady: false
 	        },
 
@@ -52,12 +53,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentAttachments_onReady() {
-	            var expandEl = Dom.get(this.id + "-action-expand");
+                var id = this.newId ? this.newId : this.id;
+
+	            var expandEl = Dom.get(id + "-action-expand");
 	            if (expandEl != null) {
 		            expandEl.onclick = this.onExpand.bind(this);
 	            }
 
-                Alfresco.util.createTwister(this.id  + "-heading", "DocumentAttachments");
+                Alfresco.util.createTwister(id  + "-heading", "DocumentAttachments");
 
 	            if (this.options.showAfterReady) {
 		            this.onExpand();
@@ -87,7 +90,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
 	        onAttachmentsUpdate: function DocumentAttachments_onAttachmentsUpdate(layer, args) {
-                var newId = this.id + "-" + Alfresco.util.generateDomId();
+                var newId = Alfresco.util.generateDomId();
 		        Alfresco.util.Ajax.request(
 			        {
 				        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/document-attachments",
@@ -101,7 +104,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						        if (container != null) {
 							    	container.innerHTML = response.serverResponse.responseText;
                                 }
-                                this.id = newId;
+                                this.newId = newId;
                                 this.onReady();
 					        },
 					        scope: this
