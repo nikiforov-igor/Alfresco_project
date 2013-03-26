@@ -9,6 +9,7 @@ import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParseException;
+import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
@@ -23,6 +24,7 @@ public class ParserImpl implements Parser {
 	private ApplicationContext applicationContext;
 	private ExpressionParser expressionParser;
 	final private static org.slf4j.Logger logger = LoggerFactory.getLogger(ParserImpl.class);
+	final private static TemplateParserContext templateParserContext = new TemplateParserContext("{", "}");
 
 	public ParserImpl(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
@@ -45,15 +47,15 @@ public class ParserImpl implements Parser {
 		String result = null;
 		setDoc(documentNode);
 		Expression exp = null;
-		String spelTemplate = templateToSpEL(templateStr);
+
 		try {
-			exp = expressionParser.parseExpression(spelTemplate);
+			exp = expressionParser.parseExpression(templateStr, templateParserContext);
 		} catch (ParseException ex) {
-			String errorMsg = String.format("Error parsing registration number template '%s'", spelTemplate);
+			String errorMsg = String.format("Error parsing registration number template '%s'", templateStr);
 			logger.error(errorMsg, ex);
 			throw new TemplateParseException(errorMsg, ex);
 		} catch (Exception ex) {
-			String errorMsg = String.format("Internal error parsing registration number template '%s'", spelTemplate);
+			String errorMsg = String.format("Internal error parsing registration number template '%s'", templateStr);
 			logger.error(errorMsg, ex);
 			throw new TemplateParseException(errorMsg, ex);
 		}
@@ -62,7 +64,7 @@ public class ParserImpl implements Parser {
 				result = exp.getValue(context, String.class);
 				logger.debug("Generated new regnum: " + result);
 			} catch (EvaluationException ex) {
-				String errorMsg = String.format("Error getting registration number using template '%s'", spelTemplate);
+				String errorMsg = String.format("Error getting registration number using template '%s'", templateStr);
 				logger.error(errorMsg, ex);
 				throw new TemplateRunException(errorMsg, ex);
 			}
@@ -72,16 +74,15 @@ public class ParserImpl implements Parser {
 
 	@Override
 	public void parseTemplate(String templateStr) throws TemplateParseException {
-		String spelTemplate = templateToSpEL(templateStr);
 
 		try {
-			expressionParser.parseExpression(spelTemplate);
+			expressionParser.parseExpression(templateStr, templateParserContext);
 		} catch (ParseException ex) {
-			String errorMsg = String.format("Error parsing registration number template '%s'", spelTemplate);
+			String errorMsg = String.format("Error parsing registration number template '%s'", templateStr);
 			logger.debug("Validating template: " + errorMsg);
 			throw new TemplateParseException(errorMsg, ex);
 		} catch (Exception ex) {
-			String errorMsg = String.format("Internal error parsing registration number template '%s'", spelTemplate);
+			String errorMsg = String.format("Internal error parsing registration number template '%s'", templateStr);
 			logger.debug("Validating template: " + errorMsg);
 			throw new TemplateParseException(errorMsg, ex);
 		}
@@ -94,26 +95,5 @@ public class ParserImpl implements Parser {
 
 	private void setDoc(NodeRef doc) {
 		this.doc = new DocumentImpl(doc, applicationContext);
-	}
-
-	/**
-	 * Превратить строку шаблона в строку, пригодную для запуска в SpEL.
-	 * Шаблон представляет собой такую строку: "{function1()} текст
-	 * {function2()}". SpEL же ожидает, что строка будет выглядеть так:
-	 * "function1() + ' текст ' + function2()". Данный метод как раз и
-	 * выполняется это предобразование.
-	 */
-	private String templateToSpEL(String template) {
-
-		return template.
-				// заменить текст вида "}XXX{" на текст " + 'XXX' + ". 
-				// таким образом, обычная строка заключается в одинарные кавычки и конкатенируется с результатами окружающих ее функций
-				replaceAll("}(.*?)\\{", " + '$1' + ").
-				// весь текст, что идет до открывающейся фигурной скобки заключить в одинарныые кавычки и конкатенировать с остальной частью строки
-				// "XXX{" -> "'XXX' + "
-				replaceAll("(.*)\\{", "'$1' + ").
-				// весь текст после закрывающейся фигурной скобки также заключить в кавычки и конкатенировать с остальной строкой
-				// "}XXX" -> " + 'XXX'"
-				replaceAll("}(.*)", " + '$1'");
 	}
 }
