@@ -106,8 +106,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     },
                     onSuccess:{
                         fn:function (response) {
-                            LogicECM.module.Base.Util.addUrlParam(location.search, 'dashlet', 'main');
-                            self.location;
+                            //формируем путь с параметрами. Осуществляем переход
+                            LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
                         },
                         scope:this
                     }

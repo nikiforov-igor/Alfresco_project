@@ -65,7 +65,7 @@ LogicECM.module.Base.Util = {
         // If the "search" string exists, then build params from it
         if (search) {
             // Try to replace an existance instance
-            params = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '$1' + newParam);
+            params = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '&' + newParam);
 
             // If nothing was replaced, then add the new param to the end
             if (params === search) {
