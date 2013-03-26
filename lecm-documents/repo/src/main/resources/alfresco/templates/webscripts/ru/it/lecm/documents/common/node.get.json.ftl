@@ -1,4 +1,4 @@
-<#import "../../../../org/alfresco/slingshot/documentlibrary-v2/item.lib.ftl" as itemLib />
+<#import "../../../../../org/alfresco/slingshot/documentlibrary-v2/item.lib.ftl" as itemLib />
 <#assign workingCopyLabel = " " + message("coci_service.working_copy_label")>
 <#escape x as jsonUtils.encodeJSONString(x)>
 {

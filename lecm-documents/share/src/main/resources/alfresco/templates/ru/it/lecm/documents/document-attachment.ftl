@@ -16,6 +16,7 @@
 	<@region id="actions-common" scope="template"/>
 	<@region id="actions" scope="template"/>
 	<@region id="document-attachment-header" scope="template"/>
+    <#if hasPermission>
 	<div class="yui-gc">
 		<div class="yui-u first preview">
 			<#if (config.scoped['DocumentDetails']['document-details'].getChildValue('display-web-preview') == "true")>
@@ -31,7 +32,7 @@
             <@region id="document-attachment-dnd" scope="template"/>
 		</div>
 	</div>
-
+    </#if>
 	<@region id="html-upload" scope="template"/>
 	<@region id="flash-upload" scope="template"/>
 	<@region id="file-upload" scope="template"/>

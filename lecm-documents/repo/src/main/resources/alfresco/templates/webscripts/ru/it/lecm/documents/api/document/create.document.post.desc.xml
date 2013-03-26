@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Document Create</shortname>
     <description>Создание документа</description>
-    <url>/lecm/document/api/properties/createDocument</url>
+    <url>/lecm/document/api/createDocument</url>
     <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>
