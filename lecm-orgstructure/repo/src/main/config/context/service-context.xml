@@ -91,6 +91,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"

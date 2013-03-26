@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 
 import org.alfresco.service.namespace.QName;
 
@@ -41,7 +42,14 @@ public class OrgstructureSGNotifierBeanImpl
 		PropertyCheck.mandatory(this, "sgNotifier", this.sgNotifier);
 		PropertyCheck.mandatory(this, "orgstructureService", this.orgstructureService);
 
-		autoTieAllEmployeers();
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+		transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+			@Override
+			public Void execute () throws Throwable {
+				autoTieAllEmployeers();
+				return null;
+			}
+		});
 
 		logger.info("initialized");
 	}
@@ -50,7 +58,7 @@ public class OrgstructureSGNotifierBeanImpl
 	// public static QName TYPE_EMPLOYEE = QName.createQName( OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee");
 
 	/**
-	 * Привязать для всех активных Сотрудников Login/userId к sgME группам ... 
+	 * Привязать для всех активных Сотрудников Login/userId к sgME группам ...
 	 */
 	void autoTieAllEmployeers() {
 		final long start = System.currentTimeMillis();
@@ -461,7 +469,7 @@ public class OrgstructureSGNotifierBeanImpl
 				? PolicyUtils.getAllParentOU(nodeOU, nodeService, true) // со всех родительских, true = включая исходное Подразделение
 				: new HashSet<NodeRef>( Arrays.asList(nodeOU)); // только с текущего узла
 
-		// получить карту распределения БР по каждому OU: 
+		// получить карту распределения БР по каждому OU:
 		// ключ=Департамент(OU), Значение=Список БР, непосредственно предоставленных для OU
 		final Map<NodeRef, Set<NodeRef>> rolesByOU = PolicyUtils.scanBRolesForOrgUnits( allRoles, nodeService);
 
@@ -533,7 +541,7 @@ public class OrgstructureSGNotifierBeanImpl
 			assocPos = PolicyUtils.makeDeputyPos(destObj, nodeService, orgstructureService, logger);
 
 			// (!) включаем Сотрудника в личную группу бизнес роли
-			
+
 		} else if (orgstructureService.isUnit(destObj)) { // присвоение БР для Подразделения
 			assocPos = PolicyUtils.makeOrgUnitPos(destObj, nodeService);
 			isOrgUnitAssoc = true;
@@ -566,7 +574,7 @@ public class OrgstructureSGNotifierBeanImpl
 
 	@Override
 	public void notifyBRDelegationChanged(NodeRef brole,
-			NodeRef sourceEmployee, NodeRef destEmployee, boolean created) 
+			NodeRef sourceEmployee, NodeRef destEmployee, boolean created)
 	{
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "notifyBRDelegationChanged: created %s\n\t Business Role{%s} of type {%s}\n\t Source Employee {%s} of type {%s}\n\t Dest Employee {%s} of type {%s}"
