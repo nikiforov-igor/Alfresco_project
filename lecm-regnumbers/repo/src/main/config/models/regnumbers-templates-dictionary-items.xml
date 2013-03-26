@@ -3,7 +3,7 @@
 	<items>
 		<item name="Простой шаблон">
 			<property name="cm:name">Простой шаблон</property>
-			<property name="lecm-regnum:template-string">doc.counterPlain</property>
+			<property name="lecm-regnum:template-string">{doc.counterPlain}</property>
 			<property name="lecm-regnum:template-comment">Использует глобальный сквозной счетчик</property>
 		</item>
 	</items>

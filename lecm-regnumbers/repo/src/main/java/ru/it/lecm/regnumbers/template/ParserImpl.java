@@ -14,6 +14,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
+ * Класс служит контекстом для парсера Spring Expression Language.
  *
  * @author vlevin
  */
@@ -24,6 +25,11 @@ public class ParserImpl implements Parser {
 	private ApplicationContext applicationContext;
 	private ExpressionParser expressionParser;
 	final private static org.slf4j.Logger logger = LoggerFactory.getLogger(ParserImpl.class);
+	/**
+	 * Ограничители для выражений, которые интерпретирует SpEL. Текст между
+	 * указанными символами (сочетаниями символов) считается интерпретируемым
+	 * выражением. Вне них - текстом.
+	 */
 	final private static TemplateParserContext templateParserContext = new TemplateParserContext("{", "}");
 
 	public ParserImpl(ApplicationContext applicationContext) {
@@ -32,6 +38,7 @@ public class ParserImpl implements Parser {
 		context = new StandardEvaluationContext(this);
 		context.setBeanResolver(new BeanFactoryResolver(applicationContext));
 
+		// Регистрация утилитарных функций SpEL
 		context.registerFunction("formatDate", Utils.getDeclaredMethod("formatDate", String.class, Date.class));
 		context.registerFunction("formatCurrentDate", Utils.getDeclaredMethod("formatDate", String.class));
 		context.registerFunction("formatNumber", Utils.getDeclaredMethod("formatNumber", String.class, Long.class));
@@ -89,10 +96,18 @@ public class ParserImpl implements Parser {
 
 	}
 
+	/**
+	 * Метод для получения объекта 'doc' в контексте SpEL. По сути, SpEL вызов
+	 * интерпретирует 'doc.method()' как 'this.getDoc().method()'
+	 */
 	public Document getDoc() {
 		return doc;
 	}
 
+	/**
+	 * Создание объекта doc для SpEL'а. Возможно, сбда потом необходимо будет
+	 * добавить какие-то проверки (например, типа документа)
+	 */
 	private void setDoc(NodeRef doc) {
 		this.doc = new DocumentImpl(doc, applicationContext);
 	}

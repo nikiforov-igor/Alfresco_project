@@ -16,10 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.counter.CounterFactory;
 import ru.it.lecm.regnumbers.counter.CounterType;
 
 /**
+ * Инкапсулирует методы, связанные с документом, для которого генерируется
+ * регистрационный номер.
  *
  * @author vlevin
  */
@@ -30,17 +33,17 @@ public class DocumentImpl implements Document {
 	private CounterFactory counterFactory;
 	private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
-	private ApplicationContext applicationContext;
+	private OrgstructureBean orgstuctureService;
 	private DocumentMembersService documentMembersService;
 	final private static Logger logger = LoggerFactory.getLogger(DocumentImpl.class);
 
 	public DocumentImpl(NodeRef documentNode, ApplicationContext applicationContext) {
 		this.documentNode = documentNode;
-		this.applicationContext = applicationContext;
 		this.nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		this.namespaceService = applicationContext.getBean("namespaceService", NamespaceService.class);
 		this.dictionaryService = applicationContext.getBean("dictionaryService", DictionaryService.class);
 		this.counterFactory = applicationContext.getBean("regNumbersCounterFactory", CounterFactory.class);
+		this.orgstuctureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
 		this.documentMembersService = applicationContext.getBean("documentMembersService", DocumentMembersService.class);
 	}
 
@@ -156,5 +159,17 @@ public class DocumentImpl implements Document {
 	private Object getNodeRefAttribute(NodeRef node, String attributeName) {
 		QName attributeQName = QName.createQName(attributeName, namespaceService);
 		return nodeService.getProperty(node, attributeQName);
+	}
+
+	@Override
+	public NodeRef getCreator() {
+		String creatorPerson = (String) nodeService.getProperty(documentNode, ContentModel.PROP_CREATOR);
+		return orgstuctureService.getEmployeeByPerson(creatorPerson);
+	}
+
+	@Override
+	public NodeRef getModifier() {
+		String modifierPerson = (String) nodeService.getProperty(documentNode, ContentModel.PROP_MODIFIER);
+		return orgstuctureService.getEmployeeByPerson(modifierPerson);
 	}
 }

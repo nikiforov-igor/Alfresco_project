@@ -35,7 +35,7 @@
 	</bean>
 
 	<bean id="regNumbersService" class="ru.it.lecm.regnumbers.bean.RegNumbersServiceImpl" init-method="init"
-		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService">
+		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService, serviceOrgstructure">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="searchService" ref="searchService"/>
