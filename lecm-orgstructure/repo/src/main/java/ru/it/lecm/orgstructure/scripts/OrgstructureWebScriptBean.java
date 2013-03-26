@@ -1,11 +1,7 @@
 package ru.it.lecm.orgstructure.scripts;
 
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -14,20 +10,22 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.*;
 
 /**
  * @author dbashmakov
  *         Date: 27.11.12
  *         Time: 17:08
  */
-public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
+public class OrgstructureWebScriptBean extends BaseWebScript {
 
 	public static final String NODE_REF = "nodeRef";
 	public static final String PAGE = "page";
@@ -69,22 +67,8 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public static final String TYPE_ORGANIZATION = "organization";
 
 	private DictionaryBean dictionaryService;
-	/**
-	 * Service registry
-	 */
-	protected ServiceRegistry services;
-
 
 	private OrgstructureBean orgstructureService;
-
-	/**
-	 * Set the service registry
-	 *
-	 * @param services the service registry
-	 */
-	public void setServiceRegistry(ServiceRegistry services) {
-		this.services = services;
-	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -107,7 +91,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public ScriptNode getOrganization() {
 		NodeRef organization = orgstructureService.getOrganizationRootRef();
-		return new ScriptNode(organization, services, getScope());
+		return new ScriptNode(organization, serviceRegistry, getScope());
 	}
 
 	/**
@@ -117,7 +101,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public String getRoots() {
 		JSONArray nodes = new JSONArray();
-		NodeService nodeService = services.getNodeService();
+		NodeService nodeService = serviceRegistry.getNodeService();
 		JSONObject root;
 		NodeRef organizationRef = orgstructureService.getOrganizationRootRef();
 		try {
@@ -210,7 +194,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public String getStructure(final String type, final String ref) {
 		List<JSONObject> nodes = new ArrayList<JSONObject>();
-		NodeService nodeService = services.getNodeService();
+		NodeService nodeService = serviceRegistry.getNodeService();
 		if (ref != null) {
 			final NodeRef currentRef = new NodeRef(ref);
 			if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
@@ -311,7 +295,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getOrganizationBoss() {
 		NodeRef boss = orgstructureService.getOrganizationBoss();
 		if (boss != null) {
-			return new ScriptNode(boss, services, getScope());
+			return new ScriptNode(boss, serviceRegistry, getScope());
 		} else {
 			return null;
 		}
@@ -323,7 +307,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getOrganizationLogo() {
 		NodeRef logo = orgstructureService.getOrganizationLogo();
 		if (logo != null) {
-			return new ScriptNode(logo, services, getScope());
+			return new ScriptNode(logo, serviceRegistry, getScope());
 		} else {
 			return null;
 		}
@@ -367,7 +351,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getParent(String nodeRef) {
 		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(nodeRef));
 		if (parent != null) {
-			return new ScriptNode(parent, services, getScope());
+			return new ScriptNode(parent, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -378,9 +362,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getUnit(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef ref = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (this.serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isUnit(ref)) {
-				return new ScriptNode(ref, this.services, getScope());
+				return new ScriptNode(ref, this.serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -392,11 +376,11 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode findUnitBoss(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef ref = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isUnit(ref)) {
 				NodeRef bossRef = orgstructureService.getUnitBoss(ref);
 				if (bossRef != null) {
-					return new ScriptNode(bossRef, this.services, getScope());
+					return new ScriptNode(bossRef, serviceRegistry, getScope());
 				}
 			}
 		}
@@ -436,19 +420,6 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	}
 
 	/**
-	 * Возвращает массив, пригодный для использования в веб-скриптах
-	 *
-	 * @return Scriptable
-	 */
-	private Scriptable createScriptable(List<NodeRef> refs) {
-		Object[] results = new Object[refs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(refs.get(i), services, getScope());
-		}
-		return Context.getCurrentContext().newArray(getScope(), results);
-	}
-
-	/**
 	 * Получение полного перечня должностных позиций
 	 */
 	public Scriptable getStaffPositions(boolean onlyActive) {
@@ -472,9 +443,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getWorkGroup(String groupRef) {
 		ParameterCheck.mandatory("groupRef", groupRef);
 		NodeRef ref = new NodeRef(groupRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isWorkGroup(ref)) {
-				return new ScriptNode(ref, this.services, getScope());
+				return new ScriptNode(ref, serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -496,9 +467,9 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getEmployee(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isEmployee(ref)) {
-				return new ScriptNode(ref, this.services, getScope());
+				return new ScriptNode(ref, serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -510,10 +481,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getEmployeeByLink(String employeeLinkNodeRef) {
 		ParameterCheck.mandatory("nodeRef", employeeLinkNodeRef);
 		NodeRef ref = new NodeRef(employeeLinkNodeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByLink(ref);
 			if (orgstructureService.isEmployee(employeeRef)) {
-				return new ScriptNode(employeeRef, this.services, getScope());
+				return new ScriptNode(employeeRef, serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -525,11 +496,11 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public  ScriptNode getPersonData(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			if(orgstructureService.isEmployee(ref)) {
 				NodeRef person = orgstructureService.getEmployeePersonalData(ref);
 				if (person != null) {
-					return new ScriptNode(person, this.services, getScope());
+					return new ScriptNode(person, serviceRegistry, getScope());
 				}
 			}
 		}
@@ -543,7 +514,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef personDataRef = null;
 		personDataRef = orgstructureService.getPersonalDataDirectory();
 		if (personDataRef != null) {
-			return new ScriptNode(personDataRef, this.services, getScope());
+			return new ScriptNode(personDataRef, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -556,7 +527,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef ref = new NodeRef(nodeRef);
 		NodeRef bossRef = orgstructureService.findEmployeeBoss(ref);
 		if (bossRef != null) {
-			return new ScriptNode(bossRef, this.services, getScope());
+			return new ScriptNode(bossRef, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -567,10 +538,10 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getUnitByStaff(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef ref = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			NodeRef unitRef = orgstructureService.getUnitByStaff(ref);
 			if (orgstructureService.isUnit(unitRef)) {
-				return new ScriptNode(unitRef, this.services, getScope());
+				return new ScriptNode(unitRef, serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -582,11 +553,11 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getEmployeePhoto(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
-		if (this.services.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isEmployee(ref)) {
 				NodeRef photo = orgstructureService.getEmployeePhoto(ref);
 				if (photo != null) {
-					return new ScriptNode(photo, this.services, getScope());
+					return new ScriptNode(photo, serviceRegistry, getScope());
 				}
 			}
 		}
@@ -634,7 +605,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef ref = new NodeRef(positionRef);
 		NodeRef link = orgstructureService.getEmployeeLinkByPosition(ref);
 		if (link != null) {
-			return new ScriptNode(link, services, getScope());
+			return new ScriptNode(link, serviceRegistry, getScope());
 		} else {
 			return null;
 		}
@@ -644,7 +615,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef sunUnitRef = new NodeRef(subUnit);
 		NodeRef bossExists = orgstructureService.getBossStaff(sunUnitRef);
 		if (bossExists != null) {
-			return new ScriptNode(bossExists, services, getScope());
+			return new ScriptNode(bossExists, serviceRegistry, getScope());
 		} else {
 		return null;
 		}
@@ -654,7 +625,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 		NodeRef employeeRef = new NodeRef(employee);
 		NodeRef mainJob = orgstructureService.getEmployeePrimaryStaff(employeeRef);
 		if (mainJob != null) {
-			return new ScriptNode(mainJob, services, getScope());
+			return new ScriptNode(mainJob, serviceRegistry, getScope());
 		} else {
 			return null;
 		}
@@ -709,7 +680,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getCurrentEmployee() {
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 		if (orgstructureService.isEmployee(employeeRef)) {
-			return new ScriptNode(employeeRef, this.services, getScope());
+			return new ScriptNode(employeeRef, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -761,7 +732,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getBusinessRoleDelegationEngineer () {
 		NodeRef engineerRef = orgstructureService.getBusinessRoleDelegationEngineer ();
 		if (engineerRef != null) {
-			return new ScriptNode (engineerRef, services, getScope ());
+			return new ScriptNode (engineerRef, serviceRegistry, getScope ());
 		}
 		return null;
 	}
@@ -773,7 +744,7 @@ public class OrgstructureWebScriptBean extends BaseScopableProcessorExtension {
 	public ScriptNode getBusinessRoleCalendarEngineer () {
 		NodeRef engineerRef = orgstructureService.getBusinessRoleCalendarEngineer ();
 		if (engineerRef != null) {
-			return new ScriptNode(engineerRef, services, getScope ());
+			return new ScriptNode(engineerRef, serviceRegistry, getScope ());
 		}
 		return null;
 	}

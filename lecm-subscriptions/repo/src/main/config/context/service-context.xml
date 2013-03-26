@@ -37,14 +37,11 @@
 		</property>
 	</bean>
 
-	<bean id="subscriptionScript" parent="baseJavaScriptExtension"
+	<bean id="subscriptionScript" parent="baseScript"
 	      class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
 	      depends-on="subscriptionsService">
 		<property name="extensionName">
 			<value>subscription</value>
-		</property>
-		<property name="serviceRegistry">
-			<ref bean="ServiceRegistry"/>
 		</property>
 		<property name="repositoryHelper">
 			<ref bean="repositoryHelper"/>

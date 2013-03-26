@@ -64,16 +64,13 @@
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
-    <bean id="contractsScript" parent="baseJavaScriptExtension" class="ru.it.lecm.document.script.ContractsWebScriptBean"
+    <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.document.script.ContractsWebScriptBean"
           depends-on="contractsService">
         <property name="extensionName">
             <value>contracts</value>
         </property>
         <property name="service">
             <ref bean="contractsService"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
     </bean>
 

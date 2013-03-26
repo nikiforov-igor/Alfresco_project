@@ -1,16 +1,15 @@
 package ru.it.lecm.notifications.channel.active.scripts;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.List;
  * Date: 22.01.13
  * Time: 9:33
  */
-public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcessorExtension {
+public class NotificationsActiveChannelWebScriptBean extends BaseWebScript {
 	private NotificationsActiveChannel service;
 
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannelWebScriptBean.class);
@@ -37,7 +36,7 @@ public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcess
 	public ScriptNode getDirectory() {
 		try {
 			NodeRef ref = this.service.getRootRef();
-			return new ScriptNode(ref, this.service.getServiceRegistry(), getScope());
+			return new ScriptNode(ref, serviceRegistry, getScope());
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось получить директорию с уведомлениями активного канала", e);
 		}
@@ -62,19 +61,6 @@ public class NotificationsActiveChannelWebScriptBean extends BaseScopableProcess
 		ParameterCheck.mandatory("loadItemsCount", loadItemsCount);
 		List<NodeRef> notfs = this.service.getNotifications(Integer.parseInt(skipItemsCount), Integer.parseInt(loadItemsCount));
 		return createScriptable(notfs);
-	}
-
-	/**
-	 * Возвращает массив, пригодный для использования в веб-скриптах
-	 *
-	 * @return Scriptable
-	 */
-	private Scriptable createScriptable(List<NodeRef> refs) {
-		Object[] results = new Object[refs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(refs.get(i), this.service.getServiceRegistry(), getScope());
-		}
-		return Context.getCurrentContext().newArray(getScope(), results);
 	}
 
 	/**

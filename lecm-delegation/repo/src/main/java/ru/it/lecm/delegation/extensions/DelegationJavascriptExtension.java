@@ -1,9 +1,6 @@
 package ru.it.lecm.delegation.extensions;
 
-import java.util.List;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -13,8 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.beans.DelegationBean;
+
+import java.util.List;
 
 /**
  * javascript root object для модуля делегирования
@@ -24,14 +24,9 @@ import ru.it.lecm.delegation.beans.DelegationBean;
  * @since 12.12.2012 14:28:32
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
-public class DelegationJavascriptExtension extends BaseScopableProcessorExtension {
+public class DelegationJavascriptExtension extends BaseWebScript {
 
-	private ServiceRegistry serviceRegistry;
 	private IDelegation delegationService;
-
-	public void setServiceRegistry (ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
 
 	public void setDelegationService (IDelegation delegationService) {
 		this.delegationService = delegationService;

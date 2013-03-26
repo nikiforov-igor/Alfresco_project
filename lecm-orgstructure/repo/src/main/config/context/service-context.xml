@@ -56,13 +56,10 @@
 		</property>
 	</bean>
 
-	<bean id="orgstructureScript" parent="baseJavaScriptExtension" class="ru.it.lecm.orgstructure.scripts.OrgstructureWebScriptBean"
+	<bean id="orgstructureScript" parent="baseScript" class="ru.it.lecm.orgstructure.scripts.OrgstructureWebScriptBean"
 		  depends-on="serviceOrgstructure">
 		<property name="extensionName">
 			<value>orgstructure</value>
-		</property>
-		<property name="serviceRegistry">
-			<ref bean="ServiceRegistry"/>
 		</property>
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>

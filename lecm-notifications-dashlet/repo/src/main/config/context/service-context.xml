@@ -47,7 +47,7 @@
         <property name="transactionService" ref="transactionService"/>
     </bean>
 
-    <bean id="notificationsDashletScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.dashlet.scripts.NotificationDashletWebScriptBean"
+    <bean id="notificationsDashletScript" parent="baseScript" class="ru.it.lecm.notifications.dashlet.scripts.NotificationDashletWebScriptBean"
           depends-on="notificationDashletChannel">
         <property name="extensionName">
             <value>notificationDashlet</value>

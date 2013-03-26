@@ -1,9 +1,7 @@
 package ru.it.lecm.subscriptions.scripts;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.logging.Log;
@@ -14,6 +12,7 @@ import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.List;
  * Date: 24.12.12
  * Time: 17:47
  */
-public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
+public class SubscriptionsWebScriptBean extends BaseWebScript {
 	public static final String NODE_REF = "nodeRef";
 	public static final String PAGE = "page";
 	public static final String ITEM_TYPE = "itemType";
@@ -42,10 +41,6 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 
 
 	private static Log logger = LogFactory.getLog(SubscriptionsWebScriptBean.class);
-	/**
-	 * Service registry
-	 */
-	protected ServiceRegistry services;
 
 	/**
 	 * Repository helper
@@ -53,15 +48,6 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	protected Repository repository;
 
 	private SubscriptionsServiceImpl subscriptionsService;
-
-	/**
-	 * Set the service registry
-	 *
-	 * @param services the service registry
-	 */
-	public void setServiceRegistry(ServiceRegistry services) {
-		this.services = services;
-	}
 
 	/**
 	 * Set the repository helper
@@ -84,7 +70,7 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	 */
 	public String getRoots() {
 		JSONArray nodes = new JSONArray();
-		NodeService nodeService = services.getNodeService();
+		NodeService nodeService = serviceRegistry.getNodeService();
 		repository.init();
 		JSONObject root;
 		NodeRef subscriptionRef = subscriptionsService.getSubscriptionRootRef();
@@ -127,28 +113,15 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 		ParameterCheck.mandatory("objectRefStr", objectRefStr);
 		NodeRef employeeRef = new NodeRef(employeeRefStr);
 		NodeRef objectRef = new NodeRef(objectRefStr);
-		if (this.services.getNodeService().exists(employeeRef) && this.services.getNodeService().exists(objectRef)) {
+		if (serviceRegistry.getNodeService().exists(employeeRef) && serviceRegistry.getNodeService().exists(objectRef)) {
 			if (subscriptionsService.getOrgstructureService().isEmployee(employeeRef)) {
 				NodeRef subscriptionRef = subscriptionsService.getEmployeeSubscriptionToObject(employeeRef, objectRef);
 				if (subscriptionRef != null && subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
-					return new ScriptNode(subscriptionRef, this.services, getScope());
+					return new ScriptNode(subscriptionRef, serviceRegistry, getScope());
 				}
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Возвращает массив, пригодный для использования в веб-скриптах
-	 *
-	 * @return Scriptable
-	 */
-	private Scriptable createScriptable(List<NodeRef> refs) {
-		Object[] results = new Object[refs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(refs.get(i), services, getScope());
-		}
-		return Context.getCurrentContext().newArray(getScope(), results);
 	}
 
 	/**
@@ -190,11 +163,11 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 		List<NodeRef> notificationTypeList = add(Context.getCurrentContext().getElements(notificationType));
 		List<NodeRef> employeeList = add(Context.getCurrentContext().getElements(employee));
 
-		if (this.services.getNodeService().exists(objectRef)) {
+		if (serviceRegistry.getNodeService().exists(objectRef)) {
 			NodeRef subscriptionRef = subscriptionsService.createSubscriptionToObject(name, objectRef, description,
 					notificationTypeList, employeeList);
 			if (subscriptionRef != null && subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
-				return new ScriptNode(subscriptionRef, services, getScope());
+				return new ScriptNode(subscriptionRef, serviceRegistry, getScope());
 			}
 		}
 		return null;
@@ -239,7 +212,7 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 					objectTypeRef, eventCategoryRef, notificationTypeList, employeeList, workGroupList,
 					organizationUnitList, positionList);
 			if (subscriptionRef != null && subscriptionsService.isSubscriptionToType(subscriptionRef)) {
-				return new ScriptNode(subscriptionRef, services, getScope());
+				return new ScriptNode(subscriptionRef, serviceRegistry, getScope());
 			}
 		return null;
 	}
@@ -253,7 +226,7 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	public boolean unsubscribeObject(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef subscriptionRef = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(subscriptionRef) &&
+		if (serviceRegistry.getNodeService().exists(subscriptionRef) &&
 				subscriptionsService.isSubscriptionToObject(subscriptionRef)) {
 
 			subscriptionsService.unsubscribe(subscriptionRef);
@@ -271,7 +244,7 @@ public class SubscriptionsWebScriptBean extends BaseScopableProcessorExtension {
 	public boolean unsubscribeType(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 		NodeRef subscriptionRef = new NodeRef(nodeRef);
-		if (this.services.getNodeService().exists(subscriptionRef) &&
+		if (serviceRegistry.getNodeService().exists(subscriptionRef) &&
 				subscriptionsService.isSubscriptionToType(subscriptionRef)) {
 
 			subscriptionsService.unsubscribe(subscriptionRef);

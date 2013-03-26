@@ -1,14 +1,12 @@
 package ru.it.lecm.notifications.scripts;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsServiceImpl;
 
@@ -22,27 +20,13 @@ import java.util.List;
  * Date: 16.01.13
  * Time: 11:57
  */
-public class NotificationsWebScriptBean extends BaseScopableProcessorExtension {
+public class NotificationsWebScriptBean extends BaseWebScript {
 	final private static Logger logger = LoggerFactory.getLogger(NotificationsWebScriptBean.class);
 
 	NotificationsServiceImpl service;
 
-	/**
-	 * Service registry
-	 */
-	protected ServiceRegistry services;
-
 	public void setService(NotificationsServiceImpl service) {
 		this.service = service;
-	}
-
-	/**
-	 * Set the service registry
-	 *
-	 * @param services the service registry
-	 */
-	public void setServiceRegistry(ServiceRegistry services) {
-		this.services = services;
 	}
 
 	/**
@@ -75,7 +59,7 @@ public class NotificationsWebScriptBean extends BaseScopableProcessorExtension {
 
 				for (int i = 0; i < recipientsArray.length(); ++i) {
 					NodeRef nodeRef =  new NodeRef ((String) recipientsArray.get(i));
-					if (nodeRef != null && services.getNodeService().exists(nodeRef) && service.getOrgstructureService().isEmployee(nodeRef)) {
+					if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.getOrgstructureService().isEmployee(nodeRef)) {
 						recipientRefsList.add(nodeRef);
 					}
 				}
@@ -85,7 +69,7 @@ public class NotificationsWebScriptBean extends BaseScopableProcessorExtension {
 			String objectRef = json.getString("object");
 			if (objectRef != null) {
 				NodeRef nodeRef =  new NodeRef (objectRef);
-				if (nodeRef != null && services.getNodeService().exists(nodeRef)) {
+				if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef)) {
 					notf.setObjectRef(nodeRef);
 				}
 			}
@@ -96,7 +80,7 @@ public class NotificationsWebScriptBean extends BaseScopableProcessorExtension {
 
 				for (int i = 0; i < typesArray.length(); ++i) {
 					NodeRef nodeRef =  new NodeRef ((String) typesArray.get(i));
-					if (nodeRef != null && services.getNodeService().exists(nodeRef) && service.isNotificationType(nodeRef)) {
+					if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.isNotificationType(nodeRef)) {
 						typesRefsList.add(nodeRef);
 					}
 				}

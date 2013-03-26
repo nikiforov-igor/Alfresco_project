@@ -1,15 +1,10 @@
 package ru.it.lecm.base.scripts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -17,27 +12,26 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.mozilla.javascript.Context;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dbashmakov
  *         Date: 08.02.13
  *         Time: 12:53
  */
-public class BaseWebScriptBean extends BaseScopableProcessorExtension {
+public class BaseWebScriptBean extends BaseWebScript {
 	private NamespaceService namespaceService;
-	private ServiceRegistry serviceRegistry;
 	private LecmObjectsService lecmObjectsService;
 
 	final int REQUEST_MAX = 1000;
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
-	}
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
 	}
 
 	public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {

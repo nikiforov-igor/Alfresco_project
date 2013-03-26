@@ -72,13 +72,10 @@
 		</property>
     </bean>
 
-    <bean id="dictionaryScript" parent="baseJavaScriptExtension" class="ru.it.lecm.dictionary.scripts.DictionaryWebScriptBean"
+    <bean id="dictionaryScript" parent="baseScript" class="ru.it.lecm.dictionary.scripts.DictionaryWebScriptBean"
           depends-on="serviceDictionary">
         <property name="extensionName">
             <value>dictionary</value>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
         <property name="dictionaryService">
             <ref bean="serviceDictionary"/>

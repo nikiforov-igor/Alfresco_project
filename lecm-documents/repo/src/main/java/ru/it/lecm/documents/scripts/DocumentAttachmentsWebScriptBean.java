@@ -1,13 +1,11 @@
 package ru.it.lecm.documents.scripts;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ParameterCheck;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 
 import java.util.List;
@@ -17,17 +15,12 @@ import java.util.List;
  * Date: 06.03.13
  * Time: 12:08
  */
-public class DocumentAttachmentsWebScriptBean extends BaseScopableProcessorExtension {
+public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
     private DocumentAttachmentsService documentAttachmentsService;
-    private ServiceRegistry serviceRegistry;
     protected NodeService nodeService;
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         this.documentAttachmentsService = documentAttachmentsService;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
     }
 
     public void setNodeService(NodeService nodeService) {
@@ -59,16 +52,4 @@ public class DocumentAttachmentsWebScriptBean extends BaseScopableProcessorExten
         return null;
     }
 
-    /**
-     * Возвращает массив, пригодный для использования в веб-скриптах
-     *
-     * @return Scriptable
-     */
-    private Scriptable createScriptable(List<NodeRef> refs) {
-        Object[] results = new Object[refs.size()];
-        for (int i = 0; i < results.length; i++) {
-            results[i] = new ScriptNode(refs.get(i), this.serviceRegistry, getScope());
-        }
-        return Context.getCurrentContext().newArray(getScope(), results);
-    }
 }

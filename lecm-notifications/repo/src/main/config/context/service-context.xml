@@ -56,13 +56,10 @@
 		</property>
 	</bean>
 
-	<bean id="notificationScript" parent="baseJavaScriptExtension" class="ru.it.lecm.notifications.scripts.NotificationsWebScriptBean"
+	<bean id="notificationScript" parent="baseScript" class="ru.it.lecm.notifications.scripts.NotificationsWebScriptBean"
 	      depends-on="notificationsService">
 		<property name="extensionName">
 			<value>notifications</value>
-		</property>
-		<property name="serviceRegistry">
-			<ref bean="ServiceRegistry"/>
 		</property>
 		<property name="service">
 			<ref bean="notificationsService"/>

@@ -1,11 +1,7 @@
 package ru.it.lecm.notifications.channel.active.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -44,15 +40,10 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
 	private final static Logger logger = LoggerFactory.getLogger(NotificationsActiveChannel.class);
 
-	private ServiceRegistry serviceRegistry;
 	protected NotificationsService notificationsService;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private NodeRef rootRef;
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
@@ -64,10 +55,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
-	}
-
-	public ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
 	}
 
 	public NodeRef getRootRef() {

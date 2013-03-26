@@ -77,9 +77,8 @@
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
-	<bean id="delegationJavascriptExtension" class="ru.it.lecm.delegation.extensions.DelegationJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="delegationJavascriptExtension" class="ru.it.lecm.delegation.extensions.DelegationJavascriptExtension" parent="baseScript">
 		<property name="extensionName" value="delegation"/>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="delegationService" ref="delegationService"/>
 	</bean>
 

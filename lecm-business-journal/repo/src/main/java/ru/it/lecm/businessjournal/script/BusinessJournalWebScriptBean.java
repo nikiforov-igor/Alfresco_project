@@ -1,12 +1,12 @@
 package ru.it.lecm.businessjournal.script;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
@@ -22,7 +22,7 @@ import java.util.List;
  *         Date: 25.12.12
  *         Time: 13:57
  */
-public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension {
+public class BusinessJournalWebScriptBean extends BaseWebScript {
 
 	private BusinessJournalServiceImpl service;
 	private BusinessJournalArchiverSettings archiverSettings;
@@ -40,7 +40,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 			refs.add(ref);
 		}
 		record = service.log(new NodeRef(mainObject), eventCategory, description, refs);
-		return new ScriptNode(record, service.getServiceRegistry(), getScope());
+		return new ScriptNode(record, serviceRegistry, getScope());
 	}
 
 	public Scriptable getRecordsByInterval(long start, long end) {
@@ -54,7 +54,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 		if (!service.isBJRecord(ref)) {
 			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала");
 		}
-		return new ScriptNode(ref, service.getServiceRegistry(), getScope());
+		return new ScriptNode(ref, serviceRegistry, getScope());
 	}
 
     public Scriptable getRecordsByParams(String objectType, String daysCount, String whoseKey) {
@@ -79,23 +79,10 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
         return createScriptable(refs);
     }
 
-	/**
-	 * Возвращает массив, пригодный для использования в веб-скриптах
-	 *
-	 * @return Scriptable
-	 */
-	private Scriptable createScriptable(List<NodeRef> refs) {
-		Object[] results = new Object[refs.size()];
-		for (int i = 0; i < results.length; i++) {
-			results[i] = new ScriptNode(refs.get(i), service.getServiceRegistry(), getScope());
-		}
-		return Context.getCurrentContext().newArray(getScope(), results);
-	}
-
 	public ScriptNode getDirectory() {
 		try {
 			NodeRef ref = service.getBusinessJournalDirectory();
-			return new ScriptNode(ref, service.getServiceRegistry(), getScope());
+			return new ScriptNode(ref, serviceRegistry, getScope());
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
 		}
@@ -127,7 +114,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 	public ScriptNode getArchiveDirectory() {
 		try {
 			NodeRef ref = service.getBusinessJournalArchiveDirectory();
-			return new ScriptNode(ref, service.getServiceRegistry(), getScope());
+			return new ScriptNode(ref, serviceRegistry, getScope());
 		} catch (Exception e) {
 			throw new ScriptException("Не удалось получить директорию с архивными записями", e);
 		}
@@ -166,7 +153,7 @@ public class BusinessJournalWebScriptBean extends BaseScopableProcessorExtension
 
 	public ScriptNode getArchSettings(){
 		NodeRef settings = archiverSettings.getArchiveSettingsRef();
-		return new ScriptNode(settings, service.getServiceRegistry(), getScope());
+		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
 	public boolean isBJEngeneer() {

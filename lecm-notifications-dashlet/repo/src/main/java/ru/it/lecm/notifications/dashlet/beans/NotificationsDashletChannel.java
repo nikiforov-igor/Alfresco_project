@@ -55,10 +55,6 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 		this.serviceRegistry = serviceRegistry;
 	}
 
-    public ServiceRegistry getServiceRegistry() {
-        return serviceRegistry;
-    }
-
     public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
 	}

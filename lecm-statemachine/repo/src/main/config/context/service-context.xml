@@ -191,13 +191,10 @@
 
     <bean id="statePrivileges" class="ru.it.lecm.statemachine.StatePrivileges" />
 
-    <bean id="statemachineScript" parent="baseJavaScriptExtension" class="ru.it.lecm.statemachine.script.StatemachineWebScriptBean"
+    <bean id="statemachineScript" parent="baseScript" class="ru.it.lecm.statemachine.script.StatemachineWebScriptBean"
           depends-on="serviceOrgstructure">
         <property name="extensionName">
             <value>statemachine</value>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
         <property name="stateMachineHelper">
             <ref bean="stateMachineHelper"/>

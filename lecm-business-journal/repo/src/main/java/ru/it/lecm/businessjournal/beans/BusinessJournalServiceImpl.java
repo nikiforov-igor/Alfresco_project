@@ -79,14 +79,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		this.orgstructureService = orgstructureService;
 	}
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
-	public ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
-	}
-
 	/**
 	 * Метод инициализвции сервиса
 	 * Создает рабочую директорию - если она еще не создана.

@@ -1,11 +1,10 @@
 package ru.it.lecm.statemachine.script;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.mozilla.javascript.ScriptableObject;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowListBean;
@@ -20,23 +19,10 @@ import java.util.List;
  * Date: 15.03.13
  * Time: 13:56
  */
-public class StatemachineWebScriptBean extends BaseScopableProcessorExtension {
+public class StatemachineWebScriptBean extends BaseWebScript {
 
-    /**
-     * Service registry
-     */
-    protected ServiceRegistry services;
     private OrgstructureBean orgstructureService;
     private StateMachineHelper stateMachineHelper;
-
-    /**
-     * Set the service registry
-     *
-     * @param services the service registry
-     */
-    public void setServiceRegistry(ServiceRegistry services) {
-        this.services = services;
-    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;

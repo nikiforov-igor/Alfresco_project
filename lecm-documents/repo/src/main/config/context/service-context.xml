@@ -131,16 +131,13 @@
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
-    <bean id="documentConnectionScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"
+    <bean id="documentConnectionScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"
           depends-on="documentConnectionService">
         <property name="extensionName">
             <value>documentConnection</value>
         </property>
         <property name="documentConnectionService">
             <ref bean="documentConnectionService"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
@@ -183,16 +180,13 @@
         <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
-    <bean id="documentAttachmentsScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
+    <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
           depends-on="documentAttachmentsService">
         <property name="extensionName">
             <value>documentAttachments</value>
         </property>
         <property name="documentAttachmentsService">
             <ref bean="documentAttachmentsService"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
@@ -206,16 +200,13 @@
         <property name="lecmObjectsService" ref="lecmObjectsService"/>
     </bean>
 
-    <bean id="documentMembersScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentMembersWebScriptBean"
+    <bean id="documentMembersScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentMembersWebScriptBean"
           depends-on="documentMembersService">
         <property name="extensionName">
             <value>documentMembers</value>
         </property>
         <property name="documentMembersService">
             <ref bean="documentMembersService"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
@@ -260,14 +251,13 @@
         </property>
     </bean>
 
-    <bean id="documentScript" parent="baseJavaScriptExtension" class="ru.it.lecm.documents.scripts.DocumentWebScriptBean"
+    <bean id="documentScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentWebScriptBean"
           depends-on="documentService">
         <property name="extensionName">
             <value>documentScript</value>
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
     <bean id="documentPrivileges" class="ru.it.lecm.statemachine.StatePrivileges">
