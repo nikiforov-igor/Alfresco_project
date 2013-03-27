@@ -153,7 +153,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-                var fileSpan = '<span class="light">Create new</span>';
+                var fileSpan = '<span class="light">'+this.msg("document.main.form.edit")+'</span>';
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", fileSpan]
                 );
