@@ -13,7 +13,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
  *
  * @author vlevin
  */
-public interface Document {
+interface Document {
 
 	/**
 	 * Получить аттрибут документа.

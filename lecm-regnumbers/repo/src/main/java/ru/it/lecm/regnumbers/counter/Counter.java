@@ -1,6 +1,7 @@
 package ru.it.lecm.regnumbers.counter;
 
 /**
+ * Интерфейс для счетчиков.
  *
  * @author vlevin
  */
