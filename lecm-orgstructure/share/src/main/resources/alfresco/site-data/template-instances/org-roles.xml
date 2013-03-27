@@ -4,7 +4,7 @@
     <components>
         <component>
             <region-id>roles-grid</region-id>
-            <url>/lecm/orgstructure/dictionary-datagrid</url>
+            <url>/lecm/orgstructure/roles-datagrid</url>
             <properties>
                 <pagination>true</pagination>
                 <bubblingLabel>workRole</bubblingLabel>
