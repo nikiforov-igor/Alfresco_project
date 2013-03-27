@@ -1,10 +1,5 @@
 package ru.it.lecm.documents.policy;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -18,7 +13,6 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -28,6 +22,11 @@ import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -106,7 +105,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     }
 
     public void setGrantAccessTag(String value) {
-        setGrantAccess( value); // StdPermission.findPermission(value));
+        setGrantAccess(value); // StdPermission.findPermission(value));
     }
 
     public void setGrantAccess(String value) {
@@ -255,10 +254,8 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
     public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         // добаваление сотрудника, изменившего документ в участники
-        if (before.size() == after.size()) {
             String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
             documentMembersService.addMember(nodeRef, orgstructureService.getEmployeeByPerson(userName), null);
-        }
     }
 
 }
