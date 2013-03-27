@@ -54,7 +54,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                     });
             }.bind(me);
 
-            this.createDialogShow(metaData, onAddCallback);
+            this.showCreateDialog(metaData, onAddCallback);
 
         },
         onActionEmployeeDelete: function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {

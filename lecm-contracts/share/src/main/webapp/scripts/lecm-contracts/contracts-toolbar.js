@@ -154,7 +154,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                     destination = metadata.nodeRef,
                     itemType = metadata.itemType,
                     namePattern = metadata.custom != null ? metadata.custom.namePattern : null;
-                this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, null, namePattern);
+                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null, namePattern);
             },
 
             // разблокировать кнопки согласно правам

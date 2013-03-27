@@ -15,7 +15,8 @@
                         var me = this;
                         var metaData = {
                             itemType: "lecm-orgstr:employee-link",
-                            nodeRef: p_item.nodeRef
+                            nodeRef: p_item.nodeRef,
+                            addMessage: this.msg("label.employee-link.add")
                         };
 
                         var onAddCallback = function (employeeRef) {
@@ -30,7 +31,7 @@
                                     });
                         }.bind(me);
 
-                        this.createDialogShow(metaData, onAddCallback);
+                        this.showCreateDialog(metaData, onAddCallback);
                     };
 					LogicECM.module.Base.DataGrid.prototype.onActionEmployeeDelete = function DataGridActions_onActionEmployeeDelete(p_item, owner, actionsConfig, fnDeleteComplete) {
 						var me = this;

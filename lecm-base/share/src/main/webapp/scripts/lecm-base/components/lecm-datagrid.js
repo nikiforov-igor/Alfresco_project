@@ -2286,11 +2286,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return fields;
             },
 
-            createDialogShow:function (meta, callback, pattern, successMessage) {
+            showCreateDialog:function (meta, callback, pattern, successMessage) {
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                    var addMsg = meta.addMessage;
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
+                        [ p_dialog.id + "-form-container_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
                     );
                 };
 
@@ -2360,7 +2361,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @method onActionCreate
              */
             onActionCreate:function DataGrid_onActionCreate() {
-                this.createDialogShow(this.datagridMeta, null, null, null);
+                this.showCreateDialog(this.datagridMeta, null, null, null);
             },
 
             /**

@@ -158,7 +158,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     destination = orgMetadata.nodeRef,
                     itemType = orgMetadata.itemType,
                     namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
-                this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, null, namePattern);
+                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null, namePattern);
             },
 
             /**
@@ -179,7 +179,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             });
                     };
 
-                    this.modules.dataGrid.createDialogShow({itemType:itemType, nodeRef: destination}, callBack, namePattern);
+                    this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, callBack, namePattern);
                 } else {
                     Alfresco.util.PopupManager.displayMessage(
                         {
