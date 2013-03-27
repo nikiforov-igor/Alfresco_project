@@ -17,5 +17,25 @@
 		    <property name="cm:name">Удаление связи</property>
 		    <property name="lecm-busjournal:eventCategory-code">DELETE_DOCUMENT_CONNECTION</property>
 	    </item>
+	    <item name="Добавление вложения">
+		    <property name="cm:name">Добавление вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">ADD_DOCUMENT_ATTACHMENT</property>
+	    </item>
+	    <item name="Удаление вложения">
+		    <property name="cm:name">Удаление вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">DELETE_DOCUMENT_ATTACHMENT</property>
+	    </item>
+	    <item name="Обновление версии вложения">
+		    <property name="cm:name">Обновление версии вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">ADD_DOCUMENT_ATTACHMENT_NEW_VERSION</property>
+	    </item>
+	    <item name="Изменений свойств вложения">
+		    <property name="cm:name">Изменений свойств вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">EDIT_DOCUMENT_ATTACHMENT_PROPERTIES</property>
+	    </item>
+	    <item name="Комментирование вложения">
+		    <property name="cm:name">Комментирование вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">COMMENT_DOCUMENT_ATTACHMENT</property>
+	    </item>
     </items>
 </dictionary>
