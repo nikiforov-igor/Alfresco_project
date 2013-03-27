@@ -661,7 +661,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // DataTable column defintions
                 var columnDefinitions =
                     [
-                        { key: "nodeRef", label: "Select", sortable: false, formatter: this.fnRenderCellSelected(), width: 16 },
                         { key: "thumbnail", label: "Preview", sortable: false, formatter: this.fnRenderCellThumbnail(), width: 100 },
                         { key: "fileName", label: "Description", sortable: false, formatter: this.fnRenderCellDescription() },
                         { key: "actions", label: "Actions", sortable: false, formatter: this.fnRenderCellActions(), width: 200 }
