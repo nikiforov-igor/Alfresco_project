@@ -16,6 +16,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -149,7 +150,11 @@ public class OrgstructureEmployeePolicy
         final NodeRef person = nodeAssocRef.getTargetRef();
         notifyEmploeeDown(employee, person);
         // получаем ссылку на аватар
-        NodeRef avatar = nodeService.getTargetAssocs(employee, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO).get(0).getTargetRef();
+        NodeRef avatar = null;
+        List<AssociationRef> avatars = nodeService.getTargetAssocs(employee, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO);
+        if (avatars.size() > 0 ) {
+            avatar = avatars.get(0).getTargetRef();
+        }
         if (avatar != null) {
             if (nodeService.getTargetAssocs(person, ContentModel.ASSOC_AVATAR).size() != 0) {
                 // сравнить ссылки на аватарки

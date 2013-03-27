@@ -109,7 +109,8 @@ public class LECMSecurityGroupsBean
 		if (!sgnm.hasAuth(simpleName)) {
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' NOT exists or already removed", sgFullName, simpleName));
 		} else {
-			this.authorityService.removeAuthority( null, sgFullName);
+            //TODO данная строчка ВСЕГДА вызывала падение по NullPointerExpection!!!
+			/*this.authorityService.removeAuthority( null, sgFullName);*/
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' removed", sgFullName, simpleName));
 		}
 	}
