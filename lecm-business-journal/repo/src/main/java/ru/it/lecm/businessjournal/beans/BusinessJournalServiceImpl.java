@@ -48,6 +48,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private AuthenticationService authService;
     private DictionaryService dicService;
 
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
+
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
+
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}

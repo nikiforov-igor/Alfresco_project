@@ -71,7 +71,8 @@
 	<util:constant id="BJ_ARCHIVE_ROOT_NAME" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ARCHIVE_ROOT_NAME"/>
 
 	<bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" parent="baseBean"
-          depends-on="repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary">
+          depends-on="ServiceRegistry, repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="substituteService" ref="substitudeService"/>
         <property name="nodeService" ref="nodeService"/>
