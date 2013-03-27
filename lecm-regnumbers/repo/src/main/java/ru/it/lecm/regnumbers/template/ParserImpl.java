@@ -1,6 +1,8 @@
 package ru.it.lecm.regnumbers.template;
 
-import java.util.Date;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -39,13 +41,10 @@ public class ParserImpl implements Parser {
 		context.setBeanResolver(new BeanFactoryResolver(applicationContext));
 
 		// Регистрация утилитарных функций SpEL
-		context.registerFunction("formatDate", Utils.getDeclaredMethod("formatDate", String.class, Date.class));
-		context.registerFunction("formatCurrentDate", Utils.getDeclaredMethod("formatDate", String.class));
-		context.registerFunction("formatNumber", Utils.getDeclaredMethod("formatNumber", String.class, Long.class));
-		context.registerFunction("employeeOrgUnitCode", Utils.getDeclaredMethod("employeeOrgUnitCode", NodeRef.class));
-		context.registerFunction("employeeInitials", Utils.getDeclaredMethod("employeeInitials", NodeRef.class));
-		context.registerFunction("employeeNumber", Utils.getDeclaredMethod("employeeNumber", NodeRef.class));
-
+		Map<String, Method> templateFunctions = Utils.getTemplateFunctionMethods();
+		for (Entry<String, Method> entry : templateFunctions.entrySet()) {
+			context.registerFunction(entry.getKey(), entry.getValue());
+		}
 		expressionParser = new SpelExpressionParser();
 	}
 

@@ -5,8 +5,11 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -28,14 +31,29 @@ public final class Utils implements ApplicationContextAware {
 	private static ApplicationContext applicationContext;
 	private final static Logger logger = LoggerFactory.getLogger(Utils.class);
 
-	public static Method getDeclaredMethod(String name, Class<?>... parameterTypes) {
-		Method method = null;
-		try {
-			method = Utils.class.getDeclaredMethod(name, parameterTypes);
-		} catch (NoSuchMethodException ex) {
-			logger.error("Can't get declared method named " + name, ex);
+	/**
+	 * Получить данные для регистрации функций в контексте SpEL.
+	 * Регистрация осуществляется с помощью аннотаций RegnumTemplateFunction.
+	 * Если в аннотации указан параметр functionName, то его значение
+	 * используется в качестве имени для внутренней функции SpEL'а. Если
+	 * параметр не указан, то имя функции совпадает с именем метода. Необходимо
+	 * помнить, что в одном контексте контексте SpEL'а не могут быть
+	 * зарегистрированы несколько функций с одним именем.
+	 *
+	 * @return карта вида "имяФункцииДляSpEL - метод"
+	 */
+	static Map<String, Method> getTemplateFunctionMethods() {
+		Map<String, Method> result = new HashMap<String, Method>();
+		Method[] declaredMethods = Utils.class.getDeclaredMethods();
+		for (int i = 0; i < declaredMethods.length; i++) {
+			Method method = declaredMethods[i];
+			RegnumTemplateFunction annotation = method.getAnnotation(RegnumTemplateFunction.class);
+			if (annotation != null) {
+				String functionName = annotation.functionName();
+				result.put(StringUtils.isEmpty(functionName) ? method.getName() : functionName, method);
+			}
 		}
-		return method;
+		return result;
 	}
 
 	@Override
@@ -46,6 +64,7 @@ public final class Utils implements ApplicationContextAware {
 	/**
 	 * Форматировать дату по правилам DateFormat/
 	 */
+	@RegnumTemplateFunction
 	public static String formatDate(String format, Date date) {
 		DateFormat dateFormatter = new SimpleDateFormat(format);
 		return dateFormatter.format(date);
@@ -54,6 +73,7 @@ public final class Utils implements ApplicationContextAware {
 	/**
 	 * Форматировать текущую дату по правилам DateFormat/
 	 */
+	@RegnumTemplateFunction(functionName = "formatCurrentDate")
 	public static String formatDate(String format) {
 		return formatDate(format, new Date());
 	}
@@ -61,6 +81,7 @@ public final class Utils implements ApplicationContextAware {
 	/**
 	 * Форматировать целочисленное значение по правилам DecimalFormat
 	 */
+	@RegnumTemplateFunction
 	public static String formatNumber(String format, Long number) {
 		DecimalFormat decimalFormatter = new DecimalFormat(format);
 		return decimalFormatter.format(number);
@@ -71,6 +92,7 @@ public final class Utils implements ApplicationContextAware {
 	 * указанный сотрудник. Если код не указан, то пустая строка. Если сотрудник
 	 * не занимает должностей, то генерируется исключение.
 	 */
+	@RegnumTemplateFunction
 	public static String employeeOrgUnitCode(NodeRef employeeNode) {
 		OrgstructureBean orgstructureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
 		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
@@ -81,6 +103,7 @@ public final class Utils implements ApplicationContextAware {
 	/**
 	 * Получить инициалы указанного сотрудника: Иванов Андрей Петрович -> ИАП
 	 */
+	@RegnumTemplateFunction
 	public static String employeeInitials(NodeRef employeeNode) {
 		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		String lastName = (String) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
@@ -94,6 +117,7 @@ public final class Utils implements ApplicationContextAware {
 	 * Получить табельный номер указанного сотрудника. Если номер не указан, то
 	 * пустая строка.
 	 */
+	@RegnumTemplateFunction
 	public static String employeeNumber(NodeRef employeeNode) {
 		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		Long employeeCode = (Long) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_NUMBER);
