@@ -203,6 +203,15 @@
            </properties>
        </component>
 
+       <!-- Печатные формы-->
+       <component>
+           <region-id>document-forms</region-id>
+           <url>/lecm/components/document/forms</url>
+           <properties>
+               <nodeRef>{nodeRef}</nodeRef>
+           </properties>
+       </component>
+
       <!-- Метки -->
       <component>
          <region-id>document-tags</region-id>

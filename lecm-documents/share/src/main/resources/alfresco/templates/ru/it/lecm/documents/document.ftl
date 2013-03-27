@@ -51,6 +51,7 @@
             <@region id="document-members" scope="template"/>
             <@region id="document-tags" scope="template"/>
             <@region id="document-history" scope="template"/>
+            <@region id="document-forms" scope="template"/>
             </div>
         </div>
     </#if>
