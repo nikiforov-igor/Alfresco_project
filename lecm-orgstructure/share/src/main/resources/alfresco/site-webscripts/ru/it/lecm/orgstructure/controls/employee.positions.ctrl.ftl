@@ -109,7 +109,7 @@
 	                                label: "${msg("actions.makePrimary")}",
 	                                evaluator: function (rowData) {
 	                                    var itemData = rowData.itemData;
-	                                    return itemData["assoc_lecm-orgstr_primary-position"].value == "false";
+	                                    return itemData["prop_lecm-orgstr_primary-position"].value == "false";
 	                                }
 	                            }
 	                        </#if>

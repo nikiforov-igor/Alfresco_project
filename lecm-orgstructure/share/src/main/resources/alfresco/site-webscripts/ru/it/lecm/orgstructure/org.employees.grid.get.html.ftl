@@ -35,8 +35,8 @@
 									evaluator: function (rowData) {
                                         var itemData = rowData.itemData;
                                         var isActive = itemData["prop_lecm-dic_active"] == undefined || itemData["prop_lecm-dic_active"].value == true;
-                                        return isActive && (itemData["assoc_lecm-orgstr_employee-main-position"] == undefined ||
-		                                        itemData["assoc_lecm-orgstr_employee-main-position"].value.length == 0);
+                                        return isActive && (itemData["prop_lecm-orgstr_employee-main-position"] == undefined ||
+		                                        itemData["prop_lecm-orgstr_employee-main-position"].value.length == 0);
                                     }
 								}
 							],
