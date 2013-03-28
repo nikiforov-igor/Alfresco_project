@@ -261,20 +261,6 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-    <bean id="documentPrivileges" class="ru.it.lecm.statemachine.StatePrivileges">
-        <property name="privileges">
-            <list>
-                <value>INITIATOR</value>
-                <value>CORRECTOR</value>
-                <value>READER</value>
-                <value>OWNER</value>
-                <value>RESPONSIBLE</value>
-                <value>STAFF</value>
-                <value>REVIEWER</value>
-            </list>
-        </property>
-    </bean>
-
     <bean id="documentAttachmentsPolicy" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
           init-method="init">
         <property name="policyComponent">

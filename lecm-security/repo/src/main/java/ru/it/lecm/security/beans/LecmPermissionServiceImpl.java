@@ -1,14 +1,5 @@
 package ru.it.lecm.security.beans;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import javax.naming.AuthenticationException;
-import javax.naming.InvalidNameException;
-
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.permissions.PermissionReference;
@@ -24,13 +15,16 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
+import java.util.*;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -58,7 +52,7 @@ public class LecmPermissionServiceImpl
 	 */
 	private boolean staticInheritParentPermissions = false;
 	private boolean dynamicInheritParentPermissions = true;
-	private LecmPermissionGroup defaultAccessOnGrant = findPermissionGroup( LecmPermissionGroup.PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
+	private LecmPermissionGroup defaultAccessOnGrant = findPermissionGroup(LecmPermissionGroup.PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
 
 	static String getMapInfo( Map<String, LecmPermissionGroup> map) {
 		final StringBuilder sb = new StringBuilder();
@@ -240,14 +234,14 @@ public class LecmPermissionServiceImpl
 	}
 
 
-	private Map<String, LecmPermissionGroupImpl> allGroups = null;
+	private Map<String, LecmPermissionGroup> allGroups = null;
 
 	/**
 	 * Построение общесистемного списка lecm-групп полномочий
 	 */
 	private void initAllGroups() {
 		if (this.allGroups != null) return;
-		this.allGroups = new HashMap<String, LecmPermissionGroupImpl>();
+		this.allGroups = new HashMap<String, LecmPermissionGroup>();
 
 		final Set<PermissionReference> list = modelDAOService.getAllPermissions(); // modelDAOService.getAllExposedPermissions();
 		final StringBuilder sb = new StringBuilder("\n");
@@ -309,9 +303,9 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
-	public LecmPermissionGroup[] getPermGroups() {
+	public Collection<LecmPermissionGroup> getPermGroups() {
 		initAllGroups();
-		return (LecmPermissionGroup[]) this.allGroups.values().toArray();
+		return this.allGroups.values();
 	}
 
 	@Override
@@ -516,7 +510,7 @@ public class LecmPermissionServiceImpl
 	 * интерфейса LecmPermissionService вместо многозначного String. 
 	 * Создание объектов типа см. LecmPermissionService.getPerm() 
 	 */
-	class LecmPermissionGroupImpl
+	public class LecmPermissionGroupImpl
 			extends PrefixedNameKeeper
 			implements LecmPermissionGroup
 	{

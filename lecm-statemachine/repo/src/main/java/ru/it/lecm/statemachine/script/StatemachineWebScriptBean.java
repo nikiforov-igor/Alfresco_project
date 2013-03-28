@@ -32,16 +32,6 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         this.stateMachineHelper = stateMachineHelper;
     }
 
-    public boolean hasPrivilegeByEmployee(ScriptNode employee, ScriptNode document, Object privileges) {
-        Collection<String> privilegesCollection = convertToJavaCollection(privileges);
-        return stateMachineHelper.hasPrivilegeByEmployee(employee.getNodeRef(), document.getNodeRef(), privilegesCollection);
-    }
-
-    public boolean hasPrivilegeByPerson(ScriptNode person, ScriptNode document, Object privileges) {
-        Collection<String> privilegesCollection = convertToJavaCollection(privileges);
-        return stateMachineHelper.hasPrivilegeByPerson(person.getNodeRef(), document.getNodeRef(), privilegesCollection);
-    }
-
     public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
         return stateMachineHelper.getTasks(node.getNodeRef(), stateParam, addSubordinatesTask, myTasksLimit);
     }

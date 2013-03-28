@@ -303,61 +303,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return new StateFields(false);
     }
 
-    @Override
-    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, String privilege) {
-        HashSet<String> privileges = new HashSet<String>();
-        privileges.add(privilege);
-        return hasPrivilegeByEmployee(employee, document, privileges);
-    }
-
-    @Override
-    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, Collection<String> privileges) {
-        List<NodeRef> businessRoles = orgstructureBean.getEmployeeRoles(employee);
-        //Выбираем роли сотрудника
-        HashSet<String> employeeRoles = new HashSet<String>();
-        for (NodeRef role : businessRoles) {
-            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-            employeeRoles.add(name);
-        }
-
-        //Выбираем привилегии для ролей сотрудника
-        HashSet<String> employeePrivileges = new HashSet<String>();
-        List<StateMachineAction> actions = getStatusChangeActions(document);
-        for (StateMachineAction action : actions) {
-            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
-            Map<String, String> statePrivileges = statusChangeAction.getPrivileges();
-            for (String role : employeeRoles) {
-                String privilege = statePrivileges.get(role);
-                if (privilege != null) {
-                    employeePrivileges.add(privilege);
-                }
-            }
-        }
-
-        for (String privilege : privileges) {
-            if (employeePrivileges.contains(privilege)) return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, String privilege) {
-        HashSet<String> privileges = new HashSet<String>();
-        privileges.add(privilege);
-        return hasPrivilegeByPerson(person, document, privileges);
-    }
-
-    @Override
-    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, Collection<String> privileges) {
-        NodeRef employee = orgstructureBean.getEmployeeByPerson(person);
-        if (employee == null) {
-            return false;
-        } else {
-            return hasPrivilegeByEmployee(employee, document, privileges);
-        }
-    }
-
     public String getCurrentExecutionId(String taskId) {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         TaskQuery taskQuery = taskService.createTaskQuery();

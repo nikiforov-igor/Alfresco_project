@@ -1,8 +1,9 @@
 package ru.it.lecm.security;
 
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.NodeRef;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Служба работы с lecm-правами:
@@ -57,7 +58,7 @@ public interface LecmPermissionService {
 	 * привилегий участникам ЖЦ)
 	 * @return список названий групп привилегий Альфреско, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 */
-	LecmPermissionGroup[] getPermGroups();
+	public Collection<LecmPermissionGroup> getPermGroups();
 
 
 	/**
@@ -142,7 +143,7 @@ public interface LecmPermissionService {
 		 *		2) of permission. Например, "_lecmPerm_SetRate", "_lecmPerm_CreateTag"
 		 * Всегда не NULL.
 		 */
-		String getName();
+		public String getName();
 
 		/**
 		 * Вернуть короткое название (без префикса PFX_LECM_ROLE = "LECM_BASIC_PG_" или префикса PFX_LECM_PERMISSION = "_lecmPerm_")
@@ -151,7 +152,7 @@ public interface LecmPermissionService {
 		 * 		2) of permission. Например, "SetRate", "CreateTag".
 		 * Всегда не NULL.
 		 */
-		String getShortName();
+		public String getShortName();
 
 		/**
 		 * @return характерный (для объектов данного типа) префикс внутри названия name. 

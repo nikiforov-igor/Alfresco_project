@@ -1,12 +1,5 @@
 package ru.it.lecm.statemachine.action;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -20,11 +13,12 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.statemachine.StateField;
+
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -40,8 +34,8 @@ public class StatusChangeAction extends StateMachineAction {
 	private NodeRef folder = null;
 	private String uuid = null;
 	private boolean forDraft = false;
-	private Map<String, String> staticPrivileges = new TreeMap<String, String>();
-	private Map<String, String> dynamicPrivileges = new TreeMap<String, String>();
+	private Map<String, LecmPermissionGroup> staticPrivileges = new HashMap<String, LecmPermissionGroup>();
+	private Map<String, LecmPermissionGroup> dynamicPrivileges = new HashMap<String, LecmPermissionGroup>();
 	private Set<StateField> fields = new HashSet<StateField>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
@@ -127,15 +121,8 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
 		//Установка статических прав на папку статуса
-		//execBuildInTransactStatic(folder, staticPermissions);
+		execBuildInTransactStatic(folder, staticPrivileges);
 	}
-
-    public Map<String, String> getPrivileges() {
-        TreeMap<String, String> result = new TreeMap<String, String>();
-        result.putAll(staticPrivileges);
-        result.putAll(dynamicPrivileges);
-        return result;
-    }
 
     public boolean isForDraft() {
         return forDraft;
@@ -175,7 +162,7 @@ public class StatusChangeAction extends StateMachineAction {
 
 		// Установка динамических ролей для файла
 		children = nodeService.getChildAssocs(nodeRef);
-		// execBuildInTransactDynamic(children, dynamicPermissions);
+		execBuildInTransactDynamic(children, dynamicPrivileges);
 	}
 
     public Set<StateField> getFields() {
@@ -200,14 +187,15 @@ public class StatusChangeAction extends StateMachineAction {
 	 * @param rolesElement
 	 * @return Список прав доступа для ролей
 	 */
-	private Map<String, String> initPrivileges(Element rolesElement) {
-		Map<String, String> permissions = new TreeMap<String, String>();
+	private Map<String, LecmPermissionGroup> initPrivileges(Element rolesElement) {
+		Map<String, LecmPermissionGroup> permissions = new HashMap<String, LecmPermissionGroup>();
 		if (rolesElement != null) {
 			List<Element> roleElements = rolesElement.elements("role");
 			for (Element roleElement : roleElements) {
 				String role = roleElement.attribute("name");
                 String privilege = roleElement.attribute("privilege");
-				permissions.put(role, privilege);
+                LecmPermissionGroup permissionGroup = getLecmPermissionService().findPermissionGroup(privilege);
+				permissions.put(role, permissionGroup);
 			}
 		}
 		return permissions;
@@ -224,7 +212,7 @@ public class StatusChangeAction extends StateMachineAction {
 						return null;
 					}
 				}, false, true);
-		// permissionsBuilder.rebuildStaticACL(folder, permissions);
+		permissionsBuilder.rebuildStaticACL(folder, permissions);
 	}
 
 	private void execBuildInTransactDynamic(final List<ChildAssociationRef> children

@@ -4,20 +4,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface StateMachineServiceBean {
 
     public StateFields getStateFields(NodeRef document);
-
-    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, String privilege);
-
-    public boolean hasPrivilegeByEmployee(NodeRef employee, NodeRef document, Collection<String> privileges);
-
-    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, String privilege);
-
-    public boolean hasPrivilegeByPerson(NodeRef person, NodeRef document, Collection<String> privileges);
 
     String nextTransition(String taskId);
 

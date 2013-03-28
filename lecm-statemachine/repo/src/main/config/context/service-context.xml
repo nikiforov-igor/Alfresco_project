@@ -200,8 +200,6 @@
 		<property name="execution" value="take" />
 	</bean>
 
-    <bean id="statePrivileges" class="ru.it.lecm.statemachine.StatePrivileges" />
-
     <bean id="statemachineScript" parent="baseScript" class="ru.it.lecm.statemachine.script.StatemachineWebScriptBean"
           depends-on="serviceOrgstructure">
         <property name="extensionName">

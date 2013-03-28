@@ -1,10 +1,5 @@
 package ru.it.lecm.statemachine.listener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
@@ -12,12 +7,16 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -33,9 +32,10 @@ public class StateMachineHandler implements ExecutionListener {
 
 	private Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
 	private static ServiceRegistry serviceRegistry;
-	private LecmPermissionService lecmPermissionService;
+	private static LecmPermissionService lecmPermissionService;
 	private static BusinessJournalService businessJournalService;
 	private static RepositoryStructureHelper repositoryStructureHelper;
+	private static LecmPermissionService LecmPermissionService;
 
 	private String processId = "";
 
@@ -101,7 +101,7 @@ public class StateMachineHandler implements ExecutionListener {
 	}
 
 	public void setLecmPermissionService(LecmPermissionService value) {
-		this.lecmPermissionService = value;
+        StateMachineHandler.lecmPermissionService = value;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
