@@ -47,6 +47,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected RepositoryStructureHelper repositoryStructureHelper;
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
+    protected ServiceRegistry serviceRegistry;
 
 	private final Object lock = new Object();
 
@@ -306,7 +307,7 @@ public abstract class BaseBean implements InitializingBean {
      * @param linkUrl
      * @return
      */
-    public String wrapperLink(ServiceRegistry serviceRegistry, NodeRef nodeRef, String description, String linkUrl) {
+    public String wrapperLink(NodeRef nodeRef, String description, String linkUrl) {
         SysAdminParams params = serviceRegistry.getSysAdminParams();
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"

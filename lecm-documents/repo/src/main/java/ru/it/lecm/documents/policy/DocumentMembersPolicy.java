@@ -43,22 +43,19 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     final protected Logger logger = LoggerFactory.getLogger(DocumentMembersPolicy.class);
 
     private PolicyComponent policyComponent;
-    private NodeService nodeService;
     private DocumentMembersService documentMembersService;
     private BusinessJournalService businessJournalService;
     private NotificationChannelBeanBase notificationActiveChannel;
     private AuthenticationService authService;
     private OrgstructureBean orgstructureService;
-    private ServiceRegistry serviceRegistry;
 
-    // final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
-    // private StdPermission grantAccess = DEFAULT_ACCESS;
     final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
     private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
 
     private String grantDynaRoleCode = "BR_MEMBER";
     private LecmPermissionService lecmPermissionService;
-    private String documentLink = "/share/page/document";
+    private final String DOC_LINK = "/share/page/document";
+
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
@@ -209,7 +206,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 return;
             }
 
-            // lecmAclBuilder.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId());
             lecmPermissionService.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId() );
 
             logger.info(String.format("Dynamic role revoked\n\t for user '%s'/employee {%s}\n\t in document {%s}", authorLogin, employee, docRef));
@@ -248,7 +244,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             notification.setRecipientRef(employee);
             notification.setAutor(authService.getCurrentUserName());
             notification.setDescription("Вы приглашены как новый участник в документ " +
-                    wrapperLink(serviceRegistry,document,nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(),documentLink));
+                    wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), DOC_LINK));
             notificationActiveChannel.sendNotification(notification);
         }
     }
