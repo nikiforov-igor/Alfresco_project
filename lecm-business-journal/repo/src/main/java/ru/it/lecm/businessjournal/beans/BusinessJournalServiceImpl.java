@@ -120,7 +120,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			// создаем записи
 			record = createRecord(date, employee, mainObject, category, objects, filled);
 		} catch (Exception ex) {
-			logger.warn("Could not create business-journal record", ex);
+			logger.error("Could not create business-journal record", ex);
 		}
 		return record;
 	}
@@ -258,7 +258,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		holders.put(MAIN_OBJECT_HOLDER, wrapAsLink(mainObject, false));
 		if (objects != null && objects.size() > 0) {
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-				holders.put(OBJECT_HOLDER + (i + 1), isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)), false) : objects.get(i));
+                if (objects.get(i) != null) {
+                    holders.put(OBJECT_HOLDER + (i + 1), isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)), false) : objects.get(i));
+                }
 			}
 		}
 		return holders;
