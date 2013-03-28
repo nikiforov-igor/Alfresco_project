@@ -212,7 +212,7 @@ public class StatusChangeAction extends StateMachineAction {
 						return null;
 					}
 				}, false, true);
-		permissionsBuilder.rebuildStaticACL(folder, permissions);
+		//permissionsBuilder.rebuildStaticACL(folder, permissions);
 	}
 
 	private void execBuildInTransactDynamic(final List<ChildAssociationRef> children

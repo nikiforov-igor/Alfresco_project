@@ -45,9 +45,6 @@
                             nodeRef: LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.nodeRef,
                             actionsConfig:{
                                 fullDelete:LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.fullDelete
-                            },
-                            custom:{
-                                namePattern:LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.namePattern
                             }
                         },
                         bubblingLabel: "${bubblingLabel!"workGroup"}"

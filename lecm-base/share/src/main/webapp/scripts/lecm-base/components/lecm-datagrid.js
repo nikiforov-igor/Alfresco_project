@@ -2286,7 +2286,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return fields;
             },
 
-            showCreateDialog:function (meta, callback, pattern, successMessage) {
+            showCreateDialog:function (meta, callback, successMessage) {
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -2341,14 +2341,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     {
                                         text:this.msg("message.save.failure")
                                     });
-                            },
-                            scope:this
-                        },
-                        doBeforeFormSubmit:{
-                            fn:function GenerateElementName(form) { // сгенерировать имя перед сохранением
-                                if (pattern != null && pattern != undefined && pattern != "") {
-                                    generateNodeName(form, pattern, ",", false);
-                                }
                             },
                             scope:this
                         }

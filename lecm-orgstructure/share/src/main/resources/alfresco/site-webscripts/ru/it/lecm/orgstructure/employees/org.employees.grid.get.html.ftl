@@ -52,9 +52,6 @@
                             nodeRef: LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.nodeRef,
                             actionsConfig:{
                                 fullDelete:LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.fullDelete
-                            },
-                            custom:{
-                                namePattern:LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.namePattern
                             }
                         },
                         bubblingLabel: "${bubblingLabel!"employee"}"

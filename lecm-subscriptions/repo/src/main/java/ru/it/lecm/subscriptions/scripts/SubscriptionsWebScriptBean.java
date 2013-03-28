@@ -30,7 +30,6 @@ public class SubscriptionsWebScriptBean extends BaseWebScript {
 	public static final String TITLE = "title";
 	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
-	public static final String NAME_PATTERN = "namePattern";
 	public static final String DELETE_NODE = "deleteNode";
 
 	public static final String PAGE_SUBSCRIPT_PROFILE = "subscr-positions";

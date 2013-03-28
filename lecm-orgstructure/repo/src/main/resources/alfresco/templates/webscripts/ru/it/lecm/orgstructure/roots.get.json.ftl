@@ -2,8 +2,7 @@
     {
         <#if root??>
             nodeRef: "${root.nodeRef!"NOT_LOAD"}",
-            itemType: "${root.itemType!""}",
-            namePattern: "${root.pattern!""}"
+            itemType: "${root.itemType!""}"
         </#if>
     }
 </#escape>

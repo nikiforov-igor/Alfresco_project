@@ -57,10 +57,13 @@ public interface OrgstructureBean {
 	QName PROP_STAFF_POSITION_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
 	QName PROP_UNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
 	QName PROP_EMPLOYEE_NUMBER = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-number");
-	QName PROP_EMPLOYEE_FIRST_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
-	QName PROP_EMPLOYEE_MIDDLE_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
-	QName PROP_EMPLOYEE_LAST_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
-	
+
+	QName PROP_EMPLOYEE_FIRST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
+	QName PROP_EMPLOYEE_MIDDLE_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
+	QName PROP_EMPLOYEE_LAST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
+	QName PROP_ORG_ELEMENT_SHORT_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
+    QName PROP_ORG_ELEMENT_FULL_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
+
 	QName TYPE_ORGANIZATION_UNIT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-unit");
 	QName TYPE_STRUCTURE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "structure");
 	QName TYPE_WORK_GROUP = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workGroup");

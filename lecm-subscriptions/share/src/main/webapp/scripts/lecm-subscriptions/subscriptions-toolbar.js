@@ -152,9 +152,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
             onNewRow:function (e, p_obj) {
                 var metadata = this.modules.dataGrid.datagridMeta,
                     destination = metadata.nodeRef,
-                    itemType = metadata.itemType,
-                    namePattern = metadata.custom != null ? metadata.custom.namePattern : null;
-                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null, namePattern);
+                    itemType = metadata.itemType;
+                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null);
             },
 
             // разблокировать кнопки согласно правам

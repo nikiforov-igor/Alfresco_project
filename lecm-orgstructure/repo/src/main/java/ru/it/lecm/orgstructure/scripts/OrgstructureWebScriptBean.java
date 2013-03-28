@@ -33,7 +33,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public static final String TITLE = "title";
 	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
-	public static final String NAME_PATTERN = "namePattern";
 
 	public static final QName ELEMENT_FULL_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
@@ -709,7 +708,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
                         if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
                             settings.put(NODE_REF, cRef.toString());
                             settings.put(ITEM_TYPE, OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(serviceRegistry.getNamespaceService()));
-                            settings.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
                             break;
                         }
                     }
@@ -742,7 +740,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
                         if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
                             settings.put(NODE_REF, cRef.toString());
                             settings.put(ITEM_TYPE, OrgstructureBean.TYPE_WORK_GROUP.toPrefixString(serviceRegistry.getNamespaceService()));
-                            settings.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
                             break;
                         }
                     }

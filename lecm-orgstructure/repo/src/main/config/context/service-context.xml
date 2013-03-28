@@ -185,4 +185,10 @@
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService" />
 	</bean>
+
+    <bean id="orgstructureGenerateNamePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureGenerateNamesPolicy"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent" />
+        <property name="nodeService" ref="nodeService" />
+    </bean>
 </beans>

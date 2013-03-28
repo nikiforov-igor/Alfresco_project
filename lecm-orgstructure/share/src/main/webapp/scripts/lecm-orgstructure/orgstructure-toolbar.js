@@ -156,9 +156,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             onNewRow:function OrgstructureToolbar_onNewRow(e, p_obj) {
                 var orgMetadata = this.modules.dataGrid.datagridMeta,
                     destination = orgMetadata.nodeRef,
-                    itemType = orgMetadata.itemType,
-                    namePattern = orgMetadata.custom != null ? orgMetadata.custom.namePattern : null;
-                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null, namePattern);
+                    itemType = orgMetadata.itemType;
+                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null);
             },
 
             /**
@@ -170,7 +169,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 if (meta != null && meta.nodeRef.indexOf(":") > 0) {
                     var destination = meta.nodeRef;
                     var itemType = meta.itemType;
-                    var namePattern = meta.custom != null ? meta.custom.namePattern : null;
                     var callBack = function(ref) {
                         YAHOO.Bubbling.fire("nodeCreated",
                             {
@@ -179,7 +177,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             });
                     };
 
-                    this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, callBack, namePattern);
+                    this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, callBack);
                 } else {
                     Alfresco.util.PopupManager.displayMessage(
                         {

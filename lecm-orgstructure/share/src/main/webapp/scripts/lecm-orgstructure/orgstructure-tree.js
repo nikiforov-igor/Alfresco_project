@@ -211,9 +211,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         datagridMeta:{
                             itemType:me.options.itemType, // тип объектов, которые будут рисоваться в гриде (обязателен)
                             nodeRef:node.data.nodeRef, // ссылка на текущую(корневую) ноды (необязателен)
-                            custom: { // кастомные настройки для вспомогательных целей (необязателен)
-                                namePattern:me.options.itemPattern // используется в тулбаре Оргструктуры при сохранении новой ноды
-                            },
                             actionsConfig: {// настройки экшенов. (необязателен)
                                 fullDelete:me.options.fullDelete // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
                             }
@@ -267,13 +264,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             });
                     },
                     scope:this
-                },
-                doBeforeFormSubmit:
-                {
-                    fn: function GenerateElementName(form){
-                        generateNodeName(form, pattern, ",", false);
-                    },
-                    scope: this
                 }
             }).show();
         },
@@ -320,9 +310,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         {
                             datagridMeta:{
                                 itemType:otree.options.itemType,
-                                custom:{
-                                    namePattern:otree.options.itemPattern
-                                },
                                 nodeRef:sNode.data.nodeRef
                             }
                         });

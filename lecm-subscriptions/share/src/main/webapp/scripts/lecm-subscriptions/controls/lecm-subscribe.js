@@ -122,7 +122,6 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 								oResponse.argument.context.root = {
 									nodeRef:oResults[nodeIndex].nodeRef,
 									itemType:oResults[nodeIndex].itemType,
-									namePattern:oResults[nodeIndex].namePattern,
 									page:oResults[nodeIndex].page,
 									fullDelete:oResults[nodeIndex].fullDelete
 								};
