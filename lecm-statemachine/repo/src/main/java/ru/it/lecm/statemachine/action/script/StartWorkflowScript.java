@@ -56,6 +56,8 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             //если небыло ошибок, то действие логируем
             if (errors.size() == 0) {
                 updateActionCount(document, actionId);
+                String newWorkflowId = helper.parseExecutionId(persistedResponse);
+                helper.logStartWorkflowEvent(document, newWorkflowId);
             }
 		} else if ("user".equals(actionType)){
             StateMachineHelper helper = new StateMachineHelper();
@@ -65,6 +67,8 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             //если небыло ошибок, то действие логируем
             if (errors.size() == 0) {
                 updateActionCount(document, actionId);
+                String newWorkflowId = helper.parseExecutionId(persistedResponse);
+                helper.logStartWorkflowEvent(document, newWorkflowId);
             }
 		}
 

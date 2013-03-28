@@ -78,6 +78,8 @@ public class EndWorkflowEvent implements ExecutionListener {
 				helper.getOutputVariables(statemachineId, executionId, variables);
 			}
 
+            helper.logEndWorkflowEvent(document, executionId);
+
 			String taskId = helper.getCurrentTaskId(statemachineId);
 			List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
 			Expression expression = new Expression(document, helper.getVariables(statemachineId), StateMachineHelper.getServiceRegistry());

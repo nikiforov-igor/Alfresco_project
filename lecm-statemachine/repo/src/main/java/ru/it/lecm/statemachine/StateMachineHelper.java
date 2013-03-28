@@ -24,6 +24,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.action.*;
@@ -58,6 +59,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
     private static OrgstructureBean orgstructureBean;
     private static DocumentMembersService documentMembersService;
+    private static BusinessJournalService businessJournalService;
 
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
@@ -77,6 +79,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         StateMachineHelper.documentMembersService = documentMembersService;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        StateMachineHelper.businessJournalService = businessJournalService;
     }
 
     public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
@@ -520,6 +526,27 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
     }
 
+    public void logEndWorkflowEvent(NodeRef document, String executionId) {
+        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс \"#object1\"", Collections.singletonList(workflow.getDescription()));
+    }
+
+    public void logStartWorkflowEvent(NodeRef document, String executionId) {
+        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс \"#object1\"", Collections.singletonList(workflow.getDescription()));
+    }
+
+    public String parseExecutionId(String persistedResponse) {
+        if (persistedResponse == null || "null".equals(persistedResponse)) {
+            return null;
+        }
+
+        int start = persistedResponse.indexOf("=") + 1;
+        int end = persistedResponse.indexOf(",");
+
+        return persistedResponse.substring(start, end);
+    }
+
     enum BPMState {
         NA, ACTIVE, COMPLETED, ALL;
 
@@ -709,12 +736,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 setExecutionParamentersByTaskId(taskId, parameters);
                 nextTransition(taskId);
 
-                if (persistedResponse != null && !"null".equals(persistedResponse)) {
-                    int start = persistedResponse.indexOf("=") + 1;
-                    int end = persistedResponse.indexOf(",");
-
-                    String dependencyExecution = persistedResponse.substring(start, end);
-
+                String dependencyExecution = parseExecutionId(persistedResponse);
+                if (dependencyExecution != null) {
                     WorkflowDescriptor descriptor = new WorkflowDescriptor(statemachineId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                     new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
                     setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
@@ -726,7 +749,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                     }
 
                 } else {
-                    errors.add("Переход осуществлен, но дочерний процесс небыл запущен");
+                    errors.add("Переход осуществлен, но дочерний процесс не был запущен");
                 }
             }
         } else {
@@ -762,10 +785,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 access = access && currentAccess;
             }
             if (access) {
-                int start = persistedResponse.indexOf("=") + 1;
-                int end = persistedResponse.indexOf(",");
-
-                String dependencyExecution = persistedResponse.substring(start, end);
+                String dependencyExecution = parseExecutionId(persistedResponse);
 
                 WorkflowDescriptor descriptor = new WorkflowDescriptor(statemachineId, taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                 new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
