@@ -181,8 +181,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 var doBeforeDialogShow = function Toolbar_onNewRow_doBeforeDialogShow(p_form, p_dialog)
                 {
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-dialogTitle", this.msg("label.new-row.title") ],
-                        [ p_dialog.id + "-dialogHeader", this.msg("label.new-row.header") ]
+                        [ p_dialog.id + "-form-container_h", this.msg("label.new-row.title") ]
                     );
                 };
 
