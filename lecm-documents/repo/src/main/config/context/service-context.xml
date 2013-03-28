@@ -285,6 +285,9 @@
         <property name="dictionaryService">
             <ref bean="dictionaryService"/>
         </property>
+	    <property name="documentAttachmentsService">
+		    <ref bean="documentAttachmentsService"/>
+	    </property>
         <property name="substituteService" ref="substitudeService"/>
     </bean>
 

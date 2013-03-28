@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -46,6 +47,7 @@ public class DocumentAttachmentsPolicy implements
     private PolicyComponent policyComponent;
     private NodeService nodeService;
     private DocumentMembersService documentMembersService;
+    private DocumentAttachmentsService documentAttachmentsService;
     private BusinessJournalService businessJournalService;
     private OrgstructureBean orgstructureService;
     private DictionaryService dictionaryService;
@@ -77,7 +79,11 @@ public class DocumentAttachmentsPolicy implements
         this.dictionaryService = dictionaryService;
     }
 
-    public final void init() {
+	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public final void init() {
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -90,7 +96,7 @@ public class DocumentAttachmentsPolicy implements
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
-        NodeRef document = getDocumentByAttachment(childAssocRef);
+        NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
         if (document != null) {
             // добавляем пользователя добавившего вложение как участника
             documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
@@ -106,7 +112,7 @@ public class DocumentAttachmentsPolicy implements
 
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
-        NodeRef document = getDocumentByAttachment(nodeRef);
+        NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
             // добавляем пользователя удалившего вложения как участника
             documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
@@ -119,33 +125,9 @@ public class DocumentAttachmentsPolicy implements
         }
     }
 
-    private NodeRef getDocumentByAttachment(ChildAssociationRef attachRef) {
-        NodeRef attachCategoryDir = attachRef.getParentRef();
-        NodeRef attachRootDir = nodeService.getPrimaryParent(attachCategoryDir).getParentRef();
-        if (attachRootDir != null) {
-            NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
-            if (document != null) {
-                QName testType = nodeService.getType(document);
-                Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-                if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-                    return document;
-                }
-            }
-        }
-        return null;
-    }
-
-    private NodeRef getDocumentByAttachment(NodeRef attachRef) {
-        if (nodeService.exists(attachRef)) {
-            return getDocumentByAttachment(nodeService.getPrimaryParent(attachRef));
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-	    NodeRef document = getDocumentByAttachment(nodeRef);
+	    NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 	    List<QName> changedProps = getAffectedProperties(before, after);
         if (!changedProps.isEmpty() && document != null) { // обновляем только автора и изменившего ноду
             for (QName changedProp : changedProps) {
@@ -190,7 +172,7 @@ public class DocumentAttachmentsPolicy implements
 
 	@Override
 	public void afterCreateVersion(NodeRef nodeRef, Version version) {
-		NodeRef document = getDocumentByAttachment(nodeRef);
+		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());

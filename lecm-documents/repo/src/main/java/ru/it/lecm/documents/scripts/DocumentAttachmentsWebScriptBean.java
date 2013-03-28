@@ -52,4 +52,14 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+	public String deleteAttachment(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref) && this.documentAttachmentsService.isDocumentAttachment(ref)) {
+			this.documentAttachmentsService.deleteAttachment(ref);
+			return "Success delete";
+		}
+		return "Failure: node not found";
+	}
 }

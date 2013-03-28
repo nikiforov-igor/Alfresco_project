@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -119,4 +116,37 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
         };
         return AuthenticationUtil.runAsSystem(raw);
     }
+
+	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef) {
+		NodeRef attachCategoryDir = attachRef.getParentRef();
+		NodeRef attachRootDir = nodeService.getPrimaryParent(attachCategoryDir).getParentRef();
+		if (attachRootDir != null) {
+			NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
+			if (document != null) {
+				QName testType = nodeService.getType(document);
+				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
+					return document;
+				}
+			}
+		}
+		return null;
+	}
+
+	public NodeRef getDocumentByAttachment(NodeRef attachRef) {
+		if (nodeService.exists(attachRef)) {
+			return getDocumentByAttachment(nodeService.getPrimaryParent(attachRef));
+		} else {
+			return null;
+		}
+	}
+
+	public boolean isDocumentAttachment(NodeRef nodeRef) {
+		return getDocumentByAttachment(nodeRef) != null;
+	}
+
+	@Override
+	public void deleteAttachment(NodeRef nodeRef) {
+		nodeService.deleteNode(nodeRef);
+	}
 }

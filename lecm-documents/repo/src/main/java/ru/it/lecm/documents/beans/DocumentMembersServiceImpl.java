@@ -37,7 +37,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     @Override
     public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
         final NodeRef documentMembersFolder = getMembersFolderRef(document);
-        if (!isDocumentMember(document, employeeRef)) {
+        if (employeeRef != null && !isDocumentMember(document, employeeRef)) {
             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                 @Override
                 public NodeRef execute() throws Throwable {

@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 
 import java.util.List;
@@ -27,4 +28,16 @@ public interface DocumentAttachmentsService {
      * @return Список ссылок на папки с категориями вложений
      */
     public List<NodeRef> getCategories(final NodeRef documentRef);
+
+	/**
+	 * Удаление вложения
+	 * @param nodeRef Ссылка на вложение
+	 */
+	public void deleteAttachment(NodeRef nodeRef);
+
+	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
+
+	public NodeRef getDocumentByAttachment(NodeRef attachRef);
+
+	public boolean isDocumentAttachment(NodeRef nodeRef);
 }
