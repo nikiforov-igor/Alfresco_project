@@ -82,4 +82,15 @@ public interface DocumentConnectionService {
 	 * @return Список сслыок на связи
 	 */
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef);
+
+	/**
+	 * Создание связи
+	 * @param primaryDocumentNodeRef Ссылка на исходный документ
+	 * @param connectedDocumentNodeRef  Ссылка на целевой документ
+	 * @param typeNodeRef Ссылка на тип связи
+	 * @return Ссылка на созданную связь
+	 */
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef);
+
+	public boolean isConnectionType(NodeRef ref);
 }

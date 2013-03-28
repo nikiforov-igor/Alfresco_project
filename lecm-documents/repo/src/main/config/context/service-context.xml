@@ -85,6 +85,7 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
@@ -141,6 +142,9 @@
         </property>
         <property name="nodeService">
             <ref bean="nodeService"/>
+        </property>
+	    <property name="documentService">
+            <ref bean="documentService"/>
         </property>
     </bean>
 

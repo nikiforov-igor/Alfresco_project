@@ -68,4 +68,5 @@ public interface DocumentService {
 
     public Map<QName, Serializable> changeProperties (NodeRef documentRef, Map<QName, Serializable> properties);
 
+	public boolean isDocument(NodeRef ref);
 }

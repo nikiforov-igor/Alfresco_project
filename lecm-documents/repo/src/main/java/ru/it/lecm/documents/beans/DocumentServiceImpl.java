@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -14,10 +15,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +32,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
+	private DictionaryService dictionaryService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -51,6 +50,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
     @Override
     public String getRating(NodeRef documentNodeRef) {
@@ -207,4 +210,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return null;
     }
 
+	@Override
+	public boolean isDocument(NodeRef ref) {
+		QName refType = nodeService.getType(ref);
+		if (refType != null) {
+			return dictionaryService.isSubClass(refType, DocumentService.TYPE_BASE_DOCUMENT);
+		}
+		return false;
+	}
 }

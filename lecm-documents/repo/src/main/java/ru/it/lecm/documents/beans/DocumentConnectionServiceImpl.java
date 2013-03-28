@@ -234,4 +234,27 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		}
 		return results;
 	}
+
+	@Override
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef) {
+		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+		QName assocQName = ContentModel.ASSOC_CONTAINS;
+
+		NodeRef connectionsRoot = getRootFolder(primaryDocumentNodeRef);
+		ChildAssociationRef associationRef = nodeService.createNode(connectionsRoot, assocTypeQName, assocQName, TYPE_CONNECTION);
+		NodeRef connectionNodeRef = associationRef.getChildRef();
+
+		nodeService.createAssociation(connectionNodeRef, primaryDocumentNodeRef, ASSOC_PRIMARY_DOCUMENT);
+		nodeService.createAssociation(connectionNodeRef, connectedDocumentNodeRef, ASSOC_CONNECTED_DOCUMENT);
+		nodeService.createAssociation(connectionNodeRef, typeNodeRef, ASSOC_CONNECTION_TYPE);
+
+		return connectionNodeRef;
+	}
+
+	@Override
+	public boolean isConnectionType(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_CONNECTION_TYPE);
+		return isProperType(ref, types);
+	}
 }

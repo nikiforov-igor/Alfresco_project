@@ -8,6 +8,7 @@ import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class DocumentConnectionWebScriptBean extends BaseWebScript {
 	private DocumentConnectionService documentConnectionService;
+	private DocumentService documentService;
 	protected NodeService nodeService;
 
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
@@ -26,6 +28,10 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	public ScriptNode getRootFolder(String documentNodeRef) {
@@ -74,21 +80,21 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-    public Scriptable getExistConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
-        ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
-        ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+	public Scriptable getExistConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
 
-        NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
-        NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
+		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
+		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
 
-        if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
-            List<NodeRef> existConnectionType = this.documentConnectionService.getExistsConnectionTypes(primaryDocumentRef, connectedDocumentRef);
-            if (existConnectionType != null) {
-                return createScriptable(existConnectionType);
-            }
-        }
-        return null;
-    }
+		if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
+			List<NodeRef> existConnectionType = this.documentConnectionService.getExistsConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+			if (existConnectionType != null) {
+				return createScriptable(existConnectionType);
+			}
+		}
+		return null;
+	}
 
 	public Scriptable getAllConnectionTypes() {
 		List<NodeRef> allConnectionType = this.documentConnectionService.getAllConnectionTypes();
@@ -108,4 +114,21 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public ScriptNode createConnection(String primaryDocumentNodeRef, String connectedDocumentNodeRef, String typeNodeRef) {
+		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+		ParameterCheck.mandatory("typeNodeRef", typeNodeRef);
+
+		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
+		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
+		NodeRef typeRef = new NodeRef(typeNodeRef);
+		if (this.nodeService.exists(primaryDocumentRef) && this.documentService.isDocument(primaryDocumentRef) &&
+				this.nodeService.exists(connectedDocumentRef) && this.documentService.isDocument(connectedDocumentRef) &&
+				this.nodeService.exists(typeRef) && this.documentConnectionService.isConnectionType(typeRef)) {
+
+			NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocumentRef, connectedDocumentRef, typeRef);
+			return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
+		}
+		return null;
+	}
 }
