@@ -4,7 +4,7 @@
 var Dom = YAHOO.util.Dom,
     Connect = YAHOO.util.Connect,
     Event = YAHOO.util.Event;
-var organizationRef;
+var organizationRef = LogicECM.module.OrgStructure.PROFILE_SETTINGS.nodeRef;
 
 function drawForm(nodeRef){
     Alfresco.util.Ajax.request(
@@ -61,7 +61,7 @@ function drawForm(nodeRef){
 }
 
 function init() {
-    var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getOrganization";
+    /*var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getOrganization";
     var callback = {
         success:function (oResponse) {
             var oResults = eval("(" + oResponse.responseText + ")");
@@ -79,7 +79,8 @@ function init() {
         argument:{
         }
     };
-    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);*/
+    drawForm(LogicECM.module.OrgStructure.PROFILE_SETTINGS.nodeRef);
 }
 
 Event.onDOMReady(init);

@@ -18,7 +18,6 @@
 	function init() {
 		var menu = new LogicECM.module.OrgStructure.Menu("menu-buttons");
 		menu.setMessages(${messages});
-		menu.draw();
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();

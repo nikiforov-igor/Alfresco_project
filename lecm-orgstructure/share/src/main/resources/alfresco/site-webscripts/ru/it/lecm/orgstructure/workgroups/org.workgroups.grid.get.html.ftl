@@ -37,6 +37,22 @@
 							showCheckboxColumn: false,
 							attributeForShow:"lecm-orgstr:element-short-name"
 						}).setMessages(${messages});
+
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.itemType,
+                            nodeRef: LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.fullDelete
+                            },
+                            custom:{
+                                namePattern:LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS.namePattern
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"workGroup"}"
+                    });
+                });
 			}
 
 			function init() {

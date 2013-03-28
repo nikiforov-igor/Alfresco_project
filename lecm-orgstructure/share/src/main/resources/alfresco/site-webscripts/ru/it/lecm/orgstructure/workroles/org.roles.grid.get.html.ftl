@@ -27,10 +27,23 @@
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							bubblingLabel: "${bubblingLabel!"dictionary"}",
+							bubblingLabel: "${bubblingLabel!"roles"}",
 							showCheckboxColumn: false,
 							attributeForShow:"cm:name"
 						}).setMessages(${messages});
+
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: LogicECM.module.OrgStructure.WORK_ROLES_SETTINGS.itemType,
+                            nodeRef: LogicECM.module.OrgStructure.WORK_ROLES_SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:LogicECM.module.OrgStructure.WORK_ROLES_SETTINGS.fullDelete
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"roles"}"
+                    });
+                });
 			}
 
 			function init() {

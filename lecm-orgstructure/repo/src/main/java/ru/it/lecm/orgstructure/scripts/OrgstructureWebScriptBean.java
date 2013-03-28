@@ -34,7 +34,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
 	public static final String NAME_PATTERN = "namePattern";
-	public static final String DELETE_NODE = "deleteNode";
 
 	public static final QName ELEMENT_FULL_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
@@ -56,17 +55,20 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
-	public static final String TYPE_EMPLOYEE = "employee";
-	public static final String TYPE_STRUCTURE = "structure";
-	public static final String TYPE_WRK_GROUP = "workGroup";
-	public static final String TYPE_UNIT = "organization-unit";
-	public static final String TYPE_STAFF_LIST = "staff-list";
-	public static final String TYPE_POSITION = "staffPosition";
-	public static final String TYPE_ROLE = "workRole";
-	public static final String TYPE_BUSINESS_ROLE = "business-role";
-	public static final String TYPE_ORGANIZATION = "organization";
+    public static final String TYPE_UNIT = "organization-unit";
 
-	private DictionaryBean dictionaryService;
+    private final Map<String, Integer> ROOTS = new HashMap<String, Integer>() {{
+        put(PAGE_ORG_EMPLOYEES, 1);
+        put(PAGE_ORG_STAFF_LIST, 2);
+        put(PAGE_ORG_STRUCTURE, 3);
+        put(PAGE_ORG_POSITIONS, 4);
+        put(PAGE_ORG_ROLES, 5);
+        put(PAGE_ORG_WORK_GROUPS, 6);
+        put(PAGE_ORG_BUSINESS_ROLES, 7);
+        put(PAGE_ORG_PROFILE, 8);
+    }};
+
+    private DictionaryBean dictionaryService;
 
 	private OrgstructureBean orgstructureService;
 
@@ -95,99 +97,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Получаем список "корневых" объектов для меню в Оргструктуре
-	 *
-	 * @return Текстовое представление JSONArrray c объектами
-	 */
-	public String getRoots() {
-		JSONArray nodes = new JSONArray();
-		NodeService nodeService = serviceRegistry.getNodeService();
-		JSONObject root;
-		NodeRef organizationRef = orgstructureService.getOrganizationRootRef();
-		try {
-			// Добавить Организацию
-			root = new JSONObject();
-			root.put(NODE_REF, "NOT_LOAD");
-			root.put(PAGE, PAGE_ORG_PROFILE);
-
-			nodes.put(root);
-
-			// Справочники
-			NodeRef positions = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
-			// Добавить справочник Должности
-			root = new JSONObject();
-			root.put(NODE_REF, positions.toString());
-			root.put(ITEM_TYPE, TYPE_POSITION);
-			root.put(PAGE, PAGE_ORG_POSITIONS);
-			root.put(DELETE_NODE, false);
-			nodes.put(root);
-
-			NodeRef roles = dictionaryService.getDictionaryByName(WORKGROUPS_ROLES_DICTIONARY_NAMES);
-			// Добавить справочник Роли в рабочих группах
-			root = new JSONObject();
-			root.put(NODE_REF, roles.toString());
-			root.put(ITEM_TYPE, TYPE_ROLE);
-			root.put(PAGE, PAGE_ORG_ROLES);
-			root.put(DELETE_NODE, false);
-			nodes.put(root);
-
-			//Добавить справочник Бизнес Роли
-			NodeRef businessRoles = dictionaryService.getDictionaryByName(BUSINESS_ROLES_DICTIONARY_NAMES);
-			root = new JSONObject();
-			root.put(NODE_REF, businessRoles.toString());
-			root.put(ITEM_TYPE, TYPE_BUSINESS_ROLE);
-			root.put(PAGE, PAGE_ORG_BUSINESS_ROLES);
-			root.put(DELETE_NODE, false);
-
-			nodes.put(root);
-		} catch (JSONException e) {
-			logger.error(e.getMessage (), e);
-		}
-
-		List<ChildAssociationRef> childs = nodeService.getChildAssocs(organizationRef);
-		for (ChildAssociationRef childAssociationRef : childs) {
-			QName qType = nodeService.getType(childAssociationRef.getChildRef());
-			String qTypeLocalName = qType.getLocalName();
-			try {
-				NodeRef cRef = childAssociationRef.getChildRef();
-
-				root = new JSONObject();
-
-				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
-					root.put(NODE_REF, cRef.toString());
-					root.put(PAGE, PAGE_ORG_EMPLOYEES);
-					root.put(ITEM_TYPE, TYPE_EMPLOYEE);
-					root.put(DELETE_NODE, false);
-					root.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
-				} else if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
-					root.put(NODE_REF, "NOT_LOAD");
-					root.put(PAGE, PAGE_ORG_STRUCTURE);
-				}
-				nodes.put(root);
-
-				//Добавить Штатное расписание, Рабочие группы
-				if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
-					root = new JSONObject();
-					root.put(NODE_REF, "NOT_LOAD");
-					root.put(PAGE, PAGE_ORG_STAFF_LIST);
-					nodes.put(root);
-
-					root = new JSONObject();
-					root.put(NODE_REF, cRef.toString());
-					root.put(PAGE, PAGE_ORG_WORK_GROUPS);
-					root.put(ITEM_TYPE, TYPE_WRK_GROUP);
-					root.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
-					root.put(DELETE_NODE, false);
-					nodes.put(root);
-				}
-			} catch (JSONException e) {
-				logger.error(e.getMessage (), e);
-			}
-		}
-		return nodes.toString();
-	}
-
-	/**
 	 * Получаем список Дочерних объектов в формате, используемом в дереве Оргструктуры
 	 *
 	 * @return Текстовое представление JSONArrray c объектами
@@ -199,7 +108,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 			final NodeRef currentRef = new NodeRef(ref);
 			if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
 				Set<QName> units = new HashSet<QName>();
-				units.add(QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, TYPE_UNIT));
+				units.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
 				// получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
 				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
 				for (ChildAssociationRef child : childs) {
@@ -209,7 +118,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 						JSONObject unit = new JSONObject();
 						try {
 							unit.put(NODE_REF, child.getChildRef().toString());
-							unit.put(ITEM_TYPE, TYPE_UNIT);
+							unit.put(ITEM_TYPE, OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService()));
 							unit.put(LABEL, getElementName(
 									nodeService, child.getChildRef(), ELEMENT_SHORT_NAME));
 							unit.put(TITLE, getElementName(
@@ -222,13 +131,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 					}
 				}
 				sort(nodes,LABEL,true);
-			} else if (type.equalsIgnoreCase(TYPE_ORGANIZATION)) { //Вывести директорию "Структура"
+			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION.toPrefixString())) { //Вывести директорию "Структура"
 				NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, OrgstructureBean.STRUCTURE_ROOT_NAME);
 				if (structure != null) {
 					JSONObject root = new JSONObject();
 					try {
 						root.put(NODE_REF, structure.toString());
-						root.put(ITEM_TYPE, TYPE_STRUCTURE);
+						root.put(ITEM_TYPE, OrgstructureBean.TYPE_STRUCTURE.toPrefixString(serviceRegistry.getNamespaceService()));
 						root.put(LABEL, getElementName(
 								nodeService, structure, ELEMENT_FULL_NAME));
 						root.put(TITLE, getElementName(
@@ -752,7 +661,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 /**
 	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
 	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник имеет роль "Технолог календарей".
 	 */
 	public boolean isCalendarEngineer(final String employeeRef) {
@@ -762,7 +670,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Проверка, занимает ли сотрудник руководящую позицию.
 	 *
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник занимает где-либо руководящую позицию.
 	 */
 	public boolean isBoss(final String employeeRef) {
@@ -785,4 +692,79 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		List<NodeRef> employeeRoles = orgstructureService.getEmployeeRoles(employeeRef);
 		return createScriptable(employeeRoles);
 	}
+
+    public String getRoot(String rootType) {
+        Integer key = ROOTS.get(rootType);
+        JSONObject settings = new JSONObject();
+
+        NodeService nodeService = serviceRegistry.getNodeService();
+        NodeRef organizationRef = orgstructureService.getOrganizationRootRef();
+        List<ChildAssociationRef> childs = nodeService.getChildAssocs(organizationRef);
+        try {
+            switch (key) {
+                case 1: {
+                    for (ChildAssociationRef childAssociationRef : childs) {
+                        String qTypeLocalName = nodeService.getType(childAssociationRef.getChildRef()).getLocalName();
+                        NodeRef cRef = childAssociationRef.getChildRef();
+                        if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_EMPLOYEES)) {
+                            settings.put(NODE_REF, cRef.toString());
+                            settings.put(ITEM_TYPE, OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(serviceRegistry.getNamespaceService()));
+                            settings.put(NAME_PATTERN, "lecm-orgstr_employee-last-name,{ },lecm-orgstr_employee-first-name[1],{.},lecm-orgstr_employee-middle-name[1]");
+                            break;
+                        }
+                    }
+                }
+                break;
+                case 2: {
+                    settings.put(NODE_REF, "NOT_LOAD");
+                }
+                break;
+                case 3: {
+                    settings.put(NODE_REF, "NOT_LOAD");
+                }
+                break;
+                case 4: {
+                    NodeRef positions = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
+                    settings.put(NODE_REF, positions.toString());
+                    settings.put(ITEM_TYPE, OrgstructureBean.TYPE_STAFF_POSITION.toPrefixString(serviceRegistry.getNamespaceService()));
+                }
+                break;
+                case 5: {
+                    NodeRef roles = dictionaryService.getDictionaryByName(WORKGROUPS_ROLES_DICTIONARY_NAMES);
+                    settings.put(NODE_REF, roles.toString());
+                    settings.put(ITEM_TYPE, OrgstructureBean.TYPE_WORK_ROLE.toPrefixString(serviceRegistry.getNamespaceService()));
+                }
+                break;
+                case 6: {
+                    for (ChildAssociationRef childAssociationRef : childs) {
+                        String qTypeLocalName = nodeService.getType(childAssociationRef.getChildRef()).getLocalName();
+                        NodeRef cRef = childAssociationRef.getChildRef();
+                        if (qTypeLocalName.equals(OrgstructureBean.TYPE_DIRECTORY_STRUCTURE)) {
+                            settings.put(NODE_REF, cRef.toString());
+                            settings.put(ITEM_TYPE, OrgstructureBean.TYPE_WORK_GROUP.toPrefixString(serviceRegistry.getNamespaceService()));
+                            settings.put(NAME_PATTERN, ELEMENT_FULL_NAME_PATTERN);
+                            break;
+                        }
+                    }
+                }
+                break;
+                case 7: {
+                    NodeRef businessRoles = dictionaryService.getDictionaryByName(BUSINESS_ROLES_DICTIONARY_NAMES);
+                    settings.put(NODE_REF, businessRoles.toString());
+                    settings.put(ITEM_TYPE, OrgstructureBean.TYPE_BUSINESS_ROLE.toPrefixString(serviceRegistry.getNamespaceService()));
+                }
+                break;
+                case 8: {
+                    settings.put(NODE_REF, organizationRef.toString());
+                }
+                break;
+                default: {
+                    settings = new JSONObject();
+                }
+            }
+        } catch (JSONException e) {
+            logger.error(e.getMessage (), e);
+        }
+        return settings.toString();
+    }
 }

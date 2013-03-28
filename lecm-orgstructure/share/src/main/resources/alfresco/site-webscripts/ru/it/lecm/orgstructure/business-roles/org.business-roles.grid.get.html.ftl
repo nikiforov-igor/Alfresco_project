@@ -1,29 +1,53 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
-<#assign id = args.htmlid/>
+<#assign id = args.htmlid>
 
-<@grid.datagrid id true>
+<div class="yui-t1" id="orgstructure-employees-grid">
+    <div id="yui-main-2">
+        <div class="yui-b" id="alf-content" style="margin-left: 0;">
+            <!-- include base datagrid markup-->
+        <@grid.datagrid id true>
+            <script type="text/javascript">//<![CDATA[
+            function createDatagrid() {
+                var datagrid = new LogicECM.module.Base.DataGrid ("${id}");
+                datagrid.setOptions ({
+                    usePagination:true,
+                    showExtendSearchBlock:true,
+                    showCheckboxColumn: false,
+                    editForm: "configureBusinessRole",
+                    attributeForShow: "cm:name",
+                    actions: [{
+                        type:"datagrid-action-link-businessRole",
+                        id:"onActionEdit",
+                        permission:"edit",
+                        label:"${msg("actions.edit")}"
+                    }],
+                    bubblingLabel: "${bubblingLabel!"business-role"}"
+                });
+                datagrid.setMessages (${messages});
 
-<script type="text/javascript">//<![CDATA[
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: LogicECM.module.OrgStructure.BUSINESS_ROLES_SETTINGS.itemType,
+                            nodeRef: LogicECM.module.OrgStructure.BUSINESS_ROLES_SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:LogicECM.module.OrgStructure.BUSINESS_ROLES_SETTINGS.fullDelete
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"business-role"}"
+                    });
+                });
+            }
 
-//var datagrid = new LogicECM.module.OrgStructure.BusinessRoles.DataGrid ("${id}");
-var datagrid = new LogicECM.module.Base.DataGrid ("${id}");
-datagrid.setOptions ({
-	usePagination:true,
-	showExtendSearchBlock:true,
-	showCheckboxColumn: false,
-	editForm: "configureBusinessRole",
-	attributeForShow: "cm:name",
-	actions: [{
-		type:"datagrid-action-link-businessRole",
-		id:"onActionEdit",
-		permission:"edit",
-		label:"${msg("actions.edit")}"
-		}
-	]
-});
-datagrid.setMessages (${messages});
-//]]>
-</script>
+            function init() {
+                createDatagrid();
+            }
 
-</@grid.datagrid>
+            YAHOO.util.Event.onDOMReady(init);
+            //]]></script>
+        </@grid.datagrid>
+        </div>
+    </div>
+</div>
+

@@ -173,7 +173,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
-                        if (curElement.data.type == "structure") {
+                        if (curElement.data.type == "lecm-orgstr:structure") {
                             curElement.expanded = true;
                             otree._treeNodeSelected(curElement);
                         }
@@ -220,7 +220,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     });
             };
-            if (node.data.type == "organization-unit") {
+            if (node.data.type == "lecm-orgstr:organization-unit") {
                 YAHOO.Bubbling.fire("initActiveButton",{disable: false});
             } else {
                 YAHOO.Bubbling.fire("initActiveButton",{disable: true});

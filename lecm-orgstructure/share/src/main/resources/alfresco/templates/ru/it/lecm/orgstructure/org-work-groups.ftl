@@ -17,8 +17,11 @@
 <!-- Historic Properties Viewer -->
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/versions.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/document-details/historic-properties-viewer.css" />
-
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-orgstructure/orgstructure-const.js"></@script>
     <script type="text/javascript">//<![CDATA[
+        var response = ${response};
+        LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS = response;
+
         function init() {
             var resizer = new LogicECM.module.Base.Resizer('WorkGroupsResizer');
 

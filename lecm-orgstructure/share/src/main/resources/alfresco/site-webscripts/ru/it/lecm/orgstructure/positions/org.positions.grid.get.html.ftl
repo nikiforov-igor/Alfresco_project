@@ -9,7 +9,7 @@
 		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
-				new LogicECM.module.Base.DataGrid('${id}').setOptions(
+				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
 							showExtendSearchBlock:true,
@@ -27,10 +27,23 @@
 									label:"${msg("actions.delete-row")}"
 								}
 							],
-							bubblingLabel: "${bubblingLabel!"dictionary"}",
+							bubblingLabel: "${bubblingLabel!"staffPosition"}",
 							showCheckboxColumn: false,
 							attributeForShow:"cm:name"
 						}).setMessages(${messages});
+
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: LogicECM.module.OrgStructure.POSITIONS_SETTINGS.itemType,
+                            nodeRef: LogicECM.module.OrgStructure.POSITIONS_SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:LogicECM.module.OrgStructure.POSITIONS_SETTINGS.fullDelete
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"staffPosition"}"
+                    });
+                });
 			}
 
 			function init() {

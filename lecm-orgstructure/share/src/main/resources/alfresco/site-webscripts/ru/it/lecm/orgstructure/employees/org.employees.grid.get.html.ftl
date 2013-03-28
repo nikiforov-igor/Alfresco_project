@@ -9,7 +9,7 @@
 		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
-				new LogicECM.module.Base.DataGrid('${id}').setOptions(
+				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
 							useDynamicPagination:true,
@@ -44,6 +44,22 @@
 							showCheckboxColumn: false,
 							attributeForShow:"lecm-orgstr:employee-last-name"
 						}).setMessages(${messages});
+
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.itemType,
+                            nodeRef: LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.fullDelete
+                            },
+                            custom:{
+                                namePattern:LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS.namePattern
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"employee"}"
+                    });
+                });
 			}
 
 			function init() {
