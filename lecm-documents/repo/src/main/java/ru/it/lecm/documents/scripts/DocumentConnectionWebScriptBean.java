@@ -131,4 +131,15 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public String deleteConnection(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref) && this.documentConnectionService.isConnection(ref)) {
+			this.documentConnectionService.deleteConnection(ref);
+			return "Success delete";
+		}
+		return "Failure: node not found";
+	}
 }

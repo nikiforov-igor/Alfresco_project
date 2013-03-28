@@ -252,6 +252,18 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	@Override
+	public void deleteConnection(NodeRef nodeRef) {
+		nodeService.deleteNode(nodeRef);
+	}
+
+	@Override
+	public boolean isConnection(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_CONNECTION);
+		return isProperType(ref, types);
+	}
+
+	@Override
 	public boolean isConnectionType(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_CONNECTION_TYPE);

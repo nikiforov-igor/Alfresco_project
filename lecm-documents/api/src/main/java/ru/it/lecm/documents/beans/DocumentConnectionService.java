@@ -92,5 +92,13 @@ public interface DocumentConnectionService {
 	 */
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef);
 
+	/**
+	 * Удаление связи
+	 * @param nodeRef Ссылка на связь
+	 */
+	public void deleteConnection(NodeRef nodeRef);
+
+	public boolean isConnection(NodeRef ref);
+
 	public boolean isConnectionType(NodeRef ref);
 }
