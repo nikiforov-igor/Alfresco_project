@@ -33,6 +33,8 @@ public class EndWorkflowEvent implements ExecutionListener {
 		NodeRef document = helper.getStatemachineDocument(executionId);
 		if (document == null) return;
 
+        helper.logEndWorkflowEvent(document, executionId);
+
 		DocumentWorkflowUtil utils = new DocumentWorkflowUtil();
 		WorkflowDescriptor descriptor = utils.getWorkflowDescriptor(document, executionId);
 
@@ -77,8 +79,6 @@ public class EndWorkflowEvent implements ExecutionListener {
 			if (variables != null) {
 				helper.getOutputVariables(statemachineId, executionId, variables);
 			}
-
-            helper.logEndWorkflowEvent(document, executionId);
 
 			String taskId = helper.getCurrentTaskId(statemachineId);
 			List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);

@@ -85,6 +85,9 @@ public class StartWorkflowAction extends StateMachineAction {
 						//Обозначить запуск процесса в документе
 						WorkflowDescriptor descriptor = new WorkflowDescriptor(stateMachineExecutionId, taskId, actionName, id, eventName);
 						new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
+
+                        helper.logStartWorkflowEvent(document, StateMachineHelper.ACTIVITI_PREFIX + stateMachineExecutionId);
+
 						return null;
 					}
 				}, user);

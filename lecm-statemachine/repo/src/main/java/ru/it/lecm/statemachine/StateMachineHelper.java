@@ -472,13 +472,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     public void logEndWorkflowEvent(NodeRef document, String executionId) {
-        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
-        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс \"#object1\"", Collections.singletonList(workflow.getDescription()));
+        String description = getWorkflowDescription(executionId);
+        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс \"#object1\"", Collections.singletonList(description));
     }
 
     public void logStartWorkflowEvent(NodeRef document, String executionId) {
-        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
-        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс \"#object1\"", Collections.singletonList(workflow.getDescription()));
+        String description = getWorkflowDescription(executionId);
+        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс \"#object1\"", Collections.singletonList(description));
     }
 
     public String parseExecutionId(String persistedResponse) {
@@ -490,6 +490,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
         int end = persistedResponse.indexOf(",");
 
         return persistedResponse.substring(start, end);
+    }
+
+    private String getWorkflowDescription(String executionId) {
+        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+        String description = workflow.getDescription();
+        if (description == null) {
+            description = "";
+        }
+        return description;
     }
 
     enum BPMState {
