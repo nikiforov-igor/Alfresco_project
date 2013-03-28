@@ -56,20 +56,26 @@ public interface LecmPermissionService {
 	 * Получение списка PermissionGroup - названий групп привилегий Альфреско
 	 * (используются для выбора в UI при настройке машины состояний и выдачи 
 	 * привилегий участникам ЖЦ)
-	 * @return список названий групп привилегий Альфреско, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
+	 * @return RO-список названий групп привилегий Альфреско, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 */
-	public Collection<LecmPermissionGroup> getPermGroups();
+	Collection<LecmPermissionGroup> getPermGroups();
 
+	/**
+	 * Получение списка LECM-полномочий - элементарных привилегий Альфреско
+	 * @return RO-список названий атомарных привилегий Альфреско, например, "_lecmPermCreateTag", "_lecmPermViewTag"
+	 */
+	Collection<LecmPermission> getAllPermissons();
 
 	/**
 	 * Определение наличия конкретной привилегии у Сотрудника относительно узла (документа, папки)
-	 * @param permission атомарная привилегия, например, "_lecmPerm_ViewTag"
+	 * @param permissionOrGroup группа ("LECM_BASIC_PG_Initiator") или атомарная привилегия (например, "_lecmPerm_ViewTag")
 	 * @param node проверяемый узел
-	 * @param userLogin llogin  Пользователя Альфреско
-	 * @return true, если указанная привилегия permission имеется у пользователя userName Name для объекта node, иначе false
+	 * @param userLogin login  Пользователя Альфреско
+	 * @return true, если указанная привилегия permission имеется у пользователя 
+	 * userName для объекта node, иначе false.
 	 */
 	// TODO: (?) ввести исопльзование employeeId вместо userLogin
-	boolean hasPermission(LecmPermissionGroup permission, NodeRef node, String userLogin);
+	boolean hasPermission(AlfrescoSecurityNamedItemWithPrefix permissionOrGroup, NodeRef node, String userLogin);
 	boolean hasPermission(String permission, NodeRef node, String userLogin);
 
 

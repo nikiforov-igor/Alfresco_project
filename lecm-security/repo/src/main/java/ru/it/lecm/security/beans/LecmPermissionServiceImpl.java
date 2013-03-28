@@ -222,7 +222,7 @@ public class LecmPermissionServiceImpl
 		return result;
 	}
 
-	private Map<String, LecmPermissionImpl> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
+	private Map<String, LecmPermission> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
 
 	/**
 	 * Построение общесистемного списка атомарных lecm-полномочий
@@ -230,7 +230,7 @@ public class LecmPermissionServiceImpl
 	private void initAllPermissions() {
 		if (this.allPermissions != null) return;
 
-		this.allPermissions = new HashMap<String, LecmPermissionImpl>();
+		this.allPermissions = new HashMap<String, LecmPermission>();
 		final List<PermissionReference> found = scanByPrefix( LecmPermission.PFX_LECM_PERMISSION, modelDAOService.getAllPermissions(), "Permissions");
 		if (found != null) {
 			for (PermissionReference item: found) {
@@ -319,13 +319,22 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
-	public boolean hasPermission(LecmPermissionGroup permission, NodeRef node,
+	public Collection<LecmPermission> getAllPermissons() {
+		initAllPermissions();
+		return Collections.unmodifiableCollection(this.allPermissions.values());
+	}
+
+	@Override
+	public boolean hasPermission(AlfrescoSecurityNamedItemWithPrefix permission, NodeRef node,
 			String userLogin) {
-		return hasPermission( permission.getName(), node, userLogin);
+		return (permission != null) && hasPermission( permission.getName(), node, userLogin);
 	}
 
 	@Override
 	public boolean hasPermission(final String permission, final NodeRef node, final String userLogin) {
+		if (permission == null || permission.length() == 0)
+			return false;
+
 		Boolean result;
 
 		try {
