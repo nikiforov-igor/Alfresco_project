@@ -55,4 +55,11 @@
 		<property name="dynamicInheritParentPermissions" value="true" />
 	</bean>
 
+    <bean id="permissionScript" parent="baseJavaScriptExtension" class="ru.it.lecm.security.script.LecmPermissionWebScript">
+        <property name="extensionName">
+            <value>lecmPermission</value>
+        </property>
+        <property name="authService" ref="authenticationService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
 </beans>

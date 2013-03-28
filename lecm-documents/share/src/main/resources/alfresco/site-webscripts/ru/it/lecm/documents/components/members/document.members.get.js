@@ -2,7 +2,20 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    model.members = getMembers(model.nodeRef);
+    var hasPerm = hasPermission(model.nodeRef);
+    if (hasPerm) {
+        model.members = getMembers(model.nodeRef);
+    }
+}
+
+function hasPermission(nodeRef) {
+    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=lecmPerm_MemberList';
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        return false;
+    }
+    var permObj = eval('(' + result + ')');
+    return (("" + permObj.hasPermission) ==  "true");
 }
 
 function getMembers(nodeRef) {
