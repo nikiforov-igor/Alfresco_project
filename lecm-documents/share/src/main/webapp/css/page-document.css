@@ -59,7 +59,7 @@
     right: 1em;
 }
 
-.alfresco-twister-actions .expand:hover {
+.document-components-panel:hover .alfresco-twister-actions .expand {
     background-image: url("/share/res/images/lecm-documents/expand-10.png");
 }
 

@@ -14,6 +14,7 @@
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
         <ul id="${el}-connection-set" style="width:  100%">
+            <hr>
             <#if connections?? && connections.items??>
                 <#list connections.items as item>
                     <li>
