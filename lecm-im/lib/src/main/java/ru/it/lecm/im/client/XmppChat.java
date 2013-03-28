@@ -55,6 +55,7 @@ public class XmppChat
 	public void openChat()
 	{
         Log.log("XmppChat.openChat()");
+        iJab.ui.getContactView().setActive(this.chatItem.getJid().getBareJID().toStringBare());
 		offlineTip();
 		button.openWindow();
 	}

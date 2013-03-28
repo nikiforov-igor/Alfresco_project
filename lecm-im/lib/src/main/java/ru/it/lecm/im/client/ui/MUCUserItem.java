@@ -63,18 +63,9 @@ public class MUCUserItem extends ContactViewItemUI
 	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onAvatarOver(int, int)
 	 */
 
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onConextMenu(int, int)
-	 */
-	@Override
-	protected void onConextMenu(int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see anzsoft.iJab.client.ui.ContactViewItemUI#onItemClicked()
-	 */
+    /* (non-Javadoc)
+     * @see anzsoft.iJab.client.ui.ContactViewItemUI#onItemClicked()
+     */
 	@Override
 	protected void onItemClicked() {
 		// TODO Auto-generated method stub

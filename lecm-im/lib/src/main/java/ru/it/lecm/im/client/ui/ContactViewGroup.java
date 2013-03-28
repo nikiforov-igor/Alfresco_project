@@ -48,6 +48,24 @@ public class ContactViewGroup extends ContactViewGroupUI
 		if(!groupIconStyle.equals("ijab-contactview-grouphead"))
 			onlineGroup = true;
 	}
+
+    public void setActitve(String bareJid)
+    {
+        String itemId = getViewItemId(bareJid);
+        if(childs.containsKey(itemId))
+        {
+            ContactViewItem ri = childs.get(itemId);
+            ri.setActive();
+        }
+    }
+
+    public void clearActive()
+    {
+        for (ContactViewItem item : childs.values())
+        {
+            item.clearActive();
+        }
+    }
 	
 	public String getGroupName()
 	{

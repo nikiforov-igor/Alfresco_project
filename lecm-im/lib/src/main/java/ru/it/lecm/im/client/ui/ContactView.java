@@ -51,13 +51,12 @@ import java.util.*;
 
 public class ContactView extends Composite {
 
-	private static ContactViewUiBinder uiBinder = GWT
-			.create(ContactViewUiBinder.class);
+	private static ContactViewUiBinder uiBinder = GWT.create(ContactViewUiBinder.class);
 	
 	@UiField FlowPanel widget;
 	
 	private Map<String,ContactViewGroup> groups = new HashMap<String,ContactViewGroup>();
-	private Map<String,ContactViewGroup> groupsCashe = new HashMap<String,ContactViewGroup>();
+	private Map<String,ContactViewGroup> groupsCache = new HashMap<String,ContactViewGroup>();
 
 	
 	private ContactViewGroup onlineGroup;
@@ -72,18 +71,29 @@ public class ContactView extends Composite {
 	private ContextMenuItem manageBlackListItem = null;
 	private MenuBar groupSubMenu = null;
 
+    public void clearActive()
+    {
+        onlineGroup.clearActive();
+    }
+
+    public void setActive(String bareJid)
+    {
+        clearActive();
+        onlineGroup.setActitve(bareJid);
+    }
+
     public void onEndRosterUpdating() {
-        for(String key : groupsCashe.keySet())
+        for(String key : groupsCache.keySet())
         {
             if (!groups.containsKey(key))
             {
-                ContactViewGroup contactViewGroup = groupsCashe.get(key);
+                ContactViewGroup contactViewGroup = groupsCache.get(key);
                 groups.put(key, contactViewGroup);
                 widget.add(contactViewGroup);
                 widget.add(contactViewGroup.getGroupBody());
             }
         }
-        groupsCashe.clear();
+        groupsCache.clear();
     }
 
     interface ContactViewUiBinder extends UiBinder<Widget, ContactView>
@@ -139,36 +149,6 @@ public class ContactView extends Composite {
 			}));
 			
 			contextMenu.addSeparator();
-			contextMenu.addItem(new ContextMenuItem(contextMenu,i18n.msg("Переименовать"),true,new ContextMenuItemListener()
-			{
-				public void onSelected(Object data) 
-				{
-					final ContactViewItem item = (ContactViewItem)data;
-					item.onNameEdit(new ContactViewItemUI.NameEditListener()
-					{
-						public void onNameChange(final String name) 
-						{
-							RosterItem ri = item.getRosterItem();
-							ri.setName(name);
-							Session.instance().getRosterPlugin().addItem(ri, new ResponseHandler()
-							{
-								public void onError(IQ iq, ErrorType errorType,
-										ErrorCondition errorCondition,
-										String text) 
-								{
-								}
-
-								public void onResult(IQ iq) 
-								{
-									XmppProfileManager.commitNewName(item.getJid(), name);
-								}
-								
-							});
-						}
-						
-					});
-				}
-			}));
 			
 			groupSubMenu = new MenuBar(true);
 			groupSubMenu.setFocusOnHoverEnabled(true);
@@ -279,8 +259,8 @@ public class ContactView extends Composite {
 	
 	private ContactViewGroup ensureGroup(final String groupName,final String groupStyle)
 	{
-		if(groupsCashe.containsKey(groupName))
-			return groupsCashe.get(groupName);
+		if(groupsCache.containsKey(groupName))
+			return groupsCache.get(groupName);
 		
 		FlowPanel groupBody = new FlowPanel();
 		ContactViewGroup group;
@@ -288,7 +268,7 @@ public class ContactView extends Composite {
 			group = new ContactViewGroup(this,groupName,groupBody);
 		else
 			group = new ContactViewGroup(this,groupName,groupBody,groupStyle);
-		groupsCashe.put(groupName,group);
+		groupsCache.put(groupName, group);
 		return group;
 	}
 	

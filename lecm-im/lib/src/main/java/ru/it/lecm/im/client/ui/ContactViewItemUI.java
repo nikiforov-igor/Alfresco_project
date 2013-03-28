@@ -44,27 +44,26 @@ public abstract class ContactViewItemUI extends Composite {
 			UiBinder<Widget, ContactViewItemUI> {
 	}
 
-//	@UiField Element avatar;
-//	@UiField Image avatarImg;
 	@UiField Element nameElement;
 	@UiField Element nameTextElement;
 	@UiField Element msgCounterTextElement;
 	@UiField Element statusIconElement;
 	@UiField Element statusTextElement;
 	@UiField FocusHTMLPanel mainWidget;
-	@UiField TextBox nameEditor;
-	
-	public interface NameEditListener
-	{
-		void onNameChange(final String name);
-	}
-	
-	private NameEditListener editListener = null;
-	
-	public ContactViewItemUI(final String id)
+
+    public void clearActive()
+    {
+        mainWidget.removeStyleName("active-contact-view-item");
+    }
+
+    public void setActive()
+    {
+        mainWidget.addStyleName("active-contact-view-item");
+    }
+
+    public ContactViewItemUI(final String id)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
-		nameEditor.setVisible(false);
 		mainWidget.getElement().setId(id);
 		mainWidget.addClickHandler(new ClickHandler()
 		{
@@ -73,101 +72,6 @@ public abstract class ContactViewItemUI extends Composite {
 				onItemClicked();
 			}
 		});
-		
-//		mainWidget.addContextMenuHandler(new ContextMenuHandler()
-//		{
-//			public void onContextMenu(ContextMenuEvent event)
-//			{
-//				event.stopPropagation();
-//				onConextMenu(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-//			}
-//
-//		});
-		
-//		mainWidget.addMouseOutHandler(new MouseOutHandler()
-//		{
-//			public void onMouseOut(MouseOutEvent event)
-//			{
-//				ContactViewItemUI.this.onMouseOut();
-//			}
-//		});
-//
-//		mainWidget.addMouseOverHandler(new MouseOverHandler()
-//		{
-//			public void onMouseOver(MouseOverEvent event)
-//			{
-//				ContactViewItemUI.this.onMouseOver();
-//			}
-//		});
-//
-//		avatarImg.addClickHandler(new ClickHandler()
-//		{
-//			public void onClick(ClickEvent event)
-//			{
-//				onAvatarClicked(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-//				event.stopPropagation();
-//			}
-//
-//		});
-//
-//		avatarImg.addMouseOverHandler(new MouseOverHandler()
-//		{
-//			public void onMouseOver(MouseOverEvent event)
-//			{
-//				onAvatarOver(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-//			}
-//		});
-//
-//		avatarImg.addMouseOutHandler(new MouseOutHandler()
-//		{
-//			public void onMouseOut(MouseOutEvent event) {
-//				onAvatarOut(event.getNativeEvent().getClientX(),event.getNativeEvent().getClientY());
-//			}
-//		});
-//
-//		avatarImg.addErrorHandler(new ErrorHandler(){
-//			public void onError(ErrorEvent event) {
-//				avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
-//			}
-//		});
-//		avatarImg.setUrl(GWT.getModuleBaseURL()+"images/alf_chat_userpic_25.png");
-		
-//		nameEditor.addKeyUpHandler(new KeyUpHandler()
-//		{
-//			public void onKeyUp(KeyUpEvent event)
-//			{
-//				if(event.getNativeKeyCode() == 13)
-//				{
-//					String newName = nameEditor.getValue();
-//					newName = newName==null?"":newName;
-//					newName= newName.equals("") ?nameTextElement.getInnerText():newName;
-//					if(editListener !=null &&!newName.equals(nameTextElement.getInnerText()))
-//					{
-//						editListener.onNameChange(nameEditor.getValue());
-//						nameTextElement.setInnerText(newName);
-//					}
-//					nameEditor.setVisible(false);
-//					nameTextElement.getStyle().setDisplay(Display.BLOCK);
-//					editListener = null;
-//
-//				}
-//				else if(event.getNativeKeyCode() == 27)
-//				{
-//					nameEditor.setFocus(false);
-//				}
-//			}
-//
-//		});
-//
-//		nameEditor.addBlurHandler(new BlurHandler()
-//		{
-//			public void onBlur(BlurEvent event)
-//			{
-//				nameEditor.setVisible(false);
-//				nameTextElement.getStyle().setDisplay(Display.BLOCK);
-//				editListener = null;
-//			}
-//		});
 	}
 	
 	public String getWidgetID()
@@ -202,50 +106,19 @@ public abstract class ContactViewItemUI extends Composite {
 			nameElement.removeClassName("names_nostatus");
 		statusTextElement.setInnerText(status);
 	}
-	
-	public void setAvatar(final String url)
-	{
-//        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-//            @Override
-//            public void execute() {
-//                avatarImg.setUrl(url);
-//            }
-//        });
 
-
-	}
-	
-	public void setStatusIcon(final String url)
+    public void setStatusIcon(final String url)
 	{
 		statusIconElement.setAttribute("src", url);
 	}
 	
 	public void setOffline(boolean b)
 	{
-//		if(b)
-//		{
-//			avatarImg.addStyleName("ijab-offline");
-//		}
-//		else
-//			avatarImg.removeStyleName("ijab-offline");
 	}
 
-	protected abstract void onConextMenu(int x,int y);
-	protected abstract void onItemClicked();
-	
-	private void onMouseOver()
-	{
-		mainWidget.addStyleName("ijab-contactview-item-hover");
-		mainWidget.removeStyleName("ijab-contactview-item-normal");
-	}
-	
-	private void onMouseOut()
-	{
-		mainWidget.addStyleName("ijab-contactview-item-normal");
-		mainWidget.removeStyleName("ijab-contactview-item-hover");
-	}
-	
-	public void setHighlight()
+    protected abstract void onItemClicked();
+
+    public void setHighlight()
 	{
 		mainWidget.addStyleName("ijab-contactview-item-highlight");
 	}
@@ -254,15 +127,4 @@ public abstract class ContactViewItemUI extends Composite {
 	{
 		mainWidget.removeStyleName("ijab-contactview-item-highlight");
 	}
-	
-	public void onNameEdit(NameEditListener listener)
-	{
-		nameEditor.setVisible(true);
-		nameEditor.setText(nameTextElement.getInnerText());
-		nameTextElement.getStyle().setDisplay(Display.NONE);
-		editListener = listener;
-		nameEditor.setFocus(true);
-	}
-
-
 }

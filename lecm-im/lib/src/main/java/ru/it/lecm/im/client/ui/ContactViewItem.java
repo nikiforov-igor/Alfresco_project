@@ -36,7 +36,7 @@ public class ContactViewItem extends ContactViewItemUI
 	private final ContactViewGroup group;
 	private XmppStatus.Status status = XmppStatus.Status.STATUS_OFFLINE;
 	private final XmppProfileListener profileListener;
-	public ContactViewItem(ContactView view,ContactViewGroup group,final RosterItem item,boolean onlineGroup) 
+	public ContactViewItem(ContactView view, ContactViewGroup group, final RosterItem item, boolean onlineGroup)
 	{
 		super(onlineGroup?buildOnlineWidgetItemIDFromJid(item.getJid()):buildWidgetIDFromJid(item.getJid()));
 		setStatusIcon(XmppStatus.statusIconFromStatus(status));
@@ -138,14 +138,6 @@ public class ContactViewItem extends ContactViewItemUI
 	{
 		return "ijabonlineuser_"+jid;
 	}
-
-
-	@Override
-	protected void onConextMenu(int x,int y) 
-	{
-		view.onItemContextMenu(this,x,y);
-	}
-
 
 
 }

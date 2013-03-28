@@ -10,7 +10,7 @@ if (window.Alfresco && window.Alfresco.constants && window.Alfresco.constants.US
     window.iJabPass = Alfresco.constants.USERNAME;
 }
 else{
-    window.iJabPass = 'q';// debug fallback
+    window.iJabPass = 'katamanov';// debug fallback
 }
 
 // Скрытие чата
@@ -64,15 +64,16 @@ var iJabConf =
     talkto_spam_repeat:2,
     xmpp:{
         domain:"localhost",
-        http_bind:"/share/proxy/alfresco/http-bind",
+        http_bind: window.Alfresco? "/share/proxy/alfresco/http-bind" : "http://127.0.0.1:7070/http-bind/" ,
         //http_bind:"http://localhost:7070/http-bind/",
+        //http_bind:"http://127.0.0.1:7070/http-bind/",
         host:"",
         port:5222,
         server_type:"ejabberd",
         auto_login:true,
         none_roster:false,
         get_roster_delay:false,
-        username_cookie_field:"JID",
+        username_cookie_field:"JID", // не используется
         token_cookie_field:"JIDPWD",
         anonymous_prefix:"",
         max_reconnect:3,

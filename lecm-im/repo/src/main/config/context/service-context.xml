@@ -30,9 +30,15 @@
 -->
 
 
-    <bean id="createIMUserPolicy" class="ru.it.lecm.im.repo.policy.CreateIMUserPolicy" init-method="init">
+    <!--<bean id="createIMUserPolicy" class="ru.it.lecm.im.repo.policy.CreateIMUserPolicy" init-method="init">-->
+        <!--<property name="policyComponent" ref="policyComponent"/>-->
+        <!--&lt;!&ndash;<property name="webFrameworkServiceRegistry" ref="webframework.service.registry"/>&ndash;&gt;-->
+        <!--<property name="orgstructureBean" ref="serviceOrgstructure"/>-->
+        <!--<property name="nodeService" ref="nodeService"/>-->
+    <!--</bean>-->
+
+    <bean id="createIMUserPolicy" class="ru.it.lecm.im.repo.policy.CreateProsodyUserPolicy" init-method="init">
         <property name="policyComponent" ref="policyComponent"/>
-        <!--<property name="webFrameworkServiceRegistry" ref="webframework.service.registry"/>-->
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>

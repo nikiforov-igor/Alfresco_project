@@ -91,6 +91,10 @@ ul, li {
     border: 1px solid #999999 !important;
 }
 
+.active-contact-view-item{
+    background-color: #00B0EB !important;
+}
+
 /*!* ijab UI v2.0.0pre * http://www.ijab.im/ * * Copyright(c) 2009 Hidden * * Date:* Revision:*/
 .ijab-Reference-standard {
     height: 5px;
@@ -1109,7 +1113,7 @@ margin: .3em .5em .3em;
 }
 
 .ijab-contactview-item-odd {
-    background: #ccc;
+    background: #eee;
 }
 
 .ijab-contactview-item-hover,
