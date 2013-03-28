@@ -852,7 +852,7 @@
       </permissionGroup>
 
       <!-- Рецензент -->
-      <permissionGroup name="LECM_BASIC_PG_Reviwer" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Reviewer" allowFullControl="true" expose="false" >
          <!--
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />

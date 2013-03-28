@@ -1,5 +1,18 @@
 package ru.it.lecm.security.beans;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
+
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.permissions.PermissionReference;
@@ -15,16 +28,13 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
-
-import javax.naming.AuthenticationException;
-import javax.naming.InvalidNameException;
-import java.util.*;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -52,7 +62,7 @@ public class LecmPermissionServiceImpl
 	 */
 	private boolean staticInheritParentPermissions = false;
 	private boolean dynamicInheritParentPermissions = true;
-	private LecmPermissionGroup defaultAccessOnGrant = findPermissionGroup(LecmPermissionGroup.PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
+	private LecmPermissionGroup defaultAccessOnGrant = findPermissionGroup( LecmPermissionGroup.PFX_LECM_ROLE + "Reader"); // право, которое сразу предоставляется по-умолчанию при выбаче БР
 
 	static String getMapInfo( Map<String, LecmPermissionGroup> map) {
 		final StringBuilder sb = new StringBuilder();
@@ -170,6 +180,48 @@ public class LecmPermissionServiceImpl
 		this.defaultAccessOnGrant = findPermissionGroup(permGroupName);
 	}
 
+
+	static String makeNamedKey(String permName) {
+		return (permName != null && permName.length() > 0)
+					? permName.trim().toUpperCase()
+					: "";
+	}
+
+	/**
+	 * Осканировать список прав, найти начинающиеся с указанного префикса
+	 * @param prefix
+	 * @param list
+	 * @param subjInfo пояснение по типу отрабатываемых прав (Permissions or Permission groups")
+	 * @return
+	 */
+	static List<PermissionReference> scanByPrefix(String prefix, Collection<PermissionReference> list, String subjInfo) {
+		final List<PermissionReference> result = new ArrayList<PermissionReference>();
+
+		final StringBuilder sb = new StringBuilder("\n");
+		if (list == null || list.isEmpty()) {
+			sb.append( String.format("(!?) No %s found\n", subjInfo));
+		} else {
+			sb.append( String.format( "%s scanned %d:\n\t(*) marker for LECM items\n", subjInfo, list.size()));
+			sb.append( "\t ============================================================\n" );
+			sb.append( String.format( "\t  [%s]\t%s\t%s\n", "*n", "Name", "Type" ));
+			sb.append( "\t ============================================================\n" );
+			int i = 0;
+			for (PermissionReference item: list) {
+				i++;
+				final String key = makeNamedKey( item.getName());
+				final boolean isLecm = key.startsWith(prefix.toUpperCase());
+				if (isLecm)
+					result.add(item);
+				// (!) отметка звёздочкой lecm-групп
+				sb.append( String.format( "\t%s[%d]\t%s\t%s\n", (isLecm ? "*" : "" ), i, item.getName(), item.getQName() ));
+			}
+			sb.append( "\t ============================================================\n" );
+			sb.append( String.format( "\t (*) Selected %s counter: %s\n", subjInfo, result.size() ));
+		}
+		logger.info( sb.toString() );
+		return result;
+	}
+
 	private Map<String, LecmPermissionImpl> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
 
 	/**
@@ -177,37 +229,15 @@ public class LecmPermissionServiceImpl
 	 */
 	private void initAllPermissions() {
 		if (this.allPermissions != null) return;
+
 		this.allPermissions = new HashMap<String, LecmPermissionImpl>();
-
-		final Set<PermissionReference> list = modelDAOService.getAllPermissions();
-		final StringBuilder sb = new StringBuilder("\n");
-		if (list == null || list.isEmpty()) {
-			sb.append("(!?) No atomic permissions found\n");
-		} else {
-			sb.append( String.format( "Permissions scanned %d:\n\t(*) marker for LECM items\n", list.size()));
-			sb.append( "\t ============================================================\n" );
-			sb.append( String.format( "\t  [%s]\t%s\t%s\n", "*nn", "Name", "Type" ));
-			sb.append( "\t ============================================================\n" );
-			int i = 0;
-			for (PermissionReference item: list) {
-				i++;
-				final String key = makePermissionKey(item.getName());
-				final boolean isLecm = key.startsWith(LecmPermission.PFX_LECM_PERMISSION.toUpperCase());
-				if (isLecm)
-					this.allPermissions.put( key, new LecmPermissionImpl(item.getName()) );
-				// отметка звёздочкой lecm-групп
-				sb.append( String.format( "\t%s[%d]\t%s\t%s\n", (isLecm ? "*" : "" ), i, item.getName(), item.getQName() ));
+		final List<PermissionReference> found = scanByPrefix( LecmPermission.PFX_LECM_PERMISSION, modelDAOService.getAllPermissions(), "Permissions");
+		if (found != null) {
+			for (PermissionReference item: found) {
+				final String key = makeNamedKey( item.getName());
+				this.allPermissions.put( key, new LecmPermissionImpl(item.getName()) );
 			}
-			sb.append( "\t ============================================================\n" );
 		}
-		logger.info( sb.toString() );
-	}
-
-
-	private String makePermissionKey(String permName) {
-		return (permName != null && permName.length() > 0)
-					? permName.trim().toUpperCase()
-					: "";
 	}
 
 
@@ -219,7 +249,7 @@ public class LecmPermissionServiceImpl
 		if (allPermissions == null)
 			initAllPermissions(); // кешируем ...
 
-		final String key = makePermissionKey(lecmPermissionName);
+		final String key = makeNamedKey( lecmPermissionName);
 
 		// DONE: check via real list of permissions
 		final LecmPermission result = 
@@ -243,34 +273,13 @@ public class LecmPermissionServiceImpl
 		if (this.allGroups != null) return;
 		this.allGroups = new HashMap<String, LecmPermissionGroup>();
 
-		final Set<PermissionReference> list = modelDAOService.getAllPermissions(); // modelDAOService.getAllExposedPermissions();
-		final StringBuilder sb = new StringBuilder("\n");
-		if (list == null || list.isEmpty()) {
-			sb.append("(!?) No permission groups found\n");
-		} else {
-			sb.append( String.format( "Permission groups scanned %d:\n\t(*) marker for LECM items\n", list.size()));
-			sb.append( "\t ============================================================\n" );
-			sb.append( String.format( "\t  [%s]\t%s\t%s\n", "*nn", "Name", "Type" ));
-			sb.append( "\t ============================================================\n" );
-			int i = 0;
-			for (PermissionReference item: list) {
-				i++;
-				final String key = makePermissionGroupKey(item.getName());
-				final boolean isLecm = key.startsWith(LecmPermissionGroup.PFX_LECM_ROLE.toUpperCase());
-				if (isLecm)
-					this.allGroups.put( key, new LecmPermissionGroupImpl(item.getName()) );
-				// отметка звёздочкой lecm-групп
-				sb.append( String.format( "\t%s[%d]\t%s\t%s\n", (isLecm ? "*" : "" ), i, item.getName(), item.getQName() ));
+		final List<PermissionReference> found = scanByPrefix( LecmPermissionGroup.PFX_LECM_ROLE, modelDAOService.getAllPermissions(), "Permission groups");
+		if (found != null) {
+			for (PermissionReference item: found) {
+				final String key = makeNamedKey( item.getName());
+				this.allGroups.put( key, new LecmPermissionGroupImpl(item.getName()) );
 			}
-			sb.append( "\t ============================================================\n" );
 		}
-		logger.info( sb.toString() );
-	}
-
-	private String makePermissionGroupKey(String permGroupName) {
-		return (permGroupName != null && permGroupName.length() > 0)
-					? permGroupName.trim().toUpperCase()
-					: "";
 	}
 
 	@Override
@@ -281,7 +290,7 @@ public class LecmPermissionServiceImpl
 
 		// созданные кешируем для единообразия, со врменем можно будет 
 		// инициализировать список по данным xml-настроек permissionService.
-		final String key = makePermissionGroupKey(lecmGroupName);
+		final String key = makeNamedKey(lecmGroupName);
 		if (allGroups == null) {
 			if (this.modelDAOService == null) {
 				// not yet initialized
@@ -305,7 +314,8 @@ public class LecmPermissionServiceImpl
 	@Override
 	public Collection<LecmPermissionGroup> getPermGroups() {
 		initAllGroups();
-		return this.allGroups.values();
+		// return (LecmPermissionGroup[]) this.allGroups.values().toArray();
+		return Collections.unmodifiableCollection(this.allGroups.values());
 	}
 
 	@Override
@@ -510,7 +520,7 @@ public class LecmPermissionServiceImpl
 	 * интерфейса LecmPermissionService вместо многозначного String. 
 	 * Создание объектов типа см. LecmPermissionService.getPerm() 
 	 */
-	public class LecmPermissionGroupImpl
+	class LecmPermissionGroupImpl
 			extends PrefixedNameKeeper
 			implements LecmPermissionGroup
 	{
