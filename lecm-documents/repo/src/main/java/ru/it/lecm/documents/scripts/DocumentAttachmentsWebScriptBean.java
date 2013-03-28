@@ -3,11 +3,13 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.version.Version;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -61,5 +63,16 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 			return "Success delete";
 		}
 		return "Failure: node not found";
+	}
+
+	public Scriptable getAttachmentVersions(String nodeRef) {
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref) && this.documentAttachmentsService.isDocumentAttachment(ref)) {
+			Collection<Version> versions = this.documentAttachmentsService.getAttachmentVersions(ref);
+			if (versions != null) {
+				return createVersionScriptable(versions);
+			}
+		}
+		return null;
 	}
 }

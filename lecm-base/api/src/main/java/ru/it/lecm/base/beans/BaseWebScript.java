@@ -2,11 +2,14 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.jscript.ScriptVersion;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.Version;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -38,5 +41,17 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
         return Context.getCurrentContext().newArray(getScope(), results);
     }
 
-
+	/**
+	 * Возвращает массив версий, пригодный для использования в веб-скриптах
+	 *
+	 * @return Scriptable
+	 */
+	public Scriptable createVersionScriptable(Collection<Version> versions) {
+		Object[] results = new Object[versions.size()];
+		int i = 0;
+		for (Version version : versions) {
+			results[i++] = new ScriptVersion(version, serviceRegistry, getScope());
+		}
+		return Context.getCurrentContext().newArray(getScope(), results);
+	}
 }

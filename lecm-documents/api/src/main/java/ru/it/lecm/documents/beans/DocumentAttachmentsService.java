@@ -2,7 +2,9 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.Version;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,6 +36,13 @@ public interface DocumentAttachmentsService {
 	 * @param nodeRef Ссылка на вложение
 	 */
 	public void deleteAttachment(NodeRef nodeRef);
+
+	/**
+	 * Получение списка версий вложения
+	 * @param nodeRef Ссылка на вложение
+	 * @return Список версий
+	 */
+	public Collection<Version> getAttachmentVersions(NodeRef nodeRef);
 
 	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
 

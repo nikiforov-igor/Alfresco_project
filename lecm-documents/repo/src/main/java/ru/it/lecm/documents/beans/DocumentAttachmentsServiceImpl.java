@@ -8,6 +8,9 @@ import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.cmr.version.VersionHistory;
+import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -26,13 +29,18 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     private final static Logger logger = LoggerFactory.getLogger(DocumentAttachmentsServiceImpl.class);
 
     private DictionaryService dictionaryService;
+	private VersionService versionService;
     private final Object lock = new Object();
 
     public void setDictionaryService(DictionaryService dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
 
-    public NodeRef getRootFolder(final NodeRef documentRef) {
+	public void setVersionService(VersionService versionService) {
+		this.versionService = versionService;
+	}
+
+	public NodeRef getRootFolder(final NodeRef documentRef) {
         final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
 
         AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -148,5 +156,15 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	@Override
 	public void deleteAttachment(NodeRef nodeRef) {
 		nodeService.deleteNode(nodeRef);
+	}
+
+	@Override
+	public Collection<Version> getAttachmentVersions(NodeRef nodeRef) {
+		VersionHistory history = versionService.getVersionHistory(nodeRef);
+		if (history != null)
+		{
+			return history.getAllVersions();
+		}
+		return null;
 	}
 }

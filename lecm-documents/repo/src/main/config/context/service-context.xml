@@ -178,10 +178,11 @@
     </bean>
 
     <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"
-          depends-on="transactionService, nodeService">
+          depends-on="transactionService, nodeService, versionService">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+	    <property name="versionService" ref="versionService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
