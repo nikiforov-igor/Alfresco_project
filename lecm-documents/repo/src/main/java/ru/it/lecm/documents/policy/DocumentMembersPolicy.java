@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -13,6 +14,7 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -33,7 +35,7 @@ import java.util.Map;
  * Date: 12.03.13
  * Time: 16:54
  */
-public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssociationPolicy,
+public class DocumentMembersPolicy extends BaseBean implements NodeServicePolicies.OnCreateAssociationPolicy,
         NodeServicePolicies.OnUpdatePropertiesPolicy,
         NodeServicePolicies.OnDeleteAssociationPolicy,
         NodeServicePolicies.OnCreateNodePolicy {
@@ -47,6 +49,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
     private NotificationChannelBeanBase notificationActiveChannel;
     private AuthenticationService authService;
     private OrgstructureBean orgstructureService;
+    private ServiceRegistry serviceRegistry;
 
     // final public StdPermission DEFAULT_ACCESS = StdPermission.readonly;
     // private StdPermission grantAccess = DEFAULT_ACCESS;
@@ -55,7 +58,7 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
     private String grantDynaRoleCode = "BR_MEMBER";
     private LecmPermissionService lecmPermissionService;
-
+    private String documentLink = "/share/page/document";
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
@@ -90,6 +93,10 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
     }
 
     public String getGrantDynaRoleCode() {
@@ -240,7 +247,8 @@ public class DocumentMembersPolicy implements NodeServicePolicies.OnCreateAssoci
             NotificationUnit notification = new NotificationUnit();
             notification.setRecipientRef(employee);
             notification.setAutor(authService.getCurrentUserName());
-            notification.setDescription("Вы приглашены как новый участник в документ " + nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING));
+            notification.setDescription("Вы приглашены как новый участник в документ " +
+                    wrapperLink(serviceRegistry,document,nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(),documentLink));
             notificationActiveChannel.sendNotification(notification);
         }
     }

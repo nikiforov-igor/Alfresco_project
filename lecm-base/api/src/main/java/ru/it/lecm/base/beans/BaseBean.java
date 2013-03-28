@@ -1,34 +1,25 @@
 package ru.it.lecm.base.beans;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.ServiceFolder;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: AIvkin
@@ -307,4 +298,18 @@ public abstract class BaseBean implements InitializingBean {
 		final ServiceFolderStructureHelper serviceFolderStructureHelper = (ServiceFolderStructureHelper) repositoryStructureHelper;
 		return serviceFolderStructureHelper.getFolderRef (serviceFolders.get (folderId));
 	}
+
+    /**
+     * Оборачиваем узел в ссылку html страницы
+     * @param nodeRef
+     * @param description
+     * @param linkUrl
+     * @return
+     */
+    public String wrapperLink(ServiceRegistry serviceRegistry, NodeRef nodeRef, String description, String linkUrl) {
+        SysAdminParams params = serviceRegistry.getSysAdminParams();
+        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
+                + description + "</a>";
+    }
 }
