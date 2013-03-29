@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -120,6 +121,7 @@ public class BPMNGenerator {
 			}
 
 			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statusesRef);
+            String version = GUID.generate();
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
@@ -128,7 +130,7 @@ public class BPMNGenerator {
 				if (type.equals(StatemachineEditorModel.TYPE_END_EVENT)) {
 					createEndEvent(process, status.getChildRef(), statusName, statusVar, stateMachine);
 				} else if (type.equals(StatemachineEditorModel.TYPE_STATUS)) {
-					createStateTask(process, status.getChildRef(), statusName, statusVar);
+					createStateTask(process, status.getChildRef(), statusName, statusVar, version);
 				}
 			}
 
@@ -145,7 +147,8 @@ public class BPMNGenerator {
 		return new ByteArrayInputStream(baos.toByteArray());
 	}
 
-	private void createStateTask(Element process, NodeRef status, String statusName, String statusVar) {
+	private void createStateTask(Element process, NodeRef status, String statusName, String statusVar, String version) {
+
 		//create status
 		Element statusTask = doc.createElement("userTask");
 		statusTask.setAttribute("id", statusVar);
@@ -233,10 +236,9 @@ public class BPMNGenerator {
             }
         }
 
-        String statusUUID = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_STATUS_UUID);
 		attribute = doc.createElement("lecm:attribute");
-		attribute.setAttribute("name", "uuid");
-		attribute.setAttribute("value", statusUUID);
+		attribute.setAttribute("name", "version");
+		attribute.setAttribute("value", version);
 		setStatusAction.appendChild(attribute);
 		start.appendChild(setStatusAction);
 

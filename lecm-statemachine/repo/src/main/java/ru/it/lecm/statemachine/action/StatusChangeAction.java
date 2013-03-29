@@ -8,7 +8,6 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
@@ -31,9 +30,9 @@ public class StatusChangeAction extends StateMachineAction {
 
 	private String status = "UNKNOWN";
 	private String processId = null;
-	private NodeRef folder = null;
-	private String uuid = null;
+	private String version = null;
 	private boolean forDraft = false;
+	private NodeRef statusFolder = null;
 	private Map<String, LecmPermissionGroup> staticPrivileges = new HashMap<String, LecmPermissionGroup>();
 	private Map<String, LecmPermissionGroup> dynamicPrivileges = new HashMap<String, LecmPermissionGroup>();
 	private Set<StateField> fields = new HashSet<StateField>();
@@ -49,9 +48,8 @@ public class StatusChangeAction extends StateMachineAction {
 			String value = attribute.attribute("value");
 			if ("status".equalsIgnoreCase(name)) {
 				status = value;
-			} else if ("uuid".equalsIgnoreCase(name)) {
-				uuid = value;
-				folder = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, uuid);
+			} else if ("version".equalsIgnoreCase(name)) {
+				version = value;
 			} else if ("forDraft".equalsIgnoreCase(name)) {
 				forDraft = Boolean.parseBoolean(value);
 			}
@@ -81,27 +79,8 @@ public class StatusChangeAction extends StateMachineAction {
         //Если начальный статус, то папки для него не требуется
 		if (forDraft) return;
 
-		// NOTE: теперь этот метод не нужно вызывать, т.к. права задаются во время смены статуса
-		// getLecmAclBuilderBean().regAccessMatrix(processId, status, permissions);
-
 		//Проверяем существует ли папка для этого статуса
 		NodeService nodeService = getServiceRegistry().getNodeService();
-		if (nodeService.exists(folder)) {
-			//если существует проверяем не переименован ли статус
-			String name = (String) nodeService.getProperty(folder, ContentModel.PROP_NAME);
-			if (!name.equals(status)) {
-				//Если изменился - переименовываем
-				//проверяем наличие такого же названия статуса
-				NodeRef processFolder = nodeService.getPrimaryParent(folder).getParentRef();
-				checkStatus(processFolder);
-				//Переименовываем
-				try {
-					getServiceRegistry().getFileFolderService().rename(folder, status);
-				} catch (Exception e) {
-					//logger.error("Set Status Exception", e);
-				}
-			}
-		} else {
 			//Если статус не существует проверяем всю структуру папок
 
 			NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
@@ -113,14 +92,20 @@ public class StatusChangeAction extends StateMachineAction {
 				processFolder = createFolder(documents, processId);
 			}
 
-			//Существует ли папка с именем нового статуса, если существует переименовываем
-			checkStatus(processFolder);
+            NodeRef versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
 
-			//Создаем папку статуса
-			createFolder(processFolder, status, uuid);
-            //Установка статических прав на папку статуса
-            execBuildInTransactStatic(folder, staticPrivileges);
-        }
+            if (versionFolder == null) {
+                versionFolder = createFolder(processFolder, version);
+            }
+
+            //Создаем папку статуса
+            statusFolder = nodeService.getChildByName(versionFolder, ContentModel.ASSOC_CONTAINS, status);
+            if (statusFolder == null) {
+                statusFolder = createFolder(versionFolder, status);
+                //Установка статических прав на папку статуса
+                execBuildInTransactStatic(statusFolder, staticPrivileges);
+
+            }
 
 	}
 
@@ -157,7 +142,7 @@ public class StatusChangeAction extends StateMachineAction {
 		//Перемещаем в нужную папку
 		for (ChildAssociationRef child : children) {
 			String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-			nodeService.moveNode(child.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+			nodeService.moveNode(child.getChildRef(), statusFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 		}
 
 		// Установка динамических ролей для файла
@@ -168,19 +153,6 @@ public class StatusChangeAction extends StateMachineAction {
     public Set<StateField> getFields() {
         return fields;
     }
-
-    private void checkStatus(NodeRef processFolder) {
-		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef existsFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, status);
-		if (existsFolder != null && !existsFolder.equals(folder)) {
-			try {
-				getServiceRegistry().getFileFolderService().rename(existsFolder, existsFolder.getId());
-			} catch (Exception e) {
-				//logger.error("Set Status Exception", e);
-				//throw new AlfrescoRuntimeException("Set Status Exception", e);
-			}
-		}
-	}
 
 	/**
 	 * Инициализирует список ролей из элемента role
@@ -208,7 +180,7 @@ public class StatusChangeAction extends StateMachineAction {
 				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
 					public Object execute() throws Throwable {
-						permissionsBuilder.rebuildStaticACL(folder, permissions);
+						permissionsBuilder.rebuildStaticACL(statusFolder, permissions);
 						return null;
 					}
 				}, false, true);
