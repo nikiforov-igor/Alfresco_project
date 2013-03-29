@@ -92,6 +92,7 @@ public class StatusChangeAction extends StateMachineAction {
 				processFolder = createFolder(documents, processId);
 			}
 
+        if (version != null) {
             NodeRef versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
 
             if (versionFolder == null) {
@@ -106,7 +107,7 @@ public class StatusChangeAction extends StateMachineAction {
                 execBuildInTransactStatic(statusFolder, staticPrivileges);
 
             }
-
+        }
 	}
 
     public boolean isForDraft() {
