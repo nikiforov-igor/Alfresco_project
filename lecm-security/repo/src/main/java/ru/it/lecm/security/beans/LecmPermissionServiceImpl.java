@@ -1,18 +1,5 @@
 package ru.it.lecm.security.beans;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.naming.AuthenticationException;
-import javax.naming.InvalidNameException;
-
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -26,13 +13,17 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-
+import org.springframework.extensions.surf.util.I18NUtil;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
+import java.util.*;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -234,7 +225,7 @@ public class LecmPermissionServiceImpl
 		if (this.allPermissions != null) return;
 
 		this.allPermissions = new HashMap<String, LecmPermission>();
-		final List<PermissionReference> found = scanByPrefix( LecmPermission.PFX_LECM_PERMISSION, modelDAOService.getAllPermissions(), "Permissions");
+		final List<PermissionReference> found = scanByPrefix(LecmPermission.PFX_LECM_PERMISSION, modelDAOService.getAllPermissions(), "Permissions");
 		if (found != null) {
 			for (PermissionReference item: found) {
 				final String key = makeNamedKey( item.getName());
@@ -557,7 +548,13 @@ public class LecmPermissionServiceImpl
 		public LecmPermissionGroupImpl(String fullLecmPermGroupName) {
 			super(LecmPermissionGroup.PFX_LECM_ROLE, fullLecmPermGroupName);
 		}
-	}
+
+        @Override
+        public String getLabel() {
+            String message = I18NUtil.getMessage("lecm.roles." + getName());
+            return message == null ? getName() : message;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
 
 	/**
 	 * Представлене для отдельного lecm-разрешения системы.

@@ -8,7 +8,7 @@ var result = [];
 for each (var privilegy in privileges) {
     result.push({
         value: privilegy.getName(),
-        label: privilegy.getName()
+        label: privilegy.getLabel()
     });
 }
 
