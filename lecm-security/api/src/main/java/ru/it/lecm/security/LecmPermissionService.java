@@ -81,11 +81,19 @@ public interface LecmPermissionService {
 	/**
 	 * Определение наличия конкретной привилегии у текущего сотрудника относительно узла (документа, папки)
 	 * @param permission  Привелегия
-	 * @param node Ссылка на элемент
+	 * @param node Ссылка на узел
 	 * @return true, если указанная привилегия permission имеется у текущего пользователя
 	 */
 	boolean hasPermission(String permission, NodeRef node);
 
+	/**
+	 * Проверка наличия привелегии у текущего сотрудника относительно узла (документа, папки).
+	 * Если нет привелегии, выбрасывается AlfrescoRuntimeException
+	 *
+	 * @param permission Привелегия
+	 * @param node Ссылка на узел
+	 */
+	public void checkPermission(final String permission, final NodeRef node);
 
 	/**
 	 * Добавление участника к узлу с заданной группой привилегий 

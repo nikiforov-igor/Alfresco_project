@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.naming.AuthenticationException;
 import javax.naming.InvalidNameException;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.permissions.PermissionReference;
@@ -373,6 +374,13 @@ public class LecmPermissionServiceImpl
 		logger.info( String.format( "hasPermission( user '%s', perm '%s', node {%s}) is %s", userLogin, permission, node, result));
 
 		return result;
+	}
+
+	@Override
+	public void checkPermission(final String permission, final NodeRef node) {
+		if (!hasPermission(permission, node)) {
+			throw new AlfrescoRuntimeException("Does not have permission '" + permission + "' for node " + node);
+		}
 	}
 
 	@Override
