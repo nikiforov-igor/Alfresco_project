@@ -1,5 +1,5 @@
 function main() {
-    var hasPerm = hasPermission(args["nodeRef"]);
+    var hasPerm = hasViewMembersPermission(args["nodeRef"]);
     if(hasPerm){
         var url = "/lecm/document/api/getMembersFolder?nodeRef=" + args["nodeRef"];
         var json = remote.connect("alfresco").get(url);
@@ -10,8 +10,8 @@ function main() {
     }
 }
 
-function hasPermission(nodeRef) {
-    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=lecmPerm_MemberList';
+function hasViewMembersPermission(nodeRef) {
+    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_MemberList';
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         return false;

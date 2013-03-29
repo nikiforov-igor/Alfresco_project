@@ -3,21 +3,24 @@
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
 <#assign docRef= nodeRef/>
+<#assign hasAddPermission = (mayAdd?? && mayAdd)/>
 <div id="${el}" class="members-list">
     <table class="members-title">
         <tr>
             <td class="members-name">
             ${msg("label.document.members")}
             </td>
-            <td class="members-add">
-                <div class="member-add">
+            <#if hasAddPermission>
+                <td class="members-add">
+                    <div class="member-add">
                    <span id="${el}-addMember-button" class="yui-button yui-push-button">
                       <span class="first-child">
                          <button type="button" title="${msg("button.member.add")}">${msg("button.add.member")}</button>
                       </span>
                    </span>
-                </div>
-            </td>
+                    </div>
+                </td>
+            </#if>
         </tr>
     </table>
     <hr>
