@@ -15,6 +15,7 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
@@ -24,6 +25,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -58,10 +60,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static OrgstructureBean orgstructureBean;
     private static DocumentMembersService documentMembersService;
     private static BusinessJournalService businessJournalService;
-
+    private static TransactionService transactionService;
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
     private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
+
+    public void setTransactionService(TransactionService transactionService) {
+        StateMachineHelper.transactionService = transactionService;
+    }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         StateMachineHelper.serviceRegistry = serviceRegistry;
@@ -608,7 +614,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private List<String> executeTransitionAction(NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+    private List<String> executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
         List<String> errors = new ArrayList<String>();
         List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
         FinishStateWithTransitionAction.NextState nextState = null;
@@ -649,8 +655,19 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
                     //Добавляем участников к документу.
                     List<NodeRef> assignees = getAssigneesForWorkflow(dependencyExecution);
-                    for (NodeRef assignee : assignees) {
-                        documentMembersService.addMember(document, assignee, null);
+                    for (final NodeRef assignee : assignees) {
+                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                            @Override
+                            public NodeRef doWork() throws Exception {
+                                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                                    @Override
+                                    public NodeRef execute() throws Throwable {
+                                        return documentMembersService.addMember(document, assignee, null);
+                                    }
+                                });
+                            }
+                        });
                     }
 
                 } else {
@@ -663,7 +680,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return errors;
     }
 
-    private List<String> executeUserWorkflowAction(NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+    private List<String> executeUserWorkflowAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
         List<String> errors = new ArrayList<String>();
         StateMachineHelper helper = new StateMachineHelper();
         List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
@@ -699,8 +716,19 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
                 //Добавляем участников к документу.
                 List<NodeRef> assignees = helper.getAssigneesForWorkflow(dependencyExecution);
-                for (NodeRef assignee : assignees) {
-                    documentMembersService.addMember(document, assignee, null);
+                for (final NodeRef assignee : assignees) {
+                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                        @Override
+                        public NodeRef doWork() throws Exception {
+                            RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                            return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                                @Override
+                                public NodeRef execute() throws Throwable {
+                                    return documentMembersService.addMember(document, assignee, null);
+                                }
+                            });
+                        }
+                    });
                 }
             }
         } else {
@@ -708,5 +736,4 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return errors;
     }
-
 }

@@ -6,28 +6,27 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ import java.util.Map;
  * Date: 15.03.13
  * Time: 15:38
  */
-public class DocumentAttachmentsPolicy implements
+public class DocumentAttachmentsPolicy extends BaseBean implements
 		NodeServicePolicies.BeforeDeleteNodePolicy,
 		NodeServicePolicies.OnUpdatePropertiesPolicy,
 		VersionServicePolicies.AfterCreateVersionPolicy,
@@ -45,7 +44,6 @@ public class DocumentAttachmentsPolicy implements
     final protected Logger logger = LoggerFactory.getLogger(DocumentAttachmentsPolicy.class);
 
     private PolicyComponent policyComponent;
-    private NodeService nodeService;
     private DocumentMembersService documentMembersService;
     private DocumentAttachmentsService documentAttachmentsService;
     private BusinessJournalService businessJournalService;
@@ -57,10 +55,6 @@ public class DocumentAttachmentsPolicy implements
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
     }
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
@@ -96,11 +90,21 @@ public class DocumentAttachmentsPolicy implements
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
-        NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
+        final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
         if (document != null) {
             // добавляем пользователя добавившего вложение как участника
-            documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
-
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+                        }
+                    });
+                }
+            });
 	        if (!childAssocRef.getQName().getLocalName().contains("(Рабочая копия)")) {
 
 		        List<String> objects = new ArrayList<String>(1);
@@ -112,11 +116,21 @@ public class DocumentAttachmentsPolicy implements
 
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
-        NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
+        final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
             // добавляем пользователя удалившего вложения как участника
-            documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
-
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+                        }
+                    });
+                }
+            });
 	        if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 				List<String> objects = new ArrayList<String>(1);
 				objects.add(nodeRef.toString());

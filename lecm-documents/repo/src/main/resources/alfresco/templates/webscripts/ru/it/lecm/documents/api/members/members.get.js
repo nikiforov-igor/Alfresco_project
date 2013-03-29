@@ -2,11 +2,10 @@ var documentRef = args['nodeRef'];
 var skipItemsCount = parseInt(args["skipCount"]);
 var loadItemsCount = parseInt(args["loadCount"]);
 
-var hasPermission = lecmPermission.hasPermission(documentRef, "_lecmPerm_MemberList");
-if (hasPermission) {
+try {
     var members = documentMembers.getMembers(documentRef, skipItemsCount, loadItemsCount);
     var membersArray = [];
-    for (var index in members){
+    for (var index in members) {
         var member = members[index];
         var employee = member.assocs["lecm-doc-members:employee-assoc"][0];
         var mainJob = orgstructure.getMainJob(employee.nodeRef);
@@ -23,4 +22,7 @@ if (hasPermission) {
     }
     model.members = membersArray;
     model.next = documentMembers.getMembers(documentRef, skipItemsCount + loadItemsCount, 1);
+} catch (e) {
+
 }
+

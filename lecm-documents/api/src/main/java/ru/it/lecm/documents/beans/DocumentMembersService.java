@@ -28,8 +28,6 @@ public interface DocumentMembersService {
 
     List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems);
 
-    void removeMember(NodeRef document, NodeRef employee);
-
     boolean isDocumentMember (NodeRef document, NodeRef employee);
 
     String generateMemberNodeName(NodeRef member);

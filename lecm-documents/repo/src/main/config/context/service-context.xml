@@ -206,6 +206,7 @@
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="lecmObjectsService" ref="lecmObjectsService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
     <bean id="documentMembersScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentMembersWebScriptBean"
@@ -248,6 +249,7 @@
         <property name="grantDynaRoleCode" value="BR_MEMBER"/>
         <property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+        <property name="transactionService" ref="transactionService"/>
     </bean>
 
     <bean id="document.businessJournalDictionaryBootstrap"
@@ -269,7 +271,7 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-    <bean id="documentAttachmentsPolicy" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
+    <bean id="documentAttachmentsPolicy" parent="baseBean" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
           init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
@@ -293,6 +295,7 @@
 		    <ref bean="documentAttachmentsService"/>
 	    </property>
         <property name="substituteService" ref="substitudeService"/>
+        <property name="transactionService" ref="transactionService"/>
     </bean>
 
     <bean id="documentFrequenciesPolicy" class="ru.it.lecm.documents.policy.DocumentFrequencyPolicy"

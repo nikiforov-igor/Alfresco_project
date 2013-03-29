@@ -3,7 +3,6 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
-import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -17,6 +16,7 @@ import org.alfresco.util.GUID;
 import org.alfresco.util.Pair;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,9 +33,19 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     public static final int MAX_ITEMS = 1000;
     private LecmObjectsService lecmObjectsService;
+    private LecmPermissionService lecmPermissionService;
+
+    public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
+        this.lecmObjectsService = lecmObjectsService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 
     @Override
     public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
+        lecmPermissionService.checkPermission("_lecmPerm_MemberAdd", document);
         final NodeRef documentMembersFolder = getMembersFolderRef(document);
         if (employeeRef != null && !isDocumentMember(document, employeeRef)) {
             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
@@ -96,6 +106,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     @Override
     public List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems) {
+        lecmPermissionService.checkPermission("_lecmPerm_MemberList", document);
         List<NodeRef> results = new ArrayList<NodeRef>();
         List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
         sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
@@ -119,14 +130,6 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     @Override
-    public void removeMember(NodeRef document, NodeRef employee) {
-        NodeRef docMember = getDocumentMember(document, employee);
-        if (docMember != null) {
-            nodeService.removeChild(getMembersFolderRef(document), docMember);
-        }
-    }
-
-    @Override
     public boolean isDocumentMember(NodeRef document, NodeRef employee) {
         return getDocumentMember(document, employee) != null;
     }
@@ -146,13 +149,5 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             }
         }
         return null;
-    }
-
-    public LecmObjectsService getLecmObjectsService() {
-        return lecmObjectsService;
-    }
-
-    public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
-        this.lecmObjectsService = lecmObjectsService;
     }
 }

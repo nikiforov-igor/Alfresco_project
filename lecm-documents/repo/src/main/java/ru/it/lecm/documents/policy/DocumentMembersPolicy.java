@@ -5,11 +5,12 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -58,10 +59,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
     }
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -251,15 +248,37 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
     public void onCreateDocument(ChildAssociationRef childAssocRef) {
         // добаваление сотрудника, создавшего документ в участники
-        NodeRef document = childAssocRef.getChildRef();
-        String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
-        documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName), null);
+        final NodeRef document = childAssocRef.getChildRef();
+        final String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        return documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName), null);
+                    }
+                });
+            }
+        });
     }
 
     public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         // добаваление сотрудника, изменившего документ в участники
-            String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-            documentMembersService.addMember(nodeRef, orgstructureService.getEmployeeByPerson(userName), null);
+        final String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+        final NodeRef docRef = nodeRef;
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), null);
+                    }
+                });
+            }
+        });
     }
-
 }

@@ -21,8 +21,8 @@ function hasAddMemberPermission(nodeRef) {
     if (result.status != 200) {
         return false;
     }
-    var permObj = eval('(' + result + ')');
-    return (("" + permObj.hasPermission) ==  "true");
+    var permission = eval('(' + result + ')');
+    return (("" + permission) ==  "true");
 }
 
 
