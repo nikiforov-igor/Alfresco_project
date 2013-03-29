@@ -261,6 +261,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.regnumbers</groupId>
+            <artifactId>lecm-regnumbers-repo</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>

@@ -198,6 +198,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+		 <dependency>
+            <groupId>ru.it.lecm.regnumbers</groupId>
+            <artifactId>lecm-regnumbers-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
