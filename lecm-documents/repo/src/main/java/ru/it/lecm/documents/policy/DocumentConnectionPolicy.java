@@ -67,9 +67,9 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef documentRef = nodeAssocRef.getTargetRef();
-		if (!nodeService.hasAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS)){
-            Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
-            aspectValues.put(DocumentConnectionService.PROP_CONNECTIONS_WITH_LIST, "");
+		if (!nodeService.hasAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS)) {
+			Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
+			aspectValues.put(DocumentConnectionService.PROP_CONNECTIONS_WITH_LIST, "");
 
 			nodeService.addAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS, aspectValues);
 		}
@@ -77,15 +77,13 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	@Override
 	public void beforeDeleteNode(NodeRef nodeRef) {
-
-
 		List<AssociationRef> connectedDocumentList = nodeService.getTargetAssocs(nodeRef, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
 		if (connectedDocumentList.size() == 1) {
 			NodeRef connectedDocument = connectedDocumentList.get(0).getTargetRef();
 
 			List<AssociationRef> assocs = nodeService.getSourceAssocs(connectedDocument, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
 			int size = 0;
-			for (AssociationRef assocRef: assocs) {
+			for (AssociationRef assocRef : assocs) {
 				if (!assocRef.getSourceRef().getStoreRef().equals(StoreRef.STORE_REF_ARCHIVE_SPACESSTORE)) {
 					size++;
 				}
@@ -101,6 +99,8 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 			}
 
 			if (primaryDocument != null && connectedDocument != null) {
+				this.lecmPermissionService.checkPermission("_lecmPerm_LinksDelete", primaryDocument);
+
 				final List<String> objects = new ArrayList<String>(1);
 				objects.add(connectedDocument.toString());
 
@@ -135,6 +135,6 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	@Override
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
-		int a = 1 + 2;
+		//todo добавть проверку прав на создание связи
 	}
 }

@@ -3,7 +3,10 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-    model.connections = getConnections(model.nodeRef);
+	var hasPerm = hasViewConnectionsPermission(model.nodeRef);
+	if (hasPerm) {
+		model.connections = getConnections(model.nodeRef);
+	}
 }
 
 function getConnections(nodeRef, defaultValue) {
@@ -16,6 +19,16 @@ function getConnections(nodeRef, defaultValue) {
         AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
     }
     return eval('(' + result + ')');
+}
+
+function hasViewConnectionsPermission(nodeRef) {
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksView';
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var permObj = eval('(' + result + ')');
+	return (("" + permObj.hasPermission) ==  "true");
 }
 
 main();
