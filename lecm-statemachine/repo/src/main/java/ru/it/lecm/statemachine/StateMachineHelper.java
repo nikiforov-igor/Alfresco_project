@@ -501,12 +501,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return getDocumentTasks(nodeRef, true);
     }
 
-    @Override
-    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
-        List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, true);
-        return filterWorkflows(activeWorkflows);
-    }
-
     public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
@@ -526,6 +520,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         return result;
+    }
+
+    @Override
+    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
+        return getActiveWorkflows(nodeRef);
+    }
+
+    public List<WorkflowInstance> getActiveWorkflows(NodeRef nodeRef) {
+        return getWorkflows(nodeRef, true);
+    }
+
+    public List<WorkflowInstance> getCompletedWorkflows(NodeRef nodeRef) {
+        return getWorkflows(nodeRef, false);
+    }
+
+    private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
+        List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
+        return filterWorkflows(activeWorkflows);
     }
 
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
@@ -573,7 +585,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    public List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
+    private List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
         List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
         NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
         for (WorkflowInstance instance : workflows) {

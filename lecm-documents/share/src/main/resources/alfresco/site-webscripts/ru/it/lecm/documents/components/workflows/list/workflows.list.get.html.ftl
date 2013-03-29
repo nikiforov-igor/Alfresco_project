@@ -11,7 +11,7 @@
                 <div class="workflow-task-item">
                     <div class="workflow-date">${workflow.startDate}</div>
                     <div class="list-workflow-description">
-                        <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${workflow.description}</a>
+                        <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${workflow.definition}</a>
                     </div>
                 </div>
             </#list>
@@ -24,7 +24,7 @@
                 <div class="workflow-task-item">
                     <div class="workflow-date">${workflow.startDate}</div>
                     <div class="list-workflow-description">
-                        <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${workflow.description}</a>
+                        <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${workflow.definition}</a>
                     </div>
                 </div>
             </#list>

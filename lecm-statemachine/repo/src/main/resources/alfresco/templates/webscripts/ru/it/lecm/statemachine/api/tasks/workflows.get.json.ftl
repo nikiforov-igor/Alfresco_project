@@ -6,11 +6,16 @@
 		{
 			"id": "${workflow.id}",
 			"description": "${workflow.description!''}",
+			"definition": <#if workflow.definition?exists>
+                    "${workflow.definition.title!''}",
+                <#else>
+                    ""
+                </#if>
             "startDate": <#if workflow.startDate?exists>
-                "${workflow.startDate?date}"
-            <#else>
-                " - "
-            </#if>
+                    "${workflow.startDate?date}"
+                <#else>
+                    " - "
+                </#if>
         }<#if workflow_has_next>,</#if>
 		</#list>
 	],
@@ -19,11 +24,16 @@
 		{
 			"id": "${workflow.id}",
             "description": "${workflow.description!''}",
+            "definition": <#if workflow.definition?exists>
+                    "${workflow.definition.title!''}",
+                <#else>
+                    ""
+                </#if>
             "startDate": <#if workflow.startDate?exists>
-                "${workflow.startDate?date}"
-            <#else>
-                " - "
-            </#if>
+                    "${workflow.startDate?date}"
+                <#else>
+                    " - "
+                </#if>
         }<#if workflow_has_next>,</#if>
 		</#list>
 	]

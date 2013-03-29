@@ -3,7 +3,6 @@ package ru.it.lecm.statemachine.script;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -86,16 +85,14 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
         NodeRef nodeRef = node.getNodeRef();
         BPMState state = BPMState.getValue(stateParam);
-
-        WorkflowService workflowService = serviceRegistry.getWorkflowService();
         WorkflowListBean result = new WorkflowListBean();
 
-        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
-        result.setActiveWorkflows(stateMachineHelper.filterWorkflows(activeWorkflows), activeWorkflowsLimit);
+        List<WorkflowInstance> activeWorkflows = stateMachineHelper.getActiveWorkflows(nodeRef);
+        result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
 
         if (state == BPMState.ALL) {
-            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
-            result.setCompletedWorkflows(stateMachineHelper.filterWorkflows(completedWorkflows));
+            List<WorkflowInstance> completedWorkflows = stateMachineHelper.getCompletedWorkflows(nodeRef);
+            result.setCompletedWorkflows(completedWorkflows);
         }
 
         return result;

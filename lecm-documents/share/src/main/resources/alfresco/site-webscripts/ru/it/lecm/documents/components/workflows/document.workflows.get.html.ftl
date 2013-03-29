@@ -16,15 +16,15 @@
 
     <div id="${el}-formContainer">
         <div class="right-workflows-container">
-            <#assign maxDescriptionLength = 30>
+            <#assign maxDefinitionLength = 30>
             <#list data.activeWorkflows as workflow>
-                <#if (workflow.description?length <= maxDescriptionLength)>
-                    <#assign description = workflow.description>
+                <#if (workflow.definition?length <= maxDefinitionLength)>
+                    <#assign definition = workflow.definition>
                 <#else>
-                    <#assign description = workflow.description?substring(0, maxDescriptionLength - 3)?right_pad(maxDescriptionLength, ".")>
+                    <#assign definition = workflow.definition?substring(0, maxDefinitionLength - 3)?right_pad(maxDefinitionLength, ".")>
                 </#if>
                 <div class="right-workflow">
-                    <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${description}</a>
+                    <a href="${url.context}/page/workflow-details?workflowId=${workflow.id}">${definition}</a>
                 </div>
             </#list>
         </div>
