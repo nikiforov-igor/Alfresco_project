@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.action.listener;
 
-import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -86,11 +85,11 @@ public class EndWorkflowEvent implements ExecutionListener {
 			List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
 			boolean isTrasitionValid = false;
 
-            Map<String, Object> statemachineVariables;
-            try {
+            Map<String, Object> statemachineVariables = new HashMap<String, Object>();
+            //необходима проверка существования execution машины состояний,
+            // иначе происходит ActivitiException и таск не закрывается, даже при перехвате ActivitiException
+            if (helper.getExecution(statemachineId) != null) {
                 statemachineVariables = helper.getVariables(statemachineId);
-            } catch (ActivitiException ae) {
-                statemachineVariables = new HashMap<String, Object>();
             }
 
             Expression expression = new Expression(document, statemachineVariables, StateMachineHelper.getServiceRegistry());
