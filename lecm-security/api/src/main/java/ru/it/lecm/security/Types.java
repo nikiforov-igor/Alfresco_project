@@ -390,13 +390,15 @@ public final class Types {
 	}
 
 	/**
-	 * Индикатор индивидуальной роли Сотрудника в документе.
+	 * Индикатор Индивидуальной роли Сотрудника в документе.
 	 */
 	public static class SGSpecialUserRole extends SGPositionWithUser 
 	{
 		public SGSpecialUserRole(String employeeId, NodeRef nodeRef,
 				LecmPermissionGroup permissionGroup, String userLogin) {
-			super( SGKind.SG_SPEC, permissionGroup.getName(), /*displayInfo*/nodeRef.getId(), employeeId, userLogin);
+			super( SGKind.SG_SPEC, permissionGroup.getName()
+					, /*displayInfo*/ String.format("user <%s> access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен 
+					, employeeId, userLogin);
 		}
 
 		public SGSpecialUserRole(String employeeId, NodeRef nodeRef, LecmPermissionGroup permissionGroup) {
@@ -409,6 +411,12 @@ public final class Types {
 
 		public String getDocId() {
 			return super.getDisplayInfo();
+
+		}
+		@Override
+		public String getAlfrescoSuffix() {
+			// для Индивидуальной роли надо ввести id Сотрудника ...
+			return super.getAlfrescoSuffix() + SFX_DELIM + this.getUserId();
 		}
 	}
 

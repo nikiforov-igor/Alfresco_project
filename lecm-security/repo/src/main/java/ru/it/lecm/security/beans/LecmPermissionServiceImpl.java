@@ -362,7 +362,7 @@ public class LecmPermissionServiceImpl
 			logger.error( String.format( "Exception at hasPermission( user '%s', perm '%s', node {%s}):\n %s", userLogin, permission, node, ex.getMessage()), ex);
 		}
 
-		logger.info( String.format( "hasPermission( user '%s', perm '%s', node {%s}) is %s", userLogin, permission, node, result));
+		logger.debug( String.format( "hasPermission( user '%s', perm '%s', node {%s}) is %s", userLogin, permission, node, result));
 
 		return result;
 	}

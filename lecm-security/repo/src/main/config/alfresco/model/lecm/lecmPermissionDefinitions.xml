@@ -117,41 +117,130 @@
       <!-- ==================================================== -->
       <!-- LECM Groups of Permisssions                          -->
       <!-- ==================================================== -->
-      <permissionGroup name="lecmPerm_DocCreate" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_DocDelete" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_AttrList" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_DocCreate" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_AttrEdit" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_ContentList" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_ContentAdd" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_DocDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteNode" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_ContentView" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_ContentAddVer" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_ContentDelete" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_AttrList" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadProperties" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_ContentCopy" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_WFEnumBP" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_WFTaskList" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_AttrEdit" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="WriteProperties" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_WFArtefactsBP" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_HistoryView" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_TagView" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_ContentList" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_TagCreate" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_TagDelete" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_LinksView" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_ContentAdd" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="LinkChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_LinksCreate" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_LinksDelete" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_CommentCreate" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_ContentView" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadContent"/>
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_CommentView" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_CommentDelete" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_ActionExec" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_ContentAddVer" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+		</permissionGroup>
 
-      <permissionGroup name="lecmPerm_MemberList" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_MemberAdd" expose="true" allowFullControl="false" />  
-      <permissionGroup name="lecmPerm_SetRate" expose="true" allowFullControl="false" />  
+		<permissionGroup name="lecmPerm_ContentDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteNode" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteChildren" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_ContentCopy" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadContent"/>
+			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="ReadChildren" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_WFEnumBP" expose="true" allowFullControl="false">
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_WFTaskList" expose="true" allowFullControl="false">
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_WFArtefactsBP" expose="true" allowFullControl="false">
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_HistoryView" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_TagView" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_TagCreate" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_TagDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_LinksView" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+			<includePermissionGroup type="sys:base" permissionGroup="ReadChildren" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_LinksCreate" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+			<includePermissionGroup type="sys:base" permissionGroup="LinkChildren"/>
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_LinksDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_CommentCreate" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_CommentView" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_CommentDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_ActionExec" expose="true" allowFullControl="false">
+			<!-- <includePermissionGroup type="sys:base" permissionGroup="ExecuteContent" /> -->
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_MemberList" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_MemberAdd" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="CreateChildren" />
+			<includePermissionGroup type="sys:base" permissionGroup="CreateAssociations" />
+		</permissionGroup>
+
+		<permissionGroup name="lecmPerm_SetRate" expose="true" allowFullControl="false">
+			<!-- <includePermissionGroup type="sys:base" permissionGroup="WriteProperties" /> иначе смоджет редактировать даже  pg-reader -->
+		</permissionGroup>
 
       <!-- =========== -->
       <!-- Permissions -->
@@ -354,6 +443,7 @@
 		<permission name="_lecmPerm_AttrList" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_AttrList" />
 		</permission>
+
 	  <!-- Изменение атрибутивного состава -->
 		<permission name="_lecmPerm_AttrEdit" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_AttrEdit" />
@@ -363,22 +453,27 @@
 		<permission name="_lecmPerm_ContentList" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentList" />
 		</permission>
+
 	  <!-- Добавление контента -->
 		<permission name="_lecmPerm_ContentAdd" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentAdd" />
 		</permission>
+
 	  <!-- Просмотр контента -->
 		<permission name="_lecmPerm_ContentView" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentView" />
 		</permission>
+
 	  <!-- Добавление новой версии контента -->
 		<permission name="_lecmPerm_ContentAddVer" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentAddVer" />
 		</permission>
+
 	  <!-- Удаление контента -->
 		<permission name="_lecmPerm_ContentDelete" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentDelete" />
 		</permission>
+
 	  <!-- Копирование контента -->
 		<permission name="_lecmPerm_ContentCopy" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentCopy" />
@@ -406,10 +501,12 @@
 		<permission name="_lecmPerm_TagView" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_TagView" />
 		</permission>
+
 	  <!-- Создание тега -->
 		<permission name="_lecmPerm_TagCreate" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_TagCreate" />
 		</permission>
+
 	  <!-- Удаление тега -->
 		<permission name="_lecmPerm_TagDelete" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_TagDelete" />
@@ -419,10 +516,12 @@
 		<permission name="_lecmPerm_LinksView" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_LinksView" />
 		</permission>
+
 	  <!-- Создание связей -->
 		<permission name="_lecmPerm_LinksCreate" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_LinksCreate" />
 		</permission>
+
 	  <!-- Удаление связей -->
 		<permission name="_lecmPerm_LinksDelete" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_LinksDelete" />
@@ -432,10 +531,12 @@
 		<permission name="_lecmPerm_CommentCreate" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_CommentCreate" />
 		</permission>
+
 	  <!-- Просмотр комментариев -->
 		<permission name="_lecmPerm_CommentView" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_CommentView" />
 		</permission>
+
 	  <!-- Удаление комментариев (своих) -->
 		<permission name="_lecmPerm_CommentDelete" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_CommentDelete" />
@@ -450,11 +551,13 @@
 		<permission name="_lecmPerm_MemberList" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_MemberList" />
 		</permission>
+
 	  <!-- Приглашение участников -->
 		<permission name="_lecmPerm_MemberAdd" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_MemberAdd" />
 		</permission>
-	  <!-- Присвоение рейтинга -->
+
+		<!-- Присвоение рейтинга -->
 		<permission name="_lecmPerm_SetRate" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_SetRate" />
 		</permission>
@@ -693,7 +796,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" /> -->
 
-         <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" />
+         <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" /> это 'неслабые' права = на ЛЮБУЮ опекрацию записи-->
          <includePermissionGroup permissionGroup="lecmPerm_WFEnumBP" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_WFTaskList" type="sys:base" />
 
