@@ -61,9 +61,6 @@ public class StartWorkflowAction extends StateMachineAction {
 		final String actionName = StateMachineActions.getActionName(StartWorkflowAction.class);
 		final String eventName = execution.getEventName();
 
-
-		StateMachineHelper helper = new StateMachineHelper();
-		final String taskId = helper.getCurrentTaskId(stateMachineExecutionId);
 		Timer timer = new Timer();
 		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
 		final WorkflowVariables localVariables = variables;
@@ -76,14 +73,11 @@ public class StartWorkflowAction extends StateMachineAction {
 					@Override
 					public Object doWork() throws Exception {
 						StateMachineHelper helper = new StateMachineHelper();
-						String currentTaskId = taskId;
-						if (currentTaskId == null) {
-							currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
-						}
+						String currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
 						String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
 						helper.setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
 						//Обозначить запуск процесса в документе
-						WorkflowDescriptor descriptor = new WorkflowDescriptor(stateMachineExecutionId, taskId, actionName, id, eventName);
+						WorkflowDescriptor descriptor = new WorkflowDescriptor(stateMachineExecutionId, currentTaskId, actionName, id, eventName);
 						new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
 
                         helper.logStartWorkflowEvent(document, executionId);
@@ -93,7 +87,7 @@ public class StartWorkflowAction extends StateMachineAction {
 				}, user);
 			}
 		};
-		timer.schedule(task, 1000);
+		timer.schedule(task, 10000);
 	}
 
 }
