@@ -498,10 +498,35 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef) {
+        return getActiveTasks(nodeRef);
+    }
+
+    public List<WorkflowTask> getActiveTasks(NodeRef nodeRef) {
         return getDocumentTasks(nodeRef, true);
     }
 
-    public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
+    public List<WorkflowTask> getCompletedTasks(NodeRef nodeRef) {
+        return getDocumentTasks(nodeRef, false);
+    }
+    @Override
+    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
+        return getActiveWorkflows(nodeRef);
+    }
+
+    public List<WorkflowInstance> getActiveWorkflows(NodeRef nodeRef) {
+        return getWorkflows(nodeRef, true);
+    }
+
+    public List<WorkflowInstance> getCompletedWorkflows(NodeRef nodeRef) {
+        return getWorkflows(nodeRef, false);
+    }
+
+    private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
+        List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
+        return filterWorkflows(activeWorkflows);
+    }
+
+    private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
@@ -520,24 +545,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         return result;
-    }
-
-    @Override
-    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef) {
-        return getActiveWorkflows(nodeRef);
-    }
-
-    public List<WorkflowInstance> getActiveWorkflows(NodeRef nodeRef) {
-        return getWorkflows(nodeRef, true);
-    }
-
-    public List<WorkflowInstance> getCompletedWorkflows(NodeRef nodeRef) {
-        return getWorkflows(nodeRef, false);
-    }
-
-    private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
-        List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
-        return filterWorkflows(activeWorkflows);
     }
 
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
