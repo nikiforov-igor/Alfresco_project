@@ -4,6 +4,8 @@ function main() {
     AlfrescoUtil.param("nodeRef");
 
 	model.hasViewPerm = hasViewConnectionsPermission(model.nodeRef);
+	model.hasCreatePerm = hasCreateConnectionsPermission(model.nodeRef);
+	model.hasDeletePerm = hasDeleteConnectionsPermission(model.nodeRef);
 	if (model.hasViewPerm) {
 		model.connections = getConnections(model.nodeRef);
 		model.connectionsWithDocument = getConnectionsWithDocument(model.nodeRef);
@@ -42,6 +44,26 @@ function hasViewConnectionsPermission(nodeRef) {
 	}
 	var permObj = eval('(' + result + ')');
 	return (("" + permObj.hasPermission) ==  "true");
+}
+
+function hasCreateConnectionsPermission(nodeRef) {
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksCreate';
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var permObj = eval('(' + result + ')');
+	return (("" + permObj.hasPermission) ==  "true");
+}
+
+function hasDeleteConnectionsPermission(nodeRef) {
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksDelete';
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var permObj = eval('(' + result + ')');
+	return (("" + permObj.hasPermission) ==  "false");
 }
 
 main();

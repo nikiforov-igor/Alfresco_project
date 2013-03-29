@@ -9,13 +9,15 @@
 					${msg("title.connected-documents")}
 				</td>
 				<td class="connections-add">
-					<div class="connections-add">
-	                   <span id="${el}-addConnection-button" class="yui-button yui-push-button">
-	                      <span class="first-child">
-	                         <button type="button" title="${msg("button.connection.create")}">${msg("button.connection.create")}</button>
-	                      </span>
-	                   </span>
-					</div>
+					<#if hasCreatePerm>
+						<div class="connections-add">
+		                   <span id="${el}-addConnection-button" class="yui-button yui-push-button">
+		                      <span class="first-child">
+		                         <button type="button" title="${msg("button.connection.create")}">${msg("button.connection.create")}</button>
+		                      </span>
+		                   </span>
+						</div>
+					</#if>
 				</td>
 			</tr>
 		</table>
@@ -52,13 +54,15 @@
 						</td>
 						<td class="list-actions-td">
 							<div class="list-action-set">
-								<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.presentString!""}"</#if>>
-									<a title="${msg("action.delete-connection.title")}" class="list-action-link" href="#">
-										<span>
-											${msg("action.delete-connection.title")}
-										</span>
-									</a>
-								</div>
+								<#if hasDeletePerm>
+									<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.presentString!""}"</#if>>
+										<a title="${msg("action.delete-connection.title")}" class="list-action-link" href="#">
+											<span>
+												${msg("action.delete-connection.title")}
+											</span>
+										</a>
+									</div>
+								</#if>
 							</div>
 						</td>
 					</tr>
