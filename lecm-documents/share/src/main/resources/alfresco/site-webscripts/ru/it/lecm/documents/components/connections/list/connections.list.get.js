@@ -63,7 +63,7 @@ function hasDeleteConnectionsPermission(nodeRef) {
 		return false;
 	}
 	var permObj = eval('(' + result + ')');
-	return (("" + permObj.hasPermission) ==  "false");
+	return (("" + permObj.hasPermission) ==  "true");
 }
 
 main();
