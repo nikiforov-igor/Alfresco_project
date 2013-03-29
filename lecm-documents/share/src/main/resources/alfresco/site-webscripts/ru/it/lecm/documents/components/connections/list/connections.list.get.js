@@ -42,8 +42,8 @@ function hasViewConnectionsPermission(nodeRef) {
 	if (result.status != 200) {
 		return false;
 	}
-	var permObj = eval('(' + result + ')');
-	return (("" + permObj.hasPermission) ==  "true");
+	var permission = eval('(' + result + ')');
+	return (("" + permission) ==  "true");
 }
 
 function hasCreateConnectionsPermission(nodeRef) {
@@ -52,8 +52,8 @@ function hasCreateConnectionsPermission(nodeRef) {
 	if (result.status != 200) {
 		return false;
 	}
-	var permObj = eval('(' + result + ')');
-	return (("" + permObj.hasPermission) ==  "true");
+	var permission = eval('(' + result + ')');
+	return (("" + permission) ==  "true");
 }
 
 function hasDeleteConnectionsPermission(nodeRef) {
@@ -62,8 +62,8 @@ function hasDeleteConnectionsPermission(nodeRef) {
 	if (result.status != 200) {
 		return false;
 	}
-	var permObj = eval('(' + result + ')');
-	return (("" + permObj.hasPermission) ==  "true");
+	var permission = eval('(' + result + ')');
+	return (("" + permission) ==  "true");
 }
 
 main();
