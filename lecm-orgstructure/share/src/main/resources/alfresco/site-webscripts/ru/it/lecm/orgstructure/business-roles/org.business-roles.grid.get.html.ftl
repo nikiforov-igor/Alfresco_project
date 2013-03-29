@@ -17,7 +17,7 @@
                     editForm: "configureBusinessRole",
                     attributeForShow: "cm:name",
                     actions: [{
-                        type:"datagrid-action-link-businessRole",
+                        type:"datagrid-action-link-${bubblingLabel!"business-role"}",
                         id:"onActionEdit",
                         permission:"edit",
                         label:"${msg("actions.edit")}"
