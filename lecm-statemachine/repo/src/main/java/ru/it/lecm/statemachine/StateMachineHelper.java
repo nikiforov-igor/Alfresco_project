@@ -32,8 +32,6 @@ import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionActio
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
-import ru.it.lecm.statemachine.bean.WorkflowListPageBean;
-import ru.it.lecm.statemachine.bean.WorkflowTaskListPageBean;
 import ru.it.lecm.statemachine.expression.Expression;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
@@ -452,25 +450,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return errors;
     }
 
-    private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
-        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
-        ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
-        List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-        for (ExecutionListener listener : listeners) {
-            if (listener instanceof StateMachineHandler) {
-                result = ((StateMachineHandler) listener).getEvents().get(onFire);
-            }
-        }
-        return result;
-    }
-
-    private List<StateMachineAction> getStatusChangeActions(NodeRef document) {
-        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
-        String taskId = getCurrentTaskId(executionId);
-        return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
-    }
-
     public void logEndWorkflowEvent(NodeRef document, String executionId) {
         String description = getWorkflowDescription(executionId);
         businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс \"#object1\"", Collections.singletonList(description));
@@ -492,62 +471,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return persistedResponse.substring(start, end);
     }
 
-    private String getWorkflowDescription(String executionId) {
-        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
-        String description = workflow.getDescription();
-        if (description == null) {
-            description = "";
-        }
-        return description;
-    }
-
-    enum BPMState {
-        NA, ACTIVE, COMPLETED, ALL;
-
-        public static BPMState getValue(String name) {
-            try {
-                return valueOf(name.toUpperCase());
-            } catch (Exception e) {
-                return NA;
-            }
-        }
-    }
-
-    @Override
-    public WorkflowTaskListBean getTasks(NodeRef nodeRef, String stateParam, boolean isAddSubordinatesTask, int myTasksLimit) {
-        if (nodeRef == null) {
-            return new WorkflowTaskListPageBean();
-        }
-        BPMState state = BPMState.getValue(stateParam);
-
-        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
-        if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-            tasks.addAll(getDocumentTasks(nodeRef, true));
-        }
-
-        if (state == BPMState.COMPLETED || state == BPMState.ALL) {
-            tasks.addAll(getDocumentTasks(nodeRef, false));
-        }
-
-        WorkflowTaskListPageBean result = new WorkflowTaskListPageBean();
-
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-        boolean isBoss = orgstructureBean.isBoss(currentEmployee);
-        result.setShowSubordinateTasks(isBoss);
-
-        List<WorkflowTask> myTasks = filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
-        result.setMyTasks(myTasks, myTasksLimit);
-
-        if (isAddSubordinatesTask) {
-            List<NodeRef> subordinateEmployees = orgstructureBean.getBossSubordinate(currentEmployee);
-            List<WorkflowTask> subordinatesTasks = filterTasksByAssignees(tasks, subordinateEmployees);
-            result.setSubordinatesTasks(subordinatesTasks);
-        }
-
-        return result;
-    }
-
-    private List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
+    public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
         if (tasks == null || tasks.isEmpty() || assigneesEmployees == null || assigneesEmployees.isEmpty()) {
             return new ArrayList<WorkflowTask>();
         }
@@ -583,7 +507,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return filterWorkflows(activeWorkflows);
     }
 
-    private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
+    public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
@@ -602,6 +526,30 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         return result;
+    }
+
+    private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
+        List<StateMachineAction> result = new ArrayList<StateMachineAction>();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
+        ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
+        List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+        for (ExecutionListener listener : listeners) {
+            if (listener instanceof StateMachineHandler) {
+                result = ((StateMachineHandler) listener).getEvents().get(onFire);
+            }
+        }
+        return result;
+    }
+
+    private List<StateMachineAction> getStatusChangeActions(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String taskId = getCurrentTaskId(executionId);
+        return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+    }
+
+    private String getWorkflowDescription(String executionId) {
+        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+        return workflow.getDefinition().getTitle();
     }
 
     private List<WorkflowTask> getWorkflowTasks(WorkflowInstance workflow, boolean activeTasks) {
@@ -625,28 +573,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    @Override
-    public WorkflowListBean getWorkflows(NodeRef nodeRef, String stateParam, int activeWorkflowsLimit) {
-        if (nodeRef == null) {
-            return new WorkflowListPageBean();
-        }
-        BPMState workflowState = BPMState.getValue(stateParam);
-
-        WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        WorkflowListPageBean result = new WorkflowListPageBean();
-
-        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
-        result.setActiveWorkflows(filterWorkflows(activeWorkflows), activeWorkflowsLimit);
-
-        if (workflowState == BPMState.ALL) {
-            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
-            result.setCompletedWorkflows(filterWorkflows(completedWorkflows));
-        }
-
-        return result;
-    }
-
-    private List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
+    public List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
         List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
         NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
         for (WorkflowInstance instance : workflows) {

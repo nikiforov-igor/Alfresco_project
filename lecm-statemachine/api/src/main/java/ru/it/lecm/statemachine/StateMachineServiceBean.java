@@ -18,13 +18,9 @@ public interface StateMachineServiceBean {
 
     public List<NodeRef> getAssigneesForWorkflow(String workflowId);
 
-    WorkflowTaskListBean getTasks(NodeRef nodeRef, String stateParam, boolean isAddSubordinatesTask, int myTasksLimit);
-
     public List<WorkflowTask> getDocumentTasks(NodeRef nodeRef);
 
     public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef);
-
-    WorkflowListBean getWorkflows(NodeRef nodeRef, String stateParam, int activeWorkflowsLimit);
 
     public String getDocumentStatus(NodeRef document);
 

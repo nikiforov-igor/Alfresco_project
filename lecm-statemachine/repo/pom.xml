@@ -82,10 +82,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.extensions.surf</groupId>
-            <artifactId>spring-surf</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
             <version>${project.version}</version>

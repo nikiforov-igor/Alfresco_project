@@ -1,7 +1,6 @@
 package ru.it.lecm.statemachine.bean;
 
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import ru.it.lecm.statemachine.WorkflowListBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,27 +12,23 @@ import java.util.List;
  * Time: 17:33
  * To change this template use File | Settings | File Templates.
  */
-public class WorkflowListPageBean implements WorkflowListBean {
+public class WorkflowListBean {
     private int activeWorkflowsTotalCount = 0;
     private List<WorkflowInstance> activeWorkflows = new ArrayList<WorkflowInstance>();
     private List<WorkflowInstance> completedWorkflows = new ArrayList<WorkflowInstance>();
 
-    @Override
     public List<WorkflowInstance> getActiveWorkflows() {
         return activeWorkflows;
     }
 
-    @Override
     public List<WorkflowInstance> getCompletedWorkflows() {
         return completedWorkflows;
     }
 
-    @Override
     public int getActiveWorkflowsTotalCount() {
         return activeWorkflowsTotalCount;
     }
 
-    @Override
     public int getActiveWorkflowsDisplayedCount() {
         return activeWorkflows.size();
     }

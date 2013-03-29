@@ -1,18 +1,18 @@
 package ru.it.lecm.statemachine.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.WorkflowListBean;
-import ru.it.lecm.statemachine.WorkflowTaskListBean;
+import ru.it.lecm.statemachine.bean.WorkflowListBean;
+import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -32,12 +32,73 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         this.stateMachineHelper = stateMachineHelper;
     }
 
+    enum BPMState {
+        NA, ACTIVE, COMPLETED, ALL;
+
+        public static BPMState getValue(String name) {
+            try {
+                return valueOf(name.toUpperCase());
+            } catch (Exception e) {
+                return NA;
+            }
+        }
+    }
+
     public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
-        return stateMachineHelper.getTasks(node.getNodeRef(), stateParam, addSubordinatesTask, myTasksLimit);
+        if (node == null) {
+            return new WorkflowTaskListBean();
+        }
+
+        NodeRef nodeRef = node.getNodeRef();
+        BPMState state = BPMState.getValue(stateParam);
+
+        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
+        if (state == BPMState.ACTIVE || state == BPMState.ALL) {
+            tasks.addAll(stateMachineHelper.getDocumentTasks(nodeRef, true));
+        }
+
+        if (state == BPMState.COMPLETED || state == BPMState.ALL) {
+            tasks.addAll(stateMachineHelper.getDocumentTasks(nodeRef, false));
+        }
+
+        WorkflowTaskListBean result = new WorkflowTaskListBean();
+
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        boolean isBoss = orgstructureService.isBoss(currentEmployee);
+        result.setShowSubordinateTasks(isBoss);
+
+        List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
+        result.setMyTasks(myTasks, myTasksLimit);
+
+        if (addSubordinatesTask) {
+            List<NodeRef> subordinateEmployees = orgstructureService.getBossSubordinate(currentEmployee);
+            List<WorkflowTask> subordinatesTasks = stateMachineHelper.filterTasksByAssignees(tasks, subordinateEmployees);
+            result.setSubordinatesTasks(subordinatesTasks);
+        }
+
+        return result;
     }
 
     public WorkflowListBean getWorkflows(ScriptNode node, String stateParam, int activeWorkflowsLimit) {
-        return stateMachineHelper.getWorkflows(node.getNodeRef(), stateParam, activeWorkflowsLimit);
+        if (node == null) {
+            return new WorkflowListBean();
+        }
+
+        NodeRef nodeRef = node.getNodeRef();
+        BPMState state = BPMState.getValue(stateParam);
+
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        WorkflowListBean result = new WorkflowListBean();
+
+        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
+        result.setActiveWorkflows(stateMachineHelper.filterWorkflows(activeWorkflows), activeWorkflowsLimit);
+
+        if (state == BPMState.ALL) {
+            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
+            result.setCompletedWorkflows(stateMachineHelper.filterWorkflows(completedWorkflows));
+        }
+
+        return result;
     }
 
     /**

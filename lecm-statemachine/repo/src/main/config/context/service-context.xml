@@ -208,6 +208,9 @@
         <property name="stateMachineHelper">
             <ref bean="stateMachineHelper"/>
         </property>
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
     </bean>
 
 </beans>

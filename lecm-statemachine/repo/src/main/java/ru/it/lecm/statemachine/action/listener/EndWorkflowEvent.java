@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine.action.listener;
 
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -13,6 +14,7 @@ import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -33,12 +35,12 @@ public class EndWorkflowEvent implements ExecutionListener {
 		NodeRef document = helper.getStatemachineDocument(executionId);
 		if (document == null) return;
 
-        helper.logEndWorkflowEvent(document, executionId);
-
 		DocumentWorkflowUtil utils = new DocumentWorkflowUtil();
 		WorkflowDescriptor descriptor = utils.getWorkflowDescriptor(document, executionId);
 
 		if (descriptor != null) {
+            helper.logEndWorkflowEvent(document, executionId);
+
 			String actionName = descriptor.getActionName();
 			String actionId = descriptor.getActionId();
 			String statemachineId = descriptor.getStatemachineExecutionId();
@@ -82,8 +84,16 @@ public class EndWorkflowEvent implements ExecutionListener {
 
 			String taskId = helper.getCurrentTaskId(statemachineId);
 			List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
-			Expression expression = new Expression(document, helper.getVariables(statemachineId), StateMachineHelper.getServiceRegistry());
 			boolean isTrasitionValid = false;
+
+            Map<String, Object> statemachineVariables;
+            try {
+                statemachineVariables = helper.getVariables(statemachineId);
+            } catch (ActivitiException ae) {
+                statemachineVariables = new HashMap<String, Object>();
+            }
+
+            Expression expression = new Expression(document, statemachineVariables, StateMachineHelper.getServiceRegistry());
 			for (StateMachineAction action : transitionActions) {
 				TransitionAction transitionAction = (TransitionAction) action;
                 boolean currentTransitionValid = expression.execute(transitionAction.getExpression());
