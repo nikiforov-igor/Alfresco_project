@@ -19,10 +19,7 @@ import org.alfresco.repo.security.permissions.PermissionReference;
 import org.alfresco.repo.security.permissions.impl.ModelDAO;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AccessPermission;
-import org.alfresco.service.cmr.security.AccessStatus;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -46,6 +43,7 @@ public class LecmPermissionServiceImpl
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
 	private ModelDAO modelDAOService; // "permissionsModelDAO"
+	private AuthenticationService authService;
 
 	/*
 	 * если потребуется прозрачное присвоение БР "по факту" - т.е. выдавать
@@ -121,6 +119,10 @@ public class LecmPermissionServiceImpl
 	public void setAuthorityService(AuthorityService authorityService) {
 		this.authorityService = authorityService;
 		this.sgnm.setAuthorityService(authorityService);
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
 	}
 
 	public ModelDAO getModelDAOService() {
@@ -328,6 +330,11 @@ public class LecmPermissionServiceImpl
 	public boolean hasPermission(AlfrescoSecurityNamedItemWithPrefix permission, NodeRef node,
 			String userLogin) {
 		return (permission != null) && hasPermission( permission.getName(), node, userLogin);
+	}
+
+	@Override
+	public boolean hasPermission(final String permission, final NodeRef node) {
+	 	return hasPermission(permission, node,  authService.getCurrentUserName());
 	}
 
 	@Override

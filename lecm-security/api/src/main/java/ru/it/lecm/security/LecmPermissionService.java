@@ -78,6 +78,14 @@ public interface LecmPermissionService {
 	boolean hasPermission(AlfrescoSecurityNamedItemWithPrefix permissionOrGroup, NodeRef node, String userLogin);
 	boolean hasPermission(String permission, NodeRef node, String userLogin);
 
+	/**
+	 * Определение наличия конкретной привилегии у текущего сотрудника относительно узла (документа, папки)
+	 * @param permission  Привелегия
+	 * @param node Ссылка на элемент
+	 * @return true, если указанная привилегия permission имеется у текущего пользователя
+	 */
+	boolean hasPermission(String permission, NodeRef node);
+
 
 	/**
 	 * Добавление участника к узлу с заданной группой привилегий 

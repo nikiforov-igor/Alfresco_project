@@ -175,6 +175,9 @@
 	    <property name="businessJournalService">
 		    <ref bean="businessJournalService"/>
 	    </property>
+	    <property name="lecmPermissionService">
+		    <ref bean="lecmPermissionServiceBean"/>
+	    </property>
     </bean>
 
     <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"

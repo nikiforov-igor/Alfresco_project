@@ -14,6 +14,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationUnit;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -25,11 +26,13 @@ import java.util.*;
  */
 public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAssociationPolicy,
 		NodeServicePolicies.BeforeDeleteNodePolicy,
+		NodeServicePolicies.BeforeCreateNodePolicy,
 		NodeServicePolicies.OnCreateNodePolicy {
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
 	private BusinessJournalService businessJournalService;
+	private LecmPermissionService lecmPermissionService;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -43,6 +46,10 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 		this.businessJournalService = businessJournalService;
 	}
 
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
 	public final void init() {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT,
@@ -53,6 +60,8 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "beforeDeleteNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
+				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "beforeCreateNode"));
 	}
 
 	@Override
@@ -68,6 +77,8 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	@Override
 	public void beforeDeleteNode(NodeRef nodeRef) {
+
+
 		List<AssociationRef> connectedDocumentList = nodeService.getTargetAssocs(nodeRef, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
 		if (connectedDocumentList.size() == 1) {
 			NodeRef connectedDocument = connectedDocumentList.get(0).getTargetRef();
@@ -120,5 +131,10 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 			businessJournalService.log(primaryDocument, EventCategory.CREATE_DOCUMENT_CONNECTION, "Сотрудник #initiator связал документ #mainobject и документ #object1", objects);
 		}
+	}
+
+	@Override
+	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
+		int a = 1 + 2;
 	}
 }

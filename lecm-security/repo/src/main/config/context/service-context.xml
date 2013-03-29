@@ -44,6 +44,7 @@
 		<property name="nodeService" ref="nodeService" />
 		<property name="permissionService" ref="permissionService" />
 		<property name="authorityService" ref="authorityService" />
+		<property name="authService" ref="authenticationService"/>
 		<property name="orgStructureNotifiers" ref="lecmSecurityGroupsBean" />
 
 		<property name="modelDAOService" ref="permissionsModelDAO" />
