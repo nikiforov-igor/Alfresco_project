@@ -118,10 +118,10 @@ public class StatusChangeAction extends StateMachineAction {
 
 			//Создаем папку статуса
 			createFolder(processFolder, status, uuid);
-		}
+            //Установка статических прав на папку статуса
+            execBuildInTransactStatic(folder, staticPrivileges);
+        }
 
-		//Установка статических прав на папку статуса
-		execBuildInTransactStatic(folder, staticPrivileges);
 	}
 
     public boolean isForDraft() {
