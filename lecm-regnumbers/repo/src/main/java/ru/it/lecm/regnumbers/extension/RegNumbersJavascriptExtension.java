@@ -31,6 +31,7 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	 * @param templateNode ссылка на шаблон номера (объект типа
 	 * lecm-regnum:template)
 	 * @return сгененриванный номер документа.
+	 * @throws WebScriptException в случае недачной генерации номера.
 	 */
 	public String getNumber(ScriptNode documentNode, ScriptNode templateNode) {
 		try {
@@ -51,6 +52,7 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	 * @param templateStr шаблон номера документа в виде строки либо NodeRef
 	 * шаблон номера (объект типа lecm-regnum:template) в виде строки
 	 * @return сгененриванный номер документа.
+	 * @throws WebScriptException в случае недачной генерации номера.
 	 */
 	public String getNumber(ScriptNode documentNode, String templateStr) {
 		String result;
@@ -92,5 +94,53 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	 */
 	public boolean isNumberUnique(String number) {
 		return regNumbersService.isNumberUnique(number);
+	}
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentProperty атрибут документа в префиксальной форме
+	 * (prefix:property), в котороый необходимо записать сгенерированный номер.
+	 * @param templateStr шаблон номера документа в виде строки либо NodeRef
+	 * шаблон номера (объект типа lecm-regnum:template) в виде строки
+	 * @throws WebScriptException в случае недачной генерации номера.
+	 */
+	public void setDocumentNumber(ScriptNode documentNode, String documentProperty, String templateStr) {
+		try {
+			if (NodeRef.isNodeRef(templateStr)) {
+				regNumbersService.setDocumentNumber(documentNode.getNodeRef(), documentProperty, new NodeRef(templateStr));
+			} else {
+				regNumbersService.setDocumentNumber(documentNode.getNodeRef(), documentProperty, templateStr);
+			}
+		} catch (TemplateParseException ex) {
+			throw new WebScriptException(String.format("Error parsing registration number template '%s'", templateStr), ex);
+		} catch (TemplateRunException ex) {
+			throw new WebScriptException(String.format("Error running registration number template '%s'", templateStr), ex);
+		}
+	}
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentProperty атрибут документа в префиксальной форме
+	 * (prefix:property), в котороый необходимо записать сгенерированный номер.
+	 * @param templateNode ссылка на шаблон номера (объект типа
+	 * lecm-regnum:template)
+	 * @throws WebScriptException в случае недачной генерации номера.
+	 */
+	public void setDocumentNumber(ScriptNode documentNode, String documentProperty, ScriptNode templateNode) {
+		try {
+			regNumbersService.setDocumentNumber(documentNode.getNodeRef(), documentProperty, templateNode.getNodeRef());
+		} catch (TemplateParseException ex) {
+			throw new WebScriptException(String.format("Error parsing registration number template '%s'", templateNode), ex);
+		} catch (TemplateRunException ex) {
+			throw new WebScriptException(String.format("Error running registration number template '%s'", templateNode), ex);
+		}
 	}
 }

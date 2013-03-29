@@ -119,4 +119,76 @@ public interface RegNumbersService {
 	 * @return строка шаблона рег. номера
 	 */
 	String getTemplateString(NodeRef templateNode);
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentProperty в какой атрибут документа необходимо записать
+	 * сгенерированный номер.
+	 * @param templateStr шаблон номера документа в виде строки.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
+	 */
+	void setDocumentNumber(NodeRef documentNode, QName documentProperty, String templateStr) throws TemplateParseException, TemplateRunException;
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentProperty в какой атрибут документа необходимо записать
+	 * сгенерированный номер.
+	 * @param templateNode ссылка на объект шаблона номера документа.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
+	 */
+	void setDocumentNumber(NodeRef documentNode, QName documentProperty, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentPropertyPrefix атрибут документа в префиксальной форме
+	 * (prefix:property), в котороый необходимо записать сгенерированный номер.
+	 * @param templateStr шаблон номера документа в виде строки.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
+	 */
+	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, String templateStr) throws TemplateParseException, TemplateRunException;
+
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в указанноый атрибут документа.
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param documentPropertyPrefix атрибут документа в префиксальной форме
+	 * (prefix:property), в котороый необходимо записать сгенерированный номер.
+	 * @param templateNode ссылка на объект шаблона номера документа.
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
+	 */
+	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 }
