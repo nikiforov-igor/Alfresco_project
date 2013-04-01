@@ -1,3 +1,6 @@
+<import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+
 function main() {
     if (json.has("tag") == false || json.get("tag").length == 0) {
         status.setCode(status.STATUS_BAD_REQUEST, "Name missing when removing tag");
@@ -12,6 +15,12 @@ function main() {
     var tagName = json.get("tag");
     var store = json.get("store");
     var nodeRef = json.get("nodeRef");
+
+    // Check permissions
+    var mayDelete = hasPermission(nodeRef, '_lecmPerm_TagDelete');
+    if (!mayDelete) {
+        return;
+    }
 
     // Check for tag existing
     var tag = taggingService.getTag(store, tagName),

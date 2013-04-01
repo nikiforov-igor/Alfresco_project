@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 var DocumentTags = {
     PROP_TAGGABLE: "cm:taggable",
@@ -15,10 +16,12 @@ function main() {
     AlfrescoUtil.param('nodeRef');
     AlfrescoUtil.param('site', null);
     var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-    if (documentDetails) {
-        model.record = jsonUtils.toJSONString(documentDetails.item);
+    var hasPerm = hasPermission(model.nodeRef, "_lecmPerm_TagView");
+    if (documentDetails && hasPerm) {
         model.tags = jsonUtils.toJSONString(DocumentTags.getTags(documentDetails.item));
-        model.allowMetaDataUpdate = documentDetails.item.node.permissions.user["Write"] || false;
+        model.record = jsonUtils.toJSONString(documentDetails.item);
+        model.mayEdit = jsonUtils.toJSONString(hasPermission(model.nodeRef, "_lecmPerm_TagCreate")
+                    && hasPermission(model.nodeRef, "_lecmPerm_TagDelete"));
     }
 };
 

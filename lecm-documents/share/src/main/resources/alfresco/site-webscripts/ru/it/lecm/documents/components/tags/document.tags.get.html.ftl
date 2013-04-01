@@ -1,6 +1,6 @@
 <!-- Parameters and libs -->
 <#assign el=args.htmlid/>
-<#if record??>
+<#if record?? && tags??>
 <!-- Markup -->
 <div class="widget-bordered-panel">
 <div class="document-metadata-header document-components-panel document-tags">
@@ -86,25 +86,27 @@
     };
 
     renderTags(${tags});
-    tageditor = Alfresco.util.createInsituEditor("${el}-tageditor",
-        {
-            type: "tagEditor",
-            nodeRef: nodeRef,
-            name: "prop_cm_taggable",
-            value: record.node.properties["cm:taggable"], // here go the tags of the current node
-            validations: [{
-                type: Alfresco.forms.validation.nodeName,
-                when: "keyup",
-                message: '${msg("validation-hint.tagName")}'
-            }],
-            title: '${msg("document.tip.insitu-tag")}',
-            errorMessage: '${msg("document.insitu-edit.tag.failure")}'
-        },
-        {
-            fn: tagsEditCallback,
-            scope: this,
-            obj: record
-        });
+    if (${mayEdit}) {
+        tageditor = Alfresco.util.createInsituEditor("${el}-tageditor",
+            {
+                type: "tagEditor",
+                nodeRef: nodeRef,
+                name: "prop_cm_taggable",
+                value: record.node.properties["cm:taggable"], // here go the tags of the current node
+                validations: [{
+                    type: Alfresco.forms.validation.nodeName,
+                    when: "keyup",
+                    message: '${msg("validation-hint.tagName")}'
+                }],
+                title: '${msg("document.tip.insitu-tag")}',
+                errorMessage: '${msg("document.insitu-edit.tag.failure")}'
+            },
+            {
+                fn: tagsEditCallback,
+                scope: this,
+                obj: record
+            });
+    }
     //]]></script>
 </div>
 </div>
