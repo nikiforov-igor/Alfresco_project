@@ -90,7 +90,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @property editorConfig
                  * @type Object
                  */
-                editorConfig: {}
+                editorConfig: {},
+
+                /**
+                 * Права доступа
+                 * @property permissions
+                 * @type Object
+                 */
+                permissions: {}
             },
 
             /**
@@ -410,7 +417,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var data = oRecord.getData(),
                     html = '',
                     rowId = this.id + '-' + oRecord.getId(),
-                    permissions = data.permissions;
+                    permissions = this.options.permissions;
 
                 // Display comment
                 html += '<div id="' + rowId + '-comment-container" class="comment-details">';
@@ -605,14 +612,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                             successCallback: {
                                                 fn:function(response){
                                                     var permission = eval(response.serverResponse.responseText);
+                                                    this.destroy();
                                                     if (permission) {
-                                                        this.destroy();
                                                         me.deleteComment.call(me, comment);
+                                                    } else {
+                                                        Alfresco.util.PopupManager.displayMessage(
+                                                            {
+                                                                text: me.msg("message.permission")
+                                                            });
                                                     }
                                                 },
                                                 scope: this
                                             },
-                                            failureMessage: me.msg("message.permission"),
+                                            failureMessage: me.msg("message.connection"),
                                             scope: me,
                                             comment: comment
                                         });

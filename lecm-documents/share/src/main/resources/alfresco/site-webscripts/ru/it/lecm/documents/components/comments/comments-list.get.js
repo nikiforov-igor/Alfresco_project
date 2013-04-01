@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function getActivityParameters(nodeRef, defaultValue)
 {
@@ -60,33 +61,13 @@ function getActivityParameters(nodeRef, defaultValue)
    return defaultValue;
 }
 
-function hasViewCommentPermission(nodeRef) {
-    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_CommentView';
-    var result = remote.connect("alfresco").get(url);
-    if (result.status != 200) {
-        return false;
-    }
-    var permission = eval('(' + result + ')');
-    return (("" + permission) == "true");
-}
-
-function hasCreateCommentPermission(nodeRef) {
-    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_CommentCreate';
-    var result = remote.connect("alfresco").get(url);
-    if (result.status != 200) {
-    return false;
-    }
-var permission = eval('(' + result + ')');
-return (("" + permission) == "true");
-}
-
 function main()
 {
    AlfrescoUtil.param('nodeRef', null);
    AlfrescoUtil.param('site', null);
    AlfrescoUtil.param('maxItems', 10);
    AlfrescoUtil.param('activityType', null);
-   AlfrescoUtil.param('hasPerm', false);
+   AlfrescoUtil.param('hasViewCommentPerm', false);
 
    if (!model.nodeRef)
    {
@@ -111,10 +92,11 @@ function main()
    }
 
    if (model.nodeRef) {
-      var hasPerm = hasViewCommentPermission(model.nodeRef);
-      model.hasPerm = hasPerm;
-      model.hasCreateCommentPermission = hasCreateCommentPermission(model.nodeRef);
-      if (hasPerm) {
+      model.hasViewCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentView');
+      if (model.hasViewCommentPerm) {
+      model.hasCreateCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentCreate');
+      model.hasDeleteCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentDelete');
+//      model.hasEditCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentEdit');
       var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
          if (documentDetails)
          {
