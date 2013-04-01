@@ -412,6 +412,12 @@ LogicECM.module = LogicECM.module || {};
             if(this.options.mandatory) {
                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
             }
+			if (this.options.fireAction.ok != null) {
+              var fireName = this.options.fireAction.ok.split(",");
+              for (var i in fireName){
+                  YAHOO.Bubbling.fire(fireName[i], this);
+              }
+          }
         },
 
         onCancel: function(e, p_obj)
@@ -424,6 +430,12 @@ LogicECM.module = LogicECM.module || {};
             if (e) {
                 Event.preventDefault(e);
             }
+			if (this.options.fireAction.cancel != null) {
+              var fireName = this.options.fireAction.cancel.split(",");
+              for (var i in fireName){
+                  YAHOO.Bubbling.fire(fireName[i], this);
+              }
+          }
         },
 
         onSearch: function()
