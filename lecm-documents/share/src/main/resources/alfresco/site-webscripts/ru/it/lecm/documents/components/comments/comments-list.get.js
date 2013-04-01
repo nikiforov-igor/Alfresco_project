@@ -70,6 +70,16 @@ function hasViewCommentPermission(nodeRef) {
     return (("" + permission) == "true");
 }
 
+function hasCreateCommentPermission(nodeRef) {
+    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_CommentCreate';
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+    return false;
+    }
+var permission = eval('(' + result + ')');
+return (("" + permission) == "true");
+}
+
 function main()
 {
    AlfrescoUtil.param('nodeRef', null);
@@ -103,16 +113,17 @@ function main()
    if (model.nodeRef) {
       var hasPerm = hasViewCommentPermission(model.nodeRef);
       model.hasPerm = hasPerm;
+      model.hasCreateCommentPermission = hasCreateCommentPermission(model.nodeRef);
       if (hasPerm) {
-          var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-          if (documentDetails)
-          {
-              var activityParameters = getActivityParameters(model.nodeRef, null);
-              if (activityParameters)
-              {
-                 model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
-              }
-          }
+      var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
+         if (documentDetails)
+         {
+            var activityParameters = getActivityParameters(model.nodeRef, null);
+            if (activityParameters)
+            {
+                model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
+            }
+         }
       }
    }
 }

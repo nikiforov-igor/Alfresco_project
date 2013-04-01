@@ -36,7 +36,9 @@
       <div class="comments-list-actions">
          <div class="left">
             <div id="${el}-actions" class="hidden">
+               <#if hasCreateCommentPermission>
                <button class="alfresco-button" name=".onAddCommentClick">${msg("button.addComment")}</button>
+               </#if>
             </div>
          </div>
          <div class="right">
