@@ -95,6 +95,10 @@ public interface BusinessJournalService {
 
 	String LINK_URL = "/share/page/view-metadata";
     String DOCUMENT_LINK_URL = "/share/page/document";
+    String WORKFLOW_LINK_URL = "/share/page/workflow-details";
+
+    String ACTIVITI_PREFIX = "activiti$";
+
     /**
      * Метод для создания записи бизнеса-журнала
      *

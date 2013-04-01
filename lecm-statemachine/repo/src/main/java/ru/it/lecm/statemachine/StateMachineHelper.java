@@ -462,13 +462,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     public void logEndWorkflowEvent(NodeRef document, String executionId) {
-        String description = getWorkflowDescription(executionId);
-        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс \"#object1\"", Collections.singletonList(description));
+        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
     }
 
     public void logStartWorkflowEvent(NodeRef document, String executionId) {
-        String description = getWorkflowDescription(executionId);
-        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс \"#object1\"", Collections.singletonList(description));
+        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
     }
 
     public String parseExecutionId(String persistedResponse) {

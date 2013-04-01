@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
@@ -35,9 +36,9 @@ import java.util.*;
  */
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
 
-	private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
 
-	private ServiceRegistry serviceRegistry;
+    private ServiceRegistry serviceRegistry;
 	private SearchService searchService;
 	private OrgstructureBean orgstructureService;
 	private NodeRef bjRootRef;
@@ -207,8 +208,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i+1)),
-								(isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)),false) : objects.get(i)));
+                        String str = objects.get(i);
+                        String description = isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i+1)),description);
 					}
 				}
 
@@ -259,7 +261,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		if (objects != null && objects.size() > 0) {
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
                 if (objects.get(i) != null) {
-                    holders.put(OBJECT_HOLDER + (i + 1), isNodeRef(objects.get(i)) ? wrapAsLink(new NodeRef(objects.get(i)), false) : objects.get(i));
+                    String str = objects.get(i);
+                    String description = isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                    holders.put(OBJECT_HOLDER + (i + 1), description);
                 }
 			}
 		}
@@ -709,5 +713,21 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         QName testType = nodeService.getType(document);
         Collection<QName> subDocumentTypes = dicService.getSubTypes(TYPE_BASE_DOCUMENT, true);
         return subDocumentTypes != null && subDocumentTypes.contains(testType);
+    }
+
+    private String getWorkflowDescription(String executionId) {
+        WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+        return workflow.getDefinition().getTitle();
+    }
+
+    private Boolean isWorkflow(String testString) {
+        return testString.startsWith(ACTIVITI_PREFIX);
+    }
+
+    private String wrapAsWorkflowLink(String executionId) {
+        SysAdminParams params = serviceRegistry.getSysAdminParams();
+        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        String description = getWorkflowDescription(executionId);
+        return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId.replace("$", "\\$") + "\">" + description + "</a>";
     }
 }
