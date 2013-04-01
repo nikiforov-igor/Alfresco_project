@@ -229,6 +229,7 @@
                 <property name="lecm-orgstr:unit-type">
                     <title>Type</title>
                     <type>d:text</type>
+                    <default>SEGREGATED</default>
                     <constraints>
                        <constraint ref="lecm-orgstr:unit-type-const"/>
                     </constraints>
