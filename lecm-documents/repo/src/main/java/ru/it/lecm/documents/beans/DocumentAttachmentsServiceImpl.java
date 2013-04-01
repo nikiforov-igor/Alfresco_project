@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -30,6 +31,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
     private DictionaryService dictionaryService;
 	private VersionService versionService;
+	private LecmPermissionService lecmPermissionService;
     private final Object lock = new Object();
 
     public void setDictionaryService(DictionaryService dictionaryService) {
@@ -40,7 +42,13 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		this.versionService = versionService;
 	}
 
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
 	public NodeRef getRootFolder(final NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", documentRef);
+
         final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
 
         AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -72,6 +80,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     }
 
     public List<NodeRef> getCategories(final NodeRef documentRef) {
+	    this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", documentRef);
+
         List<String> categories = new ArrayList<String>();
 
         QName type = nodeService.getType(documentRef);
@@ -134,6 +144,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
+					this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", document);
+
 					return document;
 				}
 			}
@@ -149,6 +161,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
+					this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", document);
+
 					return document;
 				}
 			}
@@ -170,6 +184,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	@Override
 	public void deleteAttachment(NodeRef nodeRef) {
+		this.lecmPermissionService.checkPermission("_lecmPerm_ContentDelete", nodeRef);
+
 		nodeService.deleteNode(nodeRef);
 	}
 

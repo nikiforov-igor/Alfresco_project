@@ -131,6 +131,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="searchService" ref="SearchService"/>
         <property name="namespaceService" ref="namespaceService"/>
+	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
     <bean id="documentConnectionScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"
@@ -187,6 +188,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
 	    <property name="versionService" ref="versionService"/>
+	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

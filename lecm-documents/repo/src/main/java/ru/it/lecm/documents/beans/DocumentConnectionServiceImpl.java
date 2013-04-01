@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -30,6 +31,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	private SearchService searchService;
 	private NamespaceService namespaceService;
+	private LecmPermissionService lecmPermissionService;
 
 	private final Object lock = new Object();
 
@@ -41,7 +43,13 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		this.namespaceService = namespaceService;
 	}
 
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
 	public NodeRef getRootFolder(final NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", documentRef);
+
 		final String attachmentsRootName = DOCUMENT_CONNECTIONS_ROOT_NAME;
 
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -73,10 +81,16 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", connectedDocumentRef);
+
 		return getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, null);
 	}
 
 	private NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef, NodeRef dictionary) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", connectedDocumentRef);
+
 		if (dictionary == null) {
 			dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
 		}
@@ -90,13 +104,16 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", connectedDocumentRef);
+
 		List<NodeRef> results = null;
 		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
 		if (dictionary != null) {
 			results = new ArrayList<NodeRef>();
 			List<AssociationRef> availableTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_AVAILABLE_CONNECTION_TYPES);
 			if (availableTypesAssoc != null) {
-				for (AssociationRef assocRef: availableTypesAssoc) {
+				for (AssociationRef assocRef : availableTypesAssoc) {
 					results.add(assocRef.getTargetRef());
 				}
 			}
@@ -110,6 +127,9 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public NodeRef getAvailableTypeDictionary(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", connectedDocumentRef);
+
 		String primaryDocumentType = nodeService.getType(primaryDocumentRef).toPrefixString(namespaceService);
 		String connectedDocumentType = nodeService.getType(connectedDocumentRef).toPrefixString(namespaceService);
 
@@ -141,45 +161,48 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
-    public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
-        List<NodeRef> results = new ArrayList<NodeRef>();
+	public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", connectedDocumentRef);
 
-        String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
+		List<NodeRef> results = new ArrayList<NodeRef>();
 
-        String propPrimaryDocumentRef = "@" + PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
-        String propConnectedDocumentRef = "@" + PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+		String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
 
-        SearchParameters parameters = new SearchParameters();
-        parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-        parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\"" +
-                primaryDocumentRef + "\" AND " + propConnectedDocumentRef + ":\"" + connectedDocumentRef + "\"");
-        ResultSet resultSet = null;
-        try {
-            resultSet = searchService.query(parameters);
-            if (resultSet != null) {
-                List<NodeRef> connectionRefs = resultSet.getNodeRefs();
-                for (NodeRef ref: connectionRefs) {
-                    List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(ref, ASSOC_CONNECTION_TYPE);
-                    if (typeAssoc != null && typeAssoc.size() == 1) {
-                        NodeRef typeRef = typeAssoc.get(0).getTargetRef();
-                        if (typeRef != null && !results.contains(typeRef)) {
-                            results.add(typeRef);
-                        }
-                    }
-                }
-            }
-        } catch (LuceneQueryParserException e) {
-            logger.error("Error while getting exist connection types", e);
-        } catch (Exception e) {
-            logger.error("Error while getting exist connection types", e);
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        }
-        return results;
-    }
+		String propPrimaryDocumentRef = "@" + PROP_PRIMARY_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+		String propConnectedDocumentRef = "@" + PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
+
+		SearchParameters parameters = new SearchParameters();
+		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\"" +
+				primaryDocumentRef + "\" AND " + propConnectedDocumentRef + ":\"" + connectedDocumentRef + "\"");
+		ResultSet resultSet = null;
+		try {
+			resultSet = searchService.query(parameters);
+			if (resultSet != null) {
+				List<NodeRef> connectionRefs = resultSet.getNodeRefs();
+				for (NodeRef ref : connectionRefs) {
+					List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(ref, ASSOC_CONNECTION_TYPE);
+					if (typeAssoc != null && typeAssoc.size() == 1) {
+						NodeRef typeRef = typeAssoc.get(0).getTargetRef();
+						if (typeRef != null && !results.contains(typeRef)) {
+							results.add(typeRef);
+						}
+					}
+				}
+			}
+		} catch (LuceneQueryParserException e) {
+			logger.error("Error while getting exist connection types", e);
+		} catch (Exception e) {
+			logger.error("Error while getting exist connection types", e);
+		} finally {
+			if (resultSet != null) {
+				resultSet.close();
+			}
+		}
+		return results;
+	}
 
 	public List<NodeRef> getAllConnectionTypes() {
 		String type = TYPE_CONNECTION_TYPE.toPrefixString(namespaceService);
@@ -205,6 +228,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", documentRef);
+
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
 		String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
@@ -237,6 +262,9 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef) {
+		this.lecmPermissionService.checkPermission("_lecmPerm_LinksCreate", primaryDocumentNodeRef);
+		this.lecmPermissionService.checkPermission("_lecmPerm_LinksView", connectedDocumentNodeRef);
+
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 		QName assocQName = ContentModel.ASSOC_CONTAINS;
 
@@ -253,6 +281,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public void deleteConnection(NodeRef nodeRef) {
+		this.lecmPermissionService.checkPermission("_lecmPerm_LinksDelete", nodeRef);
+
 		nodeService.deleteNode(nodeRef);
 	}
 
