@@ -60,12 +60,23 @@ function getActivityParameters(nodeRef, defaultValue)
    return defaultValue;
 }
 
+function hasViewCommentPermission(nodeRef) {
+    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_CommentView';
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        return false;
+    }
+    var permission = eval('(' + result + ')');
+    return (("" + permission) == "true");
+}
+
 function main()
 {
    AlfrescoUtil.param('nodeRef', null);
    AlfrescoUtil.param('site', null);
    AlfrescoUtil.param('maxItems', 10);
    AlfrescoUtil.param('activityType', null);
+   AlfrescoUtil.param('hasPerm', false);
 
    if (!model.nodeRef)
    {
@@ -89,19 +100,20 @@ function main()
       }
    }
 
-   var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-   if (documentDetails)
-   {
-      var activityParameters = getActivityParameters(model.nodeRef, null);
-      if (activityParameters)
-      {
-         model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
+   if (model.nodeRef) {
+      var hasPerm = hasViewCommentPermission(model.nodeRef);
+      model.hasPerm = hasPerm;
+      if (hasPerm) {
+          var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
+          if (documentDetails)
+          {
+              var activityParameters = getActivityParameters(model.nodeRef, null);
+              if (activityParameters)
+              {
+                 model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
+              }
+          }
       }
-   }
-   else
-   {
-      // Signal to the template that the node doesn't exist and that comments therefore shouldn't be displayed.
-      model.nodeRef = null;
    }
 }
 

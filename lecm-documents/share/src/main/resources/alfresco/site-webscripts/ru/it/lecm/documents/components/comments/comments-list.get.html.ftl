@@ -1,4 +1,4 @@
-<#if nodeRef??>
+<#if hasPerm>
    <#assign el=args.htmlid?js_string>
    <script type="text/javascript">//<![CDATA[
       new LogicECM.CommentsList("${el}").setOptions(
