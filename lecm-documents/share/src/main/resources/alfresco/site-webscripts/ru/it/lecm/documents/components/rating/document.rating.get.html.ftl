@@ -5,13 +5,13 @@
 <!-- Markup -->
 <#if rateable?? && rateable>
     <div class="document-rating">
-        <h2 id="rating_title" class="thin dark">Ваш голос</h2>
+        <h2 id="rating_title" class="thin dark">${msg("document.rating.your-voice")}</h2>
         <div id="raiting">
             <div id="raiting_blank"></div>
             <div id="raiting_hover"></div>
             <div id="raiting_votes"></div>
         </div>
-        <a id="rating_change" href="javascript:void(0);">Изменить</a>
+        <a id="rating_change" href="javascript:void(0);">${msg("document.rating.change")}</a>
     </div>
 
 <script type="text/javascript">//<![CDATA[
@@ -19,7 +19,7 @@
         Event = YAHOO.util.Event;
     var nodeRef = "${nodeRef?js_string}";
     var oneStarWidth = 21;
-    var yourVote = "Ваш голос учтен"; //todo change to translates
+    var yourVote = '${msg("document.rating.your-voice-set")}';
 
     Event.onContentReady('raiting', function() {
         var ratingBlock = Dom.get('raiting'),
