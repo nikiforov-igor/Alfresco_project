@@ -86,6 +86,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"

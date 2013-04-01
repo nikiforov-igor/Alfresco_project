@@ -1,4 +1,4 @@
-<#--<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>-->
+<#if mayView!false>
 <#assign id = args.htmlid?js_string>
 
 <script type="text/javascript">
@@ -43,9 +43,11 @@
 </script>
 
 <div class="dashlet-metadata" id="${id}_metadata">
-        <div class="lecm-dashlet-actions">
+    <div class="lecm-dashlet-actions">
+        <#if mayAdd!false>
             <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
-                   class="edit" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
-        </div>
-    <div id="${id}_container">
+               class="edit" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+        </#if>
     </div>
+    <div id="${id}_container"></div>
+</#if>

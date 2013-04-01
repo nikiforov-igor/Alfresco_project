@@ -66,7 +66,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DocumentMain_onReady() {
                 var linkEl = Dom.get(this.id + "-link");
-                linkEl.onclick = this.onExpand.bind(this);
+                if (linkEl) {
+                    linkEl.onclick = this.onExpand.bind(this);
+                }
+                Alfresco.util.createTwister(this.id + "-heading", "DocumentMetadata");
             },
 
             onExpand: function () {
@@ -79,7 +82,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             nodeRef: this.options.nodeRef
                         },
                         successCallback: {
-                            fn:function(response){
+                            fn: function (response) {
                                 this.expandView(response.serverResponse.responseText);
                             },
                             scope: this
@@ -88,72 +91,75 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         execScripts: true
                     });
             },
-            onEdit: function(containerId, formId) {
+
+            onEdit: function (containerId, formId) {
                 if (formId != undefined || formId != null) {
                     this.options.formId = formId;
                 }
                 if (containerId != undefined || containerId != null) {
                     this.options.containerId = containerId;
                 }
-                var templateUrl = this.generateCreateNewUrl(this.options.nodeRef,"NodeMetadata-" + this.id);
-                new Alfresco.module.SimpleDialog("documentMetadata-"+this.id+"_results").setOptions({
-                    width:"50em",
-                    templateUrl:templateUrl,
-                    actionUrl:null,
-                    destroyOnHide:true,
-                    doBeforeDialogShow:{
-                        fn:this.setCreateNewFormDialogTitle
+                var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
+                new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
+                    width: "50em",
+                    templateUrl: templateUrl,
+                    actionUrl: null,
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: this.setCreateNewFormDialogTitle
                     },
-                    onSuccess:{
-                        fn:function (response) {
+                    onSuccess: {
+                        fn: function (response) {
                             //формируем путь с параметрами. Осуществляем переход
                             LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
                         },
-                        scope:this
+                        scope: this
                     }
                 }).show();
             },
-            refreshContainer: function(containerId, formId, response){
+
+            refreshContainer: function (containerId, formId, response) {
                 Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-                        dataObj:{
-                            htmlid: 'documentMetadata-'+response.json.persistedObject,
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+                        dataObj: {
+                            htmlid: 'documentMetadata-' + response.json.persistedObject,
                             itemKind: "node",
-                            itemId:nodeRef,
+                            itemId: nodeRef,
                             formId: formId,
-                            mode:"view"
+                            mode: "view"
                         },
-                        successCallback:{
-                            fn:function(response){
+                        successCallback: {
+                            fn: function (response) {
                                 var container = Dom.get(arguments[0].config.containerId);
                                 container.innerHTML = response.serverResponse.responseText;
                             }
                         },
-                        failureMessage:"message.failure",
-                        execScripts:true,
-                        htmlId:response.json.persistedObject,
+                        failureMessage: "message.failure",
+                        execScripts: true,
+                        htmlId: response.json.persistedObject,
                         containerId: containerId
                     });
             },
-            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef,formId) {
+
+            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, formId) {
                 var templateUrl = Alfresco.constants.URL_SERVICECONTEXT +
-                "lecm/components/form"
+                    "lecm/components/form"
                     + "?itemKind={itemKind}"
                     + "&itemId={itemId}"
                     + "&mode={mode}"
                     + "&submitType={submitType}"
-                + "&showCancelButton=true";
+                    + "&showCancelButton=true";
                 return YAHOO.lang.substitute(templateUrl, {
                     itemKind: "node",
-                    itemId:nodeRef,
+                    itemId: nodeRef,
                     formId: formId,
-                    mode:"edit",
-                    submitType:"json"
+                    mode: "edit",
+                    submitType: "json"
                 });
             },
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-                var fileSpan = '<span class="light">'+this.msg("document.main.form.edit")+'</span>';
+                var fileSpan = '<span class="light">' + this.msg("document.main.form.edit") + '</span>';
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", fileSpan]
                 );

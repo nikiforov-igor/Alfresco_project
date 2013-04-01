@@ -12,6 +12,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,13 +34,20 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
+    private LecmPermissionService lecmPermissionService;
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
     }
+
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         this.businessJournalService = businessJournalService;
     }
@@ -145,16 +153,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public Map<QName, Serializable> getProperties(NodeRef documentRef) {
-        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
+        lecmPermissionService.checkPermission("_lecmPerm_AttrList", documentRef);
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 
-        for (Map.Entry<QName, Serializable> e: nodeService.getProperties(documentRef).entrySet()) {
+        for (Map.Entry<QName, Serializable> e : nodeService.getProperties(documentRef).entrySet()) {
             if (!(namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("cm") ||
                     namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("sys"))) {
-                properties.put(e.getKey(),e.getValue());
+                properties.put(e.getKey(), e.getValue());
             }
         }
         return properties;
-
     }
 
     /**
@@ -192,18 +200,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
      */
     @Override
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> property) {
+        lecmPermissionService.checkPermission("_lecmPerm_AttrEdit", nodeRef);
 
-        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
-        for(Map.Entry<String, String> e: property.entrySet()) {
-            properties.put(QName.createQName(e.getKey(),namespaceService),e.getValue());
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+        for (Map.Entry<String, String> e : property.entrySet()) {
+            properties.put(QName.createQName(e.getKey(), namespaceService), e.getValue());
         }
 
         nodeService.setProperties(nodeRef, properties);
-
         return nodeRef;
-
     }
-
 
     @Override
     public Map<QName, Serializable> changeProperties(NodeRef documentRef, Map<QName, Serializable> properties) {

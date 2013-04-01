@@ -13,9 +13,6 @@
          </span>
         </h2>
         <div id="${el}-formContainer"></div>
-        <script type="text/javascript">//<![CDATA[
-        Alfresco.util.createTwister("${el}-heading", "DocumentMetadata");
-        //]]></script>
     </div>
 </div>
 
@@ -24,7 +21,7 @@
     new Alfresco.DocumentMetadata("${el}").setOptions(
             {
                 nodeRef: "${nodeRef}",
-                site: <#if site??>"${site?js_string}"<#else>null</#if>,
+                site: null,
                 formId: <#if formId??>"${formId?js_string}"<#else>null</#if>
             }).setMessages(${messages});
     var documentMetadataComponent = new LogicECM.DocumentMetadata("${el}").setOptions(

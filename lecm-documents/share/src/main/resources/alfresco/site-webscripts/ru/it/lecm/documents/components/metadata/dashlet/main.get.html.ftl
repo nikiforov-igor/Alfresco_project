@@ -1,10 +1,11 @@
+<#if hasPermission!false>
 <#assign id = args.htmlid?js_string>
 <script type="text/javascript">
     //<![CDATA[
     (function() {
         var Dom = YAHOO.util.Dom,
-            Event = YAHOO.util.Event,
-            Selector = YAHOO.util.Selector;
+                Event = YAHOO.util.Event,
+                Selector = YAHOO.util.Selector;
         var container;
 
         function drawForm(nodeRef, htmlId, formId){
@@ -56,3 +57,4 @@
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results"></div>
 </div>
+</#if>

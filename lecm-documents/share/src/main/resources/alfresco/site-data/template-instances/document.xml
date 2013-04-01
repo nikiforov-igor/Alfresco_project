@@ -161,7 +161,7 @@
        <!-- Основные сведения -->
        <component>
            <region-id>document-metadata</region-id>
-           <url>/lecm/components/document/document-main</url>
+           <url>/lecm/components/document/document-meta</url>
            <properties>
                <nodeRef>{nodeRef}</nodeRef>
            </properties>
