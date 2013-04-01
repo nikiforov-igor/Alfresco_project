@@ -1,11 +1,11 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
-
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-	model.hasViewPerm = hasViewConnectionsPermission(model.nodeRef);
-	model.hasCreatePerm = hasCreateConnectionsPermission(model.nodeRef);
-	model.hasDeletePerm = hasDeleteConnectionsPermission(model.nodeRef);
+	model.hasViewPerm = hasPermission(model.nodeRef, '_lecmPerm_LinksView');
+	model.hasCreatePerm = hasPermission(model.nodeRef, '_lecmPerm_LinksCreate');
+	model.hasDeletePerm = hasPermission(model.nodeRef, '_lecmPerm_LinksDelete');
 	if (model.hasViewPerm) {
 		model.connections = getConnections(model.nodeRef);
 		model.connectionsWithDocument = getConnectionsWithDocument(model.nodeRef);
@@ -34,36 +34,6 @@ function getConnectionsWithDocument(nodeRef, defaultValue) {
 		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
 	}
 	return eval('(' + result + ')');
-}
-
-function hasViewConnectionsPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksView';
-	var result = remote.connect("alfresco").get(url);
-	if (result.status != 200) {
-		return false;
-	}
-	var permission = eval('(' + result + ')');
-	return (("" + permission) ==  "true");
-}
-
-function hasCreateConnectionsPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksCreate';
-	var result = remote.connect("alfresco").get(url);
-	if (result.status != 200) {
-		return false;
-	}
-	var permission = eval('(' + result + ')');
-	return (("" + permission) ==  "true");
-}
-
-function hasDeleteConnectionsPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksDelete';
-	var result = remote.connect("alfresco").get(url);
-	if (result.status != 200) {
-		return false;
-	}
-	var permission = eval('(' + result + ')');
-	return (("" + permission) ==  "true");
 }
 
 main();

@@ -1,9 +1,8 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
-
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 function main() {
     AlfrescoUtil.param("nodeRef");
-
-	var hasPerm = hasViewConnectionsPermission(model.nodeRef);
+	var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_LinksView');
 	if (hasPerm) {
 		model.connections = getConnections(model.nodeRef);
 	}
@@ -19,16 +18,6 @@ function getConnections(nodeRef, defaultValue) {
         AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
     }
     return eval('(' + result + ')');
-}
-
-function hasViewConnectionsPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_LinksView';
-	var result = remote.connect("alfresco").get(url);
-	if (result.status != 200) {
-		return false;
-	}
-	var permission = eval('(' + result + ')');
-	return (("" + permission) ==  "true");
 }
 
 main();

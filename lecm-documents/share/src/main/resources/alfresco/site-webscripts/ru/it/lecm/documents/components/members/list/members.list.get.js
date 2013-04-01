@@ -1,9 +1,10 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
     model.members = getMembers(model.nodeRef);
-    model.mayAdd = hasAddMemberPermission(model.nodeRef);
+    model.mayAdd = hasPermission(model.nodeRef, '_lecmPerm_MemberAdd');
 }
 
 function getMembers(nodeRef) {
@@ -14,16 +15,5 @@ function getMembers(nodeRef) {
     }
     return eval('(' + result + ')');
 }
-
-function hasAddMemberPermission(nodeRef) {
-    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_MemberAdd';
-    var result = remote.connect("alfresco").get(url);
-    if (result.status != 200) {
-        return false;
-    }
-    var permission = eval('(' + result + ')');
-    return (("" + permission) ==  "true");
-}
-
 
 main();

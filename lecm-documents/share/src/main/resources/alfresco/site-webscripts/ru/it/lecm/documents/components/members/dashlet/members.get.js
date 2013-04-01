@@ -1,5 +1,7 @@
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+
 function main() {
-    var hasPerm = hasViewMembersPermission(args["nodeRef"]);
+    var hasPerm = hasPermission(args["nodeRef"], '_lecmPerm_MemberList');
     if(hasPerm){
         var url = "/lecm/document/api/getMembersFolder?nodeRef=" + args["nodeRef"];
         var json = remote.connect("alfresco").get(url);
@@ -8,16 +10,6 @@ function main() {
             model.folderRef = obj.nodeRef;
         }
     }
-}
-
-function hasViewMembersPermission(nodeRef) {
-    var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_MemberList';
-    var result = remote.connect("alfresco").get(url);
-    if (result.status != 200) {
-        return false;
-    }
-    var permission = eval('(' + result + ')');
-    return (("" + permission) ==  "true");
 }
 
 main();
