@@ -1,10 +1,13 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
     var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-    if (nodeDetails) {
+    var hasPerm = hasPermission(model.nodeRef, "_lecmPerm_SetRate");
+
+    if (nodeDetails && hasPerm) {
         model.item = nodeDetails.item;
 
         var aspects = nodeDetails.item.node.aspects;

@@ -9,28 +9,29 @@
     margin-bottom: 1em;
     margin-top: 1em;
 }
-#raiting {
-    position:relative;
+#rating {
     width: 105px;
     height: 21px;
     float: right;
     cursor: pointer;
     margin-bottom: 5px;
+    position: relative;
+    overflow: hidden;
 }
-#raiting_blank,
-#raiting_votes,
-#raiting_hover {
+#rating_blank,
+#rating_votes,
+#rating_hover {
     height: 21px;
     position: absolute;
 }
-#raiting_blank {
+#rating_blank {
     background: url('../../images/rating.png') repeat-x;
     width: 105px;
 }
-#raiting_votes {
+#rating_votes {
     background: url('../../images/rating.png') repeat-x 0 -21px;
 }
-#raiting_hover {
+#rating_hover {
     background: url('../../images/rating.png') repeat-x 0 -42px;
     display: none;
 }

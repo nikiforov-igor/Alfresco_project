@@ -6,10 +6,10 @@
 <#if rateable?? && rateable>
     <div class="document-rating">
         <h2 id="rating_title" class="thin dark">${msg("document.rating.your-voice")}</h2>
-        <div id="raiting">
-            <div id="raiting_blank"></div>
-            <div id="raiting_hover"></div>
-            <div id="raiting_votes"></div>
+        <div id="rating">
+            <div id="rating_blank"></div>
+            <div id="rating_hover"></div>
+            <div id="rating_votes"></div>
         </div>
         <a id="rating_change" href="javascript:void(0);">${msg("document.rating.change")}</a>
     </div>
@@ -21,10 +21,10 @@
     var oneStarWidth = 21;
     var yourVote = '${msg("document.rating.your-voice-set")}';
 
-    Event.onContentReady('raiting', function() {
-        var ratingBlock = Dom.get('raiting'),
-            ratingHover = Dom.get('raiting_hover'),
-            ratingVotes = Dom.get('raiting_votes'),
+    Event.onContentReady('rating', function() {
+        var ratingBlock = Dom.get('rating'),
+            ratingHover = Dom.get('rating_hover'),
+            ratingVotes = Dom.get('rating_votes'),
             change = Dom.get('rating_change');
         var ratingMargin = Dom.getX(ratingBlock);
         var userVote,

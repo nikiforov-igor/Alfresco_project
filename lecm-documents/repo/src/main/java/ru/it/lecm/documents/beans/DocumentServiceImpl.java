@@ -92,6 +92,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public Integer setMyRating(NodeRef documentNodeRef, Integer rating) {
+        lecmPermissionService.checkPermission("_lecmPerm_SetRate", documentNodeRef);
         if (rating > 0 && rating < 6) {
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
