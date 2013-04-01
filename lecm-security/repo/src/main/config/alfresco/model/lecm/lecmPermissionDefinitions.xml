@@ -239,7 +239,7 @@
 		</permissionGroup>
 
 		<permissionGroup name="lecmPerm_SetRate" expose="true" allowFullControl="false">
-			<!-- <includePermissionGroup type="sys:base" permissionGroup="WriteProperties" /> иначе смоджет редактировать даже  pg-reader -->
+			<!-- <includePermissionGroup type="sys:base" permissionGroup="WriteProperties" /> иначе сможет редактировать даже  pg-reader -->
 		</permissionGroup>
 
       <!-- =========== -->
@@ -686,7 +686,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
       </permissionGroup>
 
-      <permissionGroup name="LECM_BASIC_PG_Initiator" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Initiator" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <!--
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
@@ -729,7 +729,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" /> -->
       </permissionGroup>
 
-      <permissionGroup name="LECM_BASIC_PG_InputCorrector" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_InputCorrector" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <!-- 
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
@@ -778,7 +778,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" /> -->
       </permissionGroup>
 
-      <permissionGroup name="LECM_BASIC_PG_Reader" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Reader" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />
         <!--
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
@@ -823,7 +823,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
       </permissionGroup>
 
-      <permissionGroup name="LECM_BASIC_PG_Owner" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Owner" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
          <!--
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
@@ -867,7 +867,7 @@
       </permissionGroup>
 
       <!-- Ответственный работчник -->
-      <permissionGroup name="LECM_BASIC_PG_ResponsibleEmployee" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_ResponsibleEmployee" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
          <!--
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
@@ -911,7 +911,7 @@
       </permissionGroup>
 
       <!-- Работник -->
-      <permissionGroup name="LECM_BASIC_PG_Employee" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Employee" allowFullControl="false" expose="false" >
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <!-- 
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
@@ -955,7 +955,7 @@
       </permissionGroup>
 
       <!-- Рецензент -->
-      <permissionGroup name="LECM_BASIC_PG_Reviewer" allowFullControl="true" expose="false" >
+      <permissionGroup name="LECM_BASIC_PG_Reviewer" allowFullControl="false" expose="false" >
          <!--
          <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
