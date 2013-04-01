@@ -46,6 +46,8 @@ public interface DocumentAttachmentsService {
 
 	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
 
+	public NodeRef getDocumentByCategory(NodeRef categoryRef);
+
 	public NodeRef getDocumentByAttachment(NodeRef attachRef);
 
 	public boolean isDocumentAttachment(NodeRef nodeRef);

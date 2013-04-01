@@ -295,6 +295,9 @@
 	    <property name="documentAttachmentsService">
 		    <ref bean="documentAttachmentsService"/>
 	    </property>
+	    <property name="lecmPermissionService">
+		    <ref bean="lecmPermissionServiceBean"/>
+	    </property>
         <property name="substituteService" ref="substitudeService"/>
         <property name="transactionService" ref="transactionService"/>
     </bean>

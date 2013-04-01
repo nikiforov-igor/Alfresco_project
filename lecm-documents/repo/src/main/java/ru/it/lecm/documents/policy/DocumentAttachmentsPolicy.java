@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
 import org.alfresco.repo.node.NodeServicePolicies;
@@ -24,6 +25,7 @@ import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,7 +40,9 @@ import java.util.Map;
 public class DocumentAttachmentsPolicy extends BaseBean implements
 		NodeServicePolicies.BeforeDeleteNodePolicy,
 		NodeServicePolicies.OnUpdatePropertiesPolicy,
+		VersionServicePolicies.BeforeCreateVersionPolicy,
 		VersionServicePolicies.AfterCreateVersionPolicy,
+        NodeServicePolicies.BeforeCreateNodePolicy,
         NodeServicePolicies.OnCreateNodePolicy {
 
     final protected Logger logger = LoggerFactory.getLogger(DocumentAttachmentsPolicy.class);
@@ -50,6 +54,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     private OrgstructureBean orgstructureService;
     private DictionaryService dictionaryService;
     private SubstitudeBean substituteService;
+	private LecmPermissionService lecmPermissionService;
 
     final private QName[] AFFECTED_PROPERTIES = {ContentModel.PROP_CREATOR, ContentModel.PROP_MODIFIER};
 
@@ -77,16 +82,32 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		this.documentAttachmentsService = documentAttachmentsService;
 	}
 
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
 	public final void init() {
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
+				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeDeleteNode"));
+		policyComponent.bindClassBehaviour(VersionServicePolicies.BeforeCreateVersionPolicy.QNAME,
+				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateVersion"));
         policyComponent.bindClassBehaviour(VersionServicePolicies.AfterCreateVersionPolicy.QNAME,
 			    ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "afterCreateVersion", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
+
+	@Override
+	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
+		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
+		if (document != null) {
+			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAdd", document);
+		}
+	}
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
@@ -118,6 +139,8 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
+	        this.lecmPermissionService.checkPermission("_lecmPerm_ContentDelete", document);
+
             // добавляем пользователя удалившего вложения как участника
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
                 @Override
@@ -183,6 +206,14 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     public void setSubstituteService(SubstitudeBean substitudeService) {
         this.substituteService = substitudeService;
     }
+
+	@Override
+	public void beforeCreateVersion(NodeRef versionableNode) {
+		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
+		if (document != null) {
+			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAddVer", document);
+		}
+	}
 
 	@Override
 	public void afterCreateVersion(NodeRef nodeRef, Version version) {

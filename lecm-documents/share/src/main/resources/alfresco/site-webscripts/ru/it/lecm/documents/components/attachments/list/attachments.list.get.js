@@ -1,9 +1,10 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-	model.hasViewListPerm = hasViewAttachmentsListPermission(model.nodeRef);
+	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
 	if (model.hasViewListPerm) {
         model.categories = getCategories(model.nodeRef).categories;
 	}
@@ -20,16 +21,5 @@ function getCategories(nodeRef, defaultValue) {
     }
     return eval('(' + result + ')');
 }
-
-function hasViewAttachmentsListPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_ContentList';
-	var result = remote.connect("alfresco").get(url);
-	if (result.status != 200) {
-		return false;
-	}
-	var permission = eval('(' + result + ')');
-	return (("" + permission) ==  "true");
-}
-
 
 main();
