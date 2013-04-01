@@ -1,7 +1,7 @@
 <#if nodeRef??>
    <#assign el=args.htmlid?js_string>
    <script type="text/javascript">//<![CDATA[
-      new Alfresco.CommentsList("${el}").setOptions(
+      new LogicECM.CommentsList("${el}").setOptions(
       {
          nodeRef: "${nodeRef?js_string}",
          siteId: <#if site??>"${site?js_string}"<#else>null</#if>,
