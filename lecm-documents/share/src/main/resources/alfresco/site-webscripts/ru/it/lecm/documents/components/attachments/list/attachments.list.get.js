@@ -5,9 +5,30 @@ function main() {
     AlfrescoUtil.param("nodeRef");
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
+	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
+	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentAdd');
+
+	var actions = [];
+
 	if (model.hasViewListPerm) {
         model.categories = getCategories(model.nodeRef).categories;
 	}
+
+	if (model.hasViewAttachmentPerm) {
+		actions.push("document-download");
+		actions.push("document-view-content");
+		actions.push("document-edit-properties");
+	}
+
+	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer')) {
+		actions.push("document-upload-new-version");
+	}
+
+	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete')) {
+		actions.push("document-delete");
+	}
+
+	model.actions = actions;
 }
 
 function getCategories(nodeRef, defaultValue) {

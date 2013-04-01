@@ -25,9 +25,13 @@
                             <ul class="attachment">
                                 <#list item.attachments as attachment>
                                     <li>
-                                        <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                        ${attachment.name!""}
-                                        </a>
+	                                    <#if hasViewAttachmentPerm>
+		                                    <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
+		                                    ${attachment.name!""}
+		                                    </a>
+	                                    <#else>
+	                                        ${attachment.name!""}
+	                                    </#if>
                                     </li>
                                 </#list>
                             </ul>

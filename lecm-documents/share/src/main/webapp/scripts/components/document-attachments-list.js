@@ -161,6 +161,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	             */
 	            bubblingLabel: null,
 
+	            showFileFolderLink: false,
+
 	            showActions: [
 		            "document-download",
 		            "document-view-content",
@@ -914,7 +916,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        Dom.setStyle(elCell, "width", oColumn.width + "px");
 			        Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
-			        elCell.innerHTML = '<span class="thumbnail">' + (isLink ? '<span class="link"></span>' : '') + LogicECM.DocumentAttachmentsList.generateFileFolderLinkMarkup(scope, record) + '<img id="' + imgId + '" src="' + LogicECM.DocumentAttachmentsList.generateThumbnailUrl(record) + '" alt="' + extn + '" title="' + $html(name) + '" /></a></span>';
+			        if (scope.options.showFileFolderLink) {
+				        elCell.innerHTML = '<span class="thumbnail">' + (isLink ? '<span class="link"></span>' : '') + LogicECM.DocumentAttachmentsList.generateFileFolderLinkMarkup(scope, record) + '<img id="' + imgId + '" src="' + LogicECM.DocumentAttachmentsList.generateThumbnailUrl(record) + '" alt="' + extn + '" title="' + $html(name) + '" /></a></span>';
+			        } else {
+				        elCell.innerHTML = '<span class="thumbnail">' + (isLink ? '<span class="link"></span>' : '') + '<img id="' + imgId + '" src="' + LogicECM.DocumentAttachmentsList.generateThumbnailUrl(record) + '" alt="' + extn + '" title="' + $html(name) + '" /></span>';
+			        }
 		        };
 	        },
 
@@ -1061,8 +1067,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
 
                     /* Title */
-                    desc += '<h3 class="filename"><span id="' + filenameId + '">'+ LogicECM.DocumentAttachmentsList.generateFileFolderLinkMarkup(scope, record);
-                    desc += $html(record.displayName) + '</a></span>' + titleHTML + version + '</h3>';
+	                if (scope.options.showFileFolderLink) {
+		                desc += '<h3 class="filename"><span id="' + filenameId + '">'+ LogicECM.DocumentAttachmentsList.generateFileFolderLinkMarkup(scope, record);
+		                desc += $html(record.displayName) + '</a></span>' + titleHTML + version + '</h3>';
+	                } else {
+		                desc += '<h3 class="filename"><span id="' + filenameId + '">';
+		                desc += $html(record.displayName) + '</span>' + titleHTML + version + '</h3>';
+	                }
 
                     /**
                      *  Render using metadata template

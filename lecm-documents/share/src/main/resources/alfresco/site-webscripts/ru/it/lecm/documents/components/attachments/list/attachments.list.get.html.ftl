@@ -19,13 +19,15 @@
 	                            ${category.name}
 	                        </td>
 	                        <td class="category-upload">
-	                            <div class="file-upload">
-	                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
-	                                  <span class="first-child">
-	                                     <button name="fileUpload">${msg("button.upload.file")}</button>
-	                                  </span>
-	                               </span>
-	                            </div>
+		                        <#if hasAddAttachmentPerm>
+		                            <div class="file-upload">
+		                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
+		                                  <span class="first-child">
+		                                     <button name="fileUpload">${msg("button.upload.file")}</button>
+		                                  </span>
+		                               </span>
+		                            </div>
+		                        </#if>
 	                        </td>
 	                    </tr>
 	                </table>
@@ -58,6 +60,14 @@
 			                    {
 			                        nodeRef: "${category.nodeRef}",
 				                    path: path,
+				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
+				                    showActions: [
+				                        <#if actions??>
+				                            <#list actions as action>
+				                                "${action}"<#if action_has_next>,</#if>
+				                            </#list>
+				                        </#if>
+				                    ],
 				                    bubblingLabel: "${category.nodeRef}-${aDateTime?iso_utc}"
 			                    }).setMessages(${messages});
 					</#list>

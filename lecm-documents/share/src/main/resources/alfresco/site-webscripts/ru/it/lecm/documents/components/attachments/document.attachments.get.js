@@ -5,9 +5,10 @@ function main()
 {
     AlfrescoUtil.param("nodeRef");
     AlfrescoUtil.param("view", "");
-	var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');;
+	var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
 	if (hasPerm) {
 		model.attachments = getAttachments(model.nodeRef);
+		model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
 	}
 }
 
