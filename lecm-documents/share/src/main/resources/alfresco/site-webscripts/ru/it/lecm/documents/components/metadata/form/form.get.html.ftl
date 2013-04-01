@@ -43,11 +43,11 @@
 </script>
 
 <div class="dashlet-metadata" id="${id}_metadata">
+    <#if mayAdd!false>
     <div class="lecm-dashlet-actions">
-        <#if mayAdd!false>
-            <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
-               class="edit" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
-        </#if>
+        <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
+            class="edit" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
     </div>
+    </#if>
     <div id="${id}_container"></div>
 </#if>
