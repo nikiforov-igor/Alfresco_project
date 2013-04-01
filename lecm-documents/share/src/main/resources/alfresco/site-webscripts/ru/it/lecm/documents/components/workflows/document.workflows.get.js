@@ -1,8 +1,12 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    model.data = getWorkflows(model.nodeRef);
+    var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_WFEnumBP');
+    if (hasPerm) {
+        model.data = getWorkflows(model.nodeRef);
+    }
 }
 
 function getWorkflows(nodeRef) {

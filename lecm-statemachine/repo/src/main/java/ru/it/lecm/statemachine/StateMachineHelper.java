@@ -29,6 +29,7 @@ import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
@@ -61,6 +62,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static DocumentMembersService documentMembersService;
     private static BusinessJournalService businessJournalService;
     private static TransactionService transactionService;
+    private LecmPermissionService lecmPermissionService;
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
     private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
@@ -87,6 +89,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         StateMachineHelper.businessJournalService = businessJournalService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
@@ -531,11 +537,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
+        lecmPermissionService.checkPermission("_lecmPerm_WFEnumBP", nodeRef);
+
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
         return filterWorkflows(activeWorkflows);
     }
 
     private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
+        lecmPermissionService.checkPermission("_lecmPerm_WFTaskList", nodeRef);
+
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 

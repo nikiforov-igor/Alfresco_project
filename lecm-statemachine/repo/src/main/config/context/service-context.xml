@@ -78,6 +78,7 @@
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="transactionService" ref="transactionService" />
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 	</bean>
 
 	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignExecution">

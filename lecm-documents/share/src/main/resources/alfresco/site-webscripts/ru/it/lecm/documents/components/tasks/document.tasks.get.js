@@ -1,8 +1,12 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    model.data = getTasks(model.nodeRef);
+    var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_WFTaskList');
+    if (hasPerm) {
+        model.data = getTasks(model.nodeRef);
+    }
 }
 
 function getTasks(nodeRef) {
