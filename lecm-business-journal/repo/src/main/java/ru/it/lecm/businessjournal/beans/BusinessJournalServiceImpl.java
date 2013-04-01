@@ -275,9 +275,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
 		String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
 		if (link != null) {
-            String linkUrl = isLECMDocument(link) ? DOCUMENT_LINK_URL : LINK_URL;
-            return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">"
-                        + description + "</a>";
+            String linkUrl = isLECMDocument(link) ? DOCUMENT_LINK_URL : (isLECMDocumentAttachment(link) ? DOCUMENT_ATTACHMENT_LINK_URL : LINK_URL);
+            return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">"  + description + "</a>";
 		} else {
 			return description;
 		}
@@ -713,6 +712,20 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         QName testType = nodeService.getType(document);
         Collection<QName> subDocumentTypes = dicService.getSubTypes(TYPE_BASE_DOCUMENT, true);
         return subDocumentTypes != null && subDocumentTypes.contains(testType);
+    }
+
+    private boolean isLECMDocumentAttachment(NodeRef attachment) {
+        NodeRef attachCategoryDir = nodeService.getPrimaryParent(attachment).getParentRef();
+        NodeRef attachRootDir = nodeService.getPrimaryParent(attachCategoryDir).getParentRef();
+        if (attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals("Вложения")) {
+            NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
+            if (document != null) {
+                if (isLECMDocument(document)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private String getWorkflowDescription(String executionId) {
