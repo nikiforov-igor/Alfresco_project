@@ -3,7 +3,10 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-    model.categories = getCategories(model.nodeRef).categories;
+	model.hasViewListPerm = hasViewAttachmentsListPermission(model.nodeRef);
+	if (model.hasViewListPerm) {
+        model.categories = getCategories(model.nodeRef).categories;
+	}
 }
 
 function getCategories(nodeRef, defaultValue) {
@@ -17,5 +20,16 @@ function getCategories(nodeRef, defaultValue) {
     }
     return eval('(' + result + ')');
 }
+
+function hasViewAttachmentsListPermission(nodeRef) {
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_ContentList';
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var permission = eval('(' + result + ')');
+	return (("" + permission) ==  "true");
+}
+
 
 main();

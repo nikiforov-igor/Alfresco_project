@@ -38,12 +38,14 @@
                         usePagination: false,
                         showExtendSearchBlock: false,
                         actions: [
-                            {
-                                type: "datagrid-action-link-${containerId}",
-                                id: "onActionViewContent",
-                                permission: "edit",
-                                label: "${msg("actions.view-content")}"
-                            },
+	                        <#if hasViewAttachmentPerm>
+	                            {
+	                                type: "datagrid-action-link-${containerId}",
+	                                id: "onActionViewContent",
+	                                permission: "edit",
+	                                label: "${msg("actions.view-content")}"
+	                            },
+	                        </#if>
                             {
                                 type: "datagrid-action-link-${containerId}",
                                 id: "onActionUploadNewVersion",

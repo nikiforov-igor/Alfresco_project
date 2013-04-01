@@ -4,8 +4,20 @@ function main()
 {
     AlfrescoUtil.param("nodeRef");
     AlfrescoUtil.param("view", "");
+	var hasPerm = hasViewAttachmentsListPermission(model.nodeRef);
+	if (hasPerm) {
+		model.attachments = getAttachments(model.nodeRef);
+	}
+}
 
-	model.attachments = getAttachments(model.nodeRef);
+function hasViewAttachmentsListPermission(nodeRef) {
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_ContentList';
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var permission = eval('(' + result + ')');
+	return (("" + permission) ==  "true");
 }
 
 function getAttachments(nodeRef, defaultValue) {
