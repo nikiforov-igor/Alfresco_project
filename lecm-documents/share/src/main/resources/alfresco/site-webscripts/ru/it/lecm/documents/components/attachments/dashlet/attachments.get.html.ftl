@@ -44,23 +44,27 @@
 	                                id: "onActionViewContent",
 	                                permission: "edit",
 	                                label: "${msg("actions.view-content")}"
-	                            },
+	                            }<#if hasAddNewVersionAttachmentPerm || hasDeleteAttachmentPerm>,</#if>
 	                        </#if>
-                            {
-                                type: "datagrid-action-link-${containerId}",
-                                id: "onActionUploadNewVersion",
-                                permission: "edit",
-                                label: "${msg("actions.upload-new-version")}"
-                            },
-                            {
-                                type: "datagrid-action-link-${containerId}",
-                                id: "onActionDelete",
-                                permission: "delete",
-                                label: "${msg("actions.delete-row")}",
-                                confirmFunction: function () {
-                                    YAHOO.Bubbling.fire("fileDeleted", {});
-                                }
-                            }
+	                        <#if hasAddNewVersionAttachmentPerm>
+	                            {
+	                                type: "datagrid-action-link-${containerId}",
+	                                id: "onActionUploadNewVersion",
+	                                permission: "edit",
+	                                label: "${msg("actions.upload-new-version")}"
+	                            }<#if hasDeleteAttachmentPerm>,</#if>
+	                        </#if>
+	                        <#if hasDeleteAttachmentPerm>
+	                            {
+	                                type: "datagrid-action-link-${containerId}",
+	                                id: "onActionDelete",
+	                                permission: "delete",
+	                                label: "${msg("actions.delete-row")}",
+	                                confirmFunction: function () {
+	                                    YAHOO.Bubbling.fire("fileDeleted", {});
+	                                }
+	                            }
+	                        </#if>
                         ],
                         datagridMeta: {
                             itemType: "cm:content",

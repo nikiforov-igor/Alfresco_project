@@ -6,6 +6,8 @@ function main() {
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
+	model.hasAddNewVersionAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer');
+	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentDelete');
 	if (model.hasViewListPerm) {
 		model.categories = getCategories(model.nodeRef).categories;
 	}
