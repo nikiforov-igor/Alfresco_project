@@ -21,8 +21,8 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 	var shortDateInField = Alfresco.util.formatDate(Alfresco.util.fromISO8601(field.value), "d/m");
 
 	// Подгрузить два датагрида
-	dataGrids.push(LogicECM.module.WCalendar.Utils.findGridByName("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL));
-	dataGrids.push(LogicECM.module.WCalendar.Utils.findGridByName("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL));
+	dataGrids.push(LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL));
+	dataGrids.push(LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL));
 
 	for (var i = 0; i < dataGrids.length; i++) {
 		var tableRows = [];

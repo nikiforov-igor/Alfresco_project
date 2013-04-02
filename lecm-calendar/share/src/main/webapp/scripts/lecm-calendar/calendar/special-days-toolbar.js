@@ -24,7 +24,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 		_createSpecialDay: function WCalendarToolbar_createSpecialDay(wantedBubblingLabel) {
 			var scope = this;
 			return function(event, obj) {
-				var dataGrid = LogicECM.module.WCalendar.Utils.findGridByName("LogicECM.module.Base.DataGrid", wantedBubblingLabel);
+				var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", wantedBubblingLabel);
 				var datagridMeta = dataGrid.datagridMeta;
 				var destination = datagridMeta.nodeRef;
 				var itemType = datagridMeta.itemType;
@@ -42,14 +42,14 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 							);
 				};
 
-				var url = "lecm/components/form"
-						+ "?itemKind={itemKind}"
-						+ "&itemId={itemId}"
-						+ "&formId={formId}"
-						+ "&destination={destination}"
-						+ "&mode={mode}"
-						+ "&submitType={submitType}"
-						+ "&showCancelButton=true";
+				var url = "lecm/components/form" +
+						"?itemKind={itemKind}" +
+						"&itemId={itemId}" +
+						"&formId={formId}" +
+						"&destination={destination}" +
+						"&mode={mode}" +
+						"&submitType={submitType}" +
+						"&showCancelButton=true";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
 					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.

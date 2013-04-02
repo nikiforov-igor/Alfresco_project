@@ -12,7 +12,6 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-toolbar.css"/>
 
 <#-- Скрипты меню, тулбара и датагрида -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/non-working-days-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/working-days-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/calendar/years-datagrid.js"/>

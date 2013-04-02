@@ -9,7 +9,6 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-user-profile/user-profile-menu.css"/>
 
 <#-- Скрипты меню, тулбара и датагрида -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
 <#-- Скрипт для страницы "Меня нет в офисе" -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/instant-absence-page.js"/>
@@ -36,6 +35,6 @@ LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = LogicECM.module.WCalendar.
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePage showToolbar=false>
-		<@region id="absence-instante" scope="template"/>
+	<@region id="absence-instante" scope="template"/>
 </@bpage.basePage>
 

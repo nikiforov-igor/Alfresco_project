@@ -72,7 +72,43 @@ LogicECM.module.Base.Util = {
             }
         }
         location.search = params;
-    }
+    },
+	/**
+	 * Найти на странице компонент, имеющий определенный bubbling label.
+	 * @param {string} p_sName название компонента. Например, "LogicECM.module.Base.DataGrid"
+	 * @param {string} bubblingLabel bullbling label компонента
+	 */
+	findComponentByBubblingLabel: function(p_sName, bubblingLabel) {
+		var components = [];
+		var found = [];
+		var bMatch, component;
+
+		components = Alfresco.util.ComponentManager.list();
+
+		for (var i = 0, j = components.length; i < j; i++) {
+			component = components[i];
+			bMatch = true;
+			if (component['name'].search(p_sName) == -1) {
+				bMatch = false;
+			}
+			if (bMatch) {
+				found.push(component);
+			}
+		}
+		if (bubblingLabel) {
+			for (i = 0, j = found.length; i < j; i++) {
+				component = found[i];
+				if (typeof component == "object" && component.options.bubblingLabel) {
+					if (component.options.bubblingLabel == bubblingLabel) {
+						return component;
+					}
+				}
+			}
+		} else {
+			return (typeof found[0] == "object" ? found[0] : null);
+		}
+		return null;
+	}
 };
 
 (function(){

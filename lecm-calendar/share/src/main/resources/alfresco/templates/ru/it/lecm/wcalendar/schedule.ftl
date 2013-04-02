@@ -12,7 +12,6 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/reiteration-control.css"/>
 
 <#-- Скрипты меню, тулбара и датагрида -->
-<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/utils.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/schedule-datagrid.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/schedule-toolbar.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/menu.js"/>
