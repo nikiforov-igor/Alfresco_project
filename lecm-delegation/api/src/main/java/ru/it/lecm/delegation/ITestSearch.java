@@ -7,7 +7,7 @@ public interface ITestSearch {
 
 	JSONObject test(JSONObject args);
 
-	JSONObject runTest(int testnum) throws JSONException;
+	JSONObject runTest(String testName) throws JSONException;
 
 	void setConfig(final JSONObject config) throws JSONException;
 }

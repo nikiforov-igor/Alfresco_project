@@ -153,6 +153,27 @@ public interface LecmPermissionService {
 
 
 	/**
+	 * Отладочная проца для удобства журналирования.
+	 * Сформировать таблицу lecm-прав (строки) для указанных пользователей (столбцы).
+	 * Вида:
+	 * ------------------------------------------------------------
+	 * [nn]	     permTag         	user1	user2	...
+	 * ------------------------------------------------------------
+	 * [1]	_lecmPerm_CommentView	TRUE	false	...
+	 * [2]	_lecmPerm_MemberList	TRUE	false	...
+	 * [3]	...
+	 * ------------------------------------------------------------
+	 * (TRUE с большой буквы, false наоборот)
+	 * 
+	 * @param info
+	 * @param nodeRef
+	 * @param userLogins список имён пользователей, относительно которых надо проверить доступ
+	 * @return SB со сформированным списком 
+	 */
+	StringBuilder trackAllLecmPermissions( String info, NodeRef nodeRef,
+			String ... userLogins); 
+
+	/**
 	 * Именованный security-объект Альфреско, в имено которого содержится префикс
 	 */
 	public interface AlfrescoSecurityNamedItemWithPrefix {

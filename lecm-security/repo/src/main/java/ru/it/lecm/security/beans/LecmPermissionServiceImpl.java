@@ -1,5 +1,19 @@
 package ru.it.lecm.security.beans;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
+
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -7,23 +21,24 @@ import org.alfresco.repo.security.permissions.PermissionReference;
 import org.alfresco.repo.security.permissions.impl.ModelDAO;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AccessStatus;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.extensions.surf.util.I18NUtil;
+
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
-
-import javax.naming.AuthenticationException;
-import javax.naming.InvalidNameException;
-import java.util.*;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -340,7 +355,12 @@ public class LecmPermissionServiceImpl
 			final RunAsWork<Boolean> runner = new RunAsWork<Boolean>() {
 				@Override
 				public Boolean doWork() throws Exception {
-					return permissionService.hasPermission(node, permission) == AccessStatus.ALLOWED;
+					final AccessStatus status = permissionService.hasPermission(node, permission);
+					if (logger.isTraceEnabled()) {
+						logger.debug( String.format( "hasPermission check:\n\t nodeRef: %s\n\t login: %s \n\t permission: %s \n\t found: %s"
+								, node, userLogin, permission, status));
+					}
+					return status == AccessStatus.ALLOWED;
 				}
 			};
 
@@ -756,4 +776,45 @@ public class LecmPermissionServiceImpl
 		return result;
 	}
 
+	private static final String EMPTYLINE = "\n------------------------------------------------------------";
+
+	/**
+	 * Выдать в лог таблицу lecm-прав (строки) для указанных пользователей (столбцы)
+	 * @param info
+	 * @param nodeRef
+	 * @param userLogins список имён пользователей, относительно которых надо проверить доступ
+	 */
+	public StringBuilder trackAllLecmPermissions(String info, NodeRef nodeRef,
+			String ... userLogins) 
+	{
+		final StringBuilder sb = new StringBuilder();
+		if (userLogins == null) return sb;
+		if (info != null)
+			sb.append(info);
+		sb.append( String.format( "\n\t nodeRef=%s\n\t for users [%s]", nodeRef, new HashSet<String>( Arrays.asList(userLogins)) ));
+		sb.append("\n");
+
+		// выдаём заголовок
+		sb.append(EMPTYLINE);
+		sb.append( String.format("\n  [%s]\t%15s", "nn", "permTag"));
+		for (String username: userLogins) {
+			sb.append( String.format("\t%12s", username));
+		}
+		sb.append(EMPTYLINE);
+
+		final Collection<LecmPermission> all = this.getAllPermissons();
+		// выдаём таблицу
+		int i = 0;
+		for (LecmPermission perm: all) {
+			++i;
+			sb.append( String.format("\n  [%d]\t%15s", i, perm.getName()));
+			for (String username: userLogins) {
+				final boolean flag = this.hasPermission(perm, nodeRef, username);
+				sb.append( String.format("\t%12s", (flag ? "TRUE" : "false") ));
+			}
+		}
+		sb.append(EMPTYLINE).append("\n");
+
+		return sb;
+	}
 }

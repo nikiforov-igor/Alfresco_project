@@ -15,6 +15,8 @@ import java.util.UUID;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -513,22 +515,6 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		return result;
 	}
 
-	final private static String ARG_TESTNAME = "testName";
-
-	final private static String PREFIX_TEST = "test";
-	public static Integer findTestNum(String s) {
-		if (s != null) {
-			try {
-				// final String[] sN = s.toLowerCase().split(PREFIX_TEST);
-				if (s.toLowerCase().startsWith(PREFIX_TEST))
-					return Integer.parseInt( s.substring(PREFIX_TEST.length()));
-			} catch (NumberFormatException ex) {
-				logger.info("test '"+ s + "' is not numbered test -> skipped");
-			}
-		}
-		return null; // not a number
-	}
-
 	@Override
 	public JSONObject test(JSONObject args) {
 		JSONObject result = new JSONObject();
@@ -548,9 +534,8 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 			logger.info( "performing test '"+ testName+ "'");
 			setConfig(args);
-			final Integer n = findTestNum(testName);
-			if (n != null) {
-				copyJson( result, runTest(n.intValue()));
+			if (testName.length() > 0) {
+				copyJson( result, runTest(testName));
 			} else
 				result.put("message", "Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
 
@@ -718,6 +703,44 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	*/
 
 
+	// сопосталвение LowerCase TestName -> integer
+	final static Map<String, Integer> TESTMAP = new HashMap<String, Integer>();
+	{
+		TESTMAP.put( "SearchTest1".toLowerCase(), 1);
+		TESTMAP.put( "SearchTest2".toLowerCase(), 2);
+		TESTMAP.put( "SearchTest3".toLowerCase(), 3);
+		TESTMAP.put( "SearchTest4".toLowerCase(), 4);
+
+		TESTMAP.put( "CreateSGTest".toLowerCase(), 5);
+		TESTMAP.put( "CreateNestedSGTest".toLowerCase(), 6);
+		TESTMAP.put( "OrgStrucNotifyTest".toLowerCase(), 7);
+
+		TESTMAP.put( "CheckACLTest".toLowerCase(), 8);
+		TESTMAP.put( "IntegroTest".toLowerCase(), 9);
+		TESTMAP.put( "WorkFlowTest".toLowerCase(), 10);
+
+		TESTMAP.put( "GetUserNodeAccess".toLowerCase(), 11);
+	}
+
+	final private static String ARG_TESTNAME = "testName";
+
+	final private static String PREFIX_TEST = "test";
+
+	public static Integer findTestNum(String s) {
+		if (s != null) {
+			if (TESTMAP.containsKey(s.toLowerCase()))
+				return TESTMAP.get(s.toLowerCase()).intValue();
+			try {
+				// final String[] sN = s.toLowerCase().split(PREFIX_TEST);
+				if (s.toLowerCase().startsWith(PREFIX_TEST))
+					return Integer.parseInt( s.substring(PREFIX_TEST.length()));
+			} catch (NumberFormatException ex) {
+				logger.info("test '"+ s + "' is not numbered test -> try by name");
+			}
+		}
+		return null; // not a number
+	}
+
 	/**
 	 * Выполнить тест с указанным номером
 	 * @param testnum
@@ -725,27 +748,37 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 * @throws JSONException
 	 */
 	@Override
-	public JSONObject runTest(int testnum) throws JSONException {
+	public JSONObject runTest(String testName) throws JSONException {
 		JSONObject result;
+		int testnum = 0;
 		try {
+			// вызов теста по названию будет сконвертирован в номер ...
+			final Integer n = findTestNum(testName);
+			if (n != null) {
+				testnum = n.intValue();
+			} else {
+				logger.warn("Argument '"+ ARG_TESTNAME+ "' calls unknown function '"+ testName+ "'");
+			}
+
 			// org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor;
 			final boolean needPermChk = (args != null && args.optBoolean("secure", false));
 			switch (testnum) {
-			case 1:	result = doSearchTest( "New", false, needPermChk); break;
-			case 2: result = doSearchTest( "New", true, needPermChk); break;
-			case 3: result = doSearchTest( "Active", false, needPermChk); break;
-			case 4: result = doSearchTest( "Active", true, needPermChk); break;
-			case 5: result = doCreateSGTest(); break;
-			case 6: result = doCreateNestedSGTest(); break;
-			case 7: result = doOrgStrucNotifyTest(); break;
-			case 8: result = doCheckACLTest(); break;
-			case 9: result = doIntegroTest(); break; 
-			case 10: result = doWorkFlowTest(); break;
-			default:
-				result = new JSONObject();
-				result.put( "error", "invalid test number: "+ testnum);
-				logger.error("skipping unknown test number: "+ testnum);
-			}
+				case 1:	result = doSearchTest( "New", false, needPermChk); break;
+				case 2: result = doSearchTest( "New", true, needPermChk); break;
+				case 3: result = doSearchTest( "Active", false, needPermChk); break;
+				case 4: result = doSearchTest( "Active", true, needPermChk); break;
+				case 5: result = doCreateSGTest(); break;
+				case 6: result = doCreateNestedSGTest(); break;
+				case 7: result = doOrgStrucNotifyTest(); break;
+				case 8: result = doCheckACLTest(); break;
+				case 9: result = doIntegroTest(); break; 
+				case 10: result = doWorkFlowTest(); break;
+				case 11: result = doGetUserNodeAccess(); break;
+				default:
+					result = new JSONObject();
+					result.put( "error", "invalid test number: "+ testnum);
+					logger.error("skipping unknown test number: "+ testnum);
+			} authorityService.getAuthorities();
 		} catch (Throwable t) {
 			logger.error("exception "+ t.getMessage(), t);
 			result = new JSONObject();
@@ -796,10 +829,33 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		return echoGetNodeRef(args, argName, argDefault, echoObj);
 	}
 
-	static NodeRef echoGetNodeRef(  JSONObject args, String argName, String argDefault, JSONObject echoObj
-			) throws JSONException {
+	static NodeRef echoGetNodeRef( JSONObject args, String argName
+			, String argDefault, JSONObject echoObj
+	) throws JSONException {
 		final String id = echoGetArg( args, argName, argDefault, echoObj);
 		return (id != null && id.length() > 0) ? makeFullRef(id) : null;
+	}
+
+	final static String[] ARGNODEREFNAME = { "nodeRef", "nodeId", "node"};
+	/**
+	 * Получить аргумент типа NоdeRef по любому из имён "nodeRef", "nodeId", "node".
+	 * @param args
+	 * @param argDefault
+	 * @param echoObj
+	 * @return
+	 * @throws JSONException
+	 */
+	static NodeRef echoGetNodeRef( JSONObject args, String argDefault, JSONObject echoObj
+			) throws JSONException 
+	{
+		String found = null;
+		for (String name: ARGNODEREFNAME) {
+			found = echoGetArg( args, name, null, echoObj);
+			if (found != null && found.length() > 0) break;
+			found = null;
+		}
+		if (found == null) found = argDefault;
+		return (found != null && found.length() > 0) ? makeFullRef(found) : null;
 	}
 
 	/**
@@ -825,7 +881,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				result = SGKind.getSGMyRolePos( jdata.optString("id", null), jdata.optString("userLogin", null), jdata.optString("roleCode", null));
 				break;
 			case SG_SPEC:
-				final NodeRef node = echoGetNodeRef( jdata, "nodeRef", null, echoObj);// (!) надо брать из объекта jdata, а не из this!
+				final NodeRef node = echoGetNodeRef( jdata, null, echoObj);// (!) надо брать из объекта jdata, а не из this!
 				result = SGKind.getSGSpecialUserRole(
 						echoGetArg(jdata, "id", null, echoObj)
 						, lecmPermService.findPermissionGroup( echoGetArg( jdata, "permGroup", null, echoObj))
@@ -1225,7 +1281,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		else if (ORGOPER_GRANTACCESS.equalsIgnoreCase(oper) || ORGOPER_REVOKEACCESS.equalsIgnoreCase(oper) ) {
 			final boolean grant = ORGOPER_GRANTACCESS.equalsIgnoreCase(oper);
 			final String employeeId = echoGetArg( "id", null, result);
-			final NodeRef node = echoGetNodeRef( "nodeId", echoGetArg( "node", null, result), result); // "nodeId" или "node"
+			final NodeRef node = echoGetNodeRef( args, null, result);
 			final LecmPermissionGroup permissionGroup = lecmServ.findPermissionGroup( echoGetArg( "permGroup", null, result));
 			if (grant)
 				lecmServ.grantAccess( permissionGroup, node, employeeId);
@@ -1457,7 +1513,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	private JSONObject doWorkFlowTest() throws JSONException {
 		final JSONObject result = new JSONObject();
 
-		final NodeRef nodeRef = echoGetNodeRef( "nodeRef", null, result);
+		final NodeRef nodeRef = echoGetNodeRef( args, null, result);
 		final Map<String, String> workflowList = new HashMap<String, String>();
 		if (nodeRef != null) {
 			final List<WorkflowInstance> wfInstances = workflowService.getWorkflowsForContent(nodeRef, true);
@@ -1469,6 +1525,38 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		}
 		result.put( "wf_count", workflowList.size());
 		result.put( "wf_list", workflowList);
+		return result;
+	}
+
+	/**
+	 * Метод получения таблицы доступа пользователя к документу по отдельным правам
+	 * JSON args: nodeRef, user|login 
+	 * @return
+	 * @throws JSONException 
+	 */
+	private JSONObject doGetUserNodeAccess() throws JSONException {
+		final JSONObject result = new JSONObject();
+
+		final NodeRef nodeRef = echoGetNodeRef( args, null, result);
+		String userLogin = echoGetArg( "login", null, result);
+		if (userLogin == null) userLogin = echoGetArg( "user", null, result);
+
+		result.put( "currentUser.Authorities", authorityService.getAuthorities());
+		result.put( "user.Name", userLogin);
+		final RunAsWork<Void> runner = new RunAsWork<Void>() {
+			@Override
+			public Void doWork() throws Exception {
+				result.put( "user.Authorities", authorityService.getAuthorities());
+				return null;
+			}
+		};
+
+		AuthenticationUtil.runAs( runner, userLogin);
+
+		if (nodeRef != null) {
+			final StringBuilder sb = this.lecmPermissionService.trackAllLecmPermissions("node access table", nodeRef, new String[] {userLogin});
+			result.put("accessTable", sb.toString());
+		}
 		return result;
 	}
 
