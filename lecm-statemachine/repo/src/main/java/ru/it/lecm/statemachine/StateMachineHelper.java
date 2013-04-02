@@ -13,6 +13,7 @@ import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -326,6 +327,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return result;
     }
+
+	@Override
+	public void checkReadOnlyCategory(NodeRef document, String category) {
+		if (category == null || isReadOnlyCategory(document, category)) {
+			throw new AlfrescoRuntimeException("Attachments category '" + category + "' is read only for document " + document);
+		}
+	}
 
     public String getCurrentExecutionId(String taskId) {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();

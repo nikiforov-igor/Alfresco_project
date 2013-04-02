@@ -300,6 +300,9 @@
 	    <property name="lecmPermissionService">
 		    <ref bean="lecmPermissionServiceBean"/>
 	    </property>
+	    <property name="stateMachineBean">
+		    <ref bean="stateMachineHelper"/>
+	    </property>
         <property name="substituteService" ref="substitudeService"/>
         <property name="transactionService" ref="transactionService"/>
     </bean>

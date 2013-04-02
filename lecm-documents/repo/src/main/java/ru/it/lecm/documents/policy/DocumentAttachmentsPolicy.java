@@ -26,6 +26,7 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     private DictionaryService dictionaryService;
     private SubstitudeBean substituteService;
 	private LecmPermissionService lecmPermissionService;
+	private StateMachineServiceBean stateMachineBean;
 
     final private QName[] AFFECTED_PROPERTIES = {ContentModel.PROP_CREATOR, ContentModel.PROP_MODIFIER};
 
@@ -86,6 +88,10 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
+	public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
+		this.stateMachineBean = stateMachineBean;
+	}
+
 	public final void init() {
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateNode"));
@@ -106,6 +112,8 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
 		if (document != null) {
 			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAdd", document);
+
+			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
 		}
 	}
 

@@ -177,12 +177,25 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		return null;
 	}
 
+	public String getCategoryName(NodeRef categoryRef) {
+		return (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
+	}
+
 	public NodeRef getDocumentByAttachment(NodeRef attachRef) {
 		if (nodeService.exists(attachRef)) {
 			return getDocumentByAttachment(nodeService.getPrimaryParent(attachRef));
 		} else {
 			return null;
 		}
+	}
+
+	public String getCategoryNameByAttachment(NodeRef attachRef) {
+		NodeRef categoryRef = nodeService.getPrimaryParent(attachRef).getParentRef();
+		NodeRef attachRootDir = nodeService.getPrimaryParent(categoryRef).getParentRef();
+		if (categoryRef != null && attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals(DOCUMENT_ATTACHMENTS_ROOT_NAME)) {
+			return getCategoryName(categoryRef);
+		}
+		return null;
 	}
 
 	public boolean isDocumentAttachment(NodeRef nodeRef) {
