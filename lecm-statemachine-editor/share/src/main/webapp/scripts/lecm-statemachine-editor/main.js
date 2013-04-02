@@ -323,7 +323,7 @@ LogicECM.module = LogicECM.module || {};
                     Alfresco.util.PopupManager.displayMessage(
                         {
                             text: "Машина состояний развернута в системе",
-                            displayTime: 5
+                            displayTime: 3
                         });
 				},
 				argument:{
