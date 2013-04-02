@@ -231,7 +231,12 @@ public class OrgstructureSGNotifierBeanImpl
 		// Если позиция руководящая прописать её в SG_SV своего Подразделения ...
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (isBoss) { // прописать руководящую SG_DP -> SG_SV(OU)
+			if (sgMe != null)
+				sgNotifier.sgExclude( sgSV, sgMe);
+
+			// прописать SV подразедления в личную группу
 			sgNotifier.sgInclude( sgDP, sgSV);
+
 		} else { // снять отметку руководящей ...
 			sgNotifier.sgExclude( sgDP, sgSV);
 
