@@ -33,7 +33,7 @@
                     <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${member.employeeRef}"alt="Avatar" />
                 </div>
                 <div class="person">
-                    <h3>${view.showViewLink(member.employeeName, member.employeeRef)}</h3>
+                    <h3>${view.showViewLink(member.employeeName, member.employeeRef, "logicecm.employee.view")}</h3>
                     <div>${member.employeePosition}</div>
                     <div class="member-ref" style="display: none">${member.employeeRef}</div>
                 </div>

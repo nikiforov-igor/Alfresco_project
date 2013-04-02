@@ -27,7 +27,7 @@
 				<#assign modifyUser = node.properties["lecm-document:modifier"]!"">
                 <#assign modifyUserRef = node.properties["lecm-document:modifier-ref"]!"">
 				<#assign modifyDate = node.properties["cm:modified"]>
-				<#assign modifierLink = view.showViewLink(modifyUser, modifyUserRef)>
+				<#assign modifierLink = view.showViewLink(modifyUser, modifyUserRef, "logicecm.employee.view")>
 				${displayName}<span class="document-version">${item.version}</span><span class="document-modified-info">${msg("label.modified-by-user-on-date", modifierLink, xmldate(modifyDate.iso8601)?string(msg("date-format.defaultFTL")))}</span>
 			</h1>
 		</div>

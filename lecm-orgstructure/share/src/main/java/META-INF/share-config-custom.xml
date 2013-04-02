@@ -14,9 +14,9 @@
                     <show id="lecm-orgstr:employee-photo-assoc"/>
                     <show id="lecm-orgstr:employee-phone"/>
                     <show id="lecm-orgstr:employee-number"/>
-                    <show id="lecm-orgstr:employee-fio-g"/>
-                    <show id="lecm-orgstr:employee-fio-d"/>
-                    <show id="lecm-orgstr:employee-person-assoc"/>
+                    <show id="lecm-orgstr:employee-fio-g" for-mode="edit"/>
+                    <show id="lecm-orgstr:employee-fio-d" for-mode="edit"/>
+                    <show id="lecm-orgstr:employee-person-assoc" for-mode="edit"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
                     <show id="lecm-orgstr:employee-positions"/>
                     <show id="lecm-orgstr:employee-roles"/>

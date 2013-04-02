@@ -385,7 +385,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
 	        getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
-		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 	        },
 
             getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)

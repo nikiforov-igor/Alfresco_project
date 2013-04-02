@@ -123,7 +123,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             if (displayValue.length == 0 || employeeNodeRef == null || employeeNodeRef.indexOf("://") < 0) {
                 return "Система";
             }
-            return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+            return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\',null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
         },
 
         onActionDelete: function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {

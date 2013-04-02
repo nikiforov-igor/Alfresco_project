@@ -1,108 +1,4 @@
-
-<#-- Макрос для включения включения всплывающего окна по клику на запись.
-Окно будет вызывать по вызову метода viewAttributes. Пример см. в datagrid.get.html.ftl
-Список параметров:
-viewFormId(необязательный) - по умолчанию равен view-node-form. Идентификатор, использующийся для построения html для всплывающего окна
--->
-<#macro viewForm viewFormId="view-node-form">
-<script type="text/javascript">//<![CDATA[
-	var viewDialog = null;
-
-	function viewAttributes(nodeRef, setId) {
-		Alfresco.util.Ajax.request(
-				{
-					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-					dataObj:{
-						htmlid:"NodeMetadata-" + nodeRef,
-						itemKind:"node",
-						itemId:nodeRef,
-						formId:"${viewFormId}",
-						mode:"view",
-						setId: (setId != undefined && setId != null) ? setId : "common"
-					},
-					successCallback:{
-						fn:showViewDialog
-					},
-					failureMessage:"message.failure",
-					execScripts:true
-				});
-		return false;
-	}
-
-	function showViewDialog(response) {
-		var formEl = Dom.get("${viewFormId}-content");
-		formEl.innerHTML = response.serverResponse.responseText;
-		if (viewDialog != null) {
-			Dom.setStyle("${viewFormId}", "display", "block");
-			viewDialog.show();
-		}
-	}
-
-	function hideViewDialog(layer, args) {
-        var mayHide = false;
-        if (viewDialog != null) {
-            if (args == undefined || args == null) {
-                mayHide = true;
-            } else if (args[1] && args[1].panel && args[1].panel.id == viewDialog.id){
-                mayHide = true
-            }
-            if (mayHide){
-                viewDialog.hide();
-                Dom.setStyle("${viewFormId}", "display", "none");
-            }
-        }
-    }
-
-	function createDialog() {
-		viewDialog = Alfresco.util.createYUIPanel("${viewFormId}",
-            {
-                width: "50em"
-            });
-        YAHOO.Bubbling.on("hidePanel", hideViewDialog);
-	}
-
-	function showEmployeeViewByLink(employeeLinkNodeRef) {
-		var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef;
-		var callback = {
-			success:function (oResponse) {
-				var oResults = eval("(" + oResponse.responseText + ")");
-				if (oResults && oResults.nodeRef) {
-					viewAttributes(oResults.nodeRef);
-				} else {
-					Alfresco.util.PopupManager.displayMessage(
-							{
-								text:me.msg("message.details.failure")
-							});
-				}
-			},
-			failure:function (oResponse) {
-				Alfresco.util.PopupManager.displayMessage(
-						{
-							text:me.msg("message.details.failure")
-						});
-			}
-		};
-		YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-	}
-
-	//инициализация view-node-form для того, чтобы каждый раз самостоятельно не вызывать этот метод
-	YAHOO.util.Event.onContentReady ("${viewFormId}", createDialog);
-//]]>
-</script>
-<div id="${viewFormId}" class="yui-panel">
-	<div id="${viewFormId}-head" class="hd">${msg("logicecm.view")}</div>
-	<div id="${viewFormId}-body" class="bd">
-		<div id="${viewFormId}-content"></div>
-		<div class="bdft">
-            <span id="${viewFormId}-cancel" class="yui-button yui-push-button">
-                <span class="first-child">
-                    <button type="button" tabindex="0" onclick="hideViewDialog();">${msg("button.close")}</button>
-                </span>
-            </span>
-		</div>
-	</div>
-</div>
-</#macro>
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 
 <#-- Макрос для подключения грида
 Список параметров:
@@ -118,7 +14,7 @@ viewFormId(необязательный) - по умолчанию равен vi
 <div id="${id}-body" class="datagrid">
 	<div class="datagrid-meta">
 		<#if showViewForm>
-			<@viewForm viewFormId/>
+            <@view.viewForm formId=viewFormId/>
 		</#if>
 		<h2 id="${id}-title"></h2>
 		<div id="${id}-description" class="datagrid-description"></div>

@@ -2,7 +2,7 @@
 	<script type="text/javascript">//<![CDATA[
 	var viewDialog = null;
 
-	function viewAttributes(nodeRef, setId) {
+	function viewAttributes(nodeRef, setId, title) {
 		Alfresco.util.Ajax.request(
 				{
 					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
@@ -15,21 +15,24 @@
 						setId: (setId != undefined && setId != null) ? setId : "common"
 					},
 					successCallback:{
-						fn:showViewDialog
+                        fn:function(response) {
+                            var formEl = Dom.get("${formId}-content");
+                            formEl.innerHTML = response.serverResponse.responseText;
+                            if (viewDialog != null) {
+                                Dom.setStyle("${formId}", "display", "block");
+                                var message = title ? Alfresco.messages.global[title] : "${msg("logicecm.view")}";
+                                var titleElement = Dom.get("${formId}-head");
+                                if (titleElement) {
+                                    titleElement.innerHTML = message;
+                                }
+                                viewDialog.show();
+                            }
+                        }
 					},
 					failureMessage:"message.failure",
 					execScripts:true
 				});
 		return false;
-	}
-
-	function showViewDialog(response) {
-		var formEl = Dom.get("${formId}-content");
-		formEl.innerHTML = response.serverResponse.responseText;
-		if (viewDialog != null) {
-			Dom.setStyle("${formId}", "display", "block");
-			viewDialog.show();
-		}
 	}
 
 	function hideViewDialog(layer, args) {
@@ -55,6 +58,30 @@
 		YAHOO.Bubbling.on("hidePanel", hideViewDialog);
 	}
 
+    function showEmployeeViewByLink(employeeLinkNodeRef, title) {
+        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef;
+        var callback = {
+            success:function (oResponse) {
+                var oResults = eval("(" + oResponse.responseText + ")");
+                if (oResults && oResults.nodeRef) {
+                    viewAttributes(oResults.nodeRef, null, title);
+                } else {
+                    Alfresco.util.PopupManager.displayMessage(
+                            {
+                                text:me.msg("message.details.failure")
+                            });
+                }
+            },
+            failure:function (oResponse) {
+                Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text:me.msg("message.details.failure")
+                        });
+            }
+        };
+        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+    }
+
 	//инициализация view-node-form для того, чтобы каждый раз самостоятельно не вызывать этот метод
 	YAHOO.util.Event.onContentReady ("${formId}", createDialog);
 	//]]>
@@ -74,6 +101,6 @@
 	</div>
 </#macro>
 
-<#function showViewLink name nodeRef>
-	<#return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef + "')\">" + name + "</a>">
+<#function showViewLink name nodeRef titleId>
+	<#return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef + "', null, \'" + titleId + "\')\">" + name + "</a>">
 </#function>

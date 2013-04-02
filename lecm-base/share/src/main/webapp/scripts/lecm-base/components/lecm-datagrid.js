@@ -605,14 +605,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        if (displayValue.length == 0) {
 			        return "";
 		        }
-		        return "<span class='person'><a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"showEmployeeViewByLink(\'" + employeeNodeRef + "\', \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 	        },
 
 	        getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
 		        if (displayValue.length == 0) {
 			        return "";
 		        }
-		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\')\">" + displayValue + "</a></span>";
+		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 	        },
 
             /**

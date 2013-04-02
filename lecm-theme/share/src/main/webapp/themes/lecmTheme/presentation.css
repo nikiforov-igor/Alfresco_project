@@ -490,7 +490,7 @@ h4 .lighter
 }
 .yui-skin-lecmTheme .yui-panel div.form-field label,
 .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label {
-    max-width: 110px;
+    width: 150px;
     float: left;
     clear: none;
     vertical-align: middle;
@@ -503,15 +503,22 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-field select,
 .yui-skin-lecmTheme .yui-panel div.form-field textarea,
 .yui-skin-lecmTheme .yui-panel div.form-field ul,
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker),
 .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-value {
-    width: 460px;
     max-width: 100%;
-    float: right;
+    float: left;
+    clear: none;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 3em;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
+    max-width: 100%;
     clear: none;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
 .yui-skin-lecmTheme .yui-panel div.form-field select {
     height: 28px;
