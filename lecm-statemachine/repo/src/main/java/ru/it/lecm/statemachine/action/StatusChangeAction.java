@@ -70,7 +70,7 @@ public class StatusChangeAction extends StateMachineAction {
         //Инициализация категорий для редактирования
         Element categoriesRoot = action.element("attachmentCategories");
         if (categoriesRoot != null) {
-            List<Element> categoriesElements = fieldsRoot.elements("attachmentCategory ");
+            List<Element> categoriesElements = categoriesRoot.elements("attachmentCategory");
             for (Element categoryElement : categoriesElements) {
                 String name = categoryElement.attribute("name");
                 boolean isEditable = Boolean.parseBoolean(categoryElement.attribute("isEditable"));
