@@ -29,7 +29,8 @@
     {
         user: ${transition.user?string},
         exp: "${transition.exp!"null"}",
-        status: "${transition.status}"
+        status: "${transition.status}",
+        label: "${transition.label}"
     }
 </#macro>
 

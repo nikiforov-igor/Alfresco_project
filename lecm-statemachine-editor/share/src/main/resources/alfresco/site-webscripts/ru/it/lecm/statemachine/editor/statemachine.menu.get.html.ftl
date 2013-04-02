@@ -24,7 +24,7 @@
 <div class="statemachine-menu">
 		<span id="menu-buttons-machine-deploy" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Задеплоить">&nbsp;</button>
+	            <button type="button" title="Развернуть">&nbsp;</button>
 	        </span>
 	    </span>
 </div>

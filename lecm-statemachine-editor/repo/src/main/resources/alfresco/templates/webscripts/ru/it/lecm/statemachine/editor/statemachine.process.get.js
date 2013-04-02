@@ -52,6 +52,7 @@ if (statemachineId != null && statemachineId != '') {
 				if (transition.assocs["lecm-stmeditor:transitionStatus"] != null) {
 					var transitionStatus = transition.assocs["lecm-stmeditor:transitionStatus"][0];
 					var transitionLabel = transition.properties["lecm-stmeditor:transitionLabel"];
+					var transitionWorkflow = transition.properties["lecm-stmeditor:workflowId"];
 					var userTransition = transitionLabel != null;
 					if (!userTransition) {
 						transitionLabel = transition.properties["lecm-stmeditor:transitionExpression"];
@@ -62,10 +63,24 @@ if (statemachineId != null && statemachineId != '') {
 					} else {
 						transitionStatusLabel = transitionStatus.properties["cm:name"];
 					}
+
+                    var transitionTypeLabel = "";
+                    if (actionId == "WaitForDocumentChange") {
+                        transitionTypeLabel = "По изменению документа";
+                    } else if (actionId == "FinishStateWithTransition" && transitionWorkflow != null) {
+                        transitionTypeLabel = "Переход с запуском процесса"
+                    } else if (actionId == "FinishStateWithTransition") {
+                        transitionTypeLabel = "Переход выполняемый пользователем"
+                    } else if (actionId == "TransitionAction") {
+                        transitionTypeLabel = "Переход по завершению ранее запущенного процесса"
+                    } else {
+                        transitionTypeLabel = actionId;
+                    }
 					transitions.push({
 						user: userTransition,
 						exp: transitionLabel,
-						status: transitionStatusLabel
+						status: transitionStatusLabel,
+                        label: transitionTypeLabel
 					});
 
 				}

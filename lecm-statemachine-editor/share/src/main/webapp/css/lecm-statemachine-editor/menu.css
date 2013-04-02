@@ -1,13 +1,13 @@
 #lecm-menu .statemachine-menu #menu-buttons-status-menu-button span.first-child {
-    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-statemachine-editor/new_status.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-properties-menu-button span.first-child {
-    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-statemachine-editor/properties.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-deploy span.first-child {
-	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
+	background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-export span.first-child {

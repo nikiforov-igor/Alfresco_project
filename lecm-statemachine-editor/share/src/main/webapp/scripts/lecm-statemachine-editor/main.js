@@ -48,6 +48,7 @@ LogicECM.module = LogicECM.module || {};
 		endActionsMenu: null,
 		currentStatus: null,
 		splashScreen: null,
+		currentTaskName: null,
 		options:{},
 
 		setStatemachineId: function(statemachineId) {
@@ -167,7 +168,7 @@ LogicECM.module = LogicECM.module || {};
 			td.appendChild(edit);
 
 			YAHOO.util.Event.addListener(edit, "click", function() {
-				me._editStatus(model.nodeRef, model.forDraft, model.isStarted);
+				me._editStatus(model.nodeRef, model.forDraft, model.isStarted, model.name);
 			});
 
 			if (!model.isStarted) {
@@ -232,7 +233,7 @@ LogicECM.module = LogicECM.module || {};
 		_addTransition: function (trEl, transition, parity) {
 				var td = document.createElement("td");
 				td.className = "lecm_tbl_td_" + parity;
-				td.innerHTML = transition.user ? "По действию пользователя" : "По завершению";
+				td.innerHTML = transition.label;
 				trEl.appendChild(td);
 				td = document.createElement("td");
 				td.className = "lecm_tbl_td_" + parity;
@@ -319,7 +320,11 @@ LogicECM.module = LogicECM.module || {};
 			var callback = {
 				success:function (oResponse) {
 					oResponse.argument.parent._hideSplash();
-					alert("Deployed!")
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: "Машина состояний развернута в системе",
+                            displayTime: 5
+                        });
 				},
 				argument:{
 					parent: this
@@ -359,7 +364,7 @@ LogicECM.module = LogicECM.module || {};
             Connect.asyncRequest(Alfresco.util.Ajax.POST, url, fileUploadCallback);
         },
 
-		_editStatus: function(nodeRef, forDraft, isStarted) {
+		_editStatus: function(nodeRef, forDraft, isStarted, label) {
 			var formId = "";
 			if (isStarted && forDraft) {
 				formId = "forDraftFormTrue";
@@ -385,7 +390,7 @@ LogicECM.module = LogicECM.module || {};
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog);
+						this._setFormDialogTitle(p_form, p_dialog, "Редактирование статуса \"" + label + "\"");
 					},
 					scope: this
 				},
