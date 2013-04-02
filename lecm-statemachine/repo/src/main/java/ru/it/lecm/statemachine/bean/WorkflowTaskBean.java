@@ -26,7 +26,7 @@ public class WorkflowTaskBean {
     }
 
     public enum WorkflowTaskPriority {
-        WORKFLOWTASKPRIORITY_LOW(1), WORKFLOWTASKPRIORITY_MEDIUM(2), WORKFLOWTASKPRIORITY_HIGH(3);
+        WORKFLOWTASKPRIORITY_LOW(3), WORKFLOWTASKPRIORITY_MEDIUM(2), WORKFLOWTASKPRIORITY_HIGH(1);
         int priority;
 
         private WorkflowTaskPriority(int priority) {
