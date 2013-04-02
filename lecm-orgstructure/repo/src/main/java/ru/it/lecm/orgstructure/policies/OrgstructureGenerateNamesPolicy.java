@@ -21,7 +21,7 @@ import java.util.Map;
  * Time: 11:17
  */
 public class OrgstructureGenerateNamesPolicy extends BaseBean
-        implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
+        implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     private PolicyComponent policyComponent;
 
@@ -42,24 +42,17 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
     }
 
     public final void init() {
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateProperties"));
 
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateProperties"));
 
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                OrgstructureBean.TYPE_WORK_GROUP, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                OrgstructureBean.TYPE_WORK_GROUP, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                OrgstructureBean.TYPE_WORK_GROUP, new JavaBehaviour(this, "onUpdateProperties"));
     }
 
-    @Override
-    public void onCreateNode(ChildAssociationRef childAssocRef) {
+    public void updateNodeName(ChildAssociationRef childAssocRef) {
         NodeRef object = childAssocRef.getChildRef();
         NodeRef parent = childAssocRef.getParentRef();
         QName type = nodeService.getType(object);
@@ -112,8 +105,8 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        if (before.size() == after.size() && hasChangedProperties(nodeRef, before, after)) {
-            onCreateNode(nodeService.getPrimaryParent(nodeRef));
+        if (hasChangedProperties(nodeRef, before, after)) {
+            updateNodeName(nodeService.getPrimaryParent(nodeRef));
         }
     }
 

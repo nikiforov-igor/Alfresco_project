@@ -167,7 +167,6 @@
             <form>
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
-                    <show id="cm:name"/>
                     <!-- чтобы иметь возможность сохранить с требуемым именем-->
                     <show id="lecm-orgstr:employee-last-name"/>
                     <show id="lecm-orgstr:employee-first-name"/>
@@ -369,7 +368,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <!-- для того, чтобы сохранить под требуемым именем-->
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
@@ -500,7 +498,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <!-- Для сохранения с иным именем-->
                     <show id="lecm-orgstr:element-full-name"/>
                     <show id="lecm-orgstr:element-short-name"/>
