@@ -1,3 +1,7 @@
+div.object-finder div.search-picker + div.current-values {
+    width: 100%;
+}
+
 div.object-finder div.search-picker div.picker-items {
 	border: 1px solid #aaa;
 	height: 150px;

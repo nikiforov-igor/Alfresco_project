@@ -654,6 +654,10 @@ LogicECM.module = LogicECM.module || {};
 				return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 			},
 
+            getDefaultView: function (displayValue, width100) {
+				return "<span class='not-person" + (width100 ? " width100" : "") + "'>" + displayValue + "</span>";
+			},
+
 			updateAddButtons: function AssociationSearchViewer_updateAddButtons() {
 				var button;
 				for (var id in this.addItemButtons)
@@ -696,7 +700,7 @@ LogicECM.module = LogicECM.module || {};
 						if (this.options.itemType == "lecm-orgstr:employee") {
 							el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
 						} else {
-							el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+							el.innerHTML += '<div class="' + divClass + '">' + this.getDefaultView(displayName, true) + ' ' + '</div>';
 						}
 					} else {
 						if (this.options.itemType == "lecm-orgstr:employee") {
@@ -704,7 +708,7 @@ LogicECM.module = LogicECM.module || {};
 								+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 						} else {
 							el.innerHTML
-								+= '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+								+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 						}
 						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 					}
