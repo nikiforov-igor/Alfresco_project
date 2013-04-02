@@ -314,21 +314,17 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public StateFields getStateCategories(NodeRef document) {
-        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
-        if (executionId != null) {
-            String taskId = getCurrentTaskId(executionId);
-            if (taskId != null) {
-                List<StateMachineAction> actions = getStatusChangeActions(document);
-                Set<StateField> result = new HashSet<StateField>();
-                for (StateMachineAction action : actions) {
-                    StatusChangeAction statusChangeAction = (StatusChangeAction) action;
-                    result.addAll(statusChangeAction.getCategories());
+    public boolean isReadOnlyCategory(NodeRef document, String category) {
+        Set<StateField> categories = getStateCategories(document).getFields();
+        boolean result = true;
+        if (categories.contains(category)) {
+            for (StateField categoryItem : categories) {
+                if (categoryItem.equals(category)) {
+                    result = !categoryItem.isEditable();
                 }
-                return new StateFields(true, result);
             }
         }
-        return new StateFields(false);
+        return result;
     }
 
     public String getCurrentExecutionId(String taskId) {
@@ -768,4 +764,22 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return errors;
     }
+
+    private StateFields getStateCategories(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        if (executionId != null) {
+            String taskId = getCurrentTaskId(executionId);
+            if (taskId != null) {
+                List<StateMachineAction> actions = getStatusChangeActions(document);
+                Set<StateField> result = new HashSet<StateField>();
+                for (StateMachineAction action : actions) {
+                    StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                    result.addAll(statusChangeAction.getCategories());
+                }
+                return new StateFields(true, result);
+            }
+        }
+        return new StateFields(false);
+    }
+
 }

@@ -22,7 +22,7 @@ public interface StateMachineServiceBean {
      * @param document
      * @return
      */
-    public StateFields getStateCategories(NodeRef document);
+    public boolean isReadOnlyCategory(NodeRef document, String category);
 
     String nextTransition(String taskId);
 
