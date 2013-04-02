@@ -46,6 +46,10 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     @Override
     public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
         lecmPermissionService.checkPermission("_lecmPerm_MemberAdd", document);
+        return addMemberWithoutCheckPermission(document, employeeRef, properties);
+    }
+
+    public NodeRef addMemberWithoutCheckPermission(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
         final NodeRef documentMembersFolder = getMembersFolderRef(document);
         if (employeeRef != null && !isDocumentMember(document, employeeRef)) {
             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
@@ -106,25 +110,26 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     @Override
     public List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems) {
-        lecmPermissionService.checkPermission("_lecmPerm_MemberList", document);
         List<NodeRef> results = new ArrayList<NodeRef>();
-        List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
-        sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
+        if (lecmPermissionService.hasPermission("_lecmPerm_MemberList", document)) {
+            List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+            sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
 
-        PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
-        pageRequest.setRequestTotalCountMax(MAX_ITEMS);
+            PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
+            pageRequest.setRequestTotalCountMax(MAX_ITEMS);
 
-        PagingResults<NodeRef> pageOfNodeInfos = null;
-        FileFilterMode.setClient(FileFilterMode.Client.script);
-        try {
-            pageOfNodeInfos = lecmObjectsService.list(getMembersFolderRef(document), TYPE_DOC_MEMBER, new ArrayList<FilterProp>(), sortProps, pageRequest);
-        } finally {
-            FileFilterMode.clearClient();
-        }
+            PagingResults<NodeRef> pageOfNodeInfos = null;
+            FileFilterMode.setClient(FileFilterMode.Client.script);
+            try {
+                pageOfNodeInfos = lecmObjectsService.list(getMembersFolderRef(document), TYPE_DOC_MEMBER, new ArrayList<FilterProp>(), sortProps, pageRequest);
+            } finally {
+                FileFilterMode.clearClient();
+            }
 
-        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
-        for (NodeRef ref : nodeInfos) {
-            results.add(ref);
+            List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+            for (NodeRef ref : nodeInfos) {
+                results.add(ref);
+            }
         }
         return results;
     }

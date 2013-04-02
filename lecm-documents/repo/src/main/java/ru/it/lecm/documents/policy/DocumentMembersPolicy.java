@@ -5,8 +5,6 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -216,46 +214,27 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		}
 	}
 
-	public void onCreateDocument(ChildAssociationRef childAssocRef) {
-		// добаваление сотрудника, создавшего документ в участники
+    public void onCreateDocument(ChildAssociationRef childAssocRef) {
+        // добаваление сотрудника, создавшего документ в участники
         final NodeRef docRef = childAssocRef.getChildRef();
         final String userName = (String) nodeService.getProperty(docRef, ContentModel.PROP_CREATOR);
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
-                        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-                        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), props);
-                    }
-                });
-            }
-        });
+        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+
+        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
+
+        documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
     }
 
 	public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		// добаваление сотрудника, изменившего документ в участники
         final String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-        final NodeRef docRef = nodeRef;
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
-                        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-                        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), props);
-                    }
-                });
-            }
-        });
+        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+
+        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
+
+        documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
     }
 
     private LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {

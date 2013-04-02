@@ -22,6 +22,8 @@ public interface DocumentMembersService {
 
     NodeRef addMember(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties);
 
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties);
+
     NodeRef getMembersFolderRef(NodeRef document);
 
     List<NodeRef> getDocumentMembers(NodeRef document);
