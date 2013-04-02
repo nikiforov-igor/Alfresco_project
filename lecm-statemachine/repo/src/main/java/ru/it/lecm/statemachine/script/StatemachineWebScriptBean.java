@@ -109,7 +109,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         if (categories.contains(category)) {
             for (StateField categoryItem : categories) {
                 if (categoryItem.equals(category)) {
-                    result = categoryItem.isEditable();
+                    result = !categoryItem.isEditable();
                 }
             }
         }
