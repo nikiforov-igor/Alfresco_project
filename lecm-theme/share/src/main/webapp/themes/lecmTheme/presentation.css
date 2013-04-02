@@ -1959,10 +1959,14 @@ span.person a {
 .yui-skin-lecmTheme .datagrid span.document {
     padding-left: 0;
 }
-.yui-skin-lecmTheme .datagrid span.person a,
 .yui-skin-lecmTheme .datagrid span.container a,
 .yui-skin-lecmTheme .datagrid span.document a {
 	margin-left: 20px;
+}
+
+.yui-skin-lecmTheme  span.person,
+.yui-skin-lecmTheme .datagrid span.person {
+    background: none;
 }
 
 #searchBlock .right {
