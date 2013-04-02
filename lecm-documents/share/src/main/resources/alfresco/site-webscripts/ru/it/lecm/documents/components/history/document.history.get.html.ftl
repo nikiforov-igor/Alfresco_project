@@ -1,6 +1,6 @@
 <!-- Parameters and libs -->
 <#assign el=args.htmlid/>
-
+<#if hasViewHistoryPerm!false>
 <!-- Markup -->
 <div class="widget-bordered-panel">
 <div class="document-components-panel">
@@ -30,3 +30,4 @@
     </script>
 </div>
 </div>
+</#if>
