@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.namespace.QName;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +31,13 @@ public interface DocumentAttachmentsService {
      * @return Список ссылок на папки с категориями вложений
      */
     public List<NodeRef> getCategories(final NodeRef documentRef);
+
+    /**
+     * Получения папок с категориями вложений
+     * @param documentTypeQName Тип документа
+     * @return Список ссылок на папки с категориями вложений
+     */
+    public List<String> getCategories(final QName documentTypeQName);
 
 	/**
 	 * Удаление вложения

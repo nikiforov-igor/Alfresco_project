@@ -313,6 +313,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return new StateFields(false);
     }
 
+    @Override
+    public StateFields getStateCategories(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        if (executionId != null) {
+            String taskId = getCurrentTaskId(executionId);
+            if (taskId != null) {
+                List<StateMachineAction> actions = getStatusChangeActions(document);
+                Set<StateField> result = new HashSet<StateField>();
+                for (StateMachineAction action : actions) {
+                    StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                    result.addAll(statusChangeAction.getCategories());
+                }
+                return new StateFields(true, result);
+            }
+        }
+        return new StateFields(false);
+    }
+
     public String getCurrentExecutionId(String taskId) {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         TaskQuery taskQuery = taskService.createTaskQuery();

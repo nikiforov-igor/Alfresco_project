@@ -8,7 +8,7 @@ if (json.status == 200) {
         "type": "property",
         "name": "form_field",
         "formsName": "form_field",
-        "label": "Поле формы / Статус",
+        "label": "Параметр / Статус",
         "dataType": "text",
         "sortable": false
     });

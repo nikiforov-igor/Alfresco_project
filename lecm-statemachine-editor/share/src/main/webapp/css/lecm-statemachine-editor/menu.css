@@ -1,12 +1,8 @@
-#lecm-menu .statemachine-menu #menu-buttons-new-status span.first-child {
+#lecm-menu .statemachine-menu #menu-buttons-status-menu-button span.first-child {
     background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
-#lecm-menu .statemachine-menu #menu-buttons-new-end-event span.first-child {
-	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
-}
-
-#lecm-menu .statemachine-menu #menu-buttons-machine-properties span.first-child {
+#lecm-menu .statemachine-menu #menu-buttons-properties-menu-button span.first-child {
     background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
@@ -16,11 +12,6 @@
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-export span.first-child {
 	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
-}
-
-
-#lecm-menu .statemachine-menu #menu-buttons-machine-status-fields span.first-child {
-    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
 }
 
 /*import xml block*/

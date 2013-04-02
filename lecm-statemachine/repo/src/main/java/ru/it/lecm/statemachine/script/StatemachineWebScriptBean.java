@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateField;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.bean.WorkflowListBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
@@ -99,6 +100,19 @@ public class StatemachineWebScriptBean extends BaseWebScript {
             result.setCompletedWorkflows(completedWorkflows);
         }
 
+        return result;
+    }
+
+    public boolean isReadOnlyCategory(ScriptNode node, String category) {
+        Set<StateField> categories = stateMachineHelper.getStateCategories(node.getNodeRef()).getFields();
+        boolean result = true;
+        if (categories.contains(category)) {
+            for (StateField categoryItem : categories) {
+                if (categoryItem.equals(category)) {
+                    result = categoryItem.isEditable();
+                }
+            }
+        }
         return result;
     }
 

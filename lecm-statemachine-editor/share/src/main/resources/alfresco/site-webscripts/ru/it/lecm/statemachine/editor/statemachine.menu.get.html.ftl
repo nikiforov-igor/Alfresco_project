@@ -3,23 +3,19 @@
 <#assign menuId = "menu-buttons">
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <@comp.baseMenu>
+<div id="statemachine-status-menu"></div>
+<div id="statemachine-properties-menu"></div>
+
 <div class="statemachine-menu">
-    <span id="menu-buttons-new-status" class="yui-button yui-push-button">
+    <span id="menu-buttons-status-menu-button" class="yui-button yui-push-button">
         <span class="first-child">
-            <button type="button" title="Добавить статус">&nbsp;</button>
-        </span>
-    </span>
-</div>
-<div class="statemachine-menu">
-    <span id="menu-buttons-new-end-event" class="yui-button yui-push-button">
-        <span class="first-child">
-            <button type="button" title="Добавить финальный статус">&nbsp;</button>
+            <input type="button" title="Добавить статус">
         </span>
     </span>
 </div>
 
 <div class="statemachine-menu">
-		<span id="menu-buttons-machine-properties" class="yui-button yui-push-button">
+		<span id="menu-buttons-properties-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
 	            <button type="button" title="Свойства">&nbsp;</button>
 	        </span>
@@ -55,12 +51,5 @@
     </form>
 </div>
 
-<div class="statemachine-menu">
-		<span id="menu-buttons-machine-status-fields" class="yui-button yui-push-button">
-	        <span class="first-child">
-	            <button type="button" title="Доступ к полям на статусе">&nbsp;</button>
-	        </span>
-	    </span>
-</div>
 </@comp.baseMenu>
 </#if>

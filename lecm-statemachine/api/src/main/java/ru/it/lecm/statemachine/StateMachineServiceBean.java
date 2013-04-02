@@ -10,6 +10,8 @@ public interface StateMachineServiceBean {
 
     public StateFields getStateFields(NodeRef document);
 
+    public StateFields getStateCategories(NodeRef document);
+
     String nextTransition(String taskId);
 
     String getCurrentTaskId(String executionId);

@@ -64,21 +64,64 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                 window.location.href = url + (type != null && type != '' ? type : "StatemachineEditor");
             }
 
-            // Создание кнопок
-            var onButtonClick1 = function (e) {
-                this.editor._createStatus();
-            };
-            this.widgets.employeesButton = Alfresco.util.createYUIButton(this, "new-status", onButtonClick1, {});
+            var statusMenu = new YAHOO.widget.Menu("statusMenu");
 
-			var onButtonClick4 = function (e) {
-				this.editor._createEndEvent();
-			};
-			this.widgets.staffButton = Alfresco.util.createYUIButton(this, "new-end-event", onButtonClick4, {});
+            statusMenu.addItems([
+                {
+                    text: "Добавить статус",
+                    onclick: {
+                        fn: this.editor._createStatus,
+                        scope: this.editor
+                    }
+                },
+                {
+                    text: "Добавить финальный статус",
+                    onclick: {
+                        fn: this.editor._createEndEvent,
+                        scope: this.editor
+                    }
+                }
+            ]);
 
-			var onButtonClick2 = function (e) {
-				this.editor._editStatemachine();
-			};
-            this.widgets.staffButton = Alfresco.util.createYUIButton(this, "machine-properties", onButtonClick2, {});
+            statusMenu.render("statemachine-status-menu");
+            var onClickStatusMenuButton = function(e) {
+                statusMenu.moveTo(e.clientX, e.clientY);
+                statusMenu.show();
+            }
+            Alfresco.util.createYUIButton(this, "status-menu-button", onClickStatusMenuButton, {});
+
+            var propertiesMenu = new YAHOO.widget.Menu("propertiesMenu");
+
+            propertiesMenu.addItems([
+                {
+                    text: "Общие свойства",
+                    onclick: {
+                        fn: this.editor._editStatemachine,
+                        scope: this.editor
+                    }
+                },
+                {
+                    text: "Доступ к полям на статусе",
+                    onclick: {
+                        fn: this.editor.formFieldsOnStatus,
+                        scope: this.editor
+                    }
+                },
+                {
+                    text: "Доступ к категориям вложений на статусе",
+                    onclick: {
+                        fn: this.editor.attachmentCategoryPermissions,
+                        scope: this.editor
+                    }
+                }
+            ]);
+
+            propertiesMenu.render("statemachine-properties-menu");
+            var onClickPropertiesMenuButton = function(e) {
+                propertiesMenu.moveTo(e.clientX, e.clientY);
+                propertiesMenu.show();
+            }
+            Alfresco.util.createYUIButton(this, "properties-menu-button", onClickPropertiesMenuButton, {});
 
 			var onButtonClick3 = function (e) {
 				this.editor._deployStatemachine();
@@ -89,11 +132,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 				this.editor._exportStatemachine();
 			};
 			this.widgets.exportButton = Alfresco.util.createYUIButton(this, "machine-export", onButtonClick5, {});
-
-            var onButtonClick7 = function (e) {
-                this.editor.formFieldsOnStatus();
-            };
-            this.widgets.fieldsButton = Alfresco.util.createYUIButton(this, "machine-status-fields", onButtonClick7, {});
 
             // Import XML
             var importXmlButton = Alfresco.util.createYUIButton(this, "machine-import", function(){},{});
@@ -106,6 +144,8 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                 UA.mouseout(importXmlButton);
             });
             Event.on(inputId, "change", this.editor._importStatemachine, null, this);
+
+            document.getElementById(inputId).click();
 
             // Finally show the component body here to prevent UI artifacts on YUI button decoration
             Dom.setStyle(this.id + "-body", "visibility", "visible");

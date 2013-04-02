@@ -1,0 +1,7 @@
+<webscript>
+   <shortname>Status Fields</shortname>
+   <description>Status Fields Data Webscript</description>
+   <url>/lecm/statemachine/editor/ds/categories</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

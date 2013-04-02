@@ -4,6 +4,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -18,7 +19,9 @@ import java.util.List;
  * Time: 12:08
  */
 public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
+
     private DocumentAttachmentsService documentAttachmentsService;
+
     protected NodeService nodeService;
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
@@ -54,7 +57,14 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public String deleteAttachment(String nodeRef) {
+    public String[] getCategoriesForType(String documentType) {
+        ParameterCheck.mandatory("documentType", documentType);
+        QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+        List<String> categories = this.documentAttachmentsService.getCategories(type);
+        return categories.toArray(new String[categories.size()]);
+    }
+
+    public String deleteAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
 		NodeRef ref = new NodeRef(nodeRef);

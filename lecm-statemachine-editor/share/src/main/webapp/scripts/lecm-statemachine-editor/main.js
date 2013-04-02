@@ -271,7 +271,7 @@ LogicECM.module = LogicECM.module || {};
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog);
+						this._setFormDialogTitle(p_form, p_dialog, itemId == "lecm-stmeditor:taskStatus" ? "Новый статус" : "Новый финальный статус");
 					},
 					scope: this
 				},
@@ -419,7 +419,7 @@ LogicECM.module = LogicECM.module || {};
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog);
+						this._setFormDialogTitle(p_form, p_dialog, "Свойства машины состояний");
 					},
 					scope: this
 				}
@@ -446,7 +446,33 @@ LogicECM.module = LogicECM.module || {};
                 doBeforeDialogShow:{
                     fn: function(p_form, p_dialog) {
                         this._hideSplash();
-                        this._setFormDialogTitle(p_form, p_dialog, "Редактирование полей на статусе");
+                        this._setFormDialogTitle(p_form, p_dialog, "Доступ к полям на статусе");
+                    },
+                    scope: this
+                }
+            }).show();
+        },
+
+        attachmentCategoryPermissions: function() {
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            templateUrl = YAHOO.lang.substitute(templateUrl, {
+                itemKind: "node",
+                itemId: this.machineNodeRef,
+                mode: "edit",
+                submitType: "json",
+                formId: "statemachine-attachment-categories"
+            });
+
+            this._showSplash();
+            new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
+                width:"80em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:true,
+                doBeforeDialogShow:{
+                    fn: function(p_form, p_dialog) {
+                        this._hideSplash();
+                        this._setFormDialogTitle(p_form, p_dialog, "Доступ к категориям вложений на статусе");
                     },
                     scope: this
                 }

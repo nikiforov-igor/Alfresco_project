@@ -36,6 +36,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private Map<String, LecmPermissionGroup> staticPrivileges = new HashMap<String, LecmPermissionGroup>();
 	private Map<String, LecmPermissionGroup> dynamicPrivileges = new HashMap<String, LecmPermissionGroup>();
 	private Set<StateField> fields = new HashSet<StateField>();
+	private Set<StateField> categories = new HashSet<StateField>();
 
 	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
 
@@ -63,6 +64,17 @@ public class StatusChangeAction extends StateMachineAction {
                 String name = fieldElement.attribute("name");
                 boolean isEditable = Boolean.parseBoolean(fieldElement.attribute("isEditable"));
                 fields.add(new StateFieldImpl(name, isEditable));
+            }
+        }
+
+        //Инициализация категорий для редактирования
+        Element categoriesRoot = action.element("attachmentCategories");
+        if (categoriesRoot != null) {
+            List<Element> categoriesElements = fieldsRoot.elements("attachmentCategory ");
+            for (Element categoryElement : categoriesElements) {
+                String name = categoryElement.attribute("name");
+                boolean isEditable = Boolean.parseBoolean(categoryElement.attribute("isEditable"));
+                categories.add(new StateFieldImpl(name, isEditable));
             }
         }
 
@@ -155,7 +167,11 @@ public class StatusChangeAction extends StateMachineAction {
         return fields;
     }
 
-	/**
+    public Set<StateField> getCategories() {
+        return categories;
+    }
+
+    /**
 	 * Инициализирует список ролей из элемента role
 	 * @param rolesElement
 	 * @return Список прав доступа для ролей

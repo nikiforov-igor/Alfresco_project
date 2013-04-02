@@ -766,6 +766,23 @@
                     </field>
                 </appearance>
             </form>
+            <form id="statemachine-attachment-categories">
+                <field-visibility>
+                    <show id="lecm-stmeditor:attacmentCategories" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:attacmentCategories" label-id="statemachine.editor.form.label.attacmentCategories">
+                        <control template="/ru/it/lecm/statemachine/editor/components/lecm-checkboxtable.ftl">
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="height">400</control-param>
+                            <control-param name="configURL">/lecm/statemachine/editor/datagrid/config</control-param>
+                            <control-param name="repoDatasource">true</control-param>
+                            <control-param name="ds">lecm/statemachine/editor/ds/categories</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 

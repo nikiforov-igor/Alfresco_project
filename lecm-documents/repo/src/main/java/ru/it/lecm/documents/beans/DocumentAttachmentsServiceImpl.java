@@ -82,10 +82,24 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     public List<NodeRef> getCategories(final NodeRef documentRef) {
 	    this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", documentRef);
 
+        QName type = nodeService.getType(documentRef);
+
+        List<String> categories = getCategories(type);
+
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        NodeRef attachmentRootRef = getRootFolder(documentRef);
+        for (String category: categories) {
+            NodeRef categoryFolderRef = getCategoryFolder(category, attachmentRootRef);
+            result.add(categoryFolderRef);
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getCategories(QName documentTypeQName) {
         List<String> categories = new ArrayList<String>();
 
-        QName type = nodeService.getType(documentRef);
-        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), CONSTRAINT_ATTACHMENT_CATEGORIES));
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(documentTypeQName.getNamespaceURI(), CONSTRAINT_ATTACHMENT_CATEGORIES));
         if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof ListOfValuesConstraint)) {
             ListOfValuesConstraint psConstraint = (ListOfValuesConstraint) constraint.getConstraint();
             if (psConstraint.getAllowedValues() != null) {
@@ -96,14 +110,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
         if (categories.size() == 0) {
             categories.add("Основные");
         }
-
-        List<NodeRef> result = new ArrayList<NodeRef>();
-        NodeRef attachmentRootRef = getRootFolder(documentRef);
-        for (String category: categories) {
-            NodeRef categoryFolderRef = getCategoryFolder(category, attachmentRootRef);
-            result.add(categoryFolderRef);
-        }
-        return result;
+        return categories;
     }
 
     public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {

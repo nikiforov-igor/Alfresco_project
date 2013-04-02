@@ -236,7 +236,29 @@ public class BPMNGenerator {
             }
         }
 
-		attribute = doc.createElement("lecm:attribute");
+        //Categories
+        NodeRef categories = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "categories");
+        if (categories != null) {
+            Element categoriesElement = doc.createElement("attachmentCategories");
+            setStatusAction.appendChild(categoriesElement);
+
+            List<ChildAssociationRef> categoriesItems = nodeService.getChildAssocs(categories);
+            for (ChildAssociationRef categoriesItem : categoriesItems) {
+                String name = (String) nodeService.getProperty(categoriesItem.getChildRef(), ContentModel.PROP_NAME);
+                boolean isEditable = false;
+
+                Object isEditableProperty = nodeService.getProperty(categoriesItem.getChildRef(), StatemachineEditorModel.PROP_EDITABLE_FIELD);
+                if (isEditableProperty != null) {
+                    isEditable = (Boolean) isEditableProperty;
+                }
+                Element categoryElement = doc.createElement("attachmentCategory");
+                categoryElement.setAttribute("name", name);
+                categoryElement.setAttribute("isEditable", "" + Boolean.toString(isEditable));
+                categoriesElement.appendChild(categoryElement);
+            }
+        }
+
+        attribute = doc.createElement("lecm:attribute");
 		attribute.setAttribute("name", "version");
 		attribute.setAttribute("value", version);
 		setStatusAction.appendChild(attribute);
