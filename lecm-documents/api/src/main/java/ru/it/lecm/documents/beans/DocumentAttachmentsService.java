@@ -52,6 +52,13 @@ public interface DocumentAttachmentsService {
 	 */
 	public Collection<Version> getAttachmentVersions(NodeRef nodeRef);
 
+	/**
+	 * Проверка, что категория доступна только для чтения
+	 * @param nodeRef Ссылка на категорию
+	 * @return true, если категория доступна только для чтения
+	 */
+	public boolean isReadonlyCategory(NodeRef nodeRef);
+
 	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef);

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -32,6 +33,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     private DictionaryService dictionaryService;
 	private VersionService versionService;
 	private LecmPermissionService lecmPermissionService;
+	private StateMachineServiceBean stateMachineBean;
     private final Object lock = new Object();
 
     public void setDictionaryService(DictionaryService dictionaryService) {
@@ -44,6 +46,10 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
+		this.stateMachineBean = stateMachineBean;
 	}
 
 	public NodeRef getRootFolder(final NodeRef documentRef) {
@@ -217,5 +223,15 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			return history.getAllVersions();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isReadonlyCategory(NodeRef nodeRef) {
+		boolean result = true;
+		NodeRef document = this.getDocumentByCategory(nodeRef);
+		if (document != null) {
+			return this.stateMachineBean.isReadOnlyCategory(document, getCategoryName(nodeRef));
+		}
+		return result;
 	}
 }

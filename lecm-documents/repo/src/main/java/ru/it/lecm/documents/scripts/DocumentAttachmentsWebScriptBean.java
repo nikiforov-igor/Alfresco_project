@@ -85,4 +85,13 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public boolean isReadonlyCategory(String nodeRef) {
+		boolean result = false;
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref)) {
+			return this.documentAttachmentsService.isReadonlyCategory(ref);
+		}
+		return result;
+	}
 }

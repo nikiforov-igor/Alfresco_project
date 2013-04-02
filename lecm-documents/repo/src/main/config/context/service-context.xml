@@ -189,6 +189,7 @@
         <property name="dictionaryService" ref="dictionaryService"/>
 	    <property name="versionService" ref="versionService"/>
 	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	    <property name="stateMachineBean" ref="stateMachineHelper"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

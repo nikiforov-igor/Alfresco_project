@@ -26,6 +26,14 @@
                 var datagrid = null;
                 var select = null;
 
+	            var readOnlyCategories = {
+		            <#if categories??>
+			            <#list categories as category>
+				            "${category.nodeRef}": ${category.isReadOnly?string}<#if category_has_next>,</#if>
+			            </#list>
+		            </#if>
+	            }
+
                 YAHOO.util.Event.onDOMReady(function (){
                     select = Dom.get("${id}-attachment-categories");
                     var selectValue = "";
@@ -51,7 +59,10 @@
 	                                type: "datagrid-action-link-${containerId}",
 	                                id: "onActionUploadNewVersion",
 	                                permission: "edit",
-	                                label: "${msg("actions.upload-new-version")}"
+	                                label: "${msg("actions.upload-new-version")}",
+		                            evaluator: function (rowData) {
+			                            return !readOnlyCategories[select.value];
+		                            }
 	                            }<#if hasDeleteAttachmentPerm>,</#if>
 	                        </#if>
 	                        <#if hasDeleteAttachmentPerm>
@@ -62,7 +73,10 @@
 	                                label: "${msg("actions.delete-row")}",
 	                                confirmFunction: function () {
 	                                    YAHOO.Bubbling.fire("fileDeleted", {});
-	                                }
+	                                },
+		                            evaluator: function (rowData) {
+			                            return !readOnlyCategories[select.value];
+		                            }
 	                            }
 	                        </#if>
                         ],
