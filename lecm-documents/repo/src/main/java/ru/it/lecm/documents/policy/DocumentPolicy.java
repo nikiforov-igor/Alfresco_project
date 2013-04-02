@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.model.ForumModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -8,7 +9,6 @@ import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -65,14 +65,26 @@ public class DocumentPolicy extends BaseBean
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties",Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         if (!changeIgnoredProperties(before, after)) {
-            if (before.size() == after.size()) { // только при изменении свойств (не учитываем создание документа + добавление рейтингов. комментариев и прочего
+            if (before.size() == after.size()) { // только при изменении свойств (учитываем добавление/удаление комментариев, не учитываем создание документа + добавление рейтингов и прочего
                 updatePresentString(nodeRef);
-                businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в документ \"#mainobject\"");
+                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
+                    if ((Integer)after.get(ForumModel.PROP_COMMENT_COUNT) < (Integer)before.get(ForumModel.PROP_COMMENT_COUNT)){
+                        businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator удалил комментарий в документе \"#mainobject\"");
+                    } else {
+                        businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator оставил комментарий в документе \"#mainobject\"");
+                    }
+                } else {
+                    businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в документ \"#mainobject\"");
+                }
+            } else {
+                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
+                    businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator оставил комментарий в документе \"#mainobject\"");
+                }
             }
         }
     }
