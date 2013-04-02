@@ -115,15 +115,15 @@ function main()
         var childNodes = [];
 
         parent = resolveNode(nodeRef);
-        if (parent === null) {
+        if (parent === null && argsXPath === null) {
             status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
             return null;
         }
         if (argsRootNode != null){
-            rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
+	      rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
         }
 
-        if ((argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == ""))  {
+        if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == ""))  {
             var ignoreTypes = null;
             if (argsFilterType != null)
             {
@@ -135,7 +135,19 @@ function main()
 
             childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, "cm:name", true, null).getPage();
         } else {
-            var query = getFilterParams(argsSearchTerm, parent);
+	        var parentXPath = null;
+	        if (parent != null) {
+		        parentXPath = parent.getQnamePath();
+	        } else if (argsXPath != null) {
+		        parentXPath = argsXPath;
+	        }
+
+	        if (parentXPath === null) {
+		        status.setCode(status.STATUS_NOT_FOUND, "Not a valid parent xPath");
+		        return null;
+	        }
+
+            var query = getFilterParams(argsSearchTerm, parentXPath);
             query = addAdditionalFilter(query, argsAdditionalFilter);
 
             // Query the nodes - passing in default sort and result limit parameters
@@ -512,10 +524,9 @@ function createGroupResult(node)
     return groupObject;
 }
 
-function getFilterParams(filterData, parentNode)
+function getFilterParams(filterData, parentXPath)
 {
-    var xpath = parentNode.getQnamePath();
-	var query = " +PATH:\"" + xpath + "//*\"";
+	var query = " +PATH:\"" + parentXPath + "//*\"";
 	var columns = [];
 	if (filterData !== "") {
     	columns = filterData.split('#');

@@ -34,7 +34,7 @@ LogicECM.module = LogicECM.module || {};
 		this.addItemButtons = {};
 		this.searchProperties = {};
 		this.currentNode = null;
-		this.rootNode = null;
+//		this.rootNode = null;
 		this.isSearch = false;
 
 		return this;
@@ -52,7 +52,7 @@ LogicECM.module = LogicECM.module || {};
 
 			currentNode: null,
 
-			rootNode: null,
+//			rootNode: null,
 
 			searchProperties: null,
 
@@ -76,7 +76,7 @@ LogicECM.module = LogicECM.module || {};
 
 				rootLocation: null,
 
-				rootNodeRef: "",
+//				rootNodeRef: "",
 
 				itemType: "cm:content",
 
@@ -120,7 +120,7 @@ LogicECM.module = LogicECM.module || {};
 				// Create button if control is enabled
 				if(!this.options.disabled)
 				{
-					this._loadRootNode();
+//					this._loadRootNode();
 					this._createSelectedControls();
 					this.createSearchDialog();
 					this._loadSearchProperties();
@@ -266,7 +266,7 @@ LogicECM.module = LogicECM.module || {};
 
 			onSearch: function(e, obj)
 			{
-				var nodeRef = this.options.rootNodeRef;
+//				var nodeRef = this.options.rootNodeRef;
 				var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
 				var searchData = "";
 
@@ -279,62 +279,62 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 				this.isSearch = true;
-				this._updateItems(nodeRef, searchData);
+				this._updateItems(searchData);
 				if (obj && obj[1]) {
 					obj[1].preventDefault();
 				}
 			},
 
-			_loadRootNode: function AssociationSearchViewer__loadRootNode() {
-				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
-
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: sUrl,
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null) {
-									this.options.rootNodeRef = oResults.nodeRef;
-									this._loadSelectedItems();
-								}
-							},
-							scope: this
-						},
-						failureCallback:
-						{
-							fn: function (oResponse) {
-								var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-								this.widgets.dataTable.set("MSG_ERROR", response.message);
-								this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-							},
-							scope: this
-						}
-					});
-			},
-
-			_generateRootUrlPath: function AssociationSearchViewer__generateItemsUrlPath(nodeRef)
-			{
-				return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
-			},
-
-			_generateRootUrlParams: function AssociationSearchViewer__generateItemsUrlParams()
-			{
-				var params = "?titleProperty=" + encodeURIComponent("cm:name");
-				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
-				{
-					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
-				} else if (this.options.xPathLocation)
-				{
-					params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
-					if (this.options.xPathLocationRoot != null) {
-						params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
-					}
-				}
-
-				return params;
-			},
+//			_loadRootNode: function AssociationSearchViewer__loadRootNode() {
+//				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
+//
+//				Alfresco.util.Ajax.jsonGet(
+//					{
+//						url: sUrl,
+//						successCallback:
+//						{
+//							fn: function (response) {
+//								var oResults = response.json;
+//								if (oResults != null) {
+//									this.options.rootNodeRef = oResults.nodeRef;
+//									this._loadSelectedItems();
+//								}
+//							},
+//							scope: this
+//						},
+//						failureCallback:
+//						{
+//							fn: function (oResponse) {
+//								var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+//								this.widgets.dataTable.set("MSG_ERROR", response.message);
+//								this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+//							},
+//							scope: this
+//						}
+//					});
+//			},
+//
+//			_generateRootUrlPath: function AssociationSearchViewer__generateItemsUrlPath(nodeRef)
+//			{
+//				return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
+//			},
+//
+//			_generateRootUrlParams: function AssociationSearchViewer__generateItemsUrlParams()
+//			{
+//				var params = "?titleProperty=" + encodeURIComponent("cm:name");
+//				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
+//				{
+//					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
+//				} else if (this.options.xPathLocation)
+//				{
+//					params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+//					if (this.options.xPathLocationRoot != null) {
+//						params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+//					}
+//				}
+//
+//				return params;
+//			},
 
 			_createSelectedControls: function AssociationSearchViewer__createSelectedControls()
 			{
@@ -549,7 +549,7 @@ LogicECM.module = LogicECM.module || {};
 				return (this.selectedItems[id] === undefined);
 			},
 
-			_updateItems: function AssociationSearchViewer__updateItems(nodeRef, searchTerm)
+			_updateItems: function AssociationSearchViewer__updateItems(searchTerm)
 			{
 				// Empty results table - leave tag entry if it's been rendered
 				this.widgets.dataTable.set("MSG_EMPTY", this.msg("label.loading"));
@@ -558,7 +558,7 @@ LogicECM.module = LogicECM.module || {};
 
 				var successHandler = function AssociationSearchViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
 				{
-					this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
+					this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : null;
 					this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
 					this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
 				};
@@ -585,7 +585,7 @@ LogicECM.module = LogicECM.module || {};
 				};
 
 				// build the url to call the pickerchildren data webscript
-				var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+				var url = this._generateChildrenUrlPath() + this._generateChildrenUrlParams(searchTerm);
 
 				if (Alfresco.logger.isDebugEnabled())
 				{
@@ -604,18 +604,25 @@ LogicECM.module = LogicECM.module || {};
 				this.startLocationResolved = true;
 			},
 
-			_generateChildrenUrlPath: function AssociationSearchViewer__generatePickerChildrenUrlPath(nodeRef)
+			_generateChildrenUrlPath: function AssociationSearchViewer__generatePickerChildrenUrlPath()
 			{
 				// generate the path portion of the url
-				return $combine("/", nodeRef.replace("://", "/"), "children");
+				return "/children";
 			},
 
 			_generateChildrenUrlParams: function AssociationSearchViewer__generatePickerChildrenUrlParams(searchTerm)
 			{
-				return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
+				var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
 					"&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
+
+					if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
+				{
+					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
+				}
+
+				return params;
 			},
 
 			onSelectedItemAdded: function AssociationSearchViewer_onSelectedItemAdded(layer, args)
@@ -811,38 +818,38 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			updateViewForm: function AssociationSearchViewer_getSelectedItemsNameSubstituteString() {
-				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
-
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: sUrl,
-						successCallback:
-						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null) {
-									this.rootNode =  {
-										label:oResults.title,
-										data: {
-											nodeRef:oResults.nodeRef,
-											type:oResults.type,
-											displayPath: oResults.displayPath
-										}
-									};
-									this.options.rootNodeRef = oResults.nodeRef;
+//				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
+//
+//				Alfresco.util.Ajax.jsonGet(
+//					{
+//						url: sUrl,
+//						successCallback:
+//						{
+//							fn: function (response) {
+//								var oResults = response.json;
+//								if (oResults != null) {
+//									this.rootNode =  {
+//										label:oResults.title,
+//										data: {
+//											nodeRef:oResults.nodeRef,
+//											type:oResults.type,
+//											displayPath: oResults.displayPath
+//										}
+//									};
+//									this.options.rootNodeRef = oResults.nodeRef;
 									this._loadSelectedItems();
-								}
-							},
-							scope: this
-						},
-						failureCallback:
-						{
-							fn: function (oResponse) {
-								alert(YAHOO.lang.JSON.parse(oResponse.responseText));
-							},
-							scope: this
-						}
-					});
+//								}
+//							},
+//							scope: this
+//						},
+//						failureCallback:
+//						{
+//							fn: function (oResponse) {
+//								alert(YAHOO.lang.JSON.parse(oResponse.responseText));
+//							},
+//							scope: this
+//						}
+//					});
 			}
 		});
 })();
