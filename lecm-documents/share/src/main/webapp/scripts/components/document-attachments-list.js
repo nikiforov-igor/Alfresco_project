@@ -567,28 +567,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     site: "",
                     container: "documentLibrary",
                     filter: {
-	                    filterId: "path",
-	                    filterData: this.options.path,
-	                    filterOwner: "Alfresco.DocListTree"
+	                    filterId: "path"
                     }
                 };
 
                 // Build the URI stem
-                var uriPart =  "node/alfresco/company/home",
-                    params = YAHOO.lang.substitute("{type}/" + uriPart + (obj.filter.filterId === "path" ? "{path}" : ""),
-                        {
-                            type: encodeURIComponent(obj.type),
-                            site: encodeURIComponent(obj.site),
-                            container: encodeURIComponent(obj.container),
-                            path: $combine("/", Alfresco.util.encodeURIPath(obj.path).replace(/%25/g,"%2525"))
-                        });
+                params = YAHOO.lang.substitute("{type}/node/" + this.options.nodeRef.replace(":/", ""),
+                {
+	                type: encodeURIComponent(obj.type)
+                });
 
                 // Filter parameters
                 params += "?filter=" + encodeURIComponent(obj.filter.filterId);
-                if (obj.filter.filterData && obj.filter.filterId !== "path")
-                {
-                    params += "&filterData=" + encodeURIComponent(obj.filter.filterData);
-                }
 
                 // Sort parameters
                 params += "&sortAsc=true&sortField=" + encodeURIComponent("cm:name");

@@ -55,8 +55,6 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
     }
 
 	public String deleteAttachment(String nodeRef) {
-//		nodeService.deleteNode(new NodeRef("workspace://SpacesStore/1930fcce-7522-477d-bb96-6fa6703ed1ae"));
-
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
 		NodeRef ref = new NodeRef(nodeRef);
