@@ -28,6 +28,7 @@ import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,10 +69,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 	public void setAuthService(AuthenticationService authService) {
 		this.authService = authService;
-	}
-
-	public LecmPermissionService getLecmPermissionService() {
-		return lecmPermissionService;
 	}
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
@@ -120,10 +117,10 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentMembersService.TYPE_DOC_MEMBER, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE,
-				new JavaBehaviour(this, "onCreateAssociation"));
+				new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				DocumentMembersService.TYPE_DOC_MEMBER, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE,
-				new JavaBehaviour(this, "onDeleteAssociation"));
+				new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				DocumentMembersService.TYPE_DOC_MEMBER, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -142,8 +139,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		// создание ассоциации документ -> участник
 		NodeRef member = childAssocRef.getChildRef();
-		NodeRef folder = childAssocRef.getParentRef();
-		NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
+		NodeRef document = nodeService.getPrimaryParent(childAssocRef.getParentRef()).getParentRef();
 		nodeService.createAssociation(document, member, DocumentService.ASSOC_DOC_MEMBERS);
 	}
 
@@ -154,82 +150,37 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
 
 		NodeRef docRef = null;
-		try {
-			NodeRef member = nodeAssocRef.getSourceRef();
-			NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
-			docRef = nodeService.getPrimaryParent(folder).getParentRef();
+        try {
+            NodeRef member = nodeAssocRef.getSourceRef();
+            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+            docRef = nodeService.getPrimaryParent(folder).getParentRef();
 
-			if (this.getGrantDynaRoleCode() == null) {
-				logger.warn(String.format("Dynamic role configured as NULL -> nothing performed (document {%s})", docRef));
-				return;
-			}
+            if (this.getGrantDynaRoleCode() == null) {
+                logger.warn("Dynamic role configured as NULL -> nothing performed (document {" + docRef + "})");
+                return;
+            }
 
-			logger.debug(String.format("Assigning dynamic role <%s> in document {%s}", this.getGrantDynaRoleCode(), docRef));
-
-			final String authorLogin = authService.getCurrentUserName();
-			final NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
-			if (employee == null) {
-				logger.debug(String.format("Fail assigning dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
-				return;
-			}
-
-			/*
-			 * нарезка прав на Документ
-			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
-			 * такая нарезка ничего не выполнит.
-			lecmPermissionService.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), lecmPermissionService.findPermissionGroup(this.getGrantAccess()) );
-			logger.info(String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
-			 */
-
-			/*
-			 * Выдача индивидуальной роли Сотруднику 
-			 */
-			final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
-			lecmPermissionService.grantAccess( pgGranting, docRef, employee.getId() );
-			logger.info(String.format("Access <%s> as group <%s> granted\n\t for user '%s'/employee {%s}\n\t to document {%s}"
-					, this.getGrantAccess(), pgGranting, authorLogin, employee, docRef));
-
-
-		} catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-			logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
-		}
+            LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
+            lecmPermissionService.grantAccess(pgGranting, docRef, member.getId());
+        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+            logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
+        }
 	}
 
-	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-		NodeRef docRef = null;
-		try {
-			NodeRef member = nodeAssocRef.getSourceRef();
-			NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
-			docRef = nodeService.getPrimaryParent(folder).getParentRef();
+    @Override
+    public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+        NodeRef docRef = null;
+        try {
+            NodeRef member = nodeAssocRef.getSourceRef();
+            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+            docRef = nodeService.getPrimaryParent(folder).getParentRef();
 
-			logger.debug(String.format("Revoke dynamic role <%s> in document {%s}", this.getGrantDynaRoleCode(), docRef));
-
-			final String authorLogin = authService.getCurrentUserName();
-			final NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
-			if (employee == null) {
-				logger.debug(String.format("Fail revoke dynamic role <%s> in document {%s}: employee is NULL", this.getGrantDynaRoleCode(), docRef));
-				return;
-			}
-
-			/*
-			 * Отзываем права по Динамической Роли
-			 */
-//			lecmPermissionService.revokeDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId() );
-//			logger.info(String.format("Dynamic role revoked\n\t for user '%s'/employee {%s}\n\t in document {%s}", authorLogin, employee, docRef));
-
-			/*
-			 * Отзываем индивидуальные права у Сотрудника 
-			 */
-			final LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
-			lecmPermissionService.revokeAccess( pgRevoking, docRef, employee.getId() );
-			logger.warn(String.format("Access <%s> as group <%s> REVOKED \n\t of user '%s'/employee {%s}\n\t from document {%s}"
-					, this.getGrantAccess(), pgRevoking, authorLogin, employee, docRef));
-
-		} catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-			logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
-		}
-	}
+            LecmPermissionGroup pgRevoking = getLecmPermissionGroup(docRef);
+            lecmPermissionService.revokeAccess(pgRevoking, docRef, member.getId());
+        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+            logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
+        }
+    }
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -267,8 +218,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 	public void onCreateDocument(ChildAssociationRef childAssocRef) {
 		// добаваление сотрудника, создавшего документ в участники
-        final NodeRef document = childAssocRef.getChildRef();
-        final String userName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+        final NodeRef docRef = childAssocRef.getChildRef();
+        final String userName = (String) nodeService.getProperty(docRef, ContentModel.PROP_CREATOR);
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
             @Override
             public NodeRef doWork() throws Exception {
@@ -276,7 +227,10 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                     @Override
                     public NodeRef execute() throws Throwable {
-                        return documentMembersService.addMember(document, orgstructureService.getEmployeeByPerson(userName), null);
+                        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+                        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+                        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
+                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), props);
                     }
                 });
             }
@@ -294,10 +248,25 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                     @Override
                     public NodeRef execute() throws Throwable {
-                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), null);
+                        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+                        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+                        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
+                        return documentMembersService.addMember(docRef, orgstructureService.getEmployeeByPerson(userName), props);
                     }
                 });
             }
         });
+    }
+
+    private LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
+        LecmPermissionGroup pgGranting = null;
+        String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
+        if (permGroup != null && !permGroup.isEmpty()) {
+            pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
+        }
+        if (pgGranting == null) {
+            pgGranting = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
+        }
+        return pgGranting;
     }
 }
