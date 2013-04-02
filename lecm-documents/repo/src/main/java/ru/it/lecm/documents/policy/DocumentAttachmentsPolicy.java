@@ -40,6 +40,7 @@ import java.util.Map;
  */
 public class DocumentAttachmentsPolicy extends BaseBean implements
 		NodeServicePolicies.BeforeDeleteNodePolicy,
+		NodeServicePolicies.BeforeUpdateNodePolicy,
 		NodeServicePolicies.OnUpdatePropertiesPolicy,
 		VersionServicePolicies.BeforeCreateVersionPolicy,
 		VersionServicePolicies.AfterCreateVersionPolicy,
@@ -95,6 +96,8 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 	public final void init() {
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeUpdateNodePolicy.QNAME,
+				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeUpdateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -112,7 +115,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
 		if (document != null) {
 			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAdd", document);
-
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
 		}
 	}
@@ -148,6 +150,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
 	        this.lecmPermissionService.checkPermission("_lecmPerm_ContentDelete", document);
+	        this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 
             // добавляем пользователя удалившего вложения как участника
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -220,6 +223,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
 		if (document != null) {
 			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAddVer", document);
+			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
 		}
 	}
 
@@ -230,6 +234,14 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());
 			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "Сотрудник #initiator обновил версию вложения #object1 в документе #mainobject", objects);
+		}
+	}
+
+	@Override
+	public void beforeUpdateNode(NodeRef nodeRef) {
+		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
+		if (document != null) {
+			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 		}
 	}
 }
