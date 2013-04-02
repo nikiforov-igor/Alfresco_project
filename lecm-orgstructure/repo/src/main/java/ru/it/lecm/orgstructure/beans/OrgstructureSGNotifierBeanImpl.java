@@ -184,18 +184,25 @@ public class OrgstructureSGNotifierBeanImpl
 	 */
 	@Override
 	public void notifyChangeDP(NodeRef staffDP, boolean isBoss, NodeRef nodeOrgUnit) {
+		final NodeRef employee = orgstructureService.getEmployeeByPosition(staffDP);
+		notifyChangeDPAndEmloyee(employee, staffDP, isBoss, nodeOrgUnit);
+	}
+
+	private void notifyChangeDPAndEmloyee(NodeRef employee, NodeRef staffDP, boolean isBoss, NodeRef nodeOrgUnit)
+	{
 		if (logger.isDebugEnabled()) {
 			try {
-				logger.debug( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s} of type {%s}\n\t OU {%s} of type {%s}",
-					isBoss, staffDP, nodeService.getType(staffDP), nodeOrgUnit, nodeService.getType(nodeOrgUnit)));
+				logger.debug( String.format( "notifyChangeDP/Employee: isBoss=%s \n\t employee {%s} of type {%s}\n\t DP {%s} of type {%s}\n\t OU {%s} of type {%s}",
+					isBoss
+					, employee, nodeService.getType(employee)
+					, staffDP, nodeService.getType(staffDP)
+					, nodeOrgUnit, nodeService.getType(nodeOrgUnit)));
 			} catch(Throwable t) {
 				logger.error( String.format( "notifyChangeDP: isBoss=%s \n\t DP {%s}\n\t OU {%s}",
 						isBoss, staffDP, nodeOrgUnit), t);
 				// eat the exception
 			}
 		}
-
-		final NodeRef employee = orgstructureService.getEmployeeByPosition(staffDP);
 		final String loginName = getEmployeeLogin(employee);
 		final String emplId = (employee != null) ? employee.getId() : null;
 
@@ -205,12 +212,14 @@ public class OrgstructureSGNotifierBeanImpl
 
 		// прописать Сотрудника в свою Должность ...
 		// SG_Me -> SG_DP
+		Types.SGPrivateMeOfUser sgMe = null;
 		if (employee != null) {
 			// safely-свяжем пользователя с его личной группой
 			if (loginName != null)
 				sgNotifier.orgEmployeeTie(emplId, loginName, true);
 
-			final Types.SGPosition sgMe = Types.SGKind.SG_ME.getSGPos( emplId, loginName);
+			// sgMe = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
+			sgMe = (Types.SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos( emplId, loginName);
 			sgNotifier.sgInclude( sgMe, sgDP);
 		}
 
@@ -225,8 +234,11 @@ public class OrgstructureSGNotifierBeanImpl
 			sgNotifier.sgInclude( sgDP, sgSV);
 		} else { // снять отметку руководящей ...
 			sgNotifier.sgExclude( sgDP, sgSV);
-		}
 
+			// прописать SV подразедления в личную группу
+			if (sgMe != null)
+				sgNotifier.sgInclude( sgSV, sgMe);
+		}
 	}
 
 	/**
@@ -273,18 +285,22 @@ public class OrgstructureSGNotifierBeanImpl
 	/**
 	 * Назначение DP для Сотрудника.
 	 * @param employee узел типа "lecm-orgstr:employee-link"
-	 * @param dpid узел типа "lecm-orgstr:staff-list
+	 * @param nodeDP узел типа "lecm-orgstr:staff-list
 	 */
 	@Override
-	public void notifyEmploeeSetDP(NodeRef employee, NodeRef dpid) {
+	public void notifyEmploeeSetDP(NodeRef employee, NodeRef nodeDP) {
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "notifyEmploeeSetDP:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
-					employee, nodeService.getType(employee), dpid, nodeService.getType(dpid)));
+					employee, nodeService.getType(employee), nodeDP, nodeService.getType(nodeDP)));
 		}
 
-		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
-		this.sgNotifier.sgInclude( emplPos, dpPos);
+		final NodeRef orgUnit = orgstructureService.getUnitByStaff(nodeDP);
+		if (orgUnit == null) {
+			return;
+		}
+		final boolean isBoss = Boolean.TRUE.equals(nodeService.getProperty(nodeDP, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS));
+
+		notifyChangeDPAndEmloyee(employee, nodeDP, isBoss, orgUnit);
 	}
 
 	/**
