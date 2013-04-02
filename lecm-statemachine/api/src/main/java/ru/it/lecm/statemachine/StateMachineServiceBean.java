@@ -8,14 +8,31 @@ import java.util.List;
 
 public interface StateMachineServiceBean {
 
+    /**
+     * Возвращает список полей для документа с флагами "редактируемый/не редактируемый"
+     *
+     * @param document
+     * @return
+     */
     public StateFields getStateFields(NodeRef document);
 
+    /**
+     * Возвращает список категорий для документа с флагами "редактируемый/не редактируемый"
+     *
+     * @param document
+     * @return
+     */
     public StateFields getStateCategories(NodeRef document);
 
     String nextTransition(String taskId);
 
     String getCurrentTaskId(String executionId);
 
+    /**
+     * Возвращает true, если документ находится в статусе Черновик
+     * @param document
+     * @return
+     */
     public boolean isDraft(NodeRef document);
 
     public List<NodeRef> getAssigneesForWorkflow(String workflowId);
