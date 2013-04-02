@@ -48,6 +48,11 @@ public class StatemachineWebScriptBean extends BaseWebScript {
             return new WorkflowTaskListBean();
         }
 
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (currentEmployee == null) {
+            return new WorkflowTaskListBean();
+        }
+
         NodeRef nodeRef = node.getNodeRef();
         BPMState state = BPMState.getValue(stateParam);
 
@@ -62,7 +67,6 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
         WorkflowTaskListBean result = new WorkflowTaskListBean();
 
-        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         boolean isBoss = orgstructureService.isBoss(currentEmployee);
         result.setShowSubordinateTasks(isBoss);
 

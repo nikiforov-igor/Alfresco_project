@@ -537,14 +537,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
-        lecmPermissionService.checkPermission("_lecmPerm_WFEnumBP", nodeRef);
+        boolean hasPermission = lecmPermissionService.hasPermission("_lecmPerm_WFEnumBP", nodeRef);
+        if (!hasPermission) {
+            return new ArrayList<WorkflowInstance>();
+        }
 
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
         return filterWorkflows(activeWorkflows);
     }
 
     private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
-        lecmPermissionService.checkPermission("_lecmPerm_WFTaskList", nodeRef);
+        boolean hasPermission = lecmPermissionService.hasPermission("_lecmPerm_WFTaskList", nodeRef);
+        if (!hasPermission) {
+            return new ArrayList<WorkflowTask>();
+        }
 
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
