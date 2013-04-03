@@ -38,7 +38,7 @@
            var nodeRef = ("${form.arguments.itemKind}" == "node") ? "${form.arguments.itemId}" : "";
            var typeName = ("${form.arguments.itemKind}" == "node") ? "" : "${form.arguments.itemId}";
 
-           new LogicECM.validation.Uniqueness("${fieldHtmlId}").setOptions({
+           new window.LogicECM.validation.Uniqueness("${fieldHtmlId}").setOptions({
                nodeRef: nodeRef,
                typeName: typeName,
                propertyName: "${field.configName}",

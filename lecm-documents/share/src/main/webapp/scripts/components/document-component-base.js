@@ -25,7 +25,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * LogicECM.DocumentComponentBase constructor.
      *
      * @param {String} htmlId The HTML id of the parent element
-     * @return {LogicECM.DocumentComponentBase} The new LogicECM.DocumentComponentBase instance
+     * @return {LogicECM.DocumentComponentBase} The new window.LogicECM.DocumentComponentBase instance
      * @constructor
      */
     LogicECM.DocumentComponentBase = function DocumentConnections_constructor(htmlId) {

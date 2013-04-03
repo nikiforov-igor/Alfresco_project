@@ -179,7 +179,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 			});
 		},
 		onReady: function Schedule_onReady() {
-			Alfresco.logger.info("A new LogicECM.module.WCalendar.Schedule.Toolbar has been created");
+			Alfresco.logger.info("A new window.LogicECM.module.WCalendar.Schedule.Toolbar has been created");
 			this._onToolbarReady();
 			YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
 		}

@@ -35,7 +35,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-	new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages}).setOptions({
+	new window.LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages}).setOptions({
 		searchActive: "${searchActive?string}",
 		bubblingLabel:"${bubblingLabel!''}"
 	});

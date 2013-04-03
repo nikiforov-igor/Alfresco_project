@@ -31,7 +31,7 @@
         <script type="text/javascript">//<![CDATA[
             (function () {
                 YAHOO.util.Event.onDOMReady(function (){
-                    var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+                    var datagrid = new window.LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                         usePagination: ${usePagination?string},
                         showExtendSearchBlock: false,
                         actions: [{

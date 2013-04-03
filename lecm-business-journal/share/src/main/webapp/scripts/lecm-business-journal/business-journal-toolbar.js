@@ -185,7 +185,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 var datagrid = args[1].datagrid;
                 if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel){
                     this.modules.dataGrid = datagrid;
-                    this.archivePanel = new LogicECM.module.BusinessJournal.ArchivePanel("toolbar-archivePanel", datagrid);
+                    this.archivePanel = new window.LogicECM.module.BusinessJournal.ArchivePanel("toolbar-archivePanel", datagrid);
                 }
             },
 

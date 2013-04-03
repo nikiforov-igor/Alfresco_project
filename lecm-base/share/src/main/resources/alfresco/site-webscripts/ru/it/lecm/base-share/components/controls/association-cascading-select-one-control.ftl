@@ -15,7 +15,7 @@
 (function()
 {
     YAHOO.util.Event.onDOMReady(function (){
-        var control = new LogicECM.module.AssociationCascadingSelectOne("${fieldHtmlId}").setMessages(${messages});
+        var control = new window.LogicECM.module.AssociationCascadingSelectOne("${fieldHtmlId}").setMessages(${messages});
         control.setOptions(
                 {
 				<#if field.control.params.parentNodeRef??>

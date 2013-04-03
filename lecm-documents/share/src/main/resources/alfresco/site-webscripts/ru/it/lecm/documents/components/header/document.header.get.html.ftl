@@ -15,7 +15,7 @@
                 <script type="text/javascript">//<![CDATA[
                 (function()
                 {
-                    var control = new LogicECM.module.Subscriptions.SubscribeControl("${id}").setMessages(${messages});
+                    var control = new window.LogicECM.module.Subscriptions.SubscribeControl("${id}").setMessages(${messages});
                     control.setOptions({
                         objectNodeRef: "${nodeRef}"
                     });

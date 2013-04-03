@@ -1,7 +1,7 @@
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
 function init() {
-	new LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
+	new window.LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
 }
 
 YAHOO.util.Event.onDOMReady(init);

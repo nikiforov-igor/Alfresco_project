@@ -24,7 +24,7 @@
                 site: null,
                 formId: <#if formId??>"${formId?js_string}"<#else>null</#if>
             }).setMessages(${messages});
-    var documentMetadataComponent = new LogicECM.DocumentMetadata("${el}").setOptions(
+    var documentMetadataComponent = new window.LogicECM.DocumentMetadata("${el}").setOptions(
             {
                 nodeRef: "${nodeRef}",
                 title:"${msg('heading')}"

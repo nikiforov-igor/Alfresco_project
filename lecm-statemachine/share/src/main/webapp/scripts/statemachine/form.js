@@ -54,7 +54,7 @@ LogicECM.module = LogicECM.module || {};
 		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, fields, label) {
             this.assignee = assignee;
             if (errors.length > 0) {
-                viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
+                viewDialog = new window.LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
                 viewDialog.show(nodeRef, label, errors, fields);
                 return;
             }

@@ -9,7 +9,7 @@ selected = args.selected/>
 
 (function() {
     function init() {
-        var menu = new LogicECM.module.Contracts.Menu("menu-buttons");
+        var menu = new window.LogicECM.module.Contracts.Menu("menu-buttons");
         menu.setMessages(${messages});
         menu.draw();
     }

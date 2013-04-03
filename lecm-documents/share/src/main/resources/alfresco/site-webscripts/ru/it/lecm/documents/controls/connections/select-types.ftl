@@ -23,7 +23,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-	var typeSelector = new LogicECM.module.Connection.TypeSelect("${fieldHtmlId}").setMessages(${messages});
+	var typeSelector = new window.LogicECM.module.Connection.TypeSelect("${fieldHtmlId}").setMessages(${messages});
 	typeSelector.setOptions(
 			{
 				<#if field.mandatory??>

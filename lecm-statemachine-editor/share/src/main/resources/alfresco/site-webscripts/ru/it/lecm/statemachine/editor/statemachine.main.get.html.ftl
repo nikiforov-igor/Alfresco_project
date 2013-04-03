@@ -25,11 +25,11 @@
 var workflowForm;
 (function () {
 	function init() {
-		var statemachineEditor = new LogicECM.module.StatemachineEditor("statemachine");
+		var statemachineEditor = new window.LogicECM.module.StatemachineEditor("statemachine");
         statemachineEditor.setStatemachineId("${page.url.args.statemachineId}");
         statemachineEditor.setMessages(${messages});
         statemachineEditor.draw();
-        var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
+        var menu = new window.LogicECM.module.StatemachineEditor.Menu("menu-buttons");
         menu.setMessages(${messages});
         menu.setEditor(statemachineEditor)
         menu.draw();

@@ -97,7 +97,7 @@
                         };
                         YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                     };
-                    var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+                    var datagrid = new window.LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
                         actions: [

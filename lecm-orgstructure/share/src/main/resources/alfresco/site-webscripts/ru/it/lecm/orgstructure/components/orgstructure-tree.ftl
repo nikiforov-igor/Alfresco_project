@@ -2,7 +2,7 @@
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
-			var orgStructure = new LogicECM.module.OrgStructure.Tree("orgstructure-tree");
+			var orgStructure = new window.LogicECM.module.OrgStructure.Tree("orgstructure-tree");
 			orgStructure.setMessages(${messages});
 			orgStructure.setOptions({
 				nodeType:"${nodeType}",

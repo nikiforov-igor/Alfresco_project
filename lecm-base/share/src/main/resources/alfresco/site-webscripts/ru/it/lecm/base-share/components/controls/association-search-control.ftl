@@ -54,7 +54,7 @@
 	<#assign labelSeparator=":">
 
 
-	new LogicECM.module.AssociationSearchViewer( "${fieldHtmlId}" ).setOptions({
+	new window.LogicECM.module.AssociationSearchViewer( "${fieldHtmlId}" ).setOptions({
 		<#if disabled>
 			disabled: true,
 		</#if>

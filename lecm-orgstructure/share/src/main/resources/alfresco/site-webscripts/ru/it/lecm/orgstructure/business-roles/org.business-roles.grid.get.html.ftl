@@ -9,7 +9,7 @@
         <@grid.datagrid id true>
             <script type="text/javascript">//<![CDATA[
             function createDatagrid() {
-                var datagrid = new LogicECM.module.Base.DataGrid ("${id}");
+                var datagrid = new window.LogicECM.module.Base.DataGrid ("${id}");
                 datagrid.setOptions ({
                     usePagination:true,
                     showExtendSearchBlock:true,

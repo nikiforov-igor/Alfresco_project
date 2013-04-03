@@ -10,10 +10,10 @@
 var workflowForm;
 (function () {
 	function init() {
-		var contracts = new LogicECM.module.Contracts("contracts");
+		var contracts = new window.LogicECM.module.Contracts("contracts");
 		contracts.setMessages(${messages});
 		contracts.draw();
-		workflowForm = new LogicECM.module.StartWorkflow("workflowForm");
+		workflowForm = new window.LogicECM.module.StartWorkflow("workflowForm");
 	}
 
 	YAHOO.util.Event.onDOMReady(init);

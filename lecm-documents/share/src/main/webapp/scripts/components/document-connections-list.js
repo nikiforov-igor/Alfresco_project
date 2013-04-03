@@ -38,7 +38,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				this.loadConnectionsFolder();
 				this.connectButton = Alfresco.util.createYUIButton(this, "addConnection-button", this.onConnect.bind(this));
 
-				this.modules.actions = new LogicECM.module.Base.Actions();
+				this.modules.actions = new window.LogicECM.module.Base.Actions();
 
 				var me = this;
 				var fnActionHandler = function DataGrid_fnActionHandler(layer, args)

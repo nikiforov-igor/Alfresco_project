@@ -9,7 +9,7 @@
         LogicECM.module.OrgStructure.STAFF_LIST_SETTINGS = response;
 
         function init() {
-            new LogicECM.module.Base.Resizer('StaffListResizer');
+            new window.LogicECM.module.Base.Resizer('StaffListResizer');
         }
 
         YAHOO.util.Event.onDOMReady(init);

@@ -64,7 +64,7 @@
         }
 
         function draw(folderRef) {
-            var control = new LogicECM.module.Members.DocumentMembers("${el}").setMessages(${messages});
+            var control = new window.LogicECM.module.Members.DocumentMembers("${el}").setMessages(${messages});
             control.setOptions({
                 documentNodeRef: "${docRef}",
                 documentMembersFolderRef: folderRef,

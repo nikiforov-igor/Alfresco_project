@@ -76,7 +76,7 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 			}
 		},
 		onReady: function() {
-			Alfresco.logger.info("A new LogicECM.module.WCalendar.Menu has been created");
+			Alfresco.logger.info("A new window.LogicECM.module.WCalendar.Menu has been created");
 			this._onMenuReady();
 			YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
 		}

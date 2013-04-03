@@ -25,7 +25,7 @@
     <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
     <@formLib.renderFieldHelp field=field />
     <script type="text/javascript">//<![CDATA[
-        new LogicECM.module.SelectOne("${fieldHtmlId}").setOptions({
+        new window.LogicECM.module.SelectOne("${fieldHtmlId}").setOptions({
             controlId: "${controlId}",
             webscriptType: "${field.control.params.webscriptType!"share"}",
             webscript: "${field.control.params.webscript}",

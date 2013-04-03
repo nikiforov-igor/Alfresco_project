@@ -6,7 +6,7 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var wcalendarToolbar = new LogicECM.module.WCalendar.Schedule.Toolbar("${toolbarId}");
+		var wcalendarToolbar = new window.LogicECM.module.WCalendar.Schedule.Toolbar("${toolbarId}");
 		wcalendarToolbar.setMessages(${messages});
 		wcalendarToolbar.setOptions ({
 			pageId: "${pageId}"

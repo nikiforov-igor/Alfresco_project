@@ -44,7 +44,7 @@
     <script type="text/javascript">//<![CDATA[
     Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
 
-    var documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions(
+    var documentConnectionsComponent = new window.LogicECM.DocumentConnections("${el}").setOptions(
             {
                 nodeRef: "${nodeRef}",
                 title:"${msg('heading')}"

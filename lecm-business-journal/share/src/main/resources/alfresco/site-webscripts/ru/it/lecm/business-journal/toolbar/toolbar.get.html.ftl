@@ -22,7 +22,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-	new LogicECM.module.BusinessJournal.Toolbar("${id}").setMessages(${messages}).setOptions({
+	new window.LogicECM.module.BusinessJournal.Toolbar("${id}").setMessages(${messages}).setOptions({
 		bubblingLabel:"${bubblingLabel!''}"
 	});
 }

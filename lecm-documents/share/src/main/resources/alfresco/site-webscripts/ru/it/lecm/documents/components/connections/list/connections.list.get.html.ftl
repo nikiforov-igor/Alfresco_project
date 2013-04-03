@@ -119,7 +119,7 @@
 		</table>
 
 		<script type="text/javascript">//<![CDATA[
-			new LogicECM.DocumentConnectionsList("${el}").setOptions(
+			new window.LogicECM.DocumentConnectionsList("${el}").setOptions(
 					{
 						documentNodeRef: "${nodeRef}"
 					}).setMessages(${messages});

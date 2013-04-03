@@ -35,7 +35,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-    var control = new LogicECM.module.AssociationAutoComplete("${fieldHtmlId}").setMessages(${messages});
+    var control = new window.LogicECM.module.AssociationAutoComplete("${fieldHtmlId}").setMessages(${messages});
     control.setOptions(
             {
                 <#if disabled>
@@ -69,7 +69,7 @@
             });
 
 
-    new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
+    new window.LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
             <#if form.mode == "view" || field.disabled>
                 disabled: true,
             </#if>

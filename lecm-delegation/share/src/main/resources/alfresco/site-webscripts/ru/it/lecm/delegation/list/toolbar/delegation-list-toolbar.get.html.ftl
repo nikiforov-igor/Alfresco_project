@@ -7,7 +7,7 @@
 <script type="text/javascript"> //<![CDATA[
 	(function () {
 		"use strict";
-		var delegationToolbar = new LogicECM.module.Delegation.List.Toolbar ("${toolbarId}");
+		var delegationToolbar = new window.LogicECM.module.Delegation.List.Toolbar ("${toolbarId}");
 		delegationToolbar.setMessages(${messages});
 	})();
 //]]>

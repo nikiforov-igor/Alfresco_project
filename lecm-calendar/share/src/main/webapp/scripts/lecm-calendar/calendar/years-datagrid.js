@@ -151,7 +151,7 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 					this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
 				}
 			}
-			this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+			this.search = new window.LogicECM.AdvancedSearch(this.id, this).setOptions({
 				showExtendSearchBlock: this.options.showExtendSearchBlock
 			});
 

@@ -9,7 +9,7 @@
 		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
 			function createWorkforceDatagrid() {
-				var datagrid = new LogicECM.module.Orgstructure.WorkForceDataGrid('${id}').setOptions(
+				var datagrid = new window.LogicECM.module.Orgstructure.WorkForceDataGrid('${id}').setOptions(
 						{
 							bubblingLabel: "${bubblingLabel!"workForce"}",
 							usePagination:true,

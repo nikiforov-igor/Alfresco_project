@@ -6,7 +6,7 @@
 <script type="text/javascript">//<![CDATA[
 	(function () {
 		"use strict";
-		var datagrid = new LogicECM.module.Delegation.DelegationList.Grid('${id}');
+		var datagrid = new window.LogicECM.module.Delegation.DelegationList.Grid('${id}');
 		datagrid.setOptions({
 			bubblingLabel: "delegation-list-datagrid",
 			usePagination:true,
@@ -29,7 +29,7 @@
 			YAHOO.Bubbling.fire ("activeGridChanged", {
 				datagridMeta:{
 					itemType: LogicECM.module.Delegation.Const.itemType,
-					nodeRef: LogicECM.module.Delegation.Const.nodeRef,
+					nodeRef: LogicECM.module.Delegation.Const.nodeRef
 				}
 			});
 		});

@@ -108,7 +108,7 @@ function createDatagrid(attributeForShow) {
 		};
 	};
 
-	new LogicECM.module.Base.DataGrid('${id}').setOptions(
+	new window.LogicECM.module.Base.DataGrid('${id}').setOptions(
 			{
 				usePagination:true,
 				showExtendSearchBlock:false,

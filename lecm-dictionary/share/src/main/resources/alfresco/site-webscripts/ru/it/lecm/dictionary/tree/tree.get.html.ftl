@@ -43,7 +43,7 @@
 	};
 
 	function init() {
-		var Tree = new LogicECM.module.Dictionary.Tree("dictionary");
+		var Tree = new window.LogicECM.module.Dictionary.Tree("dictionary");
 		Tree.init("${(page.url.args.dic!'')?string}");
 		Tree.setMessages(${messages});
 	}

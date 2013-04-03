@@ -77,7 +77,7 @@
    </div>
 </div>
 <script type="text/javascript">//<![CDATA[
-   var dndUpload = new LogicECM.DNDUpload("${el}");
+   var dndUpload = new window.LogicECM.DNDUpload("${el}");
    dndUpload.setInMemoryLimit("${inMemoryLimit}");
    dndUpload.setMessages(${messages});
 //]]></script>

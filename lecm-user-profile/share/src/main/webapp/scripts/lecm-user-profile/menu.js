@@ -69,7 +69,7 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 		},
 
 		onReady: function () {
-			Alfresco.logger.info ("A new LogicECM.module.UserProfile.Menu has been created");
+			Alfresco.logger.info ("A new window.LogicECM.module.UserProfile.Menu has been created");
 			this._onMenuReady ();
 			YAHOO.util.Dom.setStyle (this.id + "-body", "visibility", "visible");
 		}

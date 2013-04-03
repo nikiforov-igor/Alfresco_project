@@ -42,7 +42,7 @@
                     }
                     YAHOO.util.Event.on("${id}-attachment-categories", "change", onCategoriesSelectChange, this, true);
 
-                    datagrid = new LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
+                    datagrid = new window.LogicECM.DocumentAttachments.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
                         actions: [

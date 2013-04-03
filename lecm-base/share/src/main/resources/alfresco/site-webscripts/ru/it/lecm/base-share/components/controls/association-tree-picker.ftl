@@ -94,7 +94,7 @@
     <#assign labelSeparator=":">
 
 
-    new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
+    new window.LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if disabled>
             disabled: true,
         </#if>

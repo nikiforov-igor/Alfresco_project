@@ -5,7 +5,7 @@
 
 <script type="text/javascript">//<![CDATA[
 
-var datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
+var datagrid = new window.LogicECM.module.WCalendar.Absence.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock: false,

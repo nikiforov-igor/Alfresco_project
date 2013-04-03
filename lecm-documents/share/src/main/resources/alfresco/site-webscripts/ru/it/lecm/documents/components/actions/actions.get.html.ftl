@@ -13,7 +13,7 @@
     </h2>
     <div id="${el}-formContainer">
         <script type="text/javascript">//<![CDATA[
-            var workflowForm = new LogicECM.module.StartWorkflow("workflowForm");
+            var workflowForm = new window.LogicECM.module.StartWorkflow("workflowForm");
             Alfresco.util.createTwister("${el}-heading", "DocumentActions");
         //]]>
        </script>

@@ -184,7 +184,7 @@ LogicECM.module.Base.DataGrid.prototype.onActionExportXML = function (item) {
 				}
 			});
 }
-new LogicECM.module.Base.DataGrid('${id}').setOptions(
+new window.LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
 			usePagination: true,
 			showExtendSearchBlock:false,

@@ -24,7 +24,7 @@
 <script type="text/javascript">//<![CDATA[
 <#if isEngineer>
       function init() {
-            var resizer = new LogicECM.module.Base.Resizer('wcalendarCalendarResizer');
+            var resizer = new window.LogicECM.module.Base.Resizer('wcalendarCalendarResizer');
 
             resizer.setOptions({
                 initialWidth: 500,

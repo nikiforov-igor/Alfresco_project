@@ -8,7 +8,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-	var control = new LogicECM.module.AssociationCheckboxes("${fieldHtmlId}").setMessages(${messages});
+	var control = new window.LogicECM.module.AssociationCheckboxes("${fieldHtmlId}").setMessages(${messages});
 	control.setOptions(
 			{
 				<#if disabled>

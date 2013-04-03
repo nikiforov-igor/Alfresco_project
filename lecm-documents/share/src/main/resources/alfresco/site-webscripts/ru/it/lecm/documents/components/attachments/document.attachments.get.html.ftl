@@ -54,7 +54,7 @@
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
-            documentAttachmentsComponent =new LogicECM.DocumentAttachments("${el}").setOptions(
+            documentAttachmentsComponent =new window.LogicECM.DocumentAttachments("${el}").setOptions(
                     {
                         nodeRef: "${nodeRef}",
                         title: "${msg('heading')}",

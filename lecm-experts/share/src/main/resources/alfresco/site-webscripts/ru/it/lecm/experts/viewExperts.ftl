@@ -3,7 +3,7 @@
 <script type="text/javascript">//<![CDATA[
 (function () {
     function init() {
-        var expertsTable = new LogicECM.module.Experts("experts");
+        var expertsTable = new window.LogicECM.module.Experts("experts");
         expertsTable.init("${form.arguments.itemId}");
     }
 

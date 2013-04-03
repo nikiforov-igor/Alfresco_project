@@ -57,7 +57,7 @@
         Alfresco.util.createTwister("${el}-heading", "DocumentTasks");
 
         function init() {
-            documentTasksComponent = new LogicECM.DocumentTasks("${el}").setOptions(
+            documentTasksComponent = new window.LogicECM.DocumentTasks("${el}").setOptions(
                     {
                         nodeRef: "${nodeRef}",
                         title: "${msg('heading')}"

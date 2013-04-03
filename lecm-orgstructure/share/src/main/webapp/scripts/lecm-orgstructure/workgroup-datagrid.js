@@ -198,7 +198,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 }
             }
             // initialize Search
-            this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+            this.search = new window.LogicECM.AdvancedSearch(this.id, this).setOptions({
                 showExtendSearchBlock: this.options.showExtendSearchBlock
             });
 

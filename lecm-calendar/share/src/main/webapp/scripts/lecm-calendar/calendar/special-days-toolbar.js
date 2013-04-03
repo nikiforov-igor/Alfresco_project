@@ -114,7 +114,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 
 		},
 		onReady: function() {
-			Alfresco.logger.info("A new LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar has been created");
+			Alfresco.logger.info("A new window.LogicECM.module.WCalendar.Calendar.SpecialDays.Toolbar has been created");
 			this._onToolbarReady();
 			YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
 		}
