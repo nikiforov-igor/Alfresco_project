@@ -19,7 +19,6 @@
 .attachment-list div.action-set a:hover,
 .attachment-list div.action-set .highlighted
 {
-	background-color: #fff;
 	border: 1px solid #2b6eb5;
 	text-decoration: none;
 }
