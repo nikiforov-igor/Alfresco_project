@@ -5,13 +5,7 @@
 
 var showActions = [
 	"document-download",
-	"document-view-content",
-	"document-edit-metadata",
-	"document-inline-edit",
-	"document-edit-online",
-	"document-edit-offline",
-	"document-view-working-copy",
-	"document-cancel-editing"
+	"document-view-content"
 ];
 
 function main()
@@ -21,49 +15,67 @@ function main()
    AlfrescoUtil.param('container', 'documentLibrary');
 	args.view = "attachment";
 
-   var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
+   var attachmentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
    {
       actions: true
    });
-   if (documentDetails)
-   {
-	  setCheckedActions();
+   if (attachmentDetails) {
+	   var category = getCategoryByAttachments(model.nodeRef);
 
-	  documentDetails.item.actions = getShowAction(documentDetails.item.actions);
-	  model.documentDetailsJSON = jsonUtils.toJSONString(documentDetails);
-      doclibCommon();
+	   setCheckedActions(category);
 
-	   if (documentDetails.item.parent != null) {
-		   var attachmentsFolder = DocumentUtils.getNodeDetails(documentDetails.item.parent.nodeRef);
-		   if (attachmentsFolder != null && attachmentsFolder.item.parent != null) {
-			   var categoryFolder = DocumentUtils.getNodeDetails(attachmentsFolder.item.parent.nodeRef);
-			   if (categoryFolder != null && categoryFolder.item.parent != null){
-				   var documentFolder = DocumentUtils.getNodeDetails(categoryFolder.item.parent.nodeRef);
-				   if (documentFolder != null) {
-					   model.documentNodeRef = documentFolder.item.node.nodeRef;
-					   var presentString = documentFolder.item.node.properties["lecm-document:present-string"];
-					   if (presentString != null) {
-						   model.documentName = presentString;
-					   } else {
-						   model.documentName = documentFolder.item.displayName;
-					   }
-				   }
-			   }
-		   }
-	   }
+	   attachmentDetails.item.actions = getShowAction(attachmentDetails.item.actions);
+	   model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
+       doclibCommon();
+
+	   model.document = getDocumentByAttachments(model.nodeRef);
    }
 }
 
-function setCheckedActions() {
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer')) {
+function getDocumentByAttachments(nodeRef, defaultValue) {
+	var url = '/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=' + nodeRef;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		if (defaultValue !== undefined) {
+			return defaultValue;
+		}
+		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+	}
+	return eval('(' + result + ')');
+}
+
+function getCategoryByAttachments(nodeRef, defaultValue) {
+	var url = '/lecm/document/attachments/api/getCategoryByAttachment?nodeRef=' + nodeRef;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		if (defaultValue !== undefined) {
+			return defaultValue;
+		}
+		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+	}
+	return eval('(' + result + ')');
+}
+
+function setCheckedActions(category) {
+	if (category != null && !category.isReadOnly) {
+		showActions.push("document-edit-metadata");
+		showActions.push("document-edit-properties");
+		showActions.push("document-inline-edit");
+		showActions.push("document-edit-online");
+		showActions.push("document-edit-offline");
+		showActions.push("document-view-working-copy");
+		showActions.push("document-cancel-editing");
+	}
+
+	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer') && category != null && !category.isReadOnly) {
 		showActions.push("document-upload-new-version");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentCopy')) {
+	if (hasPermission(model.nodeRef, '_lecmPerm_ContentCopy') && category != null && !category.isReadOnly) {
 		showActions.push("document-copy-to");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete')) {
+	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete') && category != null && !category.isReadOnly) {
 		showActions.push("document-delete");
 	}
 }

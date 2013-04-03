@@ -69,5 +69,7 @@ public interface DocumentAttachmentsService {
 
 	public String getCategoryNameByAttachment(NodeRef attachRef);
 
+	public NodeRef getCategoryByAttachment(NodeRef attachRef);
+
 	public boolean isDocumentAttachment(NodeRef nodeRef);
 }

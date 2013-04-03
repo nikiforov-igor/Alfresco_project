@@ -1,4 +1,4 @@
-<#if documentDetailsJSON??>
+<#if attachmentDetailsJSON??>
    <#assign el=args.htmlid?js_string>
    <script type="text/javascript">//<![CDATA[
       new LogicECM.DocumentAttachmentActions("${el}").setOptions(
@@ -8,9 +8,9 @@
          containerId: "${container?js_string}",
          rootNode: "${rootNode}",
          replicationUrlMapping: ${replicationUrlMappingJSON!"{}"},
-         documentDetails: ${documentDetailsJSON},
+         documentDetails: ${attachmentDetailsJSON},
          repositoryBrowsing: ${(rootNode??)?string},
-	     documentNodeRef: "${documentNodeRef!""}"
+	     documentNodeRef: "${document.nodeRef!''}"
       }).setMessages(
          ${messages}
       );

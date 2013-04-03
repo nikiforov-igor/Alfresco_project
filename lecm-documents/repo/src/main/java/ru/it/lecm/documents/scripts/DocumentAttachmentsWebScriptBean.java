@@ -46,6 +46,34 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+	public ScriptNode getDocumentByAttachment(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		NodeRef ref = new NodeRef(nodeRef);
+
+		if (this.nodeService.exists(ref)) {
+			NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(ref);
+			if (document != null) {
+				return new ScriptNode(document, this.serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
+
+	public ScriptNode getCategoryByAttachment(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		NodeRef ref = new NodeRef(nodeRef);
+
+		if (this.nodeService.exists(ref)) {
+			NodeRef category = this.documentAttachmentsService.getCategoryByAttachment(ref);
+			if (category != null) {
+				return new ScriptNode(category, this.serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
+
     public Scriptable getCategories(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
