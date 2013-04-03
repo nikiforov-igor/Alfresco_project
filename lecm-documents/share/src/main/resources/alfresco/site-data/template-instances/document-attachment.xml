@@ -124,7 +124,7 @@
 		<!-- Document Versions -->
 		<component>
 			<region-id>document-versions</region-id>
-			<url>/components/document-details/document-versions</url>
+			<url>/lecm/components/document/attachment/versions</url>
 			<properties>
 				<nodeRef>{nodeRef}</nodeRef>
 			</properties>
