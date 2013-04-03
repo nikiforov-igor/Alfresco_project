@@ -8,27 +8,26 @@ var showActions = [
 	"document-view-content"
 ];
 
-function main()
-{
-   AlfrescoUtil.param('nodeRef');
-   AlfrescoUtil.param('site', null);
-   AlfrescoUtil.param('container', 'documentLibrary');
+function main() {
+	AlfrescoUtil.param('nodeRef');
+	AlfrescoUtil.param('site', null);
+	AlfrescoUtil.param('container', 'documentLibrary');
 	args.view = "attachment";
 
-   var attachmentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
-   {
-      actions: true
-   });
-   if (attachmentDetails) {
-	   var category = getCategoryByAttachments(model.nodeRef);
-	   model.document = getDocumentByAttachments(model.nodeRef);
+	var attachmentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site,
+		{
+			actions: true
+		});
+	if (attachmentDetails) {
+		var category = getCategoryByAttachments(model.nodeRef);
+		model.document = getDocumentByAttachments(model.nodeRef);
 
-	   setCheckedActions(model.document, category);
+		setCheckedActions(model.document, category);
 
-	   attachmentDetails.item.actions = getShowAction(attachmentDetails.item.actions);
-	   model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
-       doclibCommon();
-   }
+		attachmentDetails.item.actions = getShowAction(attachmentDetails.item.actions);
+		model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
+		doclibCommon();
+	}
 }
 
 function getDocumentByAttachments(nodeRef, defaultValue) {

@@ -115,7 +115,7 @@
 		<!-- Document Metadata -->
 		<component>
 			<region-id>document-metadata</region-id>
-			<url>/components/document-details/document-metadata</url>
+			<url>/lecm/components/document/attachment/metadata</url>
 			<properties>
 				<nodeRef>{nodeRef}</nodeRef>
 			</properties>
