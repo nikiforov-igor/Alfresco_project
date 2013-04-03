@@ -722,7 +722,7 @@
 
          <includePermissionGroup permissionGroup="lecmPerm_CommentView" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_CommentDelete" type="sys:base" />
-         <!-- <includePermissionGroup permissionGroup="lecmPerm_ActionExec" type="sys:base" /> -->
+         <includePermissionGroup permissionGroup="lecmPerm_ActionExec" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
