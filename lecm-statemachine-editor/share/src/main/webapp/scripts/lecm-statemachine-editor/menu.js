@@ -145,8 +145,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             });
             Event.on(inputId, "change", this.editor._importStatemachine, null, this);
 
-            document.getElementById(inputId).click();
-
             // Finally show the component body here to prevent UI artifacts on YUI button decoration
             Dom.setStyle(this.id + "-body", "visibility", "visible");
 
