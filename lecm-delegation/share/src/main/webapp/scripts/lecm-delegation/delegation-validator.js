@@ -11,7 +11,7 @@ LogicECM.module.Delegation.Validator = LogicECM.module.Delegation.Validator || {
 LogicECM.module.Delegation.Validator.Utils = LogicECM.module.Delegation.Validator.Utils || {};
 
 (function () {
-
+	"use strict";
 	LogicECM.module.Delegation.Validator.Utils.findDatagridByName = function (p_sName, bubblingLabel) {
 		var components = [];
 		var found = [];

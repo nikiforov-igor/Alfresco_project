@@ -9,9 +9,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.DelegationList || {};
 
 (function () {
-
-	var attributeForShow = "lecm-d8n:delegation-opts-owner-assoc";
-
+	"use strict";
 	LogicECM.module.Delegation.DelegationList.Grid = function (containerId) {
 		return LogicECM.module.Delegation.DelegationList.Grid.superclass.constructor.call(this, containerId);
 	};

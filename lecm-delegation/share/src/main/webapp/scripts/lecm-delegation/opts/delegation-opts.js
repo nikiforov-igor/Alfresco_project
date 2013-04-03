@@ -9,7 +9,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.DelegationOpts || {};
 
 (function () {
-
+	"use strict";
 	LogicECM.module.Delegation.DelegationOpts = function (containerId) {
 		return LogicECM.module.Delegation.DelegationOpts.superclass.constructor.call(
 			this,

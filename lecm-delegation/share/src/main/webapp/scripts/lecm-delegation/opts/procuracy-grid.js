@@ -9,7 +9,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {};
 
 (function () {
-
+	"use strict";
 	LogicECM.module.Delegation.Procuracy.Grid = function (containerId) {
 		return LogicECM.module.Delegation.Procuracy.Grid.superclass.constructor.call(this, containerId);
 	};

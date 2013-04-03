@@ -7,6 +7,7 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 (function () {
+	"use strict";
 	LogicECM.module.Delegation.Const = LogicECM.module.Delegation.Const || {
 		"nodeRef": "", //nodeRef папки в которой хранятся данные с перечнем делегирования
 		"itemType": "", //тип данных который отображается в таблице с перечнем делегирования

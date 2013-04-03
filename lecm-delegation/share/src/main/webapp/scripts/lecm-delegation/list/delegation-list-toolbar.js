@@ -10,7 +10,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
 
 (function () {
-
+	"use strict";
 	LogicECM.module.Delegation.List.Toolbar = function (containerId) {
 		LogicECM.module.Delegation.List.Toolbar.superclass.constructor.call(
 			this,

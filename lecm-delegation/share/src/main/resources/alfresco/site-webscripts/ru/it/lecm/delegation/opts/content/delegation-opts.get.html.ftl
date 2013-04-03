@@ -4,12 +4,15 @@
 
 <#if delegator??>
 <script type="text/javascript">//<![CDATA[
-	var delegationOpts = new LogicECM.module.Delegation.DelegationOpts('${id}');
-	delegationOpts.setMessages (${messages});
-	delegationOpts.setOptions ({
-		delegator: "${delegator}",
-		isActive: ${isActive?string}
-	});
+	(function(){
+		"use strict";
+		var delegationOpts = new LogicECM.module.Delegation.DelegationOpts('${id}');
+		delegationOpts.setMessages (${messages});
+		delegationOpts.setOptions ({
+			delegator: "${delegator}",
+			isActive: ${isActive?string}
+		});
+	})();
 //]]>
 </script>
 

@@ -25,13 +25,15 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/list/delegation-list.js"/>
 
 <script type="text/javascript">//<![CDATA[
+	(function () {
+		"use strict";
+		var response = ${response};
 
-var response = ${response};
-
-LogicECM.module.Delegation.Const.nodeRef = response.nodeRef;
-LogicECM.module.Delegation.Const.itemType = response.itemType;
-LogicECM.module.Delegation.Const.isBoss = response.isBoss;
-LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
+		LogicECM.module.Delegation.Const.nodeRef = response.nodeRef;
+		LogicECM.module.Delegation.Const.itemType = response.itemType;
+		LogicECM.module.Delegation.Const.isBoss = response.isBoss;
+		LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
+	})();
 //]]>
 </script>
 </@>

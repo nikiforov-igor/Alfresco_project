@@ -66,42 +66,45 @@
 		</style>
 		<div class="form-field with-grid">
 			<script type="text/javascript">//<![CDATA[
-				var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
-					bubblingLabel: "procuracy-datagrid",
-					usePagination:false,
-					showExtendSearchBlock:false,
-					showCheckboxColumn: false,
-					dataSource: "lecm/delegation/get/procuracies",
-					searchShowInactive: true,
-					editForm: "editProcuracy",
-				<#if "view" != form.mode>
-					showActionColumn: true,
-					actions: [
-						{
-							type: "datagrid-action-link-procuracy-datagrid",
-							id: "onActionEdit",
-							permission: "edit",
-							label: "редактировать доверенность"
-						},
-						{
-							type: "datagrid-action-link-procuracy-datagrid",
-							id: "onActionDelete",
-							permission: "delete",
-							label: "удалить доверенность"
-						}
-					]
-				<#else/>
-					showActionColumn: false
-				</#if>
-				});
-				YAHOO.util.Event.onContentReady (datagrid.id, function () {
-					YAHOO.Bubbling.fire ("activeGridChanged", {
-						datagridMeta:{
-							itemType: "lecm-d8n:procuracy",
-							nodeRef: "${args.itemId}"
-						}
+				(function(){
+					"use strict";
+					var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
+						bubblingLabel: "procuracy-datagrid",
+						usePagination:false,
+						showExtendSearchBlock:false,
+						showCheckboxColumn: false,
+						dataSource: "lecm/delegation/get/procuracies",
+						searchShowInactive: true,
+						editForm: "editProcuracy",
+					<#if "view" != form.mode>
+						showActionColumn: true,
+						actions: [
+							{
+								type: "datagrid-action-link-procuracy-datagrid",
+								id: "onActionEdit",
+								permission: "edit",
+								label: "редактировать доверенность"
+							},
+							{
+								type: "datagrid-action-link-procuracy-datagrid",
+								id: "onActionDelete",
+								permission: "delete",
+								label: "удалить доверенность"
+							}
+						]
+					<#else/>
+						showActionColumn: false
+					</#if>
 					});
-				});
+					YAHOO.util.Event.onContentReady (datagrid.id, function () {
+						YAHOO.Bubbling.fire ("activeGridChanged", {
+							datagridMeta:{
+								itemType: "lecm-d8n:procuracy",
+								nodeRef: "${args.itemId}"
+							}
+						});
+					});
+				})();
 			//]]>
 			</script>
 			<@grid.datagrid args.datagridId/>

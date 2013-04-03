@@ -5,6 +5,7 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
+		"use strict";
 		var delegationMenu = new LogicECM.module.Delegation.Menu ("menu-buttons");
 		delegationMenu.setMessages(${messages});
 		delegationMenu.setOptions ({

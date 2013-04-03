@@ -8,6 +8,7 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 
 (function () {
+	"use strict";
 	LogicECM.module.Delegation.Menu = function (containerId) {
 		return LogicECM.module.Delegation.Menu.superclass.constructor.call(
 			this,
