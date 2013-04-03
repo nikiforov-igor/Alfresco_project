@@ -645,11 +645,22 @@ public class OrgstructureSGNotifierBeanImpl
 			// руководящая позиция подразделения ...
 			final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
 
-			if (created) // включить личную группу в руководящую подразделения ...
-				sgNotifier.sgInclude( sgDestMe, sgSV);
-			else
-				sgNotifier.sgExclude( sgDestMe, sgSV);
-		}
+	
+            if (created) { 
+                
+                sgNotifier.sgExclude( sgSV, sgDestMe);
+                
+                sgNotifier.sgInclude( sgDestMe, sgSV);
+
+       		} else { 
+                sgNotifier.sgExclude( sgDestMe, sgSV);
+                
+                sgNotifier.sgInclude( sgSV, sgDestMe);
+    		}
+        
+        }
+        
+        
 	}
 
 }
