@@ -149,8 +149,16 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
-	        this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
-	        this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
+	        boolean hasDeletePermission =  this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
+	        if (!hasDeletePermission) {
+		        hasDeletePermission = isOwnNode(nodeRef) && this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_OWN_CONTENT_DELETE, document);
+	        }
+
+	        if (hasDeletePermission) {
+		        this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
+	        } else {
+		        throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + nodeRef);
+	        }
 
             // добавляем пользователя удалившего вложения как участника
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {

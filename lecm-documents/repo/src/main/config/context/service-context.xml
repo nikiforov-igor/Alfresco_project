@@ -316,6 +316,7 @@
 	    </property>
         <property name="substituteService" ref="substitudeService"/>
         <property name="transactionService" ref="transactionService"/>
+	    <property name="authService" ref="authenticationService"/>
     </bean>
 
     <bean id="documentFrequenciesPolicy" class="ru.it.lecm.documents.policy.DocumentFrequencyPolicy"

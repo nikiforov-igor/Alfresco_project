@@ -6,6 +6,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
@@ -48,6 +49,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
+	private AuthenticationService authService;
 
 	private final Object lock = new Object();
 
@@ -70,6 +72,10 @@ public abstract class BaseBean implements InitializingBean {
 
 	public void setRepositoryStructureHelper (final RepositoryStructureHelper repositoryStructureHelper) {
 		this.repositoryStructureHelper = repositoryStructureHelper;
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
 	}
 
 	@Override
@@ -115,6 +121,16 @@ public abstract class BaseBean implements InitializingBean {
 		boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
 		Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
 		return isArchive || (isActive != null && !isActive);
+	}
+
+	/**
+	 * Проверка элемента на архивность
+	 * @param ref Ссылка на элемент
+	 * @return true - если элемент архивный, иначе false
+	 */
+	public boolean isOwnNode(NodeRef ref){
+		return ref != null && nodeService.exists(ref) &&
+				nodeService.getProperty(ref, ContentModel.PROP_CREATOR).equals(authService.getCurrentUserName());
 	}
 
 	/**

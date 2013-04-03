@@ -52,7 +52,7 @@
 	                                id: "onActionViewContent",
 	                                permission: "edit",
 	                                label: "${msg("actions.view-content")}"
-	                            }<#if hasAddNewVersionAttachmentPerm || hasDeleteAttachmentPerm>,</#if>
+	                            }<#if hasAddNewVersionAttachmentPerm || hasDeleteAttachmentPerm || hasDeleteOwnAttachmentPerm>,</#if>
 	                        </#if>
 	                        <#if hasAddNewVersionAttachmentPerm>
 	                            {
@@ -63,9 +63,9 @@
 		                            evaluator: function (rowData) {
 			                            return !readOnlyCategories[select.value];
 		                            }
-	                            }<#if hasDeleteAttachmentPerm>,</#if>
+	                            }<#if hasDeleteAttachmentPerm || hasDeleteOwnAttachmentPerm>,</#if>
 	                        </#if>
-	                        <#if hasDeleteAttachmentPerm>
+	                        <#if hasDeleteAttachmentPerm || hasDeleteOwnAttachmentPerm>
 	                            {
 	                                type: "datagrid-action-link-${containerId}",
 	                                id: "onActionDelete",
@@ -75,7 +75,7 @@
 	                                    YAHOO.Bubbling.fire("fileDeleted", {});
 	                                },
 		                            evaluator: function (rowData) {
-			                            return !readOnlyCategories[select.value];
+			                            return !readOnlyCategories[select.value] && rowData.createdBy.value == "${user.name}";
 		                            }
 	                            }
 	                        </#if>

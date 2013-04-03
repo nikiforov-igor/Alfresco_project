@@ -42,6 +42,7 @@ public interface LecmPermissionService {
     final public String  PERM_CONTENT_VIEW = "_lecmPerm_ContentView";
     final public String  PERM_CONTENT_ADD_VER = "_lecmPerm_ContentAddVer";
     final public String  PERM_CONTENT_DELETE = "_lecmPerm_ContentDelete";
+    final public String  PERM_OWN_CONTENT_DELETE = "_lecmPerm_OwnContentDelete";
     final public String  PERM_CONTENT_COPY = "_lecmPerm_ContentCopy";
     final public String  PERM_WF_LIST = "_lecmPerm_WFEnumBP";
     final public String  PERM_WF_TASK_LIST = "_lecmPerm_WFTaskList";

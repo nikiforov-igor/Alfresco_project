@@ -7,6 +7,7 @@ const PERM_CONTENT_ADD = "_lecmPerm_ContentAdd";
 const PERM_CONTENT_VIEW = "_lecmPerm_ContentView";
 const PERM_CONTENT_ADD_VER = "_lecmPerm_ContentAddVer";
 const PERM_CONTENT_DELETE = "_lecmPerm_ContentDelete";
+const PERM_OWN_CONTENT_DELETE = "_lecmPerm_OwnContentDelete";
 const PERM_CONTENT_COPY = "_lecmPerm_ContentCopy";
 const PERM_WF_LIST = "_lecmPerm_WFEnumBP";
 const PERM_WF_TASK_LIST = "_lecmPerm_WFTaskList";

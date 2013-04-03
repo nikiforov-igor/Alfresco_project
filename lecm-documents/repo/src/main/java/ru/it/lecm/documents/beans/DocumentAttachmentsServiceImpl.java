@@ -214,8 +214,6 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	@Override
 	public void deleteAttachment(NodeRef nodeRef) {
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_DELETE, nodeRef);
-
 		nodeService.deleteNode(nodeRef);
 	}
 

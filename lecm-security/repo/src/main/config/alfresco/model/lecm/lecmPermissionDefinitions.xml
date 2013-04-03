@@ -160,6 +160,12 @@
 			<includePermissionGroup type="sys:base" permissionGroup="DeleteChildren" />
 		</permissionGroup>
 
+	   <permissionGroup name="lecmPerm_OwnContentDelete" expose="true" allowFullControl="false">
+			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteNode" />
+			<includePermissionGroup type="sys:base" permissionGroup="DeleteChildren" />
+		</permissionGroup>
+
 		<permissionGroup name="lecmPerm_ContentCopy" expose="true" allowFullControl="false">
 			<includePermissionGroup type="sys:base" permissionGroup="ReadContent"/>
 			<includePermissionGroup type="sys:base" permissionGroup="WriteContent" />
@@ -473,6 +479,11 @@
 		<permission name="_lecmPerm_ContentDelete" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_ContentDelete" />
 		</permission>
+
+	   <!-- Удаление своего контента -->
+	   <permission name="_lecmPerm_OwnContentDelete" expose="false" >
+		   <grantedToGroup permissionGroup="lecmPerm_OwnContentDelete" />
+	   </permission>
 
 	  <!-- Копирование контента -->
 		<permission name="_lecmPerm_ContentCopy" expose="false" >
@@ -927,7 +938,7 @@
 
          <includePermissionGroup permissionGroup="lecmPerm_ContentView" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" />
-         <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" /> -->
+         <includePermissionGroup permissionGroup="lecmPerm_OwnContentDelete" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_WFEnumBP" type="sys:base" />
