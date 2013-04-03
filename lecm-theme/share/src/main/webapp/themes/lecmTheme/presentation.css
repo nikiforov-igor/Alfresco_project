@@ -515,8 +515,14 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
     max-width: 100%;
     clear: none;
+    margin: 0;
+    white-space: nowrap;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field > div.autocompleteCurrentValueDisplay:not(.viewmode-field) {
+    margin-left: 150px;
 }
 
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
@@ -530,10 +536,6 @@ h4 .lighter
 }
 .yui-skin-lecmTheme .yui-panel div.form-field textarea {
     resize: none;
-}
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
-    margin: 0;
-    white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field > div.object-finder > div.current-values,
 .yui-skin-lecmTheme .yui-panel div.form-field input.autocomplete-input {
