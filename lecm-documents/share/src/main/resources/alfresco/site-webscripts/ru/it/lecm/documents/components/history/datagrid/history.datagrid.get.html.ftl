@@ -8,7 +8,7 @@
 <#assign dataSource = args.dataSource/>
 
 
-<div class="form-field with-grid" id="bjHistory-${controlId}">
+<div class="form-field with-grid history-grid" id="bjHistory-${controlId}">
 
 <#if args.showSecondaryCheckBox?? && args.showSecondaryCheckBox == "true">
     <#assign showCheckBox = true>

@@ -1,0 +1,9 @@
+.history-grid {
+    margin-left: 0.5%;
+}
+.history-grid .datagrid .grid table th:first-of-type {
+    min-width: 90px;
+}
+.history-grid .datagrid .show-archive-cb-div label.checkbox {
+    margin-right: -5px;
+}
