@@ -12,6 +12,8 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-delegation/delegation-menu.css"/>
 <#-- Стили тулбара для страницы delegation-list -->
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css"/>
+<#-- Стили для DelegationList Data Grid -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-delegation/list/delegation-list.css"/>
 
 <#-- скрипт с константами -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/delegation-const.js"/>

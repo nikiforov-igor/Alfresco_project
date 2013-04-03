@@ -2255,6 +2255,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		                            {
 			                            bubblingLabel:me.options.bubblingLabel
 		                            });
+								Alfresco.util.PopupManager.displayMessage({
+									text:this.msg("message.details.success")
+								});
                             },
                             scope:this
                         },

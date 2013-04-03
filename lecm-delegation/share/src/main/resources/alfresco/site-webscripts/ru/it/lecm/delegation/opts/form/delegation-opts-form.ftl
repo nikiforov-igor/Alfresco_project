@@ -56,6 +56,14 @@
 	</div>
 	<#-- таблица с доверенностями -->
 	<fieldset id="fieldset-delegate-by-func" form="${formId}" style="border: 0; margin-bottom: 0; padding: 0px 0px 0px 1px;" <#if canDelegate>disabled="disabled"</#if>>
+		<#-- Стили для DelegationOpts Data Grid -->
+		<style>
+			.grid .archive-record,
+			.grid .archive-record span a,
+			.grid .archive-record a {
+				color:black;
+			}
+		</style>
 		<div class="form-field with-grid">
 			<script type="text/javascript">//<![CDATA[
 				var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({

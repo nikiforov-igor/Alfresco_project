@@ -47,6 +47,8 @@ if (!isEngineer) {
 		logger.log ("ERROR: there is no nodeRef for currentEmployee");
 	}
 	var employees = orgstructure.getBossSubordinate (currentEmployee.nodeRef);
+	//добавляем самого себя в список сотрудников
+	employees.push(currentEmployee);
 	//получаем delegation-opts по сотрудникам
 	var delegationOpts = [];
 	for (var i = 0; i < employees.length; ++i) {
@@ -73,22 +75,5 @@ if (!isEngineer) {
 	model.data.paging.totalRecords = actualItems.length;
 } else {
 	//удалим себя из списка, к себе на страницу мы и так можем попасть
-	if (!currentEmployee.nodeRef) {
-		logger.log ("ERROR: there is no nodeRef for currentEmployee");
-	}
-	var delegationOpts = delegation.getDelegationOpts (currentEmployee.nodeRef);
-	logger.log (delegationOpts.name);
-
-	var items = model.data.items;
-	for (var i = 0; i < items.length; ++i) {
-		var prop = items[i].node;
-		if (delegationOpts.equals (prop)) {
-			logger.log (prop.name + "found and must be removed from search result");
-			items.splice (i, 1);
-			logger.log ("item sucessfully removed");
-			model.data.paging.totalRecords -= 1;
-			break;
-		}
-	}
 	logger.log ("current employee " + currentEmployee.name + " is an engineer. An engineer can see delegation options for all employees");
 }

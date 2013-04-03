@@ -5,6 +5,7 @@
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
+					<show id="lecm-dic:active"/>
 					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 				</field-visibility>
 			</form>
