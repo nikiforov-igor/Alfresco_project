@@ -225,31 +225,17 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
-		String connectionType = TYPE_CONNECTION.toPrefixString(namespaceService);
+		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
+		if (connections != null) {
+		 	for (AssociationRef assocRef: connections) {
+				 NodeRef connectionRef = assocRef.getSourceRef();
 
-		String propConnectedDocumentRef = "@" + PROP_CONNECTED_DOCUMENT_REF.toPrefixString(namespaceService).replace(":", "\\:");
-
-		SearchParameters parameters = new SearchParameters();
-		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		parameters.addSort("@" + ContentModel.PROP_MODIFIED, false);
-		parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propConnectedDocumentRef + ":\"" +
-				documentRef + "\"");
-		ResultSet resultSet = null;
-		try {
-			resultSet = searchService.query(parameters);
-			if (resultSet != null) {
-				results = resultSet.getNodeRefs();
-			}
-		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting connections", e);
-		} catch (Exception e) {
-			logger.error("Error while getting connections", e);
-		} finally {
-			if (resultSet != null) {
-				resultSet.close();
-			}
+				 if (!isArchive(connectionRef)) {
+					 results.add(connectionRef);
+				 }
+			 }
 		}
+
 		return results;
 	}
 
