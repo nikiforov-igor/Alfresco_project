@@ -21,14 +21,13 @@ function main()
    });
    if (attachmentDetails) {
 	   var category = getCategoryByAttachments(model.nodeRef);
+	   model.document = getDocumentByAttachments(model.nodeRef);
 
-	   setCheckedActions(category);
+	   setCheckedActions(model.document, category);
 
 	   attachmentDetails.item.actions = getShowAction(attachmentDetails.item.actions);
 	   model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
        doclibCommon();
-
-	   model.document = getDocumentByAttachments(model.nodeRef);
    }
 }
 
@@ -56,7 +55,7 @@ function getCategoryByAttachments(nodeRef, defaultValue) {
 	return eval('(' + result + ')');
 }
 
-function setCheckedActions(category) {
+function setCheckedActions(document, category) {
 	if (category != null && !category.isReadOnly) {
 		showActions.push("document-edit-metadata");
 		showActions.push("document-edit-properties");
@@ -67,15 +66,15 @@ function setCheckedActions(category) {
 		showActions.push("document-cancel-editing");
 	}
 
-	if (hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER) && category != null && !category.isReadOnly) {
+	if (hasPermission(document.nodeRef, PERM_CONTENT_ADD_VER) && category != null && !category.isReadOnly) {
 		showActions.push("document-upload-new-version");
 	}
 
-	if (hasPermission(model.nodeRef, PERM_CONTENT_COPY) && category != null && !category.isReadOnly) {
+	if (hasPermission(document.nodeRef, PERM_CONTENT_COPY) && category != null && !category.isReadOnly) {
 		showActions.push("document-copy-to");
 	}
 
-	if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE) && category != null && !category.isReadOnly) {
+	if (hasPermission(document.nodeRef, PERM_CONTENT_DELETE) && category != null && !category.isReadOnly) {
 		showActions.push("document-delete");
 	}
 }
