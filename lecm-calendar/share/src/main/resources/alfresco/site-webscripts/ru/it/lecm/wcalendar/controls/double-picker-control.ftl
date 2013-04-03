@@ -227,13 +227,13 @@ Schedule_DrawPicker({ value: '1'});
 			<span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
 		</div>
 	<#else>
-		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+		<label style="height: 50px; word-wrap: break-word;" for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+		<div>
+			<div><input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Schedule_DrawPicker(this);" checked > ${msg(field.control.params.pickerLabel1)}</div>
+			<div><input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Schedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}</div>
+			<div style="clear: both"></div>
+		</div>
 		<div id="${controlId}" class="object-finder">
-			<div>
-				<input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Schedule_DrawPicker(this);" checked> ${msg(field.control.params.pickerLabel1)}<br>
-				<input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Schedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}
-			</div>
-
 			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
 			<#if field.disabled == false>
