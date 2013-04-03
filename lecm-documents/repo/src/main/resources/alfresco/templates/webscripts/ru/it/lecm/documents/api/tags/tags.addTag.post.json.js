@@ -17,7 +17,7 @@ function main() {
     var nodeRef = json.get("nodeRef");
 
     // Check permissions
-    var mayAdd = hasPermission(nodeRef, '_lecmPerm_TagCreate');
+    var mayAdd = hasPermission(nodeRef, PERM_TAG_CREATE);
     if (!mayAdd) {
         return;
     }

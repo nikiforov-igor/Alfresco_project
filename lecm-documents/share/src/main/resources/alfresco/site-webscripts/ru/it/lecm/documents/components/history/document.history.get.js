@@ -5,7 +5,7 @@ function main()
 {
     AlfrescoUtil.param('nodeRef', null);
     if (model.nodeRef) {
-        model.hasViewHistoryPerm = hasPermission(model.nodeRef,'_lecmPerm_HistoryView');
+        model.hasViewHistoryPerm = hasPermission(model.nodeRef,PERM_HISTORY_VIEW);
     }
 }
 

@@ -91,23 +91,20 @@ function main()
       }
    }
 
-   if (model.nodeRef) {
-      model.hasViewCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentView');
-      if (model.hasViewCommentPerm) {
-      model.hasCreateCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentCreate');
-      model.hasDeleteCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentDelete');
-//      model.hasEditCommentPerm = hasPermission(model.nodeRef,'_lecmPerm_CommentEdit');
-      var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-         if (documentDetails)
-         {
-            var activityParameters = getActivityParameters(model.nodeRef, null);
-            if (activityParameters)
-            {
-                model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
+    if (model.nodeRef) {
+        model.hasViewCommentPerm = hasPermission(model.nodeRef, PERM_COMMENT_VIEW);
+        if (model.hasViewCommentPerm) {
+            model.hasCreateCommentPerm = hasPermission(model.nodeRef, PERM_COMMENT_CREATE);
+            model.hasDeleteCommentPerm = hasPermission(model.nodeRef, PERM_COMMENT_DELETE);
+            var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
+            if (documentDetails) {
+                var activityParameters = getActivityParameters(model.nodeRef, null);
+                if (activityParameters) {
+                    model.activityParameterJSON = jsonUtils.toJSONString(activityParameters);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }
 
 main();

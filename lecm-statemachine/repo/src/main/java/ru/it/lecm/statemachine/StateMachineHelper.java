@@ -557,7 +557,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
-        boolean hasPermission = lecmPermissionService.hasPermission("_lecmPerm_WFEnumBP", nodeRef);
+        boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_LIST, nodeRef);
         if (!hasPermission) {
             return new ArrayList<WorkflowInstance>();
         }
@@ -567,7 +567,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
-        boolean hasPermission = lecmPermissionService.hasPermission("_lecmPerm_WFTaskList", nodeRef);
+        boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_TASK_LIST, nodeRef);
         if (!hasPermission) {
             return new ArrayList<WorkflowTask>();
         }

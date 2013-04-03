@@ -16,12 +16,12 @@ function main() {
     AlfrescoUtil.param('nodeRef');
     AlfrescoUtil.param('site', null);
     var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-    var hasPerm = hasPermission(model.nodeRef, "_lecmPerm_TagView");
+    var hasPerm = hasPermission(model.nodeRef, PERM_TAG_VIEW);
     if (documentDetails && hasPerm) {
         model.tags = jsonUtils.toJSONString(DocumentTags.getTags(documentDetails.item));
         model.record = jsonUtils.toJSONString(documentDetails.item);
-        model.mayEdit = jsonUtils.toJSONString(hasPermission(model.nodeRef, "_lecmPerm_TagCreate")
-                    && hasPermission(model.nodeRef, "_lecmPerm_TagDelete"));
+        model.mayEdit = jsonUtils.toJSONString(hasPermission(model.nodeRef, PERM_TAG_CREATE)
+                    && hasPermission(model.nodeRef, PERM_TAG_DELETE));
     }
 };
 

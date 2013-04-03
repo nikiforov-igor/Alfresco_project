@@ -4,8 +4,8 @@
 function main(){
         AlfrescoUtil.param("nodeRef");
 
-        model.mayView = hasPermission(model.nodeRef, '_lecmPerm_AttrList');
-        model.mayAdd = hasPermission(model.nodeRef, '_lecmPerm_AttrEdit');
+        model.mayView = hasPermission(model.nodeRef, PERM_ATTR_LIST);
+        model.mayAdd = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
 }
 
 main();

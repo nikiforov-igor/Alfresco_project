@@ -5,7 +5,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
     var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-    var hasPerm = hasPermission(model.nodeRef, "_lecmPerm_SetRate");
+    var hasPerm = hasPermission(model.nodeRef, PERM_SET_RATE);
 
     if (nodeDetails && hasPerm) {
         model.item = nodeDetails.item;

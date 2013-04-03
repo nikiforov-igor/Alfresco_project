@@ -2,7 +2,7 @@
 
 function main() {
     model.nodeRef = args["nodeRef"];
-    model.hasPermission = hasPermission(model.nodeRef, '_lecmPerm_AttrList');
+    model.hasPermission = hasPermission(model.nodeRef, PERM_ATTR_LIST);
 }
 
 main();

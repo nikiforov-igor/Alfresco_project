@@ -67,15 +67,15 @@ function setCheckedActions(category) {
 		showActions.push("document-cancel-editing");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer') && category != null && !category.isReadOnly) {
+	if (hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER) && category != null && !category.isReadOnly) {
 		showActions.push("document-upload-new-version");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentCopy') && category != null && !category.isReadOnly) {
+	if (hasPermission(model.nodeRef, PERM_CONTENT_COPY) && category != null && !category.isReadOnly) {
 		showActions.push("document-copy-to");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete') && category != null && !category.isReadOnly) {
+	if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE) && category != null && !category.isReadOnly) {
 		showActions.push("document-delete");
 	}
 }

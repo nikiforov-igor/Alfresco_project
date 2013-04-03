@@ -3,7 +3,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    var hasPerm = hasPermission(model.nodeRef, "_lecmPerm_MemberList");
+    var hasPerm = hasPermission(model.nodeRef, PERM_MEMBERS_LIST);
     if (hasPerm) {
         model.members = getMembers(model.nodeRef);
     }

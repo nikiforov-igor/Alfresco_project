@@ -3,7 +3,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-    var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_WFEnumBP');
+    var hasPerm = hasPermission(model.nodeRef, PERM_WF_LIST);
     if (hasPerm) {
         model.data = getWorkflows(model.nodeRef);
     }

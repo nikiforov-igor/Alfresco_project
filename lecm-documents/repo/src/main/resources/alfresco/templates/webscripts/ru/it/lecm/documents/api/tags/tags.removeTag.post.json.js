@@ -17,7 +17,7 @@ function main() {
     var nodeRef = json.get("nodeRef");
 
     // Check permissions
-    var mayDelete = hasPermission(nodeRef, '_lecmPerm_TagDelete');
+    var mayDelete = hasPermission(nodeRef, PERM_TAG_DELETE);
     if (!mayDelete) {
         return;
     }

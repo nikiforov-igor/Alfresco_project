@@ -45,7 +45,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     @Override
     public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
-        lecmPermissionService.checkPermission("_lecmPerm_MemberAdd", document);
+        lecmPermissionService.checkPermission(LecmPermissionService.PERM_MEMBERS_ADD, document);
         return addMemberWithoutCheckPermission(document, employeeRef, properties);
     }
 
@@ -111,7 +111,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     @Override
     public List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems) {
         List<NodeRef> results = new ArrayList<NodeRef>();
-        if (lecmPermissionService.hasPermission("_lecmPerm_MemberList", document)) {
+        if (lecmPermissionService.hasPermission(LecmPermissionService.PERM_MEMBERS_LIST, document)) {
             List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
             sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
 

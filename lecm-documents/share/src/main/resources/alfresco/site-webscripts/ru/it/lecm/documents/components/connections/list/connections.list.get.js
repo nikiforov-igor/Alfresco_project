@@ -3,9 +3,9 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-	model.hasViewPerm = hasPermission(model.nodeRef, '_lecmPerm_LinksView');
-	model.hasCreatePerm = hasPermission(model.nodeRef, '_lecmPerm_LinksCreate');
-	model.hasDeletePerm = hasPermission(model.nodeRef, '_lecmPerm_LinksDelete');
+	model.hasViewPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
+	model.hasCreatePerm = hasPermission(model.nodeRef, PERM_LINKS_CREATE);
+	model.hasDeletePerm = hasPermission(model.nodeRef, PERM_LINKS_DELETE);
 	if (model.hasViewPerm) {
 		model.connections = getConnections(model.nodeRef);
 		model.connectionsWithDocument = getConnectionsWithDocument(model.nodeRef);

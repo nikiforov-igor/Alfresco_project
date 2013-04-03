@@ -48,7 +48,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public NodeRef getRootFolder(final NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", documentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		final String attachmentsRootName = DOCUMENT_CONNECTIONS_ROOT_NAME;
 
@@ -85,7 +85,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	private NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef, NodeRef dictionary) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		if (dictionary == null) {
 			dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
@@ -100,7 +100,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		List<NodeRef> results = null;
 		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
@@ -122,7 +122,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public NodeRef getAvailableTypeDictionary(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		String primaryDocumentType = nodeService.getType(primaryDocumentRef).toPrefixString(namespaceService);
 		String connectedDocumentType = nodeService.getType(connectedDocumentRef).toPrefixString(namespaceService);
@@ -156,7 +156,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", primaryDocumentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
@@ -221,7 +221,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission("lecmPerm_LinksView", documentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
 
@@ -255,7 +255,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef) {
-		this.lecmPermissionService.checkPermission("_lecmPerm_LinksCreate", primaryDocumentNodeRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, primaryDocumentNodeRef);
 
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 		QName assocQName = ContentModel.ASSOC_CONTAINS;
@@ -273,7 +273,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public void deleteConnection(NodeRef nodeRef) {
-		this.lecmPermissionService.checkPermission("_lecmPerm_LinksDelete", nodeRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_DELETE, nodeRef);
 
 		nodeService.deleteNode(nodeRef);
 	}

@@ -16,7 +16,7 @@ function hasDocumentViewPermission(nodeRef) {
 }
 
 function hasDocumentAttachmentViewPermission(nodeRef) {
-	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=lecmPerm_ContentView';
+	var url = '/lecm/security/api/getPermission?nodeRef=' + nodeRef + '&permission=_lecmPerm_ContentView';
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		return false;

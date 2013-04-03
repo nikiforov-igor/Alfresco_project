@@ -4,7 +4,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
     model.members = getMembers(model.nodeRef);
-    model.mayAdd = hasPermission(model.nodeRef, '_lecmPerm_MemberAdd');
+    model.mayAdd = hasPermission(model.nodeRef, PERM_MEMBERS_ADD);
 }
 
 function getMembers(nodeRef) {

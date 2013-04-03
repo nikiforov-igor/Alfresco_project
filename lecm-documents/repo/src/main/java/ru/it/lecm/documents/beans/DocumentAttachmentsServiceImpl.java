@@ -53,7 +53,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	public NodeRef getRootFolder(final NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", documentRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
         final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
 
@@ -86,7 +86,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     }
 
     public List<NodeRef> getCategories(final NodeRef documentRef) {
-	    this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", documentRef);
+	    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
         QName type = nodeService.getType(documentRef);
 
@@ -157,7 +157,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", document);
+					this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, document);
 
 					return document;
 				}
@@ -174,7 +174,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					this.lecmPermissionService.checkPermission("_lecmPerm_ContentList", document);
+					this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, document);
 
 					return document;
 				}
@@ -218,7 +218,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	@Override
 	public void deleteAttachment(NodeRef nodeRef) {
-		this.lecmPermissionService.checkPermission("_lecmPerm_ContentDelete", nodeRef);
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_DELETE, nodeRef);
 
 		nodeService.deleteNode(nodeRef);
 	}

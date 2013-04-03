@@ -2,7 +2,7 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 function main() {
     AlfrescoUtil.param("nodeRef");
-	var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_LinksView');
+	var hasPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
 	if (hasPerm) {
 		model.connections = getConnections(model.nodeRef);
 	}

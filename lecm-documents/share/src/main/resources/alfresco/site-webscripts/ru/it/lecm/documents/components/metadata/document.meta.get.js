@@ -7,7 +7,7 @@ function main()
     AlfrescoUtil.param('nodeRef');
     AlfrescoUtil.param('formId', "document");
     var documentDetails = DocumentUtils.getNodeDetails(model.nodeRef, model.site);
-    var hasViewPermission = hasPermission(model.nodeRef, '_lecmPerm_AttrList');
+    var hasViewPermission = hasPermission(model.nodeRef, PERM_ATTR_LIST);
     if (documentDetails && hasViewPermission)
     {
         model.document = documentDetails;

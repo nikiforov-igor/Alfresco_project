@@ -33,7 +33,34 @@ public interface LecmPermissionService {
 	 */
 	final public static String ACCPERM_EMPTY = "deny";
 
-	/**
+    final public String PERM_DOC_CREATE = "_lecmPerm_DocCreate";
+    final public String  PERM_DOC_DELETE = "_lecmPerm_DocDelete";
+    final public String  PERM_ATTR_LIST = "_lecmPerm_AttrList";
+    final public String  PERM_ATTR_EDIT = "_lecmPerm_AttrEdit";
+    final public String  PERM_CONTENT_LIST = "_lecmPerm_ContentList";
+    final public String  PERM_CONTENT_ADD = "_lecmPerm_ContentAdd";
+    final public String  PERM_CONTENT_VIEW = "_lecmPerm_ContentView";
+    final public String  PERM_CONTENT_ADD_VER = "_lecmPerm_ContentAddVer";
+    final public String  PERM_CONTENT_DELETE = "_lecmPerm_ContentDelete";
+    final public String  PERM_CONTENT_COPY = "_lecmPerm_ContentCopy";
+    final public String  PERM_WF_LIST = "_lecmPerm_WFEnumBP";
+    final public String  PERM_WF_TASK_LIST = "_lecmPerm_WFTaskList";
+    final public String  PERM_HISTORY_VIEW = "_lecmPerm_HistoryView";
+    final public String  PERM_TAG_VIEW = "_lecmPerm_TagView";
+    final public String  PERM_TAG_CREATE = "_lecmPerm_TagCreate";
+    final public String  PERM_TAG_DELETE = "_lecmPerm_TagDelete";
+    final public String  PERM_LINKS_VIEW = "_lecmPerm_LinksView";
+    final public String  PERM_LINKS_CREATE = "_lecmPerm_LinksCreate";
+    final public String  PERM_LINKS_DELETE = "_lecmPerm_LinksDelete";
+    final public String  PERM_COMMENT_CREATE = "_lecmPerm_CommentCreate";
+    final public String  PERM_COMMENT_VIEW = "_lecmPerm_CommentView";
+    final public String  PERM_COMMENT_DELETE = "_lecmPerm_CommentDelete";
+    final public String  PERM_ACTION_EXEC = "_lecmPerm_ActionExec";
+    final public String  PERM_MEMBERS_LIST = "_lecmPerm_MemberList";
+    final public String  PERM_MEMBERS_ADD = "_lecmPerm_MemberAdd";
+    final public String  PERM_SET_RATE = "_lecmPerm_SetRate";
+
+    /**
 	 * Получить обозначение группы полномочий по имени, среди зарегистрированных групп.
 	 * @param lecmPermissionGroupName назвнаие группы, например, "LECM_BASIC_PG_Editor"
 	 * Регистр не важен, в любом возвращаемое значение будет содержать точное 

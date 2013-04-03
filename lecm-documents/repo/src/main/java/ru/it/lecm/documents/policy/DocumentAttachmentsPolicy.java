@@ -114,7 +114,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
 		if (document != null) {
-			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAdd", document);
+			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
 		}
 	}
@@ -149,7 +149,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null) {
-	        this.lecmPermissionService.checkPermission("_lecmPerm_ContentDelete", document);
+	        this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
 	        this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 
             // добавляем пользователя удалившего вложения как участника
@@ -222,7 +222,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 	public void beforeCreateVersion(NodeRef versionableNode) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
 		if (document != null) {
-			this.lecmPermissionService.checkPermission("_lecmPerm_ContentAddVer", document);
+			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD_VER, document);
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
 		}
 	}

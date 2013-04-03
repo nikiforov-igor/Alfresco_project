@@ -4,7 +4,7 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
-	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
+	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 
 	var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
 	if (nodeDetails)

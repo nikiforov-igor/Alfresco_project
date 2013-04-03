@@ -4,9 +4,9 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 
-	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
-	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
-	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentAdd');
+	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
+	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
 
 	var allActions = [];
 	model.readOnlyActions = [
@@ -24,11 +24,11 @@ function main() {
 		allActions.push("document-edit-properties");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer')) {
+	if (hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER)) {
 		allActions.push("document-upload-new-version");
 	}
 
-	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete')) {
+	if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE)) {
 		allActions.push("document-delete");
 	}
 

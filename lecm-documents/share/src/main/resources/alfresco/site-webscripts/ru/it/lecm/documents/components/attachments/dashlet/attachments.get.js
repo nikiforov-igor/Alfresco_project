@@ -4,10 +4,10 @@
 function main() {
 	AlfrescoUtil.param("nodeRef");
 
-	model.hasViewListPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentList');
-	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
-	model.hasAddNewVersionAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer');
-	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentDelete');
+	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
+	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+	model.hasAddNewVersionAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER);
+	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_DELETE);
 	if (model.hasViewListPerm) {
 		model.categories = getCategories(model.nodeRef).categories;
 	}

@@ -5,7 +5,7 @@ function main() {
     AlfrescoUtil.param("nodeRef");
     AlfrescoUtil.param("tasksState");
 
-    var hasPerm = hasPermission(model.nodeRef, '_lecmPerm_WFTaskList');
+    var hasPerm = hasPermission(model.nodeRef, PERM_WF_TASK_LIST);
     if (hasPerm) {
         model.data = getTasks(model.nodeRef, model.tasksState);
     }

@@ -92,7 +92,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public Integer setMyRating(NodeRef documentNodeRef, Integer rating) {
-        lecmPermissionService.checkPermission("_lecmPerm_SetRate", documentNodeRef);
+        lecmPermissionService.checkPermission(LecmPermissionService.PERM_SET_RATE, documentNodeRef);
         if (rating > 0 && rating < 6) {
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
@@ -154,7 +154,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public Map<QName, Serializable> getProperties(NodeRef documentRef) {
-        lecmPermissionService.checkPermission("_lecmPerm_AttrList", documentRef);
+        lecmPermissionService.checkPermission(LecmPermissionService.PERM_ATTR_LIST, documentRef);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 
         for (Map.Entry<QName, Serializable> e : nodeService.getProperties(documentRef).entrySet()) {
@@ -201,7 +201,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
      */
     @Override
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> property) {
-        lecmPermissionService.checkPermission("_lecmPerm_AttrEdit", nodeRef);
+        lecmPermissionService.checkPermission(LecmPermissionService.PERM_ATTR_EDIT, nodeRef);
 
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         for (Map.Entry<String, String> e : property.entrySet()) {

@@ -99,7 +99,7 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 			}
 
 			if (primaryDocument != null && connectedDocument != null) {
-				this.lecmPermissionService.checkPermission("_lecmPerm_LinksDelete", primaryDocument);
+				this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_DELETE, primaryDocument);
 
 				final List<String> objects = new ArrayList<String>(1);
 				objects.add(connectedDocument.toString());
