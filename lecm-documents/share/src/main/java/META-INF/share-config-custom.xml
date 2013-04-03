@@ -128,10 +128,10 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-doc-members:group"/>
+                    <!--<show id="lecm-doc-members:group"/>-->
                     <show id="lecm-doc-members:employee-assoc"/>
                 </field-visibility>
-                <appearance>
+                <!--<appearance>
                     <field id="lecm-doc-members:group">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
@@ -139,7 +139,7 @@
                             <control-param name="withEmpty">true</control-param>
                         </control>
                     </field>
-                </appearance>
+                </appearance>-->
             </form>
             <form id="datagrid">
                 <field-visibility>
