@@ -37,3 +37,16 @@ function hasPermission(nodeRef, permission) {
     var perm = eval('(' + result + ')');
     return (("" + perm) ==  "true");
 }
+
+function hasOnlyInDraftPermission(nodeRef, permissionGroup) {
+    if (nodeRef == null || permissionGroup == null) {
+        return false;
+    }
+    var url = '/lecm/security/api/getOnlyDraftPermission?nodeRef=' + nodeRef + '&permission=' + permissionGroup;
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        return false;
+    }
+    var perm = eval('(' + result + ')');
+    return (("" + perm) ==  "true");
+}

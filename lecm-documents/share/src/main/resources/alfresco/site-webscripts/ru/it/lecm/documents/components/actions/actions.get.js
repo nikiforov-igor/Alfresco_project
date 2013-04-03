@@ -4,9 +4,15 @@
 function main() {
     AlfrescoUtil.param('nodeRef');
     model.nodeRef = args["nodeRef"];
-    var actions = getActions(model.nodeRef);
-    if (actions) {
-        model.result = actions;
+    var hasPerm = hasPermission(model.nodeRef, PERM_ACTION_EXEC);
+    if (hasPerm) {
+        if (!hasOnlyInDraftPermission(model.nodeRef, "LECM_BASIC_PG_Initiator")) {
+            return;
+        }
+        var actions = getActions(model.nodeRef);
+        if (actions) {
+            model.result = actions;
+        }
     }
 }
 
