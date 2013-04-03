@@ -21,7 +21,10 @@ if (categories != null) {
 				}
 
 				items.push({
-					category: categories[i],
+					category: {
+						node: categories[i],
+						isReadOnly: documentAttachments.isReadonlyCategory(categories[i].nodeRef)
+					},
 					attachments: showAttachments
 				});
 			}

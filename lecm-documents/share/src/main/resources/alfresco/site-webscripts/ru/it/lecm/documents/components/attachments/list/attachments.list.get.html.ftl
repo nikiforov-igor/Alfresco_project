@@ -52,6 +52,11 @@
 	        function init() {
 				<#if categories??>
 					<#list categories as category>
+						<#if category.isReadOnly>
+							<#assign showActions = readOnlyActions/>
+						<#else>
+							<#assign showActions = allActions/>
+						</#if>
 
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
@@ -62,8 +67,8 @@
 				                    path: path,
 				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
 				                    showActions: [
-				                        <#if actions??>
-				                            <#list actions as action>
+					                    <#if showActions??>
+				                            <#list showActions as action>
 				                                "${action}"<#if action_has_next>,</#if>
 				                            </#list>
 				                        </#if>

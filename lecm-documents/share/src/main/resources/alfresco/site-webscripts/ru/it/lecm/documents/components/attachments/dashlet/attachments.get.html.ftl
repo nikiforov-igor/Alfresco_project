@@ -32,7 +32,7 @@
 				            "${category.nodeRef}": ${category.isReadOnly?string}<#if category_has_next>,</#if>
 			            </#list>
 		            </#if>
-	            }
+	            };
 
                 YAHOO.util.Event.onDOMReady(function (){
                     select = Dom.get("${id}-attachment-categories");

@@ -8,27 +8,31 @@ function main() {
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentView');
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, '_lecmPerm_ContentAdd');
 
-	var actions = [];
+	var allActions = [];
+	model.readOnlyActions = [
+		"document-download",
+		"document-view-content"
+	];
 
 	if (model.hasViewListPerm) {
         model.categories = getCategories(model.nodeRef).categories;
 	}
 
 	if (model.hasViewAttachmentPerm) {
-		actions.push("document-download");
-		actions.push("document-view-content");
-		actions.push("document-edit-properties");
+		allActions.push("document-download");
+		allActions.push("document-view-content");
+		allActions.push("document-edit-properties");
 	}
 
 	if (hasPermission(model.nodeRef, '_lecmPerm_ContentAddVer')) {
-		actions.push("document-upload-new-version");
+		allActions.push("document-upload-new-version");
 	}
 
 	if (hasPermission(model.nodeRef, '_lecmPerm_ContentDelete')) {
-		actions.push("document-delete");
+		allActions.push("document-delete");
 	}
 
-	model.actions = actions;
+	model.allActions = allActions;
 }
 
 function getCategories(nodeRef, defaultValue) {

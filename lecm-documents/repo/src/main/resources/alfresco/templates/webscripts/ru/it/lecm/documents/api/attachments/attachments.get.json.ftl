@@ -4,10 +4,11 @@
     "items": [
         <#list items as item>
             {
-                <#if item.category??>
+                <#if item.category?? && item.category.node??>
 	                category: {
-		                "nodeRef": "${item.category.nodeRef}",
-		                "name": "${item.category.name}"
+		                "nodeRef": "${item.category.node.nodeRef}",
+		                "name": "${item.category.node.name}",
+                        "isReadOnly": ${item.category.isReadOnly?string}
 	                },
                 </#if>
                 attachments: [
