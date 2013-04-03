@@ -256,6 +256,16 @@
         <property name="transactionService" ref="transactionService"/>
     </bean>
 
+    <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="stateMachineServiceBean">
+            <ref bean="stateMachineHelper"/>
+        </property>
+    </bean>
+
     <bean id="document.businessJournalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">

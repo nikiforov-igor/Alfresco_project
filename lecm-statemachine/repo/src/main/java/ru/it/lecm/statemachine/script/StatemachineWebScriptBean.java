@@ -124,6 +124,24 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.getDocumentWorkflows(node.getNodeRef());
     }
 
+    /**
+     * Проверка наличия машины состояний у документа
+     * @param node
+     * @return
+     */
+    public boolean hasStatemachine(ScriptNode node) {
+        return stateMachineHelper.hasStatemachine(node.getNodeRef());
+    }
+
+    /**
+     * Проверка документа на черновой статус
+     * @param node
+     * @return
+     */
+    public boolean isDraft(ScriptNode node) {
+        return stateMachineHelper.isDraft(node.getNodeRef());
+    }
+
     public String getDocumentStatus(ScriptNode document) {
         return stateMachineHelper.getDocumentStatus(document.getNodeRef());
     }

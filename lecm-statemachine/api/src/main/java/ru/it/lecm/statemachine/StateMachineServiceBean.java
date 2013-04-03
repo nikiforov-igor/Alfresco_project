@@ -24,7 +24,14 @@ public interface StateMachineServiceBean {
      */
     public boolean isReadOnlyCategory(NodeRef document, String category);
 
-	public void checkReadOnlyCategory(NodeRef document, String category);
+    /**
+     * Проверка наличия машины состояний у документа
+     * @param document
+     * @return
+     */
+    public boolean hasStatemachine(NodeRef document);
+
+    public void checkReadOnlyCategory(NodeRef document, String category);
 
     String nextTransition(String taskId);
 

@@ -448,6 +448,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
+    public boolean hasStatemachine(NodeRef document) {
+        Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        return statemachineId != null;
+    }
+
     @Override
     public String getDocumentStatus(NodeRef document) {
         Serializable status = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATUS);

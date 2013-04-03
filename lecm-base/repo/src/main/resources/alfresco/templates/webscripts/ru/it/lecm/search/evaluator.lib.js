@@ -206,11 +206,16 @@ var Evaluator =
       /**
        * PERMISSIONS
        */
+
+      var deletePermission = node.hasPermission("Delete");
+      if (statemachine.hasStatemachine(node)) {
+          deletePermission = deletePermission && statemachine.isDraft(node);
+      }
       permissions =
       {
          "create": node.hasPermission("CreateChildren"),
          "edit": node.hasPermission("Write"),
-         "delete": node.hasPermission("Delete")
+         "delete": deletePermission
       };
 
       // Use the form service to parse the required properties
