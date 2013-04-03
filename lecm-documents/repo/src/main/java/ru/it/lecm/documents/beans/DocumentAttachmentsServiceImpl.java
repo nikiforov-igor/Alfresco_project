@@ -157,8 +157,6 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, document);
-
 					return document;
 				}
 			}
@@ -174,8 +172,6 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 				QName testType = nodeService.getType(document);
 				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
 				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, document);
-
 					return document;
 				}
 			}
