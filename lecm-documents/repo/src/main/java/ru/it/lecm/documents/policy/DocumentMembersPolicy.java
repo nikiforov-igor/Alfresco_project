@@ -152,14 +152,14 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             NodeRef member = nodeAssocRef.getSourceRef();
             NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
             docRef = nodeService.getPrimaryParent(folder).getParentRef();
-
+            NodeRef employee = nodeAssocRef.getTargetRef();
             if (this.getGrantDynaRoleCode() == null) {
                 logger.warn("Dynamic role configured as NULL -> nothing performed (document {" + docRef + "})");
                 return;
             }
 
             LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
-            lecmPermissionService.grantAccess(pgGranting, docRef, member.getId());
+            lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }
@@ -172,9 +172,10 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             NodeRef member = nodeAssocRef.getSourceRef();
             NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
             docRef = nodeService.getPrimaryParent(folder).getParentRef();
+            NodeRef employee = nodeAssocRef.getTargetRef();
 
             LecmPermissionGroup pgRevoking = getLecmPermissionGroup(docRef);
-            lecmPermissionService.revokeAccess(pgRevoking, docRef, member.getId());
+            lecmPermissionService.revokeAccess(pgRevoking, docRef, employee.getId());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }
