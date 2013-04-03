@@ -712,7 +712,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 // Actions module
-                this.modules.actions = new window.LogicECM.module.Base.Actions();
+                this.modules.actions = new LogicECM.module.Base.Actions();
 
                 // Reference to Data Grid component (required by actions module)
                 this.modules.dataGrid = this;
@@ -1191,7 +1191,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (!this.widgets.dataTable) {
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                     // initialize Search
-                    this.search = new window.LogicECM.AdvancedSearch(this.id, this).setOptions({
+                    this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                         showExtendSearchBlock:this.options.showExtendSearchBlock,
                         maxSearchResults: this.options.maxResults,
 	                    searchFormId: this.options.advSearchFormId
@@ -2651,5 +2651,5 @@ LogicECM.module.Base = LogicECM.module.Base || {};
     };
 
     /* Dummy instance to load optional YUI components early */
-    var dummyInstance = new window.LogicECM.module.Base.Actions();
+    var dummyInstance = new LogicECM.module.Base.Actions();
 })();

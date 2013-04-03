@@ -79,7 +79,7 @@ markupToDraw[2] = '<@compress single_line=true>
 
 function Schedule_DrawPicker(instance) {
 
-    picker = new window.LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
+    picker = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if disabled>
             disabled: true,
         </#if>

@@ -3,7 +3,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-	var control = new window.LogicECM.module.Subscriptions.SubscribeControl("${fieldHtmlId}").setMessages(${messages});
+	var control = new LogicECM.module.Subscriptions.SubscribeControl("${fieldHtmlId}").setMessages(${messages});
 	control.setOptions({
 		objectNodeRef: "${form.arguments.itemId}"
 	});

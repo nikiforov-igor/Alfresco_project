@@ -4,7 +4,7 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var wCalendarMenu = new window.LogicECM.module.WCalendar.Menu("menu-buttons");
+		var wCalendarMenu = new LogicECM.module.WCalendar.Menu("menu-buttons");
 		wCalendarMenu.setMessages(${messages});
 		wCalendarMenu.setOptions ({
 			pageId: "${pageId}"

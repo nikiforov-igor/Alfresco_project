@@ -4,7 +4,7 @@
 
 <script type="text/javascript">//<![CDATA[
 
-var nwDaysDatagrid = new window.LogicECM.module.WCalendar.Calendar.NonWorkingDays.DataGrid("${id}");
+var nwDaysDatagrid = new LogicECM.module.WCalendar.Calendar.NonWorkingDays.DataGrid("${id}");
 nwDaysDatagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock:false,

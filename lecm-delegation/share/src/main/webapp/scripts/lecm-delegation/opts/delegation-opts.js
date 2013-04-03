@@ -69,7 +69,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 
 		onReady: function () {
 
-			Alfresco.logger.info ("A new window.LogicECM.module.Delegation.DelegationOpts has been created");
+			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 
 			if (this.options.delegator) {
 

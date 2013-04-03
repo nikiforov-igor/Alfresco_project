@@ -6,7 +6,7 @@
 <script type="text/javascript">//<![CDATA[
 	(function(){
 		"use strict";
-		var delegationOpts = new window.LogicECM.module.Delegation.DelegationOpts('${id}');
+		var delegationOpts = new LogicECM.module.Delegation.DelegationOpts('${id}');
 		delegationOpts.setMessages (${messages});
 		delegationOpts.setOptions ({
 			delegator: "${delegator}",

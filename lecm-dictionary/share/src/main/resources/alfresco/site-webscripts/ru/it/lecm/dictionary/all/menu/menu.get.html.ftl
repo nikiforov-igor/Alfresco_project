@@ -4,7 +4,7 @@
 <script type="text/javascript">//<![CDATA[
 (function() {
     function init() {
-        var menu = new window.LogicECM.module.AllDictionary.Menu("menu-buttons").setMessages(${messages});
+        var menu = new LogicECM.module.AllDictionary.Menu("menu-buttons").setMessages(${messages});
     }
     YAHOO.util.Event.onDOMReady(init);
 })();

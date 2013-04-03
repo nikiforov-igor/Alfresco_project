@@ -50,7 +50,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         // функция вызываемая при окончании инициализации базового модуля
         onReady: function () {
 
-            Alfresco.logger.info ("A new window.LogicECM.module.LecmIM.Messenger has been created");
+            Alfresco.logger.info ("A new LogicECM.module.LecmIM.Messenger has been created");
 
             this.createNotifyer();
             this.subscribeToNewMessages();

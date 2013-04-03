@@ -1,7 +1,7 @@
 <#if hasViewCommentPerm!false>
     <#assign el=args.htmlid?js_string>
 <script type="text/javascript">//<![CDATA[
-new window.LogicECM.CommentsList("${el}").setOptions(
+new LogicECM.CommentsList("${el}").setOptions(
         {
             nodeRef: "${nodeRef?js_string}",
             siteId: <#if site??>"${site?js_string}"<#else>null</#if>,

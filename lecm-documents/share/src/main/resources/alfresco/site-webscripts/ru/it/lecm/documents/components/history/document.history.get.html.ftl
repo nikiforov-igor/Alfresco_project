@@ -17,7 +17,7 @@
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
-            new window.LogicECM.DocumentHistory("${el}").setOptions(
+            new LogicECM.DocumentHistory("${el}").setOptions(
                     {
                         nodeRef: "${nodeRef}",
                         title: "${msg('heading')}"

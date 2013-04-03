@@ -262,7 +262,7 @@
 						}
 					};
 
-					new window.LogicECM.module.Base.DataGrid('${id}').setOptions(
+					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
 								showExtendSearchBlock:${showSearchBlock?string},

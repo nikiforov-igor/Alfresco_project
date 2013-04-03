@@ -10,7 +10,7 @@
         <script type="text/javascript">//<![CDATA[
             (function () {
                 YAHOO.util.Event.onDOMReady(function (){
-                    var datagrid = new window.LogicECM.module.BusinessJournal.DataGrid('${containerId}').setOptions({
+                    var datagrid = new LogicECM.module.BusinessJournal.DataGrid('${containerId}').setOptions({
                         usePagination: true,
                         pageSize: 10,
                         showExtendSearchBlock: true,

@@ -68,7 +68,7 @@
 			<script type="text/javascript">//<![CDATA[
 				(function(){
 					"use strict";
-					var datagrid = new window.LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
+					var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
 						bubblingLabel: "procuracy-datagrid",
 						usePagination:false,
 						showExtendSearchBlock:false,

@@ -9,14 +9,14 @@
 
 	<script type="text/javascript">//<![CDATA[
 		function init() {
-			new window.LogicECM.module.DictionaryMain().setOptions(
+			new LogicECM.module.DictionaryMain().setOptions(
 					{
 						dictionaryName: "${page.url.args.dic!""}",
 						plane: ${plane?string}
 					});
 
             <#if !plane>
-                new window.LogicECM.module.Base.Resizer('DictionaryResizer');
+                new LogicECM.module.Base.Resizer('DictionaryResizer');
             </#if>
 		}
 

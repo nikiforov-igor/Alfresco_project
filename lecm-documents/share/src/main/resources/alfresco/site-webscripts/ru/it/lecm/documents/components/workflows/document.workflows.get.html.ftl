@@ -44,7 +44,7 @@
         Alfresco.util.createTwister("${el}-heading", "DocumentWorkflows");
 
         function init() {
-            documentWorkflowsComponent = new window.LogicECM.DocumentWorkflows("${el}").setOptions(
+            documentWorkflowsComponent = new LogicECM.DocumentWorkflows("${el}").setOptions(
                     {
                         nodeRef: "${nodeRef}",
                         title: "${msg('heading')}"

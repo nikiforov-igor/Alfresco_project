@@ -16,7 +16,7 @@
 
 (function() {
 	function init() {
-		var menu = new window.LogicECM.module.OrgStructure.Menu("menu-buttons");
+		var menu = new LogicECM.module.OrgStructure.Menu("menu-buttons");
 		menu.setMessages(${messages});
 	}
 	YAHOO.util.Event.onDOMReady(init);

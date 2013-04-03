@@ -114,7 +114,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		},
 		onReady: function Absence_onReady() {
 
-			Alfresco.logger.info("A new window.LogicECM.module.WCalendar.Absence.ToolbarProfile has been created");
+			Alfresco.logger.info("A new LogicECM.module.WCalendar.Absence.ToolbarProfile has been created");
 
 			this._onToolbarReady();
 			YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");

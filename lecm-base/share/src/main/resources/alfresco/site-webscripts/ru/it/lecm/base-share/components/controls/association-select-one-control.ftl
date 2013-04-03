@@ -28,7 +28,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-    var control = new window.LogicECM.module.AssociationSelectOne("${fieldHtmlId}").setMessages(${messages});
+    var control = new LogicECM.module.AssociationSelectOne("${fieldHtmlId}").setMessages(${messages});
     control.setOptions(
             {
                 <#if field.control.params.parentNodeRef??>

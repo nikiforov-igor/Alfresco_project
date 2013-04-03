@@ -9,7 +9,7 @@
 		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
-				var datagrid = new window.LogicECM.module.BusinessJournal.DataGrid('${id}').setOptions(
+				var datagrid = new LogicECM.module.BusinessJournal.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
 							useDynamicPagination :true,

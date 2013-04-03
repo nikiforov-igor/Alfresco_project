@@ -5,7 +5,7 @@
 
 <script type="text/javascript"> //<![CDATA[
 	(function () {
-		var userProfileMenu = new window.LogicECM.module.UserProfile.Menu("menu-buttons");
+		var userProfileMenu = new LogicECM.module.UserProfile.Menu("menu-buttons");
 		userProfileMenu.setMessages(${messages});
 		userProfileMenu.setOptions ({
 			pageId: "${pageId}"

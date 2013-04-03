@@ -16,7 +16,7 @@
             (function () {
                 var datagrid = null;
                 YAHOO.util.Event.onDOMReady(function (){
-                    datagrid = new window.LogicECM.module.DocumentMembers.DataGrid('${containerId}').setOptions({
+                    datagrid = new LogicECM.module.DocumentMembers.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
                         datagridMeta: {

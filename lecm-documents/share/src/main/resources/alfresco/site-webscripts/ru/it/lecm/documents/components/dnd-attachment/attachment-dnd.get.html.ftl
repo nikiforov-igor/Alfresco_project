@@ -7,7 +7,7 @@
 		(function () {
 
 			function init() {
-				new window.LogicECM.DocumentAttachmentsDND("doc-attach-right").setOptions(
+				new LogicECM.DocumentAttachmentsDND("doc-attach-right").setOptions(
 						{
 							nodeRef: "${nodeRef}",
 							fileName: "${displayName}",

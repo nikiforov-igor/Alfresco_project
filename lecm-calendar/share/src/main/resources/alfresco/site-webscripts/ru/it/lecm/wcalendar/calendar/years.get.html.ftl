@@ -4,7 +4,7 @@
 
 <script type="text/javascript">//<![CDATA[
 
-var datagrid = new window.LogicECM.module.WCalendar.Calendar.Years.DataGrid("${id}");
+var datagrid = new LogicECM.module.WCalendar.Calendar.Years.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock:true,

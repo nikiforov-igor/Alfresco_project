@@ -22,7 +22,7 @@
         LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS = response;
 
         function init() {
-            var resizer = new window.LogicECM.module.Base.Resizer('WorkGroupsResizer');
+            var resizer = new LogicECM.module.Base.Resizer('WorkGroupsResizer');
 
             resizer.setOptions({
                 initialWidth: 500

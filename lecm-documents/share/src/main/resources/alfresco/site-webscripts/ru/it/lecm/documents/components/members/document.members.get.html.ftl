@@ -47,7 +47,7 @@
     (function () {
         function init() {
             if (documentMembersComponent == null) {
-                documentMembersComponent = new window.LogicECM.DocumentMembers("${el}").setOptions(
+                documentMembersComponent = new LogicECM.DocumentMembers("${el}").setOptions(
                         {
                             nodeRef: "${nodeRef}",
                             title: "${msg('heading')}"

@@ -138,7 +138,7 @@ LogicECM.module = LogicECM.module || {};
       this.selectedItems = {};
       this.isReady = false;
 
-      this.options.objectRenderer = new window.LogicECM.module.ObjectRenderer(this);
+      this.options.objectRenderer = new LogicECM.module.ObjectRenderer(this);
 
       return this;
    };

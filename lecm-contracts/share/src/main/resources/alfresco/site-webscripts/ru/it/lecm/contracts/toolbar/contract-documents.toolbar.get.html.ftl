@@ -23,7 +23,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-    new window.LogicECM.module.Contracts.Toolbar("${id}").setMessages(${messages}).setOptions({
+    new LogicECM.module.Contracts.Toolbar("${id}").setMessages(${messages}).setOptions({
 	    bubblingLabel: "${bubblingLabel!''}",
         searchActive: true
     });

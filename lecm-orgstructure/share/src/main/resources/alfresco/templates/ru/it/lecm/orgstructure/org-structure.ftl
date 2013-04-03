@@ -9,7 +9,7 @@
         LogicECM.module.OrgStructure.STRUCTURE_SETTINGS = response;
 
         function init() {
-            new window.LogicECM.module.Base.Resizer('OrgstructureResizer');
+            new LogicECM.module.Base.Resizer('OrgstructureResizer');
         }
 
         YAHOO.util.Event.onDOMReady(init);

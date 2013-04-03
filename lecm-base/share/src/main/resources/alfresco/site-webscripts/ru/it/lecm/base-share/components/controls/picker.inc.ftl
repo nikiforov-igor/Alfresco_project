@@ -11,7 +11,7 @@
       </#if>
    </#if>
 
-   var ${picker} = new window.LogicECM.module.ObjectFinder("${controlId}", "${fieldHtmlId}").setOptions(
+   var ${picker} = new LogicECM.module.ObjectFinder("${controlId}", "${fieldHtmlId}").setOptions(
    {
       <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
       field: "${field.name}",

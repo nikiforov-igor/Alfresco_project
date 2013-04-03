@@ -1,9 +1,5 @@
 <script type="text/javascript">//<![CDATA[
 
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
-}
-
 LogicECM.form = LogicECM.form || {};
 
 LogicECM.form.fieldPrefix = "${args.htmlid?js_string}_";

@@ -1,7 +1,7 @@
 <#if attachmentDetailsJSON??>
    <#assign el=args.htmlid?js_string>
    <script type="text/javascript">//<![CDATA[
-      new window.LogicECM.DocumentAttachmentActions("${el}").setOptions(
+      new LogicECM.DocumentAttachmentActions("${el}").setOptions(
       {
          nodeRef: "${nodeRef?js_string}",
          siteId: <#if site??>"${site?js_string}"<#else>null</#if>,

@@ -61,7 +61,7 @@
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
 
-			            new window.LogicECM.DocumentAttachmentsList("${el}-${category.nodeRef}").setOptions(
+			            new LogicECM.DocumentAttachmentsList("${el}-${category.nodeRef}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
 				                    path: path,
