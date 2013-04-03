@@ -1,5 +1,7 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -31,6 +33,7 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
+	private DocumentConnectionService documentConnectionService;
 	private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
 
@@ -48,6 +51,10 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
 	}
 
 	public final void init() {
@@ -135,6 +142,14 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	@Override
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
-		//todo добавть проверку прав на создание связи
+		NodeRef document = null;
+		if (nodeService.getProperty(parentRef, ContentModel.PROP_NAME).equals(this.documentConnectionService.DOCUMENT_CONNECTIONS_ROOT_NAME)) {
+			document = nodeService.getPrimaryParent(parentRef).getParentRef();
+		}
+		if (document != null) {
+			lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, document);
+		} else {
+			throw new AlfrescoRuntimeException("Can't get document for connection");
+		}
 	}
 }
