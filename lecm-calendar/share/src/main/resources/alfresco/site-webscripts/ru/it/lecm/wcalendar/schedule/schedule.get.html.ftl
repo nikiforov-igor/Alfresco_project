@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid/>
+<#assign showViewForm = true/>
 
 <script type="text/javascript">//<![CDATA[
 
@@ -36,7 +37,4 @@ YAHOO.util.Event.onContentReady('${id}', function () {
 //]]>
 </script>
 
-<#-- Скрипт для всплывающего по клику окна -->
-<@grid.viewForm/>
-	<@grid.datagrid id false>
-</@grid.datagrid>
+<@grid.datagrid id showViewForm/>
