@@ -19,7 +19,7 @@
 	                            ${category.name}
 	                        </td>
 	                        <td class="category-upload">
-		                        <#if hasAddAttachmentPerm>
+		                        <#if hasAddAttachmentPerm && !category.isReadOnly>
 		                            <div class="file-upload">
 		                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
 		                                  <span class="first-child">
