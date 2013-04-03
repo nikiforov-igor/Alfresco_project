@@ -91,6 +91,10 @@ public class ContactView extends Composite {
                 groups.put(key, contactViewGroup);
                 widget.add(contactViewGroup);
                 widget.add(contactViewGroup.getGroupBody());
+                if(!contactViewGroup.onlineGroup){
+                    contactViewGroup.setVisible(false);
+                    contactViewGroup.getGroupBody().setVisible(false);
+                }
             }
         }
         groupsCache.clear();

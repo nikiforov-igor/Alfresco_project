@@ -354,7 +354,7 @@ public class RosterPlugin implements Plugin {
             final int onlineItemsCount = onlineChilds.size();
             addItemsToRoster(iq, rosterBeginUpdateTime, onlineChilds, onlineItemsCount, true);
 
-            //addItemsToRoster(iq, new Date(), offlineChilds, 50, true);
+            addItemsToRoster(iq, new Date(), offlineChilds, 50, true);
 		}
 		catch(Exception e) 
 		{

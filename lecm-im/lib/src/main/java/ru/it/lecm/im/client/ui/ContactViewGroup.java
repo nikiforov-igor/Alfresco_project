@@ -46,7 +46,9 @@ public class ContactViewGroup extends ContactViewGroupUI
 		super(name,groupBody,groupIconStyle);
 		this.view = view;
 		if(!groupIconStyle.equals("ijab-contactview-grouphead"))
-			onlineGroup = true;
+        {
+            onlineGroup = true;
+        }
 	}
 
     public void setActitve(String bareJid)
@@ -205,7 +207,7 @@ public class ContactViewGroup extends ContactViewGroupUI
 		if(!onlineGroup)
 			setGroupHeaderCount("["+onlineCount+"/"+childs.size()+"]");
 		else
-			setGroupHeaderCount("["+childs.size()+"]");
+            setGroupHeaderCount(""); //setGroupHeaderCount("["+(childs.size())+"]");
 	}
 	
 	public void updateRosterItem(RosterItem item)

@@ -9,9 +9,10 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -19,6 +20,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URLEncoder;
+import org.apache.commons.httpclient.methods.RequestEntity;
 
 public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNodePolicy {
 
@@ -83,9 +85,7 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
                 return;
             }
 
-            String url = "http://localhost:9280/register_account";
-
-            Add(url, name, password, login);
+            Add(name, password, login);
 
         }
         catch (Exception e)
@@ -96,7 +96,7 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
     }
 
 
-    private void Add(String url, String name, String password, String login) {
+    private void Add(String name, String password, String login) {
         try
         {
             logger.trace("trying to create jabber login...");
@@ -104,24 +104,29 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
             HttpClient client = new HttpClient();
             client.getParams().setAuthenticationPreemptive(true);
             Credentials defaultcreds = new UsernamePasswordCredentials("admin@localhost", "admin");
-            client.getState().setCredentials(new AuthScope("localhost", 9280, AuthScope.ANY_REALM), defaultcreds);
+            client.getState().setCredentials(new AuthScope("localhost", 5280, AuthScope.ANY_REALM), defaultcreds);
+
+            String url = String.format("http://localhost:5280/data/localhost/%s/accounts", login);
 
             // Create a method instance.
-            PostMethod method = new PostMethod(url);
+            PutMethod method = new PutMethod(url);
+            method.setRequestHeader("Content-Type", "application/json");
 
             // Provide custom retry handler is necessary
             final DefaultHttpMethodRetryHandler retryHandler = new DefaultHttpMethodRetryHandler(3, false);
             method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, retryHandler);
 
-            String requestBody = String.format("{\n" +
-                    "  \"username\": \"%s\",\n" +
-                    "  \"password\": \"%s\",\n" +
-                    "  \"host\": \"localhost\",  \n" +
-                    "  \"ip\": \"127.0.0.1\"\n" +
-                    "}",
-                    login,
-                    password
-                    );
+            JSONObject json = new JSONObject();
+            json.put("password", password);
+            json.put("FN", name);
+            String requestBody = String.format(json.toString());
+//            String requestBody = String.format("{\n" +
+//                    "  \"password\": \"%s\",\n" +
+//                    "  \"FN\": \"%s\"\n" +
+//                    "}",
+//                    password,
+//                    name
+//                    );
             final StringRequestEntity requestEntity = new StringRequestEntity(requestBody, "application/json", "UTF-8" );
             method.setRequestEntity(requestEntity);
 
@@ -183,8 +188,7 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
 
             String result = firstName + " " + lastName;
             logger.trace("Name : "+result);
-            String encodedName = URLEncoder.encode(result, "UTF-8");
-            return encodedName;
+            return result;
         }
         catch (Exception e)
         {
