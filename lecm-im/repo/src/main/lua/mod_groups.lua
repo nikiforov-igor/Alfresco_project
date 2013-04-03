@@ -13,6 +13,7 @@ local members;
 local groups_file;
 
 local jid, datamanager = require "util.jid", require "util.datamanager";
+local dm_load = require "util.datamanager".load;
 local jid_bare, jid_prep = jid.bare, jid.prep;
 
 local module_host = module:get_host();
@@ -44,8 +45,9 @@ function inject_roster_contacts(username, host, roster)
 		    if user:sub(1,1) ~= "." then
 			jid = jid_prep(decode(user:gsub("%.dat$", "")).."@"..decode(host));
 			if jid then
+			    local user_data = dm_load(decode(user:gsub("%.dat$", "")), "localhost", "accounts");
 			    module:log("debug", "New member of %s: %s", tostring(curr_group), tostring(jid));
-			    groups["default"][jid] = name or false;
+			    groups["default"][jid] = user_data.FN or false; --name or false;
 			    members[jid] = members[jid] or {};
 			    members[jid][#members[jid]+1] = "default";
 			end
