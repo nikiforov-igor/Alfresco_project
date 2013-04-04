@@ -13,6 +13,7 @@ LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 		"itemType": "", //тип данных который отображается в таблице с перечнем делегирования
 		"isBoss": false, //является ли текущий пользователь руководителем в каком либо подразделении
 		"isEngineer": false, //является ли текущий пользователь технологом
-		"hasSubordinate": false //есть ли в пользователя подчиненный (используется только на странице delegation-opts)
+		"hasSubordinate": false, //есть ли в пользователя подчиненный (используется только на странице delegation-opts)
+		"employee": null //nodeRef lecm-orgstr:employee ссылка на сотрудника для которого были открыты параметры делегирования
 	};
 })();

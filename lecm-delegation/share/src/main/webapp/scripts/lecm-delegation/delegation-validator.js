@@ -12,38 +12,6 @@ LogicECM.module.Delegation.Validator.Utils = LogicECM.module.Delegation.Validato
 
 (function () {
 	"use strict";
-	LogicECM.module.Delegation.Validator.Utils.findDatagridByName = function (p_sName, bubblingLabel) {
-		var components = [];
-		var found = [];
-		var bMatch, component;
-
-		components = Alfresco.util.ComponentManager.list();
-
-		for (var i = 0, j = components.length; i < j; i++) {
-			component = components[i];
-			bMatch = true;
-			if (component['name'].search(p_sName) == -1 ) {
-				bMatch = false;
-			}
-			if (bMatch) {
-				found.push(component);
-			}
-		}
-		if (bubblingLabel) {
-			for (i = 0, j = found.length; i < j; i++) {
-				component = found[i];
-				if (typeof component == "object" && component.options.bubblingLabel) {
-					if (component.options.bubblingLabel == bubblingLabel) {
-						return component;
-					}
-				}
-			}
-		} else {
-			return (typeof found[0] == "object" ? found[0] : null);
-		}
-		return null;
-	};
-
 	LogicECM.module.Delegation.Validator.CanTransferRightsValidator = function (field, args,  event, form, silent, message) {
 
 		var valid = true;
@@ -53,12 +21,12 @@ LogicECM.module.Delegation.Validator.Utils = LogicECM.module.Delegation.Validato
 		var htmlNode = YAHOO.util.Dom.get(form.errorContainer);
 		htmlNode.innerHTML = "";
 
-		var value = "true" == field.value;
+		var value = "true" === field.value;
 
 		if (value) {
 
-			var datagrid = LogicECM.module.Delegation.Validator.Utils.findDatagridByName ("LogicECM.module.Base.DataGrid", "procuracy-datagrid");
-			tableRows = datagrid.widgets.dataTable.getRecordSet().getRecords();
+			var datagrid = LogicECM.module.Base.Util.findComponentByBubblingLabel ("LogicECM.module.Base.DataGrid", "procuracy-datagrid");
+			var tableRows = datagrid.widgets.dataTable.getRecordSet().getRecords();
 			// Перебираем все строки датагрида
 			for (var j = 0; j < tableRows.length; j++) {
 				var tableRow = tableRows[j].getData("itemData");
@@ -78,5 +46,33 @@ LogicECM.module.Delegation.Validator.Utils = LogicECM.module.Delegation.Validato
 		}
 
 		return valid;
+	}
+
+	LogicECM.module.Delegation.Validator.HasTrusteeValidator = function (field, args,  event, form, silent, message) {
+		form.setErrorContainer("error-message-container");
+		// Каждый раз очищать <div>, чтобы не было здоровенной простыни из ошибок
+		var htmlNode = YAHOO.util.Dom.get(form.errorContainer);
+		htmlNode.innerHTML = "";
+
+		var formData = form.getFormData();
+		var canDelegateAll = "true" === formData["prop_lecm-d8n_delegation-opts-can-delegate-all"];
+		// var isValid;
+		/*
+		if (canDelegateAll) {
+			if (field.value) {
+				isValid = true;
+			} else {
+				isValid = false;
+			}
+		} else {
+			isValid = true;
+		}
+		*/
+		var isValid = !canDelegateAll || field.value;
+
+		if (!isValid) {
+			form.addError(message, field);
+		}
+		return isValid;
 	}
 })();

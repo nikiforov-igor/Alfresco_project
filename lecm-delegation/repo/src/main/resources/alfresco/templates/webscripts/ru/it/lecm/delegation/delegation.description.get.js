@@ -48,6 +48,10 @@ function getDescriptionOpts () {
 	logger.log ("model.isBoss = " + model.isBoss);
 
 	model.hasSubordinate = delegation.hasSubordinate (nodeRef);
+	var employee = delegation.getEmployee (nodeRef);
+	if (employee) {
+		model.employee = employee.nodeRef.toString();
+	}
 }
 
 switch (page) {

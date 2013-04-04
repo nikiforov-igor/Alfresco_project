@@ -19,13 +19,15 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-delegation/opts/delegation-opts.js"/>
 
 <script type="text/javascript">//<![CDATA[
+(function (){
+	"use strict";
+	var response = ${response};
 
-var response = ${response};
-
-LogicECM.module.Delegation.Const.isBoss = response.isBoss;
-LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
-LogicECM.module.Delegation.Const.hasSubordinate = response.hasSubordinate;
-
+	LogicECM.module.Delegation.Const.isBoss = response.isBoss;
+	LogicECM.module.Delegation.Const.isEngineer = response.isEngineer;
+	LogicECM.module.Delegation.Const.hasSubordinate = response.hasSubordinate;
+	LogicECM.module.Delegation.Const.employee = response.employee;
+})();
 //]]>
 </script>
 </@>

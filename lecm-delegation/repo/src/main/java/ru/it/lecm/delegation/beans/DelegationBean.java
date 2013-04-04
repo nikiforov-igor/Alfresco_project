@@ -575,4 +575,20 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public boolean isProcuracy (final NodeRef objectNodeRef) {
 		return isProperType (objectNodeRef, TYPE_PROCURACY);
 	}
+
+	@Override
+	public NodeRef getEmployee (final NodeRef nodeRef) {
+		NodeRef employeeRef = null;
+		if (isDelegationOpts (nodeRef)) {
+			employeeRef = findNodeByAssociationRef (nodeRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+		} else if (orgstructureService.isEmployee (nodeRef)) {
+			employeeRef = nodeRef;
+		} else if (isProperType (nodeRef, ContentModel.TYPE_PERSON)) {
+			employeeRef = orgstructureService.getEmployeeByPerson (nodeRef);
+		} else {
+			QName nodeType = nodeService.getType (nodeRef);
+			logger.warn (String.format ("NodeRef {%s}%s can't have employee.", nodeType, nodeRef));
+		}
+		return employeeRef;
+	}
 }

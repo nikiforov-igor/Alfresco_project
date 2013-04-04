@@ -180,4 +180,42 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 			delegationService.stopDelegation (delegator);
 		}
 	}
+
+	/**
+	 * получение сотрудника для объекта системы
+	 * В качестве объекта системы можно передать cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @param ref объект системы, можно передать следующие типы объектов cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @return ScriptNode идентификатор сотрудника или null если ничего не нашел.
+	 */
+	public ScriptNode getEmployee (final String ref) {
+		/*
+		 * проверим что ref это NodeRef,
+		 * а дальше delegationService сам разберется что он получил на вход
+		 */
+		ScriptNode result = null;
+		if (NodeRef.isNodeRef (ref)) {
+			NodeRef employeeRef = delegationService.getEmployee (new NodeRef (ref));
+			if (employeeRef != null) {
+				result = new ScriptNode (employeeRef, serviceRegistry, getScope ());
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * получение сотрудника для объекта системы
+	 * В качестве объекта системы можно передать cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @param scriptNode объект системы, можно передать следующие типы объектов cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @return ScriptNode идентификатор сотрудника или null если ничего не нашел.
+	 */
+	public ScriptNode getEmployee (final ScriptNode scriptNode) {
+		ScriptNode result = null;
+		if (scriptNode != null && scriptNode.getNodeRef () != null) {
+			NodeRef employeeRef = delegationService.getEmployee (scriptNode.getNodeRef ());
+			if (employeeRef != null) {
+				result = new ScriptNode (employeeRef, serviceRegistry, getScope ());
+			}
+		}
+		return result;
+	}
 }

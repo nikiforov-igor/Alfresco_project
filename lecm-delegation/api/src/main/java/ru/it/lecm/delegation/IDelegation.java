@@ -217,4 +217,12 @@ public interface IDelegation {
 	 * @return true является, false не является
 	 */
 	boolean isProcuracy (final NodeRef objectNodeRef);
+
+	/**
+	 * получение сотрудника для объекта системы
+	 * В качестве объекта системы можно передать cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @param nodeRef объект системы, можно передать следующие типы объектов cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
+	 * @return NodeRef идентификатор сотрудника или null если ничего не нашел.
+	 */
+	NodeRef getEmployee (final NodeRef nodeRef);
 }

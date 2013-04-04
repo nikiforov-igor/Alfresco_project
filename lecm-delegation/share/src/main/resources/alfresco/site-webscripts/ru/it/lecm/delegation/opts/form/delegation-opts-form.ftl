@@ -48,7 +48,7 @@
 			type="radio"
 			name="delegate-group"
 			value="delegate-by"
-			onchange='javascript:var radioDelegateByFunc = YAHOO.util.Dom.get("radio-delegate-by-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = !radioDelegateByFunc.checked; fieldsetDelegateByFunc.disabled = !radioDelegateByFunc.checked; fieldsetDelegateAllFunc.disabled = radioDelegateByFunc.checked;'
+			onchange='javascript:var radioDelegateByFunc = YAHOO.util.Dom.get("radio-delegate-by-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = !radioDelegateByFunc.checked; fieldsetDelegateByFunc.disabled = !radioDelegateByFunc.checked; fieldsetDelegateAllFunc.disabled = radioDelegateByFunc.checked; YAHOO.Bubbling.fire("mandatoryControlValueUpdated");'
 			<#if !canDelegate>checked="checked"</#if>
 			<#if "view" == form.mode>disabled="disabled"</#if>
 		>
@@ -119,7 +119,7 @@
 			type="radio"
 			name="delegate-group"
 			value="delegate-all"
-			onchange='javascript: var radioDelegateAllFunc = YAHOO.util.Dom.get("radio-delegate-all-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = radioDelegateAllFunc.checked; fieldsetDelegateByFunc.disabled = radioDelegateAllFunc.checked; fieldsetDelegateAllFunc.disabled = !radioDelegateAllFunc.checked;'
+			onchange='javascript: var radioDelegateAllFunc = YAHOO.util.Dom.get("radio-delegate-all-func"); var hidden = YAHOO.util.Dom.get("${htmlIdCanDelegateAll}"); var fieldsetDelegateByFunc = YAHOO.util.Dom.get("fieldset-delegate-by-func"); var fieldsetDelegateAllFunc = YAHOO.util.Dom.get("fieldset-delegate-all-func"); hidden.value = radioDelegateAllFunc.checked; fieldsetDelegateByFunc.disabled = radioDelegateAllFunc.checked; fieldsetDelegateAllFunc.disabled = !radioDelegateAllFunc.checked; YAHOO.Bubbling.fire("mandatoryControlValueUpdated");'
 			<#if canDelegate>checked="checked"</#if>
 			<#if "view" == form.mode>disabled="disabled"</#if>
 		>
@@ -127,6 +127,7 @@
 	</div>
 	<fieldset id="fieldset-delegate-all-func" form="${formId}" style="border: 0; margin-bottom: 0; padding: 0px 0px 0px 1px;" <#if !canDelegate>disabled="disabled"</#if>>
 		<@formLib.renderField field=form.fields["assoc_lecm-d8n_delegation-opts-trustee-assoc"] />
+		<div id="error-message-container" style="margin-left: 12em; color: #800000; font-weight: bold;"></div>
 		<div class="form-field">
 			<input id="${htmlIdCanTransferRights}" type="hidden" name="${fieldCanTransferRights.name}" value="${canTransfer?string}"/>
 			<input id="checkbox-can-transfer"
