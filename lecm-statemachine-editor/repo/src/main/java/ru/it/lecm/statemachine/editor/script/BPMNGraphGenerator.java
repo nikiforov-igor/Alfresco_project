@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * User: PMelnikov
@@ -83,15 +84,20 @@ public class BPMNGraphGenerator {
 
 			}
 
+            HashSet<String> flows = new HashSet<String>();
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node element = nodeList.item(i);
 				String elementName = element.getLocalName();
 				if ("sequenceFlow".equals(elementName)) {
 					String sourceId = element.getAttributes().getNamedItem("sourceRef").getNodeValue();
 					String targetId = element.getAttributes().getNamedItem("targetRef").getNodeValue();
-					Object source = vertexes.get(sourceId);
-					Object target = vertexes.get(targetId);
-					graph.insertEdge(parent, null, "", source, target, "rounded=1;");
+                    String key = sourceId + "->" + targetId;
+                    if (!flows.contains(key)) {
+                        Object source = vertexes.get(sourceId);
+                        Object target = vertexes.get(targetId);
+                        graph.insertEdge(parent, null, "", source, target, "rounded=1;");
+                        flows.add(key);
+                    }
 				}
 			}
 
