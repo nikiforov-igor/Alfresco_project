@@ -100,7 +100,7 @@ public class ContactViewGroup extends ContactViewGroupUI
 		{
 			item.setVisible(true);
 		}
-		setGroupVisible(true);
+		setGroupVisible( this.onlineGroup);
 	}
 	
 	public void addRosterItem(RosterItem item)
