@@ -1,5 +1,9 @@
 package ru.it.lecm.documents.scripts;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -12,21 +16,21 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import ru.it.lecm.security.LecmPermissionService;
 
 /**
  * User: orakovskaya
  * Date: 12.03.13
  */
 public class DocumentWebScriptBean extends BaseWebScript {
-    private DocumentService documentService;
-    private NodeService nodeService;
     private static final Logger logger = LoggerFactory.getLogger(DocumentWebScriptBean.class);
+
+    private DocumentService documentService;
+	private NodeService nodeService;
+    private LecmPermissionService lecmPermissionService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -34,6 +38,14 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+
+    public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
+	}
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
 
     public String getRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
@@ -44,6 +56,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+ 
     public Integer getRatedPersonCount(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -53,6 +66,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+ 
     public Integer getMyRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -62,6 +76,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+
     public Integer setMyRating(String documentNodeRef, String rating) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -98,6 +113,11 @@ public class DocumentWebScriptBean extends BaseWebScript {
         NodeRef documentRef = new NodeRef(nodeRef);
         Map<String, String> property = add(Context.getCurrentContext().getElements(properties));
         documentRef = documentService.editDocument(documentRef, property);
+
+        if (logger.isInfoEnabled()) {
+        	final StringBuilder sb = lecmPermissionService.trackAllLecmPermissions("Before edit document permissions:", documentRef, new String[]{null});
+        	logger.info(sb.toString());
+        }
 
         return new ScriptNode(documentRef, serviceRegistry, getScope());
     }

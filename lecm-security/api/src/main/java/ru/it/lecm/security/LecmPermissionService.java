@@ -254,7 +254,7 @@ public interface LecmPermissionService {
 		public static String PGROLE_Initiator = PFX_LECM_ROLE + "Initiator"; // "LECM_BASIC_PG_Initiator"
 		public static String PGROLE_Reader = PFX_LECM_ROLE + "Reader"; // "LECM_BASIC_PG_Reader"
 
-        public String getLabel();
+		public String getLabel();
 
 	}
 

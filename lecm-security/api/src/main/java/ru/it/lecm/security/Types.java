@@ -2,6 +2,8 @@ package ru.it.lecm.security;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
@@ -12,6 +14,8 @@ import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
  * @author rabdullin
  */
 public final class Types {
+
+	final static protected Logger logger = LoggerFactory.getLogger(Types.class);
 
 	/**
 	 * Суффиксы для security-групп Альфреско
@@ -147,8 +151,10 @@ public final class Types {
 		 * @return
 		 */
 		public SGPosition getSGPos(String objId, String displayName) {
-			if (this == SG_ME)
-				return new SGPrivateMeOfUser(objId, displayName);
+			if (this == SG_ME) { 
+				logger.warn( "use special method getSGMeOfUser() instead getSGPos() ...");
+				return new SGPrivateMeOfUser(objId, null, displayName); // (!) use getSGMeOfUser(...)
+			}
 			if (this == SG_OU)
 				return new SGOrgUnit(objId, displayName);
 			if (this == SG_SV)
@@ -193,6 +199,13 @@ public final class Types {
 			return getSGSpecialUserRole(employeeId, permissionGroup, nodeRef, null);
 		}
 
+		public static SGPrivateMeOfUser getSGMeOfUser(String userId, String login, String userDisplay) {
+			return new SGPrivateMeOfUser(userId, login, userDisplay);
+		}
+
+		public static SGPrivateMeOfUser getSGMeOfUser(String userId, String login) {
+			return new SGPrivateMeOfUser(userId, login, null);
+		}
 	}
 
 
@@ -240,7 +253,8 @@ public final class Types {
 
 		@Override
 		public String toString() {
-			return String.format( "SGPOS(%s '%s', %s)", sgKind, id, (displayInfo == null ? "" : displayInfo));
+			final String info = getDisplayInfo();
+			return String.format( "SGPOS(%s '%s', %s)", sgKind, id, (info == null ? "" : info));
 		}
 
 		/**
@@ -268,20 +282,45 @@ public final class Types {
 	 */
 	public static class SGPrivateMeOfUser extends SGPosition {
 
+		private String userLogin;
+
 		private SGPrivateMeOfUser(String userId) {
 			super( SGKind.SG_ME, userId);
 		}
 
-		private SGPrivateMeOfUser(String userId, String userDisplayOrLogin) {
-			super( SGKind.SG_ME, userId, userDisplayOrLogin);
+		private SGPrivateMeOfUser(String userId, String login, String userDisplay) {
+			super( SGKind.SG_ME, userId, userDisplay);
+			this.userLogin = login;
 		}
 
-//		public String getUserLogin() {
-//			return super.getId();
-//		}
+		/**
+		 * Ясный синоним getId() 
+		 * @return uuid Сотрудника
+		 */
 		public String getEmployeeId() {
 			return super.getId();
 		}
+
+		/**
+		 * @return login пользователя Альфреско, связанного с Сотрудником
+		 */
+		public String getUserLogin() {
+			return userLogin;
+		}
+
+		/**
+		 * @param userlogin login пользователя Альфреско, связанного с Сотрудником
+		 */
+		public void setUserLogin(String userlogin) {
+			this.userLogin = userlogin;
+		}
+
+		@Override
+		public String getDisplayInfo() {
+			final String info = super.getDisplayInfo();
+			return (info != null) ? info : String.format("Private group for user <%s> of employee <%s>", this.userLogin, this.getId());
+		}
+
 	}
 
 	/**

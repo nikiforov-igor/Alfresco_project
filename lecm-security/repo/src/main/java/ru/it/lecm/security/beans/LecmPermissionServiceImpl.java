@@ -433,7 +433,7 @@ public class LecmPermissionServiceImpl
 
 		// оповещение основной службы о личном присвоении БР (создание "теневой группы" )
 		if (this.orgStructureNotifiers != null) { 
-			final SGPrivateMeOfUser posMe = (SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos(employeeId);
+			final SGPrivateMeOfUser posMe = Types.SGKind.getSGMeOfUser(employeeId, null);
 			this.orgStructureNotifiers.orgBRAssigned(roleCode, posMe);
 		}
 
@@ -461,7 +461,7 @@ public class LecmPermissionServiceImpl
 
 		// оповещение основной службы о личном присвоении новой группы
 		if (this.orgStructureNotifiers != null) { 
-			final SGPrivateMeOfUser posMe = (SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos(employeeId);
+			final SGPrivateMeOfUser posMe = Types.SGKind.getSGMeOfUser(employeeId, null);
 			this.orgStructureNotifiers.sgInclude(posMe, posUserSpec);
 		}
 
@@ -510,7 +510,9 @@ public class LecmPermissionServiceImpl
 				// замена на корректный доступ в текущем статусе
 				for(Map.Entry<String, LecmPermissionGroup> entry: accessMap.entrySet()) {
 					final String brole = entry.getKey();
-					final String authority = sgnm.makeFullSGName( Types.SGKind.SG_BR, brole);
+					// final String authority = sgnm.makeFullSGName( Types.SGKind.SG_BR, brole);
+					final String authority = sgnm.makeSGName( Types.SGKind.SG_BR.getSGPos(brole, "Business role <"+ brole+ ">"));
+
 					final LecmPermissionGroup perm = accessMap.get(brole);
 
 					// выдаём новый доступ по Статической БР для Пользователя ...
@@ -600,12 +602,12 @@ public class LecmPermissionServiceImpl
 			super(LecmPermissionGroup.PFX_LECM_ROLE, fullLecmPermGroupName);
 		}
 
-        @Override
-        public String getLabel() {
-            String message = I18NUtil.getMessage("lecm.roles." + getName());
-            return message == null ? getName() : message;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-    }
+		@Override
+		public String getLabel() {
+			String message = I18NUtil.getMessage("lecm.roles." + getName());
+			return message == null ? getName() : message;  //To change body of implemented methods use File | Settings | File Templates.
+		}
+	}
 
 	/**
 	 * Представлене для отдельного lecm-разрешения системы.

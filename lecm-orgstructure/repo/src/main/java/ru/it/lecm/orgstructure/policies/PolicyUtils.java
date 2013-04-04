@@ -151,7 +151,7 @@ public class PolicyUtils {
 			, Logger logger
 	) {
 		final String loginName = getEmployeeLogin(employee, nodeService, orgstructureService, logger);
-		return (Types.SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName);
+		return (Types.SGPrivateMeOfUser) Types.SGKind.getSGMeOfUser( employee.getId(), loginName);
 	}
 
 	/**

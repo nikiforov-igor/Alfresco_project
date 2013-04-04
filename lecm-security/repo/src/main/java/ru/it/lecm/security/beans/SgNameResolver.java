@@ -138,7 +138,7 @@ public class SgNameResolver {
 			return false;
 		}
 		if (!this.authorityService.authorityExists(childFullName)) {
-			logger.warn( String.format( "Security group '%s' not exists", childFullName));
+			logger.warn( String.format( "Security group/user '%s' not exists", childFullName));
 			return false;
 		}
 		final Set<String> curChildren = this.authorityService.getContainedAuthorities(childType, parentFullName, true);
@@ -167,6 +167,7 @@ public class SgNameResolver {
 	 * @param kind тип модельного объекта
 	 * @param objId Id объекта
 	 * @return
+	 * @deprecated use makeSGName( SGPosition ... ); instead
 	 */
 	public String makeFullSGName(Types.SGKind kind, String objId) {
 		// DONE: возможно стоит сделать обращение через authorityService.getName(xxx)

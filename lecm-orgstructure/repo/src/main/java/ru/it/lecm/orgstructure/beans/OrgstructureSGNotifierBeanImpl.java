@@ -21,7 +21,11 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
 import ru.it.lecm.security.Types;
+import ru.it.lecm.security.Types.SGDeputyPosition;
+import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
+import ru.it.lecm.security.Types.SGPrivateMeOfUser;
+import ru.it.lecm.security.Types.SGSuperVisor;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 public class OrgstructureSGNotifierBeanImpl
@@ -123,7 +127,7 @@ public class OrgstructureSGNotifierBeanImpl
 
 
 	/**
-	 * СОбрать всех Сотрудников данного подразделения и вложенных в него
+	 * Собрать всех Сотрудников данного подразделения и вложенных в него
 	 * @param nodeOU
 	 * @return
 	 */
@@ -219,7 +223,7 @@ public class OrgstructureSGNotifierBeanImpl
 				sgNotifier.orgEmployeeTie(emplId, loginName, true);
 
 			// sgMe = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-			sgMe = (Types.SGPrivateMeOfUser) Types.SGKind.SG_ME.getSGPos( emplId, loginName);
+			sgMe = Types.SGKind.getSGMeOfUser( emplId, loginName);
 			sgNotifier.sgInclude( sgMe, sgDP);
 		}
 
@@ -228,21 +232,21 @@ public class OrgstructureSGNotifierBeanImpl
 		final Types.SGPosition sgOU = PolicyUtils.makeOrgUnitPos(nodeOrgUnit, nodeService);
 		sgNotifier.sgInclude( sgDP, sgOU);
 
-		// Если позиция руководящая прописать её в SG_SV своего Подразделения ...
+		// Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
-		if (isBoss) { // прописать руководящую SG_DP -> SG_SV(OU)
-			if (sgMe != null)
-				sgNotifier.sgExclude( sgSV, sgMe);
-
-			// прописать SV подразедления в личную группу
-			sgNotifier.sgInclude( sgDP, sgSV);
-
-		} else { // снять отметку руководящей ...
-			sgNotifier.sgExclude( sgDP, sgSV);
-
-			// прописать SV подразедления в личную группу
-			if (sgMe != null)
-				sgNotifier.sgInclude( sgSV, sgMe);
+		if (sgMe != null) {
+			if (isBoss) {
+//				if (sgMe != null) // убрать SV подразедления из личной группы  
+//					sgNotifier.sgExclude( sgSV, sgMe);
+//				// прописать руководящую SG_DP -> SG_SV(OU)
+//				sgNotifier.sgInclude( sgDP, sgSV);
+				sgNotifier.sgInclude( sgMe, sgSV);
+			} else { // снять отметку руководящей ...
+//				sgNotifier.sgExclude( sgDP, sgSV);
+//				if (sgMe != null) // прописать SV подразедления в личную группу
+//					sgNotifier.sgInclude( sgSV, sgMe);
+				sgNotifier.sgExclude( sgMe, sgSV);
+			}
 		}
 	}
 
@@ -340,13 +344,14 @@ public class OrgstructureSGNotifierBeanImpl
 		// ASSOC_EMPLOYEE_PERSON: "lecm-orgstr:employee-person-assoc"
 		final String loginName = getEmployeeLogin(employee);
 
+		sgNotifier.orgNodeCreated( Types.SGKind.getSGMeOfUser( employee.getId(), loginName));
 		// safely-свяжем пользователя с его личной группой
-		if (loginName != null)
-			sgNotifier.orgEmployeeTie(employee.getId(), loginName, true);
-
-		sgNotifier.orgNodeCreated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
 		sgNotifier.orgEmployeeTie( employee.getId(), loginName, (isActive != null) && isActive.booleanValue());
+
+		// (!) надо boss-должности перепривязать, т.к. они напрямую связаны в USER
+		tie2OUSVgroups( employee, loginName, Boolean.TRUE.equals(isActive));
 	}
+
 
 	/**
 	 * Нотификация о связывании Сотрудника и пользователя Альфреско.
@@ -376,7 +381,9 @@ public class OrgstructureSGNotifierBeanImpl
 			throw new RuntimeException( String.format( "Empty login: cannot untie employee {%s} from SG-ME", employee.getId() ));
 
 		sgNotifier.orgEmployeeTie( employee.getId(), loginName, false);
-		sgNotifier.orgNodeDeactivated( Types.SGKind.SG_ME.getSGPos( employee.getId(), loginName));
+		sgNotifier.orgNodeDeactivated( Types.SGKind.getSGMeOfUser( employee.getId(), loginName));
+
+		tie2OUSVgroups(employee, loginName, false); // отвязаться от всех boss-SV
 	}
 
 	@Override
@@ -515,7 +522,7 @@ public class OrgstructureSGNotifierBeanImpl
 					final Types.SGPrivateBusinessRole brmePos = Types.SGKind.getSGMyRolePos(employee.getId(), userLogin, ouPos.getDisplayInfo());
 					if (include) {
 						this.sgNotifier.sgInclude( brmePos, ouPos); // BRME -> OU
-						this.sgNotifier.sgInclude( Types.SGKind.SG_ME.getSGPos( employee.getId(), userLogin), brmePos); // ME -> BRME
+						this.sgNotifier.sgInclude( Types.SGKind.getSGMeOfUser( employee.getId(), userLogin), brmePos); // ME -> BRME
 					} else
 						this.sgNotifier.sgExclude( brmePos, ouPos);
 				}
@@ -634,33 +641,115 @@ public class OrgstructureSGNotifierBeanImpl
 		final Types.SGPrivateMeOfUser sgDestMe = PolicyUtils.makeEmploeePos(destEmployee, nodeService, orgstructureService, logger);
 
 		// получить все подразделения, в которых делегирующий является руководителем ...
-		final List<NodeRef> orgs = orgstructureService.getEmployeeUnits(sourceEmployee, true);
+		final List<NodeRef> orgsBoss = orgstructureService.getEmployeeUnits(sourceEmployee, true);
 
-		if (orgs == null || orgs.isEmpty()) {
+		if (orgsBoss == null || orgsBoss.isEmpty()) {
 			logger.warn( String.format("Employee {%s} is not boss at any organization unit -> nothing to delegate for employee {%s}", sourceEmployee, destEmployee));
 			return;
 		}
 
-		for(NodeRef orgUnit: orgs) {
+		// TODO: посмотреть можно ли выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
+		// Простой вариант, если не надо учитывать вложенность:
+		for(NodeRef orgUnit: orgsBoss) {
 			// руководящая позиция подразделения ...
 			final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
 
-	
-            if (created) { 
-                
-                sgNotifier.sgExclude( sgSV, sgDestMe);
-                
-                sgNotifier.sgInclude( sgDestMe, sgSV);
+			// TODO: выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
+			if (created) { 
+				// sgNotifier.sgExclude( sgSV, sgDestMe); // отвязать SV-группу своего подраздедения (SVOU) от себя ("anti-recurse step")
+				sgNotifier.sgInclude( sgDestMe, sgSV); // привязать себя к SVOU
+			} else { 
+				sgNotifier.sgExclude( sgDestMe, sgSV); // ("anti-recurse step") отвязать себя от SVOU
+				// sgNotifier.sgInclude( sgSV, sgDestMe); // привязать SVOU к себе 
+			}
+		}
 
-       		} else { 
-                sgNotifier.sgExclude( sgDestMe, sgSV);
-                
-                sgNotifier.sgInclude( sgSV, sgDestMe);
-    		}
-        
-        }
-        
-        
+
+//		// получить все подразделения, в которых принимающий делегат является работником (но не боссом)...
+//		// DONE: ты надо перечислить только подразделения, вложенные в те, которыми руководит босс (делегирующий)
+//		final List<NodeRef> orgsDest = findOnlySimpleUnits(destEmployee); 
+//
+//		if (created) {
+//			// выполнить отсоединение принимающего делегата ото всех его обычных (работных) SVOU
+//			for(NodeRef orgUnitDest: orgsDest) {
+//				// руководящая позиция подразделения ...
+//				final Types.SGSuperVisor sgSVDest = PolicyUtils.makeOrgUnitSVPos(orgUnitDest, nodeService);
+//				sgNotifier.sgExclude( sgSVDest, sgDestMe); // отвязать SV-группу своего подраздедения (SVOU) от себя ("anti-recurse step")
+//			}
+//
+//			// Присоединить принимающего к целевым ...
+//			for(NodeRef orgUnit: orgsBoss) {
+//				// руководящая позиция подразделения ...
+//				final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
+//				sgNotifier.sgInclude( sgDestMe, sgSV); // привязать себя к SVOU в качестве Руководителя
+//			}
+//
+//		} else {
+//			// "снять со всех постов" ) 
+//			// выполнить отсоединение делегата ото всх предоставленных Руководящих позиций ...
+//			for(NodeRef orgUnit: orgsBoss) {
+//				// руководящая позиция подразделения ...
+//				final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
+//				sgNotifier.sgExclude( sgDestMe, sgSV);
+//			}
+//
+//			// включить делегата во все его прежние работные SVOU (чтобы им могли руководить) ...
+//			for(NodeRef orgUnitDest: orgsDest) {
+//				// руководящая позиция подразделения ...
+//				final Types.SGSuperVisor sgSVDest = PolicyUtils.makeOrgUnitSVPos(orgUnitDest, nodeService);
+//				sgNotifier.sgInclude( sgSVDest, sgDestMe);
+//			}
+//		}
+
+	}
+
+
+	/**
+	 * Получить все подразделения, в которых принимающий делегат является 
+	 * работником, но не боссом.
+	 * @param employee
+	 * @return
+	 */
+	private List<NodeRef> findOnlySimpleUnits(NodeRef employee) {
+		final List<NodeRef>
+			total = orgstructureService.getEmployeeUnits(employee, false)		// полный список
+			, asboss = orgstructureService.getEmployeeUnits(employee, true);	// там, где он босс
+		total.removeAll(asboss);
+		return total; // (total - boss)
+	}
+
+
+	/**
+	 * Выполнить привязку Сотрудника к группам SG_SV (в тех OU где он босс)
+	 * @param employee
+	 * @param loginName
+	 * @param tie true для привязки, false наоборот
+	 */
+	private void tie2OUSVgroups(NodeRef employee, String loginName, boolean tie) {
+		if (loginName == null) {
+			// нет возможности выполнить операцию ...
+			return;
+		}
+
+		final SGPrivateMeOfUser posME = SGKind.getSGMeOfUser(employee.getId(), loginName);
+
+		// получить подразделения, в которых Сотрудник является боссом ...
+		final List<NodeRef> asbossOU = orgstructureService.getEmployeeUnits(employee, true);
+		if (asbossOU == null || asbossOU.isEmpty()) { // нет "боссовых" должностей
+			return;
+		}
+
+		// для них - включиться в SG_SV
+		for (NodeRef unit: asbossOU) {
+			final Types.SGPosition sgOU = PolicyUtils.makeOrgUnitPos(unit, nodeService);
+			final SGSuperVisor sgSV = (SGSuperVisor) Types.SGKind.SG_SV.getSGPos( unit.getId(), sgOU.getDisplayInfo());
+			this.sgNotifier.sgInclude(posME, sgSV); // ME >> SV
+			logger.debug( String.format( "%s SG_SV group of unit {%s} for/from employee <%s>/ login <%s>"
+					, (tie ? "Tied" : "Untied"), unit, employee, loginName));
+		}
+
+		logger.info( String.format( "%s %d SG_SV groups for/from employee <%s>/ login <%s>"
+				, (tie ? "Tied" : "Untied"), asbossOU.size(), employee, loginName));
 	}
 
 }

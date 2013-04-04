@@ -836,7 +836,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		return (id != null && id.length() > 0) ? makeFullRef(id) : null;
 	}
 
-	final static String[] ARGNODEREFNAME = { "nodeRef", "nodeId", "node"};
+	final static String[] ARGNODEREFNAME = { "nodeRef", "node", "nodeId"};
 	/**
 	 * Получить аргумент типа NоdeRef по любому из имён "nodeRef", "nodeId", "node".
 	 * @param args
@@ -888,6 +888,9 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 						, node
 						, echoGetArg( jdata, "userLogin", null, echoObj));
 
+				break;
+			case SG_ME:
+				result = SGKind.getSGMeOfUser(jdata.optString("id", null), jdata.optString("displayName", null), jdata.optString("userLogin", null));
 				break;
 			default: result = kind.getSGPos( jdata.optString("id", null), jdata.optString("displayName", null));
 		}
@@ -1530,7 +1533,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	/**
 	 * Метод получения таблицы доступа пользователя к документу по отдельным правам
-	 * JSON args: nodeRef, user|login 
+	 * JSON args: 1) "nodeRef" | "node" | "nodeId" 2) "user" | "login" 
 	 * @return
 	 * @throws JSONException 
 	 */

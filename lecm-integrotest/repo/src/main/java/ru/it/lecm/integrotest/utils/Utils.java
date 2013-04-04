@@ -80,6 +80,9 @@ public class Utils {
 			case SG_BRME:
 				result = SGKind.getSGMyRolePos( args.get("id"), args.get("roleCode"));
 				break;
+			case SG_ME:
+				result = SGKind.getSGMyRolePos( args.get("id"), args.get("userLogin"), args.get("displayInfo"));
+				break;
 			default: result = kind.getSGPos( args.get("id"));
 		}
 		return result;

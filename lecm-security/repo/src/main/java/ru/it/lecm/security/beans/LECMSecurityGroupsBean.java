@@ -1,5 +1,7 @@
 package ru.it.lecm.security.beans;
 
+import java.util.Set;
+
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.util.PropertyCheck;
@@ -163,7 +165,9 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgEmployeeTie(String employeeId, String alfrescoUserLogin, boolean tie) {
-		final String emplSuffix = SGKind.SG_ME.getAlfrescoSuffix(employeeId);
+		// final String emplSuffix = SGKind.SG_ME.getAlfrescoSuffix(employeeId);
+		final SGPrivateMeOfUser mepos = SGKind.getSGMeOfUser(employeeId, alfrescoUserLogin);
+		final String emplSuffix = mepos.getAlfrescoSuffix();
 
 		// safe-действия if (safeMode) ...
 		{ // (!) гарантировать создание группы Сотрудника (SG_ME)
@@ -195,7 +199,7 @@ public class LECMSecurityGroupsBean
 	private void sgSetParent( Types.SGPosition child, Types.SGPosition parent, boolean include) {
 		/*
 		 * include/exclude всегда safe-операции - в основном по причине упрощения
-		 * работы с лиными группами Бизнес-Ролей - чтобы не выносить отдельно
+		 * работы с личными группами Бизнес-Ролей - чтобы не выносить отдельно
 		 * методы создания личных групп БР (SG_MyRole)
 		 */
 		// if (safeMode)
@@ -208,10 +212,21 @@ public class LECMSecurityGroupsBean
 		// final String sgItem =  this.authorityService.getName(AuthorityType.GROUP, child.getAlfrescoSuffix());
 		final String sgItem =  this.sgnm.makeSGName(child);
 		final String sgParent = this.sgnm.makeSGName(parent);
-		if (include)
-			ensureParent(sgItem, sgParent);
-		else
-			removeParent( sgItem, sgParent);
+
+		if (isOperWithBossAndSV(child, parent)) { // SG_ME >>> SG_SV
+			// (!) вхождение личной группы в SV выполняется на уровне user->group 
+			// , а не group->group как для всего остального.
+			final Types.SGPrivateMeOfUser user = (Types.SGPrivateMeOfUser) child;
+			if (include)
+				ensureUserParent( user.getUserLogin(), sgParent);
+			else
+				removeUserParent( user.getUserLogin(), sgParent);
+		} else {
+			if (include)
+				ensureParent(sgItem, sgParent);
+			else
+				removeParent( sgItem, sgParent);
+		}
 	}
 
 	@Override
@@ -219,10 +234,37 @@ public class LECMSecurityGroupsBean
 		sgSetParent(child, parent, true);
 	}
 
+	/**
+	 * Проверка операции над SG_ME и SG_SV  
+	 * @param child
+	 * @param parent
+	 * @return true если childPos является SG_ME, а parentPos SG_SV, т.е.
+	 * если операнды для операции вклчения/искл личной группы босса в/из
+	 * SG_SV подразделения. 
+	 */
+	private boolean isOperWithBossAndSV(SGPosition child, SGPosition parent) {
+		return (	child != null && parent != null
+				&& Types.SGKind.SG_ME.equals(child.getSgKind())
+				&& Types.SGKind.SG_SV.equals(parent.getSgKind())) ;
+	}
+
 	@Override
 	public boolean isSgInside(SGPosition child, SGPosition parent) {
+		if (child == null || parent == null)
+			return false;
+
 		final String sgChildFullName =  this.sgnm.makeSGName(child);
 		final String sgParentFullName = this.sgnm.makeSGName(parent);
+
+		if (isOperWithBossAndSV(child, parent)) { // SG_ME >>> SG_SV
+			// вхождение личной группы в SV выполняется на уровне user->group 
+			// (а не group->group как для всего остального)
+			return sgnm.hasFullAuthEx( 
+					this.authorityService.getName(AuthorityType.USER, child.getAlfrescoSuffix())
+					, sgParentFullName, AuthorityType.USER
+					);
+		}
+
 		return sgnm.hasFullAuthEx(sgChildFullName, sgParentFullName, AuthorityType.GROUP);
 	}
 
@@ -287,7 +329,7 @@ public class LECMSecurityGroupsBean
 				sgInclude( sgMyRole, dp);
 
 				// SG_Me -> SG_MyRole 
-				final SGPrivateMeOfUser sgMe = (SGPrivateMeOfUser) SGKind.SG_ME.getSGPos( dp.getUserId(), dp.getUserLogin());
+				final SGPrivateMeOfUser sgMe = SGKind.getSGMeOfUser( dp.getUserId(), dp.getUserLogin());
 				sgInclude( sgMe, sgMyRole);
 			} else {
 				logger.warn( String.format("DP '%s'/{%s} is not linked with Employee -> skipping links (BRME->DP) and (ME->BRME)", dp.getDPName(), dp.getDPId()));
@@ -327,4 +369,33 @@ public class LECMSecurityGroupsBean
 		}
 	}
 
+	/**
+	 * Получить имена sec-объектов Альфреско типа USER, которые непосредственно
+	 * включены в указанную группу. 
+	 * Например, для личной ME-группы это позволит получить её владельца, т.к.
+	 * только он входит в неё как USER, а все остальные (Делегаты, Руководство 
+	 * и пр) входят как ГРУППЫ.
+	 * @param fullAlfrescoSecGroupName полное имя sec-объекта Альфреско, соот-щее
+	 * проверяемой sec-группе.
+	 * @return список входящих в группу пользователей или Null, если нет ни одного.
+	 */
+	private Set<String> getUsersOfTheGroup(String fullAlfrescoSecGroupName) {
+		return authorityService.getContainedAuthorities(AuthorityType.USER, fullAlfrescoSecGroupName, true);
+	}
+
+	/**
+	 * Получить login-имя пользователя-владельца личной группы.
+	 * @param sgMe личная группа
+	 * @return логин владельца или Null, если группа не имеет вложенных пользователей
+	 * Если в группе содержится более одного пользователя поднимается исключение.
+	 */
+	private String getUserLoginOfMeGroup(Types.SGPrivateMeOfUser sgMe) {
+		final Set<String> found = getUsersOfTheGroup( this.sgnm.makeSGName(sgMe) );
+		if (found == null || found.isEmpty())
+			return null;
+		if (found.size() > 1)
+			throw new RuntimeException( String.format("Private LECM group <%s> contains more than 1 users directly (%d): [%s]",
+					sgMe, found.size(), found)); // или log.WARN
+		return found.iterator().next(); // get[0]
+	}
 }
