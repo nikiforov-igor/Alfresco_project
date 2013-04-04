@@ -22,7 +22,7 @@ function main() {
 		var category = getCategoryByAttachments(model.nodeRef);
 		model.document = getDocumentByAttachments(model.nodeRef);
 
-		setCheckedActions(model.document, category);
+		setCheckedActions(model.document, category, attachmentDetails);
 
 		attachmentDetails.item.actions = getShowAction(attachmentDetails.item.actions);
 		model.attachmentDetailsJSON = jsonUtils.toJSONString(attachmentDetails);
@@ -54,7 +54,7 @@ function getCategoryByAttachments(nodeRef, defaultValue) {
 	return eval('(' + result + ')');
 }
 
-function setCheckedActions(document, category) {
+function setCheckedActions(document, category, nodeDetails) {
 	if (category != null && !category.isReadOnly) {
 		showActions.push("document-edit-metadata");
 		showActions.push("document-edit-properties");
@@ -73,7 +73,14 @@ function setCheckedActions(document, category) {
 		showActions.push("document-copy-to");
 	}
 
-	if (hasPermission(document.nodeRef, PERM_CONTENT_DELETE) && category != null && !category.isReadOnly) {
+	var nodeCreator = null;
+	if (nodeDetails != null && nodeDetails.item != null && nodeDetails.item.node != null) {
+		nodeCreator = nodeDetails.item.node.properties["cm:modifier"];
+	}
+
+	if ((hasPermission(document.nodeRef, PERM_CONTENT_DELETE)
+		|| (hasPermission(document.nodeRef, PERM_OWN_CONTENT_DELETE) && nodeCreator!= null && nodeCreator.userName == user.name))
+		&& category != null && !category.isReadOnly) {
 		showActions.push("document-delete");
 	}
 }
