@@ -15,6 +15,8 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 	var $siteURL = Alfresco.util.siteURL;
 
 	LogicECM.DocumentAttachmentActions  = function (containerId) {
+		YAHOO.Bubbling.on("fileCopied", this.onFileCopiedComplete, this);
+
 		return LogicECM.DocumentAttachmentActions.superclass.constructor.call(this, containerId);
 	};
 
@@ -155,6 +157,19 @@ LogicECM.DocumentAttachmentActions = LogicECM.DocumentAttachmentActions || {};
 						}
 					}
 				});
+		},
+
+		onFileCopiedComplete: function(layer, args) {
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/attachments/api/logCopy?originalNodeRef=" + encodeURIComponent(this.options.nodeRef) + "&copiedNodeRef=" + encodeURIComponent(args[1].nodeRef);
+			var callback = {
+				success:function (oResponse) {},
+				failure:function (oResponse) {
+					YAHOO.log("Failed to process XHR transaction.", "info", "example");
+				},
+				argument:{
+				}
+			};
+			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 		}
 	}, true);
 })();

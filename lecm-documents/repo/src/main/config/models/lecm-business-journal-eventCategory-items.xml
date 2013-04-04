@@ -37,5 +37,9 @@
 		    <property name="cm:name">Комментирование вложения</property>
 		    <property name="lecm-busjournal:eventCategory-code">COMMENT_DOCUMENT_ATTACHMENT</property>
 	    </item>
+	    <item name="Копирование вложения">
+		    <property name="cm:name">Копирование вложения</property>
+		    <property name="lecm-busjournal:eventCategory-code">COPY_DOCUMENT_ATTACHMENT</property>
+	    </item>
     </items>
 </dictionary>

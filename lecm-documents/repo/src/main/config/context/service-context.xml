@@ -190,6 +190,7 @@
 	    <property name="versionService" ref="versionService"/>
 	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 	    <property name="stateMachineBean" ref="stateMachineHelper"/>
+	    <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

@@ -122,4 +122,17 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		}
 		return result;
 	}
+
+	public String copyAttachmentLog(String originalNodeRef, String copiedNodeRef) {
+		ParameterCheck.mandatory("originalNodeRef", originalNodeRef);
+		ParameterCheck.mandatory("copiedNodeRef", copiedNodeRef);
+
+		NodeRef originalRef = new NodeRef(originalNodeRef);
+		NodeRef copiedRef = new NodeRef(copiedNodeRef);
+		if (this.nodeService.exists(originalRef) && this.documentAttachmentsService.isDocumentAttachment(originalRef) && this.nodeService.exists(copiedRef)) {
+			this.documentAttachmentsService.copyAttachmentLog(originalRef, copiedRef);
+			return "Success log";
+		}
+		return "Failure: node not found";
+	}
 }

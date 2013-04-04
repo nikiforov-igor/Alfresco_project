@@ -59,6 +59,12 @@ public interface DocumentAttachmentsService {
 	 */
 	public boolean isReadonlyCategory(NodeRef nodeRef);
 
+	/**
+	 * Логгирование копирования вложений
+	 * @param nodeRef Ссылка на вложения
+	 */
+	public void copyAttachmentLog(NodeRef nodeRef, NodeRef parent);
+
 	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef);

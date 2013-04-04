@@ -16,6 +16,8 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -34,6 +36,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private VersionService versionService;
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
+	private BusinessJournalService businessJournalService;
     private final Object lock = new Object();
 
     public void setDictionaryService(DictionaryService dictionaryService) {
@@ -50,6 +53,10 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
 		this.stateMachineBean = stateMachineBean;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	public NodeRef getRootFolder(final NodeRef documentRef) {
@@ -235,5 +242,16 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			return this.stateMachineBean.isReadOnlyCategory(document, getCategoryName(nodeRef));
 		}
 		return result;
+	}
+
+	@Override
+	public void copyAttachmentLog(NodeRef originalNodeRef, NodeRef copiedNodeRef) {
+		NodeRef document = this.getDocumentByAttachment(originalNodeRef);
+		if (document != null) {
+			List<String> objects = new ArrayList<String>(2);
+			objects.add(originalNodeRef.toString());
+			objects.add(this.nodeService.getPrimaryParent(copiedNodeRef).getParentRef().toString());
+			businessJournalService.log(document, EventCategory.COPY_DOCUMENT_ATTACHMENT, "Сотрудник #initiator скопировал вложение #object1 в документе #mainobject в #object2", objects);
+		}
 	}
 }
