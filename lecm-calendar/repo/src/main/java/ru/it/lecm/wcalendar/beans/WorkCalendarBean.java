@@ -264,6 +264,27 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		return result;
 	}
+	
+	@Override
+	public Date getNextWorkingDate(Date start, int workingDaysNumber) {
+		int i = 0;
+
+		Date curDay = new Date(start.getTime());
+		while (i <= workingDaysNumber) {
+			if (i != workingDaysNumber) {
+				curDay = addDayToDate(curDay);
+			}
+
+			Boolean isWorkingDay = WCalendarService.isWorkingDay(curDay);
+			if (isWorkingDay == null) {
+				return null;
+			} else if (isWorkingDay) {
+				i++;
+			}
+			
+		}
+		return curDay;
+	}
 
 	public void setAbsenceService(IAbsence absenceService) {
 		this.absenceService = absenceService;

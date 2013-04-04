@@ -493,4 +493,24 @@ public class WorkCalendarJavascriptExtension extends BaseScopableProcessorExtens
 	private Date getPlannedJobFinish(final NodeRef nodeRef, final Date start, final int workingDaysRequired) {
 		return workCalendarService.getPlannedJobFinish(nodeRef, start, workingDaysRequired);
 	}
+
+	public Date getNextWorkingDate(final String startStr, final int workingDaysNumber) {
+		Date start;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getNextWorkingDate(start, workingDaysNumber);
+	}
+
+	public Date getNextWorkingDate(final Object jsStart, final int workingDaysNumber) {
+		Date start;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+
+		return workCalendarService.getNextWorkingDate(start, workingDaysNumber);
+	}
 }

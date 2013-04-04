@@ -88,4 +88,15 @@ public interface IWorkCalendar {
 	 * @return плановая дата выполнения задачи.
 	 */
 	Date getPlannedJobFinish(NodeRef node, Date start, int workingDaysRequired);
+
+	/**
+	 * Получить дату, отстоящую от заданной на указанное количество рабочих
+	 * дней. Учитывается только производственный календарь.
+	 *
+	 * @param start дата начала отсчета.
+	 * @param workingDaysNumber сколько рабочих дней должно пройти.
+	 * @return Дата, отстоящая от заданной на заданное количесво дней. Если
+	 * отсутствует производственный календарь, то null.
+	 */
+	Date getNextWorkingDate(Date start, int workingDaysNumber);
 }
