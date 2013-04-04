@@ -418,13 +418,16 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
 		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		if (canDelegateAll) {
-//			Boolean canTransferRights = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS);
 			NodeRef trusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			List<String> objects = new ArrayList<String> ();
-			objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
-			String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
-			businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
-			//а логгировать ли что были переданы права руководителя???
+			if (trusteeRef != null) {
+				List<String> objects = new ArrayList<String> ();
+				objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
+				String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
+				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
+				//а логгировать ли что были переданы права руководителя???
+			} else {
+				logger.warn ("There is no trustee");
+			}
 		} else {
 			String template  = "Сотруднику #object1 делегированы полномочия сотрудника #mainobject в рамках бизнес роли #object2";
 			//получить список активных доверенностей и для каждой залоггировать
@@ -433,10 +436,14 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				List<String> objects = new ArrayList<String> ();
 				NodeRef trusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				NodeRef businessRoleRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
-				objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
-				objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
-				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
-				//а логгировать ли что были переданы права руководителя?
+				if (trusteeRef != null) {
+					objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
+					objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
+					businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
+					//а логгировать ли что были переданы права руководителя?
+				} else {
+					logger.warn ("There is no trustee for business role {}", nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
+				}
 			}
 		}
 	}
@@ -478,13 +485,19 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			if (canTransferRights) {
 				bossAssistant = destEmployee;
 			}
-			sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
+			if (destEmployee != null) {
+				sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
+			} else {
+				logger.warn ("dest employee is null, no security groups changed");
+			}
 		}
 		if (canDelegateAll && canTransferAllRights) {
 			bossAssistant = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		}
 		if (bossAssistant != null) {
 			sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
+		} else {
+			logger.warn ("boss assistant is null, no security groups changed");
 		}
 	}
 
