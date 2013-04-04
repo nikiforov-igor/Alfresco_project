@@ -7,11 +7,18 @@ function main() {
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
+	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
 
 	var allActions = [];
 	model.readOnlyActions = [
-		"document-download",
-		"document-view-content"
+		{
+			id: "document-download",
+			onlyForOwn: false
+		},
+		{
+			id: "document-view-content",
+			onlyForOwn: false
+		}
 	];
 
 	if (model.hasViewListPerm) {
@@ -19,17 +26,37 @@ function main() {
 	}
 
 	if (model.hasViewAttachmentPerm) {
-		allActions.push("document-download");
-		allActions.push("document-view-content");
-		allActions.push("document-edit-properties");
+		allActions.push({
+			id: "document-download",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "document-view-content",
+			onlyForOwn: false
+		});
+		allActions.push({
+			id: "document-edit-properties",
+			onlyForOwn: false
+		});
 	}
 
 	if (hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER)) {
-		allActions.push("document-upload-new-version");
+		allActions.push({
+			id: "document-upload-new-version",
+			onlyForOwn: false
+		});
 	}
 
 	if (hasPermission(model.nodeRef, PERM_CONTENT_DELETE)) {
-		allActions.push("document-delete");
+		allActions.push({
+			id: "document-delete",
+			onlyForOwn: false
+		});
+	} else if (hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE)) {
+		allActions.push({
+			id: "document-delete",
+			onlyForOwn: true
+		});
 	}
 
 	model.allActions = allActions;

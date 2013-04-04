@@ -66,10 +66,14 @@
 			                        nodeRef: "${category.nodeRef}",
 				                    path: path,
 				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
+				                    hasDeleteOwnAttachmentPerm: ${hasDeleteOwnAttachmentPerm?string},
 				                    showActions: [
 					                    <#if showActions??>
 				                            <#list showActions as action>
-				                                "${action}"<#if action_has_next>,</#if>
+					                            {
+						                            id: "${action.id}",
+						                            onlyForOwn: ${action.onlyForOwn?string}
+					                            }<#if action_has_next>,</#if>
 				                            </#list>
 				                        </#if>
 				                    ],
