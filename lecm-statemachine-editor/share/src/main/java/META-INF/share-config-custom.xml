@@ -33,6 +33,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -42,6 +43,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -52,6 +54,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -61,6 +64,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -70,6 +74,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -80,6 +85,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -89,6 +95,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -98,6 +105,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -107,6 +115,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -116,6 +125,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -126,6 +136,7 @@
 							<control-param name="allowDelete">false</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 							<control-param name="ds">lecm/statemachine/editor/ds/dynamicroles</control-param>
 						</control>
 					</field>
@@ -162,6 +173,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -171,6 +183,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -181,6 +194,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -190,6 +204,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -199,6 +214,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -209,6 +225,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -218,6 +235,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -227,6 +245,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -236,6 +255,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -273,6 +293,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -282,6 +303,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -292,6 +314,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -301,6 +324,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -310,6 +334,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -320,6 +345,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -329,6 +355,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -338,6 +365,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -347,6 +375,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -356,6 +385,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 
@@ -366,6 +396,7 @@
 							<control-param name="allowDelete">false</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 							<control-param name="ds">lecm/statemachine/editor/ds/dynamicroles</control-param>
 						</control>
 					</field>
@@ -407,6 +438,7 @@
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
 							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -743,6 +775,7 @@
 							<control-param name="itemType">lecm-stmeditor:role</control-param>
 							<control-param name="allowCreate">true</control-param>
 							<control-param name="showActions">true</control-param>
+                            <control-param name="height">300</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>

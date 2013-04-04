@@ -30,6 +30,11 @@ LogicECM.module = LogicECM.module || {};
 	var Event = YAHOO.util.Event;
 
 	LogicECM.module.StatemachineEditor = function (htmlId) {
+
+        Bubbling.on("showPanel", function(layer, args) {
+            args[1].panel.cfg.setProperty("y", 50);
+        });
+
 		return LogicECM.module.StatemachineEditor.superclass.constructor.call(
 			this,
 			"LogicECM.module.StatemachineEditor",
@@ -382,7 +387,7 @@ LogicECM.module = LogicECM.module || {};
 
 			this._showSplash();
 
-			new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
+			var form = new Alfresco.module.SimpleDialog("statemachine-editor-edit-status").setOptions({
 				width:"60em",
 				templateUrl:templateUrl,
 				actionUrl:null,

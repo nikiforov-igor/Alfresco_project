@@ -25,7 +25,7 @@
 </#if>
 
 <div class="form-field with-grid" id="${controlId}">
-    <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
+    <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
         <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
     <@grid.datagrid containerId false>
         <script type="text/javascript">//<![CDATA[
