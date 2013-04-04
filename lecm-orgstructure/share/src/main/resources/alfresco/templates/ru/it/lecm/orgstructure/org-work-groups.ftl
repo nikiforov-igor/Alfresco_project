@@ -20,6 +20,7 @@
     <script type="text/javascript">//<![CDATA[
         var response = ${response};
         LogicECM.module.OrgStructure.WORK_GROUPS_SETTINGS = response;
+        LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
 
         function init() {
             var resizer = new LogicECM.module.Base.Resizer('WorkGroupsResizer');

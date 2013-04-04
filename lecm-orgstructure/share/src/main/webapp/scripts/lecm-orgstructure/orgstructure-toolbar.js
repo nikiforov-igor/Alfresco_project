@@ -199,7 +199,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                                     // Skip if this action specifies "no-access-check"
                                     if (widget.get("srcelement").className != "no-access-check") {
                                         // Default to disabled: must be enabled via permission
-                                        widget.set("disabled", false);
+                                        widget.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
                                         if (typeof widget.get("value") == "string") {
                                             // Comma-separation indicates "AND"
                                             widgetPermissions = widget.get("value").split(",");
@@ -324,7 +324,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             {
                                 var action = this.toolbarButtons[index];
                                 if (action != null) {
-                                    action.set("disabled", false);
+                                    action.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
                                 }
                             }
                         }

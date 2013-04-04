@@ -15,44 +15,46 @@ function drawForm(nodeRef){
                 itemKind:"node",
                 itemId:nodeRef,
                 formId:"${id}",
-                mode:"edit",
+                mode: LogicECM.module.OrgStructure.IS_ENGINEER ? "edit" : "view",
                 submitType:"json",
-                showSubmitButton:"true"
+                showSubmitButton:LogicECM.module.OrgStructure.IS_ENGINEER ? "true" : "false"
             },
             successCallback:{
                 fn:function(response){
                     var formEl = Dom.get("${id}-content");
                     formEl.innerHTML = response.serverResponse.responseText;
                     Dom.setStyle("${id}-footer", "opacity", "1");
-                    var forms = Dom.get('OrganizationMetadata-' + organizationRef + '-form');
-                    // Form definition
-                    var form = new Alfresco.forms.Form('OrganizationMetadata-' + organizationRef + '-form');
-                    form.ajaxSubmit = true;
-                    form.setAJAXSubmit(true,
-                            {
-                                successCallback: {
-                                    fn: function () {
-                                        Alfresco.util.PopupManager.displayMessage(
-                                                {
-                                                    text:"Данные обновлены"
-                                                });
+                    if (LogicECM.module.OrgStructure.IS_ENGINEER) {
+                        var forms = Dom.get('OrganizationMetadata-' + organizationRef + '-form');
+                        // Form definition
+                        var form = new Alfresco.forms.Form('OrganizationMetadata-' + organizationRef + '-form');
+                        form.ajaxSubmit = true;
+                        form.setAJAXSubmit(true,
+                                {
+                                    successCallback: {
+                                        fn: function () {
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text:"Данные обновлены"
+                                                    });
+                                        },
+                                        scope: this
                                     },
-                                    scope: this
-                                },
-                                failureCallback: {
-                                    fn: function () {
-                                        Alfresco.util.PopupManager.displayMessage(
-                                                {
-                                                    text:"Не удалось обновить данные"
-                                                });
-                                    },
-                                    scope: this
-                                }
-                            });
-                    form.setSubmitAsJSON(true);
-                    form.setShowSubmitStateDynamically(true, false);
-                    // Initialise the form
-                    form.init();
+                                    failureCallback: {
+                                        fn: function () {
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text:"Не удалось обновить данные"
+                                                    });
+                                        },
+                                        scope: this
+                                    }
+                                });
+                        form.setSubmitAsJSON(true);
+                        form.setShowSubmitStateDynamically(true, false);
+                        // Initialise the form
+                        form.init();
+                    }
                 }
             },
             failureMessage:"message.failure",
@@ -61,25 +63,6 @@ function drawForm(nodeRef){
 }
 
 function init() {
-    /*var  sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getOrganization";
-    var callback = {
-        success:function (oResponse) {
-            var oResults = eval("(" + oResponse.responseText + ")");
-            if (oResults != null) {
-                organizationRef = oResults.nodeRef;
-                drawForm(organizationRef);
-            }
-        },
-        failure:function (oResponse) {
-            Alfresco.util.PopupManager.displayMessage(
-                    {
-                        text:"Не удалось загрузить данные об Организации. Попробуйте обновить страницу."
-                    });
-        },
-        argument:{
-        }
-    };
-    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);*/
     drawForm(LogicECM.module.OrgStructure.PROFILE_SETTINGS.nodeRef);
 }
 

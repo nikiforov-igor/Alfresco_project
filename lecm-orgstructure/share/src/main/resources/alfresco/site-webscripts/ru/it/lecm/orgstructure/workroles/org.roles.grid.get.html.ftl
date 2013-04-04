@@ -13,6 +13,7 @@
 						{
 							usePagination:true,
 							showExtendSearchBlock:true,
+                            showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
 							actions: [
 								{
 									type:"datagrid-action-link-${bubblingLabel!"dictionary"}",

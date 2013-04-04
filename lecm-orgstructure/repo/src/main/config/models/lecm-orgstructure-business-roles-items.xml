@@ -85,5 +85,11 @@
 			<property name="lecm-orgstr:business-role-description">Это тестовая бизнес роль за номером 10</property>
 			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 		</item>
+        <item name="Технолог Оргструктуры">
+            <property name="cm:name">Технолог Оргструктуры</property>
+            <property name="lecm-orgstr:business-role-identifier">BR_ORGSTRUCTURE_ENGINEER</property>
+            <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+            <property name="lecm-orgstr:business-role-description">Бизнес роль технолога для управления Оргструктурой</property>
+        </item>
 	</items>
 </dictionary>

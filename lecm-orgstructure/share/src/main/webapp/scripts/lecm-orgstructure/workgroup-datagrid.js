@@ -248,11 +248,12 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                     },
                     bubblingLabel: "workForce"
                 });
-            // Активируем кнопку "Новый элемент" в правом TollBar-е
-            YAHOO.Bubbling.fire("initActiveButton", {
-                bubblingLabel: "workForce",
-                disable: false});
-            //}
+            if (LogicECM.module.OrgStructure.IS_ENGINEER) {
+                // Активируем кнопку "Новый элемент" в правом TollBar-е
+                YAHOO.Bubbling.fire("initActiveButton", {
+                    bubblingLabel: "workForce",
+                    disable: false});
+            }
         }
     }, true);
 })();

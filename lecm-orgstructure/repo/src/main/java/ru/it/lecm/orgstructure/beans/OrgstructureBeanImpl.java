@@ -993,19 +993,19 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
 	}
 
-	private NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier) {
-		NodeRef businessRolesDictionaryRef = dictionaryService.getDictionaryByName (BUSINESS_ROLES_DICTIONARY_NAME);
-		List<NodeRef> children = dictionaryService.getChildren (businessRolesDictionaryRef);
-		NodeRef brRef = null;
-		for (NodeRef child : children) {
-			Serializable id = nodeService.getProperty (child, PROP_BUSINESS_ROLE_IDENTIFIER);
-			if (businessRoleIdentifier.equals (id.toString ())) {
-				brRef = child;
-				break;
-			}
-		}
-		return brRef;
-	}
+    public NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier) {
+        NodeRef businessRolesDictionaryRef = dictionaryService.getDictionaryByName(BUSINESS_ROLES_DICTIONARY_NAME);
+        List<NodeRef> children = dictionaryService.getChildren(businessRolesDictionaryRef);
+        NodeRef brRef = null;
+        for (NodeRef child : children) {
+            Serializable id = nodeService.getProperty(child, PROP_BUSINESS_ROLE_IDENTIFIER);
+            if (businessRoleIdentifier.equals(id.toString())) {
+                brRef = child;
+                break;
+            }
+        }
+        return brRef;
+    }
 
 	@Override
 	public NodeRef getBusinessRoleDelegationEngineer () {

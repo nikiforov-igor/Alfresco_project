@@ -7,7 +7,7 @@
     <script type="text/javascript">//<![CDATA[
         var response = ${response};
         LogicECM.module.OrgStructure.STRUCTURE_SETTINGS = response;
-
+        LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
         function init() {
             new LogicECM.module.Base.Resizer('OrgstructureResizer');
         }

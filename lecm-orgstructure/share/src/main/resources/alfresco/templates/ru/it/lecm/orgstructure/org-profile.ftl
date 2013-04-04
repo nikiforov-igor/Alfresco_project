@@ -8,6 +8,7 @@
     <script type="text/javascript">//<![CDATA[
         var response = ${response};
         LogicECM.module.OrgStructure.PROFILE_SETTINGS = response;
+        LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
         //]]>
     </script>
 </@>

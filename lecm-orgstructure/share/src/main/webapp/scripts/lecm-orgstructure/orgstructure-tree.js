@@ -218,7 +218,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     });
             };
             if (node.data.type == "lecm-orgstr:organization-unit") {
-                YAHOO.Bubbling.fire("initActiveButton",{disable: false});
+                if (LogicECM.module.OrgStructure.IS_ENGINEER) {
+                    YAHOO.Bubbling.fire("initActiveButton",{disable: false});
+                }
             } else {
                 YAHOO.Bubbling.fire("initActiveButton",{disable: true});
             }

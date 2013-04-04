@@ -38,6 +38,7 @@ public interface OrgstructureBean {
 	 * идентификатор бизнес роли "Технолог календарей"
 	 */
 	String BUSINESS_ROLE_CALENDAR_ENGINEER_ID = "BR_CALENDAR_ENGINEER";
+    String BUSINESS_ROLE_ORGSTRUCTURE_ENGINEER_ID = "BR_ORGSTRUCTURE_ENGINEER";
 	QName ASSOC_ORG_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-boss-assoc");
 	QName ASSOC_ORG_LOGO = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-logo-assoc");
 	QName ASSOC_EMPLOYEE_LINK_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-employee-assoc");
@@ -538,4 +539,9 @@ public interface OrgstructureBean {
 
 	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
 
+    /**
+     *
+     * @return NodeRef бизнес-роли по идентификатору
+     */
+    NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier);
 }

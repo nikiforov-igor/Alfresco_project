@@ -63,6 +63,7 @@
                                 }
                             },
 							showCheckboxColumn: false,
+                            showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
 							attributeForShow:"lecm-orgstr:element-member-position-assoc"
 						}).setMessages(${messages});
                 datagrid.draw();
