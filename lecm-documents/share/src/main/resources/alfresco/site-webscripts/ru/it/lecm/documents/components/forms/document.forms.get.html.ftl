@@ -10,7 +10,7 @@
             <div class="form-field">
             <#escape x as x?js_string>
                 <div id="experts" class="yui-skin-sam">
-                    <a href="#" onclick="printNode('${nodeRef}')">${msg("form.simple")}</a>
+                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}')" class="text-cropped" title="${msg("form.simple")}">${msg("form.simple")}</a>
                 </div>
             </#escape>
                 <script type="text/javascript">

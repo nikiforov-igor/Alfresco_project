@@ -24,10 +24,10 @@
                         <#if item.attachments??>
                             <ul class="attachment">
                                 <#list item.attachments as attachment>
-                                    <li>
+                                    <li title="${attachment.name!""}" class="text-cropped">
 	                                    <#if hasViewAttachmentPerm>
-		                                    <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-		                                    ${attachment.name!""}
+		                                    <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}" class="text-cropped">
+		                                        ${attachment.name!""}
 		                                    </a>
 	                                    <#else>
 	                                        ${attachment.name!""}

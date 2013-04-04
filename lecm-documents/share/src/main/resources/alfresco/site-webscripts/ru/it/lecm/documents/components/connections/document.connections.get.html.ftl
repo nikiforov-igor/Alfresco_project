@@ -13,19 +13,20 @@
 
     <div id="${el}-formContainer">
         <div id="${el}-form" style="display:none"></div>
-        <ul id="${el}-connection-set" style="width:  100%">
+        <ul id="${el}-connection-set" class="document-connection-set document-right-set">
             <#if connections?? && connections.items??>
                 <hr>
                 <#list connections.items as item>
-                    <li>
+                    <li class="text-broken">
                     ${item.type.name}
                         <br/>
-                        <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}">
-                            <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
-                                    ${item.connectedDocument.presentString}
-                                <#else>
-                            ${item.connectedDocument.name}
-                            </#if>
+                        <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
+                            <#assign docname="${item.connectedDocument.presentString}"/>
+                        <#else>
+                            <#assign docname="${item.connectedDocument.name}"/>
+                        </#if>
+                        <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}" class="text-cropped" title="${docname}">
+                           ${docname}
                         </a>
                         <hr>
                     </li>

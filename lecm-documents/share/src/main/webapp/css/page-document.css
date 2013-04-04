@@ -78,25 +78,21 @@
 }
 
 .widget-button-grey {
-    margin: 5px 10px 5px 15px;
-    padding: 4px 4px 4px 11px;
+    margin: 5px 0;
+    padding: 3px 12px;
+    border: 1px solid transparent;
     cursor: pointer;
-
-    font-family: Arial;
-    font-size: 14px;
+    font: 14px Arial;
     font-style: normal;
     text-decoration: none;
 }
 
 .widget-button-grey:hover {
     background-color: #ddd;
+    border: 1px solid #999;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border: #999 1px solid;
     border-radius: 5px;
-    margin: 5px 10px 5px 15px;
-    padding: 3px 3px 3px 10px;
-    cursor: pointer;
 }
 
 .dndDocListHighlight
@@ -240,3 +236,8 @@
 }
 
 /***********************************************/
+
+/* Document right part */
+.doc-right-part {
+    word-wrap: break-word;
+}

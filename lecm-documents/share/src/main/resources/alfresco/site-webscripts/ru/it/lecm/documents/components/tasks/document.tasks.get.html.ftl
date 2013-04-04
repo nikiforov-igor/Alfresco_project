@@ -33,7 +33,7 @@
                     <div class="workflow-date">${task.startDate}</div>
                     <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
                     <div style="clear:both;"></div>
-                    <div class="workflow-task-main-text">
+                    <div class="workflow-task-main-text text-broken">
                         <span class="workflow-task-title">
                             <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
                         </span>&nbsp;${description}

@@ -19,13 +19,13 @@
 
     <div id="${el}-formContainer">
         <@view.viewForm formId="${el}-view-node-form"/>
-        <ul id="document-members-set" style="width: 100%">
+        <ul id="document-members-set" class="document-members-set document-right-set">
             <hr>
             <#if members?? && members.items??>
                 <#assign i=0/>
                 <#list members.items as item>
                     <#if i < skipCount>
-                        <li style="padding-bottom: 0.4em;">
+                        <li style="padding-bottom: 0.4em;" class="text-broken">
                         ${view.showViewLink(item.employeeName, item.employeeRef, 'logicecm.employee.view')}<br/>
                         ${item.employeePosition}<br/>
                             <#assign i = i+1/>

@@ -41,17 +41,17 @@
                 <@region id="comments" scope="template"/>
             </div>
             <div id="custom-region" class="yui-u first" style="display:none"></div>
-            <div class="yui-u bordered-panel">
+            <div class="yui-u bordered-panel doc-right-part">
                 <@region id="document-actions" scope="template"/>
-            <@region id="document-metadata" scope="template"/>
-            <@region id="document-attachments" scope="template"/>
-            <@region id="document-tasks" scope="template"/>
-            <@region id="document-workflows" scope="template"/>
-            <@region id="document-connections" scope="template"/>
-            <@region id="document-members" scope="template"/>
-            <@region id="document-tags" scope="template"/>
-            <@region id="document-history" scope="template"/>
-            <@region id="document-forms" scope="template"/>
+                <@region id="document-metadata" scope="template"/>
+                <@region id="document-attachments" scope="template"/>
+                <@region id="document-tasks" scope="template"/>
+                <@region id="document-workflows" scope="template"/>
+                <@region id="document-connections" scope="template"/>
+                <@region id="document-members" scope="template"/>
+                <@region id="document-tags" scope="template"/>
+                <@region id="document-history" scope="template"/>
+                <@region id="document-forms" scope="template"/>
             </div>
         </div>
     </#if>

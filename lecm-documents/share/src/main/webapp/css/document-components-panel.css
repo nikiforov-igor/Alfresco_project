@@ -1,27 +1,41 @@
-.document-components-panel
-{
+.document-components-panel {
     background-color: #F2F2F2;
     border-bottom: 1px solid #000000;
-    padding: 0.8em 0.8em 0.8em 0.8em;
+    padding: 0.8em;
 }
-
-.document-components-panel .panel-body
-{
+.document-components-panel > h2,
+.document-forms-panel > h2 {
+    padding-left: 1em;
+}
+.document-components-panel .panel-body {
     padding: 1em 1em 0;
 }
-
-.document-components-panel .form-container .form-fields
-{
+.document-components-panel .form-container .form-fields,
+.document-forms-panel .form-field {
     border-bottom: none;
     padding: 1em 1em 0;
 }
-
 .widget-bordered-panel {
     background-color: #F2F2F2;
-    padding: 0 0.8em 0 0.8em;
+    padding: 0 0.8em;
 }
-
 .document-forms-panel {
     background-color: #F2F2F2;
-    padding: 0.8em 0.8em 0.8em 0.8em;
+    padding: 0.8em;
+}
+.document-components-panel ul.document-right-set {
+    width: 100%;
+    padding: 0 0 0 1em;
+}
+.doc-right-part .text-broken,
+.doc-right-part div.viewmode-field span.viewmode-label,
+.doc-right-part div.viewmode-field span.viewmode-value {
+    word-wrap: break-word;
+}
+.doc-right-part .text-cropped {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }

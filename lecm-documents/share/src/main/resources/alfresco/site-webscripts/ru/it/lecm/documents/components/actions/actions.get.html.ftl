@@ -19,7 +19,7 @@
        </script>
        <#if result.states?? >
             <#list result.states as state>
-                <div class="widget-button-grey" id="statemachine-state-action-${state_index}">${state.label}</div>
+                <div class="widget-button-grey text-cropped" id="statemachine-state-action-${state_index}" title="${state.label}">${state.label}</div>
                 <script type="text/javascript">//<![CDATA[
                 (function () {
                     YAHOO.util.Event.onDOMReady(function (){
@@ -34,7 +34,7 @@
        </#if>
        <#if result.workflows??>
         <#list result.workflows as workflow>
-            <div class="widget-button-grey" id="statemachine-workflow-action-${workflow_index}">${workflow.label}</div>
+            <div class="widget-button-grey text-cropped" id="statemachine-workflow-action-${workflow_index}" title="${workflow.label}">${workflow.label}</div>
             <script type="text/javascript">//<![CDATA[
             (function () {
                 YAHOO.util.Event.onDOMReady(function (){
