@@ -28,7 +28,7 @@ if (statemachineId != null && statemachineId != '') {
 		machine.save();
 
 		var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
-		var startStatus = statuses.createNode("Start", "lecm-stmeditor:taskStatus", "cm:contains");
+		var startStatus = statuses.createNode("Черновик", "lecm-stmeditor:taskStatus", "cm:contains");
 		startStatus.properties["lecm-stmeditor:forDraft"] = true;
 		startStatus.properties["lecm-stmeditor:startStatus"] = true;
 		startStatus.save();
