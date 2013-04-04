@@ -26,15 +26,17 @@
         <header>
             <app-items>
                  <!--defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"-->
-                <item type="link" id="orgstructure">/org-employees</item>
-                <item type="link" id="delegation">/delegation-list</item>
-                <item type="link" id="dictionary">/allDictionary</item>
-                <item type="js" id="messenger">LogicECM.module.LecmIM.Messenger</item>
-                <item type="link" id="wcalendar">/wcalendar-calendar</item>
+                <item type="link" id="contracts">/contract-documents</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
+                <item type="js" id="messenger">LogicECM.module.LecmIM.Messenger</item>
                 <item type="js" id="sites" icon="lecm-sites.png">Alfresco.module.Sites</item>
-
                 <item type="container" id="more" icon="lecm-more.png">
+                    <container-group id="lecms" label="LogicECM" >
+                        <item type="link" id="dictionary">/allDictionary</item>
+                        <item type="link" id="orgstructure">/org-employees</item>
+                        <item type="link" id="wcalendar">/wcalendar-calendar</item>
+                        <item type="link" id="delegation">/delegation-list</item>
+                    </container-group>
                      <container-group id="alfrescos" label="Standard">
                          <item type="link" id="my-dashboard">{userdashboardpage}</item>
                          <item type="link" id="people">/people-finder</item>
@@ -46,7 +48,6 @@
                         <item type="link" id="my-content">/user/user-content</item>
                         <item type="link" id="my-sites">/user/user-sites</item>
                         <item type="link" id="my-profile">{userprofilepage}</item>
-                        <item type="link" id="contracts">/contract-documents</item>
                     </container-group>
                     <container-group id="tools" permission="admin">
                         <item type="link" id="application">/console/admin-console/application</item>
@@ -57,6 +58,7 @@
                         <item type="link" id="users">/console/admin-console/users</item>
                         <item type="link" id="subscriptions">/subscriptions-to-type</item>
                         <item type="link" id="business-journal">/business-journal</item>
+                        <item type="link" id="statemachine">/statemachine</item>
                         <item type="link" id="more" icon="">/console/admin-console/</item>
                     </container-group>
                 </item>
