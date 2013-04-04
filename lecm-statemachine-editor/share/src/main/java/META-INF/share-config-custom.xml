@@ -840,10 +840,12 @@
 					<show id="lecm-stmeditor:inputFromValue" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:inputToType" />
-					<field id="lecm-stmeditor:inputToValue" />
-					<field id="lecm-stmeditor:inputFromType" />
-					<field id="lecm-stmeditor:inputFromValue" />
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.process_receive" />
+					<field id="lecm-stmeditor:inputToType" set="receiver"/>
+					<field id="lecm-stmeditor:inputToValue" set="receiver"/>
+					<field id="lecm-stmeditor:inputFromType" set="sender"/>
+					<field id="lecm-stmeditor:inputFromValue" set="sender"/>
 				</appearance>
 			</form>
 		</forms>
@@ -858,12 +860,14 @@
 					<show id="lecm-stmeditor:inputFromType" force="true"/>
 					<show id="lecm-stmeditor:inputFromValue" force="true"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:inputToType" />
-					<field id="lecm-stmeditor:inputToValue" />
-					<field id="lecm-stmeditor:inputFromType" />
-					<field id="lecm-stmeditor:inputFromValue" />
-				</appearance>
+                <appearance>
+                    <set id="sender" appearance="bordered-panel" label-id="Передаваемое значение из машины состояний" />
+                    <set id="receiver" appearance="bordered-panel" label-id="Получаемое значение процессом" />
+                    <field id="lecm-stmeditor:inputToType" set="receiver"/>
+                    <field id="lecm-stmeditor:inputToValue" set="receiver"/>
+                    <field id="lecm-stmeditor:inputFromType" set="sender"/>
+                    <field id="lecm-stmeditor:inputFromValue" set="sender"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -878,10 +882,12 @@
 					<show id="lecm-stmeditor:outputFromValue" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:outputToType" />
-					<field id="lecm-stmeditor:outputToValue" />
-					<field id="lecm-stmeditor:outputFromType" />
-					<field id="lecm-stmeditor:outputFromValue" />
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.process_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_receive" />
+                    <field id="lecm-stmeditor:outputToType" set="receiver" />
+					<field id="lecm-stmeditor:outputToValue" set="receiver" />
+					<field id="lecm-stmeditor:outputFromType" set="sender" />
+					<field id="lecm-stmeditor:outputFromValue" set="sender" />
 				</appearance>
 			</form>
 		</forms>
@@ -897,10 +903,12 @@
 					<show id="lecm-stmeditor:outputFromValue" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:outputToType" />
-					<field id="lecm-stmeditor:outputToValue" />
-					<field id="lecm-stmeditor:outputFromType" />
-					<field id="lecm-stmeditor:outputFromValue" />
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.process_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_receive" />
+                    <field id="lecm-stmeditor:outputToType" set="receiver" />
+                    <field id="lecm-stmeditor:outputToValue" set="receiver" />
+                    <field id="lecm-stmeditor:outputFromType" set="sender" />
+                    <field id="lecm-stmeditor:outputFromValue" set="sender" />
 				</appearance>
 			</form>
 		</forms>
