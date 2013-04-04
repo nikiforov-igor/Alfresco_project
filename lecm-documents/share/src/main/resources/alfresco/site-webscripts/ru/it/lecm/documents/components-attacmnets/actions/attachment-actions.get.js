@@ -75,7 +75,7 @@ function setCheckedActions(document, category, nodeDetails) {
 
 	var nodeCreator = null;
 	if (nodeDetails != null && nodeDetails.item != null && nodeDetails.item.node != null) {
-		nodeCreator = nodeDetails.item.node.properties["cm:modifier"];
+		nodeCreator = nodeDetails.item.node.properties["cm:creator"];
 	}
 
 	if ((hasPermission(document.nodeRef, PERM_CONTENT_DELETE)

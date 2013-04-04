@@ -10,7 +10,6 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionServicePolicies;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
@@ -54,7 +53,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     private DocumentAttachmentsService documentAttachmentsService;
     private BusinessJournalService businessJournalService;
     private OrgstructureBean orgstructureService;
-    private DictionaryService dictionaryService;
     private SubstitudeBean substituteService;
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
@@ -75,10 +73,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
-    }
-
-    public void setDictionaryService(DictionaryService dictionaryService) {
-        this.dictionaryService = dictionaryService;
     }
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
@@ -114,7 +108,9 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
 		if (document != null) {
-			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
+			if (!assocQName.getLocalName().contains("(Рабочая копия)")) {
+				this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
+			}
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
 		}
 	}
@@ -123,20 +119,20 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
         if (document != null) {
-            // добавляем пользователя добавившего вложение как участника
-            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
-                        }
-                    });
-                }
-            });
 	        if (!childAssocRef.getQName().getLocalName().contains("(Рабочая копия)")) {
+		        // добавляем пользователя добавившего вложение как участника
+		        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+			        @Override
+			        public NodeRef doWork() throws Exception {
+				        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+				        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					        @Override
+					        public NodeRef execute() throws Throwable {
+						        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+					        }
+				        });
+			        }
+		        });
 
 		        List<String> objects = new ArrayList<String>(1);
 		        objects.add(childAssocRef.getChildRef().toString());
@@ -148,7 +144,7 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
-        if (document != null) {
+        if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 	        boolean hasDeletePermission =  this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
 	        if (!hasDeletePermission) {
 		        hasDeletePermission = isOwnNode(nodeRef) && this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_OWN_CONTENT_DELETE, document);
@@ -160,24 +156,23 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		        throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + nodeRef);
 	        }
 
-            // добавляем пользователя удалившего вложения как участника
-            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
-                        }
-                    });
-                }
-            });
-	        if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
-				List<String> objects = new ArrayList<String>(1);
-				objects.add(nodeRef.toString());
-				businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "Сотрудник #initiator удалил вложение #object1 в документе #mainobject", objects);
-	        }
+	        // добавляем пользователя удалившего вложения как участника
+	        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+		        @Override
+		        public NodeRef doWork() throws Exception {
+			        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+			        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				        @Override
+				        public NodeRef execute() throws Throwable {
+					        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+				        }
+			        });
+		        }
+	        });
+
+			List<String> objects = new ArrayList<String>(1);
+			objects.add(nodeRef.toString());
+			businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "Сотрудник #initiator удалил вложение #object1 в документе #mainobject", objects);
         }
     }
 

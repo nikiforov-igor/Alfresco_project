@@ -303,9 +303,6 @@
         <property name="orgstructureService">
             <ref bean="serviceOrgstructure"/>
         </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
 	    <property name="documentAttachmentsService">
 		    <ref bean="documentAttachmentsService"/>
 	    </property>
