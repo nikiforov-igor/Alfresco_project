@@ -395,6 +395,37 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
+	public boolean hasReadAccess(final NodeRef nodeRef) {
+		return hasReadAccess(nodeRef,  authService.getCurrentUserName());
+	}
+
+	public boolean hasReadAccess(final NodeRef nodeRef, final String userLogin) {
+		boolean result = false;
+
+		try {
+			final RunAsWork<Boolean> runner = new RunAsWork<Boolean>() {
+				@Override
+				public Boolean doWork() throws Exception {
+					AccessStatus status = permissionService.hasReadPermission(nodeRef);
+					return status == AccessStatus.ALLOWED;
+				}
+			};
+
+			if (userLogin == null) {
+				result = runner.doWork();
+			} else {
+				result = AuthenticationUtil.runAs( runner, userLogin);
+			}
+
+		} catch(Throwable ex) {
+			result = false;
+			logger.error("Error check read permission for node " + nodeRef, ex);
+		}
+
+		return result;
+	}
+
+	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef,
 			String employeeId, LecmPermissionGroup permissionGroup)
 	{

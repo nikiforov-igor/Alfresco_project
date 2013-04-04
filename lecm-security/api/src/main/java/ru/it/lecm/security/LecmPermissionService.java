@@ -131,6 +131,12 @@ public interface LecmPermissionService {
 	 */
 	void grantAccess(LecmPermissionGroup permissionGroup, NodeRef node, String employeeId);
 
+	/**
+	 * Проверяет элемент на доступность
+	 * @param nodeRef Ссылка на элемент
+	 * @return true, если есть права на чтение элемента
+	 */
+	public boolean hasReadAccess(NodeRef nodeRef);
 
 	/**
 	 * Исключить Сотрудника из группы привилегий данного узла (документа, папки)

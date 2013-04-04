@@ -230,7 +230,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		 	for (AssociationRef assocRef: connections) {
 				 NodeRef connectionRef = assocRef.getSourceRef();
 
-				 if (!isArchive(connectionRef)) {
+				 if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					 results.add(connectionRef);
 				 }
 			 }

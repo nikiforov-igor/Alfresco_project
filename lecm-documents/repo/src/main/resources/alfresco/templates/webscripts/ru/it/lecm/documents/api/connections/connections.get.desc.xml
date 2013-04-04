@@ -2,7 +2,7 @@
 	<shortname>Get Connections</shortname>
 	<description>Get Connections</description>
 	<url>/lecm/document/connections/api/records?documentNodeRef={documentNodeRef}&amp;count={count}</url>
-	<authentication>user</authentication>
+	<authentication runas="admin">none</authentication>
 	<format default="json"/>
 	<transaction>required</transaction>
 </webscript>
