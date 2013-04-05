@@ -286,6 +286,20 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="documentCommentsService" class="ru.it.lecm.documents.beans.DocumentCommentsServiceImpl"
+          depends-on="nodeService,authenticationService">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="authService" ref="authenticationService"/>
+    </bean>
+
+    <bean id="documentCommentScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentCommentsWebScriptBean"
+          depends-on="documentCommentsService">
+        <property name="extensionName">
+            <value>documentScript</value>
+        </property>
+        <property name="documentCommentsService" ref="documentCommentsService"/>
+    </bean>
+
     <bean id="documentAttachmentsPolicy" parent="baseBean" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
           init-method="init">
         <property name="policyComponent">

@@ -49,7 +49,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected NodeService nodeService;
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
-	private AuthenticationService authService;
+	protected AuthenticationService authService;
 
 	private final Object lock = new Object();
 
@@ -328,5 +328,15 @@ public abstract class BaseBean implements InitializingBean {
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
+    }
+
+    /**
+     * Проверка является ли текущий пользователь автором узла
+     * @param nodeRef
+     * @return
+     */
+    public boolean isAuthorNode (NodeRef nodeRef) {
+        String person = authService.getCurrentUserName();
+        return person.equals(nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR)) ? true : false;
     }
 }

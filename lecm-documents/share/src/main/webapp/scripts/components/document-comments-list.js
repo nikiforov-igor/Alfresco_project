@@ -536,32 +536,59 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onEditCommentClick: function CommentsList_onEditCommentClick(recordId)
             {
-                // Hide previously opened form and restore row
-                this.restoreEditForm();
-
                 var comment =  this.widgets.alfrescoDataTable.getData(recordId),
-                    rowId = this.id + '-' + recordId,
+                    rowId =this.id + '-' + recordId,
                     formContainer = Dom.get(rowId + '-form-container'),
                     commentEl = Dom.get(rowId + '-comment-container');
 
-                this.currentEditedRowId = rowId;
+                //проверка есть ли у текущего пользователя права на удаление
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
+                        dataObj: {
+                            nodeRef: comment.nodeRef
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                var permission = eval(response.json.permission);
+                                var me = response.config.scope;
+                                if (permission) {
+                                    // Hide previously opened form and restore row
+                                    me.restoreEditForm();
 
-                // Hide the row and display the empty form container
-                Dom.addClass(formContainer.parentNode, "theme-bg-color-4");
-                Dom.addClass(commentEl, "hidden");
-                Dom.removeClass(formContainer, "hidden");
+                                    me.currentEditedRowId = rowId;
 
-                // Create form markup inside the absolute positioned div
-                this.widgets.editFormWrapper.innerHTML = this.formMarkup(rowId, comment.author.username, comment.content);
+                                    // Hide the row and display the empty form container
+                                    Dom.addClass(formContainer.parentNode, "theme-bg-color-4");
+                                    Dom.addClass(commentEl, "hidden");
+                                    Dom.removeClass(formContainer, "hidden");
 
-                // Initialize form with editor
-                this.setupCommentForm(rowId, comment.nodeRef, true);
+                                    // Create form markup inside the absolute positioned div
+                                    me.widgets.editFormWrapper.innerHTML = me.formMarkup(rowId, comment.author.username, comment.content);
 
-                // make sure the new form is placed above the empty form placeholder in the datatable
-                this.synchronizeElements(this.widgets.editFormWrapper, formContainer);
+                                    // Initialize form with editor
+                                    me.setupCommentForm(rowId, comment.nodeRef, true);
 
-                // Display the form
-                Dom.removeClass(this.widgets.editFormWrapper, "hidden");
+                                    // make sure the new form is placed above the empty form placeholder in the datatable
+                                    me.synchronizeElements(me.widgets.editFormWrapper, formContainer);
+
+                                    // Display the form
+                                    Dom.removeClass(me.widgets.editFormWrapper, "hidden");
+                                } else {
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: me.msg("message.permission")
+                                        });
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: this.msg("message.connection"),
+                        scope: this
+
+                    });
+
+
             },
 
             /**
@@ -605,13 +632,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                     //проверка есть ли у текущего пользователя права на удаление
                                     Alfresco.util.Ajax.request(
                                         {
-                                            url: Alfresco.constants.PROXY_URI + "/lecm/security/api/getPermission?nodeRef=" + comment.nodeRef + "&permission=_lecmPerm_CommentDelete",
+                                            url: Alfresco.constants.PROXY_URI + "/lecm/document/api/isChangeComment?nodeRef=" + comment.nodeRef,
                                             dataObj: {
                                                 nodeRef: comment.nodeRef
                                             },
                                             successCallback: {
                                                 fn:function(response){
-                                                    var permission = eval(response.serverResponse.responseText);
+                                                    var permission = eval(response.json.permission);
                                                     this.destroy();
                                                     if (permission) {
                                                         me.deleteComment.call(me, comment);
