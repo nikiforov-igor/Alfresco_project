@@ -295,7 +295,7 @@
     <bean id="documentCommentScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentCommentsWebScriptBean"
           depends-on="documentCommentsService">
         <property name="extensionName">
-            <value>documentScript</value>
+            <value>documentComment</value>
         </property>
         <property name="documentCommentsService" ref="documentCommentsService"/>
     </bean>
