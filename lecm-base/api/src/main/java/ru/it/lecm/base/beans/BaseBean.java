@@ -337,6 +337,6 @@ public abstract class BaseBean implements InitializingBean {
      */
     public boolean isAuthorNode (NodeRef nodeRef) {
         String person = authService.getCurrentUserName();
-        return person.equals(nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR)) ? true : false;
+        return person.equals(nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR));
     }
 }
