@@ -466,7 +466,9 @@ h4 .lighter
     overflow-y: auto;
 }
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
-.yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div {
+.yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div,
+.yui-skin-lecmTheme .datagrid div.paginator,
+.yui-skin-lecmTheme .yui-panel div.form-fields div.paginator {
     text-align: center;
 }
 /* historic-properties-viewer */
