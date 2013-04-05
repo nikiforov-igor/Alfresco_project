@@ -70,14 +70,14 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.member.add.title") ]
                     );
-                    var added = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc_added'];
+                    /*var added = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc_added'];
                     if (added != null) {
                         added.value = this.currentMembers.join(",")
                     }
                     var current = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc'];
                     if (current != null) {
                         current.value = this.currentMembers.join(",")
-                    }
+                    }*/
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",

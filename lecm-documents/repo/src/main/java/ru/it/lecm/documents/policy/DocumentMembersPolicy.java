@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -143,10 +144,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		// Обновляем имя ноды
-		String newName = documentMembersService.generateMemberNodeName(nodeAssocRef.getSourceRef());
-		nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
-
 		NodeRef docRef = null;
         try {
             NodeRef member = nodeAssocRef.getSourceRef();
@@ -160,9 +157,14 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
             LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
             lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
+            nodeService.setProperty(nodeAssocRef.getSourceRef(),DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }
+
+        // Обновляем имя ноды
+        String newName = documentMembersService.generateMemberNodeName(nodeAssocRef.getSourceRef());
+        nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
 	}
 
     @Override
@@ -223,8 +225,9 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-
-        documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
+        if (AuthenticationUtil.getSystemUserName().equals(userName)) {
+            documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
+        }
     }
 
 	public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -234,8 +237,9 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-
-        documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
+        if (AuthenticationUtil.getSystemUserName().equals(userName)) {
+            documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
+        }
     }
 
     private LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
