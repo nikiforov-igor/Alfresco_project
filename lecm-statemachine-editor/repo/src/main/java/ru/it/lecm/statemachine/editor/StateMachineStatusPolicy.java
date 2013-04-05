@@ -104,7 +104,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 		List<NodeRef> dynamicRoles = serviceDictionary.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
 		for (NodeRef dynamicRole : dynamicRoles) {
 			HashMap<QName, Serializable> roleProperties = new HashMap<QName, Serializable>();
-			roleProperties.put(StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE, "full");
+			roleProperties.put(StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE, "LECM_BASIC_PG_Reader");
 			NodeRef roleRef = nodeService.createNode(
 					dynamicRolesFolder,
 					ContentModel.ASSOC_CONTAINS,
