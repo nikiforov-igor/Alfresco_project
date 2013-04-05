@@ -661,7 +661,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     @Override
     public List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
 
-        List<NodeRef> result = getHistory(nodeRef, true);
+        List<NodeRef> result = getHistory(nodeRef, false);
         List<NodeRef> resultStatus = new ArrayList<NodeRef>();
 
         final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
