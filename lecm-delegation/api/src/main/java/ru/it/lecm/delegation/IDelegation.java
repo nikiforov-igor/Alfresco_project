@@ -225,31 +225,4 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор сотрудника или null если ничего не нашел.
 	 */
 	NodeRef getEmployee (final NodeRef nodeRef);
-
-	/**
-	 * определяет вхождение пользователя в бизнес-роль (с учетом делегирования!)
-	 * сначала проверяется вхождение без учета делегирования
-	 * затем с учетом делегирования
-	 * @param employeeRef NodeRef lecm-orgstr:employee ссылка на сотрудника
-	 * @param businessRoleRef NodeRef lecm-orgstr:business-role ссылка на бизнес роль
-	 * @return true если входит, false в противном случае
-	 */
-	boolean hasEmployeeBusinessRole (final NodeRef employeeRef, final NodeRef businessRoleRef);
-
-	/**
-	 * определяет, занимает ли сотрудник руководящую позицию (с учетом делегирования!)
-	 * сначала проверяет через оргштатку, затем с учетом делегирования
-	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
-	 * @return true если сотрудник занимает где-либо руководящую позицию.
-	 */
-	boolean isBoss(final NodeRef employeeRef);
-
-	/**
-	 * имеет ли текущий пользователь у себя в подчинении другого пользователя (с учетом делегирования!)
-	 * сначала проверяет через оргштатку, затем с учетом делегирования
-	 * @param bossRef employee который является боссом
-	 * @param subordinateRef employee который является подчиненным
-	 * @return true/false Если bossRef == subordinateRef то возвращается true
-	 */
-	boolean hasSubordinate (final NodeRef bossRef, final NodeRef subordinateRef);
 }

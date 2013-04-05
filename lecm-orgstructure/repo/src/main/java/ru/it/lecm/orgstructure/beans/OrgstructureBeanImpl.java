@@ -16,14 +16,15 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 /**
@@ -35,14 +36,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	final static protected Logger logger = LoggerFactory.getLogger(OrgstructureBeanImpl.class);
 
-	private AuthenticationService authService;
 	private PersonService personService;
 	private DictionaryBean dictionaryService;
 	private NodeRef organizationRootRef;
-
-	public void setAuthService(AuthenticationService authService) {
-		this.authService = authService;
-	}
 
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -70,7 +66,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 						organizationRef = nodeService.getChildByName(rootDir, ContentModel.ASSOC_CONTAINS, rootName);
 						if (organizationRef == null) {
 							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);;
+							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
 
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
 							properties.put(ContentModel.PROP_NAME, rootName);
@@ -993,6 +989,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		findAndRemoveBusinessRoleAssoc (businesssRoleRef, employeeRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
 	}
 
+	@Override
     public NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier) {
         NodeRef businessRolesDictionaryRef = dictionaryService.getDictionaryByName(BUSINESS_ROLES_DICTIONARY_NAME);
         List<NodeRef> children = dictionaryService.getChildren(businessRolesDictionaryRef);
@@ -1151,8 +1148,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return employees.contains(employeeRef);
 	}
 
-	@Override
-	public boolean isBoss(final NodeRef employeeRef) {
+	private boolean isBossInternal(final NodeRef employeeRef) {
 		boolean isBoss = false;
 		if (nodeService.exists(employeeRef) && isEmployee(employeeRef)) {
 			// получаем основную должностную позицию
@@ -1178,8 +1174,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return employees.contains (employeeRef);
 	}
 
-	@Override
-	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
+	private boolean hasSubordinateInternal (NodeRef bossRef, NodeRef subordinateRef) {
 		boolean hasSubordinate = bossRef.equals(subordinateRef);
 		if (!hasSubordinate) {
 			List<NodeRef> subordinates = getBossSubordinate (bossRef);
@@ -1193,8 +1188,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isEmployeeHasBusinessRole(getCurrentEmployee(), businessRoleIdentifier);
 	}
 
-	@Override
-	public boolean isEmployeeHasBusinessRole(NodeRef employeeRef, final String businessRoleIdentifier) {
+	private boolean isEmployeeHasBusinessRoleInternal(NodeRef employeeRef, final String businessRoleIdentifier) {
 		if (employeeRef != null) {
 			NodeRef businessRoleByIdentifier = getBusinessRoleByIdentifier(businessRoleIdentifier);
 			if (businessRoleByIdentifier != null) {
@@ -1272,5 +1266,156 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			units.addAll(getHigherUnits(parent));
 		}
 		return units;
+	}
+
+	/**
+	 * проверяет что доверенность является активной
+	 * доверенность активна если у нее и у параметров делегирования одновременно установлен active=true
+	 * @param procuracyRef ссылка на доверенность
+	 */
+	private boolean isProcuracyActive (final NodeRef procuracyRef) {
+		boolean isProcuracy = isProperType (procuracyRef, IDelegation.TYPE_PROCURACY);
+		boolean isActive = false;
+		if (isProcuracy) {
+			boolean isProcuracyActive = Boolean.TRUE.equals (nodeService.getProperty (procuracyRef, IS_ACTIVE));
+			List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracyRef, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+			boolean isDelegationActive = false;
+			if ((parents != null) && (!parents.isEmpty ())) {
+				NodeRef delegationOpts = parents.get (0).getParentRef ();
+				isDelegationActive = Boolean.TRUE.equals (nodeService.getProperty (delegationOpts, IS_ACTIVE));
+			}
+			isActive = isProcuracyActive && isDelegationActive;
+		}
+		return isActive;
+	}
+
+	/**
+	 * получает список активных доверенностей для указанного сотрудника lecm-orgstr:employee
+	 * @param employeeRef ссылка на сотрудника
+	 * @return список активных NodeRef lecm-d8n:procuracy или пустой список
+	 */
+	private List<NodeRef> getActiveProcuracies (final NodeRef employeeRef) {
+		List<NodeRef> activeProcuracies = new ArrayList<NodeRef> ();
+		if (isEmployee (employeeRef)) {
+			List<NodeRef> procuracies = findNodesByAssociationRef (employeeRef, IDelegation.ASSOC_PROCURACY_TRUSTEE, IDelegation.TYPE_PROCURACY, BaseBean.ASSOCIATION_TYPE.SOURCE);
+			for (NodeRef procuracy : procuracies) {
+				if (isProcuracyActive (procuracy)) {
+					activeProcuracies.add (procuracy);
+				}
+			}
+		}
+		return activeProcuracies;
+	}
+
+	/**
+	 * проверяет могут ли доверенность или параметры делегирования передавать права руководителя
+	 * @param nodeRef ссылка на lecm-d8n:procuracy или lecm-d8n:delegation-opts
+	 * @return true ели передавать права руководителя можно
+	 */
+	private boolean canTransferRights (final NodeRef nodeRef) {
+		boolean canTransferRights = false;
+		if (isProperType (nodeRef, IDelegation.TYPE_PROCURACY)) {
+			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, IDelegation.PROP_PROCURACY_CAN_TRANSFER_RIGHTS));
+		} else if (isProperType (nodeRef, IDelegation.TYPE_DELEGATION_OPTS)) {
+			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, IDelegation.PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS));
+		}
+		return canTransferRights;
+	}
+
+	/**
+	 * проверяет делегировали ли сотруднику указанную бизнес роль
+	 * @param procuracyRef ссылка на доверенность
+	 * @param businessRoleRef ссылка на бизнес роль
+	 * @return true - бизнес роль делегировали, false вы противном случае
+	 */
+	private boolean hasTrustedBusinessRole (final NodeRef procuracyRef, final NodeRef businessRoleRef) {
+		boolean hasTrustedBusinessRole = false;
+		if (isProperType (procuracyRef, IDelegation.TYPE_PROCURACY)) {
+			NodeRef candidateRef = findNodeByAssociationRef (procuracyRef, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			if (candidateRef != null) {
+				hasTrustedBusinessRole = candidateRef.equals (businessRoleRef);
+			}
+		}
+		return hasTrustedBusinessRole;
+	}
+
+	/**
+	 * определяет является ли сотрудник руководителем сам,
+	 * или же ему делегировали права руководителя
+	 * @param employeeRef
+	 * @return ссылку на настоящего босса, который делегировал
+	 */
+	private List<NodeRef> getBosses (final NodeRef employeeRef) {
+		List<NodeRef> bossRefs = new ArrayList<NodeRef> ();
+		if (isEmployee (employeeRef)) {
+			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
+			for (NodeRef procuracy : procuracies) {
+				boolean canProcuracyTransferRights = canTransferRights (procuracy);
+				List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracy, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+				boolean canDelegationTransferRights = (parents != null) && (!parents.isEmpty ()) && canTransferRights (parents.get (0).getParentRef ());
+				if ((canProcuracyTransferRights || canDelegationTransferRights) && (parents != null) && (!parents.isEmpty ())) {
+					bossRefs.add (parents.get (0).getParentRef ());
+				}
+			}
+		}
+		return bossRefs;
+	}
+
+	@Override
+	public boolean isBoss (final NodeRef nodeRef) {
+		return isBoss (nodeRef, false);
+	}
+
+	@Override
+	public boolean isBoss (final NodeRef nodeRef, final boolean withDelegation) {
+		boolean isBoss = isBossInternal (nodeRef);
+		if (withDelegation) {
+			isBoss = isBoss && !getBosses (nodeRef).isEmpty ();
+		}
+		return isBoss;
+	}
+
+	@Override
+	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef) {
+		return hasSubordinate (bossRef, subordinateRef, false);
+	}
+
+	@Override
+	public boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef, boolean withDelegation) {
+		boolean hasSubordinate  = hasSubordinateInternal (bossRef, subordinateRef);
+		if (withDelegation) {
+			boolean hasDelegatedSubordinate  = false;
+			List<NodeRef> bosses = getBosses (bossRef);
+			for (NodeRef boss : bosses) {
+				hasDelegatedSubordinate = hasSubordinateInternal (boss, subordinateRef);
+				if (hasDelegatedSubordinate) {
+					break;
+				}
+			}
+			hasSubordinate = hasSubordinate && hasDelegatedSubordinate;
+		}
+		return hasSubordinate;
+	}
+
+	@Override
+	public boolean isEmployeeHasBusinessRole (NodeRef employeeRef, String businessRoleIdentifier) {
+		return isEmployeeHasBusinessRole (employeeRef, businessRoleIdentifier, false);
+	}
+
+	@Override
+	public boolean isEmployeeHasBusinessRole (NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation) {
+		boolean isEmployeeHasBusinessRole = isEmployeeHasBusinessRoleInternal (employeeRef, businessRoleIdentifier);
+		if (withDelegation) {
+			boolean hasBusinessRole = false;
+			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
+			for (NodeRef procuracy : procuracies) {
+				if (hasTrustedBusinessRole (procuracy, new NodeRef (businessRoleIdentifier))) {
+					hasBusinessRole = true;
+					break;
+				}
+			}
+			isEmployeeHasBusinessRole = isEmployeeHasBusinessRole && hasBusinessRole;
+		}
+		return isEmployeeHasBusinessRole;
 	}
 }

@@ -106,6 +106,12 @@
             <artifactId>documents-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.delegation</groupId>
+			<artifactId>lecm-delegation-repo-api</artifactId>
+            <version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

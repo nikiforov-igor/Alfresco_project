@@ -14,7 +14,7 @@ import org.alfresco.service.namespace.QName;
  */
 public interface OrgstructureBean {
 
-	static final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
+	String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 	String TYPE_DIRECTORY_EMPLOYEES = "employees";
 	String TYPE_DIRECTORY_STRUCTURE = "structure";
 	String TYPE_DIRECTORY_PERSONAL_DATA = "personal-data-container";
@@ -352,7 +352,7 @@ public interface OrgstructureBean {
 	NodeRef getPersonForEmployee(NodeRef employee);
 
 	/**
-	 * Получить словарную должность для указанной Штатной Должностной Позиии. 
+	 * Получить словарную должность для указанной Штатной Должностной Позиии.
 	 * @param staffList должностная позиция
 	 * @return
 	 */
@@ -486,7 +486,7 @@ public interface OrgstructureBean {
 
 	/**
 	 * Проверка, занимает ли сотрудник руководящую позицию.
-	 *
+	 * РАБОТАЕТ БЕЗ УЧЕТА ДЕЛЕГИРОВАНИЯ!
 	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
 	 * @return true если сотрудник занимает где-либо руководящую позицию.
 	 */
@@ -509,6 +509,7 @@ public interface OrgstructureBean {
 
 	/**
 	 * имеет ли текущий пользователь у себя в подчинении другого пользователя
+	 * РАБОТАЕТ БЕЗ УЧЕТА ДЕЛЕГИРОВАНИЯ!
 	 * @param bossRef employee который является боссом
 	 * @param subordinateRef employee который является подчиненным
 	 * @return true/false Если bossRef == subordinateRef то возвращается true
@@ -524,6 +525,7 @@ public interface OrgstructureBean {
 
 	/**
 	 * имеет ли сотрудник указанную бизнес-роль
+	 * РАБОТАЕТ БЕЗ УЧЕТА ДЕЛЕГИРОВАНИЯ!
 	 * @param employeeRef ссылка на сотрудника
 	 * @param businessRoleIdentifier идентификатор бизнес-роли
 	 * @return true если сотрудник имеет роль
@@ -544,4 +546,33 @@ public interface OrgstructureBean {
      * @return NodeRef бизнес-роли по идентификатору
      */
     NodeRef getBusinessRoleByIdentifier(final String businessRoleIdentifier);
+
+	/**
+	 * Проверка, занимает ли сотрудник руководящую позицию,
+	 * с учетом или без учета настроек делегирования
+	 * @param nodeRef NodeRef сотрудника (lecm-orgstr:employee)
+	 * @param withDelegation true - учитывать параметры делегирования, false не учитывать
+	 * @return true если сотрудник занимает где-либо руководящую позицию.
+	 */
+	boolean isBoss(final NodeRef nodeRef, final boolean withDelegation);
+
+	/**
+	 * имеет ли текущий пользователь у себя в подчинении другого пользователя
+	 * с учетом или без учета настроек делегирования
+	 * @param bossRef employee который является боссом
+	 * @param subordinateRef employee который является подчиненным
+	 * @param withDelegation true - учитывать параметры делегирования, false не учитывать
+	 * @return true/false Если bossRef == subordinateRef то возвращается true
+	 */
+	boolean hasSubordinate (NodeRef bossRef, NodeRef subordinateRef, final boolean withDelegation);
+
+	/**
+	 * имеет ли сотрудник указанную бизнес-роль
+	 * с учетом или без учета настроек делегирования
+	 * @param employeeRef ссылка на сотрудника
+	 * @param businessRoleIdentifier идентификатор бизнес-роли
+	 * @param withDelegation true - учитывать параметры делегирования, false не учитывать
+	 * @return true если сотрудник имеет роль
+	 */
+	boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier, final boolean withDelegation);
 }
