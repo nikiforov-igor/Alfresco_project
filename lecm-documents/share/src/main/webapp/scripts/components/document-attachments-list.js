@@ -165,6 +165,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	            hasDeleteOwnAttachmentPerm: false,
 
+	            hasAddAttachmentPerm: false,
+
 	            showActions: [
 		            {
 			            id: "document-download",
@@ -1415,19 +1417,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         */
 	        _addDragAndDrop: function DL__addDragAndDrop()
 	        {
-		        // Make the entire DocumentList available for dropping files for uploading onto.
-		        try
-		        {
-			        // Add listeners to the HTML5 drag and drop events fired from the entire doc list
-			        var doclist = Dom.get(this.id);
-			        Event.addListener(doclist, "dragenter", this.onDocumentListDragEnter, this, true);
-			        Event.addListener(doclist, "dragover", this.onDocumentListDragOver, this, true);
-			        Event.addListener(doclist, "dragleave", this.onDocumentListDragLeave, this, true);
-			        Event.addListener(doclist, "drop", this.onDocumentListDrop, this, true);
-		        }
-		        catch(exception)
-		        {
-			        Alfresco.logger.error("_addDragAndDrop: The following exception occurred: ", exception);
+		        if (this.options.hasAddAttachmentPerm) {
+			        // Make the entire DocumentList available for dropping files for uploading onto.
+			        try
+			        {
+				        // Add listeners to the HTML5 drag and drop events fired from the entire doc list
+				        var doclist = Dom.get(this.id);
+				        Event.addListener(doclist, "dragenter", this.onDocumentListDragEnter, this, true);
+				        Event.addListener(doclist, "dragover", this.onDocumentListDragOver, this, true);
+				        Event.addListener(doclist, "dragleave", this.onDocumentListDragLeave, this, true);
+				        Event.addListener(doclist, "drop", this.onDocumentListDrop, this, true);
+			        }
+			        catch(exception)
+			        {
+				        Alfresco.logger.error("_addDragAndDrop: The following exception occurred: ", exception);
+			        }
 		        }
 	        },
 

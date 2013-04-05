@@ -66,6 +66,7 @@
 			                        nodeRef: "${category.nodeRef}",
 				                    path: path,
 				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
+				                    hasAddAttachmentPerm: ${(hasAddAttachmentPerm && !category.isReadOnly)?string},
 				                    hasDeleteOwnAttachmentPerm: ${hasDeleteOwnAttachmentPerm?string},
 				                    showActions: [
 					                    <#if showActions??>
