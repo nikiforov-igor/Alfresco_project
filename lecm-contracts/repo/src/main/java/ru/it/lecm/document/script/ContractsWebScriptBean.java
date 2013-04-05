@@ -2,7 +2,7 @@ package ru.it.lecm.document.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.document.beans.ContractsServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 
 /**
  * User: mshafeev
@@ -11,21 +11,19 @@ import ru.it.lecm.document.beans.ContractsServiceImpl;
  */
 public class ContractsWebScriptBean extends BaseWebScript {
 
-    private ContractsServiceImpl contractsService;
+    public static final String CONTRACTS = "Contracts";
+    private DocumentService service;
 
-    public void setService(ContractsServiceImpl service) {
-        this.contractsService = service;
+    public void setService(DocumentService service) {
+        this.service = service;
     }
 
     public ScriptNode getDraftRoot() {
-        return new ScriptNode(contractsService.getDraftRoot(), serviceRegistry, getScope());
+        return new ScriptNode(service.getDraftRoot(CONTRACTS), serviceRegistry, getScope());
     }
 
     public String getDraftPath() {
-        return contractsService.getDraftPath();
+        return service.getDraftPath(CONTRACTS);
     }
 
-    public String getDocumentPath() {
-        return contractsService.getDocumentPath();
-    }
 }

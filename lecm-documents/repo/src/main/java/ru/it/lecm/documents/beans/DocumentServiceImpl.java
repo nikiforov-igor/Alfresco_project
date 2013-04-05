@@ -175,8 +175,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     @Override
     public NodeRef createDocument(String type, Map<String, String> property) {
         // получение папки черновиков для документа
-        NodeRef person = repositoryHelper.getPerson();
-        NodeRef draftRef = repositoryStructureHelper.getDraftsRef(person);
+        NodeRef draftRef = getDraftRoot();
 
         QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
         QName assocQName = ContentModel.ASSOC_CONTAINS;
@@ -225,4 +224,43 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 		}
 		return false;
 	}
+
+    public String getDraftPath() {
+        NodeRef draftRef = getDraftRoot();
+        return nodeService.getPath(draftRef).toPrefixString(namespaceService);
+    }
+
+    @Override
+    public String getDraftPath(String rootName) {
+        NodeRef draftRef = getDraftRoot(rootName);
+        return  nodeService.getPath(draftRef).toPrefixString(namespaceService);
+    }
+
+    public NodeRef getDraftRoot() {
+        NodeRef person = repositoryHelper.getPerson();
+        return repositoryStructureHelper.getDraftsRef(person);
+    }
+
+    public NodeRef getDraftRoot(String rootName) {
+        NodeRef draftRef = getDraftRoot();
+        NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
+
+        if (nodeRef == null) {
+            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties.put(ContentModel.PROP_NAME, rootName);
+            ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+
+            return associationRef.getChildRef();
+        }
+        return nodeRef;
+    }
+
+    public String getDocumentsFolderPath() {
+        NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
+        return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
+    }
 }

@@ -103,7 +103,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode createDocument(String type, Scriptable properties) {
-        Map<String, String> property = add(Context.getCurrentContext().getElements(properties));
+        Map<String, String> property = takeProperties(Context.getCurrentContext().getElements(properties));
         NodeRef documentRef = documentService.createDocument(type, property);
 
         return new ScriptNode(documentRef, serviceRegistry, getScope());
@@ -111,7 +111,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public ScriptNode editDocument(String nodeRef, Scriptable properties) {
         NodeRef documentRef = new NodeRef(nodeRef);
-        Map<String, String> property = add(Context.getCurrentContext().getElements(properties));
+        Map<String, String> property = takeProperties(Context.getCurrentContext().getElements(properties));
         documentRef = documentService.editDocument(documentRef, property);
 
         if (logger.isInfoEnabled()) {
@@ -122,9 +122,32 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return new ScriptNode(documentRef, serviceRegistry, getScope());
     }
 
-    private Map<String, String> add(Object[] object){
+    public ScriptNode getDraftsRoot() {
+        return new ScriptNode(documentService.getDraftRoot(), serviceRegistry, getScope());
+    }
+
+    public String getDraftsPath(){
+        return documentService.getDraftPath();
+    }
+
+    public String getDocumentsPath(){
+        return documentService.getDocumentsFolderPath();
+    }
+
+    public ScriptNode getDraftRoot(String rootName) {
+        ParameterCheck.mandatory("rootName", rootName);
+        return new ScriptNode(documentService.getDraftRoot(rootName), serviceRegistry, getScope());
+    }
+
+    public ScriptNode getDraftPath(String rootName) {
+        ParameterCheck.mandatory("rootName", rootName);
+        NodeRef draftRef = documentService.getDraftRoot(rootName);
+        return new ScriptNode(draftRef, serviceRegistry, getScope());
+    }
+
+    private Map<String, String> takeProperties(Object[] object){
         Map<String, String> map =  new HashMap<String, String>();
-        String[] string = null;
+        String[] string;
         String value = "";
         for (Object obj : object) {
             string = obj.toString().split("=");

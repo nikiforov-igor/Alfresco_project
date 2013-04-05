@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>All contracts</shortname>
-    <description>Договора из папки черновики и из папки документов машины состояний</description>
-    <url>/lecm/contracts/datasource/all-contracts</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

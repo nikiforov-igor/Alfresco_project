@@ -69,4 +69,25 @@ public interface DocumentService {
     public Map<QName, Serializable> changeProperties (NodeRef documentRef, Map<QName, Serializable> properties);
 
 	public boolean isDocument(NodeRef ref);
+
+    /** Получение пути для папки черновиков
+     * @return xpath до директории с черновиками
+     */
+    String getDraftPath();
+
+    String getDraftPath(String rootName);
+    
+    /**
+     * Получение пути для папки Documents
+     * @return xpath до директории
+     */
+    String getDocumentsFolderPath();
+
+    /**
+     * Получение ноды с черновиками
+     * @return NodeRef
+     */
+    NodeRef getDraftRoot();
+
+    NodeRef getDraftRoot(String rootName);
 }

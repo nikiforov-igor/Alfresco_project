@@ -1,5 +1,5 @@
 <#macro dateFormat date>${date?string("dd MMM yyyy HH:mm:ss 'GMT'Z '('zzz')'")}</#macro>
-<#import "../../../../org/alfresco/slingshot/datalists/item.lib.ftl" as itemLib />
+<#import "item.lib.ftl" as itemLib />
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
     "versionable": ${data.versionable?string},

@@ -183,4 +183,22 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="model-type" condition="lecm-document:base">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:image" label=" "/>
+                    <field id="cm:name" label=" "/>
+                    <field id="lecm-document:present-string" label=" "/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
