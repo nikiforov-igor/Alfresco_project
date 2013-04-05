@@ -591,4 +591,152 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 		return employeeRef;
 	}
+
+	/**
+	 * проверяет что доверенность является активной
+	 * доверенность активна если у нее и у параметров делегирования одновременно установлен active=true
+	 * @param procuracyRef ссылка на доверенность
+	 */
+	private boolean isProcuracyActive (final NodeRef procuracyRef) {
+		boolean isProcuracy = isProcuracy (procuracyRef);
+		boolean isActive = false;
+		if (isProcuracy) {
+			boolean isProcuracyActive = Boolean.TRUE.equals (nodeService.getProperty (procuracyRef, IS_ACTIVE));
+			List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracyRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+			boolean isDelegationActive = (parents != null) && (!parents.isEmpty ()) && isDelegationActive (parents.get (0).getParentRef ());
+			isActive = isProcuracyActive && isDelegationActive;
+		}
+		return isActive;
+	}
+
+	/**
+	 * получает список активных доверенностей для указанного сотрудника lecm-orgstr:employee
+	 * @param employeeRef ссылка на сотрудника
+	 * @return список активных NodeRef lecm-d8n:procuracy или пустой список
+	 */
+	private List<NodeRef> getActiveProcuracies (final NodeRef employeeRef) {
+		List<NodeRef> activeProcuracies = new ArrayList<NodeRef> ();
+		if (orgstructureService.isEmployee (employeeRef)) {
+			List<NodeRef> procuracies = findNodesByAssociationRef (employeeRef, ASSOC_PROCURACY_TRUSTEE, TYPE_PROCURACY, BaseBean.ASSOCIATION_TYPE.SOURCE);
+			for (NodeRef procuracy : procuracies) {
+				if (isProcuracyActive (procuracy)) {
+					activeProcuracies.add (procuracy);
+				}
+			}
+		}
+		return activeProcuracies;
+	}
+
+	/**
+	 * проверяет могут ли доверенность или параметры делегирования передавать права руководителя
+	 * @param nodeRef ссылка на lecm-d8n:procuracy или lecm-d8n:delegation-opts
+	 * @return true ели передавать права руководителя можно
+	 */
+	private boolean canTransferRights (final NodeRef nodeRef) {
+		boolean canTransferRights = false;
+		if (isProcuracy (nodeRef)) {
+			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS));
+		} else if (isDelegationOpts (nodeRef)) {
+			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS));
+		}
+		return canTransferRights;
+	}
+
+	/**
+	 * проверяет делегировали ли сотруднику указанную бизнес роль
+	 * @param procuracyRef ссылка на доверенность
+	 * @param businessRoleRef ссылка на бизнес роль
+	 * @return true - бизнес роль делегировали, false вы противном случае
+	 */
+	private boolean hasTrustedBusinessRole (final NodeRef procuracyRef, final NodeRef businessRoleRef) {
+		boolean hasTrustedBusinessRole = false;
+		if (isProcuracy (procuracyRef)) {
+			NodeRef candidateRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			if (candidateRef != null) {
+				hasTrustedBusinessRole = candidateRef.equals (businessRoleRef);
+			}
+		}
+		return hasTrustedBusinessRole;
+	}
+
+	/**
+	 * проверяет фигурирует ли сотрудник в этой доверенности
+	 * @param procuracyRef ссылка на доверенность
+	 * @param employeeRef ссылка на сотрудника
+	 * @return true - да сотрудник фигурирует, false в противном случае
+	 */
+	private boolean hasTrustedEmployee (final NodeRef procuracyRef, final NodeRef employeeRef) {
+		boolean hasTrustedEmployee = false;
+		if (isProcuracy (procuracyRef)) {
+			NodeRef candidateRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+		}
+		return hasTrustedEmployee;
+	}
+
+	@Override
+	public boolean hasEmployeeBusinessRole (final NodeRef employeeRef, final NodeRef businessRoleRef) {
+		//сперва проверяем без учета делегирования, потом с учетом делегирования
+		boolean hasBusinessRole = false;
+		List<NodeRef> employees = orgstructureService.getEmployeesByBusinessRole (businessRoleRef);
+		hasBusinessRole = employees.contains (employeeRef);
+		if (!hasBusinessRole) {
+			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
+			for (NodeRef procuracy : procuracies) {
+				if (hasTrustedBusinessRole (procuracy, businessRoleRef)) {
+					hasBusinessRole = true;
+					break;
+				}
+			}
+		}
+		return hasBusinessRole;
+	}
+
+	/**
+	 * определяет является ли сотрудник руководителем сам,
+	 * или же ему делегировали права руководителя
+	 * @param employeeRef
+	 * @return ссылку на самого себя если сотрудник босс по оргштатке, ссылку на настоящего босса, который делегировал
+	 */
+	private List<NodeRef> getBosses (final NodeRef employeeRef) {
+		List<NodeRef> bossRefs = new ArrayList<NodeRef> ();
+		if (orgstructureService.isEmployee (employeeRef)) {
+			if (orgstructureService.isBoss (employeeRef)) {
+				bossRefs.add (employeeRef);
+			} else {
+				List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
+				NodeRef delegationOpts = null;
+				for (NodeRef procuracy : procuracies) {
+					boolean canProcuracyTransferRights = canTransferRights (procuracy);
+					List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracy, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
+					boolean canDelegationTransferRights = (parents != null) && (!parents.isEmpty ()) && canTransferRights (parents.get (0).getParentRef ());
+					if (canProcuracyTransferRights || canDelegationTransferRights) {
+						if ((parents != null) && (!parents.isEmpty ())) {
+							bossRefs.add (parents.get (0).getParentRef ());
+						}
+					}
+				}
+			}
+		}
+		return bossRefs;
+	}
+
+	@Override
+	public boolean isBoss (final NodeRef employeeRef) {
+		return !getBosses (employeeRef).isEmpty ();
+	}
+
+	@Override
+	public boolean hasSubordinate (final NodeRef bossRef, final NodeRef subordinateRef) {
+		boolean hasSubordinate = orgstructureService.hasSubordinate (bossRef, subordinateRef);
+		if (!hasSubordinate) {
+			List<NodeRef> bosses = getBosses (bossRef);
+			for (NodeRef boss : bosses) {
+				hasSubordinate = orgstructureService.hasSubordinate (boss, subordinateRef);
+				if (hasSubordinate) {
+					break;
+				}
+			}
+		}
+		return hasSubordinate;
+	}
 }
