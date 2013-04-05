@@ -235,16 +235,25 @@ public class OrgstructureSGNotifierBeanImpl
 		// Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (sgMe != null) {
+			/*
+			 * 
 			if (isBoss) {
-//				if (sgMe != null) // убрать SV подразедления из личной группы  
-//					sgNotifier.sgExclude( sgSV, sgMe);
-//				// прописать руководящую SG_DP -> SG_SV(OU)
-//				sgNotifier.sgInclude( sgDP, sgSV);
-				sgNotifier.sgInclude( sgMe, sgSV);
+				if (sgMe != null) // убрать SV подразедления из личной группы  
+					sgNotifier.sgExclude( sgSV, sgMe);
+				// прописать руководящую SG_DP -> SG_SV(OU)
+				sgNotifier.sgInclude( sgDP, sgSV);
 			} else { // снять отметку руководящей ...
-//				sgNotifier.sgExclude( sgDP, sgSV);
-//				if (sgMe != null) // прописать SV подразедления в личную группу
-//					sgNotifier.sgInclude( sgSV, sgMe);
+				sgNotifier.sgExclude( sgDP, sgSV);
+				if (sgMe != null) // прописать SV подразедления в личную группу
+					sgNotifier.sgInclude( sgSV, sgMe);
+			}
+			 */
+
+			// включение группы SV к любому работнику подразделения в любом случае надо cделать
+			sgNotifier.sgInclude( sgSV, sgMe);
+			if (isBoss) { // прописать руководящую: USER -> SG_SV(OU)
+				sgNotifier.sgInclude( sgMe, sgSV);
+			} else {// снять руководящую: SG_SV(OU) rem USER
 				sgNotifier.sgExclude( sgMe, sgSV);
 			}
 		}
@@ -312,21 +321,35 @@ public class OrgstructureSGNotifierBeanImpl
 		notifyChangeDPAndEmloyee(employee, nodeDP, isBoss, orgUnit);
 	}
 
-	/**
-	 * Убрать БР у Сотрудника
-	 * @param employee
-	 * @param brole
-	 */
 	@Override
-	public void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid) {
+	public void notifyEmploeeRemoveDP(NodeRef employee, NodeRef nodeDP) {
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
-					employee, nodeService.getType(employee), dpid, nodeService.getType(dpid)));
+					employee, nodeService.getType(employee), nodeDP, nodeService.getType(nodeDP)));
 		}
 
-		final Types.SGPrivateMeOfUser emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
-		final Types.SGDeputyPosition dpPos = PolicyUtils.makeDeputyPos(dpid, employee, nodeService, orgstructureService, logger);
-		this.sgNotifier.sgExclude( emplPos, dpPos);
+		// выход из DP-группы ...
+		final Types.SGPrivateMeOfUser sgMe = (employee != null) 
+				? PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger)
+				: null;
+		final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(nodeDP, employee, nodeService, orgstructureService, logger);
+		if (sgMe != null)
+		{
+			this.sgNotifier.sgExclude( sgMe, sgDP); 
+
+			// выписывание из SV групп ... 
+			// 1) убрать SVOU из личной
+			final NodeRef orgUnit = orgstructureService.getUnitByStaff(nodeDP);
+			if (orgUnit == null) {
+				logger.error( "Cannot find OU for staff position "+ nodeDP.toString());
+				return;
+			}
+			final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( orgUnit.getId());
+			sgNotifier.sgExclude( sgSV, sgMe); // SVOU убрать из личной
+
+			// 2) если босс - убрать USERid из SVOU (для других - фактичеки ничего не будет делать)
+			sgNotifier.sgExclude( sgMe, sgSV); // для босса - убрать себя из SV, для отсальных - фактичеки ничего не будет делать 
+		}
 	}
 
 	/**

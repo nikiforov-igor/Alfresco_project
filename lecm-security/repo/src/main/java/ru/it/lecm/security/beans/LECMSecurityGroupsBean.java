@@ -109,8 +109,12 @@ public class LECMSecurityGroupsBean
 		if (!sgnm.hasAuth(simpleName)) {
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' NOT exists or already removed", sgFullName, simpleName));
 		} else {
-            //TODO данная строчка ВСЕГДА вызывала падение по NullPointerExpection!!!
-			/*this.authorityService.removeAuthority( null, sgFullName);*/
+			// TODO данная строчка ВСЕГДА вызывала падение по NullPointerExpection!!!
+			try {
+				this.authorityService.removeAuthority( null, simpleName);
+			} catch (Throwable t) {
+				logger.error( String.format( "(!?) Ignoring exception at removeAuthority '%s':\n"+ t.getMessage(), simpleName), t);
+			}
 			logger.warn(String.format("Alfresco security-group '%s' for object '%s' removed", sgFullName, simpleName));
 		}
 	}
@@ -217,6 +221,12 @@ public class LECMSecurityGroupsBean
 			// (!) вхождение личной группы в SV выполняется на уровне user->group 
 			// , а не group->group как для всего остального.
 			final Types.SGPrivateMeOfUser user = (Types.SGPrivateMeOfUser) child;
+
+			if (user.getUserLogin() == null) {
+				logger.warn( String.format( "Cannot add <%s> as USER into <%s>\n\t (!) Login for employee is NULL", child, parent));
+				return;
+			}
+
 			if (include)
 				ensureUserParent( user.getUserLogin(), sgParent);
 			else
@@ -379,7 +389,7 @@ public class LECMSecurityGroupsBean
 	 * проверяемой sec-группе.
 	 * @return список входящих в группу пользователей или Null, если нет ни одного.
 	 */
-	private Set<String> getUsersOfTheGroup(String fullAlfrescoSecGroupName) {
+	Set<String> getUsersOfTheGroup(String fullAlfrescoSecGroupName) {
 		return authorityService.getContainedAuthorities(AuthorityType.USER, fullAlfrescoSecGroupName, true);
 	}
 
@@ -389,7 +399,7 @@ public class LECMSecurityGroupsBean
 	 * @return логин владельца или Null, если группа не имеет вложенных пользователей
 	 * Если в группе содержится более одного пользователя поднимается исключение.
 	 */
-	private String getUserLoginOfMeGroup(Types.SGPrivateMeOfUser sgMe) {
+	String getUserLoginOfMeGroup(Types.SGPrivateMeOfUser sgMe) {
 		final Set<String> found = getUsersOfTheGroup( this.sgnm.makeSGName(sgMe) );
 		if (found == null || found.isEmpty())
 			return null;
