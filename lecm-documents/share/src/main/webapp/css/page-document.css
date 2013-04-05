@@ -59,8 +59,12 @@
     right: 1em;
 }
 
-.document-components-panel:hover .alfresco-twister-actions .expand {
+.document-components-panel .alfresco-twister-actions .expand {
     background-image: url("/share/res/images/lecm-documents/expand-10.png");
+    display: none;
+}
+.document-components-panel:hover .alfresco-twister-actions .expand {
+    display: inline;
 }
 
 .alfresco-twister-closed .alfresco-twister-actions {

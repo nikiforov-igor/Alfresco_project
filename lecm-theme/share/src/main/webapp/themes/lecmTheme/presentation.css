@@ -2109,3 +2109,8 @@ div[id$=date-cntrl] - селектор для всех div с id, заканчи
     overflow: hidden;
 }
 
+/* Договор - Основные сведения - Изменение атрибутов документа - text editor */
+.yui-skin-lecmTheme .yui-panel.yui-module .form-field iframe {
+    max-width: 470px;
+}
+
