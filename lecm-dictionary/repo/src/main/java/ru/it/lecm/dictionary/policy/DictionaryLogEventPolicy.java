@@ -5,6 +5,7 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.version.VersionServicePolicies;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
@@ -26,7 +27,12 @@ import java.util.Map;
  * Date: 13.02.13
  * Time: 10:33
  */
-public class DictionaryLogEventPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, VersionServicePolicies.AfterCreateVersionPolicy {
+public class DictionaryLogEventPolicy implements
+		NodeServicePolicies.OnCreateNodePolicy,
+		NodeServicePolicies.OnUpdatePropertiesPolicy,
+//		NodeServicePolicies.OnCreateAssociationPolicy,
+//		NodeServicePolicies.OnDeleteAssociationPolicy,
+		VersionServicePolicies.AfterCreateVersionPolicy {
 	private final static Logger logger = LoggerFactory.getLogger(DictionaryLogEventPolicy.class);
 
 	private PolicyComponent policyComponent;
@@ -48,6 +54,18 @@ public class DictionaryLogEventPolicy implements NodeServicePolicies.OnUpdatePro
 	public final void init () {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
+//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+//				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+//				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//
+//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+//				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+//				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(VersionServicePolicies.AfterCreateVersionPolicy.QNAME,
@@ -71,23 +89,9 @@ public class DictionaryLogEventPolicy implements NodeServicePolicies.OnUpdatePro
 
 		if (before.size() == after.size()) {
 			if (!changed) {
-				try {
-					businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
-				} catch (Exception e) {
-					logger.error("Could not create the record business-journal", e);
-				}
+				businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
 			} else if (!curActive){
-				try {
-					businessJournalService.log(dictionary, EventCategory.DELETE, "Сотрудник #initiator удалил сведения об элементе #object1 справочника #mainobject", objects);
-				} catch (Exception e) {
-					logger.error("Could not create the record business-journal", e);
-				}
-			}
-		} else {
-			try {
-				businessJournalService.log(dictionary, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент #object1 в справочник #mainobject", objects);
-			} catch (Exception e) {
-				logger.error("Could not create the record business-journal", e);
+				businessJournalService.log(dictionary, EventCategory.DELETE, "Сотрудник #initiator удалил сведения об элементе #object1 справочника #mainobject", objects);
 			}
 		}
 	}
@@ -104,6 +108,38 @@ public class DictionaryLogEventPolicy implements NodeServicePolicies.OnUpdatePro
 			logger.error("Could not create the record business-journal", e);
 		}
 	}
+
+	@Override
+	public void onCreateNode(ChildAssociationRef childAssocRef) {
+		NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(childAssocRef.getChildRef());
+
+		List<String> objects = new ArrayList<String>();
+		objects.add(childAssocRef.getChildRef().toString());
+
+		businessJournalService.log(dictionary, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент #object1 в справочник #mainobject", objects);
+	}
+
+//	@Override
+//	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+//		logEditDictionaryAssoc(nodeAssocRef);
+//	}
+//
+//	@Override
+//	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+//		logEditDictionaryAssoc(nodeAssocRef);
+//	}
+//
+//	public void logEditDictionaryAssoc(AssociationRef nodeAssocRef) {
+//		NodeRef dictionaryValue = nodeAssocRef.getSourceRef();
+//		if (this.dictionaryService.isDictionaryValue(dictionaryValue)) {
+//			NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(dictionaryValue);
+//			if (dictionary != null) {
+//				List<String> objects = new ArrayList<String>();
+//				objects.add(dictionaryValue.toString());
+//				businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
+//			}
+//		}
+//	}
 
 	/**
 	 * Сравнить два объекта по значению
