@@ -71,7 +71,7 @@ public class ActionsScript extends DeclarativeWebScript {
                         if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
                             result.put("taskId", task.getId());
 
-                            Expression expression = new Expression(documentRef, serviceRegistry);
+                            Expression expression = new Expression(documentRef, serviceRegistry, orgstructureService);
 
                             ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
                             List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);

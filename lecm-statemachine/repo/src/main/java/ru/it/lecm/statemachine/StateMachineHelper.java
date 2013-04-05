@@ -668,7 +668,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         if (nextState != null) {
-            Expression expression = new Expression(document, serviceRegistry);
+            Expression expression = new Expression(document, serviceRegistry, orgstructureBean);
 
             boolean access = true;
             Conditions conditions = nextState.getConditionAccess();
@@ -734,7 +734,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
         }
         if (workflow != null && persistedResponse != null && !"null".equals(persistedResponse)) {
-            Expression expression = new Expression(document, serviceRegistry);
+            Expression expression = new Expression(document, serviceRegistry, orgstructureBean);
 
             boolean access = true;
             Conditions conditions = workflow.getConditionAccess();

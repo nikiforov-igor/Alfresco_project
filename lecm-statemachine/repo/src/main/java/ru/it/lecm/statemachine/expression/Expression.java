@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 
 import java.util.HashMap;
@@ -21,9 +22,16 @@ public class Expression {
 
 	private Map<String, Object> state = new HashMap<String, Object>();
 	private ExpressionDocument doc;
+	private ExpressionUser user;
 	private StandardEvaluationContext context;
 
     private static Log logger = LogFactory.getLog(Expression.class);
+
+    public Expression(NodeRef document, ServiceRegistry serviceRegistry, OrgstructureBean orgstructureBean) {
+        this.doc = new ExpressionDocument(document, serviceRegistry);
+        this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean);
+        context = new StandardEvaluationContext(this);
+    }
 
 	public Expression(DelegateExecution execution, ServiceRegistry serviceRegistry) {
 		StateMachineHelper helper = new StateMachineHelper();
@@ -63,5 +71,9 @@ public class Expression {
 	public ExpressionDocument getDoc() {
 		return doc;
 	}
+
+    public ExpressionUser getUser() {
+        return user;
+    }
 
 }
