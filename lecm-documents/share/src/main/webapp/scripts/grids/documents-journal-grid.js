@@ -80,8 +80,8 @@
                         }
                     }
                 } else if (oColumn.field == "prop_cm_image") {
-                    if (oRecord.getData("itemData").type) {
-                        var icon = oRecord.getData("itemData").type.replace(":", "_") + ".png";
+                    if (oRecord.getData("type")) {
+                        var icon = oRecord.getData("type").replace(":", "_") + ".png";
                         html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/" + icon + "'/>";
                     }else {
                         html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/default_document.png'/>";
