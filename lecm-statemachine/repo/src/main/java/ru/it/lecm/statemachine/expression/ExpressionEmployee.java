@@ -26,7 +26,7 @@ public class ExpressionEmployee {
      * @return
      */
     public boolean isBoss() {
-        return orgstructureBean.isBoss(employee);
+        return orgstructureBean.isBoss(employee, true);
     }
 
     /**
@@ -35,7 +35,7 @@ public class ExpressionEmployee {
      * @return
      */
     public boolean isBoss(ExpressionEmployee employee) {
-        return orgstructureBean.hasSubordinate(this.employee, employee.getEmployee());
+        return orgstructureBean.hasSubordinate(this.employee, employee.getEmployee(), true);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ExpressionEmployee {
      * @return
      */
     public boolean hasBusinessRole(String businessRole) {
-        return orgstructureBean.isEmployeeHasBusinessRole(employee, businessRole);
+        return orgstructureBean.isEmployeeHasBusinessRole(employee, businessRole, true);
     }
 
     public NodeRef getEmployee() {
