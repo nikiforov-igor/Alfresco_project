@@ -4,7 +4,9 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.version.VersionServicePolicies;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
@@ -30,14 +32,16 @@ import java.util.Map;
 public class DictionaryLogEventPolicy implements
 		NodeServicePolicies.OnCreateNodePolicy,
 		NodeServicePolicies.OnUpdatePropertiesPolicy,
-//		NodeServicePolicies.OnCreateAssociationPolicy,
-//		NodeServicePolicies.OnDeleteAssociationPolicy,
+		NodeServicePolicies.OnCreateAssociationPolicy,
+		NodeServicePolicies.OnDeleteAssociationPolicy,
 		VersionServicePolicies.AfterCreateVersionPolicy {
 	private final static Logger logger = LoggerFactory.getLogger(DictionaryLogEventPolicy.class);
 
 	private PolicyComponent policyComponent;
 	private BusinessJournalService businessJournalService;
 	private DictionaryBean dictionaryService;
+
+	private String lastTransactionId = "";
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -54,15 +58,15 @@ public class DictionaryLogEventPolicy implements
 	public final void init () {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-//				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-//				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-//
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-//				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-//				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -79,21 +83,23 @@ public class DictionaryLogEventPolicy implements
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(nodeRef);
-		List<String> objects = new ArrayList<String>();
-		objects.add(nodeRef.toString());
-
 		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
 		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
 		final boolean changed = !safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size()) {
 			if (!changed) {
-				businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
+				logEditDictionaryAssoc(nodeRef);
 			} else if (!curActive){
-				businessJournalService.log(dictionary, EventCategory.DELETE, "Сотрудник #initiator удалил сведения об элементе #object1 справочника #mainobject", objects);
+				NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(nodeRef);
+				if (dictionary != null) {
+					List<String> objects = new ArrayList<String>();
+					objects.add(nodeRef.toString());
+					businessJournalService.log(dictionary, EventCategory.DELETE, "Сотрудник #initiator удалил сведения об элементе #object1 справочника #mainobject", objects);
+				}
 			}
 		}
+		this.lastTransactionId = AlfrescoTransactionSupport.getTransactionId();
 	}
 
 	@Override
@@ -107,39 +113,45 @@ public class DictionaryLogEventPolicy implements
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}
+		this.lastTransactionId = AlfrescoTransactionSupport.getTransactionId();
 	}
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(childAssocRef.getChildRef());
-
-		List<String> objects = new ArrayList<String>();
-		objects.add(childAssocRef.getChildRef().toString());
-
-		businessJournalService.log(dictionary, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент #object1 в справочник #mainobject", objects);
+		if (dictionary != null) {
+			List<String> objects = new ArrayList<String>();
+			objects.add(childAssocRef.getChildRef().toString());
+			businessJournalService.log(dictionary, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент #object1 в справочник #mainobject", objects);
+		}
+		this.lastTransactionId = AlfrescoTransactionSupport.getTransactionId();
 	}
 
-//	@Override
-//	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-//		logEditDictionaryAssoc(nodeAssocRef);
-//	}
-//
-//	@Override
-//	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-//		logEditDictionaryAssoc(nodeAssocRef);
-//	}
-//
-//	public void logEditDictionaryAssoc(AssociationRef nodeAssocRef) {
-//		NodeRef dictionaryValue = nodeAssocRef.getSourceRef();
-//		if (this.dictionaryService.isDictionaryValue(dictionaryValue)) {
-//			NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(dictionaryValue);
-//			if (dictionary != null) {
-//				List<String> objects = new ArrayList<String>();
-//				objects.add(dictionaryValue.toString());
-//				businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
-//			}
-//		}
-//	}
+	@Override
+	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+		logEditDictionaryAssoc(nodeAssocRef.getSourceRef());
+	}
+
+	@Override
+	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+		logEditDictionaryAssoc(nodeAssocRef.getSourceRef());
+	}
+
+	public void logEditDictionaryAssoc(NodeRef nodeRef) {
+		String transactionId = AlfrescoTransactionSupport.getTransactionId();
+		if (this.lastTransactionId != transactionId) {
+			this.lastTransactionId = transactionId;
+
+			if (this.dictionaryService.isDictionaryValue(nodeRef)) {
+				NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(nodeRef);
+				if (dictionary != null) {
+					List<String> objects = new ArrayList<String>();
+					objects.add(nodeRef.toString());
+					businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Сравнить два объекта по значению
