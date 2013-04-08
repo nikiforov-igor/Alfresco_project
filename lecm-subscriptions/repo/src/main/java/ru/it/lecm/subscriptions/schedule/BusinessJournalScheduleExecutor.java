@@ -92,8 +92,12 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
 		subscriptions.addAll(findSubscriptionsToType(bjRecordRef));
 		subscriptions.addAll(findSubscriptionsToInitiator(initiator));
-		//добавляем подписки на объект
-		subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
+
+		//При подписке на сотрудника и рабочую группу в нее должны попадать не те записи Б-Ж, в которых данный сотрудник является основным объектом, а те, в которых он является инициатором
+		if (!this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
+			//добавляем подписки на объект
+			subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
+		}
 		sendNotificationsBySubscriptions(subscriptions, author, description, mainObject, date);
 		nodeService.addAspect(bjRecordRef, SubscriptionsService.ASPECT_SUBSCRIBED, null);
 	}
