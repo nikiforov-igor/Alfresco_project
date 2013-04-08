@@ -15,7 +15,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.Types;
 
 /**
  * @author dbashmakov

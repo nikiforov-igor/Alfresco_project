@@ -107,7 +107,7 @@ public final class Types {
 		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
 		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
 
-		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальнаый доступ Сотрудника на конкретный узел
+		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальный доступ Сотрудника на конкретный узел
 		;
 
 		final private String suffix;

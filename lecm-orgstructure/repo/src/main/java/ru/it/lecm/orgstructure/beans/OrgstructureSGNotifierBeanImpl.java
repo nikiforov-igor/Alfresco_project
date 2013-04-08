@@ -6,14 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-
-import org.alfresco.service.namespace.QName;
-
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
 import ru.it.lecm.security.Types;
-import ru.it.lecm.security.Types.SGDeputyPosition;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
@@ -348,7 +346,8 @@ public class OrgstructureSGNotifierBeanImpl
 			sgNotifier.sgExclude( sgSV, sgMe); // SVOU убрать из личной
 
 			// 2) если босс - убрать USERid из SVOU (для других - фактичеки ничего не будет делать)
-			sgNotifier.sgExclude( sgMe, sgSV); // для босса - убрать себя из SV, для отсальных - фактичеки ничего не будет делать 
+			sgNotifier.sgExclude( sgMe, sgSV); // для босса - убрать себя из SV, для остальных - фактически ничего не будет делать 
+
 		}
 	}
 
@@ -671,13 +670,12 @@ public class OrgstructureSGNotifierBeanImpl
 			return;
 		}
 
-		// TODO: посмотреть можно ли выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
+		// DONE: посмотреть можно ли выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
 		// Простой вариант, если не надо учитывать вложенность:
 		for(NodeRef orgUnit: orgsBoss) {
 			// руководящая позиция подразделения ...
 			final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
 
-			// TODO: выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
 			if (created) { 
 				// sgNotifier.sgExclude( sgSV, sgDestMe); // отвязать SV-группу своего подраздедения (SVOU) от себя ("anti-recurse step")
 				sgNotifier.sgInclude( sgDestMe, sgSV); // привязать себя к SVOU
@@ -733,7 +731,7 @@ public class OrgstructureSGNotifierBeanImpl
 	 * @param employee
 	 * @return
 	 */
-	private List<NodeRef> findOnlySimpleUnits(NodeRef employee) {
+	List<NodeRef> findOnlySimpleUnits(NodeRef employee) {
 		final List<NodeRef>
 			total = orgstructureService.getEmployeeUnits(employee, false)		// полный список
 			, asboss = orgstructureService.getEmployeeUnits(employee, true);	// там, где он босс

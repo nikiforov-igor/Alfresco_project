@@ -101,22 +101,29 @@ public class LECMSecurityGroupsBean
 
 	/**
 	 * Удаление security-группы Альфреско
-	 * @param simpleName
+	 * @param fullName
 	 */
-	void removeAlfrescoGroupName(String simpleName) {
-		final String sgFullName = this.sgnm.makeSGName(simpleName);
+	void removeAlfrescoAuthority(String fullName) { 
+		removeAlfrescoAuthority( fullName, false);
+	}
 
-		if (!sgnm.hasAuth(simpleName)) {
-			logger.warn(String.format("Alfresco security-group '%s' for object '%s' NOT exists or already removed", sgFullName, simpleName));
-		} else {
-			// TODO данная строчка ВСЕГДА вызывала падение по NullPointerExpection!!!
-			try {
-				this.authorityService.removeAuthority( null, simpleName);
-			} catch (Throwable t) {
-				logger.error( String.format( "(!?) Ignoring exception at removeAuthority '%s':\n"+ t.getMessage(), simpleName), t);
+	/**
+	 * Удалить группу Альфреско
+	 * @param fullName полное имя (в системе координат security Альфреско)
+	 * @param cascade удалить каскадом или нет
+	 */
+	void removeAlfrescoAuthority(String fullName, boolean cascade) {
+		try {
+			if (!authorityService.authorityExists(fullName)) {
+				logger.warn(String.format("Alfresco security item '%s' NOT exists or already removed", fullName));
+				return;
 			}
-			logger.warn(String.format("Alfresco security-group '%s' for object '%s' removed", sgFullName, simpleName));
+			// DONE данная строчка ВСЕГДА вызывала падение по NullPointerExpection!!!
+			this.authorityService.deleteAuthority(fullName, cascade);
+		} catch (Throwable t) {
+			logger.error( String.format( "(!?) Ignoring exception at removeAuthority '%s':\n"+ t.getMessage(), fullName), t);
 		}
+		logger.warn(String.format("Alfresco security item '%s' removed", fullName));
 	}
 
 	private void ensureParentEx(String sgItemFullName, String sgParentFullName, AuthorityType childType) {
@@ -193,11 +200,29 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public void orgNodeDeactivated(Types.SGPosition obj) {
-		final String sgName = this.sgnm.makeSGName( obj);
-		removeAlfrescoGroupName( sgName);
-		// дополнительные действия зависят от типа
-		if (obj.getSgKind() ==  SGKind.SG_OU)
-			removeAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()));
+		if (obj == null) return;
+
+		final String sgFullName = this.sgnm.makeSGName( obj);
+		if (Types.SGKind.SG_ME == obj.getSgKind()) {
+			// исключаем пользователя Альфреско из личной ME-группы ...
+			final Types.SGPrivateMeOfUser me = (Types.SGPrivateMeOfUser) obj;
+			if (me.getUserLogin() == null) {
+				logger.warn( String.format( "No login. Cannot deactivate <%s>.", me));
+				return;
+			}
+			final String sgUserName = this.authorityService.getName(AuthorityType.USER, me.getUserLogin());
+			removeUserParent( sgUserName, sgFullName);
+		} else {
+			// DP, OU, SV, BR, BRME
+			final boolean cascade = false;
+			removeAlfrescoAuthority( sgFullName, cascade);
+
+			// дополнительные действия для OU - убрать SV-группу
+			if (obj.getSgKind() ==  SGKind.SG_OU) {
+				final SGPosition sgPos = SGKind.SG_SV.getSGPos( obj.getId()); 
+				removeAlfrescoAuthority( sgnm.makeSGName(sgPos.getAlfrescoSuffix() ));
+			}
+		}
 	}
 
 	private void sgSetParent( Types.SGPosition child, Types.SGPosition parent, boolean include) {

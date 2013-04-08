@@ -192,15 +192,17 @@ implements NodeServicePolicies.OnCreateNodePolicy {
 			 * (!) Если реально Динамическая роль явно не была ранее выдана Сотруднику,
 			 * такая нарезка ничего не выполнит.
 			 */
-			final String[] users = {null, "ЛаоЦзы", "Согласкин", "admin"};
-			trackAllLecmPermissions( "\n(!) fresh document permissions:", docRef, users);
+			final String[] users = {/* current */ null, "admin"}; // "ЛаоЦзы", "Согласкин"
+			if (logger.isTraceEnabled())
+				trackAllLecmPermissions( "\n(!) fresh document permissions:", docRef, users);
 
 			// lecmAclBuilder.grantDynamicRole(this.getGrantDynaRoleCode(), docRef, employee.getId(), this.getGrantAccess());
 			lecmPermissionService.grantDynamicRole( this.getGrantDynaRoleCode(), docRef, employee.getId(), lecmPermissionService.findPermissionGroup(this.getGrantAccess()) );
 
 			logger.info(String.format("Dynamic role <%s> assigned\n\t for user '%s'/employee {%s}\n\t in document {%s}", this.getGrantDynaRoleCode(), authorLogin, employee, docRef));
 
-			trackAllLecmPermissions( String.format( "\n(!) after assigning dynamic role '%s' by '%s' for user '%s':", this.getGrantDynaRoleCode(), this.getGrantAccess(), authorLogin), docRef, users);
+			if (logger.isTraceEnabled())
+				trackAllLecmPermissions( String.format( "\n(!) after assigning dynamic role '%s' by '%s' for user '%s':", this.getGrantDynaRoleCode(), this.getGrantAccess(), authorLogin), docRef, users);
 
 		} catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
 			logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
