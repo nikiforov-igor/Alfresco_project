@@ -9,6 +9,7 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/editors/tiny_mce/themes/advanced/skins/default/ui.css" />
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[
