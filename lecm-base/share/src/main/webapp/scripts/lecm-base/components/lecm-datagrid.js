@@ -97,6 +97,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
+        Bubbling.on("changeFilter", this.onFilterChanged, this);
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
             {
@@ -2425,6 +2426,29 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
                 Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
+            },
+
+            onFilterChanged: function DataGrid_onFilterChanged(layer, args) {
+                var obj = args[1];
+                if (obj && this._hasEventInterest(obj.bubblingLabel)) {
+                    var filter = obj.filter;
+                    //сбрасываем на значение по умолчанию + FILTER
+                    if (this.initialSearchConfig != null) {
+                        var existFilter = this.initialSearchConfig.filter;
+                        var newFilter = (existFilter != null ? "(" + existFilter + ")" : "") + ((filter != null && filter != "") ? (" AND (" + filter) + ")": "");
+                        this.datagridMeta.searchConfig = YAHOO.lang.merge(this.initialSearchConfig, {filter: newFilter});
+                    } else {
+                        this.datagridMeta.searchConfig = {
+                            filter: ((filter != null && filter != "") ? (" AND " + filter) : "")
+                        };
+                    }
+
+                    // Reload the node's metadata
+                    Bubbling.fire("datagridRefresh",
+                        {
+                            bubblingLabel:this.options.bubblingLabel
+                        });
+                }
             }
         }, true);
 })();

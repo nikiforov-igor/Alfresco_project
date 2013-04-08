@@ -12,6 +12,7 @@
 
         LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal|| {};
         LogicECM.module.DocumentsJournal.SETTINGS = response;
+        LogicECM.module.DocumentsJournal.CURRENT_USER = "${user.id}";
     //]]>
     </script>
 </@>

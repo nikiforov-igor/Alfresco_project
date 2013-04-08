@@ -1,25 +1,3 @@
-/*// Ensure LogicECM root object exists
- if (typeof LogicECM == "undefined" || !LogicECM) {
- var LogicECM = {};
- }
-
- *//**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- *//*
- LogicECM.module = LogicECM.module || {};
-
-
- *//**
- * LogicECM Dictionary module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module.DocumentsJournal
- *//*
- LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};*/
-
 (function () {
 
     LogicECM.module.DocumentsJournal.DataGrid = function (containerId) {
@@ -79,57 +57,76 @@
                             }
                         }
                     }
-                } else if (oColumn.field == "prop_cm_image") {
-                    if (oRecord.getData("type")) {
-                        var icon = oRecord.getData("type").replace(":", "_") + ".png";
-                        html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/" + icon + "'/>";
-                    }else {
-                        html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/default_document.png'/>";
-                    }
                 }
             }
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
         },
 
-        getDataTableColumnDefinitions:function DataGrid_getDataTableColumnDefinitions() {
+        getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
             // YUI DataTable column definitions
             var columnDefinitions = [];
-            if (this.options.showCheckboxColumn) {
-                columnDefinitions.push({
-                    key: "nodeRef",
-                    label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
-                    sortable: false,
-                    formatter: this.fnRenderCellSelected (),
-                    width: 16
-                });
-            }
-
             var column, sortable;
             for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                 column = this.datagridColumns[i];
                 sortable = column.sortable;
                 if (column.name != "cm:name" && column.name != "lecm-document:list-present-string") {
-                    columnDefinitions.push(
-                        {
-                            key:this.dataResponseFields[i],
-                            label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                            sortable:sortable,
-                            sortOptions:{
-                                field:column.formsName,
-                                sortFunction:this.getSortFunction()
-                            },
-                            formatter:this.getCellFormatter(column.dataType),
-                            className: (column.dataType == 'boolean') ? 'centered' : ''
-                        });
+                    if (column.name == "cm:image") {
+                        columnDefinitions.push(
+                            {
+                                key: this.dataResponseFields[i],
+                                label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable: sortable,
+                                sortOptions: {
+                                    field: column.formsName,
+                                    sortFunction: this.getSortFunction()
+                                },
+                                formatter: this.fnRenderCellImage(),
+                                className: (column.dataType == 'boolean') ? 'centered' : '',
+                                width: 72
+                            });
+                    } else {
+                        columnDefinitions.push(
+                            {
+                                key: this.dataResponseFields[i],
+                                label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
+                                sortable: sortable,
+                                sortOptions: {
+                                    field: column.formsName,
+                                    sortFunction: this.getSortFunction()
+                                },
+                                formatter: this.getCellFormatter(column.dataType),
+                                className: (column.dataType == 'boolean') ? 'centered' : ''
+                            });
+                    }
                 }
             }
-            if (this.options.showActionColumn){
-                // Add actions as last column
-                columnDefinitions.push(
-                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
-                );
-            }
             return columnDefinitions;
+        },
+
+        fnRenderCellImage: function DataGrid_fnRenderCellSelected() {
+            var scope = this;
+
+            /**
+             * Selector custom datacell formatter
+             *
+             * @method renderCellSelected
+             * @param elCell {object}
+             * @param oRecord {object}
+             * @param oColumn {object}
+             * @param oData {object|string}
+             */
+            return function DataGrid_renderCellSelected(elCell, oRecord, oColumn, oData) {
+                Dom.setStyle(elCell, "width", oColumn.width + "px");
+                Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+                var html = "";
+                if (oRecord.getData("type")) {
+                    var icon = oRecord.getData("type").replace(":", "_") + ".png";
+                    html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/" + icon + "'/>";
+                } else {
+                    html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "/images/lecm-documents/type-icons/default_document.png'/>";
+                }
+                elCell.innerHTML = html;
+            };
         }
     }, true);
 })();

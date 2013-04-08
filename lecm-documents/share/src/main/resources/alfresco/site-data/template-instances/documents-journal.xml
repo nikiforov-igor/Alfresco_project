@@ -17,13 +17,13 @@
             <url>/lecm/documents-journal/toolbar</url>
         </component>
         <!-- Menu -->
-        <!--<component>
+        <component>
             <region-id>menu</region-id>
-            <url>/lecm/contracts/menu</url>
+            <url>/lecm/documents-journal/menu</url>
             <properties>
                 <selected>contracts</selected>
             </properties>
-        </component>-->
+        </component>
         <!-- Datagrid -->
         <component>
             <region-id>documents-grid</region-id>

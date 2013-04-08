@@ -36,6 +36,7 @@
                         <item type="link" id="orgstructure">/org-employees</item>
                         <item type="link" id="wcalendar">/wcalendar-calendar</item>
                         <item type="link" id="delegation">/delegation-list</item>
+                        <item type="link" id="doc-journal">/documents-journal</item>
                     </container-group>
                      <container-group id="alfrescos" label="Standard">
                          <item type="link" id="my-dashboard">{userdashboardpage}</item>
