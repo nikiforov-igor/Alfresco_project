@@ -1,3 +1,5 @@
+<#if hasRole>
+
 <#if page.url.args.statemachineId??>
 <#assign id = args.htmlid>
 <#assign menuId = "menu-buttons">
@@ -52,4 +54,5 @@
 </div>
 
 </@comp.baseMenu>
+</#if>
 </#if>

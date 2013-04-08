@@ -46,5 +46,9 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-    <@region id="content" scope="template" />
+    <#if hasRole>
+        <@region id="content" scope="template" />
+    <#else>
+        <@region id="forbidden" scope="template"/>
+    </#if>
 </@bpage.basePage>
