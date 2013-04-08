@@ -82,7 +82,29 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}).show();
 			} else {
-				this._chooseState("trans", taskId, null, actionId);
+                var me = this;
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: "Выполнение действия",
+                        text: "Подтвердите выполнение для этого документа действия \"" + label + "\"",
+                        buttons: [
+                            {
+                                text: "Ок",
+                                handler: function dlA_onAction_action()
+                                {
+                                    this.destroy();
+                                    me._chooseState("trans", taskId, null, actionId);
+                                }
+                            },
+                            {
+                                text: "Отмена",
+                                handler: function dlA_onActionDelete_cancel()
+                                {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }]
+                    });
 			}
 		},
 
