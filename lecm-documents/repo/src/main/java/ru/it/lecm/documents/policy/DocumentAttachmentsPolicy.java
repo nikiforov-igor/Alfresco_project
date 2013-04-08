@@ -8,6 +8,8 @@ import java.util.Map;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
+import org.alfresco.repo.coci.CheckOutCheckInServicePolicies;
+import org.alfresco.repo.content.ContentServicePolicies;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -38,14 +40,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
  * Date: 15.03.13
  * Time: 15:38
  */
-public class DocumentAttachmentsPolicy extends BaseBean implements
-		NodeServicePolicies.BeforeDeleteNodePolicy,
-		NodeServicePolicies.BeforeUpdateNodePolicy,
-		NodeServicePolicies.OnUpdatePropertiesPolicy,
-		VersionServicePolicies.BeforeCreateVersionPolicy,
-		VersionServicePolicies.AfterCreateVersionPolicy,
-        NodeServicePolicies.BeforeCreateNodePolicy,
-        NodeServicePolicies.OnCreateNodePolicy {
+public class DocumentAttachmentsPolicy extends BaseBean {
 
     final protected Logger logger = LoggerFactory.getLogger(DocumentAttachmentsPolicy.class);
 
@@ -57,6 +52,8 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
     private SubstitudeBean substituteService;
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
+
+	private boolean isCreatingWorkingCopy = false;
 
     final private QName[] AFFECTED_PROPERTIES = {ContentModel.PROP_CREATOR, ContentModel.PROP_MODIFIER};
 
@@ -89,6 +86,8 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 	}
 
 	public final void init() {
+		policyComponent.bindClassBehaviour(CheckOutCheckInServicePolicies.BeforeCheckOut.QNAME,
+				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCheckOut"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateNode"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeUpdateNodePolicy.QNAME,
@@ -105,22 +104,25 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 			    ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "afterCreateVersion", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
-	@Override
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(parentRef);
 		if (document != null) {
-			if (!assocQName.getLocalName().contains("(Рабочая копия)")) {
+			if (!this.isCreatingWorkingCopy) {
 				this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
 			}
-			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
+			try {
+				this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(parentRef));
+			} catch (AlfrescoRuntimeException ex) {
+				this.isCreatingWorkingCopy = false;
+				throw ex;
+			}
 		}
 	}
 
-    @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
         if (document != null) {
-	        if (!childAssocRef.getQName().getLocalName().contains("(Рабочая копия)")) {
+	        if (!this.isCreatingWorkingCopy) {
 		        // добавляем пользователя добавившего вложение как участника
 		        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			        @Override
@@ -138,11 +140,12 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		        List<String> objects = new ArrayList<String>(1);
 		        objects.add(childAssocRef.getChildRef().toString());
 		        businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "Сотрудник #initiator добавил вложение #object1 к документу #mainobject", objects);
+	        } else {
+	            this.isCreatingWorkingCopy = false;
 	        }
         }
     }
 
-    @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
         if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
@@ -177,7 +180,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
         }
     }
 
-    @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 	    NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 	    List<QName> changedProps = getAffectedProperties(before, after);
@@ -222,7 +224,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
         this.substituteService = substitudeService;
     }
 
-	@Override
 	public void beforeCreateVersion(NodeRef versionableNode) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
 		if (document != null) {
@@ -231,7 +232,6 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		}
 	}
 
-	@Override
 	public void afterCreateVersion(NodeRef nodeRef, Version version) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
@@ -241,11 +241,17 @@ public class DocumentAttachmentsPolicy extends BaseBean implements
 		}
 	}
 
-	@Override
 	public void beforeUpdateNode(NodeRef nodeRef) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null) {
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
+		}
+	}
+
+	public void beforeCheckOut(NodeRef nodeRef, NodeRef nodeRef2, QName qName, QName qName2) {
+		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
+		if (document != null) {
+			this.isCreatingWorkingCopy = true;
 		}
 	}
 }
