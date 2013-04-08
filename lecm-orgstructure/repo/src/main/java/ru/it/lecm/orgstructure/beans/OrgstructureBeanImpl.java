@@ -1,15 +1,5 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -22,10 +12,12 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -1370,7 +1362,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	public boolean isBoss (final NodeRef nodeRef, final boolean withDelegation) {
 		boolean isBoss = isBossInternal (nodeRef);
 		if (withDelegation) {
-			isBoss = isBoss && !getBosses (nodeRef).isEmpty ();
+			isBoss = isBoss || !getBosses (nodeRef).isEmpty ();
 		}
 		return isBoss;
 	}
@@ -1392,7 +1384,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 					break;
 				}
 			}
-			hasSubordinate = hasSubordinate && hasDelegatedSubordinate;
+			hasSubordinate = hasSubordinate || hasDelegatedSubordinate;
 		}
 		return hasSubordinate;
 	}
@@ -1414,7 +1406,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 					break;
 				}
 			}
-			isEmployeeHasBusinessRole = isEmployeeHasBusinessRole && hasBusinessRole;
+			isEmployeeHasBusinessRole = isEmployeeHasBusinessRole || hasBusinessRole;
 		}
 		return isEmployeeHasBusinessRole;
 	}
