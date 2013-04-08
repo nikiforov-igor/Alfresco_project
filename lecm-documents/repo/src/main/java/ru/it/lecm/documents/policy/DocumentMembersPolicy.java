@@ -225,7 +225,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-        if (AuthenticationUtil.getSystemUserName().equals(userName)) {
+        if (!AuthenticationUtil.getSystemUserName().equals(userName)) {
             documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
         }
     }
@@ -237,7 +237,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-        if (AuthenticationUtil.getSystemUserName().equals(userName)) {
+        if (!AuthenticationUtil.getSystemUserName().equals(userName)) {
             documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
         }
     }
