@@ -430,7 +430,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public Execution getExecution(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        return runtimeService.createExecutionQuery().executionId(executionId).singleResult();
+        return runtimeService.createExecutionQuery().executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
     }
 
     public static ServiceRegistry getServiceRegistry() {
