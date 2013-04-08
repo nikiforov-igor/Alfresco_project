@@ -4,12 +4,9 @@
 
     LogicECM.module.DocumentsJournal.Toolbar = function (htmlId) {
         LogicECM.module.DocumentsJournal.Toolbar.superclass.constructor.call(this, "LogicECM.module.DocumentsJournal.Toolbar", htmlId, ["button", "container"]);
-        this.treeSelectActions = {};
         this.toolbarButtons = {};
         // Decoupled event listeners
-        YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
         return this;
     };
 
@@ -32,18 +29,12 @@
             options: {
                 bubblingLabel: null
             },
-            /**
-             * Дополнительные кнопки, активируемы при выборе элемента в дереве
-             */
-            treeSelectActions: null,
 
             /**
              * Кнопки Tollbara, активируются при выборе элемента в дереве
              * @constructor
              */
             toolbarButtons: null,
-
-            groupActions: {},
 
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -62,7 +53,6 @@
                     });
 
                 var me = this;
-
 
                 // Search
                 this.checkShowClearSearch();
@@ -85,52 +75,6 @@
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
             },
 
-            // разблокировать кнопки согласно правам
-            onUserAccess: function (layer, args) {
-                var obj = args[1];
-                if (obj && obj.userAccess) {
-                    var widget, widgetPermissions, index, orPermissions, orMatch;
-                    for (index in this.toolbarButtons) {
-                        if (this.toolbarButtons.hasOwnProperty(index)) {
-                            widget = this.toolbarButtons[index];
-                            if (widget != null) {
-                                // Skip if this action specifies "no-access-check"
-                                if (widget.get("srcelement").className != "no-access-check") {
-                                    // Default to disabled: must be enabled via permission
-                                    widget.set("disabled", false);
-                                    if (typeof widget.get("value") == "string") {
-                                        // Comma-separation indicates "AND"
-                                        widgetPermissions = widget.get("value").split(",");
-                                        for (var i = 0, ii = widgetPermissions.length; i < ii; i++) {
-                                            // Pipe-separation is a special case and indicates an "OR" match. The matched permission is stored in "activePermission" on the widget.
-                                            if (widgetPermissions[i].indexOf("|") !== -1) {
-                                                orMatch = false;
-                                                orPermissions = widgetPermissions[i].split("|");
-                                                for (var j = 0, jj = orPermissions.length; j < jj; j++) {
-                                                    if (obj.userAccess[orPermissions[j]]) {
-                                                        orMatch = true;
-                                                        widget.set("activePermission", orPermissions[j], true);
-                                                        break;
-                                                    }
-                                                }
-                                                if (!orMatch) {
-                                                    widget.set("disabled", true);
-                                                    break;
-                                                }
-                                            }
-                                            else if (!obj.userAccess[widgetPermissions[i]]) {
-                                                widget.set("disabled", true);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-
             // инициализация грида
             onInitDataGrid: function (layer, args) {
                 var datagrid = args[1].datagrid;
@@ -146,16 +90,15 @@
                 var dataGrid = this.modules.dataGrid;
                 var datagridMeta = dataGrid.datagridMeta;
 
-                var me = this;
                 if (searchTerm.length > 0) {
-                    var columns = dataGrid.datagridColumns;
-
                     var fields = dataGrid.getTextFields();
+
                     var fullTextSearch = {
                         parentNodeRef: datagridMeta.nodeRef,
                         fields: fields,
                         searchTerm: searchTerm
                     };
+
                     if (!datagridMeta.searchConfig) {
                         datagridMeta.searchConfig = {};
                     }
@@ -163,22 +106,30 @@
                     datagridMeta.searchConfig.formData = {
                         datatype: datagridMeta.itemType
                     };
-                    this.modules.dataGrid.search.performSearch({
+                    if (dataGrid.currentFilter) {
+                        datagridMeta.searchConfig.filter = dataGrid.currentFilter;
+                    }
+
+                    dataGrid.search.performSearch({
                         searchConfig: datagridMeta.searchConfig,
-                        searchShowInactive: false,
+                        searchShowInactive: dataGrid.options.searchShowInactive,
                         sort: datagridMeta.sort
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     datagridMeta.searchConfig = dataGrid.initialSearchConfig;
+                    if (dataGrid.currentFilter != null) {
+                        datagridMeta.searchConfig = YAHOO.lang.merge(datagridMeta.searchConfig, {filter: dataGrid.currentFilter});
+                    }
                     if (datagridMeta.searchConfig.fullTextSearch) {
                         datagridMeta.searchConfig.fullTextSearch = null;
                     }
+
                     this.modules.dataGrid.search.performSearch({
                         parent: datagridMeta.nodeRef,
                         itemType: datagridMeta.itemType,
                         searchConfig: datagridMeta.searchConfig,
-                        searchShowInactive: false
+                        searchShowInactive: dataGrid.options.searchShowInactive
                     });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                 }
@@ -188,7 +139,6 @@
             onExSearchClick: function () {
                 var grid = this.modules.dataGrid;
                 var advSearch = grid.search;
-
                 advSearch.showDialog(grid.datagridMeta);
             },
 
@@ -221,43 +171,21 @@
                 if (this.modules.dataGrid) {
                     var dataGrid = this.modules.dataGrid;
                     var datagridMeta = dataGrid.datagridMeta;
+
                     datagridMeta.searchConfig = dataGrid.initialSearchConfig;
+                    if (dataGrid.currentFilter != null) {
+                        datagridMeta.searchConfig = YAHOO.lang.merge(datagridMeta.searchConfig, {filter: dataGrid.currentFilter});
+                    }
                     if (datagridMeta.searchConfig.fullTextSearch) {
                         datagridMeta.searchConfig.fullTextSearch = null;
                     }
+
                     YAHOO.Bubbling.fire("activeGridChanged",
                         {
                             datagridMeta: datagridMeta
                         });
                     YAHOO.Bubbling.fire("hideFilteredLabel");
                     this.checkShowClearSearch();
-                }
-            },
-
-            /**
-             * Удаление выбранного значения в dataGrid.
-             * Появляется диалоговое окно с потверждением на удаление
-             */
-            onDeleteRow: function Toolbar_onDeleteRow() {
-                var dataGrid = this.modules.dataGrid;
-                if (dataGrid) {
-                    // Get the function related to the clicked item
-                    var fn = "onActionDelete";
-                    if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), null, {fullDelete: true});
-                    }
-                }
-            },
-
-            onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
-                if (this.modules.dataGrid) {
-                    var items = this.modules.dataGrid.getSelectedItems();
-                    for (var index in this.groupActions) {
-                        if (this.groupActions.hasOwnProperty(index)) {
-                            var action = this.groupActions[index];
-                            action.set("disabled", (items.length === 0));
-                        }
-                    }
                 }
             }
         }, true);

@@ -88,6 +88,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.afterDataGridUpdate = [];
         this.search = null;
         this.initialSearchConfig = null;
+        this.currentFilter = null;
+
         /**
          * Decoupled event listeners
          */
@@ -2431,17 +2433,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onFilterChanged: function DataGrid_onFilterChanged(layer, args) {
                 var obj = args[1];
                 if (obj && this._hasEventInterest(obj.bubblingLabel)) {
-                    var filter = obj.filter;
+                    var filter = (obj.filter != null && obj.filter != "") ? (" AND (" + obj.filter) + ")": "";
                     //сбрасываем на значение по умолчанию + FILTER
                     if (this.initialSearchConfig != null) {
                         var existFilter = this.initialSearchConfig.filter;
-                        var newFilter = (existFilter != null ? "(" + existFilter + ")" : "") + ((filter != null && filter != "") ? (" AND (" + filter) + ")": "");
-                        this.datagridMeta.searchConfig = YAHOO.lang.merge(this.initialSearchConfig, {filter: newFilter});
+                        filter = (existFilter != null ? "(" + existFilter + ")" : "") + filter;
+                        this.datagridMeta.searchConfig = YAHOO.lang.merge(this.initialSearchConfig, {filter: filter});
                     } else {
                         this.datagridMeta.searchConfig = {
-                            filter: ((filter != null && filter != "") ? (" AND " + filter) : "")
+                            filter: filter
                         };
                     }
+                    this.currentFilter = filter != null ? filter : this.currentFilter;
 
                     // Reload the node's metadata
                     Bubbling.fire("datagridRefresh",
