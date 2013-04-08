@@ -14,7 +14,10 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -178,46 +181,39 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 		if (generalizedNotification != null) {
+            Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
+            if (generalizedNotification.getRecipientEmployeeRefs() != null) {
+                employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
+            }
+
+            if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
+                for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
+                    employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
+                }
+            }
+
+            if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
+                for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
+                    employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
+                }
+            }
+
+            if (generalizedNotification.getRecipientPositionRefs() != null) {
+                for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
+                    if (orgstructureService.isPosition(positionRef)) {
+                        employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
+                    }
+                }
+            }
 			for (NodeRef typeRef : generalizedNotification.getTypeRefs()) {
-				if (generalizedNotification.getRecipientEmployeeRefs() != null) {
-					List<NodeRef> employeeRefs = generalizedNotification.getRecipientEmployeeRefs();
-					addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
-				}
-
-				if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
-					for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
-						if (orgstructureService.isUnit(organizationUnitRef)) {
-							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(organizationUnitRef);
-							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
-						}
-					}
-				}
-
-				if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
-					for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
-						if (orgstructureService.isWorkGroup(workGroupRef)) {
-							List<NodeRef> employeeRefs = orgstructureService.getOrganizationElementEmployees(workGroupRef);
-							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
-						}
-					}
-				}
-
-				if (generalizedNotification.getRecipientPositionRefs() != null) {
-					for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
-						if (orgstructureService.isPosition(positionRef)) {
-							List<NodeRef> employeeRefs = orgstructureService.getEmployeesByPosition(positionRef);
-							addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
-						}
-					}
-				}
-			}
+                addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
+            }
 		}
 		return result;
 	}
 
-	private void addNotificationUnits(Notification generalizedNotification, List<NodeRef> employeeRefs,
+	private void addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs,
 	                                  NodeRef typeRef, Set<NotificationUnit> resultSet) {
-
 		for (NodeRef employeeRef: employeeRefs) {
 			if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef())) {
 				NotificationUnit newNotificationUnit = new NotificationUnit();
