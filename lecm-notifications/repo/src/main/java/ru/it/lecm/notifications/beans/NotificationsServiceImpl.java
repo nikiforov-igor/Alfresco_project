@@ -219,7 +219,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	                                  NodeRef typeRef, Set<NotificationUnit> resultSet) {
 
 		for (NodeRef employeeRef: employeeRefs) {
-			if (orgstructureService.isEmployee(employeeRef)) {
+			if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef())) {
 				NotificationUnit newNotificationUnit = new NotificationUnit();
 				newNotificationUnit.setAutor(generalizedNotification.getAutor());
 				newNotificationUnit.setDescription(generalizedNotification.getDescription());

@@ -58,8 +58,9 @@ public class Notification {
 	 * Берётся из подписки.
 	 */
 	private List<NodeRef> recipientWorkGroupRefs;
+    private NodeRef initiatorRef;
 
-	public Notification() {
+    public Notification() {
 	}
 
 	public String getAutor() {
@@ -137,4 +138,12 @@ public class Notification {
 	public void setRecipientWorkGroupRefs(List<NodeRef> recipientWorkGroupRefs) {
 		this.recipientWorkGroupRefs = recipientWorkGroupRefs;
 	}
+
+    public void setInitiatorRef(NodeRef initiatorRef) {
+        this.initiatorRef = initiatorRef;
+    }
+
+    public NodeRef getInitiatorRef() {
+        return initiatorRef;
+    }
 }

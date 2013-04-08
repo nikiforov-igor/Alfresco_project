@@ -98,7 +98,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			//добавляем подписки на объект
 			subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
 		}
-		sendNotificationsBySubscriptions(subscriptions, author, description, mainObject, date);
+		sendNotificationsBySubscriptions(subscriptions, author, initiator, description, mainObject, date);
 		nodeService.addAspect(bjRecordRef, SubscriptionsService.ASPECT_SUBSCRIBED, null);
 	}
 
@@ -131,7 +131,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		return subscriptions;
 	}
 
-	private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, String description, NodeRef mainObject, Date date) {
+	private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, NodeRef initiatorRef, String description, NodeRef mainObject, Date date) {
 		for (NodeRef subscription : subscriptions) {
 			List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsService.ASSOC_NOTIFICATION_TYPE);
 			List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_EMPLOYEE);
@@ -141,6 +141,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			Notification notification = new Notification();
 			notification.setObjectRef(mainObject);
 			notification.setAutor(author);
+			notification.setInitiatorRef(initiatorRef);
 			notification.setDescription(description);
 			notification.setFormingDate(date);
 			notification.setTypeRefs(notificationTypes);
