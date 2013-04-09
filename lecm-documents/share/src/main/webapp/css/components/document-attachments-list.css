@@ -1,45 +1,37 @@
-.attachment-list
-{
+.attachment-list {
 	clear: both;
-	padding-top: 2em;
 	margin-left: 10px;
 }
 
-.attachment-list .category-title
-{
-	width: 100%
+.attachment-list .category-title {
+	width: 100%;
+    padding: 0.4em;
 }
 
-.attachment-list .category-title .category-name
-{
+.attachment-list .category-title .category-name {
 	text-align: left;
-	font-family: Arial;
-	font-size: 20px;
+	font: 20px Arial;
 	font-weight: bold;
-	font-style: normal;
 	text-decoration: none;
-	color: #666666;
+	color: #666;
 }
 
-.attachment-list .category-title .category-upload
-{
+.attachment-list .category-title .category-upload {
 	text-align: right;
 }
 
-.attachment-list a:hover
-{
+.attachment-list a:hover {
 	text-decoration: none;
 }
 
-.attachment-list span.separator
-{
-	border-right: 1px dotted #c7ccce;
+.attachment-list span.separator {
+    position: relative;
+    left: -2px;
+    top: -4px;
+    border-right: 1px dotted #c7ccce;
 	border-top: medium none;
-	left: -2px;
 	margin: 0 4px;
 	padding: 2px 0;
-	position: relative;
-	top: -4px;
 	vertical-align: bottom;
 }
 
@@ -252,7 +244,7 @@ body .attachment-list tr.yui-dt-highlighted
 .attachment-list .documents
 {
 	color: #333333;
-	margin: 0 -10px 0 -8px;
+	margin: 0;
 }
 
 .attachment-list .documents a
