@@ -31,6 +31,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
  * @namespace LogicECM.module
  * @class LogicECM.module.LecmIM.Messenger
  */
+
 (function () {
     var Dom = YAHOO.util.Dom;
 
@@ -47,6 +48,11 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
         // обманка для history.js
         location: {href:"#"},
 
+        buttonDomElement : null,
+        originalBackgroundImage: null,
+
+        highLighterIntervalID : null,
+
         // функция вызываемая при окончании инициализации базового модуля
         onReady: function () {
 
@@ -56,59 +62,81 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
             this.subscribeToNewMessages();
 
             this.initButton();
+            this.initHighLighter();
         },
 
         /// Добавление счетчика
-        createNotifyer: function(){
+        createNotifyer: function (){
             var btn = Dom.get(this.id);
             var div = document.createElement("div");
             div.innerHTML = '<div id="msgCounter" class="hidden headerCounter">0</div>';
             btn.appendChild(div);
-            Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления"
+            Dom.setStyle(btn, 'position', 'relative'); //чтобы спозиционировать счетчик относительно пункта меню "Уведомления";
         },
 
-        /// Инициализатор счетчика в заголовке
-        subscribeToNewMessages: function() {
-            YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", function(layer, args) {
+        createBublingHandler : function (context){
+            return function(layer, args) {
                 var count = args[1].count;
                 var elem = Dom.get("msgCounter");
 
                 elem.innerHTML = count;
                 if (count > 0) {
                     Dom.removeClass(elem, "hidden");
+                    context.startHighlighting(context);
                 } else {
                     Dom.addClass(elem, "hidden");
+                    context.stopHighlighting(context);
                 }
-            });
+            };
+        },
+
+        /// Инициализатор счетчика в заголовке
+        subscribeToNewMessages: function () {
+            YAHOO.Bubbling.on("ru.it.lecm.im.update-messages-count", this.createBublingHandler(this) );
         },
 
         // Создание обработчика нажатия на кнопку
-        initButton : function(){
+        initButton : function (){
             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
                 onclick: {
                     fn: function() {
-//                        var elem = Dom.get("ijab");
-//                        if (Dom.hasClass(elem, "hidden")) {
-//                            Dom.removeClass(elem, "hidden");
-//                        } else {
-//                            Dom.addClass(elem, "hidden");
-//                        }
-
                         if (window.iJab) {
                             window.iJab.toggleIsVisible();
                         } else {
-                            alert("Messanger not found!");
+                            alert("Messenger not found!");
                         }
                     }
                 }
             });
+        },
 
+        initHighLighter : function () {
+            var msgCounter = Dom.get('msgCounter');
+            this.buttonDomElement = msgCounter.parentElement.previousSibling.previousSibling;
+            this.originalBackgroundImage = this.buttonDomElement.style.backgroundImage;
+        },
 
-            /*
-             this.widgets.myButton = new YAHOO.widget.Button(this.id, {
-             onclick: { fn: toggleChat }
-             });
-             */
+        stopHighlighting : function (context) {
+            if (context.highLighterIntervalID){
+                clearInterval(context.highLighterIntervalID);
+                context.highLighterIntervalID = null;
+                context.buttonDomElement.style.backgroundImage = context.originalBackgroundImage;
+            }
+        },
+
+        startHighlighting : function (context) {
+            if (!context.highLighterIntervalID){
+                context.highLighterIntervalID = setInterval(context.createIntervalHandler(context), 750);
+            }
+        },
+
+        createIntervalHandler : function(context){
+            return function () {
+                context.buttonDomElement.style.backgroundImage =
+                    (context.buttonDomElement.style.backgroundImage.indexOf("_light.png") > 0 ) ?
+                        context.originalBackgroundImage.replace(".png", "_black.png") :
+                        context.originalBackgroundImage.replace(".png", "_light.png") ;
+            };
         }
     });
 })();
