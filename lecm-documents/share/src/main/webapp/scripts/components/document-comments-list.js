@@ -97,7 +97,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  * @property permissions
                  * @type Object
                  */
-                permissions: {}
+                permissions: {},
+
+                /**
+                 * Delay before showing "loading" message for slow data requests
+                 *
+                 * @property loadingMessageDelay
+                 * @type int
+                 * @default 1000
+                 */
+                loadingMessageDelay: 2000
             },
 
             /**
@@ -575,10 +584,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                     // Display the form
                                     Dom.removeClass(me.widgets.editFormWrapper, "hidden");
                                 } else {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: me.msg("message.permission")
-                                        });
+                                    me._setBusy(me.msg("message.permission"),"message");
+                                    me.busy= true;
+                                    YAHOO.lang.later(me.options.loadingMessageDelay, me, me._releaseBusy);
                                 }
                             },
                             scope: this
@@ -643,10 +651,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                                     if (permission) {
                                                         me.deleteComment.call(me, comment);
                                                     } else {
-                                                        Alfresco.util.PopupManager.displayMessage(
-                                                            {
-                                                                text: me.msg("message.permission")
-                                                            });
+                                                        me._setBusy(me.msg("message.permission"),"message");
+                                                        me.busy= true;
+                                                        YAHOO.lang.later(me.options.loadingMessageDelay, me, me._releaseBusy);
                                                     }
                                                 },
                                                 scope: this
@@ -685,9 +692,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // ajax request success handler
                 var success = function CommentsList_deleteComment_success(response, object)
                 {
+                    this.widgets.alfrescoDataTable.reloadDataTable();
                     // remove busy message
                     this._releaseBusy();
-                    this.widgets.alfrescoDataTable.reloadDataTable();
+                    this._setBusy(this.msg("message.delete.success"),"message");
+                    this.busy = true;
+                    YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
                 };
 
                 // ajax request failure handler
@@ -695,6 +705,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 {
                     // remove busy message
                     this._releaseBusy();
+                    this._setBusy(this.msg("message.delete.failure"),"message");
+                    this.busy = true;
+                    YAHOO.lang.later(this.options.loadingMessageDelay, this, this._releaseBusy);
                 };
 
                 // put together the request url to delete the comment
@@ -719,13 +732,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 Alfresco.util.Ajax.jsonDelete(
                     {
                         url: url,
-                        successMessage: this.msg("message.delete.success"),
                         successCallback:
                         {
                             fn: success,
                             scope: this
                         },
-                        failureMessage: this.msg("message.delete.failure"),
                         failureCallback:
                         {
                             fn: failure,
@@ -743,17 +754,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @protected
              * @return true if the busy state was set, false if the component is already busy
              */
-            _setBusy: function CommentsList__setBusy(busyMessage)
+            _setBusy: function CommentsList__setBusy(busyMessage,spanClass)
             {
                 if (this.busy)
                 {
                     return false;
                 }
+                if (spanClass == undefined) {
+                    spanClass = "wait";
+                }
                 this.busy = true;
                 this.widgets.busyMessage = Alfresco.util.PopupManager.displayMessage(
                     {
                         text: busyMessage,
-                        spanClass: "wait",
+                        spanClass: spanClass,
                         displayTime: 0
                     });
                 return true;
