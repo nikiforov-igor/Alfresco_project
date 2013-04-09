@@ -3,6 +3,7 @@ package ru.it.lecm.orgstructure.policies;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -75,12 +76,10 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 				new JavaBehaviour(this, "onDeletePersonAvatarAssociation"));
 
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onCreatePersonNode"));
 //		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 //				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onDeletePersonNode"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onUpdatePersonProperties"));
+				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onUpdatePersonProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 	}
 
@@ -293,22 +292,6 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	}
 
 	/**
-	 * Создан новый пользователь. Создать сотрудника и ассоциировать его с
-	 * пользователем.
-	 */
-	public void onCreatePersonNode(ChildAssociationRef childAssocRef) {
-		final NodeRef personNode = childAssocRef.getChildRef();
-		final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
-				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-				OrgstructureBean.TYPE_EMPLOYEE);
-
-		final NodeRef employeeNode = employeeNodeRef.getChildRef();
-
-		// после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
-		nodeService.createAssociation(employeeNode, personNode, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
-	}
-
-	/**
 	 * Удаление сотрудника. Возможно когда-нибудь понадобится.
 	 */
 	public void onDeletePersonNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
@@ -319,24 +302,38 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	 * соответствующего сотрудника.
 	 */
 	public void onUpdatePersonProperties(NodeRef person, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		/*
-		 * Нас интересует, не были ли изменены следующие атрибуты: cm:firstName, cm:lastName, cm:email, cm:telephone
-		 * Атрибуты для сравнени лежат в AFFECTED_PERSON_PROPERTIES
-		 * before будет пустым, если полиси была вызвана при создании нового пользователя.
-		 * Для этого случая synchronizePersonAndEmployee уже была вызвана явным образом.
-		 * Если не проводить такую проверку, то ломается cm:name
-		 */
 
-		if (!before.isEmpty() && synchronizablePropertiesChanged(before, after)) {
-			// если что-то из этого было изменено, то синхронизируем атрибуты cm:person и lecm-orgstr:employee
-			// для начала пролучаем сотрудника, привязанного к измененному пользователю
-			NodeRef employee = orgstructureService.getEmployeeByPerson(person);
-			// если таковой присутствует...
-			if (employee != null) {
-				// ...то запускаем синхронизацию
-				synchronizePersonAndEmployee(person, employee);
+		// проверка на тот случай, что полиси вызвана во время старта системы, когда происходит обнуление системной проперти
+		if (PolicyUtils.safeEquals(before.get(ContentModel.PROP_SIZE_CURRENT), after.get(ContentModel.PROP_SIZE_CURRENT))) {
+			// мы не будем создавать сотрудника для неактивных или неправильно заполненных пользователей
+			if (personNeedsEmployee(person)) {
+				final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
+						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
+						OrgstructureBean.TYPE_EMPLOYEE);
+
+				final NodeRef employeeNode = employeeNodeRef.getChildRef();
+
+				// после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
+				nodeService.createAssociation(employeeNode, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+				/*
+				 * Нас интересует, не были ли изменены следующие атрибуты: cm:firstName, cm:lastName, cm:email, cm:telephone
+				 * Атрибуты для сравнени лежат в AFFECTED_PERSON_PROPERTIES
+				 * before будет пустым, если полиси была вызвана при создании нового пользователя.
+				 * Для этого случая synchronizePersonAndEmployee уже была вызвана явным образом.
+				 * Если не проводить такую проверку, то ломается cm:name
+				 */
+			} else if (!before.isEmpty() && synchronizablePropertiesChanged(before, after)) {
+				// если что-то из этого было изменено, то синхронизируем атрибуты cm:person и lecm-orgstr:employee
+				// для начала пролучаем сотрудника, привязанного к измененному пользователю
+				NodeRef employee = orgstructureService.getEmployeeByPerson(person);
+				// если таковой присутствует...
+				if (employee != null) {
+					// ...то запускаем синхронизацию
+					synchronizePersonAndEmployee(person, employee);
+				}
 			}
 		}
+
 	}
 
 	private void synchronizePersonAndEmployee(NodeRef person, NodeRef employee) {
@@ -360,12 +357,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 			personMiddleName = personLastAndMiddleNameArr[1];
 		} else if (personLastAndMiddleNameArr != null && personLastAndMiddleNameArr.length == 1 && personLastAndMiddleNameArr[0].length() > 0) {
 			personLastName = personLastAndMiddleNameArr[0];
-//			personMiddleName = "Имярекович";
 		}
-//		else {
-//			personLastName = "Имяреков";
-//			personMiddleName = "Имярекович";
-//		}
 
 		Map<QName, Serializable> employeeProperties = nodeService.getProperties(employee);
 
@@ -400,5 +392,14 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 			}
 		}
 		return changed;
+	}
+
+	private boolean personNeedsEmployee(NodeRef personNode) {
+		NodeRef employeeNode = orgstructureService.getEmployeeByPerson(personNode);
+		Set<QName> aspects = nodeService.getAspects(personNode);
+
+		return employeeNode == null && !aspects.contains(ContentModel.ASPECT_PERSON_DISABLED)
+				&& !aspects.contains(QName.createQName(NamespaceService.SYSTEM_MODEL_1_0_URI, "incomplete"));
+
 	}
 }
