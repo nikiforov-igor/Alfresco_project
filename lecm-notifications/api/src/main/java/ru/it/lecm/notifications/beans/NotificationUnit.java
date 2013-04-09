@@ -37,6 +37,10 @@ public class NotificationUnit {
 	 * Берётся из подписки.
 	 */
 	private NodeRef recipientRef;
+	/**
+	 * Объект уведомления
+	 */
+	private NodeRef objectRef;
 
 	public NotificationUnit() {
 	}
@@ -83,6 +87,14 @@ public class NotificationUnit {
 
 	public void setTypeRef(NodeRef typeRef) {
 		this.typeRef = typeRef;
+	}
+
+	public NodeRef getObjectRef() {
+		return objectRef;
+	}
+
+	public void setObjectRef(NodeRef objectRef) {
+		this.objectRef = objectRef;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private NodeRef notificationsRootRef;
 	private NodeRef notificationsGenaralizetionRootRef;
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
+	private LecmPermissionService lecmPermissionService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -44,6 +46,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	@Override
 	public NodeRef getNotificationsRootRef() {
 		return notificationsRootRef;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
 	}
 
 	/**
@@ -96,28 +102,34 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public boolean sendNotification(NotificationUnit notification) {
-		if (notification != null) {
-			NotificationChannelBeanBase channelBean;
-			if (channels.containsKey(notification.getTypeRef())) {
-				channelBean = channels.get(notification.getTypeRef());
-			} else {
-				WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
-				String beanId = (String) nodeService.getProperty(notification.getTypeRef(), PROP_SPRING_BEAN_ID);
-				try {
-					channelBean = (NotificationChannelBeanBase) ctx.getBean(beanId);
-					channels.put(notification.getTypeRef(), channelBean);
-				} catch (NoSuchBeanDefinitionException ex) {
-					logger.error("Не найден канал для отправки уведомлений", ex);
-					channels.put(notification.getTypeRef(), null);
-					return false;
-				} catch (ClassCastException ex) {
-					logger.error("Канал уведомлений не реализует базовый интерфейс", ex);
-					channels.put(notification.getTypeRef(), null);
-					return false;
+		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
+			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
+			if (employeeLogin != null && this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)) {
+				NotificationChannelBeanBase channelBean;
+				if (channels.containsKey(notification.getTypeRef())) {
+					channelBean = channels.get(notification.getTypeRef());
+				} else {
+					WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
+					String beanId = (String) nodeService.getProperty(notification.getTypeRef(), PROP_SPRING_BEAN_ID);
+					try {
+						channelBean = (NotificationChannelBeanBase) ctx.getBean(beanId);
+						channels.put(notification.getTypeRef(), channelBean);
+					} catch (NoSuchBeanDefinitionException ex) {
+						logger.error("Не найден канал для отправки уведомлений", ex);
+						channels.put(notification.getTypeRef(), null);
+						return false;
+					} catch (ClassCastException ex) {
+						logger.error("Канал уведомлений не реализует базовый интерфейс", ex);
+						channels.put(notification.getTypeRef(), null);
+						return false;
+					}
 				}
-			}
 
-			return channelBean != null && channelBean.sendNotification(notification);
+
+				return channelBean != null && channelBean.sendNotification(notification);
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -220,6 +232,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				newNotificationUnit.setAutor(generalizedNotification.getAutor());
 				newNotificationUnit.setDescription(generalizedNotification.getDescription());
 				newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
+				newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
 				newNotificationUnit.setTypeRef(typeRef);
 				newNotificationUnit.setRecipientRef(employeeRef);
 				resultSet.add(newNotificationUnit);

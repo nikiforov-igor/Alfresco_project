@@ -43,10 +43,11 @@
 	<util:constant id="NOTIFICATIONS_GENERALIZATION_ROOT_NAME" static-field="ru.it.lecm.notifications.beans.NotificationsService.NOTIFICATIONS_GENERALIZATION_ROOT_NAME"/>
 
 	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl" parent="baseBean"
-	      depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService">
+	      depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, lecmPermissionServiceBean">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

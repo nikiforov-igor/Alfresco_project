@@ -137,6 +137,7 @@ public interface LecmPermissionService {
 	 * @return true, если есть права на чтение элемента
 	 */
 	public boolean hasReadAccess(NodeRef nodeRef);
+	public boolean hasReadAccess(final NodeRef nodeRef, final String userLogin);
 
 	/**
 	 * Исключить Сотрудника из группы привилегий данного узла (документа, папки)
