@@ -2,7 +2,6 @@ package ru.it.lecm.orgstructure.policies;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
-import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -80,9 +79,32 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
         String firstName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
         String middleName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME);
         String lastName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
-        String newName = lastName + " " + firstName.charAt(0) + "." + middleName.charAt(0);
-        return getUniqueNodeName(parent, newName);
-    }
+		String newName;
+		final boolean hasFirstName = firstName != null && firstName.length() > 0;
+
+		if (lastName != null && lastName.length() > 0) {
+			newName = lastName;
+			if (hasFirstName) {
+				newName += " " + firstName.charAt(0);
+			}
+
+		} else if (hasFirstName)  {
+			newName = firstName;
+		} else {
+			newName = "anonymousUser";
+		}
+
+		if (middleName != null && middleName.length() > 0) {
+			if (hasFirstName) {
+				newName += ".";
+			} else {
+				newName += " ";
+			}
+			newName += middleName.charAt(0);
+		}
+
+		return getUniqueNodeName(parent, newName);
+	}
 
     private String generateOrgElementName(NodeRef parent, NodeRef element) {
         String newName = (String) nodeService.getProperty(element, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);

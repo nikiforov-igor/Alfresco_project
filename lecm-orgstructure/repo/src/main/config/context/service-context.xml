@@ -35,7 +35,7 @@
 	  -->
 	<bean id="${groupId}.${artifactId}.orgBootstrap" parent="lecmDictionaryBootstrap"
 		depends-on="businessJournalLogEventsPolicy, orgstructureBusinessRolePolicy, orgstructureBossPolicy
-			, orgstructurePrimaryPositionPolicy, orgstructureEmployeePolicy, orgstructureEmployeeLinkPolicy
+			, orgstructurePrimaryPositionPolicy, orgstucturePersonEmployeeRelationsPolicy, orgstructureEmployeeLinkPolicy
 			, orgstructureUnitPolicy, orgstructureStaffListPolicy, orgstructureOrganizationPolicy
 			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy
 		">
@@ -115,13 +115,14 @@
 		<!-- <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" /> -->
 	</bean>
 
-	<bean id="orgstructureEmployeePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeePolicy"
+	<bean id="orgstucturePersonEmployeeRelationsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePersonEmployeeRelationsPolicy"
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="behaviourFilter" ref="policyBehaviourFilter" />
 	</bean>
 
 	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
