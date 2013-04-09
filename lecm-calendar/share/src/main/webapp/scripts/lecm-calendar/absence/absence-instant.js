@@ -218,14 +218,14 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						);
 			};
 
-			var url = "lecm/components/form"
-					+ "?itemKind={itemKind}"
-					+ "&itemId={itemId}"
-					+ "&formId={formId}"
-					+ "&destination={destination}"
-					+ "&mode={mode}"
-					+ "&submitType={submitType}"
-					+ "&showCancelButton=true";
+			var url = "lecm/components/form" +
+					  "?itemKind={itemKind}" +
+					  "&itemId={itemId}" +
+					  "&formId={formId}" +
+					  "&destination={destination}" +
+					  "&mode={mode}" +
+					  "&submitType={submitType}" +
+					  "&showCancelButton=true";
 			var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 				itemKind: "type",
 				itemId: itemType,
@@ -252,9 +252,10 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var htmlNodeUnlimited = YAHOO.util.Dom.get(scope.id + "-createNewInstantAbsenceForm_prop_lecm-absence_unlimited");
 						var endDate;
 						var htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0];
-						htmlNodeBegin.value = Alfresco.util.toISO8601(new Date());
+						var beginDate = new Date();
+						beginDate.setHours(0, 0, 0, 0);
+						htmlNodeBegin.value = Alfresco.util.toISO8601(beginDate);
 						if (htmlNodeUnlimited.checked) {
-							var beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value);
 							endDate = new Date(beginDate);
 						} else {
 							endDate = Alfresco.util.fromISO8601(htmlNodeEnd.value);
