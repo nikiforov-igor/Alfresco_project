@@ -139,10 +139,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     List<NodeRef> temps = findNodesByAssociationRef(showNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
                     if (temps.isEmpty()) {
                         List<ChildAssociationRef> childs = nodeService.getChildAssocs(showNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
-                        for (ChildAssociationRef child : childs) {
-                            showNodes.add(child.getChildRef());
-                        }
-                        if (showNodes.isEmpty()) {
+                        if (!childs.isEmpty()) {
+                            for (ChildAssociationRef child : childs) {
+                                showNodes.add(child.getChildRef());
+                            }
+                        } else {
                             logger.debug("Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
                             showNode = null;
                             break;
