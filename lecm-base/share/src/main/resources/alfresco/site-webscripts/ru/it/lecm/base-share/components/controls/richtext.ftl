@@ -16,7 +16,7 @@
     <script type="text/javascript">//<![CDATA[
     (function()
     {
-        new Alfresco.RichTextControl("${fieldHtmlId}").setOptions(
+        new LogicECM.RichTextControl("${fieldHtmlId}").setOptions(
             {
                 <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
                 currentValue: "${field.value?js_string}",
