@@ -264,7 +264,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Запрос Datasource с сервера
                  */
-                repoDatasource: true
+                repoDatasource: true,
+
+                /**
+                 * Форсировать ли подписку для новых datagrid'ов.
+                 * Должно быть true, если за один жизненный цикл страницы на неё могут быть добавлены/удалены несколько
+                 * datagrid'ов.
+                 *
+                 * @property forceSubscribing
+                 * @type boolean
+                 * @default false
+                 */
+                forceSubscribing: false
             },
 
             /**
@@ -710,8 +721,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                         return true;
                     };
-                    Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler);
-                    Bubbling.addDefaultAction("show-more", fnActionHandler);
+                    Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
+                    Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
                 }
 
                 // Actions module

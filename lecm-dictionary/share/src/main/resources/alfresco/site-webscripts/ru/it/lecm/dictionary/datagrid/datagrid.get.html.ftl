@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
+<#assign bubblingLabel = "dictionaries-datagrid">
 
 <@grid.datagrid id=id showViewForm=true>
 <script type="text/javascript">//<![CDATA[
@@ -110,29 +111,30 @@ function createDatagrid(attributeForShow) {
 
 	new LogicECM.module.Base.DataGrid('${id}').setOptions(
 			{
+                bubblingLabel:"${bubblingLabel}",
 				usePagination:true,
 				showExtendSearchBlock:false,
             actions: [
                 {
-                    type:"datagrid-action-link",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionEdit",
                     permission:"edit",
                     label:"${msg("actions.edit")}"
                 },
                 {
-                    type:"datagrid-action-link}",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionVersion",
                     permission:"edit",
                     label:"${msg("actions.version")}"
                 },
                 {
-                    type:"datagrid-action-link}",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionDuplicate",
                     permission:"create",
                     label:"${msg("actions.duplicate-row")}"
                 },
                 {
-                    type:"datagrid-action-link}",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionDelete",
                     permission:"delete",
                     label:"${msg("actions.delete-row")}"

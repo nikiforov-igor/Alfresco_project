@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-contractor:contractors-dictionary" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <description>Asdf</description>
+    <author>Denis Gonchar</author>
+    <published>2013-03-18</published>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+        <namespace uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
+        <namespace uri="http://www.it.ru/lecm/contractors/model/legalform/1.0" prefix="lecm-legalform"/>
+        <namespace uri="http://www.it.ru/lecm/contractors/model/specialization/1.0" prefix="lecm-specialization"/>
+    </namespaces>
+
+    <types>
+
+        <type name="lecm-contractor:contractor-type">
+
+            <title>Contractor Type</title>
+
+            <parent>lecm-dic:hierarchical_dictionary_values</parent>
+
+            <properties>
+
+                <!-- Сокращенное наименование -->
+                <property name="lecm-contractor:shortname">
+                    <title>Short Name</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Полное наименование -->
+                <property name="lecm-contractor:fullname">
+                    <title>Full Name</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Комментарий -->
+                <property name="lecm-contractor:comment">
+                    <title>Comment</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Юридический адрес -->
+                <property name="lecm-contractor:legal-address">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Фактический адрес -->
+                <property name="lecm-contractor:physical-address">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Телефон -->
+                <property name="lecm-contractor:phone">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Факс -->
+                <property name="lecm-contractor:fax">
+                    <type>d:text</type>
+                </property>
+
+                <!-- E-mail -->
+                <property name="lecm-contractor:email">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Ограничение: ИНН филиала должен наследоваться от ИНН головной организации. -->
+                <!-- ИНН -->
+                <property name="lecm-contractor:INN">
+                    <type>d:text</type>
+                </property>
+
+                <!-- ОКПО -->
+                <property name="lecm-contractor:OKPO">
+                    <type>d:text</type>
+                </property>
+
+                <!-- ОКВЭД -->
+                <property name="lecm-contractor:OKVED">
+                    <type>d:text</type>
+                </property>
+
+                <!-- ОКОГУ -->
+                <property name="lecm-contractor:OKOGU">
+                    <type>d:text</type>
+                </property>
+
+                <!-- КПП -->
+                <property name="lecm-contractor:KPP">
+                    <type>d:text</type>
+                </property>
+
+                <!-- ОГРН -->
+                <property name="lecm-contractor:OGRN">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Расчетный счет -->
+                <property name="lecm-contractor:transactional-account">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Корреспондентский счет -->
+                <property name="lecm-contractor:correspondent-account">
+                    <type>d:text</type>
+                </property>
+
+                <!-- БИК -->
+                <property name="lecm-contractor:BIK">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Наименование банка -->
+                <property name="lecm-contractor:bankname">
+                    <type>d:text</type>
+                </property>
+
+
+                <!-- Адрес банка или любая информация о местоположении. -->
+                <!-- Местоположение банка -->
+                <property name="lecm-contractor:bank-location">
+                    <type>d:text</type>
+                </property>
+
+                <!-- Код контрагента, используется при синхронизации данного справочника с внешней системой. -->
+                <!-- Код контрагента -->
+                <property name="lecm-contractor:contractor-code">
+                    <type>d:text</type>
+                </property>
+
+            </properties>
+
+            <associations>
+
+                <!-- FK Специализация -->
+                <!-- Ссылка на элементы справочника «Специализация». -->
+                <association name="lecm-contractor:contractor-to-specialization-association">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-specialization:specialization-type</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+
+                <!-- FK ОПФ -->
+                <!-- Организационно-правовая форма: ссылка на элементы справочника «ОПФ». -->
+                <association name="lecm-contractor:contractor-to-legalform-association">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-legalform:legalform-type</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+
+                <!-- FK Представитель (через ссылку) -->
+                <child-association name="lecm-contractor:contractor-to-link-association">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-contractor:link-representative-and-contractor</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </child-association>
+                
+                <!-- FK Контрагент -->
+                <!-- Реализуется на уровне [lecm-dic:hierarchical_dictionary_values] -->
+                <!-- TODO: Один уровень вложенности! -->
+
+            </associations>
+
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <type name="lecm-contractor:link-representative-and-contractor">
+            <title>Link with Contractor</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="lecm-contractor:link-to-representative-association-is-primary">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+            <associations>
+                <!-- Ассоциация с представителем -->
+                <association name="lecm-contractor:link-to-representative-association">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-representative:representative-type</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+
+        <type name="lecm-representative:representative-type">
+
+            <title>Representative Type</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+
+            <properties>
+
+                <!-- Фамилия -->
+                    <property name="lecm-representative:surname">
+                    <title>Surname</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Имя -->
+                <property name="lecm-representative:firstname">
+                    <title>First Name</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Отчество -->
+                <property name="lecm-representative:middlename">
+                    <title>Middle Name</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Должность -->
+                <property name="lecm-representative:rank">
+                    <title>Rank</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Комментарии -->
+                <property name="lecm-representative:commments">
+                    <title>Comments</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Рабочий телефон -->
+                <property name="lecm-representative:work-phone">
+                    <title>Work Phone</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Мобильный телефон -->
+                <property name="lecm-representative:mobile-phone">
+                    <title>Mobile Phone</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Местоположение -->
+                <property name="lecm-representative:location">
+                    <title>Location</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Факс -->
+                <property name="lecm-representative:fax">
+                    <title>Fax</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- E-mail -->
+                <property name="lecm-representative:email">
+                    <title>E-mail</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Skype, ICQ -->
+                <!-- Дополнительные контакты -->
+                <property name="lecm-representative:contacts">
+                    <title>Auxiliary Contacts</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Код представителя -->
+                <!-- Код Представителя, используется при синхронизации данного справочника с внешней системой. -->
+                <property name="lecm-representative:representative-code">
+                    <title>Representative Code</title>
+                    <type>d:text</type>
+                </property>
+
+            </properties>
+
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <type name="lecm-specialization:specialization-type">
+
+            <title>Specialization Type</title>
+            <parent>lecm-dic:hierarchical_dictionary_values</parent>
+
+            <properties>
+
+                <!-- Наименование -->
+                <property name="lecm-specialization:title">
+                    <title>Title</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Описание -->
+                <property name="lecm-specialization:description">
+                    <title>Description</title>
+                    <type>d:text</type>
+                </property>
+
+            </properties>
+
+        </type>
+
+        <type name="lecm-legalform:legalform-type">
+
+            <title>Legal Form Type</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+
+            <properties>
+
+                <!-- Например, «ЗАО». -->
+                <!-- Краткое наименование -->
+                <property name="lecm-legalform:short-title">
+                    <title>Short Title</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Например, «Закрытое акционерное общество». -->
+                <!-- Полное наименование -->
+                <property name="lecm-legalform:full-title">
+                    <title>Full Title</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <!-- Комментарий -->
+                <property name="lecm-legalform:comment">
+                    <title>Comment</title>
+                    <type>d:text</type>
+                </property>
+
+            </properties>
+
+        </type>
+
+    </types>
+</model>

@@ -83,7 +83,7 @@
 			        <control-param name="nameSubstituteString">{cm:name}</control-param>
 			        <control-param name="showCreateNewLink">false</control-param>
 			        <control-param name="showCreateNewButton">false</control-param>
-		        </type>lecm-org:
+                </type>
 	        </default-controls>
 
             <dependencies>

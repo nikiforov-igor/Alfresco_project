@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	
+-->
+<beans>
+
+    <bean id="${groupId}.${artifactId}.contractors-dictionary-bootstrap"
+          parent="lecmDictionaryBootstrap"
+          depends-on="${groupId}.${artifactId}.contractors-model-bootstrap,
+                      businessJournalLogEventsPolicy,
+                      сontractorsContractorPolicy,
+                      сontractorsRepresentativePolicy,
+                      contractorsSpecializationPolicy,
+                      contractorsLegalFormPolicy,
+                      contractorsLinkPolicy" >
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/dictionaries/contractor-dictionary.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/representative-dictionary.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/specialization-dictionary.xml</value>
+            </list>
+        </property>
+        <!--<property name="createOrUpdateDictionaries">-->
+            <!--<list>-->
+                <!--<value>alfresco/module/${artifactId}/models/contractor-items.xml</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    </bean>
+
+    <!-- Registration of contractor models -->
+    <bean id="${groupId}.${artifactId}.contractors-model-bootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/contractor-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/contractor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contractorsBean" class="ru.it.lecm.contractors.ContractorsBean">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="contractorsJavascriptExtension" class="ru.it.lecm.contractors.ContractorsJavascriptExtension" parent="baseJavaScriptExtension">
+        <property name="extensionName" value="contractorsRootObject"/>
+        <property name="contractors" ref="contractorsBean"/>
+    </bean>
+
+    <bean id="сontractorsContractorPolicy" class="ru.it.lecm.contractors.policies.ContractorsContractorPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="сontractorsRepresentativePolicy" class="ru.it.lecm.contractors.policies.ContractorsRepresentativePolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="contractorsSpecializationPolicy" class="ru.it.lecm.contractors.policies.ContractorsSpecializationPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="contractorsLegalFormPolicy" class="ru.it.lecm.contractors.policies.ContractorsLegalFormPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="contractorsLinkPolicy" class="ru.it.lecm.contractors.policies.ContractorsLinkPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+</beans>

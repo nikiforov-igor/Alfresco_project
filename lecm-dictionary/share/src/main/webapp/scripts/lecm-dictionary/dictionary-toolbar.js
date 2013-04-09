@@ -143,7 +143,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
 
                 // Reference to Data Grid component
-                this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
+                this.modules.dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", "dictionaries-datagrid");
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
                 Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -459,7 +459,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
              * @constructor
              */
             onInitDataGrid:function Toolbar_onInitDataGrid(layer, args) {
-                this.modules.dataGrid = args[1].datagrid;
-            },
+                this.modules.dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", "dictionaries-datagrid");
+            }
         }, true);
 })();

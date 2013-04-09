@@ -30,7 +30,7 @@
        order to be able to use Maven snapshots we cannot use the <version/>
        below as the AMP module version. Instead we use the
        buildnumber-maven-plugin. This requires a scm connection.
-   -->
+    -->
     <version>0.1.0</version>
     <description>Logic ECM Platform</description>
     <repositories>
@@ -100,7 +100,8 @@
 		<module>lecm-integrotest</module>
 		<module>lecm-documents</module>
 		<module>lecm-regnumbers</module>
-	</modules>
+        <module>lecm-contractors</module>
+    </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
         <!--<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>-->

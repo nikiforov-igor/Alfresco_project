@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
+<#assign bubblingLabel = "dictionaries-all-datagrid">
 
 <@grid.datagrid id>
 <script type="text/javascript">//<![CDATA[
@@ -186,18 +187,19 @@ LogicECM.module.Base.DataGrid.prototype.onActionExportXML = function (item) {
 }
 new LogicECM.module.Base.DataGrid('${id}').setOptions(
 		{
+            bubblingLabel:"${bubblingLabel}",
 			usePagination: true,
 			showExtendSearchBlock:false,
             showCheckboxColumn:false,
             actions: [
                 {
-                    type:"datagrid-action-link",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionEdit",
                     permission:"edit",
                     label:"${msg("actions.edit")}"
                 },
                 {
-                    type:"datagrid-action-link}",
+                    type:"datagrid-action-link-${bubblingLabel}",
                     id:"onActionExportXML",
                     permission:"edit",
                     label:"${msg("actions.export-xml")}"
