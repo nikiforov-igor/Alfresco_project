@@ -141,7 +141,7 @@
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
-		</dependency>        
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.subscriptions</groupId>
 			<artifactId>subscriptions-share</artifactId>
@@ -201,6 +201,13 @@
 		 <dependency>
             <groupId>ru.it.lecm.regnumbers</groupId>
             <artifactId>lecm-regnumbers-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.contractors</groupId>
+            <artifactId>lecm-contractors-share</artifactId>
             <version>${platform.version}</version>
             <type>amp</type>
             <scope>runtime</scope>
