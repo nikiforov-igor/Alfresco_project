@@ -1052,6 +1052,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 searchConfig: datagridMeta.searchConfig,
                                 searchShowInactive: me.options.searchShowInactive,
                                 parent: datagridMeta.nodeRef,
+                                itemType: datagridMeta.itemType,
                                 sort:datagridMeta.sort
                             });
                         }

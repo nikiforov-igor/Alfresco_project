@@ -64,7 +64,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                                 actionsConfig: {
                                     fullDelete: "true"
                                 },
-                                sort:"cm:name|false",
+                                sort:"cm:modified|false",
                                 searchConfig: {
                                     filter: '+PATH:"'+ root.draftPath +'//*"'
                                    + ' OR +PATH:"'+ root.documentPath +'//*"'
