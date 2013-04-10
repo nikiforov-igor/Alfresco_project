@@ -32,20 +32,13 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
         this.nodeService = nodeService;
     }
 
-    public ScriptNode add(String documentRef, String employeeRef, String paramsString) {
+    public ScriptNode add(String documentRef, String employeeRef, String permGroup) {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-        if (paramsString != null && !paramsString.isEmpty()) {
-            String[] params = paramsString.split(";");
-            for (String param : params) {
-                String[] parameter = param.split("=");
-                String name = parameter[0];
-                String value = parameter[1];
-                QName qName = QName.createQName(name, serviceRegistry.getNamespaceService());
-                props.put(qName, value);
-            }
+        if (permGroup != null && !permGroup.isEmpty()) {
+            props.put(DocumentMembersService.PROP_MEMBER_GROUP, permGroup);
         }
 
         NodeRef member = documentMembersService.addMember(new NodeRef(documentRef), new NodeRef(employeeRef), props);
