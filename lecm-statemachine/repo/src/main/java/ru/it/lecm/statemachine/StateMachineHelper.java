@@ -108,8 +108,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
 
         NodeRef subprocessPackage = workflowService.createPackage(null);
+        NodeRef documentRef = null;
         for (ChildAssociationRef document : documents) {
             nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
+            documentRef = document.getChildRef();
         }
         workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
         //workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, groupRef);
@@ -147,6 +149,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         String instanceId = path.getInstance().getId();
         WorkflowTask startTask = workflowService.getStartTask(instanceId);
         workflowService.endTask(startTask.getId(), null);
+
+        //Добавляем участников к документу.
+        List<NodeRef> assignees = getAssigneesForWorkflow(instanceId);
+        final NodeRef packageDocument = documentRef;
+        for (final NodeRef assigneeRef : assignees) {
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            return documentMembersService.addMember(packageDocument, assigneeRef, null);
+                        }
+                    });
+                }
+            });
+        }
 
         return instanceId;
 
