@@ -741,7 +741,7 @@
       </permissionGroup>
 
       <permissionGroup name="LECM_BASIC_PG_InputCorrector" allowFullControl="false" expose="false" >
-         <includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />
+         <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
          <!-- 
          <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
          <includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />
