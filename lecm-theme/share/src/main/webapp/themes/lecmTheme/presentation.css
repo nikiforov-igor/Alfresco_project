@@ -496,6 +496,7 @@ h4 .lighter
     float: left;
     clear: none;
     vertical-align: middle;
+    padding-right: 10px;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field label.checkbox {
     line-height: 25px;
@@ -1832,7 +1833,8 @@ div.currentValueDisplay,
 div.autocompleteCurrentValueDisplay,
 div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel div.form-field div.selectone-control select,
-.yui-skin-lecmTheme .yui-panel div.form-field input.autocomplete-input[type="text"] {
+.yui-skin-lecmTheme .yui-panel div.form-field input.autocomplete-input[type="text"],
+.yui-skin-lecmTheme .yui-panel div.form-field textarea {
     min-height: 26px;
     max-height: 100px;
     width: 28em;
