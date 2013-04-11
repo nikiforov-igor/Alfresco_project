@@ -306,6 +306,9 @@ public class BPMNGenerator {
 			flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
 		}
 
+        //timerAction
+        flows.addAll(createTimerEvent(status, start, end, statusVar));
+
 		if (flows.size() == 1) {
 			Flow flow = flows.get(0);
 			Element flowElement = createFlow(flow.getSourceRef(), flow.getTargetRef(), flow.getContent());
@@ -325,6 +328,54 @@ public class BPMNGenerator {
 
 		}
 	}
+
+    private int getTimerDuration(NodeRef status) {
+        try {
+            String durationString = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_TIMER_DURATION);
+            return Integer.parseInt(durationString);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    private List<Flow> createTimerEvent(NodeRef status, Element start, Element end, String statusVar) {
+        int timerDuration = getTimerDuration(status);
+        if (timerDuration <= 0) {
+            return new ArrayList<Flow>();
+        }
+
+        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(status, StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+        if (targetAssocs.size() == 0) {
+            return new ArrayList<Flow>();
+        }
+
+        Element actionElement = doc.createElement("lecm:action");
+        actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TIMER_ACTION);
+        start.appendChild(actionElement);
+
+        String variableName = "ta" + statusVar;
+
+        Element attribute = doc.createElement("lecm:attribute");
+        attribute.setAttribute("name", "variableName");
+        attribute.setAttribute("value", variableName);
+        actionElement.appendChild(attribute);
+
+        attribute = doc.createElement("lecm:attribute");
+        attribute.setAttribute("name", "duration");
+        attribute.setAttribute("value", "" + timerDuration);
+        actionElement.appendChild(attribute);
+
+        AssociationRef targetStatusRef = targetAssocs.get(0);
+        String target = "id" + targetStatusRef.getTargetRef().getId().replace("-", "");
+        List<Flow> flows = new ArrayList<Flow>();
+        flows.add(new Flow(statusVar, target, "${!empty " + variableName + " && " + variableName + "}"));
+
+        actionElement = doc.createElement("lecm:action");
+        actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TIMER_ACTION);
+        end.appendChild(actionElement);
+
+        return flows;
+    }
 
 	private void prepareActions(NodeRef status, ArrayList<ChildAssociationRef> startActions, ArrayList<ChildAssociationRef> takeActions, ArrayList<ChildAssociationRef> endActions) {
 		NodeRef actionsRef = nodeService.getChildByName(status, ContentModel.ASSOC_CONTAINS, "actions");

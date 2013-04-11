@@ -151,6 +151,8 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			try {
 				path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
 				logger.info( String.format( "workflow {%s} started for document {%s}", path, docRef));
+            } catch (Exception e) {
+                logger.error("Error while start statemachine", e);
 			} finally {
 				AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
 			}

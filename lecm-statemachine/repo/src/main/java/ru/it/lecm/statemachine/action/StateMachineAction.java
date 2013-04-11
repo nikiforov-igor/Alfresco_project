@@ -17,6 +17,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 /**
@@ -30,6 +31,15 @@ abstract public class StateMachineAction {
 	private LecmPermissionService lecmPermissionService;
 	private BusinessJournalService businessJournalService;
 	private RepositoryStructureHelper repositoryStructureHelper;
+    private TimerActionHelper timerActionHelper;
+
+    public TimerActionHelper getTimerActionHelper() {
+        return timerActionHelper;
+    }
+
+    public void setTimerActionHelper(TimerActionHelper timerActionHelper) {
+        this.timerActionHelper = timerActionHelper;
+    }
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;

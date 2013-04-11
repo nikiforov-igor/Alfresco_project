@@ -6,6 +6,7 @@
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/statemachine/1.0" prefix="lecm-statemachine"/>
@@ -33,6 +34,28 @@
 				<aspect>bpm:assignee</aspect>
 			</mandatory-aspects>
 		</type>
+        <type name="lecm-statemachine:timer">
+            <title>Logic ECM Statemachine Task Timer</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <property name="lecm-statemachine:executionId">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-statemachine:taskId">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-statemachine:variable">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-statemachine:finishTimestamp">
+                    <type>d:long</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
 	</types>
 	<aspects>
 		<aspect name="lecm-statemachine:documentTask">

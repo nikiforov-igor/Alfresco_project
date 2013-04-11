@@ -623,8 +623,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
         ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
         List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
         for (ExecutionListener listener : listeners) {
-            if (listener instanceof StateMachineHandler) {
-                result = ((StateMachineHandler) listener).getEvents().get(onFire);
+            if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
+                result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get(onFire);
             }
         }
         return result;

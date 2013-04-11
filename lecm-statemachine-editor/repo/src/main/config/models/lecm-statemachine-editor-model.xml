@@ -201,7 +201,17 @@
 					<mandatory>false</mandatory>
 				</property>
 
-			</properties>
+                <property name="lecm-stmeditor:timerDuration">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
+            </properties>
+
+            <mandatory-aspects>
+                <aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+            </mandatory-aspects>
+
 		</type>
 
 		<!-- Объект Статус -->
@@ -455,8 +465,8 @@
 					</source>
 					<target>
 						<class>lecm-stmeditor:status</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
+						<mandatory>false</mandatory>
+						<many>true</many>
 					</target>
 				</association>
 			</associations>

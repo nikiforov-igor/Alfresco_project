@@ -32,6 +32,7 @@ public class StatemachineEditorModel {
 	public final static QName PROP_DYNAMIC_ROLES = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamicRoles");
 	public final static QName PROP_START_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "startStatus");
 	public final static QName PROP_FOR_DRAFT = QName.createQName(STATEMACHINE_EDITOR_URI, "forDraft");
+	public final static QName PROP_TIMER_DURATION = QName.createQName(STATEMACHINE_EDITOR_URI, "timerDuration");
 	public final static QName PROP_TRANSITION_LABEL = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionLabel");
 	public final static QName PROP_WORKFLOW_ID = QName.createQName(STATEMACHINE_EDITOR_URI, "workflowId");
 	public final static QName PROP_ASSIGNEE = QName.createQName(STATEMACHINE_EDITOR_URI, "assignee");
@@ -67,5 +68,6 @@ public class StatemachineEditorModel {
 	public final static String ACTION_WAIT_FOR_DOCUMENT_CHANGE = "WaitForDocumentChange";
 	public final static String ACTION_USER_WORKFLOW = "UserWorkflow";
 	public final static String ACTION_TRANSITION_ACTION = "TransitionAction";
+	public final static String ACTION_TIMER_ACTION = "TimerAction";
 
 }

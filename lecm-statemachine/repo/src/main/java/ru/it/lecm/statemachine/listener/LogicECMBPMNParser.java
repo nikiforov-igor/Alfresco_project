@@ -21,9 +21,13 @@ import java.util.List;
  * процесса и добавляет слушателя на завершение процесса.
  */
 public class LogicECMBPMNParser implements BpmnParseListener {
+    private static StateMachineHandler stateMachineHandler;
 
+    public void setStateMachineHandler(StateMachineHandler stateMachineHandler) {
+        LogicECMBPMNParser.stateMachineHandler = stateMachineHandler;
+    }
 
-	@Override
+    @Override
 	public void parseProcess(Element element, ProcessDefinitionEntity processDefinitionEntity) {
 	}
 
@@ -118,10 +122,10 @@ public class LogicECMBPMNParser implements BpmnParseListener {
 			Element lecmExtention = extentionElements.elementNS("http://www.it.ru/LogicECM/bpmn/1.0", "extension");
 			if (lecmExtention != null) {
 				String processId = ((ProcessDefinitionEntity)activity.getParent()).getKey();
-				StateMachineHandler handler = new StateMachineHandler(lecmExtention, processId);
-				activity.addExecutionListener(ExecutionListener.EVENTNAME_START, handler);
-				activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, handler);
-				activity.addExecutionListener(ExecutionListener.EVENTNAME_END, handler);
+                StateMachineHandler.StatemachineTaskListener listener = stateMachineHandler.configure(lecmExtention, processId);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_START, listener);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_TAKE, listener);
+                activity.addExecutionListener(ExecutionListener.EVENTNAME_END, listener);
 			}
 		}
 	}
