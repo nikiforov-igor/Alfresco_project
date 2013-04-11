@@ -27,15 +27,33 @@ YAHOO.util.Event.onContentReady('${id}', function () {
 		datagridMeta:{
 			itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
 			nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
-			datagridFormId: "absenceAdminDatagrid"
-			//searchConfig: {
-			//	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
-			//}
+			datagridFormId: "absenceAdminDatagrid",
+			searchConfig: {
+				filter: ""
+			}
 		},
 		bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL
 	});
 });
+
+function onShowOnlyActiveChanged() {
+	var cbShowOnlyConfigured = YAHOO.util.Dom.get("cbShowOnlyActive");
+	var obj = {
+		datagridMeta: datagrid.datagridMeta
+	};
+	if (cbShowOnlyConfigured.checked) {
+		obj.datagridMeta.searchConfig.filter = "@lecm\\-absence:activated:true";
+	} else {
+		obj.datagridMeta.searchConfig.filter = "";
+	}
+	YAHOO.Bubbling.fire ("activeGridChanged", obj);
+};
+
 //]]>
 </script>
 
+<div align="right" style="padding-top: 0.5em;">
+	<input type="checkbox" class="formsCheckBox" id="cbShowOnlyActive" onChange="onShowOnlyActiveChanged()">
+	<label class="checkbox" for="cbShowOnlyActive">Отображать только активные</label>
+</div>
 <@grid.datagrid id showViewForm/>

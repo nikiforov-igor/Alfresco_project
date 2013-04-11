@@ -247,6 +247,7 @@
 			</form>
 			<form id="absenceAdminDatagrid">
 				<field-visibility>
+					<show id="lecm-absence:activated"/>
 					<show id="lecm-absence:abscent-employee-assoc"/>
 					<show id="lecm-absence:begin"/>
 					<show id="lecm-absence:end"/>
