@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Contracts fake datagrid</shortname>
+    <description>Return contracts fake datagrid</description>
+    <url>/lecm/contracts/contracts-fake-datagrid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

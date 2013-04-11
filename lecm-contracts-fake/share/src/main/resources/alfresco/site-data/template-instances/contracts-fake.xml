@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/contracts/contracts-fake</template-type>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.contracts.fake.title</title>
+                <filteredLabel>page.contracts.fake.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/contracts/fake/toolbar</url>
+            <properties>
+                <showButtons>true</showButtons>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>true</showExSearchBtn>
+                <bubblingLabel>contracts-fake</bubblingLabel>
+            </properties>
+        </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/contracts/fake/menu</url>
+            <properties>
+                <selected>contracts-fake</selected>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>contracts-fake-grid</region-id>
+            <url>/lecm/contracts/contracts-fake-datagrid</url>
+            <properties>
+                <pagination>true</pagination>
+                <bubblingLabel>contracts-fake</bubblingLabel>
+                <advSearchFormId>contracts-fake-search</advSearchFormId>
+            </properties>
+        </component>
+    </components>
+</template-instance>

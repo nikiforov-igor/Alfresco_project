@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-contract-fake:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM document model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/fake/1.0" prefix="lecm-contract-fake"/>
+	</namespaces>
+
+    <constraints>
+        <constraint name="lecm-contract-fake:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value>Договор {cm:name} от {cm:created}, регистрационный номер {lecm-document:regnum}</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-contract-fake:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Основные</value>
+                    <value>Схемы</value>
+                    <value>Остальные</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
+	<types>
+		<type name="lecm-contract-fake:document">
+			<title>Logic Ecm Contract Fake Document</title>
+			<parent>lecm-document:base</parent>
+			<properties>
+                <property name="lecm-contract-fake:contentAttr">
+					<type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+				</property>
+			</properties>
+            <mandatory-aspects>
+                <aspect>lecm-document-aspects:rateable</aspect>
+            </mandatory-aspects>
+		</type>
+		<type name="lecm-contract-fake:importTestDocument">
+			<title>Logic Ecm Import Test Document</title>
+			<parent>lecm-document:base</parent>
+			<properties>
+				<property name="lecm-contract-fake:importTestRegnum">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</type>
+	</types>
+
+</model>

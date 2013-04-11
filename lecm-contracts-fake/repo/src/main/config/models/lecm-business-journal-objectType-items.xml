@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Тип объекта">
+    <items>
+        <item name="Договор">
+            <property name="cm:name">Договор (Fake)</property>
+            <property name="lecm-busjournal:objectType-code">LECM_CONTRACT_FAKE</property>
+            <property name="lecm-busjournal:objectType-class">lecm-contract-fake:document</property>
+            <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
+            <property name="lecm-busjournal:objectType-list-template">автор : {!~AUTHOR}</property>
+        </item>
+    </items>
+</dictionary>

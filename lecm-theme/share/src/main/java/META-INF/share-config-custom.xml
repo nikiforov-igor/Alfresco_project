@@ -27,6 +27,7 @@
             <app-items>
                  <!--defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"-->
                 <item type="link" id="contracts">/contract-documents</item>
+                <item type="link" id="contracts.fake">/contracts-fake</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
                 <item type="js" id="messenger">LogicECM.module.LecmIM.Messenger</item>
                 <item type="js" id="sites" icon="lecm-sites.png">Alfresco.module.Sites</item>
