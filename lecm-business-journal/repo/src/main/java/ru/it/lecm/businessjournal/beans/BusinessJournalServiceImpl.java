@@ -99,32 +99,39 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
-		if (mainObject == null) {
-			logger.warn("Main Object not set!");
-			return null;
-		}
-		NodeRef record = null;
-		try {
-			// получаем текущего пользователя по person
-			NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+    public NodeRef log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
+        if (mainObject == null) {
+            logger.warn("Main Object not set!");
+            return null;
+        }
+        final AuthenticationUtil.RunAsWork<NodeRef> runner = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                NodeRef record = null;
+                try {
+                    // получаем текущего пользователя по person
+                    NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
 
-			// заполняем карту плейсхолдеров
-			Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
-			// пытаемся получить объект Категория события по ключу
-			NodeRef category = getEventCategoryByCode(eventCategory);
-			// получаем шаблон описания
-			String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
-			// заполняем шаблон данными
-			String filled = fillTemplateString(templateString, holdersMap);
+                    // заполняем карту плейсхолдеров
+                    Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
+                    // пытаемся получить объект Категория события по ключу
+                    NodeRef category = getEventCategoryByCode(eventCategory);
+                    // получаем шаблон описания
+                    String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
+                    // заполняем шаблон данными
+                    String filled = fillTemplateString(templateString, holdersMap);
 
-			// создаем записи
-			record = createRecord(date, employee, mainObject, category, objects, filled);
-		} catch (Exception ex) {
-			logger.error("Could not create business-journal record", ex);
-		}
-		return record;
-	}
+                    // создаем записи
+                    record = createRecord(date, employee, mainObject, category, objects, filled);
+                } catch (Exception ex) {
+                    logger.error("Could not create business-journal record", ex);
+                }
+                return record;
+            }
+        };
+
+        return AuthenticationUtil.runAsSystem(runner);
+    }
 
     @Override
     public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
