@@ -71,10 +71,12 @@ public class TimerActionHelper implements InitializingBean {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
 
-        long finishTimestamp = calendar.getTime().getTime();
+        long finishTimestamp = calendar.getTimeInMillis();
 
         //TODO:stub for testing!!!
-        finishTimestamp = new Date().getTime() + duration * 60000;
+        GregorianCalendar calendarStub = new GregorianCalendar();
+        calendarStub.add(Calendar.MINUTE, duration);
+        finishTimestamp = calendarStub.getTimeInMillis();
 
         startTimer(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp);
         addTimerNode(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp);
