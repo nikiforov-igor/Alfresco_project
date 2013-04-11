@@ -50,7 +50,7 @@ public class TimerAction extends StateMachineAction {
                 }
             };
 
-            new Timer().schedule(waitForRealTaskId, 10000);
+            new Timer().schedule(waitForRealTaskId, 5000);
         }
 
         if (eventName.equalsIgnoreCase("end")) {
