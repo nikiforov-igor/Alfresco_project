@@ -466,21 +466,32 @@ public class LecmPermissionServiceImpl
 		}
 
 		// непосредственная нарезка в ACL ...
-		final String authority = sgnm.makeSGName(posUserSpec); // sgnm.makeFullBRMEAuthName(userId, roleCode);
-		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
-		final String permission = findACEPermission(permissionGroup);
-		permissionService.setPermission( nodeRef, authority, permission, true);
-		logger.warn(String.format("Private role '%s' for employee '%s'\n\tGRANTED as {%s}\n\t for document '%s'\n\t by security group <%s>", permissionGroup, employeeId, permission, nodeRef, authority));
+		grantAccessByPosition(permissionGroup, nodeRef, posUserSpec);
 	}
 
 	@Override
 	public void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef,
 			String employeeId) {
 		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeId, permissionGroup, nodeRef);
+		revokeAccessByPosition(permissionGroup, nodeRef, posUserSpec);
+	}
 
-		final String authority = sgnm.makeSGName(posUserSpec);
+	@Override
+	public void grantAccessByPosition(LecmPermissionGroup permissionGroup, NodeRef nodeRef, SGPosition securityPos) {
+		// непосредственная нарезка в ACL ...
+		final String authority = sgnm.makeSGName(securityPos); // sgnm.makeFullBRMEAuthName(userId, roleCode);
+		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
+		final String permission = findACEPermission(permissionGroup);
+		permissionService.setPermission( nodeRef, authority, permission, true);
+		logger.warn(String.format("Private role '%s' for '%s'\n\tGRANTED as {%s}\n\t for document '%s'\n\t by security group <%s>", permissionGroup, securityPos, permission, nodeRef, authority));
+	}
+
+	@Override
+	public void revokeAccessByPosition(LecmPermissionGroup permissionGroup, NodeRef nodeRef,
+			SGPosition securityPos) {
+		final String authority = sgnm.makeSGName(securityPos);
 		permissionService.clearPermission( nodeRef, authority);
-		logger.warn(String.format("Private role '%s' for employee '%s'\n\tREVOKED from document '%s'", permissionGroup, employeeId, nodeRef));
+		logger.warn(String.format("Private role '%s' for '%s'\n\tREVOKED from document '%s'", permissionGroup, securityPos, nodeRef));
 	}
 
 	@Override
@@ -850,4 +861,5 @@ public class LecmPermissionServiceImpl
 
 		return sb;
 	}
+
 }

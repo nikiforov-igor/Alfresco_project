@@ -2,6 +2,8 @@ package ru.it.lecm.security;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
+import ru.it.lecm.security.Types.SGPosition;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -115,6 +117,14 @@ public interface LecmPermissionService {
 	boolean hasPermission(String permission, NodeRef node);
 
 	/**
+	 * Проверяет элемент на доступность
+	 * @param nodeRef Ссылка на элемент
+	 * @return true, если есть права на чтение элемента
+	 */
+	public boolean hasReadAccess(NodeRef nodeRef);
+	public boolean hasReadAccess(final NodeRef nodeRef, final String userLogin);
+
+	/**
 	 * Проверка наличия привелегии у текущего сотрудника относительно узла (документа, папки).
 	 * Если нет привелегии, выбрасывается AlfrescoRuntimeException
 	 *
@@ -132,14 +142,6 @@ public interface LecmPermissionService {
 	void grantAccess(LecmPermissionGroup permissionGroup, NodeRef node, String employeeId);
 
 	/**
-	 * Проверяет элемент на доступность
-	 * @param nodeRef Ссылка на элемент
-	 * @return true, если есть права на чтение элемента
-	 */
-	public boolean hasReadAccess(NodeRef nodeRef);
-	public boolean hasReadAccess(final NodeRef nodeRef, final String userLogin);
-
-	/**
 	 * Исключить Сотрудника из группы привилегий данного узла (документа, папки)
 	 * @param permissionGroup название группы привилегий, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 * @param node узел, доступ к которому надо ограничить
@@ -147,6 +149,22 @@ public interface LecmPermissionService {
 	 */
 	void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef node, String employeeId);
 
+	/**
+	 * Добавить для объекта (указанному позицией) право доступа к узлу (документу/папке)
+	 * @param permissionGroup
+	 * @param node
+	 * @param securityPos sec-позиция, соот-щая объекту, для которого надо назначить разрешение
+	 */
+	void grantAccessByPosition(LecmPermissionGroup permissionGroup, NodeRef node, SGPosition securityPos);
+
+
+	/**
+	 * Исключить разрешения у объекта к данному узлу (документу/папки)
+	 * @param permissionGroup название группы привилегий, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
+	 * @param node узел, доступ к которому надо ограничить
+	 * @param securityPos sec-позиция, соот-щая объекту, у которого надо убрать разрешение
+	 */
+	void revokeAccessByPosition(LecmPermissionGroup permissionGroup, NodeRef node, SGPosition securityPos);
 
 	/**
 	 * Предоставить Динамическую Роль на документ/папку указанному пользователю.
