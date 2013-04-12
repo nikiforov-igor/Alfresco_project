@@ -18,6 +18,7 @@
 			<properties>
 				<property name="lecm-contract-dic:contract-type-code">
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -40,6 +41,7 @@
 			<properties>
 				<property name="lecm-contract-dic:contract-documents-type-code">
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -54,6 +56,7 @@
 			<properties>
 				<property name="lecm-contract-dic:contract-subjects-code">
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -76,6 +79,7 @@
 			<properties>
 				<property name="lecm-contract-dic:delete-reason-code">
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -90,6 +94,7 @@
 			<properties>
 				<property name="lecm-contract-dic:reference-data-link">
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>

@@ -92,4 +92,35 @@
             </form>
 		</forms>
 	</config>
+
+	<config evaluator="node-type" condition="lecm-currency:currency">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-currency:alphabetic-code" force="true"/>
+					<show id="lecm-currency:digital-code" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-currency:currency">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-currency:alphabetic-code" force="true"/>
+					<show id="lecm-currency:digital-code" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-currency:alphabetic-code" force="true"/>
+					<show id="lecm-currency:digital-code" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

@@ -19,6 +19,15 @@
 		</property>
 	</bean>
 
+	<bean id="dictionary.LogicEcmDictionaryCurrencyModelBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-dictionary-currency-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true"
           class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap">
         <property name="nodeService" ref="nodeService"/>
@@ -92,6 +101,14 @@
 		</property>
 		<property name="dictionaryService">
 			<ref bean="serviceDictionary"/>
+		</property>
+	</bean>
+
+	<bean id="dictionary.LogicEcmDictionaryCurrencyBootstrap" parent="lecmDictionaryBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-dictionary-currency.xml</value>
+			</list>
 		</property>
 	</bean>
 </beans>
