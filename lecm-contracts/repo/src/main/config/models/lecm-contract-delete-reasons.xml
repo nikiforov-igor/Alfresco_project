@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Причины удаления">
+	<property name="lecm-dic:attributeForShow">cm:name</property>
+	<property name="lecm-dic:type">lecm-contract-dic:delete-reason</property>
+	<property name="lecm-dic:active">true</property>
+	<property name="lecm-dic:show_control_in_separate_window">false</property>
+	<property name="lecm-dic:plane">true</property>
+	<property name="lecm-dic:description">Причины удаления договора</property>
+	<items>
+		<item name="Отказ контрагента">
+			<property name="cm:name">Отказ контрагента</property>
+			<property name="lecm-contract-dic:delete-reason-code">01</property>
+		</item>
+		<item name="Проигрыш тендера">
+			<property name="cm:name">Проигрыш тендера</property>
+			<property name="lecm-contract-dic:delete-reason-code">02</property>
+		</item>
+		<item name="Другое">
+			<property name="cm:name">Другое</property>
+			<property name="lecm-contract-dic:delete-reason-code">03</property>
+		</item>
+	</items>
+</dictionary>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Тематика договора">
+	<property name="lecm-dic:attributeForShow">cm:name</property>
+	<property name="lecm-dic:type">lecm-contract-dic:contract-subjects</property>
+	<property name="lecm-dic:active">true</property>
+	<property name="lecm-dic:show_control_in_separate_window">false</property>
+	<property name="lecm-dic:plane">true</property>
+	<property name="lecm-dic:description">Тематика договора</property>
+	<items>
+		<item name="Электроэнергетика">
+			<property name="cm:name">Электроэнергетика</property>
+			<property name="lecm-contract-dic:contract-subjects-code">01</property>
+		</item>
+		<item name="Доставка воды">
+			<property name="cm:name">Доставка воды</property>
+			<property name="lecm-contract-dic:contract-subjects-code">02</property>
+		</item>
+		<item name="Кейтеринг">
+			<property name="cm:name">Кейтеринг</property>
+			<property name="lecm-contract-dic:contract-subjects-code">03</property>
+		</item>
+		<item name="Поставка товаров для государственных нужд">
+			<property name="cm:name">Поставка товаров для государственных нужд</property>
+			<property name="lecm-contract-dic:contract-subjects-code">04</property>
+		</item>
+	</items>
+</dictionary>

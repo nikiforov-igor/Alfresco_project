@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-contract-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM contracts dictionaries model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-contract-dic:contract-type">
+			<title>Logic Ecm Dictionary Contract Type</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-contract-dic:contract-type-code">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-contract-dic:contract-type-description">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="lecm-contract-dic:contract-documents-type">
+			<title>Logic Ecm Dictionary Contract Documents Type</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-contract-dic:contract-documents-type-code">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="lecm-contract-dic:contract-subjects">
+			<title>Logic Ecm Dictionary Contract Subjects</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-contract-dic:contract-subjects-code">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-contract-dic:contract-subjects-description">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="lecm-contract-dic:delete-reason">
+			<title>Logic Ecm Dictionary Delete Reason</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-contract-dic:delete-reason-code">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="lecm-contract-dic:reference-data">
+			<title>Logic Ecm Dictionary Reference Data</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-contract-dic:reference-data-link">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>
