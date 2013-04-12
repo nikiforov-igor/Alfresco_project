@@ -134,6 +134,15 @@ public class StatemachineWebScriptBean extends BaseWebScript {
     }
 
     /**
+     * Возвращает может ли текущий сотрудник создавать документ определенного типа
+     * @param type
+     * @return
+     */
+    public boolean isStarter(String type) {
+        return stateMachineHelper.isStarter(type);
+    }
+
+    /**
      * Проверка документа на черновой статус
      * @param node
      * @return

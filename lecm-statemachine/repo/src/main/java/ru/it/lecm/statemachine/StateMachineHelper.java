@@ -228,6 +228,45 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
+
+    /**
+     * Возвращает может ли текущий сотрудник создавать документ определенного типа
+     * @param type - тип документа
+     * @return
+     */
+    public boolean isStarter(String type) {
+        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        return isStarter(type, employee);
+    }
+
+
+    /**
+     * Возвращает может ли сотрудник создавать документ определенного типа
+     * @param type - тип документа
+     * @param employee - сотрудник
+     * @return
+     */
+    public boolean isStarter(String type, NodeRef employee) {
+        List<NodeRef> roleRefs = orgstructureBean.getBusinesRoles(true);
+        HashSet<String> roles = new HashSet<String>();
+        for (NodeRef role : roleRefs) {
+            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+            roles.add(name);
+        }
+        boolean result = false;
+        List<StateMachineAction> actions = getStartActions(type.replace(":", "_"));
+        for (StateMachineAction action : actions) {
+            if (action instanceof DocumentPermissionAction) {
+                DocumentPermissionAction permissions = (DocumentPermissionAction) action;
+                Set<String> accessRoles = permissions.getRoles();
+                for (String role : roles) {
+                    result = result || accessRoles.contains(role);
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      * Выбирает список действий для старта процесса последней версии.
      *

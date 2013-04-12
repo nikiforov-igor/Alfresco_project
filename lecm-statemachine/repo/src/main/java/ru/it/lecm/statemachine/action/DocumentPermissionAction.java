@@ -3,8 +3,9 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: PMelnikov
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class DocumentPermissionAction extends StateMachineAction {
 
-	private ArrayList<String> roles = new ArrayList<String>();
+	private Set<String> roles = new HashSet<String>();
 
 	@Override
 	public void execute(DelegateExecution execution) {
@@ -27,5 +28,9 @@ public class DocumentPermissionAction extends StateMachineAction {
 			roles.add(value);
 		}
 	}
+
+    public Set<String> getRoles() {
+        return roles;
+    }
 
 }

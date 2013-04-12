@@ -53,4 +53,20 @@ public interface StateMachineServiceBean {
     public String getDocumentStatus(NodeRef document);
 
     public List<String> executeUserAction(NodeRef document, String actionId);
+
+    /**
+     * Возвращает может ли текущий сотрудник создавать документ определенного типа
+     * @param type - тип документа
+     * @return
+     */
+    public boolean isStarter(String type);
+
+    /**
+     * Возвращает может ли сотрудник создавать документ определенного типа
+     * @param type - тип документа
+     * @param employee - сотрудник
+     * @return
+     */
+    public boolean isStarter(String type, NodeRef employee);
+
 }
