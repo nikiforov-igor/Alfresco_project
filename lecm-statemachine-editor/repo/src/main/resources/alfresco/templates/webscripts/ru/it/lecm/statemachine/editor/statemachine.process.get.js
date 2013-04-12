@@ -86,6 +86,17 @@ if (statemachineId != null && statemachineId != '') {
 				}
 			}
 		}
+        if (status.assocs["lecm-stmeditor:transitionStatus"] != null) {
+
+            var timeoutStatusLabel = status.assocs["lecm-stmeditor:transitionStatus"][0].properties["cm:name"]
+            var duration = status.properties["lecm-stmeditor:timerDuration"];
+            transitions.push({
+                user: false,
+                exp: "Через " + duration + " р.д.",
+                status: timeoutStatusLabel,
+                label: "По таймауту"
+            });
+        }
 		statuses.push({
 			name: status.properties["cm:name"] + (status.properties["lecm-stmeditor:startStatus"] ? " (S)" : ""),
 			nodeRef: status.nodeRef.toString(),

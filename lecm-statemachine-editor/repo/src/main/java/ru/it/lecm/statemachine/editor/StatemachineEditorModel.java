@@ -14,7 +14,8 @@ public class StatemachineEditorModel {
 
     public final static QName TYPE_STATEMACHINE = QName.createQName(STATEMACHINE_EDITOR_URI, "statemachine");
 
-    public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "taskStatus");
+    public final static QName TYPE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "status");
+    public final static QName TYPE_TASK_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "taskStatus");
     public final static QName TYPE_STATUSES = QName.createQName(STATEMACHINE_EDITOR_URI, "statuses");
 	public final static QName TYPE_ROLES = QName.createQName(STATEMACHINE_EDITOR_URI, "roles");
 	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_EDITOR_URI, "actions");
@@ -57,6 +58,8 @@ public class StatemachineEditorModel {
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
 	public final static QName ASSOC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "role-assoc");
+
+    public final static QName ASPECT_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatusAspect");
 
     public static final String STATEMACHINES = "statemachines";
     public static final String STATUSES = "statuses";

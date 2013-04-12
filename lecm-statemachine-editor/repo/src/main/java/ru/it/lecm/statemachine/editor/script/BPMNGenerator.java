@@ -129,7 +129,7 @@ public class BPMNGenerator {
 				QName type = nodeService.getType(status.getChildRef());
 				if (type.equals(StatemachineEditorModel.TYPE_END_EVENT)) {
 					createEndEvent(process, status.getChildRef(), statusName, statusVar, stateMachine);
-				} else if (type.equals(StatemachineEditorModel.TYPE_STATUS)) {
+				} else if (type.equals(StatemachineEditorModel.TYPE_TASK_STATUS)) {
 					createStateTask(process, status.getChildRef(), statusName, statusVar, version);
 				}
 			}

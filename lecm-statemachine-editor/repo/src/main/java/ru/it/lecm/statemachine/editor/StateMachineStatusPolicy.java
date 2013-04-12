@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -26,7 +27,7 @@ import java.util.List;
  * Date: 16.11.12
  * Time: 14:45
  */
-public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNodePolicy {
+public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.BeforeDeleteNodePolicy {
 
 	private static ServiceRegistry serviceRegistry;
 	private static PolicyComponent policyComponent;
@@ -55,9 +56,12 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 		PropertyCheck.mandatory(this, "stateMachineActions", stateMachineActions);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				StatemachineEditorModel.TYPE_STATUS, new JavaBehaviour(this, "onCreateNode"));
+				StatemachineEditorModel.TYPE_TASK_STATUS, new JavaBehaviour(this, "onCreateNode"));
 
-	}
+        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+                StatemachineEditorModel.TYPE_STATUS, new JavaBehaviour(this, "beforeDeleteNode"));
+
+    }
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
@@ -126,9 +130,40 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 		createActions(node, statusFolder, actions, "end");
 	}
 
-	private void createActions(NodeRef status, NodeRef statusesFolder, List<String> actions, String execution) {
-		NodeService nodeService = serviceRegistry.getNodeService();
+    @Override
+    public void beforeDeleteNode(NodeRef nodeRef) {
+        NodeService nodeService = serviceRegistry.getNodeService();
+        NodeRef statuses = nodeService.getPrimaryParent(nodeRef).getParentRef();
+        List<ChildAssociationRef> children = nodeService.getChildAssocs(statuses);
+        deleteStatusTransitions(nodeRef, children, nodeService);
 
+    }
+
+    private void deleteStatusTransitions(NodeRef status, List<ChildAssociationRef> children, NodeService nodeService) {
+        for (ChildAssociationRef child : children) {
+            System.out.println(nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME));
+            if (nodeService.hasAspect(child.getChildRef(), StatemachineEditorModel.ASPECT_TRANSITION_STATUS)) {
+                List<AssociationRef> statusTransition = nodeService.getTargetAssocs(child.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+                if (statusTransition.size() > 0 && statusTransition.get(0).getTargetRef().equals(status)) {
+                    QName type = nodeService.getType(child.getChildRef());
+                    if (type.equals(StatemachineEditorModel.TYPE_TASK_STATUS)) {
+                        nodeService.removeAssociation(statusTransition.get(0).getSourceRef(), statusTransition.get(0).getTargetRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+                    } else {
+                        nodeService.deleteNode(child.getChildRef());
+                    }
+                } else {
+                    List<ChildAssociationRef> subChildren = nodeService.getChildAssocs(child.getChildRef());
+                    deleteStatusTransitions(status, subChildren, nodeService);
+                }
+            } else {
+                List<ChildAssociationRef> subChildren = nodeService.getChildAssocs(child.getChildRef());
+                deleteStatusTransitions(status, subChildren, nodeService);
+            }
+        }
+    }
+
+    private void createActions(NodeRef status, NodeRef statusesFolder, List<String> actions, String execution) {
+		NodeService nodeService = serviceRegistry.getNodeService();
 		for (String action : actions) {
 			HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
 			props.put(StatemachineEditorModel.PROP_ACTION_ID, action);
