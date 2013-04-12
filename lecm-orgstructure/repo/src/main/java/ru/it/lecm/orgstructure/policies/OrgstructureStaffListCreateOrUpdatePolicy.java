@@ -1,11 +1,11 @@
 package ru.it.lecm.orgstructure.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -28,7 +28,7 @@ public class OrgstructureStaffListCreateOrUpdatePolicy extends LogicECMAssociati
                 OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onDeleteAssociation"));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateAssociation"));
+                OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
     }
     @Override
