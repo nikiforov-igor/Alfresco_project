@@ -146,4 +146,10 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
         }
         return result;
     }
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

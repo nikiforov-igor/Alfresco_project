@@ -126,4 +126,9 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 	public NodeRef getDictionariesRoot() {
 		return getFolder(DICTIONARIES_ROOT_ID);
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getDictionariesRoot();
+	}
 }

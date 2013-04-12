@@ -59,6 +59,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		this.businessJournalService = businessJournalService;
 	}
 
+	@Override
 	public NodeRef getRootFolder(final NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
@@ -253,5 +254,11 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			objects.add(this.nodeService.getPrimaryParent(copiedNodeRef).getParentRef().toString());
 			businessJournalService.log(document, EventCategory.COPY_DOCUMENT_ATTACHMENT, "Сотрудник #initiator скопировал вложение #object1 в документе #mainobject в #object2", objects);
 		}
+	}
+
+// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
 	}
 }

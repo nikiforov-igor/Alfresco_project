@@ -3,8 +3,6 @@ package ru.it.lecm.notifications.email.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
@@ -126,5 +124,10 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		mail.setParameterValue(MailActionExecuter.PARAM_HTML, notification.getDescription());
 		mail.setExecuteAsynchronously(true);
 		actionService.executeAction(mail, null);
+	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return rootRef;
 	}
 }

@@ -11,7 +11,6 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,6 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	protected Repository repository;
 	protected OrgstructureBean orgstructureService;
 	protected BusinessJournalService businessJournalService;
-	protected AuthenticationService authService;
 	public static final String WORK_CALENDAR_FOLDER_ID = "WORK_CALENDAR_FOLDER_ID";
 	// Получить логгер, чтобы писать, что с нами происходит.
 	final private static Logger logger = LoggerFactory.getLogger(AbstractCommonWCalendarBean.class);
@@ -42,15 +40,6 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	 */
 	public void setRepositoryHelper(Repository repository) {
 		this.repository = repository;
-	}
-
-	/**
-	 * Получить экземпляр AuthenticationService от Spring-а.
-	 *
-	 * @param authService передается Spring-ом
-	 */
-	public void setAuthService(AuthenticationService authService) {
-		this.authService = authService;
 	}
 
 	/**
@@ -97,7 +86,7 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 	@Override
 	public NodeRef doWork() throws Exception {
 		repository.init();
-		final NodeRef rootNode = getFolder(WORK_CALENDAR_FOLDER_ID);
+		final NodeRef rootNode = getServiceRootFolder();
 		final Map<String, Object> params = containerParams();
 		NodeRef container = nodeService.getChildByName(rootNode, ContentModel.ASSOC_CONTAINS, (String) params.get("CONTAINER_NAME"));
 		if (container == null) {
@@ -137,5 +126,10 @@ public abstract class AbstractCommonWCalendarBean extends BaseBean implements IC
 		cal.set(Calendar.MILLISECOND, 0);
 		resetDay.setTime(cal.getTimeInMillis());
 		return resetDay;
+	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getFolder(WORK_CALENDAR_FOLDER_ID);
 	}
 }

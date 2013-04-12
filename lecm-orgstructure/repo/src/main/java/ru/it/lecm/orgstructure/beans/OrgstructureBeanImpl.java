@@ -47,7 +47,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	 */
 	public void init() {
 		final String rootName = ORGANIZATION_ROOT_NAME;
-		final NodeRef rootDir = getFolder(ORGANIZATION_ROOT_ID);
+		final NodeRef rootDir = getServiceRootFolder();
 		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
@@ -1409,5 +1409,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			isEmployeeHasBusinessRole = isEmployeeHasBusinessRole || hasBusinessRole;
 		}
 		return isEmployeeHasBusinessRole;
+	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getFolder(ORGANIZATION_ROOT_ID);
 	}
 }

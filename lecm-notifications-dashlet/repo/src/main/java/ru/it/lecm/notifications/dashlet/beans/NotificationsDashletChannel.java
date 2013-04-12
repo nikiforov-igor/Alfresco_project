@@ -178,4 +178,9 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
         }
         return records;
     }
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return rootRef;
+	}
 }

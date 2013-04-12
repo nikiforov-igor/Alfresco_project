@@ -10,6 +10,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -473,5 +474,11 @@ public class ExecutorBeanImpl
 			this.workArgs.put( key, dest);
 		}
 
+	}
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
 	}
 }

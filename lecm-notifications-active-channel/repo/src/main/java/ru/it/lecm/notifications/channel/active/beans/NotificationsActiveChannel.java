@@ -195,4 +195,9 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 			}
 		}
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return rootRef;
+	}
 }

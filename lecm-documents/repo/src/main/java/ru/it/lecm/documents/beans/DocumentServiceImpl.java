@@ -263,4 +263,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
         return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
     }
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

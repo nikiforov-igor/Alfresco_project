@@ -129,4 +129,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, NodeRef templateNode) throws TemplateParseException, TemplateRunException {
 		setDocumentNumber(documentNode, QName.createQName(documentPropertyPrefix, namespaceService), getTemplateString(templateNode));
 	}
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

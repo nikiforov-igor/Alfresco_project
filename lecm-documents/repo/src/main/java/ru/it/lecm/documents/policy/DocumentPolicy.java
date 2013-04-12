@@ -134,4 +134,10 @@ public class DocumentPolicy extends BaseBean
         }
         businessJournalService.log(childAssocRef.getChildRef(), EventCategory.ADD, "Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
     }
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

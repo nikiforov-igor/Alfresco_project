@@ -254,4 +254,9 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 	private boolean isBJEngineer() {
 		return orgstructureService.isCurrentEmployeeHasBusinessRole(SubscriptionsService.BUSINESS_ROLE_SUBSCRIPTIONS_ENGINEER);
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getSubscriptionRootRef();
+	}
 }

@@ -67,7 +67,11 @@
             <artifactId>dictionary-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- Don't add here amp dependencies as it will break amp packaging -->
+        <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

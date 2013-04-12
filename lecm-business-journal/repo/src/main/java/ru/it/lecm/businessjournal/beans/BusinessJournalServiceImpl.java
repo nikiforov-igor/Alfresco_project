@@ -77,6 +77,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         this.dicService = dicService;
     }
 
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return bjRootRef;
+	}
+
     private static enum WhoseEnum {
 		MY,
 		DEPARTMENT,

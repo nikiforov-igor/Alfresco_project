@@ -267,4 +267,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		}
 		return true;
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return notificationsRootRef;
+	}
 }

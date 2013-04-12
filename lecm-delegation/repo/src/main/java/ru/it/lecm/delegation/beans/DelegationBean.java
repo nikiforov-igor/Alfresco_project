@@ -600,4 +600,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 		return employeeRef;
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getDelegationFolder();
+	}
 }

@@ -329,4 +329,9 @@ public class FinderBeanImpl extends BaseBean implements FinderBean {
 			args.put( argNodeId,ref.getId());
 	}
 
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

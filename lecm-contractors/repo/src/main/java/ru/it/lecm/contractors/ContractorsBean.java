@@ -1,21 +1,13 @@
 package ru.it.lecm.contractors;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
 import java.util.List;
 
 public class ContractorsBean extends BaseBean implements Contractors {
-
-    private NodeService nodeService;
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
 
     @Override
     public void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary) {
@@ -48,4 +40,10 @@ public class ContractorsBean extends BaseBean implements Contractors {
                 break;
         }
     }
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

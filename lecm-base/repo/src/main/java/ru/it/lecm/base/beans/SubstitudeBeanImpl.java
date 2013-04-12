@@ -61,6 +61,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return formatNodeTitle(object, templateString);
     }
 
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+
     public String getTemplateStringForObject(NodeRef object) {
         return getTemplateStringForObject(object, false);
     }

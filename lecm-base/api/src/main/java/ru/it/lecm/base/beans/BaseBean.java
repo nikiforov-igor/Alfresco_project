@@ -339,4 +339,13 @@ public abstract class BaseBean implements InitializingBean {
         String person = authService.getCurrentUserName();
         return person.equals(nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR));
     }
+
+	/**
+	 * Каждый сервис живет в каталоге /app:company_home/cm:Business
+	 * platform/cm:LECM/имя_сервиса
+	 * Данный сервис должен возвращать NodeRef на этот каталог сервиса.
+	 *
+	 * @return Ссылка на каталог, в котором находятся все данные сервиса
+	 */
+	abstract public NodeRef getServiceRootFolder();
 }

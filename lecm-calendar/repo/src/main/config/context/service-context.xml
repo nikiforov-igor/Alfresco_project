@@ -21,6 +21,14 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap"
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap, businessJournalLogEventsPolicy" >
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/wcalendar-business-roles-dictionary-items.xml</value>
+			</list>
+		</property>
+	</bean>
 	<bean id="${groupId}.${artifactId}.absenceReasonDicBootstrap"
 		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap, businessJournalLogEventsPolicy" >
 		<property name="dictionaries">
@@ -34,6 +42,16 @@
 			</list>
 		</property>
 	</bean>
+	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
+<!--	<bean id="${groupId}.${artifactId}.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
+		  depends-on="${groupId}.${artifactId}.wCalendarBootstrap, ${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap" >
+		<property name="serviceBean" ref="ScheduleService"/>
+		<property name="permissionsList">
+			<list>
+				<value>alfresco/module/${artifactId}/models/directories-permissions.xml</value>
+			</list>
+		</property>
+	</bean>-->
 
 	<util:constant id="WORK_CALENDAR_FOLDER_ID" static-field="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean.WORK_CALENDAR_FOLDER_ID"/>
 	<bean id="commonWCalendarBean" class="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean"

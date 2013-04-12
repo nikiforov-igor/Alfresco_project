@@ -256,4 +256,9 @@ public class CounterFactory extends BaseBean {
 		cal.setTime(new Date());
 		return cal.get(Calendar.YEAR);
 	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return countersRootNode;
+	}
 }

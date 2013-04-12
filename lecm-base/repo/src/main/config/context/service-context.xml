@@ -48,6 +48,13 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
+	<bean id="ServiceFolderPermissionHelper" init-method="bootstrap" abstract="true"
+          class="ru.it.lecm.base.beans.ServiceFolderPermissionHelper" depends-on="dictionaryBootstrap">
+        <property name="nodeService" ref="nodeService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="permissionService" ref="permissionService"/>
+    </bean>
+
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" depends-on="ServiceRegistry, nodeService">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>

@@ -9,9 +9,9 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
 /**
@@ -21,8 +21,13 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
  * Time: 15:44
  * To change this template use File | Settings | File Templates.
  */
-public class BusinessJournalAddHistoryToMainObjectPolicy extends BaseBean implements NodeServicePolicies.OnCreateAssociationPolicy {
+public class BusinessJournalAddHistoryToMainObjectPolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
     private static PolicyComponent policyComponent;
+	private NodeService nodeService;
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         BusinessJournalAddHistoryToMainObjectPolicy.policyComponent = policyComponent;

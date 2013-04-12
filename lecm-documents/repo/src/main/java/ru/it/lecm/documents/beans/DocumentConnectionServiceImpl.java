@@ -277,4 +277,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		types.add(TYPE_CONNECTION_TYPE);
 		return isProperType(ref, types);
 	}
+
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 }

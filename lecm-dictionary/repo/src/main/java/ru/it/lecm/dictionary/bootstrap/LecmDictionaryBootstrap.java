@@ -47,6 +47,12 @@ public class LecmDictionaryBootstrap extends BaseBean {
 		this.dictionaryService = dictionaryService;
 	}
 
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+
 	public void bootstrap() {
         logger.info("Bootstraping dictionaries");
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
