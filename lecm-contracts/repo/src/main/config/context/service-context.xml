@@ -79,7 +79,9 @@
 
     <bean id="contract.businessJournalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
-          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, businessJournalLogEventsPolicy">
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+                      ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      businessJournalLogEventsPolicy, documents.LogicEcmModelsConnectionDictionariesBootstrap">
 	    <property name="dictionaries">
 		    <list>
 			    <value>alfresco/module/${artifactId}/models/lecm-contracts-types.xml</value>
@@ -93,6 +95,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-types-items.xml</value>
             </list>
         </property>
     </bean>

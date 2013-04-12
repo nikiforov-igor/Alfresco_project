@@ -6,16 +6,4 @@
 	<property name="lecm-dic:show_control_in_separate_window">false</property>
 	<property name="lecm-dic:plane">true</property>
 	<property name="lecm-dic:description">Типы связи документов</property>
-	<items>
-		<item name="Отменяет">
-			<property name="cm:name">Отменяет</property>
-			<property name="lecm-connect-types:reverse-name">Отменён</property>
-			<property name="lecm-connect-types:code">1</property>
-		</item>
-		<item name="Дополняет">
-			<property name="cm:name">Дополняет</property>
-			<property name="lecm-connect-types:reverse-name">Дополнен</property>
-			<property name="lecm-connect-types:code">2</property>
-		</item>
-	</items>
 </dictionary>

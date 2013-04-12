@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Типы связи">
+	<items>
+		<item name="На основании">
+			<property name="cm:name">На основании</property>
+			<property name="lecm-connect-types:reverse-name">Основание</property>
+			<property name="lecm-connect-types:code">1</property>
+		</item>
+		<item name="Отменяет">
+			<property name="cm:name">Отменяет</property>
+			<property name="lecm-connect-types:reverse-name">Отменён</property>
+			<property name="lecm-connect-types:code">2</property>
+		</item>
+	</items>
+</dictionary>
