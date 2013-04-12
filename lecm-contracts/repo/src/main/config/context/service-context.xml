@@ -23,18 +23,17 @@
 		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-contracts-document-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-contracts-workflow-model</value>
-				<value>alfresco/module/${artifactId}/messages/lecm-contracts-document-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-model</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="contractPolicy" class="ru.it.lecm.document.policies.ContractPolicy"
+	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
 			init-method="init"
 			depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
@@ -54,7 +53,7 @@
 		  -->
 	</bean>
 
-    <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.document.script.ContractsWebScriptBean"
+    <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
           depends-on="documentService">
         <property name="extensionName">
             <value>contracts</value>

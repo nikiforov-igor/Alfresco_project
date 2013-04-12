@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Contracts Module</title>
-	<description>Contracts Module</description>
-	<template-instance>contracts</template-instance>
-	<authentication>user</authentication>
+    <title>Contracts Documents Module</title>
+    <description>Contracts Documents Module</description>
+    <template-instance>contracts</template-instance>
+    <authentication>user</authentication>
 </page>

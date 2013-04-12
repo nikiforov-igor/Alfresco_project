@@ -1,17 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/contracts/main</template-type>
+    <template-type>ru/it/lecm/contracts/contracts</template-type>
     <components>
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/contracts/main</url>
-        </component>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
-            <url>/components/title/simple-title</url>
+            <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>Договора</title>
+                <title>page.contracts.title</title>
+                <filteredLabel>page.contracts.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/contracts/toolbar</url>
+            <properties>
+                <showButtons>true</showButtons>
+                <showSearchBlock>true</showSearchBlock>
+                <showExSearchBtn>true</showExSearchBtn>
+                <bubblingLabel>contracts</bubblingLabel>
+            </properties>
+        </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/contracts/menu</url>
+            <properties>
+                <selected>contracts</selected>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>contracts-grid</region-id>
+            <url>/lecm/contracts/contracts-datagrid</url>
+            <properties>
+                <pagination>true</pagination>
+                <bubblingLabel>contracts</bubblingLabel>
+                <advSearchFormId>contracts-search</advSearchFormId>
             </properties>
         </component>
     </components>

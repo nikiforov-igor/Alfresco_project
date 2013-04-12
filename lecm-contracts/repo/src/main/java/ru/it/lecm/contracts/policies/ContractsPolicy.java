@@ -1,6 +1,4 @@
-package ru.it.lecm.document.policies;
-
-import java.util.Collection;
+package ru.it.lecm.contracts.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -17,7 +15,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.security.LecmPermissionService.LecmPermission;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
@@ -27,11 +24,11 @@ import ru.it.lecm.security.events.IOrgStructureNotifiers;
  *
  * @author rabdullin
  */
-public class ContractPolicy
+public class ContractsPolicy
 extends BaseBean
 implements NodeServicePolicies.OnCreateNodePolicy {
 
-	final static protected Logger logger = LoggerFactory.getLogger(ContractPolicy.class);
+	final static protected Logger logger = LoggerFactory.getLogger(ContractsPolicy.class);
 
 	// "lecm-contract:document"
 	final public static String DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";

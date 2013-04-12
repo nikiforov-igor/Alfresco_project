@@ -1,4 +1,4 @@
-package ru.it.lecm.document.script;
+package ru.it.lecm.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import ru.it.lecm.base.beans.BaseWebScript;

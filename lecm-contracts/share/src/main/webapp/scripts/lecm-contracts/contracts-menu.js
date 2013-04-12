@@ -52,7 +52,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
         },
 
         _draw:function () {
-            var subscriptions = "contract-documents";
+            var subscriptions = "contracts";
 
             function bubbleTable(root) {
                 if (root != "undefined" && root != null && root.nodeRef != "NOT_LOAD") {
@@ -82,14 +82,14 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
 
             function reloadPage(type) {
                 var url = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT;
-                window.location.href = url + (type != null && type != '' ? type : "contract-documents");
+                window.location.href = url + (type != null && type != '' ? type : "contracts");
             }
 
             var context = this;
 
             // Создание кнопок
             var onButtonClick1 = function (e) {
-                reloadPage("contract-documents");
+                reloadPage("contracts");
             };
             this.widgets.subscrTypeButton = Alfresco.util.createYUIButton(this, "contractsBtn", onButtonClick1, {});
 
@@ -113,7 +113,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                                 draftPath: oResults.draftPath,
                                 documentPath: oResults.documentPath
                             };
-                        var page = "contract-documents";
+                        var page = "contracts";
                         root.itemType = "lecm-contract:document";
                         root.bubblingLabel = "contracts";
                         oResponse.argument.context.roots[page] = root;
