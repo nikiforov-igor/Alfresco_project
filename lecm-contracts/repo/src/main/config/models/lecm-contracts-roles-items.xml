@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Бизнес роли">
+	<items>
+		<item name="Договор. Исполнитель">
+			<property name="cm:name">Договор. Исполнитель</property>
+			<property name="lecm-orgstr:business-role-identifier">CONTRACT_EXECUTOR</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+			<property name="lecm-orgstr:business-role-description">Исполнитель договора</property>
+		</item>
+		<item name="Договор. Куратор">
+			<property name="cm:name">Договор. Куратор</property>
+			<property name="lecm-orgstr:business-role-identifier">CONTRACT_CURATOR</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+			<property name="lecm-orgstr:business-role-description">Куратор договорной деятельности</property>
+		</item>
+		<item name="Договор. Подписант">
+			<property name="cm:name">Договор. Подписант</property>
+			<property name="lecm-orgstr:business-role-identifier">CONTRACT_SIGNER</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+			<property name="lecm-orgstr:business-role-description">Подписант</property>
+		</item>
+		<item name="Договор. Регистратор">
+			<property name="cm:name">Договор. Регистратор</property>
+			<property name="lecm-orgstr:business-role-identifier">CONTRACT_RECORDER</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+			<property name="lecm-orgstr:business-role-description">Регистратор договора</property>
+		</item>
+		<item name="Договор. Пользователь">
+			<property name="cm:name">Договор. Пользователь</property>
+			<property name="lecm-orgstr:business-role-identifier">CONTRACT_USER</property>
+			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+			<property name="lecm-orgstr:business-role-description">Пользователь</property>
+		</item>
+	</items>
+</dictionary>
