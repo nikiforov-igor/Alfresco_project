@@ -70,10 +70,10 @@
                     <type>d:text</type>
                 </property>
                 <property name="lecm-contract:startDate">
-                    <type>d:text</type>
+                    <type>d:date</type>
                 </property>
                 <property name="lecm-contract:endDate">
-                    <type>d:text</type>
+                    <type>d:date</type>
                 </property>
                 <property name="lecm-contract:unlimited">
                     <type>d:boolean</type>
