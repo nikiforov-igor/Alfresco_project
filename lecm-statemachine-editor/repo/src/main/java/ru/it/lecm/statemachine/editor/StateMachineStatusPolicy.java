@@ -141,7 +141,6 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 
     private void deleteStatusTransitions(NodeRef status, List<ChildAssociationRef> children, NodeService nodeService) {
         for (ChildAssociationRef child : children) {
-            System.out.println(nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME));
             if (nodeService.hasAspect(child.getChildRef(), StatemachineEditorModel.ASPECT_TRANSITION_STATUS)) {
                 List<AssociationRef> statusTransition = nodeService.getTargetAssocs(child.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
                 if (statusTransition.size() > 0 && statusTransition.get(0).getTargetRef().equals(status)) {
