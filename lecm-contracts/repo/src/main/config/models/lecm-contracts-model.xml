@@ -29,14 +29,12 @@
         </constraint>
     </constraints>
 
-    <types>
+	<types>
         <type name="lecm-contract:additionalDocument">
             <title>Logic Ecm Additional Contract Document</title>
             <parent>lecm-document:base</parent>
         </type>
-    </types>
 
-	<types>
 		<type name="lecm-contract:document">
 			<title>Logic Ecm Contract Document</title>
 			<parent>lecm-document:base</parent>
