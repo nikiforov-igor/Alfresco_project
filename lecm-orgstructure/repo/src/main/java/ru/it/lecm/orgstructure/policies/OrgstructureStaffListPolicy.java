@@ -38,24 +38,19 @@ public class OrgstructureStaffListPolicy
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onUpdateStaffListLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onDeleteStaffListLog"));
 	}
 
-	public void onDeleteStaffListLog(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-		final NodeRef staff = childAssocRef.getChildRef();
+    public void onDeleteStaffListLog(NodeRef staff) {
+        final NodeRef unit = orgstructureService.getUnitByStaff(staff);
+        final List<String> objects = Arrays.asList(staff.toString());
+        businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "Сотрудник #initiator внес сведения об исключении должности #object1 из подразделения #mainobject", objects);
 
-		if (!isNodeArchived) {
-			final NodeRef unit = orgstructureService.getUnitByStaff(staff);
-			final List<String> objects = Arrays.asList(staff.toString());
-			businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "Сотрудник #initiator внес сведения об исключении должности #object1 из подразделения #mainobject", objects);
-		}
-
-		{	// исключение штаной SG_DP ...
-			final Types.SGDeputyPosition sgDP = (Types.SGDeputyPosition) PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);
-			this.orgSGNotifier.notifyNodeDeactivated(sgDP);
-		}
-	}
+        // исключение штаной SG_DP ...
+        final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);
+        this.orgSGNotifier.notifyNodeDeactivated(sgDP);
+    }
 
 	public void onCreateStaffListLog(ChildAssociationRef childAssocRef) {
 		final NodeRef staff = childAssocRef.getChildRef();

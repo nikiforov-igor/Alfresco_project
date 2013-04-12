@@ -316,7 +316,7 @@
                                             var itemData = rowData.itemData;
                                             return itemData["prop_lecm-orgstr_staff-list-is-boss"].value == false;
                                         }
-									},
+									}
 								],
 								bubblingLabel: "${bubblingLabel!"staff-list"}",
 								showCheckboxColumn: false,
@@ -333,7 +333,7 @@
 	</div>
 	<div id="alf-filters" class="tree">
 		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:staff-list"
-						nodePattern="lecm-orgstr_element-full-name" drawEditors=false>
+						nodePattern="lecm-orgstr_element-full-name" drawEditors=false fullDelete=true>
 		</@orgTree.tree>
 	</div>
 </div>

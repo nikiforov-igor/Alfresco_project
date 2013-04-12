@@ -61,8 +61,9 @@ function runAction(p_params) {
             if (itemNode != null) {
                 if (full == "false") {// пометить объект как неактивный
                     itemNode.properties["lecm-dic:active"] = false;
-                    result.success = itemNode.save();
-                } else {//реальное удаление объекта
+                    itemNode.save();
+                    result.success = true;
+            } else {//реальное удаление объекта
                     var sAssocs;
                     sAssocs = itemNode.getSourceAssocs();
                     // удалить все ссылки на объект
