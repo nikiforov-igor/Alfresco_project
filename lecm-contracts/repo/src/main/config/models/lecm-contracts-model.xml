@@ -9,6 +9,7 @@
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+        <import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
@@ -62,9 +63,6 @@
                 <property name="lecm-contract:summaryContent">
                     <type>d:text</type>
                 </property>
-                <property name="lecm-contract:currency">
-                    <type>d:text</type>
-                </property>
                 <property name="lecm-contract:totalSum">
                     <type>d:text</type>
                 </property>
@@ -109,6 +107,54 @@
                         <many>false</many>
                     </target>
                 </association>
+                <!-- Вид договора -->
+                <association name="lecm-contract:typeContract-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:contract-type</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Тематика договора -->
+                <association name="lecm-contract:subjectContract-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:contract-subjects</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Причина удаления -->
+                <association name="lecm-contract:reasonDelete-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:delete-reason</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Валюта договора -->
+                <!--<association name="lecm-contract:currency-assoc">-->
+                    <!--<source>-->
+                        <!--<mandatory>false</mandatory>-->
+                        <!--<many>true</many>-->
+                    <!--</source>-->
+                    <!--<target>-->
+                        <!--<class>lecm-contract-dic:delete-reason-code</class>-->
+                        <!--<mandatory>false</mandatory>-->
+                        <!--<many>false</many>-->
+                    <!--</target>-->
+                <!--</association>-->
             </associations>
 		</type>
 	</types>
