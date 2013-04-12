@@ -119,6 +119,9 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 						//если настроенная на доверенность бизнес роль в списке уникальных уже есть, то удалить ее оттуда
 						if (businessRoleNodeRefs.contains (businessRoleNodeRef)) {
 							businessRoleNodeRefs.remove (businessRoleNodeRef);
+						} else {
+							//удалить доверенность с бизнес ролью, в которую пользователь уже не входит
+							nodeService.deleteNode(procuracyNodeRef);
 						}
 					}
 				}

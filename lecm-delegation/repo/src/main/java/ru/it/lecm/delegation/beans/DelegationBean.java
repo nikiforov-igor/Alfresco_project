@@ -200,7 +200,8 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				List<NodeRef> employeeNodeRefs = orgstructureService.getEmployeesByBusinessRole (businessRoleNodeRef);
 				//если текущая бизнес роль связана с одним и только одним пользователем, то мы ее рассматриваем
 				//остальные пропускаем
-				if (employeeNodeRefs != null && employeeNodeRefs.size () == 1 && employeeNodeRef.equals (employeeNodeRefs.get (0))) {
+//				if (employeeNodeRefs != null && employeeNodeRefs.size () == 1 && employeeNodeRef.equals (employeeNodeRefs.get (0))) {
+				if (employeeNodeRefs != null && employeeNodeRefs.contains(employeeNodeRef)) {
 					uniqueBusinessRoleNodeRefs.add (businessRoleNodeRef);
 				}
 			}
@@ -475,20 +476,28 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		//находим галку "передавать права руководителя" и запоминаем этого чувака
 
 		NodeRef sourceEmployee = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		String sourceEmployeeName = (String) nodeService.getProperty(sourceEmployee, ContentModel.PROP_NAME);
 		NodeRef bossAssistant = null; //заместитель
 		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
 		Boolean canTransferAllRights = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS);
 		for (NodeRef procuracyRef : procuracies) {
 			NodeRef brole = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			String broleId = (String) nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 			NodeRef destEmployee = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			Boolean canTransferRights = (Boolean) nodeService.getProperty (procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS);
-			if (canTransferRights) {
-				bossAssistant = destEmployee;
-			}
-			if (destEmployee != null) {
-				sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
+			//на всякий случай проверим, что делегирующий все еще имеет эту бизнес роль
+			//пока проверим без учета делегирования
+			if (orgstructureService.isEmployeeHasBusinessRole(sourceEmployee, broleId, false)) {
+				Boolean canTransferRights = (Boolean) nodeService.getProperty (procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS);
+				if (canTransferRights) {
+					bossAssistant = destEmployee;
+				}
+				if (destEmployee != null) {
+					sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
+				} else {
+					logger.warn ("dest employee is null, no security groups changed");
+				}
 			} else {
-				logger.warn ("dest employee is null, no security groups changed");
+				logger.warn ("source employee {} does not have specified role with id {}", sourceEmployeeName, broleId);
 			}
 		}
 		if (canDelegateAll && canTransferAllRights) {
