@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Последняя активность</shortname>
+  <description>История работы с договорами</description>
+  <family>contracts-dashlet</family>
+  <url>/lecm/contracts/components/history</url>
+</webscript>

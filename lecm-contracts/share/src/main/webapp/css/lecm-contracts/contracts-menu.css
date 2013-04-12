@@ -1,3 +1,14 @@
-#lecm-menu #menu-buttons #menu-buttons-contractsBtn span.first-child {
+#lecm-menu #menu-buttons #menu-buttons-mainBtn span.first-child {
 	background: url('/share/res/images/lecm-contracts/alf_contracts_32.png') no-repeat 4px 4px;
+}
+#lecm-menu #menu-buttons-listBtn span.first-child {
+    background: url('/share/res/images/lecm-contracts/alf_contracts_32.png') no-repeat 4px 4px;
+}
+
+#lecm-menu #menu-buttons-documentsBtn span.first-child {
+    background: url('/share/res/images/lecm-contracts/alf_contracts_32.png') no-repeat 4px 4px;
+}
+
+#lecm-menu #menu-buttons-reportsBtn span.first-child {
+    background: url('/share/res/images/lecm-contracts/alf_contracts_32.png') no-repeat 4px 4px;
 }

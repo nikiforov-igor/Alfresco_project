@@ -26,7 +26,7 @@
         <header>
             <app-items>
                  <!--defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"-->
-                <item type="link" id="contracts">/contracts</item>
+                <item type="link" id="contracts">/contracts-main</item>
                 <item type="link" id="contracts.fake">/contracts-fake</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
                 <item type="js" id="messenger">LogicECM.module.LecmIM.Messenger</item>

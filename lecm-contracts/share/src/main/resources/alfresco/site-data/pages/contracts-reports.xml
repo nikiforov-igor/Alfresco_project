@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Отчеты по Договорам</title>
+    <description>Отчеты по Договорам</description>
+    <template-instance>contracts-reports</template-instance>
+    <authentication>user</authentication>
+</page>

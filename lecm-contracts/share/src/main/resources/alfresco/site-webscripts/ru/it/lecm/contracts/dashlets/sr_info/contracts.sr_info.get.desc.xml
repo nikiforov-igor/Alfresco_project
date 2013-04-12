@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Нормативно-справочная информация</shortname>
+  <description>Нормативно-справочная информация</description>
+  <family>contracts-dashlet</family>
+  <url>/lecm/contracts/components/sr-info</url>
+</webscript>

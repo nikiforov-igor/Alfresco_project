@@ -1,36 +1,3 @@
-/**
- * LogicECM root namespace.
- *
- * @namespace LogicECM
- */
-// Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
-}
-
-/**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- */
-LogicECM.module = LogicECM.module || {};
-
-
-/**
- * LogicECM Contracts module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module.Contracts
- */
-LogicECM.module.Contracts = LogicECM.module.Contracts || {};
-
-/**
- * Displays a list of Toolbar
- *
- * @namespace LogicECM
- * @class LogicECM.module.Contracts.Toolbar
- */
 (function () {
     /**
      * YUI Library aliases
@@ -74,8 +41,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
              * @type object
              */
             options:{
-                bubblingLabel: null,
-                searchActive: null
+                bubblingLabel: null
             },
             /**
              * Дополнительные кнопки, активируемы при выборе элемента в дереве
@@ -134,11 +100,6 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                         scope: this,
                         correctScope: true
                     }, "keydown").enable();
-                if (this.options.searchActive != null && this.options.searchActive == "false") {
-                    Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','#eeeeee');
-                    Dom.get(this.id + "-full-text-search").setAttribute('disabled', true);
-                    Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','#eeeeee');
-                }
                 // Reference to Data Grid component
                 this.modules.dataGrid = this.findGrid("LogicECM.module.Base.DataGrid", this.options.bubblingLabel);
 
@@ -301,25 +262,9 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                         }
                     }
                 }
-                if (this.options.searchActive == "false"){
-                    if (this.toolbarButtons != null) {
-                        for (var index in this.toolbarButtons)
-                        {
-                            if (this.toolbarButtons.hasOwnProperty(index))
-                            {
-                                var action = this.toolbarButtons[index];
-                                if (action != null) {
-                                    action.set("disabled", false);
-                                }
-                            }
-                        }
-                    }
-                }
                 Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
                 Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
                 Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
-
-
             },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){

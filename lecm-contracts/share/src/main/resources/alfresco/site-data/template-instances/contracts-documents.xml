@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/contracts/contracts</template-type>
+    <template-type>ru/it/lecm/contracts/contracts-documents</template-type>
     <components>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.contracts.title</title>
-                <filteredLabel>page.contracts.filter.label</filteredLabel>
+                <title>page.contracts-documents</title>
+                <filteredLabel>page.contracts-documents.filter</filteredLabel>
             </properties>
         </component>
         <!-- Toolbar -->
@@ -16,10 +16,8 @@
             <region-id>toolbar</region-id>
             <url>/lecm/contracts/toolbar</url>
             <properties>
-                <showButtons>true</showButtons>
-                <showSearchBlock>true</showSearchBlock>
-                <showExSearchBtn>true</showExSearchBtn>
-                <bubblingLabel>contracts</bubblingLabel>
+                <showCreateBtn>false</showCreateBtn>
+                <bubblingLabel>documents</bubblingLabel>
             </properties>
         </component>
         <!-- Menu -->
@@ -27,18 +25,23 @@
             <region-id>menu</region-id>
             <url>/lecm/contracts/menu</url>
             <properties>
-                <selected>contracts</selected>
+                <selected>documents</selected>
             </properties>
         </component>
         <!-- Datagrid -->
         <component>
-            <region-id>contracts-grid</region-id>
+            <region-id>contracts-documents-grid</region-id>
             <url>/lecm/contracts/contracts-datagrid</url>
             <properties>
                 <pagination>true</pagination>
-                <bubblingLabel>contracts</bubblingLabel>
-                <advSearchFormId>contracts-search</advSearchFormId>
+                <bubblingLabel>contracts-documents</bubblingLabel>
+                <advSearchFormId>contracts-documents-search</advSearchFormId>
             </properties>
+        </component>
+        <!-- Forbidden -->
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
         </component>
     </components>
 </template-instance>

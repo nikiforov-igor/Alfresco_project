@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>АРМ "Договора"</title>
+    <description>АРМ "Договора"</description>
+    <template-instance>contracts-main</template-instance>
+    <authentication>user</authentication>
+</page>

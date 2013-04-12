@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Сводная информация</shortname>
+    <description>Сводная информация</description>
+    <family>contracts-dashlet</family>
+    <url>/lecm/contracts/components/summary</url>
+</webscript>

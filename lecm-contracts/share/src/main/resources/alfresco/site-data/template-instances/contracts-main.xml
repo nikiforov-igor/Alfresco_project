@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/contracts/contracts-main</template-type>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                    <title>page.contracts-main</title>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <!--<component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/contracts/toolbar</url>
+            <properties>
+                <showButtons>false</showButtons>
+                <showSearchBlock>false</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
+                <bubblingLabel>contracts-list</bubblingLabel>
+            </properties>
+        </component>-->
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/contracts/menu</url>
+            <properties>
+                <selected>main</selected>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>contracts-grid</region-id>
+            <url>/lecm/contracts/contracts-datagrid</url>
+            <properties>
+                <pagination>true</pagination>
+                <bubblingLabel>contracts</bubblingLabel>
+                <advSearchFormId>contracts-search</advSearchFormId>
+            </properties>
+        </component>
+        <!-- Forbidden -->
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+        </component>
+
+        <component>
+            <region-id>summary</region-id>
+            <url>/lecm/contracts/components/summary</url>
+        </component>
+
+        <component>
+            <region-id>tasks</region-id>
+            <url>/lecm/contracts/components/tasks</url>
+        </component>
+
+        <component>
+            <region-id>activity</region-id>
+            <url>/lecm/contracts/components/history</url>
+        </component>
+
+        <component>
+            <region-id>sr-info</region-id>
+            <url>/lecm/contracts/components/sr-info</url>
+        </component>
+    </components>
+</template-instance>

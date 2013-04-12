@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Документы для договоров</title>
+    <description>Документы для договоров</description>
+    <template-instance>contracts-documents</template-instance>
+    <authentication>user</authentication>
+</page>
