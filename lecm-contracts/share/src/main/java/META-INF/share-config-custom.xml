@@ -12,16 +12,32 @@
 					<show id="lecm-contract:dateRegContracts"/>
 					<show id="lecm-contract:dateConclusionContracts"/>
 					<show id="lecm-contract:summaryContent"/>
-					<show id="lecm-contract:partner"/>
+					<show id="lecm-contract:partner-assoc"/>
 					<show id="lecm-contract:currency"/>
 					<show id="lecm-contract:totalSum"/>
 					<show id="lecm-contract:startDate"/>
 					<show id="lecm-contract:endDate"/>
 					<show id="lecm-contract:unlimited"/>
-					<show id="lecm-contract:registrator"/>
+					<show id="lecm-contract:registrator-assoc"/>
 					<show id="lecm-contract:locationRegistration"/>
 					<show id="lecm-contract:locationContract"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-contract:partner-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation"> /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract:registrator-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -38,18 +54,31 @@
                     <show id="lecm-contract:dateRegContracts"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:summaryContent"/>
-                    <show id="lecm-contract:partner"/>
+                    <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:currency"/>
                     <show id="lecm-contract:totalSum"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:endDate"/>
                     <show id="lecm-contract:unlimited"/>
-                    <show id="lecm-contract:registrator"/>
+                    <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:name"/>
+                    <field id="lecm-contract:partner-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation"> /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+					<field id="lecm-contract:registrator-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
             <form id="datagrid">
