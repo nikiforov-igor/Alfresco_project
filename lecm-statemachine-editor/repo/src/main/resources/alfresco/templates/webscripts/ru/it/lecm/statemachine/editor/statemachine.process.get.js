@@ -2,14 +2,9 @@ var statemachineId = args["statemachineId"];
 
 if (statemachineId != null && statemachineId != '') {
 
-	var machinesFolder = companyhome.childByNamePath("statemachines");
+	var machinesFolder = lecmRepository.getHomeRef().childByNamePath("statemachines");
 	if (machinesFolder == null) {
-		machinesFolder = companyhome.createNode("statemachines", "cm:folder", "cm:contains");
-	}
-
-	var documentsFolder = companyhome.childByNamePath("documents");
-	if (documentsFolder == null) {
-		documentsFolder = companyhome.createNode("documents", "cm:folder", "cm:contains");
+		machinesFolder = lecmRepository.getHomeRef().createNode("statemachines", "cm:folder", "cm:contains");
 	}
 
 	var machine = null;

@@ -124,6 +124,18 @@
         </property>
     </bean>
 
+    <bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
+        <property name="extensionName">
+            <value>lecmRepository</value>
+        </property>
+        <property name="repositoryStructureHelper">
+            <ref bean="repositoryStructureHelper"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+    </bean>
+
     <bean name="lecmGetChildrenCannedQueryFactory" class="ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory">
         <property name="registry" ref="fileFolderCannedQueryRegistry"/>
         <property name="dictionaryService" ref="dictionaryService"/>
