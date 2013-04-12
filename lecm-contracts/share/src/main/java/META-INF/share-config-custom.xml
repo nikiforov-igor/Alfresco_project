@@ -5,36 +5,24 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-					<show id="lecm-document:regnum" force="true"/>
-					<show id="lecm-contract:contentAttr" force="true"/>
+					<show id="lecm-contract:regNumProject"/>
+					<show id="lecm-contract:regNumSystem"/>
+					<show id="lecm-contract:regNumContractor"/>
+					<show id="lecm-contract:dateRegProjectContracts"/>
+					<show id="lecm-contract:dateRegContracts"/>
+					<show id="lecm-contract:dateConclusionContracts"/>
+					<show id="lecm-contract:summaryContent"/>
+					<show id="lecm-contract:partner"/>
+					<show id="lecm-contract:currency"/>
+					<show id="lecm-contract:totalSum"/>
+					<show id="lecm-contract:startDate"/>
+					<show id="lecm-contract:endDate"/>
+					<show id="lecm-contract:unlimited"/>
+					<show id="lecm-contract:registrator"/>
+					<show id="lecm-contract:locationRegistration"/>
+					<show id="lecm-contract:locationContract"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-contract:contentAttr">
-                        <control  template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-					</field>
-				</appearance>
 			</form>
-            <form id="document">
-                <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-document:regnum" force="true"/>
-                </field-visibility>
-            </form>
-            <form id="document-dashlet">
-                <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <show id="lecm-document-aspects:rating"/>
-                    <show id="lecm-document-aspects:rated-persons-count"/>
-                    <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-document:regnum" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-statemachine:status">
-                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
-                    </field>
-                </appearance>
-            </form>
 		</forms>
 	</config>
 
@@ -43,32 +31,51 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
-					<show id="lecm-document:regnum" force="true"/>
-                    <show id="lecm-contract:contentAttr" force="true"/>
+                    <show id="lecm-contract:regNumProject"/>
+                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-contract:dateRegContracts"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:partner"/>
+                    <show id="lecm-contract:currency"/>
+                    <show id="lecm-contract:totalSum"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:registrator"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
-					<field id="lecm-document:regnum"/>
-                    <field id="lecm-contract:contentAttr"/>
 				</appearance>
 			</form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name" force="true"/>
-                    <show id="lecm-document:regnum" force="true"/>
+                    <!--<show id="lecm-contract:regNumProject"/>-->
+                    <!--<show id="lecm-contract:regNumSystem"/>-->
+                    <!--<show id="lecm-contract:regNumContractor"/>-->
+                    <!--<show id="lecm-contract:dateRegProjectContracts"/>-->
+                    <!--<show id="lecm-contract:dateRegContracts"/>-->
+                    <!--<show id="lecm-contract:dateConclusionContracts"/>-->
+                    <!--<show id="lecm-contract:summaryContent"/>-->
+                    <!--<show id="lecm-contract:partner"/>-->
+                    <!--<show id="lecm-contract:currency"/>-->
+                    <!--<show id="lecm-contract:totalSum"/>-->
+                    <!--<show id="lecm-contract:startDate"/>-->
+                    <!--<show id="lecm-contract:endDate"/>-->
+                    <!--<show id="lecm-contract:unlimited"/>-->
+                    <!--<show id="lecm-contract:registrator"/>-->
+                    <!--<show id="lecm-contract:locationRegistration"/>-->
+                    <!--<show id="lecm-contract:locationContract"/>-->
                     <show id="lecm-document:present-string" force="true"/>
                     <show id="lecm-statemachine:status" force="true"/>
                 </field-visibility>
             </form>
 		</forms>
 	</config>
-
-    <config evaluator="string-compare" condition="AdvancedSearch">
-        <advanced-search>
-            <forms>
-                <form>lecm-contract:document</form>
-            </forms>
-        </advanced-search>
-    </config>
 
 </alfresco-config>
