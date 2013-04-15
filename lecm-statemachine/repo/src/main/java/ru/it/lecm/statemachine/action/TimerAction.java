@@ -10,11 +10,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerAction extends StateMachineAction {
-    private static final String PROP_VARIABLE_NAME = "variableName";
-    private static final String PROP_DURATION = "duration";
+    public static final String PROP_TIMER_DURATION = "timerDuration";
+    public static final String PROP_STOP_SUBWORKFLOWS = "stopSubWorkflows";
+    public static final String PROP_VARIABLE_NAME = "variableName";
 
     private String variable = null;
-    private int duration = 0;
+    private int timerDuration = 0;
+    private boolean stopSubWorkflows = false;
 
     @Override
     public void init(Element action, String processId) {
@@ -24,8 +26,12 @@ public class TimerAction extends StateMachineAction {
                 variable = attribute.attribute("value");
             }
 
-            if (PROP_DURATION.equalsIgnoreCase(attribute.attribute("name"))) {
-                duration = Integer.parseInt(attribute.attribute("value"));
+            if (PROP_TIMER_DURATION.equalsIgnoreCase(attribute.attribute("name"))) {
+                timerDuration = Integer.parseInt(attribute.attribute("value"));
+            }
+
+            if (PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(attribute.attribute("name"))) {
+                stopSubWorkflows = Boolean.parseBoolean(attribute.attribute("value"));
             }
         }
     }
@@ -42,8 +48,7 @@ public class TimerAction extends StateMachineAction {
                     AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                         @Override
                         public Object doWork() throws Exception {
-                            String currentTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
-                            getTimerActionHelper().addTimer(stateMachineExecutionId, currentTaskId, variable, duration);
+                            getTimerActionHelper().addTimer(stateMachineExecutionId, variable, timerDuration, stopSubWorkflows);
                             return null;
                         }
                     });
@@ -54,8 +59,7 @@ public class TimerAction extends StateMachineAction {
         }
 
         if (eventName.equalsIgnoreCase("end")) {
-            String currentTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
-            getTimerActionHelper().removeTimer(currentTaskId);
+            getTimerActionHelper().removeTimer(stateMachineExecutionId);
         }
     }
 }

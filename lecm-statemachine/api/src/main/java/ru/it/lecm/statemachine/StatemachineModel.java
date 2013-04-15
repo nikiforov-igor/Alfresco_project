@@ -15,6 +15,7 @@ public class StatemachineModel {
     public final static QName PROP_EXECUTION_ID = QName.createQName(STATEMACHINE_URI, "executionId");
     public final static QName PROP_TASK_ID = QName.createQName(STATEMACHINE_URI, "taskId");
     public final static QName PROP_VARIABLE = QName.createQName(STATEMACHINE_URI, "variable");
+    public static final QName PROP_STOP_SUBWORKFLOWS = QName.createQName(STATEMACHINE_URI, "stopSubWorkflows");
     public final static QName PROP_FINISH_TIMESTAMP = QName.createQName(STATEMACHINE_URI, "finishTimestamp");
 
 	public final static QName PROP_STATUS = QName.createQName(STATEMACHINE_URI, "status");

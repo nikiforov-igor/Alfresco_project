@@ -19,6 +19,7 @@
 					<show id="lecm-stmeditor:dynamicRoles" force="true"/>
 					<show id="lecm-stmeditor:timerDuration" force="true"/>
                     <show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
@@ -153,6 +154,8 @@
                             <control-param name="withEmpty">true</control-param>
                         </control>
                     </field>
+
+                    <field id="lecm-stmeditor:stopSubWorkflows" set="timer" />
 
                 </appearance>
 			</form>

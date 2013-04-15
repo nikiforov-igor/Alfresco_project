@@ -54,6 +54,9 @@
                     <type>d:long</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-statemachine:stopSubWorkflows">
+                    <type>d:boolean</type>
+                </property>
             </properties>
         </type>
 	</types>

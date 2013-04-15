@@ -457,8 +457,13 @@
 
 		<aspect name="lecm-stmeditor:transitionStatusAspect">
 			<title>Transition Status Aspect</title>
-			<associations>
-				<association name="lecm-stmeditor:transitionStatus">
+            <properties>
+                <property name="lecm-stmeditor:stopSubWorkflows">
+                    <type>d:boolean</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-stmeditor:transitionStatus">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>

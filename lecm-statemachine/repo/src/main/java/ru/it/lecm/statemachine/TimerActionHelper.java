@@ -62,8 +62,8 @@ public class TimerActionHelper implements InitializingBean {
         });
     }
 
-    public void addTimer(String stateMachineExecutionId, String stateMachineTaskId, String variable, int duration) {
-        Date finishDate = workCalendarService.getNextWorkingDate(new Date(), duration);
+    public void addTimer(String stateMachineExecutionId, String variable, int timerDuration, boolean stopSubWorkflows) {
+        Date finishDate = workCalendarService.getNextWorkingDate(new Date(), timerDuration);
 
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(finishDate);
@@ -75,22 +75,24 @@ public class TimerActionHelper implements InitializingBean {
 
         //TODO:stub for testing!!!
         GregorianCalendar calendarStub = new GregorianCalendar();
-        calendarStub.add(Calendar.MINUTE, duration);
+        calendarStub.add(Calendar.MINUTE, timerDuration);
         finishTimestamp = calendarStub.getTimeInMillis();
 
-        startTimer(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp);
-        addTimerNode(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp);
+        String stateMachineTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
+        startTimer(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp, stopSubWorkflows);
+        addTimerNode(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp, stopSubWorkflows);
     }
 
-    public void removeTimer(String stateMachineTaskId) {
-        String taskId = clearPrefix(stateMachineTaskId);
+    public void removeTimer(String stateMachineExecutionId) {
+        String stateMachineTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
+        stateMachineTaskId = clearPrefix(stateMachineTaskId);
         final NodeRef timerFolderRef = getTimerFolderRef();
 
         List<NodeRef> timers = getTimers();
         for (final NodeRef timer : timers) {
             String timerTaskId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_TASK_ID);
 
-            if (clearPrefix(timerTaskId).equals(taskId)) {
+            if (clearPrefix(timerTaskId).equals(stateMachineTaskId)) {
                 transactionService.getRetryingTransactionHelper().doInTransaction(
                         new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
                             @Override
@@ -103,7 +105,7 @@ public class TimerActionHelper implements InitializingBean {
         }
     }
 
-    private void startTimer(final String stateMachineExecutionId, final String stateMachineTaskId, final String variable, long finishTimestamp) {
+    private void startTimer(final String stateMachineExecutionId, final String stateMachineTaskId, final String variable, long finishTimestamp, final boolean stopSubWorkflows) {
         if (finishTimestamp < new Date().getTime()) {
             return;
         }
@@ -114,6 +116,9 @@ public class TimerActionHelper implements InitializingBean {
                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                     @Override
                     public Object doWork() throws Exception {
+                        if (stopSubWorkflows) {
+                            new StateMachineHelper().stopDocumentSubWorkflows(stateMachineExecutionId);
+                        }
                         nextTransition(stateMachineExecutionId, stateMachineTaskId, variable, true);
                         return null;
                     }
@@ -124,7 +129,7 @@ public class TimerActionHelper implements InitializingBean {
         new Timer().schedule(timerTask, new Date(finishTimestamp));
     }
 
-    private void addTimerNode(String stateMachineExecutionId, String stateMachineTaskId, String variable, long finishTimestamp) {
+    private void addTimerNode(String stateMachineExecutionId, String stateMachineTaskId, String variable, long finishTimestamp, boolean stopSubWorkflows) {
         final NodeRef timerFolderRef = getTimerFolderRef();
 
         final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
@@ -132,6 +137,7 @@ public class TimerActionHelper implements InitializingBean {
         properties.put(StatemachineModel.PROP_TASK_ID, stateMachineTaskId);
         properties.put(StatemachineModel.PROP_VARIABLE, variable);
         properties.put(StatemachineModel.PROP_FINISH_TIMESTAMP, finishTimestamp);
+        properties.put(StatemachineModel.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows);
 
         transactionService.getRetryingTransactionHelper().doInTransaction(
                 new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
@@ -191,6 +197,7 @@ public class TimerActionHelper implements InitializingBean {
             }
 
             final String variable = (String) nodeService.getProperty(timer, StatemachineModel.PROP_VARIABLE);
+            boolean stopSubWorkflows = (Boolean) nodeService.getProperty(timer, StatemachineModel.PROP_STOP_SUBWORKFLOWS);
             long finishTimestamp = (Long) nodeService.getProperty(timer, StatemachineModel.PROP_FINISH_TIMESTAMP);
             if (finishTimestamp < new Date().getTime()) {
                 TimerTask timerTask = new TimerTask() {
@@ -210,7 +217,7 @@ public class TimerActionHelper implements InitializingBean {
                 continue;
             }
 
-            startTimer(timerExecutionId, timerTaskId, variable, finishTimestamp);
+            startTimer(timerExecutionId, timerTaskId, variable, finishTimestamp, stopSubWorkflows);
         }
     }
 

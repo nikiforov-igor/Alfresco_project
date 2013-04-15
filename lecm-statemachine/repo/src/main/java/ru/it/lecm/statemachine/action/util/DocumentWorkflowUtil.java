@@ -7,6 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * User: PMelnikov
  * Date: 04.02.13
@@ -53,6 +57,7 @@ public class DocumentWorkflowUtil {
 			JSONObject workflows = new JSONObject((String) value);
 			JSONObject workflow = (JSONObject) workflows.get(executionId);
 			WorkflowDescriptor descriptor = new WorkflowDescriptor(
+                    executionId,
 					workflow.getString("statemachineExecutionId"),
 					workflow.getString("startTaskId"),
 					workflow.getString("actionName"),
@@ -65,6 +70,28 @@ public class DocumentWorkflowUtil {
 		}
 		return null;
 	}
+
+	public List<WorkflowDescriptor> getWorkflowDescriptors(NodeRef document) {
+        List<WorkflowDescriptor> result = new ArrayList<WorkflowDescriptor>();
+
+        try {
+            Object value = serviceRegistry.getNodeService().getProperty(document, PROP_WORKFLOWS);
+            if (value == null) {
+                return new ArrayList<WorkflowDescriptor>();
+            }
+
+            JSONObject workflows = new JSONObject((String) value);
+            Iterator keys = workflows.keys();
+            while (keys.hasNext()) {
+                String executionId = (String)keys.next();
+                WorkflowDescriptor workflowDescriptor = getWorkflowDescriptor(document, executionId);
+                result.add(workflowDescriptor);
+            }
+        } catch (JSONException e) {
+        }
+
+        return result;
+    }
 
 	public void removeWorkflow(String executionId) {
 

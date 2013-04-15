@@ -11,6 +11,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.action.TimerAction;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -356,13 +357,19 @@ public class BPMNGenerator {
         String variableName = "ta" + statusVar;
 
         Element attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", "variableName");
+        attribute.setAttribute("name", TimerAction.PROP_VARIABLE_NAME);
         attribute.setAttribute("value", variableName);
         actionElement.appendChild(attribute);
 
         attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", "duration");
+        attribute.setAttribute("name", TimerAction.PROP_TIMER_DURATION);
         attribute.setAttribute("value", "" + timerDuration);
+        actionElement.appendChild(attribute);
+
+        Boolean stopSubWorkflows = (Boolean) nodeService.getProperty(status, StatemachineEditorModel.PROP_STOP_SUB_WORKFLOWS);
+        attribute = doc.createElement("lecm:attribute");
+        attribute.setAttribute("name", TimerAction.PROP_STOP_SUBWORKFLOWS);
+        attribute.setAttribute("value", stopSubWorkflows.toString());
         actionElement.appendChild(attribute);
 
         AssociationRef targetStatusRef = targetAssocs.get(0);
