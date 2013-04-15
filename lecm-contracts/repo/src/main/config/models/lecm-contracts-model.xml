@@ -20,7 +20,7 @@
     <constraints>
         <constraint name="lecm-contract:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value>Договор {cm:name} от {cm:created}, регистрационный номер {lecm-document:regnum}</value>
+                <value>{cm:name} к договору {cm:created} от , регистрационный номер {lecm-document:regnum}</value>
             </parameter>
         </constraint>
         <constraint name="lecm-contract:attachment-categories" type="LIST">
@@ -74,6 +74,7 @@
                 <property name="lecm-contract:signatoryCounterparty">
                     <type>d:text</type>
                 </property>
+                <!-- Общая сумма по договору -->
                 <property name="lecm-contract:totalSum">
                     <type>d:text</type>
                 </property>
@@ -154,7 +155,7 @@
                         <many>false</many>
                     </target>
                 </association>
-                 <!--Представитеди -->
+                 <!--Представители -->
                 <association name="lecm-contract:representative-assoc">
                     <source>
                         <mandatory>false</mandatory>
