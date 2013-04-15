@@ -20,7 +20,7 @@
     <constraints>
         <constraint name="lecm-contract:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value>{cm:name} к договору {cm:created} от , регистрационный номер {lecm-document:regnum}</value>
+                <value>Договор {lecm-contract:typeContract-assoc/cm:name} №{lecm-contract:regNumProject} от {lecm-contract:dateConclusionContracts}, с {lecm-contract:partner-assoc/lecm-contractor:shortname}</value>
             </parameter>
         </constraint>
         <constraint name="lecm-contract:attachment-categories" type="LIST">
@@ -47,6 +47,7 @@
 			<title>Logic Ecm Contract Document</title>
 			<parent>lecm-document:base</parent>
 			<properties>
+                <!-- Регистрационный номер проекта договора-->
                 <property name="lecm-contract:regNumProject">
                     <type>d:text</type>
                     <index enabled="true">
@@ -55,6 +56,7 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!-- Регистрационный номер договора в системе-->
                 <property name="lecm-contract:regNumSystem">
                     <type>d:text</type>
                     <index enabled="true">
@@ -66,12 +68,15 @@
                 <property name="lecm-contract:regNumContractor">
                     <type>d:text</type>
                 </property>
+                <!-- Дата регистрации проекта договра-->
                 <property name="lecm-contract:dateRegProjectContracts">
                     <type>d:date</type>
                 </property>
+                <!-- Дата регистрации договора -->
                 <property name="lecm-contract:dateRegContracts">
                     <type>d:date</type>
                 </property>
+                <!-- Дата заключения договора -->
                 <property name="lecm-contract:dateConclusionContracts">
                     <type>d:date</type>
                 </property>
