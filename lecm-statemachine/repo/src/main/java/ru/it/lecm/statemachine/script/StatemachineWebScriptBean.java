@@ -159,6 +159,10 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
     }
 
+    public String[] getStatuses(String documentType) {
+        return new String[0];
+    }
+
     private Collection<String> convertToJavaCollection(Object privileges) {
         HashSet<String> result = new HashSet<String>();
         if (privileges instanceof String) {
