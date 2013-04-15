@@ -19,10 +19,13 @@ local jid_bare, jid_prep = jid.bare, jid.prep;
 local module_host = module:get_host();
 
 function inject_roster_contacts(username, host, roster)
-	--module:log("debug", "Injecting group members to roster");
+	module:log("info", "######################################################################");
+	module:log("info", "Injecting group members to roster");
+	module:log("info", "######################################################################");
 	local bare_jid = username.."@"..host;
 
 	local data_path = CFG_DATADIR or "data";
+	module:log("info", "Data path %s", data_path);
 
 	if not pcall(require, "luarocks.loader") then
 		pcall(require, "luarocks.require");
@@ -40,13 +43,16 @@ function inject_roster_contacts(username, host, roster)
 	
 
 	local accounts = data_path.."/".."localhost".."/accounts";
+	module:log("info", "######################################################################");
+	module:log("info", "%s", accounts);
+	module:log("info", "######################################################################");
 	if lfs.attributes(accounts, "mode") == "directory" then
 	    for user in lfs.dir(accounts) do
 		    if user:sub(1,1) ~= "." then
 			jid = jid_prep(decode(user:gsub("%.dat$", "")).."@"..decode(host));
 			if jid then
 			    local user_data = dm_load(decode(user:gsub("%.dat$", "")), "localhost", "accounts");
-			    module:log("debug", "New member of %s: %s", tostring(curr_group), tostring(jid));
+--			    module:log("debug", "New member of %s: %s", tostring(curr_group), tostring(jid));
 			    groups["default"][jid] = user_data.FN or false; --name or false;
 			    members[jid] = members[jid] or {};
 			    members[jid][#members[jid]+1] = "default";
@@ -103,10 +109,15 @@ end
 function remove_virtual_contacts(username, host, datastore, data)
 	if host == module_host and datastore == "roster" then
 		local new_roster = {};
-		for jid, contact in pairs(data) do
-			if contact.persist ~= false then
-				new_roster[jid] = contact;
+		if data then
+			for jid, contact in pairs(data) do
+				if contact.persist ~= false then
+					new_roster[jid] = contact;
+				end
 			end
+		else
+			module:log ("warn", "strange things happend, data is NIL!!!!1one");
+			data = {};
 		end
 		if new_roster[false] then
 			new_roster[false].version = nil; -- Version is void
@@ -118,41 +129,42 @@ function remove_virtual_contacts(username, host, datastore, data)
 end
 
 function module.load()
-	groups_file = config.get(module:get_host(), "core", "groups_file");
-	if not groups_file then return; end
-	
+	module:log("info", "Mod_groups Loaded!");
+	--groups_file = config.get(module:get_host(), "core", "groups_file");
+--	if not groups_file then return; end
+	module:log("info", "Mod_groups groups_file loaded!");
 	module:hook("roster-load", inject_roster_contacts);
 	datamanager.add_callback(remove_virtual_contacts);
 	
 	groups = { default = {} };
 	members = { };
 	local curr_group = "default";
-	for line in io.lines(groups_file) do
-		if line:match("^%s*%[.-%]%s*$") then
-			curr_group = line:match("^%s*%[(.-)%]%s*$");
-			if curr_group:match("^%+") then
-				curr_group = curr_group:gsub("^%+", "");
-				if not members[false] then
-					members[false] = {};
-				end
-				members[false][#members[false]+1] = curr_group; -- Is a public group
-			end
-			module:log("debug", "New group: %s", tostring(curr_group));
-			groups[curr_group] = groups[curr_group] or {};
-		else
+--	for line in io.lines(groups_file) do
+--		if line:match("^%s*%[.-%]%s*$") then
+--			curr_group = line:match("^%s*%[(.-)%]%s*$");
+--			if curr_group:match("^%+") then
+--				curr_group = curr_group:gsub("^%+", "");
+--				if not members[false] then
+--					members[false] = {};
+--				end
+--				members[false][#members[false]+1] = curr_group; -- Is a public group
+--			end
+--			module:log("debug", "New group: %s", tostring(curr_group));
+--			groups[curr_group] = groups[curr_group] or {};
+--		else
 			-- Add JID
-			local entryjid, name = line:match("([^=]*)=?(.*)");
-			module:log("debug", "entryjid = '%s', name = '%s'", entryjid, name);
-			local jid;
-			jid = jid_prep(entryjid:match("%S+"));
-			if jid then
-				module:log("debug", "New member of %s: %s", tostring(curr_group), tostring(jid));
-				groups[curr_group][jid] = name or false;
-				members[jid] = members[jid] or {};
-				members[jid][#members[jid]+1] = curr_group;
-			end
-		end
-	end
+--			local entryjid, name = line:match("([^=]*)=?(.*)");
+--			module:log("debug", "entryjid = '%s', name = '%s'", entryjid, name);
+--			local jid;
+--			jid = jid_prep(entryjid:match("%S+"));
+--			if jid then
+--				module:log("debug", "New member of %s: %s", tostring(curr_group), tostring(jid));
+--				groups[curr_group][jid] = name or false;
+--				members[jid] = members[jid] or {};
+--				members[jid][#members[jid]+1] = curr_group;
+--			end
+--		end
+--	end
 	module:log("info", "Groups loaded successfully");
 end
 
