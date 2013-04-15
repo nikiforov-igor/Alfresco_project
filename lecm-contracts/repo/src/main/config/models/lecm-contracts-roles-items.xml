@@ -1,12 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dictionary name="Бизнес роли">
 	<items>
-		<item name="Договор. Исполнитель">
-			<property name="cm:name">Договор. Исполнитель</property>
-			<property name="lecm-orgstr:business-role-identifier">CONTRACT_EXECUTOR</property>
-			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-			<property name="lecm-orgstr:business-role-description">Исполнитель договора</property>
-		</item>
 		<item name="Договор. Куратор">
 			<property name="cm:name">Договор. Куратор</property>
 			<property name="lecm-orgstr:business-role-identifier">CONTRACT_CURATOR</property>
