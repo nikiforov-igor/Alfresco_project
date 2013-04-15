@@ -10,6 +10,8 @@
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
         <import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+        <import uri="http://www.it.ru/logicECM/dictionary/currency/1.0" prefix="lecm-currency"/>
+        <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
@@ -61,6 +63,12 @@
                     <type>d:date</type>
                 </property>
                 <property name="lecm-contract:summaryContent">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-contract:signedCounterparty">
+                    <type>d:boolean</type>
+                </property>
+                <property name="lecm-contract:signatoryCounterparty">
                     <type>d:text</type>
                 </property>
                 <property name="lecm-contract:totalSum">
@@ -143,18 +151,30 @@
                         <many>false</many>
                     </target>
                 </association>
-                <!-- Валюта договора -->
-                <!--<association name="lecm-contract:currency-assoc">-->
-                    <!--<source>-->
-                        <!--<mandatory>false</mandatory>-->
-                        <!--<many>true</many>-->
-                    <!--</source>-->
-                    <!--<target>-->
-                        <!--<class>lecm-contract-dic:delete-reason-code</class>-->
-                        <!--<mandatory>false</mandatory>-->
-                        <!--<many>false</many>-->
-                    <!--</target>-->
-                <!--</association>-->
+                 <!--Представитеди -->
+                <association name="lecm-contract:representative-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-representative:representative-type</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!--Валюта договора -->
+                <association name="lecm-contract:currency-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-currency:currency</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
             </associations>
 		</type>
 	</types>
