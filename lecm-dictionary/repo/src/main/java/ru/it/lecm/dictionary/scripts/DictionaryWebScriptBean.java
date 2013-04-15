@@ -2,6 +2,7 @@ package ru.it.lecm.dictionary.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -14,6 +15,10 @@ import java.util.List;
  */
 public class DictionaryWebScriptBean extends BaseWebScript {
 
+    final String BJ_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
+    final QName PROP_OBJ_TYPE_CODE = QName.createQName(BJ_NAMESPACE_URI, "objectType-code");
+
+    public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
     private DictionaryBean dictionaryService;
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
@@ -30,6 +35,12 @@ public class DictionaryWebScriptBean extends BaseWebScript {
         List<NodeRef> children = dictionaryService.getChildren(new NodeRef(parent));
 
         return createScriptable(children);
+    }
+
+    public ScriptNode getDictionaryByCode(String code) {
+        NodeRef dictionary = dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CODE, code);
+
+        return (dictionary == null) ? null : new ScriptNode(dictionary, serviceRegistry, getScope());
     }
 
 }

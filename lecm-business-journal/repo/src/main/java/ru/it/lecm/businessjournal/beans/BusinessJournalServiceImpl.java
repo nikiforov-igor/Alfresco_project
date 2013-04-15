@@ -25,6 +25,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -48,6 +49,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private PersonService personService;
 	private AuthenticationService authService;
     private DictionaryService dicService;
+    private LecmPermissionService lecmPermissionService;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
@@ -75,6 +77,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
     public void setDicService(DictionaryService dicService) {
         this.dicService = dicService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
 	@Override
@@ -494,7 +500,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
     @Override
-    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey) {
+    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey, Boolean checkMainObject) {
         List<NodeRef> records = new ArrayList<NodeRef>(10);
         final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
         final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
@@ -552,9 +558,23 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         try {
             results = searchService.query(sp);
             for (ResultSetRow row : results) {
-                NodeRef currentNodeRef = row.getNodeRef();
-	            if (!isArchive(currentNodeRef)){
-		            records.add(currentNodeRef);
+                NodeRef rowNodeRef = row.getNodeRef();
+	            if (!isArchive(rowNodeRef)){
+                    if (checkMainObject != null && checkMainObject) {
+                        // проверить доступность основного объекта
+                        List<AssociationRef> sourceAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
+                        if (sourceAssocs != null) {
+                            for (AssociationRef sourceAssoc : sourceAssocs) {
+                                NodeRef nodeRef = sourceAssoc.getSourceRef();
+
+                                if (lecmPermissionService.hasReadAccess(nodeRef)) {
+                                    records.add(rowNodeRef);
+                                }
+                            }
+                        }
+                    } else {
+                        records.add(rowNodeRef);
+                    }
 	            }
             }
         } finally {

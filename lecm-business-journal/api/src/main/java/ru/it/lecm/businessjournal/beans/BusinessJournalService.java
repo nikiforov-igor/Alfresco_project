@@ -216,13 +216,14 @@ public interface BusinessJournalService {
 	/**
 	 * Метод, возвращающий список ссылок на записи заданного типа,
 	 * сформированные за заданный период с учетом инициатора
-	 * @param objectTypeRef    - тип объекта
-	 * @param begin         - начальная дата
-	 * @param end           - конечная дата
-	 * @param whoseKey      - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+	 * @param objectTypeRef     - тип объекта
+	 * @param begin             - начальная дата
+	 * @param end               - конечная дата
+	 * @param whoseKey          - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+	 * @param checkMainObject   - проверять ли доступность основного объекта
 	 * @return список ссылок
 	 */
-    List<NodeRef> getRecordsByParams(String objectTypeRef, Date begin, Date end, String whoseKey);
+    List<NodeRef> getRecordsByParams(String objectTypeRef, Date begin, Date end, String whoseKey, Boolean checkMainObject);
 
 	/**
 	 * Метод, возвращающий директорию c архивными записями
