@@ -202,26 +202,21 @@
 			</form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name" force="true"/>
-                    <!--<show id="lecm-contract:regNumProject"/>-->
-                    <!--<show id="lecm-contract:regNumSystem"/>-->
-                    <!--<show id="lecm-contract:regNumContractor"/>-->
-                    <!--<show id="lecm-contract:dateRegProjectContracts"/>-->
-                    <!--<show id="lecm-contract:dateRegContracts"/>-->
-                    <!--<show id="lecm-contract:dateConclusionContracts"/>-->
-                    <!--<show id="lecm-contract:summaryContent"/>-->
-                    <!--<show id="lecm-contract:partner"/>-->
-                    <!--<show id="lecm-contract:currency"/>-->
-                    <!--<show id="lecm-contract:totalSum"/>-->
-                    <!--<show id="lecm-contract:startDate"/>-->
-                    <!--<show id="lecm-contract:endDate"/>-->
-                    <!--<show id="lecm-contract:unlimited"/>-->
-                    <!--<show id="lecm-contract:registrator"/>-->
-                    <!--<show id="lecm-contract:locationRegistration"/>-->
-                    <!--<show id="lecm-contract:locationContract"/>-->
-                    <show id="lecm-document:present-string" force="true"/>
+                    <show id="lecm-contract:regNumProject"/>
+                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
+                    <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
+                    <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
+                    <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
+                </appearance>
             </form>
 		</forms>
 	</config>

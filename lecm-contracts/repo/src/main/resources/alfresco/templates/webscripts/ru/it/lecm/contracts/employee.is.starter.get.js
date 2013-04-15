@@ -1,0 +1,1 @@
+model.isStarter = statemachine.isStarter("lecm-contract:document");

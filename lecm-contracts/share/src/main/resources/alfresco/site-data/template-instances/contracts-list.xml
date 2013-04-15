@@ -38,6 +38,11 @@
                 <advSearchFormId>contracts-search</advSearchFormId>
             </properties>
         </component>
+        <!-- Filter -->
+        <component>
+            <region-id>contracts-filter</region-id>
+            <url>/lecm/contracts/contracts-filter</url>
+        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>

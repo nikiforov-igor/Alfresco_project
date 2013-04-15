@@ -29,10 +29,12 @@
                     ],
                     allowCreate: false,
                     showActionColumn: true,
-                    showCheckboxColumn: true,
+                    showCheckboxColumn: false,
                     bubblingLabel: "${bubblingLabel!"contracts"}",
-                    attributeForShow:"cm:name"
+                    attributeForShow:"lecm-contract:regNumProject"
                 }).setMessages(${messages});
+
+                var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
@@ -44,8 +46,10 @@
                             },
                             sort:"cm:modified|false",
                             searchConfig: {
-                                filter: '+PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
-                                        + ' OR +PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*"'
+                                filter: (filter.length > 0 ? " (" + filter + " ) AND " : "")
+                                        + '(+PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
+                                        + ' OR +PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*")'
+
                             }
                         },
                         bubblingLabel: "${bubblingLabel!"contracts"}"
@@ -56,6 +60,24 @@
 			function init() {
 				createDatagrid();
 			}
+
+            function generateFilterStr(filter) {
+                if (filter) {
+                    var re = /\s*,\s*/;
+                    var statuses = filter.split(re);
+
+                    var resultFilter = "";
+
+                    for (var i = 0; i < statuses.length; i++) {
+                        if (resultFilter.length > 0) {
+                            resultFilter += " OR ";
+                        }
+                        resultFilter += "+lecm\\-statemachine:status:\'" + statuses[i] + "\'";
+                    }
+                    return resultFilter;
+                }
+                return "";
+            }
 
 			YAHOO.util.Event.onDOMReady(init);
 			//]]></script>

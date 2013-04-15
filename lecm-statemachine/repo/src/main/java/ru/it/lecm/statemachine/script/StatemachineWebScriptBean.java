@@ -160,7 +160,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
     }
 
     public String[] getStatuses(String documentType) {
-        return new String[0];
+        return new String[]{"Черновик"};
     }
 
     private Collection<String> convertToJavaCollection(Object privileges) {

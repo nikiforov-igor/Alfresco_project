@@ -49,9 +49,19 @@
 			<properties>
                 <property name="lecm-contract:regNumProject">
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-contract:regNumSystem">
                     <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-contract:regNumContractor">
                     <type>d:text</type>
@@ -92,6 +102,22 @@
                 </property>
                 <property name="lecm-contract:locationContract">
                     <type>d:text</type>
+                </property>
+                <property name="lecm-contract:partner-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-contract:typeContract-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 			</properties>
             <associations>
