@@ -50,6 +50,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
+	protected List<String> notificationChannels = Arrays.asList("notificationActiveChannel");
 
 	private final Object lock = new Object();
 
@@ -76,6 +77,14 @@ public abstract class BaseBean implements InitializingBean {
 
 	public void setAuthService(AuthenticationService authService) {
 		this.authService = authService;
+	}
+
+	public List<String> getNotificationChannels() {
+		return notificationChannels;
+	}
+
+	public void setNotificationChannels(List<String> notificationChannels) {
+		this.notificationChannels = notificationChannels;
 	}
 
 	@Override

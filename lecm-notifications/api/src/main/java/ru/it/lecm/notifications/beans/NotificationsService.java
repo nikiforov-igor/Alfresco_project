@@ -3,6 +3,8 @@ package ru.it.lecm.notifications.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.List;
+
 /**
  * User: AIvkin
  * Date: 10.01.13
@@ -32,6 +34,7 @@ public interface NotificationsService {
 	public final QName ASSOC_RECIPIENT_WORK_GROUP = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-work-group-assoc");
 	public final QName ASSOC_NOTIFICATION_OBJECT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "object-assoc");
 
+	public final String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";
 	public final QName TYPE_NOTIFICATION_TYPE = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "notification-type");
 	public final QName PROP_SPRING_BEAN_ID = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "spring-bean-id");
 
@@ -60,6 +63,14 @@ public interface NotificationsService {
 	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
 	public boolean sendNotification(NotificationUnit notification);
+
+	/**
+	 * Отправка уведомлений в каналы, заданные строками (названиями bean-ов)
+	 * @param channels Список названий каналов отправки уведомолений
+	 * @param notification Объект с параметрами уведомления. Поле typeRefs заполнять не нужно
+	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
+	 */
+	public boolean sendNotification(List<String> channels, Notification notification);
 
 	/**
 	 * Получение корневой директории для уведомлений

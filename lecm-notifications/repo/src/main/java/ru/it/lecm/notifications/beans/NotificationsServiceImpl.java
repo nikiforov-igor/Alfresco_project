@@ -11,14 +11,12 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -29,10 +27,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
 
 	private OrgstructureBean orgstructureService;
+	private DictionaryBean dictionaryService;
 
 	private NodeRef notificationsRootRef;
 	private NodeRef notificationsGenaralizetionRootRef;
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
+	private Map<String, NodeRef> channelsNodeRefs;
 	private LecmPermissionService lecmPermissionService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -52,6 +52,24 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
+
+	public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
+		if (this.channels == null) {
+			loadChannels();
+		}
+		return this.channels;
+	}
+
+	public Map<String, NodeRef> getChannelsNodeRefs() {
+		if (this.channelsNodeRefs == null) {
+			loadChannels();
+		}
+		return this.channelsNodeRefs;
+	}
+
 	/**
 	 * Метод инициализвции сервиса
 	 * Создает рабочую директорию - если она еще не создана.
@@ -60,8 +78,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void init() {
 		notificationsRootRef = getFolder(NOTIFICATIONS_ROOT_ID);
 		notificationsGenaralizetionRootRef = getFolder(NOTIFICATIONS_GENERALIZATION_ROOT_ID);
-
-		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
 	}
 
 	@Override
@@ -69,6 +85,49 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_NOTIFICATION_TYPE);
 		return isProperType(ref, types);
+	}
+
+	public void loadChannels() {
+		channels = new HashMap<NodeRef, NotificationChannelBeanBase>();
+		channelsNodeRefs = new HashMap<String, NodeRef>();
+
+		NodeRef channelsDictionary = dictionaryService.getDictionaryByName(NOTIFICATION_TYPE_DICTIONARY_NAME);
+		if (channelsDictionary != null) {
+			List<NodeRef> channelsDictionaryValue = dictionaryService.getChildren(channelsDictionary);
+			if (channelsDictionaryValue != null) {
+				for (NodeRef typeRef: channelsDictionaryValue) {
+					String beanId = (String) nodeService.getProperty(typeRef, PROP_SPRING_BEAN_ID);
+					if (beanId != null) {
+						channelsNodeRefs.put(beanId, typeRef);
+						WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
+						try {
+							NotificationChannelBeanBase channelBean = (NotificationChannelBeanBase) ctx.getBean(beanId);
+							channels.put(typeRef, channelBean);
+						} catch (NoSuchBeanDefinitionException ex) {
+							logger.error("Не найден канал для отправки уведомлений", ex);
+							channels.put(typeRef, null);
+						} catch (ClassCastException ex) {
+							logger.error("Канал уведомлений не реализует базовый интерфейс", ex);
+							channels.put(typeRef, null);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean sendNotification(List<String> channels, Notification notification) {
+		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
+		if (channels != null) {
+			for (String channel: channels) {
+				if (getChannelsNodeRefs().containsKey(channel)) {
+					typeRefs.add(getChannelsNodeRefs().get(channel));
+				}
+			}
+		}
+		notification.setTypeRefs(typeRefs);
+		return sendNotification(notification);
 	}
 
 	@Override
@@ -105,27 +164,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
 			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
 			if (employeeLogin != null && this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)) {
-				NotificationChannelBeanBase channelBean;
-				if (channels.containsKey(notification.getTypeRef())) {
-					channelBean = channels.get(notification.getTypeRef());
-				} else {
-					WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
-					String beanId = (String) nodeService.getProperty(notification.getTypeRef(), PROP_SPRING_BEAN_ID);
-					try {
-						channelBean = (NotificationChannelBeanBase) ctx.getBean(beanId);
-						channels.put(notification.getTypeRef(), channelBean);
-					} catch (NoSuchBeanDefinitionException ex) {
-						logger.error("Не найден канал для отправки уведомлений", ex);
-						channels.put(notification.getTypeRef(), null);
-						return false;
-					} catch (ClassCastException ex) {
-						logger.error("Канал уведомлений не реализует базовый интерфейс", ex);
-						channels.put(notification.getTypeRef(), null);
-						return false;
-					}
+				NotificationChannelBeanBase channelBean = null;
+				if (getChannels().containsKey(notification.getTypeRef())) {
+					channelBean = getChannels().get(notification.getTypeRef());
 				}
-
-
 				return channelBean != null && channelBean.sendNotification(notification);
 			} else {
 				return false;

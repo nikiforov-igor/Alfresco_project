@@ -7,6 +7,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.notification.NotificationService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -19,17 +20,16 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -47,7 +47,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private PolicyComponent policyComponent;
 	private DocumentMembersService documentMembersService;
 	private BusinessJournalService businessJournalService;
-	private NotificationChannelBeanBase notificationActiveChannel;
+	private NotificationsService notificationService;
 	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
 
@@ -74,8 +74,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	public void setNotificationActiveChannel(NotificationChannelBeanBase notificationActiveChannel) {
-		this.notificationActiveChannel = notificationActiveChannel;
+	public void setNotificationService(NotificationsService notificationService) {
+		this.notificationService = notificationService;
 	}
 
 	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
@@ -208,12 +208,16 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 			businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "Сотрудник #initiator пригласил сотрудника #object1 в документ #mainobject", objects);
 
 			// уведомление
-			NotificationUnit notification = new NotificationUnit();
-			notification.setRecipientRef(employee);
+			Notification notification = new Notification();
+			ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+			employeeList.add(employee);
+			notification.setRecipientEmployeeRefs(employeeList);
 			notification.setAutor(authService.getCurrentUserName());
 			notification.setDescription("Вы приглашены как новый участник в документ " +
 					wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), DOC_LINK));
-			notificationActiveChannel.sendNotification(notification);
+			notification.setObjectRef(document);
+			notification.setInitiatorRef(employee);
+			notificationService.sendNotification(this.notificationChannels, notification);
 		}
 	}
 

@@ -242,8 +242,8 @@
         <property name="businessJournalService">
             <ref bean="businessJournalService"/>
         </property>
-        <property name="notificationActiveChannel">
-            <ref bean="notificationActiveChannel"/>
+        <property name="notificationService">
+            <ref bean="notificationsService"/>
         </property>
         <property name="authService">
             <ref bean="authenticationService"/>
@@ -256,6 +256,12 @@
         <property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="transactionService" ref="transactionService"/>
+        <property name="notificationChannels">
+	        <list>
+		        <value>notificationActiveChannel</value>
+		        <value>notificationDashletChannel</value>
+	        </list>
+	    </property>
     </bean>
 
     <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy"
