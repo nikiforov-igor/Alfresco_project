@@ -9,3 +9,7 @@ for (var i = 0; i < rolesList.length; i++) {
     }
 }
 model.hasPermission = hasRole;
+
+if (hasRole) {
+    model.settings = remote.connect("alfresco").get("/lecm/contracts/draft-root");
+}

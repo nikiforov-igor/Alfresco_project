@@ -1,0 +1,52 @@
+#doc-bd {
+    background: none repeat scroll 0 0 #FAFAFA;
+    border-radius: 3px 3px 3px 3px;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+.yui-gc div.first {
+    width: 100%;
+}
+
+.yui-gc .yui-u .columnSize2 {
+    margin-left: 1.99%;
+}
+
+.first .yui-gd div.column1 {
+    margin-left: 2%;
+    width: 47%;
+}
+
+.bordered {
+    border: 1px solid #6C6C6C;
+    border-radius: 5px 5px 0 0;
+}
+
+.yui-u .dashlet .dashlet-title {
+    background-color: #515151;
+    border-radius: 4px 4px 0 0;
+}
+
+.dashlet .title span {
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.yui-u .dashlet .dashlet-body {
+    height: 165px;
+    padding: 0 1em;
+}
+
+.first .yui-gd div.column2 {
+    margin-right: 2%;
+    width: 47%;
+}
+.yui-gc .yui-u {
+    margin-left: 0;
+    width: 20%;
+}

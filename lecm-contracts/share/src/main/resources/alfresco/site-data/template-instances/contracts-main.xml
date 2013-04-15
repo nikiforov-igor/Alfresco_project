@@ -11,16 +11,15 @@
             </properties>
         </component>
         <!-- Toolbar -->
-        <!--<component>
+        <component>
             <region-id>toolbar</region-id>
             <url>/lecm/contracts/toolbar</url>
             <properties>
-                <showButtons>false</showButtons>
-                <showSearchBlock>false</showSearchBlock>
-                <showExSearchBtn>false</showExSearchBtn>
-                <bubblingLabel>contracts-list</bubblingLabel>
+                <showCreateBtn>true</showCreateBtn>
+                <bubblingLabel>contracts</bubblingLabel>
+                <showSearch>false</showSearch>
             </properties>
-        </component>-->
+        </component>
         <!-- Menu -->
         <component>
             <region-id>menu</region-id>

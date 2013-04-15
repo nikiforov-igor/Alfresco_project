@@ -3,6 +3,11 @@
     <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-contracts/contracts-const.js"></@script>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-main.css" />
+
+    <script type="text/javascript">//<![CDATA[
+        LogicECM.module.Contracts.SETTINGS = ${settings};
+//]]></script>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

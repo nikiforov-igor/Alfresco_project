@@ -4,6 +4,9 @@ function main() {
     AlfrescoUtil.param("bubblingLabel");
     var hasPermission = isStarter();
     model.showCreateBtn = (args["showCreateBtn"] == 'true') && hasPermission;
+    if (args["showSearch"]) {
+        model.showSearch = (args["showSearch"] == 'true');
+    }
 }
 
 function isStarter() {

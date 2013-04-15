@@ -115,6 +115,10 @@
                 }
                 elCell.innerHTML = html;
             };
+        },
+        onActionEdit: function DataGrid_onActionEdit(item) {
+            window.location.href = window.location.protocol + "//" + window.location.host +
+                Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
         }
     }, true);
 })();
