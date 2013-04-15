@@ -1,13 +1,13 @@
 package ru.it.lecm.statemachine.editor.export;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.StringUtils;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.stream.XMLInputFactory;
@@ -39,11 +39,10 @@ public class XMLImporter {
     private NodeRef stateMachineNodeRef;
     private XMLNode newStateMachine;
 
-    public XMLImporter(InputStream inputStream, Repository repositoryHelper, NodeService nodeService, String stateMachineId) throws XMLStreamException {
+    public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, String stateMachineId) throws XMLStreamException {
         this.nodeService = nodeService;
 
-        repositoryHelper.init();
-        final NodeRef companyHome = repositoryHelper.getCompanyHome();
+        final NodeRef companyHome = repositoryHelper.getHomeRef();
         NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
         this.stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
 

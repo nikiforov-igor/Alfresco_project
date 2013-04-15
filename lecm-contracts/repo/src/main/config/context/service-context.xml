@@ -101,4 +101,15 @@
             </list>
         </property>
     </bean>
+
+    <bean id="contract.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-contract:document" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-contracts-default-statemachine.xml" />
+    </bean>
+
+    <bean id="additionalDocument.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-contract:additionalDocument" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml" />
+    </bean>
+
 </beans>

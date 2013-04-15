@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.editor.export;
 
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,49 +7,59 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created with IntelliJ IDEA.
  * User: pkotelnikova
  * Date: 26.02.13
  * Time: 17:45
- * To change this template use File | Settings | File Templates.
  */
 public class Import extends AbstractWebScript {
     private static final Log log = LogFactory.getLog(Export.class);
 
-    private Repository repositoryHelper;
+    private RepositoryStructureHelper repositoryStructureHelper;
     private NodeService nodeService;
+    private DefaultStatemachinesImpl defaultStatemachines;
 
-    public void setRepositoryHelper(Repository repositoryHelper) {
-        this.repositoryHelper = repositoryHelper;
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
     }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
+    public void setDefaultStatemachines(DefaultStatemachinesImpl defaultStatemachines) {
+        this.defaultStatemachines = defaultStatemachines;
+    }
+
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         String stateMachineId = req.getParameter("stateMachineId");
+        boolean defaultStatemachine = Boolean.parseBoolean(req.getParameter("default"));
         if (stateMachineId == null) {
             log.error("No State Machine to import! stateMachineId is null.");
             return;
         }
         InputStream inputStream = null;
         try {
-            FormData formData = (FormData) req.parseContent();
-            FormData.FormField[] fields = formData.getFields();
+            if (!defaultStatemachine) {
+                FormData formData = (FormData) req.parseContent();
+                FormData.FormField[] fields = formData.getFields();
 
-            inputStream = fields[0].getInputStream();
-            XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryHelper, nodeService, stateMachineId);
+                inputStream = fields[0].getInputStream();
+            } else {
+                String path = defaultStatemachines.getPath(stateMachineId);
+                inputStream = this.getClass().getClassLoader().getResourceAsStream(path);
+            }
+            XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, stateMachineId);
             xmlImporter.importStateMachine();
             xmlImporter.close();
-        } catch (XMLStreamException e) {
+        } catch (Exception e) {
             throw new IOException("Failed to import State Machine!", e);
         } finally {
             if (inputStream != null) {

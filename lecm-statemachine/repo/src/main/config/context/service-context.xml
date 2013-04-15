@@ -238,4 +238,6 @@
         </property>
     </bean>
 
+    <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>
+
 </beans>

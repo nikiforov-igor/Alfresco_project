@@ -30,6 +30,15 @@
 	        </span>
 	    </span>
 </div>
+
+<div class="statemachine-menu">
+		<span id="menu-buttons-default-machine-deploy" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Развернуть машину состояний по умолчанию">&nbsp;</button>
+	        </span>
+	    </span>
+</div>
+
 <div class="statemachine-menu">
 		<span id="menu-buttons-machine-export" class="yui-button yui-push-button">
 	        <span class="first-child">

@@ -317,27 +317,91 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_deployStatemachine: function() {
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=deploy";
-			sUrl = YAHOO.lang.substitute(sUrl, {
-				statemachineNodeRef: this.packageNodeRef
-			});
-			this._showSplash();
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-                    Alfresco.util.PopupManager.displayMessage(
+            var me = this;
+            Alfresco.util.PopupManager.displayPrompt({
+                title: "Развертывание машины состояний",
+                text: "Вы действительно хотите развернуть машину состояний в системе?",
+                buttons: [
+                    {
+                        text: "Да",
+                        handler: function dlA_onActionDeploy()
                         {
-                            text: "Машина состояний развернута в системе",
-                            displayTime: 3
-                        });
-				},
-				argument:{
-					parent: this
-				},
-				timeout: 20000
-			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            this.destroy();
+                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=deploy";
+                            sUrl = YAHOO.lang.substitute(sUrl, {
+                                statemachineNodeRef: me.packageNodeRef
+                            });
+                            me._showSplash();
+                            var callback = {
+                                success:function (oResponse) {
+                                    oResponse.argument.parent._hideSplash();
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: "Машина состояний развернута в системе",
+                                            displayTime: 3
+                                        });
+                                },
+                                argument:{
+                                    parent: me
+                                },
+                                timeout: 20000
+                            };
+                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
+                    },
+                    {
+                        text: "Нет",
+                        handler: function dlA_onActionDelete_cancel()
+                        {
+                            this.destroy();
+                        },
+                        isDefault: true
+                    }]
+                });
 		},
+
+        _deployDefaultStatemachine: function() {
+            var me = this;
+            Alfresco.util.PopupManager.displayPrompt({
+                title: "Развертывание машины состояний по умолчанию",
+                text: "Вы действительно хотите развернуть машину состояний по умолчанию в системе?",
+                buttons: [
+                    {
+                        text: "Да",
+                        handler: function dlA_onActionDeploy()
+                        {
+                            this.destroy();
+                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?default=true&stateMachineId={statemachineId}";
+                            sUrl = YAHOO.lang.substitute(sUrl, {
+                                statemachineId: me.statemachineId
+                            });
+                            me._showSplash();
+                            var callback = {
+                                success:function (oResponse) {
+                                    oResponse.argument.parent._hideSplash();
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: "Машина состояний развернута в системе",
+                                            displayTime: 3
+                                        });
+                                    document.location.reload(true);
+                                },
+                                argument:{
+                                    parent: me
+                                },
+                                timeout: 20000
+                            };
+                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
+                    },
+                    {
+                        text: "Нет",
+                        handler: function dlA_onActionDelete_cancel()
+                        {
+                            this.destroy();
+                        },
+                        isDefault: true
+                    }]
+            });
+        },
 
         _exportStatemachine: function() {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/export?statusesNodeRef={statusesNodeRef}";

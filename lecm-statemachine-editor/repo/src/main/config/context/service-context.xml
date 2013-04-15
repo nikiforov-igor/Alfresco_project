@@ -74,7 +74,16 @@
           class="ru.it.lecm.statemachine.editor.export.Import"
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <property name="defaultStatemachines" ref="defaultStatemachines"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.get"
+          class="ru.it.lecm.statemachine.editor.export.Import"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <property name="defaultStatemachines" ref="defaultStatemachines"/>
     </bean>
 
 </beans>

@@ -128,7 +128,13 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 			};
 			this.widgets.deployButton = Alfresco.util.createYUIButton(this, "machine-deploy", onButtonClick3, {});
 
-			var onButtonClick5 = function (e) {
+            var onButtonClick4 = function (e) {
+                this.editor._deployDefaultStatemachine();
+            };
+            this.widgets.defaultDeployButton = Alfresco.util.createYUIButton(this, "default-machine-deploy", onButtonClick4, {});
+
+
+            var onButtonClick5 = function (e) {
 				this.editor._exportStatemachine();
 			};
 			this.widgets.exportButton = Alfresco.util.createYUIButton(this, "machine-export", onButtonClick5, {});
