@@ -99,7 +99,7 @@
             onNewRow: function (e, p_obj) {
                 var destination = this.options.destination,
                     itemType = this.options.itemType;
-                this.showCreateDialog({itemType: itemType, nodeRef: destination}, null, null);
+                this.showCreateDialog({itemType: itemType, nodeRef: destination});
             },
 
             // инициализация грида
@@ -203,7 +203,7 @@
                 }
             },
 
-            showCreateDialog:function (meta, callback, successMessage) {
+            showCreateDialog: function (meta) {
                 // Intercept before dialog show
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -214,52 +214,45 @@
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                     {
-                        itemKind:"type",
-                        itemId:meta.itemType,
-                        destination:meta.nodeRef,
-                        mode:"create",
+                        itemKind: "type",
+                        itemId: meta.itemType,
+                        destination: meta.nodeRef,
+                        mode: "create",
                         formId: meta.createFormId != null ? meta.createFormId : "",
-                        submitType:"json"
+                        submitType: "json"
                     });
 
                 // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
                 createDetails.setOptions(
                     {
-                        width:"50em",
-                        templateUrl:templateUrl,
-                        actionUrl:null,
-                        destroyOnHide:true,
-                        doBeforeDialogShow:{
-                            fn:doBeforeDialogShow,
-                            scope:this
+                        width: "50em",
+                        templateUrl: templateUrl,
+                        actionUrl: null,
+                        destroyOnHide: true,
+                        doBeforeDialogShow: {
+                            fn: doBeforeDialogShow,
+                            scope: this
                         },
-                        onSuccess:{
-                            fn:function DataGrid_onActionCreate_success(response) {
-                                if (callback) {// вызов дополнительного события
-                                    callback.call(this, response.json.persistedObject);
-                                } else { // вызов события по умолчанию
-                                    YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
-                                        {
-                                            nodeRef:response.json.persistedObject,
-                                            bubblingLabel:this.options.bubblingLabel
-                                        });
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text:this.msg(successMessage ? successMessage : "message.save.success")
-                                        });
-                                }
-                            },
-                            scope:this
-                        },
-                        onFailure:{
-                            fn:function DataGrid_onActionCreate_failure(response) {
+                        onSuccess: {
+                            fn: function DataGrid_onActionCreate_success(response) {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text:this.msg("message.save.failure")
+                                        text: this.msg("message.save.success")
+                                    });
+                                window.location.href = window.location.protocol + "//" + window.location.host +
+                                    Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                            },
+                            scope: this
+                        },
+                        onFailure: {
+                            fn: function DataGrid_onActionCreate_failure(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: this.msg("message.save.failure")
                                     });
                             },
-                            scope:this
+                            scope: this
                         }
                     }).show();
             }
