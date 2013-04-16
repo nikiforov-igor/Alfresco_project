@@ -50,6 +50,7 @@
                 <!-- Регистрационный номер проекта договора-->
                 <property name="lecm-contract:regNumProject">
                     <type>d:text</type>
+                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -65,8 +66,10 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!-- Регистрационный номер-->
                 <property name="lecm-contract:regNumContractor">
                     <type>d:text</type>
+                    <default>Не присвоено</default>
                 </property>
                 <!-- Дата регистрации проекта договра-->
                 <property name="lecm-contract:dateRegProjectContracts">
@@ -80,12 +83,15 @@
                 <property name="lecm-contract:dateConclusionContracts">
                     <type>d:date</type>
                 </property>
+                <!-- Краткое содержание договора -->
                 <property name="lecm-contract:summaryContent">
                     <type>d:text</type>
                 </property>
+                <!-- Подписано контрагентом -->
                 <property name="lecm-contract:signedCounterparty">
                     <type>d:boolean</type>
                 </property>
+                <!-- Подписант со стороны контрагента -->
                 <property name="lecm-contract:signatoryCounterparty">
                     <type>d:text</type>
                 </property>
@@ -93,18 +99,23 @@
                 <property name="lecm-contract:totalSum">
                     <type>d:text</type>
                 </property>
+                <!-- Дата начала действия договора -->
                 <property name="lecm-contract:startDate">
                     <type>d:date</type>
                 </property>
+                <!-- Дата окончания действия договора -->
                 <property name="lecm-contract:endDate">
                     <type>d:date</type>
                 </property>
+                <!-- Бессрочный -->
                 <property name="lecm-contract:unlimited">
                     <type>d:boolean</type>
                 </property>
+                <!-- Место регистрации -->
                 <property name="lecm-contract:locationRegistration">
                     <type>d:text</type>
                 </property>
+                <!--  Местонахождение договора -->
                 <property name="lecm-contract:locationContract">
                     <type>d:text</type>
                 </property>
@@ -134,7 +145,7 @@
                     </source>
                     <target>
                         <class>lecm-contractor:contractor-type</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -158,7 +169,7 @@
                     </source>
                     <target>
                         <class>lecm-contract-dic:contract-type</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -170,7 +181,7 @@
                     </source>
                     <target>
                         <class>lecm-contract-dic:contract-subjects</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
