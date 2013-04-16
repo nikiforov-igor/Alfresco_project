@@ -500,7 +500,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
     @Override
-    public List<NodeRef> getRecordsByParams(String objectType, Date begin, Date end, String whoseKey, Boolean checkMainObject) {
+    public List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject) {
         List<NodeRef> records = new ArrayList<NodeRef>(10);
         final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
         final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
@@ -512,10 +512,21 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
         query = "TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "]";
 
-        if (objectType != null && !"".equals(objectType)) {
-            query += " AND @lecm\\-busjournal\\:bjRecord\\-objType\\-assoc\\-ref:\"" + objectType + "\"";
-        }
+        if (objectTypeRefs != null && !"".equals(objectTypeRefs)) {
+            String types = "";
+            String[] typesArray = objectTypeRefs.split(",");
 
+            for (String type : typesArray) {
+                type = type.trim();
+                if (!"".equals(type)) {
+                    types += ("".equals(types) ? "" : ", ") + "\"" + type + "\"";
+                }
+            }
+            if (types.indexOf(',') > -1) {
+                types = "[" + types + "]";
+            }
+            query += " AND @lecm\\-busjournal\\:bjRecord\\-objType\\-assoc\\-ref:" + types;
+        }
         if (whoseKey != null && !"".equals(whoseKey)) {
             switch(WhoseEnum.valueOf(whoseKey.toUpperCase())) {
                 case MY : {

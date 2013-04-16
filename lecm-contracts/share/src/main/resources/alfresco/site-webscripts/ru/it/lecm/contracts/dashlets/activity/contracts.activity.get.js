@@ -1,30 +1,35 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
-var DICT_CODE = "LECM_CONTRACT";
+var TYPE_CODES = ["LECM_CONTRACT", "LECM_CONTRACT_ADDITIONAL_DOCUMENT"]; // добавить здесь другие коды при необходимости
 
-function getRecords(code) {
-    var url = '/lecm/dictionary/api/getDictionaryByCode?code=' + code;
-    var result = remote.connect("alfresco").get(url);
+function getRecords(codes) {
+    var refs = "";
 
-    if (result.status != 200) {
-        AlfrescoUtil.error(result.status, 'Could not get dictionary for code ' + code);
-        return;
+    for each (code in codes) {
+        var url = '/lecm/dictionary/api/getDictionaryByCode?code=' + code;
+        var result = remote.connect("alfresco").get(url);
+
+        if (result.status == 200) {
+            if (refs != "") {
+                refs += ",";
+            }
+            refs += eval('(' + result + ')').nodeRef;
+        }
     }
-    var nodeRef = eval('(' + result + ')').nodeRef;
 
-    if (nodeRef != null) {
-        var url = '/lecm/business-journal/api/search?type=' + nodeRef + "&days=30&whose=&checkMainObject=true";
+    if (refs != "") {
+        var url = '/lecm/business-journal/api/search?type=' + refs + "&days=30&whose=&checkMainObject=true";
         var result = remote.connect("alfresco").get(url);
         if (result.status != 200) {
-            AlfrescoUtil.error(result.status, 'Could not get records for node ' + nodeRef);
+            AlfrescoUtil.error(result.status, 'Could not get records for the types: ' + refs);
         }
         return eval('(' + result + ')');
     }
 }
 
 function main() {
-    model.records = jsonUtils.toJSONString(getRecords(DICT_CODE));
+    model.records = jsonUtils.toJSONString(getRecords(TYPE_CODES));
 }
 
 main();

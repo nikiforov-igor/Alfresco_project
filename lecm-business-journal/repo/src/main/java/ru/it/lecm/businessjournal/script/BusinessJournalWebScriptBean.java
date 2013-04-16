@@ -57,11 +57,11 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 		return new ScriptNode(ref, serviceRegistry, getScope());
 	}
 
-    public Scriptable getRecordsByParams(String objectType, String daysCount, String whoseKey) {
-        return getRecordsByParams(objectType, daysCount, whoseKey, null);
+    public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey) {
+        return getRecordsByParams(objectTypes, daysCount, whoseKey, null);
     }
 
-    public Scriptable getRecordsByParams(String objectType, String daysCount, String whoseKey, String checkMainObject) {
+    public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey, String checkMainObject) {
         Date now = new Date();
         Date start = null;
 
@@ -79,7 +79,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                 start = calendar.getTime();
             }
         }
-        List<NodeRef> refs = service.getRecordsByParams(objectType, start, now, whoseKey, Boolean.parseBoolean(checkMainObject));
+        List<NodeRef> refs = service.getRecordsByParams(objectTypes, start, now, whoseKey, Boolean.parseBoolean(checkMainObject));
         return createScriptable(refs);
     }
 
