@@ -112,4 +112,18 @@
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml" />
     </bean>
 
+    <bean id="contractsStatusesFilter" parent="documentStatusesFilter">
+        <property name="filters">
+            <map>
+                <entry key="lecm-contract:document">
+                    <map>
+                        <entry key="Все" value="-"/>
+                        <entry key="В разработке" value="Черновик,Проект,На согласование,Согласован,На доработке,На подписании"/>
+                        <entry key="Активные" value="Подписан,Зарегистрирован,Действует"/>
+                        <entry key="Неактивные" value="Исполнен,Расторгнут"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

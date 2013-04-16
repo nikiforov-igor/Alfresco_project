@@ -1,15 +1,8 @@
 function main() {
-    var type = args["type"];
+    var type = "lecm-contract:document";
     var showStatuses = args["showStatusesBlock"] ? args["showStatusesBlock"] == "true" : false;
-    model.statusesGroups = [
-        {"title": "Все", "value": "-"},
-        {"title": "В разработке", "value": "Регистрация,Согласование"},
-        {"title": "Активные", "value": "Рассмотрение"},
-        {"title": "Неактивные", "value": "Черновик"}
-    ];
-    if (showStatuses) {
-        model.statusesList = getStatuses(type);
-    }
+    model.statusesGroups = getFilters(type);
+    model.statusesList = getStatuses(type);
 }
 
 function getStatuses(type) {
@@ -26,6 +19,27 @@ function getStatuses(type) {
     }
 
     return statuses
+}
+
+function getFilters(type) {
+    var filters = [];
+
+    var url = '/lecm/document/getFilteredStatuses?docType=' + type;
+    var result = remote.connect("alfresco").get(url);
+
+    if (result.status == 200) {
+        var filtersList = eval('(' + result + ')');
+        for (var index in filtersList) {
+            name = filtersList[index].name;
+            value = filtersList[index].statuses;
+            filters.push({
+                name: name,
+                value: value
+            });
+        }
+    }
+
+    return filters;
 }
 
 

@@ -366,4 +366,7 @@
             <ref bean="substitudeService"/>
         </property>
     </bean>
+
+    <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>
+
 </beans>

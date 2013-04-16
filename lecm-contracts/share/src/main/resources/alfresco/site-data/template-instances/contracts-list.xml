@@ -42,10 +42,6 @@
         <component>
             <region-id>contracts-filter</region-id>
             <url>/lecm/contracts/contracts-filter</url>
-            <properties>
-                <type>lecm-contract:document</type>
-                <showStatusesBlock>true</showStatusesBlock>
-            </properties>
         </component>
         <!-- Forbidden -->
         <component>

@@ -7,7 +7,7 @@
         ${msg("label.contracts")}
             <#list statusesGroups as group>
                 <li style="padding-bottom: 0.4em;" class="text-broken">
-                    <a href="${url.context}/page/contracts-list?query=${group.value}" class="text-cropped" title="${group.title}">${group.title}</a>
+                    <a href="${url.context}/page/contracts-list?query=${group.value}" class="text-cropped" title="${group.name}">${group.name}</a>
                 </li>
             </#list>
         </#if>

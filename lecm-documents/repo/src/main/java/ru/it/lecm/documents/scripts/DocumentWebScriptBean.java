@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 /**
@@ -155,5 +156,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
             map.put(string[0],value);
         }
         return map;
+    }
+
+    public Map<String, String> getFilters(String type){
+        return DocumentStatusesFilterBean.getFilterForType(type);
     }
 }
