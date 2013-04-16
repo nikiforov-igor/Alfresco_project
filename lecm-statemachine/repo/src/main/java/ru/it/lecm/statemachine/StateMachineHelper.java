@@ -705,9 +705,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
         ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
         ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
         List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-        for (ExecutionListener listener : listeners) {
-            if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
-                result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get(onFire);
+        if (listeners != null) {
+            for (ExecutionListener listener : listeners) {
+                if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
+                    result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get(onFire);
+                }
             }
         }
         return result;
