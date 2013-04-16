@@ -60,6 +60,7 @@
                 <!-- Регистрационный номер договора в системе-->
                 <property name="lecm-contract:regNumSystem">
                     <type>d:text</type>
+                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
