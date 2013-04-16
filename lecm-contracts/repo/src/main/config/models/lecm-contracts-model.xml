@@ -98,6 +98,7 @@
                 <!-- Общая сумма по договору -->
                 <property name="lecm-contract:totalSum">
                     <type>d:text</type>
+                    <default>0.00</default>
                 </property>
                 <!-- Дата начала действия договора -->
                 <property name="lecm-contract:startDate">
@@ -217,7 +218,7 @@
                     </source>
                     <target>
                         <class>lecm-currency:currency</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
