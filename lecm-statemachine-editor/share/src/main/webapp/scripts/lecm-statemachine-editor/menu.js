@@ -123,16 +123,38 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             }
             Alfresco.util.createYUIButton(this, "properties-menu-button", onClickPropertiesMenuButton, {});
 
-			var onButtonClick3 = function (e) {
-				this.editor._deployStatemachine();
-			};
-			this.widgets.deployButton = Alfresco.util.createYUIButton(this, "machine-deploy", onButtonClick3, {});
+            var deployMenu = new YAHOO.widget.Menu("deployMenu");
 
-            var onButtonClick4 = function (e) {
-                this.editor._deployDefaultStatemachine();
-            };
-            this.widgets.defaultDeployButton = Alfresco.util.createYUIButton(this, "default-machine-deploy", onButtonClick4, {});
+            deployMenu.addItems([
+                {
+                    text: "Развернуть машину состояний",
+                    onclick: {
+                        fn: this.editor._deployStatemachine,
+                        scope: this.editor
+                    }
+                },
+                {
+                    text: "Восстановить машину состояний по умолчанию",
+                    onclick: {
+                        fn: this.editor._restoreDefaultStatemachine,
+                        scope: this.editor
+                    }
+                },
+                {
+                    text: "Восстановить последнюю развернутую машину состояний",
+                    onclick: {
+                        fn: this.editor._restoreLastDeployedStatemachine,
+                        scope: this.editor
+                    }
+                }
+            ]);
 
+            deployMenu.render("statemachine-deploy-menu");
+            var onClickDeployMenuButton = function(e) {
+                deployMenu.moveTo(e.clientX, e.clientY);
+                deployMenu.show();
+            }
+            Alfresco.util.createYUIButton(this, "deploy-menu-button", onClickDeployMenuButton, {});
 
             var onButtonClick5 = function (e) {
 				this.editor._exportStatemachine();

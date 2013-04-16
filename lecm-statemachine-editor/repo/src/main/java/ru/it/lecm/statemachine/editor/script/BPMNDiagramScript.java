@@ -10,11 +10,11 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.statemachine.LecmWorkflowDeployer;
+import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
+import ru.it.lecm.statemachine.editor.export.XMLExporter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import javax.xml.stream.XMLStreamException;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -58,7 +58,8 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		if (statemachineNodeRef != null && "deploy".equals(type)) {
 			NodeRef statemachine = new NodeRef(statemachineNodeRef);
 			statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
-			String fileName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME) + ".bpmn20.xml";
+            String machineName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
+			String fileName = machineName + ".bpmn20.xml";
 			NodeRef companyHome = repositoryHelper.getCompanyHome();
 			NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, LecmWorkflowDeployer.WORKFLOW_FOLDER);
 			NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
@@ -75,10 +76,48 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			}
 			ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
 			writer.setMimetype("text/xml");
-			InputStream is = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+			ByteArrayInputStream is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 			writer.putContent(is);
 			is.close();
-			lecmWorkflowDeployer.redeploy();
+            NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
+            NodeRef restore = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_RESTORE);
+            if (restore == null) {
+                String folderName = StatemachineEditorModel.FOLDER_RESTORE;
+                HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+                props.put(ContentModel.PROP_NAME, folderName);
+                ChildAssociationRef childAssocRef = nodeService.createNode(
+                        statemachines,
+                        ContentModel.ASSOC_CONTAINS,
+                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(folderName)),
+                        ContentModel.TYPE_FOLDER,
+                        props);
+                restore = childAssocRef.getChildRef();
+            }
+            ByteArrayOutputStream restoreOut = new ByteArrayOutputStream();
+            try {
+                XMLExporter exporter = new XMLExporter(restoreOut, nodeService);
+                exporter.write(statemachineNodeRef);
+            } catch (XMLStreamException e) {
+                e.printStackTrace();
+            }
+            NodeRef restoreFile = nodeService.getChildByName(restore, ContentModel.ASSOC_CONTAINS, machineName + ".xml");
+            if (restoreFile == null) {
+                HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+                props.put(ContentModel.PROP_NAME, machineName + ".xml");
+                ChildAssociationRef childAssocRef = nodeService.createNode(
+                        restore,
+                        ContentModel.ASSOC_CONTAINS,
+                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(machineName + ".xml")),
+                        ContentModel.TYPE_CONTENT,
+                        props);
+                restoreFile = childAssocRef.getChildRef();
+            }
+            writer = contentService.getWriter(restoreFile, ContentModel.PROP_CONTENT, true);
+            writer.setMimetype("text/xml");
+            is = new ByteArrayInputStream(restoreOut.toByteArray());
+            writer.putContent(is);
+            is.close();
+            lecmWorkflowDeployer.redeploy();
 		} else if (statemachineNodeRef != null && "diagram".equals(type)) {
 			res.setContentEncoding("UTF-8");
 			res.setContentType("image/png");

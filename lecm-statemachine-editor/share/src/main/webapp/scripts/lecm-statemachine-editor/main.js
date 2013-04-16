@@ -359,11 +359,11 @@ LogicECM.module = LogicECM.module || {};
                 });
 		},
 
-        _deployDefaultStatemachine: function() {
+        _restoreDefaultStatemachine: function() {
             var me = this;
             Alfresco.util.PopupManager.displayPrompt({
-                title: "Развертывание машины состояний по умолчанию",
-                text: "Вы действительно хотите развернуть машину состояний по умолчанию в системе?",
+                title: "Восстановление машины состояний по умолчанию",
+                text: "Вы действительно хотите восстановить машину состояний по умолчанию?",
                 buttons: [
                     {
                         text: "Да",
@@ -380,7 +380,51 @@ LogicECM.module = LogicECM.module || {};
                                     oResponse.argument.parent._hideSplash();
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: "Машина состояний развернута в системе",
+                                            text: "Машина состояний восстановлена",
+                                            displayTime: 3
+                                        });
+                                    document.location.reload(true);
+                                },
+                                argument:{
+                                    parent: me
+                                },
+                                timeout: 20000
+                            };
+                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
+                    },
+                    {
+                        text: "Нет",
+                        handler: function dlA_onActionDelete_cancel()
+                        {
+                            this.destroy();
+                        },
+                        isDefault: true
+                    }]
+            });
+        },
+
+        _restoreLastDeployedStatemachine: function() {
+            var me = this;
+            Alfresco.util.PopupManager.displayPrompt({
+                title: "Восстановление машины состояний",
+                text: "Вы действительно хотите восстановить последнюю развернутую машину?",
+                buttons: [
+                    {
+                        text: "Да",
+                        handler: function dlA_onActionDeploy()
+                        {
+                            this.destroy();
+                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?last=true&stateMachineId={statemachineId}";
+                            sUrl = YAHOO.lang.substitute(sUrl, {
+                                statemachineId: me.statemachineId
+                            });
+                            me._showSplash();
+                            var callback = {
+                                success:function (oResponse) {
+                                    oResponse.argument.parent._hideSplash();
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: "Машина состояний восстановлена",
                                             displayTime: 3
                                         });
                                     document.location.reload(true);

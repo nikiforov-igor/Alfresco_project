@@ -6,12 +6,8 @@
     background: url('/share/res/images/lecm-statemachine-editor/properties.png') no-repeat 4px 4px;
 }
 
-#lecm-menu .statemachine-menu #menu-buttons-machine-deploy span.first-child {
+#lecm-menu .statemachine-menu #menu-buttons-deploy-menu-button span.first-child {
 	background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
-}
-
-#lecm-menu .statemachine-menu #menu-buttons-default-machine-deploy span.first-child {
-    background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
 }
 
 #lecm-menu .statemachine-menu #menu-buttons-machine-export span.first-child {

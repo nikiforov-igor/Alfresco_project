@@ -7,6 +7,7 @@
 <@comp.baseMenu>
 <div id="statemachine-status-menu"></div>
 <div id="statemachine-properties-menu"></div>
+<div id="statemachine-deploy-menu"></div>
 
 <div class="statemachine-menu">
     <span id="menu-buttons-status-menu-button" class="yui-button yui-push-button">
@@ -23,18 +24,11 @@
 	        </span>
 	    </span>
 </div>
-<div class="statemachine-menu">
-		<span id="menu-buttons-machine-deploy" class="yui-button yui-push-button">
-	        <span class="first-child">
-	            <button type="button" title="Развернуть">&nbsp;</button>
-	        </span>
-	    </span>
-</div>
 
 <div class="statemachine-menu">
-		<span id="menu-buttons-default-machine-deploy" class="yui-button yui-push-button">
+		<span id="menu-buttons-deploy-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Развернуть машину состояний по умолчанию">&nbsp;</button>
+	            <button type="button" title="Развертывание машины состояний">&nbsp;</button>
 	        </span>
 	    </span>
 </div>

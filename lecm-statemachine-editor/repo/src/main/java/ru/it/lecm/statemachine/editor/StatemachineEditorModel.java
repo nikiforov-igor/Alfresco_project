@@ -63,6 +63,7 @@ public class StatemachineEditorModel {
     public final static QName ASPECT_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatusAspect");
 
     public static final String STATEMACHINES = "statemachines";
+    public static final String FOLDER_RESTORE = "restore";
     public static final String STATUSES = "statuses";
     public static final String ROLES = "roles";
 
