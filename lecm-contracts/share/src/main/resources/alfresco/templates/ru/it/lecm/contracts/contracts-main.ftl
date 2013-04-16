@@ -7,6 +7,8 @@
 
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Contracts.SETTINGS = ${settings};
+
+        Alfresco.constants.DASHLET_RESIZE = true;
 //]]></script>
 </@>
 

@@ -25,6 +25,8 @@
 
         function init() {
             if (records) {
+                new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
+
                 var container = Dom.get('${id}_results');
                 container.innerHTML = '';
 
