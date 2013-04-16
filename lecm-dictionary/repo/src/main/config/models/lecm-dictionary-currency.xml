@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dictionary name="Вылюты">
+<dictionary name="Валюты">
 	<property name="lecm-dic:attributeForShow">cm:name</property>
 	<property name="lecm-dic:type">lecm-currency:currency</property>
 	<property name="lecm-dic:active">true</property>
