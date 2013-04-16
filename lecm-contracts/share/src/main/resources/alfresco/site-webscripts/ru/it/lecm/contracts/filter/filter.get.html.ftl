@@ -2,27 +2,50 @@
 
 <div id="contracts-filters">
     <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
-        <ul id="filter-groups-set">
-        <#if statusesGroups??>
-        ${msg("label.contracts")}
-            <#list statusesGroups as group>
-                <li style="padding-bottom: 0.4em;" class="text-broken">
-                    <a href="${url.context}/page/contracts-list?query=${group.value}" class="text-cropped" title="${group.name}">${group.name}</a>
-                </li>
-            </#list>
-        </#if>
-        </ul>
+        <h2 class="thin">${msg("label.contracts")}</h2>
+        <div class="grey-filter-panel">
+            <div class="contracts-filter-panel">
+                <ul id="filter-groups-set" class="filterBlock">
+                <#if statusesGroups??>
+                    <#list statusesGroups as group>
+                        <li>
+                            <a href="${url.context}/page/contracts-list?query=${group.value}"
+                               class="status-button text-cropped" title="${group.name}">${group.name}</a>
+                        </li>
+                    </#list>
+                </#if>
+                </ul>
+            </div>
+        </div>
     </div>
     <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
-        <ul id="filter-statuses-set">
-        <#if statusesList??>
-        ${msg("label.byStatus")}
-            <#list statusesList as status>
-                <li style="padding-bottom: 0.4em;" class="text-broken">
-                    <a href="${url.context}/page/contracts-list?query=${status}" class="text-cropped" title="${status}">${status}</a>
-                </li>
-            </#list>
-        </#if>
-        </ul>
+        <h2 id="${id}-heading" class="thin">${msg("label.byStatus")}</h2>
+        <div class="white-filter-panel">
+            <div class="contracts-filter-panel">
+                <ul id="filter-statuses-set" class="filterBlock">
+                <#if statusesList??>
+                    <#assign count = 0/>
+                    <#list statusesList as status>
+                        <li>
+                            <a href="${url.context}/page/contracts-list?query=${status}"
+                               class="status-button text-cropped text-broken" title="${status}">${status}</a>
+                        </li>
+                        <#assign count = count +1 />
+                    </#list>
+                </#if>
+                </ul>
+            </div>
+        </div>
     </div>
+
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        function init() {
+            Alfresco.util.createTwister("${id}-heading", "ContractsStatuses");
+        }
+
+        YAHOO.util.Event.onDOMReady(init);
+    })();
+    //]]>
+    </script>
 </div>

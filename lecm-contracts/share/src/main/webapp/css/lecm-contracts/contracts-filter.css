@@ -1,0 +1,56 @@
+h2.thin {
+    font-weight: normal;
+    font-style: italic;
+    color: #6ca5ce;
+    padding-bottom: 10px;
+}
+
+.contracts-filter-panel {
+    background-color: #F2F2F2;
+    /*border: 1px solid #000000;*/
+    margin-left: 20px;
+}
+
+.status-button {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font: 14px Arial;
+    margin: 5px 0;
+    text-decoration: none;
+}
+
+.contracts-filter-panel .text-cropped {
+    margin: 5px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.grey-filter-panel {
+     background-color: #bdbdbd;
+     border: 1px solid #000000;
+ }
+
+.white-filter-panel {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+}
+
+.contracts-filter-panel .filterBlock{
+    margin-top: -5px;
+    margin-bottom: -5px;
+}
+
+#contracts-filters .alfresco-twister-open {
+    background: transparent url('/share/res/components/images/expanded.png') no-repeat scroll 60% 35%;
+}
+
+#contracts-filters .alfresco-twister-closed
+{
+    background: transparent url('/share/res/components/images/collapsed.png') no-repeat scroll 60% 35% !important;
+}
+
+.contracts-filter-panel a:hover{
+    text-decoration: underline;
+}
