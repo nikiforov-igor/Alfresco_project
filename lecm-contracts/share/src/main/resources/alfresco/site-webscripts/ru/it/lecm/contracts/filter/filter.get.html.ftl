@@ -2,7 +2,7 @@
 
 <div id="contracts-filters">
     <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
-        <h2 class="thin">${msg("label.contracts")}</h2>
+        <h2 class="thin" style="margin-left:20px">${msg("label.contracts")}</h2>
         <div class="grey-filter-panel">
             <div class="contracts-filter-panel">
                 <ul id="filter-groups-set" class="filterBlock">
@@ -21,7 +21,7 @@
     <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
         <h2 id="${id}-heading" class="thin">${msg("label.byStatus")}</h2>
         <div class="white-filter-panel">
-            <div class="contracts-filter-panel">
+            <div class="contracts-filter-panel" >
                 <ul id="filter-statuses-set" class="filterBlock">
                 <#if statusesList??>
                     <#assign count = 0/>
