@@ -1,1 +1,0 @@
-model.statuses = statemachine.getStatuses("lecm-contract:document");

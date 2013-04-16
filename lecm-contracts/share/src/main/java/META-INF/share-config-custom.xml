@@ -366,4 +366,19 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="model-type" condition="lecm-contract:additionalDocument">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

@@ -31,11 +31,20 @@
         <!-- Datagrid -->
         <component>
             <region-id>contracts-documents-grid</region-id>
-            <url>/lecm/contracts/contracts-datagrid</url>
+            <url>/lecm/contracts/contracts-docs-datagrid</url>
             <properties>
                 <pagination>true</pagination>
                 <bubblingLabel>contracts-documents</bubblingLabel>
                 <advSearchFormId>contracts-documents-search</advSearchFormId>
+            </properties>
+        </component>
+        <!-- Filter -->
+        <component>
+            <region-id>contracts-documents-filter</region-id>
+            <url>/lecm/contracts/contracts-filter</url>
+            <properties>
+                <type>lecm-contract:additionalDocument</type>
+                <showStatusesBlock>false</showStatusesBlock>
             </properties>
         </component>
         <!-- Forbidden -->
