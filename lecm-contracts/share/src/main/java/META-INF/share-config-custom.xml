@@ -51,7 +51,7 @@
                     </field>
                     <field id="lecm-contract:currency-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вылюты</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
@@ -162,7 +162,7 @@
                     </field>
                     <field id="lecm-contract:currency-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вылюты</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
