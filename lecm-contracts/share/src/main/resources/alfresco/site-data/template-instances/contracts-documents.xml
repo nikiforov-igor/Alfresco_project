@@ -39,14 +39,14 @@
             </properties>
         </component>
         <!-- Filter -->
-        <component>
+        <!--<component>
             <region-id>contracts-documents-filter</region-id>
             <url>/lecm/contracts/contracts-filter</url>
             <properties>
                 <type>lecm-contract:additionalDocument</type>
                 <showStatusesBlock>false</showStatusesBlock>
             </properties>
-        </component>
+        </component>-->
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>
