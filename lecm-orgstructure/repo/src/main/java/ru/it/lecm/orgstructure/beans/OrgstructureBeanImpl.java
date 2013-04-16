@@ -753,7 +753,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 				for (AssociationRef orgElementChildRef : orgElementMembers) {
 					if (!isArchive(orgElementChildRef.getTargetRef())){
 						NodeRef employeeByPosition = getEmployeeByPosition(orgElementChildRef.getTargetRef());
-						if (!isArchive(employeeByPosition)) {
+						if (employeeByPosition != null && !isArchive(employeeByPosition)) {
 							results1.add(employeeByPosition);
 						}
 					}
