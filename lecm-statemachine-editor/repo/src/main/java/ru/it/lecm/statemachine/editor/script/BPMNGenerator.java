@@ -111,7 +111,7 @@ public class BPMNGenerator {
 						attribute.setAttribute("name", "role");
 						List<AssociationRef> roleAssoc = nodeService.getTargetAssocs(role.getChildRef(), StatemachineEditorModel.ASSOC_ROLE);
 						NodeRef roleRef = roleAssoc.get(0).getTargetRef();
-						String roleName = (String) nodeService.getProperty(roleRef, ContentModel.PROP_NAME);
+						String roleName = (String) nodeService.getProperty(roleRef, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 						attribute.setAttribute("value", roleName);
 						documentPermissionAction.appendChild(attribute);
 					}

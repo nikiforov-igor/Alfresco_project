@@ -279,7 +279,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<NodeRef> roleRefs = orgstructureBean.getBusinesRoles(true);
         HashSet<String> roles = new HashSet<String>();
         for (NodeRef role : roleRefs) {
-            String name = (String) serviceRegistry.getNodeService().getProperty(role, ContentModel.PROP_NAME);
+            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
             roles.add(name);
         }
         boolean result = false;
