@@ -163,6 +163,11 @@ public class StatusChangeAction extends StateMachineAction {
 		execBuildInTransactDynamic(children, dynamicPrivileges);
 	}
 
+
+    public String getStatus() {
+        return status;
+    }
+
     public Set<StateField> getFields() {
         return fields;
     }

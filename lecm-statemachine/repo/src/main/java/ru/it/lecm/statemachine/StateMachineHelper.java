@@ -239,6 +239,35 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return isStarter(type, employee);
     }
 
+    @Override
+    public List<String> getStatuses(String documentType) {
+        HashSet<String> statuses = new HashSet<String>();
+        String type = documentType.replace(":", "_");
+        List<WorkflowDefinition> definitions = serviceRegistry.getWorkflowService().getAllDefinitionsByName(ACTIVITI_PREFIX + type);
+        for (WorkflowDefinition definition : definitions) {
+            ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
+            List<ActivityImpl> activities = processDefinitionEntity.getActivities();
+            for (ActivityImpl activity : activities) {
+                List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+                if (listeners != null) {
+                    for (ExecutionListener listener : listeners) {
+                        if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
+                            List<StateMachineAction> result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("start");
+                            for (StateMachineAction action : result) {
+                                if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(StatusChangeAction.class))) {
+                                    StatusChangeAction statusAction = (StatusChangeAction) action;
+                                    statuses.add(statusAction.getStatus());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        List<String> statusesList = new ArrayList<String>(statuses);
+        Collections.sort(statusesList);
+        return statusesList;
+    }
 
     /**
      * Возвращает может ли сотрудник создавать документ определенного типа

@@ -69,4 +69,11 @@ public interface StateMachineServiceBean {
      */
     public boolean isStarter(String type, NodeRef employee);
 
+    /**
+     * Возвращает список возможных статусов для определенного типа документа
+     * @param documentType - тип документа
+     * @return
+     */
+    public List<String> getStatuses(String documentType);
+
 }
