@@ -73,6 +73,7 @@ function Absence_CheckboxChanged(skipFiring) {
          <span class="viewmode-value"><#if isTrue>${msg("form.control.checkbox.yes")}<#else>${msg("form.control.checkbox.no")}</#if></span>
       </div>
    <#else>
+		<label for="${fieldHtmlId}">&nbsp;</label>
       <input class="formsCheckBox" id="${fieldHtmlId}" type="checkbox" tabindex="0"  name="${field.name}" <#if field.description??>title="${field.description}"</#if>
              <#if isTrue> value="true" checked="checked"</#if> 
              <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if> 

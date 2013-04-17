@@ -368,15 +368,15 @@
 				</field-visibility>
 				<appearance>
 					<!--"fieldset", "panel", "bordered-panel", "title" and "whitespace"-->
-					<set id="out-of-office" template="/org/alfresco/components/form/2-column-set.ftl" appearance="" label=""/>
-					<set id="additional" template="/org/alfresco/components/form/2-column-set.ftl" appearance="" label=""/>
-					<field id="lecm-absence:abscent-employee-assoc" >
+					<!--<set id="out-of-office" template="/org/alfresco/components/form/2-column-set.ftl" appearance="" label=""/>-->
+					<!--<set id="additional"/>-->
+					<field id="lecm-absence:abscent-employee-assoc">
 						<control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
 					</field>
 					<field id="lecm-absence:begin">
 						<control template="/org/alfresco/components/form/controls/hidden.ftl"/>
 					</field>
-					<field id="lecm-absence:end" mandatory="true" label-id="label.absence.form.out-of-office.back" set="out-of-office">
+					<field id="lecm-absence:end" mandatory="true" label-id="label.absence.form.out-of-office.back">
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
 						</control>
@@ -384,12 +384,12 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIsNotBeforeToday" event="blur"  message-id="message.error.absence.date-interval-validation.early-end"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:unlimited" mandatory="true" label-id="label.absence.form.out-of-office.unlimited" set="out-of-office">
+					<field id="lecm-absence:unlimited" mandatory="true" label-id="label.absence.form.out-of-office.unlimited">
 						<control template="/ru/it/lecm/wcalendar/controls/checkbox-disabling-field.ftl">
 							<control-param name="isTrue">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-absence:abscence-reason-assoc" mandatory="true" set="additional" label-id="label.absence.form.out-of-office.reason">
+					<field id="lecm-absence:abscence-reason-assoc" mandatory="true" label-id="label.absence.form.out-of-office.reason">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_отсутствия</control-param>
 							<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>
@@ -401,11 +401,8 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.instantAbsenceReasonValidation" event="blur"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:comment" set="additional"/>
+					<field id="lecm-absence:comment"/>
 				</appearance>
-			</form>
-			<form id="createNewInstantAbsenceForm-XYZ">
-				<create-form template="/ru/it/lecm/wcalendar/absence/new-instant-absence-form.ftl"/>
 			</form>
 		</forms>
 	</config>
