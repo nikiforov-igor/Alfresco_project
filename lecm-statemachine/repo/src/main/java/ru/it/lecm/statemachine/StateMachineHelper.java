@@ -1,7 +1,6 @@
 package ru.it.lecm.statemachine;
 
 import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
-import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -24,7 +23,6 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
@@ -672,10 +670,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
         DocumentWorkflowUtil documentWorkflowUtil = new DocumentWorkflowUtil();
         List<WorkflowDescriptor> workflowDescriptors = documentWorkflowUtil.getWorkflowDescriptors(document);
         for (WorkflowDescriptor workflowDescriptor : workflowDescriptors) {
-            if (currentExecutionId != null && currentExecutionId.equals(workflowDescriptor.getExecutionId())) {
-                continue;
+            if (currentExecutionId == null || !currentExecutionId.equals(workflowDescriptor.getExecutionId())) {
+                serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
             }
-            serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
             documentWorkflowUtil.removeWorkflow(document, workflowDescriptor.getExecutionId());
         }
     }
