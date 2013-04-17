@@ -57,7 +57,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 }
 
                 if (oData) {
-                    var datalistColumn = scope.datagridColumns[oColumn.key];
+                    var datalistColumn = grid.datagridColumns[oColumn.key];
                     if (datalistColumn) {
                         var content;
                         oData = YAHOO.lang.isArray(oData) ? oData : [oData];
@@ -71,7 +71,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                     break;
 
                                 case "datetime":
-                                    content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+                                    content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), grid.msg("date-format.default"));
                                     if (datalistColumn.name == attributeForShow) {
                                         content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
                                     }
@@ -79,7 +79,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                     break;
 
                                 case "date":
-                                    content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+                                    content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), grid.msg("date-format.defaultDateOnly"));
                                     if (datalistColumn.name == attributeForShow) {
                                         content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + content + "</a>";
                                     }
