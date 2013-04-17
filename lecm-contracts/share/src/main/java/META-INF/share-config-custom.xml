@@ -389,7 +389,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="packageItems"/>
-					<field id="lecmContractWf:documentType">
+					<field id="lecmContractWf:documentType" label-id="contract.additionalDocumentType">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
