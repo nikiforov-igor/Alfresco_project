@@ -92,6 +92,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                 statemachineVariables = helper.getVariables(statemachineId);
             }
 
+            boolean stopSubWorkflows = false;
             Expression expression = new Expression(document, statemachineVariables, StateMachineHelper.getServiceRegistry());
 			for (StateMachineAction action : transitionActions) {
 				TransitionAction transitionAction = (TransitionAction) action;
@@ -100,10 +101,17 @@ public class EndWorkflowEvent implements ExecutionListener {
                 parameters.put(transitionAction.getVariableName(), currentTransitionValid);
                 helper.setExecutionParamentersByTaskId(taskId, parameters);
 
+                if (currentTransitionValid) {
+                    stopSubWorkflows = stopSubWorkflows || transitionAction.isStopSubWorkflows();
+                }
                 isTrasitionValid = isTrasitionValid || currentTransitionValid;
 			}
 
 			if (isTrasitionValid) {
+                if (stopSubWorkflows) {
+                    helper.stopDocumentSubWorkflows(statemachineId, executionId);
+                }
+
 				helper.nextTransition(taskId);
 			}
 

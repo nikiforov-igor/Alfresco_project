@@ -3,7 +3,6 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import ru.it.lecm.statemachine.StateMachineHelper;
 
 import java.util.List;
 import java.util.Timer;
@@ -11,7 +10,6 @@ import java.util.TimerTask;
 
 public class TimerAction extends StateMachineAction {
     public static final String PROP_TIMER_DURATION = "timerDuration";
-    public static final String PROP_STOP_SUBWORKFLOWS = "stopSubWorkflows";
     public static final String PROP_VARIABLE_NAME = "variableName";
 
     private String variable = null;

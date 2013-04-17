@@ -68,6 +68,10 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put(result.getOutputVariable(), result.getOutputValue());
                 helper.setExecutionParamentersByTaskId(taskId, parameters);
+                if (result.isStopSubWorkflows()) {
+                    String statemachineId = helper.getCurrentExecutionId(taskId);
+                    helper.stopDocumentSubWorkflows(statemachineId);
+                }
                 helper.stopDocumentProcessing(taskId);
             }
         }

@@ -11,6 +11,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.TimerAction;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
@@ -366,11 +367,8 @@ public class BPMNGenerator {
         attribute.setAttribute("value", "" + timerDuration);
         actionElement.appendChild(attribute);
 
-        Boolean stopSubWorkflows = (Boolean) nodeService.getProperty(status, StatemachineEditorModel.PROP_STOP_SUB_WORKFLOWS);
-        attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", TimerAction.PROP_STOP_SUBWORKFLOWS);
-        attribute.setAttribute("value", stopSubWorkflows.toString());
-        actionElement.appendChild(attribute);
+        Element stopSubWorkflowsAttribute = createStopSubWorkflowsAttribute(status);
+        actionElement.appendChild(stopSubWorkflowsAttribute);
 
         AssociationRef targetStatusRef = targetAssocs.get(0);
         String target = "id" + targetStatusRef.getTargetRef().getId().replace("-", "");
@@ -382,6 +380,19 @@ public class BPMNGenerator {
         end.appendChild(actionElement);
 
         return flows;
+    }
+
+    private Boolean getStopSubWorkflowsProperty(NodeRef nodeRef) {
+        Boolean property = (Boolean) nodeService.getProperty(nodeRef, StatemachineEditorModel.PROP_STOP_SUB_WORKFLOWS);
+        return property == null ? Boolean.FALSE : property;
+    }
+
+    private Element createStopSubWorkflowsAttribute(NodeRef nodeRef) {
+        Boolean stopSubWorkflows = getStopSubWorkflowsProperty(nodeRef);
+        Element result = doc.createElement("lecm:attribute");
+        result.setAttribute("name", StateMachineAction.PROP_STOP_SUBWORKFLOWS);
+        result.setAttribute("value", stopSubWorkflows.toString());
+        return result;
     }
 
 	private void prepareActions(NodeRef status, ArrayList<ChildAssociationRef> startActions, ArrayList<ChildAssociationRef> takeActions, ArrayList<ChildAssociationRef> endActions) {
@@ -537,6 +548,9 @@ public class BPMNGenerator {
 			attribute.setAttribute("value", expressionValue);
 			actionElement.appendChild(attribute);
 
+            Element stopSubWorkflowsAttribute = createStopSubWorkflowsAttribute(expression.getChildRef());
+            actionElement.appendChild(stopSubWorkflowsAttribute);
+
 			AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
 			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 			flows.add(new Flow(statusVar, target, "${!empty " + variableName + " && " + variableName + "}"));
@@ -571,6 +585,9 @@ public class BPMNGenerator {
 				AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
 				String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 				expressionElement.setAttribute("outputValue", target);
+
+                Boolean stopSubWorkflows = getStopSubWorkflowsProperty(expression.getChildRef());
+                expressionElement.setAttribute(StateMachineAction.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
 
 				expressionsElement.appendChild(expressionElement);
 				String var = "var" + actionVar;
@@ -665,6 +682,12 @@ public class BPMNGenerator {
 			parameter = doc.createElement("lecm:parameter");
 			parameter.setAttribute("name", "labelId");
 			parameter.setAttribute("value", labelId);
+			attribute.appendChild(parameter);
+
+            Boolean stopSubWorkflows = getStopSubWorkflowsProperty(transition.getChildRef());
+            parameter = doc.createElement("lecm:parameter");
+            parameter.setAttribute("name", StateMachineAction.PROP_STOP_SUBWORKFLOWS);
+            parameter.setAttribute("value", stopSubWorkflows.toString());
 			attribute.appendChild(parameter);
 
             appendConditionsElement(attribute, transition.getChildRef());

@@ -37,6 +37,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			String workflowId = null;
 			String variableValue = "";
 			String conditionAccess = "";
+			boolean stopSubWorkflows = false;
 			for (Element parameter : parameters) {
 				String name = parameter.attribute("name");
 				String value = parameter.attribute("value");
@@ -48,11 +49,13 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					variableValue = value;
 				} else if (PROP_CONDITION_ACCESS.equalsIgnoreCase(name)) {
 					conditionAccess = value;
+				} else if (PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
+                    stopSubWorkflows = Boolean.parseBoolean(value);
 				}
 			}
             Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables);
+			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables, stopSubWorkflows);
 			states.add(nextState);
 		}
 	}
@@ -77,8 +80,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		private String outputVariableName;
 		private String outputVariableValue;
 		private WorkflowVariables variables;
+		private boolean stopSubWorkflows;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -86,7 +90,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			this.outputVariableName = outputVariableName;
 			this.outputVariableValue = outputVariableValue;
 			this.variables = variables;
-		}
+            this.stopSubWorkflows = stopSubWorkflows;
+        }
 
 		public String getActionId() {
 			return actionId;
@@ -115,5 +120,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		public WorkflowVariables getVariables() {
 			return variables;
 		}
-	}
+
+        public boolean isStopSubWorkflows() {
+            return stopSubWorkflows;
+        }
+    }
 }

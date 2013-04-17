@@ -26,6 +26,7 @@ import ru.it.lecm.statemachine.bean.StateMachineActions;
  * Time: 14:29
  */
 abstract public class StateMachineAction {
+    public static final String PROP_STOP_SUBWORKFLOWS = "stopSubWorkflows";
 
 	private ServiceRegistry serviceRegistry;
 	private LecmPermissionService lecmPermissionService;

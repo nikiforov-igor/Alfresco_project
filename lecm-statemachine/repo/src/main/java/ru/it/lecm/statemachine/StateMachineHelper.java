@@ -653,15 +653,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     public void stopDocumentSubWorkflows(String stateMachineExecutionId) {
+        stopDocumentSubWorkflows(stateMachineExecutionId, null);
+    }
+
+    public void stopDocumentSubWorkflows(String stateMachineExecutionId, String executionId) {
         NodeRef document = getStatemachineDocument(stateMachineExecutionId);
         List<WorkflowDescriptor> workflowDescriptors = new DocumentWorkflowUtil().getWorkflowDescriptors(document);
         for (WorkflowDescriptor workflowDescriptor : workflowDescriptors) {
-            deleteWorkflow(workflowDescriptor.getExecutionId());
+            if (executionId != null && executionId.equals(workflowDescriptor.getExecutionId())) {
+                continue;
+            }
+            serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
         }
-    }
-
-    private void deleteWorkflow(String executionId) {
-        serviceRegistry.getWorkflowService().deleteWorkflow(executionId);
     }
 
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
@@ -789,12 +792,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
                 setExecutionParamentersByTaskId(taskId, parameters);
-                //ALF-706: Остановить все процессы, если требуется
+                if (nextState.isStopSubWorkflows()) {
+                    new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
+                }
                 nextTransition(taskId);
 
                 String dependencyExecution = parseExecutionId(persistedResponse);
                 if (dependencyExecution != null) {
-                    //TODO: check dependencyExecution!!!
                     WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                     new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
                     setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
@@ -900,5 +904,4 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return new StateFields(false);
     }
-
 }

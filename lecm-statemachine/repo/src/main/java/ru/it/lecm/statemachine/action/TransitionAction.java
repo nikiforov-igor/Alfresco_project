@@ -15,6 +15,7 @@ public class TransitionAction extends StateMachineAction {
 
 	private String variableName;
 	private String expressionValue;
+	private boolean stopSubWorkflows;
 
 	private static final String PROP_VARIABLE_NAME = "variableName";
 	private static final String PROP_EXPRESSION = "expression";
@@ -36,6 +37,8 @@ public class TransitionAction extends StateMachineAction {
 				variableName = value;
 			} else if (PROP_EXPRESSION.equalsIgnoreCase(name)) {
 				expressionValue = value;
+			} else if (PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
+                stopSubWorkflows = Boolean.parseBoolean(value);
 			}
 		}
 	}
@@ -46,5 +49,9 @@ public class TransitionAction extends StateMachineAction {
 
     public String getVariableName() {
         return variableName;
+    }
+
+    public boolean isStopSubWorkflows() {
+        return stopSubWorkflows;
     }
 }

@@ -604,6 +604,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -615,6 +616,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
                     <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
@@ -633,6 +635,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -643,6 +646,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
                 </appearance>
 			</form>
 		</forms>
@@ -655,6 +659,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel" />
@@ -671,12 +676,14 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
 				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -689,6 +696,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
@@ -708,6 +716,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
                     <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
@@ -741,6 +750,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionExpression" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
@@ -751,6 +761,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
 				</appearance>
 			</form>
 		</forms>
@@ -762,6 +773,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionExpression" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
@@ -772,6 +784,7 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
 				</appearance>
 			</form>
 		</forms>
