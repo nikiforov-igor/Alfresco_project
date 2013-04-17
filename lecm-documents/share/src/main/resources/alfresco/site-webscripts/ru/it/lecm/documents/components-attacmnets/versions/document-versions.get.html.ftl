@@ -16,32 +16,29 @@
       );
       //]]></script>
 
-      <div id="${el}-body" class="document-versions document-details-panel">
+   <div class="widget-bordered-panel last-panel">
+       <div id="${el}-body" class="document-versions document-components-panel">
+           <h2 id="${el}-heading" class="thin dark">
+           ${msg("header.versionHistory")}
+               <#if allowNewVersionUpload>
+                   <span class="alfresco-twister-actions">
+                       <a href="#" name=".onUploadNewVersionClick" class="${el} edit" title="${msg("label.newVersion")}"> &nbsp;</a>
+                   </span>
+               </#if>
+           </h2>
 
-         <h2 id="${el}-heading" class="thin dark">
-            ${msg("header.versionHistory")}
-            <#if allowNewVersionUpload>
-               <span class="alfresco-twister-actions">
-                  <a href="#" name=".onUploadNewVersionClick" class="${el} edit" title="${msg("label.newVersion")}">&nbsp;</a>
-               </span>
-            </#if>
-         </h2>
+           <div class="panel-body">
+               <h3 class="thin dark">${msg("section.latestVersion")}</h3>
+               <div id="${el}-latestVersion" class="current-version version-list"></div>
+               <hr/>
+               <h3 class="thin dark">${msg("section.olderVersion")}</h3>
+               <div id="${el}-olderVersions" class="version-list"></div>
+           </div>
+       </div>
+   </div>
 
-         <div class="panel-body">
-
-            <h3 class="thin dark">${msg("section.latestVersion")}</h3>
-            <div id="${el}-latestVersion" class="current-version version-list"></div>
-            <hr />
-            <h3 class="thin dark">${msg("section.olderVersion")}</h3>
-            <div id="${el}-olderVersions" class="version-list"></div>
-
-         </div>
-
-         <script type="text/javascript">//<![CDATA[
-            Alfresco.util.createTwister("${el}-heading", "DocumentVersions");
-         //]]></script>
-
-
-      </div>
+   <script type="text/javascript">//<![CDATA[
+       Alfresco.util.createTwister("${el}-heading", "DocumentVersions");
+   //]]></script>
    </#if>
 </#if>

@@ -1,23 +1,26 @@
 <#if document??>
-   <!-- Parameters and libs -->
-	<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
-   <#assign el=args.htmlid/>
+    <!-- Parameters and libs -->
+    <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
+    <#assign el=args.htmlid/>
 
-   <!-- Markup -->
-   <div class="document-metadata-header document-details-panel">
-      <h2 id="${el}-heading" class="thin dark">
-         ${msg("heading")}
-         <#if allowMetaDataUpdate!false>
-         <span class="alfresco-twister-actions">
-            <a href="${siteURL("edit-metadata?nodeRef=" + nodeRef?url)}" class="edit" title="${msg("label.edit")}">&nbsp;</a>
-         </span>
-         </#if>
-      </h2>
-      <div id="${el}-formContainer"></div>
-      <script type="text/javascript">//<![CDATA[
-         Alfresco.util.createTwister("${el}-heading", "DocumentMetadata");
-      //]]></script>
-   </div>
+    <!-- Markup -->
+<div class="widget-bordered-panel">
+    <div class="document-metadata-header document-components-panel">
+        <h2 id="${el}-heading" class="thin dark">
+            ${msg("heading")}
+            <#if allowMetaDataUpdate!false>
+                <span class="alfresco-twister-actions">
+                    <a href="${siteURL("edit-metadata?nodeRef=" + nodeRef?url)}" class="edit" title="${msg("label.edit")}"> &nbsp;</a>
+                </span>
+            </#if>
+        </h2>
+        <div id="${el}-formContainer"></div>
+    </div>
+</div>
+
+    <script type="text/javascript">//<![CDATA[
+    Alfresco.util.createTwister("${el}-heading", "DocumentMetadata");
+    //]]></script>
 
    <!-- Javascript instance -->
    <script type="text/javascript">//<![CDATA[

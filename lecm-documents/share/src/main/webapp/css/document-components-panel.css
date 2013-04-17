@@ -1,7 +1,13 @@
 .document-components-panel {
-    background-color: #F2F2F2;
-    border-bottom: 1px solid #000000;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #000;
     padding: 0.8em;
+}
+.widget-bordered-panel.last-panel .document-components-panel {
+    border-bottom: none;
+}
+#doc-attach-right .document-components-panel {
+    padding-left: 0;
 }
 .document-components-panel > h2,
 .document-forms-panel > h2 {
@@ -16,11 +22,11 @@
     padding: 1em 1em 0;
 }
 .widget-bordered-panel {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     padding: 0 0.8em;
 }
 .document-forms-panel {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     padding: 0.8em;
 }
 .document-components-panel ul.document-right-set {

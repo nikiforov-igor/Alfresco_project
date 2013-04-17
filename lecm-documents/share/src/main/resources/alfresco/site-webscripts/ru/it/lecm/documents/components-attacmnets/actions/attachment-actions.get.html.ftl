@@ -16,13 +16,15 @@
       );
    //]]></script>
 
-   <div id="${el}-body" class="document-actions document-components-panel">
-      <h2 id="${el}-heading" class="thin dark">
-         ${msg("heading")}
-      </h2>
-      <div class="doclist">
-         <div id="${el}-actionSet" class="action-set"></div>
-      </div>
+   <div class="widget-bordered-panel">
+       <div id="${el}-body" class="document-actions document-components-panel">
+           <h2 id="${el}-heading" class="thin dark">
+               ${msg("heading")}
+           </h2>
+           <div class="doclist">
+               <div id="${el}-actionSet" class="action-set"></div>
+           </div>
+       </div>
    </div>
 
    <script type="text/javascript">//<![CDATA[
