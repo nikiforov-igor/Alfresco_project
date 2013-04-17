@@ -67,10 +67,9 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <!-- Регистрационный номер-->
+                <!-- Регистрационный номер контрагента-->
                 <property name="lecm-contract:regNumContractor">
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                 </property>
                 <!-- Дата регистрации проекта договра-->
                 <property name="lecm-contract:dateRegProjectContracts">

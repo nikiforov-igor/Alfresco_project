@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Сводная информация</shortname>
+    <description>Получение сводной информации о количестве договоров</description>
+    <url>/lecm/contracts/summary</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

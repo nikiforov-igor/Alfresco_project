@@ -49,6 +49,12 @@
 		</property>
 	</bean>
 
+    <bean id="contractService" class="ru.it.lecm.contracts.beans.ContractsBeanImpl" parent="baseBean"
+          depends-on="nodeService">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="searchService" ref="searchService"/>
+    </bean>
+
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
 			init-method="init"
 			depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
@@ -70,13 +76,12 @@
 	</bean>
 
     <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
-          depends-on="documentService">
+          depends-on="documentService,contractService">
         <property name="extensionName">
             <value>contracts</value>
         </property>
-        <property name="service">
-            <ref bean="documentService"/>
-        </property>
+        <property name="documentService" ref="documentService"/>
+        <property name="contractService" ref="contractService"/>
     </bean>
 
     <bean id="contract.businessJournalDictionaryBootstrap"
