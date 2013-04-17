@@ -2,6 +2,7 @@ package ru.it.lecm.base.beans;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 		PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
 		PropertyCheck.mandatory(this, "serviceBean", serviceBean);
 		PropertyCheck.mandatory(this, "permissionsList", permissionsList);
-		Map<String, Map<String, String>> permissions = parsePermissionsList(permissionsList);
+		Map<String, List<PermissionSettings>> permissions = parsePermissionsList(permissionsList);
 		applyPermissions(permissions);
 	}
 
@@ -67,8 +68,8 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 		return null;
 	}
 
-	private Map<String, Map<String, String>> parsePermissionsList(List<String> permissionsList) {
-		Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
+	private Map<String, List<PermissionSettings>> parsePermissionsList(List<String> permissionsList) {
+		Map<String, List<PermissionSettings>> result = new HashMap<String, List<PermissionSettings>>();
 		SAXParserFactory SAXFactory = SAXParserFactory.newInstance();
 
 		for (String permissionsFile : permissionsList) {
@@ -87,16 +88,20 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 		return result;
 	}
 
-	private void applyPermissions(Map<String, Map<String, String>> permissions) {
-		for (Map.Entry<String, Map<String, String>> businessRole : permissions.entrySet()) {
+	private void applyPermissions(Map<String, List<PermissionSettings>> permissions) {
+		for (Map.Entry<String, List<PermissionSettings>> businessRole : permissions.entrySet()) {
 			final String businessRoleName = businessRole.getKey();
 			final Types.SGPosition sgBusinessRole = Types.SGKind.SG_BR.getSGPos(businessRoleName);
 
-			for (Map.Entry<String, String> objectsPermissions : businessRole.getValue().entrySet()) {
-				final NodeRef objectNode = getObjectNodeRef(objectsPermissions.getKey());
-				final String permissionGroup = objectsPermissions.getValue();
+			for (PermissionSettings objectsPermissions : businessRole.getValue()) {
+				final NodeRef objectNode = getObjectNodeRef(objectsPermissions.getObjectName());
+				if (objectNode == null) {
+					return;
+				}
+				final String permissionGroup = objectsPermissions.getPermissionGroup();
+				final boolean inheritPermissions = objectsPermissions.isInheritPermissions();
 				permissionService.clearPermission(objectNode, PermissionService.ALL_AUTHORITIES);
-				permissionService.setInheritParentPermissions(objectNode, true);
+				permissionService.setInheritParentPermissions(objectNode, inheritPermissions);
 				LecmPermissionGroup lecmPermissionGroup = lecmPermissionService.findPermissionGroup(permissionGroup);
 				if (lecmPermissionGroup != null) {
 					lecmPermissionService.grantAccessByPosition(lecmPermissionGroup, objectNode, sgBusinessRole);
@@ -121,6 +126,7 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 			if (elementNode != null) {
 				currentNode = elementNode;
 			} else {
+				currentNode = null;
 				break;
 			}
 		}
@@ -130,11 +136,11 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 
 	private class SAXParserHandler extends DefaultHandler {
 
-		private Map<String, Map<String, String>> result;
-		private Map<String, String> businessRole;
+		private Map<String, List<PermissionSettings>> result;
+		private List<PermissionSettings> permissionsList;
 		String businessRoleName;
 
-		private SAXParserHandler(Map<String, Map<String, String>> result) {
+		private SAXParserHandler(Map<String, List<PermissionSettings>> result) {
 			this.result = result;
 		}
 
@@ -143,19 +149,59 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 				throws SAXException {
 			if (qName.equalsIgnoreCase("BusinessRole")) {
 				businessRoleName = attributes.getValue("id");
-				businessRole = new HashMap<String, String>();
+				permissionsList = new ArrayList<PermissionSettings>();
 			} else if (qName.equalsIgnoreCase("Permission")) {
+				PermissionSettings permissionsSettings = new PermissionSettings();
 				String object = attributes.getValue("object");
 				String permissionGroup = attributes.getValue("permissionGroup");
-				businessRole.put(object, permissionGroup);
+				String inheritPermissions = attributes.getValue("inheritPermissions");
+				permissionsSettings.setObjectName(object);
+				permissionsSettings.setPermissionGroup(permissionGroup);
+				if ("false".equalsIgnoreCase(inheritPermissions)) {
+					permissionsSettings.setInheritPermissions(false);
+				} else {
+					permissionsSettings.setInheritPermissions(true);
+				}
+				permissionsList.add(permissionsSettings);
+
 			}
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) {
 			if (qName.equalsIgnoreCase("BusinessRole")) {
-				result.put(businessRoleName, businessRole);
+				result.put(businessRoleName, permissionsList);
 			}
+		}
+	}
+
+	private class PermissionSettings {
+		private String objectName;
+		private String permissionGroup;
+		private boolean inheritPermissions;
+
+		public void setObjectName(String objectName) {
+			this.objectName = objectName;
+		}
+
+		public void setPermissionGroup(String permissionGroup) {
+			this.permissionGroup = permissionGroup;
+		}
+
+		public void setInheritPermissions(boolean inheritPermissions) {
+			this.inheritPermissions = inheritPermissions;
+		}
+
+		public String getObjectName() {
+			return objectName;
+		}
+
+		public String getPermissionGroup() {
+			return permissionGroup;
+		}
+
+		public boolean isInheritPermissions() {
+			return inheritPermissions;
 		}
 	}
 }
