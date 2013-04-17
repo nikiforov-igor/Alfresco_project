@@ -1,5 +1,14 @@
 <alfresco-config>
-	<config evaluator="node-type" condition="lecm-dic:dictionary">
+
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-dictionary/dictionary-datagrid.js"/>
+            </dependencies>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-dic:dictionary">
 		<forms>
 			<form>
 				<field-visibility>

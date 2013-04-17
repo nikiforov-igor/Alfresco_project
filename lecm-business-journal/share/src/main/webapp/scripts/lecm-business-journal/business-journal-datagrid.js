@@ -13,7 +13,7 @@ LogicECM.module = LogicECM.module || {};
 
 
 /**
- * LogicECM Dictionary module namespace.
+ * LogicECM BusinessJournal module namespace.
  *
  * @namespace LogicECM
  * @class LogicECM.module.BusinessJournal
