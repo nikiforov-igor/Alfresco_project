@@ -379,4 +379,27 @@
             </form>
         </forms>
     </config>
+
+	<config evaluator="string-compare" condition="activiti$createOnBasis">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="packageItems" />
+					<show id="lecmContractWf:documentType" />
+				</field-visibility>
+				<appearance>
+					<field id="packageItems"/>
+					<field id="lecmContractWf:documentType">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

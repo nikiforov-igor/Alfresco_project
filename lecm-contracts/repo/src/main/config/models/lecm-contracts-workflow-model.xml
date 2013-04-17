@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmContractWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM contracts workflow model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/workflow/1.0" prefix="lecmContractWf"/>
+	</namespaces>
+
+	<types>
+		<type name="lecmContractWf:createOnBasis">
+			<parent>bpm:startTask</parent>
+			<associations>
+				<association name="lecmContractWf:documentType">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-contract-dic:contract-documents-type</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+	</types>
+</model>

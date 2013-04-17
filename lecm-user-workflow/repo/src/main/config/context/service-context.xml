@@ -47,4 +47,6 @@
     <bean id="lecmTaskScript" class="ru.it.lecm.workflow.LecmScriptTaskListener">
         <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
+
+	<bean id="lecmExecutionScript" class="ru.it.lecm.workflow.LecmScriptExecutionListener" init-method="register" />
 </beans>

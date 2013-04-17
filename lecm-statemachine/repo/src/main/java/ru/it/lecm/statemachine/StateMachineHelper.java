@@ -1,5 +1,7 @@
 package ru.it.lecm.statemachine;
 
+import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -22,11 +24,14 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -54,6 +59,7 @@ import java.util.*;
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
 public class StateMachineHelper implements StateMachineServiceBean {
+	private final static Logger logger = LoggerFactory.getLogger(StateMachineHelper.class);
 
     public static String ACTIVITI_PREFIX = "activiti$";
 
@@ -505,13 +511,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public NodeRef getStatemachineDocument(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-        List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
-        if (documents.size() > 0) {
-            return documents.get(0).getChildRef();
-        } else {
-            return null;
-        }
+	    try {
+		    NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+		    List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+		    if (documents.size() > 0) {
+		        return documents.get(0).getChildRef();
+		    } else {
+		        return null;
+		    }
+	    } catch (AuthenticationCredentialsNotFoundException e) {
+			logger.warn("Error get execution" + executionId, e);
+		    return null;
+	    }
     }
 
     public Map<String, Object> getVariables(String executionId) {

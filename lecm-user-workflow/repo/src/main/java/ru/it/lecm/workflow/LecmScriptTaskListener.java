@@ -3,6 +3,7 @@ package ru.it.lecm.workflow;
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener;
 import org.alfresco.service.ServiceRegistry;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class LecmScriptTaskListener extends ScriptTaskListener {
     }
 
     public void register(String objectName, Object object) {
-        objects.put(objectName, objects);
+        objects.put(objectName, object);
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {

@@ -131,4 +131,33 @@
             </map>
         </property>
     </bean>
+
+	<bean id="contractsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-create-on-basis.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">true</prop>
+				</props>
+			</list>
+		</property>
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-workflow-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-workflow</value>
+			</list>
+		</property>
+		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+	</bean>
+
+	<bean id="lecmContractsServiceExecutionScript" parent="lecmExecutionScript">
+		<property name="name" value="contractService"/>
+		<property name="object" ref="contractService"/>
+	</bean>
 </beans>

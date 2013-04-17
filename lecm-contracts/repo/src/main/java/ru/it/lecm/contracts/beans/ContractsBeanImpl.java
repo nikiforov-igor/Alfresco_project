@@ -54,4 +54,9 @@ public class ContractsBeanImpl extends BaseBean {
         }
         return records;
     }
+
+	public void createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {
+		System.out.println("2. Create Document On The Basis typeNodeRef=" + typeNodeRef + ", packageNodeRef=" + packageNodeRef);
+
+	}
 }
