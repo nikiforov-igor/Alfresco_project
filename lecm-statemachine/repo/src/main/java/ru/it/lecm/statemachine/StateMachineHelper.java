@@ -656,14 +656,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
         stopDocumentSubWorkflows(stateMachineExecutionId, null);
     }
 
-    public void stopDocumentSubWorkflows(String stateMachineExecutionId, String executionId) {
+    public void stopDocumentSubWorkflows(String stateMachineExecutionId, String currentExecutionId) {
         NodeRef document = getStatemachineDocument(stateMachineExecutionId);
-        List<WorkflowDescriptor> workflowDescriptors = new DocumentWorkflowUtil().getWorkflowDescriptors(document);
+        DocumentWorkflowUtil documentWorkflowUtil = new DocumentWorkflowUtil();
+        List<WorkflowDescriptor> workflowDescriptors = documentWorkflowUtil.getWorkflowDescriptors(document);
         for (WorkflowDescriptor workflowDescriptor : workflowDescriptors) {
-            if (executionId != null && executionId.equals(workflowDescriptor.getExecutionId())) {
+            if (currentExecutionId != null && currentExecutionId.equals(workflowDescriptor.getExecutionId())) {
                 continue;
             }
             serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
+            documentWorkflowUtil.removeWorkflow(document, workflowDescriptor.getExecutionId());
         }
     }
 

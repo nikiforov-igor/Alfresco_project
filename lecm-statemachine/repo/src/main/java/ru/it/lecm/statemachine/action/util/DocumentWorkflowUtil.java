@@ -93,7 +93,19 @@ public class DocumentWorkflowUtil {
         return result;
     }
 
-	public void removeWorkflow(String executionId) {
+	public void removeWorkflow(NodeRef document, String executionId) {
+        try {
+            Object value = serviceRegistry.getNodeService().getProperty(document, PROP_WORKFLOWS);
+            if (value == null) {
+                return;
+            }
+
+            JSONObject workflows = new JSONObject((String) value);
+            workflows.remove(executionId);
+            String result = workflows.toString();
+            serviceRegistry.getNodeService().setProperty(document, PROP_WORKFLOWS, result);
+        } catch (JSONException e) {
+        }
 
 	}
 
