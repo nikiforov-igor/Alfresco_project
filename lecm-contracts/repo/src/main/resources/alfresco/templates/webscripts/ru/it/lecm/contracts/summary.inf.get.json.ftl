@@ -1,3 +1,0 @@
-{
-"totalSum": "${totalSum}"
-}

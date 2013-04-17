@@ -3,7 +3,6 @@ package ru.it.lecm.contracts.script;
 import org.alfresco.repo.jscript.ScriptNode;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
-import ru.it.lecm.documents.beans.DocumentService;
 
 /**
  * User: mshafeev
@@ -25,7 +24,59 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return contractService.getDraftPath();
     }
 
-    public String getTotalContracts() {
-        return "" + contractService.getTotalContracts().size();
+    /**
+     * все договоры
+     * @return
+     */
+    public String getAllContracts() {
+        String filter = "";
+        filter = " AND ((PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
+                 " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\"))" +
+                 " AND NOT ((ASPECT:\""+"lecm\\-dic:aspect_active\""+") OR @lecm\\-dic\\:active:true)"+
+                 "";
+
+        return "" + contractService.getContracts(filter).size();
+    }
+
+    /**
+     * Контракты в разработке
+     * @return
+     */
+    public String getContractsDevelelop() {
+        String filter = " AND ( (@lecm\\-statemachine\\:status:\"Черновик\" )" +
+                        " OR @lecm\\-statemachine\\:status:\"Проект зарегестрирован\" " +
+                        " OR @lecm\\-statemachine\\:status:\"На согласовании\" " +
+                        " OR @lecm\\-statemachine\\:status:\"Согласован\" " +
+                        " OR @lecm\\-statemachine\\:status:\"На доработке\" " +
+                        " OR @lecm\\-statemachine\\:status:\"На подписании\" )" +
+                        " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
+                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
+                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
+        return "" + contractService.getContracts(filter).size();
+    }
+
+    /**
+     * Активные договора
+     * @return
+     */
+    public String getActiveContracts() {
+        String filter = " AND ( @lecm\\-statemachine\\:status:\"Подписан\"" +
+                        " OR @lecm\\-statemachine\\:status:\"Зарегестрирован\"" +
+                        " OR @lecm\\-statemachine\\:status:\"Действует\" )" +
+                        " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
+                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
+                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
+        return "" + contractService.getContracts(filter).size();
+    }
+
+    /**
+     * Неактивные договора
+     * @return
+     */
+    public String getInactiveContracts() {
+        String filter = " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
+                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
+                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
+        return "" + contractService.getContracts(filter).size();
     }
 }

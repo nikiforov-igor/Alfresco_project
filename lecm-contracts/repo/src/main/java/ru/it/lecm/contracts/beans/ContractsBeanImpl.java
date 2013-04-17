@@ -67,12 +67,16 @@ public class ContractsBeanImpl extends BaseBean {
 		return  documentService.getDraftPath(CONTRACTS);
 	}
 
-    public List<NodeRef> getTotalContracts() {
+    public List<NodeRef> getContracts(String filter) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        sp.setQuery("TYPE:\"" + TYPE_CONTRACTS_RECORD + "\"" + " -@lecm\\-statemachine\\:status:\"" + "Черновик" + "\"");
+        if (filter != null && !filter.equals("")) {
+            sp.setQuery("TYPE:\"" + TYPE_CONTRACTS_RECORD + "\"" + filter);
+        } else {
+            sp.setQuery("TYPE:\"" + TYPE_CONTRACTS_RECORD + "\"");
+        }
         ResultSet results = null;
 
         try {

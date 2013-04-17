@@ -1,1 +1,0 @@
-model.totalSum = contracts.getTotalContracts();
