@@ -363,7 +363,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
 		employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME, personFirstName);
 		employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME, personLastName);
-		employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, personMiddleName);
+		if (!personMiddleName.isEmpty()) {
+				employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, personMiddleName);
+		}
 		employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_EMAIL, personEmail);
 
 		String employeeSex = (String) employeeProperties.get(OrgstructureBean.PROP_EMPLOYEE_SEX);
@@ -397,9 +399,14 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	private boolean personNeedsEmployee(NodeRef personNode) {
 		NodeRef employeeNode = orgstructureService.getEmployeeByPerson(personNode);
 		Set<QName> aspects = nodeService.getAspects(personNode);
+		Map<QName, Serializable> personProperties = nodeService.getProperties(personNode);
+		String firstName = (String) personProperties.get(ContentModel.PROP_FIRSTNAME);
+		String email = (String) personProperties.get(ContentModel.PROP_EMAIL);
 
 		return employeeNode == null && !aspects.contains(ContentModel.ASPECT_PERSON_DISABLED)
-				&& !aspects.contains(QName.createQName(NamespaceService.SYSTEM_MODEL_1_0_URI, "incomplete"));
+				&& !aspects.contains(QName.createQName(NamespaceService.SYSTEM_MODEL_1_0_URI, "incomplete"))
+				&& (firstName != null && !firstName.isEmpty())
+				&& (email != null && !email.isEmpty());
 
 	}
 }
