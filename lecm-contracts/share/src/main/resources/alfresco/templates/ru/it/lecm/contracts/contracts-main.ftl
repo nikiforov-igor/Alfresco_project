@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-main.css" />
 
     <script type="text/javascript">//<![CDATA[
-        LogicECM.module.Contracts.SETTINGS = ${settings};
+        LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
 
         Alfresco.constants.DASHLET_RESIZE = true;
 //]]></script>

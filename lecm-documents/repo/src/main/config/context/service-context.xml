@@ -207,12 +207,22 @@
         </property>
     </bean>
 
+    <util:constant id="DMS_ROOT_ID" static-field="ru.it.lecm.documents.beans.DocumentMembersService.DMS_ROOT_ID"/>
+    <util:constant id="DMS_ROOT_NAME" static-field="ru.it.lecm.documents.beans.DocumentMembersService.LECM_DOCUMENT_MEMBERS_ROOT_NAME"/>
+
     <bean id="documentMembersService" class="ru.it.lecm.documents.beans.DocumentMembersServiceImpl"
-          depends-on="transactionService, nodeService">
+         depends-on="documents-members.LogicEcmModelsBootstrap" init-method="init">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="lecmObjectsService" ref="lecmObjectsService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <!-- Автоматическое создание каталогов. -->
+        <property name="folders">
+            <map>
+                <entry key="#{DMS_ROOT_ID}" value="#{DMS_ROOT_NAME}"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="documentMembersScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentMembersWebScriptBean"
@@ -252,6 +262,7 @@
             <ref bean="serviceOrgstructure"/>
         </property>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="namespaceService" ref="namespaceService"/>
         <property name="grantDynaRoleCode" value="BR_MEMBER"/>
         <property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />

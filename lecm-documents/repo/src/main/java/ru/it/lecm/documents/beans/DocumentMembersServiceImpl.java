@@ -35,12 +35,18 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     private LecmObjectsService lecmObjectsService;
     private LecmPermissionService lecmPermissionService;
 
+    private NodeRef ROOT;
+
     public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
         this.lecmObjectsService = lecmObjectsService;
     }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void init() {
+        ROOT = getFolder(DMS_ROOT_ID);
     }
 
     @Override
@@ -144,6 +150,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return generateMemberName(member);
     }
 
+    @Override
+    public NodeRef getRoot() {
+        return getServiceRootFolder();
+    }
+
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
         List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentService.ASSOC_DOC_MEMBERS);
         for (AssociationRef empMember : empMembers) {
@@ -156,9 +167,8 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return null;
     }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return null;
+		return ROOT;
 	}
 }

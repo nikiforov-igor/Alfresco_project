@@ -9,7 +9,7 @@
         <#assign filter = page.url.args.query/>
     </#if>
     <script type="text/javascript">//<![CDATA[
-        LogicECM.module.Contracts.SETTINGS = ${settings};
+        LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
         LogicECM.module.Contracts.FILTER = "${filter}";
     //]]></script>
 </@>

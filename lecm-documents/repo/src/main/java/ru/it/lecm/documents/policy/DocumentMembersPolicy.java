@@ -6,12 +6,15 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.notification.NotificationService;
+import org.alfresco.service.cmr.repository.AssociationExistsException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +53,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private NotificationsService notificationService;
 	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
+    private NamespaceService namespaceService;
 
 	final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
 	private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
@@ -110,6 +114,10 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
 	}
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
 	public final void init() {
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				DocumentMembersService.TYPE_DOC_MEMBER, new JavaBehaviour(this, "onCreateNode"));
@@ -158,6 +166,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
             lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
             nodeService.setProperty(nodeAssocRef.getSourceRef(),DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
+            // Добавляем нового участника в ноду со списком всех участников для данного типа документа
+            addMemberToUnit(employee, docRef);
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }
@@ -258,9 +268,43 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         return pgGranting;
     }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
+
+    private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
+        String docType = nodeService.getType(document).toPrefixString(namespaceService).replaceAll(":", "_");
+        NodeRef memberUnit = getOrCreateDocMembersUnit(docType);
+        try {
+            nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
+        } catch (AssociationExistsException ex) {
+            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + docType, ex);
+        }
+    }
+
+    private synchronized NodeRef getOrCreateDocMembersUnit(final String docType) {
+        NodeRef unitRef = nodeService.getChildByName(documentMembersService.getRoot(), ContentModel.ASSOC_CONTAINS, docType);
+        if (unitRef == null) {
+            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            NodeRef directoryRef;
+                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, docType);
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                            properties.put(ContentModel.PROP_NAME, docType);
+                            directoryRef = nodeService.createNode(documentMembersService.getRoot(), assocTypeQName, assocQName, DocumentMembersService.TYPE_DOC_MEMBERS_UNIT, properties).getChildRef();
+                            return directoryRef;
+                        }
+                    });
+                }
+            };
+            return AuthenticationUtil.runAsSystem(raw);
+        }
+        return unitRef;
+    }
 }
