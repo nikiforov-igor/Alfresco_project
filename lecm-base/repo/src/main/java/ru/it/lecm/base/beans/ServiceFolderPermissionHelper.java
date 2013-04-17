@@ -1,18 +1,20 @@
 package ru.it.lecm.base.beans;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import javax.xml.parsers.SAXParserFactory;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -28,13 +30,18 @@ import ru.it.lecm.security.Types;
  *
  * @author vlevin
  */
-public class ServiceFolderPermissionHelper extends BaseBean {
+public class ServiceFolderPermissionHelper {
 
+	private NodeService nodeService;
 	private BaseBean serviceBean;
 	private List<String> permissionsList;
 	private LecmPermissionService lecmPermissionService;
 	private PermissionService permissionService;
 	final private static org.slf4j.Logger logger = LoggerFactory.getLogger(ServiceFolderPermissionHelper.class);
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
 	public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
@@ -62,29 +69,27 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 		applyPermissions(permissions);
 	}
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
-	}
-
 	private Map<String, List<PermissionSettings>> parsePermissionsList(List<String> permissionsList) {
 		Map<String, List<PermissionSettings>> result = new HashMap<String, List<PermissionSettings>>();
-		SAXParserFactory SAXFactory = SAXParserFactory.newInstance();
 
-		for (String permissionsFile : permissionsList) {
-			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(permissionsFile);
-			try {
-				SAXFactory.newSAXParser().parse(inputStream, new SAXParserHandler(result));
-			} catch (ParserConfigurationException ex) {
-				logger.error(ex.getMessage(), ex);
-			} catch (SAXException ex) {
-				logger.error(ex.getMessage(), ex);
-			} catch (IOException ex) {
-				logger.error(ex.getMessage(), ex);
+		try {
+			SAXParserFactory SAXFactory = SAXParserFactory.newInstance();
+			SAXParser parser = SAXFactory.newSAXParser();
+			SAXParserHandler handler = new SAXParserHandler(result);
+
+			for(String permissionsFile : permissionsList) {
+				ClassPathResource resource = new ClassPathResource (permissionsFile);
+				parser.parse(resource.getInputStream(), handler);
+
 			}
-
+		} catch(ParserConfigurationException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch(SAXException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch(IOException ex) {
+			logger.error(ex.getMessage(), ex);
 		}
+
 		return result;
 	}
 
@@ -134,23 +139,24 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 		return currentNode;
 	}
 
-	private class SAXParserHandler extends DefaultHandler {
+	private static class SAXParserHandler extends DefaultHandler {
 
-		private Map<String, List<PermissionSettings>> result;
+		private final Map<String, List<PermissionSettings>> result;
 		private List<PermissionSettings> permissionsList;
 		String businessRoleName;
 
 		private SAXParserHandler(Map<String, List<PermissionSettings>> result) {
+			super();
 			this.result = result;
 		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes)
 				throws SAXException {
-			if (qName.equalsIgnoreCase("BusinessRole")) {
+			if ("BusinessRole".equalsIgnoreCase(qName)) {
 				businessRoleName = attributes.getValue("id");
 				permissionsList = new ArrayList<PermissionSettings>();
-			} else if (qName.equalsIgnoreCase("Permission")) {
+			} else if ("Permission".equalsIgnoreCase(qName)) {
 				PermissionSettings permissionsSettings = new PermissionSettings();
 				String object = attributes.getValue("object");
 				String permissionGroup = attributes.getValue("permissionGroup");
@@ -163,19 +169,18 @@ public class ServiceFolderPermissionHelper extends BaseBean {
 					permissionsSettings.setInheritPermissions(true);
 				}
 				permissionsList.add(permissionsSettings);
-
 			}
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) {
-			if (qName.equalsIgnoreCase("BusinessRole")) {
+			if ("BusinessRole".equalsIgnoreCase(qName)) {
 				result.put(businessRoleName, permissionsList);
 			}
 		}
 	}
 
-	private class PermissionSettings {
+	private static class PermissionSettings {
 		private String objectName;
 		private String permissionGroup;
 		private boolean inheritPermissions;
