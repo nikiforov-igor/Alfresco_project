@@ -28,7 +28,8 @@
 					<tr class="detail-list-item <#if item_has_next>border-bottom</#if>">
 						<td class="icon">
 							<#if item.connectedDocument?? && item.connectedDocument.type??>
-								<img src="/share/res/images/lecm-documents/type-icons/${item.connectedDocument.type?replace(":", "_")}.png"/>
+								<img src="/share/res/images/lecm-documents/type-icons/${item.primaryDocument.type?replace(":", "_")}.png"
+								     onerror="this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';"/>
 							<#else>
 								<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
 							</#if>
