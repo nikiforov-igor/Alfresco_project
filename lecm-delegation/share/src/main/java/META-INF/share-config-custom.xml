@@ -100,12 +100,8 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
-					<field id="lecm-d8n:procuracy-can-transfer-rights" mandatory="true">
+					<field id="lecm-d8n:procuracy-can-transfer-rights">
 						<control template="/ru/it/lecm/delegation/controls/checkbox.ftl"/>
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Delegation.Validator.CanTransferRightsValidator"
-										event="change" message-id="message.can-transfer-rights.error"/>
-						</constraint-handlers>
 					</field>
 				</appearance>
 				<field-visibility>

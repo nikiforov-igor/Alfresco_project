@@ -87,6 +87,12 @@
 							},
 							{
 								type: "datagrid-action-link-procuracy-datagrid",
+								id: "onActionTransferRights",
+								permission: "edit",
+								label: "передавать права руководителя"
+							},
+							{
+								type: "datagrid-action-link-procuracy-datagrid",
 								id: "onActionDelete",
 								permission: "delete",
 								label: "удалить доверенность"
@@ -129,6 +135,7 @@
 		<@formLib.renderField field=form.fields["assoc_lecm-d8n_delegation-opts-trustee-assoc"] />
 		<div id="error-message-container" style="margin-left: 12em; color: #800000; font-weight: bold;"></div>
 		<div class="form-field">
+			<label for="checkbox-can-transfer">&nbsp;</label>
 			<input id="${htmlIdCanTransferRights}" type="hidden" name="${fieldCanTransferRights.name}" value="${canTransfer?string}"/>
 			<input id="checkbox-can-transfer"
 				   class="formsCheckBox"

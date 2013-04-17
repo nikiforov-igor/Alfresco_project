@@ -605,4 +605,20 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public NodeRef getServiceRootFolder() {
 		return getDelegationFolder();
 	}
+
+	@Override
+	public boolean transferRights(final NodeRef procuracyRef, final NodeRef delegationOptsRef) {
+		boolean result = false;
+		if (nodeService.exists(procuracyRef) && nodeService.exists(delegationOptsRef) && isProcuracy(procuracyRef) && isDelegationOpts(delegationOptsRef)) {
+			List<NodeRef> procuracies = getProcuracies(delegationOptsRef, false);
+			//флаг "передавать права руководителя" сбрасываем всем
+			for (NodeRef candidateRef : procuracies) {
+				nodeService.setProperty(candidateRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, false);
+			}
+			//флаг "передавать права руководителя" устанавливаем указанной доверенности
+			nodeService.setProperty(procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, true);
+			result = true;
+		}
+		return result;
+	}
 }

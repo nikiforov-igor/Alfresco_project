@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Set flag &quot;can transfer rights&quot; to specified procuracy</shortname>
+	<description>Set flag &quot;can transfer rights&quot; to specified procuracy</description>
+	<url>/lecm/delegation/procuracy/transfer/rights</url>
+	<format default="json"/>
+	<authentication>user</authentication>
+	<transaction>required</transaction>
+</webscript>

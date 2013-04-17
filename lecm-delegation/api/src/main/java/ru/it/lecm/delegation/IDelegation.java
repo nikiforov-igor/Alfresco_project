@@ -225,4 +225,14 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор сотрудника или null если ничего не нашел.
 	 */
 	NodeRef getEmployee (final NodeRef nodeRef);
+
+	/**
+	 * установка флага "передавать права руководителя" для указанной доверенности в рамках параметров делегирования
+	 * для всех остальных доверенностей этот флаг будет сброшен
+	 * если nodeRef-ы не существуют, или не являются доверенностью и делегированием, то ничего не делать
+	 * @param procuracyRef
+	 * @param delegationOptsRef
+	 * @return true если удалось установить флаг, false - неудалось
+	 */
+	boolean transferRights(final NodeRef procuracyRef, final NodeRef delegationOptsRef);
 }
