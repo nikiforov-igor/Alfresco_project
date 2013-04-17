@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface DocumentConnectionService {
 	public static final String DOCUMENT_CONNECTIONS_ROOT_NAME = "Связи";
+	public static final String DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME = "Типы связи";
 
 	public static final String DOCUMENT_CONNECTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/org/connection/1.0";
 	public static final String DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI = "http://www.it.ru/lecm/connect/aspects/1.0";

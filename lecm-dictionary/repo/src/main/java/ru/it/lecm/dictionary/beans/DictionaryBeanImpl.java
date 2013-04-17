@@ -27,6 +27,15 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
         return nodeService.getChildByName(getDictionariesRoot(), ContentModel.ASSOC_CONTAINS, name);
     }
 
+	@Override
+	public NodeRef getDictionaryValueByName(String dictionaryName, String dictionaryValueName) {
+		NodeRef dictionary = getDictionaryByName(dictionaryName);
+		if (dictionary != null) {
+			return nodeService.getChildByName(dictionary, ContentModel.ASSOC_CONTAINS, dictionaryValueName);
+		}
+		return null;
+	}
+
     @Override
     public List<NodeRef> getChildren(NodeRef nodeRef) {
         List<NodeRef> activeChildren = new ArrayList<NodeRef>();

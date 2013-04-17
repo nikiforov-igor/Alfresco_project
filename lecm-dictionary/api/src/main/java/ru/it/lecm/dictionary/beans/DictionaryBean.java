@@ -23,10 +23,11 @@ public interface DictionaryBean {
 	public boolean isHeirarchicalDictionaryValue(NodeRef ref);
 	public boolean isPlaneDictionaryValue(NodeRef ref);
 	public boolean isDictionaryValue(NodeRef ref);
-	NodeRef getDictionaryByName(String name);
-    NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
-    List<NodeRef> getChildren(NodeRef nodeRef);
-	List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
-	NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
-	NodeRef getDictionariesRoot();
+	public NodeRef getDictionaryByName(String name);
+	public NodeRef getDictionaryValueByName(String dictionaryName, String dictionaryValueName);
+	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
+	public List<NodeRef> getChildren(NodeRef nodeRef);
+	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
+	public NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
+	public NodeRef getDictionariesRoot();
 }

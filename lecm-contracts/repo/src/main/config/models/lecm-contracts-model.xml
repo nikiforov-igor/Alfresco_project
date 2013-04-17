@@ -41,6 +41,20 @@
         <type name="lecm-contract:additionalDocument">
             <title>Logic Ecm Additional Contract Document</title>
             <parent>lecm-document:base</parent>
+	        <associations>
+		        <!-- Вид документа -->
+		        <association name="lecm-contract:additionalDocumentType">
+			        <source>
+				        <mandatory>false</mandatory>
+				        <many>true</many>
+			        </source>
+			        <target>
+				        <class>lecm-contract-dic:contract-documents-type</class>
+				        <mandatory>true</mandatory>
+				        <many>false</many>
+			        </target>
+		        </association>
+	        </associations>
         </type>
 
 		<type name="lecm-contract:document">

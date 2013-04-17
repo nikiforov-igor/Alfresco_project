@@ -50,9 +50,12 @@
 	</bean>
 
     <bean id="contractService" class="ru.it.lecm.contracts.beans.ContractsBeanImpl" parent="baseBean"
-          depends-on="nodeService">
+          depends-on="nodeService, documentService, documentConnectionService">
         <property name="nodeService" ref="nodeService"/>
         <property name="searchService" ref="searchService"/>
+	    <property name="documentService" ref="documentService"/>
+	    <property name="documentConnectionService" ref="documentConnectionService"/>
+	    <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
@@ -80,7 +83,6 @@
         <property name="extensionName">
             <value>contracts</value>
         </property>
-        <property name="documentService" ref="documentService"/>
         <property name="contractService" ref="contractService"/>
     </bean>
 
