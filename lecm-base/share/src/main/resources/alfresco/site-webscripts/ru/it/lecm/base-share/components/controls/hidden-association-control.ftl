@@ -11,7 +11,22 @@
 	<#assign fieldValue = field.value>
 </#if>
 
-<input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
-<input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-<input type="hidden" id="${fieldHtmlId}" name="${field.name}"
-       <#if field.value?is_number>value="${fieldValue?c}"<#else>value="${fieldValue?html}"</#if> />
+<script type="text/javascript">
+	(function()
+	{
+		YAHOO.util.Event.onContentReady("${fieldHtmlId}", function (){
+			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
+					{
+						fieldName: "${field.name}",
+						fieldId: "${fieldHtmlId}"
+					});
+		});
+	})();
+</script>
+
+<div class="form-field">
+	<input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
+	<input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
+	<input type="hidden" id="${fieldHtmlId}" name="${field.name}"
+	       <#if field.value?is_number>value="${fieldValue?c}"<#else>value="${fieldValue?html}"</#if> />
+</div>

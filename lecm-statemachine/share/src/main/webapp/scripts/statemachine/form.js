@@ -33,6 +33,7 @@ LogicECM.module = LogicECM.module || {};
 	LogicECM.module.StartWorkflow = function StartWorkflow_constructor(htmlId) {
 		var module = LogicECM.module.StartWorkflow.superclass.constructor.call(this, "LogicECM.module.StartWorkflow", htmlId, ["button"]);
 		YAHOO.Bubbling.on("objectFinderReady", module.onObjectFinderReady, module);
+		YAHOO.Bubbling.on("hiddenAssociationFormReady", module.onHiddenAssociationFormReady, module);
 		YAHOO.Bubbling.on("formContentReady", module.onStartWorkflowFormContentReady, module);
 
 		return module;
@@ -49,6 +50,12 @@ LogicECM.module = LogicECM.module || {};
 			} else if (this.assignee != null && (objectFinder.options.field == "assoc_bpm_assignee" || objectFinder.options.field == "assoc_bpm_groupAssignee")) {
                 objectFinder.selectItems(this.assignee);
             }
+		},
+
+		onHiddenAssociationFormReady:function StartWorkflow_onObjectFinderReady(layer, args) {
+			if (args[1].fieldName == "assoc_packageItems") {
+				Dom.get(args[1].fieldId + "-added").value = this.selectedItem;
+			}
 		},
 
 		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, fields, label) {
@@ -74,6 +81,14 @@ LogicECM.module = LogicECM.module || {};
 					templateUrl:templateUrl,
 					actionUrl:null,
 					destroyOnHide:true,
+					doBeforeDialogShow:{
+						fn:function (p_form, p_dialog) {
+							var dialogName = this.msg("logicecm.workflow.runAction.label", label);
+							Alfresco.util.populateHTML(
+								[ p_dialog.id + "-form-container_h", dialogName]
+							);
+						}
+					},
 					onSuccess:{
 						fn:function (response) {
 							this._chooseState(type, taskId, response.json.persistedObject, actionId);
