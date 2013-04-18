@@ -1154,8 +1154,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
       _applyConfig: function DNDUpload__applyConfig()
       {
          // Generate the title based on number of files and destination
-         var i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload",
-            location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
+	     var i18n = "header.singleUpdate";
+	     if (this.showConfig.updateNodeRef == null) {
+		     i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload";
+	     }
+
+         var location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
 
          this.titleText.innerHTML = this.msg(i18n, $html(location));
 
