@@ -54,7 +54,7 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 			});
 
 			// Using Forms Service, so always create new instance
-			var procuracyCanTransferRights;
+			var procuracyCanTransferRights = false;
 			var procuracyRef = item.nodeRef;
 			var delegationOptsRef = this.datagridMeta.nodeRef;
 			var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");

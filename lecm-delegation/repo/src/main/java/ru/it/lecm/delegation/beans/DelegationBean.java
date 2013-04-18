@@ -403,7 +403,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			} catch (JSONException ex) {
 				logger.error (ex.getMessage (), ex);
 			}
-			if (nodeRef != null) {
+			if (nodeRef != null && nodeService.exists(nodeRef)) {
+				nodeService.setProperty(nodeRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, false);
+				nodeService.setProperty(nodeRef, IS_ACTIVE, false);
 				List<AssociationRef> associationRefs = nodeService.getTargetAssocs (nodeRef, ASSOC_PROCURACY_TRUSTEE);
 				if (associationRefs != null) {
 					for (AssociationRef associationRef : associationRefs) {

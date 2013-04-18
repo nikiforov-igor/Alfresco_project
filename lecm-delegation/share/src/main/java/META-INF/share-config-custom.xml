@@ -100,9 +100,6 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
-					<field id="lecm-d8n:procuracy-can-transfer-rights">
-						<control template="/ru/it/lecm/delegation/controls/checkbox.ftl"/>
-					</field>
 				</appearance>
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
