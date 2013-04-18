@@ -128,7 +128,6 @@
                     <type>d:text</type>
                 </property>
 
-
                 <!-- Адрес банка или любая информация о местоположении. -->
                 <!-- Местоположение банка -->
                 <property name="lecm-contractor:bank-location">
@@ -185,7 +184,7 @@
                         <many>true</many>
                     </target>
                 </child-association>
-                
+
                 <!-- FK Контрагент -->
                 <!-- Реализуется на уровне [lecm-dic:hierarchical_dictionary_values] -->
                 <!-- TODO: Один уровень вложенности! -->
@@ -230,7 +229,7 @@
             <properties>
 
                 <!-- Фамилия -->
-                    <property name="lecm-representative:surname">
+                <property name="lecm-representative:surname">
                     <title>Surname</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>

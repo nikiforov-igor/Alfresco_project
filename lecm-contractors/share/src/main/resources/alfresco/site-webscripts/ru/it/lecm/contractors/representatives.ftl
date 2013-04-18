@@ -141,8 +141,7 @@
             // Создание формы добавления представителя.
             var addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
 
-            var isPrimaryCheckboxChecked,
-                    selectedNodeRef;
+            var isPrimaryCheckboxChecked;
 
             addRepresentativeForm.setOptions({
                 width: "500px",

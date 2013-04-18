@@ -85,7 +85,7 @@
                     <!-- Вкладка: Представители -->
                     <set id="representatives" label-id="tabs.contractor.representatives" appearance="" />
                         <field id="lecm-contractor:contractor-to-link-association" set="representatives">
-                            <control template="/ru/it/lecm/tabs/representatives.ftl">
+                            <control template="/ru/it/lecm/contractors/representatives.ftl">
                                 <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</control-param>
                                 <control-param name="showCreateNewLink">true</control-param>
                                 <control-param name="showCreateNewButton">false</control-param>
@@ -197,7 +197,7 @@
                     <!-- Вкладка: Представители -->
                     <set id="representatives" label-id="tabs.contractor.representatives" appearance="" />
                         <field id="lecm-contractor:contractor-to-link-association" set="representatives">
-                            <control template="/ru/it/lecm/tabs/representatives.ftl">
+                            <control template="/ru/it/lecm/contractors/representatives.ftl">
                                 <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</control-param>
                                 <control-param name="showCreateNewLink">true</control-param>
                                 <control-param name="showCreateNewButton">false</control-param>
@@ -244,30 +244,30 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-representative:primary-contact"/><!-- Основной контакт -->
-                    <show id="lecm-representative:surname"/><!-- Фамилия -->
-                    <show id="lecm-representative:firstname"/><!-- Имя -->
-                    <show id="lecm-representative:middlename"/><!-- Отчество -->
-                    <show id="lecm-representative:rank"/><!-- Должность -->
-                    <show id="lecm-representative:commments"/><!-- Комментарии -->
-                    <show id="lecm-representative:work-phone"/><!-- Рабочий телефон -->
-                    <show id="lecm-representative:mobile-phone"/><!-- Мобильный телефон -->
-                    <show id="lecm-representative:location"/><!-- Местоположение -->
-                    <show id="lecm-representative:fax"/><!-- Факс -->
-                    <show id="lecm-representative:email"/><!-- E-mail -->
-                    <show id="lecm-representative:contacts"/><!-- Дополнительные контакты -->
+                    <show id="lecm-representative:primary-contact"/>                                                    <!-- Основной контакт -->
+                    <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
+                    <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
+                    <show id="lecm-representative:middlename"/>                                                         <!-- Отчество -->
+                    <show id="lecm-representative:rank"/>                                                               <!-- Должность -->
+                    <show id="lecm-representative:commments"/>                                                          <!-- Комментарии -->
+                    <show id="lecm-representative:work-phone"/>                                                         <!-- Рабочий телефон -->
+                    <show id="lecm-representative:mobile-phone"/>                                                       <!-- Мобильный телефон -->
+                    <show id="lecm-representative:location"/>                                                           <!-- Местоположение -->
+                    <show id="lecm-representative:fax"/>                                                                <!-- Факс -->
+                    <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
+                    <show id="lecm-representative:contacts"/>                                                           <!-- Дополнительные контакты -->
 
-                    <show id="lecm-contractor:representative-to-contractor-association"/><!-- FK Контрагент -->
+                    <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
                 </field-visibility>
             </form>
 
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-representative:surname"/><!-- Фамилия -->
-                    <show id="lecm-representative:firstname"/><!-- Имя -->
-                    <show id="lecm-representative:middlename"/><!-- Отчество -->
-                    <show id="lecm-representative:work-phone"/><!-- Рабочий телефон -->
-                    <show id="lecm-representative:mobile-phone"/><!-- Мобильный телефон -->
+                    <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
+                    <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
+                    <show id="lecm-representative:middlename"/>                                                         <!-- Отчество -->
+                    <show id="lecm-representative:work-phone"/>                                                         <!-- Рабочий телефон -->
+                    <show id="lecm-representative:mobile-phone"/>                                                       <!-- Мобильный телефон -->
                 </field-visibility>
             </form>
         </forms>
@@ -276,20 +276,20 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-representative:primary-contact"/><!-- Основной контакт -->
-                    <show id="lecm-representative:surname"/><!-- Фамилия -->
-                    <show id="lecm-representative:firstname"/><!-- Имя -->
-                    <show id="lecm-representative:middlename"/><!-- Отчество -->
-                    <show id="lecm-representative:rank"/><!-- Должность -->
-                    <show id="lecm-representative:commments"/><!-- Комментарии -->
-                    <show id="lecm-representative:work-phone"/><!-- Рабочий телефон -->
-                    <show id="lecm-representative:mobile-phone"/><!-- Мобильный телефон -->
-                    <show id="lecm-representative:location"/><!-- Местоположение -->
-                    <show id="lecm-representative:fax"/><!-- Факс -->
-                    <show id="lecm-representative:email"/><!-- E-mail -->
-                    <show id="lecm-representative:contacts"/><!-- Дополнительные контакты -->
+                    <show id="lecm-representative:primary-contact"/>                                                    <!-- Основной контакт -->
+                    <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
+                    <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
+                    <show id="lecm-representative:middlename"/>                                                         <!-- Отчество -->
+                    <show id="lecm-representative:rank"/>                                                               <!-- Должность -->
+                    <show id="lecm-representative:commments"/>                                                          <!-- Комментарии -->
+                    <show id="lecm-representative:work-phone"/>                                                         <!-- Рабочий телефон -->
+                    <show id="lecm-representative:mobile-phone"/>                                                       <!-- Мобильный телефон -->
+                    <show id="lecm-representative:location"/>                                                           <!-- Местоположение -->
+                    <show id="lecm-representative:fax"/>                                                                <!-- Факс -->
+                    <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
+                    <show id="lecm-representative:contacts"/>                                                           <!-- Дополнительные контакты -->
 
-                    <show id="lecm-contractor:representative-to-contractor-association"/><!-- FK Контрагент -->
+                    <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
                 </field-visibility>
             </form>
         </forms>
