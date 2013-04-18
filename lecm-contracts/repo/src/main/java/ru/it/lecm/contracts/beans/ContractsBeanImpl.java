@@ -32,6 +32,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName TYPE_CONTRACTS_RECORD = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
 	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "additionalDocument");
 	public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "additionalDocumentType");
+	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_NAMESPACE_URI, "reasonDelete-assoc");
 
     private SearchService searchService;
 	private DictionaryBean dictionaryService;
@@ -117,4 +118,22 @@ public class ContractsBeanImpl extends BaseBean {
 			}
 		}
 	}
+
+    public void appendDeleteReason(String reasonNodeRef, String packageNodeRef) {
+        if (reasonNodeRef != null && packageNodeRef != null) {
+            NodeRef reasonRef = new NodeRef(reasonNodeRef);
+            NodeRef packageRef = new NodeRef(packageNodeRef);
+            if (nodeService.exists(reasonRef) && nodeService.exists(packageRef)) {
+                NodeRef documentRef = null;
+                List<ChildAssociationRef> packageAssocs = nodeService.getChildAssocs(packageRef);
+                if (packageAssocs != null && packageAssocs.size() == 1) {
+                    documentRef = packageAssocs.get(0).getChildRef();
+                }
+                if (documentRef != null && documentService.isDocument(documentRef)) {
+                    nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
+                }
+            }
+        }
+    }
+
 }

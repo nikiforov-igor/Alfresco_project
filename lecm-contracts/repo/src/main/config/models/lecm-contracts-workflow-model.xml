@@ -32,5 +32,23 @@
 				</association>
 			</associations>
 		</type>
-	</types>
+
+        <type name="lecmContractWf:deleteReasonTask">
+            <parent>bpm:startTask</parent>
+            <associations>
+                <association name="lecmContractWf:deleteReason">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:delete-reason</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+
+    </types>
 </model>
