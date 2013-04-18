@@ -101,7 +101,6 @@
 		<module>lecm-documents</module>
 		<module>lecm-regnumbers</module>
 		<module>lecm-contractors</module>
-		<module>lecm-user-workflow</module>
 		<module>lecm-contracts-fake</module>
 	</modules>
     <scm>

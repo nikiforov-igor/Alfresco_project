@@ -9,9 +9,9 @@
 		<endEvent id="endCreateOnBasis" name="End"></endEvent>
 		<scriptTask id="createOnBasisTask" name="Создать на основании" scriptFormat="javascript">
 			<extensionElements>
-				<activiti:executionListener event="start" class="ru.it.lecm.workflow.LecmScriptExecutionListener">
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contractService.createDocumentOnBasis(lecmContractWf_documentType.nodeRef, bpm_package.nodeRef);</activiti:string>
+						<activiti:string>contracts.createDocumentOnBasis(lecmContractWf_documentType.nodeRef, bpm_package.nodeRef);</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>

@@ -206,13 +206,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>ru.it.lecm.user-workflow</groupId>
-            <artifactId>user-workflow-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>ru.it.lecm.contractors</groupId>
             <artifactId>lecm-contractors-share</artifactId>
             <version>${platform.version}</version>

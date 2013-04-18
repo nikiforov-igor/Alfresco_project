@@ -60,6 +60,10 @@ public class ContractsBeanImpl extends BaseBean {
         return null;
     }
 
+	public DocumentService getDocumentService() {
+		return documentService;
+	}
+
 	public NodeRef getDraftRoot() {
 		return  documentService.getDraftRoot(CONTRACTS);
 	}
@@ -93,47 +97,20 @@ public class ContractsBeanImpl extends BaseBean {
         return records;
     }
 
-	public void createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {
-		if (typeNodeRef != null && packageNodeRef != null) {
-			NodeRef typeRef = new NodeRef(typeNodeRef);
-			NodeRef packageRef = new NodeRef(packageNodeRef);
-			if (nodeService.exists(typeRef) && nodeService.exists(packageRef)) {
-				NodeRef documentRef = null;
-				List<ChildAssociationRef> packageAssocs = nodeService.getChildAssocs(packageRef);
-				if (packageAssocs != null && packageAssocs.size() == 1) {
-					documentRef = packageAssocs.get(0).getChildRef();
-				}
-				if (documentRef != null && documentService.isDocument(documentRef)) {
-					ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
-					if (additionalDocumentAssociationRef != null && additionalDocumentAssociationRef.getChildRef() != null) {
-						NodeRef additionalDocumentRef = additionalDocumentAssociationRef.getChildRef();
-						nodeService.createAssociation(additionalDocumentRef, typeRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE);
+	public void createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {
+		ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
+		if (additionalDocumentAssociationRef != null && additionalDocumentAssociationRef.getChildRef() != null) {
+			NodeRef additionalDocumentRef = additionalDocumentAssociationRef.getChildRef();
+			nodeService.createAssociation(additionalDocumentRef, typeRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE);
 
-						NodeRef connectionType = dictionaryService.getDictionaryValueByName(DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME, DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_NAME);
-						if (connectionType != null) {
-							documentConnectionService.createConnection(additionalDocumentRef, documentRef, connectionType);
-						}
-					}
-				}
+			NodeRef connectionType = dictionaryService.getDictionaryValueByName(DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME, DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_NAME);
+			if (connectionType != null) {
+				documentConnectionService.createConnection(additionalDocumentRef, documentRef, connectionType);
 			}
 		}
 	}
 
-    public void appendDeleteReason(String reasonNodeRef, String packageNodeRef) {
-        if (reasonNodeRef != null && packageNodeRef != null) {
-            NodeRef reasonRef = new NodeRef(reasonNodeRef);
-            NodeRef packageRef = new NodeRef(packageNodeRef);
-            if (nodeService.exists(reasonRef) && nodeService.exists(packageRef)) {
-                NodeRef documentRef = null;
-                List<ChildAssociationRef> packageAssocs = nodeService.getChildAssocs(packageRef);
-                if (packageAssocs != null && packageAssocs.size() == 1) {
-                    documentRef = packageAssocs.get(0).getChildRef();
-                }
-                if (documentRef != null && documentService.isDocument(documentRef)) {
-                    nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
-                }
-            }
-        }
+    public void appendDeleteReason(NodeRef reasonRef, NodeRef documentRef) {
+        nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
     }
-
 }

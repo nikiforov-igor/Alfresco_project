@@ -79,10 +79,11 @@
 	</bean>
 
     <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
-          depends-on="documentService,contractService">
+          depends-on="nodeService, contractService">
         <property name="extensionName">
             <value>contracts</value>
         </property>
+	    <property name="nodeService" ref="nodeService"/>
         <property name="contractService" ref="contractService"/>
     </bean>
 
@@ -162,10 +163,5 @@
 			</list>
 		</property>
 		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
-	</bean>
-
-	<bean id="lecmContractsServiceExecutionScript" parent="lecmExecutionScript">
-		<property name="name" value="contractService"/>
-		<property name="object" ref="contractService"/>
 	</bean>
 </beans>

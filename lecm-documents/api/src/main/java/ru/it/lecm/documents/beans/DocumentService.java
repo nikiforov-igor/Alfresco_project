@@ -90,4 +90,12 @@ public interface DocumentService {
     NodeRef getDraftRoot();
 
     NodeRef getDraftRoot(String rootName);
+
+
+	/**
+	 * Полечение документа из workflow listener
+	 * @param packageRef Package items nodeRef
+	 * @return Ссылка на документ
+	 */
+	public NodeRef getDocumentFromPackageItems(NodeRef packageRef);
 }

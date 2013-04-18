@@ -9,9 +9,9 @@
 		<endEvent id="endDeleteReason" name="End"></endEvent>
 		<scriptTask id="deleteReasonTask" name="Create Delete Reason" scriptFormat="javascript">
 			<extensionElements>
-				<activiti:executionListener event="start" class="ru.it.lecm.workflow.LecmScriptExecutionListener">
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contractService.appendDeleteReason(lecmContractWf_deleteReason.nodeRef, bpm_package.nodeRef);</activiti:string>
+						<activiti:string>contracts.appendDeleteReason(lecmContractWf_deleteReason.nodeRef, bpm_package.nodeRef);</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
