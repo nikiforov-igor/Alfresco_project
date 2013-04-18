@@ -45,7 +45,7 @@ public class OrgstructureStaffListPolicy
     public void onDeleteStaffListLog(NodeRef staff) {
         final NodeRef unit = orgstructureService.getUnitByStaff(staff);
         final List<String> objects = Arrays.asList(staff.toString());
-        businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "Сотрудник #initiator внес сведения об исключении должности #object1 из подразделения #mainobject", objects);
+        businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #mainobject", objects);
 
         // исключение штаной SG_DP ...
         final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);
@@ -58,7 +58,7 @@ public class OrgstructureStaffListPolicy
 
 		final List<String> objects = Arrays.asList(staff.toString());
 
-		businessJournalService.log(unit, EventCategory.ADD_STAFF_POSITION, "Сотрудник #initiator  внес сведения о добавлении должности #object1 в подразделение #mainobject", objects);
+		businessJournalService.log(unit, EventCategory.ADD_STAFF_POSITION, "#initiator  внес(ла) сведения о добавлении должности #object1 в подразделение #mainobject", objects);
 
 		// оповещение по должности для создания SG_DP ...
 		this.orgSGNotifier.notifyChangeDP( staff);
@@ -77,11 +77,11 @@ public class OrgstructureStaffListPolicy
 			final String category;
 			final String defaultDescription;
 			if (curPrimary) {
-				defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
+				defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
 				category = EventCategory.TAKE_BOSS_POSITION;
 
 			} else {
-				defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
+				defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
 				category = EventCategory.RELEASE_BOSS_POSITION;
 			}
 			final List<String> objects = Arrays.asList(unit.toString());

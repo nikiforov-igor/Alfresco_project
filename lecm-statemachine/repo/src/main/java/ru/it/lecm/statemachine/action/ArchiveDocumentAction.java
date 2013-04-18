@@ -48,7 +48,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
                     objects.add(status);
                     getBusinessJournalService().log(initiator, document.getChildRef(),
                             EventCategory.CHANGE_DOCUMENT_STATUS,
-                            "Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\". Регламентная работа по документу завершена.", objects);
+                            "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\". Регламентная работа по документу завершена.", objects);
                 } catch (Exception e) {
                     logger.error("Не удалось создать запись бизнес-журнала", e);
                 }

@@ -138,7 +138,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 		        List<String> objects = new ArrayList<String>(1);
 		        objects.add(childAssocRef.getChildRef().toString());
-		        businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "Сотрудник #initiator добавил вложение #object1 к документу #mainobject", objects);
+		        businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
 	        } else {
 	            this.isCreatingWorkingCopy = false;
 	        }
@@ -175,7 +175,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());
-			businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "Сотрудник #initiator удалил вложение #object1 в документе #mainobject", objects);
+			businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "#initiator удалил(а) вложение #object1 в документе #mainobject", objects);
         }
     }
 
@@ -198,11 +198,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		    if (commentCountAfter != null && (commentCountBefore == null || !commentCountAfter.equals(commentCountBefore))) {
 			    List<String> objects = new ArrayList<String>(1);
 			    objects.add(nodeRef.toString());
-			    businessJournalService.log(document, EventCategory.COMMENT_DOCUMENT_ATTACHMENT, "Сотрудник #initiator прокомментировал вложение #object1 в документе #mainobject", objects);
+			    businessJournalService.log(document, EventCategory.COMMENT_DOCUMENT_ATTACHMENT, "#initiator прокомментировал(а) вложение #object1 в документе #mainobject", objects);
 		    } else if (before.size() == after.size()) {
 			    List<String> objects = new ArrayList<String>(1);
 			    objects.add(nodeRef.toString());
-		        businessJournalService.log(document, EventCategory.EDIT_DOCUMENT_ATTACHMENT_PROPERTIES, "Сотрудник #initiator изменил свойства вложения #object1 в документе #mainobject", objects);
+		        businessJournalService.log(document, EventCategory.EDIT_DOCUMENT_ATTACHMENT_PROPERTIES, "#initiator изменил(а) свойства вложения #object1 в документе #mainobject", objects);
 		    }
 	    }
     }
@@ -236,7 +236,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());
-			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "Сотрудник #initiator обновил версию вложения #object1 в документе #mainobject", objects);
+			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "#initiator обновил(а) версию вложения #object1 в документе #mainobject", objects);
 		}
 	}
 

@@ -43,7 +43,7 @@ public class OrgstructureOrganizationPolicy
 
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (before.size() == after.size()) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения об организации", null);
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения об организации", null);
 		}
 	}
 

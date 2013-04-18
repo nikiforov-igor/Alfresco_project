@@ -86,7 +86,7 @@ public interface BusinessJournalService {
 					", дополнительные объекты: " + OBJECT_HOLDER + "1, " + OBJECT_HOLDER + "2, " + OBJECT_HOLDER + "3, " + OBJECT_HOLDER + "4, " + OBJECT_HOLDER + "5";
 	int MAX_SECONDARY_OBJECTS_COUNT = 5;
 
-	String DEFAULT_SYSTEM_TEMPLATE = "Система";
+	String DEFAULT_SYSTEM_TEMPLATE = "Системный агент";
 
 	String SYSTEM = "System";
 

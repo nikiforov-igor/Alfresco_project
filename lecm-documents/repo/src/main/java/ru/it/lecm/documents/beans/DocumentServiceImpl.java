@@ -124,7 +124,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 //логировать изменения в журнал
                 List<String> ratingList = new ArrayList<String>();
                 ratingList.add(rating.toString());
-                businessJournalService.log(documentNodeRef, DocumentEventCategory.SET_RATING, "Сотрудник #initiator присвоил рейтинг #object1 документу \"#mainobject\"", ratingList);
+                businessJournalService.log(documentNodeRef, DocumentEventCategory.SET_RATING, "#initiator присвоил(а) рейтинг #object1 документу \"#mainobject\"", ratingList);
 
                 return getMyRating(documentNodeRef);
             }

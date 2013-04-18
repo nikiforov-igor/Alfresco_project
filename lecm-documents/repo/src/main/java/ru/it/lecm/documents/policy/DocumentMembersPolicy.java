@@ -215,7 +215,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		// запись в БЖ
 		final String initiator = authService.getCurrentUserName();
 		if (!initiator.equals(orgstructureService.getEmployeeLogin(employee))) { // не создавать запись и уведомление для текущего пользователя
-			businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "Сотрудник #initiator пригласил сотрудника #object1 в документ #mainobject", objects);
+			businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "#initiator пригласил(а) сотрудника #object1 в документ #mainobject", objects);
 
 			// уведомление
 			Notification notification = new Notification();

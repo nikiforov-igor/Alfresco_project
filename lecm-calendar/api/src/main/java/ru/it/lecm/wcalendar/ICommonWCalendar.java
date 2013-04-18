@@ -28,55 +28,55 @@ public interface ICommonWCalendar {
 	/**
 	 * Шаблон сообщения в бизнес-журнал: внесение изменений в рабочий календарь.
 	 */
-	String BUSINESS_JOURNAL_CALENDAR_MODIFIED = "Сотрудник #initiator внес изменения в Производственный календарь";
+	String BUSINESS_JOURNAL_CALENDAR_MODIFIED = "#initiator внес(ла) изменения в Производственный календарь";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание типового расписания для орг.
 	 * единицы.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_CREATE = "Сотрудник #initiator создал типовой #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_CREATE = "#initiator создал(а) типовой #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание типового расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал типовой #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_CREATE = "#initiator создал(а) типовой #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание индивидуального расписания для
 	 * орг. единицы.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_CREATE = "#initiator создал(а) индивидуальный #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: создание индивидуального расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_CREATE = "Сотрудник #initiator создал индивидуальный #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_CREATE = "#initiator создал(а) индивидуальный #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление типового расписания для орг.
 	 * единицы.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_DELETE = "Сотрудник #initiator удалил типовой #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_OU_DELETE = "#initiator удалил(а) типовой #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление типового расписания для
 	 * сотрудника.
 	 */
-	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил типовой #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_DELETE = "#initiator удалил(а) типовой #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление индивидуального расписания для
 	 * орг. единицы.
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для подразделения #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_DELETE = "#initiator удалил(а) индивидуальный #mainobject для подразделения #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление индивидуального расписания для
 	 * осотрудника
 	 */
-	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_DELETE = "Сотрудник #initiator удалил индивидуальный #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_SPECIAL_SCHEDULE_EMPLOYEE_DELETE = "#initiator удалил(а) индивидуальный #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: планирование отсутствия.
 	 */
-	String BUSINESS_JOURNAL_ABSENCE_ADD = "Сотрудник #initiator запланировал #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_ABSENCE_ADD = "#initiator запланировал(а) #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: удаление отсутствия.
 	 */
-	String BUSINESS_JOURNAL_ABSENCE_DELETE = "Сотрудник #initiator удалил #mainobject для сотрудника #object1";
+	String BUSINESS_JOURNAL_ABSENCE_DELETE = "#initiator удалил(а) #mainobject для сотрудника #object1";
 	/**
 	 * Шаблон сообщения в бизнес-журнал: продление отсутствия.
 	 */

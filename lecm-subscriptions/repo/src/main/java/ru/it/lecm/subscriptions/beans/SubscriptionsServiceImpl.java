@@ -237,11 +237,11 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 			try {
 				if (orgstructureService.isEmployee(objectRef)) {
-					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на действия сотрудника  #object1", objectsList);
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator отменил(а) подписку на действия сотрудника  #object1", objectsList);
 				} else if (orgstructureService.isWorkGroup(objectRef)) {
-					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на действия рабочей группы  #object1", objectsList);
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator отменил(а) подписку на действия рабочей группы  #object1", objectsList);
 				} else {
-					businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator отменил подписку на #object1", objectsList);
+					businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator отменил(а) подписку на #object1", objectsList);
 				}
 			} catch (Exception e) {
 				logger.error("Could not create the record business-journal", e);

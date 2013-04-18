@@ -109,7 +109,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	 */
 	public void onCreateEmployeeNodeLog(ChildAssociationRef childAssocRef) {
 		final NodeRef node = childAssocRef.getChildRef();
-		businessJournalService.log(node, EventCategory.ADD, "Сотрудник #initiator добавил нового сотрудника - #mainobject");
+		businessJournalService.log(node, EventCategory.ADD, "#initiator добавил(а) нового сотрудника - #mainobject");
 	}
 
 	/**
@@ -142,11 +142,11 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о сотруднике #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о сотруднике #mainobject");
 		}
 
 		if (changed && curActive != null && !curActive) {
-			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о сотруднике #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о сотруднике #mainobject");
 		}
 	}
 

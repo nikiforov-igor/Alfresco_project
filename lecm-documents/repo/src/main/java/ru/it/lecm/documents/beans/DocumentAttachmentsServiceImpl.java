@@ -252,7 +252,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			List<String> objects = new ArrayList<String>(2);
 			objects.add(originalNodeRef.toString());
 			objects.add(this.nodeService.getPrimaryParent(copiedNodeRef).getParentRef().toString());
-			businessJournalService.log(document, EventCategory.COPY_DOCUMENT_ATTACHMENT, "Сотрудник #initiator скопировал вложение #object1 в документе #mainobject в #object2", objects);
+			businessJournalService.log(document, EventCategory.COPY_DOCUMENT_ATTACHMENT, "#initiator скопировал(а) вложение #object1 в документе #mainobject в #object2", objects);
 		}
 	}
 

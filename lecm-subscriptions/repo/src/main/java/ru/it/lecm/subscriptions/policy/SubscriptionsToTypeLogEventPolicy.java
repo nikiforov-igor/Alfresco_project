@@ -64,7 +64,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(employeeAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил подписку #mainobject для Сотрудника #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для Сотрудника #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}
@@ -77,7 +77,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(organizationUnitAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил подписку #mainobject для подразделения #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для подразделения #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}
@@ -90,7 +90,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(workGroupAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил подписку #mainobject для рабочей группы #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для рабочей группы #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}
@@ -108,7 +108,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(employeeAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в подписку #mainobject для Сотрудника #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внёс(ла) изменения в подписку #mainobject для Сотрудника #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}
@@ -121,7 +121,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(organizationUnitAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в подписку #mainobject для подразделения #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внёс(ла) изменения в подписку #mainobject для подразделения #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}
@@ -134,7 +134,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					List<String> objects = new ArrayList<String>();
 					objects.add(workGroupAssoc.getTargetRef().toString());
 					try {
-						businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в подписку #mainobject для рабочей группы #object1", objects);
+						businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внёс(ла) изменения в подписку #mainobject для рабочей группы #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}

@@ -95,7 +95,7 @@ public class DictionaryLogEventPolicy implements
 				if (dictionary != null) {
 					List<String> objects = new ArrayList<String>();
 					objects.add(nodeRef.toString());
-					businessJournalService.log(dictionary, EventCategory.DELETE, "Сотрудник #initiator удалил сведения об элементе #object1 справочника #mainobject", objects);
+					businessJournalService.log(dictionary, EventCategory.DELETE, "#initiator удалил(а) сведения об элементе #object1 справочника #mainobject", objects);
 				}
 			}
 		}
@@ -109,7 +109,7 @@ public class DictionaryLogEventPolicy implements
 		objects.add(versionableNode.toString());
 
 		try {
-			businessJournalService.log(dictionary, EventCategory.ADD_NEW_VERSION, "Сотрудник #initiator создал новую версию элемента #object1 справочника #mainobject", objects);
+			businessJournalService.log(dictionary, EventCategory.ADD_NEW_VERSION, "#initiator создал(а) новую версию элемента #object1 справочника #mainobject", objects);
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}
@@ -122,7 +122,7 @@ public class DictionaryLogEventPolicy implements
 		if (dictionary != null) {
 			List<String> objects = new ArrayList<String>();
 			objects.add(childAssocRef.getChildRef().toString());
-			businessJournalService.log(dictionary, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент #object1 в справочник #mainobject", objects);
+			businessJournalService.log(dictionary, EventCategory.ADD, "#initiator добавил(а) новый элемент #object1 в справочник #mainobject", objects);
 		}
 		this.lastTransactionId = AlfrescoTransactionSupport.getTransactionId();
 	}
@@ -147,7 +147,7 @@ public class DictionaryLogEventPolicy implements
 				if (dictionary != null) {
 					List<String> objects = new ArrayList<String>();
 					objects.add(nodeRef.toString());
-					businessJournalService.log(dictionary, EventCategory.EDIT, "Сотрудник #initiator внёс изменения в элемент #object1 справочника #mainobject", objects);
+					businessJournalService.log(dictionary, EventCategory.EDIT, "#initiator внёс(ла) изменения в элемент #object1 справочника #mainobject", objects);
 				}
 			}
 		}

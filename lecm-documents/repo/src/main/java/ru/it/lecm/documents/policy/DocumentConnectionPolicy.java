@@ -111,7 +111,7 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 				final List<String> objects = new ArrayList<String>(1);
 				objects.add(connectedDocument.toString());
 
-				businessJournalService.log(primaryDocument, EventCategory.DELETE_DOCUMENT_CONNECTION, "Сотрудник #initiator удалил связь документов #mainobject и #object1", objects);
+				businessJournalService.log(primaryDocument, EventCategory.DELETE_DOCUMENT_CONNECTION, "#initiator удалил(а) связь документов #mainobject и #object1", objects);
 			}
 		}
 	}
@@ -136,7 +136,7 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 			final List<String> objects = new ArrayList<String>(1);
 			objects.add(connectedDocument.toString());
 
-			businessJournalService.log(primaryDocument, EventCategory.CREATE_DOCUMENT_CONNECTION, "Сотрудник #initiator связал документ #mainobject и документ #object1", objects);
+			businessJournalService.log(primaryDocument, EventCategory.CREATE_DOCUMENT_CONNECTION, "#initiator связал(а) документ #mainobject и документ #object1", objects);
 		}
 	}
 

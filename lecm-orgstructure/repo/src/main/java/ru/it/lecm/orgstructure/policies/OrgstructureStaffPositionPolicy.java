@@ -45,7 +45,7 @@ public class OrgstructureStaffPositionPolicy
 
 	public void onCreateStaffPosLog(ChildAssociationRef childAssocRef) {
 		final NodeRef staffPos = childAssocRef.getChildRef();
-		businessJournalService.log(staffPos, EventCategory.ADD, "Сотрудник #initiator добавил новый элемент в справочник «Должностные позиции» -  #mainobject");
+		businessJournalService.log(staffPos, EventCategory.ADD, "#initiator добавил(а) новый элемент в справочник «Должностные позиции» -  #mainobject");
 	}
 
 	public void onUpdateStaffPosLog(NodeRef staffPos, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -54,11 +54,11 @@ public class OrgstructureStaffPositionPolicy
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(staffPos, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о должностной позиции #mainobject");
+			businessJournalService.log(staffPos, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о должностной позиции #mainobject");
 		}
 
 		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
-			businessJournalService.log(staffPos, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о должностной позиции #mainobject");
+			businessJournalService.log(staffPos, EventCategory.DELETE, "#initiator удалил(а) сведения о должностной позиции #mainobject");
 		}
 	}
 

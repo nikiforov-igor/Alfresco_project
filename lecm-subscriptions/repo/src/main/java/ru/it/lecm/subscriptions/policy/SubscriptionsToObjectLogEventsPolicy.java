@@ -54,11 +54,11 @@ public class SubscriptionsToObjectLogEventsPolicy implements NodeServicePolicies
 		objects.add(objectRef.toString());
 		try {
 			if (orgstructureService.isEmployee(objectRef)) {
-				businessJournalService.log(subscription, EventCategory.ADD, "Сотрудник #initiator подписался на действия сотрудника  #object1", objects);
+				businessJournalService.log(subscription, EventCategory.ADD, "#initiator подписался(ась) на действия сотрудника  #object1", objects);
 			} else if (orgstructureService.isWorkGroup(objectRef)) {
-				businessJournalService.log(subscription, EventCategory.ADD, "Сотрудник #initiator подписался на действия рабочей группы #object1", objects);
+				businessJournalService.log(subscription, EventCategory.ADD, "#initiator подписался(ась) на действия рабочей группы #object1", objects);
 			} else {
-				businessJournalService.log(subscription, EventCategory.ADD, "Сотрудник #initiator подписался на #object1", objects);
+				businessJournalService.log(subscription, EventCategory.ADD, "#initiator подписался(ась) на #object1", objects);
 			}
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);

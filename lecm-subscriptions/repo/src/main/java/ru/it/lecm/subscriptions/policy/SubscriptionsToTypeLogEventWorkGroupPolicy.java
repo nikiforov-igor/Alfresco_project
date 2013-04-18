@@ -50,7 +50,7 @@ public class SubscriptionsToTypeLogEventWorkGroupPolicy implements NodeServicePo
 		List<String> objects = new ArrayList<String>();
 		objects.add(employeeRef.toString());
 		try {
-			businessJournalService.log(subscription, EventCategory.ADD, "Сотрудник #initiator создал подписку #mainobject для рабочей группы #object1", objects);
+			businessJournalService.log(subscription, EventCategory.ADD, "#initiator создал(а) подписку #mainobject для рабочей группы #object1", objects);
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}
@@ -63,7 +63,7 @@ public class SubscriptionsToTypeLogEventWorkGroupPolicy implements NodeServicePo
 		List<String> objects = new ArrayList<String>();
 		objects.add(employeeRef.toString());
 		try {
-			businessJournalService.log(subscription, EventCategory.DELETE, "Сотрудник #initiator удалил подписку #mainobject для рабочей группы #object1", objects);
+			businessJournalService.log(subscription, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для рабочей группы #object1", objects);
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}

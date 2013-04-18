@@ -44,7 +44,7 @@ public class OrgstructureWorkForcePolicy
 		final List<String> objects = new ArrayList<String>(1);
 		objects.add(workforce.toString());
 
-		businessJournalService.log(group, EventCategory.ADD_GROUP_ROLE, "Сотрудник #initiator внес сведения о добавлении роли #object1 в рабочую группу #mainobject", objects);
+		businessJournalService.log(group, EventCategory.ADD_GROUP_ROLE, "#initiator внес(ла) сведения о добавлении роли #object1 в рабочую группу #mainobject", objects);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class OrgstructureWorkForcePolicy
 			final List<String> objects = new ArrayList<String>(1);
 			objects.add(workforce.toString());
 
-			businessJournalService.log(group, EventCategory.REMOVE_GROUP_ROLE, "Сотрудник #initiator внес сведения об исключении роли #object1 из рабочей группы #mainobject", objects);
+			businessJournalService.log(group, EventCategory.REMOVE_GROUP_ROLE, "#initiator внес(ла) сведения об исключении роли #object1 из рабочей группы #mainobject", objects);
 		}
 	}
 }

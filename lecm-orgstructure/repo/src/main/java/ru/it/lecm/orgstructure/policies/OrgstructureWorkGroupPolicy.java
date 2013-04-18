@@ -37,7 +37,7 @@ public class OrgstructureWorkGroupPolicy
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef group = childAssocRef.getChildRef();
-		businessJournalService.log(group, EventCategory.ADD, "Сотрудник #initiator добавил новую рабочую группу #mainobject");
+		businessJournalService.log(group, EventCategory.ADD, "#initiator добавил(а) новую рабочую группу #mainobject");
 	}
 
 	@Override
@@ -47,11 +47,11 @@ public class OrgstructureWorkGroupPolicy
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && curActive) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о Рабочей группе #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о Рабочей группе #mainobject");
 		}
 
 		if (changed && !curActive) { // бьыли изменения во флаге и группа помечена как неактивное
-			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о Рабочей группе #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о Рабочей группе #mainobject");
 		}
 	}
 }

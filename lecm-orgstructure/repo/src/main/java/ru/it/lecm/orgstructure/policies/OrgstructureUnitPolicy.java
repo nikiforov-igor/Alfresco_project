@@ -72,11 +72,11 @@ public class OrgstructureUnitPolicy
 		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
 		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в сведения о подразделении #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о подразделении #mainobject");
 		}
 
 		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
-			businessJournalService.log(nodeRef, EventCategory.DELETE, "Сотрудник #initiator удалил сведения о подразделении #mainobject");
+			businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о подразделении #mainobject");
 		}
 
 		// отслеживаем котороткое название для SG-обозначений
@@ -114,6 +114,6 @@ public class OrgstructureUnitPolicy
 		}
 
 		final String initiator = authService.getCurrentUserName();
-		businessJournalService.log(initiator, unit, EventCategory.ADD, "Сотрудник #initiator создал новое подразделение #mainobject в подразделении #object1", objects);
+		businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
 	}
 }

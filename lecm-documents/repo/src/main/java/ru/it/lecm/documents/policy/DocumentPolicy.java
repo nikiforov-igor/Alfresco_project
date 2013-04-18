@@ -74,16 +74,16 @@ public class DocumentPolicy extends BaseBean
                 updatePresentString(nodeRef);
                 if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
                     if ((Integer)after.get(ForumModel.PROP_COMMENT_COUNT) < (Integer)before.get(ForumModel.PROP_COMMENT_COUNT)){
-                        businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator удалил комментарий в документе \"#mainobject\"");
+                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator удалил(а) комментарий в документе \"#mainobject\"");
                     } else {
-                        businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator оставил комментарий в документе \"#mainobject\"");
+                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
                     }
                 } else {
-                    businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator внес изменения в документ \"#mainobject\"");
+                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в документ \"#mainobject\"");
                 }
             } else {
                 if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
-                    businessJournalService.log(nodeRef, EventCategory.EDIT, "Сотрудник #initiator оставил комментарий в документе \"#mainobject\"");
+                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
                 }
             }
         }

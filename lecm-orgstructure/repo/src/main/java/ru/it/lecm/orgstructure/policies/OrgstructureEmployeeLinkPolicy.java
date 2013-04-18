@@ -49,7 +49,7 @@ public class OrgstructureEmployeeLinkPolicy
 
 			if (orgstructureService.isStaffList(staff)) {
 				// Назначение на должность
-				String defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject на должность #object1 в подразделение #object2";
+				String defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject на должность #object1 в подразделение #object2";
 				NodeRef position = orgstructureService.getPositionByStaff(staff);
 				NodeRef unit = orgstructureService.getUnitByStaff(staff);
 				List<String> objects = new ArrayList<String>(2);
@@ -59,7 +59,7 @@ public class OrgstructureEmployeeLinkPolicy
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на руководящую должность
-					defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject руководителем в подразделении #object1";
+					defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject руководителем в подразделении #object1";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
 					businessJournalService.log(employee, EventCategory.TAKE_BOSS_POSITION, defaultDescription, objects);
@@ -68,7 +68,7 @@ public class OrgstructureEmployeeLinkPolicy
 				notifyEmploeeSetDP(employee, staff);
 			} else {
 				// Назначение на роль
-				String defaultDescription = "Сотрудник #initiator внес сведения о назначении Сотрудника #mainobject на роль #object1 в рабочей группе #object2";
+				String defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject на роль #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(staff);
 				NodeRef group = orgstructureService.getWorkGroupByWorkForce(staff);
 				List<String> objects = new ArrayList<String>(2);
@@ -100,7 +100,7 @@ public class OrgstructureEmployeeLinkPolicy
 			final NodeRef employee = nodeAssocRef.getTargetRef();
 
 			if (orgstructureService.isStaffList(parent)) { // -> запись в БЖ
-				String defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
+				String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
 				NodeRef position = orgstructureService.getPositionByStaff(parent);
 				NodeRef unit = orgstructureService.getUnitByStaff(parent);
 				List<String> objects = new ArrayList<String>(2);
@@ -111,14 +111,14 @@ public class OrgstructureEmployeeLinkPolicy
 
 				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
-					defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с руководящей должности в подразделении #object1\"";
+					defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей должности в подразделении #object1\"";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
 					businessJournalService.log(employee, EventCategory.RELEASE_BOSS_POSITION, defaultDescription, objects);
 				}
 				notifyEmploeeRemoveDP(employee, staff);
 			} else if (orgstructureService.isWorkForce(parent)) {
-				String defaultDescription = "Сотрудник #initiator внес сведения о снятии Сотрудника #mainobject с роли #object1 в рабочей группе #object2";
+				String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с роли #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(parent);
 				NodeRef group = orgstructureService.getWorkGroupByWorkForce(staff);
 				List<String> objects = new ArrayList<String>(2);

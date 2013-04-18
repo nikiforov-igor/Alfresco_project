@@ -50,7 +50,7 @@ public class SubscriptionsToTypeLogEventOrganizationUnitPolicy implements NodeSe
 		List<String> objects = new ArrayList<String>();
 		objects.add(employeeRef.toString());
 		try {
-			businessJournalService.log(subscription, EventCategory.ADD, "Сотрудник #initiator создал подписку #mainobject для подразделения #object1", objects);
+			businessJournalService.log(subscription, EventCategory.ADD, "#initiator создал(а) подписку #mainobject для подразделения #object1", objects);
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}
@@ -63,7 +63,7 @@ public class SubscriptionsToTypeLogEventOrganizationUnitPolicy implements NodeSe
 		List<String> objects = new ArrayList<String>();
 		objects.add(employeeRef.toString());
 		try {
-			businessJournalService.log(subscription, EventCategory.DELETE, "Сотрудник #initiator удалил подписку #mainobject для подразделения #object1", objects);
+			businessJournalService.log(subscription, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для подразделения #object1", objects);
 		} catch (Exception e) {
 			logger.error("Could not create the record business-journal", e);
 		}

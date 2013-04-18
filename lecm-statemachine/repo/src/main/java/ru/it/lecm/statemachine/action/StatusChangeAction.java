@@ -142,7 +142,7 @@ public class StatusChangeAction extends StateMachineAction {
 				if (!forDraft) {
 					getBusinessJournalService().log(initiator, child.getChildRef(),
 							EventCategory.CHANGE_DOCUMENT_STATUS,
-							"Сотрудник #initiator перевел документ \"#mainobject\" в статус \"#object1\"", objects);
+							"#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
 				}
 			} catch (Exception e) {
 				logger.error("Не удалось создать запись бизнес-журнала", e);
