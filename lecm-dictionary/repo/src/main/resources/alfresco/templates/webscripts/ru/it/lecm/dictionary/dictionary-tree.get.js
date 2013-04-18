@@ -32,7 +32,18 @@ function addItems(branch, items) {
 			title = item.getName();
 			type = getNodeType(item);
 			nodeRef = item.getNodeRef().toString();
-			isLeaf = item.childAssocs[assocType] == null;
+
+			var childs = item.childAssocs[assocType];
+			var activeChildsCount = 0;
+			if (childs != null) {
+				for (var j = 0; j < childs.length; j++) {
+					if (childs[j].properties["lecm-dic:active"]) {
+						activeChildsCount++;
+					}
+				}
+			}
+
+			isLeaf = activeChildsCount == 0;
 			branch.push({
 				title: title,
 				type: type,
