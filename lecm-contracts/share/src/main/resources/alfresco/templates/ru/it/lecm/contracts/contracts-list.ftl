@@ -16,7 +16,7 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
+<@bpage.basePage showToolbar=false>
     <#if hasPermission>
     <div class="yui-gc">
         <div id="main-region" class="yui-u first">
@@ -25,6 +25,7 @@
                     <@region id="contracts-filter" scope="template" />
                 </div>
                 <div class="yui-u column2">
+                    <@region id="toolbar" scope="template" />
                     <@region id="contracts-grid" scope="template" />
                 </div>
             </div>

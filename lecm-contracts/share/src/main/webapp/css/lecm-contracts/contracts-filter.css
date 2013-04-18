@@ -43,12 +43,12 @@ h2.thin {
 }
 
 #contracts-filters .alfresco-twister-open {
-    background: transparent url('/share/res/components/images/expanded.png') no-repeat scroll 60% 35%;
+    background: transparent url('/share/res/images/lecm-contracts/expanded.png') no-repeat scroll 100% 40%;
 }
 
 #contracts-filters .alfresco-twister-closed
 {
-    background: transparent url('/share/res/components/images/collapsed.png') no-repeat scroll 60% 35% !important;
+    background: transparent url('/share/res/images/lecm-contracts/collapsed.png') no-repeat scroll 100% 40% !important;
 }
 
 .contracts-filter-panel a:hover{
