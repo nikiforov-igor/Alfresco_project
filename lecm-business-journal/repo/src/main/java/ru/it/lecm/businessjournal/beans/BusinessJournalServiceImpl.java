@@ -519,13 +519,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             for (String type : typesArray) {
                 type = type.trim();
                 if (!"".equals(type)) {
-                    types += ("".equals(types) ? "" : ", ") + "\"" + type + "\"";
+                    types += ("".equals(types) ? "" : " OR ") + "\"" + type + "\"";
                 }
             }
-            if (types.indexOf(',') > -1) {
-                types = "[" + types + "]";
-            }
-            query += " AND @lecm\\-busjournal\\:bjRecord\\-objType\\-assoc\\-ref:" + types;
+            query += " AND @lecm\\-busjournal\\:bjRecord\\-objType\\-assoc\\-ref:(" + types + ")";
         }
         if (whoseKey != null && !"".equals(whoseKey)) {
             switch(WhoseEnum.valueOf(whoseKey.toUpperCase())) {
