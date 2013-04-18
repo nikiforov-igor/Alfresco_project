@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine;
 
-import net.sf.acegisecurity.AuthenticationCredentialsNotFoundException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -507,20 +506,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
     }
 
-    public NodeRef getStatemachineDocument(String executionId) {
+    public NodeRef getStatemachineDocument(final String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-	    try {
-		    NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-		    List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
-		    if (documents.size() > 0) {
-		        return documents.get(0).getChildRef();
-		    } else {
-		        return null;
-		    }
-	    } catch (AuthenticationCredentialsNotFoundException e) {
-			logger.warn("Error get execution" + executionId, e);
-		    return null;
-	    }
+        NodeRef nodeRef = ((ActivitiScriptNode) runtimeService.getVariable(executionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+        List<ChildAssociationRef> documents = serviceRegistry.getNodeService().getChildAssocs(nodeRef);
+        if (documents.size() > 0) {
+            return documents.get(0).getChildRef();
+        } else {
+            return null;
+        }
     }
 
     public Map<String, Object> getVariables(String executionId) {

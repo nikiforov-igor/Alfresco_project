@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.action.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
@@ -28,6 +29,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 
 	@Override
 	public void notify(DelegateExecution delegateExecution) throws Exception {
+        if (AuthenticationUtil.getFullyAuthenticatedUser() == null) return;
 		StateMachineHelper helper = new StateMachineHelper();
 		String executionId = StateMachineHelper.ACTIVITI_PREFIX + delegateExecution.getId();
 
