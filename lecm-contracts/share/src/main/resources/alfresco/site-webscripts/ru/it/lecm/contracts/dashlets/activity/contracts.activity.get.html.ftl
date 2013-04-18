@@ -5,7 +5,7 @@
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
     </div>
-    <div class="body scrollableList dashlet-body" id="${id}_results">
+    <div class="body scrollableList dashlet-body" id="${id}_results" <#if args.height??>style="height: ${args.height}px;"</#if>>
         Здесь будет последняя активность...
     </div>
     <script type="text/javascript">
