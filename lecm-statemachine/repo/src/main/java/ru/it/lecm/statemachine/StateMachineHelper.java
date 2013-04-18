@@ -908,4 +908,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return new StateFields(false);
     }
+
+    @Override
+    public boolean isFinal(NodeRef document) {
+        Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        return statemachineId != null && getExecution((String) statemachineId) == null;
+    }
 }

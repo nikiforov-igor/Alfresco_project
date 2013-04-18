@@ -273,6 +273,7 @@
 		        <value>notificationDashletChannel</value>
 	        </list>
 	    </property>
+        <property name="stateMachineBean" ref="stateMachineHelper"/>
     </bean>
 
     <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy"

@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.policy;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.model.ForumModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -8,7 +9,6 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.notification.NotificationService;
 import org.alfresco.service.cmr.repository.AssociationExistsException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -24,12 +24,11 @@ import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
-import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
-import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -54,6 +53,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
     private NamespaceService namespaceService;
+    private StateMachineServiceBean stateMachineBean;
 
 	final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
 	private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
@@ -61,6 +61,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private String grantDynaRoleCode = "BR_MEMBER";
 	private LecmPermissionService lecmPermissionService;
 	private final String DOC_LINK = "/share/page/document";
+
+    final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -251,7 +253,12 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         Map<QName, Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-        if (!AuthenticationUtil.getSystemUserName().equals(userName)) {
+
+        /* не добавлять сотрудника как участника
+            1) если изменения выполняет система
+            2) если сотрудник добавляет комментарий, ставит рейтинг и документ находится на финальном статусе
+        */
+        if (!AuthenticationUtil.getSystemUserName().equals(userName) && !(hasDoNotAddMemberUpdatedProperties(before, after) && stateMachineBean.isFinal(nodeRef))) {
             documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
         }
     }
@@ -306,5 +313,20 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             return AuthenticationUtil.runAsSystem(raw);
         }
         return unitRef;
+    }
+
+    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
+        this.stateMachineBean = stateMachineBean;
+    }
+
+    private boolean hasDoNotAddMemberUpdatedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        for (QName affected : AFFECTED_NOT_ADD_MEMBER_PROPERTIES) {
+            Object prev = before.get(affected);
+            Object cur = after.get(affected);
+            if (cur != null && !cur.equals(prev)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
