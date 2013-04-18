@@ -10,7 +10,7 @@
                     <#list statusesGroups as group>
                         <li>
                             <a href="${url.context}/page/contracts-list?query=${group.value}"
-                               class="status-button text-cropped" title="${group.name}">${group.name}</a>
+                               class="status-button text-cropped" title="${group.value}">${group.name}</a>
                         </li>
                     </#list>
                 </#if>
@@ -28,7 +28,7 @@
                     <#list statusesList as status>
                         <li>
                             <a href="${url.context}/page/contracts-list?query=${status}"
-                               class="status-button text-cropped text-broken" title="${status}">${status}</a>
+                               class="status-button text-cropped text-broken">${status}</a>
                         </li>
                         <#assign count = count +1 />
                     </#list>
