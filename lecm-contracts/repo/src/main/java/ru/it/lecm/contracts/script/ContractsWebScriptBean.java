@@ -1,14 +1,15 @@
 package ru.it.lecm.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.util.ParameterCheck;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * User: mshafeev
@@ -36,59 +37,27 @@ public class ContractsWebScriptBean extends BaseWebScript {
     }
 
     /**
-     * все договоры
-     * @return
+     * Получить количество договоров
+     * @param type тип вида lecm-contract:document
+     * @param path список путей поиска
+     * @param properties список значений для фильтрации
+     * @return количество
      */
-    public String getAllContracts() {
-        String filter = "";
-        filter = " AND ((PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
-                 " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\"))" +
-                 " AND NOT ((ASPECT:\""+"lecm\\-dic:aspect_active\""+") OR @lecm\\-dic\\:active:true)"+
-                 "";
-
-        return "" + contractService.getContracts(filter).size();
+    public Integer getAmountContracts(String type, Scriptable path, Scriptable properties) {
+        return contractService.getContracts(type, getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
     }
 
-    /**
-     * Контракты в разработке
-     * @return
-     */
-    public String getContractsDevelelop() {
-        String filter = " AND ( (@lecm\\-statemachine\\:status:\"Черновик\" )" +
-                        " OR @lecm\\-statemachine\\:status:\"Проект зарегестрирован\" " +
-                        " OR @lecm\\-statemachine\\:status:\"На согласовании\" " +
-                        " OR @lecm\\-statemachine\\:status:\"Согласован\" " +
-                        " OR @lecm\\-statemachine\\:status:\"На доработке\" " +
-                        " OR @lecm\\-statemachine\\:status:\"На подписании\" )" +
-                        " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
-                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
-                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
-        return "" + contractService.getContracts(filter).size();
-    }
-
-    /**
-     * Активные договора
-     * @return
-     */
-    public String getActiveContracts() {
-        String filter = " AND ( @lecm\\-statemachine\\:status:\"Подписан\"" +
-                        " OR @lecm\\-statemachine\\:status:\"Зарегестрирован\"" +
-                        " OR @lecm\\-statemachine\\:status:\"Действует\" )" +
-                        " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
-                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
-                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
-        return "" + contractService.getContracts(filter).size();
-    }
-
-    /**
-     * Неактивные договора
-     * @return
-     */
-    public String getInactiveContracts() {
-        String filter = " AND (PATH:\"/app:company_home/cm:Черновики/cm:Contracts//*\"" +
-                        " OR PATH:\"/app:company_home/cm:Business_x0020_platform/cm:Documents//*\")" +
-                        " AND NOT ((ASPECT:\"lecm\\-dic\\:aspect_active\") OR @lecm\\-dic\\:active:true)";
-        return "" + contractService.getContracts(filter).size();
+    private ArrayList<String> getElements(Object[] object){
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (Object obj : object) {
+            if (obj instanceof NativeJavaObject) {
+                NativeJavaObject element = (NativeJavaObject) obj;
+                arrayList.add((String) element.unwrap());
+            } else if (obj instanceof String){
+                arrayList.add(obj.toString());
+            }
+        }
+        return arrayList;
     }
 
 	public void createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {

@@ -17,20 +17,25 @@
     function drawForm(){
         Alfresco.util.Ajax.jsonGet(
                 {
-                    url:Alfresco.constants.PROXY_URI + "lecm/contracts/summary",
+                    url:Alfresco.constants.PROXY_URI + "lecm/contracts/summary?type=lecm-contract:document",
                     successCallback:{
                         fn:function(response){
                             if (container != null) {
                                 container.innerHTML = '';
-                                for (var obj in response.json) {
-                                    var item = response.json[obj];
-                                    var div = createRow();
-                                    var detail = document.createElement('span');
-                                    detail.innerHTML = item.record;
-                                    detail.setAttribute('class', 'detail');
-                                    div.appendChild(detail);
-                                    div.innerHTML = message[obj] +" "+ response.json[obj];
-                                    container.appendChild(div);
+                                var oResults = eval("(" + response.serverResponse.responseText + ")");
+                                if (oResults != null) {
+                                    for (var index in oResults) {
+                                        var item = oResults[index].amountContracts;
+                                        var div = createRow();
+                                        var detail = document.createElement('span');
+                                        detail.innerHTML = item.record;
+                                        detail.setAttribute('class', 'detail');
+                                        div.appendChild(detail);
+                                        div.innerHTML = message[oResults[index].key] +" "+
+                                                "<a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
+                                                oResults[index].filter +"\">" +oResults[index].amountContracts + "</a>";
+                                        container.appendChild(div);
+                                    }
                                 }
                             }
                         }
@@ -41,10 +46,11 @@
 
     function init() {
         message =  {
-            "allContracts": "${msg("label.info.allContracts")}",
-            "inDevelopment": "${msg("label.info.contractsToDevelop")}",
-            "isActive": "${msg("label.info.activeContracts")}",
-            "isInactive": "${msg("label.info.inactiveContracts")}"
+            "Все": "${msg("label.info.allContracts")}",
+            "В разработке": "${msg("label.info.contractsToDevelop")}",
+            "Активные": "${msg("label.info.activeContracts")}",
+            "Неактивные": "${msg("label.info.inactiveContracts")}",
+            "participants": "${msg("label.info.participants")}"
         };
         container = Dom.get('${id}_results');
         drawForm();
