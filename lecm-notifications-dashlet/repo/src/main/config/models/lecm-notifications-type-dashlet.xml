@@ -3,7 +3,7 @@
 	<items>
 		<item name="Dashlet">
 			<property name="cm:name">Дашлет</property>
-			<property name="lecm-notf-type:code">2</property>
+			<property name="lecm-notf-type:code">02</property>
 			<property name="lecm-notf-type:spring-bean-id">notificationDashletChannel</property>
 			<property name="lecm-notf-type:default-select">true</property>
 		</item>

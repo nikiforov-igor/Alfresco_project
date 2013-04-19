@@ -10,6 +10,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-notf-type:spring-bean-id" read-only="true"/>
+					<field id="lecm-notf-type:code" read-only="true"/>
 				</appearance>
 			</form>
 		</forms>
@@ -24,6 +25,14 @@
 					<show id="lecm-notf-type:spring-bean-id"/>
 					<show id="lecm-notf-type:default-select"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-notf-type:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
 			</form>
 
 			<form id="datagrid">

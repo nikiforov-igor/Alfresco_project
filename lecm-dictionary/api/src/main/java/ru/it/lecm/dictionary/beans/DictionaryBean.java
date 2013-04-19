@@ -15,6 +15,7 @@ public interface DictionaryBean {
 	public static final QName TYPE_DICTIONARY = QName.createQName(DICTIONARIES_NAMESPACE_URI, "dictionary");
 	public static final QName TYPE_PLANE_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "plane_dictionary_values");
 	public static final QName TYPE_HIERARCHICAL_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "hierarchical_dictionary_values");
+	public static final QName PROPERTY_DICTIONARY_TYPE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "type");
 
     String DICTIONARIES_ROOT_NAME = "Сервис Справочники";
 	String DICTIONARIES_ROOT_ID = "DICTIONARIES_ROOT_ID";
@@ -24,7 +25,8 @@ public interface DictionaryBean {
 	public boolean isPlaneDictionaryValue(NodeRef ref);
 	public boolean isDictionaryValue(NodeRef ref);
 	public NodeRef getDictionaryByName(String name);
-	public NodeRef getDictionaryValueByName(String dictionaryName, String dictionaryValueName);
+	public NodeRef getDictionaryValueByParam(String dictionaryName, QName parameterName, String parameterValue);
+	public NodeRef getDictionaryValueByParam(NodeRef dictionaryRef, QName parameterName, String parameterValue);
 	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
 	public List<NodeRef> getChildren(NodeRef nodeRef);
 	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);

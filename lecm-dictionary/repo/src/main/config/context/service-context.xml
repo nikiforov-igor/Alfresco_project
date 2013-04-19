@@ -73,6 +73,8 @@
     <bean id="serviceDictionary" class="ru.it.lecm.dictionary.beans.DictionaryBeanImpl" parent="baseBean">
         <property name="nodeService" ref="nodeService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+	    <property name="searchService" ref="searchService"/>
+	    <property name="namespaceService" ref="namespaceService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

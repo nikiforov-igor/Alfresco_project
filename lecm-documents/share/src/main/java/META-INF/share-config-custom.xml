@@ -18,6 +18,9 @@
                     <show id="lecm-connect-types:reverse-name"/>
                     <show id="lecm-connect-types:code"/>
                 </field-visibility>
+	            <appearance>
+	                <field id="lecm-connect-types:code" read-only="true"/>
+	            </appearance>
             </form>
         </forms>
     </config>
@@ -30,6 +33,14 @@
                     <show id="lecm-connect-types:reverse-name"/>
                     <show id="lecm-connect-types:code"/>
                 </field-visibility>
+	            <appearance>
+		            <field id="lecm-connect-types:code">
+			            <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+			            <constraint-handlers>
+				            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+			            </constraint-handlers>
+		            </field>
+	            </appearance>
             </form>
 
             <form id="datagrid">

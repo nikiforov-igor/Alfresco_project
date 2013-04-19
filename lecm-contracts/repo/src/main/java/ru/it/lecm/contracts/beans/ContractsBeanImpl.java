@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS = "Contracts";
-	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_NAME = "На основании";
+	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "01";
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 
 	public static final QName TYPE_CONTRACTS_RECORD = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
@@ -121,12 +121,19 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
 	public void createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {
-		ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
+		ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(),
+				ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
+				GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
+
 		if (additionalDocumentAssociationRef != null && additionalDocumentAssociationRef.getChildRef() != null) {
 			NodeRef additionalDocumentRef = additionalDocumentAssociationRef.getChildRef();
 			nodeService.createAssociation(additionalDocumentRef, typeRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE);
 
-			NodeRef connectionType = dictionaryService.getDictionaryValueByName(DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME, DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_NAME);
+			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
+
 			if (connectionType != null) {
 				documentConnectionService.createConnection(additionalDocumentRef, documentRef, connectionType);
 			}

@@ -3,7 +3,7 @@
 	<items>
 		<item name="Email">
 			<property name="cm:name">Электронная почта</property>
-			<property name="lecm-notf-type:code">3</property>
+			<property name="lecm-notf-type:code">03</property>
 			<property name="lecm-notf-type:spring-bean-id">notificationEmailChannel</property>
 			<property name="lecm-notf-type:default-select">true</property>
 		</item>

@@ -16,11 +16,11 @@ public interface DocumentConnectionService {
 
 	public static final String DOCUMENT_CONNECTIONS_NAMESPACE_URI = "http://www.it.ru/lecm/org/connection/1.0";
 	public static final String DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI = "http://www.it.ru/lecm/connect/aspects/1.0";
-	public static final String DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI = "http://www.it.ru/lecm/org/connection/types/1.0";
+	public static final String DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI = "http://www.it.ru/lecm/org/connection/types/1.0";
 
 	public static final QName TYPE_CONNECTION = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connection");
-	public static final QName TYPE_CONNECTION_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "connection-type");
-	public static final QName TYPE_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "available-connection-type");
+	public static final QName TYPE_CONNECTION_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "connection-type");
+	public static final QName TYPE_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "available-connection-type");
 
 	public static final QName ASSOC_PRIMARY_DOCUMENT = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "primary-document-assoc");
 	public static final QName ASSOC_CONNECTED_DOCUMENT = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-assoc");
@@ -29,11 +29,13 @@ public interface DocumentConnectionService {
 	public static final QName PROP_PRIMARY_DOCUMENT_REF = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "primary-document-assoc-ref");
 	public static final QName PROP_CONNECTED_DOCUMENT_REF = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-assoc-ref");
 
-	public static final QName PROP_PRIMARY_DOCUMENT_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "primary-document-type");
-	public static final QName PROP_CONNECTED_DOCUMENT_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "connected-document-type");
+	public static final QName PROP_CONNECTION_TYPE_CODE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "code");
 
-	public static final QName ASSOC_DEFAULT_CONNECTION_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "default-connection-type-assoc");
-	public static final QName ASSOC_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_ASPECT_NAMESPACE_URI, "available-connection-types-assoc");
+	public static final QName PROP_PRIMARY_DOCUMENT_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "primary-document-type");
+	public static final QName PROP_CONNECTED_DOCUMENT_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "connected-document-type");
+
+	public static final QName ASSOC_DEFAULT_CONNECTION_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "default-connection-type-assoc");
+	public static final QName ASSOC_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "available-connection-types-assoc");
 
 	public static final QName ASPECT_HAS_CONNECTED_DOCUMENTS = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "has-connected-documents");
 
