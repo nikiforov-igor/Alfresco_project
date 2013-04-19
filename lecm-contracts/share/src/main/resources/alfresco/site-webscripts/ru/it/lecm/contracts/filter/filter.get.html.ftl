@@ -1,47 +1,50 @@
 <#assign id = args.htmlid>
-
-<div id="contracts-filters">
-    <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
-        <h2 class="thin" style="margin-left:20px">${msg("label.contracts")}</h2>
-        <div class="grey-filter-panel">
-            <div class="contracts-filter-panel">
-                <ul id="filter-groups-set" class="filterBlock">
-                <#if statusesGroups??>
-                    <#list statusesGroups as group>
-                        <li>
+<div id="contracts-filters" class="contracts-filter-panel">
+    <div class="contracts-filters-block">
+        <h2 class="thin" style="margin-left: 16px;">${msg("label.contracts")}</h2>
+        <hr/>
+        <div id="filter-groups-set" class="filterBlock">
+        <#if statusesGroups??>
+            <#list statusesGroups as group>
+                <span>
                             <a href="${url.context}/page/contracts-list?query=${group.value}"
                                class="status-button text-cropped" title="${group.value}">${group.name}</a>
-                        </li>
-                    </#list>
-                </#if>
-                </ul>
-            </div>
+                            <div class="total-tasks-count-right">${group.count}</div><br/>
+                </span><br/>
+            </#list>
+        </#if>
         </div>
+        <hr/>
     </div>
-    <div style="background-color: white; margin: 20px 0; padding: 0; position: relative;">
+    <div class="contracts-filters-block">
         <h2 id="${id}-heading" class="thin">${msg("label.byStatus")}</h2>
-        <div class="white-filter-panel">
-            <div class="contracts-filter-panel" >
-                <ul id="filter-statuses-set" class="filterBlock">
+        <div>
+            <hr/>
+            <div>
+                <div id="filter-statuses-set" class="filterBlock">
                 <#if statusesList??>
                     <#assign count = 0/>
                     <#list statusesList as status>
-                        <li>
+                        <span style="display: inline-block;">
                             <a href="${url.context}/page/contracts-list?query=${status}"
                                class="status-button text-cropped text-broken">${status}</a>
-                        </li>
+                        </span><br/>
                         <#assign count = count +1 />
                     </#list>
                 </#if>
-                </ul>
+                </div>
             </div>
         </div>
+        <hr/>
     </div>
 
     <script type="text/javascript">//<![CDATA[
     (function () {
         function init() {
             Alfresco.util.createTwister("${id}-heading", "ContractsStatuses");
+            setTimeout(function () {
+                LogicECM.module.Base.Util.setHeight();
+            }, 10);
         }
 
         YAHOO.util.Event.onDOMReady(init);

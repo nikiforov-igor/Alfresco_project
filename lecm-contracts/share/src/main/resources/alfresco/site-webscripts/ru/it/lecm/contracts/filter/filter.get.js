@@ -24,17 +24,19 @@ function getStatuses(type) {
 function getFilters(type) {
     var filters = [];
 
-    var url = '/lecm/document/getFilteredStatuses?docType=' + type;
+    var url = '/lecm/contracts/summary';
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {
         var filtersList = eval('(' + result + ')');
         for (var index in filtersList) {
-            name = filtersList[index].name;
-            value = filtersList[index].statuses;
+            name = filtersList[index].key;
+            value = filtersList[index].filter;
+            count = filtersList[index].amountContracts;
             filters.push({
                 name: name,
-                value: value
+                value: value,
+                count:count
             });
         }
     }

@@ -1,15 +1,18 @@
-var type = args["type"];
+var type = "lecm-contract:document";
+
 var draftPath = contracts.getDraftPath();
 var documentPath = documentScript.getDocumentsPath();
-var path = [draftPath,documentPath];
+var paths = [draftPath, documentPath];
+
 var map = documentScript.getFilters(type);
 var list = [];
 for (var key in map) {
-    var amountContracts = contracts.getAmountContracts("lecm-contract:document",path,map[key].split(","));
+    var amountContracts = contracts.getAmountContracts(paths, map[key].split(","));
     list.push({
-        key:key,
-        amountContracts:amountContracts,
-        filter:map[key]
+        key: key,
+        amountContracts: amountContracts,
+        filter: map[key]
     });
 }
-model.list=list
+model.list = list;
+

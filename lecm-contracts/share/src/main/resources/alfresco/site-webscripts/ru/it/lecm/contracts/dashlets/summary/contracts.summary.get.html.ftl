@@ -17,7 +17,7 @@
     function drawForm(){
         Alfresco.util.Ajax.jsonGet(
                 {
-                    url:Alfresco.constants.PROXY_URI + "lecm/contracts/summary?type=lecm-contract:document",
+                    url:Alfresco.constants.PROXY_URI + "lecm/contracts/summary",
                     successCallback:{
                         fn:function(response){
                             if (container != null) {

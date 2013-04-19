@@ -1,14 +1,12 @@
 h2.thin {
     font-weight: normal;
-    font-style: italic;
-    color: #6ca5ce;
-    padding-bottom: 10px;
+    color: #000000;
 }
 
 .contracts-filter-panel {
     background-color: #F2F2F2;
-    /*border: 1px solid #000000;*/
-    margin-left: 20px;
+    border:1px solid;
+    margin-right: -10px;
 }
 
 .status-button {
@@ -17,6 +15,7 @@ h2.thin {
     font: 14px Arial;
     margin: 5px 0;
     text-decoration: none;
+    float: left;
 }
 
 .contracts-filter-panel .text-cropped {
@@ -27,30 +26,36 @@ h2.thin {
     white-space: nowrap;
 }
 
-.grey-filter-panel {
-     background-color: #bdbdbd;
-     border: 1px solid #000000;
- }
-
-.white-filter-panel {
-    background-color: #F2F2F2;
-    border: 1px solid #000000;
-}
-
 .contracts-filter-panel .filterBlock{
     margin-top: -5px;
     margin-bottom: -5px;
 }
 
-#contracts-filters .alfresco-twister-open {
-    background: transparent url('/share/res/images/lecm-contracts/expanded.png') no-repeat scroll 100% 40%;
-}
-
-#contracts-filters .alfresco-twister-closed
-{
-    background: transparent url('/share/res/images/lecm-contracts/collapsed.png') no-repeat scroll 100% 40% !important;
-}
-
 .contracts-filter-panel a:hover{
     text-decoration: underline;
+}
+
+.contracts-filters-block {
+    margin: 0 15px;
+    padding: 5px;
+    position: relative;
+}
+
+.yui-gd.grid
+{
+    margin: 10px;
+}
+
+.total-tasks-count-right {
+    float: right;
+    background-image: url('/share/res/images/lecm-contracts/contracts-count-back.png');
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px;
+    padding-top: 2px;
+    display: inline;
+    margin-top:3px;
 }

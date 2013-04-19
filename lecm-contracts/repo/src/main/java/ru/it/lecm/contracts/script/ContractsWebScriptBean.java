@@ -38,13 +38,12 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
     /**
      * Получить количество договоров
-     * @param type тип вида lecm-contract:document
      * @param path список путей поиска
      * @param properties список значений для фильтрации
      * @return количество
      */
-    public Integer getAmountContracts(String type, Scriptable path, Scriptable properties) {
-        return contractService.getContracts(type, getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
+    public Integer getAmountContracts(Scriptable path, Scriptable properties) {
+        return contractService.getContracts(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
     }
 
     private ArrayList<String> getElements(Object[] object){

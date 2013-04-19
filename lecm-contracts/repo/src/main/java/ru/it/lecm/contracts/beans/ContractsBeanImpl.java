@@ -72,7 +72,7 @@ public class ContractsBeanImpl extends BaseBean {
 		return  documentService.getDraftPath(CONTRACTS);
 	}
 
-    public List<NodeRef> getContracts(String type, ArrayList<String> path, ArrayList<String> properties) {
+    public List<NodeRef> getContracts(ArrayList<String> path, ArrayList<String> statuses) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -80,9 +80,7 @@ public class ContractsBeanImpl extends BaseBean {
         String query = "";
 
         // формируем запрос
-        type = type.replaceAll("([:])", "\\:");
-        type = type.replaceAll("([-])", "\\-");
-        query = "TYPE:\"" + type + "\"";
+        query = "TYPE:\"" + TYPE_CONTRACTS_RECORD + "\"";
 
         if (path.size() > 0) {
             query = query + " AND (";
@@ -95,16 +93,17 @@ public class ContractsBeanImpl extends BaseBean {
             query = query + ")";
         }
 
-        if (properties.size() > 0) {
+        if (statuses.size() > 0) {
             query = query + " AND (";
-            for (int i = 0; i < properties.size(); i++) {
-                query = query + "@lecm\\-statemachine\\:status:\"" + properties.get(i).trim() + "\"";
-                if ((i + 1) < properties.size()) {
+            for (int i = 0; i < statuses.size(); i++) {
+                query = query + "@lecm\\-statemachine\\:status:\"" + statuses.get(i).trim() + "\"";
+                if ((i + 1) < statuses.size()) {
                     query = query + " OR ";
                 }
             }
             query = query + ")";
         }
+
         ResultSet results = null;
         sp.setQuery(query);
         try {
