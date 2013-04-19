@@ -5,7 +5,7 @@
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
     </div>
-    <div class="body scrollableList dashlet-body" id="${id}_results" <#if args.height??>style="height: ${args.height}px;"</#if>>
+    <div class="body scrollableList dashlet-body" id="${id}_results">
         Здесь будет последняя активность...
     </div>
     <script type="text/javascript">
@@ -25,8 +25,6 @@
 
         function init() {
             if (records) {
-                new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-
                 var container = Dom.get('${id}_results');
                 container.innerHTML = '';
 

@@ -54,7 +54,6 @@
         };
         container = Dom.get('${id}_results');
         drawForm();
-        new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
     }
     YAHOO.util.Event.onDOMReady(init);
 })();
@@ -65,6 +64,6 @@
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
     </div>
-    <div class="body scrollableList dashlet-body" id="${id}_results" <#if args.height??>style="height: ${args.height}px;"</#if>>
+    <div class="body scrollableList dashlet-body" id="${id}_results">
     </div>
 </div>
