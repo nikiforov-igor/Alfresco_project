@@ -98,7 +98,7 @@ public class ContractsBeanImpl extends BaseBean {
         if (properties.size() > 0) {
             query = query + " AND (";
             for (int i = 0; i < properties.size(); i++) {
-                query = query + "@lecm\\-statemachine\\:status:\"" + properties.get(i) + "\"";
+                query = query + "@lecm\\-statemachine\\:status:\"" + properties.get(i).trim() + "\"";
                 if ((i + 1) < properties.size()) {
                     query = query + " OR ";
                 }
