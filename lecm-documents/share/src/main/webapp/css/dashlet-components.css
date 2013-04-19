@@ -32,6 +32,19 @@
     padding-right: 13px;
 }
 
+.body.scrollableList.dashlet-body{
+    position: relative;
+}
+
+.body.scrollableList.dashlet-body:hover .edit{
+    background: url("/share/res/components/profile/images/edit.png") no-repeat scroll 2px 2px transparent;
+    height: 20px;
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    width: 20px;
+}
+
 .dashlet .lecm-dashlet-actions-right {
 	float: right;
 }

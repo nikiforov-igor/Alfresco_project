@@ -33,8 +33,8 @@
         }
 
         function init() {
-            container = Dom.get('${id}_results');
-            drawForm("${nodeRef}",'${id}_results', "document-dashlet");
+            container = Dom.get('${id}_container');
+            drawForm("${nodeRef}",'${id}_container', "document-dashlet");
             var param = decodeURIComponent(location.search.substr(1)).split('&');
             for (var i=0; i < param.length; i++) {
                 var tmp = param[i].split('=');
@@ -55,6 +55,12 @@
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
         </span>
     </div>
-    <div class="body scrollableList dashlet-body" id="${id}_results"></div>
+    <div class="body scrollableList dashlet-body" id="${id}_results">
+        <#if mayAdd!false>
+                <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
+                   class="edit" title="${msg("dashlet.edit.tooltip")}"></a>
+        </#if>
+        <div id="${id}_container"></div>
+    </div>
 </div>
 </#if>
