@@ -65,7 +65,7 @@
         </span>
     </div>
     <div id="${formId}" class="yui-panel">
-        <div id="${formId}-head" class="hd">${msg("logicecm.view")}</div>
+        <div id="${formId}-head" class="hd">${msg("form.logicecm.view")}</div>
         <div id="${formId}-body" class="bd">
             <div id="${formId}-content"></div>
             <div class="bdft">
