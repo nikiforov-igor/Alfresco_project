@@ -121,25 +121,27 @@
         <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
         <input type="hidden" id="${controlId}-selectedItems"/>
 
-        <div id="${controlId}-autocomplete">
-            <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>
-            <div class="show-picker">
-                <span class="tree-picker-button">
-                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
-                </span>
-                <#if showCreateNewLink>
-                <span class="create-new-button">
-                    <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
-                </span>
-                </#if>
+        <div class="autocomplete-block">
+            <div id="${controlId}-autocomplete">
+                <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>
+                <div class="show-picker">
+                    <span class="tree-picker-button">
+                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                    </span>
+                    <#if showCreateNewLink>
+                    <span class="create-new-button">
+                        <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                    </span>
+                    </#if>
+                </div>
+                <div id="${controlId}-autocomplete-container"></div>
+
+                <@renderTreePickerDialogHTML controlId true showSearch/>
             </div>
-            <div id="${controlId}-autocomplete-container"></div>
 
-            <@renderTreePickerDialogHTML controlId true showSearch/>
-        </div>
-
-        <div class="<#if field.endpointMany>autocompleteCurrentValueDisplay<#else>autocompleteCurrentValueDisplayInvisible</#if>" id="${controlId}-currentValueDisplayDiv" >
-            <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
+            <div class="<#if field.endpointMany>autocompleteCurrentValueDisplay<#else>autocompleteCurrentValueDisplayInvisible</#if>" id="${controlId}-currentValueDisplayDiv" >
+                <span id="${controlId}-currentValueDisplay" class="viewmode-value" />
+            </div>
         </div>
     </#if>
     <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />

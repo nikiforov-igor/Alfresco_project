@@ -27,10 +27,11 @@ width: 100%;
 .yui-skin-lecmTheme .yui-ac-content {
 position: absolute;
 width: 100%;
-border: 1px solid #808080;
+border: 1px solid #ccc;
 background: #fff;
 overflow: hidden;
 z-index: 9050;
+font-size: 99%;
 }
 .yui-skin-lecmTheme .yui-ac-shadow {
 position: absolute;

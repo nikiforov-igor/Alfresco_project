@@ -448,6 +448,7 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel .bd div.form-buttons {
     text-align: right;
     border-radius: 0 0 5px 5px;
+    clear: both;
 }
 .yui-skin-lecmTheme .yui-panel .bd div.bdft,
 .yui-skin-lecmTheme .yui-panel .bd div.ft {
@@ -462,8 +463,7 @@ h4 .lighter
 }
 .yui-skin-lecmTheme .yui-panel div.form-fields,
 .yui-skin-lecmTheme .yui-panel div.form-fields div.set {
-    overflow-x: hidden;
-    overflow-y: auto;
+    float: left;
 }
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div,
@@ -515,17 +515,13 @@ h4 .lighter
     padding-left: 3em;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.viewmode-field):not(.datepicker) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div {
     max-width: 100%;
     clear: none;
-    margin: 0;
+    margin-left: 160px;
     white-space: nowrap;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-}
-
-.yui-skin-lecmTheme .yui-panel div.form-field > div.autocompleteCurrentValueDisplay:not(.viewmode-field) {
-    margin-left: 150px;
 }
 
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
@@ -549,7 +545,7 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-field div.show-picker {
     float: left;
     clear: none;
-    margin-left: 5px;
+    margin: 0 0 5px 5px;
 }
 
 .yui-skin-lecmTheme .yui-panel .ft {
@@ -1844,6 +1840,17 @@ div.autocompleteCurrentValueDisplayInvisible,
     box-sizing: border-box;
     position: inherit;
     overflow-y: auto;
+    font-size: 99%;
+}
+.yui-skin-lecmTheme .yui-ac-content {
+    max-width: 28em;
+}
+
+div.current-values,
+div.currentValueDisplay,
+div.autocompleteCurrentValueDisplay,
+div.autocompleteCurrentValueDisplayInvisible {
+    min-height: 28px;
 }
 
 div.current-values,
@@ -1868,15 +1875,15 @@ div.autocompleteCurrentValueDisplayInvisible {
 
 a.remove-item {
     width: 10px;
-    height: 20px;
+    height: 22px;
     float: right;
     background: url(images/remove-item.png) no-repeat right center;
 }
 
 div.association-auto-complete-selected-item,
 div.association-auto-complete-selected-item-even {
-    height: 20px;
-    line-height: 20px;
+    height: 22px;
+    line-height: 22px;
     white-space: normal;
     border-bottom: 1px solid #ccc;
     padding: 3px 5px;
