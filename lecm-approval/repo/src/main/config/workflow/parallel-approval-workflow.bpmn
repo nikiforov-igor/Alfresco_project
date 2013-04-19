@@ -12,14 +12,31 @@
 						-->
 						<activiti:string>
 			            //<![CDATA[
-			            	var currentAssignee = assignee.properties.userName;
-			            	var currentDecision = task.getVariableLocal("lecmPaAt_approveTaskResult");
-			            	logger.log("User " + currentAssignee + " has completed his task with decision " + currentDecision);
+			            	var userName = assignee.properties.userName;
+			            	logger.log("userName = " + userName);
+			            	var decision = task.getVariableLocal("lecmPaAt_approveTaskResult");
+			            	logger.log("decision = " + decision);
+			            	var completionDate = task.getVariableLocal("bpm_completionDate");
+			            	logger.log("completionDate = " + completionDate);
+			            	var comment = task.getVariableLocal("lecmPaAt_approveTaskComment");
+			            	logger.log("comment = " + comment);
+			            	var commentRef = task.getVariableLocal("lecmPaAt_approveTaskCommentAssoc");
+			            	logger.log("commentRef = " + commentRef);
+			            	var taskDecision = {
+			            		"userName": userName,
+			            		"decision": decision,
+			            		"completionDate": completionDate,
+			            		"comment": comment,
+			            		"commentRef": commentRef 
+			            	};
 			            	var decisionsMap = execution.getVariableLocal("decisionsMap");
-			            	decisionsMap = approval.addDecision(decisionsMap, currentAssignee, currentDecision);
+			            	if (!decisionsMap) {
+			            		logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
+			            	}
+			            	decisionsMap = approval.addDecision(decisionsMap, taskDecision);
 			            	execution.setVariableLocal("decisionsMap", decisionsMap);
 			            	var approvalListRef = execution.getVariableLocal("approvalListRef");
-			            	approval.logDecision(approvalListRef, currentAssignee, currentDecision);
+			            	approval.logDecision(approvalListRef, taskDecision);
 			            //]]>
 						</activiti:string>
 					</activiti:field>
@@ -39,7 +56,7 @@
 			            //<![CDATA[
 			            	var personList = approval.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
 			            	execution.setVariableLocal("assigneesList", personList);
-			            	var approvalListRef = approval.createApprovalList(lecmPaWf_employeesAssoc, bpm_package); //ActivitiScriptNode
+			            	var approvalListRef = approval.createApprovalList(bpm_package); //ActivitiScriptNode
 			            	execution.setVariableLocal("approvalListRef", approvalListRef);
 			            //]]>
 						</activiti:string>
@@ -59,6 +76,7 @@
 						 -->
 						<activiti:string>
 			            //<![CDATA[
+			            	logger.log("To be continued...");
 			            //]]>
 						</activiti:string>
 					</activiti:field>

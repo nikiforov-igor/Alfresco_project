@@ -28,7 +28,7 @@ public interface ApprovalListService {
 	 * формирование нового листа согласования, для текущей версии регламента
 	 * @return ссылка на новый лист согласования
 	 */
-	NodeRef createApprovalList(List<NodeRef> employees, NodeRef bpmPackage);
+	NodeRef createApprovalList(NodeRef bpmPackage);
 
 	/**
 	 * запись решения о согласовании от текущего исполнителя в лист согласования

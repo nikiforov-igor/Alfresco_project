@@ -11,6 +11,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
@@ -26,10 +28,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	private ServiceRegistry serviceRegistry;
 	private OrgstructureBean orgstructureService;
 	private ApprovalListService approvalListService;
-
-	public ApprovalJavascriptExtension() {
-		super();
-	}
 
 	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
@@ -84,11 +82,9 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
 	 * @return ссылку на новый лист согласования
 	 */
-	public ActivitiScriptNode createApprovalList(final ActivitiScriptNodeList employeeList, final ActivitiScriptNode bpmPackage) {
-		NodeRef approvalListRef = approvalListService.createApprovalList(employeeList.getNodeReferences(), bpmPackage.getNodeRef());
-
-		ActivitiScriptNode activitiApprovalListRef = new ActivitiScriptNode(approvalListRef, serviceRegistry);
-		return activitiApprovalListRef;
+	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage) {
+		NodeRef approvalListRef = approvalListService.createApprovalList(bpmPackage.getNodeRef());
+		return new ActivitiScriptNode(approvalListRef, serviceRegistry);
 	}
 
 	/**
@@ -98,8 +94,16 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @param decision решение принятое пользователем
 	 * @return карта, дополненная новым решением
 	 */
-	public Map<String, String> addDecision(final Map<String, String> decisionMap, final String userName, final String decision) {
+	public Map<String, String> addDecision(final Map<String, String> decisionMap, final JSONObject taskDecision) {
 		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;
+		String userName = null;
+		String decision = null;
+		try {
+			userName = taskDecision.getString("userName");
+			decision = taskDecision.getString("decision");
+		} catch(JSONException ex) {
+			logger.error(ex.getMessage(), ex);
+		}
 		currentDecisionMap.put(userName, decision);
 		return currentDecisionMap;
 	}
@@ -109,9 +113,9 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @param approvalListRef ссылка на лист согласования
 	 * @param userName имя пользователя, являющегося исполнителем
 	 * @param decision решение принятое пользователем
-	 * @return 
+	 * @return
 	 */
-	public void logDecision(ActivitiScriptNode approvalListRef, final String userName, final String decision) {
-		
+	public void logDecision(final ActivitiScriptNode approvalListRef, final JSONObject taskDecision) {
+		logger.debug(taskDecision.toString());
 	}
 }

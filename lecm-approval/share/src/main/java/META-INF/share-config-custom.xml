@@ -8,6 +8,7 @@
 					<show id="bpm:workflowDueDate"/>
 					<show id="bpm:workflowDescription" />
 					<show id="lecmPaWf:employeesAssoc"/>
+					<show id="packageItems"/>
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDescription" labelid="workflow.field.message">
