@@ -240,7 +240,7 @@
     </bean>
 
     <bean id="documentMembersPolicy" class="ru.it.lecm.documents.policy.DocumentMembersPolicy"
-          init-method="init">
+          init-method="init" parent="baseBean">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
         </property>
@@ -268,12 +268,6 @@
         <property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="transactionService" ref="transactionService"/>
-        <property name="notificationChannels">
-	        <list>
-		        <value>notificationActiveChannel</value>
-		        <value>notificationDashletChannel</value>
-	        </list>
-	    </property>
         <property name="stateMachineBean" ref="stateMachineHelper"/>
     </bean>
 

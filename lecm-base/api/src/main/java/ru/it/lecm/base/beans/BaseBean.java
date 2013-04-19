@@ -50,7 +50,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
-	protected List<String> notificationChannels = Arrays.asList("notificationActiveChannel");
+	protected List<String> notificationChannels;
 
 	private final Object lock = new Object();
 

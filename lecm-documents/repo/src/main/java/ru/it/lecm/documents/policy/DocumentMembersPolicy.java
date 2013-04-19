@@ -170,6 +170,18 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             nodeService.setProperty(nodeAssocRef.getSourceRef(),DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
             // Добавляем нового участника в ноду со списком всех участников для данного типа документа
             addMemberToUnit(employee, docRef);
+
+	        // уведомление
+	        Notification notification = new Notification();
+	        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+	        employeeList.add(employee);
+	        notification.setRecipientEmployeeRefs(employeeList);
+	        notification.setAutor(authService.getCurrentUserName());
+	        notification.setDescription("Вы приглашены как новый участник в документ " +
+			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOC_LINK));
+	        notification.setObjectRef(docRef);
+	        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+	        notificationService.sendNotification(this.notificationChannels, notification);
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }
@@ -218,18 +230,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		final String initiator = authService.getCurrentUserName();
 		if (!initiator.equals(orgstructureService.getEmployeeLogin(employee))) { // не создавать запись и уведомление для текущего пользователя
 			businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "#initiator пригласил(а) сотрудника #object1 в документ #mainobject", objects);
-
-			// уведомление
-			Notification notification = new Notification();
-			ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-			employeeList.add(employee);
-			notification.setRecipientEmployeeRefs(employeeList);
-			notification.setAutor(authService.getCurrentUserName());
-			notification.setDescription("Вы приглашены как новый участник в документ " +
-					wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), DOC_LINK));
-			notification.setObjectRef(document);
-			notification.setInitiatorRef(employee);
-			notificationService.sendNotification(this.notificationChannels, notification);
 		}
 	}
 
