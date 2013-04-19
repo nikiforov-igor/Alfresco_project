@@ -515,7 +515,7 @@ h4 .lighter
     padding-left: 3em;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field > div {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid) {
     max-width: 100%;
     clear: none;
     margin-left: 160px;
