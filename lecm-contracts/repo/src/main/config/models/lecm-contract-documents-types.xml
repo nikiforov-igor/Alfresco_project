@@ -9,23 +9,23 @@
 	<items>
 		<item name="Дополнительное соглашение">
 			<property name="cm:name">Дополнительное соглашение</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">01</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">additionalAgreement</property>
 		</item>
 		<item name="Соглашение">
 			<property name="cm:name">Соглашение</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">02</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">agreement</property>
 		</item>
 		<item name="Соглашение о расторжении">
 			<property name="cm:name">Соглашение о расторжении</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">03</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">terminationAgreement</property>
 		</item>
 		<item name="Изменения к договору">
 			<property name="cm:name">Изменения к договору</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">04</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">changesToAgreement</property>
 		</item>
 		<item name="Изменение к доп. Соглашению">
 			<property name="cm:name">Изменение к доп. Соглашению</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">05</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">changesToAdditionalAgreement</property>
 		</item>
 	</items>
 </dictionary>

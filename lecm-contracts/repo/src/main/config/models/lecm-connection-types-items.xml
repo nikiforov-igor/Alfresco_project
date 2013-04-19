@@ -4,12 +4,12 @@
 		<item name="На основании">
 			<property name="cm:name">На основании</property>
 			<property name="lecm-connect-types:reverse-name">Основание</property>
-			<property name="lecm-connect-types:code">01</property>
+			<property name="lecm-connect-types:code">onBasis</property>
 		</item>
 		<item name="Отменяет">
 			<property name="cm:name">Отменяет</property>
 			<property name="lecm-connect-types:reverse-name">Отменён</property>
-			<property name="lecm-connect-types:code">02</property>
+			<property name="lecm-connect-types:code">cancel</property>
 		</item>
 	</items>
 </dictionary>

@@ -9,31 +9,31 @@
 	<items>
 		<item name="Купли-продажи">
 			<property name="cm:name">Купли-продажи</property>
-			<property name="lecm-contract-dic:contract-type-code">01</property>
+			<property name="lecm-contract-dic:contract-type-code">sale</property>
 		</item>
 		<item name="Аренды">
 			<property name="cm:name">Аренды</property>
-			<property name="lecm-contract-dic:contract-type-code">02</property>
+			<property name="lecm-contract-dic:contract-type-code">lease</property>
 		</item>
 		<item name="Перевозки">
 			<property name="cm:name">Перевозки</property>
-			<property name="lecm-contract-dic:contract-type-code">03</property>
+			<property name="lecm-contract-dic:contract-type-code">traffic</property>
 		</item>
 		<item name="Найма">
 			<property name="cm:name">Найма</property>
-			<property name="lecm-contract-dic:contract-type-code">04</property>
+			<property name="lecm-contract-dic:contract-type-code">employment</property>
 		</item>
 		<item name="Подряда">
 			<property name="cm:name">Подряда</property>
-			<property name="lecm-contract-dic:contract-type-code">05</property>
+			<property name="lecm-contract-dic:contract-type-code">work</property>
 		</item>
 		<item name="Хранения">
 			<property name="cm:name">Хранения</property>
-			<property name="lecm-contract-dic:contract-type-code">06</property>
+			<property name="lecm-contract-dic:contract-type-code">storage</property>
 		</item>
 		<item name="Лицензионный">
 			<property name="cm:name">Лицензионный</property>
-			<property name="lecm-contract-dic:contract-type-code">07</property>
+			<property name="lecm-contract-dic:contract-type-code">license</property>
 		</item>
 	</items>
 </dictionary>

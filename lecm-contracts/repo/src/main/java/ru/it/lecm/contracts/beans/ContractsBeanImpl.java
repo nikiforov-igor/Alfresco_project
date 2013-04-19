@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS = "Contracts";
-	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "01";
+	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 
 	public static final QName TYPE_CONTRACTS_RECORD = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");

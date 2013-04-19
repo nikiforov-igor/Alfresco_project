@@ -9,15 +9,15 @@
 	<items>
 		<item name="Отказ контрагента">
 			<property name="cm:name">Отказ контрагента</property>
-			<property name="lecm-contract-dic:delete-reason-code">01</property>
+			<property name="lecm-contract-dic:delete-reason-code">cotragentRejection</property>
 		</item>
 		<item name="Проигрыш тендера">
 			<property name="cm:name">Проигрыш тендера</property>
-			<property name="lecm-contract-dic:delete-reason-code">02</property>
+			<property name="lecm-contract-dic:delete-reason-code">tenderLoss</property>
 		</item>
 		<item name="Другое">
 			<property name="cm:name">Другое</property>
-			<property name="lecm-contract-dic:delete-reason-code">03</property>
+			<property name="lecm-contract-dic:delete-reason-code">other</property>
 		</item>
 	</items>
 </dictionary>
