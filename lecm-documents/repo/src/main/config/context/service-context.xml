@@ -91,7 +91,7 @@
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionDictionariesBootstrap, documents.LogicEcmModelsBootstrap">
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionTypesBootstrap, documents.LogicEcmModelsBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-connection-model.xml</value>
@@ -99,7 +99,7 @@
         </property>
     </bean>
 
-    <bean id="documents.LogicEcmModelsConnectionDictionariesBootstrap" parent="dictionaryModelBootstrap"
+    <bean id="documents.LogicEcmModelsConnectionTypesBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
@@ -117,7 +117,8 @@
         </property>
     </bean>
 
-    <bean id="${groupId}.${artifactId}.dictionaryBootstrap" parent="lecmDictionaryBootstrap" depends-on="businessJournalLogEventsPolicy">
+    <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="documents.LogicEcmModelsConnectionTypesBootstrap, businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-connection-types.xml</value>

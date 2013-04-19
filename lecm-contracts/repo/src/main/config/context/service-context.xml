@@ -91,7 +91,7 @@
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
                       ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
-                      businessJournalLogEventsPolicy, documents.LogicEcmModelsConnectionDictionariesBootstrap">
+                      businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap">
 	    <property name="dictionaries">
 		    <list>
 			    <value>alfresco/module/${artifactId}/models/lecm-contracts-types.xml</value>
