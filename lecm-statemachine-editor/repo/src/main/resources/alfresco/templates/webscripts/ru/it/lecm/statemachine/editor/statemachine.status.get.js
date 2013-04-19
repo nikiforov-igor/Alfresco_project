@@ -14,7 +14,7 @@ if (nodeRef != null) {
 	var statuses = [];
 	var children = stateMachine.getChildren();
 	for each (var status in children) {
-		if (!status.properties["lecm-stmeditor:startStatus"]) {
+		if (!status.properties["lecm-stmeditor:forDraft"]) {
 			statuses.push({
 				nodeRef: status.nodeRef.toString(),
 				name: status.properties["cm:name"]

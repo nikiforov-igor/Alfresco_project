@@ -9,7 +9,7 @@ if (nodeRef != null) {
     var children = stateMachine.getChildren();
 	for each (var status in children) {
         //проверка строк на равенство работает только в таком формате! проверка toString() не работает!
-		if ((!status.properties["lecm-stmeditor:startStatus"]) && (("" + status.nodeRef) != ("" + currentStatus.nodeRef))) {
+		if ((!status.properties["lecm-stmeditor:forDraft"]) && (("" + status.nodeRef) != ("" + currentStatus.nodeRef))) {
 			statuses.push({
 				nodeRef: status.nodeRef.toString(),
 				name: status.properties["cm:name"]
