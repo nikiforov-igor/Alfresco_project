@@ -29,15 +29,17 @@
 				</field-visibility>
                 <appearance>
                     <field id="lecm-contract:partner-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="changeItemsFireAction">lecm-contract-representative-assoc</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                        <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
+                            <control-param name="updateOnAction">lecm-contract-representative-assoc</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:registrator-assoc">
@@ -137,15 +139,17 @@
 				</field-visibility>
 				<appearance>
                     <field id="lecm-contract:partner-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="changeItemsFireAction">lecm-contract-representative-assoc</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>>
+                        <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
+                            <control-param name="updateOnAction">lecm-contract-representative-assoc</control-param>
                         </control>
                     </field>
 					<field id="lecm-contract:registrator-assoc">
