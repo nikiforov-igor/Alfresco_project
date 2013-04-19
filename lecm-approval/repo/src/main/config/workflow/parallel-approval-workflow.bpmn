@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/approval/parallel">
+	<process id="lecmParallelApproval" name="Logic ECM Parallel Approval" isExecutable="true">
+		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPaWf:parallelApproval" ></startEvent>
+		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPaAt:approveTask">
+			<extensionElements>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<!--
+						1) наполнение коллекции решений для всех assignee
+						2) добавление записи в лист согласования  
+						-->
+						<activiti:string>
+			            //<![CDATA[
+			            	var currentAssignee = assignee.properties.userName;
+			            	var currentDecision = task.getVariableLocal("lecmPaAt_approveTaskResult");
+			            	logger.log("User " + currentAssignee + " has completed his task with decision " + currentDecision);
+			            	var decisionsMap = execution.getVariableLocal("decisionsMap");
+			            	decisionsMap = approval.addDecision(decisionsMap, currentAssignee, currentDecision);
+			            	execution.setVariableLocal("decisionsMap", decisionsMap);
+			            	var approvalListRef = execution.getVariableLocal("approvalListRef");
+			            	approval.logDecision(approvalListRef, currentAssignee, currentDecision);
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+			<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneesList}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+		</userTask>
+		<sequenceFlow id="from-start-to-parallel-approvement-task" name="From start to parallel approvement task" sourceRef="start-parallel-approvement" targetRef="parallel-approvement-task">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<!--
+						1) формирование списка assignee
+						2) создание и наполнение листа согласования 
+						 -->
+						<activiti:string>
+			            //<![CDATA[
+			            	var personList = approval.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
+			            	execution.setVariableLocal("assigneesList", personList);
+			            	var approvalListRef = approval.createApprovalList(lecmPaWf_employeesAssoc, bpm_package); //ActivitiScriptNode
+			            	execution.setVariableLocal("approvalListRef", approvalListRef);
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+		</sequenceFlow>
+		<endEvent id="end-parallel-approvement" name="End parallel approvement"></endEvent>
+		<sequenceFlow id="from-parallel-approvement-task-to-end" name="From parallel approvement task to end" sourceRef="parallel-approvement-task" targetRef="end-parallel-approvement">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<!--
+						1) анализ результатов согласования
+						2) формирование  "итого" для листа согласования
+						3) положить в какую-нибудь переменную регламента результат согласования
+						 -->
+						<activiti:string>
+			            //<![CDATA[
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+		</sequenceFlow>
+	</process>
+</definitions>
