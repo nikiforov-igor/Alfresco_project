@@ -29,6 +29,11 @@
 		</property>
 	</bean>
 
+	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.workflowBootstrap">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
 	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="approval"/>
 		<property name="authenticationService" ref="authenticationService"/>
@@ -36,5 +41,6 @@
 		<property name="personService" ref="personService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="approvalListService" ref="lecm.approval.service"/>
 	</bean>
 </beans>

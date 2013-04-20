@@ -30,6 +30,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
 	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document");
+	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/fake/1.0", "document");
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -135,16 +136,33 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	public NodeRef createApprovalList(final NodeRef bpmPackage) {
 		//через bpmPackage получить ссылку на документ
 		NodeRef approvalListRef = null;
-		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_DOCUMENT, RegexQNamePattern.MATCH_ALL);
-		if (children != null && !children.isEmpty()) {
-			NodeRef contractDocumentRef = children.get(0).getChildRef();
-			//внутри этого документа получить или создать папку "Согласование/Параллельное согласование"
-			NodeRef approvalRef = getOrCreateApprovalFolder(contractDocumentRef);
-			NodeRef parallelApprovalRef = getOrCreateParallelApprovalFolder(approvalRef);
-			//создаем внутри указанной папки объект "Лист согласования"
-			approvalListRef = createApprovalList(parallelApprovalRef, contractDocumentRef);
+//		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
+		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
+		if (children != null) {
+			NodeRef contractDocumentRef = null;
+			for (ChildAssociationRef assocRef : children) {
+				NodeRef candidateRef = assocRef.getChildRef();
+				if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
+					contractDocumentRef = candidateRef;
+					break;
+				} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
+					contractDocumentRef = candidateRef;
+					break;
+				}
+			}
+			if (contractDocumentRef != null) {
+				//внутри этого документа получить или создать папку "Согласование/Параллельное согласование"
+				NodeRef approvalRef = getOrCreateApprovalFolder(contractDocumentRef);
+				NodeRef parallelApprovalRef = getOrCreateParallelApprovalFolder(approvalRef);
+				//создаем внутри указанной папки объект "Лист согласования"
+				approvalListRef = createApprovalList(parallelApprovalRef, contractDocumentRef);
+				//TODO: добавить Policy которая следит за добавлением item-ов и ассоциацию создает
+				//прикрепляем approval list к списку items у документа
+			} else {
+				logger.error("Attention: bpm:package containing lecm-contract:document is empty");
+			}
 		} else {
-			logger.warn("Attention: bpm:package containing lecm-contract:document is null or empty");
+			logger.error("Attention: bpm:package containing lecm-contract:document is null");
 		}
 		return approvalListRef;
 	}

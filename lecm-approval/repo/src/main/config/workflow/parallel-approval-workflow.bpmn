@@ -33,6 +33,8 @@
 			            	if (!decisionsMap) {
 			            		logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 			            	}
+			            	//ошибка блеать!!!
+			            	//Can't find method ru.it.lecm.approval.extensions.ApprovalJavascriptExtension.addDecision(null,object). (AlfrescoJS#24)
 			            	decisionsMap = approval.addDecision(decisionsMap, taskDecision);
 			            	execution.setVariableLocal("decisionsMap", decisionsMap);
 			            	var approvalListRef = execution.getVariableLocal("approvalListRef");

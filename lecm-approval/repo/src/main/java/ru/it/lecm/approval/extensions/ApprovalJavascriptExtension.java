@@ -49,6 +49,10 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		this.orgstructureService = orgstructureService;
 	}
 
+	public void setApprovalListService(ApprovalListService approvalListService) {
+		this.approvalListService = approvalListService;
+	}
+
 	public ActivitiScriptNode getCurrentAuthenticatedPerson() {
 		String currentUserName = authenticationService.getCurrentUserName();
 		NodeRef nodeRef = personService.getPerson(currentUserName, false);
