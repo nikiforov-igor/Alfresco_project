@@ -98,13 +98,14 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @param decision решение принятое пользователем
 	 * @return карта, дополненная новым решением
 	 */
-	public Map<String, String> addDecision(final Map<String, String> decisionMap, final JSONObject taskDecision) {
+	public Map<String, String> addDecision(final Map<String, String> decisionMap, final String taskDecision) {
 		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;
 		String userName = null;
 		String decision = null;
 		try {
-			userName = taskDecision.getString("userName");
-			decision = taskDecision.getString("decision");
+			JSONObject task = new JSONObject(taskDecision);
+			userName = task.getString("userName");
+			decision = task.getString("decision");
 		} catch(JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -119,7 +120,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @param decision решение принятое пользователем
 	 * @return
 	 */
-	public void logDecision(final ActivitiScriptNode approvalListRef, final JSONObject taskDecision) {
-		logger.debug(taskDecision.toString());
+	public void logDecision(final ActivitiScriptNode approvalListRef, final String taskDecision) {
+		logger.debug(taskDecision);
 	}
 }
