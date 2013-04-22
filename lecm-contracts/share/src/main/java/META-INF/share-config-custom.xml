@@ -397,12 +397,18 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-additional-document:number"/>
+                    <show id="lecm-additional-document:date"/>
+                    <show id="lecm-additional-document:signedCounterparty"/>
+                    <show id="lecm-additional-document:summaryContent"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="cm:name"/>
+                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-contract:regNumSystem"/>
                 </field-visibility>
             </form>
             <form id="document-dashlet">
@@ -424,12 +430,17 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-additional-document:number"/>
+                    <show id="lecm-additional-document:date"/>
+                    <show id="lecm-additional-document:signedCounterparty"/>
+                    <show id="lecm-additional-document:summaryContent"/>
                 </field-visibility>
             </form>
-            <form id="datagrid">
+            <form id="document">
                 <field-visibility>
-                    <show id="cm:name"/>
+                    <show id="lecm-additional-document:number"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
                 </field-visibility>
             </form>
         </forms>

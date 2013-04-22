@@ -9,6 +9,7 @@
         <import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
         <import uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+        <import uri="http://www.it.ru/lecm/org/connection/1.0" prefix="lecm-connect"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/contract/additional-document/1.0" prefix="lecm-additional-document"/>
@@ -17,7 +18,7 @@
     <constraints>
         <constraint name="lecm-additional-document:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value>{lecm-additional-document:additionalDocumentType/cm:name} к договору №{lecm-contract:regNumSystem} от {lecm-contract:dateConclusionContracts} с {lecm-contract:partner-assoc/lecm-contractor:shortname}</value>
+                <value>{lecm-additional-document:additionalDocumentType/cm:name} №{..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:regNumSystem} от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}</value>
             </parameter>
         </constraint>
         <constraint name="lecm-additional-document:attachment-categories" type="LIST">
