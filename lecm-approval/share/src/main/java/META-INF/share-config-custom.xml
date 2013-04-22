@@ -37,16 +37,10 @@
 					<show id="taskOwner" />
 					<show id="bpm:dueDate" />
 					<show id="lecmPaAt:approveTaskResult" />
-					<show id="lecmPaAt:approveTaskComment" />
+					<show id="bpm:comment" />
 					<show id="lecmPaAt:approveTaskCommentAssoc" />
 				</field-visibility>
 				<appearance>
-					<field id="lecmPaAt:approveTaskComment" labelid="workflow.field.message">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl">
-							<control-param name="style">width: 95%</control-param>
-						</control>
-					</field>
-
 					<field id="lecmPaAt:approveTaskResult">
 						<control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl" />
 					</field>
