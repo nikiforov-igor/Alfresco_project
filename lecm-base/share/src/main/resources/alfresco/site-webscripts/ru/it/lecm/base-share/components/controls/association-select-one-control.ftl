@@ -43,7 +43,7 @@
 		            mandatory: ${field.endpointMandatory?string},
 	            </#if>
 
-                itemType: "${field.endpointType}",
+                itemType: "${field.endpointType!''}",
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 selectedValueNodeRef: "${fieldValue}",
