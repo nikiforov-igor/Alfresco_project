@@ -1,6 +1,7 @@
 package ru.it.lecm.approval;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.approval.api.ApprovalListService;
 import static ru.it.lecm.approval.api.ApprovalListService.PROP_APPROVAL_LIST_APPROVE_DATE;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 
 /**
  *
@@ -28,9 +31,15 @@ import ru.it.lecm.base.beans.BaseBean;
  */
 public class ApprovalListServiceImpl extends BaseBean implements ApprovalListService {
 
+	DocumentAttachmentsService documentAttachmentsService;
+
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
 	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document");
 	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/fake/1.0", "document");
+
+	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+		this.documentAttachmentsService = documentAttachmentsService;
+	}
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -116,8 +125,35 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	}
 
 	private String getContractDocumentVersion(final NodeRef contractDocumentRef) {
-		//TODO: в документе, в категории "Договора" взять договор, у него взять последнюю версию
-		return "1.0";
+		NodeRef contractCategory = null;
+		List<NodeRef> contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
+		for (NodeRef categoryRef: contractCategories) {
+			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
+			if ("Договор".equals(categoryName)) {
+				contractCategory = categoryRef;
+				break;
+			}
+		}
+		if (contractCategory == null) {
+			logger.error(String.format("Document [%s] has no Contracts attachment category", contractDocumentRef));
+			return "0.0";
+		}
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(contractCategory, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		if (childAssocs.isEmpty()) {
+			logger.error(String.format("Document [%s] has no Contracts attachment", contractDocumentRef));
+			return "0.0";
+		} else if (childAssocs.size() > 1) {
+			logger.error(String.format("Document [%s] has %d Contracts attachments. I'll use first.", contractDocumentRef, childAssocs.size()));
+		}
+
+		NodeRef contractAttachmentRef = childAssocs.get(0).getChildRef();
+		Collection<Version> attachmentVersions = documentAttachmentsService.getAttachmentVersions(contractAttachmentRef);
+		if (attachmentVersions != null && !attachmentVersions.isEmpty()) {
+			Version[] versionsArray = attachmentVersions.toArray(new Version[0]);
+			return versionsArray[0].getVersionLabel();
+		} else {
+			return "1.0";
+		}
 	}
 
 	private NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef) {

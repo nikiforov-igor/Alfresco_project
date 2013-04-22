@@ -32,6 +32,7 @@
 	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.workflowBootstrap">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 	</bean>
 
 	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">

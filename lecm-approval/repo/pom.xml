@@ -51,11 +51,16 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>ru.it.lecm.approval</groupId>
 			<artifactId>approval-repo-api</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 	<!--
 		The scm is required for the buildnumber-maven-plugin which is required

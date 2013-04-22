@@ -24,6 +24,7 @@
                     <value>Основные</value>
                     <value>Схемы</value>
                     <value>Остальные</value>
+					<value>Договор</value>
                 </list>
             </parameter>
         </constraint>
