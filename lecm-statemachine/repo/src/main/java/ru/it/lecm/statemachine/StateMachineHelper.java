@@ -947,7 +947,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             String activityId = execution.getActivityId();
             ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(execution.getProcessDefinitionId());
             ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
-            if (activity.getActivityBehavior() instanceof ReceiveTaskActivityBehavior) {
+            if (activity != null && activity.getActivityBehavior() instanceof ReceiveTaskActivityBehavior) {
                 runtimeService.signal(execution.getId());
             }
         }
