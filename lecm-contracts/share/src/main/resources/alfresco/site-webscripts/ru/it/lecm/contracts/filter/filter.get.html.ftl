@@ -6,11 +6,11 @@
         <div id="filter-groups-set" class="filterBlock">
         <#if statusesGroups??>
             <#list statusesGroups as group>
-                <span>
-                            <a href="${url.context}/page/contracts-list?query=${group.value}"
-                               class="status-button text-cropped" title="${group.value}">${group.name}</a>
-                            <div class="total-tasks-count-right">${group.count}</div><br/>
-                </span><br/>
+                <div class="text-cropped">
+                    <a href="${url.context}/page/contracts-list?query=${group.value}"  style="margin:5px;"
+                       class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
+                    <span class="total-tasks-count-right">${group.count}</span><br/>
+                </div>
             </#list>
         </#if>
         </div>
@@ -25,10 +25,10 @@
                 <#if statusesList??>
                     <#assign count = 0/>
                     <#list statusesList as status>
-                        <span style="display: inline-block;">
+                        <div class="text-cropped">
                             <a href="${url.context}/page/contracts-list?query=${status}"
-                               class="status-button text-cropped text-broken">${status}</a>
-                        </span><br/>
+                               class="status-button text-broken" style="margin: 5px;">${status}</a>
+                        </div>
                         <#assign count = count +1 />
                     </#list>
                 </#if>

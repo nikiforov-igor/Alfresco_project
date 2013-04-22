@@ -19,11 +19,12 @@ h2.thin {
 }
 
 .contracts-filter-panel .text-cropped {
-    margin: 5px;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     white-space: nowrap;
+    -moz-binding: url('/examples/text-overflow.xml#ellipsis');
 }
 
 .contracts-filter-panel .filterBlock{
