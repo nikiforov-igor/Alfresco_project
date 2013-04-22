@@ -22,20 +22,22 @@
                         fn:function(response){
                             if (container != null) {
                                 container.innerHTML = '';
-                                var oResults = eval("(" + response.serverResponse.responseText + ")");
-                                if (oResults != null) {
-                                    for (var index in oResults) {
-                                        var item = oResults[index].amountContracts;
-                                        var div = createRow();
-                                        var detail = document.createElement('span');
-                                        detail.innerHTML = item.record;
-                                        detail.setAttribute('class', 'detail');
-                                        div.appendChild(detail);
-                                        div.innerHTML = message[oResults[index].key] +" "+
+                                if (response.json != null) {
+                                    var list = response.json.list;
+                                    var members = response.json.members;
+                                    var innerHtml,div;
+                                    for (var index in list) {
+                                        innerHtml = message[list[index].key] +" "+
                                                 "<a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
-                                                oResults[index].filter +"\">" +oResults[index].amountContracts + "</a>";
+                                                list[index].filter +"\">" +list[index].amountContracts + "</a>";
+                                        div = createRow(innerHtml);
                                         container.appendChild(div);
                                     }
+                                    innerHtml = message[members.key] +" "+
+                                                "<a class=\"status-button text-cropped\">" +members.amountMembers + "</a>";
+                                    div = createRow(innerHtml);
+                                    container.appendChild(div);
+
                                 }
                             }
                         }

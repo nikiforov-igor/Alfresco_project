@@ -1,6 +1,7 @@
 package ru.it.lecm.contracts.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -14,10 +15,13 @@ import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: mshafeev
@@ -39,6 +43,7 @@ public class ContractsBeanImpl extends BaseBean {
 	private DictionaryBean dictionaryService;
     private DocumentService documentService;
     private DocumentConnectionService documentConnectionService;
+    private DocumentMembersService documentMembersService;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -55,6 +60,10 @@ public class ContractsBeanImpl extends BaseBean {
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
 
 	@Override
     public NodeRef getServiceRootFolder() {
@@ -118,6 +127,25 @@ public class ContractsBeanImpl extends BaseBean {
             }
         }
         return records;
+    }
+
+    /**
+     * Метод получения всех участников всех договоров
+     * @param path
+     * @param statuses
+     * @return
+     */
+    public List<NodeRef> getAllMembers(ArrayList<String> path, ArrayList<String> statuses) {
+        Set<NodeRef> members = new HashSet<NodeRef>();
+
+        for (NodeRef nodeRef : getContracts(path,statuses)) {
+            for (NodeRef memberRef : documentMembersService.getDocumentMembers(nodeRef)) {
+                for (AssociationRef employee : nodeService.getTargetAssocs(memberRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE)) {
+                    members.add(employee.getTargetRef());
+                }
+            }
+        }
+        return new ArrayList<NodeRef>(members);
     }
 
 	public void createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {

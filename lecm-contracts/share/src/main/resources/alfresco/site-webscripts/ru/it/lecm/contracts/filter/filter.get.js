@@ -28,7 +28,8 @@ function getFilters(type) {
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {
-        var filtersList = eval('(' + result + ')');
+        var json = jsonUtils.toObject(result);
+        var filtersList = json.list.toArray();
         for (var index in filtersList) {
             name = filtersList[index].key;
             value = filtersList[index].filter;

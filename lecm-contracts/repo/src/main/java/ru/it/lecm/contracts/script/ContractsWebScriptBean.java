@@ -46,6 +46,10 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return contractService.getContracts(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
     }
 
+    public Integer getAmountMembers(Scriptable path, Scriptable properties) {
+        return contractService.getAllMembers(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
+    }
+
     private ArrayList<String> getElements(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
