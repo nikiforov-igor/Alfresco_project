@@ -941,7 +941,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     private void sendSignal(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        Object executionObject = runtimeService.createExecutionQuery().processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        Object executionObject = runtimeService.createExecutionQuery().executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
         if (executionObject != null) {
             ExecutionEntity execution = (ExecutionEntity) executionObject;
             String activityId = execution.getActivityId();
