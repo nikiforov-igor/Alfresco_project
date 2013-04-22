@@ -137,7 +137,12 @@ LogicECM.module = LogicECM.module || {};
 			});
 			callback = {
 				success:function (oResponse) {
-					document.location.reload();
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    if (oResults.redirect != null && oResults.redirect != "null") {
+                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
+                    } else {
+                        document.location.reload();
+                    }
 				},
 				argument:{
 					contractsObject:this

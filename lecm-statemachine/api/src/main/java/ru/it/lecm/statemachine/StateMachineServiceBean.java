@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface StateMachineServiceBean {
 
+    public static final String REDIRECT_VARIABLE = "lecm_redirect_url";
+
     /**
      * Возвращает список полей для документа с флагами "редактируемый/не редактируемый"
      *
@@ -52,7 +54,7 @@ public interface StateMachineServiceBean {
 
     public String getDocumentStatus(NodeRef document);
 
-    public List<String> executeUserAction(NodeRef document, String actionId);
+    public TransitionResponse executeUserAction(NodeRef document, String actionId);
 
     /**
      * Возвращает может ли текущий сотрудник создавать документ определенного типа

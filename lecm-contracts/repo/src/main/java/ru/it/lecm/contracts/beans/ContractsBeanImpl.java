@@ -154,7 +154,7 @@ public class ContractsBeanImpl extends BaseBean {
         return new ArrayList<NodeRef>(members);
     }
 
-	public void createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {
+	public String createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {
 		ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(),
 				ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
 				GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
@@ -171,8 +171,10 @@ public class ContractsBeanImpl extends BaseBean {
 			if (connectionType != null) {
 				documentConnectionService.createConnection(additionalDocumentRef, documentRef, connectionType);
 			}
+            return additionalDocumentRef.toString();
 		}
-	}
+        return null;
+    }
 
     public void appendDeleteReason(NodeRef reasonRef, NodeRef documentRef) {
 	    nodeService.addAspect(documentRef, ASPECT_CONTRACT_DELETED, null);

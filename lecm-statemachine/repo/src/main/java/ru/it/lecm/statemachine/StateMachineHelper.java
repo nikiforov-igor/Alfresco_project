@@ -570,20 +570,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public List<String> executeUserAction(NodeRef document, String actionId) {
+    public TransitionResponse executeUserAction(NodeRef document, String actionId) {
         return executeUserAction(document, actionId, FinishStateWithTransitionAction.class, null);
     }
 
-    public List<String> executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
+    public TransitionResponse executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String currentTask = getCurrentTaskId(statemachineId);
-        List<String> errors = new ArrayList<String>();
+        TransitionResponse response = new TransitionResponse();
         if (FinishStateWithTransitionAction.class.equals(actionType)) {
-            errors = executeTransitionAction(document, statemachineId, currentTask, actionId, persistedResponse);
+            response = executeTransitionAction(document, statemachineId, currentTask, actionId, persistedResponse);
         } else if (UserWorkflow.class.equals(actionType)) {
-            errors = executeUserWorkflowAction(document, statemachineId, currentTask, actionId, persistedResponse);
+            response = executeUserWorkflowAction(document, statemachineId, currentTask, actionId, persistedResponse);
         }
-        return errors;
+        return response;
     }
 
     public void logEndWorkflowEvent(NodeRef document, String executionId) {
@@ -665,7 +665,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowDescriptor> workflowDescriptors = documentWorkflowUtil.getWorkflowDescriptors(document);
         for (WorkflowDescriptor workflowDescriptor : workflowDescriptors) {
             if (currentExecutionId == null || !currentExecutionId.equals(workflowDescriptor.getExecutionId())) {
-                serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
+                WorkflowInstance instance = serviceRegistry.getWorkflowService().getWorkflowById(workflowDescriptor.getExecutionId());
+                if (instance != null) {
+                    serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
+                }
             }
             documentWorkflowUtil.removeWorkflow(document, workflowDescriptor.getExecutionId());
         }
@@ -765,7 +768,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private List<String> executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+    private TransitionResponse executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+        TransitionResponse response = new TransitionResponse();
         List<String> errors = new ArrayList<String>();
         List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
         FinishStateWithTransitionAction.NextState nextState = null;
@@ -824,6 +828,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         });
                     }
 
+                    //Берем адрес переадресации
+                    Object redirect = activitiProcessEngineConfiguration.getRuntimeService().getVariable(dependencyExecution.replace(ACTIVITI_PREFIX, ""), StateMachineServiceBean.REDIRECT_VARIABLE);
+                    if (redirect != null) {
+                        response.setRedirect(redirect.toString());
+                    }
+                    //Посылаем сигнал, если процесс с ожиданием
+                    sendSignal(dependencyExecution);
+
                 } else {
                     errors.add("Переход осуществлен, но дочерний процесс не был запущен");
                 }
@@ -831,10 +843,12 @@ public class StateMachineHelper implements StateMachineServiceBean {
         } else {
             errors.add("Данный actionId не существует для документа в текущем статусе");
         }
-        return errors;
+        response.setErrors(errors);
+        return response;
     }
 
-    private List<String> executeUserWorkflowAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+    private TransitionResponse executeUserWorkflowAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+        TransitionResponse response = new TransitionResponse();
         List<String> errors = new ArrayList<String>();
         StateMachineHelper helper = new StateMachineHelper();
         List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
@@ -885,11 +899,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         }
                     });
                 }
+
+                //Берем адрес переадресации
+                Object redirect = activitiProcessEngineConfiguration.getRuntimeService().getVariable(dependencyExecution.replace(ACTIVITI_PREFIX, ""), StateMachineServiceBean.REDIRECT_VARIABLE);
+                if (redirect != null) {
+                    response.setRedirect(redirect.toString());
+                }
+                //Посылаем сигнал, если процесс с ожиданием
+                sendSignal(dependencyExecution);
+
             }
         } else {
             errors.add("Данный actionId не существует для документа в текущем статусе");
         }
-        return errors;
+        return response;
     }
 
     private StateFields getStateCategories(NodeRef document) {
@@ -914,4 +937,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
         Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         return statemachineId != null && getExecution((String) statemachineId) == null;
     }
+
+    private void sendSignal(String executionId) {
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        try {
+            runtimeService.signal(executionId.replace(ACTIVITI_PREFIX, ""));
+        } catch (NullPointerException e) {
+        }
+    }
+
 }

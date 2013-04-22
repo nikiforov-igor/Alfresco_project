@@ -8,6 +8,7 @@ import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.bean.WorkflowListBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
 
@@ -155,7 +156,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.getDocumentStatus(document.getNodeRef());
     }
 
-    public List<String> executeAction(ScriptNode document, String actionId) {
+    public TransitionResponse executeAction(ScriptNode document, String actionId) {
         return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
     }
 

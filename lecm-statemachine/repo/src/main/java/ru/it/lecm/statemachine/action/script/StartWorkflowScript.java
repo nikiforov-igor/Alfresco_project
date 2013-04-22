@@ -11,10 +11,11 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -42,6 +43,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
+        Map<String, Object> result = new HashMap<String, Object>();
 		String taskId = req.getParameter("taskId");
 		String persistedResponse = req.getParameter("formResponse");
 		String actionId = req.getParameter("actionId");
@@ -52,27 +54,33 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             StateMachineHelper helper = new StateMachineHelper();
             String executionId = helper.getCurrentExecutionId(taskId);
             NodeRef document = helper.getStatemachineDocument(executionId);
-            List<String> errors = helper.executeUserAction(document, actionId, FinishStateWithTransitionAction.class, persistedResponse);
+            TransitionResponse transitionResponse = helper.executeUserAction(document, actionId, FinishStateWithTransitionAction.class, persistedResponse);
             //если небыло ошибок, то действие логируем
-            if (errors.size() == 0) {
+            if (transitionResponse.getErrors().size() == 0) {
                 updateActionCount(document, actionId);
                 String newWorkflowId = helper.parseExecutionId(persistedResponse);
                 helper.logStartWorkflowEvent(document, newWorkflowId);
+                if (transitionResponse.getRedirect() != null) {
+                    result.put("redirect", transitionResponse.getRedirect());
+                }
             }
 		} else if ("user".equals(actionType)){
             StateMachineHelper helper = new StateMachineHelper();
             String executionId = helper.getCurrentExecutionId(taskId);
             NodeRef document = helper.getStatemachineDocument(executionId);
-            List<String> errors = helper.executeUserAction(document, actionId, UserWorkflow.class, persistedResponse);
+            TransitionResponse transitionResponse = helper.executeUserAction(document, actionId, UserWorkflow.class, persistedResponse);
             //если небыло ошибок, то действие логируем
-            if (errors.size() == 0) {
+            if (transitionResponse.getErrors().size() == 0) {
                 updateActionCount(document, actionId);
                 String newWorkflowId = helper.parseExecutionId(persistedResponse);
                 helper.logStartWorkflowEvent(document, newWorkflowId);
+                if (transitionResponse.getRedirect() != null) {
+                    result.put("redirect", transitionResponse.getRedirect());
+                }
             }
 		}
 
-		return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.
+		return result;
 	}
 
     private void updateActionCount(NodeRef document, String actionId) {

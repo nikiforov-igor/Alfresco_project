@@ -73,17 +73,18 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return arrayList;
     }
 
-	public void createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {
+	public String createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {
 		if (typeNodeRef != null && packageNodeRef != null) {
 			NodeRef typeRef = new NodeRef(typeNodeRef);
 			NodeRef packageRef = new NodeRef(packageNodeRef);
 			if (nodeService.exists(typeRef) && nodeService.exists(packageRef)) {
 				NodeRef documentRef = contractService.getDocumentService().getDocumentFromPackageItems(packageRef);
 				if (documentRef != null) {
-					contractService.createDocumentOnBasis(typeRef, documentRef);
+					return contractService.createDocumentOnBasis(typeRef, documentRef);
 				}
 			}
 		}
+        return null;
 	}
 
     /**

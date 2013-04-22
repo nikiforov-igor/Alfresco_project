@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
-             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/contract/workflow/createOnBasis/1.0">
 	<process id="createOnBasis" name="Создать на основании">
@@ -11,21 +10,18 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.createDocumentOnBasis(lecmContractWf_documentType.nodeRef, bpm_package.nodeRef);</activiti:string>
+						<activiti:string>var nodeRef = contracts.createDocumentOnBasis(lecmContractWf_documentType.nodeRef, bpm_package.nodeRef);
+                        execution.setVariable("lecm_redirect_url", "document?nodeRef=" + nodeRef)</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
 			<script></script>
 		</scriptTask>
-		<intermediateCatchEvent id="timerintermediatecatchevent1" name="TimerCatchEvent">
-			<timerEventDefinition>
-				<timeDuration>PT10S</timeDuration>
-			</timerEventDefinition>
-		</intermediateCatchEvent>
+        <receiveTask id="receivetask1" name="Receive Task"></receiveTask>
 		<sequenceFlow id="flow4" name="" sourceRef="startCreateOnBasis" targetRef="createOnBasisTask"></sequenceFlow>
 		<sequenceFlow id="flow5" name="" sourceRef="createOnBasisTask"
-		              targetRef="timerintermediatecatchevent1"></sequenceFlow>
-		<sequenceFlow id="flow6" name="" sourceRef="timerintermediatecatchevent1"
+		              targetRef="receivetask1"></sequenceFlow>
+		<sequenceFlow id="flow6" name="" sourceRef="receivetask1"
 		              targetRef="endCreateOnBasis"></sequenceFlow>
 	</process>
 </definitions>
