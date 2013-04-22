@@ -1,5 +1,6 @@
 package ru.it.lecm.approval.api;
 
+import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
@@ -36,4 +37,6 @@ public interface ApprovalListService {
 	 * @param taskDecision
 	 */
 	void logDecision(final NodeRef approvalListRef, final JSONObject taskDecision);
+
+	void logFinalDecision(final NodeRef approvalListRef, Map<String, String> decisionMap);
 }

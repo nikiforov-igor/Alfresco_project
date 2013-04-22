@@ -121,7 +121,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @return
 	 */
 	public void logDecision(final ActivitiScriptNode approvalListRef, final String taskDecision) {
-		//TODO: добавить Policy которая следит за добавлением item-ов и ассоциацию создает
 		logger.debug(taskDecision);
 		JSONObject task = null;
 		try {
@@ -130,5 +129,19 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 			logger.error(ex.getMessage(), ex);
 		}
 		approvalListService.logDecision(approvalListRef.getNodeRef(), task);
+	}
+
+	public boolean isApproved(final Map<String, String> decisionMap) {
+		boolean isApproved = false;
+		if (decisionMap.containsValue("REJECTED")) {
+			isApproved = false;
+		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK") || decisionMap.containsValue("APPROVED")) {
+			isApproved = true;
+		}
+		return isApproved;
+	}
+
+	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final Map<String, String> decisionMap) {
+		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), decisionMap);
 	}
 }

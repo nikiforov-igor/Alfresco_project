@@ -172,7 +172,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, localName);
 		properties.put(ContentModel.PROP_TITLE, localName);
-		properties.put(PROP_APPROVAL_LIST_APPROVE_DATE, new Date()); //TODO: брать дату начала согласования из регламента
+		properties.put(PROP_APPROVAL_LIST_APPROVE_START, new Date()); //TODO: брать дату начала согласования из регламента
 		properties.put(PROP_APPROVAL_LIST_DOCUMENT_VERSION, version);
 		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, localName);
 		NodeRef approvalListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_APPROVAL_LIST, properties).getChildRef();
@@ -261,5 +261,19 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			targetRefs.add(commentRef);
 			nodeService.setAssociations(approvalListItemRef, ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
 		}
+	}
+
+	@Override
+	public void logFinalDecision(final NodeRef approvalListRef, final Map<String, String> decisionMap) {
+		Map<QName, Serializable> properties = nodeService.getProperties(approvalListRef);
+		if (decisionMap.containsValue("REJECTED")) {
+			properties.put(PROP_APPROVAL_LIST_DECISION, "REJECTED");
+		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK")) {
+			properties.put(PROP_APPROVAL_LIST_DECISION, "APPROVED_WITH_REMARK");
+		} else if (decisionMap.containsValue("APPROVED")) {
+			properties.put(PROP_APPROVAL_LIST_DECISION, "APPROVED");
+		}
+		properties.put(PROP_APPROVAL_LIST_APPROVE_DATE, new Date());
+		nodeService.setProperties(approvalListRef, properties);
 	}
 }

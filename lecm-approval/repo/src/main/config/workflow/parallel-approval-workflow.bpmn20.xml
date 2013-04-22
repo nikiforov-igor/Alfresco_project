@@ -79,10 +79,13 @@
 						<activiti:string>
 			            //<![CDATA[
 			            	var decisionsMap = execution.getVariable("decisionsMap");
+			            	var approvalListRef = execution.getVariable("approvalListRef");
 			            	if (!decisionsMap) {
 			            		logger.log("Attention: decisionsMap is null!");
 			            	}
-			            	logger.log("To be continued...");
+							approval.logFinalDecision(approvalListRef, decisionsMap);
+							var isApproved = approval.isApproved(decisionsMap);
+							execution.setVariable("isApproved", isApproved);
 			            //]]>
 						</activiti:string>
 					</activiti:field>
