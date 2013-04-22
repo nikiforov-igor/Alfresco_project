@@ -39,7 +39,7 @@
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
-                            itemType: "lecm-contract:additionalDocument",
+                            itemType: "lecm-additional-document:additionalDocument",
                             nodeRef: LogicECM.module.Contracts.SETTINGS.nodeRef,
                             actionsConfig:{
                                 fullDelete:true

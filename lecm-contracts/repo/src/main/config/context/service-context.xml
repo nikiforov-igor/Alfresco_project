@@ -26,6 +26,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -116,7 +117,7 @@
     </bean>
 
     <bean id="additionalDocument.defaultStatemachine" parent="defaultStatemachines">
-        <property name="statemachineName" value="lecm-contract:additionalDocument" />
+        <property name="statemachineName" value="lecm-additional-document:additionalDocument" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml" />
     </bean>
 

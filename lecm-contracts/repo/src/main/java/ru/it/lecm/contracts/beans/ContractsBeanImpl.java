@@ -28,10 +28,11 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS = "Contracts";
 	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
+	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
 
 	public static final QName TYPE_CONTRACTS_RECORD = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
-	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "additionalDocument");
-	public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "additionalDocumentType");
+	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
+	public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
 	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_NAMESPACE_URI, "reasonDelete-assoc");
 
     private SearchService searchService;

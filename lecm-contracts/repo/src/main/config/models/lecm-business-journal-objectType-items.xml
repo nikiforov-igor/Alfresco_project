@@ -11,7 +11,7 @@
         <item name="Документ к договору">
             <property name="cm:name">Документ к договору</property>
             <property name="lecm-busjournal:objectType-code">LECM_CONTRACT_ADDITIONAL_DOCUMENT</property>
-            <property name="lecm-busjournal:objectType-class">lecm-contract:additionalDocument</property>
+            <property name="lecm-busjournal:objectType-class">lecm-additional-document:additionalDocument</property>
             <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
             <property name="lecm-busjournal:objectType-list-template">статус: {lecm-statemachine:status}, автор : {!~AUTHOR}</property>
         </item>

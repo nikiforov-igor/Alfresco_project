@@ -407,7 +407,34 @@
 		</forms>
 	</config>
 
-    <config evaluator="model-type" condition="lecm-contract:additionalDocument">
+    <config evaluator="node-type" condition="lecm-additional-document:additionalDocument">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+            <form id="document-dashlet">
+                <field-visibility>
+                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-contract:regNumSystem"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-statemachine:status">
+                        <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-additional-document:additionalDocument">
         <forms>
             <form>
                 <field-visibility>
