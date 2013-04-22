@@ -667,7 +667,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         for (WorkflowDescriptor workflowDescriptor : workflowDescriptors) {
             if (currentExecutionId == null || !currentExecutionId.equals(workflowDescriptor.getExecutionId())) {
                 WorkflowInstance instance = serviceRegistry.getWorkflowService().getWorkflowById(workflowDescriptor.getExecutionId());
-                if (instance != null) {
+                if (instance != null && instance.isActive()) {
                     serviceRegistry.getWorkflowService().deleteWorkflow(workflowDescriptor.getExecutionId());
                 }
             }
