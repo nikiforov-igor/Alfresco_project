@@ -102,6 +102,7 @@
 		<module>lecm-regnumbers</module>
 		<module>lecm-contractors</module>
 		<module>lecm-contracts-fake</module>
+		<module>lecm-approval</module>
 	</modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

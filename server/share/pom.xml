@@ -219,6 +219,13 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.approval</groupId>
+			<artifactId>approval-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
