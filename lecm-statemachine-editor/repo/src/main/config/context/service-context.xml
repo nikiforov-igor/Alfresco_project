@@ -87,6 +87,7 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="defaultStatemachines" ref="defaultStatemachines"/>
         <property name="contentService" ref="contentService"/>
+        <property name="serviceDictionary" ref="serviceDictionary"/>
     </bean>
 
 </beans>
