@@ -445,14 +445,12 @@ h4 .lighter
     font-size: 100%;
     border-top: 1px solid #C5C7C6;
 }
-.yui-skin-lecmTheme .yui-panel .bd div.form-buttons {
-    text-align: right;
-    border-radius: 0 0 5px 5px;
-    clear: both;
-}
+.yui-skin-lecmTheme .yui-panel .bd div.form-buttons,
 .yui-skin-lecmTheme .yui-panel .bd div.bdft,
 .yui-skin-lecmTheme .yui-panel .bd div.ft {
     text-align: right;
+    border-radius: 0 0 5px 5px;
+    clear: both;
 }
 .yui-skin-lecmTheme .yui-panel div.form-fields {
     border-bottom: none;
@@ -460,10 +458,6 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields,
 .yui-skin-lecmTheme .yui-panel div.form-fields div {
     text-align: left;
-}
-.yui-skin-lecmTheme .yui-panel div.form-fields,
-.yui-skin-lecmTheme .yui-panel div.form-fields div.set {
-    float: left;
 }
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div,
@@ -515,7 +509,7 @@ h4 .lighter
     padding-left: 3em;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
     max-width: 100%;
     clear: none;
     margin-left: 160px;
@@ -815,9 +809,10 @@ span.navigation-separator-alt
     min-height: 300px;
 }
 
-.yui-skin-lecmTheme .yui-navset .yui-content
-{
-   background: #f4f6fe;
+.yui-skin-lecmTheme .yui-navset .yui-content {
+    background: #f4f6fe;
+    overflow: hidden;
+    margin-bottom: 5px;
 }
 
 .sticky-wrapper input[type="text"],
