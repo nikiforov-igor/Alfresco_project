@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -44,7 +45,6 @@ public class XMLExporter {
         xmlw.writeStartElement(ExportNamespace.STATE_MACHINE);
 
         writeXMLNode(xmlStateMachine);
-        writeRoles();
 
         xmlw.writeEndElement();
         xmlw.writeEndDocument();
@@ -58,50 +58,104 @@ public class XMLExporter {
         NodeRef stateMachineNodeRef = nodeService.getPrimaryParent(new NodeRef(statusesNodeRef)).getParentRef();
         XMLNode xmlStateMachine = createXMLNode(stateMachineNodeRef);
 
-        List<ChildAssociationRef> statusAssocs = nodeService.getChildAssocs(new NodeRef(statusesNodeRef));
-        for (ChildAssociationRef statusAssoc : statusAssocs) {
-            NodeRef statusNodeRef = statusAssoc.getChildRef();
-
-            XMLNode xmlStatus = createXMLNode(statusNodeRef);
+        List<XMLNode> xmlStatuses = getFolderChildren(new NodeRef(statusesNodeRef));
+        for (XMLNode xmlStatus : xmlStatuses) {
             xmlStateMachine.addSubFolderNode(ExportNamespace.STATUSES, xmlStatus);
 
             //actions
-            NodeRef actionsNodeRef = nodeService.getChildByName(statusNodeRef, ContentModel.ASSOC_CONTAINS, ExportNamespace.ACTIONS);
-            List<ChildAssociationRef> actionAssocs = nodeService.getChildAssocs(actionsNodeRef);
-            for (ChildAssociationRef actionAssoc : actionAssocs) {
-                NodeRef actionNodeRef = actionAssoc.getChildRef();
-                XMLNode xmlAction = createXMLNode(actionNodeRef);
+            NodeRef actionsNodeRef = nodeService.getChildByName(xmlStatus.getNodeRef(), ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ACTIONS);
+            List<XMLNode> xmlActions = getFolderChildren(actionsNodeRef);
+            for (XMLNode xmlAction : xmlActions) {
                 xmlStatus.addSubFolderNode(ExportNamespace.ACTIONS, xmlAction);
 
-                List<ChildAssociationRef> transitionAssocs = nodeService.getChildAssocs(actionNodeRef);
-                for (ChildAssociationRef transitionAssoc : transitionAssocs) {
-                    NodeRef transitionNodeRef = transitionAssoc.getChildRef();
-                    XMLNode xmlTransition = createXMLNode(transitionNodeRef);
+                List<XMLNode> xmlTransitions = getFolderChildren(xmlAction.getNodeRef());
+                for (XMLNode xmlTransition : xmlTransitions) {
                     xmlAction.addSubFolderNode(ExportNamespace.TRANSITIONS, xmlTransition);
 
-                    List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(transitionNodeRef, StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+                    List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(xmlTransition.getNodeRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
                     for (AssociationRef targetAssoc : targetAssocs) {
                         XMLAssociation xmlAssociation = new XMLAssociation(targetAssoc.getTypeQName().getLocalName(), targetAssoc.getTargetRef().toString());
                         xmlTransition.addAssociation(xmlAssociation);
                     }
 
-                    List<ChildAssociationRef> variableAssocs = nodeService.getChildAssocs(transitionNodeRef);
-                    for (ChildAssociationRef variableAssoc : variableAssocs) {
-                        NodeRef variableNodeRef = variableAssoc.getChildRef();
-                        XMLNode variable = createXMLNode(variableNodeRef);
-                        xmlTransition.addSubFolderNode(ExportNamespace.VARIABLES, variable);
-                    }
+                    List<XMLNode> variables = getFolderChildren(xmlTransition.getNodeRef());
+                    xmlTransition.addSubFolderNodes(ExportNamespace.VARIABLES, variables);
                 }
+            }
+
+            //associations
+            List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(xmlStatus.getNodeRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+            for (AssociationRef targetAssoc : targetAssocs) {
+                XMLAssociation xmlAssociation = new XMLAssociation(targetAssoc.getTypeQName().getLocalName(), targetAssoc.getTargetRef().toString());
+                xmlStatus.addAssociation(xmlAssociation);
+            }
+
+            //roles
+            NodeRef rolesNodeRef = nodeService.getChildByName(xmlStatus.getNodeRef(), ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ROLES);
+            if (rolesNodeRef != null) {
+                NodeRef staticRolesNodeRef = nodeService.getChildByName(rolesNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATIC_ROLES);
+                List<XMLNode> xmlRoles = getXmlRoles(staticRolesNodeRef);
+                xmlStatus.addSubFolderNodes(ExportNamespace.STATIC_ROLES, xmlRoles);
+
+                NodeRef dynamicRolesNodeRef = nodeService.getChildByName(rolesNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.DYNAMIC_ROLES);
+                xmlRoles = getXmlRoles(dynamicRolesNodeRef);
+                xmlStatus.addSubFolderNodes(ExportNamespace.DYNAMIC_ROLES, xmlRoles);
+            }
+
+            //fields
+            NodeRef fieldsNodeRef = nodeService.getChildByName(xmlStatus.getNodeRef(), ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FIELDS);
+            List<XMLNode> fields = getFolderChildren(fieldsNodeRef);
+            xmlStatus.addSubFolderNodes(ExportNamespace.FIELDS, fields);
+
+            //categories
+            NodeRef categoriesNodeRef = nodeService.getChildByName(xmlStatus.getNodeRef(), ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.CATEGORIES);
+            List<XMLNode> categories = getFolderChildren(categoriesNodeRef);
+            xmlStatus.addSubFolderNodes(ExportNamespace.CATEGORIES, categories);
+        }
+
+        //roles
+        NodeRef rolesNodeRef = nodeService.getChildByName(stateMachineNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ROLES);
+        List<XMLNode> xmlRoles = getXmlRoles(rolesNodeRef);
+        xmlStateMachine.addSubFolderNodes(ExportNamespace.ROLES, xmlRoles);
+
+        return xmlStateMachine;
+    }
+
+    private List<XMLNode> getFolderChildren(NodeRef folderNodeRef) {
+        if (folderNodeRef == null) {
+            return new ArrayList<XMLNode>();
+        }
+
+        List<XMLNode> result = new ArrayList<XMLNode>();
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(folderNodeRef);
+        for (ChildAssociationRef childAssoc : childAssocs) {
+            NodeRef childNodeRef = childAssoc.getChildRef();
+            XMLNode child = createXMLNode(childNodeRef);
+            result.add(child);
+        }
+
+        return result;
+    }
+
+    private List<XMLNode> getXmlRoles(NodeRef rolesNodeRef) {
+        List<XMLNode> xmlRoles = getFolderChildren(rolesNodeRef);
+
+        for (XMLNode xmlRole : xmlRoles) {
+            List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(xmlRole.getNodeRef(), StatemachineEditorModel.ASSOC_ROLE);
+            for (AssociationRef targetAssoc : targetAssocs) {
+                String businessRoleIdentifier = (String) nodeService.getProperty(targetAssoc.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+                XMLRoleAssociation xmlRoleAssociation = new XMLRoleAssociation(targetAssoc.getTypeQName().getLocalName(), businessRoleIdentifier);
+                xmlRole.addRoleAssociation(xmlRoleAssociation);
             }
         }
 
-        return xmlStateMachine;
+        return xmlRoles;
     }
 
     private XMLNode createXMLNode(NodeRef nodeRef) {
         String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         QName type = nodeService.getType(nodeRef);
-        XMLNode xmlNode = new XMLNode(type.getLocalName(), name, nodeRef.toString());
+        XMLNode xmlNode = new XMLNode(type.getLocalName(), name, nodeRef);
 
         //properties
         Map<QName, Serializable> allProperties = nodeService.getProperties(nodeRef);
@@ -131,7 +185,7 @@ public class XMLExporter {
 
         writeElement(ExportNamespace.TYPE, xmlNode.getType());
         writeElement(ExportNamespace.NAME, xmlNode.getName());
-        writeElement(ExportNamespace.NODE_REF, xmlNode.getNodeRef());
+        writeElement(ExportNamespace.NODE_REF, xmlNode.getNodeRefString());
 
         xmlw.writeStartElement(ExportNamespace.PROPERTIES);
         for (XMLProperty xmlProperty : xmlNode.getProperties()) {
@@ -157,6 +211,15 @@ public class XMLExporter {
         }
         xmlw.writeEndElement();
 
+        xmlw.writeStartElement(ExportNamespace.ROLE_ASSOCIATIONS);
+        for (XMLRoleAssociation xmlRoleAssociation : xmlNode.getRoleAssociations()) {
+            xmlw.writeStartElement(ExportNamespace.ROLE_ASSOCIATION);
+            writeElement(ExportNamespace.TYPE, xmlRoleAssociation.getType());
+            writeElement(ExportNamespace.BUSINESS_ROLE_NAME, xmlRoleAssociation.getBusinessRoleName());
+            xmlw.writeEndElement();
+        }
+        xmlw.writeEndElement();
+
         xmlw.writeStartElement(ExportNamespace.SUB_FOLDERS);
         for (Map.Entry<String, List<XMLNode>> subFolder : xmlNode.getSubFolders().entrySet()) {
             xmlw.writeStartElement(ExportNamespace.SUB_FOLDER);
@@ -170,12 +233,6 @@ public class XMLExporter {
         }
         xmlw.writeEndElement();
 
-        xmlw.writeEndElement();
-    }
-
-    private void writeRoles() throws XMLStreamException {
-        xmlw.writeStartElement(ExportNamespace.ROLES);
-        xmlw.writeAttribute("stub", "stub");
         xmlw.writeEndElement();
     }
 

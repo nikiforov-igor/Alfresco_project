@@ -65,7 +65,12 @@ public class StatemachineEditorModel {
     public static final String STATEMACHINES = "statemachines";
     public static final String FOLDER_RESTORE = "restore";
     public static final String STATUSES = "statuses";
+    public static final String ACTIONS = "actions";
     public static final String ROLES = "roles";
+    public static final String STATIC_ROLES = "static";
+    public static final String DYNAMIC_ROLES = "dynamic";
+    public static final String FIELDS = "fields";
+    public static final String CATEGORIES = "categories";
 
     public final static String ACTION_FINISH_STATE_WITH_TRANSITION = "FinishStateWithTransition";
 	public final static String ACTION_SCRIPT_ACTION = "ScriptAction";

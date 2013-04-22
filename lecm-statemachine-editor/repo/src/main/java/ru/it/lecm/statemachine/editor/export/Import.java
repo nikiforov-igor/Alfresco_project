@@ -12,6 +12,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
@@ -30,6 +31,7 @@ public class Import extends AbstractWebScript {
     private NodeService nodeService;
     private DefaultStatemachinesImpl defaultStatemachines;
     private ContentService contentService;
+    private DictionaryBean serviceDictionary;
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
@@ -45,6 +47,10 @@ public class Import extends AbstractWebScript {
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
+    }
+
+    public void setServiceDictionary(DictionaryBean serviceDictionary) {
+        this.serviceDictionary = serviceDictionary;
     }
 
     @Override
@@ -77,7 +83,7 @@ public class Import extends AbstractWebScript {
                 }
             }
             if (inputStream != null) {
-                XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, stateMachineId);
+                XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary, stateMachineId);
                 xmlImporter.importStateMachine();
                 xmlImporter.close();
             }

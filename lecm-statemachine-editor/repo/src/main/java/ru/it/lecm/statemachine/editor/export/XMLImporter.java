@@ -1,6 +1,7 @@
 package ru.it.lecm.statemachine.editor.export;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -8,6 +9,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.stream.XMLInputFactory;
@@ -33,14 +36,20 @@ public class XMLImporter {
     public static final String ACTION_ID_PROPERTY = "actionId";
     public static final String ACTION_EXECUTION_PROPERTY = "actionExecution";
     private NodeService nodeService;
+    private DictionaryBean serviceDictionary;
 
     private XMLStreamReader xmlr;
 
     private NodeRef stateMachineNodeRef;
     private XMLNode newStateMachine;
+    private NodeRef statusesNodeRef;
+    private NodeRef rolesNodeRef;
 
-    public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, String stateMachineId) throws XMLStreamException {
+    private Map<String, NodeRef> businessRoles = new HashMap<String, NodeRef>();
+
+    public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, DictionaryBean serviceDictionary, String stateMachineId) throws XMLStreamException {
         this.nodeService = nodeService;
+        this.serviceDictionary = serviceDictionary;
 
         final NodeRef companyHome = repositoryHelper.getHomeRef();
         NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
@@ -55,9 +64,16 @@ public class XMLImporter {
             throw new XMLStreamException(WRONG_XML_FORMAT);
         }
 
-        recreateRolesAndStatusesFolders();
+        Map<QName, Serializable> xmlProperties = getXmlProperties(newStateMachine);
+        for (QName qName : xmlProperties.keySet()) {
+            nodeService.setProperty(stateMachineNodeRef, qName, xmlProperties.get(qName));
+        }
+
+        this.statusesNodeRef = recreateStatusesFolder();
+        this.rolesNodeRef = recreateRolesFolder();
+
         importStatuses();
-        importActions();
+        importRoles(rolesNodeRef, newStateMachine.getSubFolder(ExportNamespace.ROLES));
     }
 
     public void close() throws XMLStreamException {
@@ -85,7 +101,7 @@ public class XMLImporter {
         String name = readTextValue(ExportNamespace.NAME);
         String nodeRef = readTextValue(ExportNamespace.NODE_REF);
 
-        XMLNode xmlNode = new XMLNode(type, name, nodeRef);
+        XMLNode xmlNode = new XMLNode(type, name, new NodeRef(nodeRef));
 
         List<XMLProperty> xmlProperties = readProperties();
         for (XMLProperty xmlProperty : xmlProperties) {
@@ -100,6 +116,11 @@ public class XMLImporter {
         List<XMLAssociation> xmlAssociations = readAssociations();
         for (XMLAssociation xmlAssociation : xmlAssociations) {
             xmlNode.addAssociation(xmlAssociation);
+        }
+
+        List<XMLRoleAssociation> xmlRoleAssociations = readRoleAssociations();
+        for (XMLRoleAssociation xmlRoleAssociation : xmlRoleAssociations) {
+            xmlNode.addRoleAssociation(xmlRoleAssociation);
         }
 
         Map<String, List<XMLNode>> subFolders = readSubFolders();
@@ -169,6 +190,23 @@ public class XMLImporter {
         return result;
     }
 
+    private List<XMLRoleAssociation> readRoleAssociations() throws XMLStreamException {
+        List<XMLRoleAssociation> result = new ArrayList<XMLRoleAssociation>();
+
+        readStartTag(ExportNamespace.ROLE_ASSOCIATIONS);
+        while (xmlr.hasNext() && !isEndTag(ExportNamespace.ROLE_ASSOCIATIONS)) {
+            xmlr.next();
+
+            if (isStartTag(ExportNamespace.ROLE_ASSOCIATION)) {
+                String type = readTextValue(ExportNamespace.TYPE);
+                String businessRoleName = readTextValue(ExportNamespace.BUSINESS_ROLE_NAME);
+                result.add(new XMLRoleAssociation(type, businessRoleName));
+            }
+        }
+
+        return result;
+    }
+
     //enter on tag before <subFolders>
     private Map<String, List<XMLNode>> readSubFolders() throws XMLStreamException {
         Map<String, List<XMLNode>> result = new HashMap<String, List<XMLNode>>();
@@ -223,13 +261,17 @@ public class XMLImporter {
         }
     }
 
-    private void recreateRolesAndStatusesFolders() {
+    private NodeRef recreateStatusesFolder() {
         Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.STATUSES);
-        recreateNode(stateMachineNodeRef, StatemachineEditorModel.TYPE_STATUSES, properties);
+        return recreateNode(stateMachineNodeRef, StatemachineEditorModel.TYPE_STATUSES, properties);
+    }
 
-        properties = getBaseProperties(StatemachineEditorModel.ROLES);
+    private NodeRef recreateRolesFolder() {
+        Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.ROLES);
         NodeRef rolesNodeRef = recreateNode(stateMachineNodeRef, StatemachineEditorModel.TYPE_ROLES, properties);
         nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_ROLES_FOLDER, rolesNodeRef);
+
+        return rolesNodeRef;
     }
 
     private Map<QName, Serializable> getBaseProperties(String propName) {
@@ -238,11 +280,19 @@ public class XMLImporter {
         return properties;
     }
 
-    private Map<QName, Serializable> getAllProperties(XMLNode xmlNode) {
-        Map<QName, Serializable> properties = getBaseProperties(xmlNode.getName());
+    private Map<QName, Serializable> getXmlProperties(XMLNode xmlNode) {
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         for (XMLProperty xmlProperty : xmlNode.getProperties()) {
             properties.put(QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, xmlProperty.getName()), xmlProperty.getValue());
         }
+
+        return properties;
+    }
+
+    private Map<QName, Serializable> getAllProperties(XMLNode xmlNode) {
+        Map<QName, Serializable> properties = getBaseProperties(xmlNode.getName());
+        Map<QName, Serializable> xmlProperties = getXmlProperties(xmlNode);
+        properties.putAll(xmlProperties);
 
         return properties;
     }
@@ -251,13 +301,46 @@ public class XMLImporter {
      * Delete old statuses and create new ones (all sub-entities are recreated on recreating status)
      */
     private void importStatuses() {
-        NodeRef statusesNodeRef = nodeService.getChildByName(stateMachineNodeRef, StatemachineEditorModel.TYPE_STATUSES, StatemachineEditorModel.TYPE_STATUSES.getLocalName());
-
         List<XMLNode> statusesXMLNode = newStateMachine.getSubFolder(ExportNamespace.STATUSES);
         for (XMLNode statusXMLNode : statusesXMLNode) {
             NodeRef statusNodeRef = recreateNode(statusesNodeRef, statusXMLNode);
             statusXMLNode.setNewNodeRef(statusNodeRef);
+
+            //roles
+            NodeRef rolesNodeRef = nodeService.getChildByName(statusNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ROLES);
+            if (rolesNodeRef != null) {
+                NodeRef staticRolesNodeRef = nodeService.getChildByName(rolesNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATIC_ROLES);
+                importRoles(staticRolesNodeRef, statusXMLNode.getSubFolder(ExportNamespace.STATIC_ROLES));
+
+                NodeRef dynamicRolesNodeRef = nodeService.getChildByName(rolesNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.DYNAMIC_ROLES);
+                importRoles(dynamicRolesNodeRef, statusXMLNode.getSubFolder(ExportNamespace.DYNAMIC_ROLES));
+            }
+
+            //categories
+            Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.CATEGORIES);
+            NodeRef categoriesNodeRef = recreateNode(statusNodeRef, ContentModel.TYPE_FOLDER, properties);
+
+            List<XMLNode> categories = statusXMLNode.getSubFolder(ExportNamespace.CATEGORIES);
+            for (XMLNode category : categories) {
+                recreateNode(categoriesNodeRef, category);
+            }
+
+            //fields
+            properties = getBaseProperties(StatemachineEditorModel.FIELDS);
+            NodeRef fieldsNodeRef = recreateNode(statusNodeRef, ContentModel.TYPE_FOLDER, properties);
+
+            List<XMLNode> fields = statusXMLNode.getSubFolder(ExportNamespace.FIELDS);
+            for (XMLNode field : fields) {
+                recreateNode(fieldsNodeRef, field);
+            }
         }
+
+        List<XMLNode> statusXMLNodes = newStateMachine.getSubFolder(ExportNamespace.STATUSES);
+        for (XMLNode statusXMLNode : statusXMLNodes) {
+            importAssociation(statusXMLNode);
+        }
+
+        importActions();
     }
 
     /**
@@ -283,10 +366,8 @@ public class XMLImporter {
                 List<XMLNode> xmlTransitions = xmlAction.getSubFolder(ExportNamespace.TRANSITIONS);
                 for (XMLNode xmlTransition : xmlTransitions) {
                     NodeRef transitionNodeRef = recreateNode(actionNodeRef, xmlTransition);
-                    for (XMLAssociation xmlAssociation : xmlTransition.getAssociations()) {
-                        XMLNode xmlNode = newStateMachine.findNode(xmlAssociation.getReference());
-                        nodeService.createAssociation(transitionNodeRef, xmlNode.getNewNodeRef(), QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, xmlAssociation.getType()));
-                    }
+                    xmlTransition.setNewNodeRef(transitionNodeRef);
+                    importAssociation(xmlTransition);
 
                     List<XMLNode> xmlVariables = xmlTransition.getSubFolder(ExportNamespace.VARIABLES);
                     for (XMLNode xmlVariable : xmlVariables) {
@@ -295,6 +376,52 @@ public class XMLImporter {
                 }
             }
         }
+    }
+
+
+    private void importAssociation(XMLNode xmlNode) {
+        for (XMLAssociation xmlAssociation : xmlNode.getAssociations()) {
+            XMLNode referenceXmlNode = newStateMachine.findNode(xmlAssociation.getReference());
+            nodeService.createAssociation(xmlNode.getNewNodeRef(), referenceXmlNode.getNewNodeRef(), QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, xmlAssociation.getType()));
+        }
+    }
+
+    private void importRoles(NodeRef rolesNodeRef, List<XMLNode> roles) {
+        List<NodeRef> addedBusinessRoles = new ArrayList<NodeRef>();
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(rolesNodeRef);
+        for (ChildAssociationRef childAssoc : childAssocs) {
+            List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(childAssoc.getChildRef(), StatemachineEditorModel.ASSOC_ROLE);
+            for (AssociationRef targetAssoc : targetAssocs) {
+                addedBusinessRoles.add(targetAssoc.getTargetRef());
+            }
+        }
+
+        for (XMLNode role : roles) {
+            NodeRef notAdded = getNotAddedBusinessRole(addedBusinessRoles, role);
+            if (notAdded != null) {
+                NodeRef roleNodeRef = recreateNode(rolesNodeRef, role);
+                nodeService.createAssociation(roleNodeRef, notAdded, StatemachineEditorModel.ASSOC_ROLE);
+            }
+        }
+    }
+
+    private NodeRef getNotAddedBusinessRole(List<NodeRef> existing, XMLNode role) {
+        for (XMLRoleAssociation roleAssociation : role.getRoleAssociations()) {
+            NodeRef businessRoleNodeRef = getBusinessRoleNodeRef(roleAssociation.getBusinessRoleName());
+            if (businessRoleNodeRef != null && !existing.contains(businessRoleNodeRef)) {
+                return businessRoleNodeRef;
+            }
+        }
+        return null;
+    }
+
+    private NodeRef getBusinessRoleNodeRef(String businessRoleName) {
+        if (!businessRoles.containsKey(businessRoleName)) {
+            NodeRef nodeRef = serviceDictionary.getRecordByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER, businessRoleName);
+            businessRoles.put(businessRoleName, nodeRef);
+        }
+
+        return businessRoles.get(businessRoleName);
     }
 
     private List<ChildAssociationRef> getActionsAssociationRefs(XMLNode statusXMLNode) {

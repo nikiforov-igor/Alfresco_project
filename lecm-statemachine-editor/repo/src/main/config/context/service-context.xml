@@ -77,6 +77,7 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="defaultStatemachines" ref="defaultStatemachines"/>
         <property name="contentService" ref="contentService"/>
+        <property name="serviceDictionary" ref="serviceDictionary"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.get"

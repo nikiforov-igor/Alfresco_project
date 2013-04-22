@@ -18,14 +18,15 @@ import java.util.Map;
 public class XMLNode {
     private String type;
     private String name;
-    private String nodeRef;
+    private NodeRef nodeRef;
     private NodeRef newNodeRef;
     private List<XMLProperty> properties = new ArrayList<XMLProperty>();
     private List<String> aspects = new ArrayList<String>();
     private List<XMLAssociation> associations = new ArrayList<XMLAssociation>();
+    private List<XMLRoleAssociation> roleAssociations = new ArrayList<XMLRoleAssociation>();
     private Map<String, List<XMLNode>> subFolders = new HashMap<String, List<XMLNode>>();
 
-    public XMLNode(String type, String name, String nodeRef) {
+    public XMLNode(String type, String name, NodeRef nodeRef) {
         if (type == null) {
             throw new IllegalArgumentException("type cannot be null!");
         }
@@ -51,8 +52,12 @@ public class XMLNode {
         return name;
     }
 
-    public String getNodeRef() {
+    public NodeRef getNodeRef() {
         return nodeRef;
+    }
+
+    public String getNodeRefString() {
+        return nodeRef.toString();
     }
 
     public NodeRef getNewNodeRef() {
@@ -97,12 +102,26 @@ public class XMLNode {
         associations.add(xmlAssociation);
     }
 
+    public List<XMLRoleAssociation> getRoleAssociations() {
+        return roleAssociations;
+    }
+
+    public void addRoleAssociation(XMLRoleAssociation roleAssociation) {
+        roleAssociations.add(roleAssociation);
+    }
+
     public Map<String, List<XMLNode>> getSubFolders() {
         return subFolders;
     }
 
     public List<XMLNode> getSubFolder(String subFolderName) {
         return subFolders.containsKey(subFolderName) ? subFolders.get(subFolderName) : new ArrayList<XMLNode>();
+    }
+
+    public void addSubFolderNodes(String subFolderName, List<XMLNode> xmlNodes) {
+        for (XMLNode xmlNode : xmlNodes) {
+            addSubFolderNode(subFolderName, xmlNode);
+        }
     }
 
     public void addSubFolderNode(String subFolderName, XMLNode xmlNode) {
@@ -119,7 +138,7 @@ public class XMLNode {
     }
 
     public XMLNode findNode(String nodeRef) {
-        if (this.nodeRef.equals(nodeRef)) {
+         if (getNodeRefString().equals(nodeRef)) {
             return this;
         }
 

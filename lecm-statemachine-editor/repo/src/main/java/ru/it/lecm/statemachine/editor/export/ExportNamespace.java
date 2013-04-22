@@ -16,6 +16,8 @@ public interface ExportNamespace {
     String REFERENCE = "reference";
     String NODE = "node";
     String ROLES = "roles";
+    String STATIC_ROLES = "staticRoles";
+    String DYNAMIC_ROLES = "dynamicRoles";
     String SUB_FOLDERS = "subFolders";
     String SUB_FOLDER = "subFolder";
     String PROPERTY = "property";
@@ -28,4 +30,9 @@ public interface ExportNamespace {
     String TYPE = "type";
     String NAME = "name";
     String NODES = "nodes";
+    String ROLE_ASSOCIATIONS = "roleAssociations";
+    String ROLE_ASSOCIATION = "roleAssociation";
+    String BUSINESS_ROLE_NAME = "businessRoleName";
+    String FIELDS = "fields";
+    String CATEGORIES = "categories";
 }
