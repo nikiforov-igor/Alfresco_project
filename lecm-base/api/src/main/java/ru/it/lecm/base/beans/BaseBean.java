@@ -52,7 +52,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected AuthenticationService authService;
 	protected List<String> notificationChannels;
 
-	private final Object lock = new Object();
+	private final static Object lock = new Object();
 
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -262,39 +262,44 @@ public abstract class BaseBean implements InitializingBean {
 	 * @param directoryPaths     - список папок
 	 * @return ссылка на директорию
 	 */
-	public NodeRef getFolder(final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						// имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
-						NodeRef directoryRef;
-						synchronized (lock) {
-							directoryRef = root;
-							for (String pathString : directoryPaths) {
-								NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-								if (pathDir == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(nameSpace, pathString);
-									QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, pathString);
-									ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-									directoryRef = result.getChildRef();
-								} else {
-									directoryRef = pathDir;
-								}
-							}
-						}
-						return directoryRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
-	}
+    public NodeRef getFolder(final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        // имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
+                        NodeRef directoryRef;
+                        directoryRef = root;
+                        for (String pathString : directoryPaths) {
+                            NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+                            if (pathDir == null) {
+                                synchronized (lock) {
+                                    pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+                                    if (pathDir == null) {
+                                        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                        QName assocQName = QName.createQName(nameSpace, pathString);
+                                        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+                                        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                        properties.put(ContentModel.PROP_NAME, pathString);
+                                        ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                        directoryRef = result.getChildRef();
+                                    } else {
+                                        directoryRef = pathDir;
+                                    }
+                                }
+                            } else {
+                                directoryRef = pathDir;
+                            }
+                        }
+                        return directoryRef;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(raw);
+    }
 
 	/**
 	 * Проверка строки на то, что она является ссылкой
