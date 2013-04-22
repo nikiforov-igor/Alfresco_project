@@ -8,36 +8,36 @@
 					<activiti:field name="script">
 						<!--
 						1) наполнение коллекции решений для всех assignee
-						2) добавление записи в лист согласования  
+						2) добавление записи в лист согласования
 						-->
 						<activiti:string>
 			            //<![CDATA[
 			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
-			            	
+
 			            	var userName = assignee.properties.userName;
-			            	logger.log("userName = " + userName);
 			            	var decision = task.getVariableLocal("lecmPaAt_approveTaskResult");
-			            	logger.log("decision = " + decision);
 			            	var completionDate = task.getVariableLocal("bpm_completionDate");
-			            	logger.log("completionDate = " + completionDate);
 			            	var comment = task.getVariableLocal("lecmPaAt_approveTaskComment");
-			            	logger.log("comment = " + comment);
 			            	var commentRef = task.getVariableLocal("lecmPaAt_approveTaskCommentAssoc");
+			            	logger.log("userName = " + userName);
+			            	logger.log("decision = " + decision);
+			            	logger.log("completionDate = " + completionDate);
+			            	logger.log("comment = " + comment);
 			            	logger.log("commentRef = " + commentRef);
 			            	var taskDecision = {
 			            		"userName": userName,
 			            		"decision": decision,
 			            		"completionDate": completionDate,
 			            		"comment": comment,
-			            		"commentRef": commentRef 
+			            		"commentRef": commentRef
 			            	};
-			            	var decisionsMap = execution.getVariableLocal("decisionsMap");
+			            	var decisionsMap = execution.getVariable("decisionsMap");
 			            	if (!decisionsMap) {
 			            		logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 			            	}
 			            	decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-			            	execution.setVariableLocal("decisionsMap", decisionsMap);
-			            	var approvalListRef = execution.getVariableLocal("approvalListRef");
+			            	execution.setVariable("decisionsMap", decisionsMap);
+			            	var approvalListRef = execution.getVariable("approvalListRef");
 			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
 			            //]]>
 						</activiti:string>
@@ -52,14 +52,14 @@
 					<activiti:field name="script">
 						<!--
 						1) формирование списка assignee
-						2) создание и наполнение листа согласования 
+						2) создание и наполнение листа согласования
 						 -->
 						<activiti:string>
 			            //<![CDATA[
 			            	var personList = approval.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
 			            	execution.setVariableLocal("assigneesList", personList);
-			            	var approvalListRef = approval.createApprovalList(bpm_package); //ActivitiScriptNode
-			            	execution.setVariableLocal("approvalListRef", approvalListRef);
+			            	var approvalListRef = approval.createApprovalList(bpm_package);
+			            	execution.setVariable("approvalListRef", approvalListRef);
 			            //]]>
 						</activiti:string>
 					</activiti:field>
@@ -78,6 +78,10 @@
 						 -->
 						<activiti:string>
 			            //<![CDATA[
+			            	var decisionsMap = execution.getVariable("decisionsMap");
+			            	if (!decisionsMap) {
+			            		logger.log("Attention: decisionsMap is null!");
+			            	}
 			            	logger.log("To be continued...");
 			            //]]>
 						</activiti:string>

@@ -121,6 +121,14 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @return
 	 */
 	public void logDecision(final ActivitiScriptNode approvalListRef, final String taskDecision) {
+		//TODO: добавить Policy которая следит за добавлением item-ов и ассоциацию создает
 		logger.debug(taskDecision);
+		JSONObject task = null;
+		try {
+			task = new JSONObject(taskDecision);
+		} catch (JSONException ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+		approvalListService.logDecision(approvalListRef.getNodeRef(), task);
 	}
 }

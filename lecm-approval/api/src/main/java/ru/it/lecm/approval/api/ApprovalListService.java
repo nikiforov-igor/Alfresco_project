@@ -1,9 +1,8 @@
 package ru.it.lecm.approval.api;
 
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONObject;
 
 /**
  *
@@ -33,8 +32,7 @@ public interface ApprovalListService {
 	/**
 	 * запись решения о согласовании от текущего исполнителя в лист согласования
 	 * @param approvalListRef
-	 * @param userName
-	 * @param decision
+	 * @param taskDecision
 	 */
-	void logDecision(final NodeRef approvalListRef, final String userName, final String decision, final Date decisionDate, final String comment, final NodeRef commentRef);
+	void logDecision(final NodeRef approvalListRef, final JSONObject taskDecision);
 }

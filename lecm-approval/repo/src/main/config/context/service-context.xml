@@ -14,7 +14,7 @@
 			<list>
 				<props>
 					<prop key="#{ENGINE_ID}">activiti</prop>
-					<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/parallel-approval-workflow.bpmn</prop>
+					<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/parallel-approval-workflow.bpmn20.xml</prop>
 					<prop key="#{MIMETYPE}">text/xml</prop>
 					<prop key="#{REDEPLOY}">true</prop>
 				</props>
@@ -33,6 +33,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">
