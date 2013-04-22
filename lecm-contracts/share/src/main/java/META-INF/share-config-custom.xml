@@ -474,7 +474,7 @@
 		</forms>
 	</config>
 
-    <config evaluator="string-compare" condition="activiti$deleteReason">
+    <config evaluator="string-compare" condition="activiti$contractsDeleteReason">
         <forms>
             <form>
                 <field-visibility>
@@ -499,4 +499,41 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$contractsContractTime">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems" />
+                    <show id="lecmContractWf:contractTimeFromDate" />
+                    <show id="lecmContractWf:contractTimeToDate" />
+                    <show id="lecmContractWf:contractTimeBaseOnDocument" />
+                    <show id="lecmContractWf:fillProperties" />
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmContractWf:contractTimeFromDate" label-id="contract.contractTime.fromTime" />
+                    <field id="lecmContractWf:contractTimeToDate" label-id="contract.contractTime.toTime" />
+                    <field id="lecmContractWf:contractTimeBaseOnDocument" label-id="contract.contractTime.baseOnDocument">
+                        <control template="/ru/it/lecm/contracts/component/contracts-based-on-document.ftl"/>
+                    </field>
+                    <field id="lecmContractWf:fillProperties">
+                        <control template="/ru/it/lecm/base-share/components/controls/fill-properties-control.ftl">
+                            <control-param name="properties">lecm-contract:startDate->lecmContractWf:contractTimeFromDate, lecm-contract:endDate->lecmContractWf:contractTimeToDate</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-contracts/contracts-const.js" />
+                <js src="/scripts/lecm-contracts/contracts-based-on-document.js" />
+            </dependencies>
+        </forms>
+    </config>
 </alfresco-config>

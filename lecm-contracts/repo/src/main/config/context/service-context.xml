@@ -87,6 +87,7 @@
         </property>
 	    <property name="nodeService" ref="nodeService"/>
         <property name="contractService" ref="contractService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
     <bean id="contract.businessJournalDictionaryBootstrap"
@@ -149,6 +150,12 @@
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-delete-reason.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-contract-time.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">true</prop>
                 </props>

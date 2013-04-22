@@ -50,5 +50,23 @@
             </associations>
         </type>
 
+        <type name="lecmContractWf:contractTimeTask">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmContractWf:contractTimeFromDate">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecmContractWf:contractTimeToDate">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecmContractWf:contractTimeBaseOnDocument">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
     </types>
 </model>

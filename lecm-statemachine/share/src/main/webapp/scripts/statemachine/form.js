@@ -55,6 +55,10 @@ LogicECM.module = LogicECM.module || {};
 		onHiddenAssociationFormReady:function StartWorkflow_onObjectFinderReady(layer, args) {
 			if (args[1].fieldName == "assoc_packageItems") {
 				Dom.get(args[1].fieldId + "-added").value = this.selectedItem;
+                YAHOO.Bubbling.fire("afterSetItems",
+                    {
+                        items: this.selectedItem
+                    });
 			}
 		},
 

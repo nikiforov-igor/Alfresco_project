@@ -81,5 +81,9 @@
             <property name="cm:name">Исключение роли</property>
             <property name="lecm-busjournal:eventCategory-code">REMOVE_GROUP_ROLE</property>
         </item>
+        <item name="Выполнение действия">
+            <property name="cm:name">Выполнение действия</property>
+            <property name="lecm-busjournal:eventCategory-code">EXEC_ACTION</property>
+        </item>
     </items>
 </dictionary>

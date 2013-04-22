@@ -105,7 +105,7 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 	}
 
 	public Scriptable getConnectionsWithDocument(String documentNodeRef) {
-		ParameterCheck.mandatory("вocumentNodeRef", documentNodeRef);
+		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 		NodeRef documentRef = new NodeRef(documentNodeRef);
 		if (this.nodeService.exists(documentRef)) {
 			List<NodeRef> connections = this.documentConnectionService.getConnectionsWithDocument(documentRef);

@@ -93,6 +93,7 @@
                 <js src="/scripts/lecm-base/components/lecm-association-cascading-selectone.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
                 <js src="/scripts/lecm-base/components/lecm-validation.js" />
+                <js src="/scripts/lecm-base/components/lecm-fillproperties.js" />
                 <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />
                 <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
 				<js src="/scripts/lecm-base/components/base-utils.js" />

@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Выбор документов для контрола "Продлен на основании"</shortname>
+	<description>Выбор документов для контрола "Продлен на основании" (получает nodeRef)</description>
+	<url>/lecm/contracts/basedOnDocuments</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

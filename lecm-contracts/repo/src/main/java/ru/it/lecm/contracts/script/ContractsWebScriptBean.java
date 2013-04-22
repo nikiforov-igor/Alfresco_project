@@ -7,9 +7,13 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * User: mshafeev
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 public class ContractsWebScriptBean extends BaseWebScript {
     private ContractsBeanImpl contractService;
 	protected NodeService nodeService;
+    private BusinessJournalService businessJournalService;
 
     public void setContractService(ContractsBeanImpl contractService) {
         this.contractService = contractService;
@@ -28,7 +33,12 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		this.nodeService = nodeService;
 	}
 
-	public ScriptNode getDraftRoot() {
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+
+    public ScriptNode getDraftRoot() {
         return new ScriptNode(contractService.getDraftRoot(), serviceRegistry, getScope());
     }
 
@@ -76,6 +86,12 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		}
 	}
 
+    /**
+     * Обозначение причины удаления документа
+     *
+     * @param reasonNodeRef - ссылка на запись справочника причин удаления документа
+     * @param packageNodeRef - ссылка на пакет документов процесса
+     */
 	public void appendDeleteReason(String reasonNodeRef, String packageNodeRef) {
 		if (reasonNodeRef != null && packageNodeRef != null) {
 			NodeRef reasonRef = new NodeRef(reasonNodeRef);
@@ -88,4 +104,21 @@ public class ContractsWebScriptBean extends BaseWebScript {
 			}
 		}
 	}
+
+    /**
+     * Изменение срока договора
+     * @param document - основной документ
+     * @param fromDate - дата начала действия договора
+     * @param toDate - дата завершения действия договора
+     * @param reasonDocumentRef - стороковая ссылка на документ основание
+     */
+    public void setContractTime(ScriptNode document, Date fromDate, Date toDate, String reasonDocumentRef) {
+        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.TYPE_CONTRACTS_START_DATE, fromDate);
+        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.TYPE_CONTRACTS_END_DATE, toDate);
+
+        List<String> objects = new ArrayList<String>();
+        objects.add(reasonDocumentRef);
+        businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator изменил(а) срок действия договора #mainobject. Основанием изменения является данный документ #object1.", objects);
+    }
+
 }

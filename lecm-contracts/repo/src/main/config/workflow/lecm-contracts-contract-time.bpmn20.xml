@@ -4,14 +4,14 @@
              xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/contract/workflow/createOnBasis/1.0">
-	<process id="contractsDeleteReason" name="Причина удаления">
-		<startEvent id="startDeleteReason" name="Start" activiti:formKey="lecmContractWf:deleteReasonTask"></startEvent>
-		<endEvent id="endDeleteReason" name="End"></endEvent>
-		<scriptTask id="deleteReasonTask" name="Create Delete Reason" scriptFormat="javascript">
+	<process id="contractsContractTime" name="Изменение срока договора">
+		<startEvent id="startContractTime" name="Start" activiti:formKey="lecmContractWf:contractTimeTask"></startEvent>
+		<endEvent id="endContractTime" name="End"></endEvent>
+		<scriptTask id="deleteContractTime" name="Contract Time Script" scriptFormat="javascript">
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.appendDeleteReason(lecmContractWf_deleteReason.nodeRef, bpm_package.nodeRef);</activiti:string>
+						<activiti:string>contracts.setContractTime(bpm_package.children[0], lecmContractWf_contractTimeFromDate,lecmContractWf_contractTimeToDate, lecmContractWf_contractTimeBaseOnDocument);</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
@@ -22,21 +22,21 @@
 				<timeDuration>PT10S</timeDuration>
 			</timerEventDefinition>
 		</intermediateCatchEvent>
-		<sequenceFlow id="flow4" name="" sourceRef="startDeleteReason" targetRef="deleteReasonTask"></sequenceFlow>
-		<sequenceFlow id="flow5" name="" sourceRef="deleteReasonTask"
+		<sequenceFlow id="flow4" name="" sourceRef="startContractTime" targetRef="deleteContractTime"></sequenceFlow>
+		<sequenceFlow id="flow5" name="" sourceRef="deleteContractTime"
 		              targetRef="timerintermediatecatchevent1"></sequenceFlow>
 		<sequenceFlow id="flow6" name="" sourceRef="timerintermediatecatchevent1"
-		              targetRef="endDeleteReason"></sequenceFlow>
+		              targetRef="endContractTime"></sequenceFlow>
 	</process>
 	<bpmndi:BPMNDiagram id="BPMNDiagram_createOnBasis">
-		<bpmndi:BPMNPlane bpmnElement="contractsDeleteReason" id="BPMNPlane_contractsDeleteReason">
-			<bpmndi:BPMNShape bpmnElement="startDeleteReason" id="BPMNShape_startDeleteReason">
+		<bpmndi:BPMNPlane bpmnElement="contractsContractTime" id="BPMNPlane_deleteReason">
+			<bpmndi:BPMNShape bpmnElement="startContractTime" id="BPMNShape_startDeleteReason">
 				<omgdc:Bounds height="35" width="35" x="120" y="190"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="endDeleteReason" id="BPMNShape_endDeleteReason">
+			<bpmndi:BPMNShape bpmnElement="endContractTime" id="BPMNShape_endDeleteReason">
 				<omgdc:Bounds height="35" width="35" x="510" y="190"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="deleteReasonTask" id="BPMNShape_deleteReasonTask">
+			<bpmndi:BPMNShape bpmnElement="deleteContractTime" id="BPMNShape_deleteReasonTask">
 				<omgdc:Bounds height="55" width="105" x="220" y="180"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="timerintermediatecatchevent1" id="BPMNShape_timerintermediatecatchevent1">
