@@ -27,6 +27,7 @@
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">

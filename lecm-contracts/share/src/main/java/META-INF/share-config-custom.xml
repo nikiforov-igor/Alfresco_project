@@ -25,7 +25,7 @@
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-contract:reasonDelete-assoc"/>
+                    <show id="lecm-contract-aspect:reasonDelete-assoc"/>
 				</field-visibility>
                 <appearance>
                     <field id="lecm-contract:partner-assoc">
@@ -75,7 +75,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:reasonDelete-assoc">
+                    <field id="lecm-contract-aspect:reasonDelete-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -135,7 +135,6 @@
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-contract:reasonDelete-assoc"/>
 				</field-visibility>
 				<appearance>
                     <field id="lecm-contract:partner-assoc">
@@ -179,15 +178,6 @@
                     <field id="lecm-contract:subjectContract-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-contract:reasonDelete-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
