@@ -122,4 +122,14 @@ public class ContractsWebScriptBean extends BaseWebScript {
         businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator изменил(а) срок действия договора #mainobject. Основанием изменения является данный документ #object1.", objects);
     }
 
+	/**
+	 * Расторжение договора
+	 * @param document - основной документ
+	 * @param reasonDocumentRef - стороковая ссылка на документ основание
+	 */
+	public void terminateContract(ScriptNode document, String reasonDocumentRef) {
+		List<String> objects = new ArrayList<String>();
+		objects.add(reasonDocumentRef);
+		businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.", objects);
+	}
 }

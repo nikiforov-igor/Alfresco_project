@@ -68,5 +68,14 @@
             </properties>
         </type>
 
+		<type name="lecmContractWf:contractTerminationTask">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmContractWf:contractTerminateBaseOnDocument">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
     </types>
 </model>
