@@ -191,8 +191,11 @@ public class XMLImporter {
     }
 
     private List<XMLRoleAssociation> readRoleAssociations() throws XMLStreamException {
-        List<XMLRoleAssociation> result = new ArrayList<XMLRoleAssociation>();
+        if (!isStartTag(ExportNamespace.ROLE_ASSOCIATIONS)) {
+            return new ArrayList<XMLRoleAssociation>();
+        }
 
+        List<XMLRoleAssociation> result = new ArrayList<XMLRoleAssociation>();
         readStartTag(ExportNamespace.ROLE_ASSOCIATIONS);
         while (xmlr.hasNext() && !isEndTag(ExportNamespace.ROLE_ASSOCIATIONS)) {
             xmlr.next();
