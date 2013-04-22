@@ -34,8 +34,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="taskOwner" />
-					<show id="bpm:dueDate" />
 					<show id="lecmPaAt:approveTaskResult" />
 					<show id="bpm:comment" />
 					<show id="lecmPaAt:approveTaskCommentAssoc" />
