@@ -6,6 +6,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -940,9 +941,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     private void sendSignal(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        try {
-            runtimeService.signal(executionId.replace(ACTIVITI_PREFIX, ""));
-        } catch (NullPointerException e) {
+        Object executionObject = runtimeService.createExecutionQuery().processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (executionObject != null) {
+            ExecutionEntity execution = (ExecutionEntity) executionObject;
+            String activityId = execution.getActivityId();
+            ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(execution.getProcessDefinitionId());
+            ActivityImpl activity = processDefinitionEntity.findActivity(activityId);
+            if (activity.getActivityBehavior() instanceof ReceiveTaskActivityBehavior) {
+                runtimeService.signal(execution.getId());
+            }
         }
     }
 
