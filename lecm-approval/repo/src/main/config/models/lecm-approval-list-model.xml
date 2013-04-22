@@ -30,6 +30,7 @@
 				<property name="lecm-al:approval-item-decision">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<default>NO_DECISION</default>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -39,6 +40,7 @@
 						<constraint name="lecm-al:approval-item-decision-constraint" type="LIST">
 							<parameter name="allowedValues">
 								<list>
+									<value>NO_DECISION</value>
 									<value>APPROVED</value> <!-- согласован -->
 									<value>APPROVED_WITH_REMARK</value> <!-- согласован с замечанием -->
 									<value>REJECTED</value> <!-- отклонен -->
@@ -103,6 +105,7 @@
 				<property name="lecm-al:approval-list-decision">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<default>NO_DECISION</default>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -112,6 +115,7 @@
 						<constraint name="lecm-al:approval-list-decision-constraint" type="LIST">
 							<parameter name="allowedValues">
 								<list>
+									<value>NO_DECISION</value>
 									<value>APPROVED</value> <!-- согласован -->
 									<value>REJECTED</value> <!-- отклонен -->
 									<value>APPROVED_WITH_REMARK</value> <!-- согласован с замечанием -->
@@ -153,6 +157,19 @@
 					</index>
 				</property>
 			</properties>
+			<associations>
+				<child-association name="lecm-al:approval-list-contains-approval-item">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-al:approval-item</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
 		</type>
 	</types>
 </model>
