@@ -20,7 +20,8 @@
 										statemachine.executeActionByName(additionalDocuments[i], "Завершить исполнение");
 									}
 									if (status == "Проект зарегистирован" || status == "На доработке" ||
-											status == "На согласовании" || status == "Согласован" || status == "На подписании") {
+											status == "На согласовании" || status == "Согласован" ||
+											status == "На подписании" || status == "На подписании у контрагента") {
 										statemachine.executeActionByName(additionalDocuments[i], "Удалить");
 									}
 								}
