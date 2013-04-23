@@ -23,6 +23,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -87,6 +88,11 @@ public class DocumentPolicy extends BaseBean
                 }
             }
         }
+
+        if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
+            updatePresentString(nodeRef);
+            nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
+        }
     }
 
     private void updatePresentString(NodeRef nodeRef) {
@@ -115,13 +121,15 @@ public class DocumentPolicy extends BaseBean
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
         for (QName ignored : IGNORED_PROPERTIES) {
-            Object prev = before.get(ignored);
-            Object cur = after.get(ignored);
-            if (cur != null && !cur.equals(prev)) {
-                return true;
-            }
+            if (isChangeProperty(before, after, ignored)) return true;
         }
         return false;
+    }
+
+    private boolean isChangeProperty(Map<QName, Serializable> before, Map<QName, Serializable> after, QName prop) {
+        Object prev = before.get(prop);
+        Object cur = after.get(prop);
+        return cur != null && !cur.equals(prev);
     }
 
     @Override

@@ -1,3 +1,30 @@
+/**
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
+// Ensure LogicECM root object exists
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+/**
+ * LogicECM top-level module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module
+ */
+LogicECM.module = LogicECM.module || {};
+
+
+/**
+ * LogicECM Base module namespace.
+ *
+ * @namespace LogicECM
+ * @class LogicECM.module.DocumentsJournal
+ */
+LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
+
 (function () {
 
     LogicECM.module.DocumentsJournal.DataGrid = function (containerId) {
@@ -127,6 +154,59 @@
                 }
                 elCell.innerHTML = html;
             };
+        },
+        showCreateDialog:function (meta) {
+            // Intercept before dialog show
+            var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                var addMsg = meta.addMessage;
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-form-container_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
+                );
+            };
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                {
+                    itemKind:"type",
+                    itemId:meta.itemType,
+                    destination:meta.nodeRef,
+                    mode:"create",
+                    formId: meta.createFormId != null ? meta.createFormId : "",
+                    submitType:"json"
+                });
+
+            // Using Forms Service, so always create new instance
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+            createDetails.setOptions(
+                {
+                    width:"50em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn:doBeforeDialogShow,
+                        scope:this
+                    },
+                    onSuccess:{
+                        fn:function DataGrid_onActionCreate_success(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: this.msg("message.save.success")
+                                });
+                            window.location.href = window.location.protocol + "//" + window.location.host +
+                                Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                        },
+                        scope:this
+                    },
+                    onFailure:{
+                        fn:function DataGrid_onActionCreate_failure(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text:this.msg("message.save.failure")
+                                });
+                        },
+                        scope:this
+                    }
+                }).show();
         }
     }, true);
 })();

@@ -64,6 +64,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+                <property name="lecm-document:status-changed-date">
+                    <title>Last Status Changed Date</title>
+                    <type>d:datetime</type>
+                    <protected>true</protected>
+                </property>
 			</properties>
             <associations>
             <association name="lecm-document:doc-members-assoc">

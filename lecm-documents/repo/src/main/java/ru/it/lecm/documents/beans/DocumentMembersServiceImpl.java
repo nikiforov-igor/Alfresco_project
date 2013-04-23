@@ -156,7 +156,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
-        List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentService.ASSOC_DOC_MEMBERS);
+        List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentMembersService.ASSOC_DOC_MEMBERS);
         for (AssociationRef empMember : empMembers) {
             NodeRef member = empMember.getTargetRef();
             NodeRef employeeRef = nodeService.getTargetAssocs(member, ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();

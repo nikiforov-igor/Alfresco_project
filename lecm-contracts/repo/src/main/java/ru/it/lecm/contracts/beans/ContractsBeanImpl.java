@@ -17,11 +17,11 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: mshafeev
@@ -51,6 +51,9 @@ public class ContractsBeanImpl extends BaseBean {
     private DocumentService documentService;
     private DocumentConnectionService documentConnectionService;
     private DocumentMembersService documentMembersService;
+    private OrgstructureBean orgstructureService;
+
+    DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -187,6 +190,67 @@ public class ContractsBeanImpl extends BaseBean {
     public void appendDeleteReason(NodeRef reasonRef, NodeRef documentRef) {
 	    nodeService.addAspect(documentRef, ASPECT_CONTRACT_DELETED, null);
         nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
+    }
+
+    public List<NodeRef> getContractsByFilter(Date begin, Date end, List<NodeRef> employeesList, List<NodeRef> docsList) {
+        List<NodeRef> records = new ArrayList<NodeRef>();
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        String query = "";
+
+        // формируем базовый запрос - ищем договора и документы к договорам в папке Черновики и Документы
+        query = "(TYPE:\"" + TYPE_CONTRACTS_RECORD + "\" OR TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\") AND " +
+                "(PATH:\"" + documentService.getDraftPath() + "//*\" OR PATH:\"" + documentService.getDocumentsFolderPath() + "//*\")";
+
+        final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+
+        // Фильтр по датам последнего изменения статуса
+        query += " AND @lecm\\-document\\:status-changed-date:[" + MIN + " TO " + MAX + "]";
+
+        // фильтр по сотрудниками-создателям
+        if (employeesList != null && !employeesList.isEmpty()) {
+            boolean addOR = false;
+            String employeesFilter = "";
+            for (NodeRef employeeRef : employeesList) {
+                String personName = orgstructureService.getEmployeeLogin(employeeRef);
+                if (personName != null && !personName.isEmpty()) {
+                    employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:\'" + personName + "\'";
+                    addOR = true;
+                }
+            }
+            query += " AND (" + employeesFilter + ")";
+        }
+
+        // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
+        if (docsList != null && !docsList.isEmpty()) {
+            boolean addOR = false;
+            String docsFilter = "";
+            for (NodeRef docRef : docsList) {
+                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
+                addOR = true;
+            }
+            query += " AND (" + docsFilter + ")";
+        }
+
+        ResultSet results = null;
+        sp.setQuery(query);
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {

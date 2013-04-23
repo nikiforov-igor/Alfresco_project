@@ -60,6 +60,7 @@
 	    <property name="documentConnectionService" ref="documentConnectionService"/>
 	    <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="documentMembersService" ref="documentMembersService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
@@ -90,6 +91,7 @@
 	    <property name="nodeService" ref="nodeService"/>
         <property name="contractService" ref="contractService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="contract.businessJournalDictionaryBootstrap"

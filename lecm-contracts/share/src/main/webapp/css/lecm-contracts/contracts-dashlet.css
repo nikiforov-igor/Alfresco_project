@@ -1,0 +1,24 @@
+.dashlet .titleBarActions .arm {
+    background-image: url('/share/res/images/lecm-contracts/arm.png');
+}
+
+.lecm-dashlet-actions {
+    margin-left: 1em;
+}
+
+.dashlet .lecm-dashlet-actions .add {
+    background-image: url("/share/res/images/lecm-contracts/add_16.png");
+}
+
+.dashlet .lecm-dashlet-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 1.5em;
+    text-decoration: none;
+}
+
+.dashlet .datagrid .datagrid-bar
+{
+    margin: 0;
+    padding: 0;
+}

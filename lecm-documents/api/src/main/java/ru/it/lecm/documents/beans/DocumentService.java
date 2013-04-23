@@ -20,11 +20,12 @@ public interface DocumentService {
 
     public static final QName PROP_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "present-string");
     public static final QName PROP_LIST_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "list-present-string");
-    public static final QName ASSOC_DOC_MEMBERS = QName.createQName(DOCUMENT_NAMESPACE_URI, "doc-members-assoc");
     public static final String CONSTRAINT_PRESENT_STRING = "present-string-constraint";
 
     public static final QName PROP_RATING = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rating");
     public static final QName PROP_RATED_PERSONS_COUNT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-persons-count");
+
+    public static final QName PROP_STATUS_CHANGED_DATE = QName.createQName(DOCUMENT_NAMESPACE_URI, "status-changed-date");
 
     /**
      * Метод для получения рейтинга документа

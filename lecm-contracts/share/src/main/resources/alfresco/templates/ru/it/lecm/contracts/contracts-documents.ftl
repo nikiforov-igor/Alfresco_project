@@ -2,8 +2,7 @@
 <@templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-contracts/contracts-const.js"></@script>
-<link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-list.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-list.css" />
     <#assign filter = ""/>
     <#if page.url.args.query?? && page.url.args.query != "-" && page.url.args.query != "">
         <#assign filter = page.url.args.query/>

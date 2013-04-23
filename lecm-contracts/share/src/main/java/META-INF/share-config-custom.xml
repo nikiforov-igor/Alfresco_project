@@ -200,6 +200,19 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                 </appearance>
             </form>
+            <form id="document-journal">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:image" label=" "/>
+                    <field id="cm:name" label=" "/>
+                    <field id="lecm-document:present-string" label=" "/>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 

@@ -1,6 +1,7 @@
 package ru.it.lecm.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.mozilla.javascript.Context;
@@ -10,8 +11,11 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
+import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +28,17 @@ public class ContractsWebScriptBean extends BaseWebScript {
     private ContractsBeanImpl contractService;
 	protected NodeService nodeService;
     private BusinessJournalService businessJournalService;
+    private OrgstructureBean orgstructureService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    private static enum WhoseEnum {
+        MY,
+        DEPARTMENT,
+        MEMBER
+    }
 
     public void setContractService(ContractsBeanImpl contractService) {
         this.contractService = contractService;
@@ -105,6 +120,67 @@ public class ContractsWebScriptBean extends BaseWebScript {
 			}
 		}
 	}
+
+    public NodeRef[] getContractsByFilters(String daysCount, String userFilter){
+        Date now = new Date();
+        Date start = null;
+
+        if (daysCount != null &&  !"".equals(daysCount)) {
+            Integer days = Integer.parseInt(daysCount);
+
+            if (days > 0) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(now);
+                calendar.add(Calendar.DAY_OF_MONTH, (-1) * (days - 1));
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                start = calendar.getTime();
+            }
+        }
+
+        List<NodeRef> employees = new ArrayList<NodeRef>();
+        List<NodeRef> docs = new ArrayList<NodeRef>();
+
+        if (userFilter != null && !"".equals(userFilter)) {
+            NodeRef employee = orgstructureService.getCurrentEmployee();
+            if (employee != null) {
+                switch(WhoseEnum.valueOf(userFilter.toUpperCase())) {
+                    case MY : {
+                        employees.add(employee);
+                        break;
+                    }
+                    case DEPARTMENT: {
+                            List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(employee);
+                            employees.addAll(departmentEmployees);
+                            //departmentEmployees.add(employee);
+                        break;
+                    }
+                    case MEMBER: {
+                        List<AssociationRef> membersUnits =  nodeService.getSourceAssocs(employee, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+                        for (AssociationRef membersUnit : membersUnits) {
+                            NodeRef memberUnit = membersUnit.getSourceRef();
+                            List<AssociationRef> documents = nodeService.getSourceAssocs(memberUnit, DocumentMembersService.ASSOC_DOC_MEMBERS);
+                            for (AssociationRef document : documents) {
+                                NodeRef doc = document.getSourceRef();
+                                if (!contractService.isArchive(doc)){
+                                    docs.add(doc);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    default: {
+                        employees.add(orgstructureService.getCurrentEmployee());
+                        break;
+                    }
+                }
+            }
+        }
+
+        List<NodeRef> refs = contractService.getContractsByFilter(start, now, employees, docs);
+        return refs.toArray(new NodeRef[refs.size()]);
+    }
 
     /**
      * Изменение срока договора
