@@ -112,7 +112,7 @@
 						<properties>
 							<property>
 								<name>creationDocument</name>
-								<value>false</value>
+								<value>true</value>
 							</property>
 						</properties>
 						<aspects>
