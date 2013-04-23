@@ -214,6 +214,15 @@ function main() {
             }
             result.push(fields);
         }
+        result.sort(function sortResult(item1, item2) {
+            if (item1[0].displayValue > item2[0].displayValue) {
+                return 1;
+            } else if (item1[0].displayValue < item2[0].displayValue) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
         model.result = result;
     }
 }
