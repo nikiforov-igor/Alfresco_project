@@ -13,10 +13,13 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -180,4 +183,34 @@ public class ContractsBeanImpl extends BaseBean {
 	    nodeService.addAspect(documentRef, ASPECT_CONTRACT_DELETED, null);
         nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
     }
+
+	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> allConnections = documentConnectionService.getConnectionsWithDocument(contractRef);
+
+		if (allConnections != null && allConnections.size() > 0) {
+			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
+
+			for (NodeRef connection: allConnections) {
+				NodeRef type = null;
+				List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
+				if (typeAssoc != null && typeAssoc.size() == 1) {
+					type = typeAssoc.get(0).getTargetRef();
+				}
+				if (type != null && type.equals(connectionType)) {
+					List<AssociationRef> primaryDocumentAssoc = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT);
+					if (primaryDocumentAssoc != null && primaryDocumentAssoc.size() == 1) {
+						NodeRef additionalDocument = primaryDocumentAssoc.get(0).getTargetRef();
+						if (additionalDocument != null && documentService.isDocument(additionalDocument)) {
+							result.add(additionalDocument);
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
 }

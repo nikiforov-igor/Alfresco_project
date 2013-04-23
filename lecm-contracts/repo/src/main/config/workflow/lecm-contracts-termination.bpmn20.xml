@@ -10,7 +10,22 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.terminateContract(bpm_package.children[0], lecmContractWf_contractTerminateBaseOnDocument);</activiti:string>
+						<activiti:string>
+							contracts.terminateContract(bpm_package.children[0], lecmContractWf_contractTerminateBaseOnDocument);
+							var additionalDocuments = contracts.getAllContractDocuments(bpm_package.children[0]);
+							if (additionalDocuments != null) {
+								for (var i = 0; i &lt; additionalDocuments.length; i++) {
+									var status = statemachine.getDocumentStatus(additionalDocuments[i]);
+									if (status == "Подписан" || status == "Действует") {
+										statemachine.executeActionByName(additionalDocuments[i], "Завершить исполнение");
+									}
+									if (status == "Проект зарегистирован" || status == "На доработке" ||
+											status == "На согласовании" || status == "Согласован" || status == "На подписании") {
+										statemachine.executeActionByName(additionalDocuments[i], "Удалить");
+									}
+								}
+							}
+						</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>

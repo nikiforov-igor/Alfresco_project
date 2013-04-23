@@ -132,4 +132,9 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		objects.add(reasonDocumentRef);
 		businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.", objects);
 	}
+
+	public Scriptable getAllContractDocuments(ScriptNode document) {
+		List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
+		return createScriptable(additionalDocuments);
+	}
 }
