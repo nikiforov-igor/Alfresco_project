@@ -22,3 +22,16 @@
     margin: 0;
     padding: 0;
 }
+
+.contracts .title {
+    padding: 5px 9px 5px 9px;
+    overflow: hidden;
+}
+
+.dashlet .datagrid {
+    padding-top: 0;
+}
+
+.dashlet .scrollableList {
+    padding: 0;
+}
