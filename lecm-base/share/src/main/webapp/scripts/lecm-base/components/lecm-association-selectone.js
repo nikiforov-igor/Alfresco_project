@@ -25,8 +25,10 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.AssociationSelectOne = function LogicECM_module_AssociationSelectOne(fieldHtmlId)
     {
         LogicECM.module.AssociationSelectOne.superclass.constructor.call(this, "LogicECM.module.AssociationSelectOne", fieldHtmlId, [ "container", "resize", "datasource"]);
-        this.selectItemId = fieldHtmlId + "-added";
+        this.selectItemId = fieldHtmlId;
         this.removedItemId = fieldHtmlId + "-removed";
+        this.addedItemId = fieldHtmlId + "-added";
+        this.oldItemId = fieldHtmlId + "-old";
         this.controlId = fieldHtmlId;
         this.currentDisplayValueId = fieldHtmlId + "-currentValueDisplay";
 
@@ -50,6 +52,8 @@ LogicECM.module = LogicECM.module || {};
 	            mandatory: false,
 
                 selectedValueNodeRef: "",
+
+	            oldValue: "",
 
                 maxSearchResults: 1000,
 
@@ -75,6 +79,8 @@ LogicECM.module = LogicECM.module || {};
             selectItemId: null,
 
 	        removedItemId: null,
+
+	        addedItemId: null,
 
             currentDisplayValueId: null,
 
@@ -117,7 +123,16 @@ LogicECM.module = LogicECM.module || {};
             },
 
 	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
-	            Dom.get(this.controlId).value = this.selectItem.value;
+		        var selectValue = this.selectItem.value;
+		        var addedItem = "";
+		        var removedItem = "";
+
+		        if (selectValue != this.options.oldValue) {
+			        removedItem = this.options.oldValue;
+			        addedItem = selectValue;
+		        }
+		        Dom.get(this.removedItemId).value = removedItem;
+		        Dom.get(this.addedItemId).value = addedItem;
 
 		        if (this.options.mandatory) {
 			        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
@@ -126,9 +141,9 @@ LogicECM.module = LogicECM.module || {};
 		        YAHOO.Bubbling.fire("formValueChanged",
 			        {
 				        eventGroup:this,
-				        addedItems:this.selectItem.value,
-				        removedItems:Dom.get(this.removedItemId).value,
-				        selectedItems:this.selectItem.value,
+				        addedItems:addedItem,
+				        removedItems:removedItem,
+				        selectedItems:selectValue,
 				        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
 			        });
                 if (this.options.primaryCascading) {

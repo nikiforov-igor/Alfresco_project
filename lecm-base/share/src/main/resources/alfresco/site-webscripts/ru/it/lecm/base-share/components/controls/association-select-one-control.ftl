@@ -46,6 +46,7 @@
                 itemType: "${field.endpointType!''}",
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
+                oldValue: "${fieldValue}",
                 selectedValueNodeRef: "${fieldValue}",
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
                 showCreateNewButton: ${showCreateNewButton?string},
@@ -61,6 +62,8 @@
 <div class="form-field">
     <#if disabled>
         <div class="viewmode-field">
+	        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value}" />
+
             <#if field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
             </#if>
@@ -69,9 +72,10 @@
         </div>
     <#else>
         <label for="${fieldHtmlId}-added">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
+	    <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
+        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
         <div id="${fieldHtmlId}-controls" class="selectone-control">
-            <select id="${fieldHtmlId}-added" name="${field.name}_added" tabindex="0"
+            <select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
                     <#if field.description??>title="${field.description}"</#if>
                     <#if field.control.params.size??>size="${field.control.params.size}"</#if>
                     <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
@@ -97,5 +101,4 @@
         </div>
 
     </#if>
-    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 </div>
