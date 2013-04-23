@@ -67,7 +67,9 @@ LogicECM.module = LogicECM.module || {};
 
                 fieldId: null,
 
-	            notSelectedOptionShow: false
+	            notSelectedOptionShow: false,
+
+	            disabled: false
             },
 
             rootNode: null,
@@ -103,17 +105,20 @@ LogicECM.module = LogicECM.module || {};
             onReady: function AssociationSelectOne_onReady()
             {
                 this._loadParentNode();
-                this.selectItem = Dom.get(this.selectItemId);
-                if (this.selectItem) {
-                    this.populateSelect();
-                }
-	            YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+
+	            if (!this.options.disabled) {
+	                this.selectItem = Dom.get(this.selectItemId);
+	                if (this.selectItem) {
+	                    this.populateSelect();
+	                }
+		            YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+	            }
 
                 this.currentDisplayValueElement = Dom.get(this.currentDisplayValueId);
                 if (this.currentDisplayValueElement) {
                     this.populateCurrentValue();
                 }
-                if (this.options.showCreateNewButton) {
+                if (!this.options.disabled && this.options.showCreateNewButton) {
                     this.createNewButton =  new YAHOO.widget.Button(
                         this.controlId + "-selectone-create-new-button",
                         { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }

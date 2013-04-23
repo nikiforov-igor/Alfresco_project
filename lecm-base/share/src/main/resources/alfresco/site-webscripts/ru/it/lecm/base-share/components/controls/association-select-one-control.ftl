@@ -31,6 +31,9 @@
     var control = new LogicECM.module.AssociationSelectOne("${fieldHtmlId}").setMessages(${messages});
     control.setOptions(
             {
+	            <#if disabled>
+		            disabled: true,
+	            </#if>
                 <#if field.control.params.parentNodeRef??>
                     parentNodeRef: "${field.control.params.parentNodeRef}",
                 </#if>
