@@ -309,35 +309,37 @@ LogicECM.module = LogicECM.module || {};
             },
 
             populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
-                        successCallback:
-                        {
-                            fn: function (response) {
-                                var properties = response.json.properties;
-                                var name = this.options.nameSubstituteString;
-                                for (var i = 0; i < properties.length; i++) {
-                                    var prop = properties[i];
-                                    if (prop.name && prop.values[0]) {
-                                        var propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
-                                        if (name.indexOf(propSubstName) != -1) {
-                                            name = name.replace(propSubstName, prop.values[0].value);
-                                        }
-                                    }
-                                }
-                                this.currentDisplayValueElement.innerHTML = name;
-                            },
-                            scope: this
-                        },
-                        failureCallback:
-                        {
-                            fn: function (response) {
-                                //todo show error message
-                            },
-                            scope: this
-                        }
-                    });
+	            if (this.options.selectedValueNodeRef != null && this.options.selectedValueNodeRef.length > 0) {
+	                Alfresco.util.Ajax.jsonGet(
+	                    {
+	                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
+	                        successCallback:
+	                        {
+	                            fn: function (response) {
+	                                var properties = response.json.properties;
+	                                var name = this.options.nameSubstituteString;
+	                                for (var i = 0; i < properties.length; i++) {
+	                                    var prop = properties[i];
+	                                    if (prop.name && prop.values[0]) {
+	                                        var propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
+	                                        if (name.indexOf(propSubstName) != -1) {
+	                                            name = name.replace(propSubstName, prop.values[0].value);
+	                                        }
+	                                    }
+	                                }
+	                                this.currentDisplayValueElement.innerHTML = name;
+	                            },
+	                            scope: this
+	                        },
+	                        failureCallback:
+	                        {
+	                            fn: function (response) {
+	                                //todo show error message
+	                            },
+	                            scope: this
+	                        }
+	                    });
+	            }
             },
 
             _createDataSource: function AssociationSelectOne__createDataSource() {
