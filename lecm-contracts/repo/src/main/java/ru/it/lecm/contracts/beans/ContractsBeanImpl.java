@@ -254,14 +254,6 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<AssociationRef> allAdditionalDocument = nodeService.getSourceAssocs(contractRef,ASSOC_DOCUMENT);
-
-        if (allAdditionalDocument != null && allAdditionalDocument.size() > 0) {
-            for (AssociationRef document : allAdditionalDocument ) {
-                result.add(document.getSourceRef());
-            }
-        }
-		return result;
+		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
 	}
 }
