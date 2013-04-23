@@ -281,38 +281,12 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	}
 
     private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
-        String docType = nodeService.getType(document).toPrefixString(namespaceService).replaceAll(":", "_");
-        NodeRef memberUnit = getOrCreateDocMembersUnit(docType);
+        NodeRef memberUnit = documentMembersService.getMembersUnit(nodeService.getType(document));
         try {
             nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
         } catch (AssociationExistsException ex) {
-            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + docType, ex);
+            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document), ex);
         }
-    }
-
-    private synchronized NodeRef getOrCreateDocMembersUnit(final String docType) {
-        NodeRef unitRef = nodeService.getChildByName(documentMembersService.getRoot(), ContentModel.ASSOC_CONTAINS, docType);
-        if (unitRef == null) {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            NodeRef directoryRef;
-                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, docType);
-                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                            properties.put(ContentModel.PROP_NAME, docType);
-                            directoryRef = nodeService.createNode(documentMembersService.getRoot(), assocTypeQName, assocQName, DocumentMembersService.TYPE_DOC_MEMBERS_UNIT, properties).getChildRef();
-                            return directoryRef;
-                        }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
-        }
-        return unitRef;
     }
 
     public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {

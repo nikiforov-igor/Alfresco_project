@@ -34,6 +34,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     public static final int MAX_ITEMS = 1000;
     private LecmObjectsService lecmObjectsService;
     private LecmPermissionService lecmPermissionService;
+    private NamespaceService namespaceService;
 
     private NodeRef ROOT;
 
@@ -43,6 +44,10 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 
     public void init() {
@@ -155,6 +160,12 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return getServiceRootFolder();
     }
 
+    @Override
+    public NodeRef getMembersUnit(QName docType) {
+        String type = docType.toPrefixString(namespaceService).replaceAll(":", "_");
+        return  getOrCreateDocMembersUnit(type);
+    }
+
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
         List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentMembersService.ASSOC_DOC_MEMBERS);
         for (AssociationRef empMember : empMembers) {
@@ -171,4 +182,29 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 	public NodeRef getServiceRootFolder() {
 		return ROOT;
 	}
+
+    private synchronized NodeRef getOrCreateDocMembersUnit(final String docType) {
+        NodeRef unitRef = nodeService.getChildByName(getRoot(), ContentModel.ASSOC_CONTAINS, docType);
+        if (unitRef == null) {
+            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            NodeRef directoryRef;
+                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, docType);
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                            properties.put(ContentModel.PROP_NAME, docType);
+                            directoryRef = nodeService.createNode(getRoot(), assocTypeQName, assocQName, DocumentMembersService.TYPE_DOC_MEMBERS_UNIT, properties).getChildRef();
+                            return directoryRef;
+                        }
+                    });
+                }
+            };
+            return AuthenticationUtil.runAsSystem(raw);
+        }
+        return unitRef;
+    }
 }

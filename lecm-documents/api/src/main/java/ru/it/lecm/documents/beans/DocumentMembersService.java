@@ -42,4 +42,6 @@ public interface DocumentMembersService {
     String generateMemberNodeName(NodeRef member);
 
     NodeRef getRoot();
+
+    NodeRef getMembersUnit(QName docType);
 }

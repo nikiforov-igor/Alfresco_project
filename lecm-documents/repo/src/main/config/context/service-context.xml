@@ -218,6 +218,7 @@
         <property name="lecmObjectsService" ref="lecmObjectsService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <property name="namespaceService" ref="namespaceService"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
             <map>
