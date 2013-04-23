@@ -15,8 +15,9 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
+<@bpage.basePage showToolbar=false>
     <#if hasPermission>
+    <@region id="toolbar" scope="template"/>
     <div class="yui-gc">
         <div id="main-region" class="yui-u first">
             <div class="yui-gd grid columnSize2">
