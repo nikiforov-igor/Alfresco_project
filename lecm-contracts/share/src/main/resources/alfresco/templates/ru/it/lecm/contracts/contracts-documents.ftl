@@ -17,7 +17,6 @@
 
 <@bpage.basePage showToolbar=false>
     <#if hasPermission>
-    <@region id="toolbar" scope="template"/>
     <div class="yui-gc">
         <div id="main-region" class="yui-u first">
             <div class="yui-gd grid columnSize2">
@@ -25,6 +24,7 @@
                     <@region id="contracts-documents-filter" scope="template" />
                 </div>
                 <div class="yui-u column2">
+                    <@region id="toolbar" scope="template" />
                     <@region id="contracts-documents-grid" scope="template" />
                 </div>
             </div>

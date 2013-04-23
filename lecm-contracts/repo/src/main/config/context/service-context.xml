@@ -183,4 +183,20 @@
 		</property>
 		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
 	</bean>
+
+    <bean id="additionalDocumentOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.AdditionalDocumentOnCreateAssocsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
 </beans>

@@ -455,6 +455,21 @@
                     <show id="lecm-additional-document:summaryContent"/>
                 </field-visibility>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-additional-document:number"/>
+                    <show id="lecm-additional-document:counterparty" force="true"/>
+                    <show id="lecm-additional-document:additionalDocumentType"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-additional-document:date"/>
+                    <show id="lecm-additional-document:contractType" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-additional-document:counterparty" substituteString="{lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}"/>
+                    <field id="lecm-additional-document:contractType" substituteString="{lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:name}"/>
+                    <field id="lecm-statemachine:status" label-id="contract.status"/>
+                </appearance>
+            </form>
         </forms>
     </config>
 

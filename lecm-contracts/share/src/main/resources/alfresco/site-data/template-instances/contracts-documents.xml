@@ -17,7 +17,7 @@
             <url>/lecm/contracts/toolbar</url>
             <properties>
                 <showCreateBtn>false</showCreateBtn>
-                <bubblingLabel>documents</bubblingLabel>
+                <bubblingLabel>contracts-documents</bubblingLabel>
             </properties>
         </component>
         <!-- Menu -->
