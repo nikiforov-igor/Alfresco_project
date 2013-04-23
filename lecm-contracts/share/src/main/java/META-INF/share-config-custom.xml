@@ -415,7 +415,7 @@
                 <field-visibility>
                     <show id="lecm-statemachine:status"/>
                     <show id="lecm-additional-document:additionalDocumentType"/>
-                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-additional-document:document-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-statemachine:status">
@@ -427,7 +427,7 @@
                 <field-visibility>
                     <show id="lecm-statemachine:status"/>
                     <show id="lecm-additional-document:additionalDocumentType"/>
-                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-additional-document:document-assoc"/>
                 </field-visibility>
             </form>
         </forms>

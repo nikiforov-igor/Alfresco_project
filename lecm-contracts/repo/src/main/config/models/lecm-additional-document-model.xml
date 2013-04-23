@@ -72,6 +72,18 @@
                         <many>false</many>
                     </target>
                 </association>
+                <!-- Документ основание -->
+                <association name="lecm-additional-document:document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract:document</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
             </associations>
         </type>
     </types>

@@ -13,13 +13,10 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +41,7 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName TYPE_CONTRACTS_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
 
     public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
+    public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
 	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "reasonDelete-assoc");
 
 	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
@@ -91,6 +89,12 @@ public class ContractsBeanImpl extends BaseBean {
 		return  documentService.getDraftPath(CONTRACTS);
 	}
 
+    /**
+     * Поиск договоров
+     * @param path путь где следует искать
+     * @param statuses статусы договоров
+     * @return
+     */
     public List<NodeRef> getContracts(ArrayList<String> path, ArrayList<String> statuses) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
@@ -165,6 +169,7 @@ public class ContractsBeanImpl extends BaseBean {
 		if (additionalDocumentAssociationRef != null && additionalDocumentAssociationRef.getChildRef() != null) {
 			NodeRef additionalDocumentRef = additionalDocumentAssociationRef.getChildRef();
 			nodeService.createAssociation(additionalDocumentRef, typeRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE);
+			nodeService.createAssociation(additionalDocumentRef, documentRef, ASSOC_DOCUMENT);
 
 			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
 					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
