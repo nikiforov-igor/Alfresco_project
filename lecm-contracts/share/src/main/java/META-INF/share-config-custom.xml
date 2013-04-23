@@ -421,6 +421,13 @@
                     <field id="lecm-statemachine:status">
                         <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
                     </field>
+	                <field id="lecm-additional-document:document-assoc">
+		                <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
+			                <control-param name="showTargetLink">true</control-param>
+			                <control-param name="targetLink">document?nodeRef={nodeRef}</control-param>
+			                <control-param name="nameSubstituteString">{lecm-contract:regNumSystem}</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
             <form id="document">

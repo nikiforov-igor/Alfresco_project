@@ -20,6 +20,9 @@
                     viewOnLinkClick: ${field.control.params.viewOnLinkClick},
 	            </#if>
             </#if>
+            <#if field.control.params.targetLink??>
+	            linkToTarget: "${field.control.params.targetLink}",
+            </#if>
             <#if field.control.params.allowNavigationToContentChildren??>
                 allowNavigationToContentChildren: ${field.control.params.allowNavigationToContentChildren},
             </#if>

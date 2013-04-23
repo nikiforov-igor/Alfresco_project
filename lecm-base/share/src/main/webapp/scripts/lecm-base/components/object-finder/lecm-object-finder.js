@@ -253,6 +253,8 @@ LogicECM.module = LogicECM.module || {};
           * @default false
           */
          showLinkToTarget: false,
+
+	     linkToTarget: "document-details?nodeRef={nodeRef}",
          
          /**
           * Template string or function to use for link to target nodes, must
@@ -1063,7 +1065,7 @@ LogicECM.module = LogicECM.module || {};
                              }
                              else {
                                  //Discard template, build link from scratch
-                                 var linkTemplate = (item.site) ? Alfresco.constants.URL_PAGECONTEXT + "site/{site}/document-details?nodeRef={nodeRef}" : Alfresco.constants.URL_PAGECONTEXT + "document-details?nodeRef={nodeRef}";
+                                 var linkTemplate = (item.site) ? Alfresco.constants.URL_PAGECONTEXT + "site/{site}/" + this.options.linkToTarget : Alfresco.constants.URL_PAGECONTEXT + this.options.linkToTarget;
                                  link = YAHOO.lang.substitute(linkTemplate,
                                      {
                                          nodeRef: item.nodeRef,
