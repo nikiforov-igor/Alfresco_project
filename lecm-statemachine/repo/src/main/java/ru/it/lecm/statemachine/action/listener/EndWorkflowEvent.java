@@ -80,7 +80,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 			}
 
 			if (variables != null) {
-				helper.getOutputVariables(statemachineId, executionId, variables);
+				helper.getOutputVariables(statemachineId, delegateExecution.getVariables(), variables);
 			}
 
 			String taskId = helper.getCurrentTaskId(statemachineId);
