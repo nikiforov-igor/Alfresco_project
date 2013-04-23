@@ -160,6 +160,10 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
     }
 
+    public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
+        return stateMachineHelper.executeUserAction(document.getNodeRef(), actionName);
+    }
+
     public String[] getStatuses(String documentType) {
         List<String> statuses = stateMachineHelper.getStatuses(documentType);
         return statuses.toArray(new String[statuses.size()]);

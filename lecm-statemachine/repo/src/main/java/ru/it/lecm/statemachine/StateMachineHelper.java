@@ -575,7 +575,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return executeUserAction(document, actionId, FinishStateWithTransitionAction.class, null);
     }
 
-    public TransitionResponse executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
+    public TransitionResponse executeActionByName(NodeRef document, String actionName) {
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String currentTask = getCurrentTaskId(statemachineId);
+        TransitionResponse response = new TransitionResponse();
+        List<StateMachineAction> actions = getTaskActionsByName(currentTask, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+        FinishStateWithTransitionAction.NextState nextState = null;
+        String id = "";
+        for (StateMachineAction action : actions) {
+            FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
+            List<FinishStateWithTransitionAction.NextState> states = finishStateWithTransitionAction.getStates();
+            for (FinishStateWithTransitionAction.NextState state : states) {
+                if (state.getLabel().equalsIgnoreCase(actionName)) {
+                    id = state.getActionId();
+                }
+            }
+        }
+        response = executeUserAction(document, id);
+        return response;
+    }
+
+
+        public TransitionResponse executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String currentTask = getCurrentTaskId(statemachineId);
         TransitionResponse response = new TransitionResponse();
@@ -768,6 +789,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return result;
     }
+
+
 
     private TransitionResponse executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
         TransitionResponse response = new TransitionResponse();
