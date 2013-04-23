@@ -191,31 +191,13 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<NodeRef> allConnections = documentConnectionService.getConnectionsWithDocument(contractRef);
+		List<AssociationRef> allAdditionalDocument = nodeService.getSourceAssocs(contractRef,ASSOC_DOCUMENT);
 
-		if (allConnections != null && allConnections.size() > 0) {
-			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
-					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-					DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
-
-			for (NodeRef connection: allConnections) {
-				NodeRef type = null;
-				List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_CONNECTION_TYPE);
-				if (typeAssoc != null && typeAssoc.size() == 1) {
-					type = typeAssoc.get(0).getTargetRef();
-				}
-				if (type != null && type.equals(connectionType)) {
-					List<AssociationRef> primaryDocumentAssoc = nodeService.getTargetAssocs(connection, DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT);
-					if (primaryDocumentAssoc != null && primaryDocumentAssoc.size() == 1) {
-						NodeRef additionalDocument = primaryDocumentAssoc.get(0).getTargetRef();
-						if (additionalDocument != null && documentService.isDocument(additionalDocument)) {
-							result.add(additionalDocument);
-						}
-					}
-				}
-			}
-		}
+        if (allAdditionalDocument != null && allAdditionalDocument.size() > 0) {
+            for (AssociationRef document : allAdditionalDocument ) {
+                result.add(document.getSourceRef());
+            }
+        }
 		return result;
 	}
 }
