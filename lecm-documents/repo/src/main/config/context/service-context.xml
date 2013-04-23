@@ -219,6 +219,7 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
             <map>

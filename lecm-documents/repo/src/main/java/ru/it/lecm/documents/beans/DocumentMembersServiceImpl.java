@@ -6,6 +6,7 @@ import org.alfresco.query.PagingResults;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -37,9 +38,14 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     private NamespaceService namespaceService;
 
     private NodeRef ROOT;
+    private DictionaryService dictionaryService;
 
     public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
         this.lecmObjectsService = lecmObjectsService;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
@@ -162,8 +168,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     @Override
     public NodeRef getMembersUnit(QName docType) {
-        String type = docType.toPrefixString(namespaceService).replaceAll(":", "_");
-        return  getOrCreateDocMembersUnit(type);
+        if (dictionaryService.isSubClass(docType, DocumentService.TYPE_BASE_DOCUMENT)) {
+            String type = docType.toPrefixString(namespaceService).replaceAll(":", "_");
+            return getOrCreateDocMembersUnit(type);
+        }
+        return null;
     }
 
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
