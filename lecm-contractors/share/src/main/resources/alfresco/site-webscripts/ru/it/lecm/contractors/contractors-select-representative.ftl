@@ -55,36 +55,40 @@
             YAHOO.util.Event.onAvailable( "${controlId}", function() {
                 var currentInputEl = YAHOO.util.Dom.get( "${controlId}" );
 
-                Alfresco.util.Ajax.jsonGet({
-                    url: Alfresco.constants.PROXY_URI + "slingshot/node/" + currentInputEl.value.replace("://", "/"),
-                    successCallback:
-                    {
-                        fn: function (response) {
-                            var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
-                                    properties = response.json.properties,
-                                    name = this.options.nameSubstituteString,
-                                    i, prop, propSubstName;
+                if (currentInputEl !== null && currentInputEl.value.length > 0) {
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + currentInputEl.value.replace("://", "/"),
+                        successCallback:
+                        {
+                            fn: function (response) {
+                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
+                                        properties = response.json.properties,
+                                        name = this.options.nameSubstituteString,
+                                        i, prop, propSubstName;
 
-                            for( i = 0; i < properties.length; i++ ) {
-                                prop = properties[i];
-                                if (prop.name && prop.values[0]) {
-                                    propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
-                                    if (name.indexOf(propSubstName) != -1) {
-                                        name = name.replace(propSubstName, prop.values[0].value);
+
+
+                                for( i = 0; i < properties.length; i++ ) {
+                                    prop = properties[i];
+                                    if (prop.name && prop.values[0]) {
+                                        propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
+                                        if (name.indexOf(propSubstName) != -1) {
+                                            name = name.replace(propSubstName, prop.values[0].value);
+                                        }
                                     }
+                                    currentDisplayValueElement.innerHTML = name;
                                 }
-                                currentDisplayValueElement.innerHTML = name;
-                            }
+                            },
+                            scope: this
                         },
-                        scope: this
-                    },
-                    failureCallback:
-                    {
-                        fn: function (response) {
-                        },
-                        scope: this
-                    }
-                });
+                        failureCallback:
+                        {
+                            fn: function (response) {
+                            },
+                            scope: this
+                        }
+                    });
+                }
             }, this, true);
 
             return this;
