@@ -261,4 +261,18 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
+
+    public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName) {
+        NodeRef attachments = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, DOCUMENT_ATTACHMENTS_ROOT_NAME);
+        NodeRef category = nodeService.getChildByName(attachments, ContentModel.ASSOC_CONTAINS, categoryName);
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        if (category != null) {
+            List<ChildAssociationRef> children = nodeService.getChildAssocs(category);
+            for (ChildAssociationRef child : children) {
+                result.add(child.getChildRef());
+            }
+        }
+        return result;
+    }
+
 }
