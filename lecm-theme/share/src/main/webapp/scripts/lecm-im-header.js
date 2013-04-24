@@ -79,13 +79,14 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
                 var count = args[1].count;
                 var elem = Dom.get("msgCounter");
 
-                elem.innerHTML = count;
                 if (count > 0) {
                     Dom.removeClass(elem, "hidden");
                     context.startHighlighting(context);
+                    elem.innerHTML = (count>99) ? "∞" : count;
                 } else {
                     Dom.addClass(elem, "hidden");
                     context.stopHighlighting(context);
+                    elem.innerHTML = "0";
                 }
             };
         },
@@ -126,7 +127,9 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
 
         startHighlighting : function (context) {
             if (!context.highLighterIntervalID){
-                context.highLighterIntervalID = setInterval(context.createIntervalHandler(context), 750);
+                var handler = context.createIntervalHandler(context);
+                context.highLighterIntervalID = setInterval(handler, 750);
+                handler();
             }
         },
 

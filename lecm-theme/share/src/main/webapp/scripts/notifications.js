@@ -61,13 +61,50 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		skipItemsCount: 0,
 
+        buttonDomElement : null,
+        originalBackgroundImage: null,
+
+        highLighterIntervalID : null,
+
 		// функция вызываемая при окончании инициализации базового модуля
 		onReady: function () {
 			this.createNotifyer();
 			this.startLoadNewNotifications();
 
 			this.initButton();
+            this.initHighLighter();
 		},
+
+        initHighLighter : function () {
+            var msgCounter = Dom.get(this.notificationsCounterId);
+            this.buttonDomElement = msgCounter.parentElement.previousSibling.previousSibling;
+            this.originalBackgroundImage = this.buttonDomElement.style.backgroundImage;
+        },
+
+        stopHighlighting : function (context) {
+            if (context.highLighterIntervalID){
+                clearInterval(context.highLighterIntervalID);
+                context.highLighterIntervalID = null;
+                context.buttonDomElement.style.backgroundImage = context.originalBackgroundImage;
+            }
+        },
+
+        startHighlighting : function (context) {
+            if (!context.highLighterIntervalID){
+                var handler = context.createIntervalHandler(context);
+                context.highLighterIntervalID = setInterval(handler, 750);
+                handler();
+            }
+        },
+
+        createIntervalHandler : function(context){
+            return function () {
+                context.buttonDomElement.style.backgroundImage =
+                    (context.buttonDomElement.style.backgroundImage.indexOf("_light.png") > 0 ) ?
+                        context.originalBackgroundImage.replace(".png", "_black.png") :
+                        context.originalBackgroundImage.replace(".png", "_light.png") ;
+            };
+        },
 
 		// Добавление счетчика
 		createNotifyer: function(){
@@ -83,6 +120,11 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		checkVisibleCounter: function(count) {
             Dom.setStyle(this.notificationsCounterId, "display", count > 0 ? "block" : "none");
+            if (count > 0){
+                this.startHighlighting(this);
+            }else{
+                this.stopHighlighting(this);
+            }
 		},
 
 		createWindow: function(div) {
@@ -147,7 +189,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					if (oResults && oResults.newCount) {
 						var elem = Dom.get(me.notificationsCounterId);
 						if (elem != null) {
-							elem.innerHTML = oResults.newCount;
+							elem.innerHTML = (oResults.newCount > 99) ? "∞" : oResults.newCount;
 							me.checkVisibleCounter(oResults.newCount);
 						}
 					} else {

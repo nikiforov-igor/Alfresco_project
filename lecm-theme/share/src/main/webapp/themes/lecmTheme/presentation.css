@@ -148,7 +148,7 @@ a:hover {
     height: 0;
 }
 /* Utils: end */
-
+/*
 .headerCounter {
     width: 22px;
     height : 22px;
@@ -162,11 +162,26 @@ a:hover {
     vertical-align: middle;
     font-size: 16px;
     font-weight: bold;
-    /*background-color: green;*/
     color: #00B0EB;
     cursor: pointer;
-}
+} */
 
+.headerCounter {
+    min-width:16px;
+    width:16px;
+    max-width:16px;
+    position: absolute;
+    top: 48%; /* 35*/
+    left: 50%;       /* 49*/
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 11px;
+    font-weight: bold;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: Arial Bold;
+}
 /*
 .logo{
   display:none;
