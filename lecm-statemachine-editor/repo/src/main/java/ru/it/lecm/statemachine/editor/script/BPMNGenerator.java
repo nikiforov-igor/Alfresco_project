@@ -795,7 +795,7 @@ public class BPMNGenerator {
             }
             Element extension = doc.createElement("activiti:taskListener");
             extension.setAttribute("event", eventType);
-            extension.setAttribute("class", "ru.it.lecm.workflow.LecmScriptTaskListener");
+            extension.setAttribute("class", "org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener");
             extensions.appendChild(extension);
 
             Element activitiField = doc.createElement("activiti:field");

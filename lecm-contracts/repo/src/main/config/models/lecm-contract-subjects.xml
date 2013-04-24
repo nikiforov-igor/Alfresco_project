@@ -9,19 +9,19 @@
 	<items>
 		<item name="Электроэнергетика">
 			<property name="cm:name">Электроэнергетика</property>
-			<property name="lecm-contract-dic:contract-subjects-code">electricity</property>
+			<property name="lecm-contract-dic:contract-subjects-code">01</property>
 		</item>
 		<item name="Доставка воды">
 			<property name="cm:name">Доставка воды</property>
-			<property name="lecm-contract-dic:contract-subjects-code">waterDelivery</property>
+			<property name="lecm-contract-dic:contract-subjects-code">02</property>
 		</item>
 		<item name="Кейтеринг">
 			<property name="cm:name">Кейтеринг</property>
-			<property name="lecm-contract-dic:contract-subjects-code">catering</property>
+			<property name="lecm-contract-dic:contract-subjects-code">03</property>
 		</item>
 		<item name="Поставка товаров для государственных нужд">
 			<property name="cm:name">Поставка товаров для государственных нужд</property>
-			<property name="lecm-contract-dic:contract-subjects-code">supplyGoods</property>
+			<property name="lecm-contract-dic:contract-subjects-code">04</property>
 		</item>
 	</items>
 </dictionary>

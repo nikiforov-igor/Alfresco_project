@@ -53,7 +53,7 @@
 	</bean>
 
     <bean id="contractService" class="ru.it.lecm.contracts.beans.ContractsBeanImpl" parent="baseBean"
-          depends-on="nodeService, documentService, documentConnectionService,documentMembersService">
+          depends-on="nodeService, documentService, documentConnectionService,documentMembersService,regNumbersService">
         <property name="nodeService" ref="nodeService"/>
         <property name="searchService" ref="searchService"/>
 	    <property name="documentService" ref="documentService"/>
@@ -61,6 +61,7 @@
 	    <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="regNumbersService" ref="regNumbersService"/>
     </bean>
 
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"

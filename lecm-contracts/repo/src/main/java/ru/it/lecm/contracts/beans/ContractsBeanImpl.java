@@ -12,12 +12,17 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.regnumbers.RegNumbersService;
+import ru.it.lecm.regnumbers.template.TemplateParseException;
+import ru.it.lecm.regnumbers.template.TemplateRunException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,12 +51,20 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
 
+	public static final QName PROP_REGNUM_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumProject");
+	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
+
+	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE = "{#employeeOrgUnitCode(doc.creator)}-{doc.associatedAttributePath('lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code')}-{#formatNumber('0000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}";
+
+	final static protected Logger logger = LoggerFactory.getLogger(ContractsBeanImpl.class);
+
     private SearchService searchService;
 	private DictionaryBean dictionaryService;
     private DocumentService documentService;
     private DocumentConnectionService documentConnectionService;
     private DocumentMembersService documentMembersService;
     private OrgstructureBean orgstructureService;
+	private RegNumbersService regNumbersService;
 
     DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
@@ -74,6 +87,10 @@ public class ContractsBeanImpl extends BaseBean {
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;
     }
+
+	public void setRegNumbersService(RegNumbersService regNumbersService) {
+		this.regNumbersService = regNumbersService;
+	}
 
 	@Override
     public NodeRef getServiceRootFolder() {
@@ -255,5 +272,9 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
+	}
+
+	public void registrationContractProject(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
+		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_PROJECT, CONTRACT_PROJECT_REGNUM_TEMPLATE);
 	}
 }
