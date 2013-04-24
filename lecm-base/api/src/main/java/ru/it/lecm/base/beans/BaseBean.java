@@ -36,6 +36,11 @@ public abstract class BaseBean implements InitializingBean {
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/document/1.0", "base");
 
+	public static final String LINK_URL = "/share/page/view-metadata";
+	public static final String DOCUMENT_LINK_URL = "/share/page/document";
+	public static final String WORKFLOW_LINK_URL = "/share/page/workflow-details";
+	public static final String DOCUMENT_ATTACHMENT_LINK_URL = "/share/page/document-attachment";
+
 	/**
 	 * карта с папками из декларативного описания бина
 	 */
@@ -85,6 +90,10 @@ public abstract class BaseBean implements InitializingBean {
 
 	public void setNotificationChannels(List<String> notificationChannels) {
 		this.notificationChannels = notificationChannels;
+	}
+
+	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+		this.serviceRegistry = serviceRegistry;
 	}
 
 	@Override

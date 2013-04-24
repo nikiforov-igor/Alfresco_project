@@ -60,7 +60,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 	private String grantDynaRoleCode = "BR_MEMBER";
 	private LecmPermissionService lecmPermissionService;
-	private final String DOC_LINK = "/share/page/document";
 
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
 
@@ -178,7 +177,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	        notification.setRecipientEmployeeRefs(employeeList);
 	        notification.setAutor(authService.getCurrentUserName());
 	        notification.setDescription("Вы приглашены как новый участник в документ " +
-			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOC_LINK));
+			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
 	        notification.setObjectRef(docRef);
 	        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
 	        notificationService.sendNotification(this.notificationChannels, notification);

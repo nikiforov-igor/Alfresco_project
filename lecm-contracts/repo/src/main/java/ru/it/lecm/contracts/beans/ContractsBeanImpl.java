@@ -19,6 +19,8 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
@@ -48,6 +50,8 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
 	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "reasonDelete-assoc");
+	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
+	public static final QName ASSOC_CONTRACT_SUBJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "subjectContract-assoc");
 
 	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
 
@@ -59,7 +63,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACT_REGNUM_TEMPLATE = "{#employeeOrgUnitCode(doc.creator)}-{#formatNumber('0000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}";
 	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE = "{#employeeOrgUnitCode(doc.creator)}-{doc.associatedAttributePath('lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code')}-{#formatNumber('0000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}";
 
-	final static protected Logger logger = LoggerFactory.getLogger(ContractsBeanImpl.class);
+	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 
     private SearchService searchService;
 	private DictionaryBean dictionaryService;
@@ -68,6 +72,7 @@ public class ContractsBeanImpl extends BaseBean {
     private DocumentMembersService documentMembersService;
     private OrgstructureBean orgstructureService;
 	private RegNumbersService regNumbersService;
+	private NotificationsService notificationService;
 
     DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
@@ -93,6 +98,10 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public void setRegNumbersService(RegNumbersService regNumbersService) {
 		this.regNumbersService = regNumbersService;
+	}
+
+	public void setNotificationService(NotificationsService notificationService) {
+		this.notificationService = notificationService;
 	}
 
 	@Override
@@ -278,12 +287,55 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void registrationContractProject(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
-		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_PROJECT, CONTRACT_PROJECT_REGNUM_TEMPLATE);
+		String documentNumber = regNumbersService.getNumber(contractRef, CONTRACT_PROJECT_REGNUM_TEMPLATE);
+		nodeService.setProperty(contractRef, PROP_REGNUM_PROJECT, documentNumber);
+		nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT_PROJECT, new Date());
+
+		// уведомление
+		List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
+		StringBuilder notificationText = new StringBuilder();
+		notificationText.append("Зарегистрирован проект договора номер ");
+		notificationText.append(wrapperLink(contractRef, documentNumber, DOCUMENT_LINK_URL));
+		notificationText.append(", вид договора ").append(getContractType(contractRef));
+		notificationText.append(", тематика ").append(getContractSubject(contractRef));
+		notificationText.append(", исполнитель ");
+		NodeRef executor = getContractExecutor(contractRef);
+		String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
+		notificationText.append(wrapperLink(executor, executorName, LINK_URL));
+
+		Notification notification = new Notification();
+		notification.setRecipientEmployeeRefs(curators);
+		notification.setAutor(authService.getCurrentUserName());
+		notification.setDescription(notificationText.toString());
+		notification.setObjectRef(contractRef);
+		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+		notificationService.sendNotification(this.notificationChannels, notification);
 	}
 
 	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
 		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_SYSTEM, CONTRACT_REGNUM_TEMPLATE);
 		nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
+	}
+
+	public String getContractType(NodeRef contractRef) {
+		NodeRef type = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_TYPE, null, ASSOCIATION_TYPE.TARGET);
+		if (type != null) {
+			return nodeService.getProperty(type, ContentModel.PROP_NAME).toString();
+		}
+		return null;
+	}
+
+	public String getContractSubject(NodeRef contractRef) {
+		NodeRef subject = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_SUBJECT, null, ASSOCIATION_TYPE.TARGET);
+		if (subject != null) {
+			return nodeService.getProperty(subject, ContentModel.PROP_NAME).toString();
+		}
+		return null;
+	}
+
+	public NodeRef getContractExecutor(NodeRef contractRef) {
+		String creator = (String) nodeService.getProperty(contractRef, ContentModel.PROP_CREATOR);
+		return orgstructureService.getEmployeeByPerson(creator);
 	}
 
     public List<NodeRef> getAdditionalDocs(String filter) {

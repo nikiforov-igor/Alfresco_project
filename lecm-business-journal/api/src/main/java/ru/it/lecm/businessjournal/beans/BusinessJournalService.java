@@ -93,11 +93,6 @@ public interface BusinessJournalService {
 	DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 	String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
 
-	String LINK_URL = "/share/page/view-metadata";
-    String DOCUMENT_LINK_URL = "/share/page/document";
-    String WORKFLOW_LINK_URL = "/share/page/workflow-details";
-    String DOCUMENT_ATTACHMENT_LINK_URL = "/share/page/document-attachment";
-
     String ACTIVITI_PREFIX = "activiti$";
 
     /**

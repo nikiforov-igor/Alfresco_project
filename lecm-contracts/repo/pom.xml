@@ -109,6 +109,11 @@
 		    <version>${project.version}</version>
 		    <scope>provided</scope>
 	    </dependency>
+	    <dependency>
+		    <groupId>ru.it.lecm.notifications</groupId>
+		    <artifactId>notifications-repo-api</artifactId>
+		    <version>${project.version}</version>
+	    </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

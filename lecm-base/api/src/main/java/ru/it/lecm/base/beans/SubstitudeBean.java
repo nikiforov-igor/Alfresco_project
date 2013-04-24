@@ -64,8 +64,6 @@ public interface SubstitudeBean {
 
     final String AUTHOR = "AUTHOR";
 
-    final String LINK_URL = "/share/page/view-metadata";
-
     final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
     final String DEFAULT_OBJECT_TYPE_LIST_TEMPLATE = "автор : {!~AUTHOR}, дата изменения: {cm:modified}";
 

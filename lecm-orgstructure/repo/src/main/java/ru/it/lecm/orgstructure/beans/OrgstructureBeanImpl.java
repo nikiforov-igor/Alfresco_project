@@ -742,6 +742,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
+	public List<NodeRef> getEmployeesByBusinessRole(String businessRoleId) {
+		NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleId);
+		if (businessRole != null) {
+			return getEmployeesByBusinessRole(businessRole);
+		}
+		return null;
+	}
+
+	@Override
 	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
