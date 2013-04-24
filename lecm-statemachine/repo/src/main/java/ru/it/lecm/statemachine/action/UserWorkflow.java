@@ -15,7 +15,6 @@ public class UserWorkflow extends StateMachineAction {
 
     private final static String PROP_ID = "id";
     private final static String PROP_WORKFLOW_ID = "workflowId";
-    private final static String PROP_ASSIGNEE = "assignee";
     private final static String PROP_LABEL = "label";
     private final static String PROP_CONDITION_ACCESS = "conditionAccess";
 
@@ -32,14 +31,13 @@ public class UserWorkflow extends StateMachineAction {
             String id = attribute.attribute(PROP_ID);
             String label = attribute.attribute(PROP_LABEL);
             String workflowId = attribute.attribute(PROP_WORKFLOW_ID);
-            String assignee = attribute.attribute(PROP_ASSIGNEE);
             String conditionAccess = attribute.attribute(PROP_CONDITION_ACCESS);
 			if (conditionAccess == null) {
 				conditionAccess = "";
 			}
             Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-            entities.add(new UserWorkflowEntity(id, label, workflowId, assignee, conditions, variables));
+            entities.add(new UserWorkflowEntity(id, label, workflowId, conditions, variables));
         }
     }
 
@@ -52,15 +50,13 @@ public class UserWorkflow extends StateMachineAction {
         private String id;
         private String label;
         private String workflowId;
-        private String assignee;
         private Conditions conditionAccess;
         private WorkflowVariables variables;
 
-        UserWorkflowEntity(String id, String label, String workflowId, String assignee, Conditions conditionAccess, WorkflowVariables variables) {
+        UserWorkflowEntity(String id, String label, String workflowId, Conditions conditionAccess, WorkflowVariables variables) {
             this.id = id;
 			this.label = label;
             this.workflowId = workflowId;
-            this.assignee = assignee;
             this.conditionAccess = conditionAccess;
 			this.variables = variables;
         }
@@ -75,10 +71,6 @@ public class UserWorkflow extends StateMachineAction {
 
         public String getWorkflowId() {
             return workflowId;
-        }
-
-        public String getAssignee() {
-            return assignee;
         }
 
 		public Conditions getConditionAccess() {

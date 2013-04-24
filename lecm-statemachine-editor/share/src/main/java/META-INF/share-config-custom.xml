@@ -537,7 +537,6 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
-					<show id="lecm-stmeditor:assignee" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:workflowLabel" />
@@ -558,7 +557,6 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:workflowLabel" force="true"/>
 					<show id="lecm-stmeditor:workflowId" force="true"/>
-					<show id="lecm-stmeditor:assignee" force="true"/>
 					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 					<show id="lecm-stmeditor:inputWorkflowData" force="true"/>
 					<show id="lecm-stmeditor:outputWorkflowData" force="true"/>
@@ -571,7 +569,6 @@
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:assignee" />
                     <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>

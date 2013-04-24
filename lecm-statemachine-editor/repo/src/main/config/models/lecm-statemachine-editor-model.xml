@@ -310,7 +310,6 @@
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
-                <aspect>lecm-stmeditor:assigneeAspect</aspect>
 			</mandatory-aspects>
 		</type>
 

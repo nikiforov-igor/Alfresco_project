@@ -7563,10 +7563,6 @@
                                                                 <value>activiti$createOnBasis</value>
                                                             </property>
                                                             <property>
-                                                                <name>assignee</name>
-                                                                <value>currentUser()</value>
-                                                            </property>
-                                                            <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>Создать на основании</value>
                                                             </property>
@@ -7589,10 +7585,6 @@
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>activiti$contractsContractTime</value>
-                                                            </property>
-                                                            <property>
-                                                                <name>assignee</name>
-                                                                <value>currentUser()</value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>
@@ -8583,10 +8575,6 @@
                                                                 <value>activiti$createOnBasis</value>
                                                             </property>
                                                             <property>
-                                                                <name>assignee</name>
-                                                                <value>currentUser()</value>
-                                                            </property>
-                                                            <property>
                                                                 <name>workflowLabel</name>
                                                                 <value>Создать на основании</value>
                                                             </property>
@@ -8609,10 +8597,6 @@
                                                             <property>
                                                                 <name>workflowId</name>
                                                                 <value>activiti$contractsContractTime</value>
-                                                            </property>
-                                                            <property>
-                                                                <name>assignee</name>
-                                                                <value>currentUser()</value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowLabel</name>

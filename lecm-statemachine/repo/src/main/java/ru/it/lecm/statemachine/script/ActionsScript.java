@@ -125,12 +125,6 @@ public class ActionsScript extends DeclarativeWebScript {
                                     workflow.put("id", entity.getId());
                                     workflow.put("label", entity.getLabel());
                                     workflow.put("workflowId", entity.getWorkflowId());
-                                    assignExecution.execute(entity.getAssignee());
-                                    List<String> refs = new ArrayList<String>();
-                                    if (assignExecution.getNodeRefResult() != null) {
-                                        refs.add(assignExecution.getNodeRefResult().toString());
-                                    }
-                                    workflow.put("assignees", refs);
                                     workflow.put("errors", messages);
                                     workflow.put("fields", fields);
                                     workflow.put("count",count);
