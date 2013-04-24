@@ -101,12 +101,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
                 var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
                 new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
-                    width: "50em",
+                    width: "60em",
                     templateUrl: templateUrl,
                     actionUrl: null,
                     destroyOnHide: true,
                     doBeforeDialogShow: {
-                        fn: this.setCreateNewFormDialogTitle
+                        fn: this.beforeDialogShow
                     },
                     onSuccess: {
                         fn: function (response) {
@@ -158,11 +158,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     submitType: "json"
                 });
             },
-            setCreateNewFormDialogTitle: function (p_form, p_dialog) {
+            beforeDialogShow: function(p_form, p_dialog) {
                 var fileSpan = '<span class="light">' + this.msg("document.main.form.edit") + '</span>';
                 Alfresco.util.populateHTML(
-                    [ p_dialog.id + "-form-container_h", fileSpan]
+                    [p_dialog.id + "-form-container_h", fileSpan]
                 );
+
+                Dom.addClass(p_dialog.id + "-form", "dashlet-metadata-edit");
             }
         }, true);
 })();

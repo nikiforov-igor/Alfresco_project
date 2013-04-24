@@ -46,8 +46,9 @@
     <#if mayAdd!false>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
-            class="edit" title="${msg("dashlet.edit.tooltip")}">&nbsp</a>
+            class="edit" title="${msg("dashlet.edit.tooltip")}"></a>
     </div>
     </#if>
     <div id="${id}_container"></div>
+</div>
 </#if>

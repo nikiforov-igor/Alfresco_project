@@ -29,7 +29,7 @@
 .dashlet-metadata .lecm-dashlet-actions .edit {
     background-image: url("/share/res/components/profile/images/edit.png");
     background-repeat: no-repeat;
-    padding-right: 13px;
+    padding-right: 15px;
 }
 
 .body.scrollableList.dashlet-body{
