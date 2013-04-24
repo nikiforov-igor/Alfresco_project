@@ -5,7 +5,8 @@
 	<version>1.0</version>
 	<imports>
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
-	</imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/aspects/1.0" prefix="lecm-contract-aspect"/>
 	</namespaces>
@@ -26,5 +27,12 @@
 				</association>
 			</associations>
 		</aspect>
+        <aspect name="lecm-contract-aspect:primaryDocumentDeletedAspect">
+            <properties>
+                <property name="lecm-contract-aspect:primaryDocumentDeleted">
+                    <type>d:boolean</type>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

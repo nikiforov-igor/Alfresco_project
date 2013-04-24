@@ -4,6 +4,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -16,10 +17,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * User: mshafeev
@@ -206,7 +205,14 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	 * @param reasonDocumentRef - стороковая ссылка на документ основание
 	 */
 	public void terminateContract(ScriptNode document, String reasonDocumentRef) {
-		List<String> objects = new ArrayList<String>();
+        List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
+        for (NodeRef additionalDocument : additionalDocuments) {
+            HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+            nodeService.addAspect(additionalDocument, ContractsBeanImpl.ASPECT_PRIMARY_DOCUMENT_DELETE, aspectProps);
+            nodeService.setProperty(additionalDocument, ContractsBeanImpl.PROP_PRIMARY_DOCUMENT_DELETE, true);
+        }
+
+        List<String> objects = new ArrayList<String>();
 		objects.add(reasonDocumentRef);
 		businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.", objects);
 	}
