@@ -216,7 +216,23 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		return createScriptable(additionalDocuments);
 	}
 
+	/**
+	 * Регистрация проекта договора
+	 * @param contract договор
+	 * @throws TemplateParseException
+	 * @throws TemplateRunException
+	 */
 	public void registrationContractProject(ScriptNode contract) throws TemplateParseException, TemplateRunException {
 	 	this.contractService.registrationContractProject(contract.getNodeRef());
+	}
+
+	/**
+	 * Регистрация договора
+	 * @param contract договор
+	 * @throws TemplateParseException
+	 * @throws TemplateRunException
+	 */
+	public void registrationContract(ScriptNode contract) throws TemplateParseException, TemplateRunException {
+	 	this.contractService.registrationContract(contract.getNodeRef());
 	}
 }

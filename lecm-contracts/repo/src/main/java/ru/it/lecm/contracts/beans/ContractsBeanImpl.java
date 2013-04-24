@@ -53,7 +53,10 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public static final QName PROP_REGNUM_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumProject");
 	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
+	public static final QName PROP_DATE_REG_CONTRACT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegContracts");
+	public static final QName PROP_DATE_REG_CONTRACT_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegProjectContracts");
 
+	public static final String CONTRACT_REGNUM_TEMPLATE = "{#employeeOrgUnitCode(doc.creator)}-{#formatNumber('0000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}";
 	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE = "{#employeeOrgUnitCode(doc.creator)}-{doc.associatedAttributePath('lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code')}-{#formatNumber('0000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}";
 
 	final static protected Logger logger = LoggerFactory.getLogger(ContractsBeanImpl.class);
@@ -276,5 +279,10 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public void registrationContractProject(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
 		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_PROJECT, CONTRACT_PROJECT_REGNUM_TEMPLATE);
+	}
+
+	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
+		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_SYSTEM, CONTRACT_REGNUM_TEMPLATE);
+		nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
 	}
 }
