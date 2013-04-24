@@ -236,6 +236,16 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	 	this.contractService.registrationContract(contract.getNodeRef());
 	}
 
+	/**
+	 * Регистрация проекта документа к договору
+	 * @param document документ к договору
+	 * @throws TemplateParseException
+	 * @throws TemplateRunException
+	 */
+	public void registrationContractDocumentProject(ScriptNode document) throws TemplateParseException, TemplateRunException {
+	 	this.contractService.registrationContractDocumentProject(document.getNodeRef());
+	}
+
     public Scriptable getAdditionalDocsByType(String typeFilter){
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s"): new String[0];
         String filter = "";
