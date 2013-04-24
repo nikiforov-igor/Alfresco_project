@@ -11,3 +11,5 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-orgstructure/orgstructure-tree.css" />
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-orgstructure/orgstructure-tree.js"></@script>
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-orgstructure/orgstructure-utils.js"></@script>
+
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-orgstructure/employee-has-no-absencesl-validation.js"/>

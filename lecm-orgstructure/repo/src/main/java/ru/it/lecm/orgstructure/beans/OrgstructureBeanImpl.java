@@ -265,6 +265,20 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isProperType(ref, types);
 	}
 
+    @Override
+	public boolean isOrganizationElement(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ORGANIZATION_ELEMENT);
+		return isProperType(ref, types);
+	}
+
+    @Override
+	public boolean isOrganizationElementMember(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ORGANIZATION_ELEMENT_MEMBER);
+		return isProperType(ref, types);
+	}
+
 	@Override
 	public boolean isStaffList(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
@@ -1411,7 +1425,33 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isEmployeeHasBusinessRole;
 	}
 
-	@Override
+    @Override
+    public List<NodeRef> getNodeRefEmployees(NodeRef nodeRef) {
+        List<NodeRef> absences = new ArrayList<NodeRef>();
+
+        logger.info("getNodeRefEmployees: " + nodeRef.toString());
+
+        if (this.isEmployee(nodeRef)){
+                absences.add(nodeRef);
+        } else if (this.isStaffList(nodeRef) || this.isWorkForce(nodeRef)){
+            logger.info("getNodeRefEmployees: this.isStaffList(nodeRef) || this.isWorkForce(nodeRef) ");
+            if (! isArchive(nodeRef)){
+                NodeRef employee = this.getEmployeeByPosition(nodeRef);
+                if (employee != null && !isArchive(employee)){
+                    absences.add(employee);
+                }
+            }
+        } else if (this.isUnit(nodeRef)){
+            final List<NodeRef> organizationElementEmployees = this.getOrganizationElementEmployees(nodeRef);
+            for (NodeRef employee : organizationElementEmployees){
+                absences.add(employee);
+            }
+        }
+
+        return absences;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ORGANIZATION_ROOT_ID);
 	}

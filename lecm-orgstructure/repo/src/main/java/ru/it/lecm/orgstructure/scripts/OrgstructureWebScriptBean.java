@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
@@ -17,6 +16,7 @@ import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.util.*;
 
@@ -70,6 +70,12 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     private DictionaryBean dictionaryService;
 
 	private OrgstructureBean orgstructureService;
+
+    private IAbsence absenceService;
+
+    public void setAbsenceService(IAbsence absenceService) {
+        this.absenceService = absenceService;
+    }
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -495,6 +501,18 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return createScriptable(employees);
 	}
 
+    public ScriptNode getEmployeeByPosition(ScriptNode positionRef) {
+        return new ScriptNode(orgstructureService.getEmployeeByPosition(positionRef.getNodeRef()), serviceRegistry, getScope());
+    }
+
+    public ScriptNode getEmployeeByPosition(NodeRef positionRef) {
+        NodeRef nodeRef = orgstructureService.getEmployeeByPosition(positionRef);
+        if (nodeRef != null) {
+            return new ScriptNode(nodeRef, serviceRegistry, getScope());
+        }
+        return null;
+    }
+
 	/**
 	 * Получение Рабочих групп, в которых участвует сотрудник
 	 */
@@ -764,4 +782,46 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         }
         return settings.toString();
     }
+
+    public Scriptable checkNodeRefForAbsence(String nodeRefStr)
+    {
+        NodeRef nodeRef = new NodeRef(nodeRefStr);
+
+
+
+        //через структурные единицы (подразделения и рабочие группы)
+//        List<NodeRef> elementsByBusinessRole = getOrganizationElementsByBusinessRole(businessRoleRef);
+//        for (NodeRef orgElement : elementsByBusinessRole) {
+//            List<NodeRef> organizationElementEmployees = getOrganizationElementEmployees(orgElement);
+//            results.addAll(organizationElementEmployees);
+//        }
+//        //через позиции (должности и роли в рабочих группах)
+//        Set<NodeRef> results1 = new HashSet<NodeRef>();
+//        if (isBusinessRole(businessRoleRef)) { // если бизнес роль
+//            // получаем организационные элементы (подразделения и рабочие группы)
+//            List<AssociationRef> orgElementMembers = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+//            for (AssociationRef orgElementChildRef : orgElementMembers) {
+//                if (!isArchive(orgElementChildRef.getTargetRef())){
+//                    NodeRef employeeByPosition = getEmployeeByPosition(orgElementChildRef.getTargetRef());
+//                    if (!isArchive(employeeByPosition)) {
+//                        results1.add(employeeByPosition);
+//                    }
+//                }
+//            }
+//        }
+
+
+        final List<NodeRef> nodeRefEmployees = orgstructureService.getNodeRefEmployees(nodeRef);
+        List<NodeRef> absences = new ArrayList<NodeRef>();
+        for(NodeRef employee : nodeRefEmployees){
+            if (absenceService.isEmployeeAbsentToday(employee)){
+                absences.add(employee) ;
+            }
+        }
+
+        return createScriptable(absences);
+
+    }
+
+
 }

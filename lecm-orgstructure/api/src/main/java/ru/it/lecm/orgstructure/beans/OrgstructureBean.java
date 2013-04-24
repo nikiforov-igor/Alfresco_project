@@ -1,11 +1,11 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.util.List;
-
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import java.util.List;
 
 /**
  * User: PMelnikov
@@ -76,6 +76,8 @@ public interface OrgstructureBean {
 	QName TYPE_STAFF_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staffPosition");
 	QName TYPE_WORK_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "workRole");
 	QName TYPE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee");
+	QName TYPE_ORGANIZATION_ELEMENT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-element");
+	QName TYPE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization-element-member");
 	QName TYPE_PERSONAL_DATA = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "personal-data");
 	QName TYPE_BUSINESS_ROLE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role");
 
@@ -166,6 +168,16 @@ public interface OrgstructureBean {
 	 * проверяет что объект является сотрудником
 	 */
 	boolean isEmployee(NodeRef ref);
+
+    /**
+	 * проверяет что объект является Organization Element
+	 */
+	boolean isOrganizationElement(NodeRef ref);
+
+    /**
+	 * проверяет что объект является Organization Element Member
+	 */
+	boolean isOrganizationElementMember(NodeRef ref);
 
 	/**
 	 * проверяет что объект является штатным расписанием
@@ -577,4 +589,11 @@ public interface OrgstructureBean {
 	 * @return true если сотрудник имеет роль
 	 */
 	boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier, final boolean withDelegation);
+
+    /**
+     * Получает список сотрудников оформивших отстутсвие
+     * @param nodeRef Сотрудник / Позация в структуре предприятия / Подразделение
+     * @return
+     */
+    List<NodeRef> getNodeRefEmployees(NodeRef nodeRef);
 }

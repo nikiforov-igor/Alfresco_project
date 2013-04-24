@@ -9,6 +9,94 @@
 		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
+
+                YAHOO.lang.augmentObject(LogicECM.module.Base.DataGrid.prototype, {
+
+		                	makeJquerySyncRequestForAbsence : function _makeJquerySyncRequestForAbsence(url, payload, showMessage, comment ){
+		                        var result = {};
+
+		                        result.hasNoActiveAbsences = false;
+
+		                        // Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
+		                        jQuery.ajax({
+		                            url: Alfresco.constants.PROXY_URI_RELATIVE + url,
+		                            type: "POST",
+		                            timeout: 30000, // 30 секунд таймаута хватит всем!
+		                            async: false, // ничего не делаем, пока не отработал запром
+		                            dataType: "json",
+		                            contentType: "application/json",
+		                            data: YAHOO.lang.JSON.stringify(payload), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
+		                            processData: false, // данные не трогать, не кодировать вообще
+		                            success: function (response, textStatus, jqXHR) {
+		                                if (response && response.hasNoActiveAbsences) {
+		                                    result.hasNoActiveAbsences = true;
+		                                } else {
+		                                    result.hasNoActiveAbsences = false;
+		                                    result.reason = response.reason;
+		                                }
+		                            },
+		                            error: function(jqXHR, textStatus, errorThrown) {
+		                                result.hasNoActiveAbsences = false;
+		                                result.errorText = textStatus;
+		                            }
+		                        });
+
+		                        if (showMessage){
+		                            if (result.errorText){
+		                                Alfresco.util.PopupManager.displayMessage(
+		                                        {
+		                                            text:result.errorText
+		                                        });
+		                            }else{
+		                                if ( !result.hasNoActiveAbsences && result.reason){
+		                                    Alfresco.util.PopupManager.displayMessage(
+		                                            {
+		                                                text:  comment
+		                                            });
+		                                }
+		                            }
+		                        }
+
+		                        return result;
+		                    },
+                            //Действия по умолчанию. В конкретных реализациях ДатаГрида эти методы при необходимости следует переопределять
+                            /**
+                             * Delete item(s).
+                             *
+                             * @method onActionDelete
+                             * @param p_items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
+                             * @param owner {Object} не используется Dom-объект
+                             * @param actionsConfig {Object} Объект с настройками для экшена
+                             * @param fnDeleteComplete {Object} CallBack, который вызовется после завершения удаления
+                             */
+                            onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+                                this.checkBeforeDeleteAction(p_items, owner, actionsConfig, fnDeleteComplete);
+                            },
+
+                            checkBeforeDeleteAction: function DataGridActions_checkBeforeDelete(p_items, owner, actionsConfig, fnDeleteComplete){
+                                if (this.checkBeforeDeleteSync(p_items)){
+                                    this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                }
+                            },
+
+                            checkBeforeDeleteSync: function DataGridActions_checkBeforeDeleteSync(p_items){                            	
+                                   
+                                var hasNoActiveAbsences = this.makeJquerySyncRequestForAbsence("lecm/orgstructure/api/employeeHasNoAbsences",
+                                                                                               { nodeRef : p_items.nodeRef },
+                                                                                               true,
+                                                                                               "Сотрудник не может быть уволен т.к. имеет активные отсутсвия"
+                                                                                              );
+                                if (hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences){
+                                    return true;
+                                }
+                                   
+                                return false;
+                            }
+
+                        },
+                    true
+                );
+
 				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,

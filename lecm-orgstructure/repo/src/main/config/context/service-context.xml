@@ -64,6 +64,9 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
+        <property name="absenceService">
+			<ref bean="AbsenceService"/>
+		</property>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 	</bean>
 

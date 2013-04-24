@@ -15,6 +15,7 @@
                         var me = this;
                         var metaData = {
                             itemType: "lecm-orgstr:employee-link",
+                            createFormId: "selectEmployeeWithNoAbsences",
                             nodeRef: p_item.nodeRef,
                             addMessage: this.msg("label.employee-link.add")
                         };
@@ -49,6 +50,13 @@
                                     success:function (oResponse) {
                                         var oResult = eval("(" + oResponse.responseText + ")");
                                         if (oResult) {
+
+                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences(oResult.employee, "Невозможно снять сотрудника, т.к. оформлено отсутствие \n")
+
+                                            if (hasNoActiveAbsences && !hasNoActiveAbsences.hasNoActiveAbsences){
+                                                return;
+                                            }
+
                                             var onPrompt = function (fnAfterPrompt) {
                                                 Alfresco.util.PopupManager.displayPrompt(
                                                         {
@@ -128,9 +136,89 @@
 						}
                         YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					};
+
+                    LogicECM.module.Base.DataGrid.prototype.makeJquerySyncRequestForAbsence = function _makeJquerySyncRequestForAbsence(url, payload, showMessage, comment ){
+                        var result = {};
+
+                        result.hasNoActiveAbsences = false;
+
+                        // Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
+                        jQuery.ajax({
+                            url: Alfresco.constants.PROXY_URI_RELATIVE + url,
+                            type: "POST",
+                            timeout: 30000, // 30 секунд таймаута хватит всем!
+                            async: false, // ничего не делаем, пока не отработал запром
+                            dataType: "json",
+                            contentType: "application/json",
+                            data: YAHOO.lang.JSON.stringify(payload), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
+                            processData: false, // данные не трогать, не кодировать вообще
+                            success: function (response, textStatus, jqXHR) {
+                                if (response && response.hasNoActiveAbsences) {
+                                    result.hasNoActiveAbsences = true;
+                                } else {
+                                    result.hasNoActiveAbsences = false;
+                                    result.reason = response.reason;
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                result.hasNoActiveAbsences = false;
+                                result.errorText = textStatus;
+                            }
+                        });
+
+                        if (showMessage){
+                            if (result.errorText){
+                                Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text:result.errorText
+                                        });
+                            }else{
+                                if ( !result.hasNoActiveAbsences && result.reason){
+                                    Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text:  comment + result.reason
+                                            });
+                                }
+                            }
+                        }
+
+                        return result;
+                    };
+
+
+                    /**
+                     * Синхронная проверка того, что сотрудник не оформлял отсутствие
+                     *
+                     * @param {Object} employeeNodeRef - NodeRef проверяемого сотрудника
+                     * @returns {Object} hasNoActiveAbsences = true - если на данный момент на сотрудника не оформлено отсутствие. Иначе false
+                     * @private
+                     */
+                    LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences = function _сheckEmployeeHasNoActiveAbsences (employeeNodeRef, comment){
+
+                        var result = LogicECM.module.Base.DataGrid.prototype.makeJquerySyncRequestForAbsence(
+                                                                                                            "lecm/orgstructure/api/employeeHasNoAbsences",
+                                                                                                            { nodeRef : employeeNodeRef },
+                                                                                                            true,
+                                                                                                            comment);
+                        return result;
+                    };
+
+                    LogicECM.module.Base.DataGrid.prototype.checkMakeBossHasNoActiveAbsences = function _сheckMakeBossHasNoActiveAbsences (staffNodeRef, comment){
+
+                        var result = LogicECM.module.Base.DataGrid.prototype.makeJquerySyncRequestForAbsence(
+                                                                                                            "lecm/orgstructure/api/makeBossHasNoAbsences",
+                                                                                                            { nodeRef : staffNodeRef },
+                                                                                                            true,
+                                                                                                            comment);
+                        return result;
+                    };
+
 					LogicECM.module.Base.DataGrid.prototype.onActionMakeBoss = function DataGridActions_onActionMakeBoss(p_item, owner, actionsConfig, fnCallback) {
 						var me = this;
 						var staffRow = p_item;
+
+
+
 						// Получаем для штатного расписания ссылку на сотрудника
 						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
 						var callback = {
@@ -145,9 +233,18 @@
 												buttons:[
 													{
 														text:me.msg("button.position.makeBoss"),
-														handler:function DataGridActions__onActionDelete_delete() {
+														handler:function DataGridActions__onActionMakeBoss_make() {
 															this.destroy();
-															var onSuccess = function DataGrid_onActionEmployeeAdd_onSuccess(response) {
+
+                                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkMakeBossHasNoActiveAbsences(
+                                                                    staffRow.nodeRef /*oResult.employee*/,
+                                                                    "Невозможно назначить руководящую позицию из-за отсутствия \n");
+
+                                                            if (!(hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences)){
+                                                                return;
+                                                            }
+
+															var onSuccess = function DataGrid_onActionMakeBoss_makeBossConfirmed(response) {
 																YAHOO.Bubbling.fire("datagridRefresh",
 																		{
 																			bubblingLabel:me.options.bubblingLabel
