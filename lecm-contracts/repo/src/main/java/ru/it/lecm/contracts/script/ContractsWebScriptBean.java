@@ -72,8 +72,16 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return contractService.getContracts(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
     }
 
-    public Integer getAmountMembers(Scriptable path, Scriptable properties) {
-        return contractService.getAllMembers(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
+    /**
+     * Получить количество участников договорной деятельности
+     * @return
+     */
+    public Integer getAmountMembers() {
+        return contractService.getAllMembers().size();
+    }
+
+    public Scriptable getMembers(String sortColumnName, Boolean sortAscending) {
+        return createScriptable(contractService.getAllMembers(sortColumnName, sortAscending));
     }
 
     private ArrayList<String> getElements(Object[] object){

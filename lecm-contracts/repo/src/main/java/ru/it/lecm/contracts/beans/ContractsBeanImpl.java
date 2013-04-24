@@ -24,6 +24,7 @@ import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -177,22 +178,35 @@ public class ContractsBeanImpl extends BaseBean {
     }
 
     /**
-     * Метод получения всех участников всех договоров
-     * @param path
-     * @param statuses
+     * Метод получения всех участников
      * @return
      */
-    public List<NodeRef> getAllMembers(ArrayList<String> path, ArrayList<String> statuses) {
-        Set<NodeRef> members = new HashSet<NodeRef>();
+    public List<NodeRef> getAllMembers() {
+        NodeRef membersUnit = documentMembersService.getMembersUnit(TYPE_CONTRACTS_RECORD);
+        List<NodeRef> members = new ArrayList<NodeRef>();
+        for (AssociationRef employee : nodeService.getTargetAssocs(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE)) {
+            members.add(employee.getTargetRef());
+        }
+        return members;
+    }
 
-        for (NodeRef nodeRef : getContracts(path,statuses)) {
-            for (NodeRef memberRef : documentMembersService.getDocumentMembers(nodeRef)) {
-                for (AssociationRef employee : nodeService.getTargetAssocs(memberRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE)) {
-                    members.add(employee.getTargetRef());
-                }
+    public List<NodeRef> getAllMembers(String sortColumnLocalName, final boolean sortAscending) {
+        List<NodeRef> members = getAllMembers();
+        final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, sortColumnLocalName) : OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME;
+
+        class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
+            @Override
+            public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
+                T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
+                T obj2 = (T) nodeService.getProperty(nodeRef2, sortFieldQName);
+
+                return sortAscending ? obj1.compareTo(obj2) : obj2.compareTo(obj1);
             }
         }
-        return new ArrayList<NodeRef>(members);
+        if (members.size() > 0 && nodeService.getProperties(members.get(0)).containsKey(sortFieldQName)){
+            Collections.sort(members, new NodeRefComparator<String>());
+        };
+        return members;
     }
 
 	public String createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {

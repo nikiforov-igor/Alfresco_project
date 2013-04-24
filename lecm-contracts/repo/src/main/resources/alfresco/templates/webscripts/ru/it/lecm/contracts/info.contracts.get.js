@@ -15,7 +15,7 @@ for (var key in map) {
         filter: map[key]
     });
 }
-var amountMembers = contracts.getAmountMembers(paths, map[0].split(","));
+var amountMembers = contracts.getAmountMembers();
 members.push({
     key:"participants",
     amountMembers:amountMembers
