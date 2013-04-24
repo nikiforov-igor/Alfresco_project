@@ -12,16 +12,16 @@
                 new LogicECM.module.Contracts.DocsDataGrid('${id}').setOptions({
                     usePagination: true,
                     pageSize: 20,
-                    showExtendSearchBlock: true,
+                    showExtendSearchBlock: false,
                     actions: [
                         {
-                            type: "datagrid-action-link-${bubblingLabel!'contracts'}",
+                            type: "datagrid-action-link-${bubblingLabel!'contracts-documents'}",
                             id: "onActionEdit",
                             permission: "edit",
                             label: "${msg("actions.edit")}"
                         },
                         {
-                            type: "datagrid-action-link-${bubblingLabel!'contracts'}",
+                            type: "datagrid-action-link-${bubblingLabel!'contracts-documents'}",
                             id: "onActionDelete",
                             permission: "delete",
                             label: "${msg("actions.delete-row")}"
@@ -30,8 +30,8 @@
                     allowCreate: false,
                     showActionColumn: true,
                     showCheckboxColumn: false,
-                    bubblingLabel: "${bubblingLabel!"contracts"}",
-                    attributeForShow:"cm:name"
+                    bubblingLabel: "${bubblingLabel!"contracts-documents"}",
+                    attributeForShow:"lecm-additional-document:number"
                 }).setMessages(${messages});
 
                 var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);
@@ -52,7 +52,7 @@
 
                             }
                         },
-                        bubblingLabel: "${bubblingLabel!"contracts"}"
+                        bubblingLabel: "${bubblingLabel!"contracts-documents"}"
                     });
                 });
 			}
@@ -64,15 +64,15 @@
             function generateFilterStr(filter) {
                 if (filter) {
                     var re = /\s*,\s*/;
-                    var statuses = filter.split(re);
+                    var types = filter.split(re);
 
                     var resultFilter = "";
 
-                    for (var i = 0; i < statuses.length; i++) {
+                    for (var i = 0; i < types.length; i++) {
                         if (resultFilter.length > 0) {
                             resultFilter += " OR ";
                         }
-                        resultFilter += "+lecm\\-statemachine:status:\'" + statuses[i] + "\'";
+                        resultFilter += "+lecm\\-additional\\-document:additionalDocumentType\\-text\\-content:\'" + types[i] + "\'";
                     }
                     return resultFilter;
                 }

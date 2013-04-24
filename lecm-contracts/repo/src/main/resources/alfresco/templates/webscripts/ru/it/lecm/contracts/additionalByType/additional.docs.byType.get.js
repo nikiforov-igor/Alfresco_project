@@ -1,0 +1,1 @@
+model.docs = contracts.getAdditionalDocsByType(args.type);

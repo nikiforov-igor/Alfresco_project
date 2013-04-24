@@ -235,4 +235,17 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	public void registrationContract(ScriptNode contract) throws TemplateParseException, TemplateRunException {
 	 	this.contractService.registrationContract(contract.getNodeRef());
 	}
+
+    public Scriptable getAdditionalDocsByType(String typeFilter){
+        String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s"): new String[0];
+        String filter = "";
+        for (String type : types) {
+            if (filter.length() > 0) {
+                filter += " OR ";
+            }
+            filter += "@lecm\\-additional\\-document\\:additionalDocumentType-text-content:\"" + type + "\"";
+        }
+        List<NodeRef> additionalDocuments = this.contractService.getAdditionalDocs(filter.length() > 0 ? filter : null);
+        return createScriptable(additionalDocuments);
+    }
 }

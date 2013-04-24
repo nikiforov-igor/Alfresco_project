@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Contracts docs filter</shortname>
+    <description>Return contracts docs filter</description>
+    <url>/lecm/contracts/contracts-docs-filter</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

@@ -236,7 +236,7 @@ public class ContractsBeanImpl extends BaseBean {
             for (NodeRef employeeRef : employeesList) {
                 String personName = orgstructureService.getEmployeeLogin(employeeRef);
                 if (personName != null && !personName.isEmpty()) {
-                    employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:\'" + personName + "\'";
+                    employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:" + personName + "";
                     addOR = true;
                 }
             }
@@ -285,4 +285,35 @@ public class ContractsBeanImpl extends BaseBean {
 		regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_SYSTEM, CONTRACT_REGNUM_TEMPLATE);
 		nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
 	}
+
+    public List<NodeRef> getAdditionalDocs(String filter) {
+        List<NodeRef> records = new ArrayList<NodeRef>();
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        String query = "";
+
+        // формируем базовый запрос - ищем документы к договорам в папке Черновики и Документы
+        query = "TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\" AND " +
+                "(PATH:\"" + documentService.getDraftPath() + "//*\" OR PATH:\"" + documentService.getDocumentsFolderPath() + "//*\")";
+
+
+        if (filter != null && filter.length() > 0) {
+            query += " AND (" + filter + ")";
+        }
+
+        ResultSet results = null;
+        sp.setQuery(query);
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
 }
