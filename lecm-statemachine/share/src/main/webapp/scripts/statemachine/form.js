@@ -195,20 +195,23 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 form += '</div></div>' +
-                '<div class="bdft">' +
-                '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
-                '<span class="first-child">' +
-                '<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">Редактировать</button>' +
-                '</span>' +
-                '</span>' +
-                '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
-                '<span class="first-child">' +
-                '<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">Отмена</button>' +
-                '</span>' +
-                '</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
+                '<div class="bdft">'
+                if (fields.length > 0) {
+                    form += '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
+                            '<span class="first-child">' +
+                            '<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">Редактировать</button>' +
+                            '</span>' +
+                            '</span>';
+
+                }
+                form += '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
+                        '<span class="first-child">' +
+                        '<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">Отмена</button>' +
+                        '</span>' +
+                        '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
             containerDiv.innerHTML = form;
             this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
                 {
