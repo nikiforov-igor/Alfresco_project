@@ -51,7 +51,7 @@
                 createRow: function Create_row(innerHtml)
                 {
                     var div = document.createElement('div');
-                    div.setAttribute('class', 'row');
+                    div.setAttribute('class', 'row summary');
                     if (innerHtml) {
                         div.innerHTML = innerHtml;
                     }
@@ -72,14 +72,16 @@
                                                 var members = response.json.members;
                                                 var innerHtml,div;
                                                 for (var index in list) {
-                                                    innerHtml = this.message[list[index].key] +" "+
-                                                            "<a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
-                                                            list[index].filter +"\">" +list[index].amountContracts + "</a>";
+                                                    innerHtml = "<div class='column first'>" + this.message[list[index].key] + "</div>"+
+                                                            "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
+                                                            list[index].filter +"\">" +list[index].amountContracts + "</a></div>";
                                                     div = this.createRow(innerHtml);
                                                     this.container.appendChild(div);
                                                 }
-                                                innerHtml = this.message[members.key] +" "+
-                                                        "<a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" +members.amountMembers + "</a>";
+                                                div = this.createRow('&nbsp');
+                                                this.container.appendChild(div);
+                                                innerHtml = "<div class='column first'>" + this.message[members.key] +"</div>"+
+                                                        "<div class='column second'><a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" +members.amountMembers + "</a></div>";
                                                 div = this.createRow(innerHtml);
                                                 this.container.appendChild(div);
                                             }
