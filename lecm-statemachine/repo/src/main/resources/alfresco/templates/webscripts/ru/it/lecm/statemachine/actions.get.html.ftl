@@ -33,12 +33,7 @@
         label: "${workflow.label}",
         count: "${workflow.count}",
         workflowId: "${workflow.workflowId!"null"}",
-        assignees: [
-                   <#list workflow.assignees as assignee>
-                       "${assignee}"
-                       <#if assignee_has_next>,</#if>
-                   </#list>
-        ],
+        assignees: [],
         errors: [
             <#list workflow.errors as error>
             "${error}"
