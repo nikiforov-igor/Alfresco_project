@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -89,8 +90,28 @@ public class StatusChangeAction extends StateMachineAction {
 		}
 
         if (staticPrivileges != null) {
-            LecmPermissionGroup permissionGroup = getLecmPermissionService().findPermissionGroup("Read");
-            staticPrivileges.put("Collaborator", permissionGroup);
+            LecmPermissionGroup group = new LecmPermissionGroup() {
+                @Override
+                public String getLabel() {
+                    return "";
+                }
+
+                @Override
+                public String getName() {
+                    return "Read";
+                }
+
+                @Override
+                public String getShortName() {
+                    return "Read";
+                }
+
+                @Override
+                public String getPrefix() {
+                    return "";
+                }
+            };
+            staticPrivileges.put(AuthenticationUtil.SYSTEM_USER_NAME, group);
         }
 
         //Если начальный статус, то папки для него не требуется
