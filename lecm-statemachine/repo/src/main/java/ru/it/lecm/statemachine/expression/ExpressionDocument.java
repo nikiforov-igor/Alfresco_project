@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.expression;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 
 /**
  * User: PMelnikov
@@ -13,8 +14,13 @@ public class ExpressionDocument {
 
 	private NodeRef nodeRef;
 	private ServiceRegistry serviceRegistry;
+    private static DocumentAttachmentsService documentAttachmentsService;
 
-	public ExpressionDocument(NodeRef nodeRef, ServiceRegistry serviceRegistry) {
+    public ExpressionDocument() {
+
+    }
+
+    public ExpressionDocument(NodeRef nodeRef, ServiceRegistry serviceRegistry) {
 		this.nodeRef = nodeRef;
 		this.serviceRegistry = serviceRegistry;
 	}
@@ -26,8 +32,8 @@ public class ExpressionDocument {
 	}
 
 	//Наличие вложения с определенным типом
-	public boolean hasAttachmentType(String attachmentType) {
-		return true;
+	public boolean hasCategoryAttachment(String attachmentCategory) {
+        return !documentAttachmentsService.getAttachmentsByCategory(nodeRef, attachmentCategory).isEmpty();
 	}
 
 	//Проверка условий на корректность хотя бы у одного из вложений
@@ -40,4 +46,7 @@ public class ExpressionDocument {
 		return true;
 	}
 
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        ExpressionDocument.documentAttachmentsService = documentAttachmentsService;
+    }
 }

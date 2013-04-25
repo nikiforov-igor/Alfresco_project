@@ -240,4 +240,9 @@
 
     <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>
 
+    <bean id="documentExpression" class="ru.it.lecm.statemachine.expression.ExpressionDocument">
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+    </bean>
+
+
 </beans>

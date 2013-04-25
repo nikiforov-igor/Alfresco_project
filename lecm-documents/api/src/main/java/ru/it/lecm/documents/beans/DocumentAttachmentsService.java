@@ -78,4 +78,12 @@ public interface DocumentAttachmentsService {
 	public NodeRef getCategoryByAttachment(NodeRef attachRef);
 
 	public boolean isDocumentAttachment(NodeRef nodeRef);
+
+    /**
+     * Возвращает список вложений определенной категории
+     * @param document - документ
+     * @param categoryName - имя категории
+     * @return
+     */
+    public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName);
 }
