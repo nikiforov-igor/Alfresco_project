@@ -5,22 +5,22 @@
 			<form>
 				<field-visibility>
                     <show id="lecm-contract:regNumProject"/>
-                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-contract:subjectContract-assoc" force="true"/>
                     <show id="lecm-contract:totalSum" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
-                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:endDate"/>
                     <show id="lecm-contract:unlimited"/>
                     <show id="lecm-contract:summaryContent"/>
-                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:regNumSystem"/>
                     <show id="lecm-contract:dateRegContracts"/>
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
@@ -30,6 +30,7 @@
                 <appearance>
                     <set id="contract-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
+                    <set id="date-conclusion" parent="contract-info" appearance="" />
                     <set id="counterparty-info-1" appearance=""/>
                     <set id="counterparty-info-2" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -38,7 +39,7 @@
                     <set id="other" appearance="" />
 
                     <field id="lecm-contract:regNumProject" set="contract-info"/>
-                    <field id="lecm-contract:dateConclusionContracts" set="contract-info"/>
+                    <field id="lecm-contract:dateRegProjectContracts" set="contract-info"/>
                     <field id="lecm-contract:typeContract-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
@@ -67,7 +68,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:dateRegProjectContracts" set="counterparty-info-1"/>
+                    <field id="lecm-contract:dateConclusionContracts" set="date-conclusion"/>
                     <field id="lecm-contract:partner-assoc" set="counterparty-info-1">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="changeItemsFireAction">lecm-contract-representative-assoc</control-param>
@@ -84,14 +85,14 @@
                     </field>
                     <field id="lecm-contract:signedCounterparty" set="counterparty-info-1"/>
                     <field id="lecm-contract:signatoryCounterparty" set="counterparty-info-2"/>
-                    <field id="lecm-contract:regNumSystem" set="counterparty-info-2"/>
+                    <field id="lecm-contract:regNumContractor" set="counterparty-info-2"/>
                     <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
                     <field id="lecm-contract:endDate" set="dates" label=""/>
                     <field id="lecm-contract:unlimited" set="dates"/>
                     <field id="lecm-contract:summaryContent" set="content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-contract:regNumContractor" set="registr-info"/>
+                    <field id="lecm-contract:regNumSystem" set="registr-info"/>
                     <field id="lecm-contract:dateRegContracts" set="registr-info"/>
                     <field id="lecm-contract:registrator-assoc" read-only="true" set="registr-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -101,15 +102,6 @@
                     </field>
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
-                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="other">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
                 </appearance>
 			</form>
             <form id="document">
@@ -142,27 +134,25 @@
                 <field-visibility>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-contract:subjectContract-assoc" force="true"/>
-                    <show id="lecm-contract:totalSum"/>
+                    <show id="lecm-contract:totalSum" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
-                    <show id="lecm-contract:regNumSystem"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:endDate"/>
                     <show id="lecm-contract:unlimited"/>
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-contract-aspect:reasonDelete-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="contract-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="counterparty-info-1" appearance=""/>
                     <set id="counterparty-info-2" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="content" appearance="" />
                     <set id="registr-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="other" appearance="" />
@@ -212,23 +202,14 @@
                     <field id="lecm-contract:signedCounterparty" set="counterparty-info-1"/>
                     <field id="lecm-contract:signatoryCounterparty" set="counterparty-info-2"/>
                     <field id="lecm-contract:regNumSystem" set="counterparty-info-2"/>
-                    <field id="lecm-contract:startDate" set="dates"/>
-                    <field id="lecm-contract:endDate" set="dates"/>
+                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
+                    <field id="lecm-contract:endDate" set="dates" label=""/>
                     <field id="lecm-contract:unlimited" set="dates"/>
                     <field id="lecm-contract:summaryContent" set="content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-contract:regNumContractor" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
-                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="other">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Причины_x0020_удаления</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
                 </appearance>
 			</form>
             <form id="datagrid">

@@ -1,5 +1,4 @@
 /* Договор - основные сведения */
-/* Просмотр */
 .dashlet-metadata .set {
     overflow: hidden;
 }
@@ -9,70 +8,4 @@
 }
 .dashlet-metadata .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item  {
     display: inline;
-}
-
-/* Редактирование */
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field {
-    position: relative;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > label {
-    max-width: 150px;
-    padding-right: 10px;
-    text-align: right;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field input[type=text],
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.selectone-control select {
-    width: 210px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry {
-    width: 180px;
-    margin-bottom: 16px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry + a {
-    float: left;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry ~ div.format-info {
-    height: 16px;
-    line-height: 16px;
-    position: absolute;
-    top: 30px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.price-control div.price-sum {
-    float: left;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.price-control div.price-sum input[type=text] {
-    width: 125px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.price-control div.price-currency {
-    width: 80px;
-    float: left;
-    margin-left: 5px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.price-control div.price-currency label {
-    display: none;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.price-control div.price-currency div.selectone-control {
-    margin-left: 0;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder {
-    margin-bottom: 0;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder .current-values {
-    width: 510px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder .show-picker {
-    float: right;
-    margin-right: 3px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > select {
-    width: 590px !important;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > input.formsCheckBox {
-    margin-left: 160px;
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field  {
-
-}
-.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field  {
-
 }

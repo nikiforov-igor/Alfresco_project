@@ -1,0 +1,62 @@
+/* Договор - Основные сведения - Редактирование */
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field {
+    position: relative;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set div.yui-g div.yui-u {
+    margin-right: 0;
+    margin-left: 0;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > label {
+    width: 190px;
+    padding-right: 10px;
+    text-align: right;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field input[type=text],
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+    width: 230px;
+    overflow: hidden;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry {
+    width: 200px;
+    margin-bottom: 16px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry + a {
+    float: left;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry ~ div.format-info {
+    height: 16px;
+    line-height: 16px;
+    position: absolute;
+    top: 30px;
+    margin-left: 200px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder {
+    margin-bottom: 0;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder .current-values {
+    width: 590px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.object-finder .show-picker,
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
+    float: right;
+    margin-right: 7px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
+    margin-right: 3px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+    width: 150px;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item span.person > a,
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item-even span.person > a {
+    max-width: 180px;
+    text-overflow: ellipsis;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > select,
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > input[type=text]:not(.date-entry) {
+    width: 675px !important;
+}
+.yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > input.formsCheckBox {
+    margin-left: 200px;
+}

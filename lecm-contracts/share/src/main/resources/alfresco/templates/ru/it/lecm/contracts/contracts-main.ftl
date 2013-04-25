@@ -2,7 +2,8 @@
 <@templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-main.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-main.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
 
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
