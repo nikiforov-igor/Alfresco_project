@@ -89,46 +89,21 @@ public class StatusChangeAction extends StateMachineAction {
 			dynamicPrivileges = initPrivileges(dynamicRoleElement);
 		}
 
-        if (staticPrivileges != null) {
-            LecmPermissionGroup group = new LecmPermissionGroup() {
-                @Override
-                public String getLabel() {
-                    return "";
-                }
-
-                @Override
-                public String getName() {
-                    return "Read";
-                }
-
-                @Override
-                public String getShortName() {
-                    return "Read";
-                }
-
-                @Override
-                public String getPrefix() {
-                    return "";
-                }
-            };
-            staticPrivileges.put(AuthenticationUtil.SYSTEM_USER_NAME, group);
-        }
-
         //Если начальный статус, то папки для него не требуется
 		if (forDraft) return;
 
 		//Проверяем существует ли папка для этого статуса
 		NodeService nodeService = getServiceRegistry().getNodeService();
-			//Если статус не существует проверяем всю структуру папок
+        //Если статус не существует проверяем всю структуру папок
 
-			NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
+        NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
 
-			//Существует ли папка processId
-			NodeRef processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
-			if (processFolder == null) {
-				//Создаем папку
-				processFolder = createFolder(documents, processId);
-			}
+        //Существует ли папка processId
+        NodeRef processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
+        if (processFolder == null) {
+            //Создаем папку
+            processFolder = createFolder(documents, processId);
+        }
 
         if (version != null) {
             NodeRef versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
@@ -143,7 +118,7 @@ public class StatusChangeAction extends StateMachineAction {
                 statusFolder = createFolder(versionFolder, status);
                 //Установка статических прав на папку статуса
                 execBuildInTransactStatic(statusFolder, staticPrivileges);
-
+                getServiceRegistry().getPermissionService().setPermission(statusFolder, AuthenticationUtil.SYSTEM_USER_NAME, "Read", true);
             }
         }
 	}
