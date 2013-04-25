@@ -13,6 +13,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
@@ -193,7 +194,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
             }
         }
 
-        List<NodeRef> refs = contractService.getContractsByFilter(start, now, employees, docs);
+        List<NodeRef> refs = contractService.getContractsByFilter(DocumentService.PROP_STATUS_CHANGED_DATE, start, now,
+                Arrays.asList(contractService.getDraftPath(), contractService.getDocumentsFolderPath()), null, employees, docs, true);
         return refs.toArray(new NodeRef[refs.size()]);
     }
 
@@ -205,8 +207,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
      * @param reasonDocumentRef - стороковая ссылка на документ основание
      */
     public void setContractTime(ScriptNode document, Date fromDate, Date toDate, String reasonDocumentRef) {
-        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.TYPE_CONTRACTS_START_DATE, fromDate);
-        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.TYPE_CONTRACTS_END_DATE, toDate);
+        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.PROP_START_DATE, fromDate);
+        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.PROP_END_DATE, toDate);
 
         List<String> objects = new ArrayList<String>();
         objects.add(reasonDocumentRef);

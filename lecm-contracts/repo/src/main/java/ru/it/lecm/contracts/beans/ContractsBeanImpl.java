@@ -42,8 +42,8 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
 	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
-    public static final QName TYPE_CONTRACTS_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
-    public static final QName TYPE_CONTRACTS_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
+    public static final QName PROP_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
+    public static final QName PROP_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
 
     public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
@@ -72,11 +72,12 @@ public class ContractsBeanImpl extends BaseBean {
     private DocumentService documentService;
     private DocumentConnectionService documentConnectionService;
     private DocumentMembersService documentMembersService;
+    private NamespaceService namespaceService;
     private OrgstructureBean orgstructureService;
 	private RegNumbersService regNumbersService;
 	private NotificationsService notificationService;
 
-    DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+    public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -110,6 +111,10 @@ public class ContractsBeanImpl extends BaseBean {
         this.orgstructureService = orgstructureService;
     }
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
 	@Override
     public NodeRef getServiceRootFolder() {
         return null;
@@ -127,57 +132,18 @@ public class ContractsBeanImpl extends BaseBean {
 		return  documentService.getDraftPath(CONTRACTS);
 	}
 
+    public String getDocumentsFolderPath(){
+        return documentService.getDocumentsFolderPath();
+    }
+
     /**
      * Поиск договоров
      * @param path путь где следует искать
      * @param statuses статусы договоров
-     * @return
+     * @return List<NodeRef>
      */
     public List<NodeRef> getContracts(ArrayList<String> path, ArrayList<String> statuses) {
-        List<NodeRef> records = new ArrayList<NodeRef>();
-        SearchParameters sp = new SearchParameters();
-        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        String query = "";
-
-        // формируем запрос
-        query = "TYPE:\"" + TYPE_CONTRACTS_DOCUMENT + "\"";
-
-        if (path.size() > 0) {
-            query = query + " AND (";
-            for (int i = 0; i < path.size(); i++) {
-                query = query + "PATH:\"" + path.get(i) + "//*\"";
-                if ((i + 1) < path.size()) {
-                    query = query + " OR ";
-                }
-            }
-            query = query + ")";
-        }
-
-        if (statuses.size() > 0) {
-            query = query + " AND (";
-            for (int i = 0; i < statuses.size(); i++) {
-                query = query + "@lecm\\-statemachine\\:status:\"" + statuses.get(i).trim() + "\"";
-                if ((i + 1) < statuses.size()) {
-                    query = query + " OR ";
-                }
-            }
-            query = query + ")";
-        }
-
-        ResultSet results = null;
-        sp.setQuery(query);
-        try {
-            results = searchService.query(sp);
-            for (ResultSetRow row : results) {
-                records.add(row.getNodeRef());
-            }
-        } finally {
-            if (results != null) {
-                results.close();
-            }
-        }
-        return records;
+        return getContractsByFilter(null, null, null, path, statuses, null, null, false);
     }
 
     /**
@@ -241,28 +207,52 @@ public class ContractsBeanImpl extends BaseBean {
         nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
     }
 
-    public List<NodeRef> getContractsByFilter(Date begin, Date end, List<NodeRef> employeesList, List<NodeRef> docsList) {
+    public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList, boolean includeAdditional) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
         String query = "";
 
-        // формируем базовый запрос - ищем договора и документы к договорам в папке Черновики и Документы
-        query = "(TYPE:\"" + TYPE_CONTRACTS_DOCUMENT + "\" OR TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\") AND " +
-                "(PATH:\"" + documentService.getDraftPath() + "//*\" OR PATH:\"" + documentService.getDocumentsFolderPath() + "//*\")";
+        query = "(TYPE:\"" + TYPE_CONTRACTS_DOCUMENT + "\"" + (includeAdditional ? " OR TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\"": "") +  ")";
 
-        final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
-        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+        // пути
+        if (paths != null && !paths.isEmpty()) {
+            boolean addOR = false;
+            String pathsFilter = "";
+            for (String path : paths) {
+                pathsFilter += (addOR ? " OR " : "") + "PATH:\"" + path + "//*\"";
+                addOR = true;
+            }
+            query += " AND (" + pathsFilter + ")";
+        }
 
-        // Фильтр по датам последнего изменения статуса
-        query += " AND @lecm\\-document\\:status-changed-date:[" + MIN + " TO " + MAX + "]";
+        // Фильтр по датам
+        if (dateProperty != null) {
+            final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+            final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+
+            String property = dateProperty.toPrefixString(namespaceService);
+            property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+            query += " AND @" + property + ":[" + MIN + " TO " + MAX + "]";
+        }
+
+        // фильтр по статусам
+        if (statuses != null && !statuses.isEmpty()) {
+            boolean addOR = false;
+            String statusesFilter = "";
+            for (String status : statuses) {
+                statusesFilter += (addOR ? " OR " : "") + "@lecm\\-statemachine\\:status:\"" + status.trim() + "\"";
+                addOR = true;
+            }
+            query += " AND (" + statusesFilter + ")";
+        }
 
         // фильтр по сотрудниками-создателям
-        if (employeesList != null && !employeesList.isEmpty()) {
+        if (inititatorsList != null && !inititatorsList.isEmpty()) {
             boolean addOR = false;
             String employeesFilter = "";
-            for (NodeRef employeeRef : employeesList) {
+            for (NodeRef employeeRef : inititatorsList) {
                 String personName = orgstructureService.getEmployeeLogin(employeeRef);
                 if (personName != null && !personName.isEmpty()) {
                     employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:" + personName + "";

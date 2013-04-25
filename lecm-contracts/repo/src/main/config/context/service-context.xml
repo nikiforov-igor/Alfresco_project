@@ -65,6 +65,7 @@
         <property name="notificationService" ref="notificationsService"/>
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="authService" ref="authenticationService"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
@@ -202,5 +203,60 @@
         <property name="dictionaryService">
             <ref bean="dictionaryService"/>
         </property>
+    </bean>
+
+
+    <bean id="contractsInitiatorNotificationExecutor" class="ru.it.lecm.contracts.schedule.InitiatorEveryDayNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="contractsService" ref="contractService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+    </bean>
+
+    <bean id="contractsInitiatorNotificationSchedule" class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 3 */1 * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */12 * * * ?</value>
+        </property>
+        <property name="jobName">
+            <value>contracts-notifications-job</value>
+        </property>
+        <property name="jobGroup">
+            <value>contracts-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>contracts-notifications-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>contracts-notifications</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="contractsService" ref="contractService"/>
     </bean>
 </beans>
