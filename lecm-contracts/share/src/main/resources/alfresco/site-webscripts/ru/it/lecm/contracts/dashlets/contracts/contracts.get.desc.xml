@@ -3,5 +3,4 @@
    <description>Дашлет "Договора"</description>
    <family>user-dashlet</family>
    <url>/lecm/contracts/dashlets/contracts-list</url>
-    <authentication>user</authentication>
 </webscript>

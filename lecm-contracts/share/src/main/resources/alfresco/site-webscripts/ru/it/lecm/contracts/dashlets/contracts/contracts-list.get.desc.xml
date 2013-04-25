@@ -3,5 +3,4 @@
     <description>Contracts dashlet docs list script</description>
     <url>/lecm/contracts/dashlets/list</url>
     <lifecycle>internal</lifecycle>
-    <authentication>user</authentication>
 </webscript>
