@@ -1,7 +1,6 @@
 package ru.it.lecm.contracts.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -41,7 +40,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/aspects/1.0";
 	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
 
-	public static final QName TYPE_CONTRACTS_RECORD = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
+	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
 	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
     public static final QName TYPE_CONTRACTS_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
     public static final QName TYPE_CONTRACTS_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
@@ -107,6 +106,10 @@ public class ContractsBeanImpl extends BaseBean {
 		this.notificationService = notificationService;
 	}
 
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
 	@Override
     public NodeRef getServiceRootFolder() {
         return null;
@@ -138,7 +141,7 @@ public class ContractsBeanImpl extends BaseBean {
         String query = "";
 
         // формируем запрос
-        query = "TYPE:\"" + TYPE_CONTRACTS_RECORD + "\"";
+        query = "TYPE:\"" + TYPE_CONTRACTS_DOCUMENT + "\"";
 
         if (path.size() > 0) {
             query = query + " AND (";
@@ -182,12 +185,8 @@ public class ContractsBeanImpl extends BaseBean {
      * @return
      */
     public List<NodeRef> getAllMembers() {
-        NodeRef membersUnit = documentMembersService.getMembersUnit(TYPE_CONTRACTS_RECORD);
-        List<NodeRef> members = new ArrayList<NodeRef>();
-        for (AssociationRef employee : nodeService.getTargetAssocs(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE)) {
-            members.add(employee.getTargetRef());
-        }
-        return members;
+        NodeRef membersUnit = documentMembersService.getMembersUnit(TYPE_CONTRACTS_DOCUMENT);
+        return findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
     }
 
     public List<NodeRef> getAllMembers(String sortColumnLocalName, final boolean sortAscending) {
@@ -232,6 +231,11 @@ public class ContractsBeanImpl extends BaseBean {
         return null;
     }
 
+    /**
+     * Добавить причину удаления к документу
+     * @param reasonRef ссылка на узел причины удаления в справочнике "Причины удаления"
+     * @param documentRef ссылка на документ
+     */
     public void appendDeleteReason(NodeRef reasonRef, NodeRef documentRef) {
 	    nodeService.addAspect(documentRef, ASPECT_CONTRACT_DELETED, null);
         nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
@@ -245,7 +249,7 @@ public class ContractsBeanImpl extends BaseBean {
         String query = "";
 
         // формируем базовый запрос - ищем договора и документы к договорам в папке Черновики и Документы
-        query = "(TYPE:\"" + TYPE_CONTRACTS_RECORD + "\" OR TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\") AND " +
+        query = "(TYPE:\"" + TYPE_CONTRACTS_DOCUMENT + "\" OR TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\") AND " +
                 "(PATH:\"" + documentService.getDraftPath() + "//*\" OR PATH:\"" + documentService.getDocumentsFolderPath() + "//*\")";
 
         final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
@@ -292,10 +296,6 @@ public class ContractsBeanImpl extends BaseBean {
             }
         }
         return records;
-    }
-
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {

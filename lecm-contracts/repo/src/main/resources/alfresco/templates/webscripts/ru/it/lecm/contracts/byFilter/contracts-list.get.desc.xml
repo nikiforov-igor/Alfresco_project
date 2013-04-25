@@ -1,5 +1,5 @@
 <webscript>
-    <shortname>Список договоров по фильлтрам</shortname>
+    <shortname>Список договоров по фильтрам</shortname>
     <description>Список договоров по фльтрам: дата изменения, пользователи</description>
     <url>/lecm/contracts/getContractsByFilters</url>
     <format default="json">extension</format>

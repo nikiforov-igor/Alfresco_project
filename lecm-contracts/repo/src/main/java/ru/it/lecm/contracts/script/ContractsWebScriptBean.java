@@ -80,6 +80,12 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return contractService.getAllMembers().size();
     }
 
+    /**
+     * Получить список участников договорной деятельности
+     * @param sortColumnName сортируемый атрибут
+     * @param sortAscending сортировка
+     * @return список участников
+     */
     public Scriptable getMembers(String sortColumnName, Boolean sortAscending) {
         return createScriptable(contractService.getAllMembers(sortColumnName, sortAscending));
     }

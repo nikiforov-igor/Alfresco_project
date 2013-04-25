@@ -55,7 +55,9 @@
                     if (innerHtml) {
                         div.innerHTML = innerHtml;
                     }
-                    return div;
+                    if (this.container) {
+                        this.container.appendChild(div);
+                    }
                 },
 
                 drawForm: function Draw_form()
@@ -70,20 +72,17 @@
                                             if (response.json != null) {
                                                 var list = response.json.list;
                                                 var members = response.json.members;
-                                                var innerHtml,div;
+                                                var innerHtml;
                                                 for (var index in list) {
                                                     innerHtml = "<div class='column first'>" + this.message[list[index].key] + "</div>"+
                                                             "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
                                                             list[index].filter +"\">" +list[index].amountContracts + "</a></div>";
-                                                    div = this.createRow(innerHtml);
-                                                    this.container.appendChild(div);
+                                                    this.createRow(innerHtml);
                                                 }
-                                                div = this.createRow('&nbsp');
-                                                this.container.appendChild(div);
+                                                this.createRow('&nbsp');
                                                 innerHtml = "<div class='column first'>" + this.message[members.key] +"</div>"+
                                                         "<div class='column second'><a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" +members.amountMembers + "</a></div>";
-                                                div = this.createRow(innerHtml);
-                                                this.container.appendChild(div);
+                                                this.createRow(innerHtml);
                                             }
                                         }
                                     },
