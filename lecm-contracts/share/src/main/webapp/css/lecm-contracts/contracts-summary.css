@@ -1,0 +1,13 @@
+.dashlet.contracts .body .row.summary {
+    line-height: 16px;
+    margin: 10px 0;
+    clear: both;
+}
+.dashlet.contracts .body .row .column.first {
+    position: relative;
+    width: auto;
+}
+.dashlet.contracts .body .row .column.second {
+    float: right;
+    overflow: auto;
+}
