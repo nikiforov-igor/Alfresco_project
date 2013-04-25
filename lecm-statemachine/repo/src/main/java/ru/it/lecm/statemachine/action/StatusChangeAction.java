@@ -88,6 +88,11 @@ public class StatusChangeAction extends StateMachineAction {
 			dynamicPrivileges = initPrivileges(dynamicRoleElement);
 		}
 
+        if (staticPrivileges != null) {
+            LecmPermissionGroup permissionGroup = getLecmPermissionService().findPermissionGroup("Read");
+            staticPrivileges.put("Collaborator", permissionGroup);
+        }
+
         //Если начальный статус, то папки для него не требуется
 		if (forDraft) return;
 
