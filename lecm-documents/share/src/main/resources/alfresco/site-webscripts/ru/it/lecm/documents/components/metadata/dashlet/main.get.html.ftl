@@ -57,7 +57,7 @@
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <#if mayAdd!false>
-                <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
+                <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container',null,true)"
                    class="edit" title="${msg("dashlet.edit.tooltip")}"></a>
         </#if>
         <div id="${id}_container"></div>

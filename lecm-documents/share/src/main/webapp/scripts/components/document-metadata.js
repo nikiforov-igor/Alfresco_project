@@ -54,7 +54,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                  */
                 nodeRef: null,
                 formId: "",
-                containerId: null
+                containerId: null,
+                moveStartPage: false
 
             },
 
@@ -92,12 +93,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
-            onEdit: function (containerId, formId) {
+            onEdit: function (containerId, formId, moveStartPage) {
                 if (formId != undefined || formId != null) {
                     this.options.formId = formId;
                 }
                 if (containerId != undefined || containerId != null) {
                     this.options.containerId = containerId;
+                }
+                if (moveStartPage != undefined || moveStartPage != null) {
+                    this.options.moveStartPage = moveStartPage;
                 }
                 var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
                 new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
@@ -110,8 +114,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     },
                     onSuccess: {
                         fn: function (response) {
-                            //формируем путь с параметрами. Осуществляем переход
-                            LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
+                            if (this.options.moveStartPage) {
+                                window.location.reload();
+                            } else {
+                                //формируем путь с параметрами. Осуществляем переход
+                                LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
+                            }
                         },
                         scope: this
                     }
