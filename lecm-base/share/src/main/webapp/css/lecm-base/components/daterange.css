@@ -1,0 +1,17 @@
+.yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-start-date,
+.yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-end-date {
+	float: left;
+}
+
+.yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-unlimited div.form-field {
+	width: auto;
+	margin-left: 20px;
+}
+
+.yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-end-date div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+	margin-left: 15px;
+}
+
+.yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-end-date div.form-field label {
+	width: auto;
+}

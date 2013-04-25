@@ -32,7 +32,7 @@
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="counterparty-info-1" appearance=""/>
                     <set id="counterparty-info-2" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="content" appearance="" />
                     <set id="registr-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="other" appearance="" />
@@ -85,8 +85,8 @@
                     <field id="lecm-contract:signedCounterparty" set="counterparty-info-1"/>
                     <field id="lecm-contract:signatoryCounterparty" set="counterparty-info-2"/>
                     <field id="lecm-contract:regNumSystem" set="counterparty-info-2"/>
-                    <field id="lecm-contract:startDate" set="dates"/>
-                    <field id="lecm-contract:endDate" set="dates"/>
+                    <field id="lecm-contract:startDate" set="dates" label-id="contract.daterange"/>
+                    <field id="lecm-contract:endDate" set="dates" label=""/>
                     <field id="lecm-contract:unlimited" set="dates"/>
                     <field id="lecm-contract:summaryContent" set="content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
