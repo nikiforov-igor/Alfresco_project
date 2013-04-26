@@ -235,6 +235,7 @@
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
                     );
+                    Dom.addClass(p_dialog.id + "-form", "dashlet-metadata-edit");
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -251,7 +252,7 @@
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createContractDetails");
                 createDetails.setOptions(
                     {
-                        width: "50em",
+                        width: "70em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,
