@@ -1,2 +1,2 @@
-<import resource="classpath:alfresco/site-webscripts/org/alfresco/components/workflow/workflow.lib.js">
+<import resource="classpath:alfresco/site-webscripts/ru/it/lecm/statemachine/editor/lecm.workflow.lib.js">
 model.workflowDefinitions = getWorkflowDefinitions();

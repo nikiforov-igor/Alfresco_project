@@ -1118,4 +1118,16 @@
         </forms>
     </config>
 
+	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$default_statemachine"/>
+		</hidden-workflows>
+	</config>
+
+	<config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+		<hidden-workflows>
+			<workflow name="activiti$default_statemachine"/>
+		</hidden-workflows>
+	</config>
+
 </alfresco-config>

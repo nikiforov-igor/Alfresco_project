@@ -629,6 +629,28 @@
 		</forms>
 	</config>
 
+	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$createOnBasis"/>
+			<workflow name="activiti$contractsDeleteReason"/>
+			<workflow name="activiti$contractsContractTime"/>
+			<workflow name="activiti$contractsTermination"/>
+			<workflow name="activiti$default_statemachine"/>
+			<workflow name="activiti$lecm-contract-fake_document"/>
+			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
+			<workflow name="activiti$lecm-contract_document"/>
+		</hidden-workflows>
+	</config>
+
+	<config evaluator="string-compare" condition="LECMStatemachineWorkflow">
+		<hidden-workflows>
+			<workflow name="activiti$default_statemachine"/>
+			<workflow name="activiti$lecm-contract-fake_document"/>
+			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
+			<workflow name="activiti$lecm-contract_document"/>
+		</hidden-workflows>
+	</config>
+
     <config>
         <forms>
             <dependencies>
