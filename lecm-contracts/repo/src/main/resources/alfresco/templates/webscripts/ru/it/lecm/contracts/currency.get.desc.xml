@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Валюта</shortname>
+    <description>Валюта договора</description>
+    <url>/lecm/contracts/getCurrency</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
