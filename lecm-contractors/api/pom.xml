@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>lecm-contractors-api</artifactId>
-	<name>Logic ECM Calendar Repo API</name>
+	<name>Logic ECM Contractors Repo API</name>
 
 	<dependencies>
 		<dependency>
