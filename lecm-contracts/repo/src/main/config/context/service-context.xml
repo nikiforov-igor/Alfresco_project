@@ -272,4 +272,20 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="contractsOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.ContractsOnCreateAssocsPolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
 </beans>
