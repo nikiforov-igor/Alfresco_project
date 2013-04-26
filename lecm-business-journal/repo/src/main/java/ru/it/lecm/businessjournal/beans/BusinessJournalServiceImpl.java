@@ -607,12 +607,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 					public Boolean execute() throws Throwable {
 						if (!isArchive(record)) {
 							NodeRef objectType = findNodeByAssociationRef(record, ASSOC_BR_RECORD_OBJ_TYPE, null, ASSOCIATION_TYPE.TARGET);
-							String type;
+							String type = null;
 							if (objectType != null) {
 								type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
 							} else {
 								NodeRef mainObject = findNodeByAssociationRef(record, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET);
-								type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
+                                if(mainObject != null) {
+                                    type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
+                                }
 							}
 							String category;
 							NodeRef eventCategory = findNodeByAssociationRef(record, ASSOC_BR_RECORD_EVENT_CAT, null, ASSOCIATION_TYPE.TARGET);
@@ -621,7 +623,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 							} else {
 								category = "unknown";
 							}
-							NodeRef archiveRef = getArchiveFolder(new Date(), type, category);
+							NodeRef archiveRef = getArchiveFolder(new Date(), (type != null ? type : "unknown"), category);
 							nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
 							ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
 							return newRef != null;
