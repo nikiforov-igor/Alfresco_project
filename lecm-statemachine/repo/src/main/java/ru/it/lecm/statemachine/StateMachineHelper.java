@@ -25,6 +25,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
@@ -676,10 +677,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
         }
 
+        PersonService personService = serviceRegistry.getPersonService();
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         for (WorkflowTask task : tasks) {
             String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
-            NodeRef ownerPerson = serviceRegistry.getPersonService().getPerson(owner);
+            NodeRef ownerPerson = personService.getPerson(owner);
             if (persons.contains(ownerPerson)) {
                 result.add(task);
             }
@@ -730,6 +732,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
             documentWorkflowUtil.removeWorkflow(document, workflowDescriptor.getExecutionId());
         }
+    }
+
+    @Override
+    public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
+        List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
+                WorkflowTaskState.IN_PROGRESS);
+
+        NodeService nodeService = serviceRegistry.getNodeService();
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+        for (WorkflowTask task : assignedTasks) {
+            NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
+            for (ChildAssociationRef childAssoc : childAssocs) {
+                NodeRef document = childAssoc.getChildRef();
+                String type = nodeService.getType(document).getLocalName();
+                if (documentTypes.contains(type)) {
+                    result.add(task);
+                }
+            }
+        }
+
+        return result;
     }
 
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {

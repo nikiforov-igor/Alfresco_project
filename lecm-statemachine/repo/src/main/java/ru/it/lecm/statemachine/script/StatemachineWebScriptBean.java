@@ -1,9 +1,11 @@
 package ru.it.lecm.statemachine.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.ScriptableObject;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -105,6 +107,34 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
     public boolean isReadOnlyCategory(ScriptNode node, String category) {
         return stateMachineHelper.isReadOnlyCategory(node.getNodeRef(), category);
+    }
+
+    /**
+     * Возвращает список активных задач пользователя для документа данного типа
+     *
+     * @param documentTypesString
+     * @return
+     */
+    public WorkflowTaskListBean getDocumentsTasks(String documentTypesString) {
+        if (StringUtils.isEmpty(documentTypesString)) {
+            return new WorkflowTaskListBean();
+        }
+
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (currentEmployee == null) {
+            return new WorkflowTaskListBean();
+        }
+
+        List<String> documentTypes = Arrays.asList(documentTypesString.split(","));
+        String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+
+        List<WorkflowTask> documentsTasks = stateMachineHelper.getDocumentsTasks(documentTypes, fullyAuthenticatedUser);
+        List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(documentsTasks, Collections.singletonList(currentEmployee));
+
+        WorkflowTaskListBean result = new WorkflowTaskListBean();
+        result.setMyTasks(myTasks);
+
+        return result;
     }
 
     /**

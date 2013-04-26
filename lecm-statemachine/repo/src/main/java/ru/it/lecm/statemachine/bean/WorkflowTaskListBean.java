@@ -3,6 +3,8 @@ package ru.it.lecm.statemachine.bean;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -38,6 +40,10 @@ public class WorkflowTaskListBean {
         return subordinateTasks;
     }
 
+    public void setMyTasks(List<WorkflowTask> myTasks) {
+        setMyTasks(myTasks, 0);
+    }
+
     public void setMyTasks(List<WorkflowTask> myTasks, int myTasksLimit) {
         if (myTasks == null) {
             return;
@@ -55,6 +61,13 @@ public class WorkflowTaskListBean {
         for (WorkflowTask task : myTasksDisplayed) {
             this.myTasks.add(new WorkflowTaskBean(task));
         }
+
+        Collections.sort(this.myTasks, new Comparator<WorkflowTaskBean>() {
+            @Override
+            public int compare(WorkflowTaskBean o1, WorkflowTaskBean o2) {
+                return o2.getStartDate().compareTo(o1.getStartDate());
+            }
+        });
     }
 
     public void setSubordinatesTasks(List<WorkflowTask> subordinatesTasks) {

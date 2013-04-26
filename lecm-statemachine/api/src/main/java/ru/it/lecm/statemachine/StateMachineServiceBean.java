@@ -79,4 +79,6 @@ public interface StateMachineServiceBean {
     public List<String> getStatuses(String documentType);
 
     public boolean isFinal(NodeRef document);
+
+    List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser);
 }
