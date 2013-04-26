@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dictionary name="Шаблоны регистрационных номеров">
+	<items>
+		<item name="Регистрационный номер договора">
+			<property name="cm:name">Регистрационный номер договора</property>
+			<property name="lecm-regnum:template-string">{#employeeOrgUnitCode(doc.creator)}-{#formatNumber('0000', doc.counterYearDoctype('contracts_system'))}/{#formatDate('yy', doc.creationDate)}</property>
+			<property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров договоров</property>
+		</item>
+		<item name="Регистрационный номер проекта договора">
+			<property name="cm:name">Регистрационный номер проекта договора</property>
+			<property name="lecm-regnum:template-string">{#employeeOrgUnitCode(doc.creator)}-{doc.associatedAttributePath('lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code')}-{#formatNumber('0000', doc.counterYearDoctype('contracts_project'))}/{#formatDate('yy', doc.creationDate)}</property>
+			<property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров проектов договоров</property>
+		</item>
+		<item name="Регистрационный номер проекта документа к договору">
+			<property name="cm:name">Регистрационный номер проекта документа к договору</property>
+			<property name="lecm-regnum:template-string">{doc.counterPlainDoctype}</property>
+			<property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров проектов документов к договору</property>
+		</item>
+	</items>
+</dictionary>

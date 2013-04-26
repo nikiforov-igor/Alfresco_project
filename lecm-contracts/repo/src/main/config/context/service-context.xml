@@ -118,6 +118,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-connection-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-regnumbers.xml</value>
             </list>
         </property>
     </bean>
@@ -259,4 +260,16 @@
         </property>
         <property name="contractsService" ref="contractService"/>
     </bean>
+
+	<bean id="contracts.LogicEcmContractsTaggedCounterRegistrator"
+	      parent="regNumbersTaggedCounterRegistrator"
+	      depends-on="contracts.LogicEcmContractsBootstrap">
+		<property name="documentType" value="lecm-contract:document"/>
+		<property name="tags">
+			<list>
+				<value>contracts_system</value>
+				<value>contracts_project</value>
+			</list>
+		</property>
+	</bean>
 </beans>

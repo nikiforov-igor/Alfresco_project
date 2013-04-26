@@ -12,6 +12,11 @@ import ru.it.lecm.regnumbers.template.TemplateRunException;
 public interface RegNumbersService {
 
 	/**
+	 * Название справочника с шаблонами регистрационных номеров
+	 */
+	public static final String REGNUMBERS_TEMPLATE_DICTIONARY_NAME = "Шаблоны регистрационных номеров";
+
+	/**
 	 * Namespace для модели данных
 	 */
 	String REGNUMBERS_NAMESPACE = "http://www.it.ru/lecm/model/regnumbers/1.0";
