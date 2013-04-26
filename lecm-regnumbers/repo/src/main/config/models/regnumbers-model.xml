@@ -68,6 +68,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-regnum:template-service-id">
+					<title>Служебный идентификатор шаблона номера</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="lecm-regnum:template-comment">
 					<title>Комментарий</title>
 					<type>d:text</type>

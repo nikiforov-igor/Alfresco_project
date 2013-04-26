@@ -13,6 +13,7 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name"/>
+					<show id="lecm-regnum:template-service-id"/>
 					<show id="lecm-regnum:template-string"/>
 					<show id="lecm-regnum:template-comment"/>
 				</field-visibility>
@@ -27,6 +28,7 @@
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name"/>
+					<show id="lecm-regnum:template-service-id"/>
 					<show id="lecm-regnum:template-string"/>
 					<show id="lecm-regnum:template-comment"/>
 				</field-visibility>
@@ -48,6 +50,14 @@
 						</constraint-handlers>
 					</field>
 				</appearance>
+			</form>
+			<form id="view-node-form">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:template-service-id"/>
+					<show id="lecm-regnum:template-string"/>
+					<show id="lecm-regnum:template-comment"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>

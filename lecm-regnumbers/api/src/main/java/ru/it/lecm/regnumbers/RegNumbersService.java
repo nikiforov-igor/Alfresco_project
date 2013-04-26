@@ -62,6 +62,10 @@ public interface RegNumbersService {
 	 * Комментарий к шаблону, lecm-regnum:template-comment
 	 */
 	QName PROP_TEMPLATE_COMMENT = QName.createQName(REGNUMBERS_NAMESPACE, "template-comment");
+	/**
+	 * Служебный идентификатор шаблона номера, lecm-regnum:template-service-id
+	 */
+	QName PROP_TEMPLATE_SERVICE_ID = QName.createQName(REGNUMBERS_NAMESPACE, "template-service-id");
 
 	/**
 	 * Сгенерировать номер документа до данному шаблону номера.
