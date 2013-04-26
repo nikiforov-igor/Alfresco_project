@@ -152,7 +152,7 @@ var info = new LogicECM.module.Contracts.dashlet.Summary("${id}").setOptions(
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results"></div>
 </div>
-<div id="${formId}" class="yui-panel">
+<div id="${formId}" class="yui-panel" style="display: none">
     <div id="${formId}-head" class="hd">${msg("label.info.panel.title")}</div>
     <div id="${formId}-body" class="bd">
         <div id="${formId}-content"></div>

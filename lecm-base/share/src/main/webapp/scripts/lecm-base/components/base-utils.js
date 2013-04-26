@@ -50,6 +50,27 @@ LogicECM.module.Base.Util = {
         Dom.setStyle(block, 'min-height', h + 'px');
         Bubbling.fire("HeightSetted");
     },
+
+    setDashletsHeight: function(dashletsBlockId, numberDashlets) {
+        var Dom = YAHOO.util.Dom;
+
+        var bd = Dom.get('doc-bd');
+        var dashletsBlock = Dom.get(dashletsBlockId);
+
+        var bdHeight = parseInt(Dom.getStyle(bd, 'height'));
+        Dom.setStyle(dashletsBlock, 'height', 'auto');
+        Dom.setStyle(dashletsBlock, 'min-height', bdHeight + 'px');
+
+        var dashlets = Dom.getElementsByClassName('dashlet', 'div');
+        var dashletsMarginTop = parseInt(Dom.getStyle(dashlets, 'margin-top'));
+        var dashletsMarginBottom = parseInt(Dom.getStyle(dashlets, 'margin-bottom'));
+
+        var h = (bdHeight - dashletsMarginTop - dashletsMarginBottom - (numberDashlets - 1) * Math.max(dashletsMarginTop, dashletsMarginBottom))/numberDashlets;
+
+        Dom.setStyle(dashlets, 'height', 'auto');
+        Dom.setStyle(dashlets, 'min-height', h + 'px');
+    },
+
     /**
      * Add a URL parameter (or changing it if it already exists)
      * @param {search} string  this is typically document.location.search

@@ -7,6 +7,17 @@
 
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
+        (function () {
+            function init() {
+                setTimeout(function () {
+                    LogicECM.module.Base.Util.setHeight();
+                    LogicECM.module.Base.Util.setDashletsHeight("main-region", 2);
+                }, 10);
+            }
+
+            YAHOO.util.Event.onDOMReady(init);
+        })();
+
 //]]></script>
 </@>
 
