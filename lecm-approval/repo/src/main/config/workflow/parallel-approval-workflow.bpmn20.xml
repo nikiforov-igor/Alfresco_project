@@ -26,8 +26,6 @@
 						-->
 						<activiti:string>
 			            //<![CDATA[
-			            	approval.printVariables(task.getVariables());
-			            	approval.printVariablesLocal(task.getVariablesLocal());
 			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
 			            	var userName = assignee.properties.userName;

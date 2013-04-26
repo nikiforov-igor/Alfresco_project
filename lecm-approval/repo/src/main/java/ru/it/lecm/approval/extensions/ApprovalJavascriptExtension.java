@@ -2,7 +2,6 @@ package ru.it.lecm.approval.extensions;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -144,23 +143,5 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final Map<String, String> decisionMap) {
 		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), decisionMap);
-	}
-
-	private void print(final Map<String, Object> vars) {
-		if (vars != null) {
-			for (Entry<String, Object> var : vars.entrySet()) {
-				logger.debug("{} = {}", var.getKey(), var.getValue());
-			}
-		}
-	}
-
-	public void printVariables(final Map<String, Object> variables) {
-		logger.debug("Task variables trace...");
-		print(variables);
-	}
-
-	public void printVariablesLocal(final Map<String, Object> variablesLocal) {
-		logger.debug("Task local variables trace...");
-		print(variablesLocal);
 	}
 }
