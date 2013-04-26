@@ -52,4 +52,52 @@
 		</forms>
 	</config>
 
+
+
+	<config evaluator="string-compare" condition="activiti$lecmSequentialApproval">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDueDate"/>
+					<show id="bpm:workflowDescription" />
+					<show id="lecmSaWf:employeesAssoc"/>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="bpm:workflowDescription" labelid="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+
+					<field id="lecmSaWf:employeesAssoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="lecmSaAt:approveTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecmSaAt:approveTaskResult" />
+					<show id="bpm:comment" />
+					<show id="lecmSaAt:approveTaskCommentAssoc" />
+				</field-visibility>
+				<appearance>
+					<field id="lecmSaAt:approveTaskResult">
+						<control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 </alfresco-config>

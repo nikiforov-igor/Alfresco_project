@@ -27,12 +27,20 @@
 					<prop key="#{MIMETYPE}">text/xml</prop>
 					<prop key="#{REDEPLOY}">true</prop>
 				</props>
+				<props>
+					<prop key="#{ENGINE_ID}">activiti</prop>
+					<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/sequential-approval-workflow.bpmn20.xml</prop>
+					<prop key="#{MIMETYPE}">text/xml</prop>
+					<prop key="#{REDEPLOY}">true</prop>
+				</props>
 			</list>
 		</property>
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-workflow-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-approve-task-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-workflow-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-approve-task-model.xml</value>
 			</list>
 		</property>
         <property name="labels">
@@ -42,21 +50,34 @@
         </property>
 	</bean>
 
-	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.modelBootstrap">
+	<bean id="lecm.approval.service.abstract" class="ru.it.lecm.approval.ApprovalListServiceAbstract" parent="baseBean" depends-on="lecm.approval.modelBootstrap" abstract="true">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
+	
+	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>
+	<bean id="lecm.approval.service.sequential" class="ru.it.lecm.approval.ApprovalListServiceSequential" parent="lecm.approval.service.abstract"/>
 
-	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="approval"/>
+	<bean id="lecm.approval.javascriptExtension.abstract" abstract="true" parent="baseJavaScriptExtension">
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="personService" ref="personService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="approvalListService" ref="lecm.approval.service"/>
+	</bean>
+
+	<bean id="lecm.approval.javascriptExtension.parallel" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"
+		  parent="lecm.approval.javascriptExtension.abstract">
+		<property name="extensionName" value="approvalParallel"/>
+		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
+	</bean>
+
+	<bean id="lecm.approval.javascriptExtension.sequential" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"
+		  parent="lecm.approval.javascriptExtension.abstract">
+		<property name="extensionName" value="approvalSequential"/>
+		<property name="approvalListService" ref="lecm.approval.service.sequential"/>
 	</bean>
 
 	<bean id="lecm.approval.ApprovalListApprovalItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListApprovalItemPolicy" init-method="init"

@@ -47,12 +47,12 @@
 			            	};
 			            	var decisionsMap = execution.getVariable("decisionsMap");
 			            	if (!decisionsMap) {
-			            		logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
+			            		logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
 			            	}
-			            	decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+			            	decisionsMap = approvalParallel.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
 			            	execution.setVariable("decisionsMap", decisionsMap);
 			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            	approvalParallel.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
 			            //]]>
 						</activiti:string>
 					</activiti:field>
@@ -70,9 +70,9 @@
 						 -->
 						<activiti:string>
 			            //<![CDATA[
-			            	var personList = approval.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
+			            	var personList = approvalParallel.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
 			            	execution.setVariableLocal("assigneesList", personList);
-			            	var approvalListRef = approval.createApprovalList(bpm_package);
+			            	var approvalListRef = approvalParallel.createApprovalList(bpm_package);
 			            	execution.setVariable("approvalListRef", approvalListRef);
 			            //]]>
 						</activiti:string>
@@ -97,8 +97,8 @@
 			            	if (!decisionsMap) {
 			            		logger.log("Attention: decisionsMap is null!");
 			            	}
-							approval.logFinalDecision(approvalListRef, decisionsMap);
-							var isApproved = approval.isApproved(decisionsMap);
+							approvalParallel.logFinalDecision(approvalListRef, decisionsMap);
+							var isApproved = approvalParallel.isApproved(decisionsMap);
 							execution.setVariable("isApproved", isApproved);
 			            //]]>
 						</activiti:string>

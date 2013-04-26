@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/approval/sequential">
+	<process id="lecmSequentialApproval" name="Logic ECM Sequential Approval" isExecutable="true">
+		<startEvent id="start-sequential-approvement" name="Start sequential approvement" activiti:formKey="lecmSaWf:sequentialApproval" ></startEvent>
+		<userTask id="sequential-approvement-task" name="Sequential approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmSaAt:approveTask">
+			<extensionElements>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script" >
+						<!--
+						1) наполнение коллекции решений для всех assignee
+						2) добавление записи в лист согласования
+						-->
+						<activiti:string>
+							//<![CDATA[
+			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+
+			            	var userName = assignee.properties.userName;
+			            	var decision = task.getVariableLocal("lecmSaAt_approveTaskResult");
+			            	var completionDate = task.getVariableLocal("bpm_completionDate");
+			            	var comment = task.getVariableLocal("bpm_comment");
+			            	var commentRef = task.getVariableLocal("lecmSaAt_approveTaskCommentAssoc");
+			            	logger.log("userName = " + userName);
+			            	logger.log("decision = " + decision);
+			            	logger.log("completionDate = " + completionDate);
+			            	logger.log("comment = " + comment);
+			            	logger.log("commentRef = " + commentRef);
+			            	var taskDecision = {
+			            		"userName": userName,
+			            		"decision": decision,
+			            		"completionDate": completionDate,
+			            		"comment": comment,
+			            		"commentRef": commentRef
+			            	};
+			            	var decisionsMap = execution.getVariable("decisionsMap");
+			            	if (!decisionsMap) {
+			            		logger.log("Attention: decisionsMap is null, it will be created in approvalSequential.addDecision method");
+			            	}
+			            	decisionsMap = approvalSequential.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+			            	execution.setVariable("decisionsMap", decisionsMap);
+			            	var approvalListRef = execution.getVariable("approvalListRef");
+			            	approvalSequential.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+							execution.setVariable("taskDecision", decision);
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+			<multiInstanceLoopCharacteristics isSequential="true" activiti:collection="${assigneesList}" activiti:elementVariable="assignee">
+				<completionCondition>${"REJECTED" == taskDecision}</completionCondition>
+			</multiInstanceLoopCharacteristics>
+		</userTask>
+		<sequenceFlow id="from-start-to-sequential-approvement-task" name="From start to sequential approvement task" sourceRef="start-sequential-approvement" targetRef="sequential-approvement-task">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<!--
+					   1) формирование списка assignee
+					   2) создание и наполнение листа согласования
+						-->
+						<activiti:string>
+							//<![CDATA[
+			            	var personList = approvalSequential.getPersonListByEmployeeList(lecmSaWf_employeesAssoc);
+			            	execution.setVariableLocal("assigneesList", personList);
+			            	var approvalListRef = approvalSequential.createApprovalList(bpm_package);
+			            	execution.setVariable("approvalListRef", approvalListRef);
+							
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+		</sequenceFlow>
+		<endEvent id="end-sequential-approvement" name="End sequential approvement"></endEvent>
+		<sequenceFlow id="from-sequential-approvement-task-to-end" name="From sequential approvement task to end" sourceRef="sequential-approvement-task" targetRef="end-sequential-approvement">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<!--
+					   1) анализ результатов согласования
+					   2) формирование  "итого" для листа согласования
+					   3) положить в какую-нибудь переменную регламента результат согласования
+						-->
+						<activiti:string>
+							//<![CDATA[
+			            	var decisionsMap = execution.getVariable("decisionsMap");
+			            	var approvalListRef = execution.getVariable("approvalListRef");
+			            	if (!decisionsMap) {
+			            		logger.log("Attention: decisionsMap is null!");
+			            	}
+							approvalSequential.logFinalDecision(approvalListRef, decisionsMap);
+							var isApproved = approvalSequential.isApproved(decisionsMap);
+							execution.setVariable("isApproved", isApproved);
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+		</sequenceFlow>
+	</process>
+</definitions>

@@ -34,9 +34,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *
  * @author vlevin
  */
-public class ApprovalListServiceImpl extends BaseBean implements ApprovalListService {
+public abstract class ApprovalListServiceAbstract extends BaseBean implements ApprovalListService {
 
-	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document");
 	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/fake/1.0", "document");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
@@ -63,7 +63,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	 * @param folder имя папки без слешей и прочей ерунды
 	 * @return NodeRef свежесозданной папки
 	 */
-	private NodeRef createFolder(final NodeRef parentRef, final String folder) {
+	protected NodeRef createFolder(final NodeRef parentRef, final String folder) {
 		ParameterCheck.mandatory("parentRef", parentRef);
 		ParameterCheck.mandatory("folder", folder);
 		NodeRef folderRef = AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
@@ -93,7 +93,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	 * @param folder имя папки без слешей и прочей ерунды
 	 * @return NodeRef если папка есть, null в противном случае
 	 */
-	private NodeRef getFolder(final NodeRef parentRef, final String folder) {
+	protected NodeRef getFolder(final NodeRef parentRef, final String folder) {
 		NodeRef folderRef = null;
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		if (childAssocs != null) {
@@ -115,7 +115,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	 * @param parentRef
 	 * @return
 	 */
-	private NodeRef getOrCreateApprovalFolder(NodeRef parentRef) {
+	protected NodeRef getOrCreateRootApprovalFolder(NodeRef parentRef) {
 		NodeRef approvalRef = getFolder(parentRef, "Согласование");
 		if (approvalRef == null) {
 			approvalRef = createFolder(parentRef, "Согласование");
@@ -129,7 +129,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	 * @param parentRef
 	 * @return
 	 */
-	private NodeRef getOrCreateParallelApprovalFolder(NodeRef parentRef) {
+	protected NodeRef getOrCreateParallelApprovalFolder(NodeRef parentRef) {
 		NodeRef parallelApprovalRef = getFolder(parentRef, "Параллельное согласование");
 		if (parallelApprovalRef == null) {
 			parallelApprovalRef = createFolder(parentRef, "Параллельное согласование");
@@ -137,7 +137,39 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		return parallelApprovalRef;
 	}
 
-	private String getContractDocumentVersion(final NodeRef contractDocumentRef) {
+	/**
+	 * Создание папки "Согласование/Последовательное согласование" внутри
+	 * документа
+	 *
+	 * @param parentRef
+	 * @return
+	 */
+	protected NodeRef getOrCreateSequentialApprovalFolder(NodeRef parentRef) {
+		NodeRef parallelApprovalRef = getFolder(parentRef, "Последовательное согласование");
+		if (parallelApprovalRef == null) {
+			parallelApprovalRef = createFolder(parentRef, "Последовательное согласование");
+		}
+		return parallelApprovalRef;
+	}
+
+	/**
+	 * Этот метод должен возвращать ссылку на папку, в которорую надо сложить
+	 * лист согласования данного конкретного регламента согласования
+	 * (последовательное, параллельное, еще какое-то)
+	 *
+	 * @param parentRef ссылка на папку "Согласование" в рамках вложения
+	 * документа.
+	 * @return ссылка на папку, куда можно складывать лист согласования
+	 */
+	protected abstract NodeRef getOrCreateApprovalFolder(NodeRef parentRef);
+
+	/**
+	 * Получить из документа версию вложения типа "Договор"
+	 *
+	 * @param contractDocumentRef ссылка на документ "Договор"
+	 * @return последняя версия вложенного файла из категории "Договор"
+	 */
+	protected String getContractDocumentVersion(final NodeRef contractDocumentRef) {
 		NodeRef contractCategory = null;
 		List<NodeRef> contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
 		for (NodeRef categoryRef : contractCategories) {
@@ -169,7 +201,19 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		}
 	}
 
-	private String getApprovalListVersion(String version, NodeRef parentRef) {
+	/**
+	 * Получить версию листа согласования. ПРоверяется наличие листа
+	 * согласования с указанной версией в указанной папке. Если лист с такой
+	 * версией уже есть, то версия инкреминируется. Пример: если есть лист
+	 * согласования с версией 1.5, то будет создан новый с версией 1.5.1. После
+	 * этого будет создан лист с версией 1.5.2 и т. д.
+	 *
+	 * @param version начальная версия листа согласования.
+	 * @param parentRef каталог с листами согласования
+	 * @return версия листа согласования, которую можно безбоязненно
+	 * использовать для нового листа
+	 */
+	protected String getApprovalListVersion(String version, NodeRef parentRef) {
 		String result;
 		String approvalListName = String.format(APPROVAL_LIST_NAME, version);
 		NodeRef approvalListNode = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, approvalListName);
@@ -178,14 +222,17 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		} else {
 			String[] splittedVersion = version.split("\\.");
 			if (splittedVersion.length == 2) {
+				// В версии две цифры (1.5)
 				result = version + ".1";
 			} else if (splittedVersion.length == 3) {
+				// В версии три цифры (1.5.3)
 				String minorVersionStr = splittedVersion[2];
 				int minorVersionInt = Integer.parseInt(minorVersionStr);
 				minorVersionInt++;
 				splittedVersion[2] = String.valueOf(minorVersionInt);
 				result = StringUtils.join(splittedVersion, ".");
 			} else {
+				// Мы не должны сюда попасть
 				logger.error("Error in version string: {}", version);
 				return null;
 			}
@@ -193,7 +240,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		}
 	}
 
-	private NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef, final NodeRef bpmPackage) {
+	protected NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef, final NodeRef bpmPackage) {
 		String contractDocumentVersion = getContractDocumentVersion(contractDocumentRef);
 		String approvalListVersion = getApprovalListVersion(contractDocumentVersion, parentRef);
 		String localName = String.format(APPROVAL_LIST_NAME, approvalListVersion);
@@ -229,9 +276,9 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				}
 			}
 			if (contractDocumentRef != null) {
-				//внутри этого документа получить или создать папку "Согласование/Параллельное согласование"
-				NodeRef approvalRef = getOrCreateApprovalFolder(contractDocumentRef);
-				NodeRef parallelApprovalRef = getOrCreateParallelApprovalFolder(approvalRef);
+				//внутри этого документа получить или создать папку "Согласование/<Какое-то> согласование"
+				NodeRef approvalRef = getOrCreateRootApprovalFolder(contractDocumentRef);
+				NodeRef parallelApprovalRef = getOrCreateApprovalFolder(approvalRef);
 				//создаем внутри указанной папки объект "Лист согласования"
 				approvalListRef = createApprovalList(parallelApprovalRef, contractDocumentRef, bpmPackage);
 			} else {
