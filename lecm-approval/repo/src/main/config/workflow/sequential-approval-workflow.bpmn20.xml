@@ -4,6 +4,19 @@
 		<startEvent id="start-sequential-approvement" name="Start sequential approvement" activiti:formKey="lecmSaWf:sequentialApproval" ></startEvent>
 		<userTask id="sequential-approvement-task" name="Sequential approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmSaAt:approveTask">
 			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+			            //<![CDATA[
+			            	var userName = assignee.properties.userName;
+			            	var dueDate = bpm_workflowDueDate;
+			            	logger.log(userName  + " must complete his task before worflow dueDate expired " + dueDate);
+			            	//считать DueDate для каждого assignee
+			            	//task.setDueDate(dueDate);
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script" >
 						<!--
