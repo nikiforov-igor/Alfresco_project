@@ -19,6 +19,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.ParameterCheck;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,11 +36,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  */
 public class ApprovalListServiceImpl extends BaseBean implements ApprovalListService {
 
-
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
 	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document");
 	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/fake/1.0", "document");
-
+	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
 	private OrgstructureBean orgstructureService;
 	private DocumentAttachmentsService documentAttachmentsService;
 
@@ -58,35 +58,37 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	/**
 	 * создаем папку у указанного родителя
+	 *
 	 * @param parentRef ссылка на родителя
 	 * @param folder имя папки без слешей и прочей ерунды
 	 * @return NodeRef свежесозданной папки
 	 */
-	private NodeRef createFolder (final NodeRef parentRef, final String folder) {
-		ParameterCheck.mandatory ("parentRef", parentRef);
-		ParameterCheck.mandatory ("folder", folder);
-		NodeRef folderRef = AuthenticationUtil.runAsSystem (new RunAsWork<NodeRef> () {
+	private NodeRef createFolder(final NodeRef parentRef, final String folder) {
+		ParameterCheck.mandatory("parentRef", parentRef);
+		ParameterCheck.mandatory("folder", folder);
+		NodeRef folderRef = AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
 			@Override
-			public NodeRef doWork () throws Exception {
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-				return transactionHelper.doInTransaction (new RetryingTransactionCallback<NodeRef> () {
+			public NodeRef doWork() throws Exception {
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+				return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
 					@Override
-					public NodeRef execute () throws Throwable {
-						QName assocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, folder);
-						Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
-						properties.put (ContentModel.PROP_NAME, folder);
-						ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-						return childAssoc.getChildRef ();
+					public NodeRef execute() throws Throwable {
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+						properties.put(ContentModel.PROP_NAME, folder);
+						ChildAssociationRef childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+						return childAssoc.getChildRef();
 					}
 				});
 			}
 		});
-		logger.trace ("NodeRef {} was sucessfully created for {} folder", folderRef, folder);
+		logger.trace("NodeRef {} was sucessfully created for {} folder", folderRef, folder);
 		return folderRef;
 	}
 
 	/**
 	 * получаем папку у указанного родителя
+	 *
 	 * @param parentRef ссылка на родителя
 	 * @param folder имя папки без слешей и прочей ерунды
 	 * @return NodeRef если папка есть, null в противном случае
@@ -96,10 +98,10 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		if (childAssocs != null) {
 			for (ChildAssociationRef childAssoc : childAssocs) {
-				NodeRef childRef = childAssoc.getChildRef ();
-				if (folder.equals (nodeService.getProperty (childRef, ContentModel.PROP_NAME))) {
+				NodeRef childRef = childAssoc.getChildRef();
+				if (folder.equals(nodeService.getProperty(childRef, ContentModel.PROP_NAME))) {
 					folderRef = childRef;
-					logger.trace ("Folder {} already exists, it's noderef is {}", folder, folderRef);
+					logger.trace("Folder {} already exists, it's noderef is {}", folder, folderRef);
 					break;
 				}
 			}
@@ -109,6 +111,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	/**
 	 * создание папки "Согласование" внутри объекта lecm-contract:document
+	 *
 	 * @param parentRef
 	 * @return
 	 */
@@ -137,7 +140,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	private String getContractDocumentVersion(final NodeRef contractDocumentRef) {
 		NodeRef contractCategory = null;
 		List<NodeRef> contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
-		for (NodeRef categoryRef: contractCategories) {
+		for (NodeRef categoryRef : contractCategories) {
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
 			if ("Договор".equals(categoryName)) {
 				contractCategory = categoryRef;
@@ -166,14 +169,39 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		}
 	}
 
+	private String getApprovalListVersion(String version, NodeRef parentRef) {
+		String result;
+		String approvalListName = String.format(APPROVAL_LIST_NAME, version);
+		NodeRef approvalListNode = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, approvalListName);
+		if (approvalListNode == null) {
+			return version;
+		} else {
+			String[] splittedVersion = version.split("\\.");
+			if (splittedVersion.length == 2) {
+				result = version + ".1";
+			} else if (splittedVersion.length == 3) {
+				String minorVersionStr = splittedVersion[2];
+				int minorVersionInt = Integer.parseInt(minorVersionStr);
+				minorVersionInt++;
+				splittedVersion[2] = String.valueOf(minorVersionInt);
+				result = StringUtils.join(splittedVersion, ".");
+			} else {
+				logger.error("Error in version string: {}", version);
+				return null;
+			}
+			return getApprovalListVersion(result, parentRef);
+		}
+	}
+
 	private NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef, final NodeRef bpmPackage) {
-		String version = getContractDocumentVersion(contractDocumentRef);
-		String localName = "Лист согласования версия " + version;
+		String contractDocumentVersion = getContractDocumentVersion(contractDocumentRef);
+		String approvalListVersion = getApprovalListVersion(contractDocumentVersion, parentRef);
+		String localName = String.format(APPROVAL_LIST_NAME, approvalListVersion);
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, localName);
 		properties.put(ContentModel.PROP_TITLE, localName);
 		properties.put(PROP_APPROVAL_LIST_APPROVE_START, new Date()); //TODO: брать дату начала согласования из регламента
-		properties.put(PROP_APPROVAL_LIST_DOCUMENT_VERSION, version);
+		properties.put(PROP_APPROVAL_LIST_DOCUMENT_VERSION, contractDocumentVersion);
 		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, localName);
 		NodeRef approvalListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_APPROVAL_LIST, properties).getChildRef();
 		//прикрепляем approval list к списку items у документа
@@ -238,7 +266,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			if (NodeRef.isNodeRef(commentStrRef)) {
 				commentRef = new NodeRef(commentStrRef);
 			}
-		}catch(JSONException ex) {
+		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 		}
 
