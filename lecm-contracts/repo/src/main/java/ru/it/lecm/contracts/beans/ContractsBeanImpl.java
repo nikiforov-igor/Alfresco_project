@@ -61,9 +61,9 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName PROP_DATE_REG_CONTRACT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegContracts");
 	public static final QName PROP_DATE_REG_CONTRACT_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegProjectContracts");
 
-	public static final String CONTRACT_REGNUM_TEMPLATE_CODE = "Регистрационный номер договора";
-	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE = "Регистрационный номер проекта договора";
-	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "Регистрационный номер проекта документа к договору";
+	public static final String CONTRACT_REGNUM_TEMPLATE_CODE = "CONTRACT_REGNUM";
+	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_PROJECT_REGNUM";
+	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_DOCUMENT_PROJECT_REGNUM";
 
 	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 
@@ -293,7 +293,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void registrationContractProject(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE);
+		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE);
 		if (templateDictionary != null) {
 			String documentNumber = regNumbersService.getNumber(contractRef, templateDictionary);
 			nodeService.setProperty(contractRef, PROP_REGNUM_PROJECT, documentNumber);
@@ -322,7 +322,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, CONTRACT_REGNUM_TEMPLATE_CODE);
+		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, CONTRACT_REGNUM_TEMPLATE_CODE);
 		if (templateDictionary != null) {
 			regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_SYSTEM, templateDictionary);
 			nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
@@ -330,7 +330,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void registrationContractDocumentProject(NodeRef documentRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE);
+		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE);
 		if (templateDictionary != null) {
 			String documentNumber = regNumbersService.getNumber(documentRef, templateDictionary);
 			nodeService.setProperty(documentRef, PROP_ADDITIONAL_DOCUMENT_NUMBER, documentNumber);
