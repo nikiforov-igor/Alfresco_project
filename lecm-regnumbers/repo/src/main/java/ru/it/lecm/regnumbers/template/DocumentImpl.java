@@ -138,22 +138,32 @@ public class DocumentImpl implements Document {
 
 	@Override
 	public long getCounterPlain() {
-		return counterFactory.getCounter(CounterType.PLAIN, documentNode).getValue();
+		return counterFactory.getCounter(CounterType.PLAIN, documentNode, null).getValue();
 	}
 
 	@Override
 	public long getCounterYear() {
-		return counterFactory.getCounter(CounterType.YEAR, documentNode).getValue();
+		return counterFactory.getCounter(CounterType.YEAR, documentNode, null).getValue();
 	}
 
 	@Override
 	public long getCounterPlainDoctype() {
-		return counterFactory.getCounter(CounterType.DOCTYPE_PLAIN, documentNode).getValue();
+		return counterFactory.getCounter(CounterType.DOCTYPE_PLAIN, documentNode, null).getValue();
 	}
 
 	@Override
 	public long getCounterYearDoctype() {
-		return counterFactory.getCounter(CounterType.DOCTYPE_YEAR, documentNode).getValue();
+		return counterFactory.getCounter(CounterType.DOCTYPE_YEAR, documentNode, null).getValue();
+	}
+
+	@Override
+	public long counterPlainDoctype(String tag) {
+		return counterFactory.getCounter(CounterType.DOCTYPE_PLAIN, documentNode, tag).getValue();
+	}
+
+	@Override
+	public long counterYearDoctype(String tag) {
+		return counterFactory.getCounter(CounterType.DOCTYPE_YEAR, documentNode, tag).getValue();
 	}
 
 	private Object getNodeRefAttribute(NodeRef node, String attributeName) {

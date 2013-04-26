@@ -33,6 +33,16 @@
 		</property>
 	</bean>
 
+	<bean id="contracts.LogicEcmContractsFakeTaggedCounterRegistrator" parent="regNumbersTaggedCounterRegistrator"
+		  depends-on="contracts.LogicEcmContractsFakeBootstrap">
+		<property name="documentType" value="lecm-contract-fake:document"/>
+		<property name="tags">
+			<list>
+				<value>PROJECT</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="contractsFakePolicy" class="ru.it.lecm.documents.contracts.policies.ContractsFakePolicy"
 			init-method="init"
 			depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">

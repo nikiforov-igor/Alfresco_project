@@ -122,6 +122,25 @@ interface Document {
 	long getCounterYearDoctype();
 
 	/**
+	 * Получить значение сквозного счетчика, отдельного для каждой пары "тип
+	 * документа - тэг"
+	 *
+	 * @param tag метка счетчика
+	 * @return значение счетчика.
+	 */
+	long counterPlainDoctype(String tag);
+
+	/**
+	 * Получить значение счетчика в пределах года, отдельного для каждой пары
+	 * "тип документа - тэг"
+	 * Каждый год нумерация начинается заново.
+	 *
+	 * @param tag метка счетчика
+	 * @return значение счетчика.
+	 */
+	long counterYearDoctype(String tag);
+
+	/**
 	 * @return Дата содания документа.
 	 */
 	Date getCreationDate();

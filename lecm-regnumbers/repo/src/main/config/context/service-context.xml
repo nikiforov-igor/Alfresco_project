@@ -5,7 +5,7 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="${groupId}.${artifactId}.regNumbersBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="regNumbers.regNumbersBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
@@ -20,8 +20,8 @@
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.regNumbersTemplatesDicBootstrap"
-		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.regNumbersBootstrap, businessJournalLogEventsPolicy" >
+	<bean id="regNumbers.regNumbersTemplatesDicBootstrap"
+		  parent="lecmDictionaryBootstrap" depends-on="regNumbers.regNumbersBootstrap, businessJournalLogEventsPolicy" >
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/regnumbers-templates-dictionary.xml</value>
@@ -35,7 +35,7 @@
 	</bean>
 
 	<bean id="regNumbersService" class="ru.it.lecm.regnumbers.bean.RegNumbersServiceImpl" init-method="init"
-		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService, serviceOrgstructure">
+		  depends-on="regNumbers.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService, serviceOrgstructure">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="searchService" ref="searchService"/>
@@ -44,7 +44,7 @@
 
 	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>
 	<bean id="regNumbersCounterFactory" class="ru.it.lecm.regnumbers.counter.CounterFactory" init-method="init" parent="baseBean"
-		  depends-on="${groupId}.${artifactId}.regNumbersBootstrap, documentService, contracts.LogicEcmContractsBootstrap">
+		  depends-on="regNumbers.regNumbersBootstrap, documentService, contracts.LogicEcmContractsBootstrap">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="namespaceService" ref="namespaceService"/>
@@ -54,6 +54,10 @@
 				<entry key="#{REGNUMBERS_FOLDER_ID}" value="Сервис Регистрационные номера"/>
 			</map>
 		</property>
+	</bean>
+
+	<bean id="regNumbersTaggedCounterRegistrator" class="ru.it.lecm.regnumbers.counter.TaggedCounterRegistrator" init-method="init" abstract="true">
+		<property name="counterFactory" ref="regNumbersCounterFactory"/>
 	</bean>
 
 	<bean id="regNumbersTemplateUtils" class="ru.it.lecm.regnumbers.template.Utils" depends-on="serviceOrgstructure"/>
