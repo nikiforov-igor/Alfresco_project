@@ -449,6 +449,10 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-stmeditor:hideAction">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
         </type>
 

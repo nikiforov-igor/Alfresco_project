@@ -81,23 +81,27 @@ public class ActionsScript extends DeclarativeWebScript {
                                 for (FinishStateWithTransitionAction.NextState state : states) {
                                     ArrayList<String> messages = new ArrayList<String>();
                                     HashSet<String> fields = new HashSet<String>();
+                                    boolean hideAction = false;
                                     for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
                                         if (!expression.execute(condition.getExpression())) {
                                             messages.add(condition.getErrorMessage());
                                             fields.addAll(condition.getFields());
+                                            hideAction = hideAction || condition.isHideAction();
                                         }
                                     }
 
                                     long count = getActionCount(nodeRef, state.getActionId());
 
-                                    HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                    resultState.put("actionId", state.getActionId());
-                                    resultState.put("label", state.getLabel());
-                                    resultState.put("workflowId", state.getWorkflowId());
-                                    resultState.put("errors", messages);
-                                    resultState.put("fields", fields);
-                                    resultState.put("count", count);
-                                    resultStates.add(resultState);
+                                    if (!hideAction) {
+                                        HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                        resultState.put("actionId", state.getActionId());
+                                        resultState.put("label", state.getLabel());
+                                        resultState.put("workflowId", state.getWorkflowId());
+                                        resultState.put("errors", messages);
+                                        resultState.put("fields", fields);
+                                        resultState.put("count", count);
+                                        resultStates.add(resultState);
+                                    }
                                 }
                             }
                             sort(resultStates);

@@ -26,7 +26,8 @@ public class Conditions {
             for (Element condition : conditions) {
                 String expression = condition.element("expression").getText();
                 String errorMessage = condition.element("errorMessage").getText();
-                this.conditions.add(new Condition(expression, errorMessage));
+                Boolean hideAction = Boolean.valueOf(condition.element("hideAction").getText());
+                this.conditions.add(new Condition(expression, errorMessage, hideAction));
             }
         }
     }
@@ -39,9 +40,10 @@ public class Conditions {
 
         private String expression;
         private String errorMessage;
+        private boolean hideAction;
         private Set<String> fields = new HashSet<String>();
 
-        public Condition(String expression, String errorMessage) {
+        public Condition(String expression, String errorMessage, boolean hideAction) {
             this.expression = expression;
             this.errorMessage = errorMessage;
             Pattern pattern = Pattern.compile("doc\\.attr\\(\"(.*?)\"\\)");
@@ -49,7 +51,7 @@ public class Conditions {
             while (matcher.find()) {
                 fields.add(matcher.group(1));
             }
-
+            this.hideAction = hideAction;
         }
 
         public String getExpression() {
@@ -62,6 +64,10 @@ public class Conditions {
 
         public Set<String> getFields() {
             return fields;
+        }
+
+        public boolean isHideAction() {
+            return hideAction;
         }
     }
 }

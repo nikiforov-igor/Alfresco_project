@@ -55,6 +55,7 @@ public class StatemachineEditorModel {
 	public final static QName PROP_EDITABLE_FIELD = QName.createQName(STATEMACHINE_EDITOR_URI, "editableField");
     public final static QName PROP_CONDITION = QName.createQName(STATEMACHINE_EDITOR_URI, "condition");
     public final static QName PROP_CONDITION_ERROR_MESSAGE = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionErrorMessage");
+    public final static QName PROP_CONDITION_HIDE_ACTION = QName.createQName(STATEMACHINE_EDITOR_URI, "hideAction");
 	public final static QName PROP_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "rolesFolder");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");

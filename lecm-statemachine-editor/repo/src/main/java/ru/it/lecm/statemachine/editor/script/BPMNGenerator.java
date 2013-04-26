@@ -757,6 +757,7 @@ public class BPMNGenerator {
             for (ChildAssociationRef condition : conditions) {
                 String expression = (String) nodeService.getProperty(condition.getChildRef(), StatemachineEditorModel.PROP_CONDITION);
                 String errorMessage = (String) nodeService.getProperty(condition.getChildRef(), StatemachineEditorModel.PROP_CONDITION_ERROR_MESSAGE);
+                Boolean hideAction = (Boolean) nodeService.getProperty(condition.getChildRef(), StatemachineEditorModel.PROP_CONDITION_HIDE_ACTION);
 
                 Element conditionElement = doc.createElement("condition");
 
@@ -769,6 +770,10 @@ public class BPMNGenerator {
                 cdata = doc.createCDATASection(errorMessage);
                 errorMessageElement.appendChild(cdata);
                 conditionElement.appendChild(errorMessageElement);
+
+                Element hideActionElement = doc.createElement("hideAction");
+                hideActionElement.setTextContent(hideAction.toString());
+                conditionElement.appendChild(hideActionElement);
 
                 conditionElements.appendChild(conditionElement);
 
