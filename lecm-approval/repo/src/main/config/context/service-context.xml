@@ -35,6 +35,11 @@
 				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-approve-task-model.xml</value>
 			</list>
 		</property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
+            </list>
+        </property>
 	</bean>
 
 	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.modelBootstrap">
