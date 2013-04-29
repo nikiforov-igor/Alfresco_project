@@ -37,15 +37,14 @@
 		</property>
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-workflow-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-approve-task-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-workflow-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-approve-task-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-model.xml</value>
 			</list>
 		</property>
         <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-sequential-approval-workflow-model</value>
             </list>
         </property>
 	</bean>

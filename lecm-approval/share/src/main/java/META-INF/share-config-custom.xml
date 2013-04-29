@@ -7,7 +7,7 @@
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
 					<show id="bpm:workflowDescription" />
-					<show id="lecmPaWf:employeesAssoc"/>
+					<show id="lecmPar:employeesAssoc"/>
 					<show id="packageItems"/>
 				</field-visibility>
 				<appearance>
@@ -17,7 +17,7 @@
 						</control>
 					</field>
 
-					<field id="lecmPaWf:employeesAssoc">
+					<field id="lecmPar:employeesAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -34,20 +34,20 @@
 		</forms>
 	</config>
 
-	<config evaluator="task-type" condition="lecmPaAt:approveTask">
+	<config evaluator="task-type" condition="lecmPar:approveTask">
 		<forms>
 			<form>
 				<field-visibility>
 					<show id="bpm:dueDate" />
-					<show id="lecmPaAt:approveTaskResult" />
+					<show id="lecmPar:approveTaskResult" />
 					<show id="bpm:comment" />
-					<show id="lecmPaAt:approveTaskCommentAssoc" />
+					<show id="lecmPar:approveTaskCommentAssoc" />
 				</field-visibility>
 				<appearance>
-                    <field id="bpm:dueDate" label-id="workflow.field.due">
-                        <control template="/org/alfresco/components/form/controls/info.ftl" />
-                    </field>
-					<field id="lecmPaAt:approveTaskResult">
+					<field id="bpm:dueDate" label-id="workflow.field.due">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+					</field>
+					<field id="lecmPar:approveTaskResult">
 						<control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl" />
 					</field>
 				</appearance>
@@ -63,7 +63,7 @@
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
 					<show id="bpm:workflowDescription" />
-					<show id="lecmSaWf:employeesAssoc"/>
+					<show id="lecmSeq:employeesAssoc"/>
 					<show id="packageItems"/>
 				</field-visibility>
 				<appearance>
@@ -73,7 +73,7 @@
 						</control>
 					</field>
 
-					<field id="lecmSaWf:employeesAssoc">
+					<field id="lecmSeq:employeesAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -86,16 +86,16 @@
 		</forms>
 	</config>
 
-	<config evaluator="task-type" condition="lecmSaAt:approveTask">
+	<config evaluator="task-type" condition="lecmSeq:approveTask">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmSaAt:approveTaskResult" />
+					<show id="lecmSeq:approveTaskResult" />
 					<show id="bpm:comment" />
-					<show id="lecmSaAt:approveTaskCommentAssoc" />
+					<show id="lecmSeq:approveTaskCommentAssoc" />
 				</field-visibility>
 				<appearance>
-					<field id="lecmSaAt:approveTaskResult">
+					<field id="lecmSeq:approveTaskResult">
 						<control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl" />
 					</field>
 				</appearance>

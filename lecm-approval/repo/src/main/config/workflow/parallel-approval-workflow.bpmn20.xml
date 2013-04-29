@@ -3,8 +3,8 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/workflow/approval/parallel">
 	<process id="lecmParallelApproval" name="Logic ECM Parallel Approval" isExecutable="true">
-		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPaWf:parallelApproval" ></startEvent>
-		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPaAt:approveTask">
+		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval" ></startEvent>
+		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
@@ -29,10 +29,10 @@
 			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
 			            	var userName = assignee.properties.userName;
-			            	var decision = task.getVariableLocal("lecmPaAt_approveTaskResult");
+			            	var decision = task.getVariableLocal("lecmPar_approveTaskResult");
 			            	var completionDate = task.getVariableLocal("bpm_completionDate");
 			            	var comment = task.getVariableLocal("bpm_comment");
-			            	var commentRef = task.getVariableLocal("lecmPaAt_approveTaskCommentAssoc");
+			            	var commentRef = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
 			            	logger.log("userName = " + userName);
 			            	logger.log("decision = " + decision);
 			            	logger.log("completionDate = " + completionDate);
@@ -70,7 +70,7 @@
 						 -->
 						<activiti:string>
 			            //<![CDATA[
-			            	var personList = approvalParallel.getPersonListByEmployeeList(lecmPaWf_employeesAssoc);
+			            	var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
 			            	execution.setVariableLocal("assigneesList", personList);
 			            	var approvalListRef = approvalParallel.createApprovalList(bpm_package);
 			            	execution.setVariable("approvalListRef", approvalListRef);
