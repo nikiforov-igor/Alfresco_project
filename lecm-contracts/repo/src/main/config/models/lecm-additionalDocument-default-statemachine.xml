@@ -466,7 +466,36 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>UserWorkflowEntity</type>
+                                                        <name>05043eab-1b02-4884-aec4-656d6b1b7545</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/94bc7e8a-a05a-4206-b324-92d51a0242e6
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>activiti$taskToRaters</value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowLabel</name>
+                                                                <value>Отправить оценщикам</value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <workflowAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
@@ -4496,38 +4525,6 @@
                                                 <name>transitions</name>
                                                 <nodes>
                                                     <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>2cb3e166-a8d0-4255-b3b5-5a4ed8abbea7</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/bf36012a-2f82-4eec-b5cc-635af07336ce
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value>Передать на подписание</value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>activiti$activitiReview</value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/bbabcec9-8bc6-4cd5-afad-5e4076f12dd2
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
                                                         <type>userTransition</type>
                                                         <name>9c7754f2-aac4-483d-b9fd-88849ef06842</name>
                                                         <nodeRef>
@@ -4584,6 +4581,37 @@
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/77aaa773-8e4b-410b-a3ce-717c98caaaa4
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>7f5caa3a-74cf-4e29-a11c-bebe0b5e7f87</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/57f438f1-75d9-42ce-812c-1402f04a66c4
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value>false</value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value>Передать на подписание</value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/bbabcec9-8bc6-4cd5-afad-5e4076f12dd2
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -5524,38 +5552,6 @@
                                                     </node>
                                                     <node>
                                                         <type>transitionWorkflow</type>
-                                                        <name>57831d27-ba45-49f0-9839-3bbda251add8</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/9840eb17-510a-4958-9cc5-2c299bf69b5c
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value>Передать на подписание</value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>activiti$activitiReview</value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/bbabcec9-8bc6-4cd5-afad-5e4076f12dd2
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
                                                         <name>aafdf384-b18f-4f81-8593-2ab8455e29c0</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/bdf5687e-ae8b-4de8-9296-89da0e370386
@@ -5584,6 +5580,37 @@
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/77aaa773-8e4b-410b-a3ce-717c98caaaa4
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>076c961d-5618-4caf-9b0b-9adad87b4a3f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/0ac5a162-b412-41de-b12b-aaa32eac9b2a
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value>false</value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value>Передать на подписание</value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/bbabcec9-8bc6-4cd5-afad-5e4076f12dd2
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -6595,12 +6622,12 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>Подписан у контрагента</value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>hideAction</name>
                                                                                 <value>true</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Подписан у контрагента</value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6660,12 +6687,12 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>Не подписан у контрагента</value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>hideAction</name>
                                                                                 <value>true</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Не подписан у контрагента</value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -10157,8 +10184,12 @@
                                                         </nodeRef>
                                                         <properties>
                                                             <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value>false</value>
+                                                            </property>
+                                                            <property>
                                                                 <name>transitionLabel</name>
-                                                                <value>Подписан</value>
+                                                                <value>Подписан контрагентом</value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
