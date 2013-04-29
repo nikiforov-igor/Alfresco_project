@@ -12,7 +12,7 @@
     (function () {
         YAHOO.util.Event.onDOMReady(function (){
             var dGrid = new LogicECM.module.DocumentsJournal.DataGrid('${containerId}').setOptions({
-                usePagination: true,
+                usePagination: false,
                 pageSize: 5,
                 showExtendSearchBlock: false,
                 actions: [],

@@ -10,8 +10,8 @@
      * Preferences
      */
     var PREFERENCES_CONTRACTS = "ru.it.lecm.contracts",
-        PREF_FILTER = ".contracts-filter",
-        PREF_RANGE = ".contracts-range";
+        PREF_FILTER = ".dashlet-contracts-filter",
+        PREF_RANGE = ".dashlet-contracts-range";
     
     LogicECM.module.Contracts.dashlet.Contracts = function Contracts_constructor(htmlId)
     {
