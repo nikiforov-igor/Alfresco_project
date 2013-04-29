@@ -161,6 +161,9 @@ public final class Types {
 				return new SGSuperVisor(objId, displayName);
 			if (this == SG_BR)
 				return new SGBusinessRole(objId, displayName);
+			if (this == SG_SPEC)
+				return new SGSpecialOrGeneric(objId, displayName);
+
 			// if (this == SG_BRME) return new SGPrivateBusinessRole(objId, moreId);
 			throw new RuntimeException( String.format("Cannot create simple locate descriptor for sg-enum %s", this));
 		}
@@ -436,7 +439,7 @@ public final class Types {
 		public SGSpecialUserRole(String employeeId, NodeRef nodeRef,
 				LecmPermissionGroup permissionGroup, String userLogin) {
 			super( SGKind.SG_SPEC, permissionGroup.getName()
-					, /*displayInfo*/ String.format("user <%s> access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен 
+					, /*displayInfo*/ String.format("user <%s> individual access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен 
 					, employeeId, userLogin);
 		}
 
@@ -456,6 +459,39 @@ public final class Types {
 		public String getAlfrescoSuffix() {
 			// для Индивидуальной роли надо ввести id Сотрудника ...
 			return super.getAlfrescoSuffix() + SFX_DELIM + this.getUserId();
+		}
+	}
+
+	/**
+	 * Индикатор некоторой/специальной группы, определяемой заданным уникальным 
+	 * названияем (Ключом).
+	 *    Предполагается для использования в динамике activity-процессов.
+	 *    Например, в имя группы ввести id задачи (TASK_NNNNNNN), затем этой 
+	 * группе выдать права на документ (LecmPermissionService.grantAccessByPosition),
+	 * и включить в этй группу нужных Сотрудников (IOrgStructureNotifiers.sgInclude):
+	 *
+	 *  // создаём "спецификаторы" объектов безопасности
+	 *  SGSpecialOrGeneric posGrp = new SGSpecialOrGeneric("TASK_"+ taskID); // спецификатор некоторой группы
+	 *  SGPrivateMeOfUser posUsr1 = SGKind.SG_ME.getSGMeOfUser( userId1, login1); // личная ME-группа пользователя userId1
+	 *  SGPrivateMeOfUser posUsr2 = SGKind.SG_ME.getSGMeOfUser( userId2, login2); // -//- userId2
+	 *
+	 *  // включение Сотрудников в спец группу ...
+	 *  lecmSecurityGroupsBean.sgInclude( posUsr1, posGrp);
+	 *  lecmSecurityGroupsBean.sgInclude( posUsr2, posGrp);
+	 *  lecmSecurityGroupsBean.sgInclude( SGKind.SG_ME.getSGMeOfUser( userId3, login3), posGrp); // вполне себе читабельно и без промежутоных объектов posXXX )
+	 *  
+	 *  // выдача прав "ответственный сотрудник" группе posGrp на документ node ...
+	 *  LecmPermissionGroup perms = lecmPermissionServiceBean.findPermissionGroup("LECM_BASIC_PG_ResponsibleEmployee");
+	 *  lecmPermissionServiceBean.grantAccessByPosition( perms, node, posGrp);
+	 */
+	public static class SGSpecialOrGeneric extends SGPosition {
+
+		public SGSpecialOrGeneric(String id) {
+			this( id, null);
+		}
+
+		public SGSpecialOrGeneric(String id, String displayInfo) {
+			super( SGKind.SG_SPEC, id, displayInfo);
 		}
 	}
 
